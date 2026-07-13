@@ -17,8 +17,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         fonts-dejavu-core fonts-liberation \
     && rm -rf /var/lib/apt/lists/*
 
+# openpyxl — для xlsx/xls/ods: электронные таблицы читаем по ячейкам, а не через
+# PDF-рендер (LibreOffice не печатает сетку в PDF → opendataloader не видит таблицу).
 ARG OPENDATALOADER_VERSION=2.4.7
-RUN pip3 install --no-cache-dir "opendataloader-pdf==${OPENDATALOADER_VERSION}"
+ARG OPENPYXL_VERSION=3.1.5
+RUN pip3 install --no-cache-dir \
+        "opendataloader-pdf==${OPENDATALOADER_VERSION}" \
+        "openpyxl==${OPENPYXL_VERSION}"
 
 COPY app.py /opt/odl-sidecar/app.py
 COPY entrypoint.sh /opt/odl-sidecar/entrypoint.sh

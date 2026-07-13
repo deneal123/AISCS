@@ -5,11 +5,18 @@
 
 ## Что внутри
 
-- [opendataloader-pdf](https://github.com/opendataloader-project/opendataloader-pdf) (Hancom, Apache-2.0) —
-  парсит **только PDF**, зато со структурой. Ядро на Java; python-пакет с PyPI уже везёт собранный
-  shaded-JAR, поэтому Maven в сборке не нужен.
-- **LibreOffice headless** — доводит office-форматы до PDF, после чего их парсит тот же opendataloader.
-  Так один сервис закрывает docx/xlsx/pptx/rtf, не разводя зоопарк python-библиотек с худшим качеством таблиц.
+Два маршрута, потому что свёрстанный документ и электронная таблица — принципиально разные вещи.
+
+**1. Документы** (`pdf`, `docx`, `doc`, `odt`, `rtf`, `pptx`, `ppt`, `odp`, `html`) →
+[opendataloader-pdf](https://github.com/opendataloader-project/opendataloader-pdf) (Hancom, Apache-2.0).
+Он читает вёрстку **визуально** и по линиям разметки восстанавливает таблицы, заголовки и списки.
+Парсит только PDF, поэтому не-PDF сначала доводим до PDF через **LibreOffice headless**.
+
+**2. Таблицы** (`xlsx`, `xls`, `ods`) → **openpyxl**, напрямую по ячейкам.
+Через PDF их гнать нельзя: LibreOffice при экспорте Calc в PDF **не печатает сетку**, а без линий
+opendataloader не видит таблицу и склеивает всё в один абзац; вдобавок широкую таблицу PDF режет по
+страницам. Электронная таблица уже структурирована — распознавать её обратно незачем.
+`.xls`/`.ods` сначала конвертируем в `.xlsx` (это LibreOffice умеет хорошо).
 
 Исходники upstream здесь **не вендорятся** — пакет ставится из PyPI по пину (`OPENDATALOADER_VERSION`
 в `Dockerfile`). Тот же приём, что в сабмодуле `whisper`, где whisper.cpp клонируется на этапе сборки.
