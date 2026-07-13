@@ -733,8 +733,21 @@ class APIConfig:
         }
 
     @staticmethod
-    def get_neo4j_community_config(user_id: str | None = None) -> dict[str, Any]:
-        """Get Neo4j community configuration."""
+    def get_neo4j_community_config(
+        user_id: str | None = None,
+        dimension: int | None = None,
+        collection_name: str | None = None,
+    ) -> dict[str, Any]:
+        """Get Neo4j community configuration.
+
+        Per-cube overrides (GPTHub): ``dimension`` + ``collection_name`` let each user
+        cube use its own embedder dimension and its own Qdrant collection (a collection
+        is locked to one dimension). Defaults (None) preserve the global behaviour
+        (shared ``neo4j_vec_db`` + ``EMBEDDING_DIMENSION``). The Neo4j graph stays
+        shared, isolated by ``user_name`` (community mode keeps vectors only in Qdrant).
+        """
+        dim = dimension if dimension is not None else int(os.getenv("EMBEDDING_DIMENSION", 1024))
+        collection = collection_name or "neo4j_vec_db"
         return {
             "uri": os.getenv("NEO4J_URI", "bolt://localhost:7687"),
             "user": os.getenv("NEO4J_USER", "neo4j"),
@@ -743,14 +756,14 @@ class APIConfig:
             "user_name": f"memos{user_id.replace('-', '')}",
             "auto_create": False,
             "use_multi_db": False,
-            "embedding_dimension": int(os.getenv("EMBEDDING_DIMENSION", 1024)),
+            "embedding_dimension": dim,
             "vec_config": {
                 # Pass nested config to initialize external vector DB
                 # If you use qdrant, please use Server instead of local mode.
                 "backend": "qdrant",
                 "config": {
-                    "collection_name": "neo4j_vec_db",
-                    "vector_dimension": int(os.getenv("EMBEDDING_DIMENSION", 1024)),
+                    "collection_name": collection,
+                    "vector_dimension": dim,
                     "distance_metric": "cosine",
                     "host": os.getenv("QDRANT_HOST", "localhost"),
                     "port": int(os.getenv("QDRANT_PORT", "6333")),
