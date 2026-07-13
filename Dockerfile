@@ -1,0 +1,36 @@
+# Сайдкар парсинга документов: opendataloader-pdf (Hancom, Apache-2.0) → markdown.
+#
+# Ядро opendataloader — Java, а python-пакет лишь запускает `java -jar`. Поэтому
+# сервис живёт отдельным контейнером: иначе JRE (~190 МБ) уехала бы в образ backend
+# и во все три celery-воркера (у них общий Dockerfile), а JVM стартовала бы прямо
+# в процессе, обслуживающем API.
+#
+# Колесо с PyPI УЖЕ содержит собранный shaded-JAR — Maven тут не нужен.
+FROM eclipse-temurin:21-jre-jammy
+
+# LibreOffice headless доводит office-форматы до PDF (сам opendataloader парсит только
+# PDF). Шрифты обязательны: без них кириллица в конвертированном PDF теряет глифы и
+# извлечённый текст превращается в мусор.
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        python3 python3-pip curl ca-certificates \
+        libreoffice-core libreoffice-writer libreoffice-calc libreoffice-impress \
+        fonts-dejavu-core fonts-liberation \
+    && rm -rf /var/lib/apt/lists/*
+
+ARG OPENDATALOADER_VERSION=2.4.7
+RUN pip3 install --no-cache-dir "opendataloader-pdf==${OPENDATALOADER_VERSION}"
+
+COPY app.py /opt/odl-sidecar/app.py
+COPY entrypoint.sh /opt/odl-sidecar/entrypoint.sh
+RUN chmod +x /opt/odl-sidecar/entrypoint.sh
+
+# HOME нужен LibreOffice: без записываемой домашней директории soffice падает.
+ENV HOME=/tmp \
+    PYTHONUNBUFFERED=1 \
+    JAVA_TOOL_OPTIONS="-Djava.awt.headless=true" \
+    ODL_MAX_BYTES=20971520 \
+    ODL_LO_TIMEOUT_SEC=120 \
+    ODL_PARSE_TIMEOUT_SEC=300 \
+    PORT=8080
+EXPOSE 8080
+ENTRYPOINT ["/opt/odl-sidecar/entrypoint.sh"]
