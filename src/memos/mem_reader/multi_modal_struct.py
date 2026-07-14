@@ -408,7 +408,7 @@ class MultiModalStructMemReader(SimpleStructMemReader):
                 usage=[],
                 sources=all_sources,
                 background="",
-                confidence=0.99,
+                confidence=None,
                 type="fact",
                 info=info_,
                 **extra_kwargs,

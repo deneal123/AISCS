@@ -2,6 +2,7 @@ import concurrent.futures
 import copy
 import json
 import os
+import re
 import traceback
 
 from abc import ABC
@@ -38,15 +39,20 @@ from memos.memories.textual.item import (
 )
 from memos.templates.mem_reader_prompts import (
     CUSTOM_TAGS_INSTRUCTION,
+    CUSTOM_TAGS_INSTRUCTION_RU,
     CUSTOM_TAGS_INSTRUCTION_ZH,
     GENERAL_STRUCT_STRING_READER_PROMPT,
+    GENERAL_STRUCT_STRING_READER_PROMPT_RU,
     GENERAL_STRUCT_STRING_READER_PROMPT_ZH,
     PROMPT_MAPPING,
     SIMPLE_STRUCT_DOC_READER_PROMPT,
+    SIMPLE_STRUCT_DOC_READER_PROMPT_RU,
     SIMPLE_STRUCT_DOC_READER_PROMPT_ZH,
     SIMPLE_STRUCT_MEM_READER_EXAMPLE,
+    SIMPLE_STRUCT_MEM_READER_EXAMPLE_RU,
     SIMPLE_STRUCT_MEM_READER_EXAMPLE_ZH,
     SIMPLE_STRUCT_MEM_READER_PROMPT,
+    SIMPLE_STRUCT_MEM_READER_PROMPT_RU,
     SIMPLE_STRUCT_MEM_READER_PROMPT_ZH,
 )
 from memos.types import MessagesType
@@ -86,20 +92,52 @@ SceneDataInput: TypeAlias = (
 
 
 logger = log.get_logger(__name__)
+# GPTHub: "ru" MUST be present in EVERY section. Lookups are direct indexing
+# (PROMPT_DICT["chat"][lang]), not .get() — a missing section is a runtime KeyError,
+# not a silent fallback. See tests/gpthub/test_russian_prompts.py.
 PROMPT_DICT = {
     "chat": {
         "en": SIMPLE_STRUCT_MEM_READER_PROMPT,
         "zh": SIMPLE_STRUCT_MEM_READER_PROMPT_ZH,
+        "ru": SIMPLE_STRUCT_MEM_READER_PROMPT_RU,
         "en_example": SIMPLE_STRUCT_MEM_READER_EXAMPLE,
         "zh_example": SIMPLE_STRUCT_MEM_READER_EXAMPLE_ZH,
+        "ru_example": SIMPLE_STRUCT_MEM_READER_EXAMPLE_RU,
     },
-    "doc": {"en": SIMPLE_STRUCT_DOC_READER_PROMPT, "zh": SIMPLE_STRUCT_DOC_READER_PROMPT_ZH},
+    "doc": {
+        "en": SIMPLE_STRUCT_DOC_READER_PROMPT,
+        "zh": SIMPLE_STRUCT_DOC_READER_PROMPT_ZH,
+        "ru": SIMPLE_STRUCT_DOC_READER_PROMPT_RU,
+    },
     "general_string": {
         "en": GENERAL_STRUCT_STRING_READER_PROMPT,
         "zh": GENERAL_STRUCT_STRING_READER_PROMPT_ZH,
+        "ru": GENERAL_STRUCT_STRING_READER_PROMPT_RU,
     },
-    "custom_tags": {"en": CUSTOM_TAGS_INSTRUCTION, "zh": CUSTOM_TAGS_INSTRUCTION_ZH},
+    "custom_tags": {
+        "en": CUSTOM_TAGS_INSTRUCTION,
+        "zh": CUSTOM_TAGS_INSTRUCTION_ZH,
+        "ru": CUSTOM_TAGS_INSTRUCTION_RU,
+    },
 }
+
+
+_WINDOW_PREFIX_RE = re.compile(
+    r"^\s*(?:user|assistant|system|tool)\s*:\s*(?:\[[^\]]*\]\s*:?\s*)?", re.IGNORECASE
+)
+
+
+def _strip_window_prefixes(text: str) -> str:
+    """Drop the transport prefixes a chat window carries: ``role: [timestamp]: ``.
+
+    These are how the window is serialised for the LLM, not part of what the user
+    said — publishing them as memory content (or worse, as a memory *key*) is what
+    produced titles like ``"user: [20"``.
+    """
+    if not text:
+        return ""
+    lines = [_WINDOW_PREFIX_RE.sub("", line).strip() for line in str(text).splitlines()]
+    return "\n".join(line for line in lines if line).strip()
 
 
 def _build_node(idx, message, info, source_info, llm, parse_json_result, embedder):
@@ -154,7 +192,7 @@ def _build_node(idx, message, info, source_info, llm, parse_json_result, embedde
                 usage=[],
                 sources=source_info,
                 background="",
-                confidence=0.99,
+                confidence=None,
                 type="fact",
                 info=info_,
             ),
@@ -227,7 +265,7 @@ class SimpleStructMemReader(BaseMemReader, ABC):
         sources: list | None = None,
         background: str = "",
         type_: str = "fact",
-        confidence: float = 0.99,
+        confidence: float | None = None,
         need_embed: bool = True,
         **kwargs,
     ) -> TextualMemoryItem:
@@ -298,16 +336,24 @@ class SimpleStructMemReader(BaseMemReader, ABC):
             # ``resp.get("memory list", [])``. A typo here drops the
             # salvaged item silently and causes ``/product/add`` to return
             # 200 with zero memories written to Neo4j (bug #1355).
+            #
+            # GPTHub: this salvage path used to emit `key = mem_str[:10]` over the RAW
+            # window — and the raw window carries role and timestamp prefixes, so the
+            # key came out as literal junk like "user: [20", while `value` was the whole
+            # unprocessed window (the "summary blobs"). That is precisely the rot
+            # described in migration 013_user_memory_facts. Salvage is meant to preserve
+            # content, not to publish transport formatting as a memory title.
+            cleaned = _strip_window_prefixes(mem_str)
             return {
                 "memory list": [
                     {
-                        "key": mem_str[:10],
+                        "key": derive_key(cleaned),
                         "memory_type": "UserMemory",
-                        "value": mem_str,
+                        "value": cleaned,
                         "tags": [],
                     }
                 ],
-                "summary": mem_str,
+                "summary": cleaned,
             }
 
         return response_json
@@ -467,7 +513,7 @@ class SimpleStructMemReader(BaseMemReader, ABC):
                     sources=raw_node.metadata.sources,
                     background=response_json.get("summary", ""),
                     type_="fact",
-                    confidence=0.99,
+                    confidence=None,
                     **ctx_kwargs,
                 )
                 chat_read_nodes.append(node_i)

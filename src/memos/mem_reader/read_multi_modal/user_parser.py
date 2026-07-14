@@ -211,7 +211,7 @@ class UserParser(BaseMessageParser):
                 usage=[],
                 sources=sources,
                 background="",
-                confidence=0.99,
+                confidence=None,
                 type="fact",
                 info=info_,
                 manager_user_id=manager_user_id,

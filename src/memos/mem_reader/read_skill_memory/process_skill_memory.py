@@ -902,7 +902,7 @@ def create_skill_memory_item(
         sources=sources or [],
         usage=[],
         background="",
-        confidence=0.99,
+        confidence=None,
         created_at=datetime.now().isoformat(),
         updated_at=datetime.now().isoformat(),
         type="skills",
