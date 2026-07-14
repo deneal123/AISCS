@@ -544,18 +544,15 @@ def parse_json_result(response_text):
         logger.error(f"[JSONParse] Unexpected error: {e}")
         return {}
 
+# GPTHub: this used to be a SECOND copy of detect_lang — and the search path imported
+# THIS one. Two copies meant that adding Russian to the reader's copy silently did
+# nothing for retrieval: Russian queries kept resolving to "en". Delegate to the single
+# canonical implementation instead of keeping the fork alive.
+from memos.lang_utils import (  # noqa: E402
+    detect_lang,  # noqa: F401 - re-exported: callers import it from here
+    pick_by_lang,  # noqa: F401
+)
 
-def detect_lang(text):
-    try:
-        if not text or not isinstance(text, str):
-            return "en"
-        chinese_pattern = r"[\u4e00-\u9fff\u3400-\u4dbf\U00020000-\U0002a6df\U0002a700-\U0002b73f\U0002b740-\U0002b81f\U0002b820-\U0002ceaf\uf900-\ufaff]"
-        chinese_chars = re.findall(chinese_pattern, text)
-        if len(chinese_chars) / len(re.sub(r"[\s\d\W]", "", text)) > 0.3:
-            return "zh"
-        return "en"
-    except Exception:
-        return "en"
 
 
 def format_memory_item(memory_data: Any) -> dict[str, Any]:

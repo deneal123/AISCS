@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING, Any
 
 from memos.context.context import ContextThreadPoolExecutor
 from memos.log import get_logger
-from memos.mem_reader.read_multi_modal import detect_lang
+from memos.mem_reader.read_multi_modal import detect_lang, pick_by_lang
 from memos.memories.textual.item import (
     PreferenceTextualMemoryMetadata,
     TextualMemoryItem,
@@ -69,7 +69,7 @@ class NaiveExtractor(BaseExtractor):
             "zh": NAIVE_EXPLICIT_PREFERENCE_EXTRACT_PROMPT_ZH,
             "en": NAIVE_EXPLICIT_PREFERENCE_EXTRACT_PROMPT,
         }
-        prompt = _map[lang].replace("{qa_pair}", qa_pair_str)
+        prompt = pick_by_lang(_map, lang).replace("{qa_pair}", qa_pair_str)
 
         try:
             response = self.llm_provider.generate([{"role": "user", "content": prompt}])
@@ -97,7 +97,7 @@ class NaiveExtractor(BaseExtractor):
             "zh": NAIVE_IMPLICIT_PREFERENCE_EXTRACT_PROMPT_ZH,
             "en": NAIVE_IMPLICIT_PREFERENCE_EXTRACT_PROMPT,
         }
-        prompt = _map[lang].replace("{qa_pair}", qa_pair_str)
+        prompt = pick_by_lang(_map, lang).replace("{qa_pair}", qa_pair_str)
 
         try:
             response = self.llm_provider.generate([{"role": "user", "content": prompt}])

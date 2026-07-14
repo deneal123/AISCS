@@ -27,8 +27,10 @@ from memos.memories.textual.item import (
 )
 from memos.templates.mem_reader_prompts import (
     CUSTOM_TAGS_INSTRUCTION,
+    CUSTOM_TAGS_INSTRUCTION_RU,
     CUSTOM_TAGS_INSTRUCTION_ZH,
     SIMPLE_STRUCT_DOC_READER_PROMPT,
+    SIMPLE_STRUCT_DOC_READER_PROMPT_RU,
     SIMPLE_STRUCT_DOC_READER_PROMPT_ZH,
 )
 from memos.types.openai_chat_completion_types import File
@@ -41,9 +43,18 @@ if TYPE_CHECKING:
 logger = get_logger(__name__)
 
 # Prompt dictionary for doc processing (shared by simple_struct and file_content_parser)
+# GPTHub: "ru" must exist in every section — lookups are direct indexing.
 DOC_PROMPT_DICT = {
-    "doc": {"en": SIMPLE_STRUCT_DOC_READER_PROMPT, "zh": SIMPLE_STRUCT_DOC_READER_PROMPT_ZH},
-    "custom_tags": {"en": CUSTOM_TAGS_INSTRUCTION, "zh": CUSTOM_TAGS_INSTRUCTION_ZH},
+    "doc": {
+        "en": SIMPLE_STRUCT_DOC_READER_PROMPT,
+        "zh": SIMPLE_STRUCT_DOC_READER_PROMPT_ZH,
+        "ru": SIMPLE_STRUCT_DOC_READER_PROMPT_RU,
+    },
+    "custom_tags": {
+        "en": CUSTOM_TAGS_INSTRUCTION,
+        "zh": CUSTOM_TAGS_INSTRUCTION_ZH,
+        "ru": CUSTOM_TAGS_INSTRUCTION_RU,
+    },
 }
 
 
@@ -568,7 +579,7 @@ class FileContentParser(BaseMessageParser):
                     usage=[],
                     sources=[source],
                     background="",
-                    confidence=0.99,
+                    confidence=None,
                     type="fact",
                     info=info_,
                     file_ids=file_ids,
@@ -602,7 +613,7 @@ class FileContentParser(BaseMessageParser):
                     usage=[],
                     sources=[placeholder_source],
                     background="",
-                    confidence=0.99,
+                    confidence=None,
                     type="fact",
                     info=info_,
                     file_ids=file_ids,
@@ -813,7 +824,7 @@ class FileContentParser(BaseMessageParser):
                     usage=[],
                     sources=[chunk_source],
                     background="",
-                    confidence=0.99,
+                    confidence=None,
                     type="fact",
                     info=info_,
                     file_ids=file_ids,

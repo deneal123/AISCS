@@ -23,7 +23,7 @@ from .system_parser import SystemParser
 from .text_content_parser import TextContentParser
 from .tool_parser import ToolParser
 from .user_parser import UserParser
-from .utils import coerce_scene_data, detect_lang, extract_role
+from .utils import coerce_scene_data, detect_lang, extract_role, pick_by_lang
 
 
 __all__ = [
@@ -40,4 +40,5 @@ __all__ = [
     "coerce_scene_data",
     "detect_lang",
     "extract_role",
+    "pick_by_lang",
 ]

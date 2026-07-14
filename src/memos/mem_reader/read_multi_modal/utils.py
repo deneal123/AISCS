@@ -331,64 +331,7 @@ def coerce_scene_data(scene_data: SceneDataInput, scene_type: str) -> list[Messa
     return [str(scene_data)]
 
 
-def detect_lang(text):
-    """
-    Detect the language of the given text (Chinese or English).
 
-    Args:
-        text: Text to analyze
-
-    Returns:
-        "zh" for Chinese, "en" for English (default)
-    """
-    try:
-        if not text or not isinstance(text, str):
-            return "en"
-        cleaned_text = text
-        # remove role and timestamp-like prefixes
-        cleaned_text = re.sub(
-            r"\b(user|assistant|query|answer)\s*:", "", cleaned_text, flags=re.IGNORECASE
-        )
-        # timestamps like [11:32 AM on 04 March, 2026]
-        cleaned_text = re.sub(
-            r"\[\s*\d{1,2}:\d{2}\s*(?:AM|PM)\s+on\s+\d{2}\s+[A-Za-z]+\s*,\s*\d{4}\s*\]",
-            "",
-            cleaned_text,
-            flags=re.IGNORECASE,
-        )
-        # purely numeric timestamps like [2025-01-01 10:00]
-        cleaned_text = re.sub(r"\[[\d\-:\s]+\]", "", cleaned_text)
-        # remove URLs to prevent the dilution of Chinese characters
-        cleaned_text = re.sub(r'https?://[^\s<>"{}|\\^`\[\]]+', "", cleaned_text)
-        # remove common id-like tokens (uuid-ish / file_id / image_id /
-        # my_id_01 etc.)
-        # uuid
-        cleaned_text = re.sub(
-            r"\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b",
-            " ",
-            cleaned_text,
-            flags=re.IGNORECASE,
-        )
-        # key:value where key ends with _id or is id, and value is quoted or bare token
-        cleaned_text = re.sub(
-            r'(?i)\b[a-z_]*id\b\s*[:=]\s*(".*?"|\'.*?\'|[a-z0-9_\-]+)', " ", cleaned_text
-        )
-        cleaned_text = re.sub(
-            r'(?i)\b[a-z_]*_id\b\s*[:=]\s*(".*?"|\'.*?\'|[a-z0-9_\-]+)', " ", cleaned_text
-        )
-        # remove schema keywords like text / type / image_url / url
-        cleaned_text = re.sub(
-            r"\b(text|type|image_url|imageurl|url|file|file_id|image_id|file_data)\b",
-            "",
-            cleaned_text,
-            flags=re.IGNORECASE,
-        )
-        # extract chinese characters
-        chinese_pattern = r"[\u4e00-\u9fff\u3400-\u4dbf\U00020000-\U0002a6df\U0002a700-\U0002b73f\U0002b740-\U0002b81f\U0002b820-\U0002ceaf\uf900-\ufaff]"
-        chinese_chars = re.findall(chinese_pattern, cleaned_text)
-        text_without_special = re.sub(r"[\s\d\W]", "", cleaned_text)
-        if text_without_special and len(chinese_chars) / len(text_without_special) > 0.3:
-            return "zh"
-        return "en"
-    except Exception:
-        return "en"
+# Re-exported from the leaf module so both the reader and the retrieve path share ONE
+# implementation (they used to have divergent copies — see memos/lang_utils.py).
+from memos.lang_utils import detect_lang, pick_by_lang  # noqa: E402, F401

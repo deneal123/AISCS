@@ -10,11 +10,15 @@ from memos.mem_reader.simple_struct import SimpleStructMemReader
 from memos.parsers.factory import ParserFactory
 from memos.templates.mem_reader_prompts import (
     CUSTOM_TAGS_INSTRUCTION,
+    CUSTOM_TAGS_INSTRUCTION_RU,
     CUSTOM_TAGS_INSTRUCTION_ZH,
     SIMPLE_STRUCT_DOC_READER_PROMPT,
+    SIMPLE_STRUCT_DOC_READER_PROMPT_RU,
     SIMPLE_STRUCT_DOC_READER_PROMPT_ZH,
     SIMPLE_STRUCT_MEM_READER_EXAMPLE,
+    SIMPLE_STRUCT_MEM_READER_EXAMPLE_RU,
     SIMPLE_STRUCT_MEM_READER_EXAMPLE_ZH,
+    SIMPLE_STRUCT_MEM_READER_PROMPT_RU,
 )
 from memos.templates.mem_reader_strategy_prompts import (
     STRATEGY_STRUCT_MEM_READER_PROMPT,
@@ -23,15 +27,30 @@ from memos.templates.mem_reader_strategy_prompts import (
 
 
 logger = log.get_logger(__name__)
+# GPTHub: "ru" must exist in every section — lookups are direct indexing, a missing
+# key is a runtime KeyError. The strategy reader has no Russian variant of its own,
+# so Russian falls back to the simple-struct Russian prompt: same extraction task,
+# and a Russian prompt beats an English one. (This backend is not our default —
+# MEM_READER_BACKEND=multimodal_struct, which inherits simple_struct.)
 STRATEGY_PROMPT_DICT = {
     "chat": {
         "en": STRATEGY_STRUCT_MEM_READER_PROMPT,
         "zh": STRATEGY_STRUCT_MEM_READER_PROMPT_ZH,
+        "ru": SIMPLE_STRUCT_MEM_READER_PROMPT_RU,
         "en_example": SIMPLE_STRUCT_MEM_READER_EXAMPLE,
         "zh_example": SIMPLE_STRUCT_MEM_READER_EXAMPLE_ZH,
+        "ru_example": SIMPLE_STRUCT_MEM_READER_EXAMPLE_RU,
     },
-    "doc": {"en": SIMPLE_STRUCT_DOC_READER_PROMPT, "zh": SIMPLE_STRUCT_DOC_READER_PROMPT_ZH},
-    "custom_tags": {"en": CUSTOM_TAGS_INSTRUCTION, "zh": CUSTOM_TAGS_INSTRUCTION_ZH},
+    "doc": {
+        "en": SIMPLE_STRUCT_DOC_READER_PROMPT,
+        "zh": SIMPLE_STRUCT_DOC_READER_PROMPT_ZH,
+        "ru": SIMPLE_STRUCT_DOC_READER_PROMPT_RU,
+    },
+    "custom_tags": {
+        "en": CUSTOM_TAGS_INSTRUCTION,
+        "zh": CUSTOM_TAGS_INSTRUCTION_ZH,
+        "ru": CUSTOM_TAGS_INSTRUCTION_RU,
+    },
 }
 
 

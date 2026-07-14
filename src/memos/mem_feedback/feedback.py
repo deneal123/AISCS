@@ -26,7 +26,7 @@ from memos.mem_feedback.utils import (
     split_into_chunks,
 )
 from memos.mem_reader.factory import MemReaderFactory
-from memos.mem_reader.read_multi_modal import detect_lang
+from memos.mem_reader.read_multi_modal import detect_lang, pick_by_lang
 from memos.memories.textual.item import TextualMemoryItem
 from memos.memories.textual.tree_text_memory.organize.manager import (
     MemoryManager,
@@ -179,7 +179,7 @@ class MemFeedback(BaseMemFeedback):
         Determine whether it is keyword replacement
         """
         lang = detect_lang(feedback_content)
-        template = FEEDBACK_PROMPT_DICT["if_kw_replace"][lang]
+        template = pick_by_lang(FEEDBACK_PROMPT_DICT["if_kw_replace"], lang)
         prompt = template.format(
             user_feedback=feedback_content,
         )
@@ -200,7 +200,7 @@ class MemFeedback(BaseMemFeedback):
         Generate a judgement for a given feedback.
         """
         lang = detect_lang(feedback_content)
-        template = FEEDBACK_PROMPT_DICT["judge"][lang]
+        template = pick_by_lang(FEEDBACK_PROMPT_DICT["judge"], lang)
         chat_history_lis = [f"""{msg["role"]}: {msg["content"]}""" for msg in chat_history[-4:]]
         chat_history_str = "\n".join(chat_history_lis)
         prompt = template.format(
@@ -443,7 +443,7 @@ class MemFeedback(BaseMemFeedback):
     ):
         """Modify memory at the semantic level"""
         lang = detect_lang("".join(memory_item.memory))
-        template = FEEDBACK_PROMPT_DICT["compare"][lang]
+        template = pick_by_lang(FEEDBACK_PROMPT_DICT["compare"], lang)
         if current_memories == []:
             user_indices = [i for i, d in enumerate(chat_history_list) if d["role"] == "user"]
             if user_indices:
@@ -792,7 +792,7 @@ class MemFeedback(BaseMemFeedback):
             return operations
 
         lang = detect_lang("".join(updated_operations[0]["text"]))
-        template = FEEDBACK_PROMPT_DICT["compare_judge"][lang]
+        template = pick_by_lang(FEEDBACK_PROMPT_DICT["compare_judge"], lang)
 
         all_judge = []
         operations_chunks = general_split_into_chunks(updated_operations)
@@ -929,7 +929,7 @@ class MemFeedback(BaseMemFeedback):
         if not corrected_answer or feedback_content.strip() == "":
             return ""
         lang = detect_lang(feedback_content)
-        template = FEEDBACK_PROMPT_DICT["generation"][lang]
+        template = pick_by_lang(FEEDBACK_PROMPT_DICT["generation"], lang)
         chat_history_str = "\n".join(
             [f"{item['role']}: {item['content']}" for item in chat_history]
         )

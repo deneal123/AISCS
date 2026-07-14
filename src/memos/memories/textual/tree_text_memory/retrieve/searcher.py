@@ -17,6 +17,7 @@ from memos.memories.textual.tree_text_memory.retrieve.retrieve_utils import (
     StopwordManager,
     cosine_similarity_matrix,
     detect_lang,
+    pick_by_lang,
     find_best_unrelated_subgroup,
     parse_json_result,
 )
@@ -1393,14 +1394,14 @@ class Searcher:
 
         lang = detect_lang(query)
         if mode == "fine" and context:
-            template = COT_DICT["fine"][lang]
+            template = pick_by_lang(COT_DICT["fine"], lang)
             prompt = (
                 template.replace("${original_query}", query)
                 .replace("${split_num_threshold}", str(split_num))
                 .replace("${context}", "\n".join(context))
             )
         else:
-            template = COT_DICT["fast"][lang]
+            template = pick_by_lang(COT_DICT["fast"], lang)
             prompt = template.replace("${original_query}", query).replace(
                 "${split_num_threshold}", str(split_num)
             )

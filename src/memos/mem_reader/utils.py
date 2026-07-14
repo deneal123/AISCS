@@ -28,10 +28,16 @@ except Exception:
 
 
 def derive_key(text: str, max_len: int = 80) -> str:
-    """default key when without LLM: first max_len words"""
+    """default key when without LLM: first max_len words
+
+    GPTHub: the sentence splitter knew only Chinese and Latin terminators
+    (。！？!?) — the plain full stop was missing, so for Russian text "the first
+    sentence" was the whole paragraph up to a newline, and the key became a
+    truncated blob instead of a phrase.
+    """
     if not text:
         return ""
-    sent = re.split(r"[。！？!?]\s*|\n", text.strip())[0]
+    sent = re.split(r"[。！？!?.]\s*|\n", text.strip())[0]
     return (sent[:max_len]).strip()
 
 

@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING, Any
 
 from memos.context.context import ContextThreadPoolExecutor
 from memos.log import get_logger
-from memos.mem_reader.read_multi_modal import detect_lang
+from memos.mem_reader.read_multi_modal import detect_lang, pick_by_lang
 from memos.memories.textual.item import TextualMemoryItem, TreeNodeTextualMemoryMetadata
 from memos.templates.prefer_complete_prompt import (
     NAIVE_EXPLICIT_PREFERENCE_EXTRACT_PROMPT,
@@ -33,7 +33,7 @@ def _extract_explicit_preference(qa_pair_str: str, llm) -> list[dict[str, Any]] 
         "zh": NAIVE_EXPLICIT_PREFERENCE_EXTRACT_PROMPT_ZH,
         "en": NAIVE_EXPLICIT_PREFERENCE_EXTRACT_PROMPT,
     }
-    prompt = _map[lang].replace("{qa_pair}", qa_pair_str)
+    prompt = pick_by_lang(_map, lang).replace("{qa_pair}", qa_pair_str)
 
     try:
         response = llm.generate([{"role": "user", "content": prompt}])
@@ -62,7 +62,7 @@ def _extract_implicit_preference(qa_pair_str: str, llm) -> list[dict[str, Any]] 
         "zh": NAIVE_IMPLICIT_PREFERENCE_EXTRACT_PROMPT_ZH,
         "en": NAIVE_IMPLICIT_PREFERENCE_EXTRACT_PROMPT,
     }
-    prompt = _map[lang].replace("{qa_pair}", qa_pair_str)
+    prompt = pick_by_lang(_map, lang).replace("{qa_pair}", qa_pair_str)
 
     try:
         response = llm.generate([{"role": "user", "content": prompt}])

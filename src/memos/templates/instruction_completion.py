@@ -1,6 +1,6 @@
 from typing import Any
 
-from memos.mem_reader.read_multi_modal import detect_lang
+from memos.mem_reader.read_multi_modal import detect_lang, pick_by_lang
 from memos.templates.prefer_complete_prompt import PREF_INSTRUCTIONS, PREF_INSTRUCTIONS_ZH
 
 
@@ -53,14 +53,14 @@ def instruct_completion(
     if not explicit_pref_str and not implicit_pref_str:
         return "", ""
     if not explicit_pref_str:
-        pref_note = _prompt_map[lang].replace(_remove_exp_map[lang], "")
+        pref_note = pick_by_lang(_prompt_map, lang).replace(pick_by_lang(_remove_exp_map, lang), "")
         pref_string = implicit_pref_str + "\n" + pref_note
         return pref_string, pref_note
     if not implicit_pref_str:
-        pref_note = _prompt_map[lang].replace(_remove_imp_map[lang], "")
+        pref_note = pick_by_lang(_prompt_map, lang).replace(pick_by_lang(_remove_imp_map, lang), "")
         pref_string = explicit_pref_str + "\n" + pref_note
         return pref_string, pref_note
 
-    pref_note = _prompt_map[lang]
+    pref_note = pick_by_lang(_prompt_map, lang)
     pref_string = explicit_pref_str + "\n" + implicit_pref_str + "\n" + pref_note
     return pref_string, pref_note
