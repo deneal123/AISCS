@@ -134,6 +134,30 @@ def add_memories(add_req: APIADDRequest):
     return add_handler.handle_add_memories(add_req)
 
 
+@router.post("/admin/wipe", summary="Wipe ALL MemOS memory (Neo4j :Memory + Qdrant collection)")
+def wipe_all_memory():
+    """GPTHub: полный сброс памяти MemOS (все пользователи). Нужен при смене эмбеддера —
+    коллекция Qdrant привязана к размерности; после wipe + рестарта memos она
+    пересоздаётся под новую размерность. Удаляет все узлы :Memory в Neo4j и дропает
+    Qdrant-коллекцию."""
+    result = {"neo4j_deleted": 0, "qdrant_dropped": False}
+    try:
+        with graph_db.driver.session(database=graph_db.db_name) as session:
+            rec = session.run("MATCH (n:Memory) RETURN count(n) AS c").single()
+            result["neo4j_deleted"] = int(rec["c"]) if rec else 0
+            session.run("MATCH (n:Memory) DETACH DELETE n")
+    except Exception as exc:  # noqa: BLE001
+        logger.warning(f"wipe: neo4j clear failed: {exc}")
+    try:
+        vec_db = getattr(graph_db, "vec_db", None)
+        if vec_db is not None:
+            vec_db.delete_collection(vec_db.config.collection_name)
+            result["qdrant_dropped"] = True
+    except Exception as exc:  # noqa: BLE001
+        logger.warning(f"wipe: qdrant drop failed: {exc}")
+    return {"code": 200, "message": "MemOS memory wiped", "data": result}
+
+
 # =============================================================================
 # Cube Management API Endpoints
 # =============================================================================

@@ -577,10 +577,40 @@ class APIConfig:
                 },
             }
 
+    # GPTHub: админ-выбор эмбеддера (модель+размерность) читается из backend один раз
+    # при старте; env — фолбэк. Позволяет менять эмбеддер из админки (после рестарта
+    # memos) без правки env. Кэш на уровне процесса.
+    _embedder_override_cache: dict[str, Any] | None = None
+
+    @staticmethod
+    def _backend_embedder_override() -> dict[str, Any]:
+        if APIConfig._embedder_override_cache is not None:
+            return APIConfig._embedder_override_cache
+        APIConfig._embedder_override_cache = {}
+        api_base = os.getenv("MOS_EMBEDDER_API_BASE") or os.getenv("MEMRADER_API_BASE") or ""
+        base = api_base.rstrip("/")
+        if base.endswith("/v1"):
+            base = base[:-3]
+        if base:
+            try:
+                import json as _json
+                import urllib.request
+
+                with urllib.request.urlopen(  # noqa: S310 — внутренний backend
+                    f"{base}/api/analytics/memos-embedder", timeout=4
+                ) as resp:
+                    data = _json.load(resp)
+                if isinstance(data, dict):
+                    APIConfig._embedder_override_cache = data
+            except Exception:
+                pass  # backend недоступен → env-фолбэк
+        return APIConfig._embedder_override_cache
+
     @staticmethod
     def get_embedder_config() -> dict[str, Any]:
         """Get embedder configuration."""
         embedder_backend = os.getenv("MOS_EMBEDDER_BACKEND", "ollama")
+        override_model = (APIConfig._backend_embedder_override().get("model") or "").strip()
 
         if embedder_backend == "universal_api":
             return {
@@ -588,7 +618,8 @@ class APIConfig:
                 "config": {
                     "provider": os.getenv("MOS_EMBEDDER_PROVIDER", "openai"),
                     "api_key": os.getenv("MOS_EMBEDDER_API_KEY", "sk-xxxx"),
-                    "model_name_or_path": os.getenv("MOS_EMBEDDER_MODEL", "text-embedding-3-large"),
+                    "model_name_or_path": override_model
+                    or os.getenv("MOS_EMBEDDER_MODEL", "text-embedding-3-large"),
                     "headers_extra": json.loads(os.getenv("MOS_EMBEDDER_HEADERS_EXTRA", "{}")),
                     "base_url": os.getenv("MOS_EMBEDDER_API_BASE", "http://openai.com"),
                     "backup_client": os.getenv("MOS_EMBEDDER_BACKUP_CLIENT", "false").lower()
@@ -746,7 +777,14 @@ class APIConfig:
         (shared ``neo4j_vec_db`` + ``EMBEDDING_DIMENSION``). The Neo4j graph stays
         shared, isolated by ``user_name`` (community mode keeps vectors only in Qdrant).
         """
-        dim = dimension if dimension is not None else int(os.getenv("EMBEDDING_DIMENSION", 1024))
+        dim = (
+            dimension
+            if dimension is not None
+            else int(
+                APIConfig._backend_embedder_override().get("dimension")
+                or os.getenv("EMBEDDING_DIMENSION", 1024)
+            )
+        )
         collection = collection_name or "neo4j_vec_db"
         return {
             "uri": os.getenv("NEO4J_URI", "bolt://localhost:7687"),
