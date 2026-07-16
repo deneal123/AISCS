@@ -167,8 +167,43 @@ class Handler(BaseHTTPRequestHandler):
             return self._json(200, {"formats": list(SUPPORTED_EXTENSIONS)})
         return self._json(404, {"error": "not found"})
 
+    # Конверсия таблицы в xlsx-байты. Нужна DuckDB-сайдкару: он не читает xls/ods
+    # (расширения по сети не тянет), а тут уже есть LibreOffice — не дублируем его.
+    # Вход — сырые байты таблицы, выход — сырые байты xlsx (application/octet-stream).
+    CONVERTIBLE = (".xls", ".ods", ".xlsm", ".fods", ".xlsx")
+
+    def _do_convert(self, parsed):
+        query = parse_qs(parsed.query)
+        filename = (query.get("filename", [""])[0] or "").strip()
+        ext = extension_of(filename)
+        if ext not in self.CONVERTIBLE:
+            return self._json(415, {"error": f"convert unsupported: {ext or 'unknown'}"})
+        length = int(self.headers.get("Content-Length", "0") or 0)
+        if length <= 0:
+            return self._json(400, {"error": "empty body"})
+        if length > MAX_BYTES:
+            return self._json(413, {"error": "document too large"})
+        raw = self.rfile.read(length)
+        try:
+            with tempfile.TemporaryDirectory() as workdir:
+                src = Path(workdir) / f"input{ext}"
+                src.write_bytes(raw)
+                out = src if ext == ".xlsx" else soffice_convert(src, workdir, "xlsx")
+                data = out.read_bytes()
+            self.send_response(200)
+            self.send_header("Content-Type", "application/octet-stream")
+            self.send_header("Content-Length", str(len(data)))
+            self.end_headers()
+            self.wfile.write(data)
+        except subprocess.TimeoutExpired:
+            return self._json(504, {"error": "conversion timeout"})
+        except Exception as exc:  # noqa: BLE001 — любой сбой конверсии → 500
+            return self._json(500, {"error": "convert failed", "detail": str(exc)[-400:]})
+
     def do_POST(self):
         parsed = urlparse(self.path)
+        if parsed.path == "/convert":
+            return self._do_convert(parsed)
         if parsed.path != "/parse":
             return self._json(404, {"error": "not found"})
 
