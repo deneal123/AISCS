@@ -23,8 +23,11 @@ RUN pip install --no-cache-dir \
 # ⚠️ core.py ОБЯЗАТЕЛЕН: логика вынесена туда из app.py, и без него контейнер
 # падает на импорте. Проверяется тем, что образ действительно собирается и
 # отвечает на /health — иначе такой промах виден только в проде.
-COPY app.py core.py settings.py settings.toml /opt/duckdb-sidecar/
-COPY entrypoint.sh /opt/duckdb-sidecar/entrypoint.sh
+# Код — каталогом `service/`, как у backend. Конфигурация (`settings.toml`)
+# ложится в корень сервиса, рядом с ним, а не внутрь пакета.
+COPY service /opt/duckdb-sidecar/service
+COPY settings.toml /opt/duckdb-sidecar/settings.toml
+COPY docker/entrypoint.sh /opt/duckdb-sidecar/entrypoint.sh
 RUN chmod +x /opt/duckdb-sidecar/entrypoint.sh
 
 ENV PYTHONUNBUFFERED=1 \

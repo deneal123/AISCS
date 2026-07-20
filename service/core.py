@@ -21,12 +21,12 @@ import time
 from pathlib import Path
 
 import duckdb
-from openpyxl import load_workbook
 
 # Побочный эффект импорта: подкладывает дефолты из settings.toml ПОД окружение.
 # Стоит здесь, а не в app.py, потому что именно этот модуль читает переменные на
 # уровне модуля — значит он и должен гарантировать, что дефолты уже применены.
 import settings  # noqa: F401
+from openpyxl import load_workbook
 
 PORT = int(os.environ.get("PORT", "8080"))
 # Потолок тела запроса: файлы приходят base64 (≈+33%), поэтому лимит выше «сырого».

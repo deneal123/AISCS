@@ -31,6 +31,6 @@ select = ["E", "F", "I", "B", "UP"]
 "tests/*" = ["E501"]
 
 [tool.pytest.ini_options]
-# `pythonpath = ["."]` — чтобы `from core import ...` работал без установки пакета.
-pythonpath = ["."]
+# `pythonpath = ["service"]` — чтобы `from core import ...` работал без установки пакета.
+pythonpath = ["service"]
 testpaths = ["tests"]

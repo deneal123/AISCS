@@ -83,7 +83,7 @@ C++/Velox-движок (напр. facebookincubator/axiom) здесь оверк
 ## Локально
 
 ```bash
-docker build -t duckdb-sidecar .
+docker build -t duckdb-sidecar -f docker/Dockerfile .
 docker run --rm -p 8090:8080 duckdb-sidecar
 
 B64=$(printf 'city,sales\nMoscow,100\nKazan,80\n' | base64 -w0)
