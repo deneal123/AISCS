@@ -75,7 +75,7 @@ C++/Velox-движок (напр. facebookincubator/axiom) здесь оверк
 ## Как это видит бэкенд
 
 Клиент — `DuckDBClient` + `gather_user_tabular_files`
-(`backend/service/services/agents/domain/tools/duckdb_client.py`), инструмент агента `analyze_data`
+(`agents/gpthub_agents/domain/tools/duckdb_client.py` — движок уехал в сайдкар `agents`), инструмент агента `analyze_data`
 (в `DEFAULT_FUNCTION_TOOLS` у general-агента). Включается флагом `AGENTS__DUCKDB_ENABLED`. Работает
 **fail-open**: сайдкар недоступен / нет файлов → инструмент отвечает модели словами, а не роняет ход.
 Табличные файлы пользователя берутся из объектного хранилища (MinIO) по метаданным `UserFile`.
