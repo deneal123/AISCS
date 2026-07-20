@@ -30,6 +30,13 @@ select = ["E", "F", "I", "B", "UP"]
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = ["E501"]
 
+[tool.ruff.lint.isort]
+# `core`/`app` — СВОИ модули сервиса, но лежат не пакетом, а плоско в `service/`,
+# и разные версии ruff классифицируют их по-разному: одна кладёт в третью сторону
+# рядом с duckdb/pytest, другая выносит в отдельную группу. Отсюда «поправил у себя
+# — упало в хуке» и наоборот. Объявляем явно, чтобы вердикт не зависел от версии.
+known-first-party = ["app", "core"]
+
 [tool.pytest.ini_options]
 # `pythonpath = ["service"]` — чтобы `from core import ...` работал без установки пакета.
 pythonpath = ["service"]
