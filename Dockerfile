@@ -28,7 +28,7 @@ RUN pip3 install --no-cache-dir \
 # ⚠️ core.py ОБЯЗАТЕЛЕН: логика вынесена туда из app.py, и без него контейнер
 # падает на импорте. Проверяется тем, что образ действительно собирается и
 # отвечает на /health — иначе такой промах виден только в проде.
-COPY app.py core.py /opt/odl-sidecar/
+COPY app.py core.py settings.py settings.toml /opt/odl-sidecar/
 COPY entrypoint.sh /opt/odl-sidecar/entrypoint.sh
 RUN chmod +x /opt/odl-sidecar/entrypoint.sh
 
