@@ -32,6 +32,7 @@ from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
 import opendataloader_pdf
+from openpyxl import load_workbook
 
 # Логика без тяжёлых зависимостей — в core.py (см. его докстринг: иначе её нельзя
 # проверить, не подняв JVM).
@@ -42,7 +43,6 @@ from core import (
     _cell,
     extension_of,
 )
-from openpyxl import load_workbook
 
 PORT = int(os.environ.get("PORT", "8080"))
 MAX_BYTES = int(os.environ.get("ODL_MAX_BYTES", str(20 * 1024 * 1024)))

@@ -12,11 +12,6 @@
 import os
 from pathlib import Path
 
-# Побочный эффект импорта: подкладывает дефолты из settings.toml ПОД окружение.
-# Стоит здесь, а не в app.py, потому что именно этот модуль читает переменные на
-# уровне модуля — значит он и должен гарантировать, что дефолты уже применены.
-import settings  # noqa: F401
-
 MAX_SHEET_ROWS = int(os.environ.get("ODL_MAX_SHEET_ROWS", "2000"))
 
 SPREADSHEET_EXTENSIONS = (".xlsx", ".xls", ".ods")

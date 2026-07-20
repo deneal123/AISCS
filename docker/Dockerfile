@@ -34,10 +34,8 @@ RUN pip3 install --no-cache-dir \
 # ⚠️ core.py ОБЯЗАТЕЛЕН: логика вынесена туда из app.py, и без него контейнер
 # падает на импорте. Проверяется тем, что образ действительно собирается и
 # отвечает на /health — иначе такой промах виден только в проде.
-# Код — каталогом `service/`, как у backend. Конфигурация (`settings.toml`)
-# ложится в корень сервиса, рядом с ним, а не внутрь пакета.
+# Код — каталогом `service/`, как у backend.
 COPY service /opt/odl-sidecar/service
-COPY settings.toml /opt/odl-sidecar/settings.toml
 COPY docker/entrypoint.sh /opt/odl-sidecar/entrypoint.sh
 RUN chmod +x /opt/odl-sidecar/entrypoint.sh
 
