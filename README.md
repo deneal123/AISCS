@@ -52,7 +52,7 @@ opendataloader не видит таблицу и склеивает всё в о
 ## Локально
 
 ```bash
-docker build -t odl-sidecar .
+docker build -t odl-sidecar -f docker/Dockerfile .
 docker run --rm -p 8080:8080 odl-sidecar
 curl -s --data-binary @doc.pdf "http://localhost:8080/parse?filename=doc.pdf" | jq -r .markdown
 ```

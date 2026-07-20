@@ -6,4 +6,4 @@ set -e
 java -version 2>&1 | head -1
 soffice --version 2>/dev/null | head -1 || echo "WARN: soffice unavailable — office formats will fail"
 
-exec python3 /opt/odl-sidecar/app.py
+exec python3 /opt/odl-sidecar/service/app.py

@@ -37,7 +37,9 @@ except ModuleNotFoundError:  # Python < 3.11
 # Путь можно переопределить — это аварийный ход для оператора, когда правку нужно
 # внести без пересборки образа.
 _ENV_OVERRIDE = "GPTHUB_SETTINGS_TOML"
-_DEFAULT_PATH = Path(__file__).resolve().parent / "settings.toml"
+# `.parent.parent` — settings.toml лежит в КОРНЕ сервиса, рядом с pyproject.toml,
+# а не внутри пакета: это конфигурация сервиса, а не его код.
+_DEFAULT_PATH = Path(__file__).resolve().parent.parent / "settings.toml"
 
 
 def _flatten(table: dict, prefix: str = "") -> dict[str, str]:
