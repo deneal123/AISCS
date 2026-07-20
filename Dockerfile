@@ -20,7 +20,10 @@ RUN pip install --no-cache-dir \
         "duckdb==${DUCKDB_VERSION}" \
         "openpyxl==${OPENPYXL_VERSION}"
 
-COPY app.py /opt/duckdb-sidecar/app.py
+# ⚠️ core.py ОБЯЗАТЕЛЕН: логика вынесена туда из app.py, и без него контейнер
+# падает на импорте. Проверяется тем, что образ действительно собирается и
+# отвечает на /health — иначе такой промах виден только в проде.
+COPY app.py core.py /opt/duckdb-sidecar/
 COPY entrypoint.sh /opt/duckdb-sidecar/entrypoint.sh
 RUN chmod +x /opt/duckdb-sidecar/entrypoint.sh
 

@@ -1,0 +1,29 @@
+# Хуки САМОГО сайдкара.
+#
+# Сабмодуль — самостоятельный git-репозиторий: хуки суперпроекта на коммит внутри
+# него не срабатывают. Без этого файла правки сайдкара шли бы без единой проверки.
+#
+# Установка: `pre-commit install` здесь или `make hooks` из корня.
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-yaml
+      - id: check-toml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: debug-statements
+
+  - repo: local
+    hooks:
+      - id: ruff
+        name: ruff (lint + format)
+        entry: bash -lc "ruff check . && ruff format --check ."
+        language: system
+        pass_filenames: false
+
+      - id: pytest
+        name: pytest
+        entry: bash -lc "pytest -q"
+        language: system
+        pass_filenames: false
