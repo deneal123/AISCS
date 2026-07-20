@@ -34,6 +34,16 @@ from urllib.parse import parse_qs, urlparse
 import opendataloader_pdf
 from openpyxl import load_workbook
 
+# Логика без тяжёлых зависимостей — в core.py (см. его докстринг: иначе её нельзя
+# проверить, не подняв JVM).
+from core import (
+    MAX_SHEET_ROWS,
+    SPREADSHEET_EXTENSIONS,
+    SUPPORTED_EXTENSIONS,
+    _cell,
+    extension_of,
+)
+
 PORT = int(os.environ.get("PORT", "8080"))
 MAX_BYTES = int(os.environ.get("ODL_MAX_BYTES", str(20 * 1024 * 1024)))
 LO_TIMEOUT = int(os.environ.get("ODL_LO_TIMEOUT_SEC", "120"))
@@ -41,24 +51,9 @@ PARSE_TIMEOUT = int(os.environ.get("ODL_PARSE_TIMEOUT_SEC", "300"))
 SOFFICE = os.environ.get("ODL_SOFFICE", "soffice")
 # Потолок на лист: гигантская выгрузка не должна раздуть контекст (бэкенд её потом
 # всё равно сожмёт, но незачем гонять мегабайты по сети).
-MAX_SHEET_ROWS = int(os.environ.get("ODL_MAX_SHEET_ROWS", "2000"))
+
 
 # Таблицы — читаем ячейки напрямую (см. docstring).
-SPREADSHEET_EXTENSIONS = (".xlsx", ".xls", ".ods")
-# Свёрстанные документы — через LibreOffice → PDF → opendataloader. Текстовые форматы
-# (txt/md/csv/json/код) сюда НЕ входят: бэкенд читает их сам.
-DOCUMENT_EXTENSIONS = (
-    ".docx", ".doc", ".odt", ".rtf",
-    ".pptx", ".ppt", ".odp",
-    ".html", ".htm",
-)
-SUPPORTED_EXTENSIONS = (".pdf", *DOCUMENT_EXTENSIONS, *SPREADSHEET_EXTENSIONS)
-
-
-def extension_of(filename):
-    return Path(str(filename or "")).suffix.lower()
-
-
 def soffice_convert(src, workdir, target):
     """LibreOffice headless: конвертация в target ("pdf"/"xlsx"). → путь к результату."""
     # UserInstallation в temp: без своего профиля soffice падает в контейнере,
@@ -86,13 +81,6 @@ def soffice_convert(src, workdir, target):
         detail = (proc.stderr or b"").decode("utf-8", "replace")[-400:]
         raise RuntimeError(f"libreoffice produced no {target}: {detail}")
     return produced[0]
-
-
-def _cell(value):
-    if value is None:
-        return ""
-    # Трубы сломали бы разметку markdown-таблицы.
-    return str(value).replace("|", "\\|").replace("\n", " ").strip()
 
 
 def spreadsheet_to_markdown(src, workdir, ext):

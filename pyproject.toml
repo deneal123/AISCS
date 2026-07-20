@@ -1,0 +1,36 @@
+# Конфигурация инструментов сайдкара — НЕ пакет.
+#
+# `[build-system]` здесь намеренно НЕТ: это приложение, а не библиотека. Блок сборки
+# приглашал бы кого-нибудь сделать `pip install .`, чего делать не нужно — сервис
+# запускается как скрипт в своём образе.
+#
+# Рантайм-зависимость (`opendataloader-pdf`) остаётся ЗАКРЕПЛЁННОЙ В Dockerfile через ARG:
+# она ставится из индекса в образ, лок ей не нужен. Здесь — только то, чем сервис
+# проверяется.
+[project]
+name = "gpthub-opendataloader-sidecar"
+version = "0.1.0"
+description = "Сайдкар opendataloader: вложения → структурный markdown"
+requires-python = ">=3.12"
+
+[project.optional-dependencies]
+# openpyxl нужен для теста разметки таблиц; opendataloader-pdf (и вместе с ним JVM)
+# НЕ нужен — ровно ради этого логика и вынесена в core.py.
+dev = ["pytest>=8.0.0,<9.0.0", "ruff>=0.6.0,<1.0.0"]
+
+[tool.ruff]
+# Те же правила, что у backend и agents: один стиль на монорепо.
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+
+[tool.ruff.lint.per-file-ignores]
+# `_cell` — приватное имя, но именно оно строит markdown-таблицу для модели.
+"tests/*" = ["E501"]
+
+[tool.pytest.ini_options]
+# `pythonpath = ["."]` — чтобы `from core import ...` работал без установки пакета.
+pythonpath = ["."]
+testpaths = ["tests"]
