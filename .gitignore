@@ -244,3 +244,7 @@ test_file_pipeline.py
 # spec
 .ai-tasks/
 openspecs/
+
+# Вывод `make graph GRAPH_TARGET=memos` — дев-артефакты, не код форка.
+# Корневой .gitignore сюда НЕ достаёт: для суперпроекта сабмодуль это гитлинк.
+graphify-out/
