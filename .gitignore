@@ -18,6 +18,7 @@ evaluation/configs/*
 **script.py**
 .env
 evaluation/scripts/personamem
+memos\.claude
 
 # benchmarks
 benchmarks/
