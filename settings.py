@@ -22,8 +22,17 @@
 from __future__ import annotations
 
 import os
-import tomllib
 from pathlib import Path
+
+# ⚠️ Не «на всякий случай», а по факту: база этого сайдкара — jre-jammy, где python3
+# это 3.10 и tomllib в stdlib ещё нет. Бэкпорт `tomli` ставится в образ ЯВНО
+# (см. Dockerfile). Если не импортируется ни то ни другое — падаем громко: молчаливая
+# деградация означала бы, что settings.toml перестал действовать, а заметили бы это
+# по неверным лимитам, то есть сильно позже и не там.
+try:
+    import tomllib
+except ModuleNotFoundError:  # Python < 3.11
+    import tomli as tomllib
 
 # Путь можно переопределить — это аварийный ход для оператора, когда правку нужно
 # внести без пересборки образа.

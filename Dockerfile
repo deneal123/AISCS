@@ -21,7 +21,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # PDF-рендер (LibreOffice не печатает сетку в PDF → opendataloader не видит таблицу).
 ARG OPENDATALOADER_VERSION=2.4.7
 ARG OPENPYXL_VERSION=3.1.5
+# ⚠️ tomli — БЭКПОРТ tomllib, и он здесь не «на всякий случай». База этого сайдкара
+# `eclipse-temurin:21-jre-jammy`, её `python3` — 3.10, а tomllib вошёл в stdlib
+# только в 3.11. У остальных сайдкаров образы на 3.12, там пакет не нужен.
+# Поймано СБОРКОЙ: без него контейнер падал на импорте settings.py — то есть
+# предположение «tomllib есть везде» было неверным ровно для одного из четырёх.
 RUN pip3 install --no-cache-dir \
+        "tomli==2.0.1" \
         "opendataloader-pdf==${OPENDATALOADER_VERSION}" \
         "openpyxl==${OPENPYXL_VERSION}"
 
