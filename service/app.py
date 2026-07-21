@@ -1,99 +1,180 @@
 #!/usr/bin/env python3
-"""Тонкая HTTP-обёртка: SQL/аналитика по загруженным табличным файлам через DuckDB.
+"""Транспорт сайдкара duckdb: SQL/аналитика по загруженным табличным файлам.
 
-Без веб-фреймворка (stdlib http.server + duckdb + openpyxl). На каждый запрос —
-свежее in-memory DuckDB-соединение (изоляция между запросами), файлы грузятся в
-ТАБЛИЦЫ, затем внешний доступ к ФС отключается — SQL от LLM видит только таблицы.
+Логика — в `core.py`, границы контракта — в `contracts.py`; здесь только HTTP.
 
-  POST /query   body(JSON) = {
-      "sql": "<опц. SQL; пусто → схема+превью таблиц>",
-      "files": [{"name": "sales.csv", "content_b64": "<base64>"}, ...],
-      "max_rows": 200
-    }
-    → {"columns": [...], "rows": [[...]], "row_count": N, "truncated": bool,
-       "tables": [{"name","columns":[{name,type}],"row_count"}],
-       "duration_sec": <float>, "sql": "<исполненный или ''>"}
-  GET /health   → {"status":"ok","formats":[...],"duckdb": "<версия>"}
-  GET /formats  → {"formats":[...]}
+  POST /query   {"sql": "<опц.; пусто → схема+превью>",
+                 "files": [{name, content_b64}], "max_rows": 200}
+                → {"sql","columns","rows","row_count","truncated","tables","duration_sec"}
+  GET  /health  → {"status","service","version","contract"}
+  GET  /formats → {"formats": [...]}
+
+Форма ошибки одна на все сервисы: `{"error": "<машинный код>", "detail": "<текст>"}`.
+Коды — в `contracts.ERROR_CODES`; вызывающий различает по `error`, а не по тексту.
+
+⚠️ ЕДИНСТВЕННОЕ отступление от «ошибка = не-2xx»: неверный SQL отдаётся с HTTP 200 и
+телом `{"error": "sql_error", ...}`. Это не сбой транспорта, а нормальный ход диалога —
+текст ошибки возвращается модели, чтобы она исправила запрос. Отступление названо явно
+здесь и в контракте, чтобы отличаться от недосмотра.
 
 Почему DuckDB, а не тяжёлый Velox/Axiom: один pip-пакет, нативно читает
-csv/tsv/parquet/json, встраивается, изолируется. xlsx читаем через openpyxl →
-csv (DuckDB сам выведет типы) — расширение `excel` тянуть по сети нельзя: сайдкар
-на internal-сети без интернета.
+csv/tsv/parquet/json, встраивается, изолируется. xlsx читаем через openpyxl → csv
+(DuckDB сам выведет типы) — расширение `excel` тянуть по сети нельзя: сайдкар на
+internal-сети без интернета.
 """
 
-import json
+import logging
 import os
-from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 import duckdb
+import uvicorn
+from contracts import (
+    ERROR_CODES,
+    MAX_BODY_BYTES,
+    QUERY_TIMEOUT_SEC,
+    RESPONSE_FIELDS,
+    SERVICE_NAME,
+    SERVICE_VERSION,
+)
+from fastapi import FastAPI, Header, Request
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
+from pydantic import BaseModel, Field
+from starlette.exceptions import HTTPException as StarletteHTTPException
 
-# Логика — в core.py; здесь только транспорт.
 from core import (
     DEFAULT_MAX_ROWS,
-    MAX_BODY_BYTES,
+    HARD_MAX_ROWS,
     SUPPORTED_EXT,
+    QueryTimeout,
+    UnsupportedFormat,
     run_query,
 )
 
 PORT = int(os.environ.get("PORT", "8080"))
 
+logger = logging.getLogger("duckdb-sidecar")
 
-class Handler(BaseHTTPRequestHandler):
-    protocol_version = "HTTP/1.1"
+app = FastAPI(title="GPTHub duckdb sidecar", version=SERVICE_VERSION, docs_url=None, redoc_url=None)
 
-    def _json(self, code, obj):
-        body = json.dumps(obj, ensure_ascii=False, default=str).encode("utf-8")
-        self.send_response(code)
-        self.send_header("Content-Type", "application/json; charset=utf-8")
-        self.send_header("Content-Length", str(len(body)))
-        self.end_headers()
-        self.wfile.write(body)
 
-    def do_GET(self):
-        if self.path.split("?", 1)[0] == "/health":
-            return self._json(
-                200, {"status": "ok", "formats": list(SUPPORTED_EXT), "duckdb": duckdb.__version__}
-            )
-        if self.path.split("?", 1)[0] == "/formats":
-            return self._json(200, {"formats": list(SUPPORTED_EXT)})
-        return self._json(404, {"error": "not found"})
+def _error(code: str, detail: str, status: int) -> JSONResponse:
+    """Единая форма ошибки. `code` обязан быть объявлен в контракте."""
+    assert code in ERROR_CODES, f"код ошибки {code!r} не объявлен в contracts.ERROR_CODES"
+    return JSONResponse({"error": code, "detail": detail}, status_code=status)
 
-    def do_POST(self):
-        if self.path.split("?", 1)[0] != "/query":
-            return self._json(404, {"error": "not found"})
-        length = int(self.headers.get("Content-Length", "0") or 0)
-        if length <= 0:
-            return self._json(400, {"error": "empty body"})
-        if length > MAX_BODY_BYTES:
-            return self._json(413, {"error": "request too large"})
-        try:
-            payload = json.loads(self.rfile.read(length).decode("utf-8"))
-        except Exception:
-            return self._json(400, {"error": "invalid JSON body"})
 
-        files = payload.get("files") or []
-        if not isinstance(files, list) or not files:
-            return self._json(400, {"error": "no files provided"})
-        sql = payload.get("sql") or ""
-        max_rows = payload.get("max_rows") or DEFAULT_MAX_ROWS
+# ⚠️ ОБРАБОТЧИКИ ФРЕЙМВОРКА — ЧАСТЬ КОНТРАКТА, А НЕ КОСМЕТИКА. Без них FastAPI отдаёт
+# СВОЮ форму (`{"detail": ...}` на 404 и `{"detail": [...]}` на 422), и сервис говорит
+# двумя разными языками ошибок сразу: наши ручки — `{"error","detail"}`, а фреймворк —
+# по-своему. Вызывающий тогда обязан уметь оба, то есть разбирать ответ угадыванием.
+# Живой прогон это и показал: коды `not_found`/`invalid_request` были объявлены в
+# контракте, но не отдавались никогда.
+@app.exception_handler(StarletteHTTPException)
+async def _http_error(_request: Request, exc: StarletteHTTPException) -> JSONResponse:
+    code = "not_found" if exc.status_code == 404 else "query_failed"
+    return _error(code, str(exc.detail), exc.status_code)
 
-        try:
-            return self._json(200, run_query(sql, files, max_rows))
-        except duckdb.Error as exc:
-            # Ошибка SQL — это НОРМАЛЬНО: возвращаем модели текст, пусть исправит запрос.
-            return self._json(200, {"error": "sql_error", "detail": str(exc)[-600:], "sql": sql})
-        except Exception as exc:  # defensive: любой сбой → нет результата
-            return self._json(500, {"error": "query failed", "detail": str(exc)[-400:]})
 
-    def log_message(self, *_args):
-        return
+@app.exception_handler(RequestValidationError)
+async def _validation_error(_request: Request, exc: RequestValidationError) -> JSONResponse:
+    # Текст pydantic полезен вызывающему (он называет поле), но форма — наша.
+    return _error("invalid_request", str(exc.errors())[:400], 422)
+
+
+class FileIn(BaseModel):
+    name: str = ""
+    content_b64: str = ""
+
+
+class QueryIn(BaseModel):
+    """Схема запроса.
+
+    ⚠️ До неё тело разбиралось вручную и типы не проверялись: `{"max_rows": "abc"}`
+    доезжал до `int()` в core и превращался в 500 «query failed» — то есть ошибка
+    ВЫЗЫВАЮЩЕГО выглядела как поломка сервиса. Теперь это 422 с указанием поля.
+    """
+
+    sql: str = ""
+    files: list[FileIn] = Field(default_factory=list)
+    max_rows: int = Field(default=DEFAULT_MAX_ROWS, ge=1, le=HARD_MAX_ROWS)
+
+
+@app.get("/health")
+async def health() -> dict:
+    """Хелсчек + публикация контракта: с кем именно говорит вызывающий.
+
+    `contract` — ИМЕНА, а не счётчики: «7 полей» совпадёт и при разных наборах.
+    Сверяется офлайн-гейтом `scripts/check_contract_parity.py`.
+    """
+    return {
+        "status": "ok",
+        "service": SERVICE_NAME,
+        "version": SERVICE_VERSION,
+        "duckdb": duckdb.__version__,
+        "contract": {
+            "response_fields": sorted(RESPONSE_FIELDS),
+            "error_codes": sorted(ERROR_CODES),
+            "max_body_bytes": MAX_BODY_BYTES,
+            "query_timeout_sec": QUERY_TIMEOUT_SEC,
+            "formats": list(SUPPORTED_EXT),
+        },
+    }
+
+
+@app.get("/formats")
+async def formats() -> dict:
+    return {"formats": list(SUPPORTED_EXT)}
+
+
+@app.post("/query")
+async def query(
+    payload: QueryIn,
+    request: Request,
+    correlation_id: str | None = Header(default=None, alias="X-Correlation-Id"),
+) -> JSONResponse:
+    # Сквозной идентификатор — единственное, что связывает строку в логе сайдкара с
+    # сообщением пользователя в логе backend'а. Заголовка нет — работаем, но помечаем:
+    # молча терять связь хуже, чем знать, что её нет.
+    cid = correlation_id or "-"
+
+    length = int(request.headers.get("content-length") or 0)
+    if length > MAX_BODY_BYTES:
+        return _error("request_too_large", f"тело больше {MAX_BODY_BYTES} байт", 413)
+    if not payload.files:
+        return _error("no_files", "не передано ни одного файла", 400)
+
+    try:
+        result = run_query(payload.sql, [f.model_dump() for f in payload.files], payload.max_rows)
+    except UnsupportedFormat as exc:
+        return _error("unsupported_format", str(exc), 415)
+    except QueryTimeout as exc:
+        logger.warning("[cid=%s] дедлайн запроса исчерпан: %s", cid, exc)
+        return _error("query_timeout", str(exc), 504)
+    except duckdb.Error as exc:
+        # ⚠️ Сюда НЕ должен попадать наш дедлайн. `duckdb.InterruptException` —
+        # подкласс `duckdb.Error`, и без преобразования в `core.QueryTimeout` он
+        # приехал бы именно в эту ветку: модель получила бы «поправь SQL» с кодом 200
+        # на наш собственный таймаут и переписывала бы корректный запрос впустую.
+        # Само преобразование живёт в `core.run_query` — там же, где его видно.
+        return JSONResponse(
+            {"error": "sql_error", "detail": str(exc)[-600:], "sql": payload.sql}, status_code=200
+        )
+    except Exception as exc:  # defensive: любой сбой → нет результата
+        logger.exception("[cid=%s] запрос не выполнен", cid)
+        return _error("query_failed", str(exc)[-400:], 500)
+
+    return JSONResponse(result)
 
 
 if __name__ == "__main__":
-    print(
-        f"duckdb-sidecar on :{PORT} | duckdb={duckdb.__version__} "
-        f"| formats={len(SUPPORTED_EXT)} | max_rows={DEFAULT_MAX_ROWS}",
-        flush=True,
+    logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+    logger.info(
+        "duckdb-sidecar on :%s | contract=%s | duckdb=%s | formats=%d | timeout=%gs",
+        PORT,
+        SERVICE_VERSION,
+        duckdb.__version__,
+        len(SUPPORTED_EXT),
+        QUERY_TIMEOUT_SEC,
     )
-    ThreadingHTTPServer(("0.0.0.0", PORT), Handler).serve_forever()
+    uvicorn.run(app, host="0.0.0.0", port=PORT, log_level="info")

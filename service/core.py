@@ -17,15 +17,19 @@ import csv as csv_mod
 import os
 import re
 import tempfile
+import threading
 import time
 from pathlib import Path
 
 import duckdb
+
+# ⚠️ Границы контракта импортируются, а не объявляются здесь заново. `MAX_BODY_BYTES`
+# раньше жил в этом файле, а `PORT` был объявлен ДВАЖДЫ — тут и в `app.py`, с
+# независимым чтением одной и той же переменной окружения. Источник правды один:
+# `contracts.py` (только stdlib, поэтому его может загрузить страж без duckdb).
+from contracts import MAX_BODY_BYTES, QUERY_TIMEOUT_SEC  # noqa: F401 — ре-экспорт для app.py
 from openpyxl import load_workbook
 
-PORT = int(os.environ.get("PORT", "8080"))
-# Потолок тела запроса: файлы приходят base64 (≈+33%), поэтому лимит выше «сырого».
-MAX_BODY_BYTES = int(os.environ.get("DUCKDB_MAX_BODY_BYTES", str(64 * 1024 * 1024)))
 # Строк в ответе по умолчанию — чтобы не раздуть контекст LLM.
 DEFAULT_MAX_ROWS = int(os.environ.get("DUCKDB_MAX_ROWS", "200"))
 HARD_MAX_ROWS = int(os.environ.get("DUCKDB_HARD_MAX_ROWS", "2000"))
@@ -86,11 +90,21 @@ def xlsx_to_csv_path(src: Path, workdir: Path) -> Path:
     return out
 
 
+class UnsupportedFormat(ValueError):
+    """Расширение файла не поддерживается.
+
+    Отдельный тип, а не голый `ValueError`: транспорт обязан отличать «клиент прислал
+    не тот файл» (415) от «у нас сломалось» (500). Раньше здесь был `ValueError`, он
+    проваливался в общий `except Exception` и превращался в 500 «query failed» — то
+    есть вина сваливалась на сервис, а вызывающий не мог понять, что чинить.
+    """
+
+
 def load_file(con, name: str, raw: bytes, workdir: Path, used: set[str]) -> dict:
     """Записать файл в temp, создать из него таблицу DuckDB. → метаданные таблицы."""
     ext = ext_of(name)
     if ext not in SUPPORTED_EXT:
-        raise ValueError(f"формат не поддержан: {ext or 'unknown'}")
+        raise UnsupportedFormat(f"формат не поддержан: {ext or 'unknown'}")
     table = table_name_for(name, used)
     src = workdir / f"in_{table}{ext or '.dat'}"
     src.write_bytes(raw)
@@ -169,6 +183,16 @@ def _seal_external_access(con) -> None:
         )
 
 
+class QueryTimeout(Exception):
+    """Работа не уложилась в серверный дедлайн и была прервана.
+
+    Отдельный тип нужен, чтобы отличить таймаут от ошибки SQL. Иначе не выйдет:
+    `duckdb.InterruptException` — ПОДКЛАСС `duckdb.Error`, то есть обработчик ошибок
+    запроса поймал бы прерывание первым и отдал модели «поправь SQL» с кодом 200.
+    Модель бы послушно переписала корректный запрос, а он снова упёрся бы в дедлайн.
+    """
+
+
 def run_query(sql: str, files: list[dict], max_rows: int) -> dict:
     started = time.monotonic()
     with tempfile.TemporaryDirectory() as tmp:
@@ -178,6 +202,28 @@ def run_query(sql: str, files: list[dict], max_rows: int) -> dict:
             con.execute(f"SET memory_limit='{MEMORY_LIMIT}'")
         except Exception:
             pass
+        # ⚠️ СЕРВЕРНЫЙ ДЕДЛАЙН. До него таймаута на стороне сайдкара не было ВООБЩЕ:
+        # клиент отваливался по своим 60 с, а `con.execute` продолжал считать запрос,
+        # написанный моделью, — процессорное время горело без единого потребителя.
+        #
+        # Дедлайн накрывает и ЗАГРУЗКУ файлов, а не только SQL: распарсить присланный
+        # csv на десятки миллионов строк ничуть не быстрее тяжёлого join'а.
+        #
+        # ⚠️ ПОЧЕМУ СТОРОЖ В ЦИКЛЕ, А НЕ ОДИН `threading.Timer`. `interrupt()` гасит
+        # ТОЛЬКО ИДУЩИЙ запрос; сработав в промежутке между двумя (например, между
+        # загрузкой последнего файла и стартом SQL), он пропадает впустую — и дедлайн
+        # молча не применяется. Тест это и поймал: запрос отработал целиком.
+        # Поэтому сторож бьёт повторно, пока работа не кончится.
+        done = threading.Event()
+
+        def _watchdog() -> None:
+            if done.wait(QUERY_TIMEOUT_SEC):
+                return  # уложились — прерывать нечего
+            while not done.wait(0.2):
+                con.interrupt()
+
+        watchdog = threading.Thread(target=_watchdog, daemon=True, name="duckdb-deadline")
+        watchdog.start()
         try:
             used: set[str] = set()
             tables = [
@@ -227,5 +273,14 @@ def run_query(sql: str, files: list[dict], max_rows: int) -> dict:
                 ],
                 "duration_sec": round(time.monotonic() - started, 3),
             }
+        except duckdb.InterruptException as exc:
+            # Прерывание пришло от нашего же сторожа — это дедлайн, а не кривой SQL.
+            # Без этого преобразования InterruptException (подкласс `duckdb.Error`)
+            # приехал бы в транспорте в ветку sql_error и вернулся с кодом 200.
+            raise QueryTimeout(f"дедлайн {QUERY_TIMEOUT_SEC:g}с исчерпан") from exc
         finally:
+            # Сначала гасим сторожа, потом закрываем соединение: иначе он может
+            # дёрнуть `interrupt()` по уже закрытому соединению.
+            done.set()
+            watchdog.join(timeout=1.0)
             con.close()
