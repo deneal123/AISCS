@@ -26,10 +26,16 @@ ARG OPENPYXL_VERSION=3.1.5
 # только в 3.11. У остальных сайдкаров образы на 3.12, там пакет не нужен.
 # Поймано СБОРКОЙ: без него контейнер падал на импорте settings.py — то есть
 # предположение «tomllib есть везде» было неверным ровно для одного из четырёх.
+# Транспорт сайдкара. Версии совпадают с dev-зависимостями pyproject.toml: тесты
+# должны проверять то, что реально исполняется в образе.
+ARG FASTAPI_VERSION=0.115.6
+ARG UVICORN_VERSION=0.34.0
 RUN pip3 install --no-cache-dir \
         "tomli==2.0.1" \
         "opendataloader-pdf==${OPENDATALOADER_VERSION}" \
-        "openpyxl==${OPENPYXL_VERSION}"
+        "openpyxl==${OPENPYXL_VERSION}" \
+        "fastapi==${FASTAPI_VERSION}" \
+        "uvicorn==${UVICORN_VERSION}"
 
 # ⚠️ core.py ОБЯЗАТЕЛЕН: логика вынесена туда из app.py, и без него контейнер
 # падает на импорте. Проверяется тем, что образ действительно собирается и
@@ -40,12 +46,16 @@ COPY docker/entrypoint.sh /opt/odl-sidecar/entrypoint.sh
 RUN chmod +x /opt/odl-sidecar/entrypoint.sh
 
 # HOME нужен LibreOffice: без записываемой домашней директории soffice падает.
+#
+# ⚠️ ТАЙМАУТЫ ЗДЕСЬ ПЕРЕКРЫВАЮТ ДЕФОЛТЫ `contracts.py`, поэтому правятся ВМЕСТЕ с ними
+# (и с обоими compose-файлами — там свои `:-` дефолты). Было 120+300=420 при клиентском
+# таймауте 180: сервер продолжал работу после ухода клиента. Сумма обязана быть < 180.
 ENV HOME=/tmp \
     PYTHONUNBUFFERED=1 \
     JAVA_TOOL_OPTIONS="-Djava.awt.headless=true" \
     ODL_MAX_BYTES=20971520 \
-    ODL_LO_TIMEOUT_SEC=120 \
-    ODL_PARSE_TIMEOUT_SEC=300 \
+    ODL_LO_TIMEOUT_SEC=70 \
+    ODL_PARSE_TIMEOUT_SEC=95 \
     PORT=8080
 EXPOSE 8080
 ENTRYPOINT ["/opt/odl-sidecar/entrypoint.sh"]

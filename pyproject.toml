@@ -18,7 +18,15 @@ requires-python = ">=3.10"
 [project.optional-dependencies]
 # openpyxl нужен для теста разметки таблиц; opendataloader-pdf (и вместе с ним JVM)
 # НЕ нужен — ровно ради этого логика и вынесена в core.py.
-dev = ["pytest>=8.0.0,<9.0.0", "ruff>=0.6.0,<1.0.0"]
+dev = [
+    "pytest>=8.0.0,<9.0.0",
+    "ruff>=0.6.0,<1.0.0",
+    "openpyxl==3.1.5",  # разбор таблиц по ячейкам — тестируется без JVM
+    # Транспорт сайдкара; версии те же, что в docker/Dockerfile (ARG).
+    "fastapi==0.115.6",
+    "uvicorn==0.34.0",
+    "httpx>=0.27",  # TestClient FastAPI ходит через httpx
+]
 
 [tool.ruff]
 # Те же правила, что у backend и agents: один стиль на монорепо.

@@ -1,41 +1,48 @@
 #!/usr/bin/env python3
-"""Тонкая HTTP-обёртка: документ → markdown для LLM.
+"""Транспорт сайдкара opendataloader: документы → markdown для LLM.
 
-Без веб-фреймворка (stdlib + opendataloader_pdf + openpyxl) — на каждый запрос:
-  POST /parse?filename=<name>   body = сырые байты документа
-    → {"markdown": "...", "engine": "...", "chars": N, "duration_sec": <float>}
-  GET /formats → {"formats": [...]}
-  GET /health  → {"status": "ok", "formats": [...]}
+Границы контракта — в `contracts.py`, разбор ячеек — в `core.py`; здесь HTTP и
+подпроцессы (LibreOffice, JVM-парсер).
 
-Два маршрута, потому что документы и таблицы — принципиально разные вещи:
+  POST /parse?filename=<name>    тело = сырые байты документа
+                → {"markdown", "engine", "chars", "duration_sec"}
+  POST /convert?filename=<name>  тело = сырые байты таблицы
+                → сырые байты xlsx (application/octet-stream)
+  GET  /health  → {"status","service","version","contract","formats"}
+  GET  /formats → {"formats": [...]}
 
-1. ДОКУМЕНТЫ (pdf/docx/pptx/rtf/html) — свёрстанные страницы. Их парсит
-   opendataloader (Java): он читает вёрстку ВИЗУАЛЬНО и по линиям разметки
-   восстанавливает таблицы, заголовки, списки. Не-PDF сначала доводим до PDF
-   через LibreOffice headless.
+Форма ошибки одна на все сервисы: `{"error": "<машинный код>", "detail": "<текст>"}`.
 
-2. ТАБЛИЦЫ (xlsx/xls/ods) — уже структурированные данные, и гнать их через
-   PDF-рендер ЛОМАЕТ их: LibreOffice при экспорте Calc в PDF не печатает сетку,
-   а без линий opendataloader не видит таблицу и склеивает всё в один абзац;
-   вдобавок широкую таблицу PDF режет по страницам. Поэтому читаем ячейки
-   напрямую (openpyxl) — распознавать то, что и так структурировано, незачем.
-   .xls/.ods сначала конвертируем в .xlsx (LibreOffice умеет это хорошо).
+⚠️ `/convert` намеренно отдаёт БИНАРЬ, а не JSON: результат уходит в сайдкар duckdb как
+файл, и base64-обёртка раздула бы его на треть без всякой пользы. Это названное
+отступление от «ответ = JSON», а не недосмотр.
+
+Почему JVM-парсер запускается ОТДЕЛЬНЫМ ПРОЦЕССОМ — см. `pdf_to_markdown`.
 """
 
-import json
+import logging
 import os
 import subprocess
+import sys
 import tempfile
 import time
-from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from urllib.parse import parse_qs, urlparse
 
-import opendataloader_pdf
-from openpyxl import load_workbook
+import uvicorn
+from contracts import (
+    ERROR_CODES,
+    LO_TIMEOUT_SEC,
+    MAX_BODY_BYTES,
+    PARSE_TIMEOUT_SEC,
+    RESPONSE_FIELDS,
+    SERVICE_NAME,
+    SERVICE_VERSION,
+)
+from fastapi import FastAPI, Header, Request
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse, Response
+from starlette.exceptions import HTTPException as StarletteHTTPException
 
-# Логика без тяжёлых зависимостей — в core.py (см. его докстринг: иначе её нельзя
-# проверить, не подняв JVM).
 from core import (
     MAX_SHEET_ROWS,
     SPREADSHEET_EXTENSIONS,
@@ -45,90 +52,112 @@ from core import (
 )
 
 PORT = int(os.environ.get("PORT", "8080"))
-MAX_BYTES = int(os.environ.get("ODL_MAX_BYTES", str(20 * 1024 * 1024)))
-LO_TIMEOUT = int(os.environ.get("ODL_LO_TIMEOUT_SEC", "120"))
-PARSE_TIMEOUT = int(os.environ.get("ODL_PARSE_TIMEOUT_SEC", "300"))
 SOFFICE = os.environ.get("ODL_SOFFICE", "soffice")
-# Потолок на лист: гигантская выгрузка не должна раздуть контекст (бэкенд её потом
-# всё равно сожмёт, но незачем гонять мегабайты по сети).
+# Форматы, которые умеет конвертировать в xlsx для сайдкара duckdb (он не читает
+# xls/ods: расширения по сети не тянет, а LibreOffice уже стоит здесь).
+CONVERTIBLE = (".xls", ".ods", ".xlsm", ".fods", ".xlsx")
+
+logger = logging.getLogger("opendataloader-sidecar")
+
+app = FastAPI(
+    title="GPTHub opendataloader sidecar",
+    version=SERVICE_VERSION,
+    docs_url=None,
+    redoc_url=None,
+)
 
 
-# Таблицы — читаем ячейки напрямую (см. docstring).
+def _error(code: str, detail: str, status: int) -> JSONResponse:
+    assert code in ERROR_CODES, f"код ошибки {code!r} не объявлен в contracts.ERROR_CODES"
+    return JSONResponse({"error": code, "detail": detail}, status_code=status)
+
+
+@app.exception_handler(StarletteHTTPException)
+async def _http_error(_request: Request, exc: StarletteHTTPException) -> JSONResponse:
+    code = "not_found" if exc.status_code == 404 else "internal"
+    return _error(code, str(exc.detail), exc.status_code)
+
+
+@app.exception_handler(RequestValidationError)
+async def _validation_error(_request: Request, exc: RequestValidationError) -> JSONResponse:
+    return _error("invalid_request", str(exc.errors())[:400], 422)
+
+
 def soffice_convert(src, workdir, target):
     """LibreOffice headless: конвертация в target ("pdf"/"xlsx"). → путь к результату."""
     # UserInstallation в temp: без своего профиля soffice падает в контейнере,
     # а параллельные запросы дерутся за общий профиль.
     profile = Path(workdir) / "lo-profile"
-    out_dir = Path(workdir) / f"lo-{target}"
-    out_dir.mkdir(parents=True, exist_ok=True)
-    proc = subprocess.run(
+    subprocess.run(
         [
             SOFFICE,
             f"-env:UserInstallation=file://{profile}",
             "--headless",
-            "--norestore",
             "--convert-to",
             target,
             "--outdir",
-            str(out_dir),
+            str(workdir),
             str(src),
         ],
+        check=True,
         capture_output=True,
-        timeout=LO_TIMEOUT,
+        timeout=LO_TIMEOUT_SEC,
     )
-    produced = sorted(out_dir.glob(f"*.{target}"))
-    if not produced:
-        detail = (proc.stderr or b"").decode("utf-8", "replace")[-400:]
-        raise RuntimeError(f"libreoffice produced no {target}: {detail}")
-    return produced[0]
+    out = Path(workdir) / (Path(src).stem + f".{target}")
+    if not out.exists():
+        raise RuntimeError(f"LibreOffice не создал {target}")
+    return out
 
 
 def spreadsheet_to_markdown(src, workdir, ext):
-    """xlsx/xls/ods → markdown-таблицы по листам, напрямую из ячеек."""
-    if ext != ".xlsx":
-        src = soffice_convert(src, workdir, "xlsx")
+    """Таблица → markdown ПО ЯЧЕЙКАМ (не через PDF-рендер: там теряется сетка)."""
+    from openpyxl import load_workbook
 
-    # data_only=True → кэшированные значения формул вместо самих формул: LLM нужны числа.
-    wb = load_workbook(src, data_only=True, read_only=True)
+    path = src if ext == ".xlsx" else soffice_convert(src, workdir, "xlsx")
+    wb = load_workbook(path, data_only=True, read_only=True)
     blocks = []
     for sheet in wb.worksheets:
         rows = []
-        for row in sheet.iter_rows(values_only=True):
-            cells = [_cell(v) for v in row]
-            if any(cells):  # пустые строки-разделители не тащим
-                rows.append(cells)
-            if len(rows) >= MAX_SHEET_ROWS:
-                rows.append([f"…лист обрезан на {MAX_SHEET_ROWS} строках"])
+        for i, row in enumerate(sheet.iter_rows(values_only=True)):
+            if i >= MAX_SHEET_ROWS:
+                rows.append("…лист обрезан…")
                 break
-        if not rows:
-            continue
-
-        width = max(len(r) for r in rows)
-        rows = [r + [""] * (width - len(r)) for r in rows]
-        header, body = rows[0], rows[1:]
-        lines = [
-            f"## Лист: {sheet.title}",
-            "",
-            "| " + " | ".join(header) + " |",
-            "| " + " | ".join(["---"] * width) + " |",
-        ]
-        lines += ["| " + " | ".join(r) + " |" for r in body]
-        blocks.append("\n".join(lines))
+            if row is None or all(c is None for c in row):
+                continue
+            rows.append("| " + " | ".join(_cell(c) for c in row) + " |")
+        if rows:
+            blocks.append(f"## {sheet.title}\n\n" + "\n".join(rows))
     wb.close()
-
     if not blocks:
         raise RuntimeError("spreadsheet has no data")
     return "\n\n".join(blocks)
 
 
+# Скрипт-обёртка для дочернего процесса: делает ровно один вызов парсера.
+_PARSE_CHILD = (
+    "import sys, opendataloader_pdf;"
+    "opendataloader_pdf.convert(input_path=[sys.argv[1]], output_dir=sys.argv[2],"
+    " format='markdown')"
+)
+
+
 def pdf_to_markdown(pdf_path, workdir):
-    """opendataloader-pdf: PDF → markdown. Каждый вызов поднимает JVM."""
+    """opendataloader-pdf: PDF → markdown. Каждый вызов поднимает JVM.
+
+    ⚠️ ОТДЕЛЬНЫМ ПРОЦЕССОМ РАДИ ДЕДЛАЙНА. `opendataloader_pdf.convert` — обычный вызов
+    внутри нашего процесса, и ограничить его по времени было НЕЧЕМ: поток с JVM не
+    прервать. Поэтому `ODL_PARSE_TIMEOUT_SEC` объявлялся, пробрасывался через compose
+    и не применялся НИ РАЗУ — парсер мог висеть сколько угодно, а клиент давно ушёл
+    (его таймаут 180 с). Дочерний процесс `subprocess.run(..., timeout=…)` убивается
+    по-настоящему — тем же приёмом, что уже используется для LibreOffice.
+    """
     out_dir = Path(workdir) / "md"
     out_dir.mkdir(parents=True, exist_ok=True)
-    opendataloader_pdf.convert(
-        input_path=[str(pdf_path)],
-        output_dir=str(out_dir),
-        format="markdown",
+    subprocess.run(
+        [sys.executable, "-c", _PARSE_CHILD, str(pdf_path), str(out_dir)],
+        check=True,
+        capture_output=True,
+        timeout=PARSE_TIMEOUT_SEC,
     )
     produced = sorted(out_dir.rglob("*.md"))
     if not produced:
@@ -136,117 +165,132 @@ def pdf_to_markdown(pdf_path, workdir):
     return "\n\n".join(p.read_text(encoding="utf-8", errors="replace") for p in produced)
 
 
-class Handler(BaseHTTPRequestHandler):
-    protocol_version = "HTTP/1.1"
+@app.get("/health")
+async def health() -> dict:
+    """Хелсчек + контракт.
 
-    def _json(self, code, obj):
-        body = json.dumps(obj, ensure_ascii=False).encode("utf-8")
-        self.send_response(code)
-        self.send_header("Content-Type", "application/json; charset=utf-8")
-        self.send_header("Content-Length", str(len(body)))
-        self.end_headers()
-        self.wfile.write(body)
+    ⚠️ Готовность зависимостей здесь НЕ проверяется, и это осознанное ограничение, а не
+    недосмотр: единственный честный способ узнать, жива ли JVM и LibreOffice, — запустить
+    их, а это секунды на каждый хелсчек каждые 30 с. Наличие обоих проверяет
+    `docker/entrypoint.sh` при старте. Ограничение названо здесь, чтобы «status: ok» не
+    читался как «зависимости точно на месте».
+    """
+    return {
+        "status": "ok",
+        "service": SERVICE_NAME,
+        "version": SERVICE_VERSION,
+        "formats": list(SUPPORTED_EXTENSIONS),
+        "contract": {
+            "response_fields": sorted(RESPONSE_FIELDS),
+            "error_codes": sorted(ERROR_CODES),
+            "max_body_bytes": MAX_BODY_BYTES,
+            "lo_timeout_sec": LO_TIMEOUT_SEC,
+            "parse_timeout_sec": PARSE_TIMEOUT_SEC,
+        },
+    }
 
-    def do_GET(self):
-        path = urlparse(self.path).path
-        if path == "/health":
-            return self._json(200, {"status": "ok", "formats": list(SUPPORTED_EXTENSIONS)})
-        if path == "/formats":
-            return self._json(200, {"formats": list(SUPPORTED_EXTENSIONS)})
-        return self._json(404, {"error": "not found"})
 
-    # Конверсия таблицы в xlsx-байты. Нужна DuckDB-сайдкару: он не читает xls/ods
-    # (расширения по сети не тянет), а тут уже есть LibreOffice — не дублируем его.
-    # Вход — сырые байты таблицы, выход — сырые байты xlsx (application/octet-stream).
-    CONVERTIBLE = (".xls", ".ods", ".xlsm", ".fods", ".xlsx")
+@app.get("/formats")
+async def formats() -> dict:
+    return {"formats": list(SUPPORTED_EXTENSIONS)}
 
-    def _do_convert(self, parsed):
-        query = parse_qs(parsed.query)
-        filename = (query.get("filename", [""])[0] or "").strip()
-        ext = extension_of(filename)
-        if ext not in self.CONVERTIBLE:
-            return self._json(415, {"error": f"convert unsupported: {ext or 'unknown'}"})
-        length = int(self.headers.get("Content-Length", "0") or 0)
-        if length <= 0:
-            return self._json(400, {"error": "empty body"})
-        if length > MAX_BYTES:
-            return self._json(413, {"error": "document too large"})
-        raw = self.rfile.read(length)
-        try:
-            with tempfile.TemporaryDirectory() as workdir:
-                src = Path(workdir) / f"input{ext}"
-                src.write_bytes(raw)
-                out = src if ext == ".xlsx" else soffice_convert(src, workdir, "xlsx")
-                data = out.read_bytes()
-            self.send_response(200)
-            self.send_header("Content-Type", "application/octet-stream")
-            self.send_header("Content-Length", str(len(data)))
-            self.end_headers()
-            self.wfile.write(data)
-        except subprocess.TimeoutExpired:
-            return self._json(504, {"error": "conversion timeout"})
-        except Exception as exc:  # noqa: BLE001 — любой сбой конверсии → 500
-            return self._json(500, {"error": "convert failed", "detail": str(exc)[-400:]})
 
-    def do_POST(self):
-        parsed = urlparse(self.path)
-        if parsed.path == "/convert":
-            return self._do_convert(parsed)
-        if parsed.path != "/parse":
-            return self._json(404, {"error": "not found"})
+def _guard_body(request: Request, raw: bytes) -> JSONResponse | None:
+    length = int(request.headers.get("content-length") or 0)
+    if length > MAX_BODY_BYTES:
+        return _error("request_too_large", f"тело больше {MAX_BODY_BYTES} байт", 413)
+    if not raw:
+        return _error("empty_body", "тело пустое — нечего разбирать", 400)
+    return None
 
-        query = parse_qs(parsed.query)
-        filename = (query.get("filename", [""])[0] or "").strip()
-        ext = extension_of(filename)
-        if ext not in SUPPORTED_EXTENSIONS:
-            return self._json(415, {"error": f"unsupported format: {ext or 'unknown'}"})
 
-        length = int(self.headers.get("Content-Length", "0") or 0)
-        if length <= 0:
-            return self._json(400, {"error": "empty body"})
-        if length > MAX_BYTES:
-            return self._json(413, {"error": "document too large"})
-        raw = self.rfile.read(length)
+@app.post("/convert")
+async def convert(
+    request: Request,
+    filename: str = "",
+    correlation_id: str | None = Header(default=None, alias="X-Correlation-Id"),
+):
+    """Таблица → xlsx-байты. Нужна сайдкару duckdb."""
+    cid = correlation_id or "-"
+    ext = extension_of((filename or "").strip())
+    if ext not in CONVERTIBLE:
+        return _error("unsupported_format", f"конверсия не поддержана: {ext or 'unknown'}", 415)
 
-        started = time.monotonic()
-        try:
-            with tempfile.TemporaryDirectory() as workdir:
-                src = Path(workdir) / f"input{ext}"
-                src.write_bytes(raw)
+    raw = await request.body()
+    if (bad := _guard_body(request, raw)) is not None:
+        return bad
 
-                if ext in SPREADSHEET_EXTENSIONS:
-                    markdown = spreadsheet_to_markdown(src, workdir, ext)
-                    engine = "openpyxl" if ext == ".xlsx" else "libreoffice+openpyxl"
+    try:
+        with tempfile.TemporaryDirectory() as workdir:
+            src = Path(workdir) / f"input{ext}"
+            src.write_bytes(raw)
+            out = src if ext == ".xlsx" else soffice_convert(src, workdir, "xlsx")
+            data = out.read_bytes()
+        return Response(content=data, media_type="application/octet-stream")
+    except subprocess.TimeoutExpired:
+        logger.warning("[cid=%s] дедлайн конверсии исчерпан", cid)
+        return _error("parse_timeout", "конверсия не уложилась в отведённое время", 504)
+    except Exception as exc:  # noqa: BLE001 — любой сбой конверсии → 500
+        logger.exception("[cid=%s] конверсия не выполнена", cid)
+        return _error("convert_failed", str(exc)[-400:], 500)
+
+
+@app.post("/parse")
+async def parse(
+    request: Request,
+    filename: str = "",
+    correlation_id: str | None = Header(default=None, alias="X-Correlation-Id"),
+) -> JSONResponse:
+    """Документ → markdown."""
+    cid = correlation_id or "-"
+    ext = extension_of((filename or "").strip())
+    if ext not in SUPPORTED_EXTENSIONS:
+        return _error("unsupported_format", f"формат не поддержан: {ext or 'unknown'}", 415)
+
+    raw = await request.body()
+    if (bad := _guard_body(request, raw)) is not None:
+        return bad
+
+    started = time.monotonic()
+    try:
+        with tempfile.TemporaryDirectory() as workdir:
+            src = Path(workdir) / f"input{ext}"
+            src.write_bytes(raw)
+
+            if ext in SPREADSHEET_EXTENSIONS:
+                markdown = spreadsheet_to_markdown(src, workdir, ext)
+                engine = "openpyxl" if ext == ".xlsx" else "libreoffice+openpyxl"
+            else:
+                if ext == ".pdf":
+                    pdf_path, engine = src, "opendataloader"
                 else:
-                    if ext == ".pdf":
-                        pdf_path, engine = src, "opendataloader"
-                    else:
-                        pdf_path = soffice_convert(src, workdir, "pdf")
-                        engine = "libreoffice+opendataloader"
-                    markdown = pdf_to_markdown(pdf_path, workdir)
+                    pdf_path = soffice_convert(src, workdir, "pdf")
+                    engine = "libreoffice+opendataloader"
+                markdown = pdf_to_markdown(pdf_path, workdir)
 
-            return self._json(
-                200,
-                {
-                    "markdown": markdown,
-                    "engine": engine,
-                    "chars": len(markdown),
-                    "duration_sec": round(time.monotonic() - started, 2),
-                },
-            )
-        except subprocess.TimeoutExpired:
-            return self._json(504, {"error": "conversion timeout"})
-        except Exception as exc:  # defensive: бэкенд трактует любую ошибку как «нет результата»
-            return self._json(500, {"error": "parse failed", "detail": str(exc)[-400:]})
-
-    def log_message(self, *_args):
-        return
+        return JSONResponse(
+            {
+                "markdown": markdown,
+                "engine": engine,
+                "chars": len(markdown),
+                "duration_sec": round(time.monotonic() - started, 2),
+            }
+        )
+    except subprocess.TimeoutExpired:
+        logger.warning("[cid=%s] дедлайн разбора исчерпан", cid)
+        return _error("parse_timeout", "разбор не уложился в отведённое время", 504)
+    except Exception as exc:  # defensive: вызывающий трактует ошибку как «нет результата»
+        logger.exception("[cid=%s] разбор не выполнен", cid)
+        return _error("parse_failed", str(exc)[-400:], 500)
 
 
 if __name__ == "__main__":
-    print(
-        f"opendataloader-sidecar on :{PORT} | max_bytes={MAX_BYTES} "
-        f"| formats={len(SUPPORTED_EXTENSIONS)}",
-        flush=True,
+    logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+    logger.info(
+        "opendataloader-sidecar on :%s | contract=%s | max_bytes=%s | formats=%d",
+        PORT,
+        SERVICE_VERSION,
+        MAX_BODY_BYTES,
+        len(SUPPORTED_EXTENSIONS),
     )
-    ThreadingHTTPServer(("0.0.0.0", PORT), Handler).serve_forever()
+    uvicorn.run(app, host="0.0.0.0", port=PORT, log_level="info")
