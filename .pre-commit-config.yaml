@@ -28,14 +28,22 @@ repos:
 
   - repo: local
     hooks:
+      # ⚠️ ТОЛЬКО через `uv run`, а не голыми `ruff`/`pytest`. Голое имя берётся из
+      # PATH, а там оказывается венв ПЕРВОГО ПОПАВШЕГОСЯ сервиса-соседа: на рабочей
+      # машине сюда попадал duckdb/.venv. У agents это ломало хук в открытую
+      # (ModuleNotFoundError), а здесь дефект ЛАТЕНТНЫЙ и оттого хуже: тесты этих
+      # сайдкаров почти без зависимостей и в чужом венве проходят «успешно». При
+      # этом `ruff` тоже брался чужой — ровно та плавающая версия, на которую
+      # жалуется комментарий в pyproject.toml («поправил у себя — упало в хуке»).
+      # `--frozen` + uv.lock фиксируют версии инструментов.
       - id: ruff
         name: ruff (lint + format)
-        entry: bash -lc "ruff check . && ruff format --check ."
+        entry: bash -lc "uv run --frozen --extra dev ruff check . && uv run --frozen --extra dev ruff format --check ."
         language: system
         pass_filenames: false
 
       - id: pytest
         name: pytest
-        entry: bash -lc "pytest -q"
+        entry: bash -lc "uv run --frozen --extra dev pytest -q"
         language: system
         pass_filenames: false
