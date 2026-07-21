@@ -3,9 +3,11 @@
 Сервис исполняет SQL, который пишет МОДЕЛЬ, по файлам, которые прислал
 ПОЛЬЗОВАТЕЛЬ. До этого файла тестов у него не было ни одного.
 
-Самый важный тест здесь — `test_sql_cannot_read_the_filesystem`: отключение
-внешнего доступа стоит внутри `try/except: pass`, поэтому переименование
-настройки в новой версии DuckDB убрало бы песочницу совершенно молча.
+Самый важный тест здесь — `test_sql_cannot_read_the_filesystem`. Раньше отключение
+внешнего доступа стояло внутри `try/except: pass`, и переименование настройки в новой
+версии DuckDB убрало бы песочницу совершенно молча; теперь отказ поднимается наверх, а
+факт закрытия проверяется чтением значения — см. `core._seal_external_access` и
+`test_seal_raises_when_setting_is_gone` ниже.
 """
 
 from __future__ import annotations
@@ -49,6 +51,40 @@ def test_sql_cannot_read_the_filesystem(tmp_path):
 
     with pytest.raises(duckdb.Error):
         run_query(sql, [SALES], 10)
+
+
+def test_seal_raises_when_setting_is_gone():
+    """Если настройка песочницы исчезла — прогон обязан УПАСТЬ, а не продолжиться.
+
+    Имитируем именно тот сценарий, ради которого гард и существует: новая версия
+    DuckDB не знает `enable_external_access`. Прежний `except: pass` проглотил бы
+    это и выполнил SQL от модели по незапечатанному соединению.
+    """
+
+    class _ConWithoutSetting:
+        def execute(self, sql):
+            raise RuntimeError("Catalog Error: unrecognized configuration parameter")
+
+    with pytest.raises(RuntimeError, match="внешний доступ"):
+        core._seal_external_access(_ConWithoutSetting())
+
+
+def test_seal_raises_when_setting_did_not_take_effect():
+    """И если `SET` прошёл, но значение осталось открытым — тоже падаем.
+
+    Ловит молчаливое игнорирование неизвестной настройки: `SET` не бросил, а
+    доступ остался. Проверка значением отличает «применилось» от «не возразило».
+    """
+
+    class _ConIgnoringSet:
+        def execute(self, sql):
+            return self
+
+        def fetchone(self):
+            return (True,)
+
+    with pytest.raises(RuntimeError, match="остался открыт"):
+        core._seal_external_access(_ConIgnoringSet())
 
 
 def test_sandbox_test_is_not_vacuous(tmp_path):

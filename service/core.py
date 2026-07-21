@@ -143,6 +143,32 @@ def preview_tables(con, tables: list[dict], limit: int = 5) -> list[dict]:
     return out
 
 
+def _seal_external_access(con) -> None:
+    """Закрыть DuckDB доступ к файловой системе и сети — и УБЕДИТЬСЯ, что закрыт.
+
+    ⚠️ Раньше здесь стояло `try: SET … except: pass`. Это ровно тот случай, когда
+    «на всякий случай не падать» отключает защиту: переименуй DuckDB настройку в
+    новой версии — `SET` бросит, `pass` проглотит, и SQL от модели пойдёт
+    выполняться по НЕЗАПЕЧАТАННОМУ соединению. Тихо, без единой строчки в логах.
+
+    Поэтому: во-первых, отказ поднимается наверх; во-вторых, факт закрытия
+    ПРОВЕРЯЕТСЯ чтением значения, а не верой в то, что `SET` подействовал. Второе
+    важнее первого — оно ловит и молчаливое игнорирование неизвестной настройки.
+    """
+    try:
+        con.execute("SET enable_external_access=false")
+        applied = con.execute("SELECT current_setting('enable_external_access')").fetchone()
+    except Exception as exc:  # настройка исчезла/переименована — это не «мелочь»
+        raise RuntimeError(
+            "DuckDB: не удалось закрыть внешний доступ (enable_external_access). "
+            "Выполнять SQL от модели с открытой ФС нельзя — прогон остановлен."
+        ) from exc
+    if applied and applied[0] not in (False, 0, "false", "0"):
+        raise RuntimeError(
+            f"DuckDB: внешний доступ остался открыт (enable_external_access={applied[0]!r})."
+        )
+
+
 def run_query(sql: str, files: list[dict], max_rows: int) -> dict:
     started = time.monotonic()
     with tempfile.TemporaryDirectory() as tmp:
@@ -167,12 +193,9 @@ def run_query(sql: str, files: list[dict], max_rows: int) -> dict:
             if not tables:
                 raise ValueError("не передано ни одного файла")
 
-            # После загрузки в таблицы отключаем внешний доступ: SQL от LLM больше не
+            # После загрузки в таблицы закрываем внешний доступ: SQL от LLM больше не
             # сможет прочитать произвольный файл (read_csv('/etc/passwd') и т.п.).
-            try:
-                con.execute("SET enable_external_access=false")
-            except Exception:
-                pass
+            _seal_external_access(con)
 
             sql = (sql or "").strip().rstrip(";")
             if not sql:
