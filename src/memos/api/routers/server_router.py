@@ -16,6 +16,7 @@ import random as _random
 import socket
 
 from fastapi import APIRouter, HTTPException, Query
+from pydantic import BaseModel, Field
 
 from memos.api import handlers
 from memos.api.handlers.add_handler import AddHandler
@@ -146,16 +147,80 @@ def wipe_all_memory():
             rec = session.run("MATCH (n:Memory) RETURN count(n) AS c").single()
             result["neo4j_deleted"] = int(rec["c"]) if rec else 0
             session.run("MATCH (n:Memory) DETACH DELETE n")
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         logger.warning(f"wipe: neo4j clear failed: {exc}")
     try:
         vec_db = getattr(graph_db, "vec_db", None)
         if vec_db is not None:
             vec_db.delete_collection(vec_db.config.collection_name)
             result["qdrant_dropped"] = True
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         logger.warning(f"wipe: qdrant drop failed: {exc}")
     return {"code": 200, "message": "MemOS memory wiped", "data": result}
+
+
+class WipeUserMemoryRequest(BaseModel):
+    """GPTHub: тело запроса на сброс памяти ОДНОГО пользователя."""
+
+    user_name: str = Field(..., min_length=1, description="mem_cube_id пользователя (n.user_name)")
+
+
+@router.post("/admin/wipe_user", summary="Wipe MemOS memory of ONE user (Neo4j + Qdrant)")
+def wipe_user_memory(req: WipeUserMemoryRequest):
+    """GPTHub: сброс памяти одного пользователя по кнопке «очистить» в панели памяти.
+
+    🔴 Почему не `/product/delete_memory` с фильтром по user_id: в community-сборке
+    (`NEO4J_BACKEND=neo4j-community`) `delete_node_by_prams` удаляет ТОЛЬКО узлы Neo4j и
+    не трогает векторы в Qdrant. Осиротевшие векторы продолжают попадать в выдачу
+    векторного поиска и занимать места в top_k, а узлов за ними уже нет — то есть
+    «забытая» память молча вытесняет живую.
+
+    🔴 Почему не `graph_db.clear(user_name=...)`, у которого обе половины есть: он
+    безопасен лишь пока `use_multi_db` выключен, а при включённом уходит в
+    `MATCH (n) DETACH DELETE n` — то есть по кнопке одного пользователя стёрлась бы
+    память ВСЕХ. Опирать пользовательскую кнопку на значение флага конфигурации нельзя,
+    поэтому оба удаления здесь заданы явно и всегда ограничены `user_name`.
+
+    Счётчики возвращаются реальные (замер до удаления): «стёрли» и «не нашли что стирать»
+    вызывающая сторона обязана различать.
+    """
+    user_name = (req.user_name or "").strip()
+    if not user_name:
+        # Пустое имя в Cypher-условии совпало бы с нулём узлов, а в Qdrant-фильтре —
+        # тоже ни с чем, но полагаться на это нельзя: цена ошибки — чужая память.
+        raise HTTPException(status_code=400, detail="user_name is required")
+
+    result = {"neo4j_deleted": 0, "vectors_deleted": 0}
+    try:
+        with graph_db.driver.session(database=graph_db.db_name) as session:
+            rec = session.run(
+                "MATCH (n:Memory) WHERE n.user_name = $user_name RETURN count(n) AS c",
+                user_name=user_name,
+            ).single()
+            result["neo4j_deleted"] = int(rec["c"]) if rec else 0
+            session.run(
+                "MATCH (n:Memory) WHERE n.user_name = $user_name DETACH DELETE n",
+                user_name=user_name,
+            )
+    except Exception as exc:
+        logger.warning(f"wipe_user: neo4j clear failed for {user_name}: {exc}")
+        raise HTTPException(status_code=500, detail="neo4j clear failed") from exc
+
+    # Векторы удаляем ПОСЛЕ узлов и отдельно: у community-сборки это два независимых
+    # хранилища, и полу-удаление (узлы стёрты, векторы остались) хуже, чем неудача целиком.
+    try:
+        vec_db = getattr(graph_db, "vec_db", None)
+        if vec_db is not None:
+            items = vec_db.get_by_filter({"user_name": user_name})
+            if items:
+                vec_db.delete([item.id for item in items])
+                result["vectors_deleted"] = len(items)
+    except Exception as exc:
+        logger.warning(f"wipe_user: qdrant clear failed for {user_name}: {exc}")
+        result["vectors_error"] = type(exc).__name__
+
+    logger.info(f"wipe_user: {user_name} -> {result}")
+    return {"code": 200, "message": "User memory wiped", "data": result}
 
 
 # =============================================================================

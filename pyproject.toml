@@ -264,6 +264,12 @@ lint.extend-select = [
 ]
 lint.ignore = [
     "RUF001", # ambiguous-unicode-character-string
+    # GPTHub: комментарии и докстринги в наших вставках русскоязычные, и каждая буква
+    # «с», «о», «а» ловится как «похожа на латинскую». RUF001 (строки — риск настоящий,
+    # там подмена буквы меняет значение) уже был отключён; для текста, который никуда не
+    # исполняется, правило даёт только шум: одна русская фраза = десятки ошибок линтера.
+    "RUF002", # ambiguous-unicode-character-docstring
+    "RUF003", # ambiguous-unicode-character-comment
     "PGH003", # blanket-type-ignore
 ]
 lint.isort.lines-between-types = 1
