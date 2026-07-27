@@ -9,6 +9,7 @@
   POST   /workspaces/{id}/files/read  {user_id, token, path}     → {content, truncated}
   POST   /workspaces/{id}/files/write {user_id, token, path, content} → {written}
   POST   /workspaces/{id}/files/grep  {user_id, token, pattern, path} → {matches, truncated}
+  POST   /workspaces/{id}/import      {user_id, token, files:[{name,url}]} → {files, imported}
   PATCH  /workspaces/{id}/policy      {user_id, token, update}   → {policy}
   DELETE /workspaces/{id}             {user_id, token}           → {deleted}
   GET    /health                      → {status, service, version, contract, driver, …}
@@ -37,6 +38,8 @@ from files import (
     read_command,
     write_command,
 )
+from importer import MAX_TOTAL_BYTES, ImportRefused, fetch, plan
+from importer import write_command as import_command
 from pydantic import BaseModel, Field
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
@@ -125,6 +128,12 @@ class PolicyRequest(BaseModel):
 class OwnerRequest(BaseModel):
     user_id: str
     token: str
+
+
+class ImportRequest(BaseModel):
+    user_id: str
+    token: str
+    files: list[dict]
 
 
 class FileRequest(BaseModel):
@@ -325,6 +334,43 @@ async def grep_files(
         return _error("forbidden", str(exc), 403)
     result = await _run_file_op(item, command)
     return {"matches": (result.stdout or "").splitlines(), "truncated": result.truncated}
+
+
+@app.post("/workspaces/{workspace_id}/import")
+async def import_files(
+    workspace_id: str, payload: ImportRequest, authorization: str | None = Header(default=None)
+):
+    """Скачать файлы пользователя по презайнед-ссылкам и положить внутрь песочницы.
+
+    ⚠️ Ответ ПОФАЙЛОВЫЙ: один непринятый файл не отменяет остальные, но и не исчезает из
+    ответа. Молча укоротившийся список выглядел бы как «файлов столько и было».
+    """
+    _auth(authorization)
+    item, failure = _owned(workspace_id, payload)
+    if failure is not None:
+        return failure
+
+    results, total = [], 0
+    for entry in plan(payload.files):
+        try:
+            if total >= MAX_TOTAL_BYTES:
+                raise ImportRefused("суммарный потолок импорта исчерпан")
+            data = await fetch(entry["url"])
+            total += len(data)
+            command = import_command(item.policy.root, entry["name"], data)
+        except ImportRefused as exc:
+            results.append({"name": entry["name"], "imported": False, "reason": str(exc)})
+            continue
+        result = await _run_file_op(item, command)
+        ok = "__OK__" in (result.stdout or "")
+        results.append(
+            {
+                "name": entry["name"],
+                "imported": ok,
+                **({} if ok else {"reason": (result.stderr or "запись не удалась")[:200]}),
+            }
+        )
+    return {"files": results, "imported": sum(1 for r in results if r["imported"])}
 
 
 @app.get("/health")
