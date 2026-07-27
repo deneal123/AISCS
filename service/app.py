@@ -11,6 +11,7 @@
   POST   /workspaces/{id}/files/grep  {user_id, token, pattern, path} → {matches, truncated}
   POST   /workspaces/{id}/import      {user_id, token, files:[{name,url}]} → {files, imported}
   POST   /workspaces/{id}/artifacts   {user_id, token}           → {artifacts, truncated}
+  POST   /workspaces/{id}/files/download {user_id, token, path}   → {content_b64}
   PATCH  /workspaces/{id}/policy      {user_id, token, update}   → {policy}
   DELETE /workspaces/{id}             {user_id, token}           → {deleted}
   GET    /health                      → {status, service, version, contract, driver, …}
@@ -31,14 +32,18 @@ from fastapi import FastAPI, Header, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from files import (
+    MAX_DOWNLOAD_BYTES,
     MAX_READ_BYTES,
     UnsafePath,
     artifacts_command,
+    download_command,
     grep_command,
     list_command,
     parse_artifacts,
+    parse_download,
     parse_read,
     read_command,
+    reject_control_bytes,
     write_command,
 )
 from importer import MAX_TOTAL_BYTES, ImportRefused, fetch, plan
@@ -191,7 +196,13 @@ async def exec_in_workspace(
     except WorkspaceNotFound as exc:
         return _error("not_found", str(exc), 404)
     try:
-        result = await registry.exec(item, payload.command)
+        command = reject_control_bytes(payload.command, "команда")
+    except UnsafePath as exc:
+        # ⚠️ 422, а не 500: это негодный ВВОД, а не сбой сервиса. Раньше нулевой байт
+        # ронял создание процесса, и наружу уходило нечитаемое «Internal Server Error».
+        return _error("invalid_request", str(exc), 422)
+    try:
+        result = await registry.exec(item, command)
     except DriverError as exc:
         return _error("driver_failed", str(exc), 502)
     return {
@@ -394,6 +405,36 @@ async def list_artifacts(
     result = await _run_file_op(item, artifacts_command(item.policy.root))
     files = parse_artifacts(result.stdout, item.policy.root, item.imported)
     return {"artifacts": files, "truncated": result.truncated}
+
+
+@app.post("/workspaces/{workspace_id}/files/download")
+async def download_file(
+    workspace_id: str, payload: FileRequest, authorization: str | None = Header(default=None)
+):
+    """Содержимое файла КАК ЕСТЬ, в base64 — чтобы backend положил его в хранилище.
+
+    🔴 Отдельно от `files/read`: тот отдаёт ТЕКСТ и разбирает байты как utf-8 с заменой
+    битых. Для `.xlsx`, картинки или архива это порча, а не неточность — отданный
+    пользователю файл просто не откроется.
+    """
+    _auth(authorization)
+    item, failure = _owned(workspace_id, payload)
+    if failure is not None:
+        return failure
+    try:
+        command = download_command(item.policy.root, payload.path)
+    except UnsafePath as exc:
+        return _error("forbidden", str(exc), 403)
+    result = await registry.exec_raw(item, command, max_output_chars=MAX_DOWNLOAD_BYTES * 2)
+    try:
+        content, truncated = parse_download(result.stdout)
+    except FileNotFoundError:
+        return _error("not_found", f"файла {payload.path!r} нет", 404)
+    if truncated:
+        # ⚠️ Обрезанный АРТЕФАКТ отдавать нельзя: неполный файл выглядит как целый и
+        # ломается у пользователя. Отказ честнее половины.
+        return _error("request_too_large", f"файл больше {MAX_DOWNLOAD_BYTES} байт", 413)
+    return {"path": payload.path, "content_b64": content}
 
 
 @app.get("/health")

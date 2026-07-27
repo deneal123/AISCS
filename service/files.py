@@ -24,6 +24,10 @@ import shlex
 # Потолок ЧТЕНИЯ отдельно от потолка вывода команды: файл читают, чтобы получить его
 # целиком, а вывод сборки — чтобы увидеть, чем кончилось.
 MAX_READ_BYTES = 256 * 1024
+# Потолок ВЫГРУЗКИ артефакта отдельно от чтения: читает модель (и платит за токены), а
+# выгружает backend в хранилище. 🔴 Больше не берём осознанно: base64 идёт через поток
+# вывода команды, то есть целиком лежит в памяти процесса, обслуживающего всех арендаторов.
+MAX_DOWNLOAD_BYTES = 4 * 1024 * 1024
 MAX_WRITE_BYTES = 1024 * 1024
 MAX_LIST_ENTRIES = 500
 MAX_GREP_MATCHES = 200
@@ -31,6 +35,20 @@ MAX_GREP_MATCHES = 200
 
 class UnsafePath(Exception):
     """Путь ведёт за пределы корня песочницы."""
+
+
+# 🔴 Байты, которых не может быть в аргументе команды. NUL завершает строку в syscall
+# `exec`, и попытка передать его роняет создание процесса ЦЕЛИКОМ — наружу это уходило
+# нечитаемым «Internal Server Error». Модель такую строку сочиняет запросто.
+_FORBIDDEN_BYTES = ("\x00",)
+
+
+def reject_control_bytes(text: str, what: str) -> str:
+    """Отвергнуть то, что не может доехать до процесса. Отказ ВНЯТНЫЙ, а не 500."""
+    value = str(text or "")
+    if any(ch in value for ch in _FORBIDDEN_BYTES):
+        raise UnsafePath(f"{what} содержит недопустимый нулевой байт")
+    return value
 
 
 def _q(value: str) -> str:
@@ -47,7 +65,7 @@ def safe_path(root: str, path: str) -> str:
     лежащим внутри `/workspace`.
     """
     root_norm = posixpath.normpath("/" + str(root or "").strip("/"))
-    raw = str(path or "").strip()
+    raw = reject_control_bytes(path, "путь").strip()
     candidate = raw if raw.startswith("/") else posixpath.join(root_norm, raw)
     resolved = posixpath.normpath(candidate)
     if resolved != root_norm and not resolved.startswith(root_norm + "/"):
@@ -150,3 +168,23 @@ def parse_artifacts(output: str, root: str, imported: set[str]) -> list[dict]:
         except ValueError:
             continue
     return out
+
+
+def download_command(root: str, path: str) -> str:
+    """Выгрузить артефакт целиком, в base64. Отличается от чтения только потолком."""
+    return read_command(root, path, max_bytes=MAX_DOWNLOAD_BYTES)
+
+
+def parse_download(output: str) -> tuple[str, bool]:
+    """base64 КАК ЕСТЬ и признак обрезки.
+
+    🔴 БЕЗ ДЕКОДИРОВАНИЯ В ТЕКСТ. `parse_read` разбирает байты как utf-8 с заменой битых —
+    для `.xlsx`, картинки или архива это ПОРЧА, а не «неточность»: файл, отданный
+    пользователю после такого разбора, не откроется. Артефакт обязан доехать побайтово.
+    """
+    raw = (output or "").strip()
+    if raw == "__MISSING__" or not raw:
+        raise FileNotFoundError("файла нет")
+    # Обрезку определяем по длине base64: 4 символа на 3 байта.
+    approx_bytes = len(raw) // 4 * 3
+    return raw, approx_bytes > MAX_DOWNLOAD_BYTES

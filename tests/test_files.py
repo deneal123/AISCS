@@ -185,3 +185,64 @@ def test_broken_line_does_not_break_the_listing() -> None:
 
     artifacts = parse_artifacts("мусор\n5\t/workspace/ok.txt\n\t", ROOT, set())
     assert [a["path"] for a in artifacts] == ["ok.txt"]
+
+
+# --- выгрузка артефакта: побайтово ------------------------------------------------------
+
+
+def test_download_keeps_bytes_intact_where_read_would_corrupt_them() -> None:
+    """🔴 Тот самый мотив ручки: `.xlsx` и картинка после текстового разбора НЕ ОТКРОЮТСЯ.
+
+    `parse_read` декодирует utf-8 с заменой битых байт — это порча, а не неточность.
+    Выгрузка обязана возвращать содержимое как есть.
+    """
+    from files import parse_download, parse_read
+
+    payload = base64.b64encode(b"PK\x03\x04\xff\xfe\x00zip").decode()
+    raw, truncated = parse_download(payload)
+    assert base64.b64decode(raw) == b"PK\x03\x04\xff\xfe\x00zip"
+    assert not truncated
+    # А текстовое чтение те же байты искажает — потому ручки и разные.
+    text, _ = parse_read(payload)
+    assert text.encode("utf-8", "replace") != b"PK\x03\x04\xff\xfe\x00zip"
+
+
+def test_download_reports_truncation_so_a_partial_file_is_never_passed_off_as_whole() -> None:
+    from files import MAX_DOWNLOAD_BYTES, parse_download
+
+    _, truncated = parse_download(base64.b64encode(b"x" * (MAX_DOWNLOAD_BYTES + 10)).decode())
+    assert truncated
+
+
+def test_download_has_a_bigger_ceiling_than_read() -> None:
+    """Читает МОДЕЛЬ и платит за токены; выгружает backend в хранилище — задачи разные."""
+    from files import MAX_DOWNLOAD_BYTES, MAX_READ_BYTES
+
+    assert MAX_DOWNLOAD_BYTES > MAX_READ_BYTES
+
+
+def test_missing_artifact_is_distinguishable() -> None:
+    from files import parse_download
+
+    with pytest.raises(FileNotFoundError):
+        parse_download("__MISSING__")
+
+
+def test_download_path_is_checked_like_any_other() -> None:
+    from files import download_command
+
+    with pytest.raises(UnsafePath):
+        download_command(ROOT, "../../etc/shadow")
+
+
+def test_null_byte_is_refused_before_it_reaches_the_process() -> None:
+    """🔴 NUL завершает строку в syscall `exec` — попытка передать его роняет СОЗДАНИЕ
+    процесса целиком, и наружу уходило нечитаемое «Internal Server Error». Модель такую
+    строку сочиняет запросто; отказ обязан быть внятным."""
+    from files import reject_control_bytes
+
+    with pytest.raises(UnsafePath):
+        reject_control_bytes("echo \x00 hi", "команда")
+    with pytest.raises(UnsafePath):
+        safe_path(ROOT, "a\x00.txt")
+    assert reject_control_bytes("echo ok", "команда") == "echo ok"
