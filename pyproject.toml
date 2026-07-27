@@ -1,0 +1,43 @@
+# Конфигурация инструментов сайдкара — НЕ пакет.
+#
+# `[build-system]` здесь намеренно НЕТ: это приложение, а не библиотека.
+#
+# Рантайм-зависимостей у сервиса почти нет: он управляет чужим рантаймом через CLI docker,
+# а не считает сам. Версии транспорта закреплены в Dockerfile через ARG и продублированы
+# здесь — тесты обязаны идти на той же версии, что исполняет прод.
+[project]
+name = "gpthub-workspace-sidecar"
+version = "0.1.0"
+description = "Сайдкар workspace: файловая песочница для агента"
+requires-python = ">=3.12"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0,<9.0.0",
+    "pytest-asyncio>=0.23,<1.0",
+    "ruff>=0.6.0,<1.0.0",
+    "fastapi==0.115.6",
+    "uvicorn==0.34.0",
+    "httpx>=0.27",  # TestClient FastAPI ходит через httpx
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["E501"]
+
+[tool.ruff.lint.isort]
+# Свои модули лежат плоско в `service/`, и разные версии ruff классифицируют их по-разному
+# (то в третью сторону, то в отдельную группу). Объявляем явно — иначе «поправил у себя,
+# упало в хуке».
+known-first-party = ["app", "contracts", "core", "drivers", "ownership", "policy"]
+
+[tool.pytest.ini_options]
+pythonpath = ["service"]
+testpaths = ["tests"]
+asyncio_mode = "auto"

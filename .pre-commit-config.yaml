@@ -1,0 +1,49 @@
+# Хуки САМОГО сайдкара.
+#
+# Сабмодуль — самостоятельный git-репозиторий: хуки суперпроекта на коммит внутри
+# него не срабатывают. Без этого файла правки сайдкара шли бы без единой проверки.
+#
+# Установка: `pre-commit install` здесь или `make hooks` из корня.
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-yaml
+      - id: check-toml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: debug-statements
+
+  # Сканер секретов. Ставится ПОСЛЕДНИМ рубежом: секрет, попавший в коммит, из
+  # истории уже не убрать простым откатом — только переписыванием, поэтому ловить
+  # его надо до записи, а не в ревью.
+  #
+  # Стартует зелёным: прогон по истории backend и agents дал НОЛЬ находок (70
+  # «утечек» из первого прогона все оказались внутри .venv, то есть вне гита).
+  # Значит разбирать накопленное не пришлось и подавлений заводить не нужно.
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.30.1
+    hooks:
+      - id: gitleaks
+
+  - repo: local
+    hooks:
+      # ⚠️ ТОЛЬКО через `uv run`, а не голыми `ruff`/`pytest`. Голое имя берётся из
+      # PATH, а там оказывается венв ПЕРВОГО ПОПАВШЕГОСЯ сервиса-соседа: на рабочей
+      # машине сюда попадал duckdb/.venv. У agents это ломало хук в открытую
+      # (ModuleNotFoundError), а здесь дефект ЛАТЕНТНЫЙ и оттого хуже: тесты этих
+      # сайдкаров почти без зависимостей и в чужом венве проходят «успешно». При
+      # этом `ruff` тоже брался чужой — ровно та плавающая версия, на которую
+      # жалуется комментарий в pyproject.toml («поправил у себя — упало в хуке»).
+      # `--frozen` + uv.lock фиксируют версии инструментов.
+      - id: ruff
+        name: ruff (lint + format)
+        entry: bash -lc "uv run --frozen --extra dev ruff check . && uv run --frozen --extra dev ruff format --check ."
+        language: system
+        pass_filenames: false
+
+      - id: pytest
+        name: pytest
+        entry: bash -lc "uv run --frozen --extra dev pytest -q"
+        language: system
+        pass_filenames: false
