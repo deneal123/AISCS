@@ -66,6 +66,12 @@ def safe_path(root: str, path: str) -> str:
     """
     root_norm = posixpath.normpath("/" + str(root or "").strip("/"))
     raw = reject_control_bytes(path, "путь").strip()
+    # ⚠️ Голый «/» — это «корень МОЕГО каталога» с точки зрения того, кто внутри песочницы.
+    # Живой прогон: модель попросила `/`, получила отказ «за пределами песочницы» и сказала
+    # пользователю, что не может читать файлы ВООБЩЕ. Отказ был формально верен и по делу
+    # бесполезен. Прочие абсолютные пути (`/etc/passwd`) по-прежнему отвергаются.
+    if raw == "/":
+        raw = ""
     candidate = raw if raw.startswith("/") else posixpath.join(root_norm, raw)
     resolved = posixpath.normpath(candidate)
     if resolved != root_norm and not resolved.startswith(root_norm + "/"):

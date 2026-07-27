@@ -246,3 +246,16 @@ def test_null_byte_is_refused_before_it_reaches_the_process() -> None:
     with pytest.raises(UnsafePath):
         safe_path(ROOT, "a\x00.txt")
     assert reject_control_bytes("echo ok", "команда") == "echo ok"
+
+
+def test_bare_slash_means_my_own_root() -> None:
+    """🔴 Живой прогон: модель попросила «/», получила отказ и сообщила пользователю, что
+    не может читать файлы вообще. Формально верно, по делу бесполезно."""
+    assert safe_path(ROOT, "/") == ROOT
+
+
+def test_other_absolute_paths_are_still_refused() -> None:
+    """Послабление касается ТОЛЬКО голого «/»: побег остаётся побегом."""
+    for path in ("/etc/passwd", "/root/.ssh/id_rsa", "/var/run/docker.sock"):
+        with pytest.raises(UnsafePath):
+            safe_path(ROOT, path)
