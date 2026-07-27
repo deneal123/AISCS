@@ -109,3 +109,44 @@ def grep_command(root: str, pattern: str, path: str, *, limit: int = MAX_GREP_MA
         f"grep -rnI --exclude-dir=.git -e {_q(pattern)} {_q(target)} 2>/dev/null | "
         f"head -n {int(limit)}"
     )
+
+
+def artifacts_command(root: str, *, limit: int = MAX_LIST_ENTRIES) -> str:
+    """Что лежит в рабочем каталоге — плоским списком «размер, путь».
+
+    ⚠️ Обход ВСЕЙ глубины, а не двух уровней как у `list`: артефакт мог родиться в
+    подкаталоге, и не заметить его хуже, чем показать лишнее. Служебные каталоги
+    инструментов исключены — иначе первый же `git init` или `pip install` завалил бы
+    ответ тысячами файлов, которых пользователь не создавал.
+    """
+    target = safe_path(root, root)
+    excludes = " ".join(
+        f"-path {_q(target + '/' + name)} -prune -o" for name in (".git", "node_modules", ".venv")
+    )
+    return (
+        f"find {_q(target)} {excludes} -type f -print 2>/dev/null | head -n {int(limit)} | "
+        'while IFS= read -r p; do echo "$(wc -c < "$p" 2>/dev/null || echo 0)	$p"; done'
+    )
+
+
+def parse_artifacts(output: str, root: str, imported: set[str]) -> list[dict]:
+    """Строки обхода → список артефактов. Импортированное исключается.
+
+    🔴 Импортированный файл — НЕ артефакт: вернуть пользователю его же файл значит сообщить,
+    что агент его создал. Сравниваем по пути ОТНОСИТЕЛЬНО корня: абсолютный путь внутри
+    контейнера наружу не нужен и только путает.
+    """
+    out: list[dict] = []
+    prefix = safe_path(root, root).rstrip("/") + "/"
+    for line in (output or "").splitlines():
+        size, _, path = line.partition("	")
+        if not path:
+            continue
+        relative = path[len(prefix) :] if path.startswith(prefix) else path
+        if relative in imported:
+            continue
+        try:
+            out.append({"path": relative, "size": int(size or 0)})
+        except ValueError:
+            continue
+    return out

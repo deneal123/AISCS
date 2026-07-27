@@ -141,3 +141,47 @@ def test_oversized_write_is_refused_before_reaching_the_container() -> None:
 
 def test_list_is_bounded() -> None:
     assert "head -n 500" in list_command(ROOT, "")
+
+
+# --- артефакты ------------------------------------------------------------------------
+
+
+def test_imported_files_are_not_reported_as_artifacts() -> None:
+    """🔴 Вернуть человеку его же файл значит сообщить, что агент его создал."""
+    from files import parse_artifacts
+
+    output = "12\t/workspace/данные.csv\n40\t/workspace/отчёт.md"
+    artifacts = parse_artifacts(output, ROOT, {"данные.csv"})
+    assert [a["path"] for a in artifacts] == ["отчёт.md"]
+
+
+def test_artifact_paths_are_relative_to_the_root() -> None:
+    """Абсолютный путь внутри контейнера наружу не нужен и только путает."""
+    from files import parse_artifacts
+
+    artifacts = parse_artifacts("7\t/workspace/sub/a.txt", ROOT, set())
+    assert artifacts == [{"path": "sub/a.txt", "size": 7}]
+
+
+def test_artifacts_walk_the_whole_depth_not_two_levels() -> None:
+    """Артефакт мог родиться в подкаталоге: не заметить его хуже, чем показать лишнее."""
+    from files import artifacts_command, list_command
+
+    assert "-maxdepth" not in artifacts_command(ROOT)
+    assert "-maxdepth" in list_command(ROOT, "")
+
+
+def test_tool_directories_are_excluded() -> None:
+    """Первый же `git init` или `pip install` иначе завалит ответ тысячами чужих файлов."""
+    from files import artifacts_command
+
+    command = artifacts_command(ROOT)
+    for noisy in (".git", "node_modules", ".venv"):
+        assert noisy in command and "-prune" in command
+
+
+def test_broken_line_does_not_break_the_listing() -> None:
+    from files import parse_artifacts
+
+    artifacts = parse_artifacts("мусор\n5\t/workspace/ok.txt\n\t", ROOT, set())
+    assert [a["path"] for a in artifacts] == ["ok.txt"]

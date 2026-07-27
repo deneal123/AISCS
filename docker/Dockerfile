@@ -25,15 +25,26 @@ RUN apt-get update && apt-get install -y --no-install-recommends curl docker-cli
 
 ARG FASTAPI_VERSION=0.115.6
 ARG UVICORN_VERSION=0.34.0
+ARG HTTPX_VERSION=0.28.1
 # ⚠️ Версии обязаны совпадать с dev-зависимостями в pyproject.toml: тесты идут на той же
 # версии транспорта, что исполняет прод.
+# 🔴 `httpx` — РАНТАЙМ-зависимость (импорт качает файл по ссылке), а не только тестовая.
+# Её отсутствия тесты увидеть не могли: у них она есть из dev-набора, а сервис в проде
+# падал ModuleNotFoundError на старте.
 RUN pip install --no-cache-dir \
         "fastapi==${FASTAPI_VERSION}" \
-        "uvicorn==${UVICORN_VERSION}"
+        "uvicorn==${UVICORN_VERSION}" \
+        "httpx==${HTTPX_VERSION}"
 
 COPY service /opt/workspace-sidecar/service
 COPY docker/entrypoint.sh /opt/workspace-sidecar/entrypoint.sh
 RUN chmod +x /opt/workspace-sidecar/entrypoint.sh
+
+# 🔴 СБОРКА ОБЯЗАНА ПАДАТЬ НА НЕДОСТАЮЩЕЙ ЗАВИСИМОСТИ, а не контейнер на старте. Импорт
+# приложения целиком поднимает каждый модуль сервиса — то есть закрывает весь класс
+# «в образе нет пакета, который код импортирует». Оба таких дефекта за день ловил ЗАПУСК,
+# и оба тесты увидеть не могли: у них зависимости из dev-набора.
+RUN PYTHONPATH=/opt/workspace-sidecar/service python3 -c "import app; print('импорт сервиса ок')"
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONPATH=/opt/workspace-sidecar/service \

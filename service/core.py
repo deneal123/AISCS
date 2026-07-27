@@ -47,6 +47,10 @@ class Workspace:
     policy: WorkspacePolicy
     expires_at: float
     created_at: float = field(default_factory=time.time)
+    # ⚠️ Что мы САМИ положили внутрь. Без этого импортированный файл вернулся бы наружу
+    # как результат работы агента: пользователь получил бы обратно свой же файл и решил,
+    # что агент его переписал.
+    imported: set[str] = field(default_factory=set)
 
     def expired(self, now: float | None = None) -> bool:
         return (now or time.time()) >= self.expires_at

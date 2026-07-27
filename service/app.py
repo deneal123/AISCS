@@ -10,6 +10,7 @@
   POST   /workspaces/{id}/files/write {user_id, token, path, content} → {written}
   POST   /workspaces/{id}/files/grep  {user_id, token, pattern, path} → {matches, truncated}
   POST   /workspaces/{id}/import      {user_id, token, files:[{name,url}]} → {files, imported}
+  POST   /workspaces/{id}/artifacts   {user_id, token}           → {artifacts, truncated}
   PATCH  /workspaces/{id}/policy      {user_id, token, update}   → {policy}
   DELETE /workspaces/{id}             {user_id, token}           → {deleted}
   GET    /health                      → {status, service, version, contract, driver, …}
@@ -32,8 +33,10 @@ from fastapi.responses import JSONResponse
 from files import (
     MAX_READ_BYTES,
     UnsafePath,
+    artifacts_command,
     grep_command,
     list_command,
+    parse_artifacts,
     parse_read,
     read_command,
     write_command,
@@ -363,6 +366,8 @@ async def import_files(
             continue
         result = await _run_file_op(item, command)
         ok = "__OK__" in (result.stdout or "")
+        if ok:
+            item.imported.add(entry["name"])
         results.append(
             {
                 "name": entry["name"],
@@ -371,6 +376,24 @@ async def import_files(
             }
         )
     return {"files": results, "imported": sum(1 for r in results if r["imported"])}
+
+
+@app.post("/workspaces/{workspace_id}/artifacts")
+async def list_artifacts(
+    workspace_id: str, payload: OwnerRequest, authorization: str | None = Header(default=None)
+):
+    """Что агент создал внутри песочницы — чтобы backend отдал это пользователю.
+
+    🔴 Импортированное СЮДА НЕ ВХОДИТ: вернуть человеку его же файл значит сообщить, что
+    агент его создал. Песочница помнит, что мы в неё положили.
+    """
+    _auth(authorization)
+    item, failure = _owned(workspace_id, payload)
+    if failure is not None:
+        return failure
+    result = await _run_file_op(item, artifacts_command(item.policy.root))
+    files = parse_artifacts(result.stdout, item.policy.root, item.imported)
+    return {"artifacts": files, "truncated": result.truncated}
 
 
 @app.get("/health")
