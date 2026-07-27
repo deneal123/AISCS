@@ -5,15 +5,19 @@
 
   POST   /workspaces                  {user_id, ttl_sec, policy} → {workspace_id, token, …}
   POST   /workspaces/{id}/exec        {user_id, token, command}  → {exit_code, stdout, …}
+  POST   /workspaces/{id}/files/list  {user_id, token, path}     → {entries, truncated}
+  POST   /workspaces/{id}/files/read  {user_id, token, path}     → {content, truncated}
+  POST   /workspaces/{id}/files/write {user_id, token, path, content} → {written}
+  POST   /workspaces/{id}/files/grep  {user_id, token, pattern, path} → {matches, truncated}
   PATCH  /workspaces/{id}/policy      {user_id, token, update}   → {policy}
   DELETE /workspaces/{id}             {user_id, token}           → {deleted}
   GET    /health                      → {status, service, version, contract, driver, …}
 
 Форма ошибки одна на все сервисы: `{"error": "<машинный код>", "detail": "<текст>"}`.
 
-🔴 ЭТОТ СЕРВИС — ЕДИНСТВЕННЫЙ, КОМУ ОТДАН `docker.sock`. Поэтому у него ровно четыре ручки,
-и каждая требует и ключ сервиса (кто зовёт), и токен владения (чья песочница). Разделение не
-избыточно: ключ общий на весь backend, а песочница принадлежит одному пользователю.
+🔴 ЭТОТ СЕРВИС — ЕДИНСТВЕННЫЙ, КОМУ ОТДАН `docker.sock`. Поэтому ручек ровно столько,
+сколько нужно, и каждая требует и ключ сервиса (кто зовёт), и токен владения (чья песочница).
+Разделение не избыточно: ключ общий на весь backend, а песочница принадлежит пользователю.
 """
 
 import asyncio
@@ -24,6 +28,15 @@ import uvicorn
 from fastapi import FastAPI, Header, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
+from files import (
+    MAX_READ_BYTES,
+    UnsafePath,
+    grep_command,
+    list_command,
+    parse_read,
+    read_command,
+    write_command,
+)
 from pydantic import BaseModel, Field
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
@@ -112,6 +125,14 @@ class PolicyRequest(BaseModel):
 class OwnerRequest(BaseModel):
     user_id: str
     token: str
+
+
+class FileRequest(BaseModel):
+    user_id: str
+    token: str
+    path: str = ""
+    content: str | None = None
+    pattern: str | None = None
 
 
 @app.post("/workspaces")
@@ -204,6 +225,106 @@ async def delete_workspace(
     except WorkspaceNotFound as exc:
         return _error("not_found", str(exc), 404)
     return {"deleted": workspace_id}
+
+
+def _owned(workspace_id: str, payload):
+    """Найти песочницу владельца или отдать готовый ответ об ошибке."""
+    try:
+        return _resolve(workspace_id, payload.user_id, payload.token), None
+    except OwnershipError as exc:
+        return None, _error("forbidden", str(exc), 403)
+    except WorkspaceNotFound as exc:
+        return None, _error("not_found", str(exc), 404)
+
+
+async def _run_file_op(item, command: str):
+    """Выполнить служебную команду файловой операции.
+
+    ⚠️ Потолок вывода СВОЙ, а не из политики: у чтения файла и у вывода сборки разные
+    задачи, и общий потолок молча обрезал бы первое под второе.
+    """
+    return await registry.exec_raw(item, command, max_output_chars=MAX_READ_BYTES * 2)
+
+
+@app.post("/workspaces/{workspace_id}/files/list")
+async def list_files(
+    workspace_id: str, payload: FileRequest, authorization: str | None = Header(default=None)
+):
+    _auth(authorization)
+    item, failure = _owned(workspace_id, payload)
+    if failure is not None:
+        return failure
+    try:
+        command = list_command(item.policy.root, payload.path)
+    except UnsafePath as exc:
+        return _error("forbidden", str(exc), 403)
+    result = await _run_file_op(item, command)
+    entries = []
+    for line in (result.stdout or "").splitlines():
+        parts = line.split("	")
+        if len(parts) == 3:
+            entries.append({"type": parts[0], "size": int(parts[1] or 0), "path": parts[2]})
+    return {"entries": entries, "truncated": result.truncated}
+
+
+@app.post("/workspaces/{workspace_id}/files/read")
+async def read_file(
+    workspace_id: str, payload: FileRequest, authorization: str | None = Header(default=None)
+):
+    _auth(authorization)
+    item, failure = _owned(workspace_id, payload)
+    if failure is not None:
+        return failure
+    try:
+        command = read_command(item.policy.root, payload.path)
+    except UnsafePath as exc:
+        return _error("forbidden", str(exc), 403)
+    result = await _run_file_op(item, command)
+    try:
+        content, truncated = parse_read(result.stdout)
+    except FileNotFoundError:
+        return _error("not_found", f"файла {payload.path!r} нет", 404)
+    except ValueError as exc:
+        return _error("driver_failed", f"чтение не удалось: {exc}", 502)
+    return {"path": payload.path, "content": content, "truncated": truncated}
+
+
+@app.post("/workspaces/{workspace_id}/files/write")
+async def write_file(
+    workspace_id: str, payload: FileRequest, authorization: str | None = Header(default=None)
+):
+    _auth(authorization)
+    item, failure = _owned(workspace_id, payload)
+    if failure is not None:
+        return failure
+    try:
+        command = write_command(item.policy.root, payload.path, payload.content or "")
+    except UnsafePath as exc:
+        return _error("forbidden", str(exc), 403)
+    except ValueError as exc:
+        return _error("request_too_large", str(exc), 413)
+    result = await _run_file_op(item, command)
+    if "__OK__" not in (result.stdout or ""):
+        return _error("driver_failed", (result.stderr or "запись не удалась")[:300], 502)
+    return {"path": payload.path, "written": True}
+
+
+@app.post("/workspaces/{workspace_id}/files/grep")
+async def grep_files(
+    workspace_id: str, payload: FileRequest, authorization: str | None = Header(default=None)
+):
+    _auth(authorization)
+    item, failure = _owned(workspace_id, payload)
+    if failure is not None:
+        return failure
+    if not (payload.pattern or "").strip():
+        return _error("invalid_request", "нужен непустой шаблон поиска", 422)
+    try:
+        command = grep_command(item.policy.root, payload.pattern, payload.path)
+    except UnsafePath as exc:
+        return _error("forbidden", str(exc), 403)
+    result = await _run_file_op(item, command)
+    return {"matches": (result.stdout or "").splitlines(), "truncated": result.truncated}
 
 
 @app.get("/health")

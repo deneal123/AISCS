@@ -150,6 +150,20 @@ class WorkspaceRegistry:
             max_output_chars=item.policy.max_output_chars,
         )
 
+    async def exec_raw(self, item: Workspace, command: str, *, max_output_chars: int):
+        """Служебная команда файловой операции — со СВОИМ потолком вывода.
+
+        ⚠️ Потолок политики рассчитан на вывод сборки: он маленький намеренно. Прочитать
+        файл под ним значило бы молча вернуть его половину — то есть неверное чтение.
+        Время при этом остаётся общим: чужая команда не должна ждать дольше своей.
+        """
+        return await self._driver.exec(
+            item.ref,
+            command,
+            timeout_sec=item.policy.exec_timeout_sec,
+            max_output_chars=max_output_chars,
+        )
+
     def _drop_expired(self) -> list[Workspace]:
         now = time.time()
         expired = [w for w in list(self._items.values()) if w.expired(now)]
