@@ -258,3 +258,50 @@ def test_unknown_driver_is_an_error_not_a_silent_docker() -> None:
 
     with pytest.raises(ValueError):
         build_driver("firecracker")
+
+
+# --- таймаут: путь, который тесты не видели, а живой прогон сломал ------------------
+
+
+class _GoneProcess:
+    """Процесс `docker exec`, который завершился САМ, пока мы добивали группу внутри."""
+
+    returncode = None
+
+    async def communicate(self):
+        await asyncio.sleep(10)  # никогда не успеет: вызывающий ждёт с таймаутом
+
+    def kill(self):
+        raise ProcessLookupError("процесса уже нет")
+
+    async def wait(self):
+        raise ProcessLookupError("процесса уже нет")
+
+
+async def test_timeout_returns_a_result_even_if_the_exec_process_is_already_gone(
+    monkeypatch,
+) -> None:
+    """🔴 Таймаут отдавал 500 БЕЗ результата: клиент не получал ни вывода, ни признака.
+
+    Добивание группы внутри контейнера завершает хостовой `docker exec` раньше нас, и
+    `proc.kill()` бросал ProcessLookupError. Живой дефект; тесты его не видели, потому что
+    подменяли драйвер целиком — здесь подменяется только ЗАПУСК ПРОЦЕССА.
+    """
+    from drivers.docker_cli import DockerCliDriver
+
+    driver = DockerCliDriver()
+
+    async def fake_exec(*args, **kwargs):
+        return _GoneProcess()
+
+    async def no_kill(ref):
+        return None
+
+    monkeypatch.setattr(asyncio, "create_subprocess_exec", fake_exec)
+    monkeypatch.setattr(driver, "_kill_process_group", no_kill)
+
+    result = await driver.exec(
+        ContainerRef("docker", "c1"), "sleep 60", timeout_sec=0.05, max_output_chars=100
+    )
+    assert result.timed_out is True
+    assert result.exit_code == -1, "таймаут обязан быть отличим от успешного завершения"

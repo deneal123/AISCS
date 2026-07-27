@@ -17,6 +17,7 @@ CLI, а не python-SDK: docker-клиент уже есть в образе к�
 from __future__ import annotations
 
 import asyncio
+import contextlib
 import json
 import logging
 import shlex
@@ -150,8 +151,15 @@ class DockerCliDriver:
             timed_out = True
             out, err = b"", b""
             await self._kill_process_group(ref)
-            proc.kill()
-            await proc.wait()
+            # 🔴 Добивание группы ВНУТРИ контейнера завершает и хостовой `docker exec` — сам,
+            # раньше нас. `proc.kill()` тогда бросает ProcessLookupError, и таймаут
+            # превращался в 500 БЕЗ результата: клиент не получал ни вывода, ни признака
+            # `timed_out`, то есть худший исход из возможных. Нашёл живой прогон — тесты
+            # увидеть этого не могли, они подменяют драйвер целиком.
+            with contextlib.suppress(ProcessLookupError):
+                proc.kill()
+            with contextlib.suppress(Exception):
+                await proc.wait()
         stdout, cut_out = _clip(out.decode("utf-8", "replace"), max_output_chars)
         stderr, cut_err = _clip(err.decode("utf-8", "replace"), max_output_chars)
         return ExecResult(

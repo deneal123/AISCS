@@ -11,8 +11,17 @@ FROM python:3.12-slim
 # curl — healthcheck compose; docker-cli — единственный способ, которым сервис работает.
 # ⚠️ Ставим КЛИЕНТ, а не демон: демон здесь не нужен и был бы docker-in-docker, то есть
 # ещё одна привилегированная поверхность.
-RUN apt-get update && apt-get install -y --no-install-recommends curl docker.io \
-    && rm -rf /var/lib/apt/lists/*
+#
+# 🔴 Пакет называется `docker-cli`, НЕ `docker.io`. В Debian 13 клиент вынесли в отдельный
+# пакет, и `docker.io` ставит ТОЛЬКО рантайм: образ собирался успешно, `dpkg -l` показывал
+# docker, а `/usr/bin/docker` не существовал. Нашёл живой запуск — тесты увидеть этого не
+# могли по построению, они подменяют драйвер.
+#
+# ⚠️ `docker --version` в том же слое: сборка обязана падать здесь, а не контейнер — на
+# старте. Проверка стоит секунду и закрывает весь класс «пакет переименовали».
+RUN apt-get update && apt-get install -y --no-install-recommends curl docker-cli \
+    && rm -rf /var/lib/apt/lists/* \
+    && docker --version
 
 ARG FASTAPI_VERSION=0.115.6
 ARG UVICORN_VERSION=0.34.0
