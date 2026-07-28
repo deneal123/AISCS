@@ -90,6 +90,146 @@ def list_command(root: str, path: str, *, limit: int = MAX_LIST_ENTRIES) -> str:
     )
 
 
+# Глубина дерева для ПАНЕЛИ рабочего места. Больше, чем у `list` (там два уровня для
+# модели), но не безгранично: развёрнутый `node_modules` — это не дерево, а стена.
+MAX_TREE_DEPTH = 6
+MAX_TREE_ENTRIES = 400
+# Каталоги, которых в дереве быть не должно: служебные и заведомо шумные. `.git` — ещё и
+# по существу: история песочницы (S14.2) не является её содержимым и не должна ни
+# показываться человеку файлами, ни попадать в опись артефактов.
+TREE_PRUNED_DIRS = (".git", "node_modules", "__pycache__", ".venv", ".mypy_cache")
+
+
+def tree_command(
+    root: str,
+    path: str,
+    *,
+    depth: int = MAX_TREE_DEPTH,
+    limit: int = MAX_TREE_ENTRIES,
+) -> str:
+    """Дерево содержимого для ПАНЕЛИ, а не для модели.
+
+    ⚠️ Отдельно от `list_command`: у того два уровня и потолок под окно модели, здесь —
+    показ человеку. Общая команда однажды подстроилась бы под одного потребителя и молча
+    испортила бы второго.
+
+    ⚠️ Служебные каталоги ОТСЕКАЮТСЯ (`-prune`), а не фильтруются после: обход
+    `node_modules` съедает потолок записей и время, даже если результат потом выбросить.
+    """
+    target = safe_path(root, path or root)
+    pruned = " -o ".join(f"-name {_q(name)}" for name in TREE_PRUNED_DIRS)
+    return (
+        f"find {_q(target)} -mindepth 1 -maxdepth {int(depth)} "
+        f"\\( -type d \\( {pruned} \\) -prune \\) -o -print 2>/dev/null | "
+        f"sort | head -n {int(limit)} | "
+        "while IFS= read -r p; do "
+        'if [ -d "$p" ]; then echo "dir\t0\t$p"; '
+        'else echo "file\t$(wc -c < "$p" 2>/dev/null || echo 0)\t$p"; fi; done'
+    )
+
+
+# --- история версий песочницы -------------------------------------------------------
+#
+# 🔴 Агент правит файлы, и предыдущее состояние не восстановить НИЧЕМ. Git внутри
+# контейнера даёт и историю, и дифф, и откат — тем же инструментом, которым это делают
+# люди, и без своей машинерии снапшотов.
+#
+# ⚠️ Личность коммиттера задаётся ЯВНО: без неё `git commit` в контейнере без конфига
+# просто отказывается, и история молча не ведётся.
+#
+# ⚠️ `.git` НЕ ДОЛЖЕН попадать ни в опись артефактов, ни в дерево, ни в импорт: иначе он
+# поедет пользователю файлами и раздует выгрузку (см. `TREE_PRUNED_DIRS`).
+MAX_LOG_ENTRIES = 50
+MAX_DIFF_CHARS = 20_000
+
+
+def git_init_command(root: str, author: str) -> str:
+    """Завести историю. Идемпотентно: повторный вызов ничего не портит.
+
+    Отсутствие git — НЕ ошибка вызывающего: образ рантайма мог быть подменён
+    развёртыванием. Сообщаем маркером, чтобы это было видно, а не гадалось по пустому логу.
+    """
+    name, _, email = str(author or "").partition(" <")
+    email = email.rstrip(">") or "agent@gpthub.local"
+    return (
+        "command -v git >/dev/null 2>&1 || { echo __NO_GIT__; exit 0; }; "
+        f"cd {_q(root)} || exit 0; "
+        "if [ ! -d .git ]; then git init -q . >/dev/null 2>&1 || { echo __NO_GIT__; exit 0; }; fi; "
+        f"git config user.name {_q(name.strip() or 'GPTHub Agent')} && "
+        f"git config user.email {_q(email.strip())} && "
+        "echo __OK__"
+    )
+
+
+def git_commit_command(root: str, message: str) -> str:
+    """Снимок текущего состояния. Пусто изменений — не коммитим и говорим об этом."""
+    text = reject_control_bytes(message, "сообщение коммита")[:200] or "изменения агента"
+    return (
+        "command -v git >/dev/null 2>&1 || { echo __NO_GIT__; exit 0; }; "
+        f"cd {_q(root)} || exit 0; "
+        "[ -d .git ] || { echo __NO_REPO__; exit 0; }; "
+        "git add -A >/dev/null 2>&1; "
+        "if git diff --cached --quiet 2>/dev/null; then echo __NO_CHANGES__; exit 0; fi; "
+        f"git commit -q -m {_q(text)} >/dev/null 2>&1 && echo __OK__ || echo __FAILED__"
+    )
+
+
+def git_log_command(root: str, limit: int = MAX_LOG_ENTRIES) -> str:
+    """История: `хеш\\tкогда\\tсообщение` построчно."""
+    return (
+        "command -v git >/dev/null 2>&1 || { echo __NO_GIT__; exit 0; }; "
+        f"cd {_q(root)} || exit 0; "
+        "[ -d .git ] || { echo __NO_REPO__; exit 0; }; "
+        f"git log --max-count={int(limit)} --date=iso-strict "
+        "--pretty=format:'%h%x09%ad%x09%s' 2>/dev/null"
+    )
+
+
+def git_diff_command(root: str, ref: str = "", path: str = "") -> str:
+    """Что изменилось: от ревизии (или от прошлого коммита) до текущего состояния."""
+    revision = reject_control_bytes(ref, "ревизия").strip() or "HEAD"
+    target = safe_path(root, path) if str(path or "").strip() else ""
+    scope = f" -- {_q(target)}" if target else ""
+    return (
+        "command -v git >/dev/null 2>&1 || { echo __NO_GIT__; exit 0; }; "
+        f"cd {_q(root)} || exit 0; "
+        "[ -d .git ] || { echo __NO_REPO__; exit 0; }; "
+        f"git diff {_q(revision)}{scope} 2>/dev/null | head -c {MAX_DIFF_CHARS}"
+    )
+
+
+def git_revert_command(root: str, ref: str, path: str = "") -> str:
+    """Вернуть файл (или всё дерево) к состоянию ревизии.
+
+    🔴 `checkout <ревизия> -- <путь>`, а не `reset --hard`: откат ОДНОГО файла не должен
+    сносить остальную работу агента, а история обязана остаться на месте.
+    """
+    revision = reject_control_bytes(ref, "ревизия").strip()
+    if not revision:
+        raise UnsafePath("ревизия для отката не указана")
+    target = safe_path(root, path) if str(path or "").strip() else ""
+    scope = _q(target) if target else "."
+    return (
+        "command -v git >/dev/null 2>&1 || { echo __NO_GIT__; exit 0; }; "
+        f"cd {_q(root)} || exit 0; "
+        "[ -d .git ] || { echo __NO_REPO__; exit 0; }; "
+        f"git checkout {_q(revision)} -- {scope} >/dev/null 2>&1 && echo __OK__ || echo __FAILED__"
+    )
+
+
+def parse_git_log(output: str) -> list[dict[str, str]]:
+    """`хеш\\tкогда\\tсообщение` → записи. Маркеры отсутствия — пустая история."""
+    raw = (output or "").strip()
+    if not raw or raw in ("__NO_GIT__", "__NO_REPO__"):
+        return []
+    entries = []
+    for line in raw.splitlines():
+        parts = line.split("\t")
+        if len(parts) == 3:
+            entries.append({"ref": parts[0], "at": parts[1], "message": parts[2]})
+    return entries
+
+
 def read_command(root: str, path: str, *, max_bytes: int = MAX_READ_BYTES) -> str:
     """Прочитать файл в base64.
 

@@ -18,6 +18,7 @@ from typing import Any
 
 from contracts import (
     DEFAULT_EXEC_TIMEOUT_SEC,
+    DEFAULT_IMAGE,
     DEFAULT_MAX_OUTPUT_CHARS,
     DYNAMIC_POLICY_FIELDS,
     HARD_EXEC_TIMEOUT_SEC,
@@ -39,7 +40,9 @@ class WorkspacePolicy:
     """
 
     # --- статическая половина (заперта при создании) ---
-    image: str = "python:3.12-slim"
+    # ⚠️ Образ — из окружения, а не литералом: истории версий нужен `git`, и какой
+    # рантайм подан, решает развёртывание (см. `contracts.DEFAULT_IMAGE`).
+    image: str = DEFAULT_IMAGE
     network: str = "none"
     read_only_root: bool = True
     memory_bytes: int = 512 * 1024 * 1024

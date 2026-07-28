@@ -9,6 +9,7 @@ from __future__ import annotations
 import base64
 import shlex
 
+import files
 import pytest
 from files import (
     MAX_READ_BYTES,
@@ -259,3 +260,95 @@ def test_other_absolute_paths_are_still_refused() -> None:
     for path in ("/etc/passwd", "/root/.ssh/id_rsa", "/var/run/docker.sock"):
         with pytest.raises(UnsafePath):
             safe_path(ROOT, path)
+
+
+# --- дерево для панели и история версий ------------------------------------------------
+
+
+def test_tree_prunes_service_directories():
+    """🔴 `.git` и `node_modules` в дереве рабочего места не показываем.
+
+    История песочницы не является её содержимым: показанная файлами, она поехала бы
+    пользователю и раздула бы выгрузку. `node_modules` — просто стена вместо дерева, и
+    отсекать его надо ДО обхода, иначе он съедает потолок записей и время.
+    """
+    command = files.tree_command("/workspace", "")
+
+    assert "-prune" in command
+    for name in (".git", "node_modules", "__pycache__"):
+        assert f"-name {name}" in command or f"-name '{name}'" in command
+
+
+def test_tree_stays_inside_the_sandbox():
+    with pytest.raises(files.UnsafePath):
+        files.tree_command("/workspace", "../etc")
+
+
+def test_tree_is_deeper_than_the_model_listing():
+    """Панель и модель — разные потребители: у модели два уровня, человеку нужно дерево."""
+    assert files.MAX_TREE_DEPTH > 2
+    assert "-maxdepth 2 " in files.list_command("/workspace", "")
+
+
+def test_git_init_sets_the_committer():
+    """⚠️ Без личности `git commit` в контейнере без конфига ОТКАЗЫВАЕТСЯ, и история
+    молча не ведётся."""
+    command = files.git_init_command("/workspace", "GPTHub Agent <agent@gpthub.local>")
+
+    assert "git config user.name" in command
+    assert "git config user.email" in command
+    assert "agent@gpthub.local" in command
+
+
+def test_git_commands_survive_an_image_without_git():
+    """Образ рантайма могли подменить: отвечаем маркером, а не падаем на первой команде."""
+    for command in (
+        files.git_init_command("/workspace", "A <a@b.c>"),
+        files.git_commit_command("/workspace", "правка"),
+        files.git_log_command("/workspace"),
+        files.git_diff_command("/workspace"),
+        files.git_revert_command("/workspace", "abc123"),
+    ):
+        assert "__NO_GIT__" in command
+
+
+def test_commit_message_is_quoted():
+    """Сообщение приходит из запроса пользователя — кавычки в нём не должны исполняться.
+
+    ⚠️ Проверяем, что текст доехал ОДНИМ shell-аргументом, а не «нет опасной подстроки»:
+    подстрока-то остаётся, вопрос лишь в том, аргумент это или команда.
+    """
+    payload = "'; rm -rf / ; echo '"
+    command = files.git_commit_command("/workspace", payload)
+
+    assert shlex.quote(payload) in command
+    # Разбор шеллом отдаёт его ОДНИМ токеном — значит это аргумент, а не команда.
+    assert payload in shlex.split(command)
+
+
+def test_revert_needs_a_revision():
+    with pytest.raises(files.UnsafePath):
+        files.git_revert_command("/workspace", "  ")
+
+
+def test_revert_scopes_the_path_to_the_sandbox():
+    with pytest.raises(files.UnsafePath):
+        files.git_revert_command("/workspace", "abc123", "../../etc/passwd")
+
+
+def test_revert_uses_checkout_not_reset():
+    """🔴 Откат ОДНОГО файла не должен сносить остальную работу и стирать историю."""
+    command = files.git_revert_command("/workspace", "abc123", "main.py")
+
+    assert "git checkout" in command
+    assert "reset --hard" not in command
+
+
+def test_log_parser_reads_entries_and_tolerates_absence():
+    parsed = files.parse_git_log("a1b2c3\t2026-07-28T10:00:00+00:00\tпервый снимок")
+
+    assert parsed == [
+        {"ref": "a1b2c3", "at": "2026-07-28T10:00:00+00:00", "message": "первый снимок"}
+    ]
+    assert files.parse_git_log("__NO_GIT__") == []
+    assert files.parse_git_log("") == []

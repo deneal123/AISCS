@@ -6,10 +6,15 @@
   POST   /workspaces                  {user_id, ttl_sec, policy} → {workspace_id, token, …}
   POST   /workspaces/{id}/exec        {user_id, token, command}  → {exit_code, stdout, …}
   POST   /workspaces/{id}/files/list  {user_id, token, path}     → {entries, truncated}
+  POST   /workspaces/{id}/files/tree  {user_id, token, path}     → {entries, truncated}
   POST   /workspaces/{id}/files/read  {user_id, token, path}     → {content, truncated}
   POST   /workspaces/{id}/files/write {user_id, token, path, content} → {written}
   POST   /workspaces/{id}/files/grep  {user_id, token, pattern, path} → {matches, truncated}
   POST   /workspaces/{id}/import      {user_id, token, files:[{name,url}]} → {files, imported}
+  POST   /workspaces/{id}/snapshot    {user_id, token, message}  → {committed, reason}
+  POST   /workspaces/{id}/history     {user_id, token}           → {entries}
+  POST   /workspaces/{id}/diff        {user_id, token, ref, path} → {diff, available}
+  POST   /workspaces/{id}/revert      {user_id, token, ref, path} → {reverted}
   POST   /workspaces/{id}/artifacts   {user_id, token}           → {artifacts, truncated}
   POST   /workspaces/{id}/files/download {user_id, token, path}   → {content_b64}
   PATCH  /workspaces/{id}/policy      {user_id, token, update}   → {policy}
@@ -37,13 +42,20 @@ from files import (
     UnsafePath,
     artifacts_command,
     download_command,
+    git_commit_command,
+    git_diff_command,
+    git_init_command,
+    git_log_command,
+    git_revert_command,
     grep_command,
     list_command,
     parse_artifacts,
     parse_download,
+    parse_git_log,
     parse_read,
     read_command,
     reject_control_bytes,
+    tree_command,
     write_command,
 )
 from importer import MAX_TOTAL_BYTES, ImportRefused, fetch, plan
@@ -56,6 +68,7 @@ from contracts import (
     DEFAULT_TTL_SEC,
     ERROR_CODES,
     EXEC_RESPONSE_FIELDS,
+    GIT_AUTHOR,
     MAX_BODY_BYTES,
     SERVICE_NAME,
     SERVICE_VERSION,
@@ -150,6 +163,9 @@ class FileRequest(BaseModel):
     path: str = ""
     content: str | None = None
     pattern: str | None = None
+    # История версий: ревизия для diff/revert и сообщение снимка.
+    ref: str | None = None
+    message: str | None = None
 
 
 @app.post("/workspaces")
@@ -171,7 +187,26 @@ async def create_workspace(
         return _error("isolation_unverified", str(exc), 500)
     except DriverError as exc:
         return _error("driver_failed", str(exc), 502)
+    # 🔴 История заводится СРАЗУ и здесь: заводить её на первой правке значило бы, что
+    # исходное состояние песочницы не зафиксировано, и «вернуть как было» некуда.
+    # Best-effort: образ без git отвечает маркером, песочница остаётся рабочей — но уже
+    # без истории, и это видно в логе, а не по пустому `ws_log`.
+    versioned = False
+    try:
+        probe = await registry.exec_raw(
+            item, git_init_command(item.policy.root, GIT_AUTHOR), max_output_chars=4096
+        )
+        versioned = "__OK__" in (probe.stdout or "")
+        if not versioned:
+            logger.warning(
+                "история версий песочницы %s не заведена: в образе %s нет git",
+                item.workspace_id,
+                item.policy.image,
+            )
+    except Exception:  # noqa: BLE001 — песочница выдаётся и без истории
+        logger.warning("git init в песочнице %s не выполнен", item.workspace_id, exc_info=True)
     return {
+        "versioned": versioned,
         "workspace_id": item.workspace_id,
         "token": token,
         "root": item.policy.root,
@@ -290,6 +325,36 @@ async def list_files(
     return {"entries": entries, "truncated": result.truncated}
 
 
+@app.post("/workspaces/{workspace_id}/files/tree")
+async def tree_files(
+    workspace_id: str, payload: FileRequest, authorization: str | None = Header(default=None)
+):
+    """Дерево содержимого — для ПАНЕЛИ рабочего места, не для модели.
+
+    🔴 Песочница есть, но человек её не видит: файлы появляются и исчезают, и понять,
+    с чем работает агент, нечем. Отдельно от `files/list` намеренно: у того два уровня и
+    потолок под окно модели, здесь — глубина и отсечка служебных каталогов под показ.
+
+    ⚠️ Путь проходит тот же `safe_path` и тот же токен владения: ручка «покажи дерево»
+    без них стала бы чтением чужой песочницы по угаданному идентификатору.
+    """
+    _auth(authorization)
+    item, failure = _owned(workspace_id, payload)
+    if failure is not None:
+        return failure
+    try:
+        command = tree_command(item.policy.root, payload.path)
+    except UnsafePath as exc:
+        return _error("forbidden", str(exc), 403)
+    result = await _run_file_op(item, command)
+    entries = []
+    for line in (result.stdout or "").splitlines():
+        parts = line.split("	")
+        if len(parts) == 3:
+            entries.append({"type": parts[0], "size": int(parts[1] or 0), "path": parts[2]})
+    return {"entries": entries, "truncated": result.truncated, "root": item.policy.root}
+
+
 @app.post("/workspaces/{workspace_id}/files/read")
 async def read_file(
     workspace_id: str, payload: FileRequest, authorization: str | None = Header(default=None)
@@ -387,6 +452,86 @@ async def import_files(
             }
         )
     return {"files": results, "imported": sum(1 for r in results if r["imported"])}
+
+
+@app.post("/workspaces/{workspace_id}/snapshot")
+async def snapshot_workspace(
+    workspace_id: str, payload: FileRequest, authorization: str | None = Header(default=None)
+):
+    """Зафиксировать состояние после хода, который что-то менял.
+
+    ⚠️ Снимок делает ВЫЗЫВАЮЩИЙ по факту хода, а не сайдкар по таймеру: только он знает,
+    чем этот ход был для человека, и его запрос становится сообщением коммита.
+    """
+    _auth(authorization)
+    item, failure = _owned(workspace_id, payload)
+    if failure is not None:
+        return failure
+    result = await _run_file_op(
+        item, git_commit_command(item.policy.root, payload.message or "изменения агента")
+    )
+    out = result.stdout or ""
+    return {
+        "committed": "__OK__" in out,
+        # Разделяем «нечего фиксировать» и «истории нет вовсе»: первое — норма хода без
+        # правок, второе — образ без git, и молчать об этом нельзя.
+        "reason": next(
+            (m for m in ("__NO_CHANGES__", "__NO_GIT__", "__NO_REPO__", "__FAILED__") if m in out),
+            "",
+        )
+        .strip("_")
+        .lower(),
+    }
+
+
+@app.post("/workspaces/{workspace_id}/history")
+async def history_workspace(
+    workspace_id: str, payload: FileRequest, authorization: str | None = Header(default=None)
+):
+    """История правок песочницы. Пусто — истории нет или правок не было."""
+    _auth(authorization)
+    item, failure = _owned(workspace_id, payload)
+    if failure is not None:
+        return failure
+    result = await _run_file_op(item, git_log_command(item.policy.root))
+    return {"entries": parse_git_log(result.stdout)}
+
+
+@app.post("/workspaces/{workspace_id}/diff")
+async def diff_workspace(
+    workspace_id: str, payload: FileRequest, authorization: str | None = Header(default=None)
+):
+    """Что изменилось от ревизии до текущего состояния."""
+    _auth(authorization)
+    item, failure = _owned(workspace_id, payload)
+    if failure is not None:
+        return failure
+    try:
+        command = git_diff_command(item.policy.root, payload.ref or "", payload.path or "")
+    except UnsafePath as exc:
+        return _error("forbidden", str(exc), 403)
+    result = await _run_file_op(item, command)
+    text = result.stdout or ""
+    if text.strip() in ("__NO_GIT__", "__NO_REPO__"):
+        return {"diff": "", "available": False}
+    return {"diff": text, "available": True, "truncated": result.truncated}
+
+
+@app.post("/workspaces/{workspace_id}/revert")
+async def revert_workspace(
+    workspace_id: str, payload: FileRequest, authorization: str | None = Header(default=None)
+):
+    """Вернуть файл (или всё дерево) к состоянию ревизии."""
+    _auth(authorization)
+    item, failure = _owned(workspace_id, payload)
+    if failure is not None:
+        return failure
+    try:
+        command = git_revert_command(item.policy.root, payload.ref or "", payload.path or "")
+    except UnsafePath as exc:
+        return _error("invalid_request", str(exc), 422)
+    result = await _run_file_op(item, command)
+    return {"reverted": "__OK__" in (result.stdout or "")}
 
 
 @app.post("/workspaces/{workspace_id}/artifacts")

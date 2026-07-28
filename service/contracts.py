@@ -80,3 +80,12 @@ HARD_TTL_SEC = float(os.environ.get("WORKSPACE_HARD_TTL_SEC", "14400"))
 
 # Сколько песочниц держим одновременно. Потолок общий, а не на арендатора: ресурс хостовой.
 MAX_WORKSPACES = int(os.environ.get("WORKSPACE_MAX_WORKSPACES", "32"))
+
+# Образ рантайма песочницы. 🔴 НЕ ЛИТЕРАЛ В ПОЛИТИКЕ: истории версий (`ws_log`/`ws_diff`/
+# `ws_revert`) нужен `git`, которого в голом `python:*-slim` нет. Какой образ подан — это
+# решение развёртывания, и оно должно приниматься в одном месте, а не выясняться по
+# провалу первой же команды. Дефолт — собираемый нами `runtime.Dockerfile` (slim + git).
+DEFAULT_IMAGE = str(os.environ.get("WORKSPACE_IMAGE", "gpthub-workspace-runtime:latest"))
+# Личность коммиттера: без неё `git commit` в контейнере без конфига просто ОТКАЗЫВАЕТСЯ,
+# и история молча не ведётся.
+GIT_AUTHOR = str(os.environ.get("WORKSPACE_GIT_AUTHOR", "GPTHub Agent <agent@gpthub.local>"))
