@@ -290,6 +290,25 @@ def test_tree_is_deeper_than_the_model_listing():
     assert "-maxdepth 2 " in files.list_command("/workspace", "")
 
 
+def test_model_listing_hides_the_service_directories_too():
+    """🔴 НАЙДЕНО ЖИВЫМ ПРОГОНОМ. `.git` завёлся ради истории — и полез в листинг МОДЕЛИ.
+
+    Прогон показал ей `.git/config`, `.git/HEAD`, `.git/refs`: оплаченные токены за
+    служебные потроха и приглашение принять их за результат работы. Отсечка была только
+    в дереве для панели — а модель смотрит через `files/list`.
+    """
+    command = files.list_command("/workspace", "")
+
+    assert "-prune" in command
+    for name in (".git", "node_modules", "__pycache__"):
+        assert f"-name {name}" in command or f"-name '{name}'" in command
+
+
+def test_listing_and_tree_prune_the_same_set():
+    """Два потребителя, одно правило: разъедься списки — `.git` вернулся бы к одному."""
+    assert files.TREE_PRUNED_DIRS == files.PRUNED_DIRS
+
+
 def test_git_init_sets_the_committer():
     """⚠️ Без личности `git commit` в контейнере без конфига ОТКАЗЫВАЕТСЯ, и история
     молча не ведётся."""

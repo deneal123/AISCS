@@ -79,11 +79,26 @@ def safe_path(root: str, path: str) -> str:
     return resolved
 
 
+# Каталоги, которых в листинге и дереве быть не должно: служебные и заведомо шумные.
+# 🔴 `.git` — ещё и по существу: история песочницы (S14.2) не её содержимое. Живой прогон
+# показал модели `.git/config`, `.git/HEAD`, `.git/refs` — оплаченные токены за служебные
+# потроха и приглашение принять их за результат работы. Отсекаем ДО обхода (`-prune`), а
+# не фильтрацией после: иначе `.git` и `node_modules` съедают потолок записей.
+PRUNED_DIRS = (".git", "node_modules", "__pycache__", ".venv", ".mypy_cache")
+
+
+def _prune_expr() -> str:
+    names = " -o ".join(f"-name {_q(name)}" for name in PRUNED_DIRS)
+    return f"\( -type d \( {names} \) -prune \) -o -print"
+
+
 def list_command(root: str, path: str, *, limit: int = MAX_LIST_ENTRIES) -> str:
+    """Листинг для МОДЕЛИ: два уровня, служебные каталоги отсечены."""
     target = safe_path(root, path or root)
     # `-printf` есть не во всех образах; формат собираем сами из `find` + `ls`.
     return (
-        f"find {_q(target)} -maxdepth 2 -mindepth 1 2>/dev/null | head -n {int(limit)} | "
+        f"find {_q(target)} -maxdepth 2 -mindepth 1 {_prune_expr()} 2>/dev/null | "
+        f"head -n {int(limit)} | "
         "while IFS= read -r p; do "
         'if [ -d "$p" ]; then echo "dir\t0\t$p"; '
         'else echo "file\t$(wc -c < "$p" 2>/dev/null || echo 0)\t$p"; fi; done'
@@ -94,10 +109,7 @@ def list_command(root: str, path: str, *, limit: int = MAX_LIST_ENTRIES) -> str:
 # модели), но не безгранично: развёрнутый `node_modules` — это не дерево, а стена.
 MAX_TREE_DEPTH = 6
 MAX_TREE_ENTRIES = 400
-# Каталоги, которых в дереве быть не должно: служебные и заведомо шумные. `.git` — ещё и
-# по существу: история песочницы (S14.2) не является её содержимым и не должна ни
-# показываться человеку файлами, ни попадать в опись артефактов.
-TREE_PRUNED_DIRS = (".git", "node_modules", "__pycache__", ".venv", ".mypy_cache")
+TREE_PRUNED_DIRS = PRUNED_DIRS  # прежнее имя: дерево и листинг режут одно и то же
 
 
 def tree_command(
