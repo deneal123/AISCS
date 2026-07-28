@@ -186,3 +186,18 @@ def test_non_archive_is_left_alone():
     command = importer.unpack_command("/workspace", "notes.txt")
 
     assert "__NOT_ARCHIVE__" in command
+
+
+def test_unpack_is_wired_into_the_import_handler():
+    """⚠️ ТОЧКА ВЫЗОВА. Команда, которую никто не зовёт, архив не разворачивает.
+
+    Правило выше проверяет саму команду и осталось бы зелёным, если убрать её вызов из
+    обработчика импорта, — в проекте этот промах ловили трижды.
+    """
+    import inspect
+
+    import app
+
+    src = inspect.getsource(app.import_files)
+    assert "unpack_command(" in src, "архив импортируется, но не разворачивается"
+    assert '.endswith(".zip")' in src, "разворачиваем что попало либо не разворачиваем вовсе"
