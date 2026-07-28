@@ -201,3 +201,56 @@ def test_unpack_is_wired_into_the_import_handler():
     src = inspect.getsource(app.import_files)
     assert "unpack_command(" in src, "архив импортируется, но не разворачивается"
     assert '.endswith(".zip")' in src, "разворачиваем что попало либо не разворачиваем вовсе"
+
+
+@pytest.mark.asyncio
+async def test_a_failed_download_names_its_cause(monkeypatch) -> None:
+    """🔴 «Источник не ответил» одинаково покрывает не разрешившееся имя, отказ TLS, обрыв
+    и таймаут — а действия при них РАЗНЫЕ: первое значит, что сайдкару сломали сеть,
+    последнее — что источник медленный.
+
+    Найдено сквозным прогоном: импорт отказал, и по единственной строке, которую видит
+    вызывающий, разобраться было нечем — исходное исключение проглатывал широкий `except`.
+    """
+
+    async def _boom(self, *a, **kw):
+        raise httpx.ConnectError("Temporary failure in name resolution")
+
+    logged: list[str] = []
+    monkeypatch.setattr(httpx.AsyncClient, "get", _boom)
+    monkeypatch.setattr("importer.assert_public_host", _ok)
+    monkeypatch.setattr(
+        importer.logger,
+        "warning",
+        lambda message, *args, **kw: logged.append(str(message) % args if args else str(message)),
+    )
+
+    with pytest.raises(importer.ImportRefused) as caught:
+        await importer.fetch("https://storage.example.com/a.txt")
+
+    assert "ConnectError" in str(caught.value), (
+        "причина отказа по-прежнему безымянна — разбираться вызывающему нечем"
+    )
+    # ⚠️ Тип в ответе называет РОД беды, но не её обстоятельства: сам текст исключения
+    # («Temporary failure in name resolution») наружу не отдаём — это внутренности сети, —
+    # поэтому он обязан оказаться в логе, иначе не окажется нигде.
+    assert [m for m in logged if "storage.example.com" in m], (
+        "отказ не оставил следа в логе — подробности исключения пропали совсем"
+    )
+
+
+@pytest.mark.asyncio
+async def test_a_successful_download_says_nothing_extra(monkeypatch) -> None:
+    """⚠️ Граница: диагностика не должна превращать успех в отказ."""
+
+    async def _ok_get(self, *a, **kw):
+        class _R:
+            status_code = 200
+            content = b"data"
+
+        return _R()
+
+    monkeypatch.setattr(httpx.AsyncClient, "get", _ok_get)
+    monkeypatch.setattr("importer.assert_public_host", _ok)
+
+    assert await importer.fetch("https://storage.example.com/a.txt") == b"data"

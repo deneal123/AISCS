@@ -53,7 +53,12 @@ async def fetch(url: str, *, timeout_sec: float = DOWNLOAD_TIMEOUT_SEC) -> bytes
         async with httpx.AsyncClient(follow_redirects=False, timeout=timeout_sec) as client:
             response = await client.get(str(url))
     except Exception as exc:  # noqa: BLE001
-        raise ImportRefused("источник не ответил") from exc
+        # 🔴 ПРИЧИНУ НАЗЫВАЕМ. «Источник не ответил» одинаково покрывает не разрешившееся
+        # имя, отказ TLS, обрыв и таймаут — а действия при них РАЗНЫЕ: первое означает, что
+        # сайдкару сломали сеть, последнее — что источник медленный. Единственное, что
+        # видел вызывающий, — эта строка, и по ней разобраться было нельзя ничем.
+        logger.warning("не скачали %s: %s", parsed.hostname or "?", exc, exc_info=True)
+        raise ImportRefused(f"источник не ответил: {type(exc).__name__}") from exc
     if 300 <= response.status_code < 400:
         raise ImportRefused("редирект не поддерживается")
     if response.status_code >= 400:
