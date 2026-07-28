@@ -82,6 +82,52 @@ def write_command(root: str, name: str, data: bytes) -> str:
     )
 
 
+# Разворачивание архива. 🔴 Загруженный `.zip` давал КАРТУ репозитория для промпта, но
+# файлов, которые можно открыть и поправить, из него не появлялось: в песочнице лежал
+# архив. Разворачиваем в каталог рядом — рабочее место должно содержать дерево, а не
+# коробку с ним.
+MAX_UNPACKED_FILES = 400
+MAX_UNPACKED_BYTES = 64 * 1024 * 1024
+
+
+def unpack_command(root: str, name: str) -> str:
+    """Развернуть загруженный архив в каталог рядом. Не архив — тихо ничего не делает.
+
+    🔴 Разворачиваем ПИТОНОМ, а не `unzip`: его в образе рантайма нет, а сети у песочницы
+    нет тем более. `zipfile` есть всегда — образ питоновский по построению.
+
+    🔴 Каждый путь внутри архива проверяется на выход за каталог назначения (zip-slip):
+    архив приносит пользователь, и `../../etc/passwd` внутри него — обычное дело.
+    Потолки на число файлов и суммарный размер — от zip-бомбы.
+    """
+    import shlex
+
+    target = safe_path(root, name)
+    dest = target.rsplit(".", 1)[0] or f"{target}-unpacked"
+    script = (
+        "import os,sys,zipfile\n"
+        "src,dst=sys.argv[1],sys.argv[2]\n"
+        "if not zipfile.is_zipfile(src): print('__NOT_ARCHIVE__'); raise SystemExit(0)\n"
+        "total=0; taken=0\n"
+        "with zipfile.ZipFile(src) as z:\n"
+        "    for info in z.infolist():\n"
+        "        if info.is_dir(): continue\n"
+        f"        if taken>={MAX_UNPACKED_FILES} or total>{MAX_UNPACKED_BYTES}:\n"
+        "            print('__TRUNCATED__'); break\n"
+        "        out=os.path.realpath(os.path.join(dst,info.filename))\n"
+        "        if not out.startswith(os.path.realpath(dst)+os.sep): continue\n"
+        "        os.makedirs(os.path.dirname(out),exist_ok=True)\n"
+        "        with z.open(info) as fh, open(out,'wb') as w:\n"
+        "            data=fh.read(); w.write(data)\n"
+        "        total+=len(data); taken+=1\n"
+        "print('__OK__',taken)\n"
+    )
+    return (
+        f"mkdir -p {shlex.quote(dest)} && "
+        f"python3 -c {shlex.quote(script)} {shlex.quote(target)} {shlex.quote(dest)}"
+    )
+
+
 def plan(items: list[dict] | None) -> list[dict]:
     """Отобрать, что вообще берём. Отказ ГРОМКИЙ: молча укоротившийся список выглядит
     как «файлов столько и было», и пользователь не узнает, что его файл не доехал."""

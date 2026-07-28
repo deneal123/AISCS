@@ -11,7 +11,9 @@ import json
 import pathlib
 import shlex
 
+import files
 import httpx
+import importer
 import pytest
 from importer import MAX_FILES, ImportRefused, fetch, plan, write_command
 from net_guard import UnsafeUrlError, assert_public_host
@@ -145,3 +147,42 @@ def test_file_count_is_capped() -> None:
     """Потолок числа файлов: импорт делит время и память с чужими прогонами."""
     selected = plan([{"name": f"f{i}", "url": f"http://x/{i}"} for i in range(MAX_FILES + 5)])
     assert len(selected) == MAX_FILES
+
+
+# --- разворачивание архива --------------------------------------------------------
+
+
+def test_zip_is_unpacked_into_a_tree():
+    """🔴 Загруженный `.zip` давал карту репозитория, но файлов, которые можно открыть и
+    поправить, из него не появлялось — в каталоге лежал архив."""
+    command = importer.unpack_command("/workspace", "repo.zip")
+
+    assert "zipfile" in command, "разворачиваем не питоном — в образе нет unzip"
+    assert "python3 -c" in command
+    assert "/workspace/repo" in command, "каталог назначения не рядом с архивом"
+
+
+def test_unpack_refuses_paths_outside_the_destination():
+    """🔴 zip-slip: `../../etc/passwd` внутри архива — обычное дело, архив приносит человек."""
+    command = importer.unpack_command("/workspace", "repo.zip")
+
+    assert "realpath" in command and "startswith" in command
+
+
+def test_unpack_has_ceilings_against_a_zip_bomb():
+    command = importer.unpack_command("/workspace", "repo.zip")
+
+    assert str(importer.MAX_UNPACKED_FILES) in command
+    assert str(importer.MAX_UNPACKED_BYTES) in command
+    assert "__TRUNCATED__" in command, "обрезка молча выглядела бы как «файлов столько и было»"
+
+
+def test_unpack_stays_inside_the_sandbox():
+    with pytest.raises(files.UnsafePath):
+        importer.unpack_command("/workspace", "../../etc/archive.zip")
+
+
+def test_non_archive_is_left_alone():
+    command = importer.unpack_command("/workspace", "notes.txt")
+
+    assert "__NOT_ARCHIVE__" in command

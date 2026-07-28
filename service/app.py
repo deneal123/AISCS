@@ -58,7 +58,7 @@ from files import (
     tree_command,
     write_command,
 )
-from importer import MAX_TOTAL_BYTES, ImportRefused, fetch, plan
+from importer import MAX_TOTAL_BYTES, ImportRefused, fetch, plan, unpack_command
 from importer import write_command as import_command
 from pydantic import BaseModel, Field
 from starlette.exceptions import HTTPException as StarletteHTTPException
@@ -442,12 +442,20 @@ async def import_files(
             continue
         result = await _run_file_op(item, command)
         ok = "__OK__" in (result.stdout or "")
+        unpacked = False
         if ok:
             item.imported.add(entry["name"])
+            # 🔴 Архив разворачиваем СРАЗУ: загруженный `.zip` давал карту репозитория
+            # для промпта, но открыть и поправить из него было нечего — в каталоге лежал
+            # архив. Не архив (`__NOT_ARCHIVE__`) — тихо ничего не делаем.
+            if entry["name"].lower().endswith(".zip"):
+                out = await _run_file_op(item, unpack_command(item.policy.root, entry["name"]))
+                unpacked = "__OK__" in (out.stdout or "")
         results.append(
             {
                 "name": entry["name"],
                 "imported": ok,
+                **({"unpacked": True} if unpacked else {}),
                 **({} if ok else {"reason": (result.stderr or "запись не удалась")[:200]}),
             }
         )
