@@ -37,6 +37,7 @@ from fastapi import FastAPI, Header, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from files import (
+    IMPORT_MESSAGE,
     MAX_DOWNLOAD_BYTES,
     MAX_READ_BYTES,
     UnsafePath,
@@ -459,7 +460,37 @@ async def import_files(
                 **({} if ok else {"reason": (result.stderr or "запись не удалась")[:200]}),
             }
         )
-    return {"files": results, "imported": sum(1 for r in results if r["imported"])}
+    imported = sum(1 for r in results if r["imported"])
+    # 🔴 ТОЧКА «КАК ПРИСЛАЛ ЧЕЛОВЕК» — ЗДЕСЬ, И ТОЛЬКО ЗДЕСЬ. Импорт идёт ПОСЛЕ создания
+    # песочницы, поэтому базовый коммит её файлов не застаёт; а следующая запись истории
+    # появится лишь после хода — уже с правками агента вперемешку. Без этого коммита
+    # ревизии «мои файлы до того, как их тронули» не существует, и `ws_revert` не умеет
+    # ровно того, ради чего заведён. Каждый импорт ставит свою точку: приложить файл
+    # посреди диалога — законное «вот с чего начинаем».
+    if imported:
+        await _snapshot(item, IMPORT_MESSAGE)
+    return {"files": results, "imported": imported}
+
+
+async def _snapshot(item, message: str) -> dict:
+    """Одна запись истории. ⚠️ ЕДИНСТВЕННЫЙ способ её поставить.
+
+    Точек, с которых история начинается, стало две — импорт и ход, — и второй способ
+    коммитить рядом означал бы, что расходиться они начнут молча.
+    """
+    result = await _run_file_op(item, git_commit_command(item.policy.root, message))
+    out = result.stdout or ""
+    return {
+        "committed": "__OK__" in out,
+        # Разделяем «нечего фиксировать» и «истории нет вовсе»: первое — норма хода без
+        # правок, второе — образ без git, и молчать об этом нельзя.
+        "reason": next(
+            (m for m in ("__NO_CHANGES__", "__NO_GIT__", "__NO_REPO__", "__FAILED__") if m in out),
+            "",
+        )
+        .strip("_")
+        .lower(),
+    }
 
 
 @app.post("/workspaces/{workspace_id}/snapshot")
@@ -475,21 +506,7 @@ async def snapshot_workspace(
     item, failure = _owned(workspace_id, payload)
     if failure is not None:
         return failure
-    result = await _run_file_op(
-        item, git_commit_command(item.policy.root, payload.message or "изменения агента")
-    )
-    out = result.stdout or ""
-    return {
-        "committed": "__OK__" in out,
-        # Разделяем «нечего фиксировать» и «истории нет вовсе»: первое — норма хода без
-        # правок, второе — образ без git, и молчать об этом нельзя.
-        "reason": next(
-            (m for m in ("__NO_CHANGES__", "__NO_GIT__", "__NO_REPO__", "__FAILED__") if m in out),
-            "",
-        )
-        .strip("_")
-        .lower(),
-    }
+    return await _snapshot(item, payload.message or "изменения агента")
 
 
 @app.post("/workspaces/{workspace_id}/history")
