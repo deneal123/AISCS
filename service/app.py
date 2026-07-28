@@ -59,7 +59,7 @@ from files import (
     tree_command,
     write_command,
 )
-from importer import MAX_TOTAL_BYTES, ImportRefused, fetch, plan, unpack_command
+from importer import EXISTS_MARKER, MAX_TOTAL_BYTES, ImportRefused, fetch, plan, unpack_command
 from importer import write_command as import_command
 from pydantic import BaseModel, Field
 from starlette.exceptions import HTTPException as StarletteHTTPException
@@ -442,13 +442,23 @@ async def import_files(
             results.append({"name": entry["name"], "imported": False, "reason": str(exc)})
             continue
         result = await _run_file_op(item, command)
-        ok = "__OK__" in (result.stdout or "")
+        stdout = result.stdout or ""
+        # 🔴 «УЖЕ ЛЕЖИТ» — ТРЕТЬЕ СОСТОЯНИЕ, не успех и не отказ. Импорт повторяется на
+        # каждом ходу; засчитав пропуск успехом, мы ставили бы точку истории на ровном
+        # месте, а засчитав отказом — пугали бы вызывающего провалом там, где всё в
+        # порядке. Файл при этом остаётся ИМПОРТИРОВАННЫМ: иначе опись артефактов сочтёт
+        # его созданием агента и вернёт человеку его же вложение.
+        kept = EXISTS_MARKER in stdout
+        ok = "__OK__" in stdout
         unpacked = False
-        if ok:
+        if ok or kept:
             item.imported.add(entry["name"])
+        if ok:
             # 🔴 Архив разворачиваем СРАЗУ: загруженный `.zip` давал карту репозитория
             # для промпта, но открыть и поправить из него было нечего — в каталоге лежал
             # архив. Не архив (`__NOT_ARCHIVE__`) — тихо ничего не делаем.
+            # ⚠️ Только при СВЕЖЕЙ записи: повторный разворот затёр бы правки агента в
+            # распакованном дереве — ровно то, от чего защищает пропуск существующего.
             if entry["name"].lower().endswith(".zip"):
                 out = await _run_file_op(item, unpack_command(item.policy.root, entry["name"]))
                 unpacked = "__OK__" in (out.stdout or "")
@@ -457,10 +467,12 @@ async def import_files(
                 "name": entry["name"],
                 "imported": ok,
                 **({"unpacked": True} if unpacked else {}),
-                **({} if ok else {"reason": (result.stderr or "запись не удалась")[:200]}),
+                **({"kept": True} if kept else {}),
+                **({} if ok or kept else {"reason": (result.stderr or "запись не удалась")[:200]}),
             }
         )
     imported = sum(1 for r in results if r["imported"])
+    kept_count = sum(1 for r in results if r.get("kept"))
     # 🔴 ТОЧКА «КАК ПРИСЛАЛ ЧЕЛОВЕК» — ЗДЕСЬ, И ТОЛЬКО ЗДЕСЬ. Импорт идёт ПОСЛЕ создания
     # песочницы, поэтому базовый коммит её файлов не застаёт; а следующая запись истории
     # появится лишь после хода — уже с правками агента вперемешку. Без этого коммита
@@ -469,7 +481,7 @@ async def import_files(
     # посреди диалога — законное «вот с чего начинаем».
     if imported:
         await _snapshot(item, IMPORT_MESSAGE)
-    return {"files": results, "imported": imported}
+    return {"files": results, "imported": imported, "kept": kept_count}
 
 
 async def _snapshot(item, message: str) -> dict:
