@@ -9,8 +9,9 @@ from __future__ import annotations
 import base64
 import shlex
 
-import files
 import pytest
+
+import files
 from files import (
     MAX_READ_BYTES,
     UnsafePath,

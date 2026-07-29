@@ -19,6 +19,7 @@ import logging
 from urllib.parse import urlparse
 
 import httpx
+
 from files import MAX_WRITE_BYTES, UnsafePath, safe_path
 from net_guard import UnsafeUrlError, assert_public_host
 

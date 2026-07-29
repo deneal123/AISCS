@@ -36,6 +36,21 @@ import uvicorn
 from fastapi import FastAPI, Header, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
+from pydantic import BaseModel, Field
+from starlette.exceptions import HTTPException as StarletteHTTPException
+
+from contracts import (
+    CREATE_RESPONSE_FIELDS,
+    DEFAULT_TTL_SEC,
+    ERROR_CODES,
+    EXEC_RESPONSE_FIELDS,
+    GIT_AUTHOR,
+    MAX_BODY_BYTES,
+    SERVICE_NAME,
+    SERVICE_VERSION,
+)
+from core import TooManyWorkspaces, WorkspaceNotFound, WorkspaceRegistry
+from drivers import DriverError, IsolationUnverified, build_driver, driver_names
 from files import (
     IMPORT_MESSAGE,
     MAX_DOWNLOAD_BYTES,
@@ -61,21 +76,6 @@ from files import (
 )
 from importer import EXISTS_MARKER, MAX_TOTAL_BYTES, ImportRefused, fetch, plan, unpack_command
 from importer import write_command as import_command
-from pydantic import BaseModel, Field
-from starlette.exceptions import HTTPException as StarletteHTTPException
-
-from contracts import (
-    CREATE_RESPONSE_FIELDS,
-    DEFAULT_TTL_SEC,
-    ERROR_CODES,
-    EXEC_RESPONSE_FIELDS,
-    GIT_AUTHOR,
-    MAX_BODY_BYTES,
-    SERVICE_NAME,
-    SERVICE_VERSION,
-)
-from core import TooManyWorkspaces, WorkspaceNotFound, WorkspaceRegistry
-from drivers import DriverError, IsolationUnverified, build_driver, driver_names
 from ownership import OwnershipError
 from policy import StaticPolicyLocked, policy_from_request
 

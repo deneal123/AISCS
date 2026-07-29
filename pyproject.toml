@@ -35,7 +35,20 @@ select = ["E", "F", "I", "B", "UP"]
 # Свои модули лежат плоско в `service/`, и разные версии ruff классифицируют их по-разному
 # (то в третью сторону, то в отдельную группу). Объявляем явно — иначе «поправил у себя,
 # упало в хуке».
-known-first-party = ["app", "contracts", "core", "drivers", "ownership", "policy"]
+# ⚠️ ПЕРЕЧИСЛЯТЬ ВСЕ. Список отставал на три модуля (`files`, `importer`, `net_guard`), и
+# ruff разносил их с остальными по РАЗНЫМ группам: локальный (старее) молчал, свежий в CI
+# краснел. Ровно то «поправил у себя, упало в хуке», от которого этот блок и заведён.
+known-first-party = [
+    "app",
+    "contracts",
+    "core",
+    "drivers",
+    "files",
+    "importer",
+    "net_guard",
+    "ownership",
+    "policy",
+]
 
 [tool.pytest.ini_options]
 pythonpath = ["service"]

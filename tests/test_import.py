@@ -11,10 +11,11 @@ import json
 import pathlib
 import shlex
 
-import files
 import httpx
-import importer
 import pytest
+
+import files
+import importer
 from importer import MAX_FILES, ImportRefused, fetch, plan, write_command
 from net_guard import UnsafeUrlError, assert_public_host
 
