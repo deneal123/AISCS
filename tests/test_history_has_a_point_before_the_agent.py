@@ -17,7 +17,7 @@
 
 from __future__ import annotations
 
-from service import files
+import files
 
 
 def test_init_leaves_a_revision_behind_not_just_a_repository():

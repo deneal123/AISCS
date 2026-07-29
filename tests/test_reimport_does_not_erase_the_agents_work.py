@@ -20,7 +20,8 @@ import inspect
 
 import pytest
 
-from service import app, importer
+import app
+import importer
 
 
 def test_an_existing_file_is_left_alone():
