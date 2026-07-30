@@ -128,12 +128,48 @@ def test_loaded_tables_are_still_queryable():
     ],
 )
 def test_table_name_is_always_a_safe_identifier(filename):
-    """Результат подставляется в SQL f-строкой — это и есть поверхность инъекции."""
+    """Результат подставляется в SQL f-строкой — это и есть поверхность инъекции.
+
+    ⚠️ ПРОВЕРЯЕМ ОТСУТСТВИЕ ОПАСНОГО, А НЕ «ТОЛЬКО ЛАТИНИЦУ». Прежнее правило требовало
+    `[a-z_][a-z0-9_]*`, и ради него всякое кириллическое имя вырождалось в служебное `t`:
+    «отчёт за май.csv» → `t`, «продажи.csv» → `t_2`. У русскоязычного продукта так звались
+    ПОЧТИ ВСЕ таблицы, и модель не могла понять, какая из них какая. Буква алфавита никакой
+    инъекции не даёт — опасны кавычка, точка с запятой, скобка, пробел, дефис, перевод
+    строки. Их и проверяем, а заодно требуем, чтобы имя начиналось не с цифры.
+    """
     import re
 
     name = table_name_for(filename, set())
 
-    assert re.fullmatch(r"[a-z_][a-z0-9_]*", name), f"{filename!r} → небезопасное имя {name!r}"
+    assert name, f"{filename!r} → пустое имя таблицы"
+    assert re.fullmatch(r"\w+", name, re.UNICODE), f"{filename!r} → небезопасное имя {name!r}"
+    assert not name[0].isdigit(), f"{filename!r} → имя с цифры: {name!r}"
+    for char in "'\";()-*/\\ \t\n\r.,=":
+        assert char not in name, f"{filename!r} → в имени опасный символ {char!r}: {name!r}"
+
+
+def test_a_cyrillic_name_stays_recognisable():
+    """🔴 ЗАМЕР, ИЗ КОТОРОГО ВЗЯЛОСЬ ПРАВИЛО. Модели показывали «### t — из «отчёт за
+    май.csv»», и на вопрос про этот отчёт она обращалась к таблице по имени из вопроса, а не
+    по `t`. У русскоязычного продукта это случай не редкий, а ОСНОВНОЙ.
+
+    ⚠️ DuckDB принимает кириллические идентификаторы БЕЗ кавычек — проверено на живом
+    сайдкаре: `CREATE TABLE отчёт_за_май (a INTEGER)` работает.
+    """
+    assert table_name_for("отчёт за май.csv", set()) == "отчёт_за_май"
+    assert table_name_for("Продажи-2026.xlsx", set()) == "продажи_2026"
+
+
+def test_different_cyrillic_names_do_not_collapse_together():
+    """🔴 ГЛАВНАЯ ЦЕНА ПРЕЖНЕГО ПРАВИЛА: два разных русских файла давали `t` и `t_2`, то
+    есть соответствие «таблица ↔ файл» держалось только на порядке."""
+    used: set[str] = set()
+    first = table_name_for("отчёт за май.csv", used)
+    second = table_name_for("продажи.csv", used)
+
+    assert {first, second} == {"отчёт_за_май", "продажи"}, (
+        f"русские имена снова слиплись в служебные: {first!r}, {second!r}"
+    )
 
 
 def test_colliding_names_get_unique_suffixes():
