@@ -52,9 +52,11 @@ from contracts import (
 from core import TooManyWorkspaces, WorkspaceNotFound, WorkspaceRegistry
 from drivers import DriverError, IsolationUnverified, build_driver, driver_names
 from files import (
+    BAD_PATTERN_MARKER,
     IMPORT_MESSAGE,
     MAX_DOWNLOAD_BYTES,
     MAX_READ_BYTES,
+    IsADirectory,
     UnsafePath,
     artifacts_command,
     download_command,
@@ -375,6 +377,15 @@ async def read_file(
     result = await _run_file_op(item, command)
     try:
         content, truncated = parse_read(result.stdout)
+    except IsADirectory:
+        # 🔴 «Здесь каталог» ВМЕСТО «файла нет». Одна ветка на оба случая отвечала «файла
+        # 'requests' нет» там, где каталог существует и содержит искомое: модель, услышав
+        # «нет», говорила человеку, что файл недоступен, вместо того чтобы заглянуть внутрь.
+        return _error(
+            "invalid_request",
+            f"{payload.path!r} — это каталог, а не файл: посмотри его содержимое списком",
+            422,
+        )
     except FileNotFoundError:
         return _error("not_found", f"файла {payload.path!r} нет", 404)
     except ValueError as exc:
@@ -417,7 +428,13 @@ async def grep_files(
     except UnsafePath as exc:
         return _error("forbidden", str(exc), 403)
     result = await _run_file_op(item, command)
-    return {"matches": (result.stdout or "").splitlines(), "truncated": result.truncated}
+    lines = (result.stdout or "").splitlines()
+    # 🔴 НЕГОДНЫЙ ШАБЛОН — ОТКАЗ, А НЕ ПУСТОЙ РЕЗУЛЬТАТ. Пустой список означает «искали и не
+    # нашли», и выдавать им несостоявшийся поиск значит ЛГАТЬ вызывающему: модель отвечает
+    # «в коде такого нет». См. `grep_command`.
+    if lines and lines[0].strip() == BAD_PATTERN_MARKER:
+        return _error("invalid_request", f"шаблон не годится для grep: {payload.pattern!r}", 422)
+    return {"matches": lines, "truncated": result.truncated}
 
 
 @app.post("/workspaces/{workspace_id}/import")

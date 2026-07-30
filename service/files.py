@@ -31,6 +31,9 @@ MAX_DOWNLOAD_BYTES = 4 * 1024 * 1024
 MAX_WRITE_BYTES = 1024 * 1024
 MAX_LIST_ENTRIES = 500
 MAX_GREP_MATCHES = 200
+# Путь есть, но это КАТАЛОГ. Отдельный маркер, потому что «нет файла» и «здесь каталог» —
+# разные ответы, и второй сам подсказывает следующий шаг: посмотреть, что внутри.
+IS_DIRECTORY_MARKER = "__IS_DIRECTORY__"
 
 
 class UnsafePath(Exception):
@@ -269,15 +272,26 @@ def read_command(root: str, path: str, *, max_bytes: int = MAX_READ_BYTES) -> st
     последовательности, которые поток вывода испортит. Плюс сразу видно, где кончился файл.
     """
     target = safe_path(root, path)
+    # 🔴 КАТАЛОГ — НЕ «ФАЙЛА НЕТ». Одна ветка на оба случая отвечала «файла 'requests' нет»
+    # там, где каталог существует и содержит ровно то, что искали. Модель, услышав «нет»,
+    # говорит человеку «файл недоступен» вместо того, чтобы заглянуть внутрь. Замерено:
+    # `ws_read` по каталогу `requests` возвращал отказ, хотя дерево было под рукой.
     return (
+        f'if [ -d {_q(target)} ]; then echo "{IS_DIRECTORY_MARKER}"; exit 0; fi; '
         f'if [ ! -f {_q(target)} ]; then echo "__MISSING__"; exit 0; fi; '
         f"head -c {int(max_bytes) + 1} {_q(target)} | base64 | tr -d '\\n'"
     )
 
 
+class IsADirectory(Exception):
+    """Путь существует, но это каталог. Отдельный тип: ответ и следующий шаг тут ДРУГИЕ."""
+
+
 def parse_read(output: str, *, max_bytes: int = MAX_READ_BYTES) -> tuple[str, bool]:
     """base64 → текст и признак обрезки. Признак ОБЯЗАТЕЛЕН: см. модульную шапку."""
     raw = (output or "").strip()
+    if raw == IS_DIRECTORY_MARKER:
+        raise IsADirectory("это каталог, а не файл")
     if raw == "__MISSING__" or not raw:
         raise FileNotFoundError("файла нет")
     data = base64.b64decode(raw, validate=False)
@@ -309,11 +323,29 @@ def write_command(root: str, path: str, content: str) -> tuple[str, bytes]:
     return command, base64.b64encode(raw)
 
 
+BAD_PATTERN_MARKER = "__BAD_PATTERN__"
+
+
 def grep_command(root: str, pattern: str, path: str, *, limit: int = MAX_GREP_MATCHES) -> str:
-    """Поиск по содержимому. Шаблон уходит АРГУМЕНТОМ `-e`, а не частью команды."""
+    """Поиск по содержимому. Шаблон уходит АРГУМЕНТОМ `-e`, а не частью команды.
+
+    🔴 НЕГОДНЫЙ ШАБЛОН ОТЛИЧАЕТСЯ ОТ «НИЧЕГО НЕ НАЙДЕНО». Раньше не отличался: `2>/dev/null`
+    глушил сообщение grep, а пайп в `head` подменял его код возврата — и `[unclosed` давал
+    ровно тот же ответ `{"matches": []}`, что честный поиск без совпадений. Наружу это
+    ЛОЖНООТРИЦАТЕЛЬНЫЙ результат: модель отвечает «в коде такого нет», хотя поиск не
+    состоялся вовсе. Хуже любого отказа — отказ хотя бы виден.
+
+    ⚠️ Шаблон проверяем ОТДЕЛЬНЫМ дешёвым вызовом на пустом вводе: `grep` возвращает 1 при
+    «не найдено» и >1 при негодном шаблоне, а обходить дерево для этого не нужно. Иначе
+    пришлось бы ловить код возврата сквозь пайп, чего `dash` (это `/bin/sh` в образе
+    песочницы) не умеет — `pipefail` там нет.
+    """
     target = safe_path(root, path or root)
+    quoted = _q(pattern)
     return (
-        f"grep -rnI --exclude-dir=.git -e {_q(pattern)} {_q(target)} 2>/dev/null | "
+        f"printf '' | grep -e {quoted} >/dev/null 2>&1; "
+        f'if [ "$?" -gt 1 ]; then echo {BAD_PATTERN_MARKER}; exit 0; fi; '
+        f"grep -rnI --exclude-dir=.git -e {quoted} {_q(target)} 2>/dev/null | "
         f"head -n {int(limit)}"
     )
 
