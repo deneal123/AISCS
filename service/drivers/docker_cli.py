@@ -127,6 +127,62 @@ class DockerCliDriver:
         for complaint in _isolation_complaints(info, policy):
             raise IsolationUnverified(complaint)
 
+    async def exec_with_input(
+        self,
+        ref: ContainerRef,
+        command: str,
+        *,
+        payload: bytes,
+        timeout_sec: float,
+        max_output_chars: int,
+    ) -> ExecResult:
+        """Команда, которой содержимое приходит ЧЕРЕЗ STDIN, а не в аргументах.
+
+        🔴 ЗАЧЕМ ОТДЕЛЬНЫЙ ПУТЬ. Запись файла клала его base64 прямо в argv, а у Linux
+        потолок ОДНОГО аргумента — 128 КБ (`MAX_ARG_STRLEN`), то есть ~96 КБ исходных байт.
+        Любой настоящий архив это переполнял, и `execve` падал с `OSError: Argument list too
+        long` ЕЩЁ ДО контейнера. Наружу это выглядело как «песочница есть, а файлов в ней
+        нет»: заявленный потолок стоял 1 МБ и до дела не доходил.
+
+        ⚠️ БЕЗ `setsid`-обёртки, в отличие от `exec`. Та существует, чтобы добить ГРУППУ
+        процессов чужого кода по таймауту; фоновый запуск через `&` при этом отвязывает
+        stdin, и содержимое до команды просто не доехало бы. Запись файла — не чужой код и
+        группы не плодит, поэтому здесь путь прямой.
+        """
+        started = time.monotonic()
+        proc = await asyncio.create_subprocess_exec(
+            "docker",
+            "exec",
+            "-i",
+            ref.container_id,
+            "/bin/sh",
+            "-c",
+            command,
+            stdin=asyncio.subprocess.PIPE,
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE,
+        )
+        timed_out = False
+        try:
+            out, err = await asyncio.wait_for(proc.communicate(payload), timeout=timeout_sec)
+        except TimeoutError:
+            timed_out = True
+            out, err = b"", b""
+            with contextlib.suppress(ProcessLookupError):
+                proc.kill()
+            with contextlib.suppress(Exception):
+                await proc.wait()
+        stdout, cut_out = _clip(out.decode("utf-8", "replace"), max_output_chars)
+        stderr, cut_err = _clip(err.decode("utf-8", "replace"), max_output_chars)
+        return ExecResult(
+            exit_code=-1 if timed_out else (proc.returncode or 0),
+            stdout=stdout,
+            stderr=stderr,
+            truncated=cut_out or cut_err,
+            duration_sec=round(time.monotonic() - started, 3),
+            timed_out=timed_out,
+        )
+
     async def exec(
         self, ref: ContainerRef, command: str, *, timeout_sec: float, max_output_chars: int
     ) -> ExecResult:

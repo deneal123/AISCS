@@ -285,17 +285,28 @@ def parse_read(output: str, *, max_bytes: int = MAX_READ_BYTES) -> tuple[str, bo
     return data[:max_bytes].decode("utf-8", "replace"), truncated
 
 
-def write_command(root: str, path: str, content: str) -> str:
-    """Записать файл. Содержимое едет base64 — иначе кавычки и переводы строк ломают всё."""
+def write_command(root: str, path: str, content: str) -> tuple[str, bytes]:
+    """Записать файл. Возвращает `(команда, содержимое-для-stdin)`.
+
+    🔴 СОДЕРЖИМОЕ ИДЁТ ЧЕРЕЗ STDIN, А НЕ В АРГУМЕНТАХ. Оно клалось base64 прямо в argv, а
+    потолок ОДНОГО аргумента у Linux — 128 КБ (`MAX_ARG_STRLEN`), то есть ~96 КБ исходных
+    байт. Заявленный же потолок стоял 1 МБ, и до его проверки дело не доходило: `execve`
+    падал раньше с `OSError: Argument list too long`. Наружу это выглядело как «песочница
+    есть, а файлов в ней нет» — ровно то, на что пожаловался человек, загрузив архив.
+
+    base64 остаётся: сырые байты в stdin пришлось бы отличать от EOF и следить за
+    бинарной прозрачностью канала, а `base64 -d` есть в любом образе.
+    """
     target = safe_path(root, path)
-    payload = base64.b64encode(str(content or "").encode("utf-8")).decode("ascii")
-    if len(payload) > MAX_WRITE_BYTES * 2:
+    raw = str(content or "").encode("utf-8")
+    if len(raw) > MAX_WRITE_BYTES:
         raise ValueError(f"содержимое больше {MAX_WRITE_BYTES} байт")
     parent = posixpath.dirname(target) or root
-    return (
-        f"mkdir -p {_q(parent)} && printf '%s' {_q(payload)} | base64 -d > {_q(target)} && "
+    command = (
+        f"mkdir -p {_q(parent)} && base64 -d > {_q(target)} && "
         f'echo "__OK__ $(wc -c < {_q(target)})"'
     )
+    return command, base64.b64encode(raw)
 
 
 def grep_command(root: str, pattern: str, path: str, *, limit: int = MAX_GREP_MATCHES) -> str:

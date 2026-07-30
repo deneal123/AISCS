@@ -296,13 +296,17 @@ def _owned(workspace_id: str, payload):
         return None, _error("not_found", str(exc), 404)
 
 
-async def _run_file_op(item, command: str):
+async def _run_file_op(item, command: str, *, stdin_payload: bytes | None = None):
     """Выполнить служебную команду файловой операции.
 
     ⚠️ Потолок вывода СВОЙ, а не из политики: у чтения файла и у вывода сборки разные
     задачи, и общий потолок молча обрезал бы первое под второе.
+
+    ⚠️ `stdin_payload` — содержимое записи. В аргументах ему не место: см. `write_command`.
     """
-    return await registry.exec_raw(item, command, max_output_chars=MAX_READ_BYTES * 2)
+    return await registry.exec_raw(
+        item, command, max_output_chars=MAX_READ_BYTES * 2, stdin_payload=stdin_payload
+    )
 
 
 @app.post("/workspaces/{workspace_id}/files/list")
@@ -387,12 +391,12 @@ async def write_file(
     if failure is not None:
         return failure
     try:
-        command = write_command(item.policy.root, payload.path, payload.content or "")
+        command, content = write_command(item.policy.root, payload.path, payload.content or "")
     except UnsafePath as exc:
         return _error("forbidden", str(exc), 403)
     except ValueError as exc:
         return _error("request_too_large", str(exc), 413)
-    result = await _run_file_op(item, command)
+    result = await _run_file_op(item, command, stdin_payload=content)
     if "__OK__" not in (result.stdout or ""):
         return _error("driver_failed", (result.stderr or "запись не удалась")[:300], 502)
     return {"path": payload.path, "written": True}
@@ -437,11 +441,11 @@ async def import_files(
                 raise ImportRefused("суммарный потолок импорта исчерпан")
             data = await fetch(entry["url"])
             total += len(data)
-            command = import_command(item.policy.root, entry["name"], data)
+            command, content = import_command(item.policy.root, entry["name"], data)
         except ImportRefused as exc:
             results.append({"name": entry["name"], "imported": False, "reason": str(exc)})
             continue
-        result = await _run_file_op(item, command)
+        result = await _run_file_op(item, command, stdin_payload=content)
         stdout = result.stdout or ""
         # 🔴 «УЖЕ ЛЕЖИТ» — ТРЕТЬЕ СОСТОЯНИЕ, не успех и не отказ. Импорт повторяется на
         # каждом ходу; засчитав пропуск успехом, мы ставили бы точку истории на ровном

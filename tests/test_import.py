@@ -124,15 +124,16 @@ def test_file_name_cannot_escape_the_root(name: str) -> None:
 
 def test_name_with_shell_metacharacters_stays_one_argument() -> None:
     """Проверяем число АРГУМЕНТОВ, а не отсутствие подстроки: кавычки обезвреживают текст."""
-    tokens = shlex.split(write_command(ROOT, "a; rm -rf /.txt", b"data"))
-    assert "rm" not in tokens
+    command, _ = write_command(ROOT, "a; rm -rf /.txt", b"data")
+    assert "rm" not in shlex.split(command)
 
 
 def test_binary_content_survives_the_round_trip() -> None:
+    """⚠️ Содержимое берём ИЗ ВТОРОГО ЗНАЧЕНИЯ, а не выуживаем из команды: в аргументах его
+    больше нет — там оно роняло `execve` на любом настоящем файле."""
     import base64
 
-    command = write_command(ROOT, "img.bin", b"\xff\xd8\xff\x00binary")
-    payload = next(t for t in shlex.split(command) if len(t) > 8 and t.endswith("="))
+    _, payload = write_command(ROOT, "img.bin", b"\xff\xd8\xff\x00binary")
     assert base64.b64decode(payload) == b"\xff\xd8\xff\x00binary"
 
 

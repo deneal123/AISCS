@@ -26,7 +26,7 @@ import importer
 
 def test_an_existing_file_is_left_alone():
     """⚠️ ГЛАВНОЕ. Проверка существования стоит ДО записи, иначе она бесполезна."""
-    command = importer.write_command("/workspace", "договор.txt", "из хранилища".encode())
+    command, _ = importer.write_command("/workspace", "договор.txt", "из хранилища".encode())
 
     assert importer.EXISTS_MARKER in command, "существующий файл будет перезаписан"
     assert command.index(importer.EXISTS_MARKER) < command.index("base64 -d"), (
@@ -39,7 +39,7 @@ def test_an_existing_file_is_left_alone():
 
 def test_a_new_file_is_still_written():
     """🔴 ГРАНИЦА. «Починка», после которой не импортируется НИЧЕГО, хуже исходной беды."""
-    command = importer.write_command("/workspace", "новый.txt", "данные".encode())
+    command, _ = importer.write_command("/workspace", "новый.txt", "данные".encode())
 
     assert "base64 -d" in command
     assert "__OK__" in command

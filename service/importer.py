@@ -20,7 +20,7 @@ from urllib.parse import urlparse
 
 import httpx
 
-from files import MAX_WRITE_BYTES, UnsafePath, safe_path
+from files import UnsafePath, safe_path
 from net_guard import UnsafeUrlError, assert_public_host
 
 logger = logging.getLogger("workspace-sidecar.import")
@@ -70,7 +70,7 @@ async def fetch(url: str, *, timeout_sec: float = DOWNLOAD_TIMEOUT_SEC) -> bytes
     return data
 
 
-def write_command(root: str, name: str, data: bytes) -> str:
+def write_command(root: str, name: str, data: bytes) -> tuple[str, bytes]:
     """Команда записи скачанного файла внутрь песочницы.
 
     🔴 СУЩЕСТВУЮЩИЙ ФАЙЛ НЕ ПЕРЕЗАПИСЫВАЕТСЯ. Импорт идёт НЕ ОДИН РАЗ: список файлов
@@ -87,24 +87,37 @@ def write_command(root: str, name: str, data: bytes) -> str:
     ⚠️ Новая версия файла приезжает НОВОЙ записью хранилища и попадает в каталог под
     отличающимся именем (`договор (2).docx`) — конфликта с этим правилом нет.
 
-    ⚠️ Содержимое едет base64 в аргументе команды — как и у обычной записи. Потолок
-    `MAX_WRITE_BYTES` тот же: единая граница на «сколько влезает в один вызов».
+    🔴 СОДЕРЖИМОЕ ИДЁТ ЧЕРЕЗ STDIN, А НЕ В АРГУМЕНТАХ, и это не оптимизация. Оно клалось
+    base64 прямо в argv, а потолок ОДНОГО аргумента у Linux — 128 КБ (`MAX_ARG_STRLEN`), то
+    есть ~96 КБ исходных байт. Заявленный потолок при этом стоял 1 МБ и до проверки дело не
+    доходило: `execve` падал раньше с `OSError: Argument list too long`. Любой настоящий
+    архив с кодом не импортировался ВООБЩЕ, а снаружи это выглядело как «песочница есть, а
+    внутри пусто» — ровно то, на что пожаловался человек, загрузив `src.zip`.
+
+    ⚠️ Возвращаем ПАРУ `(команда, содержимое)`: команда читает stdin, содержимое отдаётся
+    драйвером.
+
+    🔴 ПОТОЛОК ЗДЕСЬ ТОТ ЖЕ, ЧТО У СКАЧИВАНИЯ, и это вторая половина того же дефекта. Стоял
+    `MAX_WRITE_BYTES` (1 МБ) — потолок ТЕЛА ЗАПРОСА на запись, к импорту отношения не
+    имеющий: `fetch` пропускал 32 МБ, а запись их же отказывалась принять. Один импорт с
+    двумя разными границами означал, что настоящий архив либо ронял `execve` (96 КБ…1.5 МБ),
+    либо получал отказ вопреки разрешённому скачиванию. Граница на импорт ОДНА.
     """
     try:
         target = safe_path(root, name)
     except UnsafePath as exc:
         raise ImportRefused(str(exc)) from exc
-    payload = base64.b64encode(data).decode("ascii")
-    if len(payload) > MAX_WRITE_BYTES * 2:
-        raise ImportRefused(f"файл больше {MAX_WRITE_BYTES} байт для одного вызова")
+    if len(data) > MAX_FILE_BYTES:
+        raise ImportRefused(f"файл больше {MAX_FILE_BYTES} байт")
     import shlex
 
     quoted, parent = shlex.quote(target), shlex.quote(target.rsplit("/", 1)[0] or root)
-    return (
+    command = (
         f"if [ -e {quoted} ]; then echo {EXISTS_MARKER}; exit 0; fi; "
-        f"mkdir -p {parent} && printf '%s' {shlex.quote(payload)} | base64 -d > {quoted} && "
+        f"mkdir -p {parent} && base64 -d > {quoted} && "
         f'echo "__OK__ $(wc -c < {quoted})"'
     )
+    return command, base64.b64encode(data)
 
 
 # Разворачивание архива. 🔴 Загруженный `.zip` давал КАРТУ репозитория для промпта, но

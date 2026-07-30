@@ -98,10 +98,15 @@ def test_grep_pattern_is_quoted_too() -> None:
 
 
 def test_write_content_travels_base64_not_inline() -> None:
-    """Кавычки и переводы строк в содержимом иначе ломают команду целиком."""
-    command = write_command(ROOT, "a.txt", "line1\n'; rm -rf /\nline3")
+    """Кавычки и переводы строк в содержимом иначе ломают команду целиком.
+
+    ⚠️ Содержимое едет ОТДЕЛЬНО от команды (stdin): в аргументах ему не место — см.
+    `test_file_content_never_travels_in_argv`.
+    """
+    command, payload = write_command(ROOT, "a.txt", "line1\n'; rm -rf /\nline3")
     assert "rm -rf" not in command
     assert "base64 -d" in command
+    assert base64.b64decode(payload).decode() == "line1\n'; rm -rf /\nline3"
 
 
 # --- чтение не врёт -------------------------------------------------------------------
