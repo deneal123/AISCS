@@ -15,13 +15,14 @@
 from __future__ import annotations
 
 import base64
+import json
 import logging
+import shlex
 from urllib.parse import urlparse
 
 import httpx
-
-from files import UnsafePath, safe_path
-from net_guard import UnsafeUrlError, assert_public_host
+from domain.files import UnsafePath, safe_path
+from infrastructure.net_guard import UnsafeUrlError, assert_public_host
 
 logger = logging.getLogger("workspace-sidecar.import")
 
@@ -35,6 +36,10 @@ DOWNLOAD_TIMEOUT_SEC = 60.0
 # Файл уже лежит в песочнице — оставляем как есть. Отдельный маркер, а не молчание и не
 # ошибка: это НОРМА (импорт повторяется каждый ход), но и не «положили заново».
 EXISTS_MARKER = "__EXISTS__"
+STAGING_DIR = ".gpthub-import-staging"
+IMPORTED_MARKER = "__IMPORTED__"
+KEPT_MARKER = "__KEPT__"
+PUBLISH_FAILED_MARKER = "__PUBLISH_FAILED__"
 
 
 class ImportRefused(Exception):
@@ -118,6 +123,69 @@ def write_command(root: str, name: str, data: bytes) -> tuple[str, bytes]:
         f'echo "__OK__ $(wc -c < {quoted})"'
     )
     return command, base64.b64encode(data)
+
+
+def stage_command(root: str, staging_id: str, name: str, data: bytes) -> tuple[str, bytes]:
+    """Write one validated import payload into a private staging directory."""
+    try:
+        safe_path(root, name)
+        target = safe_path(root, f"{STAGING_DIR}/{staging_id}/{name}")
+    except UnsafePath as exc:
+        raise ImportRefused(str(exc)) from exc
+    if len(data) > MAX_FILE_BYTES:
+        raise ImportRefused(f"файл больше {MAX_FILE_BYTES} байт")
+    parent = shlex.quote(target.rsplit("/", 1)[0] or root)
+    quoted = shlex.quote(target)
+    command = (
+        f"mkdir -p {parent} && tmp=$(mktemp {parent}/.stage.XXXXXX) && "
+        "trap 'rm -f \"$tmp\"' EXIT && "
+        f"base64 -d > \"$tmp\" && mv -f \"$tmp\" {quoted} && echo __OK__"
+    )
+    return command, base64.b64encode(data)
+
+
+def publish_command(root: str, staging_id: str, names: list[str]) -> str:
+    """Publish a staged batch or roll back every newly created file on failure."""
+    target = safe_path(root, root)
+    stage = safe_path(root, f"{STAGING_DIR}/{staging_id}")
+    checked: list[str] = []
+    for name in names:
+        safe_path(root, name)
+        checked.append(name)
+    payload = base64.b64encode(json.dumps(checked, separators=(",", ":")).encode()).decode()
+    script = (
+        "import base64,json,os,shutil,sys\n"
+        "root,stage,names=sys.argv[1],sys.argv[2],json.loads(base64.b64decode(sys.argv[3]))\n"
+        "created=[]; kept=[]\n"
+        "try:\n"
+        "  for name in names:\n"
+        "    src=os.path.join(stage,name); dst=os.path.join(root,name)\n"
+        "    if os.path.lexists(dst): kept.append(name); continue\n"
+        "    if not os.path.isfile(src): raise RuntimeError('staging_missing')\n"
+        "  for name in names:\n"
+        "    src=os.path.join(stage,name); dst=os.path.join(root,name)\n"
+        "    if name in kept: continue\n"
+        "    if os.path.lexists(dst): raise RuntimeError('destination_changed')\n"
+        "    os.makedirs(os.path.dirname(dst),exist_ok=True)\n"
+        "    os.replace(src,dst); created.append(dst)\n"
+        "except Exception:\n"
+        "  for dst in reversed(created):\n"
+        "    try: os.unlink(dst) if not os.path.isdir(dst) else shutil.rmtree(dst)\n"
+        "    except OSError: pass\n"
+        "  print('__PUBLISH_FAILED__')\n"
+        "else:\n"
+        "  for name in names:\n"
+        "    print(('__KEPT__' if name in kept else '__IMPORTED__')+'\\t'+name)\n"
+    )
+    return (
+        f"python3 -c {shlex.quote(script)} {shlex.quote(target)} "
+        f"{shlex.quote(stage)} {shlex.quote(payload)}"
+    )
+
+
+def cleanup_staging_command(root: str, staging_id: str) -> str:
+    target = safe_path(root, f"{STAGING_DIR}/{staging_id}")
+    return f"rm -rf {shlex.quote(target)}"
 
 
 # Разворачивание архива. 🔴 Загруженный `.zip` давал КАРТУ репозитория для промпта, но

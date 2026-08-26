@@ -87,7 +87,14 @@ def safe_path(root: str, path: str) -> str:
 # показал модели `.git/config`, `.git/HEAD`, `.git/refs` — оплаченные токены за служебные
 # потроха и приглашение принять их за результат работы. Отсекаем ДО обхода (`-prune`), а
 # не фильтрацией после: иначе `.git` и `node_modules` съедают потолок записей.
-PRUNED_DIRS = (".git", "node_modules", "__pycache__", ".venv", ".mypy_cache")
+PRUNED_DIRS = (
+    ".git",
+    ".gpthub-import-staging",
+    "node_modules",
+    "__pycache__",
+    ".venv",
+    ".mypy_cache",
+)
 
 
 def _prune_expr() -> str:
@@ -162,7 +169,7 @@ MAX_DIFF_CHARS = 20_000
 # было» для песочницы, где всё создал агент, означает «убери всё созданное».
 BASELINE_MESSAGE = "песочница создана"
 # Вторая: состояние сразу после того, как приложенные человеком файлы легли внутрь.
-IMPORT_MESSAGE = "файлы пользователя"
+IMPORT_MESSAGE = "import"
 
 
 def git_init_command(root: str, author: str) -> str:
@@ -317,10 +324,23 @@ def write_command(root: str, path: str, content: str) -> tuple[str, bytes]:
         raise ValueError(f"содержимое больше {MAX_WRITE_BYTES} байт")
     parent = posixpath.dirname(target) or root
     command = (
-        f"mkdir -p {_q(parent)} && base64 -d > {_q(target)} && "
+        f"mkdir -p {_q(parent)} && tmp=$(mktemp {_q(parent + '/.ws-write.XXXXXX')}) && "
+        "trap 'rm -f \"$tmp\"' EXIT && "
+        f"base64 -d > \"$tmp\" && mv -f \"$tmp\" {_q(target)} && "
         f'echo "__OK__ $(wc -c < {_q(target)})"'
     )
     return command, base64.b64encode(raw)
+
+
+def git_head_command(root: str) -> str:
+    target = safe_path(root, root)
+    return (
+        f"if ! command -v git >/dev/null 2>&1; then echo __NO_GIT__; "
+        f"elif ! git -C {_q(target)} rev-parse --is-inside-work-tree >/dev/null 2>&1; then "
+        "echo __NO_REPO__; else git -C "
+        + _q(target)
+        + " rev-parse HEAD 2>/dev/null || echo __EMPTY__; fi"
+    )
 
 
 BAD_PATTERN_MARKER = "__BAD_PATTERN__"
@@ -360,7 +380,8 @@ def artifacts_command(root: str, *, limit: int = MAX_LIST_ENTRIES) -> str:
     """
     target = safe_path(root, root)
     excludes = " ".join(
-        f"-path {_q(target + '/' + name)} -prune -o" for name in (".git", "node_modules", ".venv")
+        f"-path {_q(target + '/' + name)} -prune -o"
+        for name in (".git", ".gpthub-import-staging", "node_modules", ".venv")
     )
     return (
         f"find {_q(target)} {excludes} -type f -print 2>/dev/null | head -n {int(limit)} | "

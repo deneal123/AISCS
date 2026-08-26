@@ -19,9 +19,8 @@ from __future__ import annotations
 import inspect
 
 import pytest
-
-import app
-import importer
+from application import importer
+from presentation import workspace_routes as app
 
 
 def test_an_existing_file_is_left_alone():
@@ -70,7 +69,24 @@ async def _drive_import(monkeypatch, stdout: str):
     monkeypatch.setattr(app, "_owned", lambda _wid, _p: (item, None))
     monkeypatch.setattr(app, "_auth", lambda _a: None)
     monkeypatch.setattr(app, "fetch", _returns(b"payload"))
-    monkeypatch.setattr(app, "_run_file_op", _returns(_Result(stdout)))
+    calls = 0
+
+    async def _file_op(*_a, **_kw):
+        nonlocal calls
+        calls += 1
+        if stdout == "__STAGE_FAILED__":
+            return _Result("")
+        if calls == 1:  # staging always completes before the batch is published
+            return _Result("__OK__")
+        if calls == 2:
+            if stdout == importer.EXISTS_MARKER:
+                return _Result(f"{importer.KEPT_MARKER}\tдоговор.txt")
+            if stdout:
+                return _Result(f"{importer.IMPORTED_MARKER}\tдоговор.txt")
+            return _Result(importer.PUBLISH_FAILED_MARKER)
+        return _Result("")
+
+    monkeypatch.setattr(app, "_run_file_op", _file_op)
     monkeypatch.setattr(app, "_snapshot", _records(commits))
 
     payload = app.ImportRequest(
@@ -141,12 +157,32 @@ async def test_a_real_failure_is_still_a_failure(monkeypatch):
     assert commits == []
 
 
+@pytest.mark.asyncio
+async def test_a_staging_failure_publishes_nothing(monkeypatch):
+    out, _, commits = await _drive_import(monkeypatch, "__STAGE_FAILED__")
+
+    entry = out["files"][0]
+    assert entry["outcome"] == "stage_failed"
+    assert entry["imported"] is False
+    assert commits == []
+
+
+def test_batch_publication_has_a_rollback_path():
+    command = importer.publish_command("/workspace", "safe-stage", ["one.txt", "dir/two.txt"])
+
+    assert "os.replace" in command
+    assert "__PUBLISH_FAILED__" in command
+    assert "reversed(created)" in command
+
+
 def test_an_archive_is_not_unpacked_over_the_agents_edits():
     """⚠️ Разворот `.zip` — та же запись, только массовая: повторный затёр бы дерево."""
-    src = inspect.getsource(app.import_files)
+    from application.imports import ImportService
+
+    src = inspect.getsource(ImportService.execute)
 
     unpack_at = src.index("unpack_command(")
-    assert "if ok:" in src[:unpack_at], "разворот не привязан к СВЕЖЕЙ записи"
-    assert "if ok or kept:" in src[: src.index("if ok:")], (
-        "порядок веток изменился — разворот мог уехать под условие «или пропущен»"
+    assert 'outcome.get("outcome") == "imported"' in src[:unpack_at], (
+        "разворот не привязан к СВЕЖЕЙ записи"
     )
+    assert '"outcome": "kept"' in src, "пропуск существующего файла больше не отделён"

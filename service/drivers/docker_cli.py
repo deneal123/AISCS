@@ -23,8 +23,15 @@ import logging
 import shlex
 import time
 
-from drivers.base import ContainerRef, DriverError, ExecResult, IsolationUnverified
-from policy import WorkspacePolicy
+from domain.policy import WorkspacePolicy
+
+from drivers.base import (
+    ContainerRef,
+    DriverError,
+    ExecResult,
+    IsolationUnverified,
+    ManagedContainer,
+)
 
 logger = logging.getLogger("workspace-sidecar.docker")
 
@@ -49,7 +56,9 @@ async def _docker(*args: str, timeout_sec: float = _CLI_TIMEOUT_SEC) -> tuple[in
     return proc.returncode or 0, out.decode("utf-8", "replace"), err.decode("utf-8", "replace")
 
 
-def _create_argv(workspace_id: str, policy: WorkspacePolicy) -> list[str]:
+def _create_argv(
+    workspace_id: str, policy: WorkspacePolicy, labels: dict[str, str] | None = None
+) -> list[str]:
     """Аргументы `docker create`. Каждый флаг здесь — ограничение, а не настройка."""
     argv = [
         "create",
@@ -80,6 +89,9 @@ def _create_argv(workspace_id: str, policy: WorkspacePolicy) -> list[str]:
         "--cap-drop",
         "ALL",
     ]
+    for key, value in sorted((labels or {}).items()):
+        if key != "gpthub.workspace":
+            argv += ["--label", f"{key}={value}"]
     if policy.read_only_root:
         argv += ["--read-only"]
     # Рабочий каталог — единственное записываемое место, и с потолком размера: без него
@@ -104,8 +116,10 @@ class DockerCliDriver:
 
     name = DRIVER_NAME
 
-    async def create(self, workspace_id: str, policy: WorkspacePolicy) -> ContainerRef:
-        code, out, err = await _docker(*_create_argv(workspace_id, policy))
+    async def create(
+        self, workspace_id: str, policy: WorkspacePolicy, *, labels: dict[str, str] | None = None
+    ) -> ContainerRef:
+        code, out, err = await _docker(*_create_argv(workspace_id, policy, labels))
         if code != 0:
             raise DriverError(f"не удалось создать песочницу: {err.strip() or out.strip()}")
         container_id = out.strip()
@@ -114,6 +128,25 @@ class DockerCliDriver:
             await self.destroy(ContainerRef(DRIVER_NAME, container_id))
             raise DriverError(f"не удалось запустить песочницу: {err.strip()}")
         return ContainerRef(DRIVER_NAME, container_id)
+
+    async def list_managed(self) -> list[ManagedContainer]:
+        code, out, _ = await _docker("ps", "-aq", "--filter", "label=gpthub.workspace=1")
+        if code != 0:
+            raise DriverError("docker discovery failed")
+        found: list[ManagedContainer] = []
+        for container_id in (line.strip() for line in out.splitlines()):
+            if not container_id:
+                continue
+            code, details, _ = await _docker("inspect", container_id)
+            if code != 0:
+                continue
+            try:
+                payload = json.loads(details)[0]
+                labels = dict((payload.get("Config") or {}).get("Labels") or {})
+            except (IndexError, TypeError, json.JSONDecodeError):
+                labels = {}
+            found.append(ManagedContainer(ContainerRef(DRIVER_NAME, container_id), labels))
+        return found
 
     async def verify_isolation(self, ref: ContainerRef, policy: WorkspacePolicy) -> None:
         """Сверить ЗАЯВЛЕННОЕ с ФАКТИЧЕСКИМ. Расхождение — отказ, а не предупреждение."""
@@ -250,7 +283,7 @@ class DockerCliDriver:
     async def destroy(self, ref: ContainerRef) -> None:
         code, _, err = await _docker("rm", "-f", ref.container_id)
         if code != 0:
-            logger.warning("не удалось удалить контейнер %s: %s", ref.container_id, err.strip())
+            raise DriverError("docker destroy failed")
 
 
 def _clip(text: str, limit: int) -> tuple[str, bool]:

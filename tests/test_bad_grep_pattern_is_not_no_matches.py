@@ -22,7 +22,7 @@ from __future__ import annotations
 
 import shlex
 
-from files import BAD_PATTERN_MARKER, grep_command
+from domain.files import BAD_PATTERN_MARKER, grep_command
 
 ROOT = "/workspace"
 

@@ -12,12 +12,12 @@ import pathlib
 import time
 
 import pytest
+from application.lifecycle import TooManyWorkspaces, WorkspaceNotFound, WorkspaceRegistry
+from domain import ownership
+from domain.policy import StaticPolicyLocked, WorkspacePolicy, policy_from_request
 
-import ownership
-from core import TooManyWorkspaces, WorkspaceNotFound, WorkspaceRegistry
 from drivers.base import ContainerRef, IsolationUnverified
 from drivers.docker_cli import _create_argv, _isolation_complaints
-from policy import StaticPolicyLocked, WorkspacePolicy, policy_from_request
 
 SECRET = "0123456789abcdef-secret"
 

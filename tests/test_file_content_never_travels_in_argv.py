@@ -21,11 +21,10 @@
 from __future__ import annotations
 
 import pytest
-
-from files import MAX_WRITE_BYTES
-from files import write_command as fs_write_command
-from importer import MAX_FILE_BYTES, ImportRefused
-from importer import write_command as import_command
+from application.importer import MAX_FILE_BYTES, ImportRefused
+from application.importer import write_command as import_command
+from domain.files import MAX_WRITE_BYTES
+from domain.files import write_command as fs_write_command
 
 ROOT = "/workspace"
 
@@ -155,7 +154,7 @@ class _Item:
 @pytest.mark.asyncio
 async def test_the_import_handler_hands_the_content_to_the_driver(monkeypatch):
     """🔴 Прогоняем НАСТОЯЩИЙ обработчик, подменяя только поход в сеть и в контейнер."""
-    import app
+    from presentation import workspace_routes as app
 
     # ⚠️ СПИСОК, а не словарь: за записью идёт разворот архива, у которого содержимого нет
     # по построению. Первая редакция теста держала последний вызов и краснела на разворот —
@@ -174,7 +173,6 @@ async def test_the_import_handler_hands_the_content_to_the_driver(monkeypatch):
     monkeypatch.setattr(app, "fetch", lambda *_a, **_kw: _returns(b"PK\x03\x04data"))
     monkeypatch.setattr(app, "_run_file_op", _file_op)
     monkeypatch.setattr(app, "_snapshot", lambda *_a, **_kw: _returns({"committed": True}))
-    monkeypatch.setattr(app, "unpack_command", lambda *_a, **_kw: "true")
 
     await app.import_files(
         "w-1",
@@ -195,12 +193,14 @@ async def test_the_import_handler_hands_the_content_to_the_driver(monkeypatch):
 async def test_the_write_handler_hands_the_content_to_the_driver(monkeypatch):
     """⚠️ Второй вход в ту же запись. Один почин двух вызовов — обычное дело: у меня
     расходились и не такие пары."""
-    import app
+    from presentation import workspace_routes as app
 
     seen = {}
 
     async def _file_op(_item, command, *, stdin_payload=None):
-        seen.update({"command": command, "payload": stdin_payload})
+        seen["command"] = command
+        if stdin_payload:
+            seen["payload"] = stdin_payload
         return _Result("__OK__ 6")
 
     async def _returns(value):
@@ -251,8 +251,8 @@ class _RecordingDriver:
 
 
 def _registry_item():
-    from core import Workspace
-    from policy import policy_from_request
+    from application.lifecycle import Workspace
+    from domain.policy import policy_from_request
 
     return Workspace(
         workspace_id="w-1",
@@ -267,7 +267,7 @@ def _registry_item():
 async def test_the_registry_uses_the_stdin_path_when_content_is_given():
     """🔴 Содержимое есть — идём путём с каналом. Иначе байты просто пропадают: команда
     ждёт stdin, ей его не подают, и в песочнице появляется ПУСТОЙ файл."""
-    from core import WorkspaceRegistry
+    from application.lifecycle import WorkspaceRegistry
 
     driver = _RecordingDriver()
     registry = WorkspaceRegistry(driver)
@@ -286,7 +286,7 @@ async def test_the_registry_uses_the_stdin_path_when_content_is_given():
 async def test_the_registry_keeps_the_plain_path_for_everything_else():
     """🔴 ГРАНИЦА. Обычные команды обязаны идти прежним путём: у него `setsid`-обёртка,
     которой добивают группу процессов по таймауту, а у канального пути её нет намеренно."""
-    from core import WorkspaceRegistry
+    from application.lifecycle import WorkspaceRegistry
 
     driver = _RecordingDriver()
     registry = WorkspaceRegistry(driver)

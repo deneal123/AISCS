@@ -16,7 +16,7 @@ from __future__ import annotations
 from dataclasses import dataclass, fields, replace
 from typing import Any
 
-from contracts import (
+from domain.contracts import (
     DEFAULT_EXEC_TIMEOUT_SEC,
     DEFAULT_IMAGE,
     DEFAULT_MAX_OUTPUT_CHARS,

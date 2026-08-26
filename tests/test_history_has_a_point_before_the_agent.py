@@ -17,7 +17,7 @@
 
 from __future__ import annotations
 
-import files
+from domain import files
 
 
 def test_init_leaves_a_revision_behind_not_just_a_repository():
@@ -88,9 +88,9 @@ def test_the_import_point_is_wired_into_the_import_handler():
     """
     import inspect
 
-    import app
+    from application.imports import ImportService
 
-    src = inspect.getsource(app.import_files)
+    src = inspect.getsource(ImportService.execute)
     assert "IMPORT_MESSAGE" in src, "импорт не оставляет за собой точки истории"
     assert "_snapshot(" in src, "точка ставится не общей командой коммита"
     assert "if imported" in src, (
@@ -102,9 +102,10 @@ def test_both_points_are_placed_by_the_one_commit_helper():
     """⚠️ Ход и импорт — две точки, но способ их поставить обязан остаться один."""
     import inspect
 
-    import app
+    from application.history import HistoryService
+    from presentation import workspace_routes as app
 
-    assert "git_commit_command(" in inspect.getsource(app._snapshot)
+    assert "git_commit_command(" in inspect.getsource(HistoryService.snapshot)
     for handler in (app.import_files, app.snapshot_workspace):
         src = inspect.getsource(handler)
         assert "git_commit_command(" not in src, (

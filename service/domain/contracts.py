@@ -53,10 +53,12 @@ ERROR_CODES = frozenset(
         "unauthorized",  # 401 — нет ключа сервиса
         "forbidden",  # 403 — токен владения не подошёл
         "static_policy_locked",  # 409 — правка запертого поля политики
+        "workspace_conflict",  # 409 — stale optimistic revision
         "isolation_unverified",  # 500 — заявленная изоляция не подтвердилась
         "quota_exceeded",  # 413
         "request_too_large",  # 413
         "exec_timeout",  # 504
+        "workspace_unavailable",  # 503 - temporary coordinator/sidecar transport failure
         "driver_failed",  # 502 — не смогли создать/выполнить
         "internal",  # 500
     }

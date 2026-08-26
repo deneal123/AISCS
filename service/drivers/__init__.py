@@ -8,6 +8,7 @@ from drivers.base import (
     DriverError,
     ExecResult,
     IsolationUnverified,
+    ManagedContainer,
 )
 from drivers.docker_cli import DRIVER_NAME as DOCKER_DRIVER
 from drivers.docker_cli import DockerCliDriver
@@ -22,6 +23,7 @@ __all__ = [
     "DriverError",
     "ExecResult",
     "IsolationUnverified",
+    "ManagedContainer",
     "build_driver",
     "driver_names",
 ]

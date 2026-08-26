@@ -17,7 +17,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Protocol, runtime_checkable
 
-from policy import WorkspacePolicy
+from domain.policy import WorkspacePolicy
 
 
 class DriverError(Exception):
@@ -37,6 +37,12 @@ class ContainerRef:
 
 
 @dataclass(frozen=True, slots=True)
+class ManagedContainer:
+    ref: ContainerRef
+    labels: dict[str, str]
+
+
+@dataclass(frozen=True, slots=True)
 class ExecResult:
     exit_code: int
     stdout: str
@@ -52,7 +58,11 @@ class ComputeDriver(Protocol):
 
     name: str
 
-    async def create(self, workspace_id: str, policy: WorkspacePolicy) -> ContainerRef: ...
+    async def create(
+        self, workspace_id: str, policy: WorkspacePolicy, *, labels: dict[str, str] | None = None
+    ) -> ContainerRef: ...
+
+    async def list_managed(self) -> list[ManagedContainer]: ...
 
     async def verify_isolation(self, ref: ContainerRef, policy: WorkspacePolicy) -> None:
         """Подтвердить фактическое состояние. Расхождение — `IsolationUnverified`."""

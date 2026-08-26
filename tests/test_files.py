@@ -10,9 +10,8 @@ import base64
 import shlex
 
 import pytest
-
-import files
-from files import (
+from domain import files
+from domain.files import (
     MAX_READ_BYTES,
     UnsafePath,
     grep_command,
@@ -155,7 +154,7 @@ def test_list_is_bounded() -> None:
 
 def test_imported_files_are_not_reported_as_artifacts() -> None:
     """🔴 Вернуть человеку его же файл значит сообщить, что агент его создал."""
-    from files import parse_artifacts
+    from domain.files import parse_artifacts
 
     output = "12\t/workspace/данные.csv\n40\t/workspace/отчёт.md"
     artifacts = parse_artifacts(output, ROOT, {"данные.csv"})
@@ -164,7 +163,7 @@ def test_imported_files_are_not_reported_as_artifacts() -> None:
 
 def test_artifact_paths_are_relative_to_the_root() -> None:
     """Абсолютный путь внутри контейнера наружу не нужен и только путает."""
-    from files import parse_artifacts
+    from domain.files import parse_artifacts
 
     artifacts = parse_artifacts("7\t/workspace/sub/a.txt", ROOT, set())
     assert artifacts == [{"path": "sub/a.txt", "size": 7}]
@@ -172,7 +171,7 @@ def test_artifact_paths_are_relative_to_the_root() -> None:
 
 def test_artifacts_walk_the_whole_depth_not_two_levels() -> None:
     """Артефакт мог родиться в подкаталоге: не заметить его хуже, чем показать лишнее."""
-    from files import artifacts_command, list_command
+    from domain.files import artifacts_command, list_command
 
     assert "-maxdepth" not in artifacts_command(ROOT)
     assert "-maxdepth" in list_command(ROOT, "")
@@ -180,7 +179,7 @@ def test_artifacts_walk_the_whole_depth_not_two_levels() -> None:
 
 def test_tool_directories_are_excluded() -> None:
     """Первый же `git init` или `pip install` иначе завалит ответ тысячами чужих файлов."""
-    from files import artifacts_command
+    from domain.files import artifacts_command
 
     command = artifacts_command(ROOT)
     for noisy in (".git", "node_modules", ".venv"):
@@ -188,7 +187,7 @@ def test_tool_directories_are_excluded() -> None:
 
 
 def test_broken_line_does_not_break_the_listing() -> None:
-    from files import parse_artifacts
+    from domain.files import parse_artifacts
 
     artifacts = parse_artifacts("мусор\n5\t/workspace/ok.txt\n\t", ROOT, set())
     assert [a["path"] for a in artifacts] == ["ok.txt"]
@@ -203,7 +202,7 @@ def test_download_keeps_bytes_intact_where_read_would_corrupt_them() -> None:
     `parse_read` декодирует utf-8 с заменой битых байт — это порча, а не неточность.
     Выгрузка обязана возвращать содержимое как есть.
     """
-    from files import parse_download, parse_read
+    from domain.files import parse_download, parse_read
 
     payload = base64.b64encode(b"PK\x03\x04\xff\xfe\x00zip").decode()
     raw, truncated = parse_download(payload)
@@ -215,7 +214,7 @@ def test_download_keeps_bytes_intact_where_read_would_corrupt_them() -> None:
 
 
 def test_download_reports_truncation_so_a_partial_file_is_never_passed_off_as_whole() -> None:
-    from files import MAX_DOWNLOAD_BYTES, parse_download
+    from domain.files import MAX_DOWNLOAD_BYTES, parse_download
 
     _, truncated = parse_download(base64.b64encode(b"x" * (MAX_DOWNLOAD_BYTES + 10)).decode())
     assert truncated
@@ -223,20 +222,20 @@ def test_download_reports_truncation_so_a_partial_file_is_never_passed_off_as_wh
 
 def test_download_has_a_bigger_ceiling_than_read() -> None:
     """Читает МОДЕЛЬ и платит за токены; выгружает backend в хранилище — задачи разные."""
-    from files import MAX_DOWNLOAD_BYTES, MAX_READ_BYTES
+    from domain.files import MAX_DOWNLOAD_BYTES, MAX_READ_BYTES
 
     assert MAX_DOWNLOAD_BYTES > MAX_READ_BYTES
 
 
 def test_missing_artifact_is_distinguishable() -> None:
-    from files import parse_download
+    from domain.files import parse_download
 
     with pytest.raises(FileNotFoundError):
         parse_download("__MISSING__")
 
 
 def test_download_path_is_checked_like_any_other() -> None:
-    from files import download_command
+    from domain.files import download_command
 
     with pytest.raises(UnsafePath):
         download_command(ROOT, "../../etc/shadow")
@@ -246,7 +245,7 @@ def test_null_byte_is_refused_before_it_reaches_the_process() -> None:
     """🔴 NUL завершает строку в syscall `exec` — попытка передать его роняет СОЗДАНИЕ
     процесса целиком, и наружу уходило нечитаемое «Internal Server Error». Модель такую
     строку сочиняет запросто; отказ обязан быть внятным."""
-    from files import reject_control_bytes
+    from domain.files import reject_control_bytes
 
     with pytest.raises(UnsafePath):
         reject_control_bytes("echo \x00 hi", "команда")

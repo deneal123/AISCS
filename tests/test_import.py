@@ -13,11 +13,10 @@ import shlex
 
 import httpx
 import pytest
-
-import files
-import importer
-from importer import MAX_FILES, ImportRefused, fetch, plan, write_command
-from net_guard import UnsafeUrlError, assert_public_host
+from application import importer
+from application.importer import MAX_FILES, ImportRefused, fetch, plan, write_command
+from domain import files
+from infrastructure.net_guard import UnsafeUrlError, assert_public_host
 
 ROOT = "/workspace"
 
@@ -64,7 +63,7 @@ async def test_only_http_urls_are_accepted(url: str, monkeypatch) -> None:
     ВНЯТНАЯ ПРИЧИНА, и тест обязан требовать именно её. Хост у ftp-случая публичный, а
     проверка адреса подменена: иначе отказ давала бы она.
     """
-    monkeypatch.setattr("importer.assert_public_host", _ok)
+    monkeypatch.setattr("application.importer.assert_public_host", _ok)
     with pytest.raises(ImportRefused, match="http"):
         await fetch(url)
 
@@ -91,7 +90,7 @@ async def test_redirect_is_not_followed(monkeypatch) -> None:
         return httpx.Response(302, headers={"Location": "http://127.0.0.1:9000/secret"})
 
     monkeypatch.setattr(httpx.AsyncClient, "get", fake_get)
-    monkeypatch.setattr("importer.assert_public_host", _ok)
+    monkeypatch.setattr("application.importer.assert_public_host", _ok)
     with pytest.raises(ImportRefused):
         await fetch("https://files.example.com/a.txt")
 
@@ -101,13 +100,13 @@ async def _ok(_host: str) -> None:
 
 
 async def test_oversized_file_is_refused(monkeypatch) -> None:
-    from importer import MAX_FILE_BYTES
+    from application.importer import MAX_FILE_BYTES
 
     async def fake_get(self, url, **kwargs):
         return httpx.Response(200, content=b"x" * (MAX_FILE_BYTES + 1))
 
     monkeypatch.setattr(httpx.AsyncClient, "get", fake_get)
-    monkeypatch.setattr("importer.assert_public_host", _ok)
+    monkeypatch.setattr("application.importer.assert_public_host", _ok)
     with pytest.raises(ImportRefused):
         await fetch("https://files.example.com/big.bin")
 
@@ -198,9 +197,9 @@ def test_unpack_is_wired_into_the_import_handler():
     """
     import inspect
 
-    import app
+    from application.imports import ImportService
 
-    src = inspect.getsource(app.import_files)
+    src = inspect.getsource(ImportService.execute)
     assert "unpack_command(" in src, "архив импортируется, но не разворачивается"
     assert '.endswith(".zip")' in src, "разворачиваем что попало либо не разворачиваем вовсе"
 
@@ -220,7 +219,7 @@ async def test_a_failed_download_names_its_cause(monkeypatch) -> None:
 
     logged: list[str] = []
     monkeypatch.setattr(httpx.AsyncClient, "get", _boom)
-    monkeypatch.setattr("importer.assert_public_host", _ok)
+    monkeypatch.setattr("application.importer.assert_public_host", _ok)
     monkeypatch.setattr(
         importer.logger,
         "warning",
@@ -253,6 +252,6 @@ async def test_a_successful_download_says_nothing_extra(monkeypatch) -> None:
         return _R()
 
     monkeypatch.setattr(httpx.AsyncClient, "get", _ok_get)
-    monkeypatch.setattr("importer.assert_public_host", _ok)
+    monkeypatch.setattr("application.importer.assert_public_host", _ok)
 
     assert await importer.fetch("https://storage.example.com/a.txt") == b"data"
