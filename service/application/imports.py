@@ -6,6 +6,7 @@ import uuid
 from collections.abc import Awaitable, Callable
 from typing import Any
 
+from application.files import FileConflict
 from application.importer import (
     IMPORTED_MARKER,
     KEPT_MARKER,
@@ -23,13 +24,33 @@ from application.importer import (
 RunCommand = Callable[..., Awaitable[Any]]
 Fetch = Callable[[str], Awaitable[bytes]]
 Snapshot = Callable[[Any, str], Awaitable[dict[str, Any]]]
+Revision = Callable[[Any], Awaitable[str]]
 
 
 class ImportService:
-    def __init__(self, run_command: RunCommand, snapshot: Snapshot, fetcher: Fetch = fetch) -> None:
-        self._run_command, self._snapshot, self._fetch = run_command, snapshot, fetcher
+    def __init__(
+        self,
+        run_command: RunCommand,
+        snapshot: Snapshot,
+        revision: Revision,
+        fetcher: Fetch = fetch,
+    ) -> None:
+        self._run_command, self._snapshot, self._revision, self._fetch = (
+            run_command,
+            snapshot,
+            revision,
+            fetcher,
+        )
 
-    async def execute(self, item: Any, entries: list[dict] | None) -> dict[str, Any]:
+    async def execute(
+        self,
+        item: Any,
+        entries: list[dict] | None,
+        *,
+        expected_revision: str | None = None,
+    ) -> dict[str, Any]:
+        if expected_revision and await self._revision(item) != expected_revision:
+            raise FileConflict("workspace revision changed")
         results, staged, by_name = [], [], {}
         total, staging_id = 0, uuid.uuid4().hex
         for entry in plan(entries):
@@ -58,6 +79,11 @@ class ImportService:
             staged.append(entry["name"])
         if staged:
             try:
+                # Download/staging can take long enough for a second actor to
+                # finish a mutation.  Do not publish a prepared batch over a
+                # newer workspace state.
+                if expected_revision and await self._revision(item) != expected_revision:
+                    raise FileConflict("workspace revision changed")
                 output = (
                     await self._run_command(
                         item, publish_command(item.policy.root, staging_id, staged)

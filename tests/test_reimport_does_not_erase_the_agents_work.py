@@ -62,6 +62,43 @@ class _Item:
         self.workspace_id, self.user_id = "w-1", "u-1"
 
 
+@pytest.mark.asyncio
+async def test_revision_change_after_staging_never_publishes_the_batch():
+    """A stale editor must not publish an already staged library file."""
+    from application.files import FileConflict
+    from application.imports import ImportService
+
+    item = _Item()
+    calls: list[str] = []
+    snapshots: list[str] = []
+    revisions = iter(["base", "new"])
+
+    async def run(_item, command, **_kwargs):
+        calls.append(command)
+        return _Result("__OK__")
+
+    async def snapshot(_item, kind):
+        snapshots.append(kind)
+        return {}
+
+    async def revision(_item):
+        return next(revisions)
+
+    async def fetcher(_url):
+        return b"library payload"
+
+    service = ImportService(run, snapshot, revision, fetcher)
+    with pytest.raises(FileConflict):
+        await service.execute(
+            item,
+            [{"name": "library.txt", "url": "https://safe.example/library.txt"}],
+            expected_revision="base",
+        )
+
+    assert not any("os.replace" in command for command in calls)
+    assert snapshots == []
+
+
 async def _drive_import(monkeypatch, stdout: str):
     """Прогнать НАСТОЯЩИЙ обработчик импорта, подменив только поход в контейнер и в сеть."""
     item = _Item()

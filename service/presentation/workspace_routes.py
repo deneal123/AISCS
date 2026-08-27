@@ -87,7 +87,9 @@ class ImportRequest(BaseModel):
     user_id: str
     token: str
     files: list[dict]
+    expected_revision: str | None = None
     coordination_capability: str = Field(default="", max_length=2048)
+    coordination_fence: int | None = Field(default=None, ge=1)
 
 
 class FileRequest(BaseModel):
@@ -402,14 +404,26 @@ async def import_files(
     item, failure = _owned(workspace_id, payload)
     if failure is not None:
         return failure
+    if payload.coordination_capability and not payload.expected_revision:
+        return _error("invalid_request", "expected_revision is required", 422)
     guarded = await _coordination_guard(payload, "import", workspace_id=workspace_id)
     if _guard_denied(guarded):
         return guarded
-    service = ImportService(_run_file_op, _snapshot, fetch)
-    if registry is not None:
-        async with registry.operation(item):
-            return await service.execute(item, payload.files)
-    return await service.execute(item, payload.files)
+    service = ImportService(_run_file_op, _snapshot, _revision, fetch)
+    try:
+        if registry is not None:
+            async with registry.operation(item):
+                result = await service.execute(
+                    item, payload.files, expected_revision=payload.expected_revision
+                )
+        else:
+            result = await service.execute(
+                item, payload.files, expected_revision=payload.expected_revision
+            )
+    except FileConflict:
+        return _error("workspace_conflict", "workspace revision changed", 409)
+    result["revision"] = await _revision(item)
+    return result
 
 
 @router.post("/workspaces/{workspace_id}/snapshot")
