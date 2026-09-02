@@ -15,7 +15,7 @@ from __future__ import annotations
 import os
 
 # Версия КОНТРАКТА, не образа. Поднимать при несовместимом изменении формы запроса/ответа.
-SERVICE_VERSION = "1.0.0"
+SERVICE_VERSION = "1.1.0"
 SERVICE_NAME = "workspace"
 
 # 🔴 Поля политики, ЗАПЕРТЫЕ при создании. Попытка изменить любое на живой песочнице —
@@ -43,6 +43,9 @@ DYNAMIC_POLICY_FIELDS = frozenset({"exec_timeout_sec", "max_output_chars"})
 CREATE_RESPONSE_FIELDS = frozenset({"workspace_id", "token", "root", "expires_at", "policy"})
 EXEC_RESPONSE_FIELDS = frozenset(
     {"exit_code", "stdout", "stderr", "truncated", "duration_sec", "timed_out"}
+)
+VIEW_RESPONSE_FIELDS = frozenset(
+    {"entries", "history", "truncated", "root", "revision", "recovered"}
 )
 
 # Машинные коды ошибок: вызывающий различает случаи по КОДУ, а не по тексту `detail`.

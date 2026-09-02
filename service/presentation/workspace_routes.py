@@ -13,6 +13,7 @@ from application.history import HistoryService
 from application.importer import fetch
 from application.imports import ImportService
 from application.lifecycle import TooManyWorkspaces, WorkspaceNotFound, WorkspaceRegistry
+from application.view import WorkspaceViewService
 from domain.contracts import DEFAULT_TTL_SEC, ERROR_CODES, GIT_AUTHOR
 from domain.files import (
     BAD_PATTERN_MARKER,
@@ -137,9 +138,7 @@ def _owned(workspace_id: str, payload):
         return None, _error("not_found", str(exc), 404)
 
 
-async def _coordination_guard(
-    payload, mutation: str, *, path: str = "", workspace_id: str = ""
-):
+async def _coordination_guard(payload, mutation: str, *, path: str = "", workspace_id: str = ""):
     try:
         return await require_mutation(payload, mutation, path=path, workspace_id=workspace_id)
     except GuardFailure as exc:
@@ -313,6 +312,25 @@ async def tree_files(
     }
 
 
+@router.post("/workspaces/{workspace_id}/view")
+async def workspace_view(
+    workspace_id: str, payload: FileRequest, authorization: str | None = Header(default=None)
+):
+    """Return tree, history and revision from one operation boundary."""
+    _auth(authorization)
+    item, failure = _owned(workspace_id, payload)
+    if failure is not None:
+        return failure
+    service = WorkspaceViewService(_run_file_op, _revision)
+    try:
+        if registry is None:
+            return await service.snapshot(item, payload.path)
+        async with registry.operation(item):
+            return await service.snapshot(item, payload.path)
+    except UnsafePath as exc:
+        return _error("forbidden", str(exc), 403)
+
+
 @router.post("/workspaces/{workspace_id}/files/read")
 async def read_file(
     workspace_id: str, payload: FileRequest, authorization: str | None = Header(default=None)
@@ -322,8 +340,15 @@ async def read_file(
     if failure is not None:
         return failure
     try:
-        result = await _run_file_op(item, read_command(item.policy.root, payload.path))
-        content, truncated = parse_read(result.stdout)
+        if registry is None:
+            result = await _run_file_op(item, read_command(item.policy.root, payload.path))
+            content, truncated = parse_read(result.stdout)
+            revision = await _revision(item)
+        else:
+            async with registry.operation(item):
+                result = await _run_file_op(item, read_command(item.policy.root, payload.path))
+                content, truncated = parse_read(result.stdout)
+                revision = await _revision(item)
     except UnsafePath as exc:
         return _error("forbidden", str(exc), 403)
     except IsADirectory:
@@ -332,7 +357,12 @@ async def read_file(
         return _error("not_found", "file not found", 404)
     except ValueError as exc:
         return _error("driver_failed", f"read failed: {exc}", 502)
-    return {"path": payload.path, "content": content, "truncated": truncated}
+    return {
+        "path": payload.path,
+        "content": content,
+        "truncated": truncated,
+        "revision": revision,
+    }
 
 
 @router.post("/workspaces/{workspace_id}/files/write")
