@@ -8,43 +8,28 @@ import logging
 import os
 
 from application.coordination_guard import GuardFailure, require_mutation
-from application.files import FileConflict, FileService, FileWriteFailed
 from application.history import HistoryService
 from application.importer import fetch
-from application.imports import ImportService
-from application.lifecycle import TooManyWorkspaces, WorkspaceNotFound, WorkspaceRegistry
-from application.view import WorkspaceViewService
-from domain.contracts import DEFAULT_TTL_SEC, ERROR_CODES, GIT_AUTHOR
-from domain.files import (
-    BAD_PATTERN_MARKER,
-    MAX_DOWNLOAD_BYTES,
-    MAX_READ_BYTES,
-    IsADirectory,
-    UnsafePath,
-    artifacts_command,
-    download_command,
-    git_diff_command,
-    git_init_command,
-    git_log_command,
-    git_revert_command,
-    grep_command,
-    list_command,
-    parse_artifacts,
-    parse_download,
-    parse_git_log,
-    parse_read,
-    read_command,
-    reject_control_bytes,
-    tree_command,
-)
+from application.lifecycle import WorkspaceNotFound, WorkspaceRegistry
+from domain.contracts import ERROR_CODES
+from domain.files import MAX_READ_BYTES
 from domain.ownership import OwnershipError
-from domain.policy import StaticPolicyLocked, policy_from_request
-from fastapi import APIRouter, Header
+from fastapi import APIRouter
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel, Field
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from drivers import DriverError, IsolationUnverified
+from drivers import DriverError
+from presentation.routes.contracts import CreateRequest as CreateRequest
+from presentation.routes.contracts import ExecRequest as ExecRequest
+from presentation.routes.contracts import FileRequest as FileRequest
+from presentation.routes.contracts import ImportRequest as ImportRequest
+from presentation.routes.contracts import OwnerRequest as OwnerRequest
+from presentation.routes.contracts import PolicyRequest as PolicyRequest
+from presentation.routes.dependencies import WorkspaceRouteDependencies
+from presentation.routes.files import create_files_router
+from presentation.routes.history import create_history_router
+from presentation.routes.imports import create_import_router
+from presentation.routes.lifecycle import create_lifecycle_router
 
 logger = logging.getLogger("workspace-sidecar")
 router = APIRouter()
@@ -55,55 +40,6 @@ registry: WorkspaceRegistry | None = None
 # Compatibility anchor for a direct-handler regression.  Runtime history uses
 # the same allowlisted snapshot type, never a request-derived commit message.
 IMPORT_MESSAGE = "import"
-
-
-class CreateRequest(BaseModel):
-    user_id: str
-    ttl_sec: float = DEFAULT_TTL_SEC
-    policy: dict | None = None
-
-
-class ExecRequest(BaseModel):
-    user_id: str
-    token: str
-    command: str = Field(min_length=1)
-    coordination_capability: str = Field(default="", max_length=2048)
-    coordination_fence: int | None = Field(default=None, ge=1)
-
-
-class PolicyRequest(BaseModel):
-    user_id: str
-    token: str
-    update: dict
-    coordination_capability: str = Field(default="", max_length=2048)
-
-
-class OwnerRequest(BaseModel):
-    user_id: str
-    token: str
-    coordination_capability: str = Field(default="", max_length=2048)
-
-
-class ImportRequest(BaseModel):
-    user_id: str
-    token: str
-    files: list[dict]
-    expected_revision: str | None = None
-    coordination_capability: str = Field(default="", max_length=2048)
-    coordination_fence: int | None = Field(default=None, ge=1)
-
-
-class FileRequest(BaseModel):
-    user_id: str
-    token: str
-    path: str = ""
-    content: str | None = None
-    pattern: str | None = None
-    ref: str | None = None
-    message: str | None = None
-    expected_revision: str | None = None
-    coordination_capability: str = Field(default="", max_length=2048)
-    coordination_fence: int | None = Field(default=None, ge=1)
 
 
 def error_response(code: str, detail: str, status: int) -> JSONResponse:
@@ -132,10 +68,10 @@ def _resolve(workspace_id: str, user_id: str, token: str):
 def _owned(workspace_id: str, payload):
     try:
         return _resolve(workspace_id, payload.user_id, payload.token), None
-    except OwnershipError as exc:
-        return None, _error("forbidden", str(exc), 403)
-    except WorkspaceNotFound as exc:
-        return None, _error("not_found", str(exc), 404)
+    except OwnershipError:
+        return None, _error("forbidden", "workspace ownership mismatch", 403)
+    except WorkspaceNotFound:
+        return None, _error("not_found", "workspace not found", 404)
 
 
 async def _coordination_guard(payload, mutation: str, *, path: str = "", workspace_id: str = ""):
@@ -165,416 +101,59 @@ def _guard_denied(guarded):
     return guarded is not None and not hasattr(guarded, "allowed")
 
 
-@router.post("/workspaces")
-async def create_workspace(
-    payload: CreateRequest, authorization: str | None = Header(default=None)
-):
-    _auth(authorization)
-    if registry is None:
-        return _error("workspace_unavailable", "workspace registry is not ready", 503)
-    try:
-        policy = policy_from_request(payload.policy)
-        item, token = await registry.create(payload.user_id, policy, ttl_sec=payload.ttl_sec)
-    except (TypeError, ValueError) as exc:
-        return _error("invalid_request", str(exc), 422)
-    except TooManyWorkspaces as exc:
-        return _error("quota_exceeded", str(exc), 413)
-    except IsolationUnverified as exc:
-        logger.error("workspace isolation was not verified: %s", exc)
-        return _error("isolation_unverified", str(exc), 500)
-    except DriverError as exc:
-        return _error("driver_failed", str(exc), 502)
-    versioned = False
-    try:
-        result = await registry.exec_raw(
-            item, git_init_command(item.policy.root, GIT_AUTHOR), max_output_chars=4096
-        )
-        versioned = "__OK__" in (result.stdout or "")
-    except Exception:  # noqa: BLE001 - a workspace remains usable without git.
-        logger.warning("workspace git initialization failed", exc_info=True)
-    return {
-        "versioned": versioned,
-        "workspace_id": item.workspace_id,
-        "token": token,
-        "root": item.policy.root,
-        "expires_at": item.expires_at,
-        "policy": item.policy.as_dict(),
-    }
+async def _route_coordination_guard(*args, **kwargs):
+    return await _coordination_guard(*args, **kwargs)
 
 
-@router.post("/workspaces/{workspace_id}/exec")
-async def exec_in_workspace(
-    workspace_id: str, payload: ExecRequest, authorization: str | None = Header(default=None)
-):
-    _auth(authorization)
-    item, failure = _owned(workspace_id, payload)
-    if failure is not None:
-        return failure
-    try:
-        command = reject_control_bytes(payload.command, "command")
-    except UnsafePath as exc:
-        return _error("invalid_request", str(exc), 422)
-    guarded = await _coordination_guard(payload, "exec", workspace_id=workspace_id)
-    if _guard_denied(guarded):
-        return guarded
-    try:
-        async with registry.operation(item):
-            result = await registry.exec(item, command)
-    except DriverError as exc:
-        return _error("driver_failed", str(exc), 502)
-    return {
-        "exit_code": result.exit_code,
-        "stdout": result.stdout,
-        "stderr": result.stderr,
-        "truncated": result.truncated,
-        "duration_sec": result.duration_sec,
-        "timed_out": result.timed_out,
-    }
+async def _route_run_file_op(*args, **kwargs):
+    return await _run_file_op(*args, **kwargs)
 
 
-@router.patch("/workspaces/{workspace_id}/policy")
-async def update_policy(
-    workspace_id: str, payload: PolicyRequest, authorization: str | None = Header(default=None)
-):
-    _auth(authorization)
-    item, failure = _owned(workspace_id, payload)
-    if failure is not None:
-        return failure
-    guarded = await _coordination_guard(payload, "policy", workspace_id=workspace_id)
-    if _guard_denied(guarded):
-        return guarded
-    try:
-        policy = await registry.update_policy(item, payload.update)
-    except StaticPolicyLocked as exc:
-        return _error("static_policy_locked", str(exc), 409)
-    except (TypeError, ValueError) as exc:
-        return _error("invalid_request", str(exc), 422)
-    return {"policy": policy.as_dict()}
+async def _route_revision(item):
+    return await _revision(item)
 
 
-@router.delete("/workspaces/{workspace_id}")
-async def delete_workspace(
-    workspace_id: str, payload: OwnerRequest, authorization: str | None = Header(default=None)
-):
-    _auth(authorization)
-    try:
-        _resolve(workspace_id, payload.user_id, payload.token)
-        await registry.destroy(workspace_id)
-    except OwnershipError as exc:
-        return _error("forbidden", str(exc), 403)
-    except WorkspaceNotFound as exc:
-        return _error("not_found", str(exc), 404)
-    return {"deleted": workspace_id}
+async def _route_snapshot(item, message: str):
+    return await _snapshot(item, message)
 
 
-def _parse_entries(stdout: str | None) -> list[dict]:
-    entries: list[dict] = []
-    for line in (stdout or "").splitlines():
-        parts = line.split("\t")
-        if len(parts) == 3:
-            entries.append({"type": parts[0], "size": int(parts[1] or 0), "path": parts[2]})
-    return entries
+async def _route_fetch(*args, **kwargs):
+    return await fetch(*args, **kwargs)
 
 
-@router.post("/workspaces/{workspace_id}/files/list")
-async def list_files(
-    workspace_id: str, payload: FileRequest, authorization: str | None = Header(default=None)
-):
-    _auth(authorization)
-    item, failure = _owned(workspace_id, payload)
-    if failure is not None:
-        return failure
-    try:
-        result = await _run_file_op(item, list_command(item.policy.root, payload.path))
-    except UnsafePath as exc:
-        return _error("forbidden", str(exc), 403)
-    return {"entries": _parse_entries(result.stdout), "truncated": result.truncated}
-
-
-@router.post("/workspaces/{workspace_id}/files/tree")
-async def tree_files(
-    workspace_id: str, payload: FileRequest, authorization: str | None = Header(default=None)
-):
-    _auth(authorization)
-    item, failure = _owned(workspace_id, payload)
-    if failure is not None:
-        return failure
-    try:
-        result = await _run_file_op(item, tree_command(item.policy.root, payload.path))
-    except UnsafePath as exc:
-        return _error("forbidden", str(exc), 403)
-    return {
-        "entries": _parse_entries(result.stdout),
-        "truncated": result.truncated,
-        "root": item.policy.root,
-        "revision": await _revision(item),
-        "recovered": item.recovered,
-    }
-
-
-@router.post("/workspaces/{workspace_id}/view")
-async def workspace_view(
-    workspace_id: str, payload: FileRequest, authorization: str | None = Header(default=None)
-):
-    """Return tree, history and revision from one operation boundary."""
-    _auth(authorization)
-    item, failure = _owned(workspace_id, payload)
-    if failure is not None:
-        return failure
-    service = WorkspaceViewService(_run_file_op, _revision)
-    try:
-        if registry is None:
-            return await service.snapshot(item, payload.path)
-        async with registry.operation(item):
-            return await service.snapshot(item, payload.path)
-    except UnsafePath as exc:
-        return _error("forbidden", str(exc), 403)
-
-
-@router.post("/workspaces/{workspace_id}/files/read")
-async def read_file(
-    workspace_id: str, payload: FileRequest, authorization: str | None = Header(default=None)
-):
-    _auth(authorization)
-    item, failure = _owned(workspace_id, payload)
-    if failure is not None:
-        return failure
-    try:
-        if registry is None:
-            result = await _run_file_op(item, read_command(item.policy.root, payload.path))
-            content, truncated = parse_read(result.stdout)
-            revision = await _revision(item)
-        else:
-            async with registry.operation(item):
-                result = await _run_file_op(item, read_command(item.policy.root, payload.path))
-                content, truncated = parse_read(result.stdout)
-                revision = await _revision(item)
-    except UnsafePath as exc:
-        return _error("forbidden", str(exc), 403)
-    except IsADirectory:
-        return _error("invalid_request", "path is a directory", 422)
-    except FileNotFoundError:
-        return _error("not_found", "file not found", 404)
-    except ValueError as exc:
-        return _error("driver_failed", f"read failed: {exc}", 502)
-    return {
-        "path": payload.path,
-        "content": content,
-        "truncated": truncated,
-        "revision": revision,
-    }
-
-
-@router.post("/workspaces/{workspace_id}/files/write")
-async def write_file(
-    workspace_id: str, payload: FileRequest, authorization: str | None = Header(default=None)
-):
-    _auth(authorization)
-    item, failure = _owned(workspace_id, payload)
-    if failure is not None:
-        return failure
-    if payload.coordination_capability and not payload.expected_revision:
-        return _error("invalid_request", "expected_revision is required", 422)
-    guarded = await _coordination_guard(
-        payload, "write", path=payload.path, workspace_id=workspace_id
-    )
-    if _guard_denied(guarded):
-        return guarded
-    service = FileService(_run_file_op, _revision, _snapshot)
-    try:
-        if registry is not None:
-            async with registry.operation(item):
-                return await service.write(
-                    item,
-                    path=payload.path,
-                    content=payload.content or "",
-                    expected_revision=payload.expected_revision,
-                    snapshot_user_edit=bool(payload.coordination_capability),
-                )
-        return await service.write(
-            item,
-            path=payload.path,
-            content=payload.content or "",
-            expected_revision=payload.expected_revision,
-            snapshot_user_edit=bool(payload.coordination_capability),
-        )
-    except FileConflict:
-        return _error("workspace_conflict", "workspace revision changed", 409)
-    except FileWriteFailed:
-        return _error("driver_failed", "write failed", 502)
-
-
-@router.post("/workspaces/{workspace_id}/files/grep")
-async def grep_files(
-    workspace_id: str, payload: FileRequest, authorization: str | None = Header(default=None)
-):
-    _auth(authorization)
-    item, failure = _owned(workspace_id, payload)
-    if failure is not None:
-        return failure
-    if not (payload.pattern or "").strip():
-        return _error("invalid_request", "a search pattern is required", 422)
-    try:
-        result = await _run_file_op(
-            item, grep_command(item.policy.root, payload.pattern, payload.path)
-        )
-    except UnsafePath as exc:
-        return _error("forbidden", str(exc), 403)
-    lines = (result.stdout or "").splitlines()
-    if lines and lines[0].strip() == BAD_PATTERN_MARKER:
-        return _error("invalid_request", "invalid grep pattern", 422)
-    return {"matches": lines, "truncated": result.truncated}
-
-
-@router.post("/workspaces/{workspace_id}/import")
-async def import_files(
-    workspace_id: str, payload: ImportRequest, authorization: str | None = Header(default=None)
-):
-    _auth(authorization)
-    item, failure = _owned(workspace_id, payload)
-    if failure is not None:
-        return failure
-    if payload.coordination_capability and not payload.expected_revision:
-        return _error("invalid_request", "expected_revision is required", 422)
-    guarded = await _coordination_guard(payload, "import", workspace_id=workspace_id)
-    if _guard_denied(guarded):
-        return guarded
-    service = ImportService(_run_file_op, _snapshot, _revision, fetch)
-    try:
-        if registry is not None:
-            async with registry.operation(item):
-                result = await service.execute(
-                    item, payload.files, expected_revision=payload.expected_revision
-                )
-        else:
-            result = await service.execute(
-                item, payload.files, expected_revision=payload.expected_revision
-            )
-    except FileConflict:
-        return _error("workspace_conflict", "workspace revision changed", 409)
-    result["revision"] = await _revision(item)
-    return result
-
-
-@router.post("/workspaces/{workspace_id}/snapshot")
-async def snapshot_workspace(
-    workspace_id: str, payload: FileRequest, authorization: str | None = Header(default=None)
-):
-    _auth(authorization)
-    item, failure = _owned(workspace_id, payload)
-    if failure is not None:
-        return failure
-    guarded = await _coordination_guard(payload, "snapshot", workspace_id=workspace_id)
-    if _guard_denied(guarded):
-        return guarded
-    if registry is None:
-        return await _snapshot(item, "agent_run")
-    async with registry.operation(item):
-        snapshot = await _snapshot(item, "agent_run")
-        snapshot["revision"] = await _revision(item)
-        return snapshot
-
-
-@router.post("/workspaces/{workspace_id}/history")
-async def history_workspace(
-    workspace_id: str, payload: FileRequest, authorization: str | None = Header(default=None)
-):
-    _auth(authorization)
-    item, failure = _owned(workspace_id, payload)
-    if failure is not None:
-        return failure
-    result = await _run_file_op(item, git_log_command(item.policy.root))
-    return {
-        "entries": parse_git_log(result.stdout),
-        "revision": await _revision(item),
-        "recovered": item.recovered,
-    }
-
-
-@router.post("/workspaces/{workspace_id}/diff")
-async def diff_workspace(
-    workspace_id: str, payload: FileRequest, authorization: str | None = Header(default=None)
-):
-    _auth(authorization)
-    item, failure = _owned(workspace_id, payload)
-    if failure is not None:
-        return failure
-    try:
-        result = await _run_file_op(
-            item, git_diff_command(item.policy.root, payload.ref or "", payload.path or "")
-        )
-    except UnsafePath as exc:
-        return _error("forbidden", str(exc), 403)
-    text = result.stdout or ""
-    if text.strip() in ("__NO_GIT__", "__NO_REPO__"):
-        return {"diff": "", "available": False}
-    return {"diff": text, "available": True, "truncated": result.truncated}
-
-
-@router.post("/workspaces/{workspace_id}/revert")
-async def revert_workspace(
-    workspace_id: str, payload: FileRequest, authorization: str | None = Header(default=None)
-):
-    _auth(authorization)
-    item, failure = _owned(workspace_id, payload)
-    if failure is not None:
-        return failure
-    if not payload.expected_revision:
-        return _error("invalid_request", "expected_revision is required", 422)
-    guarded = await _coordination_guard(
-        payload, "revert", path=payload.path or "", workspace_id=workspace_id
-    )
-    if _guard_denied(guarded):
-        return guarded
-    async with registry.operation(item):
-        if await _revision(item) != payload.expected_revision:
-            return _error("workspace_conflict", "workspace revision changed", 409)
-        try:
-            result = await _run_file_op(
-                item, git_revert_command(item.policy.root, payload.ref or "", payload.path or "")
-            )
-        except UnsafePath as exc:
-            return _error("invalid_request", str(exc), 422)
-        snapshot = await _snapshot(item, "revert")
-        return {
-            "reverted": "__OK__" in (result.stdout or ""),
-            "revision": await _revision(item),
-            **snapshot,
-        }
-
-
-@router.post("/workspaces/{workspace_id}/artifacts")
-async def list_artifacts(
-    workspace_id: str, payload: OwnerRequest, authorization: str | None = Header(default=None)
-):
-    _auth(authorization)
-    item, failure = _owned(workspace_id, payload)
-    if failure is not None:
-        return failure
-    result = await _run_file_op(item, artifacts_command(item.policy.root))
-    return {
-        "artifacts": parse_artifacts(result.stdout, item.policy.root, item.imported),
-        "truncated": result.truncated,
-    }
-
-
-@router.post("/workspaces/{workspace_id}/files/download")
-async def download_file(
-    workspace_id: str, payload: FileRequest, authorization: str | None = Header(default=None)
-):
-    _auth(authorization)
-    item, failure = _owned(workspace_id, payload)
-    if failure is not None:
-        return failure
-    try:
-        command = download_command(item.policy.root, payload.path)
-    except UnsafePath as exc:
-        return _error("forbidden", str(exc), 403)
-    try:
-        result = await registry.exec_raw(item, command, max_output_chars=MAX_DOWNLOAD_BYTES * 2)
-        content, truncated = parse_download(result.stdout)
-    except FileNotFoundError:
-        return _error("not_found", "file not found", 404)
-    if truncated:
-        return _error("request_too_large", "file is too large", 413)
-    return {"path": payload.path, "content_b64": content}
+_route_dependencies = WorkspaceRouteDependencies(
+    auth=lambda authorization: _auth(authorization),
+    error=lambda code, detail, status: _error(code, detail, status),
+    registry=lambda: registry,
+    owned=lambda workspace_id, payload: _owned(workspace_id, payload),
+    coordination_guard=_route_coordination_guard,
+    guard_denied=lambda guarded: _guard_denied(guarded),
+    run_file_op=_route_run_file_op,
+    revision=_route_revision,
+    snapshot=_route_snapshot,
+    fetch=_route_fetch,
+)
+_lifecycle_router, _lifecycle_handlers = create_lifecycle_router(_route_dependencies)
+router.include_router(_lifecycle_router)
+create_workspace = _lifecycle_handlers.create_workspace
+exec_in_workspace = _lifecycle_handlers.exec_in_workspace
+update_policy = _lifecycle_handlers.update_policy
+delete_workspace = _lifecycle_handlers.delete_workspace
+_files_router, _file_handlers = create_files_router(_route_dependencies)
+router.include_router(_files_router)
+list_files = _file_handlers.list_files
+tree_files = _file_handlers.tree_files
+workspace_view = _file_handlers.workspace_view
+read_file = _file_handlers.read_file
+write_file = _file_handlers.write_file
+grep_files = _file_handlers.grep_files
+list_artifacts = _file_handlers.list_artifacts
+download_file = _file_handlers.download_file
+_import_router, import_files = create_import_router(_route_dependencies)
+router.include_router(_import_router)
+_history_router, _history_handlers = create_history_router(_route_dependencies)
+router.include_router(_history_router)
+snapshot_workspace = _history_handlers.snapshot_workspace
+history_workspace = _history_handlers.history_workspace
+diff_workspace = _history_handlers.diff_workspace
+revert_workspace = _history_handlers.revert_workspace

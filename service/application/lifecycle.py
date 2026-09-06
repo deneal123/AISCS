@@ -245,7 +245,8 @@ class WorkspaceRegistry:
 
     def health(self) -> dict[str, object]:
         return {
-            "active": len(self._items), "recovered": self._recovered,
+            "active": len(self._items),
+            "recovered": self._recovered,
             "pending_cleanup": len(self._pending_cleanup),
             "expired_cleanup": self._cleanup_counts["expired"],
             "legacy_cleanup": self._cleanup_counts["legacy"] + self._cleanup_counts["malformed"],

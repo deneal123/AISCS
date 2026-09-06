@@ -152,9 +152,7 @@ async def safe_boundary(capability: str, *, correlation_id: str = "") -> str:
     return str((state or {}).get("state") or "running") if isinstance(state, dict) else "running"
 
 
-async def list_issues(
-    capability: str, *, correlation_id: str = ""
-) -> list[dict[str, Any]]:
+async def list_issues(capability: str, *, correlation_id: str = "") -> list[dict[str, Any]]:
     data = await _request(
         "/internal/workspace-coordination/issues",
         {"capability": str(capability)},

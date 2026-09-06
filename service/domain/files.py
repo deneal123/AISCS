@@ -99,7 +99,7 @@ PRUNED_DIRS = (
 
 def _prune_expr() -> str:
     names = " -o ".join(f"-name {_q(name)}" for name in PRUNED_DIRS)
-    return f"\( -type d \( {names} \) -prune \) -o -print"
+    return rf"\( -type d \( {names} \) -prune \) -o -print"
 
 
 def list_command(root: str, path: str, *, limit: int = MAX_LIST_ENTRIES) -> str:
@@ -326,7 +326,7 @@ def write_command(root: str, path: str, content: str) -> tuple[str, bytes]:
     command = (
         f"mkdir -p {_q(parent)} && tmp=$(mktemp {_q(parent + '/.ws-write.XXXXXX')}) && "
         "trap 'rm -f \"$tmp\"' EXIT && "
-        f"base64 -d > \"$tmp\" && mv -f \"$tmp\" {_q(target)} && "
+        f'base64 -d > "$tmp" && mv -f "$tmp" {_q(target)} && '
         f'echo "__OK__ $(wc -c < {_q(target)})"'
     )
     return command, base64.b64encode(raw)

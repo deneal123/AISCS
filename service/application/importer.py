@@ -139,7 +139,7 @@ def stage_command(root: str, staging_id: str, name: str, data: bytes) -> tuple[s
     command = (
         f"mkdir -p {parent} && tmp=$(mktemp {parent}/.stage.XXXXXX) && "
         "trap 'rm -f \"$tmp\"' EXIT && "
-        f"base64 -d > \"$tmp\" && mv -f \"$tmp\" {quoted} && echo __OK__"
+        f'base64 -d > "$tmp" && mv -f "$tmp" {quoted} && echo __OK__'
     )
     return command, base64.b64encode(data)
 
