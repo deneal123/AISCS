@@ -8,14 +8,17 @@ import logging
 import os
 
 from application.coordination_guard import GuardFailure, require_mutation
+from application.documents import DocumentBuildManager, DocumentProjectService
 from application.history import HistoryService
 from application.importer import fetch
 from application.lifecycle import WorkspaceNotFound, WorkspaceRegistry
 from domain.contracts import ERROR_CODES
+from domain.documents import load_profile_catalog
 from domain.files import MAX_READ_BYTES
 from domain.ownership import OwnershipError
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
+from infrastructure.document_compiler import DockerDocumentCompiler
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from drivers import DriverError
@@ -26,6 +29,7 @@ from presentation.routes.contracts import ImportRequest as ImportRequest
 from presentation.routes.contracts import OwnerRequest as OwnerRequest
 from presentation.routes.contracts import PolicyRequest as PolicyRequest
 from presentation.routes.dependencies import WorkspaceRouteDependencies
+from presentation.routes.documents import DocumentRouteDependencies, create_documents_router
 from presentation.routes.files import create_files_router
 from presentation.routes.history import create_history_router
 from presentation.routes.imports import create_import_router
@@ -71,7 +75,7 @@ def _owned(workspace_id: str, payload):
     except OwnershipError:
         return None, _error("forbidden", "workspace ownership mismatch", 403)
     except WorkspaceNotFound:
-        return None, _error("not_found", "workspace not found", 404)
+        return None, _error("workspace_not_found", "workspace not found", 404)
 
 
 async def _coordination_guard(payload, mutation: str, *, path: str = "", workspace_id: str = ""):
@@ -157,3 +161,18 @@ snapshot_workspace = _history_handlers.snapshot_workspace
 history_workspace = _history_handlers.history_workspace
 diff_workspace = _history_handlers.diff_workspace
 revert_workspace = _history_handlers.revert_workspace
+
+# Trusted profiles fail fast at import/startup. Runtime Docker access remains lazy.
+document_catalog = load_profile_catalog()
+document_projects = DocumentProjectService(_route_run_file_op, _route_snapshot, document_catalog)
+document_builds = DocumentBuildManager(DockerDocumentCompiler(), document_projects, _route_revision)
+router.include_router(
+    create_documents_router(
+        DocumentRouteDependencies(
+            common=_route_dependencies,
+            catalog=document_catalog,
+            projects=document_projects,
+            builds=document_builds,
+        )
+    )
+)

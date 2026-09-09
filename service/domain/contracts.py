@@ -52,7 +52,8 @@ VIEW_RESPONSE_FIELDS = frozenset(
 ERROR_CODES = frozenset(
     {
         "invalid_request",  # 422 — тело не прошло схему
-        "not_found",  # 404 — песочницы нет или она истекла
+        "not_found",  # legacy/nested 404 retained for rolling compatibility
+        "workspace_not_found",  # 404 — owning sandbox is proven absent or expired
         "unauthorized",  # 401 — нет ключа сервиса
         "forbidden",  # 403 — токен владения не подошёл
         "static_policy_locked",  # 409 — правка запертого поля политики
@@ -63,6 +64,27 @@ ERROR_CODES = frozenset(
         "exec_timeout",  # 504
         "workspace_unavailable",  # 503 - temporary coordinator/sidecar transport failure
         "driver_failed",  # 502 — не смогли создать/выполнить
+        "invalid_project",
+        "profile_missing",
+        "profile_mismatch",
+        "project_exists",
+        "target_path_required",
+        "source_changed",
+        "build_timeout",
+        "build_cancelled",
+        "compile_failed",
+        "audit_failed",
+        "artifact_too_large",
+        "artifact_invalid",
+        "runtime_unavailable",
+        "build_missing",
+        "build_interrupted",
+        "audit_busy",
+        "audit_unavailable",
+        "visual_unavailable",
+        "visual_interrupted",
+        "visual_render_failed",
+        "visual_audit_failed",
         "internal",  # 500
     }
 )

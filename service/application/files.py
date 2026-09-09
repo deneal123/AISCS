@@ -15,6 +15,10 @@ from domain.files import (
     write_command,
 )
 
+_BINARY_ARTIFACT_SUFFIXES = frozenset(
+    {".pdf", ".zip", ".png", ".jpg", ".jpeg", ".gif", ".webp", ".pptx"}
+)
+
 RunCommand = Callable[..., Awaitable[Any]]
 Revision = Callable[[Any], Awaitable[str]]
 Snapshot = Callable[[Any, str], Awaitable[dict[str, Any]]]
@@ -78,6 +82,9 @@ class FileService:
         expected_revision: str | None,
         snapshot_user_edit: bool,
     ) -> dict[str, Any]:
+        normalized_path = str(path or "").replace("\\", "/").lower()
+        if any(normalized_path.endswith(suffix) for suffix in _BINARY_ARTIFACT_SUFFIXES):
+            raise ValueError("binary artifact requires a typed generator")
         if expected_revision and await self._revision(item) != expected_revision:
             raise FileConflict("workspace revision changed")
         command, body = write_command(item.policy.root, path, content)

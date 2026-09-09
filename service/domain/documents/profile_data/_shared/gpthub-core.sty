@@ -1,0 +1,20 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{gpthub-core}[2026/09/08 Document Forge primitives]
+\RequirePackage{graphicx}
+\RequirePackage{booktabs}
+\RequirePackage{tabularx}
+\RequirePackage{longtable}
+\RequirePackage{xcolor}
+\RequirePackage{hyperref}
+\RequirePackage{microtype}
+\definecolor{GPTHubBlue}{HTML}{2F6FED}
+\newcommand{\DocumentPlaceholder}[1]{\textcolor{red}{\textbf{[[#1]]}}}
+\newenvironment{DocumentCallout}{\begin{quote}\color{GPTHubBlue}\bfseries}{\end{quote}}
+\newenvironment{DocumentTable}[1]
+  {\begin{table}[htbp]\centering\caption{#1}\begin{tabularx}{\linewidth}{@{}lX@{}}\toprule}
+  {\\\bottomrule\end{tabularx}\end{table}}
+\newcommand{\SignatureLine}[2]{%
+  \par\noindent\begin{tabularx}{\linewidth}{@{}X X@{}}
+  \rule{0.9\linewidth}{0.4pt} & \rule{0.9\linewidth}{0.4pt}\\
+  #1 & #2
+  \end{tabularx}\par}

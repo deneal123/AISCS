@@ -147,7 +147,7 @@ def create_lifecycle_router(
         except OwnershipError:
             return deps.error("forbidden", "workspace ownership mismatch", 403)
         except WorkspaceNotFound:
-            return deps.error("not_found", "workspace not found", 404)
+            return deps.error("workspace_not_found", "workspace not found", 404)
         return {"deleted": workspace_id}
 
     return router, LifecycleHandlers(

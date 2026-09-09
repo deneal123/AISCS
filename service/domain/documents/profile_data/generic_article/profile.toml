@@ -1,0 +1,17 @@
+profile_id = "generic_article"
+version = 1
+label_ru = "Научная статья"
+kind = "article"
+engine = "xelatex"
+entrypoint = "main.tex"
+documentclass = "article"
+locale = "ru-RU"
+paper = "a4"
+orientation = "portrait"
+bibliography_backend = "biber"
+bibliography_required = true
+required_sections = ["Аннотация", "Введение", "Заключение", "Литература"]
+locked_fields = ["kind", "engine", "bibliography_backend"]
+allowed_overrides = ["title", "locale", "authors", "page_limit"]
+anonymize_supported = true
+source_export = "allowed"

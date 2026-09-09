@@ -253,6 +253,12 @@ class WorkspaceRegistry:
             "failure_codes": sorted({entry[1] for entry in self._pending_cleanup.values()}),
         }
 
+    async def active_workspaces(self) -> tuple[Workspace, ...]:
+        """Return a stable process-local view for document manifest reconciliation."""
+
+        async with self._lock:
+            return tuple(self._items.values())
+
     async def reap_forever(self, interval_sec: float = REAP_INTERVAL_SEC) -> None:
         while True:
             await asyncio.sleep(interval_sec)

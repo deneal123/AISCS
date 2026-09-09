@@ -1,0 +1,17 @@
+profile_id = "generic_document"
+version = 1
+label_ru = "Произвольный PDF-документ"
+kind = "generic"
+engine = "xelatex"
+entrypoint = "main.tex"
+documentclass = "article"
+locale = "ru-RU"
+paper = "a4"
+orientation = "portrait"
+bibliography_backend = "none"
+bibliography_required = false
+required_sections = []
+locked_fields = ["engine"]
+allowed_overrides = ["title", "authors", "locale", "paper", "orientation", "margins"]
+anonymize_supported = false
+source_export = "allowed"

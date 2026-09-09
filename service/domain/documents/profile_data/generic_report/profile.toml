@@ -1,0 +1,17 @@
+profile_id = "generic_report"
+version = 1
+label_ru = "Отчёт или техническое задание"
+kind = "report"
+engine = "xelatex"
+entrypoint = "main.tex"
+documentclass = "report"
+locale = "ru-RU"
+paper = "a4"
+orientation = "portrait"
+bibliography_backend = "none"
+bibliography_required = false
+required_sections = ["Цель", "Результаты", "Выводы"]
+locked_fields = ["kind", "engine", "paper"]
+allowed_overrides = ["title", "authors", "locale", "margins", "page_numbering"]
+anonymize_supported = false
+source_export = "allowed"

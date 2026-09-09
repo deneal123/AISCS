@@ -82,6 +82,13 @@ async def health():
         "drivers_available": driver_names(),
         "workspaces": registry.count() if registry else 0,
         "workspace_lifecycle": registry.health() if registry else {},
+        "documents": {
+            "status": "ok",
+            "profile_version": workspace_routes.document_catalog.version,
+            "profile_digest": workspace_routes.document_catalog.digest[:16],
+            "profiles": len(workspace_routes.document_catalog.profiles),
+            **workspace_routes.document_builds.health(),
+        },
         "contract": {
             "create_response_fields": sorted(CREATE_RESPONSE_FIELDS),
             "exec_response_fields": sorted(EXEC_RESPONSE_FIELDS),
@@ -94,7 +101,11 @@ async def health():
 async def startup() -> None:
     workspace_routes.registry = WorkspaceRegistry(build_driver(workspace_routes.DRIVER))
     await workspace_routes.registry.reconcile()
+    await workspace_routes.document_builds.reconcile_registry(workspace_routes.registry)
     asyncio.create_task(workspace_routes.registry.reap_forever())
+    asyncio.create_task(
+        workspace_routes.document_builds.reconcile_forever(workspace_routes.registry)
+    )
 
 
 if __name__ == "__main__":

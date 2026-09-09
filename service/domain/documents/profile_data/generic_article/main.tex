@@ -1,0 +1,26 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{fontspec}
+\setmainfont{DejaVu Serif}
+\setsansfont{DejaVu Sans}
+\setmonofont{DejaVu Sans Mono}
+\usepackage[english,russian]{babel}
+\usepackage[margin=25mm]{geometry}
+\usepackage[backend=biber,style=numeric]{biblatex}
+\usepackage{gpthub-core}
+\addbibresource{bibliography/references.bib}
+\title{Новая научная статья}
+\author{Автор не указан}
+\date{\today}
+\begin{document}
+\maketitle
+\begin{abstract}\textbf{Аннотация.} Сформулируйте цель, метод, результаты и вывод.\end{abstract}
+\section{Введение}
+Опишите постановку задачи и укажите проверяемые источники.
+\section{Метод}
+Опишите воспроизводимую методику.
+\section{Результаты}
+Представьте результаты, таблицы и ограничения.
+\section{Заключение}
+Сформулируйте выводы без утверждений, не подтверждённых материалами.
+\printbibliography[title={Литература}]
+\end{document}

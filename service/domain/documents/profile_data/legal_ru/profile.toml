@@ -1,0 +1,17 @@
+profile_id = "legal_ru"
+version = 1
+label_ru = "Юридический документ A4"
+kind = "legal"
+engine = "xelatex"
+entrypoint = "main.tex"
+documentclass = "article"
+locale = "ru-RU"
+paper = "a4"
+orientation = "portrait"
+bibliography_backend = "none"
+bibliography_required = false
+required_sections = ["Предмет документа", "Подписи сторон"]
+locked_fields = ["kind", "engine", "paper", "orientation"]
+allowed_overrides = ["title", "parties", "date", "city", "margins", "page_numbering"]
+anonymize_supported = false
+source_export = "allowed"

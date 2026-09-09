@@ -89,6 +89,7 @@ def safe_path(root: str, path: str) -> str:
 # не фильтрацией после: иначе `.git` и `node_modules` съедают потолок записей.
 PRUNED_DIRS = (
     ".git",
+    ".gpthub-document",
     ".gpthub-import-staging",
     "node_modules",
     "__pycache__",

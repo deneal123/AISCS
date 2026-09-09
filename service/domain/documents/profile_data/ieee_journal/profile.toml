@@ -1,0 +1,17 @@
+profile_id = "ieee_journal"
+version = 1
+label_ru = "Статья IEEE"
+kind = "article"
+engine = "pdflatex"
+entrypoint = "main.tex"
+documentclass = "IEEEtran"
+locale = "en-US"
+paper = "letter"
+orientation = "portrait"
+bibliography_backend = "bibtex"
+bibliography_required = true
+required_sections = ["Abstract", "Introduction", "Conclusion", "References"]
+locked_fields = ["kind", "engine", "paper", "bibliography_backend", "documentclass"]
+allowed_overrides = ["title", "authors", "anonymous", "page_limit"]
+anonymize_supported = true
+source_export = "allowed"
