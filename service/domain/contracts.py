@@ -92,6 +92,11 @@ ERROR_CODES = frozenset(
         "vendor_collision",
         "vendor_source_unavailable",
         "vendor_integrity",
+        "vendor_profile_invalid",
+        "authoring_invalid",
+        "authoring_missing",
+        "authoring_publish_failed",
+        "source_too_large",
         "internal",  # 500
     }
 )

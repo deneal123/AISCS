@@ -2,13 +2,17 @@
 
 from __future__ import annotations
 
+import hashlib
 import io
+import json
 import posixpath
+import re
 import secrets
 import shlex
 import tarfile
 import tomllib
 from collections.abc import Awaitable, Callable
+from dataclasses import replace
 from pathlib import Path
 from typing import Any
 
@@ -17,6 +21,26 @@ from domain.files import parse_read, read_command, safe_path, write_command
 
 RunCommand = Callable[..., Awaitable[Any]]
 Snapshot = Callable[[Any, str], Awaitable[dict]]
+_AUTHORING_BLOCK_ID = re.compile(r"^[a-z][a-z0-9_-]{2,63}$")
+_VENDOR_PACKAGE_ID = re.compile(r"^[a-z][a-z0-9_-]{2,63}$")
+_VENDOR_FILENAME = re.compile(r"^[A-Za-z0-9_.-]{1,80}$")
+_CONTENT_CONTRACT = re.compile(r"^[a-z][a-z0-9_.-]{1,63}$")
+_EFFECTIVE_PROFILE_FIELDS = frozenset(
+    {
+        "schema_version",
+        "base_profile_id",
+        "base_profile_version",
+        "vendor_package_id",
+        "documentclass",
+        "bibliography_style",
+        "content_contract",
+        "paper",
+        "orientation",
+        "max_pages",
+        "required_sections",
+        "export_allowed",
+    }
+)
 
 
 class DocumentProjectError(RuntimeError):
@@ -192,7 +216,76 @@ class DocumentProjectService:
             raise DocumentProjectError("profile_mismatch")
         if raw.get("mode") == "submission" and profile.anonymize_supported and not anonymize:
             raise DocumentProjectError("profile_mismatch")
-        return raw, profile
+        _effective, resolved = await self.effective_profile(item, path, profile)
+        return raw, resolved
+
+    async def effective_profile(
+        self,
+        item: Any,
+        path: str,
+        base: DocumentProfile,
+    ) -> tuple[dict[str, object] | None, DocumentProfile]:
+        """Resolve a validated project-local overlay without weakening the base policy."""
+
+        project = safe_path(item.policy.root, path)
+        result = await self._run(
+            item,
+            read_command(item.policy.root, f"{project}/.gpthub-effective-profile.json"),
+        )
+        try:
+            content, truncated = parse_read(result.stdout)
+            raw = json.loads(content)
+        except (FileNotFoundError, UnicodeError, ValueError):
+            return None, base
+        if truncated or not isinstance(raw, dict):
+            raise DocumentProjectError("vendor_profile_invalid")
+        required = {
+            "schema_version": 1,
+            "base_profile_id": base.profile_id,
+            "base_profile_version": base.version,
+            "paper": base.paper,
+            "orientation": base.orientation,
+            "export_allowed": False,
+        }
+        if any(raw.get(key) != value for key, value in required.items()):
+            raise DocumentProjectError("vendor_profile_invalid")
+        package_id = str(raw.get("vendor_package_id") or "")
+        documentclass = str(raw.get("documentclass") or "")
+        bibliography_style = str(raw.get("bibliography_style") or "")
+        content_contract = str(raw.get("content_contract") or "")
+        max_pages = raw.get("max_pages")
+        sections = raw.get("required_sections")
+        if (
+            set(raw) != _EFFECTIVE_PROFILE_FIELDS
+            or not _VENDOR_PACKAGE_ID.fullmatch(package_id)
+            or not _VENDOR_FILENAME.fullmatch(documentclass)
+            or bibliography_style
+            and not _VENDOR_FILENAME.fullmatch(bibliography_style)
+            or not _CONTENT_CONTRACT.fullmatch(content_contract)
+            or not isinstance(max_pages, int)
+            or isinstance(max_pages, bool)
+            or max_pages < 0
+            or base.max_pages
+            and (max_pages == 0 or max_pages > base.max_pages)
+            or not isinstance(sections, list)
+            or len(sections) > 32
+            or any(not isinstance(value, str) or not 1 <= len(value) <= 120 for value in sections)
+        ):
+            raise DocumentProjectError("vendor_profile_invalid")
+        required_sections = tuple(dict.fromkeys((*base.required_sections, *sections)))
+        digest = hashlib.sha256(
+            json.dumps(raw, sort_keys=True, separators=(",", ":")).encode()
+        ).hexdigest()
+        resolved = replace(
+            base,
+            documentclass=documentclass,
+            content_contract=content_contract,
+            required_sections=required_sections,
+            max_pages=max_pages or None,
+            source_export="forbidden",
+            digest=digest,
+        )
+        return raw, resolved
 
     async def digest(self, item: Any, path: str) -> str:
         result = await self._run(item, source_digest_command(item.policy.root, path))
@@ -205,8 +298,125 @@ class DocumentProjectService:
             raise DocumentProjectError("invalid_project") from exc
         return value[0]
 
+    async def _authoring_manifest(self, item: Any, path: str) -> dict[str, object] | None:
+        project = safe_path(item.policy.root, path)
+        result = await self._run(
+            item,
+            read_command(item.policy.root, f"{project}/.gpthub-authoring.json"),
+        )
+        try:
+            content, truncated = parse_read(result.stdout)
+            raw = json.loads(content)
+        except FileNotFoundError:
+            return None
+        except (UnicodeError, ValueError) as exc:
+            raise DocumentProjectError("authoring_invalid") from exc
+        if truncated or not isinstance(raw, dict):
+            raise DocumentProjectError("authoring_invalid")
+        return raw
+
+    @staticmethod
+    def _authoring_facts(raw: dict[str, object]) -> tuple[int, str, dict[str, object], list]:
+        version = raw.get("draft_version")
+        digest = str(raw.get("draft_digest") or "")
+        draft = raw.get("draft")
+        blocks = draft.get("blocks") if isinstance(draft, dict) else None
+        if (
+            raw.get("schema_version") != 1
+            or not isinstance(version, int)
+            or version < 1
+            or not isinstance(draft, dict)
+            or draft.get("version") != version
+            or not isinstance(blocks, list)
+            or not 1 <= len(blocks) <= 120
+            or len(digest) != 64
+        ):
+            raise DocumentProjectError("authoring_invalid")
+        try:
+            bytes.fromhex(digest)
+        except ValueError as exc:
+            raise DocumentProjectError("authoring_invalid") from exc
+        computed = hashlib.sha256(
+            json.dumps(
+                draft,
+                ensure_ascii=False,
+                sort_keys=True,
+                separators=(",", ":"),
+            ).encode()
+        ).hexdigest()
+        if computed != digest:
+            raise DocumentProjectError("authoring_invalid")
+        return version, digest, draft, blocks
+
+    async def authoring(self, item: Any, path: str) -> tuple[int, str]:
+        raw = await self._authoring_manifest(item, path)
+        if raw is None:
+            return 0, ""
+        version, digest, _draft, _blocks = self._authoring_facts(raw)
+        return version, digest
+
+    async def authoring_state(self, item: Any, path: str) -> dict[str, object]:
+        await self.manifest(item, path)
+        raw = await self._authoring_manifest(item, path)
+        if raw is None:
+            raise DocumentProjectError("authoring_missing")
+        version, digest, draft, blocks = self._authoring_facts(raw)
+        intent = raw.get("intent")
+        if not isinstance(intent, dict):
+            raise DocumentProjectError("authoring_invalid")
+        block_ids = {
+            str(block.get("block_id") or block.get("id") or "")
+            for block in blocks
+            if isinstance(block, dict)
+        }
+        if len(block_ids) != len(blocks) or any(
+            not _AUTHORING_BLOCK_ID.fullmatch(block_id) for block_id in block_ids
+        ):
+            raise DocumentProjectError("authoring_invalid")
+        raw_files = raw.get("block_files")
+        block_files: dict[str, str] = {}
+        if isinstance(raw_files, dict) and len(raw_files) <= 120:
+            for path_value, block_value in raw_files.items():
+                relative = str(path_value or "")
+                block_id = str(block_value or "")
+                if (
+                    relative.startswith("content/")
+                    and relative.endswith(".tex")
+                    and 1 <= len(relative) <= 200
+                    and block_id in block_ids
+                ):
+                    block_files[block_id] = relative
+        return {
+            "schema_version": 1,
+            "authoring_version": version,
+            "draft_digest": digest,
+            "intent": intent,
+            "draft": draft,
+            "block_files": block_files,
+        }
+
+    async def block_provenance(self, item: Any, path: str) -> dict[str, str]:
+        try:
+            state = await self.authoring_state(item, path)
+        except DocumentProjectError as exc:
+            if exc.code == "authoring_missing":
+                return {}
+            raise
+        mapping = state.get("block_files")
+        if not isinstance(mapping, dict):
+            return {}
+        return {
+            posixpath.basename(str(relative)): str(block_id)
+            for block_id, relative in mapping.items()
+        }
+
     async def status(self, item: Any, path: str) -> dict[str, object]:
         raw, profile = await self.manifest(item, path)
+        authoring_version, draft_digest = await self.authoring(item, path)
+        base = self.catalog.get(str(raw.get("profile_id") or ""))
+        effective, _resolved = (
+            await self.effective_profile(item, path, base) if base is not None else (None, profile)
+        )
         return {
             "path": posixpath.relpath(safe_path(item.policy.root, path), item.policy.root),
             "kind": profile.kind,
@@ -214,6 +424,24 @@ class DocumentProjectService:
             "mode": str(raw.get("mode") or "draft"),
             "locale": str(raw.get("locale") or profile.locale),
             "source_digest": await self.digest(item, path),
+            "authoring_version": authoring_version,
+            "draft_digest": draft_digest or None,
+            "authoring_state": "ready" if authoring_version else "absent",
+            "effective_profile": (
+                {
+                    key: effective.get(key)
+                    for key in (
+                        "base_profile_id",
+                        "vendor_package_id",
+                        "content_contract",
+                        "paper",
+                        "orientation",
+                        "max_pages",
+                    )
+                }
+                if effective is not None
+                else None
+            ),
         }
 
     async def apply_profile(

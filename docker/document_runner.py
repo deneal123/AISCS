@@ -30,6 +30,7 @@ ENGINES = {"pdflatex": "pdf", "xelatex": "xelatex", "lualatex": "lualatex"}
 
 
 def run(argv: list[str], cwd: Path, timeout: float) -> subprocess.CompletedProcess[bytes]:
+    vendor_inputs = str((cwd / "vendor").resolve()) + "//:"
     return subprocess.run(
         argv,
         cwd=cwd,
@@ -43,6 +44,11 @@ def run(argv: list[str], cwd: Path, timeout: float) -> subprocess.CompletedProce
             "SOURCE_DATE_EPOCH": os.environ.get("SOURCE_DATE_EPOCH", "1704067200"),
             "FORCE_SOURCE_DATE": "1",
             "max_print_line": "1000",
+            # Project-local vendor classes/styles/bibliography files are reachable only
+            # inside the already isolated compiler container. No host path is exposed.
+            "TEXINPUTS": vendor_inputs,
+            "BIBINPUTS": vendor_inputs,
+            "BSTINPUTS": vendor_inputs,
         },
     )
 
@@ -133,6 +139,49 @@ def project_tex_source(project: Path) -> str:
     return "\n".join(parts)
 
 
+def authoring_manifest_audit(project: Path, profile_id: str) -> list[dict[str, object]]:
+    """Validate renderer-owned semantic provenance without returning authored text."""
+
+    path = project / ".gpthub-authoring.json"
+    if not path.is_file():
+        return []
+    try:
+        raw = json.loads(path.read_text("utf-8"))
+        draft = raw.get("draft") if isinstance(raw, dict) else None
+        blocks = draft.get("blocks") if isinstance(draft, dict) else None
+        encoded = json.dumps(
+            draft,
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode()
+        valid = (
+            raw.get("schema_version") == 1
+            and raw.get("profile_id") == profile_id
+            and isinstance(raw.get("draft_version"), int)
+            and raw.get("draft_version") == draft.get("version")
+            and isinstance(blocks, list)
+            and hashlib.sha256(encoded).hexdigest() == raw.get("draft_digest")
+        )
+    except (OSError, UnicodeError, TypeError, ValueError):
+        valid = False
+        raw = {}
+        blocks = []
+    if not valid:
+        return [{"severity": "error", "code": "authoring_invalid", "count": 1}]
+    intent = raw.get("intent") if isinstance(raw.get("intent"), dict) else {}
+    required = intent.get("required_sections") if isinstance(intent, dict) else []
+    if not isinstance(required, list) or not all(isinstance(item, str) for item in required[:24]):
+        return [{"severity": "error", "code": "authoring_invalid", "count": 1}]
+    headings = {
+        str(block.get("title") or block.get("text") or "").strip().casefold()
+        for block in blocks
+        if isinstance(block, dict) and block.get("kind") in {"section", "slide"}
+    }
+    missing = sum(1 for section in required[:24] if section.strip().casefold() not in headings)
+    return [{"severity": "error", "code": "required_section", "count": missing}] if missing else []
+
+
 def lint_diagnostics(entrypoint: Path, project: Path, timeout: float) -> list[dict[str, object]]:
     result = run(
         ["chktex", "-q", "-n1", "-n8", "-n13", "-n46", entrypoint.name],
@@ -173,6 +222,76 @@ def manifest_audit(
         manifest = tomllib.loads((project / "document.toml").read_text("utf-8"))
     except (OSError, UnicodeError, tomllib.TOMLDecodeError):
         return [{"severity": "error", "code": "manifest_invalid", "count": 1}]
+    effective_path = project / ".gpthub-effective-profile.json"
+    if effective_path.is_file():
+        try:
+            effective = json.loads(effective_path.read_text("utf-8"))
+            base_limit = int(manifest.get("max_pages") or 0)
+            effective_limit = effective.get("max_pages")
+            allowed_keys = {
+                "schema_version",
+                "base_profile_id",
+                "base_profile_version",
+                "vendor_package_id",
+                "documentclass",
+                "bibliography_style",
+                "content_contract",
+                "paper",
+                "orientation",
+                "max_pages",
+                "required_sections",
+                "export_allowed",
+            }
+            valid = (
+                isinstance(effective, dict)
+                and set(effective) == allowed_keys
+                and effective.get("schema_version") == 1
+                and effective.get("base_profile_id") == manifest.get("profile_id")
+                and effective.get("base_profile_version") == manifest.get("profile_version")
+                and effective.get("paper") == manifest.get("paper")
+                and effective.get("orientation") == manifest.get("orientation")
+                and effective.get("export_allowed") is False
+                and isinstance(effective.get("vendor_package_id"), str)
+                and re.fullmatch(r"[a-z][a-z0-9_-]{2,63}", effective["vendor_package_id"])
+                and isinstance(effective.get("documentclass"), str)
+                and re.fullmatch(r"[A-Za-z0-9_.-]{1,80}", effective["documentclass"])
+                and isinstance(effective.get("bibliography_style"), str)
+                and (
+                    not effective["bibliography_style"]
+                    or re.fullmatch(r"[A-Za-z0-9_.-]{1,80}", effective["bibliography_style"])
+                )
+                and isinstance(effective.get("content_contract"), str)
+                and re.fullmatch(r"[a-z][a-z0-9_.-]{1,63}", effective["content_contract"])
+                and isinstance(effective_limit, int)
+                and not isinstance(effective_limit, bool)
+                and effective_limit >= 0
+                and (not base_limit or 0 < effective_limit <= base_limit)
+                and isinstance(effective.get("required_sections"), list)
+                and len(effective["required_sections"]) <= 32
+                and all(
+                    isinstance(item, str) and 1 <= len(item) <= 120
+                    for item in effective["required_sections"]
+                )
+            )
+        except (OSError, UnicodeError, ValueError, TypeError):
+            valid = False
+            effective = {}
+        if not valid:
+            return [{"severity": "error", "code": "vendor_profile_invalid", "count": 1}]
+        manifest = {
+            **manifest,
+            "documentclass": effective["documentclass"],
+            "max_pages": effective_limit,
+            "required_sections": list(
+                dict.fromkeys(
+                    [
+                        *(str(item) for item in manifest.get("required_sections") or []),
+                        *(str(item) for item in effective["required_sections"]),
+                    ]
+                )
+            ),
+            "source_export": "forbidden",
+        }
     out: list[dict[str, object]] = []
     pages = int(metadata.get("page_count") or 0)
     max_pages = int(manifest.get("max_pages") or 0)
@@ -214,6 +333,7 @@ def manifest_audit(
     except OSError:
         entrypoint_source = ""
     source = project_tex_source(project)
+    out.extend(authoring_manifest_audit(project, str(manifest.get("profile_id") or "")))
     if manifest.get("bibliography_required") and not re.search(
         r"\\(?:auto|paren|text|foot|super)?cite\*?(?:\[[^\]]*\])?\{", source
     ):
@@ -266,29 +386,74 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def block_pages(project: Path, entrypoint: Path) -> list[dict[str, object]]:
+    """Read renderer-owned labels from the final aux file without exposing source text."""
+
+    aux = project / f"{entrypoint.stem}.aux"
+    try:
+        source = aux.read_text("utf-8", errors="ignore")
+    except OSError:
+        return []
+    found: list[dict[str, object]] = []
+    seen: set[str] = set()
+    pattern = re.compile(
+        r"\\newlabel\{gpthub:block:([a-z][a-z0-9_-]{2,63})\}"
+        r"\{\{.*?\}\{(\d{1,4})\}",
+    )
+    for block_id, raw_page in pattern.findall(source):
+        page = int(raw_page)
+        if block_id in seen or not 1 <= page <= MAX_VISUAL_PAGES:
+            continue
+        seen.add(block_id)
+        found.append({"block_id": block_id, "page": page})
+        if len(found) >= 120:
+            break
+    return found
+
+
 def source_bundle(project: Path, target: Path) -> None:
-    excluded_dirs = {".git", ".gpthub-document", "artifacts", "__pycache__"}
-    excluded_suffixes = {
-        ".aux",
-        ".bbl",
-        ".bcf",
-        ".blg",
-        ".fdb_latexmk",
-        ".fls",
-        ".log",
-        ".out",
-        ".run.xml",
-        ".toc",
-        ".nav",
-        ".snm",
-        ".pdf",
+    # Project-local vendor kits are executable, untrusted and non-redistributable by
+    # default. Trusted global profiles are baked into the runtime, never copied from
+    # this directory.
+    excluded_dirs = {".git", ".gpthub-document", "artifacts", "vendor", "__pycache__"}
+    # Export source by an explicit allowlist.  TeX engines keep adding new
+    # intermediate formats (for example XeLaTeX's ``.xdv``), so a denylist can
+    # silently turn a source archive into a compiler-work archive.  The list
+    # below contains authored text, profile support files and static assets
+    # needed to reproduce a build; final PDF and every engine by-product stay
+    # outside the Library bundle.
+    source_suffixes = {
+        ".bbx",
+        ".bib",
+        ".bst",
+        ".cbx",
+        ".cfg",
+        ".clo",
+        ".cls",
+        ".csv",
+        ".def",
+        ".eps",
+        ".jpeg",
+        ".jpg",
+        ".json",
+        ".lbx",
+        ".md",
+        ".png",
+        ".sty",
+        ".svg",
+        ".tex",
+        ".toml",
+        ".tsv",
+        ".txt",
+        ".yaml",
+        ".yml",
     }
     with zipfile.ZipFile(target, "w", compression=zipfile.ZIP_DEFLATED) as archive:
         for path in sorted(item for item in project.rglob("*") if item.is_file()):
             relative = path.relative_to(project)
             if any(part in excluded_dirs for part in relative.parts):
                 continue
-            if any(path.name.endswith(suffix) for suffix in excluded_suffixes):
+            if path.is_symlink() or path.suffix.lower() not in source_suffixes:
                 continue
             info = zipfile.ZipInfo(relative.as_posix(), date_time=(2024, 1, 1, 0, 0, 0))
             info.compress_type = zipfile.ZIP_DEFLATED
@@ -460,6 +625,7 @@ def main() -> int:
                     if visual_archive is not None and visual_archive.is_file()
                     else None
                 ),
+                "block_pages": block_pages(project, entrypoint),
             }
         )
         return 0

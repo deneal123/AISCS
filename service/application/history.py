@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from collections.abc import Awaitable, Callable
 from typing import Any
 
@@ -13,6 +14,7 @@ SAFE_SNAPSHOT_TYPES = frozenset(
         "import",
         "revert",
         "user_edit",
+        "document_authoring",
         "document_scaffold",
         "document_profile",
         "document_vendor",
@@ -34,6 +36,7 @@ class HistoryService:
         safe_type = snapshot_type if snapshot_type in SAFE_SNAPSHOT_TYPES else "agent_run"
         result = await self._run_command(item, git_commit_command(item.policy.root, safe_type))
         output = result.stdout or ""
+        revision = re.search(r"__(?:OK|NO_CHANGES)__\s+([0-9a-f]{40,64})(?:\s|$)", output)
         return {
             "committed": "__OK__" in output,
             "reason": next(
@@ -46,4 +49,5 @@ class HistoryService:
             )
             .strip("_")
             .lower(),
+            "revision": revision.group(1) if revision else "",
         }

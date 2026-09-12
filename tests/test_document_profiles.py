@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import io
+import shutil
 import tarfile
 from pathlib import Path
 
@@ -12,7 +13,7 @@ from domain.documents import ProfileConfigurationError, load_profile_catalog
 def test_builtin_document_profiles_are_complete_and_stable() -> None:
     catalog = load_profile_catalog()
 
-    assert catalog.version == "s34.v1"
+    assert catalog.version == "s35.v1"
     assert len(catalog.digest) == 64
     assert tuple(catalog.profiles) == (
         "aaai_conference",
@@ -65,3 +66,27 @@ def test_profile_catalog_rejects_unsafe_entrypoint(tmp_path: Path) -> None:
 
     with pytest.raises(ProfileConfigurationError, match="entrypoint_invalid"):
         load_profile_catalog(tmp_path)
+
+
+def test_shared_renderer_module_is_part_of_every_profile_digest(tmp_path: Path) -> None:
+    source = Path(__file__).parents[1] / "service" / "domain" / "documents" / "profile_data"
+    root = tmp_path / "profiles"
+    shutil.copytree(source, root)
+    before = load_profile_catalog(root)
+    shared = root / "_shared" / "gpthub-core.sty"
+    shared.write_text(shared.read_text(encoding="utf-8") + "\n% digest change\n", encoding="utf-8")
+    after = load_profile_catalog(root)
+
+    assert before.digest != after.digest
+    assert all(
+        before.profiles[profile_id].digest != after.profiles[profile_id].digest
+        for profile_id in before.profiles
+    )
+
+
+def test_shared_callout_is_a_balanced_command() -> None:
+    root = Path(__file__).parents[1] / "service" / "domain" / "documents" / "profile_data"
+    source = (root / "_shared" / "gpthub-core.sty").read_text(encoding="utf-8")
+
+    assert r"\newcommand{\DocumentCallout}[1]" in source
+    assert r"\newenvironment{DocumentCallout}" not in source

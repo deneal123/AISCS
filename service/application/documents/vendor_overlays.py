@@ -89,6 +89,19 @@ PACKAGE_ID = re.compile(r"^[a-z][a-z0-9_-]{2,63}$")
 VERSION = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._+-]{0,31}$")
 SHA256 = re.compile(r"^[0-9a-f]{64}$")
 OVERLAY_METADATA = ".gpthub-overlay.toml"
+VENDOR_PROFILE_KEYS = frozenset(
+    {
+        "template_entrypoint",
+        "documentclass",
+        "styles",
+        "bibliography_style",
+        "content_contract",
+        "paper",
+        "orientation",
+        "max_pages",
+        "required_sections",
+    }
+)
 
 RunCommand = Callable[..., Awaitable[Any]]
 Snapshot = Callable[[Any, str], Awaitable[dict[str, Any]]]
@@ -101,7 +114,34 @@ class VendorOverlayError(DocumentProjectError):
 
 
 @dataclass(frozen=True, slots=True)
+class VendorProfileDeclaration:
+    template_entrypoint: str
+    documentclass: str
+    styles: tuple[str, ...]
+    bibliography_style: str
+    content_contract: str
+    paper: str
+    orientation: str
+    max_pages: int | None
+    required_sections: tuple[str, ...]
+
+    def metadata(self) -> dict[str, object]:
+        return {
+            "template_entrypoint": self.template_entrypoint,
+            "documentclass": self.documentclass,
+            "styles": list(self.styles),
+            "bibliography_style": self.bibliography_style,
+            "content_contract": self.content_contract,
+            "paper": self.paper,
+            "orientation": self.orientation,
+            "max_pages": self.max_pages or 0,
+            "required_sections": list(self.required_sections),
+        }
+
+
+@dataclass(frozen=True, slots=True)
 class VendorOverlayPackage:
+    schema_version: int
     package_id: str
     version: str
     license_name: str
@@ -109,6 +149,7 @@ class VendorOverlayPackage:
     file_count: int
     expanded_bytes: int
     archive: bytes
+    profile: VendorProfileDeclaration | None = None
 
     def public_dict(self) -> dict[str, object]:
         return {
@@ -120,6 +161,15 @@ class VendorOverlayPackage:
             "expanded_bytes": self.expanded_bytes,
             "trusted": False,
             "export_allowed": False,
+            **(
+                {
+                    "schema_version": 2,
+                    "profile_available": True,
+                    "content_contract": self.profile.content_contract,
+                }
+                if self.profile is not None
+                else {}
+            ),
         }
 
 
@@ -160,13 +210,77 @@ def _relative_name(name: str, root: str) -> str:
     return path.as_posix()
 
 
-def _read_manifest(payload: bytes, available: set[str]) -> tuple[str, str, str]:
+def _manifest_file(value: object, available: set[str], suffixes: frozenset[str]) -> str:
+    if not isinstance(value, str):
+        raise VendorOverlayError("vendor_manifest_invalid")
+    name = _normalized_name(value).as_posix()
+    if name not in available or PurePosixPath(name).suffix.lower() not in suffixes:
+        raise VendorOverlayError("vendor_manifest_invalid")
+    return name
+
+
+def _read_profile(raw: object, available: set[str]) -> VendorProfileDeclaration:
+    if not isinstance(raw, dict) or set(raw) - VENDOR_PROFILE_KEYS:
+        raise VendorOverlayError("vendor_manifest_invalid")
+    template = _manifest_file(raw.get("template_entrypoint"), available, frozenset({".tex"}))
+    documentclass = str(raw.get("documentclass") or "").strip()
+    bibliography_style = str(raw.get("bibliography_style") or "").strip()
+    content_contract = str(raw.get("content_contract") or "").strip()
+    paper = str(raw.get("paper") or "").strip().lower()
+    orientation = str(raw.get("orientation") or "").strip().lower()
+    styles_raw = raw.get("styles", [])
+    sections_raw = raw.get("required_sections", [])
+    max_pages_raw = raw.get("max_pages", 0)
+    if (
+        not re.fullmatch(r"[A-Za-z0-9_.-]{1,80}", documentclass)
+        or bibliography_style
+        and not re.fullmatch(r"[A-Za-z0-9_.-]{1,80}", bibliography_style)
+        or not re.fullmatch(r"[a-z][a-z0-9_.-]{1,63}", content_contract)
+        or paper not in {"a4", "letter", "slide_16_9"}
+        or orientation not in {"portrait", "landscape"}
+        or not isinstance(styles_raw, list)
+        or len(styles_raw) > 32
+        or not isinstance(sections_raw, list)
+        or len(sections_raw) > 32
+        or not isinstance(max_pages_raw, int)
+        or isinstance(max_pages_raw, bool)
+        or not 0 <= max_pages_raw <= 10_000
+    ):
+        raise VendorOverlayError("vendor_manifest_invalid")
+    styles = tuple(
+        _manifest_file(value, available, frozenset({".sty", ".cls"})) for value in styles_raw
+    )
+    sections: list[str] = []
+    for value in sections_raw:
+        normalized = str(value or "").strip()
+        if not normalized or len(normalized) > 80 or any(ord(char) < 32 for char in normalized):
+            raise VendorOverlayError("vendor_manifest_invalid")
+        sections.append(normalized)
+    return VendorProfileDeclaration(
+        template_entrypoint=template,
+        documentclass=documentclass,
+        styles=styles,
+        bibliography_style=bibliography_style,
+        content_contract=content_contract,
+        paper=paper,
+        orientation=orientation,
+        max_pages=max_pages_raw or None,
+        required_sections=tuple(sections),
+    )
+
+
+def _read_manifest(
+    payload: bytes, available: set[str]
+) -> tuple[int, str, str, str, VendorProfileDeclaration | None]:
     try:
         raw = tomllib.loads(payload.decode("utf-8"))
     except (UnicodeError, tomllib.TOMLDecodeError) as exc:
         raise VendorOverlayError("vendor_manifest_invalid") from exc
-    allowed = {"schema_version", "package_id", "version", "license", "entry_files"}
-    if set(raw) - allowed or raw.get("schema_version") != 1:
+    allowed = {"schema_version", "package_id", "version", "license", "entry_files", "profile"}
+    schema_version = raw.get("schema_version")
+    if set(raw) - allowed or schema_version not in {1, 2}:
+        raise VendorOverlayError("vendor_manifest_invalid")
+    if schema_version == 1 and "profile" in raw:
         raise VendorOverlayError("vendor_manifest_invalid")
     package_id = str(raw.get("package_id") or "")
     version = str(raw.get("version") or "")
@@ -181,17 +295,22 @@ def _read_manifest(payload: bytes, available: set[str]) -> tuple[str, str, str]:
     for value in entry_files:
         if not isinstance(value, str):
             raise VendorOverlayError("vendor_manifest_invalid")
-        name = _normalized_name(value).as_posix()
-        if name not in available or PurePosixPath(name).suffix.lower() not in ENTRY_EXTENSIONS:
-            raise VendorOverlayError("vendor_manifest_invalid")
-    return package_id, version, license_name
+        _manifest_file(value, available, ENTRY_EXTENSIONS)
+    profile = _read_profile(raw.get("profile"), available) if schema_version == 2 else None
+    return schema_version, package_id, version, license_name, profile
 
 
 def _metadata(
-    package_id: str, version: str, license_name: str, digest: str, count: int, size: int
+    package_id: str,
+    version: str,
+    license_name: str,
+    digest: str,
+    count: int,
+    size: int,
+    profile: VendorProfileDeclaration | None,
 ) -> bytes:
-    return (
-        "schema_version = 1\n"
+    content = (
+        f"schema_version = {2 if profile is not None else 1}\n"
         f'package_id = "{package_id}"\n'
         f'version = "{version}"\n'
         f"license = {json.dumps(license_name, ensure_ascii=False)}\n"
@@ -200,7 +319,14 @@ def _metadata(
         f"expanded_bytes = {size}\n"
         "trusted = false\n"
         "export_allowed = false\n"
-    ).encode()
+        f"profile_available = {str(profile is not None).lower()}\n"
+    )
+    if profile is not None:
+        values = profile.metadata()
+        content += "\n[profile]\n"
+        for key, value in values.items():
+            content += f"{key} = {json.dumps(value, ensure_ascii=False)}\n"
+    return content.encode()
 
 
 def validate_vendor_archive(payload: bytes) -> VendorOverlayPackage:
@@ -245,7 +371,7 @@ def validate_vendor_archive(payload: bytes) -> VendorOverlayPackage:
             except (OSError, RuntimeError, zipfile.BadZipFile) as exc:
                 raise VendorOverlayError("vendor_archive_invalid") from exc
         manifest_relative = _relative_name(manifest_name, root)
-        package_id, version, license_name = _read_manifest(
+        schema_version, package_id, version, license_name, profile = _read_manifest(
             contents[manifest_relative], set(contents)
         )
         for name, content in contents.items():
@@ -269,6 +395,7 @@ def validate_vendor_archive(payload: bytes) -> VendorOverlayPackage:
                 digest,
                 len(contents),
                 expanded,
+                profile,
             )
             info = tarfile.TarInfo(OVERLAY_METADATA)
             info.size = len(metadata)
@@ -276,6 +403,7 @@ def validate_vendor_archive(payload: bytes) -> VendorOverlayPackage:
             info.mtime = 1_704_067_200
             target.addfile(info, io.BytesIO(metadata))
     return VendorOverlayPackage(
+        schema_version=schema_version,
         package_id=package_id,
         version=version,
         license_name=license_name,
@@ -283,6 +411,7 @@ def validate_vendor_archive(payload: bytes) -> VendorOverlayPackage:
         file_count=len(contents),
         expanded_bytes=expanded,
         archive=output.getvalue(),
+        profile=profile,
     )
 
 
@@ -319,8 +448,8 @@ def _list_command(root: str, project_path: str) -> str:
         "  if path.is_symlink() or path.parent.is_symlink(): continue\n"
         "  raw=tomllib.loads(path.read_text(encoding='utf-8'))\n"
         "  if raw.get('schema_version')!=1: continue\n"
-        "  keys=('package_id','version','license','digest','file_count',"
-        "'expanded_bytes','trusted','export_allowed')\n"
+        "  keys=('schema_version','package_id','version','license','digest','file_count',"
+        "'expanded_bytes','trusted','export_allowed','profile_available','profile')\n"
         "  out.append({k:raw.get(k) for k in keys})\n"
         " except (OSError,UnicodeError,tomllib.TOMLDecodeError): pass\n"
         "print(json.dumps(out,separators=(',',':')))\n"
@@ -347,7 +476,7 @@ def _public_overlay(row: object) -> dict[str, object] | None:
         or not 1 <= file_count <= MAX_VENDOR_FILES
     ):
         return None
-    return {
+    result = {
         "package_id": package_id,
         "version": version,
         "license": license_name,
@@ -355,6 +484,34 @@ def _public_overlay(row: object) -> dict[str, object] | None:
         "trusted": False,
         "export_allowed": False,
     }
+    if row.get("schema_version") == 2 and isinstance(row.get("profile"), dict):
+        result.update(
+            {
+                "schema_version": 2,
+                "profile_available": True,
+                "content_contract": str(row["profile"].get("content_contract") or ""),
+            }
+        )
+    return result
+
+
+def _profile_command(root: str, project_path: str, package_id: str) -> str:
+    project = safe_path(root, project_path)
+    package = safe_path(root, f"{project}/vendor/{package_id}")
+    script = (
+        "import json,pathlib,tomllib,sys\n"
+        "path=pathlib.Path(sys.argv[1])/'.gpthub-overlay.toml'\n"
+        "try:\n"
+        " raw=tomllib.loads(path.read_text(encoding='utf-8'))\n"
+        " profile=raw.get('profile') if raw.get('schema_version')==2 else None\n"
+        " print(json.dumps(profile if isinstance(profile,dict) else None,separators=(',',':')))\n"
+        "except (OSError,UnicodeError,tomllib.TOMLDecodeError): print('null')\n"
+    )
+    return f"python3 -c {shlex.quote(script)} {shlex.quote(package)}"
+
+
+def _profile_from_metadata(raw: object, *, available: set[str]) -> VendorProfileDeclaration:
+    return _read_profile(raw, available)
 
 
 class DocumentVendorOverlayService:
@@ -383,6 +540,32 @@ class DocumentVendorOverlayService:
             return []
         safe_rows = (_public_overlay(row) for row in rows)
         return [row for row in safe_rows if row is not None]
+
+    async def profile(self, item: Any, path: str, package_id: str) -> VendorProfileDeclaration:
+        """Resolve an installed v2 declaration without trusting workspace metadata."""
+
+        if not PACKAGE_ID.fullmatch(package_id):
+            raise VendorOverlayError("vendor_profile_invalid")
+        await self._projects.manifest(item, path)
+        result = await self._run(item, _profile_command(item.policy.root, path, package_id))
+        try:
+            raw = json.loads(str(result.stdout or "null"))
+        except (TypeError, ValueError) as exc:
+            raise VendorOverlayError("vendor_profile_invalid") from exc
+        package_root = safe_path(item.policy.root, f"{path}/vendor/{package_id}")
+        listing = await self._run(
+            item,
+            f"find {shlex.quote(package_root)} -type f -printf '%P\\n' 2>/dev/null",
+        )
+        available = {
+            line.strip()
+            for line in str(listing.stdout or "").splitlines()
+            if line.strip() and "\\" not in line
+        }
+        try:
+            return _profile_from_metadata(raw, available=available)
+        except VendorOverlayError as exc:
+            raise VendorOverlayError("vendor_profile_invalid") from exc
 
     async def apply(
         self,
@@ -434,5 +617,6 @@ __all__ = [
     "DocumentVendorOverlayService",
     "VendorOverlayError",
     "VendorOverlayPackage",
+    "VendorProfileDeclaration",
     "validate_vendor_archive",
 ]

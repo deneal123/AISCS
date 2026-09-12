@@ -12,6 +12,7 @@ import pytest
 from application.documents.vendor_overlays import (
     DocumentVendorOverlayService,
     VendorOverlayError,
+    VendorProfileDeclaration,
     validate_vendor_archive,
 )
 
@@ -43,6 +44,32 @@ def _error_code(payload: bytes) -> str:
     return raised.value.code
 
 
+def _v2_archive() -> bytes:
+    output = io.BytesIO()
+    manifest = (
+        "schema_version = 2\n"
+        'package_id = "journal-kit"\n'
+        'version = "2.0"\n'
+        'license = "LPPL-1.3c"\n'
+        'entry_files = ["journal.cls", "template.tex"]\n'
+        "[profile]\n"
+        'template_entrypoint = "template.tex"\n'
+        'documentclass = "journal"\n'
+        'styles = ["journal.cls"]\n'
+        'bibliography_style = "plain"\n'
+        'content_contract = "scientific-article-v1"\n'
+        'paper = "a4"\n'
+        'orientation = "portrait"\n'
+        "max_pages = 12\n"
+        'required_sections = ["abstract", "references"]\n'
+    )
+    with zipfile.ZipFile(output, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+        archive.writestr("vendor.toml", manifest)
+        archive.writestr("journal.cls", "\\NeedsTeXFormat{LaTeX2e}\n")
+        archive.writestr("template.tex", "\\documentclass{vendor/journal-kit/journal}\n")
+    return output.getvalue()
+
+
 def test_valid_archive_is_normalized_to_deterministic_untrusted_package() -> None:
     payload = _archive()
     package = validate_vendor_archive(payload)
@@ -57,6 +84,39 @@ def test_valid_archive_is_normalized_to_deterministic_untrusted_package() -> Non
         metadata = archive.extractfile(".gpthub-overlay.toml")
         assert metadata is not None
         assert b"export_allowed = false" in metadata.read()
+
+
+def test_v2_archive_exposes_a_validated_activatable_profile() -> None:
+    package = validate_vendor_archive(_v2_archive())
+
+    assert package.schema_version == 2
+    assert package.profile == VendorProfileDeclaration(
+        template_entrypoint="template.tex",
+        documentclass="journal",
+        styles=("journal.cls",),
+        bibliography_style="plain",
+        content_contract="scientific-article-v1",
+        paper="a4",
+        orientation="portrait",
+        max_pages=12,
+        required_sections=("abstract", "references"),
+    )
+    assert package.public_dict()["profile_available"] is True
+
+
+def test_v2_profile_cannot_change_the_compiler_engine() -> None:
+    source = zipfile.ZipFile(io.BytesIO(_v2_archive()))
+    output = io.BytesIO()
+    with source, zipfile.ZipFile(output, "w") as archive:
+        for info in source.infolist():
+            content = source.read(info)
+            if info.filename == "vendor.toml":
+                content = content.replace(
+                    b"[profile]\n",
+                    b'[profile]\nengine = "lualatex"\n',
+                )
+            archive.writestr(info.filename, content)
+    assert _error_code(output.getvalue()) == "vendor_manifest_invalid"
 
 
 def test_archive_rejects_traversal_symlink_and_executable_tex_primitives() -> None:

@@ -16,6 +16,8 @@ from presentation.routes.contracts import (
     DocumentPathRequest,
     DocumentProfileApplyRequest,
     DocumentProjectRequest,
+    DocumentSourceRequest,
+    DocumentVendorActivateRequest,
     DocumentVendorOverlayRequest,
     DocumentVisualAuditResultRequest,
     OwnerRequest,
@@ -28,8 +30,10 @@ class DocumentRouteDependencies:
     common: WorkspaceRouteDependencies
     catalog: Any
     projects: Any
+    sources: Any
     vendors: Any
     builds: Any
+    vendor_profiles: Any = None
 
 
 def _status(code: str) -> int:
@@ -41,19 +45,21 @@ def _status(code: str) -> int:
         "target_path_required",
         "vendor_archive_invalid",
         "vendor_manifest_invalid",
+        "vendor_profile_invalid",
         "vendor_unsafe",
         "vendor_integrity",
+        "authoring_invalid",
     }:
         return 422
     if code in {"project_exists", "profile_mismatch", "source_changed", "vendor_collision"}:
         return 409
     if code == "audit_busy":
         return 409
-    if code == "build_missing":
+    if code in {"build_missing", "authoring_missing"}:
         return 404
     if code in {"audit_unavailable", "visual_unavailable"}:
         return 503
-    if code == "runtime_unavailable":
+    if code in {"runtime_unavailable", "authoring_publish_failed"}:
         return 503
     if code == "artifact_too_large":
         return 413
@@ -145,6 +151,57 @@ def create_documents_router(deps: DocumentRouteDependencies) -> APIRouter:
         except DocumentProjectError as exc:
             return deps.common.error(exc.code, "document project unavailable", _status(exc.code))
 
+    @router.post("/workspaces/{workspace_id}/documents/source")
+    async def publish_source(
+        workspace_id: str,
+        payload: DocumentSourceRequest,
+        authorization: str | None = Header(default=None),
+    ):
+        deps.common.auth(authorization)
+        item, failure = deps.common.owned(workspace_id, payload)
+        if failure is not None:
+            return failure
+        guarded = await deps.common.coordination_guard(
+            payload, "write", path=payload.path, workspace_id=workspace_id
+        )
+        if deps.common.guard_denied(guarded):
+            return guarded
+        registry = deps.common.registry()
+        if registry is None:
+            return deps.common.error("workspace_unavailable", "workspace is unavailable", 503)
+        try:
+            async with registry.operation(item):
+                current = await deps.common.revision(item)
+                if current != payload.expected_revision:
+                    raise DocumentProjectError("revision_conflict")
+                return await deps.sources.publish(
+                    item,
+                    path=payload.path,
+                    files=payload.files,
+                    authoring_version=payload.authoring_version,
+                    draft_digest=payload.draft_digest,
+                )
+        except DocumentProjectError as exc:
+            code = "workspace_conflict" if exc.code == "revision_conflict" else exc.code
+            return deps.common.error(code, "document source request failed", _status(exc.code))
+
+    @router.post("/workspaces/{workspace_id}/documents/authoring")
+    async def document_authoring(
+        workspace_id: str,
+        payload: DocumentPathRequest,
+        authorization: str | None = Header(default=None),
+    ):
+        deps.common.auth(authorization)
+        item, failure = deps.common.owned(workspace_id, payload)
+        if failure is not None:
+            return failure
+        if deps.common.registry() is None:
+            return deps.common.error("workspace_unavailable", "workspace is unavailable", 503)
+        try:
+            return await deps.projects.authoring_state(item, payload.path)
+        except DocumentProjectError as exc:
+            return deps.common.error(exc.code, "document authoring unavailable", _status(exc.code))
+
     @router.post("/workspaces/{workspace_id}/documents/profile")
     async def apply_profile(
         workspace_id: str,
@@ -217,6 +274,40 @@ def create_documents_router(deps: DocumentRouteDependencies) -> APIRouter:
         except DocumentProjectError as exc:
             code = "workspace_conflict" if exc.code == "revision_conflict" else exc.code
             return deps.common.error(code, "vendor overlay request failed", _status(exc.code))
+
+    @router.post("/workspaces/{workspace_id}/documents/vendor/activate")
+    async def activate_vendor_profile(
+        workspace_id: str,
+        payload: DocumentVendorActivateRequest,
+        authorization: str | None = Header(default=None),
+    ):
+        deps.common.auth(authorization)
+        item, failure = deps.common.owned(workspace_id, payload)
+        if failure is not None:
+            return failure
+        guarded = await deps.common.coordination_guard(
+            payload,
+            "write",
+            path=payload.path,
+            workspace_id=workspace_id,
+        )
+        if deps.common.guard_denied(guarded):
+            return guarded
+        registry = deps.common.registry()
+        if registry is None or deps.vendor_profiles is None:
+            return deps.common.error("workspace_unavailable", "workspace is unavailable", 503)
+        try:
+            return await deps.vendor_profiles.activate(
+                registry,
+                item,
+                path=payload.path,
+                package_id=payload.package_id,
+                target_path=payload.target_path,
+                expected_revision=payload.expected_revision,
+            )
+        except DocumentProjectError as exc:
+            code = "workspace_conflict" if exc.code == "revision_conflict" else exc.code
+            return deps.common.error(code, "vendor profile activation failed", _status(exc.code))
 
     @router.post("/workspaces/{workspace_id}/documents/builds")
     async def start_build(
@@ -358,6 +449,10 @@ def create_documents_router(deps: DocumentRouteDependencies) -> APIRouter:
                     "page_count": build.page_count,
                     "profile_id": build.profile_id,
                     "profile_version": build.profile_version,
+                    "block_pages": [
+                        {"page": page, "block_ids": list(block_ids)}
+                        for page, block_ids in sorted(build.page_blocks.items())
+                    ],
                 },
             }
         except DocumentProjectError as exc:

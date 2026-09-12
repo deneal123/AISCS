@@ -9,7 +9,7 @@
 \RequirePackage{microtype}
 \definecolor{GPTHubBlue}{HTML}{2F6FED}
 \newcommand{\DocumentPlaceholder}[1]{\textcolor{red}{\textbf{[[#1]]}}}
-\newenvironment{DocumentCallout}{\begin{quote}\color{GPTHubBlue}\bfseries}{\end{quote}}
+\newcommand{\DocumentCallout}[1]{\begin{quote}\color{GPTHubBlue}\bfseries #1\end{quote}}
 \newenvironment{DocumentTable}[1]
   {\begin{table}[htbp]\centering\caption{#1}\begin{tabularx}{\linewidth}{@{}lX@{}}\toprule}
   {\\\bottomrule\end{tabularx}\end{table}}

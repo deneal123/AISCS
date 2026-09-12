@@ -112,6 +112,7 @@ class DocumentDiagnostic:
     relative_path: str = ""
     line: int | None = None
     count: int = 1
+    block_id: str = ""
 
     def public_dict(self) -> dict[str, object]:
         return {
@@ -120,6 +121,7 @@ class DocumentDiagnostic:
             **({"path": self.relative_path} if self.relative_path else {}),
             **({"line": self.line} if self.line is not None else {}),
             "count": max(1, self.count),
+            **({"block_id": self.block_id} if self.block_id else {}),
         }
 
 
@@ -155,6 +157,8 @@ class DocumentBuild:
     source_digest: str
     mode: str
     final: bool
+    authoring_version: int = 0
+    draft_digest: str = ""
     output_revision: str = ""
     state: BuildState = "queued"
     failure_code: str = ""
@@ -171,6 +175,7 @@ class DocumentBuild:
     visual_bundle_size: int = field(default=0, repr=False)
     visual_audit_version: int = 0
     visual_audit_claimed_at: float | None = field(default=None, repr=False)
+    page_blocks: dict[int, tuple[str, ...]] = field(default_factory=dict, repr=False)
 
     @property
     def terminal(self) -> bool:
@@ -192,6 +197,8 @@ class DocumentBuild:
             "profile_version": self.profile_version,
             "source_revision": self.source_revision,
             "source_digest": self.source_digest,
+            "authoring_version": self.authoring_version,
+            "draft_digest": self.draft_digest,
             "mode": self.mode,
             "final": self.final,
             "output_revision": self.output_revision,
@@ -213,6 +220,9 @@ class DocumentBuild:
             "visual_bundle_size": self.visual_bundle_size,
             "visual_audit_version": self.visual_audit_version,
             "visual_audit_claimed_at": self.visual_audit_claimed_at,
+            "page_blocks": {
+                str(page): list(blocks) for page, blocks in sorted(self.page_blocks.items())
+            },
         }
 
     @classmethod
@@ -229,6 +239,7 @@ class DocumentBuild:
                 relative_path=str(item.get("path") or "")[:1024],
                 line=(int(item["line"]) if isinstance(item.get("line"), int) else None),
                 count=max(1, int(item.get("count") or 1)),
+                block_id=str(item.get("block_id") or "")[:64],
             )
             for item in raw.get("diagnostics", [])
             if isinstance(item, dict)
@@ -256,6 +267,8 @@ class DocumentBuild:
             source_digest=str(raw.get("source_digest") or ""),
             mode=str(raw.get("mode") or "draft"),
             final=bool(raw.get("final")),
+            authoring_version=max(0, int(raw.get("authoring_version") or 0)),
+            draft_digest=str(raw.get("draft_digest") or ""),
             output_revision=str(raw.get("output_revision") or ""),
             state=state,  # type: ignore[arg-type]
             failure_code=str(raw.get("failure_code") or "")[:64],
@@ -280,6 +293,19 @@ class DocumentBuild:
                 if isinstance(raw.get("visual_audit_claimed_at"), (int, float))
                 else None
             ),
+            page_blocks={
+                int(page): tuple(
+                    str(block_id)[:64]
+                    for block_id in blocks
+                    if isinstance(block_id, str) and 3 <= len(block_id) <= 64
+                )
+                for page, blocks in (
+                    raw.get("page_blocks", {}).items()
+                    if isinstance(raw.get("page_blocks"), dict)
+                    else []
+                )
+                if str(page).isdigit() and 1 <= int(page) <= 200 and isinstance(blocks, list)
+            },
         )
         if (
             not build.build_id
@@ -299,6 +325,8 @@ class DocumentBuild:
             "profile_version": self.profile_version,
             "source_revision": self.source_revision,
             "source_digest": self.source_digest,
+            "authoring_version": self.authoring_version,
+            "draft_digest": self.draft_digest or None,
             "output_revision": self.output_revision or self.source_revision,
             "mode": self.mode,
             "final": self.final,

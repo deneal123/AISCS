@@ -212,8 +212,11 @@ def git_commit_command(root: str, message: str) -> str:
         f"cd {_q(root)} || exit 0; "
         "[ -d .git ] || { echo __NO_REPO__; exit 0; }; "
         "git add -A >/dev/null 2>&1; "
-        "if git diff --cached --quiet 2>/dev/null; then echo __NO_CHANGES__; exit 0; fi; "
-        f"git commit -q -m {_q(text)} >/dev/null 2>&1 && echo __OK__ || echo __FAILED__"
+        "if git diff --cached --quiet 2>/dev/null; then "
+        "printf '__NO_CHANGES__ '; git rev-parse HEAD 2>/dev/null || echo __FAILED__; exit 0; fi; "
+        f"if git commit -q -m {_q(text)} >/dev/null 2>&1; then "
+        "printf '__OK__ '; git rev-parse HEAD 2>/dev/null || echo __FAILED__; "
+        "else echo __FAILED__; fi"
     )
 
 

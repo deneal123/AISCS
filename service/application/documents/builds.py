@@ -65,6 +65,10 @@ class DocumentBuildManager:
             self.manifest_failures += 1
             raise DocumentProjectError("runtime_unavailable") from None
 
+    async def _provenance(self, item: Any, project_path: str) -> dict[str, str]:
+        resolver = getattr(self.projects, "block_provenance", None)
+        return await resolver(item, project_path) if callable(resolver) else {}
+
     async def recover(self, registry: Any, item: Any) -> None:
         """Load one workspace's private manifests exactly once per sidecar process."""
 
@@ -138,6 +142,10 @@ class DocumentBuildManager:
             if not expected_revision or current_revision != expected_revision:
                 raise DocumentProjectError("revision_conflict")
             raw, profile = await self.projects.manifest(item, project_path)
+            authoring = getattr(self.projects, "authoring", None)
+            authoring_version, draft_digest = (
+                await authoring(item, project_path) if callable(authoring) else (0, "")
+            )
             source_digest = await self.projects.digest(item, project_path)
             target = safe_path(item.policy.root, project_path)
             prepared = await self.compiler.prepare(
@@ -153,6 +161,8 @@ class DocumentBuildManager:
             profile_version=profile.version,
             source_revision=current_revision,
             source_digest=source_digest,
+            authoring_version=authoring_version,
+            draft_digest=draft_digest,
             mode=str(raw.get("mode") or "draft"),
             final=final,
             state="building",
@@ -180,7 +190,8 @@ class DocumentBuildManager:
             if result.status != "ready":
                 build.state = "failed"
                 build.failure_code = result.failure_code
-                build.diagnostics = self._diagnostics(result.report)
+                provenance = await self._provenance(item, build.project_path)
+                build.diagnostics = self._diagnostics(result.report, provenance)
                 build.completed_at = time.time()
                 await self._persist(registry, item, build)
                 return
@@ -297,7 +308,24 @@ class DocumentBuildManager:
             build.page_count = int(report.get("page_count") or 0)
             build.page_width_pt = float(report.get("page_width_pt") or 0.0)
             build.page_height_pt = float(report.get("page_height_pt") or 0.0)
-            build.diagnostics = self._diagnostics(report)
+            page_blocks: dict[int, list[str]] = {}
+            raw_block_pages = report.get("block_pages")
+            for entry in raw_block_pages if isinstance(raw_block_pages, list) else []:
+                if not isinstance(entry, dict):
+                    continue
+                page = entry.get("page")
+                block_id = str(entry.get("block_id") or "")
+                if (
+                    isinstance(page, int)
+                    and 1 <= page <= build.page_count
+                    and 3 <= len(block_id) <= 64
+                ):
+                    page_blocks.setdefault(page, []).append(block_id)
+            build.page_blocks = {
+                page: tuple(dict.fromkeys(blocks)) for page, blocks in page_blocks.items()
+            }
+            provenance = await self._provenance(item, build.project_path)
+            build.diagnostics = self._diagnostics(report, provenance)
             build.state = "visual_pending" if build.final else "preview_ready"
             build.failure_code = ""
             if not build.final:
@@ -331,7 +359,9 @@ class DocumentBuildManager:
             await self.compiler.destroy(prepared.container_id)
 
     @staticmethod
-    def _diagnostics(report: dict[str, object]) -> tuple[DocumentDiagnostic, ...]:
+    def _diagnostics(
+        report: dict[str, object], provenance: dict[str, str] | None = None
+    ) -> tuple[DocumentDiagnostic, ...]:
         out: list[DocumentDiagnostic] = []
         raw = report.get("diagnostics")
         for item in raw if isinstance(raw, list) else []:
@@ -348,6 +378,7 @@ class DocumentBuildManager:
                     relative_path=path,
                     line=int(line) if isinstance(line, int) and line > 0 else None,
                     count=max(1, int(item.get("count") or 1)),
+                    block_id=(provenance or {}).get(path, ""),
                 )
             )
         return tuple(out[:100])
@@ -467,6 +498,10 @@ class DocumentBuildManager:
             "page_count": build.page_count,
             "profile_id": build.profile_id,
             "profile_version": build.profile_version,
+            "block_pages": [
+                {"page": page, "block_ids": list(block_ids)}
+                for page, block_ids in sorted(build.page_blocks.items())
+            ],
         }
         return metadata, self.compiler.artifact_stream(
             item.ref, build.visual_bundle_path, max_bytes=build.visual_bundle_size
@@ -526,6 +561,12 @@ class DocumentBuildManager:
                 code=str(entry.get("code") or "")[:64],
                 line=(int(entry["page"]) if isinstance(entry.get("page"), int) else None),
                 count=max(1, int(entry.get("count") or 1)),
+                block_id=(
+                    build.page_blocks[int(entry["page"])][0]
+                    if isinstance(entry.get("page"), int)
+                    and len(build.page_blocks.get(int(entry["page"]), ())) == 1
+                    else ""
+                ),
             )
             for entry in diagnostics[:100]
             if isinstance(entry, dict) and str(entry.get("code") or "") in VISUAL_DIAGNOSTIC_CODES

@@ -83,7 +83,10 @@ def _load_profile(directory: Path) -> DocumentProfile:
         raise ProfileConfigurationError("entrypoint_invalid")
     if not (directory / entrypoint).is_file():
         raise ProfileConfigurationError("entrypoint_missing")
-    digest = _tree_digest(directory)
+    shared = directory.parent / "_shared"
+    digest = hashlib.sha256(
+        f"{_tree_digest(shared) if shared.is_dir() else ''}:{_tree_digest(directory)}".encode()
+    ).hexdigest()
     try:
         return DocumentProfile(
             profile_id=profile_id,
@@ -134,7 +137,7 @@ def load_profile_catalog(root: Path | None = None) -> ProfileCatalog:
     ]
     digest = hashlib.sha256(json.dumps(payload, sort_keys=True).encode()).hexdigest()
     return ProfileCatalog(
-        version="s34.v1",
+        version="s35.v1",
         digest=digest,
         profiles=MappingProxyType(profiles),
         root=profile_root,

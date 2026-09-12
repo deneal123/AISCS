@@ -38,6 +38,10 @@ class _Compiler:
                 "preview": {"size": 10, "sha256": "b" * 64},
                 "source_bundle": {"size": 30, "sha256": "c" * 64},
                 "visual_bundle": {"size": 40, "sha256": "e" * 64},
+                "block_pages": [
+                    {"block_id": "introduction", "page": 1},
+                    {"block_id": "results_slide", "page": 2},
+                ],
             },
         )
 
@@ -129,12 +133,45 @@ async def test_build_publishes_one_atomic_artifact_directory() -> None:
     ]
     assert compiler.published is True
     assert compiler.destroyed is True
+    assert build.page_blocks == {1: ("introduction",), 2: ("results_slide",)}
     command = next(
         command for command in registry.commands if "mv /workspace/.gpthub-document" in command
     )
     assert "mv /workspace/.gpthub-document/build-123456789" in command
     assert "/workspace/paper/artifacts/build-123456789" in command
     assert "mv /workspace/.gpthub-document/build-123456789/document.pdf" not in command
+
+
+@pytest.mark.asyncio
+async def test_visual_diagnostic_uses_unambiguous_page_block_provenance() -> None:
+    compiler = _Compiler()
+    manager = DocumentBuildManager(compiler, _Projects(), lambda _item: _value("rev-1"))
+    registry = _Registry()
+    item = SimpleNamespace(
+        workspace_id="workspace-1",
+        ref=SimpleNamespace(container_id="workspace-container"),
+        policy=SimpleNamespace(root="/workspace"),
+    )
+    started = await manager.start(
+        registry, item, project_path="paper", expected_revision="rev-1", final=True
+    )
+    build = await _finished(manager, started.build_id)
+
+    audited = await manager.complete_visual_audit(
+        registry,
+        item,
+        build.build_id,
+        source_digest=build.source_digest,
+        artifact_sha256="a" * 64,
+        passed=False,
+        retryable=False,
+        audit_version=1,
+        diagnostics=[{"code": "visual_clipping", "page": 2, "count": 1}],
+    )
+
+    visual = next(item for item in audited.diagnostics if item.code == "visual_clipping")
+    assert visual.line == 2
+    assert visual.block_id == "results_slide"
 
 
 @pytest.mark.asyncio

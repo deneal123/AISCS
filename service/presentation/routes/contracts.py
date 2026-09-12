@@ -74,6 +74,14 @@ class DocumentBuildRequest(DocumentPathRequest):
     final: bool = False
 
 
+class DocumentSourceRequest(DocumentPathRequest):
+    files: dict[str, str] = Field(min_length=1, max_length=128)
+    authoring_version: int = Field(ge=1, le=1_000_000)
+    draft_digest: str = Field(min_length=64, max_length=64, pattern="^[0-9a-f]{64}$")
+    expected_revision: str = Field(min_length=1, max_length=128)
+    coordination_fence: int | None = Field(default=None, ge=1)
+
+
 class DocumentProfileApplyRequest(DocumentPathRequest):
     target_path: str | None = Field(default=None, min_length=1, max_length=1024)
     profile_id: str = Field(min_length=3, max_length=64)
@@ -99,6 +107,13 @@ class DocumentVendorOverlayRequest(DocumentPathRequest):
     coordination_fence: int | None = Field(default=None, ge=1)
 
 
+class DocumentVendorActivateRequest(DocumentPathRequest):
+    package_id: str = Field(pattern="^[a-z][a-z0-9_-]{2,63}$")
+    target_path: str = Field(min_length=1, max_length=1024)
+    expected_revision: str = Field(min_length=1, max_length=128)
+    coordination_fence: int | None = Field(default=None, ge=1)
+
+
 class DocumentVisualAuditResultRequest(OwnerRequest):
     source_digest: str = Field(min_length=64, max_length=64, pattern="^[0-9a-f]{64}$")
     artifact_sha256: str = Field(min_length=64, max_length=64, pattern="^[0-9a-f]{64}$")
@@ -120,7 +135,9 @@ __all__ = [
     "DocumentPathRequest",
     "DocumentProfileApplyRequest",
     "DocumentProjectRequest",
+    "DocumentSourceRequest",
     "DocumentVisualAuditResultRequest",
+    "DocumentVendorActivateRequest",
     "DocumentVendorOverlayRequest",
     "ExecRequest",
     "FileRequest",
