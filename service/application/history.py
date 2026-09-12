@@ -8,7 +8,15 @@ from typing import Any
 from domain.files import git_commit_command, git_head_command
 
 SAFE_SNAPSHOT_TYPES = frozenset(
-    {"agent_run", "import", "revert", "user_edit", "document_scaffold", "document_profile"}
+    {
+        "agent_run",
+        "import",
+        "revert",
+        "user_edit",
+        "document_scaffold",
+        "document_profile",
+        "document_vendor",
+    }
 )
 RunCommand = Callable[..., Awaitable[Any]]
 

@@ -8,7 +8,11 @@ import logging
 import os
 
 from application.coordination_guard import GuardFailure, require_mutation
-from application.documents import DocumentBuildManager, DocumentProjectService
+from application.documents import (
+    DocumentBuildManager,
+    DocumentProjectService,
+    DocumentVendorOverlayService,
+)
 from application.history import HistoryService
 from application.importer import fetch
 from application.lifecycle import WorkspaceNotFound, WorkspaceRegistry
@@ -165,6 +169,13 @@ revert_workspace = _history_handlers.revert_workspace
 # Trusted profiles fail fast at import/startup. Runtime Docker access remains lazy.
 document_catalog = load_profile_catalog()
 document_projects = DocumentProjectService(_route_run_file_op, _route_snapshot, document_catalog)
+document_vendors = DocumentVendorOverlayService(
+    _route_run_file_op,
+    _route_snapshot,
+    _route_revision,
+    document_projects,
+    _route_fetch,
+)
 document_builds = DocumentBuildManager(DockerDocumentCompiler(), document_projects, _route_revision)
 router.include_router(
     create_documents_router(
@@ -172,6 +183,7 @@ router.include_router(
             common=_route_dependencies,
             catalog=document_catalog,
             projects=document_projects,
+            vendors=document_vendors,
             builds=document_builds,
         )
     )

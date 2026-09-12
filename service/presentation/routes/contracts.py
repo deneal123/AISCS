@@ -83,6 +83,22 @@ class DocumentProfileApplyRequest(DocumentPathRequest):
     coordination_fence: int | None = Field(default=None, ge=1)
 
 
+class DocumentVendorSource(BaseModel):
+    url: str = Field(min_length=8, max_length=4096)
+    sha256: str | None = Field(
+        default=None,
+        min_length=64,
+        max_length=64,
+        pattern="^[0-9a-f]{64}$",
+    )
+
+
+class DocumentVendorOverlayRequest(DocumentPathRequest):
+    source: DocumentVendorSource
+    expected_revision: str = Field(min_length=1, max_length=128)
+    coordination_fence: int | None = Field(default=None, ge=1)
+
+
 class DocumentVisualAuditResultRequest(OwnerRequest):
     source_digest: str = Field(min_length=64, max_length=64, pattern="^[0-9a-f]{64}$")
     artifact_sha256: str = Field(min_length=64, max_length=64, pattern="^[0-9a-f]{64}$")
@@ -105,6 +121,7 @@ __all__ = [
     "DocumentProfileApplyRequest",
     "DocumentProjectRequest",
     "DocumentVisualAuditResultRequest",
+    "DocumentVendorOverlayRequest",
     "ExecRequest",
     "FileRequest",
     "ImportRequest",

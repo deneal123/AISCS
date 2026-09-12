@@ -54,21 +54,23 @@ async def fetch(url: str, *, timeout_sec: float = DOWNLOAD_TIMEOUT_SEC) -> bytes
     try:
         await assert_public_host(parsed.hostname or "")
     except UnsafeUrlError as exc:
-        raise ImportRefused(f"адрес не подходит: {exc}") from exc
+        raise ImportRefused("source address is not allowed") from exc
     try:
         async with httpx.AsyncClient(follow_redirects=False, timeout=timeout_sec) as client:
             response = await client.get(str(url))
     except Exception as exc:  # noqa: BLE001
-        # 🔴 ПРИЧИНУ НАЗЫВАЕМ. «Источник не ответил» одинаково покрывает не разрешившееся
-        # имя, отказ TLS, обрыв и таймаут — а действия при них РАЗНЫЕ: первое означает, что
-        # сайдкару сломали сеть, последнее — что источник медленный. Единственное, что
-        # видел вызывающий, — эта строка, и по ней разобраться было нельзя ничем.
-        logger.warning("не скачали %s: %s", parsed.hostname or "?", exc, exc_info=True)
-        raise ImportRefused(f"источник не ответил: {type(exc).__name__}") from exc
+        # The URL, hostname and exception body are private integration data.
+        # Operators need a bounded category here; callers receive the same safe
+        # retryable outcome regardless of the transport library's wording.
+        logger.warning(
+            "workspace import source unavailable",
+            extra={"component": "workspace_import", "failure_code": "transport"},
+        )
+        raise ImportRefused("source is temporarily unavailable") from exc
     if 300 <= response.status_code < 400:
         raise ImportRefused("редирект не поддерживается")
     if response.status_code >= 400:
-        raise ImportRefused(f"источник ответил {response.status_code}")
+        raise ImportRefused("source rejected the request")
     data = response.content or b""
     if len(data) > MAX_FILE_BYTES:
         raise ImportRefused(f"файл больше {MAX_FILE_BYTES} байт")

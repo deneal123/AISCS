@@ -205,14 +205,8 @@ def test_unpack_is_wired_into_the_import_handler():
 
 
 @pytest.mark.asyncio
-async def test_a_failed_download_names_its_cause(monkeypatch) -> None:
-    """🔴 «Источник не ответил» одинаково покрывает не разрешившееся имя, отказ TLS, обрыв
-    и таймаут — а действия при них РАЗНЫЕ: первое значит, что сайдкару сломали сеть,
-    последнее — что источник медленный.
-
-    Найдено сквозным прогоном: импорт отказал, и по единственной строке, которую видит
-    вызывающий, разобраться было нечем — исходное исключение проглатывал широкий `except`.
-    """
+async def test_a_failed_download_keeps_transport_diagnostics_bounded(monkeypatch) -> None:
+    """A transport failure must not disclose its URL or exception body."""
 
     async def _boom(self, *a, **kw):
         raise httpx.ConnectError("Temporary failure in name resolution")
@@ -229,15 +223,10 @@ async def test_a_failed_download_names_its_cause(monkeypatch) -> None:
     with pytest.raises(importer.ImportRefused) as caught:
         await importer.fetch("https://storage.example.com/a.txt")
 
-    assert "ConnectError" in str(caught.value), (
-        "причина отказа по-прежнему безымянна — разбираться вызывающему нечем"
-    )
-    # ⚠️ Тип в ответе называет РОД беды, но не её обстоятельства: сам текст исключения
-    # («Temporary failure in name resolution») наружу не отдаём — это внутренности сети, —
-    # поэтому он обязан оказаться в логе, иначе не окажется нигде.
-    assert [m for m in logged if "storage.example.com" in m], (
-        "отказ не оставил следа в логе — подробности исключения пропали совсем"
-    )
+    assert str(caught.value) == "source is temporarily unavailable"
+    assert logged == ["workspace import source unavailable"]
+    assert "storage.example.com" not in str(logged)
+    assert "Temporary failure" not in str(logged)
 
 
 @pytest.mark.asyncio

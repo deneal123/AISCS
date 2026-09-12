@@ -16,6 +16,7 @@ from presentation.routes.contracts import (
     DocumentPathRequest,
     DocumentProfileApplyRequest,
     DocumentProjectRequest,
+    DocumentVendorOverlayRequest,
     DocumentVisualAuditResultRequest,
     OwnerRequest,
 )
@@ -27,15 +28,24 @@ class DocumentRouteDependencies:
     common: WorkspaceRouteDependencies
     catalog: Any
     projects: Any
+    vendors: Any
     builds: Any
 
 
 def _status(code: str) -> int:
     if code == "revision_conflict":
         return 409
-    if code in {"profile_missing", "invalid_project", "target_path_required"}:
+    if code in {
+        "profile_missing",
+        "invalid_project",
+        "target_path_required",
+        "vendor_archive_invalid",
+        "vendor_manifest_invalid",
+        "vendor_unsafe",
+        "vendor_integrity",
+    }:
         return 422
-    if code in {"project_exists", "profile_mismatch", "source_changed"}:
+    if code in {"project_exists", "profile_mismatch", "source_changed", "vendor_collision"}:
         return 409
     if code == "audit_busy":
         return 409
@@ -47,8 +57,10 @@ def _status(code: str) -> int:
         return 503
     if code == "artifact_too_large":
         return 413
-    if code == "source_too_large":
+    if code in {"source_too_large", "vendor_too_large"}:
         return 413
+    if code == "vendor_source_unavailable":
+        return 503
     return 500
 
 
@@ -124,6 +136,7 @@ def create_documents_router(deps: DocumentRouteDependencies) -> APIRouter:
                 raise DocumentProjectError("runtime_unavailable")
             async with registry.operation(item):
                 result = await deps.projects.status(item, payload.path)
+                result["vendor_overlays"] = await deps.vendors.list(item, payload.path)
                 result["revision"] = await deps.common.revision(item)
             latest = await deps.builds.latest_for_project(registry, item, payload.path)
             if latest is not None:
@@ -168,6 +181,42 @@ def create_documents_router(deps: DocumentRouteDependencies) -> APIRouter:
         except DocumentProjectError as exc:
             code = "workspace_conflict" if exc.code == "revision_conflict" else exc.code
             return deps.common.error(code, "document profile request failed", _status(exc.code))
+
+    @router.post("/workspaces/{workspace_id}/documents/vendor")
+    async def apply_vendor_overlay(
+        workspace_id: str,
+        payload: DocumentVendorOverlayRequest,
+        authorization: str | None = Header(default=None),
+    ):
+        deps.common.auth(authorization)
+        item, failure = deps.common.owned(workspace_id, payload)
+        if failure is not None:
+            return failure
+        guarded = await deps.common.coordination_guard(
+            payload,
+            "write",
+            path=payload.path,
+            workspace_id=workspace_id,
+        )
+        if deps.common.guard_denied(guarded):
+            return guarded
+        registry = deps.common.registry()
+        if registry is None:
+            return deps.common.error("workspace_unavailable", "workspace is unavailable", 503)
+        try:
+            async with registry.operation(item):
+                result = await deps.vendors.apply(
+                    item,
+                    path=payload.path,
+                    source_url=payload.source.url,
+                    source_sha256=payload.source.sha256,
+                    expected_revision=payload.expected_revision,
+                )
+                result["revision"] = await deps.common.revision(item)
+                return result
+        except DocumentProjectError as exc:
+            code = "workspace_conflict" if exc.code == "revision_conflict" else exc.code
+            return deps.common.error(code, "vendor overlay request failed", _status(exc.code))
 
     @router.post("/workspaces/{workspace_id}/documents/builds")
     async def start_build(

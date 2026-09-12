@@ -85,6 +85,13 @@ ERROR_CODES = frozenset(
         "visual_interrupted",
         "visual_render_failed",
         "visual_audit_failed",
+        "vendor_archive_invalid",
+        "vendor_manifest_invalid",
+        "vendor_unsafe",
+        "vendor_too_large",
+        "vendor_collision",
+        "vendor_source_unavailable",
+        "vendor_integrity",
         "internal",  # 500
     }
 )
