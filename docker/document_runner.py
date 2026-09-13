@@ -80,7 +80,77 @@ def missing_file_count(log: str) -> int:
     return sum(len(re.findall(pattern, log, re.IGNORECASE)) for pattern in patterns)
 
 
-def diagnostics(log: str) -> list[dict[str, object]]:
+_COMPILER_FAILURE_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
+    ("missing_math_delimiter", ("missing $ inserted", "math shift")),
+    (
+        "unbalanced_group",
+        (
+            "extra }",
+            "runaway argument",
+            "file ended while scanning",
+            "end occurred inside a group",
+        ),
+    ),
+    (
+        "invalid_command_argument",
+        (
+            "paragraph ended before",
+            "doesn't match its definition",
+            "does not match its definition",
+        ),
+    ),
+    ("undefined_control_sequence", ("undefined control sequence",)),
+    ("invalid_alignment", ("misplaced \\noalign", "extra alignment tab")),
+    ("invalid_dimension", ("illegal unit of measure", "missing number")),
+    ("missing_file", ("not found", "i can't find file")),
+)
+
+
+def _compiler_failure_location(log: str) -> tuple[str | None, int | None, str]:
+    """Return a user-safe TeX location and a bounded compiler error code."""
+
+    file_line = re.compile(
+        r"(?m)^(?P<path>[^\r\n:]{1,512}\.tex):(?P<line>\d+):\s*(?P<message>[^\r\n]*)"
+    )
+    matches = list(file_line.finditer(log))
+    for match in matches:
+        message = match.group("message").casefold()
+        for code, needles in _COMPILER_FAILURE_PATTERNS:
+            if any(needle in message for needle in needles):
+                return Path(match.group("path")).name, int(match.group("line")), code
+
+    folded = log.casefold()
+    code = next(
+        (
+            candidate
+            for candidate, needles in _COMPILER_FAILURE_PATTERNS
+            if any(needle in folded for needle in needles)
+        ),
+        "compile_failed",
+    )
+    if matches:
+        match = matches[-1]
+        return Path(match.group("path")).name, int(match.group("line")), code
+    return None, None, code
+
+
+def _append_compiler_failure(out: list[dict[str, object]], log: str) -> list[dict[str, object]]:
+    path, line, code = _compiler_failure_location(log)
+    existing = next(
+        (item for item in out if item.get("severity") == "error" and item.get("code") == code),
+        None,
+    )
+    if existing is None:
+        existing = {"severity": "error", "code": code, "count": 1}
+        out.append(existing)
+    if path is not None:
+        existing["path"] = path
+    if line is not None:
+        existing["line"] = line
+    return out
+
+
+def diagnostics(log: str, *, compilation_failed: bool = False) -> list[dict[str, object]]:
     out: list[dict[str, object]] = []
     for severity, code, needles in (
         ("error", "undefined_reference", ("undefined references", "reference `")),
@@ -104,13 +174,8 @@ def diagnostics(log: str) -> list[dict[str, object]]:
     missing = missing_file_count(log)
     if missing:
         out.append({"severity": "error", "code": "missing_file", "count": missing})
-    if "! latex error" in log.lower() or "fatal error" in log.lower():
-        match = re.search(r"(?:^|\n)([^\n:]{1,180}\.tex):(\d+):", log)
-        item: dict[str, object] = {"severity": "error", "code": "compile_failed", "count": 1}
-        if match:
-            item["path"] = Path(match.group(1)).name
-            item["line"] = int(match.group(2))
-        out.append(item)
+    if compilation_failed or "! latex error" in log.lower() or "fatal error" in log.lower():
+        _append_compiler_failure(out, log)
     return out
 
 
@@ -347,8 +412,20 @@ def manifest_audit(
     documentclass = re.search(r"\\documentclass(?:\[[^\]]*\])?\{([^}]+)\}", entrypoint_source)
     if not documentclass or documentclass.group(1) != manifest.get("documentclass"):
         out.append({"severity": "error", "code": "documentclass_mismatch", "count": 1})
+    source_folded = source.casefold()
+    abstract_environment = bool(re.search(r"\\begin\s*\{abstract\}", source, re.IGNORECASE))
+    bibliography_environment = bool(
+        re.search(r"\\(?:printbibliography|bibliography\s*\{)", source, re.IGNORECASE)
+    )
     for section in manifest.get("required_sections") or []:
-        if str(section).casefold() not in source.casefold():
+        normalized_section = str(section).strip().casefold()
+        semantic_environment_present = (
+            normalized_section in {"abstract", "аннотация"} and abstract_environment
+        ) or (
+            normalized_section in {"bibliography", "references", "литература", "список литературы"}
+            and bibliography_environment
+        )
+        if normalized_section not in source_folded and not semantic_environment_present:
             out.append({"severity": "error", "code": "required_section", "count": 1})
     if re.search(r"\{\{[A-Z][A-Z0-9_]{2,}\}\}", source) or "\\DocumentPlaceholder{" in source:
         out.append(
@@ -532,13 +609,12 @@ def main() -> int:
         )
         stem = entrypoint.stem
         log = safe_log(project / f"{stem}.log")
-        report["diagnostics"] = diagnostics(log)
         pdf = project / f"{stem}.pdf"
+        report["diagnostics"] = diagnostics(
+            log,
+            compilation_failed=result.returncode != 0 or not pdf.is_file(),
+        )
         if result.returncode != 0 or not pdf.is_file():
-            if not report["diagnostics"]:
-                report["diagnostics"] = [
-                    {"severity": "error", "code": "compile_failed", "count": 1}
-                ]
             return 1
         if pdf.stat().st_size > MAX_ARTIFACT_BYTES:
             report["failure_code"] = "artifact_too_large"

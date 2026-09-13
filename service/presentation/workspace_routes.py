@@ -10,6 +10,7 @@ import os
 from application.coordination_guard import GuardFailure, require_mutation
 from application.documents import (
     DocumentBuildManager,
+    DocumentCheckpointService,
     DocumentProjectService,
     DocumentSourceService,
     DocumentVendorOverlayService,
@@ -177,6 +178,7 @@ document_sources = DocumentSourceService(
     _route_revision,
     document_projects,
 )
+document_checkpoints = DocumentCheckpointService(_route_run_file_op, document_projects)
 document_vendors = DocumentVendorOverlayService(
     _route_run_file_op,
     _route_snapshot,
@@ -201,6 +203,7 @@ router.include_router(
             catalog=document_catalog,
             projects=document_projects,
             sources=document_sources,
+            checkpoints=document_checkpoints,
             vendors=document_vendors,
             vendor_profiles=document_vendor_profiles,
             builds=document_builds,

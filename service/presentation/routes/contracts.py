@@ -82,6 +82,19 @@ class DocumentSourceRequest(DocumentPathRequest):
     coordination_fence: int | None = Field(default=None, ge=1)
 
 
+class DocumentCheckpointRequest(DocumentPathRequest):
+    checkpoint: dict[str, object]
+    request_digest: str = Field(min_length=64, max_length=64, pattern="^[0-9a-f]{64}$")
+    evidence_digest: str = Field(min_length=64, max_length=64, pattern="^[0-9a-f]{64}$")
+    expected_revision: str = Field(min_length=1, max_length=128)
+    coordination_fence: int | None = Field(default=None, ge=1)
+
+
+class DocumentCheckpointLookupRequest(OwnerRequest):
+    request_digest: str = Field(min_length=64, max_length=64, pattern="^[0-9a-f]{64}$")
+    evidence_digest: str = Field(min_length=64, max_length=64, pattern="^[0-9a-f]{64}$")
+
+
 class DocumentProfileApplyRequest(DocumentPathRequest):
     target_path: str | None = Field(default=None, min_length=1, max_length=1024)
     profile_id: str = Field(min_length=3, max_length=64)

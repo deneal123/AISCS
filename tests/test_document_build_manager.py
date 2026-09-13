@@ -65,6 +65,15 @@ class _BlockingCompiler(_Compiler):
         await asyncio.Event().wait()
 
 
+class _FailedAuditCompiler(_Compiler):
+    async def execute(self, *_args, **_kwargs):
+        return CompilerResult(
+            "failed",
+            "audit_failed",
+            {"diagnostics": [{"severity": "error", "code": "required_section", "count": 2}]},
+        )
+
+
 class _Projects:
     def __init__(self) -> None:
         self.profile = load_profile_catalog().get("generic_article")
@@ -76,6 +85,18 @@ class _Projects:
 
     async def digest(self, _item, _path):
         return self.digest_value
+
+
+class _DelayedProvenanceProjects(_Projects):
+    def __init__(self) -> None:
+        super().__init__()
+        self.entered = asyncio.Event()
+        self.release = asyncio.Event()
+
+    async def block_provenance(self, _item, _path):
+        self.entered.set()
+        await self.release.wait()
+        return {}
 
 
 class _Registry:
@@ -140,6 +161,34 @@ async def test_build_publishes_one_atomic_artifact_directory() -> None:
     assert "mv /workspace/.gpthub-document/build-123456789" in command
     assert "/workspace/paper/artifacts/build-123456789" in command
     assert "mv /workspace/.gpthub-document/build-123456789/document.pdf" not in command
+
+
+@pytest.mark.asyncio
+async def test_terminal_failure_is_latched_only_after_diagnostics_are_complete() -> None:
+    projects = _DelayedProvenanceProjects()
+    manager = DocumentBuildManager(_FailedAuditCompiler(), projects, lambda _item: _value("rev-1"))
+    registry = _Registry()
+    item = SimpleNamespace(
+        workspace_id="workspace-1",
+        ref=SimpleNamespace(container_id="workspace-container"),
+        policy=SimpleNamespace(root="/workspace"),
+    )
+
+    started = await manager.start(
+        registry, item, project_path="paper", expected_revision="rev-1", final=True
+    )
+    await projects.entered.wait()
+
+    observed = manager.get(item.workspace_id, started.build_id)
+    assert observed is not None
+    assert observed.state == "building"
+    assert observed.failure_code == ""
+    assert observed.diagnostics == ()
+
+    projects.release.set()
+    failed = await _finished(manager, started.build_id)
+    assert failed.state == "failed"
+    assert [item.code for item in failed.diagnostics] == ["required_section"]
 
 
 @pytest.mark.asyncio

@@ -13,6 +13,8 @@ from infrastructure.document_compiler import CompilerFailure
 from presentation.routes.contracts import (
     DocumentBuildRequest,
     DocumentCancelRequest,
+    DocumentCheckpointLookupRequest,
+    DocumentCheckpointRequest,
     DocumentPathRequest,
     DocumentProfileApplyRequest,
     DocumentProjectRequest,
@@ -31,6 +33,7 @@ class DocumentRouteDependencies:
     catalog: Any
     projects: Any
     sources: Any
+    checkpoints: Any
     vendors: Any
     builds: Any
     vendor_profiles: Any = None
@@ -59,7 +62,7 @@ def _status(code: str) -> int:
         return 404
     if code in {"audit_unavailable", "visual_unavailable"}:
         return 503
-    if code in {"runtime_unavailable", "authoring_publish_failed"}:
+    if code in {"runtime_unavailable", "authoring_publish_failed", "authoring_checkpoint_failed"}:
         return 503
     if code == "artifact_too_large":
         return 413
@@ -201,6 +204,63 @@ def create_documents_router(deps: DocumentRouteDependencies) -> APIRouter:
             return await deps.projects.authoring_state(item, payload.path)
         except DocumentProjectError as exc:
             return deps.common.error(exc.code, "document authoring unavailable", _status(exc.code))
+
+    @router.post("/workspaces/{workspace_id}/documents/authoring/checkpoint")
+    async def checkpoint_authoring(
+        workspace_id: str,
+        payload: DocumentCheckpointRequest,
+        authorization: str | None = Header(default=None),
+    ):
+        deps.common.auth(authorization)
+        item, failure = deps.common.owned(workspace_id, payload)
+        if failure is not None:
+            return failure
+        guarded = await deps.common.coordination_guard(
+            payload, "write", path=payload.path, workspace_id=workspace_id
+        )
+        if deps.common.guard_denied(guarded):
+            return guarded
+        registry = deps.common.registry()
+        if registry is None:
+            return deps.common.error("workspace_unavailable", "workspace is unavailable", 503)
+        try:
+            async with registry.operation(item):
+                current = await deps.common.revision(item)
+                if current != payload.expected_revision:
+                    raise DocumentProjectError("revision_conflict")
+                return await deps.checkpoints.write(
+                    item,
+                    path=payload.path,
+                    checkpoint=payload.checkpoint,
+                    revision=current,
+                    request_digest=payload.request_digest,
+                    evidence_digest=payload.evidence_digest,
+                )
+        except DocumentProjectError as exc:
+            code = "workspace_conflict" if exc.code == "revision_conflict" else exc.code
+            return deps.common.error(code, "document checkpoint request failed", _status(exc.code))
+
+    @router.post("/workspaces/{workspace_id}/documents/authoring/checkpoint/latest")
+    async def latest_authoring_checkpoint(
+        workspace_id: str,
+        payload: DocumentCheckpointLookupRequest,
+        authorization: str | None = Header(default=None),
+    ):
+        deps.common.auth(authorization)
+        item, failure = deps.common.owned(workspace_id, payload)
+        if failure is not None:
+            return failure
+        if deps.common.registry() is None:
+            return deps.common.error("workspace_unavailable", "workspace is unavailable", 503)
+        try:
+            result = await deps.checkpoints.latest(
+                item,
+                request_digest=payload.request_digest,
+                evidence_digest=payload.evidence_digest,
+            )
+            return result or {"outcome": "absent"}
+        except DocumentProjectError as exc:
+            return deps.common.error(exc.code, "document checkpoint unavailable", _status(exc.code))
 
     @router.post("/workspaces/{workspace_id}/documents/profile")
     async def apply_profile(

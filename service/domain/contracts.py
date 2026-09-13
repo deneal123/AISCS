@@ -96,6 +96,7 @@ ERROR_CODES = frozenset(
         "authoring_invalid",
         "authoring_missing",
         "authoring_publish_failed",
+        "authoring_checkpoint_failed",
         "source_too_large",
         "internal",  # 500
     }

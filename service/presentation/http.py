@@ -73,6 +73,8 @@ app.include_router(
 
 @app.get("/health")
 async def health():
+    from domain.documents.runtime_digest import DOCUMENT_RUNTIME_DIGEST, DOCUMENT_RUNTIME_VERSION
+
     registry = workspace_routes.registry
     return {
         "status": "ok",
@@ -84,6 +86,8 @@ async def health():
         "workspace_lifecycle": registry.health() if registry else {},
         "documents": {
             "status": "ok",
+            "runtime_version": DOCUMENT_RUNTIME_VERSION,
+            "runtime_digest": DOCUMENT_RUNTIME_DIGEST,
             "profile_version": workspace_routes.document_catalog.version,
             "profile_digest": workspace_routes.document_catalog.digest[:16],
             "profiles": len(workspace_routes.document_catalog.profiles),

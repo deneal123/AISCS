@@ -89,6 +89,79 @@ def test_publication_requires_records_and_resolved_citation_intent(tmp_path: Pat
     assert "citation_missing" not in codes
 
 
+def test_abstract_environment_satisfies_the_profile_section_contract(tmp_path: Path) -> None:
+    runner = _runner()
+    project = tmp_path / "abstract-article"
+    project.mkdir()
+    (project / "document.toml").write_text(
+        "\n".join(
+            (
+                'entrypoint = "main.tex"',
+                'documentclass = "article"',
+                'paper = "a4"',
+                'orientation = "portrait"',
+                "bibliography_required = false",
+                'required_sections = ["Abstract"]',
+                'source_export = "allowed"',
+                "anonymize = false",
+            )
+        ),
+        encoding="utf-8",
+    )
+    (project / "main.tex").write_text(
+        "\\documentclass{article}\\begin{document}"
+        "\\begin{abstract}Summary\\end{abstract}"
+        "\\end{document}",
+        encoding="utf-8",
+    )
+
+    diagnostics = runner.manifest_audit(
+        project,
+        {"page_count": 1, "page_width_pt": 595.28, "page_height_pt": 841.89},
+        publication=True,
+    )
+
+    assert "required_section" not in {item["code"] for item in diagnostics}
+
+
+def test_bibliography_command_satisfies_the_profile_section_contract(tmp_path: Path) -> None:
+    runner = _runner()
+    project = tmp_path / "bibliography-article"
+    project.mkdir()
+    (project / "document.toml").write_text(
+        "\n".join(
+            (
+                'entrypoint = "main.tex"',
+                'documentclass = "article"',
+                'paper = "a4"',
+                'orientation = "portrait"',
+                "bibliography_required = false",
+                'required_sections = ["References", "Литература"]',
+                'source_export = "allowed"',
+                "anonymize = false",
+            )
+        ),
+        encoding="utf-8",
+    )
+    (project / "main.tex").write_text(
+        "\\documentclass{article}\n\\begin{document}\n\\printbibliography\n\\end{document}\n",
+        encoding="utf-8",
+    )
+
+    diagnostics = runner.manifest_audit(
+        project,
+        {
+            "page_count": 1,
+            "page_width_pt": 595.3,
+            "page_height_pt": 841.9,
+            "author_present": False,
+        },
+        publication=False,
+    )
+
+    assert "required_section" not in {item["code"] for item in diagnostics}
+
+
 def test_publication_rejects_legal_placeholders(tmp_path: Path) -> None:
     runner = _runner()
     project = tmp_path / "legal"
@@ -162,6 +235,38 @@ def test_diagnostics_reject_missing_font_glyphs() -> None:
     missing = next(item for item in diagnostics if item["code"] == "missing_glyph")
     assert missing["severity"] == "error"
     assert missing["count"] == 1
+
+
+def test_failed_compilation_is_not_masked_by_layout_warning() -> None:
+    runner = _runner()
+
+    diagnostics = runner.diagnostics(
+        "Overfull \\hbox (4.0pt too wide) in paragraph.\n"
+        "./content/article.tex:37: Missing $ inserted.\n",
+        compilation_failed=True,
+    )
+
+    assert {item["code"] for item in diagnostics} >= {
+        "overfull_box",
+        "missing_math_delimiter",
+    }
+    failure = next(item for item in diagnostics if item["code"] == "missing_math_delimiter")
+    assert failure["severity"] == "error"
+    assert failure["path"] == "article.tex"
+    assert failure["line"] == 37
+
+
+def test_failed_compilation_always_has_bounded_error() -> None:
+    runner = _runner()
+
+    diagnostics = runner.diagnostics(
+        "Overfull \\hbox (4.0pt too wide) in paragraph.\n",
+        compilation_failed=True,
+    )
+
+    assert any(
+        item["severity"] == "error" and item["code"] == "compile_failed" for item in diagnostics
+    )
 
 
 def test_effective_vendor_profile_is_applied_to_deterministic_audit(tmp_path: Path) -> None:

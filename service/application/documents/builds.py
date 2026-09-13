@@ -188,11 +188,16 @@ class DocumentBuildManager:
                 final=build.final,
             )
             if result.status != "ready":
-                build.state = "failed"
-                build.failure_code = result.failure_code
                 provenance = await self._provenance(item, build.project_path)
-                build.diagnostics = self._diagnostics(result.report, provenance)
+                diagnostics = self._diagnostics(result.report, provenance)
+                # ``state`` is the externally observed terminal latch.  Publish
+                # it only after every field in the terminal snapshot is ready;
+                # otherwise a concurrent status read can see ``failed`` with no
+                # diagnostics and trigger a wrong repair path.
+                build.failure_code = result.failure_code
+                build.diagnostics = diagnostics
                 build.completed_at = time.time()
+                build.state = "failed"
                 await self._persist(registry, item, build)
                 return
             build.state = "deterministic_audit"
@@ -326,30 +331,30 @@ class DocumentBuildManager:
             }
             provenance = await self._provenance(item, build.project_path)
             build.diagnostics = self._diagnostics(report, provenance)
-            build.state = "visual_pending" if build.final else "preview_ready"
             build.failure_code = ""
             if not build.final:
                 build.completed_at = time.time()
+            build.state = "visual_pending" if build.final else "preview_ready"
             await self._persist(registry, item, build)
         except asyncio.CancelledError:
             user_cancelled = build.build_id in self._cancel_requested
-            build.state = "cancelled" if user_cancelled else "failed"
             build.failure_code = "build_cancelled" if user_cancelled else "build_interrupted"
             build.completed_at = time.time()
+            build.state = "cancelled" if user_cancelled else "failed"
             await self._persist(registry, item, build)
             raise
         except (CompilerFailure, DocumentProjectError) as exc:
-            build.state = "failed"
             build.failure_code = exc.code
             build.completed_at = time.time()
+            build.state = "failed"
             try:
                 await self._persist(registry, item, build)
             except DocumentProjectError:
                 pass
         except Exception:
-            build.state = "failed"
             build.failure_code = "internal"
             build.completed_at = time.time()
+            build.state = "failed"
             try:
                 await self._persist(registry, item, build)
             except DocumentProjectError:
@@ -420,9 +425,9 @@ class DocumentBuildManager:
             except asyncio.CancelledError:
                 pass
         elif not build.terminal:
-            build.state = "cancelled"
             build.failure_code = "build_cancelled"
             build.completed_at = time.time()
+            build.state = "cancelled"
             await self._persist(registry, item, build)
         return build
 
@@ -574,17 +579,17 @@ class DocumentBuildManager:
         build.visual_audit_version = max(1, int(audit_version or 1))
         build.visual_audit_claimed_at = None
         if passed and not visual:
-            build.state = "ready"
             build.failure_code = ""
             build.completed_at = time.time()
+            build.state = "ready"
         elif retryable:
-            build.state = "visual_pending"
             build.failure_code = "visual_unavailable"
+            build.state = "visual_pending"
         else:
-            build.state = "failed"
             build.failure_code = "visual_audit_failed"
             build.completed_at = time.time()
             build.diagnostics = (*build.diagnostics, *visual)[:100]
+            build.state = "failed"
         await self._persist(registry, item, build)
         return build
 
