@@ -1,0 +1,9 @@
+{
+  "_comment": "Известный долг сложности на момент включения проверки. ТОЛЬКО УМЕНЬШАТЬ: новые нарушения и рост записанных роняют check_module_complexity.py.",
+  "_note_2026_07_30": "Разбор по узлам со своей причиной меняться. chat_worker_tasks: 1769 -> 1366, функция process_agent_message_async 428 -> 376 (turn_context.py — сборка контекста, charging.py — тарификация, turn_result.py — фиксация итога). billing_repository: 1137 -> 908 (SQL -> persistence/sql.py). Дальше опускать тем же способом.",
+  "_note_2026_08_06": "Provider-aware pricing, reservation safeguards and agent usage accounting temporarily increased the measured modules; the exact post-change values below remain reviewable and must only decrease in follow-up refactors.",
+  "_note_2026_09_06": "S26 extracted job state, reservation preflight, run inputs, provider execution, finalization, failure compensation, cleanup, memory maintenance and retention. The Celery compatibility facade is now within the standard module and function limits.",
+  "allowed": {
+    "settings.py::lines": 893
+  }
+}

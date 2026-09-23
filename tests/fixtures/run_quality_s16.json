@@ -1,0 +1,87 @@
+{
+  "version": "s26-v1",
+  "cross_service_contracts": [
+    "first_valid_result",
+    "error_before_result_recovery",
+    "post_terminal_discard",
+    "privacy_boundary",
+    "malformed_event_drop",
+    "crash_redelivery_single_billing"
+  ],
+  "scenarios": [
+    {
+      "id": "first_valid_result",
+      "event_order": ["run_integrity", "finalization"],
+      "statuses": ["duplicate_result"],
+      "reasons": ["duplicate_result"],
+      "counts": {"billing_envelopes": 1, "terminal_results": 1},
+      "budgets": {"transport_flush_sec": 5}
+    },
+    {
+      "id": "error_before_result_recovery",
+      "event_order": ["run_integrity", "finalization"],
+      "statuses": ["result_after_error"],
+      "reasons": ["result_after_error"],
+      "counts": {"billing_envelopes": 1, "terminal_results": 1},
+      "budgets": {"transport_flush_sec": 5}
+    },
+    {
+      "id": "post_terminal_discard",
+      "event_order": ["run_integrity", "finalization"],
+      "statuses": ["duplicate_result", "error_after_result", "event_after_result"],
+      "reasons": ["duplicate_result", "error_after_result", "event_after_result"],
+      "counts": {"billing_envelopes": 1, "terminal_results": 1},
+      "budgets": {"transport_flush_sec": 5}
+    },
+    {
+      "id": "invalid_terminal_and_eof",
+      "event_order": ["run_integrity", "failure"],
+      "statuses": ["invalid_result", "mixed_terminal", "eof"],
+      "reasons": ["invalid_result", "mixed_terminal"],
+      "counts": {"billing_envelopes": 0, "terminal_results": 0},
+      "budgets": {"transport_flush_sec": 5}
+    },
+    {
+      "id": "privacy_boundary",
+      "event_order": ["run_integrity", "stream_projection"],
+      "statuses": ["redacted"],
+      "reasons": [],
+      "counts": {"billing_envelopes": 0},
+      "budgets": {"transport_flush_sec": 5}
+    },
+    {
+      "id": "s17_auto_mode_policy_privacy",
+      "event_order": ["stream_projection", "persistence"],
+      "statuses": ["confirmation_required", "model_classification"],
+      "reasons": [],
+      "counts": {"billing_envelopes": 0},
+      "budgets": {"transport_flush_sec": 5}
+    },
+    {
+      "id": "malformed_event_drop",
+      "event_order": ["stream_projection", "run_integrity", "finalization"],
+      "statuses": ["invalid_event", "invalid_json"],
+      "reasons": ["invalid_event", "invalid_json"],
+      "counts": {
+        "billing_envelopes": 1,
+        "terminal_results": 1,
+        "forwarded_events": 1,
+        "dropped_records": 2
+      },
+      "budgets": {"transport_flush_sec": 5}
+    },
+    {
+      "id": "crash_redelivery_single_billing",
+      "event_order": ["durable_result", "redelivery_short_circuit"],
+      "statuses": ["success", "redelivery_skipped"],
+      "reasons": ["already_succeeded"],
+      "counts": {
+        "billing_envelopes": 1,
+        "terminal_results": 1,
+        "redeliveries": 1,
+        "redelivery_billing_envelopes": 0
+      },
+      "budgets": {"provider_calls_on_redelivery": 0}
+    }
+  ]
+}

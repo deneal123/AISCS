@@ -1,0 +1,110 @@
+{
+  "description": "Векторы classify_model/cost_rank. У backend по ним фолбэк-цена, у сайдкара подбор модели при фейловере — расхождение регексов даёт молчаливое неверное ценообразование.",
+  "cases": [
+    {
+      "model": "openai/gpt-4o-mini",
+      "class": "fast",
+      "cost_rank": 0
+    },
+    {
+      "model": "openai/gpt-4o",
+      "class": "large",
+      "cost_rank": 2
+    },
+    {
+      "model": "gpt-5.5",
+      "class": "large",
+      "cost_rank": 2
+    },
+    {
+      "model": "anthropic/claude-3-haiku",
+      "class": "fast",
+      "cost_rank": 0
+    },
+    {
+      "model": "anthropic/claude-3-opus",
+      "class": "large",
+      "cost_rank": 2
+    },
+    {
+      "model": "meta-llama/llama-3-8b-instruct",
+      "class": "fast",
+      "cost_rank": 0
+    },
+    {
+      "model": "meta-llama/llama-3-70b-instruct",
+      "class": "large",
+      "cost_rank": 2
+    },
+    {
+      "model": "mistralai/mistral-small",
+      "class": "fast",
+      "cost_rank": 0
+    },
+    {
+      "model": "mistralai/mistral-large",
+      "class": "large",
+      "cost_rank": 2
+    },
+    {
+      "model": "qwen/qwen-turbo",
+      "class": null,
+      "cost_rank": 1
+    },
+    {
+      "model": "GigaChat-2-Max",
+      "class": "large",
+      "cost_rank": 2
+    },
+    {
+      "model": "mws-gpt-alpha",
+      "class": "large",
+      "cost_rank": 2
+    },
+    {
+      "model": "some/unknown-model",
+      "class": null,
+      "cost_rank": 1
+    },
+    {
+      "model": "",
+      "class": null,
+      "cost_rank": 1
+    },
+    {
+      "model": "google/gemini-2.5-flash-image",
+      "class": "image",
+      "cost_rank": 3
+    },
+    {
+      "model": "google/gemini-3-pro-image-preview",
+      "class": "image",
+      "cost_rank": 3
+    },
+    {
+      "model": "openai/gpt-image-1-mini",
+      "class": "image",
+      "cost_rank": 3
+    },
+    {
+      "model": "black-forest-labs/flux.2-pro",
+      "class": "image",
+      "cost_rank": 3
+    },
+    {
+      "model": "dall-e-3",
+      "class": "image",
+      "cost_rank": 3
+    },
+    {
+      "model": "google/gemini-2.5-pro",
+      "class": "large",
+      "cost_rank": 2
+    },
+    {
+      "model": "google/gemini-ultra",
+      "class": "large",
+      "cost_rank": 2
+    }
+  ]
+}

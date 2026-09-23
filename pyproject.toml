@@ -1,0 +1,93 @@
+[project]
+name = "forgeincellcorp"
+version = "1.4.0"
+requires-python = ">=3.13,<3.14"
+dependencies = [
+    "pydantic>=2.11.7,<3.0.0",
+    "fastapi>=0.116.1,<0.117.0",
+    "fastapi[standard]>=0.116.1,<0.117.0",
+    "pydantic-settings>=2.10.1,<3.0.0",
+    "pyjwt>=2.13.0,<3.0.0",
+    "uvicorn>=0.35.0,<0.36.0",
+    "python-dotenv>=1.2.2,<2.0.0",
+    "sqlalchemy>=2.0.43,<3.0.0",
+    "alembic>=1.16.4,<2.0.0",
+    "asyncpg>=0.30.0,<0.31.0",
+    "argon2-cffi>=25.1.0,<26.0.0",
+    # ⚠️ Объявлена ЯВНО, хотя раньше её здесь не было. `secret_cipher.py` шифрует
+    # провайдерские ключи из админки, то есть это зависимость безопасности — а
+    # приезжала она ТРАНЗИТИВНО, через `openai-agents`/`dask`. Стоило снять эти
+    # (ни разу не импортируемые) пакеты, как шифрование секретов перестало
+    # импортироваться. Ровно тот случай, ради которого зависимости и объявляют.
+    "cryptography>=50.0.0,<51.0.0",
+    "httpx>=0.27.0,<0.28.0",
+    "minio>=7.2.0,<8.0.0",
+    "prometheus-client>=0.20.0,<1.0.0",
+    "redis>=5.0.1,<6.0.0",
+    "aiosmtplib>=3.0.0,<4.0.0",
+    "celery[redis]>=5.4.0,<6.0.0",
+    "kombu>=5.4.0,<6.0.0",
+    "setuptools>=80.0.0",
+    "PyPDF2>=3.0.0,<4.0.0",
+    "python-docx>=1.0.0,<2.0.0",
+    "mem0ai>=1.0.11",
+]
+
+[project.optional-dependencies]
+dev = [
+    # Только для tests/integration/test_db_redis_connection.py: приложение ходит
+    # в PG через asyncpg, синхронный драйвер в прод-образе лишний.
+    "psycopg2-binary>=2.9.0,<3.0.0",
+    "pre-commit>=4.3.0",
+    "pytest>=8.3.3,<9.0.0",
+    "pytest-asyncio>=0.23.0,<1.0.0",
+    "pytest-cov>=6.0.0,<7.0.0",
+    "mypy>=1.9.0",
+    "ruff>=0.7.0",
+]
+
+# Security constraints for transitive deps (bump patched versions without changing
+# the direct dependency set). starlette is intentionally NOT pinned here — it is
+# capped by fastapi and needs a coordinated fastapi upgrade (tracked separately).
+[tool.uv]
+constraint-dependencies = [
+    "urllib3>=2.7.0",
+    "requests>=2.33.0",
+    "python-multipart>=0.0.31",
+    "tornado>=6.5.7",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+
+# Применённые миграции — исторический документ: их содержимое должно совпадать с
+# тем, что реально отработало на базе. Переформатировать их значит менять запись
+# о прошлом ради стиля. Исключены только `versions/`; `alembic/env.py` — живой код
+# и линтуется как обычно.
+extend-exclude = ["alembic/versions"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "C90"]
+ignore = []
+
+[tool.ruff.lint.mccabe]
+max-complexity = 70
+
+# Длина строки отключена ТОЧЕЧНО и по той же причине, что у сайдкара `agents`: внутри
+# файла лежит ТЕКСТ ПРОМПТА, а не код. Строка 84 — JSON-схема ответа внутри инструкции
+# модели; перенос в ней меняет то, что видит модель, то есть это правка ДАННЫХ под
+# видом форматирования. Исключение поимённое: новый файл с длинными строками кода
+# упадёт, как и должен.
+[tool.ruff.lint.per-file-ignores]
+"service/services/analytics/application/memory_service.py" = ["E501"]
+
+[tool.mypy]
+python_version = "3.13"
+pretty = true
+show_error_codes = true
+warn_unused_configs = true
+ignore_missing_imports = true
+follow_imports = "silent"
+packages = ["service"]
+disable_error_code = ["attr-defined", "assignment", "override", "arg-type", "operator", "dict-item", "union-attr", "name-defined", "misc", "valid-type", "method-assign"]

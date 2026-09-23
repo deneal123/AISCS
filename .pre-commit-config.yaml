@@ -1,0 +1,69 @@
+# Хуки САМОГО backend.
+#
+# Зачем отдельно от суперпроекта: сабмодуль — самостоятельный git-репозиторий со
+# своим `.git`. Хуки суперпроекта на коммит ВНУТРИ него не срабатывают, а именно
+# так здесь и вносится код. Без этого файла проверки существовали только для
+# коммитов в суперпроект — то есть почти никогда.
+#
+# Установка: `pre-commit install` здесь же, либо `make hooks` из корня.
+#
+# Полный набор тестов сюда НЕ вынесен намеренно: он идёт ~22 секунды и его гоняет
+# CI. Здесь — быстрые проверки, ловящие типовые поломки до пуша.
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-yaml
+      - id: check-toml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: debug-statements
+
+  # Сканер секретов. Ставится ПОСЛЕДНИМ рубежом: секрет, попавший в коммит, из
+  # истории уже не убрать простым откатом — только переписыванием, поэтому ловить
+  # его надо до записи, а не в ревью.
+  #
+  # Стартует зелёным: прогон по истории backend и agents дал НОЛЬ находок (70
+  # «утечек» из первого прогона все оказались внутри .venv, то есть вне гита).
+  # Значит разбирать накопленное не пришлось и подавлений заводить не нужно.
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.30.1
+    hooks:
+      - id: gitleaks
+
+  - repo: local
+    hooks:
+      - id: ruff
+        name: ruff (lint + format)
+        entry: bash -lc "ruff check . && ruff format --check ."
+        language: system
+        pass_filenames: false
+
+      - id: mypy
+        name: mypy
+        entry: bash -lc "mypy"
+        language: system
+        pass_filenames: false
+
+      # Храповик сложности: новые нарушения и рост известных роняют коммит.
+      # Известный долг перечислен в scripts/complexity_baseline.json.
+      - id: complexity-guard
+        name: complexity guard
+        entry: bash -lc "uv run --frozen python scripts/check_module_complexity.py"
+        language: system
+        pass_filenames: false
+
+      # 🔴 Каталог моделей РАЗДВОЕН с сайдкаром и обязан оставаться побайтово равным ему.
+      # Расхождение не падает — оно тихо меняет поведение одной стороны: `TOOL_CAPABLE_*`
+      # решают, кому давать инструменты, `STATIC_CONTEXT_WINDOWS` — сколько влезет
+      # контекста. Так уже случилось: в копию сайдкара добавили импорт, которого здесь
+      # нет, сверка стала невыполнимой, и эта сторона полгода ходила мимо прокси.
+      #
+      # Ловим здесь, в момент правки. Скрипт лежит в суперпроекте — в отдельном клоне
+      # ветки его нет, и тогда хук ГРОМКО пропускается, а не падает не по делу.
+      - id: shared-copies
+        name: раздвоенные копии backend ↔ agents
+        entry: bash -lc "[ -f ../scripts/check_shared_copies.py ] || { echo 'ПРОПУСК — нет суперпроекта рядом'; exit 0; }; cd .. && uv run --project agents --frozen python scripts/check_shared_copies.py"
+        language: system
+        pass_filenames: false
+        always_run: true
