@@ -1,0 +1,12 @@
+{
+  "name":"aspa-text-sidecar",
+  "mcp_name":"aspa-text",
+  "version":"1.0.0",
+  "uses_biber":true,
+  "registry":"data/text.json",
+  "outline":"docs/outline.md",
+  "source_roots":["document"],
+  "snapshot_paths":["data","document","docs","README.md","TODO.md"],
+  "placeholder_patterns":["\\\\ResultPending","\\\\Blocked","\\bTODO\\b","\\bBLOCKED\\b"]
+  ,"allowed_target_constructs":["construct_boundaries","nociceptive_response","human_pain_self_report","human_experimental_nociception","ecap_like_observation","clinical_scs_response","simulation_dynamics","methodological_transfer"]
+}

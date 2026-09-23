@@ -1,0 +1,46 @@
+% !TEX program = xelatex
+\documentclass[14pt,a4paper]{extreport}
+\usepackage{fontspec}
+\usepackage[main=russian,english]{babel}
+\usepackage[left=30mm,right=15mm,top=20mm,bottom=20mm]{geometry}
+\usepackage{setspace}
+\usepackage{indentfirst}
+\usepackage{titlesec}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{amsmath}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\ifdefined\ASPADraft
+  \newcommand{\printbibliography}[1][]{\chapter*{СПИСОК ЛИТЕРАТУРЫ}\textit{Черновой профиль: библиография формируется Biber в release-профиле.}}
+\else
+\usepackage[backend=biber,style=numeric,sorting=none]{biblatex}
+\addbibresource{backmatter/references.bib}
+\fi
+\setmainfont{Times New Roman}
+\setsansfont{Arial}
+\onehalfspacing
+\setlength{\parindent}{1.25cm}
+\input{config/metadata.tex}
+\newcommand{\EvidenceRef}[1]{\textsuperscript{\textcolor{gray}{[#1]}}}
+\newcommand{\ResultPending}[1]{\par\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Ожидаемый результат:} #1}}\par}
+\newcommand{\Blocked}[2]{\par\noindent\fbox{\parbox{0.94\linewidth}{\textbf{BLOCKED (#1):} #2}}\par}
+\hypersetup{colorlinks=true,linkcolor=black,citecolor=black,urlcolor=blue,pdftitle={\WorkingTitle}}
+\begin{document}
+\input{frontmatter/title.tex}
+\input{frontmatter/abstract.tex}
+\tableofcontents
+\input{chapters/00-introduction.tex}
+\input{chapters/01-evidence.tex}
+\input{chapters/02-contract.tex}
+\input{chapters/03-simulation.tex}
+\input{chapters/04-synthetic-dataset.tex}
+\input{chapters/05-human-transfer.tex}
+\input{chapters/06-scs.tex}
+\input{chapters/07-results-discussion.tex}
+\input{backmatter/conclusion.tex}
+\input{backmatter/glossary.tex}
+\printbibliography[title={СПИСОК ЛИТЕРАТУРЫ}]
+\appendix
+\input{backmatter/appendices.tex}
+\end{document}

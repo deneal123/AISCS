@@ -1,0 +1,1648 @@
+{
+  "meta": {
+    "schema_version": "1.0.0",
+    "imported_at": "2026-09-23T12:47:18+00:00",
+    "source": "aspa-research",
+    "source_fingerprint": "B9EEDBBE190088F2",
+    "source_files": [
+      {
+        "name": "records.json",
+        "sha256": "68DDDB46E847764B1EB71614989F6E4603920779E1C781FC6DDEEE12FFFC84B8"
+      },
+      {
+        "name": "ST.json",
+        "sha256": "1978679B018E181C9E60597E0F97548319CDCA812B5D1155F62664C0A708B8D6"
+      },
+      {
+        "name": "scientific-contract.json",
+        "sha256": "CA0D45D1B7BC20E2F680BDB52CF343398391B85D2322F4D638605F1FC998D94B"
+      },
+      {
+        "name": "human-dataset-matrix.json",
+        "sha256": "23C57DE7BCD3A37EF1C3EC99763104C12D9066D8CEEEC5D37775C689BAA7F97F"
+      }
+    ]
+  },
+  "selected_refs": [
+    "S029",
+    "S062",
+    "S090",
+    "S105",
+    "S159",
+    "S162",
+    "S280",
+    "S291",
+    "S730",
+    "S731",
+    "ST031",
+    "ST032",
+    "ST033",
+    "ST034",
+    "ST035",
+    "ST039",
+    "ST040",
+    "ST041"
+  ],
+  "sources": [
+    {
+      "id": "S029",
+      "название": "Ascending nociceptive pathways drive rapid escape and sustained avoidance in adult Drosophila",
+      "авторы": "Jones, J. M.; Sustar, A.; Mamiya, A. et al.",
+      "год": 2025,
+      "издание": "bioRxiv preprint",
+      "модальность": "Нейронная активность",
+      "задача": "Восходящие ноцицептивные пути",
+      "метод": "Connectomics, optogenetics",
+      "датасет": "Adult Drosophila",
+      "производительность": null,
+      "кросс_субъект": "Не применимо",
+      "релевантность": 4,
+      "ограничения": "Препринт",
+      "тип_источника": "препринт",
+      "identifiers": {
+        "doi": "10.1101/2025.10.28.684868",
+        "pmid": "41280033",
+        "arxiv_id": null,
+        "patent_id": null,
+        "dataset_id": null,
+        "exact_url": "https://pubmed.ncbi.nlm.nih.gov/41280033/"
+      },
+      "provenance": {
+        "import_source": "archive/2026-09-21/records.json",
+        "retrieved_at": "2026-09-21",
+        "search_stream": "G0_primary_source_validation",
+        "query_or_seed": "Ascending nociceptive pathways drive rapid escape and sustained avoidance in adult Drosophila",
+        "iteration": "2026-09-21-pass-1"
+      },
+      "evidence": {
+        "species": "Drosophila melanogaster",
+        "population": "adult flies",
+        "sample_size": null,
+        "target_construct": "nociceptive_response",
+        "target_label": "escape and sustained avoidance after noxious stimulation",
+        "access_status": "open",
+        "evidence_role": "simulation_foundation",
+        "subject_domain": "drosophila_adult",
+        "modalities": [
+          "connectome",
+          "neural_activity"
+        ]
+      },
+      "validation": {
+        "status": "verified_primary",
+        "screening_status": "included_core",
+        "full_text_status": "checked",
+        "checked_at": "2026-09-21",
+        "notes": "Препринт, не прошедший журнальное рецензирование на дату проверки. Поддерживает модель ноцицепции, но не человеческой боли.",
+        "split_unit": "not_reported",
+        "cross_subject": "not_reported",
+        "external_validation": "not_reported",
+        "calibration": "not_reported",
+        "uncertainty": "not_reported",
+        "exclusion_reason": null
+      },
+      "risk_flags": [
+        "animal_to_human_transfer_unvalidated",
+        "missing_reported_metrics",
+        "preprint"
+      ],
+      "relations": []
+    },
+    {
+      "id": "S062",
+      "название": "Ascending nociceptive pathways drive rapid escape and sustained avoidance in adult Drosophila",
+      "авторы": "Jessica M Jones; Anne Sustar; Akira Mamiya; Sarah Walling-Bell; Grant M Chou; Andrew P Cook; John C Tuthill",
+      "год": 2025,
+      "издание": "bioRxiv",
+      "модальность": "Нейронная активность",
+      "задача": "Эволюция сенсорной настройки",
+      "метод": "Transcriptomics, imaging",
+      "датасет": null,
+      "производительность": null,
+      "кросс_субъект": "Не применимо",
+      "релевантность": 3,
+      "ограничения": "Препринт",
+      "тип_источника": "препринт",
+      "identifiers": {
+        "doi": "10.1101/2025.10.28.684868",
+        "pmid": "41280033",
+        "arxiv_id": null,
+        "patent_id": null,
+        "dataset_id": null,
+        "exact_url": "https://pubmed.ncbi.nlm.nih.gov/41280033/"
+      },
+      "provenance": {
+        "import_source": "archive/2026-09-21/records.json",
+        "retrieved_at": null,
+        "search_stream": null,
+        "query_or_seed": null,
+        "iteration": null
+      },
+      "evidence": {
+        "species": null,
+        "population": null,
+        "sample_size": null,
+        "target_construct": "nociceptive_response",
+        "target_label": null,
+        "access_status": "unknown",
+        "evidence_role": "simulation_foundation",
+        "subject_domain": "unknown",
+        "modalities": [
+          "neural_activity"
+        ]
+      },
+      "validation": {
+        "status": "verified_primary",
+        "screening_status": "included_core",
+        "full_text_status": "checked",
+        "checked_at": "2026-09-22",
+        "notes": "The preprint identifies adult-fly nociceptors and ascending pathways supporting escape and sustained avoidance. Its discussion of pain criteria does not demonstrate subjective experience or human transfer.",
+        "split_unit": "not_reported",
+        "cross_subject": "not_reported",
+        "external_validation": "not_reported",
+        "calibration": "not_reported",
+        "uncertainty": "not_reported",
+        "exclusion_reason": null
+      },
+      "risk_flags": [
+        "preprint",
+        "animal_to_human_transfer_unvalidated"
+      ],
+      "relations": []
+    },
+    {
+      "id": "S090",
+      "название": "Optogenetic Stimulation of Nociceptive Escape Behaviors in Drosophila Larvae",
+      "авторы": "Stephanie E Mauthner; W Daniel Tracey",
+      "год": 2024,
+      "издание": "Cold Spring Harbor Protocols",
+      "модальность": "Нейронная активность",
+      "задача": "Оптогенетическая стимуляция ноцицепторов",
+      "метод": "ChR2 optogenetics",
+      "датасет": null,
+      "производительность": null,
+      "кросс_субъект": "Не применимо",
+      "релевантность": 4,
+      "ограничения": null,
+      "тип_источника": "метод",
+      "identifiers": {
+        "doi": "10.1101/pdb.prot108128",
+        "pmid": "39095077",
+        "arxiv_id": null,
+        "patent_id": null,
+        "dataset_id": null,
+        "exact_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11787400/"
+      },
+      "provenance": {
+        "import_source": "archive/2026-09-21/records.json",
+        "retrieved_at": null,
+        "search_stream": null,
+        "query_or_seed": null,
+        "iteration": null
+      },
+      "evidence": {
+        "species": null,
+        "population": null,
+        "sample_size": null,
+        "target_construct": "protective_behavior",
+        "target_label": null,
+        "access_status": "unknown",
+        "evidence_role": "simulation_foundation",
+        "subject_domain": "drosophila_larva",
+        "modalities": [
+          "behavior",
+          "neural_activity"
+        ]
+      },
+      "validation": {
+        "status": "verified_primary",
+        "screening_status": "included_core",
+        "full_text_status": "checked",
+        "checked_at": "2026-09-22",
+        "notes": "This is an experimental protocol for activating larval nociceptors and eliciting rolling. It validates a nociceptive-behavior assay, not subjective pain or human transfer.",
+        "split_unit": "not_reported",
+        "cross_subject": "not_reported",
+        "external_validation": "not_reported",
+        "calibration": "not_reported",
+        "uncertainty": "not_reported",
+        "exclusion_reason": null
+      },
+      "risk_flags": [
+        "animal_to_human_transfer_unvalidated"
+      ],
+      "relations": []
+    },
+    {
+      "id": "S105",
+      "название": "Feature extraction and prediction of spinal cord stimulation evoked compound action potentials in humans",
+      "авторы": "König, S.; Ramadan, A.; Sullivan, D. et al.",
+      "год": 2025,
+      "издание": "Journal of Neural Engineering 22(2)",
+      "модальность": "ECAP",
+      "задача": "Предсказание ECAP",
+      "метод": "PCA, KNN",
+      "датасет": "8 пациентов",
+      "производительность": "AUC d'=2.44",
+      "кросс_субъект": "Индивидуальная вариабельность",
+      "релевантность": 5,
+      "ограничения": "n=8",
+      "тип_источника": "метод",
+      "identifiers": {
+        "doi": "10.1088/1741-2552/adbfbe",
+        "pmid": "40073452",
+        "arxiv_id": null,
+        "patent_id": null,
+        "dataset_id": null,
+        "exact_url": "https://pubmed.ncbi.nlm.nih.gov/40073452/"
+      },
+      "provenance": {
+        "import_source": "archive/2026-09-21/records.json",
+        "retrieved_at": "2026-09-21",
+        "search_stream": "G0_primary_source_validation",
+        "query_or_seed": "Feature extraction and prediction of spinal cord stimulation evoked compound action potentials in humans",
+        "iteration": "2026-09-21-pass-1"
+      },
+      "evidence": {
+        "species": "Homo sapiens",
+        "population": "8 participants with chronic pain during externalized SCS trial",
+        "sample_size": 8,
+        "target_construct": "ecap_neural_recruitment",
+        "target_label": "ECAP/non-ECAP/artifact and ECAP waveform features",
+        "access_status": "open",
+        "evidence_role": "scs_ecap_validation",
+        "subject_domain": "human_clinical",
+        "modalities": [
+          "ecap"
+        ]
+      },
+      "validation": {
+        "status": "verified_primary",
+        "screening_status": "included_core",
+        "full_text_status": "checked",
+        "checked_at": "2026-09-21",
+        "notes": "Проверена обработка ECAP и межиндивидуальная вариабельность; исследование не является моделью прямого измерения боли.",
+        "split_unit": "not_reported",
+        "cross_subject": "not_reported",
+        "external_validation": "not_reported",
+        "calibration": "not_reported",
+        "uncertainty": "not_reported",
+        "exclusion_reason": null
+      },
+      "risk_flags": [
+        "ecap_not_pain_measure"
+      ],
+      "relations": []
+    },
+    {
+      "id": "S159",
+      "название": "Biphasic Electrostimulation Artifact Model for ECAP Extraction in Spinal Cord Stimulation",
+      "авторы": "Zhang, H.; Luo, X.; Ma, B. et al.",
+      "год": 2026,
+      "издание": "IEEE Transactions on Neural Systems and Rehabilitation Engineering 34, 880–893",
+      "модальность": "ECAP",
+      "задача": "Извлечение ECAP",
+      "метод": "Artifact model",
+      "датасет": null,
+      "производительность": null,
+      "кросс_субъект": null,
+      "релевантность": 4,
+      "ограничения": null,
+      "тип_источника": "метод",
+      "identifiers": {
+        "doi": "10.1109/TNSRE.2026.3658636",
+        "pmid": "41605141",
+        "arxiv_id": null,
+        "patent_id": null,
+        "dataset_id": null,
+        "exact_url": "https://doi.org/10.1109/TNSRE.2026.3658636"
+      },
+      "provenance": {
+        "import_source": "archive/2026-09-21/records.json",
+        "retrieved_at": "2026-09-21",
+        "search_stream": "G0_primary_source_validation",
+        "query_or_seed": "Biphasic Electrostimulation Artifact Model for ECAP Extraction in Spinal Cord Stimulation",
+        "iteration": "2026-09-21-pass-1"
+      },
+      "evidence": {
+        "species": "Homo sapiens",
+        "population": "two SCS patients; longitudinal clinical recordings",
+        "sample_size": "2 patients; 208336 retained signals under 900 stimulation settings",
+        "target_construct": "technical_signal_quality",
+        "target_label": "stimulation artifact removal and ECAP extraction",
+        "access_status": "open",
+        "evidence_role": "scs_ecap_validation",
+        "subject_domain": "unknown",
+        "modalities": [
+          "ecap"
+        ]
+      },
+      "validation": {
+        "status": "verified_primary",
+        "screening_status": "included_core",
+        "full_text_status": "checked",
+        "checked_at": "2026-09-21",
+        "notes": "Техническая работа по удалению артефакта и извлечению ECAP; не доказательство оценки боли или ответа на SCS.",
+        "split_unit": "not_reported",
+        "cross_subject": "not_reported",
+        "external_validation": "not_reported",
+        "calibration": "not_reported",
+        "uncertainty": "not_reported",
+        "exclusion_reason": null
+      },
+      "risk_flags": [
+        "ecap_not_pain_measure",
+        "future_or_recent_record_requires_recheck",
+        "missing_cross_subject_validation",
+        "missing_dataset",
+        "missing_reported_metrics"
+      ],
+      "relations": []
+    },
+    {
+      "id": "S162",
+      "название": "Next-Generation SCS Programming Platform: Enhancing ECAP Fidelity and Objectivity to Improve Patient Experience",
+      "авторы": "Daniel J Parker; Ajay B Antony; Gregory L Smith; Johnathan H Goree; Marc A Russo; Erika A Petersen; Chau M Vu; Paul Verrills; Christopher Gilmore; Leonardo Kapural; Darayus Nanavati; Dean M Karantonis; Jason E Pope",
+      "год": 2026,
+      "издание": "Pain and Therapy",
+      "модальность": "ECAP",
+      "задача": "ECAP fidelity",
+      "метод": "Platform (APM)",
+      "датасет": null,
+      "производительность": "96% успех, median time 11.9 мин, SNR 4.6",
+      "кросс_субъект": null,
+      "релевантность": 4,
+      "ограничения": null,
+      "тип_источника": "применение",
+      "identifiers": {
+        "doi": "10.1007/s40122-025-00808-5",
+        "pmid": null,
+        "arxiv_id": null,
+        "patent_id": null,
+        "dataset_id": null,
+        "exact_url": "https://link.springer.com/article/10.1007/s40122-025-00808-5"
+      },
+      "provenance": {
+        "import_source": "archive/2026-09-21/records.json",
+        "retrieved_at": null,
+        "search_stream": null,
+        "query_or_seed": null,
+        "iteration": null
+      },
+      "evidence": {
+        "species": null,
+        "population": null,
+        "sample_size": null,
+        "target_construct": "ecap_neural_recruitment",
+        "target_label": null,
+        "access_status": "unknown",
+        "evidence_role": "scs_ecap_validation",
+        "subject_domain": "human_clinical",
+        "modalities": [
+          "ecap"
+        ]
+      },
+      "validation": {
+        "status": "verified_primary",
+        "screening_status": "included_core",
+        "full_text_status": "checked",
+        "checked_at": "2026-09-22",
+        "notes": "Two prospective multicenter single-arm feasibility studies support programming feasibility and signal fidelity. They do not establish comparative analgesic efficacy or prediction of long-term SCS response.",
+        "split_unit": "not_reported",
+        "cross_subject": "not_reported",
+        "external_validation": "not_reported",
+        "calibration": "not_reported",
+        "uncertainty": "not_reported",
+        "exclusion_reason": null
+      },
+      "risk_flags": [
+        "ecap_not_pain_measure"
+      ],
+      "relations": []
+    },
+    {
+      "id": "S280",
+      "название": "BioVid Heat Pain Database",
+      "авторы": "Walter, S.; Gruss, S.; Ehleiter, H. et al.",
+      "год": 2013,
+      "издание": "Official database page; Cyberworlds 2013 descriptor",
+      "модальность": "Видео, GSR/EDA, ECG, EMG",
+      "задача": "Оценка реакции на индивидуально калиброванную экспериментальную тепловую стимуляцию",
+      "метод": "Мультимодальный набор данных",
+      "датасет": "BioVid Heat Pain Database, Parts A–E",
+      "производительность": "Не применимо: описание набора данных",
+      "кросс_субъект": "Рекомендуется LOSO; фиксировать точный состав участников",
+      "релевантность": 5,
+      "ограничения": "Экспериментальная острая боль у здоровых взрослых; доступ по соглашению; не SCS/ECAP",
+      "тип_источника": "датасет",
+      "identifiers": {
+        "doi": null,
+        "pmid": null,
+        "arxiv_id": null,
+        "patent_id": null,
+        "dataset_id": "BioVid Heat Pain Database",
+        "exact_url": "https://www.nit.ovgu.de/BioVid.html"
+      },
+      "provenance": {
+        "import_source": "archive/2026-09-21/records.json",
+        "retrieved_at": "2026-09-21",
+        "search_stream": "G0_primary_source_validation",
+        "query_or_seed": "BioVid Heat Pain Database",
+        "iteration": "2026-09-21-pass-1"
+      },
+      "evidence": {
+        "species": "Homo sapiens",
+        "population": "healthy adults exposed to calibrated experimental heat",
+        "sample_size": "90 recruited; 87 in Part A",
+        "target_construct": "experimental_pain_class",
+        "target_label": "individualized heat-stimulus levels; pain-related responses",
+        "access_status": "agreement_required",
+        "evidence_role": "human_validation",
+        "subject_domain": "human_clinical",
+        "modalities": [
+          "ecg",
+          "eda",
+          "emg",
+          "video_face"
+        ]
+      },
+      "validation": {
+        "status": "verified_primary",
+        "screening_status": "included_core",
+        "full_text_status": "checked",
+        "checked_at": "2026-09-21",
+        "notes": "Part A: video, GSR/EDA, ECG and trapezius EMG; non-commercial research access requires institutional agreement.",
+        "split_unit": "not_reported",
+        "cross_subject": "not_reported",
+        "external_validation": "not_reported",
+        "calibration": "not_reported",
+        "uncertainty": "not_reported",
+        "exclusion_reason": null
+      },
+      "risk_flags": [],
+      "relations": []
+    },
+    {
+      "id": "S291",
+      "название": "AI4PAIN Grand Challenge 2024 dataset",
+      "авторы": "Fernandez-Rojas, R.; Joseph, C.; Hirachan, N. et al.",
+      "год": 2024,
+      "издание": "ACIIW 2024 / official challenge",
+      "модальность": "fNIRS и видео лица",
+      "задача": "Трехклассовая оценка экспериментально вызванной боли",
+      "метод": "Grand Challenge dataset and fixed test protocol",
+      "датасет": "AI4PAIN 2024",
+      "производительность": "Официальный baseline: 43,3% accuracy; лучший результат challenge: до 51,3%",
+      "кросс_субъект": "Фиксированные непересекающиеся train/validation/test по участникам",
+      "релевантность": 4,
+      "ограничения": "Экспериментальная боль у здоровых участников; метки теста закрыты; не SCS/ECAP",
+      "тип_источника": "датасет",
+      "identifiers": {
+        "doi": null,
+        "pmid": null,
+        "arxiv_id": null,
+        "patent_id": null,
+        "dataset_id": "AI4PAIN 2024",
+        "exact_url": "https://sites.google.com/view/ai4pain/challenge-details"
+      },
+      "provenance": {
+        "import_source": "archive/2026-09-21/records.json",
+        "retrieved_at": "2026-09-21",
+        "search_stream": "G0_primary_source_validation",
+        "query_or_seed": "AI4PAIN Grand Challenge 2024 dataset",
+        "iteration": "2026-09-21-pass-1"
+      },
+      "evidence": {
+        "species": "Homo sapiens",
+        "population": "healthy volunteers under controlled painful stimulation",
+        "sample_size": "65 participants: 41 train, 12 validation, 12 test",
+        "target_construct": "experimental_pain_class",
+        "target_label": "No Pain / Low Pain / High Pain",
+        "access_status": "registration_required",
+        "evidence_role": "human_validation",
+        "subject_domain": "human_clinical",
+        "modalities": [
+          "fnirs",
+          "video_face"
+        ]
+      },
+      "validation": {
+        "status": "verified_primary",
+        "screening_status": "included_core",
+        "full_text_status": "checked",
+        "checked_at": "2026-09-21",
+        "notes": "Подтверждены fNIRS и facial video. Физиологические EDA/BVP/RESP/SpO2 не подтверждены для версии challenge 2024 и исключены из описания.",
+        "split_unit": "not_reported",
+        "cross_subject": "not_reported",
+        "external_validation": "not_reported",
+        "calibration": "not_reported",
+        "uncertainty": "not_reported",
+        "exclusion_reason": null
+      },
+      "risk_flags": [],
+      "relations": []
+    },
+    {
+      "id": "S730",
+      "название": "The PainMonit Database: An Experimental and Clinical Physiological Signal Dataset for Automated Pain Recognition",
+      "авторы": "Gouverneur, P.; Badura, A.; Li, F. et al.",
+      "год": 2024,
+      "издание": "Scientific Data 11, 1051",
+      "модальность": "BVP, EDA, temperature, ECG, EMG, IBI, HR, respiration; clinical part also grip",
+      "задача": "Experimental and clinical pain assessment with stimulus and self-report labels",
+      "метод": "Open multimodal physiological dataset",
+      "датасет": "PainMonit Experimental Dataset and PainMonit Clinical Dataset",
+      "производительность": "Not applicable: dataset descriptor",
+      "кросс_субъект": "Participant identifiers are available for subject-wise splits",
+      "релевантность": 5,
+      "ограничения": "PMED and PMCD have different populations, elicitation and labels; they must not be pooled without domain-aware analysis",
+      "тип_источника": "датасет",
+      "identifiers": {
+        "doi": "10.1038/s41597-024-03878-w",
+        "pmid": null,
+        "arxiv_id": null,
+        "patent_id": null,
+        "dataset_id": "10.6084/m9.figshare.26965159.v3",
+        "exact_url": "https://figshare.com/articles/dataset/The_PainMonit_Database_An_Experimental_and_Clinical_Physiological_Signal_Dataset_for_Automated_Pain_Recognition/26965159"
+      },
+      "provenance": {
+        "import_source": "archive/2026-09-21/records.json",
+        "retrieved_at": "2026-09-21",
+        "search_stream": "G0_primary_source_validation",
+        "query_or_seed": "The PainMonit Database: An Experimental and Clinical Physiological Signal Dataset for Automated Pain Recognition",
+        "iteration": "2026-09-21-pass-1"
+      },
+      "evidence": {
+        "species": "Homo sapiens",
+        "population": "55 healthy participants in PMED; 49 physiotherapy patients in PMCD",
+        "sample_size": "104 participants total",
+        "target_construct": "self_reported_pain",
+        "target_label": "stimulus intensity and/or self-reported VAS/NRS depending on subset",
+        "access_status": "open",
+        "evidence_role": "human_validation",
+        "subject_domain": "human_healthy",
+        "modalities": [
+          "bvp_ppg",
+          "ecg",
+          "eda",
+          "emg"
+        ]
+      },
+      "validation": {
+        "status": "verified_primary",
+        "screening_status": "included_core",
+        "full_text_status": "checked",
+        "checked_at": "2026-09-21",
+        "notes": "Проверены статья Scientific Data, Figshare v3 и официальный кодовый репозиторий.",
+        "split_unit": "not_reported",
+        "cross_subject": "not_reported",
+        "external_validation": "not_reported",
+        "calibration": "not_reported",
+        "uncertainty": "not_reported",
+        "exclusion_reason": null
+      },
+      "risk_flags": [],
+      "relations": []
+    },
+    {
+      "id": "S731",
+      "название": "NeuroMechFly v2: simulating embodied sensorimotor control in adult Drosophila",
+      "авторы": "Wang-Chen, S.; Stimpfling, V. A.; Özdil, P. G. et al.",
+      "год": 2024,
+      "издание": "Nature Methods",
+      "модальность": "Biomechanics, proprioception, vision, olfaction, locomotion",
+      "задача": "Embodied sensorimotor simulation of adult Drosophila",
+      "метод": "MuJoCo-based neuromechanical model exposed through FlyGym",
+      "датасет": "NeuroMechFly v2 / FlyGym",
+      "производительность": "Not a pain or nociception benchmark",
+      "кросс_субъект": "Not applicable; model variability must be introduced explicitly",
+      "релевантность": 5,
+      "ограничения": "Does not provide a nociceptive circuit, subjective pain labels, ECAP measurement model or human SCS mapping out of the box",
+      "тип_источника": "фундаментальные_модели",
+      "identifiers": {
+        "doi": "10.1038/s41592-024-02497-y",
+        "pmid": null,
+        "arxiv_id": null,
+        "patent_id": null,
+        "dataset_id": "10.5281/zenodo.12973000",
+        "exact_url": "https://flygym.readthedocs.io/latest/index.html"
+      },
+      "provenance": {
+        "import_source": "archive/2026-09-21/records.json",
+        "retrieved_at": "2026-09-21",
+        "search_stream": "G0_primary_source_validation",
+        "query_or_seed": "NeuroMechFly v2: simulating embodied sensorimotor control in adult Drosophila",
+        "iteration": "2026-09-21-pass-1"
+      },
+      "evidence": {
+        "species": "Drosophila melanogaster",
+        "population": "adult female fly biomechanical digital twin",
+        "sample_size": null,
+        "target_construct": "not_applicable",
+        "target_label": null,
+        "access_status": "open",
+        "evidence_role": "simulation_foundation",
+        "subject_domain": "drosophila_adult",
+        "modalities": [
+          "movement_pose",
+          "simulation_state"
+        ]
+      },
+      "validation": {
+        "status": "verified_primary",
+        "screening_status": "included_core",
+        "full_text_status": "checked",
+        "checked_at": "2026-09-21",
+        "notes": "Подтверждены официальный пакет FlyGym, документация, Apache-2.0 code availability and frozen Zenodo snapshot.",
+        "split_unit": "not_reported",
+        "cross_subject": "not_reported",
+        "external_validation": "not_reported",
+        "calibration": "not_reported",
+        "uncertainty": "not_reported",
+        "exclusion_reason": null
+      },
+      "risk_flags": [
+        "animal_to_human_transfer_unvalidated"
+      ],
+      "relations": []
+    }
+  ],
+  "resources": [
+    {
+      "название": "BioVid HeatPain Database",
+      "ссылка": "https://www.nit.ovgu.de/BioVid.html",
+      "данные": "ECG, sEMG, video лица (N = 90); острая тепловая боль; Part A–E",
+      "задачи": [
+        "Задача 4",
+        "Задача 5"
+      ],
+      "исходная_ссылка": "https://www.nit.ovgu.de/nit/en/BioVid-p-1358.html",
+      "статус_валидации": "verified_primary",
+      "проверено": "2026-09-21",
+      "примечание_валидации": "Доступ для некоммерческих исследований по соглашению; Part A содержит 87 участников.",
+      "resource_id": "ST031",
+      "проверенные_утверждения": [],
+      "ограничения_валидации": []
+    },
+    {
+      "название": "AI4Pain Grand Challenge",
+      "ссылка": "https://sites.google.com/view/ai4pain/challenge-details",
+      "данные": "fNIRS + видео лица (65 участников); No Pain / Low Pain / High Pain; EDA, BVP, RESP, SpO2",
+      "задачи": [
+        "Задача 4",
+        "Задача 5"
+      ],
+      "исходная_ссылка": "https://sites.google.com/view/ai4pain/home",
+      "статус_валидации": "verified_primary",
+      "проверено": "2026-09-21",
+      "примечание_валидации": "65 участников, fNIRS+video, фиксированные train/validation/test.",
+      "resource_id": "ST032",
+      "проверенные_утверждения": [],
+      "ограничения_валидации": []
+    },
+    {
+      "название": "PainMonit Dataset",
+      "ссылка": "https://figshare.com/articles/dataset/The_PainMonit_Database_An_Experimental_and_Clinical_Physiological_Signal_Dataset_for_Automated_Pain_Recognition/26965159",
+      "данные": "9 физиологических модальностей (BVP, 2×EDA, skin temperature, ECG, EMG, IBI, HR, respiration); 55 здоровых субъектов",
+      "задачи": [
+        "Задача 4",
+        "Задача 5"
+      ],
+      "исходная_ссылка": "https://www.mendeley.com",
+      "статус_валидации": "verified_primary",
+      "проверено": "2026-09-21",
+      "примечание_валидации": "Figshare v3; PMED 55 и PMCD 49 участников; DOI 10.1038/s41597-024-03878-w.",
+      "resource_id": "ST033",
+      "проверенные_утверждения": [],
+      "ограничения_валидации": []
+    },
+    {
+      "название": "PainMotion Dataset",
+      "ссылка": "https://zenodo.org/records/17704417",
+      "данные": "sEMG + ECG + кинематика верхних конечностей; DOMS vs musculoskeletal disorders; 6h4m данных",
+      "задачи": [
+        "Задача 4"
+      ],
+      "исходная_ссылка": "https://zenodo.org",
+      "статус_валидации": "verified_primary",
+      "проверено": "2026-09-22",
+      "примечание_валидации": "Version 1.0.1 and the exact Zenodo DOI were confirmed.",
+      "resource_id": "ST034",
+      "проверенные_утверждения": [
+        "Zenodo record 10.5281/zenodo.17704417 provides ECG, sEMG, upper-limb inertial data and binary self-reported pain labels.",
+        "The record describes 17 healthy participants with DOMS and 6 participants with shoulder musculoskeletal disorders."
+      ],
+      "ограничения_валидации": [
+        "Labels are binary self-reports collected during industrial tasks, not a continuous clinical pain endpoint.",
+        "Files total 12.5 GB; this audit checked metadata and file inventory, not the signal contents."
+      ],
+      "назначение": "Multimodal human musculoskeletal-pain dataset with ECG, sEMG, IMU and binary self-report labels."
+    },
+    {
+      "название": "EmoPain Database",
+      "ссылка": "https://www.ucl.ac.uk/uclic/research/affective-computing/emopain-dataset",
+      "данные": "IMU + sEMG; хроническая боль в спине; упражнения",
+      "задачи": [
+        "Задача 4",
+        "Задача 5"
+      ],
+      "исходная_ссылка": "https://www.nit.ovgu.de",
+      "статус_валидации": "verified_primary",
+      "проверено": "2026-09-22",
+      "примечание_валидации": "The former generic NIT link was replaced with the official UCL dataset page.",
+      "resource_id": "ST035",
+      "проверенные_утверждения": [
+        "The UCL page describes 18 IMUs and four sEMG sensors for 12 healthy and 18 chronic-pain participants.",
+        "Protective behaviour was independently annotated by four domain experts."
+      ],
+      "ограничения_валидации": [
+        "Access to the body-movement component requires contacting the dataset owner.",
+        "Protective behaviour is not interchangeable with pain intensity or a clinical outcome."
+      ],
+      "назначение": "Controlled-access movement, sEMG and annotation resource for chronic-pain protective behaviour research."
+    },
+    {
+      "название": "Chronic neuropathic pain EEG",
+      "ссылка": "https://data.mendeley.com/datasets/yj52xrfgtz/4",
+      "данные": "36 пациентов; eyes open/closed; painDETECT + BPI",
+      "задачи": [
+        "Задача 4"
+      ],
+      "исходная_ссылка": "https://europepmc.org",
+      "статус_валидации": "verified_primary",
+      "проверено": "2026-09-22",
+      "примечание_валидации": "Exact Mendeley version and data article were matched.",
+      "resource_id": "ST039",
+      "проверенные_утверждения": [
+        "Mendeley Data DOI 10.17632/yj52xrfgtz.4 contains resting-state EEG and questionnaire data from 36 chronic neuropathic-pain patients.",
+        "The protocol includes five minutes eyes open, five minutes eyes closed, painDETECT and Brief Pain Inventory reports."
+      ],
+      "ограничения_валидации": [
+        "The dataset has no healthy control group and contains heterogeneous etiologies and medication exposure.",
+        "It supports within-cohort association or stratification, not causal or population-wide pain inference."
+      ],
+      "назначение": "Resting-state EEG plus painDETECT and Brief Pain Inventory data for 36 chronic neuropathic-pain patients."
+    },
+    {
+      "название": "ValidPain2 (Nociception Level Index)",
+      "ссылка": "https://openneuro.org/datasets/ds008115",
+      "данные": "180 субъектов; ЭЭГ; 4 ch, 178 Hz, BIDS",
+      "задачи": [
+        "Задача 4"
+      ],
+      "исходная_ссылка": "https://eegdash.org",
+      "статус_валидации": "verified_primary",
+      "проверено": "2026-09-22",
+      "примечание_валидации": "Nociception-monitor output and behavioural responsiveness must remain distinct from subjective pain.",
+      "resource_id": "ST040",
+      "проверенные_утверждения": [
+        "OpenNeuro identifier ds008115 resolves to the ValidPain2 EEG dataset under DOI 10.18112/openneuro.ds008115.v1.0.0.",
+        "Catalogue metadata reports 180 mechanically ventilated intensive-care patients, four EEG channels and three clinical-procedure tasks."
+      ],
+      "ограничения_валидации": [
+        "Patients were unable to self-report pain; the target concerns responsiveness to potentially nociceptive procedures, not subjective pain intensity.",
+        "Signal files were not downloaded or independently quality-controlled in this audit."
+      ],
+      "назначение": "Frontal EEG dataset for responsiveness to potentially nociceptive procedures in mechanically ventilated ICU patients."
+    },
+    {
+      "название": "Phantom Limb Pain EEG",
+      "ссылка": "https://nemar.org/dataset/on006921",
+      "данные": "64/128 ch resting-state ЭЭГ; ампутанты с фантомной болью",
+      "задачи": [
+        "Задача 4"
+      ],
+      "исходная_ссылка": "https://nemar.org",
+      "статус_валидации": "verified_primary",
+      "проверено": "2026-09-22",
+      "примечание_валидации": "OpenNeuro DOI 10.18112/openneuro.ds006921.v1.1.1 is linked by NEMAR.",
+      "resource_id": "ST041",
+      "проверенные_утверждения": [
+        "NEMAR on006921 provides 64/128-channel resting-state EEG from 38 participants across amputee and intact-control groups.",
+        "The BIDS dataset includes eyes-open/eyes-closed tasks and pain-related phenotype data."
+      ],
+      "ограничения_валидации": [
+        "This is a resting-state group-comparison resource, not an evoked pain-intensity dataset.",
+        "NEMAR data-quality summaries were not yet published on the checked page."
+      ],
+      "назначение": "High-density resting-state EEG and phenotype data for phantom-limb-pain, amputee-control and intact-control groups."
+    }
+  ],
+  "scientific_contract": {
+    "meta": {
+      "schema_version": "1.0.0",
+      "prepared_at": "2026-09-23",
+      "status": "contract_complete_pending_author_and_supervisor_review",
+      "gate": "G0_REVISE",
+      "scope": "Pre-registered scientific boundaries for simulation, transfer to human datasets, and conditional SCS validation.",
+      "invariants": [
+        "A simulation label is not subjective human pain.",
+        "ECAP measures evoked neural recruitment and is not a direct measure of pain.",
+        "Clinical SCS claims require patient-level human ECAP or telemetry linked to a pre-specified clinical outcome."
+      ]
+    },
+    "entities": [
+      {
+        "id": "ENT-01",
+        "name": "noxious_stimulus",
+        "carrier": "simulation environment or experimental stimulus apparatus",
+        "measurement": "commanded location, intensity, duration, and waveform",
+        "time_scale": "stimulus event and trial",
+        "analysis_unit": "trial within an individual",
+        "primary_target_construct": "noxious_stimulus",
+        "permitted_conclusion": "The applied exposure can be detected or its parameters can be estimated.",
+        "prohibited_interpretation": "The individual experienced subjective pain.",
+        "source_refs": [
+          "S280",
+          "S730",
+          "S291",
+          "ST031",
+          "ST032",
+          "ST033"
+        ]
+      },
+      {
+        "id": "ENT-02",
+        "name": "nociceptive_response",
+        "carrier": "sensory and downstream neural or physiological system",
+        "measurement": "neural activity or physiological response after a noxious stimulus",
+        "time_scale": "milliseconds to seconds after stimulation",
+        "analysis_unit": "trial within an animal or participant",
+        "primary_target_construct": "nociceptive_response",
+        "permitted_conclusion": "A measurable response associated with potentially tissue-damaging stimulation occurred.",
+        "prohibited_interpretation": "The response is equivalent to subjective pain or chronic pain.",
+        "source_refs": [
+          "S730",
+          "ST033",
+          "ST040"
+        ]
+      },
+      {
+        "id": "ENT-03",
+        "name": "protective_behavior",
+        "carrier": "animal or human participant",
+        "measurement": "movement, pose, withdrawal, guarding, or expert behavioral annotation",
+        "time_scale": "event to session",
+        "analysis_unit": "animal or participant",
+        "primary_target_construct": "protective_behavior",
+        "permitted_conclusion": "Observable protective behavior was detected under the defined protocol.",
+        "prohibited_interpretation": "Behavior alone quantifies subjective pain intensity.",
+        "source_refs": [
+          "ST035"
+        ]
+      },
+      {
+        "id": "ENT-04",
+        "name": "self_reported_pain",
+        "carrier": "human participant able to report experience",
+        "measurement": "pre-specified NRS, VAS, questionnaire, or ordinal self-report",
+        "time_scale": "rating event or clinical visit",
+        "analysis_unit": "participant",
+        "primary_target_construct": "self_reported_pain",
+        "permitted_conclusion": "The model estimates the recorded self-report under the sampled population and protocol.",
+        "prohibited_interpretation": "The estimate is an objective universal measure of pain or a causal diagnosis.",
+        "source_refs": [
+          "S730",
+          "ST033",
+          "ST034",
+          "ST039",
+          "ST041"
+        ]
+      },
+      {
+        "id": "ENT-05",
+        "name": "ecap_neural_recruitment",
+        "carrier": "electrically stimulated and recorded human neural tissue",
+        "measurement": "artifact-controlled evoked compound action-potential morphology, latency, area, and peak-to-peak amplitude",
+        "time_scale": "sub-millisecond to tens of milliseconds after a stimulation pulse",
+        "analysis_unit": "pulse nested in electrode configuration, session, and participant",
+        "primary_target_construct": "ecap_neural_recruitment",
+        "permitted_conclusion": "The signal characterizes evoked neural recruitment and stimulation delivery under the recording configuration.",
+        "prohibited_interpretation": "ECAP is a direct measure of pain or proves clinical benefit.",
+        "source_refs": [
+          "S105",
+          "S159",
+          "S162"
+        ]
+      },
+      {
+        "id": "ENT-06",
+        "name": "scs_response",
+        "carrier": "human patient receiving spinal cord stimulation",
+        "measurement": "pre-specified patient-level clinical outcome at a fixed follow-up time",
+        "time_scale": "trial period to longitudinal follow-up",
+        "analysis_unit": "participant",
+        "primary_target_construct": "scs_response",
+        "permitted_conclusion": "The model predicts the defined clinical outcome in an independent patient-level evaluation.",
+        "prohibited_interpretation": "A waveform-only or within-patient window result establishes therapeutic efficacy or cross-subject prediction.",
+        "source_refs": [
+          "S079",
+          "S105",
+          "S162"
+        ]
+      }
+    ],
+    "simulation_domain": {
+      "id": "SIM-DOM-01",
+      "organism": "adult Drosophila melanogaster",
+      "neural_scope": "Peripheral nociceptors and connectome-addressable ascending nociceptive neurons implicated in rapid escape and sustained avoidance; exact cell/root IDs must be frozen in the simulator manifest for the selected connectome release.",
+      "state_variables": [
+        "neuron activation or spike state when the selected simulator supports it",
+        "synaptic input and output state when exposed by the simulator",
+        "body pose, joint state, contact state, and locomotor state",
+        "environment and stimulus state retained for audit but withheld from a detector when it is the target"
+      ],
+      "stimuli": [
+        "localized noxious mechanical exposure",
+        "localized noxious thermal exposure when supported by the selected sensory model",
+        "sham and non-noxious controls"
+      ],
+      "observable_sensors": [
+        "neural_activity",
+        "simulation_state",
+        "movement_pose",
+        "behavior"
+      ],
+      "observable_behaviors": [
+        "rapid escape",
+        "sustained avoidance",
+        "locomotor trajectory and pose-derived protective response"
+      ],
+      "fallback_domain": "A separate larval Class-IV multidendritic-nociceptor escape/rolling circuit may be used only as an explicitly different experiment; adult and larval circuits are not pooled.",
+      "excluded_claims": [
+        "subjective pain",
+        "human spinal-cord equivalence",
+        "clinical SCS response"
+      ],
+      "source_refs": [
+        "S029",
+        "S062",
+        "S090",
+        "S731"
+      ]
+    },
+    "experiments": [
+      {
+        "id": "EXP-01",
+        "name": "simulation_stimulus_detection",
+        "primary_entity_id": "ENT-01",
+        "input": "simulated neural, pose, movement, or behavioral observations without the stimulus command",
+        "output": "location, intensity, duration, or presence of a noxious stimulus",
+        "training_data": "synthetic individuals and scenarios assigned only to training",
+        "independent_test": "held-out synthetic individuals and held-out stimulus scenarios",
+        "success_criterion": "pre-registered improvement over chance and leakage controls with confidence intervals",
+        "falsification_criterion": "performance collapses after removing the stimulus command or under individual/scenario holdout",
+        "source_refs": []
+      },
+      {
+        "id": "EXP-02",
+        "name": "simulation_response_estimation",
+        "primary_entity_id": "ENT-02",
+        "input": "stimulus parameters and pre-stimulus simulation state",
+        "output": "held-out neural or protective response",
+        "training_data": "synthetic individuals and perturbations assigned only to training",
+        "independent_test": "held-out individuals, parameter ranges, and perturbations",
+        "success_criterion": "response features remain identifiable and calibrated under pre-registered perturbations",
+        "falsification_criterion": "the response is not distinguishable from control or is determined by metadata leakage",
+        "source_refs": []
+      },
+      {
+        "id": "EXP-03",
+        "name": "human_target_transfer",
+        "primary_entity_id": "ENT-04",
+        "input": "human modalities mapped through modality-specific encoders into an abstract temporal representation",
+        "output": "exactly one dataset-specific human target construct",
+        "training_data": "human training participants with optional synthetic pretraining performed before human fine-tuning",
+        "independent_test": "participant-disjoint validation and at least one compatible independent dataset",
+        "success_criterion": "synthetic pretraining improves the pre-selected metric with a 95% confidence interval and no calibration degradation versus human-only and synthetic controls",
+        "falsification_criterion": "no gain on participant-disjoint evaluation or gain disappears on a compatible external dataset",
+        "source_refs": [
+          "S280",
+          "S291",
+          "S730",
+          "ST031",
+          "ST032",
+          "ST033"
+        ]
+      },
+      {
+        "id": "EXP-04",
+        "name": "clinical_scs_response_prediction",
+        "primary_entity_id": "ENT-06",
+        "input": "human SCS telemetry or ECAP plus pre-specified clinical covariates",
+        "output": "pre-specified patient-level clinical response at a fixed follow-up",
+        "training_data": "authorized human SCS cohort, participant-disjoint from evaluation",
+        "independent_test": "held-out patients or a separate clinical cohort",
+        "success_criterion": "improvement over clinical baseline and a no-synthetic-pretraining model with calibrated uncertainty",
+        "falsification_criterion": "no linked outcome dataset, within-patient-only performance, or disappearance under patient-level testing",
+        "source_refs": [
+          "S079",
+          "S105",
+          "S162"
+        ]
+      }
+    ],
+    "transfer_chain": [
+      {
+        "id": "TR-01",
+        "from": "simulation",
+        "to": "abstract_representation",
+        "input": "neural activity, simulation state, movement, pose, and protective behavior",
+        "output": "masked temporal embeddings with modality identity and no claim of species equivalence",
+        "training_data": "training synthetic individuals and scenarios",
+        "independent_test": "held-out synthetic individuals and scenarios",
+        "success_criterion": "representation preserves pre-registered stimulus and response information under perturbation",
+        "falsification_criterion": "representation depends on command leakage or fails individual/scenario holdout",
+        "source_refs": []
+      },
+      {
+        "id": "TR-02",
+        "from": "abstract_representation",
+        "to": "human_dataset_interface",
+        "input": "synthetic embeddings and dataset-specific human modalities",
+        "output": "common temporal interface with explicit modality masks and separate encoders",
+        "training_data": "synthetic corpus and human training participants only",
+        "independent_test": "held-out human participants",
+        "success_criterion": "transfer exceeds human-only and naive/random synthetic controls",
+        "falsification_criterion": "no comparable observable space or no gain after leakage-safe evaluation",
+        "source_refs": [
+          "S036",
+          "S039",
+          "S191"
+        ]
+      },
+      {
+        "id": "TR-03",
+        "from": "human_dataset_interface",
+        "to": "dataset_specific_human_target",
+        "input": "participant-level human representation",
+        "output": "one target construct declared by the selected dataset row",
+        "training_data": "one target-compatible training partition",
+        "independent_test": "participant-disjoint partition and compatible external dataset",
+        "success_criterion": "pre-registered primary metric improves with a 95% confidence interval without worse calibration",
+        "falsification_criterion": "effect disappears across participants or requires pooling incompatible targets",
+        "source_refs": [
+          "S280",
+          "S291",
+          "S730",
+          "ST031",
+          "ST032",
+          "ST033"
+        ]
+      },
+      {
+        "id": "TR-04",
+        "from": "human_pain_result",
+        "to": "scs_validation",
+        "input": "a frozen transfer method plus authorized patient-level SCS telemetry or ECAP",
+        "output": "pre-specified clinical SCS response",
+        "training_data": "SCS training patients with linked outcomes",
+        "independent_test": "held-out SCS patients or a separate cohort",
+        "success_criterion": "incremental patient-level predictive value over clinical and no-pretraining baselines",
+        "falsification_criterion": "linked outcomes are unavailable or gain vanishes under patient-level evaluation",
+        "source_refs": [
+          "S079",
+          "S105",
+          "S162"
+        ]
+      }
+    ],
+    "ecap_like_observation_model": {
+      "id": "ECAP-OBS-01",
+      "required_term_before_validation": "ECAP-like",
+      "source_activity": "population transmembrane action potentials elicited by electrical stimulation",
+      "conduction_delays": "path-length and fiber-parameter dependent delays applied before summation",
+      "spatial_summation": "signed summation over recruited fibers with distance and orientation weighting",
+      "electrode_geometry": "explicit stimulation and recording contact positions, spacing, polarity, and reference",
+      "volume_conduction": "forward observation operator from neural sources to recording contacts",
+      "disturbances": [
+        "stimulation artifact",
+        "physiological noise including EMG and movement",
+        "electronic noise and baseline drift",
+        "amplifier or ADC saturation",
+        "missing pulses, samples, and channels"
+      ],
+      "human_comparators": [
+        "S105",
+        "S159",
+        "S162"
+      ],
+      "measurable_characteristics": [
+        "waveform morphology and classifiability against non-ECAP and artifact waveforms",
+        "N1 and later-component latency relative to stimulation",
+        "area under the curve and peak-to-peak amplitude",
+        "signal-to-noise ratio and residual artifact",
+        "recruitment threshold and response versus amplitude, pulse width, polarity, and contact geometry"
+      ],
+      "tolerance_protocol": {
+        "status": "specified_pending_human_signal_access",
+        "reference": "participant- and configuration-stratified distributions from held-out human ECAP data",
+        "acceptance_rule": "Before analysis, register metric-specific bounds from the human training reference only; every required characteristic must fall within its registered 95% reference interval or registered standardized-distance bound on held-out human data.",
+        "numeric_bounds": null,
+        "reason_numeric_bounds_are_null": "Raw comparator signals and a locked preprocessing protocol are required; inventing numeric bounds from abstracts would be unsupported.",
+        "failure_rule": "Failure of any required characteristic keeps the label ECAP-like only and blocks claims of human ECAP equivalence."
+      },
+      "prohibited_claim": "A raw aggregate of simulator activity is an ECAP or a direct measure of pain."
+    },
+    "stop_criteria": [
+      {
+        "id": "STOP-H1",
+        "trigger": "The simulator cannot be reproduced from fixed code, configuration, and seed, or target performance is explained by direct access to the stimulus command.",
+        "measurement": "independent rerun plus command-removal and leakage-control evaluation",
+        "decision": "stop claims for H1 and do not proceed with the affected representation",
+        "reserve_result": "release the simulator audit, failure analysis, and a bounded stimulus/response benchmark if reproducible components remain",
+        "forbidden_conclusion": "The simulator models pain or provides valid pretraining data.",
+        "source_refs": []
+      },
+      {
+        "id": "STOP-H2-A",
+        "trigger": "No synthetic observables can be mapped to a documented human modality through a pre-specified representation or modality-specific encoder.",
+        "measurement": "completed modality correspondence matrix with all candidate paths marked absent or unjustified",
+        "decision": "stop cross-domain transfer claims",
+        "reserve_result": "retain a simulation-method and dataset-generation contribution",
+        "forbidden_conclusion": "Cross-species transfer to human pain assessment is supported.",
+        "source_refs": [
+          "ST031",
+          "ST032",
+          "ST033"
+        ]
+      },
+      {
+        "id": "STOP-H2-B",
+        "trigger": "Synthetic pretraining does not improve the pre-selected participant-level primary metric over human-only and naive/random synthetic controls, or worsens calibration.",
+        "measurement": "participant-level bootstrap confidence interval and calibration comparison on locked independent data",
+        "decision": "reject H2 for the tested method and dataset",
+        "reserve_result": "report the negative transfer result and conditions under which synthetic pretraining fails",
+        "forbidden_conclusion": "FlyBrain-constrained pretraining improves human pain assessment.",
+        "source_refs": [
+          "S036",
+          "S039",
+          "S191"
+        ]
+      },
+      {
+        "id": "STOP-H3-A",
+        "trigger": "No legally and ethically available human dataset links SCS telemetry or ECAP to a pre-specified patient-level clinical outcome and follow-up time.",
+        "measurement": "documented dataset-access and field audit before the SCS experiment",
+        "decision": "do not run or claim clinical SCS-response prediction",
+        "reserve_result": "limit the dissertation result to ECAP-like observation modeling and transfer to compatible open human datasets",
+        "forbidden_conclusion": "The method predicts clinical response to SCS.",
+        "source_refs": [
+          "S079",
+          "S105",
+          "S162"
+        ]
+      },
+      {
+        "id": "STOP-H3-B",
+        "trigger": "Performance exists only for windows from patients seen in training or disappears when patients are held out.",
+        "measurement": "patient-disjoint evaluation with participant-level confidence intervals",
+        "decision": "reject cross-patient SCS generalization",
+        "reserve_result": "report within-patient signal characterization only",
+        "forbidden_conclusion": "The model predicts SCS response for new patients.",
+        "source_refs": [
+          "S105"
+        ]
+      }
+    ],
+    "pending_decisions": [
+      "Author review of the evidence matrix.",
+      "Supervisor decision on H1-H3, the reserve scenario, and G0.",
+      "Selection of a primary and an independent human dataset after lawful access is confirmed.",
+      "Numeric ECAP-like tolerances after raw human comparator access and protocol lock."
+    ]
+  },
+  "human_dataset_matrix": {
+    "meta": {
+      "schema_version": "1.0.0",
+      "audited_at": "2026-09-23",
+      "status": "candidate_audit_complete_access_not_yet_exercised",
+      "rule": "Each row has exactly one primary target construct. Datasets with different constructs are not pooled into one metric.",
+      "participant_manifest_status": "not_created",
+      "primary_dataset_status": "not_selected"
+    },
+    "datasets": [
+      {
+        "id": "HDS-BIOVID-A",
+        "name": "BioVid Heat Pain Database Part A",
+        "source_refs": [
+          "S280",
+          "ST031"
+        ],
+        "primary_url": "https://www.nit.ovgu.de/BioVid.html",
+        "license": "Academic non-commercial research under a signed institutional agreement; redistribution and public display are restricted by the agreement.",
+        "access_procedure": "A permanently employed academic principal investigator signs and submits the Part A-D agreement; students apply through their professor.",
+        "access_status": "agreement_required",
+        "population": "87 healthy human participants in Part A; subject-specific heat thresholds and tolerances",
+        "participants": 87,
+        "modalities": [
+          "video_face",
+          "eda",
+          "ecg",
+          "emg"
+        ],
+        "labels": "baseline plus four individualized heat-stimulus levels, 20 samples per class and participant",
+        "target_construct": "experimental_pain_class",
+        "split_unit": "participant",
+        "subject_disjoint_split_possible": true,
+        "compatibility_group": "experimental_stimulus_class",
+        "missing_correspondences": [
+          "fnirs",
+          "ecap",
+          "clinical_outcome",
+          "simulation_state"
+        ],
+        "permitted_use": "Participant-disjoint estimation of protocol-defined experimental heat-stimulus class.",
+        "prohibited_pooling": [
+          "self_reported_pain",
+          "protective_behavior",
+          "nociceptive_response",
+          "scs_response"
+        ],
+        "limitations": [
+          "Access has not yet been exercised by this project.",
+          "Stimulus class is not subjective chronic pain."
+        ]
+      },
+      {
+        "id": "HDS-PAINMONIT-PMED",
+        "name": "PainMonit Experimental Dataset",
+        "source_refs": [
+          "S730",
+          "ST033"
+        ],
+        "primary_url": "https://figshare.com/articles/dataset/The_PainMonit_Database_An_Experimental_and_Clinical_Physiological_Signal_Dataset_for_Automated_Pain_Recognition/26965159",
+        "license": "CC BY 4.0; the associated data-use agreement additionally restricts use to academic research.",
+        "access_procedure": "Download Figshare version 3 and comply with the accompanying data-use agreement.",
+        "access_status": "open",
+        "population": "55 healthy human participants exposed to heat stimuli",
+        "participants": 55,
+        "modalities": [
+          "bvp_ppg",
+          "eda",
+          "ecg",
+          "emg",
+          "other"
+        ],
+        "labels": "objective heater classes with additional perceived-pain information",
+        "target_construct": "experimental_pain_class",
+        "split_unit": "participant",
+        "subject_disjoint_split_possible": true,
+        "compatibility_group": "experimental_stimulus_class",
+        "missing_correspondences": [
+          "video_face",
+          "fnirs",
+          "ecap",
+          "clinical_outcome",
+          "simulation_state"
+        ],
+        "permitted_use": "Participant-disjoint prediction of the selected pre-declared PMED heater or rating target, never both under one primary metric.",
+        "prohibited_pooling": [
+          "self_reported_pain",
+          "protective_behavior",
+          "nociceptive_response",
+          "scs_response"
+        ],
+        "limitations": [
+          "Heat stimulation differs from naturally occurring pain.",
+          "The selected label definition must be locked before analysis."
+        ]
+      },
+      {
+        "id": "HDS-PAINMONIT-PMCD",
+        "name": "PainMonit Clinical Dataset",
+        "source_refs": [
+          "S730",
+          "ST033"
+        ],
+        "primary_url": "https://figshare.com/articles/dataset/The_PainMonit_Database_An_Experimental_and_Clinical_Physiological_Signal_Dataset_for_Automated_Pain_Recognition/26965159",
+        "license": "CC BY 4.0; the associated data-use agreement additionally restricts use to academic research.",
+        "access_procedure": "Download Figshare version 3 and comply with the accompanying data-use agreement.",
+        "access_status": "open",
+        "population": "49 physiotherapy participants with arm or neck pain",
+        "participants": 49,
+        "modalities": [
+          "bvp_ppg",
+          "eda",
+          "emg",
+          "other"
+        ],
+        "labels": "timestamped NRS 0-10 ratings and participant-specific no/moderate/severe classes with missing unlabeled intervals",
+        "target_construct": "self_reported_pain",
+        "split_unit": "participant",
+        "subject_disjoint_split_possible": true,
+        "compatibility_group": "clinical_self_report",
+        "missing_correspondences": [
+          "ecg",
+          "video_face",
+          "fnirs",
+          "ecap",
+          "clinical_outcome",
+          "simulation_state"
+        ],
+        "permitted_use": "Participant-disjoint estimation of sparse self-reported pain under the PMCD protocol.",
+        "prohibited_pooling": [
+          "experimental_pain_class",
+          "protective_behavior",
+          "nociceptive_response",
+          "scs_response"
+        ],
+        "limitations": [
+          "Self-reports are sparse and weakly label overlapping windows.",
+          "No stimulus intensity is available for the clinical procedure."
+        ]
+      },
+      {
+        "id": "HDS-AI4PAIN-2024",
+        "name": "AI4PAIN Grand Challenge 2024",
+        "source_refs": [
+          "S291",
+          "ST032"
+        ],
+        "primary_url": "https://sites.google.com/view/ai4pain/challenge-details",
+        "license": "Challenge data-use terms; no public redistribution license is stated on the checked challenge page.",
+        "access_procedure": "Register a team, accept the organizers' terms, and use the supplied train, validation, and held-out test partitions.",
+        "access_status": "registration_required",
+        "population": "65 human participants in a controlled experimental-pain challenge",
+        "participants": 65,
+        "modalities": [
+          "fnirs",
+          "video_face"
+        ],
+        "labels": "No Pain, Low Pain, and High Pain",
+        "target_construct": "experimental_pain_class",
+        "split_unit": "participant",
+        "subject_disjoint_split_possible": true,
+        "compatibility_group": "experimental_stimulus_class",
+        "missing_correspondences": [
+          "ecg",
+          "eda",
+          "emg",
+          "ecap",
+          "clinical_outcome",
+          "simulation_state"
+        ],
+        "permitted_use": "Evaluation on the official 41/12/12 participant train/validation/test protocol.",
+        "prohibited_pooling": [
+          "self_reported_pain",
+          "protective_behavior",
+          "nociceptive_response",
+          "scs_response"
+        ],
+        "limitations": [
+          "Project access has not yet been exercised.",
+          "The challenge classes do not establish clinical chronic-pain intensity."
+        ]
+      },
+      {
+        "id": "HDS-PAINMOTION",
+        "name": "PainMotion Dataset",
+        "source_refs": [
+          "ST034"
+        ],
+        "primary_url": "https://zenodo.org/records/17704417",
+        "license": "License recorded on the Zenodo record; verify the downloaded version's license file before use.",
+        "access_procedure": "Download the versioned Zenodo record and retain its DOI and license metadata.",
+        "access_status": "open",
+        "population": "17 healthy participants with DOMS and 6 participants with shoulder musculoskeletal disorders",
+        "participants": 23,
+        "modalities": [
+          "ecg",
+          "emg",
+          "movement_pose"
+        ],
+        "labels": "binary self-reported pain during industrial tasks",
+        "target_construct": "self_reported_pain",
+        "split_unit": "participant",
+        "subject_disjoint_split_possible": true,
+        "compatibility_group": "clinical_self_report",
+        "missing_correspondences": [
+          "video_face",
+          "fnirs",
+          "ecap",
+          "simulation_state"
+        ],
+        "permitted_use": "Participant-disjoint binary self-report modeling in the recorded task context.",
+        "prohibited_pooling": [
+          "experimental_pain_class",
+          "protective_behavior",
+          "nociceptive_response",
+          "scs_response"
+        ],
+        "limitations": [
+          "Small and heterogeneous groups.",
+          "Binary self-report is not a continuous clinical outcome."
+        ]
+      },
+      {
+        "id": "HDS-EMOPAIN",
+        "name": "EmoPain Database",
+        "source_refs": [
+          "ST035"
+        ],
+        "primary_url": "https://www.ucl.ac.uk/uclic/research/affective-computing/emopain-dataset",
+        "license": "No open redistribution license confirmed; access is controlled by the dataset owner.",
+        "access_procedure": "Contact the UCL dataset owner for the body-movement component and applicable terms.",
+        "access_status": "request_required",
+        "population": "12 healthy and 18 chronic-pain participants",
+        "participants": 30,
+        "modalities": [
+          "movement_pose",
+          "emg",
+          "behavior"
+        ],
+        "labels": "protective behavior independently annotated by domain experts",
+        "target_construct": "protective_behavior",
+        "split_unit": "participant",
+        "subject_disjoint_split_possible": true,
+        "compatibility_group": "protective_behavior",
+        "missing_correspondences": [
+          "video_face",
+          "fnirs",
+          "ecap",
+          "simulation_state"
+        ],
+        "permitted_use": "Participant-disjoint detection of annotated protective behavior.",
+        "prohibited_pooling": [
+          "experimental_pain_class",
+          "self_reported_pain",
+          "nociceptive_response",
+          "scs_response"
+        ],
+        "limitations": [
+          "Access has not been granted to this project.",
+          "Protective behavior is not pain intensity."
+        ]
+      },
+      {
+        "id": "HDS-VALIDPAIN2",
+        "name": "ValidPain2 Nociception Level Index",
+        "source_refs": [
+          "ST040"
+        ],
+        "primary_url": "https://openneuro.org/datasets/ds008115",
+        "license": "License is distributed with the OpenNeuro BIDS dataset and must be checked for the selected snapshot before use.",
+        "access_procedure": "Download the versioned OpenNeuro snapshot ds008115 and preserve its BIDS metadata and DOI.",
+        "access_status": "open",
+        "population": "180 mechanically ventilated intensive-care patients unable to self-report",
+        "participants": 180,
+        "modalities": [
+          "eeg",
+          "clinical_outcome"
+        ],
+        "labels": "responsiveness around potentially nociceptive clinical procedures",
+        "target_construct": "nociceptive_response",
+        "split_unit": "participant",
+        "subject_disjoint_split_possible": true,
+        "compatibility_group": "nociceptive_response",
+        "missing_correspondences": [
+          "video_face",
+          "fnirs",
+          "ecap",
+          "simulation_state"
+        ],
+        "permitted_use": "Participant-disjoint modeling of the defined responsiveness or nociception-monitor target.",
+        "prohibited_pooling": [
+          "experimental_pain_class",
+          "self_reported_pain",
+          "protective_behavior",
+          "scs_response"
+        ],
+        "limitations": [
+          "Participants could not provide pain self-report.",
+          "The target is not subjective pain intensity."
+        ]
+      },
+      {
+        "id": "HDS-NEUROPATHIC-EEG",
+        "name": "Chronic neuropathic pain EEG",
+        "source_refs": [
+          "ST039"
+        ],
+        "primary_url": "https://data.mendeley.com/datasets/yj52xrfgtz/4",
+        "license": "License is stated on the versioned Mendeley Data record and must be preserved with the download.",
+        "access_procedure": "Download version 4 and retain DOI 10.17632/yj52xrfgtz.4 and its terms.",
+        "access_status": "open",
+        "population": "36 patients with heterogeneous chronic neuropathic pain",
+        "participants": 36,
+        "modalities": [
+          "eeg",
+          "metadata"
+        ],
+        "labels": "painDETECT and Brief Pain Inventory questionnaire variables",
+        "target_construct": "self_reported_pain",
+        "split_unit": "participant",
+        "subject_disjoint_split_possible": true,
+        "compatibility_group": "clinical_self_report",
+        "missing_correspondences": [
+          "ecg",
+          "eda",
+          "emg",
+          "video_face",
+          "fnirs",
+          "ecap",
+          "simulation_state"
+        ],
+        "permitted_use": "Within-cohort association or participant-level stratification against a pre-selected questionnaire target.",
+        "prohibited_pooling": [
+          "experimental_pain_class",
+          "protective_behavior",
+          "nociceptive_response",
+          "scs_response"
+        ],
+        "limitations": [
+          "No healthy control group.",
+          "Etiology and medication exposure are heterogeneous."
+        ]
+      },
+      {
+        "id": "HDS-PHANTOM-LIMB-EEG",
+        "name": "Phantom Limb Pain EEG",
+        "source_refs": [
+          "ST041"
+        ],
+        "primary_url": "https://nemar.org/dataset/on006921",
+        "license": "The BIDS/OpenNeuro snapshot license must be checked and retained before use.",
+        "access_procedure": "Obtain the linked versioned OpenNeuro/NEMAR dataset and preserve DOI 10.18112/openneuro.ds006921.v1.1.1.",
+        "access_status": "open",
+        "population": "38 participants across phantom-limb-pain, amputee-control, and intact-control groups",
+        "participants": 38,
+        "modalities": [
+          "eeg",
+          "metadata"
+        ],
+        "labels": "group membership and pain-related phenotype variables",
+        "target_construct": "clinical_function",
+        "split_unit": "participant",
+        "subject_disjoint_split_possible": true,
+        "compatibility_group": "clinical_group_phenotype",
+        "missing_correspondences": [
+          "ecg",
+          "eda",
+          "emg",
+          "video_face",
+          "fnirs",
+          "ecap",
+          "simulation_state"
+        ],
+        "permitted_use": "Participant-level resting-state group comparison using a pre-specified phenotype.",
+        "prohibited_pooling": [
+          "experimental_pain_class",
+          "self_reported_pain",
+          "protective_behavior",
+          "nociceptive_response",
+          "scs_response"
+        ],
+        "limitations": [
+          "Not an evoked pain-intensity dataset.",
+          "No published NEMAR data-quality summary was confirmed in the source audit."
+        ]
+      }
+    ],
+    "compatibility_rules": [
+      {
+        "id": "COMP-01",
+        "target_construct": "experimental_pain_class",
+        "dataset_ids": [
+          "HDS-BIOVID-A",
+          "HDS-PAINMONIT-PMED",
+          "HDS-AI4PAIN-2024"
+        ],
+        "condition": "Targets must be harmonized as protocol-defined experimental classes; modality-specific encoders and participant-disjoint splits remain mandatory."
+      },
+      {
+        "id": "COMP-02",
+        "target_construct": "self_reported_pain",
+        "dataset_ids": [
+          "HDS-PAINMONIT-PMCD",
+          "HDS-PAINMOTION",
+          "HDS-NEUROPATHIC-EEG"
+        ],
+        "condition": "A common metric is allowed only after a single compatible self-report definition, scale transform, time reference, and population scope are pre-registered; otherwise evaluate separately."
+      },
+      {
+        "id": "COMP-03",
+        "target_construct": "protective_behavior",
+        "dataset_ids": [
+          "HDS-EMOPAIN"
+        ],
+        "condition": "Behavioral annotation remains a separate endpoint."
+      },
+      {
+        "id": "COMP-04",
+        "target_construct": "nociceptive_response",
+        "dataset_ids": [
+          "HDS-VALIDPAIN2"
+        ],
+        "condition": "Responsiveness to a potentially nociceptive procedure remains separate from self-reported pain."
+      },
+      {
+        "id": "COMP-05",
+        "target_construct": "clinical_function",
+        "dataset_ids": [
+          "HDS-PHANTOM-LIMB-EEG"
+        ],
+        "condition": "Resting-state group phenotype remains separate from evoked experimental and self-report targets."
+      }
+    ]
+  }
+}

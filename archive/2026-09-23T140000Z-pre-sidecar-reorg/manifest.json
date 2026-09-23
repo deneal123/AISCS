@@ -1,0 +1,57 @@
+﻿{
+    "snapshot_at":  "2026-09-23T14:00:00+03:00",
+    "status":  "immutable_pre_reorganization_snapshot",
+    "sidecar":  "text",
+    "files":  [
+                  {
+                      "path":  ".gitignore",
+                      "bytes":  207,
+                      "sha256":  "8E640AE35DA20D540FCDBDBFC812A226E56133FC24B966FEA7BB402279BA0CE6"
+                  },
+                  {
+                      "path":  ".python-version",
+                      "bytes":  9,
+                      "sha256":  "A90B1125CEE77C2F544B9367FCDDABBC1FA7AFBFA1806E13F925033F292D9780"
+                  },
+                  {
+                      "path":  "assets/mmd/fig_2_4_agents.mmd",
+                      "bytes":  2447,
+                      "sha256":  "084034C6424E04CA47F788F0F95EDD741DB5EE50E74D55B93767ACC8E9AB7FC8"
+                  },
+                  {
+                      "path":  "example.tex",
+                      "bytes":  142869,
+                      "sha256":  "2723AE944EAEBD946B64C15316E3022DF4C67EEE1153D9D5127FAB4A1ACC5130"
+                  },
+                  {
+                      "path":  "pyproject.toml",
+                      "bytes":  176,
+                      "sha256":  "7DB83679E57297F30ED8ABE82E9EC7346D64E586B0EE45EDBC0683AAD59FD002"
+                  },
+                  {
+                      "path":  "scripts/convert_pdf.py",
+                      "bytes":  428,
+                      "sha256":  "56C1B286002289DC5DDA419F527F5778B76F20D3F7D96D3C7F90218B0C3A9FFF"
+                  },
+                  {
+                      "path":  "scripts/gen_figures.py",
+                      "bytes":  35775,
+                      "sha256":  "9976580A8F9B53008E9ED997062BD506B9A9211613780D22EFF6EB5ED7CF8CEF"
+                  },
+                  {
+                      "path":  "scripts/gen_screenshots.py",
+                      "bytes":  11895,
+                      "sha256":  "19A35C74A61D1F24EFD6ADD61F3C1E866B07C901007A865F648EF787CE443322"
+                  },
+                  {
+                      "path":  "SKILL.md",
+                      "bytes":  10882,
+                      "sha256":  "E41CE3F83E58C6861AD3BE5519C9DEADE3936DE5CB1CEBDAD088E0AEF343BF6A"
+                  },
+                  {
+                      "path":  "uv.lock",
+                      "bytes":  54524,
+                      "sha256":  "FC3C7453DE9FBFC19B3338167B51B75A68F39FF00A31ABEB5080327FB6918C31"
+                  }
+              ]
+}

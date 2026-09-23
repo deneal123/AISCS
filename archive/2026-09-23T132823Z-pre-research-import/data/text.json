@@ -1,0 +1,15 @@
+{
+  "meta":{"schema_version":"1.0.0","sidecar_version":"1.0.0","updated_at":"2026-09-23"},
+  "release_approvals":{"author_review":false,"supervisor_review":false,"official_title_approved":false,"title_page_approved":false},
+  "documents":[{
+    "id":"TEXT-001","title":"Рабочий текст диссертации","kind":"dissertation","language":"ru","status":"draft","source_dir":".","entrypoint":"dissertation.tex","primary_output":null,"research_snapshot":"data/research-snapshot/snapshot.json",
+    "evidence_refs":["S029","S062","S090","S105","S159","S162","S280","S291","S730","S731","ST031","ST032","ST033","ST034","ST035","ST039","ST040","ST041"],
+    "immutable":false,"immutable_files":[],
+    "traceability":[
+      {"section":"chapter-01-evidence","target_construct":"human_experimental_nociception","refs":["S280","S291","S730","ST031","ST032","ST033","ST034","ST035","ST039","ST040","ST041"]},
+      {"section":"chapter-02-contract","target_construct":"construct_boundaries","refs":["S029","S062","S090","S105","S159","S162","S731"]},
+      {"section":"chapter-03-simulation","target_construct":"simulation_dynamics","refs":["S029","S062","S090","S731"]},
+      {"section":"chapter-06-scs","target_construct":"clinical_scs_response","refs":["S105","S159","S162"]}
+    ]
+  }]
+}

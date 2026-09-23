@@ -1,0 +1,9 @@
+repos:
+  - repo: local
+    hooks:
+      - id: text-check
+        name: dissertation text sidecar check
+        entry: uv run --extra dev --frozen pytest -q
+        language: system
+        pass_filenames: false
+        always_run: true
