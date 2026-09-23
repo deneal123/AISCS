@@ -1,0 +1,76 @@
+# Хуки САМОГО сайдкара.
+#
+# Зачем отдельно от суперпроекта: сабмодуль — самостоятельный git-репозиторий со
+# своим `.git`. Хуки суперпроекта на коммит ВНУТРИ него не срабатывают вообще, а
+# именно так здесь и вносится код. Без этого файла проверки существовали только
+# для коммитов в суперпроект — то есть почти никогда.
+#
+# Установка: `pre-commit install` здесь же, либо `make hooks` из корня — он
+# обходит все репозитории сразу.
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-yaml
+      - id: check-toml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: debug-statements
+
+  # Сканер секретов. Ставится ПОСЛЕДНИМ рубежом: секрет, попавший в коммит, из
+  # истории уже не убрать простым откатом — только переписыванием, поэтому ловить
+  # его надо до записи, а не в ревью.
+  #
+  # Стартует зелёным: прогон по истории backend и agents дал НОЛЬ находок (70
+  # «утечек» из первого прогона все оказались внутри .venv, то есть вне гита).
+  # Значит разбирать накопленное не пришлось и подавлений заводить не нужно.
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.30.1
+    hooks:
+      - id: gitleaks
+
+  - repo: local
+    hooks:
+      # ⚠️ ТОЛЬКО через `uv run --frozen`, а не голыми `ruff`/`pytest`. Голое имя
+      # берётся из PATH, а там лежит венв ПЕРВОГО попавшегося сервиса-соседа: на
+      # рабочей машине `pytest` резолвился в duckdb/.venv, и хук agents падал на
+      # ModuleNotFoundError у каждого модуля — то есть не проходил НИ РАЗУ.
+      # `--frozen` — чтобы хук не трогал uv.lock молча.
+      - id: ruff
+        name: ruff (lint + format)
+        entry: bash -lc "uv run --frozen ruff check . && uv run --frozen ruff format --check ."
+        language: system
+        pass_filenames: false
+
+      # Ограничитель роста модулей и функций. ⚠️ До него у сайдкара не было НИЧЕГО:
+      # единственным упоминанием сложности был `max-complexity = 70` у ruff — часовой,
+      # который не срабатывал никогда. За это время `domain/base.py` дорос до 1071
+      # строки, а три функции — до 236/265/305. Долг зафиксирован храповиком: записанное
+      # не может расти, незаписанное роняет проверку.
+      - id: complexity-guard
+        name: страж сложности (храповик)
+        entry: bash -lc "uv run --frozen python scripts/check_module_complexity.py"
+        language: system
+        pass_filenames: false
+
+      # Набор идёт ~4 секунды — дешевле, чем узнать о поломке контракта из CI.
+      - id: pytest
+        name: pytest
+        entry: bash -lc "uv run --frozen pytest tests -q"
+        language: system
+        pass_filenames: false
+
+      # 🔴 Каталог моделей РАЗДВОЕН с backend и обязан оставаться побайтово равным ему.
+      # Расхождение не падает — оно тихо меняет поведение одной стороны: `TOOL_CAPABLE_*`
+      # решают, кому давать инструменты, `STATIC_CONTEXT_WINDOWS` — сколько влезет
+      # контекста. Так уже случилось: сюда добавили импорт, которого у backend нет, сверка
+      # стала невыполнимой, и backend полгода ходил за каталогом мимо прокси.
+      #
+      # Ловим здесь, в момент правки. Скрипт лежит в суперпроекте — в отдельном клоне
+      # ветки его нет, и тогда хук ГРОМКО пропускается, а не падает не по делу.
+      - id: shared-copies
+        name: раздвоенные копии backend ↔ agents
+        entry: bash -lc "[ -f ../scripts/check_shared_copies.py ] || { echo 'ПРОПУСК — нет суперпроекта рядом'; exit 0; }; cd .. && uv run --project agents --frozen python scripts/check_shared_copies.py"
+        language: system
+        pass_filenames: false
+        always_run: true

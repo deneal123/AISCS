@@ -1,0 +1,75 @@
+{
+  "description": "Векторы assert_public_host. Тест подменяет getaddrinfo и проверяет вердикт по адресу. Отставшая копия пропустит внутренний адрес — это SSRF.",
+  "cases": [
+    {
+      "address": "8.8.8.8",
+      "safe": true,
+      "why": "публичный IPv4"
+    },
+    {
+      "address": "1.1.1.1",
+      "safe": true,
+      "why": "публичный IPv4"
+    },
+    {
+      "address": "2606:4700:4700::1111",
+      "safe": true,
+      "why": "публичный IPv6"
+    },
+    {
+      "address": "127.0.0.1",
+      "safe": false,
+      "why": "loopback"
+    },
+    {
+      "address": "::1",
+      "safe": false,
+      "why": "loopback IPv6"
+    },
+    {
+      "address": "10.0.0.5",
+      "safe": false,
+      "why": "приватный 10/8"
+    },
+    {
+      "address": "172.16.0.1",
+      "safe": false,
+      "why": "приватный 172.16/12"
+    },
+    {
+      "address": "192.168.1.1",
+      "safe": false,
+      "why": "приватный 192.168/16"
+    },
+    {
+      "address": "169.254.169.254",
+      "safe": false,
+      "why": "link-local (метаданные облака)"
+    },
+    {
+      "address": "fd00::1",
+      "safe": false,
+      "why": "ULA IPv6"
+    },
+    {
+      "address": "fe80::1",
+      "safe": false,
+      "why": "link-local IPv6"
+    },
+    {
+      "address": "0.0.0.0",
+      "safe": false,
+      "why": "unspecified"
+    },
+    {
+      "address": "224.0.0.1",
+      "safe": false,
+      "why": "multicast"
+    },
+    {
+      "address": "240.0.0.1",
+      "safe": false,
+      "why": "reserved"
+    }
+  ]
+}

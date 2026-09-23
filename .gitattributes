@@ -1,0 +1,23 @@
+# Нормализация концов строк. Репозиторий хранит LF; рабочее дерево на любой ОС
+# получает LF при checkout. Это устраняет CRLF-шебанг в Linux-контейнерах
+# (env: 'bash\r': No such file or directory).
+* text=auto eol=lf
+
+# Скрипты и конфиги, исполняемые внутри контейнеров — строго LF.
+*.sh    text eol=lf
+*.bash  text eol=lf
+Dockerfile      text eol=lf
+*.dockerfile    text eol=lf
+
+# Бинарные файлы не трогаем.
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.webp binary
+*.ico  binary
+*.pdf  binary
+*.woff  binary
+*.woff2 binary
+*.xlsx binary
+*.pem  binary

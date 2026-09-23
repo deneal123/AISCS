@@ -1,0 +1,112 @@
+{
+  "version": "s26-v1",
+  "cross_service_contracts": [
+    "first_valid_result",
+    "error_before_result_recovery",
+    "post_terminal_discard",
+    "privacy_boundary",
+    "malformed_event_drop",
+    "crash_redelivery_single_billing"
+  ],
+  "scenarios": [
+    {
+      "id": "auto_mode_confirmation",
+      "event_order": ["auto_decision", "mode_offer"],
+      "statuses": ["awaiting_confirmation"],
+      "counts": {"model_calls": 1, "charged_calls": 0},
+      "budgets": {"prompt_tokens": 0, "schema_tokens_saved": 0}
+    },
+    {
+      "id": "s17_auto_mode_policy_privacy",
+      "event_order": ["auto_decision", "mode_offer", "stream_projection"],
+      "statuses": ["confirmation_required", "model_classification"],
+      "counts": {"model_calls": 1, "charged_calls": 0},
+      "budgets": {"prompt_tokens": 0, "schema_tokens_saved": 0}
+    },
+    {
+      "id": "catalog_selection_and_revalidation",
+      "event_order": ["workflow_execution"],
+      "statuses": ["selected", "needs_confirmation", "fallback"],
+      "counts": {"model_calls": 0, "tool_calls": 0},
+      "budgets": {"prompt_tokens": 0, "schema_tokens_saved": 0}
+    },
+    {
+      "id": "s11_static_under_fifteen",
+      "event_order": ["tool_availability", "tool_plan", "agent_complete"],
+      "statuses": ["full_toolset"],
+      "counts": {"model_calls": 2, "meta_calls": 0, "tool_calls": 1, "charged_calls": 1, "rounds": 1},
+      "budgets": {"prompt_tokens": 18, "schema_tokens_saved": 0}
+    },
+    {
+      "id": "s11_enforce_reselection",
+      "event_order": ["tool_disclosure", "meta_usage", "tool_availability", "tool_plan", "tool_summary", "agent_complete"],
+      "statuses": ["enforce", "reselected"],
+      "counts": {"model_calls": 2, "meta_calls": 2, "tool_calls": 1, "charged_calls": 1, "rounds": 1},
+      "budgets": {"prompt_tokens": 18, "schema_tokens_saved": 1}
+    },
+    {
+      "id": "s11_observe",
+      "event_order": ["tool_disclosure", "meta_usage", "tool_availability", "tool_plan", "tool_summary", "agent_complete"],
+      "statuses": ["observe"],
+      "counts": {"model_calls": 2, "meta_calls": 2, "tool_calls": 1, "charged_calls": 1, "rounds": 1},
+      "budgets": {"prompt_tokens": 18, "schema_tokens_saved": 1}
+    },
+    {
+      "id": "s11_selector_fallbacks",
+      "event_order": ["tool_disclosure", "tool_availability", "tool_plan", "agent_complete"],
+      "statuses": ["prompt_budget", "invalid_selector", "deadline"],
+      "counts": {"tool_calls": 1, "charged_calls": 1},
+      "budgets": {"schema_tokens_saved": 0}
+    },
+    {
+      "id": "s13_safe_dedup_and_retry",
+      "event_order": ["tool_call_start", "tool_call_complete", "tool_summary"],
+      "statuses": ["inflight", "completed", "retryable", "unsafe"],
+      "counts": {"charged_calls": 1},
+      "budgets": {"prompt_tokens": 0, "schema_tokens_saved": 0}
+    },
+    {
+      "id": "s12_mcp_resilience",
+      "event_order": ["integration_health", "tool_availability"],
+      "statuses": ["discovery", "observe", "enforce"],
+      "counts": {"tool_calls": 0},
+      "budgets": {"prompt_tokens": 0, "schema_tokens_saved": 0}
+    },
+    {
+      "id": "round_cap_and_deadline_finalization",
+      "event_order": ["tool_summary", "agent_complete"],
+      "statuses": ["round_cap", "timed_out"],
+      "counts": {"rounds": 0},
+      "budgets": {"prompt_tokens": 0, "schema_tokens_saved": 0}
+    },
+    {
+      "id": "s25_ledger_native_receipts",
+      "event_order": ["model_call", "usage_receipt", "finalization"],
+      "statuses": ["exact", "estimated", "nonchargeable"],
+      "counts": {"model_calls": 3, "receipts": 3, "charged_calls": 2},
+      "budgets": {"repair_rounds": 0}
+    },
+    {
+      "id": "s25_grounding_repair_latch",
+      "event_order": ["tool_intent", "tool_plan", "tool_call_complete", "tool_intent", "agent_complete"],
+      "statuses": ["pending", "repair", "satisfied"],
+      "reasons": ["missing_call"],
+      "counts": {"model_calls": 3, "meta_calls": 1, "receipts": 4, "tool_calls": 1, "repair_rounds": 1},
+      "budgets": {"prompt_tokens": 24, "schema_tokens_saved": 0}
+    },
+    {
+      "id": "s26_provider_qualification_and_pinning",
+      "event_order": ["provider_qualification", "provider_stream", "usage_receipt", "finalization"],
+      "statuses": ["compatible", "no_compatible_model", "pinned"],
+      "counts": {"model_calls": 1, "receipts": 1, "charged_calls": 1},
+      "budgets": {"repair_rounds": 0}
+    },
+    {
+      "id": "s26_stream_privacy_and_single_receipt",
+      "event_order": ["provider_stream", "usage_receipt", "agent_complete"],
+      "statuses": ["exact", "estimated", "redacted"],
+      "counts": {"model_calls": 2, "receipts": 2, "charged_calls": 2},
+      "budgets": {"repair_rounds": 0}
+    }
+  ]
+}
