@@ -1,0 +1,505 @@
+{
+  "meta": {
+    "batch_id": "st-batch-004",
+    "schema_version": "1.0.0",
+    "created_at": "2026-09-22",
+    "status": "applied",
+    "reviewed_at": "2026-09-22",
+    "applied_at": "2026-09-22"
+  },
+  "resource_ids": [
+    "ST084",
+    "ST085",
+    "ST086",
+    "ST017",
+    "ST018",
+    "ST019",
+    "ST020",
+    "ST021",
+    "ST022",
+    "ST023",
+    "ST024",
+    "ST025",
+    "ST026",
+    "ST027",
+    "ST028"
+  ],
+  "resources": [
+    {
+      "resource_id": "ST084",
+      "category_id": "C8",
+      "subcategory_id": "C8.1",
+      "name": "DoomFly (Alex Wormuth)",
+      "status": "url_present_content_not_checked",
+      "url": "https://github.com/nftechie/doomfly"
+    },
+    {
+      "resource_id": "ST085",
+      "category_id": "C8",
+      "subcategory_id": "C8.1",
+      "name": "US20220323766A1",
+      "status": "partially_verified",
+      "url": "https://patents.google.com/patent/US20220323766A1/en"
+    },
+    {
+      "resource_id": "ST086",
+      "category_id": "C8",
+      "subcategory_id": "C8.1",
+      "name": "US10842996",
+      "status": "needs_exact_url",
+      "url": null
+    },
+    {
+      "resource_id": "ST017",
+      "category_id": "C2",
+      "subcategory_id": "C2.1",
+      "name": "Brian 2",
+      "status": "url_present_content_not_checked",
+      "url": "https://github.com/brian-team/brian2"
+    },
+    {
+      "resource_id": "ST018",
+      "category_id": "C2",
+      "subcategory_id": "C2.1",
+      "name": "Brian2GeNN",
+      "status": "url_present_content_not_checked",
+      "url": "https://github.com/brian-team/brian2genn"
+    },
+    {
+      "resource_id": "ST019",
+      "category_id": "C2",
+      "subcategory_id": "C2.1",
+      "name": "GeNN",
+      "status": "needs_exact_url",
+      "url": null
+    },
+    {
+      "resource_id": "ST020",
+      "category_id": "C2",
+      "subcategory_id": "C2.1",
+      "name": "NEST",
+      "status": "needs_exact_url",
+      "url": null
+    },
+    {
+      "resource_id": "ST021",
+      "category_id": "C2",
+      "subcategory_id": "C2.1",
+      "name": "sapicore",
+      "status": "url_present_content_not_checked",
+      "url": "https://github.com/cplab/sapicore"
+    },
+    {
+      "resource_id": "ST022",
+      "category_id": "C2",
+      "subcategory_id": "C2.1",
+      "name": "SNN Toolbox",
+      "status": "url_present_content_not_checked",
+      "url": "https://github.com/NeuromorphicProcessorProject/snn_toolbox"
+    },
+    {
+      "resource_id": "ST023",
+      "category_id": "C2",
+      "subcategory_id": "C2.1",
+      "name": "Norse",
+      "status": "url_present_content_not_checked",
+      "url": "https://github.com/norse/norse"
+    },
+    {
+      "resource_id": "ST024",
+      "category_id": "C2",
+      "subcategory_id": "C2.1",
+      "name": "snnTorch",
+      "status": "url_present_content_not_checked",
+      "url": "https://github.com/jeshraghian/snntorch"
+    },
+    {
+      "resource_id": "ST025",
+      "category_id": "C2",
+      "subcategory_id": "C2.1",
+      "name": "ModNEF",
+      "status": "url_present_content_not_checked",
+      "url": "https://github.com/ModNEF"
+    },
+    {
+      "resource_id": "ST026",
+      "category_id": "C2",
+      "subcategory_id": "C2.2",
+      "name": "BrainChip Akida — MetaTF SDK",
+      "status": "needs_exact_url",
+      "url": null
+    },
+    {
+      "resource_id": "ST027",
+      "category_id": "C2",
+      "subcategory_id": "C2.2",
+      "name": "BrainChip Edge AI Box",
+      "status": "needs_exact_url",
+      "url": null
+    },
+    {
+      "resource_id": "ST028",
+      "category_id": "C2",
+      "subcategory_id": "C2.2",
+      "name": "BrainChip AKD1500 (open-source)",
+      "status": "needs_exact_url",
+      "url": null
+    }
+  ],
+  "decisions": [
+    {
+      "resource_id": "ST084",
+      "decision": "verified_primary",
+      "exact_url": "https://github.com/nftechie/doomfly",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "nftechie DoomFly MaleCNS validation",
+          "url": "https://github.com/nftechie/doomfly",
+          "accessed_at": "2026-09-22"
+        },
+        {
+          "query": "DoomFly live training protocol",
+          "url": "https://github.com/nftechie/doomfly/blob/main/docs/doom-live-training.md",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "The repository connects a retained MaleCNS graph to engineered ViZDoom visual inputs and fixed motor readouts.",
+        "Its experimental rule applies artificial damage input to two PPL101 cells and modifies selected KC-to-MBON11 weights."
+      ],
+      "limitations": [
+        "The repository explicitly reports failed visual, conditioning and survival validation gates.",
+        "Artificial game damage is an engineering reinforcement signal, not a natural nociceptor model or pain label.",
+        "PPL101 and MBON11 are spectator readouts and learned survival has not been demonstrated."
+      ],
+      "corrected_purpose": "Experimental MaleCNS-to-ViZDoom integration with explicit negative validation results and engineered reinforcement.",
+      "note": "Retain as falsifiable implementation evidence; do not cite as successful learning, pain or whole-brain emulation."
+    },
+    {
+      "resource_id": "ST085",
+      "decision": "verified_primary",
+      "exact_url": "https://patents.google.com/patent/US20220323766A1/en",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "US20220323766A1 EEG ECAP neurostimulation",
+          "url": "https://patents.google.com/patent/US20220323766A1/en",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "The patent application describes ML processing of EEG features and embodiments combining EEG and ECAP-derived information for neurostimulation control.",
+        "It defines d_EEG from pain/paresthesia-related feature distances and an embodiment where d_total combines d_EEG with I_ECAP."
+      ],
+      "limitations": [
+        "A patent application describes claimed embodiments and is not empirical validation, clinical efficacy evidence or a released algorithm.",
+        "Its pain-state EEG assumptions and combined metric require independent prospective validation."
+      ],
+      "corrected_purpose": "Patent prior art for EEG/ECAP-informed machine-learning control of neurostimulation.",
+      "note": "The imported equation is confirmed as an embodiment, not an established clinical method."
+    },
+    {
+      "resource_id": "ST086",
+      "decision": "verified_primary",
+      "exact_url": "https://patents.google.com/patent/US10842996B2/en",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "US10842996B2 ECAP stimulus artifact rejection",
+          "url": "https://patents.google.com/patent/US10842996B2/en",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "The granted patent describes neural stimulation and recording for closed-loop control.",
+        "One embodiment tunes an analog stimulation-artifact simulator and subtracts the artificial artifact before digital residual processing to extract ECAPs."
+      ],
+      "limitations": [
+        "The patent is prior art, not validation of signal quality, clinical outcome or commercial implementation.",
+        "Artifact rejection does not turn ECAP into a direct measure of pain."
+      ],
+      "corrected_purpose": "Granted patent prior art for simultaneous stimulation/recording and analog-plus-digital artifact rejection in ECAP sensing.",
+      "note": "Exact B2 identifier and artifact-rejection embodiment were confirmed."
+    },
+    {
+      "resource_id": "ST017",
+      "decision": "verified_primary",
+      "exact_url": "https://github.com/brian-team/brian2",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Brian2 official repository",
+          "url": "https://github.com/brian-team/brian2",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "Brian2 is a free, open-source, clock-driven Python simulator for spiking neural networks.",
+        "It supports code generation, examples, tutorials and extensible neuron/synapse equations."
+      ],
+      "limitations": [
+        "A general simulator does not provide a FlyWire, nociception or ECAP model by itself.",
+        "Project compatibility must be tested against the selected Python and accelerator stack."
+      ],
+      "corrected_purpose": "General-purpose, equation-oriented SNN simulator and candidate reference CPU backend.",
+      "note": "Software identity and maintained primary repository confirmed."
+    },
+    {
+      "resource_id": "ST018",
+      "decision": "verified_primary",
+      "exact_url": "https://github.com/brian-team/brian2genn",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Brian2GeNN official repository",
+          "url": "https://github.com/brian-team/brian2genn",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "Brian2GeNN is a Brian2 backend interface for running supported models through GeNN on NVIDIA GPUs."
+      ],
+      "limitations": [
+        "The maintainers label the software beta.",
+        "The imported 10-100x speedup is not a universal guarantee and was removed; performance depends on model and hardware.",
+        "The current GeNN project also supports AMD HIP, but Brian2GeNN's documented path is NVIDIA-focused."
+      ],
+      "corrected_purpose": "Beta Brian2-to-GeNN backend for accelerator execution of supported SNN simulations.",
+      "note": "Benchmark claims must be reproduced on the chosen whole-brain workload."
+    },
+    {
+      "resource_id": "ST019",
+      "decision": "verified_primary",
+      "exact_url": "https://github.com/genn-team/genn",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "GeNN official repository CUDA HIP",
+          "url": "https://github.com/genn-team/genn",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "GeNN is a code-generation environment for neuronal-network simulation on NVIDIA CUDA and AMD HIP accelerators."
+      ],
+      "limitations": [
+        "It is a simulation engine, not a biological model or dataset.",
+        "Supported model features and device memory limits require workload-specific testing."
+      ],
+      "corrected_purpose": "GPU-accelerated neuronal-network simulation environment based on generated CUDA/HIP code.",
+      "note": "Exact maintained repository replaces the former documentation-domain landing page."
+    },
+    {
+      "resource_id": "ST020",
+      "decision": "verified_primary",
+      "exact_url": "https://github.com/nest/nest-simulator",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "NEST Simulator official repository",
+          "url": "https://github.com/nest/nest-simulator",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "NEST is an open-source simulator for the dynamics, size and structure of spiking neuronal networks.",
+        "It exposes Python and standalone interfaces and scales from laptops to compute clusters."
+      ],
+      "limitations": [
+        "NEST focuses on network dynamics rather than exact single-neuron morphology.",
+        "No FlyWire, nociception or ECAP model is supplied by the framework itself."
+      ],
+      "corrected_purpose": "Scalable point-neuron/network simulator and candidate independent backend for reproducibility checks.",
+      "note": "Exact maintained repository and project scope confirmed."
+    },
+    {
+      "resource_id": "ST021",
+      "decision": "verified_primary",
+      "exact_url": "https://github.com/cplab/sapicore",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "cplab sapicore",
+          "url": "https://github.com/cplab/sapicore",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "sapicore is a public PyTorch-based framework for neuromorphic modeling with documentation and tutorials."
+      ],
+      "limitations": [
+        "Repository metadata alone does not establish biological realism or suitability for a 100k-neuron connectome.",
+        "Activity is lower than the major general-purpose simulators and local execution has not been tested."
+      ],
+      "corrected_purpose": "PyTorch-based neuromorphic-modeling framework for prototype comparison.",
+      "note": "Retain as a candidate only after scale and reproducibility benchmarking."
+    },
+    {
+      "resource_id": "ST022",
+      "decision": "verified_primary",
+      "exact_url": "https://github.com/NeuromorphicProcessorProject/snn_toolbox",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "SNN Toolbox ANN to SNN official repository",
+          "url": "https://github.com/NeuromorphicProcessorProject/snn_toolbox",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "The toolbox converts analog neural networks to spiking networks and runs them in supported spiking simulators."
+      ],
+      "limitations": [
+        "Its primary use is ANN-to-SNN conversion, not connectome-constrained biological simulation.",
+        "The repository's last source push predates this audit by several years, so current dependency compatibility requires testing."
+      ],
+      "corrected_purpose": "ANN-to-SNN conversion toolbox for deployment experiments, not a FlyBrain simulator.",
+      "note": "Scope narrowed to the functionality stated by the repository."
+    },
+    {
+      "resource_id": "ST023",
+      "decision": "verified_primary",
+      "exact_url": "https://github.com/norse/norse",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Norse PyTorch SNN official repository",
+          "url": "https://github.com/norse/norse",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "Norse extends PyTorch with differentiable spiking-neuron components and provides notebooks, tasks and examples."
+      ],
+      "limitations": [
+        "The library targets trainable deep SNNs and does not supply connectome or biological-validation data.",
+        "Repository performance statements are preliminary and workload-specific."
+      ],
+      "corrected_purpose": "Differentiable PyTorch SNN component library for trainable baseline models and representation experiments.",
+      "note": "Do not infer biological fidelity from bio-inspired components."
+    },
+    {
+      "resource_id": "ST024",
+      "decision": "verified_primary",
+      "exact_url": "https://github.com/jeshraghian/snntorch",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "snnTorch official repository",
+          "url": "https://github.com/jeshraghian/snntorch",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "snnTorch provides gradient-based SNN learning integrated with PyTorch/autograd, surrogate gradients and NIR import/export."
+      ],
+      "limitations": [
+        "It is a machine-learning library, not a biophysical connectome simulator.",
+        "GPU acceleration and feasible scale inherit PyTorch and require empirical benchmarking."
+      ],
+      "corrected_purpose": "PyTorch library for gradient-based SNN baselines, training and interchange experiments.",
+      "note": "Relevant to model comparison, not evidence for fly-to-human transfer."
+    },
+    {
+      "resource_id": "ST025",
+      "decision": "partially_verified",
+      "exact_url": "https://doi.org/10.1145/3730581",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "ModNEF modular neuromorphic emulator FPGA",
+          "url": "https://doi.org/10.1145/3730581",
+          "accessed_at": "2026-09-22"
+        },
+        {
+          "query": "github ModNEF",
+          "url": "https://github.com/ModNEF",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "The ACM article describes ModNEF as a modular open-source FPGA SNN emulator evaluated on a Xilinx Zynq device with MNIST/N-MNIST."
+      ],
+      "limitations": [
+        "The imported GitHub organization URL returns 404 and no stable source repository was confirmed.",
+        "The paper does not establish support for whole-connectome scale, biological models or the project's target hardware."
+      ],
+      "corrected_purpose": "Published FPGA SNN-emulator architecture whose reusable source location remains unverified.",
+      "note": "Keep as hardware prior art, not as an immediately available implementation dependency."
+    },
+    {
+      "resource_id": "ST026",
+      "decision": "verified_primary",
+      "exact_url": "https://doc.brainchipinc.com/",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "BrainChip MetaTF official documentation",
+          "url": "https://doc.brainchipinc.com/",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "MetaTF bundles Python packages for creating, converting, simulating and deploying networks on the Akida platform.",
+        "The official getting-started guide documents pip installation and a software simulator."
+      ],
+      "limitations": [
+        "BrainChip states that examples are Apache-licensed but the underlying Akida library is proprietary under an EULA.",
+        "This is a deployment SDK and simulator, not open biological-neural simulation software."
+      ],
+      "corrected_purpose": "Proprietary-core Akida development framework with Python APIs, conversion tools and a software simulator.",
+      "note": "Licensing must be reviewed before reproducible dissertation artifacts depend on it."
+    },
+    {
+      "resource_id": "ST027",
+      "decision": "partially_verified",
+      "exact_url": "https://brainchip.com/wp-content/uploads/2025/04/AKD1000-Edge-AI-Box-Product-Brochure-V.2-Mar.-25.pdf",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "BrainChip Edge AI Box official product brief",
+          "url": "https://brainchip.com/wp-content/uploads/2025/04/AKD1000-Edge-AI-Box-Product-Brochure-V.2-Mar.-25.pdf",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "The official product brief describes an Edge AI Box with an NXP i.MX 8M Plus and two AKD1000 accelerators."
+      ],
+      "limitations": [
+        "The checked Edge AI Box is AKD1000-based; the imported AKD1000/AKD1500 wording was not confirmed.",
+        "It is commercial deployment hardware, not required for dataset or simulator validity."
+      ],
+      "corrected_purpose": "Commercial AKD1000 Edge AI Box for Akida edge-inference demonstrations.",
+      "note": "Hardware purchase is optional and must follow a measured software-only feasibility comparison."
+    },
+    {
+      "resource_id": "ST028",
+      "decision": "partially_verified",
+      "exact_url": "https://brainchip.com/press/brainchip-launches-akd1500-pcie-card-for-edge-ai-evaluation-everywhere/",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "BrainChip AKD1500 official open tools",
+          "url": "https://brainchip.com/press/brainchip-launches-akd1500-pcie-card-for-edge-ai-evaluation-everywhere/",
+          "accessed_at": "2026-09-22"
+        },
+        {
+          "query": "BrainChip DevHub AKD1500",
+          "url": "https://github.com/Brainchip-Inc/brainchip_devhub",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "BrainChip markets AKD1500 silicon and PCIe/M.2 evaluation hardware and publishes example projects in DevHub.",
+        "The official material states that tools/model examples are available without subscription fees."
+      ],
+      "limitations": [
+        "AKD1500 hardware and the underlying Akida runtime are not established as open-source; the imported label is false as written.",
+        "No Arduino Nicla driver claim was verified for AKD1500."
+      ],
+      "corrected_purpose": "Commercial AKD1500 neuromorphic accelerator with public examples and proprietary runtime components.",
+      "note": "Do not describe the chip or complete software stack as open-source."
+    }
+  ]
+}

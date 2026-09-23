@@ -1,0 +1,766 @@
+{
+  "meta": {
+    "название": "Системные требования и источники для диссертации",
+    "тема": "Биологически обоснованная генерация синтетических ECAP-сигналов на основе коннектома Drosophila для кросс-субъектной детекции боли при SCS",
+    "версия": "1.0.0",
+    "дата": "2026-09-19",
+    "язык": "ru",
+    "всего_категорий": 9,
+    "всего_ресурсов": 92
+  },
+  "categories": [
+    {
+      "id": "C1",
+      "название": "Коннектом Drosophila и симуляция мозга",
+      "подкатегории": [
+        {
+          "id": "C1.1",
+          "название": "Данные коннектома",
+          "ресурсы": [
+            {
+              "название": "FlyWire Codex (API для скачивания)",
+              "ссылка": "https://codex.flywire.ai/api/download",
+              "назначение": "Основной источник коннектома взрослой мухи (v783: 139 255 нейронов, ~50M синапсов)",
+              "задачи": ["Задача 1"]
+            },
+            {
+              "название": "FlyConnectome (Seung Lab)",
+              "ссылка": "https://github.com/seung-lab/FlyConnectome",
+              "назначение": "Программный доступ к данным FlyWire, CAVE tutorial (Jupyter notebook)",
+              "задачи": ["Задача 1"]
+            },
+            {
+              "название": "murthylab/flywire-network-analysis",
+              "ссылка": "https://github.com/murthylab/flywire-network-analysis",
+              "назначение": "Скрипты сетевого анализа коннектома; публикация Network Statistics of the Whole-Brain Connectome of Drosophila",
+              "задачи": ["Задача 1"]
+            },
+            {
+              "название": "connectome_data_prep",
+              "ссылка": "https://github.com/YijieYin/connectome_data_prep",
+              "назначение": "Подготовка данных FlyWire/FAFB; tinyurl-интерфейс для v783",
+              "задачи": ["Задача 1"]
+            },
+            {
+              "название": "FlyWire v783 (browsable)",
+              "ссылка": "https://tinyurl.com/flywire783",
+              "назначение": "Веб-интерфейс для детального изучения коннектома",
+              "задачи": ["Задача 1"]
+            }
+          ]
+        },
+        {
+          "id": "C1.2",
+          "название": "Embodied симуляция (мозг + тело)",
+          "ресурсы": [
+            {
+              "название": "NeuroMechFly v2 / FlyGym",
+              "ссылка": "https://neuromechfly.org",
+              "назначение": "Python-библиотека цифрового двойника мухи; симуляция сенсомоторного контроля, зрение, обоняние, ходьба",
+              "задачи": ["Задача 2"]
+            },
+            {
+              "название": "Eon Systems: fly-brain",
+              "ссылка": "https://github.com/eonsystemspbc/fly-brain",
+              "назначение": "Whole-brain LIF-модель Drosophila; Brian2, Brian2CUDA, PyTorch, NEST GPU, нейроморфные чипы",
+              "задачи": ["Задача 2", "Задача 3"]
+            },
+            {
+              "название": "claude-fly",
+              "ссылка": "https://github.com/legacyindiesubmissions-ai/claude-fly",
+              "назначение": "Первая embodied whole-brain spiking simulation Drosophila (FlyWire v783, 138 639 нейронов, MuJoCo, $140 hardware)",
+              "задачи": ["Задача 2", "Задача 3"]
+            },
+            {
+              "название": "snedea/flybrain",
+              "ссылка": "https://github.com/snedea/flybrain",
+              "назначение": "Интерактивная симуляция 139K LIF-нейронов из FlyWire FAFB v783 в реальном времени через Web Worker",
+              "задачи": ["Задача 2"]
+            },
+            {
+              "название": "philshiu/Drosophila_brain_model",
+              "ссылка": "https://github.com/philshiu/Drosophila_brain_model",
+              "назначение": "LIF-модель всего мозга Drosophila; spike times и rates всех нейронов",
+              "задачи": ["Задача 1", "Задача 2"]
+            },
+            {
+              "название": "artem-x-meta/fly-arena",
+              "ссылка": "https://github.com/artem-x-meta/fly-arena",
+              "назначение": "Симулятор Drosophila с MaleCNS connectome + FlyGym/MuJoCo; автономное поведение, конкуренция за еду, neural state readout",
+              "задачи": ["Задача 2", "Задача 3"]
+            },
+            {
+              "название": "MakazhanAlpamys/soup-connectome",
+              "ссылка": "https://github.com/MakazhanAlpamys/soup-connectome",
+              "назначение": "Benchmark MaleCNS connectome; CPU/GPU, streamed residency",
+              "задачи": ["Задача 2"]
+            },
+            {
+              "название": "chaobrain/fitting_drosophila_whole_brain",
+              "ссылка": "https://github.com/chaobrain/fitting_drosophila_whole_brain_spiking_model",
+              "назначение": "Двухстадийная SNN-модель для симуляции и предсказания динамики мозга Drosophila",
+              "задачи": ["Задача 3"]
+            }
+          ]
+        },
+        {
+          "id": "C1.3",
+          "название": "Ноцицептивные цепи Drosophila (референсные работы)",
+          "ресурсы": [
+            {
+              "название": "Jessica Jones: Circuit Reconstruction",
+              "ссылка": "https://jesmjones.github.io",
+              "назначение": "Реконструкция ноцицептивных цепей; md-нейроны → две downstream-пути (S283, S348)",
+              "задачи": ["Задача 1", "Задача 2"]
+            },
+            {
+              "название": "Ascending nociceptive pathways (bioRxiv 2025)",
+              "ссылка": "https://www.biorxiv.org",
+              "назначение": "Восходящие пути: Ipsigoro → Goro; роль KCs в escape response (S029, S091)",
+              "задачи": ["Задача 1", "Задача 2"]
+            },
+            {
+              "название": "MaleCNS connectome (Janelia)",
+              "ссылка": "https://www.janelia.org",
+              "назначение": "Коннектом CNS самца Drosophila (166 700 нейронов, 25.5M соединений)",
+              "задачи": ["Задача 1", "Задача 2"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "C2",
+      "название": "Нейроморфные вычисления и SNN",
+      "подкатегории": [
+        {
+          "id": "C2.1",
+          "название": "Симуляторы SNN",
+          "ресурсы": [
+            {
+              "название": "Brian 2",
+              "ссылка": "https://github.com/brian-team/brian2",
+              "назначение": "Бесплатный open-source симулятор SNN на Python; почти все платформы",
+              "задачи": ["Задача 5"]
+            },
+            {
+              "название": "Brian2GeNN",
+              "ссылка": "https://github.com/brian-team/brian2genn",
+              "назначение": "Ускорение Brian 2 на NVIDIA GPU (в 10–100 раз быстрее CPU)",
+              "задачи": ["Задача 5"]
+            },
+            {
+              "название": "GeNN",
+              "ссылка": "https://genn-team.github.io",
+              "назначение": "C++ мета-компилятор для ускорения SNN на GPU",
+              "задачи": ["Задача 5"]
+            },
+            {
+              "название": "NEST",
+              "ссылка": "https://www.nest-simulator.org",
+              "назначение": "C++/Python симулятор для динамических нейронных систем",
+              "задачи": ["Задача 5"]
+            },
+            {
+              "название": "sapicore",
+              "ссылка": "https://github.com/cplab/sapicore",
+              "назначение": "PyTorch-based SNN-симулятор для нейробиологически реалистичных моделей",
+              "задачи": ["Задача 5"]
+            },
+            {
+              "название": "SNN Toolbox",
+              "ссылка": "https://github.com/NeuromorphicProcessorProject/snn_toolbox",
+              "назначение": "Конвертация ANN → SNN и запуск в спайковом симуляторе",
+              "задачи": ["Задача 5"]
+            },
+            {
+              "название": "Norse",
+              "ссылка": "https://github.com/norse/norse",
+              "назначение": "Библиотека SNN на PyTorch; Jupyter notebooks для Colab",
+              "задачи": ["Задача 5"]
+            },
+            {
+              "название": "snnTorch",
+              "ссылка": "https://github.com/jeshraghian/snntorch",
+              "назначение": "Python-библиотека для обучения SNN; Colab tutorials",
+              "задачи": ["Задача 5"]
+            },
+            {
+              "название": "ModNEF",
+              "ссылка": "https://github.com/ModNEF",
+              "назначение": "Open-source SNN emulator для FPGA; Python API + VHDL generation",
+              "задачи": ["Задача 5"]
+            }
+          ]
+        },
+        {
+          "id": "C2.2",
+          "название": "Нейроморфное железо",
+          "ресурсы": [
+            {
+              "название": "BrainChip Akida — MetaTF SDK",
+              "ссылка": "https://doc.brainchipinc.com",
+              "назначение": "Python API (Keras-like) для SNN inference на Akida; pip install akida",
+              "задачи": ["Задача 5"]
+            },
+            {
+              "название": "BrainChip Edge AI Box",
+              "ссылка": "https://shop.brainchipinc.com",
+              "назначение": "Dev kit для Akida (AKD1000/AKD1500); PCIe inference",
+              "задачи": ["Задача 5"]
+            },
+            {
+              "название": "BrainChip AKD1500 (open-source)",
+              "ссылка": "https://www.opensourceforu.com",
+              "назначение": "Arduino Nicla drivers, board libraries, Akida Engine",
+              "задачи": ["Задача 5"]
+            },
+            {
+              "название": "Edge Impulse + BrainChip AKD1000",
+              "ссылка": "https://docs.edgeimpulse.com",
+              "назначение": "Python Akida Library, Edge Impulse SDK, MetaTF Deployment Block",
+              "задачи": ["Задача 5"]
+            },
+            {
+              "название": "Catalyst N1 Neuromorphic Processor",
+              "ссылка": "https://huggingface.co/Catalyst-Neuromorphic/catalyst-n1",
+              "назначение": "Python SDK, CPU reference simulator (LIF), GPU simulator (PyTorch CUDA, 4–8x speedup)",
+              "задачи": ["Задача 5"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "C3",
+      "название": "Открытые датасеты",
+      "подкатегории": [
+        {
+          "id": "C3.1",
+          "название": "Датасеты боли (физиологические сигналы)",
+          "ресурсы": [
+            {
+              "название": "BioVid HeatPain Database",
+              "ссылка": "https://www.nit.ovgu.de/nit/en/BioVid-p-1358.html",
+              "данные": "ECG, sEMG, video лица (N = 90); острая тепловая боль; Part A–E",
+              "задачи": ["Задача 4", "Задача 5"]
+            },
+            {
+              "название": "AI4Pain Grand Challenge",
+              "ссылка": "https://sites.google.com/view/ai4pain/home",
+              "данные": "fNIRS + видео лица (65 участников); No Pain / Low Pain / High Pain; EDA, BVP, RESP, SpO2",
+              "задачи": ["Задача 4", "Задача 5"]
+            },
+            {
+              "название": "PainMonit Dataset",
+              "ссылка": "https://www.mendeley.com",
+              "данные": "9 физиологических модальностей (BVP, 2×EDA, skin temperature, ECG, EMG, IBI, HR, respiration); 55 здоровых субъектов",
+              "задачи": ["Задача 4", "Задача 5"]
+            },
+            {
+              "название": "PainMotion Dataset",
+              "ссылка": "https://zenodo.org",
+              "данные": "sEMG + ECG + кинематика верхних конечностей; DOMS vs musculoskeletal disorders; 6h4m данных",
+              "задачи": ["Задача 4"]
+            },
+            {
+              "название": "EmoPain Database",
+              "ссылка": "https://www.nit.ovgu.de",
+              "данные": "IMU + sEMG; хроническая боль в спине; упражнения",
+              "задачи": ["Задача 4", "Задача 5"]
+            },
+            {
+              "название": "LENS Dataset",
+              "ссылка": "https://odesi.ca",
+              "данные": "sEMG + NIRS; интенсивность скелетно-мышечной боли; стандартизированный jaw-clenching task",
+              "задачи": ["Задача 4"]
+            }
+          ]
+        },
+        {
+          "id": "C3.2",
+          "название": "Датасеты ЭЭГ (хроническая боль)",
+          "ресурсы": [
+            {
+              "название": "OpenPain / OSF",
+              "ссылка": "https://osf.io/mj9xr/",
+              "данные": "ЭЭГ-BIDS; хроническая боль; open access",
+              "задачи": ["Задача 4", "Задача 5"]
+            },
+            {
+              "название": "PainLabMunich",
+              "ссылка": "https://osf.io/hbkmx/",
+              "данные": "Resting-state ЭЭГ; хроническая боль; PainLabMunich",
+              "задачи": ["Задача 4"]
+            },
+            {
+              "название": "Chronic neuropathic pain EEG",
+              "ссылка": "https://europepmc.org",
+              "данные": "36 пациентов; eyes open/closed; painDETECT + BPI",
+              "задачи": ["Задача 4"]
+            },
+            {
+              "название": "ValidPain2 (Nociception Level Index)",
+              "ссылка": "https://eegdash.org",
+              "данные": "180 субъектов; ЭЭГ; 4 ch, 178 Hz, BIDS",
+              "задачи": ["Задача 4"]
+            },
+            {
+              "название": "Phantom Limb Pain EEG",
+              "ссылка": "https://nemar.org",
+              "данные": "64/128 ch resting-state ЭЭГ; ампутанты с фантомной болью",
+              "задачи": ["Задача 4"]
+            },
+            {
+              "название": "Expectation effects on nociception",
+              "ссылка": "https://nemar.org",
+              "данные": "ЭЭГ-BIDS; expectation модулирует repetition suppression",
+              "задачи": ["Задача 4"]
+            },
+            {
+              "название": "Zuo2025 (knee pain)",
+              "ссылка": "https://moabb.neurotechx.com",
+              "данные": "30 ch ЭЭГ; knee pain; motor imagery",
+              "задачи": ["Задача 4"]
+            }
+          ]
+        },
+        {
+          "id": "C3.3",
+          "название": "Датасеты fNIRS (боль)",
+          "ресурсы": [
+            {
+              "название": "Evoked fNIRS (thermal QST)",
+              "ссылка": "https://data.mendeley.com",
+              "данные": "200 MB; fNIRS; thermal quantitative sensory testing",
+              "задачи": ["Задача 4"]
+            },
+            {
+              "название": "Electrical_Thermal_FingerTapping_2015",
+              "ссылка": "https://nemar.org",
+              "данные": "fNIRS; painful thermal + electrical stimuli; finger-tapping",
+              "задачи": ["Задача 4"]
+            },
+            {
+              "название": "Electrical_Morphine_Placebo_2018",
+              "ссылка": "https://nemar.org",
+              "данные": "fNIRS; morphine analgesia + placebo effects",
+              "задачи": ["Задача 4"]
+            },
+            {
+              "название": "NITRC Open access fNIRS (pain)",
+              "ссылка": "http://www.nitrc.org/projects/yucel18pain/",
+              "данные": "fNIRS; painful stimuli; morphine vs placebo",
+              "задачи": ["Задача 4"]
+            },
+            {
+              "название": "NITRC Electrical pain stimulus",
+              "ссылка": "http://www.nitrc.org/projects/yucel15pain",
+              "данные": "fNIRS; 11 subjects; innocuous + noxious electrical stimulus",
+              "задачи": ["Задача 4"]
+            }
+          ]
+        },
+        {
+          "id": "C3.4",
+          "название": "Датасеты SCS/ECAP",
+          "ресурсы": [
+            {
+              "название": "data_CL_SCS (Figshare)",
+              "ссылка": "https://figshare.com",
+              "данные": "ECAP-сигналы при postural changes during SCS",
+              "задачи": ["Задача 4", "Задача 5"]
+            },
+            {
+              "название": "ECAP + conductivity data (Figshare)",
+              "ссылка": "https://figshare.com",
+              "данные": "ECAP amplitudes при разных directional contacts; conductivity of tissues",
+              "задачи": ["Задача 4", "Задача 5"]
+            },
+            {
+              "название": "Epidural spinal recordings (Newcastle)",
+              "ссылка": "https://apps-eprint4-l.ncl.ac.uk",
+              "данные": "ECAPs, doublets, ESAPs, EMGs; SCS neural processes",
+              "задачи": ["Задача 4"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "C4",
+      "название": "ML-фреймворки и модели детекции боли",
+      "подкатегории": [
+        {
+          "id": "C4.1",
+          "название": "SOTA-модели (GitHub-репозитории)",
+          "ресурсы": [
+            {
+              "название": "VST-APA (Video Swin Transformers)",
+              "ссылка": "https://github.com/MRausus/VST-APA",
+              "назначение": "Pain detection; effectiveness, generalizability, explainability",
+              "задачи": ["Задача 5"]
+            },
+            {
+              "название": "HCAT-Pain",
+              "ссылка": "https://github.com/AnupKumarGupta/HCAT-Pain",
+              "назначение": "Hierarchical Cross-Attention Transformer; non-contact multimodal pain classification",
+              "задачи": ["Задача 5"]
+            },
+            {
+              "название": "Tiny-BioMoE",
+              "ссылка": "https://github.com/GkikasStefanos/Tiny-BioMoE",
+              "назначение": "Lightweight embedding model для биосигналов; pretrained weights",
+              "задачи": ["Задача 5"]
+            },
+            {
+              "название": "Hierarchical Multimodal Fusion (X-ITE)",
+              "ссылка": "https://github.com/Satyajithchary/Hierarchical-Multimodal-Fusion-with-Phased-Training-for-X-ITE-Challenge",
+              "назначение": "Multimodal pain recognition; physiological + video + audio; 3-phase curriculum",
+              "задачи": ["Задача 5"]
+            },
+            {
+              "название": "Cross-Spectral Attention Fusion (CSAF)",
+              "ссылка": "https://github.com/oussama123-ai/Cross-Spectral-Fusion-of-Thermal",
+              "назначение": "Thermal + RGB imaging; objective pain estimation",
+              "задачи": ["Задача 5"]
+            },
+            {
+              "название": "PainFormer",
+              "ссылка": "https://github.com/GkikasStefanos/PainFormer",
+              "назначение": "Vision foundation model; 14 tasks/datasets; 10.9M samples",
+              "задачи": ["Задача 5"]
+            },
+            {
+              "название": "Automatic-Recognition-VAS-Index",
+              "ссылка": "https://github.com/LorenzoGianassi/Automatic-Recognition-VAS-Index-with-Random-Forest",
+              "назначение": "Random Forest для pain index; BioVid dataset",
+              "задачи": ["Задача 5"]
+            }
+          ]
+        },
+        {
+          "id": "C4.2",
+          "название": "ML-фреймворки",
+          "ресурсы": [
+            {
+              "название": "PyTorch Tabular",
+              "ссылка": "https://github.com/manujosephv/pytorch_tabular",
+              "назначение": "Deep learning для табличных данных; NODE, TabNet, категориальные энкодеры, TensorBoard/W&B",
+              "задачи": ["Задача 5"]
+            },
+            {
+              "название": "sktime",
+              "ссылка": "https://github.com/sktime/sktime",
+              "назначение": "Time series classification; pain detection",
+              "задачи": ["Задача 5"]
+            },
+            {
+              "название": "PyTorch Lightning",
+              "ссылка": "https://github.com/Lightning-AI/pytorch-lightning",
+              "назначение": "Упрощение training loop; experiment tracking",
+              "задачи": ["Задача 5"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "C5",
+      "название": "Модели SCS/ECAP и цифровые двойники",
+      "подкатегории": [
+        {
+          "id": "C5.1",
+          "название": "Ресурсы",
+          "ресурсы": [
+            {
+              "название": "RADO-SCS",
+              "ссылка": "https://zenodo.org",
+              "назначение": "Realistic Anatomically Detailed Open-Source SCS Model; CAD-derived human spinal anatomy",
+              "задачи": ["Задача 4"]
+            },
+            {
+              "название": "SCSInSCIMechanisms",
+              "ссылка": "https://github.com/jostrows9/SCSInSCIMechanisms",
+              "назначение": "Biophysical model + анализ epidural SCS при травме; Balaguer et al. (2025)",
+              "задачи": ["Задача 4"]
+            },
+            {
+              "название": "SCS-network",
+              "ссылка": "https://github.com/lauramedlock/SCS-network",
+              "назначение": "SCS network model (Sagalajev et al. 2024); Python-симуляция",
+              "задачи": ["Задача 4"]
+            },
+            {
+              "название": "NRV (NeuRon Virtualizer)",
+              "ссылка": "https://github.com/fkolbl/NRV",
+              "назначение": "Multi-scale Python framework для in-silico PNS stimulation",
+              "задачи": ["Задача 4"]
+            },
+            {
+              "название": "OpenXstim",
+              "ссылка": "https://github.com/OpenMedTech-Lab/OpenXstim",
+              "назначение": "Open-source programmable electrical stimulator для transcutaneous SCS",
+              "задачи": ["Задача 4"]
+            },
+            {
+              "название": "Digital Twins (npj Biomedical Innovations)",
+              "ссылка": "https://www.nature.com",
+              "назначение": "Biophysical + surrogate digital twins; hybrid modeling framework для SCS",
+              "задачи": ["Задача 4", "Задача 5"]
+            },
+            {
+              "название": "Multi-scale digital twins (FAU)",
+              "ссылка": "https://www.pdh.med.fau.de",
+              "назначение": "Multi-scale digital twins of spinal cord; Pareto-optimal parameter exploration",
+              "задачи": ["Задача 4"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "C6",
+      "название": "Облачные и вычислительные ресурсы",
+      "подкатегории": [
+        {
+          "id": "C6.1",
+          "название": "Ресурсы",
+          "ресурсы": [
+            {
+              "название": "Google Colab",
+              "ссылка": "https://colab.research.google.com",
+              "назначение": "Бесплатные GPU/TPU; Jupyter notebooks; SNN tutorials",
+              "задачи": ["Задача 5"]
+            },
+            {
+              "название": "Norse Colab Tutorials",
+              "ссылка": "https://github.com/norse/notebooks",
+              "назначение": "SNN tutorials в Colab; hardware acceleration (GPU/TPU)",
+              "задачи": ["Задача 5"]
+            },
+            {
+              "название": "snnTorch Colab",
+              "ссылка": "https://github.com/jeshraghian/snntorch",
+              "назначение": "5+ Colab tutorials: Spike Encoding, Feedforward SNN, Training SNN",
+              "задачи": ["Задача 5"]
+            },
+            {
+              "название": "EvoJAX SNN (Colab)",
+              "ссылка": "https://nbviewer.org",
+              "назначение": "Evolving SNN with EvoJAX; чистый Jax; TPU-совместимый",
+              "задачи": ["Задача 5"]
+            },
+            {
+              "название": "Radboud SNN Simulator (Colab)",
+              "ссылка": "https://github.com/adiehl96/SNN-computing",
+              "назначение": "Simulator of SNN for neuromorphic computing; Colab badge",
+              "задачи": ["Задача 5"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "C7",
+      "название": "Туториалы и документация",
+      "подкатегории": [
+        {
+          "id": "C7.1",
+          "название": "Ресурсы",
+          "ресурсы": [
+            {
+              "название": "FlyConnectome CAVE Tutorial",
+              "ссылка": "https://github.com/seung-lab/FlyConnectome/blob/main/CAVE%20tutorial.ipynb",
+              "назначение": "Jupyter tutorial для программного доступа к FlyWire",
+              "задачи": ["Задача 1"]
+            },
+            {
+              "название": "NeuroMechFly v2 Docs",
+              "ссылка": "https://neuromechfly.org",
+              "назначение": "Документация: leg adhesion, rule-based controller, hybrid controller, vision, olfaction, RL-based navigation, Gym environment",
+              "задачи": ["Задача 2"]
+            },
+            {
+              "название": "Brian2GeNN Tutorial",
+              "ссылка": "https://genn-team.github.io",
+              "назначение": "Пример: LIF neurons with varying input currents; f/I curve",
+              "задачи": ["Задача 5"]
+            },
+            {
+              "название": "BrainChip MetaTF Docs",
+              "ссылка": "https://doc.brainchipinc.com",
+              "назначение": "Akida ML framework; QuantizeML + Compilation packages",
+              "задачи": ["Задача 5"]
+            },
+            {
+              "название": "PyTorch Tabular Docs",
+              "ссылка": "https://github.com/manujosephv/pytorch_tabular",
+              "назначение": "Полная документация; FeedForward + Category Embedding, TabNet, NODE",
+              "задачи": ["Задача 5"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "C8",
+      "название": "Референсные публикации и метаданные",
+      "подкатегории": [
+        {
+          "id": "C8.1",
+          "название": "Ресурсы",
+          "ресурсы": [
+            {
+              "название": "FlyWire: Method of the Year 2025 (Nature Methods)",
+              "ссылка": "https://www.nature.com",
+              "назначение": "Методология коннектомики; EM-based approach (S252, S445)",
+              "задачи": ["Задача 1"]
+            },
+            {
+              "название": "LIF model from Shiu et al. (Nature 2024)",
+              "ссылка": "https://www.nature.com/articles/s41586-024-07763-9",
+              "назначение": "Canonical LIF model; 91% prediction accuracy против экспериментальных данных Drosophila",
+              "задачи": ["Задача 2"]
+            },
+            {
+              "название": "EVOKE Study (JPHV 2026)",
+              "ссылка": "https://www.jphv.org",
+              "назначение": "CL-SCS vs OL-SCS; RR 1.47 для ≥50% pain relief (S357, S404)",
+              "задачи": ["Задача 5"]
+            },
+            {
+              "название": "Control Signals in CL-SCS (Neuromodulation 2026)",
+              "ссылка": "https://www.neuromodulationjournal.org",
+              "назначение": "Scoping review: 28 статей, 19 исследований; ни одна модель не интегрирует субъективные + биомаркеры (S079, S290)",
+              "задачи": ["Задача 5"]
+            },
+            {
+              "название": "Eon Systems: Embodied whole-brain emulation",
+              "ссылка": "https://tech.yahoo.com",
+              "назначение": "125 000 нейронов, 50M синапсов; NeuroMechFly v2; compound eye vision (S287, S254)",
+              "задачи": ["Задача 2"]
+            },
+            {
+              "название": "DoomFly (Alex Wormuth)",
+              "ссылка": "https://github.com/nftechie/doomfly",
+              "назначение": "MaleCNS v1.0; PPL101 dopamine receptors; pain feedback (S121, S354)",
+              "задачи": ["Задача 2", "Задача 3"]
+            },
+            {
+              "название": "US20220323766A1",
+              "ссылка": "https://patents.google.com",
+              "назначение": "d_total = d_EEG + I_ECAP; closed-loop SCS (S289, S392)",
+              "задачи": ["Задача 4"]
+            },
+            {
+              "название": "US10842996",
+              "ссылка": "https://patents.google.com",
+              "назначение": "Analog SA rejection circuit для ECAP extraction (S681, S700)",
+              "задачи": ["Задача 4"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "C9",
+      "название": "Системные требования",
+      "подкатегории": [
+        {
+          "id": "C9.1",
+          "название": "Минимальная конфигурация",
+          "ресурсы": [
+            {"компонент": "CPU", "требование": "16+ ядер (для Brian2/NEST CPU-симуляций)"},
+            {"компонент": "RAM", "требование": "64 GB (коннектом v783 ~5M синапсов; MaleCNS ~25.5M)"},
+            {"компонент": "GPU", "требование": "NVIDIA RTX 3090/4090 (24 GB VRAM) — для Brian2GeNN, PyTorch, transformer-моделей"},
+            {"компонент": "Storage", "требование": "2 TB NVMe SSD (датасеты + симуляции + checkpoints)"},
+            {"компонент": "OS", "требование": "Ubuntu 22.04+ / Windows 11 + WSL2"},
+            {"компонент": "Python", "требование": "3.10–3.12 (совместимость с BrainChip MetaTF, PyTorch)"},
+            {"компонент": "CUDA", "требование": "12.x"}
+          ]
+        },
+        {
+          "id": "C9.2",
+          "название": "Рекомендуемая конфигурация",
+          "ресурсы": [
+            {"компонент": "CPU", "требование": "32+ ядер (AMD Threadripper / Intel Xeon)"},
+            {"компонент": "RAM", "требование": "128–256 GB"},
+            {"компонент": "GPU", "требование": "2× NVIDIA A100 80GB или 4× RTX 4090"},
+            {"компонент": "Storage", "требование": "4 TB NVMe + 8 TB HDD (архив датасетов)"},
+            {"компонент": "Нейроморфное железо", "требование": "BrainChip Akida dev kit / AKD1500 (для edge-валидации)"}
+          ]
+        },
+        {
+          "id": "C9.3",
+          "название": "Программный стек",
+          "ресурсы": [
+            {
+              "группа": "Симуляция",
+              "компоненты": [
+                "Brian2 + Brian2GeNN (SNN)",
+                "NEST GPU (альтернатива)",
+                "FlyGym / NeuroMechFly v2 (embodied)",
+                "MuJoCo (физика)",
+                "FlyWire Codex API (коннектом)"
+              ]
+            },
+            {
+              "группа": "ML",
+              "компоненты": [
+                "PyTorch 2.x + Lightning",
+                "PyTorch Tabular",
+                "sktime (time series)",
+                "HuggingFace Transformers",
+                "snnTorch / Norse (SNN)"
+              ]
+            },
+            {
+              "группа": "SCS-модели",
+              "компоненты": [
+                "RADO-SCS (FEM)",
+                "SCSInSCIMechanisms",
+                "NRV (PNS)"
+              ]
+            },
+            {
+              "группа": "Нейроморфное железо",
+              "компоненты": [
+                "BrainChip MetaTF SDK",
+                "Edge Impulse (AKD1000)"
+              ]
+            },
+            {
+              "группа": "Данные",
+              "компоненты": [
+                "BioVid, AI4Pain, PainMonit, LENS",
+                "OpenPain, PainLabMunich (ЭЭГ)",
+                "fNIRS datasets (Mendeley, NEMAR)"
+              ]
+            },
+            {
+              "группа": "Облако",
+              "компоненты": [
+                "Google Colab (GPU/TPU) для прототипирования"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "matrix_task_to_resources": [
+    {"задача": "1. Формализация коннектома", "ключевые_ресурсы": ["FlyWire Codex", "FlyConnectome", "murthylab/flywire-network-analysis", "philshiu/Drosophila_brain_model"]},
+    {"задача": "2. Embodied симуляция", "ключевые_ресурсы": ["NeuroMechFly v2/FlyGym", "MuJoCo", "Eon Systems fly-brain", "claude-fly", "fly-arena"]},
+    {"задача": "3. Синтетический датасет", "ключевые_ресурсы": ["Brian2/Brian2GeNN", "NEST GPU", "snnTorch", "ModMix", "diffusion models"]},
+    {"задача": "4. Cross-species adaptation", "ключевые_ресурсы": ["RADO-SCS", "SCSInSCIMechanisms", "DANN", "meta-learning (VNS)", "US20220323766A1"]},
+    {"задача": "5. Обучение и валидация", "ключевые_ресурсы": ["PyTorch Tabular", "PainFormer", "HCAT-Pain", "GIAFormer", "BioVid", "AI4Pain", "BrainChip Akida"]},
+    {"задача": "6. Этический аудит", "ключевые_ресурсы": ["Drosophila emulations (Scilit)", "The Mousing Problem (Zenodo)", "AI and Ethics"]},
+    {"задача": "7. Open science", "ключевые_ресурсы": ["GitHub", "Zenodo", "HuggingFace", "OSF"]}
+  ],
+  "notes": [
+    "Некоторые ссылки (BioVid, AI4Pain) требуют подписания agreement form или запроса доступа.",
+    "Для ECAP-данных публичных датасетов практически нет — это подтверждает ключевой пробел диссертации.",
+    "Рекомендуется начать с запроса доступа к BioVid и AI4Pain параллельно с разработкой симулятора."
+  ]
+}

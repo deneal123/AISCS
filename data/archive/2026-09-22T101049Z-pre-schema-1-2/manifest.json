@@ -1,0 +1,48 @@
+{
+  "snapshot_at": "2026-09-22T10:10:49+00:00",
+  "status": "immutable_pre_publish_snapshot",
+  "label": "pre-schema-1-2",
+  "files": [
+    {
+      "name": "records.json",
+      "bytes": 656823,
+      "sha256": "873C6FEB145EA6C5096FCB6139FCE6BEF89D37ED235FED9EB5EB3B7E6DD4B385"
+    },
+    {
+      "name": "clusters.json",
+      "bytes": 129527,
+      "sha256": "087CC23EEB576EC92A4BE132551F47BFFD6CAB6A49616AC2BAFF757704428D39"
+    },
+    {
+      "name": "ST.json",
+      "bytes": 77052,
+      "sha256": "420BC2D5D2E5928445D5DB5870D5D842EF13BDF03C35EBA12B631E8C68D3B060"
+    },
+    {
+      "name": "aliases.json",
+      "bytes": 6340,
+      "sha256": "DB99BEC0C9A3AC79AA57BA1CB3C5D1F22D8300A344F56E710ED221855845D28C"
+    },
+    {
+      "name": "vocabularies.json",
+      "bytes": 1633,
+      "sha256": "461FC1CE96578BDFD3FC3BA63411AE103BD780E065F56C52703ECC05F3546125"
+    },
+    {
+      "name": "source-record.schema.json",
+      "bytes": 3800,
+      "sha256": "34915529CCCB9A34174ED93DA0DE0C0F1E841E1D466EDCF530AD6B2172614B07"
+    },
+    {
+      "name": "audit-report.json",
+      "bytes": 10278,
+      "sha256": "56D6D8DB4159551C2473AE238210AE946C25CC8AD05CB144F743F5B62DFF8F47"
+    },
+    {
+      "name": "validation-log.json",
+      "bytes": 4211,
+      "sha256": "DE7D70E37C7417CD05F9D302E13E16A1394B2016B520CF8CF3ED7D1B4C6618EC"
+    }
+  ],
+  "mutation_policy": "Do not edit; publish changes only to the working research JSON files."
+}

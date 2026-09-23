@@ -1,0 +1,271 @@
+{
+  "meta": {
+    "batch_id": "st-batch-007",
+    "schema_version": "1.0.0",
+    "created_at": "2026-09-22",
+    "status": "applied",
+    "reviewed_at": "2026-09-22",
+    "applied_at": "2026-09-22"
+  },
+  "resource_ids": [
+    "ST096",
+    "ST097",
+    "ST098",
+    "ST099",
+    "ST100",
+    "ST101",
+    "ST102",
+    "ST103",
+    "ST104"
+  ],
+  "resources": [
+    {
+      "resource_id": "ST096",
+      "category_id": "C9",
+      "subcategory_id": "C9.2",
+      "name": "GPU",
+      "status": "unverified",
+      "url": null
+    },
+    {
+      "resource_id": "ST097",
+      "category_id": "C9",
+      "subcategory_id": "C9.2",
+      "name": "Storage",
+      "status": "unverified",
+      "url": null
+    },
+    {
+      "resource_id": "ST098",
+      "category_id": "C9",
+      "subcategory_id": "C9.2",
+      "name": "Нейроморфное железо",
+      "status": "unverified",
+      "url": null
+    },
+    {
+      "resource_id": "ST099",
+      "category_id": "C9",
+      "subcategory_id": "C9.3",
+      "name": "ST099",
+      "status": "unverified",
+      "url": null
+    },
+    {
+      "resource_id": "ST100",
+      "category_id": "C9",
+      "subcategory_id": "C9.3",
+      "name": "ST100",
+      "status": "unverified",
+      "url": null
+    },
+    {
+      "resource_id": "ST101",
+      "category_id": "C9",
+      "subcategory_id": "C9.3",
+      "name": "ST101",
+      "status": "unverified",
+      "url": null
+    },
+    {
+      "resource_id": "ST102",
+      "category_id": "C9",
+      "subcategory_id": "C9.3",
+      "name": "ST102",
+      "status": "unverified",
+      "url": null
+    },
+    {
+      "resource_id": "ST103",
+      "category_id": "C9",
+      "subcategory_id": "C9.3",
+      "name": "ST103",
+      "status": "unverified",
+      "url": null
+    },
+    {
+      "resource_id": "ST104",
+      "category_id": "C9",
+      "subcategory_id": "C9.3",
+      "name": "ST104",
+      "status": "unverified",
+      "url": null
+    }
+  ],
+  "decisions": [
+    {
+      "resource_id": "ST096",
+      "decision": "rejected",
+      "exact_url": null,
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "primary documentation supporting recommended GPU",
+          "url": "https://github.com/brian-team/brian2genn",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [],
+      "limitations": [
+        "The proposed 2x A100 80 GB or 4x RTX 4090 configuration has no measured target workload, scaling curve or cost justification."
+      ],
+      "corrected_purpose": "Non-evidentiary planning item: recommended GPU.",
+      "note": "Rejected from the source registry; preserve actionable choices in versioned environment or experiment specifications instead."
+    },
+    {
+      "resource_id": "ST097",
+      "decision": "rejected",
+      "exact_url": null,
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "primary documentation supporting recommended storage",
+          "url": "https://github.com/seung-lab/FlyConnectome",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [],
+      "limitations": [
+        "The proposed 4 TB NVMe plus 8 TB HDD capacity has no dataset inventory, retention policy or generated-data volume model."
+      ],
+      "corrected_purpose": "Non-evidentiary planning item: recommended storage.",
+      "note": "Rejected from the source registry; preserve actionable choices in versioned environment or experiment specifications instead."
+    },
+    {
+      "resource_id": "ST098",
+      "decision": "partially_verified",
+      "exact_url": "https://brainchip.com/press/brainchip-launches-akd1500-pcie-card-for-edge-ai-evaluation-everywhere/",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "BrainChip AKD1500 official evaluation hardware",
+          "url": "https://brainchip.com/press/brainchip-launches-akd1500-pcie-card-for-edge-ai-evaluation-everywhere/",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "BrainChip offers AKD1500 evaluation hardware and an associated vendor software stack for edge-AI evaluation."
+      ],
+      "limitations": [
+        "No experiment currently requires Akida hardware and no project model has been converted or benchmarked on it.",
+        "Calling the hardware recommended is unsupported until it beats software baselines on a predefined edge-deployment metric."
+      ],
+      "corrected_purpose": "Optional edge-deployment candidate behind a later measured go/no-go gate.",
+      "note": "Hardware existence is confirmed; procurement recommendation is not."
+    },
+    {
+      "resource_id": "ST099",
+      "decision": "rejected",
+      "exact_url": null,
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "primary documentation supporting simulation stack list",
+          "url": "https://github.com/brian-team/brian2",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [],
+      "limitations": [
+        "This is an aggregate architecture proposal, not a source; several listed tools were separately validated and NEST GPU was not established as a chosen dependency."
+      ],
+      "corrected_purpose": "Non-evidentiary planning item: simulation stack list.",
+      "note": "Rejected from the source registry; preserve actionable choices in versioned environment or experiment specifications instead."
+    },
+    {
+      "resource_id": "ST100",
+      "decision": "rejected",
+      "exact_url": null,
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "primary documentation supporting ML stack list",
+          "url": "https://github.com/Lightning-AI/lightning",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [],
+      "limitations": [
+        "This is an unversioned aggregate dependency list, not evidence; packages must be selected per baseline and pinned in a lockfile."
+      ],
+      "corrected_purpose": "Non-evidentiary planning item: ML stack list.",
+      "note": "Rejected from the source registry; preserve actionable choices in versioned environment or experiment specifications instead."
+    },
+    {
+      "resource_id": "ST101",
+      "decision": "rejected",
+      "exact_url": null,
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "primary documentation supporting SCS modeling stack list",
+          "url": "https://github.com/SCORE-Lab-SMM-SCS/ScsInSCIMechanisms",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [],
+      "limitations": [
+        "This is an aggregate planning list and does not demonstrate compatibility, shared outputs or an ECAP measurement model."
+      ],
+      "corrected_purpose": "Non-evidentiary planning item: SCS modeling stack list.",
+      "note": "Rejected from the source registry; preserve actionable choices in versioned environment or experiment specifications instead."
+    },
+    {
+      "resource_id": "ST102",
+      "decision": "rejected",
+      "exact_url": null,
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "primary documentation supporting neuromorphic hardware stack list",
+          "url": "https://docs.edgeimpulse.com/hardware/boards/brainchip-akd1000",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [],
+      "limitations": [
+        "This duplicates separately curated BrainChip and Edge Impulse resources and provides no benchmark or decision criterion."
+      ],
+      "corrected_purpose": "Non-evidentiary planning item: neuromorphic hardware stack list.",
+      "note": "Rejected from the source registry; preserve actionable choices in versioned environment or experiment specifications instead."
+    },
+    {
+      "resource_id": "ST103",
+      "decision": "rejected",
+      "exact_url": null,
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "primary documentation supporting human-data stack list",
+          "url": "https://www.nit.ovgu.de/BioVid.html",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [],
+      "limitations": [
+        "This mixes datasets with different targets, modalities, access conditions and licenses; each dataset must remain a separately validated source card."
+      ],
+      "corrected_purpose": "Non-evidentiary planning item: human-data stack list.",
+      "note": "Rejected from the source registry; preserve actionable choices in versioned environment or experiment specifications instead."
+    },
+    {
+      "resource_id": "ST104",
+      "decision": "rejected",
+      "exact_url": null,
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "primary documentation supporting cloud stack list",
+          "url": "https://research.google.com/colaboratory/faq.html",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [],
+      "limitations": [
+        "This duplicates the Google Colab resource and its unguaranteed accelerator availability; it is not an independent source."
+      ],
+      "corrected_purpose": "Non-evidentiary planning item: cloud stack list.",
+      "note": "Rejected from the source registry; preserve actionable choices in versioned environment or experiment specifications instead."
+    }
+  ]
+}

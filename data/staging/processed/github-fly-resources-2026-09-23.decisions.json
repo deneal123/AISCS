@@ -1,0 +1,17 @@
+{
+  "processed_at": "2026-09-23",
+  "input": "six user-supplied GitHub repository URLs",
+  "decisions": [
+    {"url": "https://github.com/eonsystemspbc/fly-brain", "action": "publish_new", "canonical_id": "S732"},
+    {"url": "https://github.com/Neuromorphicism/fly-brain-snntorch", "action": "publish_new", "canonical_id": "S733"},
+    {"url": "https://github.com/NeLy-EPFL/flygym", "action": "publish_new_code_entity", "canonical_id": "S734", "related_source_id": "S731"},
+    {"url": "https://github.com/legacyindiesubmissions-ai/claude-fly", "action": "refresh_existing", "canonical_id": "S292", "batch_id": "r4-github-refresh-001"},
+    {"url": "https://github.com/nftechie/doomfly", "action": "refresh_existing_duplicate_rejected", "canonical_id": "S200", "batch_id": "r4-github-refresh-001"},
+    {"url": "https://github.com/gauravvvvvvvvvv/flybox", "action": "publish_new", "canonical_id": "S737"}
+  ],
+  "limitations": [
+    "Repository verification confirms source identity and inspected documentation, not independent runtime reproduction.",
+    "Simulation outputs do not establish subjective pain, human transfer, ECAP validity or SCS outcomes.",
+    "The DOI claimed by claude-fly did not resolve during this review."
+  ]
+}

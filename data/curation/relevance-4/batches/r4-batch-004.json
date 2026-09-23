@@ -1,0 +1,910 @@
+{
+  "meta": {
+    "batch_id": "r4-batch-004",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-22",
+    "scope": "relevance=4; status=unverified",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-22"
+  },
+  "source_ids": [
+    "S074",
+    "S116",
+    "S176",
+    "S090",
+    "S133",
+    "S175",
+    "S189",
+    "S190",
+    "S193",
+    "S035",
+    "S191",
+    "S302",
+    "S027",
+    "S048",
+    "S013",
+    "S020",
+    "S038",
+    "S041",
+    "S050",
+    "S052",
+    "S075",
+    "S076",
+    "S077",
+    "S084",
+    "S096"
+  ],
+  "records": [
+    {
+      "id": "S074",
+      "title": "Multimodal Fusion of Physiological and Psychosocial Parameters",
+      "year": 2025,
+      "source_type": "метод"
+    },
+    {
+      "id": "S116",
+      "title": "Multimodal Fusion of Physiological and Psychosocial Parameters",
+      "year": 2025,
+      "source_type": "метод"
+    },
+    {
+      "id": "S176",
+      "title": "Multimodal Fusion of Physiological and Psychosocial Parameters (extended)",
+      "year": 2025,
+      "source_type": "метод"
+    },
+    {
+      "id": "S090",
+      "title": "Optogenetic Stimulation of Nociceptive Escape Behaviors in Drosophila Larvae",
+      "year": 2025,
+      "source_type": "метод"
+    },
+    {
+      "id": "S133",
+      "title": "Optogenetic stimulation of nociceptors (extended)",
+      "year": 2025,
+      "source_type": "метод"
+    },
+    {
+      "id": "S175",
+      "title": "Enhanced deep learning framework for real-time pain (extended)",
+      "year": 2025,
+      "source_type": "метод"
+    },
+    {
+      "id": "S189",
+      "title": "Electroencephalography-Based Pain Detection Using Kernel Spectral Connectivity",
+      "year": 2025,
+      "source_type": "XAI"
+    },
+    {
+      "id": "S190",
+      "title": "Efficient Pain Recognition via Respiration Signals",
+      "year": 2025,
+      "source_type": "метод"
+    },
+    {
+      "id": "S193",
+      "title": "Multi-modal multi-expert framework for pain assessment",
+      "year": 2025,
+      "source_type": "метод"
+    },
+    {
+      "id": "S035",
+      "title": "ModMix: Data Augmentation for Multimodal Pain Detection",
+      "year": 2024,
+      "source_type": "метод"
+    },
+    {
+      "id": "S191",
+      "title": "Twins-PainViT: Modality-Agnostic Vision Transformer",
+      "year": 2024,
+      "source_type": "метод"
+    },
+    {
+      "id": "S302",
+      "title": "Twins-PainViT (extended)",
+      "year": 2024,
+      "source_type": "метод"
+    },
+    {
+      "id": "S027",
+      "title": "Drosophila pain sensitization and modulation unveiled by a novel pain model",
+      "year": 2023,
+      "source_type": "метод"
+    },
+    {
+      "id": "S048",
+      "title": "Selective peripheral nerve recording using simulated human median nerve activity",
+      "year": 2023,
+      "source_type": "метод"
+    },
+    {
+      "id": "S013",
+      "title": "Beyond Reflex: Nociception, Neural Circuits, and the Transformation of Threat into Memory in Drosophila melanogaster",
+      "year": 2026,
+      "source_type": "диссертация"
+    },
+    {
+      "id": "S020",
+      "title": "Real-time detection of gait phase for closed-loop neuromodulation with Federated Learning",
+      "year": 2026,
+      "source_type": "федеративное_SCS"
+    },
+    {
+      "id": "S038",
+      "title": "Synthetic pain generation framework (Zero-shot)",
+      "year": 2026,
+      "source_type": "генеративные_модели"
+    },
+    {
+      "id": "S041",
+      "title": "Real-time detection of gait phase for closed-loop neuromodulation with FL",
+      "year": 2026,
+      "source_type": "федеративное_SCS"
+    },
+    {
+      "id": "S050",
+      "title": "Real-time detection of gait phase for closed-loop neuromodulation with FL",
+      "year": 2026,
+      "source_type": "федеративное_SCS"
+    },
+    {
+      "id": "S052",
+      "title": "Zero-shot multimodal pain estimation via synthetic pain simulation",
+      "year": 2026,
+      "source_type": "генеративные_модели"
+    },
+    {
+      "id": "S075",
+      "title": "Deep Learning and Noninvasive Sensors for Detecting Physiological Dysregulation",
+      "year": 2026,
+      "source_type": "обзор"
+    },
+    {
+      "id": "S076",
+      "title": "Fly brain simulation with pain feedback mechanism (DoomFly)",
+      "year": 2026,
+      "source_type": "фундаментальные_модели"
+    },
+    {
+      "id": "S077",
+      "title": "The Fly's Last Second: Welfare states in connectome simulations",
+      "year": 2026,
+      "source_type": "XAI_этика"
+    },
+    {
+      "id": "S084",
+      "title": "PainControl: Identity-preserving pain expression transfer",
+      "year": 2026,
+      "source_type": "генеративные_модели"
+    },
+    {
+      "id": "S096",
+      "title": "Real-time gait phase detection for closed-loop neuromodulation",
+      "year": 2026,
+      "source_type": "федеративное_SCS"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S074",
+      "decision": "verified_metadata",
+      "checked_at": "2026-09-22",
+      "full_text_status": "metadata_only",
+      "searches": [
+        {
+          "query": "Multimodal Fusion of Physiological and Psychosocial Parameters for Intelligent Pain Intensity Assessment in Sickle Cell Disease Using Ensemble Learning and LSTM Framework",
+          "url": "https://www.proceedings.com/content/082/082935webtoc.pdf",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "Multimodal Fusion of Physiological and Psychosocial Parameters for Intelligent Pain Intensity Assessment in Sickle Cell Disease Using Ensemble Learning and LSTM Framework",
+        "identifiers": {
+          "doi": null,
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://www.proceedings.com/content/082/082935webtoc.pdf"
+        },
+        "evidence": {
+          "target_construct": "self_reported_pain",
+          "evidence_role": "method_baseline"
+        },
+        "risk_flags": [
+          "metadata_only",
+          "missing_cross_subject_validation"
+        ],
+        "авторы": "Chanchal Dahat; Goldi Soni",
+        "издание": "ICICNCT 2025 proceedings table of contents"
+      },
+      "claims": [
+        {
+          "claim": "The conference proceedings contain a paper on physiological and psychosocial fusion for sickle-cell pain intensity assessment.",
+          "target_variable": "self_reported_pain",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: https://www.proceedings.com/content/082/082935webtoc.pdf",
+          "limitation": "The exact conference paper and authors are confirmed in the proceedings contents, but the paper text, cohort, split and metrics were not verified.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "The exact conference paper and authors are confirmed in the proceedings contents, but the paper text, cohort, split and metrics were not verified."
+    },
+    {
+      "source_id": "S116",
+      "decision": "alias",
+      "canonical_id": "S074",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Multimodal Fusion of Physiological and Psychosocial Parameters",
+          "url": "https://www.proceedings.com/content/082/082935webtoc.pdf",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S176",
+      "decision": "alias",
+      "canonical_id": "S074",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Multimodal Fusion of Physiological and Psychosocial Parameters (extended)",
+          "url": "https://www.proceedings.com/content/082/082935webtoc.pdf",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S090",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-22",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "query": "Optogenetic Stimulation of Nociceptive Escape Behaviors in Drosophila Larvae",
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11787400/",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "Optogenetic Stimulation of Nociceptive Escape Behaviors in Drosophila Larvae",
+        "identifiers": {
+          "doi": "10.1101/pdb.prot108128",
+          "pmid": "39095077",
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11787400/"
+        },
+        "evidence": {
+          "target_construct": "protective_behavior",
+          "evidence_role": "simulation_foundation"
+        },
+        "risk_flags": [
+          "animal_to_human_transfer_unvalidated"
+        ],
+        "авторы": "Stephanie E Mauthner; W Daniel Tracey",
+        "издание": "Cold Spring Harbor Protocols",
+        "год": 2024
+      },
+      "claims": [
+        {
+          "claim": "The protocol details optogenetic activation of class-IV multidendritic neurons to elicit nociceptive rolling in Drosophila larvae.",
+          "target_variable": "protective_behavior",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: 10.1101/pdb.prot108128",
+          "limitation": "This is an experimental protocol for activating larval nociceptors and eliciting rolling. It validates a nociceptive-behavior assay, not subjective pain or human transfer.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "This is an experimental protocol for activating larval nociceptors and eliciting rolling. It validates a nociceptive-behavior assay, not subjective pain or human transfer."
+    },
+    {
+      "source_id": "S133",
+      "decision": "alias",
+      "canonical_id": "S090",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Optogenetic stimulation of nociceptors (extended)",
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11787400/",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S175",
+      "decision": "alias",
+      "canonical_id": "S073",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Enhanced deep learning framework for real-time pain (extended)",
+          "url": "https://dl.acm.org/action/doSearch?AllField=%22Enhanced+deep+learning+framework+for+real-time+pain+assessment%22",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S189",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-22",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "query": "Electroencephalography-Based Pain Detection Using Kernel Spectral Connectivity Network with Preserved Spatio-Frequency Interpretability",
+          "url": "https://www.mdpi.com/2076-3417/15/9/4804",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "Electroencephalography-Based Pain Detection Using Kernel Spectral Connectivity Network with Preserved Spatio-Frequency Interpretability",
+        "identifiers": {
+          "doi": "10.3390/app15094804",
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://www.mdpi.com/2076-3417/15/9/4804"
+        },
+        "evidence": {
+          "target_construct": "experimental_pain_class",
+          "evidence_role": "human_validation"
+        },
+        "risk_flags": [],
+        "авторы": "Santiago Buitrago-Osorio; Julian Gil-Gonzalez; Andres Marino Alvarez-Meza; David Cardenas-Pena; Alvaro Orozco-Gutierrez",
+        "издание": "Applied Sciences"
+      },
+      "claims": [
+        {
+          "claim": "KCS-FCnet is evaluated on the Brain Mediators of Pain dataset with subject-dependent and leave-one-subject-out analyses.",
+          "target_variable": "experimental_pain_class",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: 10.3390/app15094804",
+          "limitation": "The paper evaluates controlled no-pain versus high-pain EEG and includes LOSO analysis, but the reported headline metrics include subject-dependent results and are not clinical-pain validation.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "The paper evaluates controlled no-pain versus high-pain EEG and includes LOSO analysis, but the reported headline metrics include subject-dependent results and are not clinical-pain validation."
+    },
+    {
+      "source_id": "S190",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-22",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "query": "Efficient Pain Recognition via Respiration Signals: A Single Cross-Attention Transformer Multi-Window Fusion Pipeline",
+          "url": "https://arxiv.org/abs/2507.21886",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "Efficient Pain Recognition via Respiration Signals: A Single Cross-Attention Transformer Multi-Window Fusion Pipeline",
+        "identifiers": {
+          "doi": "10.1145/3747327.3764782",
+          "pmid": null,
+          "arxiv_id": "2507.21886",
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://arxiv.org/abs/2507.21886"
+        },
+        "evidence": {
+          "target_construct": "experimental_pain_class",
+          "evidence_role": "method_baseline"
+        },
+        "risk_flags": [
+          "missing_cross_subject_validation"
+        ],
+        "авторы": "Stefanos Gkikas; Ioannis Kyprakis; Manolis Tsiknakis",
+        "издание": "ICMI 2025 Companion / arXiv"
+      },
+      "claims": [
+        {
+          "claim": "The conference paper evaluates a compact cross-attention, multi-window respiration pipeline for automatic pain recognition.",
+          "target_variable": "experimental_pain_class",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: 10.1145/3747327.3764782",
+          "limitation": "AI4PAIN challenge method using respiration signals. Benchmark evidence does not establish clinical generalization or an independent external cohort.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "AI4PAIN challenge method using respiration signals. Benchmark evidence does not establish clinical generalization or an independent external cohort."
+    },
+    {
+      "source_id": "S193",
+      "decision": "verified_metadata",
+      "checked_at": "2026-09-22",
+      "full_text_status": "metadata_only",
+      "searches": [
+        {
+          "query": "A Multi-Modal Multi-Expert Framework for Pain Assessment in Postoperative Children",
+          "url": "https://doi.org/10.1109/TAFFC.2025.3567307",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "A Multi-Modal Multi-Expert Framework for Pain Assessment in Postoperative Children",
+        "identifiers": {
+          "doi": "10.1109/TAFFC.2025.3567307",
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://doi.org/10.1109/TAFFC.2025.3567307"
+        },
+        "evidence": {
+          "target_construct": "self_reported_pain",
+          "evidence_role": "human_validation"
+        },
+        "risk_flags": [
+          "metadata_only",
+          "missing_cross_subject_validation"
+        ],
+        "авторы": "Zequan Liang; Hao Luo; Xi Chen; Zhipeng Zhong; Cheng Fan; Xingrong Song; Bilian Li; Jianming Lv",
+        "издание": "IEEE Transactions on Affective Computing"
+      },
+      "claims": [
+        {
+          "claim": "The indexed article proposes multimodal expert models for pain-score regression in postoperative children.",
+          "target_variable": "self_reported_pain",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: 10.1109/TAFFC.2025.3567307",
+          "limitation": "Bibliographic identity and abstract-level claims are confirmed; the full paper, patient-level split and external validation were not checked.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "Bibliographic identity and abstract-level claims are confirmed; the full paper, patient-level split and external validation were not checked."
+    },
+    {
+      "source_id": "S035",
+      "decision": "verified_metadata",
+      "checked_at": "2026-09-22",
+      "full_text_status": "metadata_only",
+      "searches": [
+        {
+          "query": "ModMix: Data Augmentation for Multimodal Pain Detection",
+          "url": "https://doi.org/10.1007/978-3-031-88220-3_11",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "ModMix: Data Augmentation for Multimodal Pain Detection",
+        "identifiers": {
+          "doi": "10.1007/978-3-031-88220-3_11",
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://doi.org/10.1007/978-3-031-88220-3_11"
+        },
+        "evidence": {
+          "target_construct": "experimental_pain_class",
+          "evidence_role": "method_baseline"
+        },
+        "risk_flags": [
+          "metadata_only",
+          "missing_cross_subject_validation"
+        ],
+        "авторы": "Mehmet Erdal; Sascha Gruss; Steffen Walter; Friedhelm Schwenker",
+        "издание": "ICPR Workshops and Challenges"
+      },
+      "claims": [
+        {
+          "claim": "The ICPR workshop paper concerns data augmentation for multimodal pain detection.",
+          "target_variable": "experimental_pain_class",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: 10.1007/978-3-031-88220-3_11",
+          "limitation": "Bibliographic identity is confirmed; full-text claims, split design and augmentation gains were not independently checked.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "Bibliographic identity is confirmed; full-text claims, split design and augmentation gains were not independently checked."
+    },
+    {
+      "source_id": "S191",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-22",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "query": "Twins-PainViT: Towards a Modality-Agnostic Vision Transformer Framework for Multimodal Automatic Pain Assessment Using Facial Videos and fNIRS",
+          "url": "https://arxiv.org/abs/2407.19809",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "Twins-PainViT: Towards a Modality-Agnostic Vision Transformer Framework for Multimodal Automatic Pain Assessment Using Facial Videos and fNIRS",
+        "identifiers": {
+          "doi": "10.1109/ACIIW63320.2024.00007",
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://arxiv.org/abs/2407.19809"
+        },
+        "evidence": {
+          "target_construct": "experimental_pain_class",
+          "evidence_role": "method_baseline"
+        },
+        "risk_flags": [
+          "missing_cross_subject_validation"
+        ],
+        "авторы": "Stefanos Gkikas; Manolis Tsiknakis",
+        "издание": "ACIIW 2024 / arXiv"
+      },
+      "claims": [
+        {
+          "claim": "The paper evaluates a dual-ViT modality-agnostic fusion framework using facial video and fNIRS in the AI4PAIN challenge.",
+          "target_variable": "experimental_pain_class",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: 10.1109/ACIIW63320.2024.00007",
+          "limitation": "AI4PAIN benchmark paper reporting 46.76% multilevel accuracy. This is benchmark evidence, not independent clinical validation.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "AI4PAIN benchmark paper reporting 46.76% multilevel accuracy. This is benchmark evidence, not independent clinical validation."
+    },
+    {
+      "source_id": "S302",
+      "decision": "alias",
+      "canonical_id": "S191",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Twins-PainViT (extended)",
+          "url": "https://arxiv.org/abs/2407.19809",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S027",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-22",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "query": "Drosophila pain sensitization and modulation unveiled by a novel pain model and analgesic drugs",
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9934396/",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "Drosophila pain sensitization and modulation unveiled by a novel pain model and analgesic drugs",
+        "identifiers": {
+          "doi": "10.1371/journal.pone.0281874",
+          "pmid": "36795675",
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9934396/"
+        },
+        "evidence": {
+          "target_construct": "nociceptive_response",
+          "evidence_role": "simulation_foundation"
+        },
+        "risk_flags": [
+          "animal_to_human_transfer_unvalidated"
+        ],
+        "авторы": "Wijeong Jang; Myungsok Oh; Eun-Hee Cho; Minwoo Baek; Changsoo Kim",
+        "издание": "PLOS ONE",
+        "год": 2023
+      },
+      "claims": [
+        {
+          "claim": "The fly assay links capsaicin activation of transgenic nociceptors to behavioral and survival effects modulated by several analgesic classes.",
+          "target_variable": "nociceptive_response",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: 10.1371/journal.pone.0281874",
+          "limitation": "The assay uses transgenic TRPV1 expression, capsaicin exposure, behavior and survival. The authors use pain terminology, but these observables remain nociceptive and protective responses and cannot establish subjective human pain equivalence.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "The assay uses transgenic TRPV1 expression, capsaicin exposure, behavior and survival. The authors use pain terminology, but these observables remain nociceptive and protective responses and cannot establish subjective human pain equivalence."
+    },
+    {
+      "source_id": "S048",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-22",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "query": "Selective peripheral nerve recording using simulated human median nerve activity and convolutional neural networks",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/38062509/",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "Selective peripheral nerve recording using simulated human median nerve activity and convolutional neural networks",
+        "identifiers": {
+          "doi": "10.1186/s12938-023-01181-0",
+          "pmid": "38062509",
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://pubmed.ncbi.nlm.nih.gov/38062509/"
+        },
+        "evidence": {
+          "target_construct": "not_applicable",
+          "evidence_role": "method_baseline"
+        },
+        "risk_flags": [
+          "synthetic_only"
+        ],
+        "авторы": "Taseen Jawad; Ryan G L Koh; Jose Zariffa",
+        "издание": "BioMedical Engineering OnLine"
+      },
+      "claims": [
+        {
+          "claim": "The study evaluates CNN classification of simulated nerve compound action potentials from a human median-nerve geometry under varying noise and source counts.",
+          "target_variable": "not_applicable",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: 10.1186/s12938-023-01181-0",
+          "limitation": "The neural activity is generated from a finite-element model of a human median nerve; it concerns source classification for neural interfaces, not pain or ECAP/SCS outcomes.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "The neural activity is generated from a finite-element model of a human median nerve; it concerns source classification for neural interfaces, not pain or ECAP/SCS outcomes."
+    },
+    {
+      "source_id": "S013",
+      "decision": "rejected",
+      "checked_at": "2026-09-22",
+      "exclusion_reason": "unverifiable",
+      "searches": [
+        {
+          "query": "Beyond Reflex: Nociception, Neural Circuits, and the Transformation of Threat into Memory in Drosophila melanogaster",
+          "url": "https://scholar.google.com/scholar?q=%22Beyond+Reflex%22+Nociception+Drosophila",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "risk_flags": [
+          "claim_not_supported"
+        ]
+      },
+      "claims": [],
+      "notes": "No dissertation, journal article or repository record with this exact title and stable identifier was found."
+    },
+    {
+      "source_id": "S020",
+      "decision": "alias",
+      "canonical_id": "S150",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Real-time detection of gait phase for closed-loop neuromodulation with Federated Learning",
+          "url": "https://scholar.google.com/scholar?q=%22gait+phase%22+%22federated+learning%22+neuromodulation",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S038",
+      "decision": "alias",
+      "canonical_id": "S149",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Synthetic pain generation framework (Zero-shot)",
+          "url": "https://doi.org/10.3389/frai.2026.1827727",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S041",
+      "decision": "alias",
+      "canonical_id": "S150",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Real-time detection of gait phase for closed-loop neuromodulation with FL",
+          "url": "https://scholar.google.com/scholar?q=%22gait+phase%22+%22federated+learning%22+neuromodulation",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S050",
+      "decision": "alias",
+      "canonical_id": "S150",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Real-time detection of gait phase for closed-loop neuromodulation with FL",
+          "url": "https://scholar.google.com/scholar?q=%22gait+phase%22+%22federated+learning%22+neuromodulation",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S052",
+      "decision": "alias",
+      "canonical_id": "S149",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Zero-shot multimodal pain estimation via synthetic pain simulation",
+          "url": "https://doi.org/10.3389/frai.2026.1827727",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S075",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-22",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "query": "Deep Learning and Noninvasive Sensors for Detecting Physiological Dysregulation: A Scoping Review",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/41615529/",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "Deep Learning and Noninvasive Sensors for Detecting Physiological Dysregulation: A Scoping Review",
+        "identifiers": {
+          "doi": "10.1007/s10916-025-02332-7",
+          "pmid": "41615529",
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://pubmed.ncbi.nlm.nih.gov/41615529/"
+        },
+        "evidence": {
+          "target_construct": "technical_signal_quality",
+          "evidence_role": "context_only"
+        },
+        "risk_flags": [
+          "missing_cross_subject_validation"
+        ],
+        "авторы": "Mariana Gonzalez Garces; Jeronimo Cardenas Montoya; Maria Isabel Pena Martinez; Juanita Valencia Garcia; Erwin Hernando Hernandez Rincon",
+        "издание": "Journal of Medical Systems"
+      },
+      "claims": [
+        {
+          "claim": "The scoping review maps deep-learning use with noninvasive sensors and identifies persistent external-validation and implementation gaps.",
+          "target_variable": "technical_signal_quality",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: 10.1007/s10916-025-02332-7",
+          "limitation": "Scoping review of 27 heterogeneous studies spanning pain, stress and hemodynamic deterioration; it explicitly calls for real-world and clinical-impact validation and is not effectiveness evidence.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "Scoping review of 27 heterogeneous studies spanning pain, stress and hemodynamic deterioration; it explicitly calls for real-world and clinical-impact validation and is not effectiveness evidence."
+    },
+    {
+      "source_id": "S076",
+      "decision": "alias",
+      "canonical_id": "S200",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Fly brain simulation with pain feedback mechanism (DoomFly)",
+          "url": "https://github.com/nftechie/doomfly",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S077",
+      "decision": "rejected",
+      "checked_at": "2026-09-22",
+      "exclusion_reason": "unverifiable",
+      "searches": [
+        {
+          "query": "The Fly's Last Second: Welfare states in connectome simulations",
+          "url": "https://huggingface.co/datasets/Hyperstition-for-Good/Competition-Submissions/viewer/default/human_curated",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "risk_flags": [
+          "claim_not_supported"
+        ]
+      },
+      "claims": [],
+      "notes": "The exact phrase identifies a science-fiction competition submission, not a scientific source or validated welfare-state measurement."
+    },
+    {
+      "source_id": "S084",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-22",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "query": "PainControl: Identity-Preserving Pain Expression Transfer with Generative Diffusion Models",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/41968302/",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "PainControl: Identity-Preserving Pain Expression Transfer with Generative Diffusion Models",
+        "identifiers": {
+          "doi": "10.1186/s12938-026-01561-2",
+          "pmid": "41968302",
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://pubmed.ncbi.nlm.nih.gov/41968302/"
+        },
+        "evidence": {
+          "target_construct": "experimental_pain_class",
+          "evidence_role": "method_baseline"
+        },
+        "risk_flags": [
+          "synthetic_only"
+        ],
+        "авторы": "Yasamin Zarghami; Muhammad Muzammil; Vida Adeli; Hailey Reimer; Thomas Hadjistavropoulos; Babak Taati",
+        "издание": "BioMedical Engineering OnLine"
+      },
+      "claims": [
+        {
+          "claim": "PainControl evaluates identity-preserving diffusion-based expression transfer and reports benefits chiefly when real pain-expression data are extremely scarce.",
+          "target_variable": "experimental_pain_class",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: 10.1186/s12938-026-01561-2",
+          "limitation": "Synthetic augmentation did not improve the classifier in the general regime and showed AU-intensity and temporal limitations; gains were confined to data-scarce regimes.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "Synthetic augmentation did not improve the classifier in the general regime and showed AU-intensity and temporal limitations; gains were confined to data-scarce regimes."
+    },
+    {
+      "source_id": "S096",
+      "decision": "alias",
+      "canonical_id": "S150",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Real-time gait phase detection for closed-loop neuromodulation",
+          "url": "https://scholar.google.com/scholar?q=%22gait+phase%22+%22federated+learning%22+neuromodulation",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    }
+  ]
+}

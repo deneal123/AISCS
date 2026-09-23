@@ -1,0 +1,543 @@
+{
+  "meta": {
+    "batch_id": "r3-batch-002",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-22",
+    "scope": "relevance=3; status=unverified",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-22"
+  },
+  "source_ids": [
+    "S250",
+    "S314",
+    "S061",
+    "S062",
+    "S169",
+    "S095",
+    "S154",
+    "S168",
+    "S247",
+    "S152",
+    "S214",
+    "S266",
+    "S307",
+    "S157"
+  ],
+  "records": [
+    {
+      "id": "S250",
+      "title": "Brain Sovereignty Demands Privacy-Enhancing AI by Default",
+      "year": 2026,
+      "source_type": "XAI_этика"
+    },
+    {
+      "id": "S314",
+      "title": "Brain Sovereignty Demands Privacy-Enhancing AI",
+      "year": 2026,
+      "source_type": "XAI_этика"
+    },
+    {
+      "id": "S061",
+      "title": "Drosophila larval connectome: synaptic density and connectivity",
+      "year": 2025,
+      "source_type": "препринт"
+    },
+    {
+      "id": "S062",
+      "title": "Shifts in sensory tuning from larva to adult",
+      "year": 2025,
+      "source_type": "препринт"
+    },
+    {
+      "id": "S169",
+      "title": "Shifts in sensory tuning from larva to adult (extended)",
+      "year": 2025,
+      "source_type": "препринт"
+    },
+    {
+      "id": "S095",
+      "title": "From Connectome to Cognition: Building the First Digital Organism",
+      "year": 2025,
+      "source_type": "фундаментальные_модели"
+    },
+    {
+      "id": "S154",
+      "title": "RNA Sequencing Dataset of Drosophila Nociceptor Translatomic Response",
+      "year": 2025,
+      "source_type": "датасет"
+    },
+    {
+      "id": "S168",
+      "title": "Drosophila larval connectome: synaptic density (extended)",
+      "year": 2025,
+      "source_type": "препринт"
+    },
+    {
+      "id": "S247",
+      "title": "A Neuromodulable Current-Mode Silicon Neuron",
+      "year": 2025,
+      "source_type": "фундаментальные_модели"
+    },
+    {
+      "id": "S152",
+      "title": "Nociception in fruit fly larvae (Review)",
+      "year": 2023,
+      "source_type": "обзор"
+    },
+    {
+      "id": "S214",
+      "title": "Lightweight SNN model of Drosophila olfactory system",
+      "year": 2023,
+      "source_type": "фундаментальные_модели"
+    },
+    {
+      "id": "S266",
+      "title": "A lightweight data-driven SNN model (extended)",
+      "year": 2023,
+      "source_type": "фундаментальные_модели"
+    },
+    {
+      "id": "S307",
+      "title": "A lightweight data-driven SNN model (extended)",
+      "year": 2023,
+      "source_type": "фундаментальные_модели"
+    },
+    {
+      "id": "S157",
+      "title": "Drosophila as a Model to Study Nociception",
+      "year": 2022,
+      "source_type": "обзор"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S250",
+      "decision": "rejected",
+      "checked_at": "2026-09-22",
+      "exclusion_reason": "unverifiable",
+      "searches": [
+        {
+          "query": "Brain Sovereignty Demands Privacy-Enhancing AI by Default",
+          "url": "https://inferensys.com/blog/neurotechnology-and-precision-neurology/why-brain-sovereignty-requires-privacy-enhancing-ai-by-default",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "risk_flags": [
+          "claim_not_supported"
+        ]
+      },
+      "claims": [],
+      "notes": "The exact match is a commercial blog post with unsupported legal, performance and market claims, not a scholarly or authoritative regulatory source."
+    },
+    {
+      "source_id": "S314",
+      "decision": "alias",
+      "canonical_id": "S250",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Brain Sovereignty Demands Privacy-Enhancing AI",
+          "url": "https://inferensys.com/blog/neurotechnology-and-precision-neurology/why-brain-sovereignty-requires-privacy-enhancing-ai-by-default",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S061",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-22",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "query": "Synaptic density and relative connectivity conservation maintain circuit stability across development",
+          "url": "https://elifesciences.org/reviewed-preprints/108643",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "Synaptic density and relative connectivity conservation maintain circuit stability across development",
+        "identifiers": {
+          "doi": "10.7554/eLife.108643.1",
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://elifesciences.org/reviewed-preprints/108643"
+        },
+        "evidence": {
+          "target_construct": "nociceptive_response",
+          "evidence_role": "simulation_foundation"
+        },
+        "risk_flags": [
+          "preprint",
+          "animal_to_human_transfer_unvalidated"
+        ],
+        "авторы": "Ingo Fritz; Feiyu Wang; Ricardo Chirif; Nikos Malakasis; Julijana Gjorgjieva; Andre Ferreira Castro",
+        "издание": "eLife reviewed preprint"
+      },
+      "claims": [
+        {
+          "claim": "Conserved synaptic density and relative connectivity can maintain modeled postsynaptic responses as the larval nociceptive circuit grows.",
+          "target_variable": "nociceptive_response",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: 10.7554/eLife.108643.1",
+          "limitation": "The study combines EM reconstructions and passive single-cell modeling of a larval nociceptive circuit across development. It does not model whole-brain dynamics, subjective pain or human transfer.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "The study combines EM reconstructions and passive single-cell modeling of a larval nociceptive circuit across development. It does not model whole-brain dynamics, subjective pain or human transfer."
+    },
+    {
+      "source_id": "S062",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-22",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "query": "Ascending nociceptive pathways drive rapid escape and sustained avoidance in adult Drosophila",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/41280033/",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "Ascending nociceptive pathways drive rapid escape and sustained avoidance in adult Drosophila",
+        "identifiers": {
+          "doi": "10.1101/2025.10.28.684868",
+          "pmid": "41280033",
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://pubmed.ncbi.nlm.nih.gov/41280033/"
+        },
+        "evidence": {
+          "target_construct": "nociceptive_response",
+          "evidence_role": "simulation_foundation"
+        },
+        "risk_flags": [
+          "preprint",
+          "animal_to_human_transfer_unvalidated"
+        ],
+        "авторы": "Jessica M Jones; Anne Sustar; Akira Mamiya; Sarah Walling-Bell; Grant M Chou; Andrew P Cook; John C Tuthill",
+        "издание": "bioRxiv"
+      },
+      "claims": [
+        {
+          "claim": "Adult abdominal multidendritic neurons and distinct ascending pathways support rapid escape and sustained avoidance of noxious heat.",
+          "target_variable": "nociceptive_response",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: 10.1101/2025.10.28.684868",
+          "limitation": "The preprint identifies adult-fly nociceptors and ascending pathways supporting escape and sustained avoidance. Its discussion of pain criteria does not demonstrate subjective experience or human transfer.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "The preprint identifies adult-fly nociceptors and ascending pathways supporting escape and sustained avoidance. Its discussion of pain criteria does not demonstrate subjective experience or human transfer."
+    },
+    {
+      "source_id": "S169",
+      "decision": "alias",
+      "canonical_id": "S062",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Shifts in sensory tuning from larva to adult (extended)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/41280033/",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S095",
+      "decision": "partially_verified",
+      "checked_at": "2026-09-22",
+      "full_text_status": "metadata_only",
+      "searches": [
+        {
+          "query": "From Connectome to Cognition: Building the First Digital Organism",
+          "url": "https://doi.org/10.59973/ipil.361",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "From Connectome to Cognition: Building the First Digital Organism",
+        "identifiers": {
+          "doi": "10.59973/ipil.361",
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://doi.org/10.59973/ipil.361"
+        },
+        "evidence": {
+          "target_construct": "not_applicable",
+          "evidence_role": "context_only"
+        },
+        "risk_flags": [
+          "news_or_secondary_source",
+          "claim_not_supported"
+        ],
+        "авторы": "Melvin M Vopson",
+        "издание": "IPI Letters, News and Views"
+      },
+      "claims": [
+        {
+          "claim": "The commentary links the adult fly connectome, computational brain model and later embodied demonstrations into a digital-organism narrative.",
+          "target_variable": "not_applicable",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: 10.59973/ipil.361",
+          "limitation": "The article is a News and Views interpretation of prior connectome and Eon work. Its 'first digital organism' framing is commentary, not independent empirical validation of a complete brain emulation or cognition.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "The article is a News and Views interpretation of prior connectome and Eon work. Its 'first digital organism' framing is commentary, not independent empirical validation of a complete brain emulation or cognition."
+    },
+    {
+      "source_id": "S154",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-22",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "query": "RNA Sequencing Dataset of Drosophila Nociceptor Translatomic Response to Injury",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/40855845/",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "RNA Sequencing Dataset of Drosophila Nociceptor Translatomic Response to Injury",
+        "identifiers": {
+          "doi": "10.3390/data10020011",
+          "pmid": "40855845",
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": "PRJNA1056042",
+          "exact_url": "https://pubmed.ncbi.nlm.nih.gov/40855845/"
+        },
+        "evidence": {
+          "target_construct": "nociceptive_response",
+          "evidence_role": "dataset_descriptor"
+        },
+        "risk_flags": [
+          "animal_to_human_transfer_unvalidated"
+        ],
+        "авторы": "Christine M Hale; Kyle J Beauchemin; Courtney L Brann; Julie K Moulton; Ramaz Geguchadze; Benjamin J Harrison; Geoffrey K Ganter",
+        "издание": "Data"
+      },
+      "claims": [
+        {
+          "claim": "The data descriptor provides injury and sham larval nociceptor translatomes under BioProject PRJNA1056042.",
+          "target_variable": "nociceptive_response",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: 10.3390/data10020011",
+          "limitation": "The dataset compares nociceptor-specific ribosome-bound RNA after UV injury versus sham in larvae. It is molecular translatomic data, not neural activity, behavior, subjective pain or human validation.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "The dataset compares nociceptor-specific ribosome-bound RNA after UV injury versus sham in larvae. It is molecular translatomic data, not neural activity, behavior, subjective pain or human validation."
+    },
+    {
+      "source_id": "S168",
+      "decision": "alias",
+      "canonical_id": "S061",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Drosophila larval connectome: synaptic density (extended)",
+          "url": "https://elifesciences.org/reviewed-preprints/108643",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S247",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-22",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "query": "A Neuromodulable Current-Mode Silicon Neuron for Robust and Adaptive Neuromorphic Systems",
+          "url": "https://arxiv.org/abs/2512.01133",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "A Neuromodulable Current-Mode Silicon Neuron for Robust and Adaptive Neuromorphic Systems",
+        "identifiers": {
+          "doi": null,
+          "pmid": null,
+          "arxiv_id": "2512.01133",
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://arxiv.org/abs/2512.01133"
+        },
+        "evidence": {
+          "target_construct": "technical_signal_quality",
+          "evidence_role": "context_only"
+        },
+        "risk_flags": [
+          "preprint"
+        ],
+        "авторы": "Loris Mendolia; Chenxi Wen; Elisabetta Chicca; Giacomo Indiveri; Rodolphe Sepulchre; Jean-Michel Redoute; Alessio Franci",
+        "издание": "arXiv"
+      },
+      "claims": [
+        {
+          "claim": "A 180 nm CMOS implementation demonstrates tunable firing regimes and robustness of a mixed-feedback current-mode silicon neuron.",
+          "target_variable": "technical_signal_quality",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: https://arxiv.org/abs/2512.01133",
+          "limitation": "The preprint validates an analog CMOS neuron circuit. 'Neuromodulable' describes electronic adaptation; it is not therapeutic neuromodulation, nociception, pain assessment, ECAP or SCS evidence.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "The preprint validates an analog CMOS neuron circuit. 'Neuromodulable' describes electronic adaptation; it is not therapeutic neuromodulation, nociception, pain assessment, ECAP or SCS evidence."
+    },
+    {
+      "source_id": "S152",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-22",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "query": "Nociception in fruit fly larvae",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/37006412/",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "Nociception in fruit fly larvae",
+        "identifiers": {
+          "doi": "10.3389/fpain.2023.1076017",
+          "pmid": "37006412",
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://pubmed.ncbi.nlm.nih.gov/37006412/"
+        },
+        "evidence": {
+          "target_construct": "nociceptive_response",
+          "evidence_role": "simulation_foundation"
+        },
+        "risk_flags": [
+          "animal_to_human_transfer_unvalidated"
+        ],
+        "авторы": "Jean-Christophe Boivin; Jiayi Zhu; Tomoko Ohyama",
+        "издание": "Frontiers in Pain Research"
+      },
+      "claims": [
+        {
+          "claim": "The review summarizes known larval nociceptors, downstream circuits, nocifensive behaviors and neuromodulators.",
+          "target_variable": "nociceptive_response",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: 10.3389/fpain.2023.1076017",
+          "limitation": "The review covers larval nociceptive circuits, connectomics, behavior and neuromodulation. Cross-species relevance is hypothesis-generating and does not establish subjective pain or a human spinal mapping.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "The review covers larval nociceptive circuits, connectomics, behavior and neuromodulation. Cross-species relevance is hypothesis-generating and does not establish subjective pain or a human spinal mapping."
+    },
+    {
+      "source_id": "S214",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-22",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "query": "A lightweight data-driven spiking neuronal network model of Drosophila olfactory nervous system with dedicated hardware support",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/38994271/",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "A lightweight data-driven spiking neuronal network model of Drosophila olfactory nervous system with dedicated hardware support",
+        "identifiers": {
+          "doi": "10.3389/fnins.2024.1384336",
+          "pmid": "38994271",
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://pubmed.ncbi.nlm.nih.gov/38994271/"
+        },
+        "evidence": {
+          "target_construct": "not_applicable",
+          "evidence_role": "simulation_foundation"
+        },
+        "risk_flags": [
+          "synthetic_only",
+          "animal_to_human_transfer_unvalidated"
+        ],
+        "авторы": "Takuya Nanami; Daichi Yamada; Makoto Someya; Toshihide Hige; Hokto Kazama; Takashi Kohno",
+        "издание": "Frontiers in Neuroscience",
+        "год": 2024
+      },
+      "claims": [
+        {
+          "claim": "The paper builds a connectome-informed lightweight SNN of the Drosophila olfactory system and demonstrates real-time FPGA execution.",
+          "target_variable": "not_applicable",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: 10.3389/fnins.2024.1384336",
+          "limitation": "The model targets olfaction and associative learning and runs on FPGA hardware. It does not model nociception, whole-brain dynamics, pain or human transfer.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "The model targets olfaction and associative learning and runs on FPGA hardware. It does not model nociception, whole-brain dynamics, pain or human transfer."
+    },
+    {
+      "source_id": "S266",
+      "decision": "alias",
+      "canonical_id": "S214",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "A lightweight data-driven SNN model (extended)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/38994271/",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S307",
+      "decision": "alias",
+      "canonical_id": "S214",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "A lightweight data-driven SNN model (extended)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/38994271/",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S157",
+      "decision": "alias",
+      "canonical_id": "S012",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Drosophila as a Model to Study Nociception",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/35418874/",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    }
+  ]
+}

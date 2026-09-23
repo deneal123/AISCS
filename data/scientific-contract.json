@@ -1,0 +1,308 @@
+{
+  "meta": {
+    "schema_version": "1.0.0",
+    "prepared_at": "2026-09-23",
+    "status": "contract_complete_pending_author_and_supervisor_review",
+    "gate": "G0_REVISE",
+    "scope": "Pre-registered scientific boundaries for simulation, transfer to human datasets, and conditional SCS validation.",
+    "invariants": [
+      "A simulation label is not subjective human pain.",
+      "ECAP measures evoked neural recruitment and is not a direct measure of pain.",
+      "Clinical SCS claims require patient-level human ECAP or telemetry linked to a pre-specified clinical outcome."
+    ]
+  },
+  "entities": [
+    {
+      "id": "ENT-01",
+      "name": "noxious_stimulus",
+      "carrier": "simulation environment or experimental stimulus apparatus",
+      "measurement": "commanded location, intensity, duration, and waveform",
+      "time_scale": "stimulus event and trial",
+      "analysis_unit": "trial within an individual",
+      "primary_target_construct": "noxious_stimulus",
+      "permitted_conclusion": "The applied exposure can be detected or its parameters can be estimated.",
+      "prohibited_interpretation": "The individual experienced subjective pain.",
+      "source_refs": ["S280", "S730", "S291", "ST031", "ST032", "ST033"]
+    },
+    {
+      "id": "ENT-02",
+      "name": "nociceptive_response",
+      "carrier": "sensory and downstream neural or physiological system",
+      "measurement": "neural activity or physiological response after a noxious stimulus",
+      "time_scale": "milliseconds to seconds after stimulation",
+      "analysis_unit": "trial within an animal or participant",
+      "primary_target_construct": "nociceptive_response",
+      "permitted_conclusion": "A measurable response associated with potentially tissue-damaging stimulation occurred.",
+      "prohibited_interpretation": "The response is equivalent to subjective pain or chronic pain.",
+      "source_refs": ["S730", "ST033", "ST040"]
+    },
+    {
+      "id": "ENT-03",
+      "name": "protective_behavior",
+      "carrier": "animal or human participant",
+      "measurement": "movement, pose, withdrawal, guarding, or expert behavioral annotation",
+      "time_scale": "event to session",
+      "analysis_unit": "animal or participant",
+      "primary_target_construct": "protective_behavior",
+      "permitted_conclusion": "Observable protective behavior was detected under the defined protocol.",
+      "prohibited_interpretation": "Behavior alone quantifies subjective pain intensity.",
+      "source_refs": ["ST035"]
+    },
+    {
+      "id": "ENT-04",
+      "name": "self_reported_pain",
+      "carrier": "human participant able to report experience",
+      "measurement": "pre-specified NRS, VAS, questionnaire, or ordinal self-report",
+      "time_scale": "rating event or clinical visit",
+      "analysis_unit": "participant",
+      "primary_target_construct": "self_reported_pain",
+      "permitted_conclusion": "The model estimates the recorded self-report under the sampled population and protocol.",
+      "prohibited_interpretation": "The estimate is an objective universal measure of pain or a causal diagnosis.",
+      "source_refs": ["S730", "ST033", "ST034", "ST039", "ST041"]
+    },
+    {
+      "id": "ENT-05",
+      "name": "ecap_neural_recruitment",
+      "carrier": "electrically stimulated and recorded human neural tissue",
+      "measurement": "artifact-controlled evoked compound action-potential morphology, latency, area, and peak-to-peak amplitude",
+      "time_scale": "sub-millisecond to tens of milliseconds after a stimulation pulse",
+      "analysis_unit": "pulse nested in electrode configuration, session, and participant",
+      "primary_target_construct": "ecap_neural_recruitment",
+      "permitted_conclusion": "The signal characterizes evoked neural recruitment and stimulation delivery under the recording configuration.",
+      "prohibited_interpretation": "ECAP is a direct measure of pain or proves clinical benefit.",
+      "source_refs": ["S105", "S159", "S162"]
+    },
+    {
+      "id": "ENT-06",
+      "name": "scs_response",
+      "carrier": "human patient receiving spinal cord stimulation",
+      "measurement": "pre-specified patient-level clinical outcome at a fixed follow-up time",
+      "time_scale": "trial period to longitudinal follow-up",
+      "analysis_unit": "participant",
+      "primary_target_construct": "scs_response",
+      "permitted_conclusion": "The model predicts the defined clinical outcome in an independent patient-level evaluation.",
+      "prohibited_interpretation": "A waveform-only or within-patient window result establishes therapeutic efficacy or cross-subject prediction.",
+      "source_refs": ["S079", "S105", "S162"]
+    }
+  ],
+  "simulation_domain": {
+    "id": "SIM-DOM-01",
+    "organism": "adult Drosophila melanogaster",
+    "neural_scope": "Peripheral nociceptors and connectome-addressable ascending nociceptive neurons implicated in rapid escape and sustained avoidance; exact cell/root IDs must be frozen in the simulator manifest for the selected connectome release.",
+    "state_variables": [
+      "neuron activation or spike state when the selected simulator supports it",
+      "synaptic input and output state when exposed by the simulator",
+      "body pose, joint state, contact state, and locomotor state",
+      "environment and stimulus state retained for audit but withheld from a detector when it is the target"
+    ],
+    "stimuli": [
+      "localized noxious mechanical exposure",
+      "localized noxious thermal exposure when supported by the selected sensory model",
+      "sham and non-noxious controls"
+    ],
+    "observable_sensors": [
+      "neural_activity",
+      "simulation_state",
+      "movement_pose",
+      "behavior"
+    ],
+    "observable_behaviors": [
+      "rapid escape",
+      "sustained avoidance",
+      "locomotor trajectory and pose-derived protective response"
+    ],
+    "fallback_domain": "A separate larval Class-IV multidendritic-nociceptor escape/rolling circuit may be used only as an explicitly different experiment; adult and larval circuits are not pooled.",
+    "excluded_claims": [
+      "subjective pain",
+      "human spinal-cord equivalence",
+      "clinical SCS response"
+    ],
+    "source_refs": ["S029", "S062", "S090", "S731"]
+  },
+  "experiments": [
+    {
+      "id": "EXP-01",
+      "name": "simulation_stimulus_detection",
+      "primary_entity_id": "ENT-01",
+      "input": "simulated neural, pose, movement, or behavioral observations without the stimulus command",
+      "output": "location, intensity, duration, or presence of a noxious stimulus",
+      "training_data": "synthetic individuals and scenarios assigned only to training",
+      "independent_test": "held-out synthetic individuals and held-out stimulus scenarios",
+      "success_criterion": "pre-registered improvement over chance and leakage controls with confidence intervals",
+      "falsification_criterion": "performance collapses after removing the stimulus command or under individual/scenario holdout",
+      "source_refs": []
+    },
+    {
+      "id": "EXP-02",
+      "name": "simulation_response_estimation",
+      "primary_entity_id": "ENT-02",
+      "input": "stimulus parameters and pre-stimulus simulation state",
+      "output": "held-out neural or protective response",
+      "training_data": "synthetic individuals and perturbations assigned only to training",
+      "independent_test": "held-out individuals, parameter ranges, and perturbations",
+      "success_criterion": "response features remain identifiable and calibrated under pre-registered perturbations",
+      "falsification_criterion": "the response is not distinguishable from control or is determined by metadata leakage",
+      "source_refs": []
+    },
+    {
+      "id": "EXP-03",
+      "name": "human_target_transfer",
+      "primary_entity_id": "ENT-04",
+      "input": "human modalities mapped through modality-specific encoders into an abstract temporal representation",
+      "output": "exactly one dataset-specific human target construct",
+      "training_data": "human training participants with optional synthetic pretraining performed before human fine-tuning",
+      "independent_test": "participant-disjoint validation and at least one compatible independent dataset",
+      "success_criterion": "synthetic pretraining improves the pre-selected metric with a 95% confidence interval and no calibration degradation versus human-only and synthetic controls",
+      "falsification_criterion": "no gain on participant-disjoint evaluation or gain disappears on a compatible external dataset",
+      "source_refs": ["S280", "S291", "S730", "ST031", "ST032", "ST033"]
+    },
+    {
+      "id": "EXP-04",
+      "name": "clinical_scs_response_prediction",
+      "primary_entity_id": "ENT-06",
+      "input": "human SCS telemetry or ECAP plus pre-specified clinical covariates",
+      "output": "pre-specified patient-level clinical response at a fixed follow-up",
+      "training_data": "authorized human SCS cohort, participant-disjoint from evaluation",
+      "independent_test": "held-out patients or a separate clinical cohort",
+      "success_criterion": "improvement over clinical baseline and a no-synthetic-pretraining model with calibrated uncertainty",
+      "falsification_criterion": "no linked outcome dataset, within-patient-only performance, or disappearance under patient-level testing",
+      "source_refs": ["S079", "S105", "S162"]
+    }
+  ],
+  "transfer_chain": [
+    {
+      "id": "TR-01",
+      "from": "simulation",
+      "to": "abstract_representation",
+      "input": "neural activity, simulation state, movement, pose, and protective behavior",
+      "output": "masked temporal embeddings with modality identity and no claim of species equivalence",
+      "training_data": "training synthetic individuals and scenarios",
+      "independent_test": "held-out synthetic individuals and scenarios",
+      "success_criterion": "representation preserves pre-registered stimulus and response information under perturbation",
+      "falsification_criterion": "representation depends on command leakage or fails individual/scenario holdout",
+      "source_refs": []
+    },
+    {
+      "id": "TR-02",
+      "from": "abstract_representation",
+      "to": "human_dataset_interface",
+      "input": "synthetic embeddings and dataset-specific human modalities",
+      "output": "common temporal interface with explicit modality masks and separate encoders",
+      "training_data": "synthetic corpus and human training participants only",
+      "independent_test": "held-out human participants",
+      "success_criterion": "transfer exceeds human-only and naive/random synthetic controls",
+      "falsification_criterion": "no comparable observable space or no gain after leakage-safe evaluation",
+      "source_refs": ["S036", "S039", "S191"]
+    },
+    {
+      "id": "TR-03",
+      "from": "human_dataset_interface",
+      "to": "dataset_specific_human_target",
+      "input": "participant-level human representation",
+      "output": "one target construct declared by the selected dataset row",
+      "training_data": "one target-compatible training partition",
+      "independent_test": "participant-disjoint partition and compatible external dataset",
+      "success_criterion": "pre-registered primary metric improves with a 95% confidence interval without worse calibration",
+      "falsification_criterion": "effect disappears across participants or requires pooling incompatible targets",
+      "source_refs": ["S280", "S291", "S730", "ST031", "ST032", "ST033"]
+    },
+    {
+      "id": "TR-04",
+      "from": "human_pain_result",
+      "to": "scs_validation",
+      "input": "a frozen transfer method plus authorized patient-level SCS telemetry or ECAP",
+      "output": "pre-specified clinical SCS response",
+      "training_data": "SCS training patients with linked outcomes",
+      "independent_test": "held-out SCS patients or a separate cohort",
+      "success_criterion": "incremental patient-level predictive value over clinical and no-pretraining baselines",
+      "falsification_criterion": "linked outcomes are unavailable or gain vanishes under patient-level evaluation",
+      "source_refs": ["S079", "S105", "S162"]
+    }
+  ],
+  "ecap_like_observation_model": {
+    "id": "ECAP-OBS-01",
+    "required_term_before_validation": "ECAP-like",
+    "source_activity": "population transmembrane action potentials elicited by electrical stimulation",
+    "conduction_delays": "path-length and fiber-parameter dependent delays applied before summation",
+    "spatial_summation": "signed summation over recruited fibers with distance and orientation weighting",
+    "electrode_geometry": "explicit stimulation and recording contact positions, spacing, polarity, and reference",
+    "volume_conduction": "forward observation operator from neural sources to recording contacts",
+    "disturbances": [
+      "stimulation artifact",
+      "physiological noise including EMG and movement",
+      "electronic noise and baseline drift",
+      "amplifier or ADC saturation",
+      "missing pulses, samples, and channels"
+    ],
+    "human_comparators": ["S105", "S159", "S162"],
+    "measurable_characteristics": [
+      "waveform morphology and classifiability against non-ECAP and artifact waveforms",
+      "N1 and later-component latency relative to stimulation",
+      "area under the curve and peak-to-peak amplitude",
+      "signal-to-noise ratio and residual artifact",
+      "recruitment threshold and response versus amplitude, pulse width, polarity, and contact geometry"
+    ],
+    "tolerance_protocol": {
+      "status": "specified_pending_human_signal_access",
+      "reference": "participant- and configuration-stratified distributions from held-out human ECAP data",
+      "acceptance_rule": "Before analysis, register metric-specific bounds from the human training reference only; every required characteristic must fall within its registered 95% reference interval or registered standardized-distance bound on held-out human data.",
+      "numeric_bounds": null,
+      "reason_numeric_bounds_are_null": "Raw comparator signals and a locked preprocessing protocol are required; inventing numeric bounds from abstracts would be unsupported.",
+      "failure_rule": "Failure of any required characteristic keeps the label ECAP-like only and blocks claims of human ECAP equivalence."
+    },
+    "prohibited_claim": "A raw aggregate of simulator activity is an ECAP or a direct measure of pain."
+  },
+  "stop_criteria": [
+    {
+      "id": "STOP-H1",
+      "trigger": "The simulator cannot be reproduced from fixed code, configuration, and seed, or target performance is explained by direct access to the stimulus command.",
+      "measurement": "independent rerun plus command-removal and leakage-control evaluation",
+      "decision": "stop claims for H1 and do not proceed with the affected representation",
+      "reserve_result": "release the simulator audit, failure analysis, and a bounded stimulus/response benchmark if reproducible components remain",
+      "forbidden_conclusion": "The simulator models pain or provides valid pretraining data.",
+      "source_refs": []
+    },
+    {
+      "id": "STOP-H2-A",
+      "trigger": "No synthetic observables can be mapped to a documented human modality through a pre-specified representation or modality-specific encoder.",
+      "measurement": "completed modality correspondence matrix with all candidate paths marked absent or unjustified",
+      "decision": "stop cross-domain transfer claims",
+      "reserve_result": "retain a simulation-method and dataset-generation contribution",
+      "forbidden_conclusion": "Cross-species transfer to human pain assessment is supported.",
+      "source_refs": ["ST031", "ST032", "ST033"]
+    },
+    {
+      "id": "STOP-H2-B",
+      "trigger": "Synthetic pretraining does not improve the pre-selected participant-level primary metric over human-only and naive/random synthetic controls, or worsens calibration.",
+      "measurement": "participant-level bootstrap confidence interval and calibration comparison on locked independent data",
+      "decision": "reject H2 for the tested method and dataset",
+      "reserve_result": "report the negative transfer result and conditions under which synthetic pretraining fails",
+      "forbidden_conclusion": "FlyBrain-constrained pretraining improves human pain assessment.",
+      "source_refs": ["S036", "S039", "S191"]
+    },
+    {
+      "id": "STOP-H3-A",
+      "trigger": "No legally and ethically available human dataset links SCS telemetry or ECAP to a pre-specified patient-level clinical outcome and follow-up time.",
+      "measurement": "documented dataset-access and field audit before the SCS experiment",
+      "decision": "do not run or claim clinical SCS-response prediction",
+      "reserve_result": "limit the dissertation result to ECAP-like observation modeling and transfer to compatible open human datasets",
+      "forbidden_conclusion": "The method predicts clinical response to SCS.",
+      "source_refs": ["S079", "S105", "S162"]
+    },
+    {
+      "id": "STOP-H3-B",
+      "trigger": "Performance exists only for windows from patients seen in training or disappears when patients are held out.",
+      "measurement": "patient-disjoint evaluation with participant-level confidence intervals",
+      "decision": "reject cross-patient SCS generalization",
+      "reserve_result": "report within-patient signal characterization only",
+      "forbidden_conclusion": "The model predicts SCS response for new patients.",
+      "source_refs": ["S105"]
+    }
+  ],
+  "pending_decisions": [
+    "Author review of the evidence matrix.",
+    "Supervisor decision on H1-H3, the reserve scenario, and G0.",
+    "Selection of a primary and an independent human dataset after lawful access is confirmed.",
+    "Numeric ECAP-like tolerances after raw human comparator access and protocol lock."
+  ]
+}

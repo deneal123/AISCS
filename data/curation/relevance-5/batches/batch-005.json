@@ -1,0 +1,1063 @@
+{
+  "meta": {
+    "batch_id": "batch-005",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-22",
+    "scope": "relevance=5; status=unverified",
+    "status": "applied",
+    "reviewed_at": "2026-09-22",
+    "applied_at": "2026-09-22"
+  },
+  "source_ids": [
+    "S356",
+    "S358",
+    "S403",
+    "S357",
+    "S359",
+    "S404",
+    "S238",
+    "S351",
+    "S362",
+    "S402",
+    "S360",
+    "S408",
+    "S361",
+    "S409",
+    "S001",
+    "S002",
+    "S003",
+    "S059",
+    "S033",
+    "S047"
+  ],
+  "records": [
+    {
+      "id": "S356",
+      "title": "ECAP-Controlled CL-SCS in Refractory Lumbar Radiculopathy",
+      "year": 2026,
+      "source_type": "применение"
+    },
+    {
+      "id": "S358",
+      "title": "Impact of ECAP-Controlled CL-SCS in Refractory Lumbar Radiculopathy (extended)",
+      "year": 2026,
+      "source_type": "применение"
+    },
+    {
+      "id": "S403",
+      "title": "ECAP-Controlled CL-SCS Case Report (final)",
+      "year": 2026,
+      "source_type": "применение"
+    },
+    {
+      "id": "S357",
+      "title": "CLOSING THE LOOP ON CHRONIC PAIN (EVOKE Study)",
+      "year": 2026,
+      "source_type": "обзор"
+    },
+    {
+      "id": "S359",
+      "title": "CLOSING THE LOOP (extended)",
+      "year": 2026,
+      "source_type": "обзор"
+    },
+    {
+      "id": "S404",
+      "title": "EVOKE Study (final)",
+      "year": 2026,
+      "source_type": "обзор"
+    },
+    {
+      "id": "S238",
+      "title": "ECAP-guided programming in CL-SCS and OL-SCS",
+      "year": 2024,
+      "source_type": "метод"
+    },
+    {
+      "id": "S351",
+      "title": "Next-Generation SCS Programming Platform",
+      "year": 2026,
+      "source_type": "применение"
+    },
+    {
+      "id": "S362",
+      "title": "Next-Generation SCS Programming Platform (extended)",
+      "year": 2026,
+      "source_type": "применение"
+    },
+    {
+      "id": "S402",
+      "title": "Next-Generation SCS Platform (final)",
+      "year": 2026,
+      "source_type": "применение"
+    },
+    {
+      "id": "S360",
+      "title": "Objective Same-Day SCS Trials with ECAP-Controlled CL Therapy",
+      "year": 2026,
+      "source_type": "применение"
+    },
+    {
+      "id": "S408",
+      "title": "Objective Same-Day SCS Trials (final)",
+      "year": 2026,
+      "source_type": "применение"
+    },
+    {
+      "id": "S361",
+      "title": "Long-Term Outcomes of Closed Loop SCS",
+      "year": 2026,
+      "source_type": "применение"
+    },
+    {
+      "id": "S409",
+      "title": "Long-Term Outcomes CL-SCS (final)",
+      "year": 2026,
+      "source_type": "применение"
+    },
+    {
+      "id": "S001",
+      "title": "Ultrasound-induced wireless implantable stimulator for adaptive pain management",
+      "year": 2025,
+      "source_type": "применение"
+    },
+    {
+      "id": "S002",
+      "title": "Feature extraction and prediction of spinal cord stimulation evoked compound action potentials in humans",
+      "year": 2025,
+      "source_type": "метод"
+    },
+    {
+      "id": "S003",
+      "title": "Classification of chronic pain and spinal cord stimulation response using machine learning in magnetoencephalography data",
+      "year": 2025,
+      "source_type": "метод"
+    },
+    {
+      "id": "S059",
+      "title": "Classification of chronic pain and SCS response using ML in MEG",
+      "year": 2025,
+      "source_type": "метод"
+    },
+    {
+      "id": "S033",
+      "title": "Machine learning predicts spinal cord stimulation surgery outcomes",
+      "year": 2025,
+      "source_type": "метод"
+    },
+    {
+      "id": "S047",
+      "title": "Machine learning predicts SCS surgery outcomes (neural markers)",
+      "year": 2025,
+      "source_type": "метод"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S356",
+      "decision": "verified_metadata",
+      "checked_at": "2026-09-22",
+      "full_text_status": "metadata_only",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "ECAP-Controlled CL-SCS in Refractory Lumbar Radiculopathy",
+          "url": "https://api.crossref.org/works?query.title=ECAP-Controlled+CL-SCS+in+Refractory+Lumbar+Radiculopathy&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"ECAP-Controlled CL-SCS in Refractory Lumbar Radiculopathy\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22ECAP-Controlled+CL-SCS+in+Refractory+Lumbar+Radiculopathy%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "updates": {
+        "название": "Impact of Evoked Compound Action Potential (ECAP)-Controlled Closed-Loop Spinal Cord Stimulation in Refractory Lumbar Radiculopathy: A Case Report",
+        "авторы": "Aviraj Soin; Sarah Kassis; Richard J Witte; Ben Sloop; Cameron Brittain",
+        "год": 2026,
+        "издание": "Cureus",
+        "модальность": null,
+        "задача": null,
+        "метод": null,
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "ограничения": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+        "identifiers": {
+          "doi": "10.7759/cureus.102799",
+          "exact_url": "https://doi.org/10.7759/cureus.102799"
+        },
+        "provenance": {
+          "retrieved_at": "2026-09-22",
+          "search_stream": "relevance-5/registry-and-primary-review",
+          "query_or_seed": "Impact of Evoked Compound Action Potential (ECAP)-Controlled Closed-Loop Spinal Cord Stimulation in Refractory Lumbar Radiculopathy: A Case Report",
+          "iteration": 1
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "subject_domain": "unknown",
+          "modalities": [],
+          "sample_size": null,
+          "target_construct": "unknown",
+          "target_label": null,
+          "evidence_role": "context_only"
+        },
+        "validation": {
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported"
+        },
+        "risk_flags": [
+          "metadata_only"
+        ]
+      },
+      "claims": [
+        {
+          "claim": "The bibliographic source exists under the verified identifier.",
+          "target_variable": "source identity",
+          "population_or_data": "not extracted in metadata-only decisions",
+          "evidence": "doi=10.7759/cureus.102799; exact title=Impact of Evoked Compound Action Potential (ECAP)-Controlled Closed-Loop Spinal Cord Stimulation in Refractory Lumbar Radiculopathy: A Case Report",
+          "limitation": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+          "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+        }
+      ],
+      "notes": "Bibliographic metadata confirmed; full text was not used for claim extraction."
+    },
+    {
+      "source_id": "S358",
+      "decision": "alias",
+      "canonical_id": "S356",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Impact of ECAP-Controlled CL-SCS in Refractory Lumbar Radiculopathy",
+          "url": "https://api.crossref.org/works?query.title=Impact+of+ECAP-Controlled+CL-SCS+in+Refractory+Lumbar+Radiculopathy&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Impact of ECAP-Controlled CL-SCS in Refractory Lumbar Radiculopathy\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Impact+of+ECAP-Controlled+CL-SCS+in+Refractory+Lumbar+Radiculopathy%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S403",
+      "decision": "alias",
+      "canonical_id": "S356",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "ECAP-Controlled CL-SCS Case Report",
+          "url": "https://api.crossref.org/works?query.title=ECAP-Controlled+CL-SCS+Case+Report&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"ECAP-Controlled CL-SCS Case Report\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22ECAP-Controlled+CL-SCS+Case+Report%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S357",
+      "decision": "verified_metadata",
+      "checked_at": "2026-09-22",
+      "full_text_status": "metadata_only",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "CLOSING THE LOOP ON CHRONIC PAIN (EVOKE Study)",
+          "url": "https://api.crossref.org/works?query.title=CLOSING+THE+LOOP+ON+CHRONIC+PAIN+%28EVOKE+Study%29&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"CLOSING THE LOOP ON CHRONIC PAIN (EVOKE Study)\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22CLOSING+THE+LOOP+ON+CHRONIC+PAIN+%28EVOKE+Study%29%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "updates": {
+        "название": "Closing the loop on chronic pain with ECAP-controlled closed-loop vs open-loop spinal cord stimulation: systematic and longitudinal pooled analysis of the EVOKE study",
+        "авторы": "Muhammad Ananda Miftah Redyno; Avisa Cetta Cresma; Ritma Ratri Ayunda Putri",
+        "год": 2026,
+        "издание": "JPHV (Journal of Pain, Vertigo and Headache)",
+        "модальность": null,
+        "задача": null,
+        "метод": null,
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "ограничения": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+        "identifiers": {
+          "doi": "10.21776/ub.jphv.2026.007.01.07",
+          "exact_url": "https://doi.org/10.21776/ub.jphv.2026.007.01.07"
+        },
+        "provenance": {
+          "retrieved_at": "2026-09-22",
+          "search_stream": "relevance-5/registry-and-primary-review",
+          "query_or_seed": "Closing the loop on chronic pain with ECAP-controlled closed-loop vs open-loop spinal cord stimulation: systematic and longitudinal pooled analysis of the EVOKE study",
+          "iteration": 1
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "subject_domain": "unknown",
+          "modalities": [],
+          "sample_size": null,
+          "target_construct": "unknown",
+          "target_label": null,
+          "evidence_role": "context_only"
+        },
+        "validation": {
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported"
+        },
+        "risk_flags": [
+          "metadata_only"
+        ]
+      },
+      "claims": [
+        {
+          "claim": "The bibliographic source exists under the verified identifier.",
+          "target_variable": "source identity",
+          "population_or_data": "not extracted in metadata-only decisions",
+          "evidence": "doi=10.21776/ub.jphv.2026.007.01.07; exact title=Closing the loop on chronic pain with ECAP-controlled closed-loop vs open-loop spinal cord stimulation: systematic and longitudinal pooled analysis of the EVOKE study",
+          "limitation": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+          "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+        }
+      ],
+      "notes": "Bibliographic metadata confirmed; full text was not used for claim extraction."
+    },
+    {
+      "source_id": "S359",
+      "decision": "alias",
+      "canonical_id": "S357",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "CLOSING THE LOOP",
+          "url": "https://api.crossref.org/works?query.title=CLOSING+THE+LOOP&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"CLOSING THE LOOP\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22CLOSING+THE+LOOP%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S404",
+      "decision": "alias",
+      "canonical_id": "S357",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "EVOKE Study",
+          "url": "https://api.crossref.org/works?query.title=EVOKE+Study&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"EVOKE Study\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22EVOKE+Study%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S238",
+      "decision": "verified_metadata",
+      "checked_at": "2026-09-22",
+      "full_text_status": "metadata_only",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "ECAP-guided programming in CL-SCS and OL-SCS",
+          "url": "https://api.crossref.org/works?query.title=ECAP-guided+programming+in+CL-SCS+and+OL-SCS&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"ECAP-guided programming in CL-SCS and OL-SCS\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22ECAP-guided+programming+in+CL-SCS+and+OL-SCS%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "updates": {
+        "название": "Next-Generation SCS Programming Platform: Enhancing ECAP Fidelity and Objectivity to Improve Patient Experience",
+        "авторы": "Daniel J. Parker; Ajay B. Antony; Gregory L. Smith; Johnathan H. Goree; Marc A. Russo; Erika A. Petersen; Chau M. Vu; Paul Verrills; Christopher Gilmore; Leonardo Kapural; Darayus Nanavati; Dean M. Karantonis; Jason E. Pope",
+        "год": 2026,
+        "издание": "Pain and Therapy",
+        "модальность": null,
+        "задача": null,
+        "метод": null,
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "ограничения": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+        "identifiers": {
+          "doi": "10.1007/s40122-025-00808-5",
+          "exact_url": "https://doi.org/10.1007/s40122-025-00808-5"
+        },
+        "provenance": {
+          "retrieved_at": "2026-09-22",
+          "search_stream": "relevance-5/registry-and-primary-review",
+          "query_or_seed": "Next-Generation SCS Programming Platform: Enhancing ECAP Fidelity and Objectivity to Improve Patient Experience",
+          "iteration": 1
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "subject_domain": "unknown",
+          "modalities": [],
+          "sample_size": null,
+          "target_construct": "unknown",
+          "target_label": null,
+          "evidence_role": "context_only"
+        },
+        "validation": {
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported"
+        },
+        "risk_flags": [
+          "metadata_only"
+        ]
+      },
+      "claims": [
+        {
+          "claim": "The bibliographic source exists under the verified identifier.",
+          "target_variable": "source identity",
+          "population_or_data": "not extracted in metadata-only decisions",
+          "evidence": "doi=10.1007/s40122-025-00808-5; exact title=Next-Generation SCS Programming Platform: Enhancing ECAP Fidelity and Objectivity to Improve Patient Experience",
+          "limitation": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+          "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+        }
+      ],
+      "notes": "Bibliographic metadata confirmed; full text was not used for claim extraction."
+    },
+    {
+      "source_id": "S351",
+      "decision": "alias",
+      "canonical_id": "S238",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Next-Generation SCS Programming Platform",
+          "url": "https://api.crossref.org/works?query.title=Next-Generation+SCS+Programming+Platform&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Next-Generation SCS Programming Platform\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Next-Generation+SCS+Programming+Platform%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S362",
+      "decision": "alias",
+      "canonical_id": "S238",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Next-Generation SCS Programming Platform",
+          "url": "https://api.crossref.org/works?query.title=Next-Generation+SCS+Programming+Platform&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Next-Generation SCS Programming Platform\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Next-Generation+SCS+Programming+Platform%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S402",
+      "decision": "alias",
+      "canonical_id": "S238",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Next-Generation SCS Platform",
+          "url": "https://api.crossref.org/works?query.title=Next-Generation+SCS+Platform&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Next-Generation SCS Platform\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Next-Generation+SCS+Platform%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S360",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-22",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Objective Same-Day SCS Trials with ECAP-Controlled CL Therapy",
+          "url": "https://api.crossref.org/works?query.title=Objective+Same-Day+SCS+Trials+with+ECAP-Controlled+CL+Therapy&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Objective Same-Day SCS Trials with ECAP-Controlled CL Therapy\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Objective+Same-Day+SCS+Trials+with+ECAP-Controlled+CL+Therapy%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "primary source",
+          "query": "Objective, Same-Day SCS Trials with ECAP-Controlled Closed-Loop Therapy: Depth of Response is Maintained from Trial to 12 months",
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13009343/",
+          "result": "exact source page checked"
+        }
+      ],
+      "updates": {
+        "название": "Objective, Same-Day SCS Trials with ECAP-Controlled Closed-Loop Therapy: Depth of Response is Maintained from Trial to 12 months",
+        "авторы": "Jason E. Pope; Chau M. Vu; Johnathan H. Goree; Eric G. Cornidez; Drew Trainor; Abeer Khurram; Ian Gould; Dean M. Karantonis",
+        "год": 2026,
+        "издание": "Pain and Therapy",
+        "модальность": null,
+        "задача": null,
+        "метод": null,
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "ограничения": "Full open article checked; single-center selected cohort of 15 limits generalization.",
+        "identifiers": {
+          "doi": "10.1007/s40122-026-00821-2",
+          "exact_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13009343/"
+        },
+        "provenance": {
+          "retrieved_at": "2026-09-22",
+          "search_stream": "relevance-5/registry-and-primary-review",
+          "query_or_seed": "Objective, Same-Day SCS Trials with ECAP-Controlled Closed-Loop Therapy: Depth of Response is Maintained from Trial to 12 months",
+          "iteration": 1
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "subject_domain": "unknown",
+          "modalities": [],
+          "sample_size": null,
+          "target_construct": "unknown",
+          "target_label": null,
+          "evidence_role": "method_baseline"
+        },
+        "validation": {
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported"
+        },
+        "risk_flags": []
+      },
+      "claims": [
+        {
+          "claim": "The bibliographic source exists under the verified identifier.",
+          "target_variable": "source identity",
+          "population_or_data": "not extracted in metadata-only decisions",
+          "evidence": "doi=10.1007/s40122-026-00821-2; exact title=Objective, Same-Day SCS Trials with ECAP-Controlled Closed-Loop Therapy: Depth of Response is Maintained from Trial to 12 months",
+          "limitation": "Full open article checked; single-center selected cohort of 15 limits generalization.",
+          "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+        }
+      ],
+      "notes": "Full open article checked; single-center selected cohort of 15 limits generalization."
+    },
+    {
+      "source_id": "S408",
+      "decision": "alias",
+      "canonical_id": "S360",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Objective Same-Day SCS Trials",
+          "url": "https://api.crossref.org/works?query.title=Objective+Same-Day+SCS+Trials&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Objective Same-Day SCS Trials\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Objective+Same-Day+SCS+Trials%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "primary source",
+          "query": "Objective, Same-Day SCS Trials with ECAP-Controlled Closed-Loop Therapy: Depth of Response is Maintained from Trial to 12 months",
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13009343/",
+          "result": "exact source page checked"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S361",
+      "decision": "rejected",
+      "checked_at": "2026-09-22",
+      "exclusion_reason": "unverifiable",
+      "clear_fields": [
+        "авторы",
+        "издание",
+        "модальность",
+        "задача",
+        "метод",
+        "датасет",
+        "производительность",
+        "кросс_субъект"
+      ],
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Long-Term Outcomes of Closed Loop SCS",
+          "url": "https://api.crossref.org/works?query.title=Long-Term+Outcomes+of+Closed+Loop+SCS&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Long-Term Outcomes of Closed Loop SCS\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Long-Term+Outcomes+of+Closed+Loop+SCS%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [
+        {
+          "claim": "Imported source claim is traceable to a primary record.",
+          "target_variable": "source identity",
+          "population_or_data": "not established",
+          "evidence": "No unique matching primary record was established.",
+          "limitation": "Generic title could not be mapped uniquely to a primary publication; candidate records describe different cohorts.",
+          "permitted_conclusion": "Do not cite as evidence."
+        }
+      ],
+      "notes": "Generic title could not be mapped uniquely to a primary publication; candidate records describe different cohorts."
+    },
+    {
+      "source_id": "S409",
+      "decision": "alias",
+      "canonical_id": "S361",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Long-Term Outcomes CL-SCS",
+          "url": "https://api.crossref.org/works?query.title=Long-Term+Outcomes+CL-SCS&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Long-Term Outcomes CL-SCS\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Long-Term+Outcomes+CL-SCS%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S001",
+      "decision": "verified_metadata",
+      "checked_at": "2026-09-22",
+      "full_text_status": "metadata_only",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Ultrasound-induced wireless implantable stimulator for adaptive pain management",
+          "url": "https://api.crossref.org/works?query.title=Ultrasound-induced+wireless+implantable+stimulator+for+adaptive+pain+management&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Ultrasound-induced wireless implantable stimulator for adaptive pain management\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Ultrasound-induced+wireless+implantable+stimulator+for+adaptive+pain+management%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "updates": {
+        "название": "Ultrasound-induced wireless implantable stimulator for adaptive pain management",
+        "авторы": null,
+        "год": 2025,
+        "издание": "Nature Electronics",
+        "модальность": null,
+        "задача": null,
+        "метод": null,
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "ограничения": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+        "identifiers": {
+          "doi": "10.1038/s41928-025-01377-3",
+          "exact_url": "https://doi.org/10.1038/s41928-025-01377-3"
+        },
+        "provenance": {
+          "retrieved_at": "2026-09-22",
+          "search_stream": "relevance-5/registry-and-primary-review",
+          "query_or_seed": "Ultrasound-induced wireless implantable stimulator for adaptive pain management",
+          "iteration": 1
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "subject_domain": "unknown",
+          "modalities": [],
+          "sample_size": null,
+          "target_construct": "unknown",
+          "target_label": null,
+          "evidence_role": "context_only"
+        },
+        "validation": {
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported"
+        },
+        "risk_flags": [
+          "metadata_only"
+        ]
+      },
+      "claims": [
+        {
+          "claim": "The bibliographic source exists under the verified identifier.",
+          "target_variable": "source identity",
+          "population_or_data": "not extracted in metadata-only decisions",
+          "evidence": "doi=10.1038/s41928-025-01377-3; exact title=Ultrasound-induced wireless implantable stimulator for adaptive pain management",
+          "limitation": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+          "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+        }
+      ],
+      "notes": "Bibliographic metadata confirmed; full text was not used for claim extraction."
+    },
+    {
+      "source_id": "S002",
+      "decision": "verified_metadata",
+      "checked_at": "2026-09-22",
+      "full_text_status": "metadata_only",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Feature extraction and prediction of spinal cord stimulation evoked compound action potentials in humans",
+          "url": "https://api.crossref.org/works?query.title=Feature+extraction+and+prediction+of+spinal+cord+stimulation+evoked+compound+action+potentials+in+humans&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Feature extraction and prediction of spinal cord stimulation evoked compound action potentials in humans\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Feature+extraction+and+prediction+of+spinal+cord+stimulation+evoked+compound+action+potentials+in+humans%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "updates": {
+        "название": "Feature extraction and prediction of spinal cord stimulation evoked compound action potentials in humans",
+        "авторы": "Seth König; Ahmed Ramadan; Disa Sullivan; Vasudha Goel; R Scott Stayner; David Schultz; Alexander B Herman; Theoden I Netoff; David P Darrow",
+        "год": 2025,
+        "издание": "Journal of Neural Engineering",
+        "модальность": null,
+        "задача": null,
+        "метод": null,
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "ограничения": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+        "identifiers": {
+          "doi": "10.1088/1741-2552/adbfbe",
+          "exact_url": "https://doi.org/10.1088/1741-2552/adbfbe"
+        },
+        "provenance": {
+          "retrieved_at": "2026-09-22",
+          "search_stream": "relevance-5/registry-and-primary-review",
+          "query_or_seed": "Feature extraction and prediction of spinal cord stimulation evoked compound action potentials in humans",
+          "iteration": 1
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "subject_domain": "unknown",
+          "modalities": [],
+          "sample_size": null,
+          "target_construct": "unknown",
+          "target_label": null,
+          "evidence_role": "context_only"
+        },
+        "validation": {
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported"
+        },
+        "risk_flags": [
+          "metadata_only"
+        ]
+      },
+      "claims": [
+        {
+          "claim": "The bibliographic source exists under the verified identifier.",
+          "target_variable": "source identity",
+          "population_or_data": "not extracted in metadata-only decisions",
+          "evidence": "doi=10.1088/1741-2552/adbfbe; exact title=Feature extraction and prediction of spinal cord stimulation evoked compound action potentials in humans",
+          "limitation": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+          "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+        }
+      ],
+      "notes": "Bibliographic metadata confirmed; full text was not used for claim extraction."
+    },
+    {
+      "source_id": "S003",
+      "decision": "verified_metadata",
+      "checked_at": "2026-09-22",
+      "full_text_status": "metadata_only",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Classification of chronic pain and spinal cord stimulation response using machine learning in magnetoencephalography data",
+          "url": "https://api.crossref.org/works?query.title=Classification+of+chronic+pain+and+spinal+cord+stimulation+response+using+machine+learning+in+magnetoencephalography+data&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Classification of chronic pain and spinal cord stimulation response using machine learning in magnetoencephalography data\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Classification+of+chronic+pain+and+spinal+cord+stimulation+response+using+machine+learning+in+magnetoencephalography+data%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "updates": {
+        "название": "Classification of chronic pain and spinal cord stimulation response using machine learning in magnetoencephalography data",
+        "авторы": "Bart Witjes; Martijn P. A. Starmans; Frank J.P.M. Huygen; Cecile C. de Vos",
+        "год": 2025,
+        "издание": "PLOS One",
+        "модальность": null,
+        "задача": null,
+        "метод": null,
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "ограничения": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+        "identifiers": {
+          "doi": "10.1371/journal.pone.0337726",
+          "exact_url": "https://doi.org/10.1371/journal.pone.0337726"
+        },
+        "provenance": {
+          "retrieved_at": "2026-09-22",
+          "search_stream": "relevance-5/registry-and-primary-review",
+          "query_or_seed": "Classification of chronic pain and spinal cord stimulation response using machine learning in magnetoencephalography data",
+          "iteration": 1
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "subject_domain": "unknown",
+          "modalities": [],
+          "sample_size": null,
+          "target_construct": "unknown",
+          "target_label": null,
+          "evidence_role": "context_only"
+        },
+        "validation": {
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported"
+        },
+        "risk_flags": [
+          "metadata_only"
+        ]
+      },
+      "claims": [
+        {
+          "claim": "The bibliographic source exists under the verified identifier.",
+          "target_variable": "source identity",
+          "population_or_data": "not extracted in metadata-only decisions",
+          "evidence": "doi=10.1371/journal.pone.0337726; exact title=Classification of chronic pain and spinal cord stimulation response using machine learning in magnetoencephalography data",
+          "limitation": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+          "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+        }
+      ],
+      "notes": "Bibliographic metadata confirmed; full text was not used for claim extraction."
+    },
+    {
+      "source_id": "S059",
+      "decision": "alias",
+      "canonical_id": "S003",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Classification of chronic pain and SCS response using ML in MEG",
+          "url": "https://api.crossref.org/works?query.title=Classification+of+chronic+pain+and+SCS+response+using+ML+in+MEG&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Classification of chronic pain and SCS response using ML in MEG\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Classification+of+chronic+pain+and+SCS+response+using+ML+in+MEG%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S033",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-22",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Machine learning predicts spinal cord stimulation surgery outcomes",
+          "url": "https://api.crossref.org/works?query.title=Machine+learning+predicts+spinal+cord+stimulation+surgery+outcomes&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Machine learning predicts spinal cord stimulation surgery outcomes\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Machine+learning+predicts+spinal+cord+stimulation+surgery+outcomes%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "primary source",
+          "query": "Machine learning predicts spinal cord stimulation surgery outcomes and reveals novel neural markers for chronic pain",
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11920397/",
+          "result": "exact source page checked"
+        }
+      ],
+      "updates": {
+        "название": "Machine learning predicts spinal cord stimulation surgery outcomes and reveals novel neural markers for chronic pain",
+        "авторы": "Jay Gopal; Jonathan Bao; Tessa Harland; Julie G. Pilitsis; Steven Paniccioli; Rachael Grey; Michael Briotte; Kevin McCarthy; Ilknur Telkes",
+        "год": 2025,
+        "издание": "Scientific Reports",
+        "модальность": null,
+        "задача": null,
+        "метод": null,
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "ограничения": "Open full article checked; this is an SCS responder study with a limited clinical cohort, not evidence for ECAP-based prediction.",
+        "identifiers": {
+          "doi": "10.1038/s41598-025-92111-8",
+          "exact_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11920397/"
+        },
+        "provenance": {
+          "retrieved_at": "2026-09-22",
+          "search_stream": "relevance-5/registry-and-primary-review",
+          "query_or_seed": "Machine learning predicts spinal cord stimulation surgery outcomes and reveals novel neural markers for chronic pain",
+          "iteration": 1
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "subject_domain": "unknown",
+          "modalities": [],
+          "sample_size": null,
+          "target_construct": "unknown",
+          "target_label": null,
+          "evidence_role": "method_baseline"
+        },
+        "validation": {
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported"
+        },
+        "risk_flags": []
+      },
+      "claims": [
+        {
+          "claim": "The bibliographic source exists under the verified identifier.",
+          "target_variable": "source identity",
+          "population_or_data": "not extracted in metadata-only decisions",
+          "evidence": "doi=10.1038/s41598-025-92111-8; exact title=Machine learning predicts spinal cord stimulation surgery outcomes and reveals novel neural markers for chronic pain",
+          "limitation": "Open full article checked; this is an SCS responder study with a limited clinical cohort, not evidence for ECAP-based prediction.",
+          "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+        }
+      ],
+      "notes": "Open full article checked; this is an SCS responder study with a limited clinical cohort, not evidence for ECAP-based prediction."
+    },
+    {
+      "source_id": "S047",
+      "decision": "alias",
+      "canonical_id": "S033",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Machine learning predicts SCS surgery outcomes (neural markers)",
+          "url": "https://api.crossref.org/works?query.title=Machine+learning+predicts+SCS+surgery+outcomes+%28neural+markers%29&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Machine learning predicts SCS surgery outcomes (neural markers)\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Machine+learning+predicts+SCS+surgery+outcomes+%28neural+markers%29%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "primary source",
+          "query": "Machine learning predicts spinal cord stimulation surgery outcomes and reveals novel neural markers for chronic pain",
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11920397/",
+          "result": "exact source page checked"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    }
+  ]
+}

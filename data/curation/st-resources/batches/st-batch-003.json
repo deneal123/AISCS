@@ -1,0 +1,490 @@
+{
+  "meta": {
+    "batch_id": "st-batch-003",
+    "schema_version": "1.0.0",
+    "created_at": "2026-09-22",
+    "status": "applied",
+    "reviewed_at": "2026-09-22",
+    "applied_at": "2026-09-22"
+  },
+  "resource_ids": [
+    "ST049",
+    "ST050",
+    "ST051",
+    "ST062",
+    "ST063",
+    "ST064",
+    "ST065",
+    "ST066",
+    "ST067",
+    "ST068",
+    "ST079",
+    "ST080",
+    "ST081",
+    "ST082",
+    "ST083"
+  ],
+  "resources": [
+    {
+      "resource_id": "ST049",
+      "category_id": "C3",
+      "subcategory_id": "C3.4",
+      "name": "data_CL_SCS (Figshare)",
+      "status": "unverified",
+      "url": null
+    },
+    {
+      "resource_id": "ST050",
+      "category_id": "C3",
+      "subcategory_id": "C3.4",
+      "name": "ECAP + conductivity data (Figshare)",
+      "status": "unverified",
+      "url": null
+    },
+    {
+      "resource_id": "ST051",
+      "category_id": "C3",
+      "subcategory_id": "C3.4",
+      "name": "Epidural spinal recordings (Newcastle)",
+      "status": "partially_verified",
+      "url": null
+    },
+    {
+      "resource_id": "ST062",
+      "category_id": "C5",
+      "subcategory_id": "C5.1",
+      "name": "RADO-SCS",
+      "status": "needs_exact_url",
+      "url": null
+    },
+    {
+      "resource_id": "ST063",
+      "category_id": "C5",
+      "subcategory_id": "C5.1",
+      "name": "SCSInSCIMechanisms",
+      "status": "url_present_content_not_checked",
+      "url": "https://github.com/jostrows9/SCSInSCIMechanisms"
+    },
+    {
+      "resource_id": "ST064",
+      "category_id": "C5",
+      "subcategory_id": "C5.1",
+      "name": "SCS-network",
+      "status": "url_present_content_not_checked",
+      "url": "https://github.com/lauramedlock/SCS-network"
+    },
+    {
+      "resource_id": "ST065",
+      "category_id": "C5",
+      "subcategory_id": "C5.1",
+      "name": "NRV (NeuRon Virtualizer)",
+      "status": "url_present_content_not_checked",
+      "url": "https://github.com/fkolbl/NRV"
+    },
+    {
+      "resource_id": "ST066",
+      "category_id": "C5",
+      "subcategory_id": "C5.1",
+      "name": "OpenXstim",
+      "status": "url_present_content_not_checked",
+      "url": "https://github.com/OpenMedTech-Lab/OpenXstim"
+    },
+    {
+      "resource_id": "ST067",
+      "category_id": "C5",
+      "subcategory_id": "C5.1",
+      "name": "Digital Twins (npj Biomedical Innovations)",
+      "status": "needs_exact_url",
+      "url": null
+    },
+    {
+      "resource_id": "ST068",
+      "category_id": "C5",
+      "subcategory_id": "C5.1",
+      "name": "Multi-scale digital twins (FAU)",
+      "status": "needs_exact_url",
+      "url": null
+    },
+    {
+      "resource_id": "ST079",
+      "category_id": "C8",
+      "subcategory_id": "C8.1",
+      "name": "FlyWire: Method of the Year 2025 (Nature Methods)",
+      "status": "needs_exact_url",
+      "url": null
+    },
+    {
+      "resource_id": "ST080",
+      "category_id": "C8",
+      "subcategory_id": "C8.1",
+      "name": "LIF model from Shiu et al. (Nature 2024)",
+      "status": "url_present_content_not_checked",
+      "url": "https://www.nature.com/articles/s41586-024-07763-9"
+    },
+    {
+      "resource_id": "ST081",
+      "category_id": "C8",
+      "subcategory_id": "C8.1",
+      "name": "EVOKE Study (JPHV 2026)",
+      "status": "needs_exact_url",
+      "url": null
+    },
+    {
+      "resource_id": "ST082",
+      "category_id": "C8",
+      "subcategory_id": "C8.1",
+      "name": "Control Signals in CL-SCS (Neuromodulation 2026)",
+      "status": "needs_exact_url",
+      "url": null
+    },
+    {
+      "resource_id": "ST083",
+      "category_id": "C8",
+      "subcategory_id": "C8.1",
+      "name": "Eon Systems: Embodied whole-brain emulation",
+      "status": "needs_exact_url",
+      "url": null
+    }
+  ],
+  "decisions": [
+    {
+      "resource_id": "ST049",
+      "decision": "rejected",
+      "exact_url": null,
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "site:figshare.com data_CL_SCS postural ECAP",
+          "url": "https://figshare.com/search?q=data_CL_SCS",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [],
+      "limitations": [
+        "No exact Figshare record, DOI or primary page matching data_CL_SCS and the imported postural-ECAP description was found."
+      ],
+      "corrected_purpose": "Rejected dataset candidate without a stable identifier or primary record.",
+      "note": "Do not treat the imported ECAP/posture description as an available dataset."
+    },
+    {
+      "resource_id": "ST050",
+      "decision": "rejected",
+      "exact_url": null,
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "site:figshare.com ECAP conductivity directional contacts SCS",
+          "url": "https://figshare.com/search?q=ECAP%20conductivity%20SCS",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [],
+      "limitations": [
+        "No exact Figshare record or DOI matching the claimed combination of ECAP amplitudes, directional contacts and tissue conductivity was found."
+      ],
+      "corrected_purpose": "Rejected dataset candidate without a stable identifier or verified composition.",
+      "note": "A general Figshare domain cannot substantiate availability or contents."
+    },
+    {
+      "resource_id": "ST051",
+      "decision": "partially_verified",
+      "exact_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12803051/",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Newcastle epidural spinal recordings ECAP doublet ESAP EMG",
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12803051/",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "The publication characterizes ECAPs, doublets, ESAPs and EMG in preclinical epidural spinal recordings."
+      ],
+      "limitations": [
+        "The checked source is a preclinical publication, not a confirmed openly downloadable human dataset.",
+        "Species and recording geometry limit direct use for human SCS outcome prediction."
+      ],
+      "corrected_purpose": "Preclinical publication on electrophysiological components and artifacts in epidural spinal recordings.",
+      "note": "Retained as measurement-model evidence, not as an available validation dataset."
+    },
+    {
+      "resource_id": "ST062",
+      "decision": "verified_primary",
+      "exact_url": "https://zenodo.org/records/3732197",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "RADO-SCS Zenodo",
+          "url": "https://zenodo.org/records/3732197",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "Zenodo DOI 10.5281/zenodo.3732197 provides RADO-SCS 3.0 CAD/STL anatomy for T9-T11 and clinical leads.",
+        "The record documents a 0.1-mm anatomical representation and a FEM-to-axon modeling workflow."
+      ],
+      "limitations": [
+        "RADO-SCS is a CAD-derived model resource, not executable SCS modeling software.",
+        "It does not include pathological or patient-specific spinal anatomy."
+      ],
+      "corrected_purpose": "Open CAD/STL anatomical resource for constructing conventional, high-frequency, DRG and trans-spinal stimulation models.",
+      "note": "Exact Zenodo record and model/software distinction were confirmed."
+    },
+    {
+      "resource_id": "ST063",
+      "decision": "verified_primary",
+      "exact_url": "https://github.com/jostrows9/SCSInSCIMechanisms",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "jostrows9 SCSInSCIMechanisms",
+          "url": "https://github.com/jostrows9/SCSInSCIMechanisms",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "Repository contains NEURON simulation and EMG-analysis code underlying Balaguer et al. (2025).",
+        "It models interaction of epidural SCS, supraspinal input and motoneuron pools after spinal injury."
+      ],
+      "limitations": [
+        "The model addresses motor control after spinal-cord injury, not chronic-pain relief or ECAP prediction.",
+        "Local reproducibility and parameter provenance were not independently tested."
+      ],
+      "corrected_purpose": "NEURON-based biophysical SCS model and analysis code for motor-circuit mechanisms after spinal-cord injury.",
+      "note": "Relevant as mechanistic software, not as a pain-outcome model."
+    },
+    {
+      "resource_id": "ST064",
+      "decision": "verified_primary",
+      "exact_url": "https://github.com/lauramedlock/SCS-network",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "lauramedlock SCS-network Sagalajev",
+          "url": "https://github.com/lauramedlock/SCS-network",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "Repository provides NEURON/NetPyNE code intended to reproduce the SCS network model from Sagalajev et al.",
+        "The README links DOI 10.1016/j.neuron.2023.10.021."
+      ],
+      "limitations": [
+        "The repository is small and has no release package or automated reproducibility evidence.",
+        "Its pain-suppression mechanism is a model hypothesis, not a clinical-outcome predictor."
+      ],
+      "corrected_purpose": "NEURON/NetPyNE implementation of a published spinal-cord-stimulation network model.",
+      "note": "Execution and numerical reproduction remain a later feasibility gate."
+    },
+    {
+      "resource_id": "ST065",
+      "decision": "verified_primary",
+      "exact_url": "https://github.com/nrv-framework/NRV",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "NRV NeuRon Virtualizer",
+          "url": "https://github.com/nrv-framework/NRV",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "NRV is an actively developed Python library for peripheral nervous-system stimulation modeling.",
+        "The repository includes documentation, examples, tests and tutorials."
+      ],
+      "limitations": [
+        "NRV targets peripheral nerves and is not a ready-made spinal-cord or ECAP model.",
+        "Its redirected organization URL should replace the former personal-repository URL."
+      ],
+      "corrected_purpose": "General multiscale Python framework for in-silico peripheral-nerve stimulation.",
+      "note": "Potential component only; spinal-cord applicability requires a separate model."
+    },
+    {
+      "resource_id": "ST066",
+      "decision": "verified_primary",
+      "exact_url": "https://github.com/OpenMedTech-Lab/OpenXstim",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "OpenMedTech OpenXstim programmable transcutaneous stimulator",
+          "url": "https://github.com/OpenMedTech-Lab/OpenXstim",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "Repository publishes an open design for a programmable transcutaneous current stimulator."
+      ],
+      "limitations": [
+        "This is stimulation hardware, not a validated SCS simulator, dataset or clinical device.",
+        "Safety, regulatory status and suitability for any human experiment are not established by the repository."
+      ],
+      "corrected_purpose": "Open programmable transcutaneous current-stimulator hardware design for engineering reference only.",
+      "note": "Not authorized here for human use or self-experimentation."
+    },
+    {
+      "resource_id": "ST067",
+      "decision": "verified_primary",
+      "exact_url": "https://www.nature.com/articles/s44385-026-00076-8",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "npj biophysical surrogate digital twins neural interfaces",
+          "url": "https://www.nature.com/articles/s44385-026-00076-8",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "The 2026 review describes hybrid volume-conduction, neural-response and transduction models plus surrogate optimization.",
+        "It surveys SCS among several neuroprosthetic applications and identifies calibration and personalization limits."
+      ],
+      "limitations": [
+        "This is a review and conceptual framework, not a released SCS digital-twin implementation or dataset.",
+        "The paper notes that subject-specific calibration remains early and assumptions are substantial."
+      ],
+      "corrected_purpose": "Review framework for biophysical and surrogate digital twins used to optimize neural interfaces, including SCS.",
+      "note": "Use for modeling requirements and limitations, not implementation evidence."
+    },
+    {
+      "resource_id": "ST068",
+      "decision": "verified_primary",
+      "exact_url": "https://www.pdh.med.fau.de/research/neural-engineering/epidural-spinal-cord-stimulation/",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "FAU multiscale digital twins spinal cord Pareto",
+          "url": "https://www.pdh.med.fau.de/research/neural-engineering/epidural-spinal-cord-stimulation/",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "The FAU project page states an aim to create multiscale spinal-cord digital twins and explore Pareto-optimal parameter solutions."
+      ],
+      "limitations": [
+        "The page describes an ongoing research direction and provides no validated software, dataset or clinical results.",
+        "No patient-specific pain or ECAP prediction claim is supported."
+      ],
+      "corrected_purpose": "FAU research-program page on multiscale spinal-cord digital twins and Pareto-oriented eSCS design.",
+      "note": "Treat as prospective prior art, not a reusable artifact."
+    },
+    {
+      "resource_id": "ST079",
+      "decision": "verified_primary",
+      "exact_url": "https://www.nature.com/articles/s41592-025-02988-6",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Nature Methods Method of the Year 2025 EM connectomics",
+          "url": "https://www.nature.com/articles/s41592-025-02988-6",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "Nature Methods selected electron-microscopy-based connectomics as Method of the Year 2025.",
+        "The editorial discusses whole-brain Drosophila/FlyWire and other connectomics achievements."
+      ],
+      "limitations": [
+        "The award is for EM-based connectomics broadly, not for FlyWire alone.",
+        "An editorial distinction is not validation of a particular simulator or pain-transfer hypothesis."
+      ],
+      "corrected_purpose": "Editorial context for EM-based connectomics and the methodological significance of FlyWire-scale reconstructions.",
+      "note": "Resource title was broader than the verified editorial scope and is corrected in purpose."
+    },
+    {
+      "resource_id": "ST080",
+      "decision": "verified_primary",
+      "exact_url": "https://www.nature.com/articles/s41586-024-07763-9",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Shiu Drosophila computational brain model Nature 2024",
+          "url": "https://www.nature.com/articles/s41586-024-07763-9",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "The article implements a Brian2 LIF model of 127,400 central-brain neurons using FlyWire connectivity and transmitter identity.",
+        "Feeding and grooming predictions were tested with optogenetics, imaging and behaviour; one unbiased cell-type screen exceeded 90% accuracy."
+      ],
+      "limitations": [
+        "The greater-than-90% result is task- and screen-specific, not 91% whole-brain prediction accuracy.",
+        "The authors note zero baseline firing, missing neuromodulation and inaccurate absolute firing-rate assumptions."
+      ],
+      "corrected_purpose": "Primary whole-central-brain LIF model for experimentally testable feeding and grooming sensorimotor circuits.",
+      "note": "The imported global 91% accuracy claim was narrowed to the actual evaluation."
+    },
+    {
+      "resource_id": "ST081",
+      "decision": "partially_verified",
+      "exact_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11103285/",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "EVOKE closed-loop open-loop SCS 36 month trial",
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11103285/",
+          "accessed_at": "2026-09-22"
+        },
+        {
+          "query": "JPHV EVOKE RR 1.47 2026",
+          "url": "https://www.jphv.org/",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "The EVOKE blinded randomized trial NCT02924129 compared ECAP-controlled closed-loop with fixed-output open-loop SCS.",
+        "At 36 months the publication reports 77.6% versus 49.3% achieving at least 50% overall back/leg pain reduction."
+      ],
+      "limitations": [
+        "The imported JPHV 2026 pooled-analysis identity was not confirmed as a stable primary publication.",
+        "The RR 1.47 figure must not replace the directly reported time-specific trial results and confidence intervals."
+      ],
+      "corrected_purpose": "Primary EVOKE randomized-trial evidence for ECAP-controlled closed-loop versus open-loop SCS.",
+      "note": "Underlying trial verified; the imported secondary-publication attribution remains unverified."
+    },
+    {
+      "resource_id": "ST082",
+      "decision": "verified_primary",
+      "exact_url": "https://www.neuromodulationjournal.org/article/S1094-7159%2825%2901170-5/fulltext",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Control Signals Closed-Loop SCS scoping review",
+          "url": "https://www.neuromodulationjournal.org/article/S1094-7159%2825%2901170-5/fulltext",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "The scoping review screened 688 unique articles and retained 28 publications covering 19 unique studies.",
+        "It categorized three subjective-state, seven position/movement and nine ECAP-control studies and found no fully integrated subjective-plus-biophysical model."
+      ],
+      "limitations": [
+        "The result is a literature-gap statement, not proof that such integration improves outcomes.",
+        "ECAP is treated as spinal activation and a proxy for delivery changes, not direct pain intensity."
+      ],
+      "corrected_purpose": "Scoping review of control signals used in closed-loop SCS for chronic pain.",
+      "note": "Exact DOI 10.1016/j.neurom.2025.11.011 and counts were confirmed."
+    },
+    {
+      "resource_id": "ST083",
+      "decision": "partially_verified",
+      "exact_url": "https://eon.systems/updates/embodied-brain-emulation",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Eon embodied brain emulation Drosophila NeuroMechFly",
+          "url": "https://eon.systems/updates/embodied-brain-emulation",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "Eon describes integration of a FlyWire-derived LIF brain model with a NeuroMechFly/MuJoCo body.",
+        "The page identifies the work as an integration of existing brain and body models and discusses roughly 140,000 neurons and 50 million synapses."
+      ],
+      "limitations": [
+        "The source is a company-authored demonstration, not peer-reviewed independent validation of embodied whole-brain emulation.",
+        "The demonstrated behaviours and brain-body interface require code, protocol and ablation review before scientific use."
+      ],
+      "corrected_purpose": "Company technical account of an experimental FlyWire-LIF and NeuroMechFly/MuJoCo integration.",
+      "note": "Do not cite it as validated brain upload, nociception model or emergent-behaviour evidence."
+    }
+  ]
+}

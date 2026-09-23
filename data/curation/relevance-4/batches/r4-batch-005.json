@@ -1,0 +1,725 @@
+{
+  "meta": {
+    "batch_id": "r4-batch-005",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-22",
+    "scope": "relevance=4; status=unverified",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-22"
+  },
+  "source_ids": [
+    "S102",
+    "S121",
+    "S122",
+    "S136",
+    "S354",
+    "S211",
+    "S233",
+    "S235",
+    "S249",
+    "S253",
+    "S254",
+    "S287",
+    "S288",
+    "S292",
+    "S312",
+    "S315",
+    "S010",
+    "S025",
+    "S032",
+    "S042",
+    "S051",
+    "S043",
+    "S083",
+    "S155"
+  ],
+  "records": [
+    {
+      "id": "S102",
+      "title": "Deep learning and noninvasive sensors for physiological dysregulation",
+      "year": 2026,
+      "source_type": "обзор"
+    },
+    {
+      "id": "S121",
+      "title": "Fly brain simulation with aversive feedback (DoomFly)",
+      "year": 2026,
+      "source_type": "фундаментальные_модели"
+    },
+    {
+      "id": "S122",
+      "title": "Ethics of whole-brain connectome simulations",
+      "year": 2026,
+      "source_type": "XAI_этика"
+    },
+    {
+      "id": "S136",
+      "title": "DoomFly: Fly brain plays Doom with pain feedback",
+      "year": 2026,
+      "source_type": "фундаментальные_модели"
+    },
+    {
+      "id": "S354",
+      "title": "DOOMFLY: Fly brain plays Doom with pain feedback",
+      "year": 2026,
+      "source_type": "фундаментальные_модели"
+    },
+    {
+      "id": "S211",
+      "title": "Beyond Reflex: Nociception, Neural Circuits, and Memory (Dissertation)",
+      "year": 2026,
+      "source_type": "диссертация"
+    },
+    {
+      "id": "S233",
+      "title": "The Mousing Problem: Whole-Brain Emulation Makes AI Suffering Measurable",
+      "year": 2026,
+      "source_type": "XAI_этика"
+    },
+    {
+      "id": "S235",
+      "title": "Google open-sources fly brain connectome (DoomFly coverage)",
+      "year": 2026,
+      "source_type": "фундаментальные_модели"
+    },
+    {
+      "id": "S249",
+      "title": "Decision-centered wearable biosensors for personalized rehabilitation",
+      "year": 2026,
+      "source_type": "носимые_реальное_время"
+    },
+    {
+      "id": "S253",
+      "title": "Whole-brain emulation of Drosophila (Eon Systems)",
+      "year": 2026,
+      "source_type": "фундаментальные_модели"
+    },
+    {
+      "id": "S254",
+      "title": "Virtual embodied fly with physical simulation",
+      "year": 2026,
+      "source_type": "фундаментальные_модели"
+    },
+    {
+      "id": "S287",
+      "title": "Eon Systems: Embodied whole-brain emulation",
+      "year": 2026,
+      "source_type": "фундаментальные_модели"
+    },
+    {
+      "id": "S288",
+      "title": "Emergent Individuality in Whole-Brain Connectome Simulations",
+      "year": 2026,
+      "source_type": "фундаментальные_модели"
+    },
+    {
+      "id": "S292",
+      "title": "Embodied Whole-Brain Spiking Simulation of Drosophila (claude-fly)",
+      "year": 2026,
+      "source_type": "фундаментальные_модели"
+    },
+    {
+      "id": "S312",
+      "title": "Decision-centered wearable biosensors",
+      "year": 2026,
+      "source_type": "носимые_реальное_время"
+    },
+    {
+      "id": "S315",
+      "title": "Towards Personalized Edge-AI for Medicine",
+      "year": 2026,
+      "source_type": "федеративное_SCS"
+    },
+    {
+      "id": "S010",
+      "title": "Combining brain-wide activity imaging with electron microscopy reveals a distributed nociceptive network in the brain",
+      "year": 2025,
+      "source_type": "препринт"
+    },
+    {
+      "id": "S025",
+      "title": "A predictive corticospinal model for pain perception",
+      "year": 2025,
+      "source_type": "фундаментальные_модели"
+    },
+    {
+      "id": "S032",
+      "title": "Combining brain-wide activity imaging with electron microscopy reveals a distributed nociceptive network",
+      "year": 2025,
+      "source_type": "препринт"
+    },
+    {
+      "id": "S042",
+      "title": "Preserving privacy in big data research: FL in spine surgery",
+      "year": 2025,
+      "source_type": "федеративное_SCS"
+    },
+    {
+      "id": "S051",
+      "title": "Preserving privacy in big data research: FL in spine surgery",
+      "year": 2025,
+      "source_type": "федеративное_SCS"
+    },
+    {
+      "id": "S043",
+      "title": "Advanced brain-wide imaging + EM reveals novel nociceptive circuits",
+      "year": 2025,
+      "source_type": "препринт"
+    },
+    {
+      "id": "S083",
+      "title": "Synthetic Thermal and RGB Videos for Pain Assessment",
+      "year": 2025,
+      "source_type": "генеративные_модели"
+    },
+    {
+      "id": "S155",
+      "title": "Beyond Reflex: Nociception, Neural Circuits, and Memory",
+      "year": 2025,
+      "source_type": "диссертация"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S102",
+      "decision": "alias",
+      "canonical_id": "S075",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Deep learning and noninvasive sensors for physiological dysregulation",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/41615529/",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S121",
+      "decision": "alias",
+      "canonical_id": "S200",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Fly brain simulation with aversive feedback (DoomFly)",
+          "url": "https://github.com/nftechie/doomfly",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S122",
+      "decision": "rejected",
+      "checked_at": "2026-09-22",
+      "exclusion_reason": "unverifiable",
+      "searches": [
+        {
+          "query": "Ethics of whole-brain connectome simulations",
+          "url": "https://scholar.google.com/scholar?q=%22Ethics+of+whole-brain+connectome+simulations%22",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "risk_flags": [
+          "claim_not_supported"
+        ]
+      },
+      "claims": [],
+      "notes": "No uniquely identifiable scholarly source with this exact generic title was found."
+    },
+    {
+      "source_id": "S136",
+      "decision": "alias",
+      "canonical_id": "S200",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "DoomFly: Fly brain plays Doom with pain feedback",
+          "url": "https://github.com/nftechie/doomfly",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S354",
+      "decision": "alias",
+      "canonical_id": "S200",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "DOOMFLY: Fly brain plays Doom with pain feedback",
+          "url": "https://github.com/nftechie/doomfly",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S211",
+      "decision": "alias",
+      "canonical_id": "S013",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Beyond Reflex: Nociception, Neural Circuits, and Memory (Dissertation)",
+          "url": "https://scholar.google.com/scholar?q=%22Beyond+Reflex%22+Nociception+Drosophila",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S233",
+      "decision": "rejected",
+      "checked_at": "2026-09-22",
+      "exclusion_reason": "unverifiable",
+      "searches": [
+        {
+          "query": "The Mousing Problem: Whole-Brain Emulation Makes AI Suffering Measurable",
+          "url": "https://scholar.google.com/scholar?q=%22The+Mousing+Problem%22+%22Whole-Brain+Emulation%22",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "risk_flags": [
+          "claim_not_supported"
+        ]
+      },
+      "claims": [],
+      "notes": "No primary scholarly publication or stable repository record was found; later web commentary is insufficient evidence."
+    },
+    {
+      "source_id": "S235",
+      "decision": "alias",
+      "canonical_id": "S368",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Google open-sources fly brain connectome (DoomFly coverage)",
+          "url": "https://blog.google/innovation-and-ai/technology/research/male-fruit-fly-brain-map/",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S249",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-22",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "query": "Decision-Centered Wearable Biosensors for Personalized Rehabilitation: Integrating Multimodal Monitoring, Artificial Intelligence, and Closed-Loop Intervention",
+          "url": "https://www.frontiersin.org/journals/bioengineering-and-biotechnology/articles/10.3389/fbioe.2026.1948186/full",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "Decision-Centered Wearable Biosensors for Personalized Rehabilitation: Integrating Multimodal Monitoring, Artificial Intelligence, and Closed-Loop Intervention",
+        "identifiers": {
+          "doi": "10.3389/fbioe.2026.1948186",
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://www.frontiersin.org/journals/bioengineering-and-biotechnology/articles/10.3389/fbioe.2026.1948186/full"
+        },
+        "evidence": {
+          "target_construct": "clinical_function",
+          "evidence_role": "context_only"
+        },
+        "risk_flags": [
+          "missing_cross_subject_validation"
+        ],
+        "авторы": "Fujin Jia; Xinzhu Li; Hui Song; Xinyue Liu; Yuli Tang; Qingping Wen; Ping Wu",
+        "издание": "Frontiers in Bioengineering and Biotechnology"
+      },
+      "claims": [
+        {
+          "claim": "The review proposes a decision-centered framework for evaluating wearable biosensor systems in personalized rehabilitation.",
+          "target_variable": "clinical_function",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: 10.3389/fbioe.2026.1948186",
+          "limitation": "Critical narrative review, not a trial. It emphasizes uncertainty, safe degradation, clinician oversight and patient-important outcomes as prerequisites for closed-loop rehabilitation systems.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "Critical narrative review, not a trial. It emphasizes uncertainty, safe degradation, clinician oversight and patient-important outcomes as prerequisites for closed-loop rehabilitation systems."
+    },
+    {
+      "source_id": "S253",
+      "decision": "partially_verified",
+      "checked_at": "2026-09-22",
+      "full_text_status": "metadata_only",
+      "searches": [
+        {
+          "query": "How the Eon Team Produced a Virtual Embodied Fly",
+          "url": "https://eon.systems/updates/embodied-brain-emulation",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "How the Eon Team Produced a Virtual Embodied Fly",
+        "identifiers": {
+          "doi": null,
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://eon.systems/updates/embodied-brain-emulation"
+        },
+        "evidence": {
+          "target_construct": "protective_behavior",
+          "evidence_role": "simulation_foundation"
+        },
+        "risk_flags": [
+          "news_or_secondary_source",
+          "synthetic_only",
+          "animal_to_human_transfer_unvalidated"
+        ],
+        "авторы": "Scott Harris; Aarav Sinha; Viktor Toth; Alexis Pomares; Philip Shiu",
+        "издание": "Eon Systems technical update"
+      },
+      "claims": [
+        {
+          "claim": "Eon documents a closed sensorimotor integration of a connectome-constrained fly model with NeuroMechFly and MuJoCo for a small behavior subset.",
+          "target_variable": "protective_behavior",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: https://eon.systems/updates/embodied-brain-emulation",
+          "limitation": "The company technical post documents integration of published components and explicitly lists major simplifications. It is non-peer-reviewed, work in progress, and does not independently validate behavioral fidelity, nociception or affect.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "The company technical post documents integration of published components and explicitly lists major simplifications. It is non-peer-reviewed, work in progress, and does not independently validate behavioral fidelity, nociception or affect."
+    },
+    {
+      "source_id": "S254",
+      "decision": "alias",
+      "canonical_id": "S253",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Virtual embodied fly with physical simulation",
+          "url": "https://eon.systems/updates/embodied-brain-emulation",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S287",
+      "decision": "alias",
+      "canonical_id": "S253",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Eon Systems: Embodied whole-brain emulation",
+          "url": "https://eon.systems/updates/embodied-brain-emulation",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S288",
+      "decision": "alias",
+      "canonical_id": "S320",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Emergent Individuality in Whole-Brain Connectome Simulations",
+          "url": "https://doi.org/10.5281/zenodo.19152238",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S292",
+      "decision": "rejected",
+      "checked_at": "2026-09-22",
+      "exclusion_reason": "unverifiable",
+      "searches": [
+        {
+          "query": "Embodied Whole-Brain Spiking Simulation of Drosophila (claude-fly)",
+          "url": "https://github.com/search?q=%22claude-fly%22+%22whole-brain%22&type=repositories",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "risk_flags": [
+          "claim_not_supported"
+        ]
+      },
+      "claims": [],
+      "notes": "No stable repository or publication matching the supplied claude-fly title was identified."
+    },
+    {
+      "source_id": "S312",
+      "decision": "alias",
+      "canonical_id": "S249",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Decision-centered wearable biosensors",
+          "url": "https://doi.org/10.3389/fbioe.2026.1948186",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S315",
+      "decision": "alias",
+      "canonical_id": "S330",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Towards Personalized Edge-AI for Medicine",
+          "url": "https://www.medrxiv.org/content/10.1101/2025.09.22.25336341v2",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S010",
+      "decision": "alias",
+      "canonical_id": "S212",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Combining brain-wide activity imaging with electron microscopy reveals a distributed nociceptive network in the brain",
+          "url": "https://doi.org/10.1101/2025.09.25.678485",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S025",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-22",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "query": "A predictive corticospinal model for pain perception",
+          "url": "https://doi.org/10.1016/j.xcrm.2026.102793",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "A predictive corticospinal model for pain perception",
+        "identifiers": {
+          "doi": "10.1016/j.xcrm.2026.102793",
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://doi.org/10.1016/j.xcrm.2026.102793"
+        },
+        "evidence": {
+          "target_construct": "self_reported_pain",
+          "evidence_role": "human_validation"
+        },
+        "risk_flags": [
+          "missing_authors"
+        ],
+        "издание": "Cell Reports Medicine",
+        "год": 2026
+      },
+      "claims": [
+        {
+          "claim": "The corticospinal fMRI model is evaluated across experimental and chronic-pain datasets and tracks TENS-associated changes.",
+          "target_variable": "self_reported_pain",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: 10.1016/j.xcrm.2026.102793",
+          "limitation": "The primary article reports independent-dataset tests across experimental pain, TENS and chronic pain. It is an fMRI biomarker study, not ECAP evidence or an SCS-response model; full authorship metadata remains to be completed.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "The primary article reports independent-dataset tests across experimental pain, TENS and chronic pain. It is an fMRI biomarker study, not ECAP evidence or an SCS-response model; full authorship metadata remains to be completed."
+    },
+    {
+      "source_id": "S032",
+      "decision": "alias",
+      "canonical_id": "S212",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Combining brain-wide activity imaging with electron microscopy reveals a distributed nociceptive network",
+          "url": "https://doi.org/10.1101/2025.09.25.678485",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S042",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-22",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "query": "Preserving privacy in big data research: the role of federated learning in spine surgery",
+          "url": "https://doi.org/10.1007/s00586-024-08172-2",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "Preserving privacy in big data research: the role of federated learning in spine surgery",
+        "identifiers": {
+          "doi": "10.1007/s00586-024-08172-2",
+          "pmid": "38403832",
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://doi.org/10.1007/s00586-024-08172-2"
+        },
+        "evidence": {
+          "target_construct": "not_applicable",
+          "evidence_role": "context_only"
+        },
+        "risk_flags": [
+          "missing_cross_subject_validation"
+        ],
+        "авторы": "Hania Shahzad; Cole Veliky; Hai Le; Sheeraz Qureshi; Frank M Phillips; Yashar Javidan; Safdar N Khan",
+        "издание": "European Spine Journal",
+        "год": 2024
+      },
+      "claims": [
+        {
+          "claim": "The review describes privacy and data-sharing motivations for federated learning in spine-surgery research.",
+          "target_variable": "not_applicable",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: 10.1007/s00586-024-08172-2",
+          "limitation": "Narrative review of federated learning opportunities in spine surgery; it is not a deployed federated SCS model or outcome-validation study.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "Narrative review of federated learning opportunities in spine surgery; it is not a deployed federated SCS model or outcome-validation study."
+    },
+    {
+      "source_id": "S051",
+      "decision": "alias",
+      "canonical_id": "S042",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Preserving privacy in big data research: FL in spine surgery",
+          "url": "https://doi.org/10.1007/s00586-024-08172-2",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S043",
+      "decision": "alias",
+      "canonical_id": "S212",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Advanced brain-wide imaging + EM reveals novel nociceptive circuits",
+          "url": "https://doi.org/10.1101/2025.09.25.678485",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S083",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-22",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "query": "Synthetic Thermal and RGB Videos for Automatic Pain Assessment Utilizing a Vision-MLP Architecture",
+          "url": "https://arxiv.org/abs/2407.19811",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "Synthetic Thermal and RGB Videos for Automatic Pain Assessment Utilizing a Vision-MLP Architecture",
+        "identifiers": {
+          "doi": "10.1109/ACIIW63320.2024.00006",
+          "pmid": null,
+          "arxiv_id": "2407.19811",
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://arxiv.org/abs/2407.19811"
+        },
+        "evidence": {
+          "target_construct": "experimental_pain_class",
+          "evidence_role": "method_baseline"
+        },
+        "risk_flags": [
+          "synthetic_only",
+          "missing_cross_subject_validation"
+        ],
+        "авторы": "Stefanos Gkikas; Manolis Tsiknakis",
+        "издание": "ACIIW 2024 / arXiv",
+        "год": 2024
+      },
+      "claims": [
+        {
+          "claim": "The conference paper evaluates GAN-derived thermal videos with RGB video for automatic pain assessment on BioVid.",
+          "target_variable": "experimental_pain_class",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: 10.1109/ACIIW63320.2024.00006",
+          "limitation": "The method generates synthetic thermal video from BioVid facial video and evaluates benchmark recognition. It does not create physiological ground truth or demonstrate clinical transfer.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "The method generates synthetic thermal video from BioVid facial video and evaluates benchmark recognition. It does not create physiological ground truth or demonstrate clinical transfer."
+    },
+    {
+      "source_id": "S155",
+      "decision": "alias",
+      "canonical_id": "S013",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Beyond Reflex: Nociception, Neural Circuits, and Memory",
+          "url": "https://scholar.google.com/scholar?q=%22Beyond+Reflex%22+Nociception+Drosophila",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    }
+  ]
+}

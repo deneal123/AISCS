@@ -1,0 +1,774 @@
+{
+  "meta": {
+    "batch_id": "batch-003",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-22",
+    "scope": "relevance=5; status=unverified",
+    "status": "applied",
+    "reviewed_at": "2026-09-22",
+    "applied_at": "2026-09-22"
+  },
+  "source_ids": [
+    "S078",
+    "S124",
+    "S139",
+    "S202",
+    "S349",
+    "S364",
+    "S401",
+    "S004",
+    "S080",
+    "S125",
+    "S146",
+    "S226",
+    "S257",
+    "S082",
+    "S127",
+    "S143",
+    "S207",
+    "S264",
+    "S374"
+  ],
+  "records": [
+    {
+      "id": "S078",
+      "title": "Physiologic closed loop controlled spinal cord stimulation",
+      "year": 2026,
+      "source_type": "метод"
+    },
+    {
+      "id": "S124",
+      "title": "Physiologic closed-loop SCS (extended)",
+      "year": 2026,
+      "source_type": "метод"
+    },
+    {
+      "id": "S139",
+      "title": "Physiologic closed loop controlled SCS (PCLC)",
+      "year": 2026,
+      "source_type": "метод"
+    },
+    {
+      "id": "S202",
+      "title": "Physiologic closed loop controlled SCS (final)",
+      "year": 2026,
+      "source_type": "метод"
+    },
+    {
+      "id": "S349",
+      "title": "Physiologic closed loop controlled SCS (PCLC)",
+      "year": 2026,
+      "source_type": "метод"
+    },
+    {
+      "id": "S364",
+      "title": "Physiologic closed loop controlled SCS (extended)",
+      "year": 2026,
+      "source_type": "метод"
+    },
+    {
+      "id": "S401",
+      "title": "Physiologic PCLC SCS (final)",
+      "year": 2026,
+      "source_type": "метод"
+    },
+    {
+      "id": "S004",
+      "title": "RE-HPBS-IPIC: A Resting EEG- and High-Activation Pain Brain Source-Driven Framework for Inter-Subject Pain Intensity Classification",
+      "year": 2026,
+      "source_type": "кросс_субъект"
+    },
+    {
+      "id": "S080",
+      "title": "RE-HPBS-IPIC: Inter-Subject Pain Intensity Classification",
+      "year": 2026,
+      "source_type": "кросс_субъект"
+    },
+    {
+      "id": "S125",
+      "title": "Inter-subject pain intensity classification (RE-HPBS-IPIC, extended)",
+      "year": 2026,
+      "source_type": "кросс_субъект"
+    },
+    {
+      "id": "S146",
+      "title": "RE-HPBS-IPIC (final)",
+      "year": 2026,
+      "source_type": "кросс_субъект"
+    },
+    {
+      "id": "S226",
+      "title": "RE-HPBS-IPIC (extended)",
+      "year": 2026,
+      "source_type": "кросс_субъект"
+    },
+    {
+      "id": "S257",
+      "title": "RE-HPBS-IPIC (final extended)",
+      "year": 2026,
+      "source_type": "кросс_субъект"
+    },
+    {
+      "id": "S082",
+      "title": "Pain intensity classification with hybrid CNN–BiLSTM",
+      "year": 2026,
+      "source_type": "метод"
+    },
+    {
+      "id": "S127",
+      "title": "Hybrid CNN–BiLSTM for pain intensity (extended)",
+      "year": 2026,
+      "source_type": "метод"
+    },
+    {
+      "id": "S143",
+      "title": "Pain intensity classification CNN-BiLSTM",
+      "year": 2026,
+      "source_type": "метод"
+    },
+    {
+      "id": "S207",
+      "title": "Pain intensity classification CNN-BiLSTM (final)",
+      "year": 2026,
+      "source_type": "метод"
+    },
+    {
+      "id": "S264",
+      "title": "Hybrid CNN–BiLSTM (final)",
+      "year": 2026,
+      "source_type": "метод"
+    },
+    {
+      "id": "S374",
+      "title": "Hybrid CNN-BiLSTM for Pain Intensity (final)",
+      "year": 2026,
+      "source_type": "метод"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S078",
+      "decision": "verified_metadata",
+      "checked_at": "2026-09-22",
+      "full_text_status": "metadata_only",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Physiologic closed loop controlled spinal cord stimulation",
+          "url": "https://api.crossref.org/works?query.title=Physiologic+closed+loop+controlled+spinal+cord+stimulation&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Physiologic closed loop controlled spinal cord stimulation\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Physiologic+closed+loop+controlled+spinal+cord+stimulation%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "updates": {
+        "название": "Physiologic closed loop controlled spinal cord stimulation",
+        "авторы": "Trishul Kapoor; Chau Vu; Chheany Ung; Timothy Deer; Jason E. Pope",
+        "год": 2026,
+        "издание": "A Modern Atlas for Implantable Devices of the Spine, Brain, and Nerve",
+        "модальность": null,
+        "задача": null,
+        "метод": null,
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "ограничения": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+        "identifiers": {
+          "doi": "10.1016/B978-0-443-36528-7.00011-X",
+          "exact_url": "https://doi.org/10.1016/b978-0-443-36528-7.00011-x"
+        },
+        "provenance": {
+          "retrieved_at": "2026-09-22",
+          "search_stream": "relevance-5/registry-and-primary-review",
+          "query_or_seed": "Physiologic closed loop controlled spinal cord stimulation",
+          "iteration": 1
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "subject_domain": "unknown",
+          "modalities": [],
+          "sample_size": null,
+          "target_construct": "unknown",
+          "target_label": null,
+          "evidence_role": "context_only"
+        },
+        "validation": {
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported"
+        },
+        "risk_flags": [
+          "metadata_only"
+        ]
+      },
+      "claims": [
+        {
+          "claim": "The bibliographic source exists under the verified identifier.",
+          "target_variable": "source identity",
+          "population_or_data": "not extracted in metadata-only decisions",
+          "evidence": "doi=10.1016/B978-0-443-36528-7.00011-X; exact title=Physiologic closed loop controlled spinal cord stimulation",
+          "limitation": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+          "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+        }
+      ],
+      "notes": "Bibliographic metadata confirmed; full text was not used for claim extraction."
+    },
+    {
+      "source_id": "S124",
+      "decision": "alias",
+      "canonical_id": "S078",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Physiologic closed-loop SCS",
+          "url": "https://api.crossref.org/works?query.title=Physiologic+closed-loop+SCS&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Physiologic closed-loop SCS\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Physiologic+closed-loop+SCS%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S139",
+      "decision": "alias",
+      "canonical_id": "S078",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Physiologic closed loop controlled SCS (PCLC)",
+          "url": "https://api.crossref.org/works?query.title=Physiologic+closed+loop+controlled+SCS+%28PCLC%29&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Physiologic closed loop controlled SCS (PCLC)\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Physiologic+closed+loop+controlled+SCS+%28PCLC%29%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S202",
+      "decision": "alias",
+      "canonical_id": "S078",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Physiologic closed loop controlled SCS",
+          "url": "https://api.crossref.org/works?query.title=Physiologic+closed+loop+controlled+SCS&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Physiologic closed loop controlled SCS\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Physiologic+closed+loop+controlled+SCS%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S349",
+      "decision": "alias",
+      "canonical_id": "S078",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Physiologic closed loop controlled SCS (PCLC)",
+          "url": "https://api.crossref.org/works?query.title=Physiologic+closed+loop+controlled+SCS+%28PCLC%29&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Physiologic closed loop controlled SCS (PCLC)\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Physiologic+closed+loop+controlled+SCS+%28PCLC%29%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S364",
+      "decision": "alias",
+      "canonical_id": "S078",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Physiologic closed loop controlled SCS",
+          "url": "https://api.crossref.org/works?query.title=Physiologic+closed+loop+controlled+SCS&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Physiologic closed loop controlled SCS\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Physiologic+closed+loop+controlled+SCS%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S401",
+      "decision": "alias",
+      "canonical_id": "S078",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Physiologic PCLC SCS",
+          "url": "https://api.crossref.org/works?query.title=Physiologic+PCLC+SCS&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Physiologic PCLC SCS\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Physiologic+PCLC+SCS%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S004",
+      "decision": "verified_metadata",
+      "checked_at": "2026-09-22",
+      "full_text_status": "metadata_only",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "RE-HPBS-IPIC: A Resting EEG- and High-Activation Pain Brain Source-Driven Framework for Inter-Subject Pain Intensity Classification",
+          "url": "https://api.crossref.org/works?query.title=RE-HPBS-IPIC%3A+A+Resting+EEG-+and+High-Activation+Pain+Brain+Source-Driven+Framework+for+Inter-Subject+Pain+Intensity+Classification&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"RE-HPBS-IPIC: A Resting EEG- and High-Activation Pain Brain Source-Driven Framework for Inter-Subject Pain Intensity Classification\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22RE-HPBS-IPIC%3A+A+Resting+EEG-+and+High-Activation+Pain+Brain+Source-Driven+Framework+for+Inter-Subject+Pain+Intensity+Classification%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "updates": {
+        "название": "RE-HPBS-IPIC: A Resting EEG- and High-Activation Pain Brain Source-Driven Framework for Inter-Subject Pain Intensity Classification",
+        "авторы": "Wenjia Gao; Dan Liu; Qisong Wang; Yongping Zhao; Jinwei Sun",
+        "год": 2026,
+        "издание": "IEEE Journal of Biomedical and Health Informatics",
+        "модальность": null,
+        "задача": null,
+        "метод": null,
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "ограничения": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+        "identifiers": {
+          "doi": "10.1109/JBHI.2026.3650972",
+          "exact_url": "https://doi.org/10.1109/jbhi.2026.3650972"
+        },
+        "provenance": {
+          "retrieved_at": "2026-09-22",
+          "search_stream": "relevance-5/registry-and-primary-review",
+          "query_or_seed": "RE-HPBS-IPIC: A Resting EEG- and High-Activation Pain Brain Source-Driven Framework for Inter-Subject Pain Intensity Classification",
+          "iteration": 1
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "subject_domain": "unknown",
+          "modalities": [],
+          "sample_size": null,
+          "target_construct": "unknown",
+          "target_label": null,
+          "evidence_role": "context_only"
+        },
+        "validation": {
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported"
+        },
+        "risk_flags": [
+          "metadata_only"
+        ]
+      },
+      "claims": [
+        {
+          "claim": "The bibliographic source exists under the verified identifier.",
+          "target_variable": "source identity",
+          "population_or_data": "not extracted in metadata-only decisions",
+          "evidence": "doi=10.1109/JBHI.2026.3650972; exact title=RE-HPBS-IPIC: A Resting EEG- and High-Activation Pain Brain Source-Driven Framework for Inter-Subject Pain Intensity Classification",
+          "limitation": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+          "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+        }
+      ],
+      "notes": "Bibliographic metadata confirmed; full text was not used for claim extraction."
+    },
+    {
+      "source_id": "S080",
+      "decision": "alias",
+      "canonical_id": "S004",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "RE-HPBS-IPIC: Inter-Subject Pain Intensity Classification",
+          "url": "https://api.crossref.org/works?query.title=RE-HPBS-IPIC%3A+Inter-Subject+Pain+Intensity+Classification&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"RE-HPBS-IPIC: Inter-Subject Pain Intensity Classification\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22RE-HPBS-IPIC%3A+Inter-Subject+Pain+Intensity+Classification%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S125",
+      "decision": "alias",
+      "canonical_id": "S004",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Inter-subject pain intensity classification (RE-HPBS-IPIC, extended)",
+          "url": "https://api.crossref.org/works?query.title=Inter-subject+pain+intensity+classification+%28RE-HPBS-IPIC%2C+extended%29&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Inter-subject pain intensity classification (RE-HPBS-IPIC, extended)\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Inter-subject+pain+intensity+classification+%28RE-HPBS-IPIC%2C+extended%29%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S146",
+      "decision": "alias",
+      "canonical_id": "S004",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "RE-HPBS-IPIC",
+          "url": "https://api.crossref.org/works?query.title=RE-HPBS-IPIC&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"RE-HPBS-IPIC\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22RE-HPBS-IPIC%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S226",
+      "decision": "alias",
+      "canonical_id": "S004",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "RE-HPBS-IPIC",
+          "url": "https://api.crossref.org/works?query.title=RE-HPBS-IPIC&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"RE-HPBS-IPIC\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22RE-HPBS-IPIC%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S257",
+      "decision": "alias",
+      "canonical_id": "S004",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "RE-HPBS-IPIC",
+          "url": "https://api.crossref.org/works?query.title=RE-HPBS-IPIC&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"RE-HPBS-IPIC\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22RE-HPBS-IPIC%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S082",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-22",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Pain intensity classification with hybrid CNN–BiLSTM",
+          "url": "https://api.crossref.org/works?query.title=Pain+intensity+classification+with+hybrid+CNN%E2%80%93BiLSTM&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Pain intensity classification with hybrid CNN–BiLSTM\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Pain+intensity+classification+with+hybrid+CNN%E2%80%93BiLSTM%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "primary source",
+          "query": "Pain intensity classification and evaluation of individual differences in subjects based on hybrid CNN–BiLSTM approach",
+          "url": "https://www.sciencedirect.com/science/article/pii/S1746809426003691",
+          "result": "exact source page checked"
+        }
+      ],
+      "updates": {
+        "название": "Pain intensity classification and evaluation of individual differences in subjects based on hybrid CNN–BiLSTM approach",
+        "авторы": "Mingxuan Sun; Yang Liu; Daoshuang Geng; Xiaobang Wu; Daoguo Yang",
+        "год": 2026,
+        "издание": "Biomedical Signal Processing and Control",
+        "модальность": null,
+        "задача": null,
+        "метод": null,
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "ограничения": "Publisher abstract checked; LOSO evaluation is reported, but this does not establish clinical validity.",
+        "identifiers": {
+          "doi": "10.1016/j.bspc.2026.109815",
+          "exact_url": "https://www.sciencedirect.com/science/article/pii/S1746809426003691"
+        },
+        "provenance": {
+          "retrieved_at": "2026-09-22",
+          "search_stream": "relevance-5/registry-and-primary-review",
+          "query_or_seed": "Pain intensity classification and evaluation of individual differences in subjects based on hybrid CNN–BiLSTM approach",
+          "iteration": 1
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "subject_domain": "unknown",
+          "modalities": [],
+          "sample_size": null,
+          "target_construct": "unknown",
+          "target_label": null,
+          "evidence_role": "method_baseline"
+        },
+        "validation": {
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported"
+        },
+        "risk_flags": []
+      },
+      "claims": [
+        {
+          "claim": "The bibliographic source exists under the verified identifier.",
+          "target_variable": "source identity",
+          "population_or_data": "not extracted in metadata-only decisions",
+          "evidence": "doi=10.1016/j.bspc.2026.109815; exact title=Pain intensity classification and evaluation of individual differences in subjects based on hybrid CNN–BiLSTM approach",
+          "limitation": "Publisher abstract checked; LOSO evaluation is reported, but this does not establish clinical validity.",
+          "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+        }
+      ],
+      "notes": "Publisher abstract checked; LOSO evaluation is reported, but this does not establish clinical validity."
+    },
+    {
+      "source_id": "S127",
+      "decision": "alias",
+      "canonical_id": "S082",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Hybrid CNN–BiLSTM for pain intensity",
+          "url": "https://api.crossref.org/works?query.title=Hybrid+CNN%E2%80%93BiLSTM+for+pain+intensity&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Hybrid CNN–BiLSTM for pain intensity\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Hybrid+CNN%E2%80%93BiLSTM+for+pain+intensity%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "primary source",
+          "query": "Pain intensity classification and evaluation of individual differences in subjects based on hybrid CNN–BiLSTM approach",
+          "url": "https://www.sciencedirect.com/science/article/pii/S1746809426003691",
+          "result": "exact source page checked"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S143",
+      "decision": "alias",
+      "canonical_id": "S082",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Pain intensity classification CNN-BiLSTM",
+          "url": "https://api.crossref.org/works?query.title=Pain+intensity+classification+CNN-BiLSTM&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Pain intensity classification CNN-BiLSTM\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Pain+intensity+classification+CNN-BiLSTM%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "primary source",
+          "query": "Pain intensity classification and evaluation of individual differences in subjects based on hybrid CNN–BiLSTM approach",
+          "url": "https://www.sciencedirect.com/science/article/pii/S1746809426003691",
+          "result": "exact source page checked"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S207",
+      "decision": "alias",
+      "canonical_id": "S082",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Pain intensity classification CNN-BiLSTM",
+          "url": "https://api.crossref.org/works?query.title=Pain+intensity+classification+CNN-BiLSTM&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Pain intensity classification CNN-BiLSTM\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Pain+intensity+classification+CNN-BiLSTM%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "primary source",
+          "query": "Pain intensity classification and evaluation of individual differences in subjects based on hybrid CNN–BiLSTM approach",
+          "url": "https://www.sciencedirect.com/science/article/pii/S1746809426003691",
+          "result": "exact source page checked"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S264",
+      "decision": "alias",
+      "canonical_id": "S082",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Hybrid CNN–BiLSTM",
+          "url": "https://api.crossref.org/works?query.title=Hybrid+CNN%E2%80%93BiLSTM&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Hybrid CNN–BiLSTM\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Hybrid+CNN%E2%80%93BiLSTM%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "primary source",
+          "query": "Pain intensity classification and evaluation of individual differences in subjects based on hybrid CNN–BiLSTM approach",
+          "url": "https://www.sciencedirect.com/science/article/pii/S1746809426003691",
+          "result": "exact source page checked"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S374",
+      "decision": "alias",
+      "canonical_id": "S082",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Hybrid CNN-BiLSTM for Pain Intensity",
+          "url": "https://api.crossref.org/works?query.title=Hybrid+CNN-BiLSTM+for+Pain+Intensity&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Hybrid CNN-BiLSTM for Pain Intensity\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Hybrid+CNN-BiLSTM+for+Pain+Intensity%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "primary source",
+          "query": "Pain intensity classification and evaluation of individual differences in subjects based on hybrid CNN–BiLSTM approach",
+          "url": "https://www.sciencedirect.com/science/article/pii/S1746809426003691",
+          "result": "exact source page checked"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    }
+  ]
+}

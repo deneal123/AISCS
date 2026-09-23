@@ -1,0 +1,881 @@
+{
+  "meta": {
+    "batch_id": "batch-001",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-22",
+    "scope": "relevance=5; status=unverified",
+    "status": "applied",
+    "reviewed_at": "2026-09-22",
+    "applied_at": "2026-09-22"
+  },
+  "source_ids": [
+    "S149",
+    "S210",
+    "S224",
+    "S256",
+    "S304",
+    "S380",
+    "S039",
+    "S056",
+    "S089",
+    "S118",
+    "S132",
+    "S178",
+    "S225",
+    "S258",
+    "S353",
+    "S366",
+    "S407",
+    "S036",
+    "S053",
+    "S085",
+    "S128"
+  ],
+  "records": [
+    {
+      "id": "S149",
+      "title": "Zero-shot multimodal pain estimation",
+      "year": 2026,
+      "source_type": "генеративные_модели"
+    },
+    {
+      "id": "S210",
+      "title": "Zero-shot multimodal pain estimation (final)",
+      "year": 2026,
+      "source_type": "генеративные_модели"
+    },
+    {
+      "id": "S224",
+      "title": "Zero-shot multimodal pain estimation (GitHub ZSL_MPE)",
+      "year": 2026,
+      "source_type": "генеративные_модели"
+    },
+    {
+      "id": "S256",
+      "title": "Zero-shot multimodal pain estimation (extended)",
+      "year": 2026,
+      "source_type": "генеративные_модели"
+    },
+    {
+      "id": "S304",
+      "title": "Zero-shot multimodal pain estimation (extended)",
+      "year": 2026,
+      "source_type": "генеративные_модели"
+    },
+    {
+      "id": "S380",
+      "title": "Zero-shot multimodal pain estimation (final)",
+      "year": 2026,
+      "source_type": "генеративные_модели"
+    },
+    {
+      "id": "S039",
+      "title": "Deep Multi-Head attention network for Cross-Subject pain monitoring",
+      "year": 2026,
+      "source_type": "кросс_субъект"
+    },
+    {
+      "id": "S056",
+      "title": "Deep Multi-Head attention network for Cross-Subject pain monitoring",
+      "year": 2026,
+      "source_type": "кросс_субъект"
+    },
+    {
+      "id": "S089",
+      "title": "Deep Multi-Head attention network with Subject-Incremental learning",
+      "year": 2026,
+      "source_type": "кросс_субъект"
+    },
+    {
+      "id": "S118",
+      "title": "Subject-Incremental learning for Cross-Subject pain monitoring",
+      "year": 2026,
+      "source_type": "кросс_субъект"
+    },
+    {
+      "id": "S132",
+      "title": "Subject-Incremental learning (final)",
+      "year": 2026,
+      "source_type": "кросс_субъект"
+    },
+    {
+      "id": "S178",
+      "title": "Subject-Incremental learning for Cross-Subject pain (extended)",
+      "year": 2026,
+      "source_type": "кросс_субъект"
+    },
+    {
+      "id": "S225",
+      "title": "Deep Multi-Head attention with Subject-Incremental learning (extended)",
+      "year": 2026,
+      "source_type": "кросс_субъект"
+    },
+    {
+      "id": "S258",
+      "title": "Deep Multi-Head attention with Subject-Incremental (final)",
+      "year": 2026,
+      "source_type": "кросс_субъект"
+    },
+    {
+      "id": "S353",
+      "title": "Deep Multi-Head attention with Subject-Incremental (extended)",
+      "year": 2026,
+      "source_type": "кросс_субъект"
+    },
+    {
+      "id": "S366",
+      "title": "Deep Multi-Head attention with Subject-Incremental (final)",
+      "year": 2026,
+      "source_type": "кросс_субъект"
+    },
+    {
+      "id": "S407",
+      "title": "Deep Multi-Head attention (final extended)",
+      "year": 2026,
+      "source_type": "кросс_субъект"
+    },
+    {
+      "id": "S036",
+      "title": "Multimodal pain assessment with transformers (PainFusion+)",
+      "year": 2026,
+      "source_type": "метод"
+    },
+    {
+      "id": "S053",
+      "title": "PainFusion+: Multimodal pain assessment with transformers",
+      "year": 2026,
+      "source_type": "метод"
+    },
+    {
+      "id": "S085",
+      "title": "Multimodal pain assessment with transformers (PainFusion+)",
+      "year": 2026,
+      "source_type": "метод"
+    },
+    {
+      "id": "S128",
+      "title": "PainFusion+ (final)",
+      "year": 2026,
+      "source_type": "метод"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S149",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-22",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "service": "Frontiers",
+          "query": "\"Zero-shot multimodal pain estimation\"",
+          "url": "https://www.frontiersin.org/journals/artificial-intelligence/articles/10.3389/frai.2026.1827727/full",
+          "result": "Exact publisher article found; DOI and full text checked."
+        },
+        {
+          "service": "Crossref/DOI",
+          "query": "\"Zero-shot multimodal pain estimation\" DOI",
+          "url": "https://doi.org/10.3389/frai.2026.1827727",
+          "result": "DOI resolves to the same publisher article."
+        }
+      ],
+      "updates": {
+        "название": "Zero-shot multimodal pain estimation via synthetic pain simulation and domain-invariant learning",
+        "авторы": "Oussama El Othmani; Sami Naouali",
+        "год": 2026,
+        "издание": "Frontiers in Artificial Intelligence 9:1827727",
+        "модальность": "Видео; HRV/ECG; EDA; контекстные признаки",
+        "задача": "Synthetic-source unsupervised domain adaptation for pain-intensity estimation",
+        "метод": "Diffusion-based synthetic generation; multimodal transformer; domain adaptation",
+        "датасет": "50,000 synthetic scenarios; UNBC-McMaster; BioVid; in-house neonatal cohort",
+        "производительность": "UNBC MAE 0.89; BioVid accuracy 78.3%; neonatal accuracy 81.5%",
+        "кросс_субъект": "Да, разбиения по субъектам; полностью независимый внешний центр отсутствует",
+        "ограничения": "Ретроспективные наборы; real data used unlabeled for alignment; no fourth held-out external site; neonatal cohort is small.",
+        "identifiers": {
+          "doi": "10.3389/frai.2026.1827727",
+          "exact_url": "https://www.frontiersin.org/journals/artificial-intelligence/articles/10.3389/frai.2026.1827727/full"
+        },
+        "provenance": {
+          "retrieved_at": "2026-09-22",
+          "search_stream": "relevance-5/batch-001",
+          "query_or_seed": "\"Zero-shot multimodal pain estimation\"",
+          "iteration": 1
+        },
+        "evidence": {
+          "species": "Homo sapiens and synthetic humans",
+          "population": "UNBC, BioVid, 15 neonates, synthetic demographic strata",
+          "subject_domain": "mixed",
+          "modalities": [
+            "ecg",
+            "eda",
+            "metadata",
+            "movement_pose",
+            "video_face"
+          ],
+          "sample_size": "50,000 synthetic scenarios; UNBC 25 subjects; BioVid 87 subjects; 120 segments from 15 neonates",
+          "target_construct": "experimental_pain_class",
+          "target_label": "continuous 0-10 pain intensity / dataset-specific pain labels",
+          "access_status": "open",
+          "evidence_role": "method_baseline"
+        },
+        "validation": {
+          "split_unit": "participant",
+          "cross_subject": "yes",
+          "external_validation": "no",
+          "calibration": "yes",
+          "uncertainty": "yes"
+        },
+        "risk_flags": [
+          "future_or_recent_record_requires_recheck",
+          "synthetic_only"
+        ]
+      },
+      "claims": [
+        {
+          "claim": "Synthetic-source domain adaptation can be evaluated on retrospective human pain benchmarks without labeled real target samples during training.",
+          "target_variable": "pain intensity",
+          "population_or_data": "UNBC-McMaster, BioVid, neonatal cohort",
+          "evidence": "Publisher full text reports MAE 0.89 on UNBC, 78.3% accuracy on BioVid and 81.5% on the neonatal cohort.",
+          "limitation": "All real benchmark data are retrospective and used at least unlabeled during alignment; no fully independent fourth site.",
+          "permitted_conclusion": "Feasibility on the tested datasets only; not clinical validation and not evidence for Drosophila-to-human transfer."
+        },
+        {
+          "claim": "The imported 96% value describes this paper.",
+          "target_variable": "performance",
+          "population_or_data": "unspecified",
+          "evidence": "Unsupported; exact full text contains no matching headline 96% result.",
+          "limitation": "The original registry did not provide a locator.",
+          "permitted_conclusion": "Do not cite 96%; use the dataset-specific published metrics."
+        }
+      ],
+      "notes": "Primary article checked. The source calls the setup zero-shot in the qualified sense of zero labeled real target examples, not classical zero-shot learning."
+    },
+    {
+      "source_id": "S210",
+      "decision": "alias",
+      "canonical_id": "S149",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Frontiers",
+          "query": "\"Zero-shot multimodal pain estimation\"",
+          "url": "https://www.frontiersin.org/journals/artificial-intelligence/articles/10.3389/frai.2026.1827727/full",
+          "result": "Exact publisher article found; DOI and full text checked."
+        },
+        {
+          "service": "Crossref/DOI",
+          "query": "\"Zero-shot multimodal pain estimation\" DOI",
+          "url": "https://doi.org/10.3389/frai.2026.1827727",
+          "result": "DOI resolves to the same publisher article."
+        }
+      ],
+      "claims": [],
+      "notes": "Название, год, издание и уникальная метрика соответствуют одной публикации; отдельная версия не обнаружена."
+    },
+    {
+      "source_id": "S224",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-22",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "service": "GitHub",
+          "query": "site:github.com/oussama123-ai/ZSL_MPE",
+          "url": "https://github.com/oussama123-ai/ZSL_MPE",
+          "result": "Repository linked directly by the publisher article."
+        },
+        {
+          "service": "Frontiers",
+          "query": "\"Zero-shot multimodal pain estimation\"",
+          "url": "https://www.frontiersin.org/journals/artificial-intelligence/articles/10.3389/frai.2026.1827727/full",
+          "result": "Exact publisher article found; DOI and full text checked."
+        },
+        {
+          "service": "Crossref/DOI",
+          "query": "\"Zero-shot multimodal pain estimation\" DOI",
+          "url": "https://doi.org/10.3389/frai.2026.1827727",
+          "result": "DOI resolves to the same publisher article."
+        }
+      ],
+      "updates": {
+        "название": "ZSL_MPE: code for Zero-shot multimodal pain estimation via synthetic pain simulation and domain-invariant learning",
+        "авторы": "Oussama El Othmani; Sami Naouali",
+        "год": 2026,
+        "издание": "GitHub",
+        "производительность": null,
+        "identifiers": {
+          "exact_url": "https://github.com/oussama123-ai/ZSL_MPE"
+        },
+        "provenance": {
+          "retrieved_at": "2026-09-22",
+          "search_stream": "relevance-5/batch-001",
+          "query_or_seed": "site:github.com/oussama123-ai/ZSL_MPE",
+          "iteration": 1
+        },
+        "evidence": {
+          "subject_domain": "simulation",
+          "modalities": [
+            "ecg",
+            "eda",
+            "metadata",
+            "movement_pose",
+            "video_face"
+          ],
+          "target_construct": "not_applicable",
+          "evidence_role": "context_only",
+          "access_status": "open"
+        },
+        "validation": {
+          "split_unit": "not_applicable",
+          "cross_subject": "not_applicable",
+          "external_validation": "not_applicable",
+          "calibration": "not_applicable",
+          "uncertainty": "not_applicable"
+        },
+        "relations": [
+          {
+            "type": "code_for",
+            "target_id": "S149",
+            "external_id": null,
+            "note": "Repository linked from the publisher full text."
+          }
+        ],
+        "risk_flags": [
+          "future_or_recent_record_requires_recheck"
+        ]
+      },
+      "claims": [],
+      "notes": "Code repository verified through the publisher's full-text link; retained separately and linked with code_for."
+    },
+    {
+      "source_id": "S256",
+      "decision": "alias",
+      "canonical_id": "S149",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Frontiers",
+          "query": "\"Zero-shot multimodal pain estimation\"",
+          "url": "https://www.frontiersin.org/journals/artificial-intelligence/articles/10.3389/frai.2026.1827727/full",
+          "result": "Exact publisher article found; DOI and full text checked."
+        },
+        {
+          "service": "Crossref/DOI",
+          "query": "\"Zero-shot multimodal pain estimation\" DOI",
+          "url": "https://doi.org/10.3389/frai.2026.1827727",
+          "result": "DOI resolves to the same publisher article."
+        }
+      ],
+      "claims": [],
+      "notes": "Название, год, издание и уникальная метрика соответствуют одной публикации; отдельная версия не обнаружена."
+    },
+    {
+      "source_id": "S304",
+      "decision": "alias",
+      "canonical_id": "S149",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Frontiers",
+          "query": "\"Zero-shot multimodal pain estimation\"",
+          "url": "https://www.frontiersin.org/journals/artificial-intelligence/articles/10.3389/frai.2026.1827727/full",
+          "result": "Exact publisher article found; DOI and full text checked."
+        },
+        {
+          "service": "Crossref/DOI",
+          "query": "\"Zero-shot multimodal pain estimation\" DOI",
+          "url": "https://doi.org/10.3389/frai.2026.1827727",
+          "result": "DOI resolves to the same publisher article."
+        }
+      ],
+      "claims": [],
+      "notes": "Название, год, издание и уникальная метрика соответствуют одной публикации; отдельная версия не обнаружена."
+    },
+    {
+      "source_id": "S380",
+      "decision": "alias",
+      "canonical_id": "S149",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Frontiers",
+          "query": "\"Zero-shot multimodal pain estimation\"",
+          "url": "https://www.frontiersin.org/journals/artificial-intelligence/articles/10.3389/frai.2026.1827727/full",
+          "result": "Exact publisher article found; DOI and full text checked."
+        },
+        {
+          "service": "Crossref/DOI",
+          "query": "\"Zero-shot multimodal pain estimation\" DOI",
+          "url": "https://doi.org/10.3389/frai.2026.1827727",
+          "result": "DOI resolves to the same publisher article."
+        }
+      ],
+      "claims": [],
+      "notes": "Название, год, издание и уникальная метрика соответствуют одной публикации; отдельная версия не обнаружена."
+    },
+    {
+      "source_id": "S039",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-22",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "service": "Elsevier",
+          "query": "\"Deep Multi-Head attention network\" \"Subject-Incremental\"",
+          "url": "https://www.sciencedirect.com/science/article/pii/S174680942601815X",
+          "result": "Exact publisher article and full text metadata found."
+        },
+        {
+          "service": "Crossref/DOI",
+          "query": "\"10.1016/j.bspc.2026.111261\"",
+          "url": "https://doi.org/10.1016/j.bspc.2026.111261",
+          "result": "DOI resolves to the same article."
+        }
+      ],
+      "updates": {
+        "название": "Deep Multi-Head attention network with Subject-Incremental learning for Cross-Subject generalization in objective pain monitoring using multimodal physiological signals",
+        "авторы": "Rakesh Chandra Joshi; Suman Kumar; Sujeet Kumar Singh Gautam; Malay Kishore Dutta",
+        "год": 2026,
+        "издание": "Biomedical Signal Processing and Control 128:111261",
+        "модальность": "EDA; BVP; ECG; EMG; respiration",
+        "задача": "Six-class participant-independent experimental pain recognition",
+        "метод": "Subject-incremental multi-head attention and deep fusion with SHAP",
+        "датасет": "PainMonit PMED",
+        "производительность": "87.68% ± 0.41% mean participant-level accuracy across four subject-independent outer folds",
+        "кросс_субъект": "Да, subject-wise four-fold outer cross-validation",
+        "ограничения": "52 healthy participants under controlled thermal stimulation; no chronic-pain clinical validation.",
+        "identifiers": {
+          "doi": "10.1016/j.bspc.2026.111261",
+          "exact_url": "https://www.sciencedirect.com/science/article/pii/S174680942601815X"
+        },
+        "provenance": {
+          "retrieved_at": "2026-09-22",
+          "search_stream": "relevance-5/batch-001",
+          "query_or_seed": "\"Deep Multi-Head attention network\" \"Subject-Incremental\"",
+          "iteration": 1
+        },
+        "evidence": {
+          "species": "Homo sapiens",
+          "population": "52 healthy PMED participants exposed to graded thermal stimulation",
+          "subject_domain": "human_healthy",
+          "modalities": [
+            "bvp_ppg",
+            "ecg",
+            "eda",
+            "emg"
+          ],
+          "sample_size": 52,
+          "target_construct": "experimental_pain_class",
+          "target_label": "baseline, non-painful stimulation, and four graded pain levels",
+          "access_status": "open",
+          "evidence_role": "method_baseline"
+        },
+        "validation": {
+          "split_unit": "participant",
+          "cross_subject": "yes",
+          "external_validation": "no",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported"
+        },
+        "risk_flags": [
+          "future_or_recent_record_requires_recheck"
+        ]
+      },
+      "claims": [
+        {
+          "claim": "The method reports 87.68% participant-level accuracy for six-class recognition.",
+          "target_variable": "experimental pain class",
+          "population_or_data": "PainMonit PMED, 52 healthy participants",
+          "evidence": "Elsevier full text reports 87.68% ± 0.41% across four subject-independent outer folds.",
+          "limitation": "Controlled thermal stimulation in healthy participants; no independent clinical cohort.",
+          "permitted_conclusion": "Cross-subject feasibility within PMED, not general clinical pain validity."
+        }
+      ],
+      "notes": "Primary publisher record and article text checked."
+    },
+    {
+      "source_id": "S056",
+      "decision": "alias",
+      "canonical_id": "S039",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Elsevier",
+          "query": "\"Deep Multi-Head attention network\" \"Subject-Incremental\"",
+          "url": "https://www.sciencedirect.com/science/article/pii/S174680942601815X",
+          "result": "Exact publisher article and full text metadata found."
+        },
+        {
+          "service": "Crossref/DOI",
+          "query": "\"10.1016/j.bspc.2026.111261\"",
+          "url": "https://doi.org/10.1016/j.bspc.2026.111261",
+          "result": "DOI resolves to the same article."
+        }
+      ],
+      "claims": [],
+      "notes": "Название, год, издание и уникальная метрика соответствуют одной публикации; отдельная версия не обнаружена."
+    },
+    {
+      "source_id": "S089",
+      "decision": "alias",
+      "canonical_id": "S039",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Elsevier",
+          "query": "\"Deep Multi-Head attention network\" \"Subject-Incremental\"",
+          "url": "https://www.sciencedirect.com/science/article/pii/S174680942601815X",
+          "result": "Exact publisher article and full text metadata found."
+        },
+        {
+          "service": "Crossref/DOI",
+          "query": "\"10.1016/j.bspc.2026.111261\"",
+          "url": "https://doi.org/10.1016/j.bspc.2026.111261",
+          "result": "DOI resolves to the same article."
+        }
+      ],
+      "claims": [],
+      "notes": "Название, год, издание и уникальная метрика соответствуют одной публикации; отдельная версия не обнаружена."
+    },
+    {
+      "source_id": "S118",
+      "decision": "alias",
+      "canonical_id": "S039",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Elsevier",
+          "query": "\"Deep Multi-Head attention network\" \"Subject-Incremental\"",
+          "url": "https://www.sciencedirect.com/science/article/pii/S174680942601815X",
+          "result": "Exact publisher article and full text metadata found."
+        },
+        {
+          "service": "Crossref/DOI",
+          "query": "\"10.1016/j.bspc.2026.111261\"",
+          "url": "https://doi.org/10.1016/j.bspc.2026.111261",
+          "result": "DOI resolves to the same article."
+        }
+      ],
+      "claims": [],
+      "notes": "Название, год, издание и уникальная метрика соответствуют одной публикации; отдельная версия не обнаружена."
+    },
+    {
+      "source_id": "S132",
+      "decision": "alias",
+      "canonical_id": "S039",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Elsevier",
+          "query": "\"Deep Multi-Head attention network\" \"Subject-Incremental\"",
+          "url": "https://www.sciencedirect.com/science/article/pii/S174680942601815X",
+          "result": "Exact publisher article and full text metadata found."
+        },
+        {
+          "service": "Crossref/DOI",
+          "query": "\"10.1016/j.bspc.2026.111261\"",
+          "url": "https://doi.org/10.1016/j.bspc.2026.111261",
+          "result": "DOI resolves to the same article."
+        }
+      ],
+      "claims": [],
+      "notes": "Название, год, издание и уникальная метрика соответствуют одной публикации; отдельная версия не обнаружена."
+    },
+    {
+      "source_id": "S178",
+      "decision": "alias",
+      "canonical_id": "S039",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Elsevier",
+          "query": "\"Deep Multi-Head attention network\" \"Subject-Incremental\"",
+          "url": "https://www.sciencedirect.com/science/article/pii/S174680942601815X",
+          "result": "Exact publisher article and full text metadata found."
+        },
+        {
+          "service": "Crossref/DOI",
+          "query": "\"10.1016/j.bspc.2026.111261\"",
+          "url": "https://doi.org/10.1016/j.bspc.2026.111261",
+          "result": "DOI resolves to the same article."
+        }
+      ],
+      "claims": [],
+      "notes": "Название, год, издание и уникальная метрика соответствуют одной публикации; отдельная версия не обнаружена."
+    },
+    {
+      "source_id": "S225",
+      "decision": "alias",
+      "canonical_id": "S039",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Elsevier",
+          "query": "\"Deep Multi-Head attention network\" \"Subject-Incremental\"",
+          "url": "https://www.sciencedirect.com/science/article/pii/S174680942601815X",
+          "result": "Exact publisher article and full text metadata found."
+        },
+        {
+          "service": "Crossref/DOI",
+          "query": "\"10.1016/j.bspc.2026.111261\"",
+          "url": "https://doi.org/10.1016/j.bspc.2026.111261",
+          "result": "DOI resolves to the same article."
+        }
+      ],
+      "claims": [],
+      "notes": "Название, год, издание и уникальная метрика соответствуют одной публикации; отдельная версия не обнаружена."
+    },
+    {
+      "source_id": "S258",
+      "decision": "alias",
+      "canonical_id": "S039",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Elsevier",
+          "query": "\"Deep Multi-Head attention network\" \"Subject-Incremental\"",
+          "url": "https://www.sciencedirect.com/science/article/pii/S174680942601815X",
+          "result": "Exact publisher article and full text metadata found."
+        },
+        {
+          "service": "Crossref/DOI",
+          "query": "\"10.1016/j.bspc.2026.111261\"",
+          "url": "https://doi.org/10.1016/j.bspc.2026.111261",
+          "result": "DOI resolves to the same article."
+        }
+      ],
+      "claims": [],
+      "notes": "Название, год, издание и уникальная метрика соответствуют одной публикации; отдельная версия не обнаружена."
+    },
+    {
+      "source_id": "S353",
+      "decision": "alias",
+      "canonical_id": "S039",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Elsevier",
+          "query": "\"Deep Multi-Head attention network\" \"Subject-Incremental\"",
+          "url": "https://www.sciencedirect.com/science/article/pii/S174680942601815X",
+          "result": "Exact publisher article and full text metadata found."
+        },
+        {
+          "service": "Crossref/DOI",
+          "query": "\"10.1016/j.bspc.2026.111261\"",
+          "url": "https://doi.org/10.1016/j.bspc.2026.111261",
+          "result": "DOI resolves to the same article."
+        }
+      ],
+      "claims": [],
+      "notes": "Название, год, издание и уникальная метрика соответствуют одной публикации; отдельная версия не обнаружена."
+    },
+    {
+      "source_id": "S366",
+      "decision": "alias",
+      "canonical_id": "S039",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Elsevier",
+          "query": "\"Deep Multi-Head attention network\" \"Subject-Incremental\"",
+          "url": "https://www.sciencedirect.com/science/article/pii/S174680942601815X",
+          "result": "Exact publisher article and full text metadata found."
+        },
+        {
+          "service": "Crossref/DOI",
+          "query": "\"10.1016/j.bspc.2026.111261\"",
+          "url": "https://doi.org/10.1016/j.bspc.2026.111261",
+          "result": "DOI resolves to the same article."
+        }
+      ],
+      "claims": [],
+      "notes": "Название, год, издание и уникальная метрика соответствуют одной публикации; отдельная версия не обнаружена."
+    },
+    {
+      "source_id": "S407",
+      "decision": "alias",
+      "canonical_id": "S039",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Elsevier",
+          "query": "\"Deep Multi-Head attention network\" \"Subject-Incremental\"",
+          "url": "https://www.sciencedirect.com/science/article/pii/S174680942601815X",
+          "result": "Exact publisher article and full text metadata found."
+        },
+        {
+          "service": "Crossref/DOI",
+          "query": "\"10.1016/j.bspc.2026.111261\"",
+          "url": "https://doi.org/10.1016/j.bspc.2026.111261",
+          "result": "DOI resolves to the same article."
+        }
+      ],
+      "claims": [],
+      "notes": "Название, год, издание и уникальная метрика соответствуют одной публикации; отдельная версия не обнаружена."
+    },
+    {
+      "source_id": "S036",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-22",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "service": "Elsevier",
+          "query": "\"Multimodal pain assessment with transformers\"",
+          "url": "https://www.sciencedirect.com/science/article/pii/S0925231225027389",
+          "result": "Exact open publisher article found and content checked."
+        },
+        {
+          "service": "Crossref/DOI",
+          "query": "\"10.1016/j.neucom.2025.132066\"",
+          "url": "https://doi.org/10.1016/j.neucom.2025.132066",
+          "result": "DOI resolves to the same article."
+        }
+      ],
+      "updates": {
+        "название": "Multimodal pain assessment with transformers",
+        "авторы": "Manuel Benavent-Lledó; Maria Dolores Lopez-Valle; David Ortiz-Pérez; David Mulero-Pérez; José García-Rodríguez; Alexandra Psarrou",
+        "год": 2026,
+        "издание": "Neurocomputing 664:132066",
+        "модальность": "Facial video; ECG; EMG; GSR/EDA",
+        "задача": "Multimodal experimental pain classification",
+        "метод": "CNN physiological encoder; frozen video transformer; transformer fusion",
+        "датасет": "BioVid Heat Pain Database",
+        "производительность": "35.40% accuracy on the reported BioVid multimodal task; >16 percentage-point improvement for biomedical signal processing",
+        "кросс_субъект": null,
+        "ограничения": "Experimental heat-pain benchmark; publisher text does not establish SCS/ECAP or clinical generalizability.",
+        "identifiers": {
+          "doi": "10.1016/j.neucom.2025.132066",
+          "exact_url": "https://www.sciencedirect.com/science/article/pii/S0925231225027389"
+        },
+        "provenance": {
+          "retrieved_at": "2026-09-22",
+          "search_stream": "relevance-5/batch-001",
+          "query_or_seed": "\"Multimodal pain assessment with transformers\"",
+          "iteration": 1
+        },
+        "evidence": {
+          "species": "Homo sapiens",
+          "population": "BioVid healthy participants under controlled heat stimulation",
+          "subject_domain": "human_healthy",
+          "modalities": [
+            "ecg",
+            "eda",
+            "emg",
+            "video_face"
+          ],
+          "sample_size": null,
+          "target_construct": "experimental_pain_class",
+          "target_label": "BioVid pain classes",
+          "access_status": "open",
+          "evidence_role": "method_baseline"
+        },
+        "validation": {
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "no",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported"
+        },
+        "risk_flags": [
+          "future_or_recent_record_requires_recheck",
+          "missing_cross_subject_validation"
+        ]
+      },
+      "claims": [
+        {
+          "claim": "PainFusion+ reports 35.40% accuracy on its BioVid multimodal task.",
+          "target_variable": "experimental pain class",
+          "population_or_data": "BioVid",
+          "evidence": "The open Elsevier article states 35.40% accuracy and describes the multimodal transformer.",
+          "limitation": "The exact split unit is not recorded in this curation pass; BioVid is experimental heat pain.",
+          "permitted_conclusion": "Method baseline for experimental multimodal classification only."
+        }
+      ],
+      "notes": "Primary open publisher article checked."
+    },
+    {
+      "source_id": "S053",
+      "decision": "alias",
+      "canonical_id": "S036",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Elsevier",
+          "query": "\"Multimodal pain assessment with transformers\"",
+          "url": "https://www.sciencedirect.com/science/article/pii/S0925231225027389",
+          "result": "Exact open publisher article found and content checked."
+        },
+        {
+          "service": "Crossref/DOI",
+          "query": "\"10.1016/j.neucom.2025.132066\"",
+          "url": "https://doi.org/10.1016/j.neucom.2025.132066",
+          "result": "DOI resolves to the same article."
+        }
+      ],
+      "claims": [],
+      "notes": "Название, год, издание и уникальная метрика соответствуют одной публикации; отдельная версия не обнаружена."
+    },
+    {
+      "source_id": "S085",
+      "decision": "alias",
+      "canonical_id": "S036",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Elsevier",
+          "query": "\"Multimodal pain assessment with transformers\"",
+          "url": "https://www.sciencedirect.com/science/article/pii/S0925231225027389",
+          "result": "Exact open publisher article found and content checked."
+        },
+        {
+          "service": "Crossref/DOI",
+          "query": "\"10.1016/j.neucom.2025.132066\"",
+          "url": "https://doi.org/10.1016/j.neucom.2025.132066",
+          "result": "DOI resolves to the same article."
+        }
+      ],
+      "claims": [],
+      "notes": "Название, год, издание и уникальная метрика соответствуют одной публикации; отдельная версия не обнаружена."
+    },
+    {
+      "source_id": "S128",
+      "decision": "alias",
+      "canonical_id": "S036",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Elsevier",
+          "query": "\"Multimodal pain assessment with transformers\"",
+          "url": "https://www.sciencedirect.com/science/article/pii/S0925231225027389",
+          "result": "Exact open publisher article found and content checked."
+        },
+        {
+          "service": "Crossref/DOI",
+          "query": "\"10.1016/j.neucom.2025.132066\"",
+          "url": "https://doi.org/10.1016/j.neucom.2025.132066",
+          "result": "DOI resolves to the same article."
+        }
+      ],
+      "claims": [],
+      "notes": "Название, год, издание и уникальная метрика соответствуют одной публикации; отдельная версия не обнаружена."
+    }
+  ]
+}

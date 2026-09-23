@@ -1,0 +1,3581 @@
+{
+  "meta": {
+    "schema_version": "1.2.0",
+    "version": "structural_cleanup_pass_1",
+    "language": "ru",
+    "source_snapshot": "archive/2026-09-21/clusters.json",
+    "records_count": 148,
+    "clusters_count": 43,
+    "retired_clusters_count": 11,
+    "cluster_references_count": 177,
+    "unique_clustered_records_count": 125,
+    "unclustered_records_count": 23,
+    "multiple_membership_records_count": 43,
+    "validation_status": "structurally valid; thematic review pending",
+    "updated_at": "2026-09-23"
+  },
+  "clusters": [
+    {
+      "id": "C01",
+      "тема": "ML для детекции ECAP при SCS",
+      "синтез": "1D-CNN, KNN, LSTM, RL, трансформеры; accuracy >97%; closed-loop SCS; EEG+ECAP fusion; multiplexed waveforms; AI-IC co-design. Требует_разбиения (записей > 8).",
+      "записей": 23,
+      "представитель": {
+        "id": "S002",
+        "название": "Feature extraction and prediction of spinal cord stimulation evoked compound action potentials in humans",
+        "авторы": "Seth König; Ahmed Ramadan; Disa Sullivan; Vasudha Goel; R Scott Stayner; David Schultz; Alexander B Herman; Theoden I Netoff; David P Darrow",
+        "год": 2025,
+        "издание": "Journal of Neural Engineering",
+        "модальность": null,
+        "задача": null,
+        "метод": null,
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "релевантность": 5,
+        "ограничения": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+        "тип_источника": "метод",
+        "identifiers": {
+          "doi": "10.1088/1741-2552/adbfbe",
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://doi.org/10.1088/1741-2552/adbfbe"
+        },
+        "provenance": {
+          "import_source": "archive/2026-09-21/records.json",
+          "retrieved_at": "2026-09-22",
+          "search_stream": "relevance-5/registry-and-primary-review",
+          "query_or_seed": "Feature extraction and prediction of spinal cord stimulation evoked compound action potentials in humans",
+          "iteration": 1
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "sample_size": null,
+          "target_construct": "unknown",
+          "target_label": null,
+          "access_status": "unknown",
+          "evidence_role": "context_only",
+          "subject_domain": "unknown",
+          "modalities": []
+        },
+        "validation": {
+          "status": "verified_metadata",
+          "screening_status": "included_core",
+          "full_text_status": "metadata_only",
+          "checked_at": "2026-09-22",
+          "notes": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported",
+          "exclusion_reason": null
+        },
+        "risk_flags": [
+          "metadata_only"
+        ],
+        "relations": []
+      },
+      "состав_кластера": [
+        "S002",
+        "S006",
+        "S018",
+        "S048",
+        "S049",
+        "S105",
+        "S159",
+        "S161",
+        "S162",
+        "S236",
+        "S237",
+        "S238",
+        "S239",
+        "S240",
+        "S241",
+        "S243",
+        "S279",
+        "S289",
+        "S356",
+        "S357",
+        "S360",
+        "S361",
+        "S363"
+      ],
+      "validation": {
+        "status": "structurally_valid",
+        "checked_at": "2026-09-21",
+        "content_validation": "pending"
+      }
+    },
+    {
+      "id": "C02",
+      "тема": "ML для детекции боли по ЭЭГ",
+      "синтез": "Кросс-субъектные, XAI, предсказание ответа; accuracy 88–96%; meta-learning. Требует_разбиения.",
+      "записей": 10,
+      "представитель": {
+        "id": "S004",
+        "название": "RE-HPBS-IPIC: A Resting EEG- and High-Activation Pain Brain Source-Driven Framework for Inter-Subject Pain Intensity Classification",
+        "авторы": "Wenjia Gao; Dan Liu; Qisong Wang; Yongping Zhao; Jinwei Sun",
+        "год": 2026,
+        "издание": "IEEE Journal of Biomedical and Health Informatics",
+        "модальность": null,
+        "задача": null,
+        "метод": null,
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "релевантность": 5,
+        "ограничения": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+        "тип_источника": "кросс_субъект",
+        "identifiers": {
+          "doi": "10.1109/JBHI.2026.3650972",
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://doi.org/10.1109/jbhi.2026.3650972"
+        },
+        "provenance": {
+          "import_source": "archive/2026-09-21/records.json",
+          "retrieved_at": "2026-09-22",
+          "search_stream": "relevance-5/registry-and-primary-review",
+          "query_or_seed": "RE-HPBS-IPIC: A Resting EEG- and High-Activation Pain Brain Source-Driven Framework for Inter-Subject Pain Intensity Classification",
+          "iteration": 1
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "sample_size": null,
+          "target_construct": "unknown",
+          "target_label": null,
+          "access_status": "unknown",
+          "evidence_role": "context_only",
+          "subject_domain": "unknown",
+          "modalities": []
+        },
+        "validation": {
+          "status": "verified_metadata",
+          "screening_status": "included_core",
+          "full_text_status": "metadata_only",
+          "checked_at": "2026-09-22",
+          "notes": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported",
+          "exclusion_reason": null
+        },
+        "risk_flags": [
+          "metadata_only"
+        ],
+        "relations": []
+      },
+      "состав_кластера": [
+        "S004",
+        "S008",
+        "S018",
+        "S023",
+        "S033",
+        "S044",
+        "S045",
+        "S046",
+        "S069",
+        "S082"
+      ],
+      "validation": {
+        "status": "structurally_valid",
+        "checked_at": "2026-09-21",
+        "content_validation": "pending"
+      }
+    },
+    {
+      "id": "C03",
+      "тема": "Мультимодальная фузия для детекции боли",
+      "синтез": "Трансформеры (PainFusion+, GIAFormer, CrossMod-Transformer, HCAT-Pain, DANN-Transformer), DANN, multi-head attention; SOTA; обзоры. Требует_разбиения.",
+      "записей": 9,
+      "представитель": {
+        "id": "S016",
+        "название": "A Multimodal Deep Learning Approach to Intraoperative Nociception Monitoring: Integrating Electroencephalogram, Photoplethysmography, and Electrocardiogram",
+        "авторы": "Omar M. T. Abdel Deen; Shou-Zen Fan; Jiann-Shing Shieh",
+        "год": 2025,
+        "издание": "Sensors",
+        "модальность": null,
+        "задача": null,
+        "метод": null,
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "релевантность": 5,
+        "ограничения": "Open full article checked; target is intraoperative nociception under anesthesia, not conscious pain.",
+        "тип_источника": "метод",
+        "identifiers": {
+          "doi": "10.3390/s25041150",
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11859842/"
+        },
+        "provenance": {
+          "import_source": "archive/2026-09-21/records.json",
+          "retrieved_at": "2026-09-22",
+          "search_stream": "relevance-5/registry-and-primary-review",
+          "query_or_seed": "A Multimodal Deep Learning Approach to Intraoperative Nociception Monitoring: Integrating Electroencephalogram, Photoplethysmography, and Electrocardiogram",
+          "iteration": 1
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "sample_size": null,
+          "target_construct": "unknown",
+          "target_label": null,
+          "access_status": "unknown",
+          "evidence_role": "method_baseline",
+          "subject_domain": "unknown",
+          "modalities": []
+        },
+        "validation": {
+          "status": "verified_primary",
+          "screening_status": "included_core",
+          "full_text_status": "checked",
+          "checked_at": "2026-09-22",
+          "notes": "Open full article checked; target is intraoperative nociception under anesthesia, not conscious pain.",
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported",
+          "exclusion_reason": null
+        },
+        "risk_flags": [],
+        "relations": []
+      },
+      "состав_кластера": [
+        "S005",
+        "S016",
+        "S019",
+        "S036",
+        "S037",
+        "S040",
+        "S086",
+        "S088",
+        "S148"
+      ],
+      "validation": {
+        "status": "structurally_valid",
+        "checked_at": "2026-09-21",
+        "content_validation": "pending"
+      }
+    },
+    {
+      "id": "C04",
+      "тема": "Детекция боли по EDA",
+      "синтез": "Real-time CNN на EDA; latency 102–119 мс на Raspberry Pi 5.",
+      "записей": 2,
+      "представитель": {
+        "id": "S007",
+        "название": "MDNet: A Lightweight Multidomain 1-D CNN for Embedded Pain Assessment Using EDA Signals",
+        "авторы": "Sumair Aziz; Girija Chetty; Roland Goecke; Raul Fernandez Rojas",
+        "год": 2026,
+        "издание": "IEEE Internet of Things Journal",
+        "модальность": null,
+        "задача": null,
+        "метод": null,
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "релевантность": 5,
+        "ограничения": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+        "тип_источника": "носимые_реальное_время",
+        "identifiers": {
+          "doi": "10.1109/JIOT.2026.3663683",
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://doi.org/10.1109/jiot.2026.3663683"
+        },
+        "provenance": {
+          "import_source": "archive/2026-09-21/records.json",
+          "retrieved_at": "2026-09-22",
+          "search_stream": "relevance-5/registry-and-primary-review",
+          "query_or_seed": "MDNet: A Lightweight Multidomain 1-D CNN for Embedded Pain Assessment Using EDA Signals",
+          "iteration": 1
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "sample_size": null,
+          "target_construct": "unknown",
+          "target_label": null,
+          "access_status": "unknown",
+          "evidence_role": "context_only",
+          "subject_domain": "unknown",
+          "modalities": []
+        },
+        "validation": {
+          "status": "verified_metadata",
+          "screening_status": "included_core",
+          "full_text_status": "metadata_only",
+          "checked_at": "2026-09-22",
+          "notes": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported",
+          "exclusion_reason": null
+        },
+        "risk_flags": [
+          "metadata_only"
+        ],
+        "relations": []
+      },
+      "состав_кластера": [
+        "S007",
+        "S015"
+      ],
+      "validation": {
+        "status": "structurally_valid",
+        "checked_at": "2026-09-21",
+        "content_validation": "pending"
+      }
+    },
+    {
+      "id": "C05",
+      "тема": "Детекция боли по ЭКГ",
+      "синтез": "End-to-end нейросеть по ЭКГ; CrossMod-Transformer для EDA+ЭКГ fusion.",
+      "записей": 2,
+      "представитель": {
+        "id": "S017",
+        "название": "Toward Efficient ECG-Based Pain Intensity Recognition: An End-to-End Neural Network Using Multiple Temporal Feature Compression and Fusion",
+        "авторы": "Rongjian Qiu; Kan Xie; Shengli Xie; Junjie Yang; Yuan Xie; Shihan Qiu; Wenfang Bai",
+        "год": 2025,
+        "издание": "IEEE Internet of Things Journal",
+        "модальность": "ЭКГ",
+        "задача": "Распознавание интенсивности боли по ЭКГ",
+        "метод": "End-to-end нейросеть",
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "релевантность": 4,
+        "ограничения": null,
+        "тип_источника": "метод",
+        "identifiers": {
+          "doi": "10.1109/JIOT.2025.3590401",
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://doi.org/10.1109/JIOT.2025.3590401"
+        },
+        "provenance": {
+          "import_source": "archive/2026-09-21/records.json",
+          "retrieved_at": null,
+          "search_stream": null,
+          "query_or_seed": null,
+          "iteration": null
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "sample_size": null,
+          "target_construct": "experimental_pain_class",
+          "target_label": null,
+          "access_status": "unknown",
+          "evidence_role": "method_baseline",
+          "subject_domain": "unknown",
+          "modalities": [
+            "ecg"
+          ]
+        },
+        "validation": {
+          "status": "verified_metadata",
+          "screening_status": "included_core",
+          "full_text_status": "metadata_only",
+          "checked_at": "2026-09-22",
+          "notes": "Bibliographic identity and BioVid evaluation are confirmed from indexing metadata; the publisher full text was not checked, so reported performance is not promoted to a verified claim.",
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported",
+          "exclusion_reason": null
+        },
+        "risk_flags": [
+          "metadata_only"
+        ],
+        "relations": []
+      },
+      "состав_кластера": [
+        "S017",
+        "S037"
+      ],
+      "validation": {
+        "status": "structurally_valid",
+        "checked_at": "2026-09-21",
+        "content_validation": "pending"
+      }
+    },
+    {
+      "id": "C06",
+      "тема": "Коннектом Drosophila и ноцицепция",
+      "синтез": "FlyWire + EM; hub-нейроны; восходящие пути (Ipsigoro → Goro); whole-brain emulation; GNN; adult nociception; md-нейроны. Требует_разбиения.",
+      "записей": 22,
+      "представитель": {
+        "id": "S012",
+        "название": "Drosophila as a Model to Study the Mechanism of Nociception",
+        "авторы": "Jianzheng He; Botong Li; Shuzhen Han; Yuan Zhang; Kai Liu; Simeng Yi; Yongqi Liu; Minghui Xiu",
+        "год": 2022,
+        "издание": "Frontiers in Physiology",
+        "модальность": "Нейронная активность (dTRPA1)",
+        "задача": "Обзор ноцицепции у Drosophila",
+        "метод": "Обзор",
+        "датасет": "Не применимо",
+        "производительность": "Не применимо",
+        "кросс_субъект": "Не применимо",
+        "релевантность": 4,
+        "ограничения": "Не сфокусирован на ML",
+        "тип_источника": "обзор",
+        "identifiers": {
+          "doi": "10.3389/fphys.2022.854124",
+          "pmid": "35418874",
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8996152/"
+        },
+        "provenance": {
+          "import_source": "archive/2026-09-21/records.json",
+          "retrieved_at": null,
+          "search_stream": null,
+          "query_or_seed": null,
+          "iteration": null
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "sample_size": null,
+          "target_construct": "nociceptive_response",
+          "target_label": null,
+          "access_status": "unknown",
+          "evidence_role": "simulation_foundation",
+          "subject_domain": "drosophila_adult",
+          "modalities": [
+            "neural_activity"
+          ]
+        },
+        "validation": {
+          "status": "verified_primary",
+          "screening_status": "included_core",
+          "full_text_status": "checked",
+          "checked_at": "2026-09-22",
+          "notes": "The review explicitly distinguishes subjective pain from objective nociception and surveys fly genetics, sensory neurons and behavioral assays. Conservation does not establish equivalence to human pain or a spinal-cord model.",
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported",
+          "exclusion_reason": null
+        },
+        "risk_flags": [
+          "animal_to_human_transfer_unvalidated"
+        ],
+        "relations": []
+      },
+      "состав_кластера": [
+        "S012",
+        "S013",
+        "S027",
+        "S029",
+        "S030",
+        "S031",
+        "S061",
+        "S062",
+        "S065",
+        "S066",
+        "S068",
+        "S092",
+        "S095",
+        "S106",
+        "S152",
+        "S154",
+        "S167",
+        "S212",
+        "S219",
+        "S252",
+        "S253",
+        "S282"
+      ],
+      "validation": {
+        "status": "structurally_valid",
+        "checked_at": "2026-09-21",
+        "content_validation": "pending"
+      }
+    },
+    {
+      "id": "C07",
+      "тема": "Федеративное обучение для SCS",
+      "синтез": "FL + Edge Computing + neuromorphic; differential privacy; FANN; EPOC. Требует_разбиения.",
+      "записей": 14,
+      "представитель": {
+        "id": "S042",
+        "название": "Preserving privacy in big data research: the role of federated learning in spine surgery",
+        "авторы": "Hania Shahzad; Cole Veliky; Hai Le; Sheeraz Qureshi; Frank M Phillips; Yashar Javidan; Safdar N Khan",
+        "год": 2024,
+        "издание": "European Spine Journal",
+        "модальность": "Клинические данные",
+        "задача": "Приватность в спинальной хирургии",
+        "метод": "Federated Learning",
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": "Да",
+        "релевантность": 4,
+        "ограничения": null,
+        "тип_источника": "федеративное_SCS",
+        "identifiers": {
+          "doi": "10.1007/s00586-024-08172-2",
+          "pmid": "38403832",
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://doi.org/10.1007/s00586-024-08172-2"
+        },
+        "provenance": {
+          "import_source": "archive/2026-09-21/records.json",
+          "retrieved_at": null,
+          "search_stream": null,
+          "query_or_seed": null,
+          "iteration": null
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "sample_size": null,
+          "target_construct": "not_applicable",
+          "target_label": null,
+          "access_status": "unknown",
+          "evidence_role": "context_only",
+          "subject_domain": "unknown",
+          "modalities": [
+            "clinical_outcome"
+          ]
+        },
+        "validation": {
+          "status": "verified_primary",
+          "screening_status": "included_core",
+          "full_text_status": "checked",
+          "checked_at": "2026-09-22",
+          "notes": "Narrative review of federated learning opportunities in spine surgery; it is not a deployed federated SCS model or outcome-validation study.",
+          "split_unit": "not_reported",
+          "cross_subject": "yes",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported",
+          "exclusion_reason": null
+        },
+        "risk_flags": [
+          "missing_cross_subject_validation"
+        ],
+        "relations": []
+      },
+      "состав_кластера": [
+        "S042",
+        "S097",
+        "S098",
+        "S099",
+        "S144",
+        "S150",
+        "S165",
+        "S187",
+        "S228",
+        "S229",
+        "S231",
+        "S246",
+        "S247",
+        "S284"
+      ],
+      "validation": {
+        "status": "structurally_valid",
+        "checked_at": "2026-09-21",
+        "content_validation": "pending"
+      }
+    },
+    {
+      "id": "C08",
+      "тема": "Синтетические данные для детекции боли",
+      "синтез": "GAN, diffusion, ControlNet, VAE; zero-shot; 50,000 сценариев; 96% accuracy на unseen. Требует_разбиения.",
+      "записей": 8,
+      "представитель": {
+        "id": "S011",
+        "название": "Детекция боли на основе данных со стимулятора спинного мозга",
+        "авторы": null,
+        "год": 2024,
+        "издание": null,
+        "модальность": null,
+        "задача": null,
+        "метод": null,
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "релевантность": 5,
+        "ограничения": "Синтетические данные",
+        "тип_источника": "метод",
+        "identifiers": {
+          "doi": null,
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": null
+        },
+        "provenance": {
+          "import_source": "archive/2026-09-21/records.json",
+          "retrieved_at": null,
+          "search_stream": null,
+          "query_or_seed": null,
+          "iteration": null
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "sample_size": null,
+          "target_construct": "unknown",
+          "target_label": null,
+          "access_status": "unknown",
+          "evidence_role": "not_assigned",
+          "subject_domain": "simulation",
+          "modalities": []
+        },
+        "validation": {
+          "status": "rejected",
+          "screening_status": "excluded_unverifiable",
+          "full_text_status": "unavailable",
+          "checked_at": "2026-09-22",
+          "notes": "No matching pain/SCS source was found; the exact-title Crossref hit was an unrelated crystal-growth article.",
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported",
+          "exclusion_reason": "unverifiable"
+        },
+        "risk_flags": [
+          "claim_not_supported",
+          "missing_cross_subject_validation",
+          "missing_primary_identifier",
+          "missing_reported_metrics"
+        ],
+        "relations": []
+      },
+      "состав_кластера": [
+        "S011",
+        "S028",
+        "S035",
+        "S083",
+        "S084",
+        "S149",
+        "S192",
+        "S224"
+      ],
+      "validation": {
+        "status": "structurally_valid",
+        "checked_at": "2026-09-21",
+        "content_validation": "pending"
+      }
+    },
+    {
+      "id": "C09",
+      "тема": "XAI для детекции боли",
+      "синтез": "DeepSHAP, SHAP; интерпретируемость; kernel spectral connectivity.",
+      "записей": 8,
+      "представитель": {
+        "id": "S008",
+        "название": "Explainable AI for pain perception: subject-independent EEG decoding using DeepSHAP and CNNs",
+        "авторы": "Feyzi Alkım Aktaş; Aykut Eken; Osman Eroğul",
+        "год": 2026,
+        "издание": "Biomedical Physics &amp; Engineering Express",
+        "модальность": null,
+        "задача": null,
+        "метод": null,
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "релевантность": 5,
+        "ограничения": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+        "тип_источника": "XAI",
+        "identifiers": {
+          "doi": "10.1088/2057-1976/ae34b4",
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://doi.org/10.1088/2057-1976/ae34b4"
+        },
+        "provenance": {
+          "import_source": "archive/2026-09-21/records.json",
+          "retrieved_at": "2026-09-22",
+          "search_stream": "relevance-5/registry-and-primary-review",
+          "query_or_seed": "Explainable AI for pain perception: subject-independent EEG decoding using DeepSHAP and CNNs",
+          "iteration": 1
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "sample_size": null,
+          "target_construct": "unknown",
+          "target_label": null,
+          "access_status": "unknown",
+          "evidence_role": "context_only",
+          "subject_domain": "unknown",
+          "modalities": []
+        },
+        "validation": {
+          "status": "verified_metadata",
+          "screening_status": "included_core",
+          "full_text_status": "metadata_only",
+          "checked_at": "2026-09-22",
+          "notes": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported",
+          "exclusion_reason": null
+        },
+        "risk_flags": [
+          "metadata_only"
+        ],
+        "relations": []
+      },
+      "состав_кластера": [
+        "S008",
+        "S019",
+        "S039",
+        "S046",
+        "S060",
+        "S077",
+        "S122",
+        "S189"
+      ],
+      "validation": {
+        "status": "structurally_valid",
+        "checked_at": "2026-09-21",
+        "content_validation": "pending"
+      }
+    },
+    {
+      "id": "C10",
+      "тема": "Фундаментальные модели боли",
+      "синтез": "Кортикоспинальная предиктивная модель восприятия боли.",
+      "записей": 1,
+      "представитель": {
+        "id": "S025",
+        "название": "A predictive corticospinal model for pain perception",
+        "авторы": null,
+        "год": 2026,
+        "издание": "Cell Reports Medicine",
+        "модальность": "Кортикоспинальная",
+        "задача": "Предиктивная модель восприятия боли",
+        "метод": "Predictive coding",
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "релевантность": 4,
+        "ограничения": null,
+        "тип_источника": "фундаментальные_модели",
+        "identifiers": {
+          "doi": "10.1016/j.xcrm.2026.102793",
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://doi.org/10.1016/j.xcrm.2026.102793"
+        },
+        "provenance": {
+          "import_source": "archive/2026-09-21/records.json",
+          "retrieved_at": null,
+          "search_stream": null,
+          "query_or_seed": null,
+          "iteration": null
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "sample_size": null,
+          "target_construct": "self_reported_pain",
+          "target_label": null,
+          "access_status": "unknown",
+          "evidence_role": "human_validation",
+          "subject_domain": "unknown",
+          "modalities": []
+        },
+        "validation": {
+          "status": "verified_primary",
+          "screening_status": "included_core",
+          "full_text_status": "checked",
+          "checked_at": "2026-09-22",
+          "notes": "The primary article reports independent-dataset tests across experimental pain, TENS and chronic pain. It is an fMRI biomarker study, not ECAP evidence or an SCS-response model; full authorship metadata remains to be completed.",
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported",
+          "exclusion_reason": null
+        },
+        "risk_flags": [
+          "missing_authors"
+        ],
+        "relations": []
+      },
+      "состав_кластера": [
+        "S025"
+      ],
+      "validation": {
+        "status": "structurally_valid",
+        "checked_at": "2026-09-21",
+        "content_validation": "pending"
+      }
+    },
+    {
+      "id": "C11",
+      "тема": "Предсказание ответа на SCS (клиническое)",
+      "синтез": "Радиомика, ЭЭГ, MEG; accuracy 88–90%.",
+      "записей": 2,
+      "представитель": {
+        "id": "S034",
+        "название": "Prediction of Response to Spinal Cord Stimulation Using Machine Learning Based on Radiomics and Patient-Reported Outcomes",
+        "авторы": null,
+        "год": null,
+        "издание": null,
+        "модальность": null,
+        "задача": null,
+        "метод": null,
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "релевантность": 5,
+        "ограничения": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+        "тип_источника": "применение",
+        "identifiers": {
+          "doi": "10.1227/neu.0000000000003715",
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": null
+        },
+        "provenance": {
+          "import_source": "archive/2026-09-21/records.json",
+          "retrieved_at": "2026-09-22",
+          "search_stream": "relevance-5/registry-and-primary-review",
+          "query_or_seed": "Prediction of Response to Spinal Cord Stimulation Using Machine Learning Based on Radiomics and Patient-Reported Outcomes",
+          "iteration": 1
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "sample_size": null,
+          "target_construct": "unknown",
+          "target_label": null,
+          "access_status": "unknown",
+          "evidence_role": "context_only",
+          "subject_domain": "unknown",
+          "modalities": []
+        },
+        "validation": {
+          "status": "verified_metadata",
+          "screening_status": "included_core",
+          "full_text_status": "metadata_only",
+          "checked_at": "2026-09-22",
+          "notes": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported",
+          "exclusion_reason": null
+        },
+        "risk_flags": [
+          "metadata_only"
+        ],
+        "relations": []
+      },
+      "состав_кластера": [
+        "S033",
+        "S034"
+      ],
+      "validation": {
+        "status": "structurally_valid",
+        "checked_at": "2026-09-21",
+        "content_validation": "pending"
+      }
+    },
+    {
+      "id": "C12",
+      "тема": "Носимые устройства для детекции боли",
+      "синтез": "DL + носимые датчики; real-time мониторинг; closed-loop TENS; MenstruEase.",
+      "записей": 7,
+      "представитель": {
+        "id": "S075",
+        "название": "Deep Learning and Noninvasive Sensors for Detecting Physiological Dysregulation: A Scoping Review",
+        "авторы": "Mariana Gonzalez Garces; Jeronimo Cardenas Montoya; Maria Isabel Pena Martinez; Juanita Valencia Garcia; Erwin Hernando Hernandez Rincon",
+        "год": 2026,
+        "издание": "Journal of Medical Systems",
+        "модальность": "Мультимодальная (носимые)",
+        "задача": "Раннее обнаружение боли",
+        "метод": "DL + wearable sensors",
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "релевантность": 4,
+        "ограничения": "Scoping review",
+        "тип_источника": "обзор",
+        "identifiers": {
+          "doi": "10.1007/s10916-025-02332-7",
+          "pmid": "41615529",
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://pubmed.ncbi.nlm.nih.gov/41615529/"
+        },
+        "provenance": {
+          "import_source": "archive/2026-09-21/records.json",
+          "retrieved_at": null,
+          "search_stream": null,
+          "query_or_seed": null,
+          "iteration": null
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "sample_size": null,
+          "target_construct": "technical_signal_quality",
+          "target_label": null,
+          "access_status": "unknown",
+          "evidence_role": "context_only",
+          "subject_domain": "unknown",
+          "modalities": []
+        },
+        "validation": {
+          "status": "verified_primary",
+          "screening_status": "included_core",
+          "full_text_status": "checked",
+          "checked_at": "2026-09-22",
+          "notes": "Scoping review of 27 heterogeneous studies spanning pain, stress and hemodynamic deterioration; it explicitly calls for real-world and clinical-impact validation and is not effectiveness evidence.",
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported",
+          "exclusion_reason": null
+        },
+        "risk_flags": [
+          "missing_cross_subject_validation"
+        ],
+        "relations": []
+      },
+      "состав_кластера": [
+        "S073",
+        "S074",
+        "S075",
+        "S244",
+        "S245",
+        "S249",
+        "S273"
+      ],
+      "validation": {
+        "status": "structurally_valid",
+        "checked_at": "2026-09-21",
+        "content_validation": "pending"
+      }
+    },
+    {
+      "id": "C13",
+      "тема": "Симуляция боли на коннектоме Drosophila",
+      "синтез": "DoomFly, Infinite Sugar; pain feedback; PPL101 dopamine receptors; этические аспекты.",
+      "записей": 7,
+      "представитель": {
+        "id": "S077",
+        "название": "The Fly's Last Second: Welfare states in connectome simulations",
+        "авторы": null,
+        "год": 2026,
+        "издание": "GitHub (Stories)",
+        "модальность": "Нейронная активность (симуляция)",
+        "задача": "Этические аспекты",
+        "метод": "Activation steering vector",
+        "датасет": "FlyWire",
+        "производительность": "Не применимо",
+        "кросс_субъект": "Не применимо",
+        "релевантность": 4,
+        "ограничения": null,
+        "тип_источника": "XAI_этика",
+        "identifiers": {
+          "doi": null,
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": null
+        },
+        "provenance": {
+          "import_source": "archive/2026-09-21/records.json",
+          "retrieved_at": null,
+          "search_stream": null,
+          "query_or_seed": null,
+          "iteration": null
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "sample_size": null,
+          "target_construct": "unknown",
+          "target_label": null,
+          "access_status": "unknown",
+          "evidence_role": "not_assigned",
+          "subject_domain": "simulation",
+          "modalities": [
+            "connectome",
+            "neural_activity",
+            "simulation_state"
+          ]
+        },
+        "validation": {
+          "status": "rejected",
+          "screening_status": "excluded_unverifiable",
+          "full_text_status": "unavailable",
+          "checked_at": "2026-09-22",
+          "notes": "The exact phrase identifies a science-fiction competition submission, not a scientific source or validated welfare-state measurement.",
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported",
+          "exclusion_reason": "unverifiable"
+        },
+        "risk_flags": [
+          "claim_not_supported"
+        ],
+        "relations": []
+      },
+      "состав_кластера": [
+        "S077",
+        "S090",
+        "S122",
+        "S138",
+        "S200",
+        "S201",
+        "S368"
+      ],
+      "validation": {
+        "status": "structurally_valid",
+        "checked_at": "2026-09-21",
+        "content_validation": "pending"
+      }
+    },
+    {
+      "id": "C14",
+      "тема": "Оптогенетика ноцицепции Drosophila",
+      "синтез": "ChR2 оптогенетика; активация ноцицепторов.",
+      "записей": 1,
+      "представитель": {
+        "id": "S090",
+        "название": "Optogenetic Stimulation of Nociceptive Escape Behaviors in Drosophila Larvae",
+        "авторы": "Stephanie E Mauthner; W Daniel Tracey",
+        "год": 2024,
+        "издание": "Cold Spring Harbor Protocols",
+        "модальность": "Нейронная активность",
+        "задача": "Оптогенетическая стимуляция ноцицепторов",
+        "метод": "ChR2 optogenetics",
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": "Не применимо",
+        "релевантность": 4,
+        "ограничения": null,
+        "тип_источника": "метод",
+        "identifiers": {
+          "doi": "10.1101/pdb.prot108128",
+          "pmid": "39095077",
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11787400/"
+        },
+        "provenance": {
+          "import_source": "archive/2026-09-21/records.json",
+          "retrieved_at": null,
+          "search_stream": null,
+          "query_or_seed": null,
+          "iteration": null
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "sample_size": null,
+          "target_construct": "protective_behavior",
+          "target_label": null,
+          "access_status": "unknown",
+          "evidence_role": "simulation_foundation",
+          "subject_domain": "drosophila_larva",
+          "modalities": [
+            "behavior",
+            "neural_activity"
+          ]
+        },
+        "validation": {
+          "status": "verified_primary",
+          "screening_status": "included_core",
+          "full_text_status": "checked",
+          "checked_at": "2026-09-22",
+          "notes": "This is an experimental protocol for activating larval nociceptors and eliciting rolling. It validates a nociceptive-behavior assay, not subjective pain or human transfer.",
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported",
+          "exclusion_reason": null
+        },
+        "risk_flags": [
+          "animal_to_human_transfer_unvalidated"
+        ],
+        "relations": []
+      },
+      "состав_кластера": [
+        "S090"
+      ],
+      "validation": {
+        "status": "structurally_valid",
+        "checked_at": "2026-09-21",
+        "content_validation": "pending"
+      }
+    },
+    {
+      "id": "C15",
+      "тема": "Восходящие ноцицептивные пути Drosophila",
+      "синтез": "Connectomics; восходящие пути; adult Drosophila; md-нейроны → Ipsigoro → Goro.",
+      "записей": 1,
+      "представитель": {
+        "id": "S029",
+        "название": "Ascending nociceptive pathways drive rapid escape and sustained avoidance in adult Drosophila",
+        "авторы": "Jones, J. M.; Sustar, A.; Mamiya, A. et al.",
+        "год": 2025,
+        "издание": "bioRxiv preprint",
+        "модальность": "Нейронная активность",
+        "задача": "Восходящие ноцицептивные пути",
+        "метод": "Connectomics, optogenetics",
+        "датасет": "Adult Drosophila",
+        "производительность": null,
+        "кросс_субъект": "Не применимо",
+        "релевантность": 4,
+        "ограничения": "Препринт",
+        "тип_источника": "препринт",
+        "identifiers": {
+          "doi": "10.1101/2025.10.28.684868",
+          "pmid": "41280033",
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://pubmed.ncbi.nlm.nih.gov/41280033/"
+        },
+        "provenance": {
+          "import_source": "archive/2026-09-21/records.json",
+          "retrieved_at": "2026-09-21",
+          "search_stream": "G0_primary_source_validation",
+          "query_or_seed": "Ascending nociceptive pathways drive rapid escape and sustained avoidance in adult Drosophila",
+          "iteration": "2026-09-21-pass-1"
+        },
+        "evidence": {
+          "species": "Drosophila melanogaster",
+          "population": "adult flies",
+          "sample_size": null,
+          "target_construct": "nociceptive_response",
+          "target_label": "escape and sustained avoidance after noxious stimulation",
+          "access_status": "open",
+          "evidence_role": "simulation_foundation",
+          "subject_domain": "drosophila_adult",
+          "modalities": [
+            "connectome",
+            "neural_activity"
+          ]
+        },
+        "validation": {
+          "status": "verified_primary",
+          "screening_status": "included_core",
+          "full_text_status": "checked",
+          "checked_at": "2026-09-21",
+          "notes": "Препринт, не прошедший журнальное рецензирование на дату проверки. Поддерживает модель ноцицепции, но не человеческой боли.",
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported",
+          "exclusion_reason": null
+        },
+        "risk_flags": [
+          "animal_to_human_transfer_unvalidated",
+          "missing_reported_metrics",
+          "preprint"
+        ],
+        "relations": []
+      },
+      "состав_кластера": [
+        "S029"
+      ],
+      "validation": {
+        "status": "structurally_valid",
+        "checked_at": "2026-09-21",
+        "content_validation": "pending"
+      }
+    },
+    {
+      "id": "C16",
+      "тема": "Холодовая ноцицепция Drosophila",
+      "синтез": "Connectome, EM; холодовые рецепторы.",
+      "записей": 1,
+      "представитель": {
+        "id": "S031",
+        "название": "Neural substrates of cold nociception in Drosophila larva",
+        "авторы": "Patel, A. A.; Cardona, A.; Cox, D. N.",
+        "год": 2025,
+        "издание": "eLife 12:RP91582",
+        "модальность": "Нейронная активность",
+        "задача": "Холодовая ноцицепция",
+        "метод": "Connectome, EM",
+        "датасет": "Larval connectome",
+        "производительность": null,
+        "кросс_субъект": "Не применимо",
+        "релевантность": 4,
+        "ограничения": null,
+        "тип_источника": "метод",
+        "identifiers": {
+          "doi": "10.7554/eLife.91582",
+          "pmid": "40512662",
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://pubmed.ncbi.nlm.nih.gov/40512662/"
+        },
+        "provenance": {
+          "import_source": "archive/2026-09-21/records.json",
+          "retrieved_at": "2026-09-21",
+          "search_stream": "G0_primary_source_validation",
+          "query_or_seed": "Neural substrates of cold nociception in Drosophila larva",
+          "iteration": "2026-09-21-pass-1"
+        },
+        "evidence": {
+          "species": "Drosophila melanogaster",
+          "population": "larvae",
+          "sample_size": null,
+          "target_construct": "nociceptive_response",
+          "target_label": "cold-evoked contraction and neural/calcium responses",
+          "access_status": "open",
+          "evidence_role": "simulation_foundation",
+          "subject_domain": "drosophila_larva",
+          "modalities": [
+            "connectome",
+            "neural_activity"
+          ]
+        },
+        "validation": {
+          "status": "verified_primary",
+          "screening_status": "included_core",
+          "full_text_status": "checked",
+          "checked_at": "2026-09-21",
+          "notes": "Функционально исследует холодовую ноцицепцию личинки; не подтверждает субъективную боль человека или перенос на SCS.",
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported",
+          "exclusion_reason": null
+        },
+        "risk_flags": [
+          "animal_to_human_transfer_unvalidated",
+          "missing_reported_metrics"
+        ],
+        "relations": []
+      },
+      "состав_кластера": [
+        "S031"
+      ],
+      "validation": {
+        "status": "structurally_valid",
+        "checked_at": "2026-09-21",
+        "content_validation": "pending"
+      }
+    },
+    {
+      "id": "C17",
+      "тема": "Ноцицептивная пластичность Drosophila",
+      "синтез": "Octopaminergic feedback; ноцицепция и память (mushroom body).",
+      "записей": 1,
+      "представитель": {
+        "id": "S065",
+        "название": "Dopaminergic Modulation of Mushroom Body Output Neurons Mediates Nociception-Induced Escape in Drosophila",
+        "авторы": "Chi-Lien Yang; Chia-Wen Chen; Kuan-Lin Feng; Hsiao-Chien Peng; Ming-Chin Wu; Ching-Che Charng; Li-An Chu; Yeong-Ray Wen; Ann-Shyn Chiang",
+        "год": 2026,
+        "издание": "eLife reviewed preprint",
+        "модальность": "Нейронная активность",
+        "задача": "Ноцицепция и память",
+        "метод": "Connectomics, optogenetics",
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": "Не применимо",
+        "релевантность": 4,
+        "ограничения": null,
+        "тип_источника": "метод",
+        "identifiers": {
+          "doi": "10.7554/eLife.110557.1",
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://elifesciences.org/reviewed-preprints/110557"
+        },
+        "provenance": {
+          "import_source": "archive/2026-09-21/records.json",
+          "retrieved_at": null,
+          "search_stream": null,
+          "query_or_seed": null,
+          "iteration": null
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "sample_size": null,
+          "target_construct": "nociceptive_response",
+          "target_label": null,
+          "access_status": "unknown",
+          "evidence_role": "simulation_foundation",
+          "subject_domain": "unknown",
+          "modalities": [
+            "connectome",
+            "neural_activity"
+          ]
+        },
+        "validation": {
+          "status": "verified_primary",
+          "screening_status": "included_core",
+          "full_text_status": "checked",
+          "checked_at": "2026-09-22",
+          "notes": "Reviewed preprint v1; anatomical tracing and perturbation support nociception-induced escape circuitry, not subjective pain or human transfer.",
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported",
+          "exclusion_reason": null
+        },
+        "risk_flags": [
+          "preprint",
+          "animal_to_human_transfer_unvalidated"
+        ],
+        "relations": []
+      },
+      "состав_кластера": [
+        "S065"
+      ],
+      "validation": {
+        "status": "structurally_valid",
+        "checked_at": "2026-09-21",
+        "content_validation": "pending"
+      }
+    },
+    {
+      "id": "C18",
+      "тема": "Коннектомика Drosophila (общие методы)",
+      "синтез": "FlyWire platform; реконструкция; v783 (139,255 нейронов, ~50M синапсов).",
+      "записей": 4,
+      "представитель": {
+        "id": "S106",
+        "название": "FlyWire: Online community for whole-brain connectomics",
+        "авторы": "Dorkenwald, S. et al.",
+        "год": 2022,
+        "издание": "Nature Methods, 19(1), 119–128",
+        "модальность": "Нейронная активность",
+        "задача": "Коннектомика",
+        "метод": "FlyWire platform",
+        "датасет": "FlyWire",
+        "производительность": null,
+        "кросс_субъект": "Не применимо",
+        "релевантность": 3,
+        "ограничения": "Препринт",
+        "тип_источника": "метод",
+        "identifiers": {
+          "doi": "10.1038/s41592-021-01330-0",
+          "pmid": "34949809",
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8903166/"
+        },
+        "provenance": {
+          "import_source": "archive/2026-09-21/records.json",
+          "retrieved_at": "2026-09-21",
+          "search_stream": "G0_primary_source_validation",
+          "query_or_seed": "FlyWire: Online community for whole-brain connectomics",
+          "iteration": "2026-09-21-pass-1"
+        },
+        "evidence": {
+          "species": "Drosophila melanogaster",
+          "population": "female adult fly brain electron-microscopy volume",
+          "sample_size": null,
+          "target_construct": "not_applicable",
+          "target_label": null,
+          "access_status": "open",
+          "evidence_role": "simulation_foundation",
+          "subject_domain": "unknown",
+          "modalities": [
+            "connectome",
+            "neural_activity"
+          ]
+        },
+        "validation": {
+          "status": "verified_primary",
+          "screening_status": "included_core",
+          "full_text_status": "checked",
+          "checked_at": "2026-09-21",
+          "notes": "Проверена статья о платформе совместной реконструкции. Это не функциональная симуляция и не датасет боли.",
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported",
+          "exclusion_reason": null
+        },
+        "risk_flags": [
+          "animal_to_human_transfer_unvalidated",
+          "missing_reported_metrics"
+        ],
+        "relations": []
+      },
+      "состав_кластера": [
+        "S061",
+        "S062",
+        "S106",
+        "S167"
+      ],
+      "validation": {
+        "status": "structurally_valid",
+        "checked_at": "2026-09-21",
+        "content_validation": "pending"
+      }
+    },
+    {
+      "id": "C19",
+      "тема": "Экстероцепция и механочувствительность Drosophila",
+      "синтез": "Эпидермальные клетки модулируют ноцицептивные поведенческие выходы.",
+      "записей": 1,
+      "представитель": {
+        "id": "S092",
+        "название": "Drosophila epidermal cells are intrinsically mechanosensitive and modulate nociceptive behavioral outputs",
+        "авторы": "Jiro Yoshino; Sonali S Mali; Claire R Williams; Takeshi Morita; Chloe E Emerson; Christopher J Arp; Sophie E Miller; Chang Yin; Lydia The; Chikayo Hemmi; Mana Motoyoshi; Kenichi Ishii; Kazuo Emoto; Diana M Bautista; Jay Z Parrish",
+        "год": 2025,
+        "издание": "eLife",
+        "модальность": "Нейронная активность",
+        "задача": "Механочувствительность эпидермиса",
+        "метод": "Optogenetics, calcium imaging",
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": "Не применимо",
+        "релевантность": 3,
+        "ограничения": null,
+        "тип_источника": "метод",
+        "identifiers": {
+          "doi": "10.7554/eLife.95379",
+          "pmid": "40353351",
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://pubmed.ncbi.nlm.nih.gov/40353351/"
+        },
+        "provenance": {
+          "import_source": "archive/2026-09-21/records.json",
+          "retrieved_at": null,
+          "search_stream": null,
+          "query_or_seed": null,
+          "iteration": null
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "sample_size": null,
+          "target_construct": "nociceptive_response",
+          "target_label": null,
+          "access_status": "unknown",
+          "evidence_role": "simulation_foundation",
+          "subject_domain": "drosophila_adult",
+          "modalities": [
+            "behavior",
+            "neural_activity"
+          ]
+        },
+        "validation": {
+          "status": "verified_primary",
+          "screening_status": "included_core",
+          "full_text_status": "checked",
+          "checked_at": "2026-09-22",
+          "notes": "The work identifies epidermal contributions to larval mechanonociception and sensitization. Behavioral escape remains a nociceptive outcome, not evidence of subjective pain or human transfer.",
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported",
+          "exclusion_reason": null
+        },
+        "risk_flags": [
+          "animal_to_human_transfer_unvalidated"
+        ],
+        "relations": []
+      },
+      "состав_кластера": [
+        "S092"
+      ],
+      "validation": {
+        "status": "structurally_valid",
+        "checked_at": "2026-09-21",
+        "content_validation": "pending"
+      }
+    },
+    {
+      "id": "C20",
+      "тема": "Closed-loop SCS (обзор)",
+      "синтез": "ECAP-контроль; субъективные + объективные маркеры; scoping review; meta-analysis; PCLC framework (major/minor loop).",
+      "записей": 2,
+      "представитель": {
+        "id": "S079",
+        "название": "Control Signals in Closed-Loop Spinal Cord Stimulation in Patients with Chronic Pain: A Scoping Review",
+        "авторы": "Prateek Dullur; Meenakshi Singhal; Brian Hong; Mehreen Ali; Yuan Yang; Ravishankar Iyer; Suguna Pappu",
+        "год": 2026,
+        "издание": "Neuromodulation: Technology at the Neural Interface",
+        "модальность": null,
+        "задача": null,
+        "метод": null,
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "релевантность": 5,
+        "ограничения": "Open publisher review checked; ECAP is a control signal, not a direct measure of pain.",
+        "тип_источника": "обзор",
+        "identifiers": {
+          "doi": "10.1016/j.neurom.2025.11.011",
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://www.sciencedirect.com/science/article/pii/S1094715925011705"
+        },
+        "provenance": {
+          "import_source": "archive/2026-09-21/records.json",
+          "retrieved_at": "2026-09-22",
+          "search_stream": "relevance-5/registry-and-primary-review",
+          "query_or_seed": "Control Signals in Closed-Loop Spinal Cord Stimulation in Patients with Chronic Pain: A Scoping Review",
+          "iteration": 1
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "sample_size": null,
+          "target_construct": "unknown",
+          "target_label": null,
+          "access_status": "unknown",
+          "evidence_role": "method_baseline",
+          "subject_domain": "unknown",
+          "modalities": []
+        },
+        "validation": {
+          "status": "verified_primary",
+          "screening_status": "included_core",
+          "full_text_status": "checked",
+          "checked_at": "2026-09-22",
+          "notes": "Open publisher review checked; ECAP is a control signal, not a direct measure of pain.",
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported",
+          "exclusion_reason": null
+        },
+        "risk_flags": [],
+        "relations": []
+      },
+      "состав_кластера": [
+        "S079",
+        "S357"
+      ],
+      "validation": {
+        "status": "structurally_valid",
+        "checked_at": "2026-09-21",
+        "content_validation": "pending"
+      }
+    },
+    {
+      "id": "C21",
+      "тема": "Патенты SCS и нейроинтерфейсы",
+      "синтез": "FL + graph theory; ECAP-контроль; SCI therapy; d_total; analog SA rejection.",
+      "записей": 8,
+      "представитель": {
+        "id": "S098",
+        "название": "Machine learning to optimize spinal cord stimulation",
+        "авторы": "Michael A. Moffitt; Natalie A. Brill; Jianwen Gu; Juan Gabriel Hincapie Ordonez; Changfang Zhu; Hemant Bokil; Stephen Carcieri",
+        "год": 2023,
+        "издание": "Google Patents / USPTO publication metadata",
+        "модальность": "Нейромодуляция",
+        "задача": "Оптимизация SCS",
+        "метод": "ML для параметров стимуляции",
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "релевантность": 4,
+        "ограничения": "Патент",
+        "тип_источника": "патент",
+        "identifiers": {
+          "doi": null,
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": "US11666761B2",
+          "dataset_id": null,
+          "exact_url": "https://patents.google.com/patent/US11666761B2/en"
+        },
+        "provenance": {
+          "import_source": "archive/2026-09-21/records.json",
+          "retrieved_at": null,
+          "search_stream": null,
+          "query_or_seed": null,
+          "iteration": null
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "sample_size": null,
+          "target_construct": "scs_response",
+          "target_label": null,
+          "access_status": "unknown",
+          "evidence_role": "context_only",
+          "subject_domain": "human_clinical",
+          "modalities": []
+        },
+        "validation": {
+          "status": "verified_metadata",
+          "screening_status": "included_core",
+          "full_text_status": "metadata_only",
+          "checked_at": "2026-09-22",
+          "notes": "The patent describes optimization concepts and possible feedback measures. It is not empirical evidence that an ML optimizer improves patient outcomes.",
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported",
+          "exclusion_reason": null
+        },
+        "risk_flags": [
+          "patent_not_empirical_evidence",
+          "metadata_only"
+        ],
+        "relations": []
+      },
+      "состав_кластера": [
+        "S098",
+        "S099",
+        "S140",
+        "S144",
+        "S240",
+        "S241",
+        "S272",
+        "S289"
+      ],
+      "validation": {
+        "status": "structurally_valid",
+        "checked_at": "2026-09-21",
+        "content_validation": "pending"
+      }
+    },
+    {
+      "id": "C22",
+      "тема": "Безопасность федеративного обучения",
+      "синтез": "Vulnerabilities, attacks, defenses; differential privacy.",
+      "записей": 2,
+      "представитель": {
+        "id": "S097",
+        "название": "Federated Learning in Edge Computing: Vulnerabilities, Attacks, and Defenses—A Survey",
+        "авторы": "Sahar Saleh Alhawas; Murad A Rassam",
+        "год": 2026,
+        "издание": "Sensors",
+        "модальность": "Обзор",
+        "задача": "Безопасность FL",
+        "метод": "Survey",
+        "датасет": "Не применимо",
+        "производительность": "Не применимо",
+        "кросс_субъект": "Не применимо",
+        "релевантность": 3,
+        "ограничения": null,
+        "тип_источника": "федеративное_SCS",
+        "identifiers": {
+          "doi": "10.3390/s26041275",
+          "pmid": "41755214",
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://www.mdpi.com/1424-8220/26/4/1275"
+        },
+        "provenance": {
+          "import_source": "archive/2026-09-21/records.json",
+          "retrieved_at": null,
+          "search_stream": null,
+          "query_or_seed": null,
+          "iteration": null
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "sample_size": null,
+          "target_construct": "not_applicable",
+          "target_label": null,
+          "access_status": "unknown",
+          "evidence_role": "context_only",
+          "subject_domain": "unknown",
+          "modalities": []
+        },
+        "validation": {
+          "status": "verified_primary",
+          "screening_status": "included_core",
+          "full_text_status": "checked",
+          "checked_at": "2026-09-22",
+          "notes": "General structured survey of edge federated-learning security; it contains no pain, SCS, ECAP, or clinical-transfer validation.",
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported",
+          "exclusion_reason": null
+        },
+        "risk_flags": [],
+        "relations": []
+      },
+      "состав_кластера": [
+        "S097",
+        "S187"
+      ],
+      "validation": {
+        "status": "structurally_valid",
+        "checked_at": "2026-09-21",
+        "content_validation": "pending"
+      }
+    },
+    {
+      "id": "C23",
+      "тема": "Real-time gait phase detection для нейромодуляции",
+      "синтез": "Edge AI; closed-loop нейромодуляция.",
+      "записей": 1,
+      "представитель": {
+        "id": "S150",
+        "название": "Real-time gait phase detection with FL",
+        "авторы": null,
+        "год": 2026,
+        "издание": "MDPI",
+        "модальность": "ЭМГ",
+        "задача": "Closed-loop нейромодуляция",
+        "метод": "FL + Edge Computing",
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": "Да",
+        "релевантность": 4,
+        "ограничения": null,
+        "тип_источника": "федеративное_SCS",
+        "identifiers": {
+          "doi": null,
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": null
+        },
+        "provenance": {
+          "import_source": "archive/2026-09-21/records.json",
+          "retrieved_at": null,
+          "search_stream": null,
+          "query_or_seed": null,
+          "iteration": null
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "sample_size": null,
+          "target_construct": "unknown",
+          "target_label": null,
+          "access_status": "unknown",
+          "evidence_role": "not_assigned",
+          "subject_domain": "unknown",
+          "modalities": [
+            "emg"
+          ]
+        },
+        "validation": {
+          "status": "rejected",
+          "screening_status": "excluded_unverifiable",
+          "full_text_status": "unavailable",
+          "checked_at": "2026-09-22",
+          "notes": "No exact primary source matching the imported federated-learning title was found; nearby gait-phase papers use other methods.",
+          "split_unit": "not_reported",
+          "cross_subject": "yes",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported",
+          "exclusion_reason": "unverifiable"
+        },
+        "risk_flags": [
+          "claim_not_supported"
+        ],
+        "relations": []
+      },
+      "состав_кластера": [
+        "S150"
+      ],
+      "validation": {
+        "status": "structurally_valid",
+        "checked_at": "2026-09-21",
+        "content_validation": "pending"
+      }
+    },
+    {
+      "id": "C27",
+      "тема": "Гибридные CNN–BiLSTM модели",
+      "синтез": "CNN + BiLSTM; self-attention; 93.98% accuracy.",
+      "записей": 1,
+      "представитель": {
+        "id": "S082",
+        "название": "Pain intensity classification and evaluation of individual differences in subjects based on hybrid CNN–BiLSTM approach",
+        "авторы": "Mingxuan Sun; Yang Liu; Daoshuang Geng; Xiaobang Wu; Daoguo Yang",
+        "год": 2026,
+        "издание": "Biomedical Signal Processing and Control",
+        "модальность": null,
+        "задача": null,
+        "метод": null,
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "релевантность": 5,
+        "ограничения": "Publisher abstract checked; LOSO evaluation is reported, but this does not establish clinical validity.",
+        "тип_источника": "метод",
+        "identifiers": {
+          "doi": "10.1016/j.bspc.2026.109815",
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://www.sciencedirect.com/science/article/pii/S1746809426003691"
+        },
+        "provenance": {
+          "import_source": "archive/2026-09-21/records.json",
+          "retrieved_at": "2026-09-22",
+          "search_stream": "relevance-5/registry-and-primary-review",
+          "query_or_seed": "Pain intensity classification and evaluation of individual differences in subjects based on hybrid CNN–BiLSTM approach",
+          "iteration": 1
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "sample_size": null,
+          "target_construct": "unknown",
+          "target_label": null,
+          "access_status": "unknown",
+          "evidence_role": "method_baseline",
+          "subject_domain": "unknown",
+          "modalities": []
+        },
+        "validation": {
+          "status": "verified_primary",
+          "screening_status": "included_core",
+          "full_text_status": "checked",
+          "checked_at": "2026-09-22",
+          "notes": "Publisher abstract checked; LOSO evaluation is reported, but this does not establish clinical validity.",
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported",
+          "exclusion_reason": null
+        },
+        "risk_flags": [],
+        "relations": []
+      },
+      "состав_кластера": [
+        "S082"
+      ],
+      "validation": {
+        "status": "structurally_valid",
+        "checked_at": "2026-09-21",
+        "content_validation": "pending"
+      }
+    },
+    {
+      "id": "C29",
+      "тема": "HCAT-Pain",
+      "синтез": "Hierarchical cross-attention transformer; не-контактная детекция.",
+      "записей": 1,
+      "представитель": {
+        "id": "S086",
+        "название": "Hierarchical Cross-Attention Transformer for Non-contact Multimodal Pain Classification using Remote Physiological Signals and Visual Features",
+        "авторы": "Anup Kumar Gupta; Puneet Gupta; Abhinav Dhall",
+        "год": 2026,
+        "издание": "2026 IEEE 20th International Conference on Automatic Face and Gesture Recognition (FG)",
+        "модальность": null,
+        "задача": null,
+        "метод": null,
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "релевантность": 5,
+        "ограничения": "Official institutional repository metadata and abstract checked.",
+        "тип_источника": "метод",
+        "identifiers": {
+          "doi": "10.1109/FG67764.2026.11556963",
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://dspace.iiti.ac.in/handle/123456789/18784"
+        },
+        "provenance": {
+          "import_source": "archive/2026-09-21/records.json",
+          "retrieved_at": "2026-09-22",
+          "search_stream": "relevance-5/registry-and-primary-review",
+          "query_or_seed": "Hierarchical Cross-Attention Transformer for Non-contact Multimodal Pain Classification using Remote Physiological Signals and Visual Features",
+          "iteration": 1
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "sample_size": null,
+          "target_construct": "unknown",
+          "target_label": null,
+          "access_status": "unknown",
+          "evidence_role": "method_baseline",
+          "subject_domain": "unknown",
+          "modalities": []
+        },
+        "validation": {
+          "status": "verified_primary",
+          "screening_status": "included_core",
+          "full_text_status": "checked",
+          "checked_at": "2026-09-22",
+          "notes": "Official institutional repository metadata and abstract checked.",
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported",
+          "exclusion_reason": null
+        },
+        "risk_flags": [],
+        "relations": []
+      },
+      "состав_кластера": [
+        "S086"
+      ],
+      "validation": {
+        "status": "structurally_valid",
+        "checked_at": "2026-09-21",
+        "content_validation": "pending"
+      }
+    },
+    {
+      "id": "C30",
+      "тема": "GIAFormer",
+      "синтез": "Gradient-infused attention; 90.51% accuracy; EDA + fNIRS.",
+      "записей": 1,
+      "представитель": {
+        "id": "S040",
+        "название": "GIAFormer: A Gradient-Infused Attention and Transformer for Pain Assessment with EDA-fNIRS Fusion",
+        "авторы": "Muhammad Umar Khan; Girija Chetty; Stefanos Gkikas; Manolis Tsiknakis; Roland Goecke; Raul Fernandez-Rojas",
+        "год": 2026,
+        "издание": "Information Fusion",
+        "модальность": null,
+        "задача": null,
+        "метод": null,
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "релевантность": 5,
+        "ограничения": "Open publisher abstract checked; 65 AI4Pain subjects and LOSO accuracy 90.51% are publisher-reported.",
+        "тип_источника": "метод",
+        "identifiers": {
+          "doi": "10.1016/j.inffus.2026.104173",
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://www.sciencedirect.com/science/article/pii/S1566253526000527"
+        },
+        "provenance": {
+          "import_source": "archive/2026-09-21/records.json",
+          "retrieved_at": "2026-09-22",
+          "search_stream": "relevance-5/registry-and-primary-review",
+          "query_or_seed": "GIAFormer: A Gradient-Infused Attention and Transformer for Pain Assessment with EDA-fNIRS Fusion",
+          "iteration": 1
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "sample_size": null,
+          "target_construct": "unknown",
+          "target_label": null,
+          "access_status": "unknown",
+          "evidence_role": "method_baseline",
+          "subject_domain": "unknown",
+          "modalities": []
+        },
+        "validation": {
+          "status": "verified_primary",
+          "screening_status": "included_core",
+          "full_text_status": "checked",
+          "checked_at": "2026-09-22",
+          "notes": "Open publisher abstract checked; 65 AI4Pain subjects and LOSO accuracy 90.51% are publisher-reported.",
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported",
+          "exclusion_reason": null
+        },
+        "risk_flags": [],
+        "relations": []
+      },
+      "состав_кластера": [
+        "S040"
+      ],
+      "validation": {
+        "status": "structurally_valid",
+        "checked_at": "2026-09-21",
+        "content_validation": "pending"
+      }
+    },
+    {
+      "id": "C31",
+      "тема": "DANN-Transformer",
+      "синтез": "DANN; кросс-доменная детекция; 4 физиологических сигнала.",
+      "записей": 1,
+      "представитель": {
+        "id": "S088",
+        "название": "Cross-Domain Multimodal Pain Detection Using a DANN–Transformer Architecture with Supervised Contrastive Warmup and Test-Time Augmentation",
+        "авторы": "Samia Bouchfar; Yassmine Bouchfar; Hamid El Malali; Azeddine Mouhsen; Lhoucine Ben Taleb; Mohammed Harmouchi",
+        "год": 2026,
+        "издание": "2026 International Conference on Intelligent Systems and Digital Applications (ISDA)",
+        "модальность": null,
+        "задача": null,
+        "метод": null,
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "релевантность": 5,
+        "ограничения": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+        "тип_источника": "кросс_субъект",
+        "identifiers": {
+          "doi": "10.1109/ISDA70544.2026.11606012",
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://doi.org/10.1109/isda70544.2026.11606012"
+        },
+        "provenance": {
+          "import_source": "archive/2026-09-21/records.json",
+          "retrieved_at": "2026-09-22",
+          "search_stream": "relevance-5/registry-and-primary-review",
+          "query_or_seed": "Cross-Domain Multimodal Pain Detection Using a DANN–Transformer Architecture with Supervised Contrastive Warmup and Test-Time Augmentation",
+          "iteration": 1
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "sample_size": null,
+          "target_construct": "unknown",
+          "target_label": null,
+          "access_status": "unknown",
+          "evidence_role": "context_only",
+          "subject_domain": "unknown",
+          "modalities": []
+        },
+        "validation": {
+          "status": "verified_metadata",
+          "screening_status": "included_core",
+          "full_text_status": "metadata_only",
+          "checked_at": "2026-09-22",
+          "notes": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported",
+          "exclusion_reason": null
+        },
+        "risk_flags": [
+          "metadata_only"
+        ],
+        "relations": []
+      },
+      "состав_кластера": [
+        "S088"
+      ],
+      "validation": {
+        "status": "structurally_valid",
+        "checked_at": "2026-09-21",
+        "content_validation": "pending"
+      }
+    },
+    {
+      "id": "C32",
+      "тема": "Subject-Incremental learning",
+      "синтез": "Multi-Head attention; кросс-субъектная генерализация; 87.68% accuracy для 6-class.",
+      "записей": 1,
+      "представитель": {
+        "id": "S039",
+        "название": "Deep Multi-Head attention network with Subject-Incremental learning for Cross-Subject generalization in objective pain monitoring using multimodal physiological signals",
+        "авторы": "Rakesh Chandra Joshi; Suman Kumar; Sujeet Kumar Singh Gautam; Malay Kishore Dutta",
+        "год": 2026,
+        "издание": "Biomedical Signal Processing and Control 128:111261",
+        "модальность": "EDA; BVP; ECG; EMG; respiration",
+        "задача": "Six-class participant-independent experimental pain recognition",
+        "метод": "Subject-incremental multi-head attention and deep fusion with SHAP",
+        "датасет": "PainMonit PMED",
+        "производительность": "87.68% ± 0.41% mean participant-level accuracy across four subject-independent outer folds",
+        "кросс_субъект": "Да, subject-wise four-fold outer cross-validation",
+        "релевантность": 5,
+        "ограничения": "52 healthy participants under controlled thermal stimulation; no chronic-pain clinical validation.",
+        "тип_источника": "кросс_субъект",
+        "identifiers": {
+          "doi": "10.1016/j.bspc.2026.111261",
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://www.sciencedirect.com/science/article/pii/S174680942601815X"
+        },
+        "provenance": {
+          "import_source": "archive/2026-09-21/records.json",
+          "retrieved_at": "2026-09-22",
+          "search_stream": "relevance-5/batch-001",
+          "query_or_seed": "\"Deep Multi-Head attention network\" \"Subject-Incremental\"",
+          "iteration": 1
+        },
+        "evidence": {
+          "species": "Homo sapiens",
+          "population": "52 healthy PMED participants exposed to graded thermal stimulation",
+          "sample_size": 52,
+          "target_construct": "experimental_pain_class",
+          "target_label": "baseline, non-painful stimulation, and four graded pain levels",
+          "access_status": "open",
+          "evidence_role": "method_baseline",
+          "subject_domain": "human_healthy",
+          "modalities": [
+            "bvp_ppg",
+            "ecg",
+            "eda",
+            "emg"
+          ]
+        },
+        "validation": {
+          "status": "verified_primary",
+          "screening_status": "included_core",
+          "full_text_status": "checked",
+          "checked_at": "2026-09-22",
+          "notes": "Primary publisher record and article text checked.",
+          "split_unit": "participant",
+          "cross_subject": "yes",
+          "external_validation": "no",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported",
+          "exclusion_reason": null
+        },
+        "risk_flags": [
+          "future_or_recent_record_requires_recheck"
+        ],
+        "relations": []
+      },
+      "состав_кластера": [
+        "S039"
+      ],
+      "validation": {
+        "status": "structurally_valid",
+        "checked_at": "2026-09-21",
+        "content_validation": "pending"
+      }
+    },
+    {
+      "id": "C33",
+      "тема": "Synthetic pain data (GAN/diffusion)",
+      "синтез": "ControlNet; diffusion; identity preservation; PainControl.",
+      "записей": 3,
+      "представитель": {
+        "id": "S084",
+        "название": "PainControl: Identity-Preserving Pain Expression Transfer with Generative Diffusion Models",
+        "авторы": "Yasamin Zarghami; Muhammad Muzammil; Vida Adeli; Hailey Reimer; Thomas Hadjistavropoulos; Babak Taati",
+        "год": 2026,
+        "издание": "BioMedical Engineering OnLine",
+        "модальность": "Лицевые экспрессии",
+        "задача": "Генерация синтетических данных",
+        "метод": "ControlNet, diffusion",
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "релевантность": 4,
+        "ограничения": null,
+        "тип_источника": "генеративные_модели",
+        "identifiers": {
+          "doi": "10.1186/s12938-026-01561-2",
+          "pmid": "41968302",
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://pubmed.ncbi.nlm.nih.gov/41968302/"
+        },
+        "provenance": {
+          "import_source": "archive/2026-09-21/records.json",
+          "retrieved_at": null,
+          "search_stream": null,
+          "query_or_seed": null,
+          "iteration": null
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "sample_size": null,
+          "target_construct": "experimental_pain_class",
+          "target_label": null,
+          "access_status": "unknown",
+          "evidence_role": "method_baseline",
+          "subject_domain": "simulation",
+          "modalities": [
+            "video_face"
+          ]
+        },
+        "validation": {
+          "status": "verified_primary",
+          "screening_status": "included_core",
+          "full_text_status": "checked",
+          "checked_at": "2026-09-22",
+          "notes": "Synthetic augmentation did not improve the classifier in the general regime and showed AU-intensity and temporal limitations; gains were confined to data-scarce regimes.",
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported",
+          "exclusion_reason": null
+        },
+        "risk_flags": [
+          "synthetic_only"
+        ],
+        "relations": []
+      },
+      "состав_кластера": [
+        "S083",
+        "S084",
+        "S192"
+      ],
+      "validation": {
+        "status": "structurally_valid",
+        "checked_at": "2026-09-21",
+        "content_validation": "pending"
+      }
+    },
+    {
+      "id": "C34",
+      "тема": "ModMix: аугментация данных",
+      "синтез": "Random modality shuffling; zero-shot.",
+      "записей": 1,
+      "представитель": {
+        "id": "S035",
+        "название": "ModMix: Data Augmentation for Multimodal Pain Detection",
+        "авторы": "Mehmet Erdal; Sascha Gruss; Steffen Walter; Friedhelm Schwenker",
+        "год": 2024,
+        "издание": "ICPR Workshops and Challenges",
+        "модальность": "Мультимодальная",
+        "задача": "Аугментация данных",
+        "метод": "Random modality shuffling",
+        "датасет": "BioVid",
+        "производительность": null,
+        "кросс_субъект": null,
+        "релевантность": 4,
+        "ограничения": null,
+        "тип_источника": "метод",
+        "identifiers": {
+          "doi": "10.1007/978-3-031-88220-3_11",
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://doi.org/10.1007/978-3-031-88220-3_11"
+        },
+        "provenance": {
+          "import_source": "archive/2026-09-21/records.json",
+          "retrieved_at": null,
+          "search_stream": null,
+          "query_or_seed": null,
+          "iteration": null
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "sample_size": null,
+          "target_construct": "experimental_pain_class",
+          "target_label": null,
+          "access_status": "unknown",
+          "evidence_role": "method_baseline",
+          "subject_domain": "human_healthy",
+          "modalities": []
+        },
+        "validation": {
+          "status": "verified_metadata",
+          "screening_status": "included_core",
+          "full_text_status": "metadata_only",
+          "checked_at": "2026-09-22",
+          "notes": "Bibliographic identity is confirmed; full-text claims, split design and augmentation gains were not independently checked.",
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported",
+          "exclusion_reason": null
+        },
+        "risk_flags": [
+          "metadata_only",
+          "missing_cross_subject_validation"
+        ],
+        "relations": []
+      },
+      "состав_кластера": [
+        "S035"
+      ],
+      "validation": {
+        "status": "structurally_valid",
+        "checked_at": "2026-09-21",
+        "content_validation": "pending"
+      }
+    },
+    {
+      "id": "C35",
+      "тема": "AI4Pain / BioVid датасеты",
+      "синтез": "Публичные датасеты для детекции боли (мультимодальные).",
+      "записей": 2,
+      "представитель": {
+        "id": "S280",
+        "название": "BioVid Heat Pain Database",
+        "авторы": "Walter, S.; Gruss, S.; Ehleiter, H. et al.",
+        "год": 2013,
+        "издание": "Official database page; Cyberworlds 2013 descriptor",
+        "модальность": "Видео, GSR/EDA, ECG, EMG",
+        "задача": "Оценка реакции на индивидуально калиброванную экспериментальную тепловую стимуляцию",
+        "метод": "Мультимодальный набор данных",
+        "датасет": "BioVid Heat Pain Database, Parts A–E",
+        "производительность": "Не применимо: описание набора данных",
+        "кросс_субъект": "Рекомендуется LOSO; фиксировать точный состав участников",
+        "релевантность": 5,
+        "ограничения": "Экспериментальная острая боль у здоровых взрослых; доступ по соглашению; не SCS/ECAP",
+        "тип_источника": "датасет",
+        "identifiers": {
+          "doi": null,
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": "BioVid Heat Pain Database",
+          "exact_url": "https://www.nit.ovgu.de/BioVid.html"
+        },
+        "provenance": {
+          "import_source": "archive/2026-09-21/records.json",
+          "retrieved_at": "2026-09-21",
+          "search_stream": "G0_primary_source_validation",
+          "query_or_seed": "BioVid Heat Pain Database",
+          "iteration": "2026-09-21-pass-1"
+        },
+        "evidence": {
+          "species": "Homo sapiens",
+          "population": "healthy adults exposed to calibrated experimental heat",
+          "sample_size": "90 recruited; 87 in Part A",
+          "target_construct": "experimental_pain_class",
+          "target_label": "individualized heat-stimulus levels; pain-related responses",
+          "access_status": "agreement_required",
+          "evidence_role": "human_validation",
+          "subject_domain": "human_clinical",
+          "modalities": [
+            "ecg",
+            "eda",
+            "emg",
+            "video_face"
+          ]
+        },
+        "validation": {
+          "status": "verified_primary",
+          "screening_status": "included_core",
+          "full_text_status": "checked",
+          "checked_at": "2026-09-21",
+          "notes": "Part A: video, GSR/EDA, ECG and trapezius EMG; non-commercial research access requires institutional agreement.",
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported",
+          "exclusion_reason": null
+        },
+        "risk_flags": [],
+        "relations": []
+      },
+      "состав_кластера": [
+        "S280",
+        "S291"
+      ],
+      "validation": {
+        "status": "structurally_valid",
+        "checked_at": "2026-09-21",
+        "content_validation": "pending"
+      }
+    },
+    {
+      "id": "C37",
+      "тема": "Ноцицепция и память Drosophila",
+      "синтез": "Dopaminergic modulation; mushroom body; octopaminergic feedback.",
+      "записей": 1,
+      "представитель": {
+        "id": "S065",
+        "название": "Dopaminergic Modulation of Mushroom Body Output Neurons Mediates Nociception-Induced Escape in Drosophila",
+        "авторы": "Chi-Lien Yang; Chia-Wen Chen; Kuan-Lin Feng; Hsiao-Chien Peng; Ming-Chin Wu; Ching-Che Charng; Li-An Chu; Yeong-Ray Wen; Ann-Shyn Chiang",
+        "год": 2026,
+        "издание": "eLife reviewed preprint",
+        "модальность": "Нейронная активность",
+        "задача": "Ноцицепция и память",
+        "метод": "Connectomics, optogenetics",
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": "Не применимо",
+        "релевантность": 4,
+        "ограничения": null,
+        "тип_источника": "метод",
+        "identifiers": {
+          "doi": "10.7554/eLife.110557.1",
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://elifesciences.org/reviewed-preprints/110557"
+        },
+        "provenance": {
+          "import_source": "archive/2026-09-21/records.json",
+          "retrieved_at": null,
+          "search_stream": null,
+          "query_or_seed": null,
+          "iteration": null
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "sample_size": null,
+          "target_construct": "nociceptive_response",
+          "target_label": null,
+          "access_status": "unknown",
+          "evidence_role": "simulation_foundation",
+          "subject_domain": "unknown",
+          "modalities": [
+            "connectome",
+            "neural_activity"
+          ]
+        },
+        "validation": {
+          "status": "verified_primary",
+          "screening_status": "included_core",
+          "full_text_status": "checked",
+          "checked_at": "2026-09-22",
+          "notes": "Reviewed preprint v1; anatomical tracing and perturbation support nociception-induced escape circuitry, not subjective pain or human transfer.",
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported",
+          "exclusion_reason": null
+        },
+        "risk_flags": [
+          "preprint",
+          "animal_to_human_transfer_unvalidated"
+        ],
+        "relations": []
+      },
+      "состав_кластера": [
+        "S065"
+      ],
+      "validation": {
+        "status": "structurally_valid",
+        "checked_at": "2026-09-21",
+        "content_validation": "pending"
+      }
+    },
+    {
+      "id": "C38",
+      "тема": "Сенсорная настройка Drosophila",
+      "синтез": "Larva → adult; transcriptomics.",
+      "записей": 1,
+      "представитель": {
+        "id": "S062",
+        "название": "Ascending nociceptive pathways drive rapid escape and sustained avoidance in adult Drosophila",
+        "авторы": "Jessica M Jones; Anne Sustar; Akira Mamiya; Sarah Walling-Bell; Grant M Chou; Andrew P Cook; John C Tuthill",
+        "год": 2025,
+        "издание": "bioRxiv",
+        "модальность": "Нейронная активность",
+        "задача": "Эволюция сенсорной настройки",
+        "метод": "Transcriptomics, imaging",
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": "Не применимо",
+        "релевантность": 3,
+        "ограничения": "Препринт",
+        "тип_источника": "препринт",
+        "identifiers": {
+          "doi": "10.1101/2025.10.28.684868",
+          "pmid": "41280033",
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://pubmed.ncbi.nlm.nih.gov/41280033/"
+        },
+        "provenance": {
+          "import_source": "archive/2026-09-21/records.json",
+          "retrieved_at": null,
+          "search_stream": null,
+          "query_or_seed": null,
+          "iteration": null
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "sample_size": null,
+          "target_construct": "nociceptive_response",
+          "target_label": null,
+          "access_status": "unknown",
+          "evidence_role": "simulation_foundation",
+          "subject_domain": "unknown",
+          "modalities": [
+            "neural_activity"
+          ]
+        },
+        "validation": {
+          "status": "verified_primary",
+          "screening_status": "included_core",
+          "full_text_status": "checked",
+          "checked_at": "2026-09-22",
+          "notes": "The preprint identifies adult-fly nociceptors and ascending pathways supporting escape and sustained avoidance. Its discussion of pain criteria does not demonstrate subjective experience or human transfer.",
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported",
+          "exclusion_reason": null
+        },
+        "risk_flags": [
+          "preprint",
+          "animal_to_human_transfer_unvalidated"
+        ],
+        "relations": []
+      },
+      "состав_кластера": [
+        "S062"
+      ],
+      "validation": {
+        "status": "structurally_valid",
+        "checked_at": "2026-09-21",
+        "content_validation": "pending"
+      }
+    },
+    {
+      "id": "C39",
+      "тема": "Консервация коннектома",
+      "синтез": "Synaptic density; connectivity.",
+      "записей": 1,
+      "представитель": {
+        "id": "S061",
+        "название": "Synaptic density and relative connectivity conservation maintain circuit stability across development",
+        "авторы": "Ingo Fritz; Feiyu Wang; Ricardo Chirif; Nikos Malakasis; Julijana Gjorgjieva; Andre Ferreira Castro",
+        "год": 2025,
+        "издание": "eLife reviewed preprint",
+        "модальность": "Нейронная активность",
+        "задача": "Консервация коннектома",
+        "метод": "EM, connectome",
+        "датасет": "Larval",
+        "производительность": null,
+        "кросс_субъект": "Не применимо",
+        "релевантность": 3,
+        "ограничения": "Препринт",
+        "тип_источника": "препринт",
+        "identifiers": {
+          "doi": "10.7554/eLife.108643.1",
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://elifesciences.org/reviewed-preprints/108643"
+        },
+        "provenance": {
+          "import_source": "archive/2026-09-21/records.json",
+          "retrieved_at": null,
+          "search_stream": null,
+          "query_or_seed": null,
+          "iteration": null
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "sample_size": null,
+          "target_construct": "nociceptive_response",
+          "target_label": null,
+          "access_status": "unknown",
+          "evidence_role": "simulation_foundation",
+          "subject_domain": "drosophila_larva",
+          "modalities": [
+            "connectome",
+            "neural_activity"
+          ]
+        },
+        "validation": {
+          "status": "verified_primary",
+          "screening_status": "included_core",
+          "full_text_status": "checked",
+          "checked_at": "2026-09-22",
+          "notes": "The study combines EM reconstructions and passive single-cell modeling of a larval nociceptive circuit across development. It does not model whole-brain dynamics, subjective pain or human transfer.",
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported",
+          "exclusion_reason": null
+        },
+        "risk_flags": [
+          "preprint",
+          "animal_to_human_transfer_unvalidated"
+        ],
+        "relations": []
+      },
+      "состав_кластера": [
+        "S061"
+      ],
+      "validation": {
+        "status": "structurally_valid",
+        "checked_at": "2026-09-21",
+        "content_validation": "pending"
+      }
+    },
+    {
+      "id": "C40",
+      "тема": "Этика симуляции боли",
+      "синтез": "Activation steering; welfare states; affective indeterminacy; architectural audit; 'Mousing' moral category.",
+      "записей": 4,
+      "представитель": {
+        "id": "S122",
+        "название": "Ethics of whole-brain connectome simulations",
+        "авторы": null,
+        "год": 2026,
+        "издание": "GitHub (Stories)",
+        "модальность": "Нейронная активность",
+        "задача": "Этические аспекты",
+        "метод": "Activation steering",
+        "датасет": "Не применимо",
+        "производительность": "Не применимо",
+        "кросс_субъект": "Не применимо",
+        "релевантность": 4,
+        "ограничения": null,
+        "тип_источника": "XAI_этика",
+        "identifiers": {
+          "doi": null,
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": null
+        },
+        "provenance": {
+          "import_source": "archive/2026-09-21/records.json",
+          "retrieved_at": null,
+          "search_stream": null,
+          "query_or_seed": null,
+          "iteration": null
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "sample_size": null,
+          "target_construct": "unknown",
+          "target_label": null,
+          "access_status": "unknown",
+          "evidence_role": "not_assigned",
+          "subject_domain": "simulation",
+          "modalities": [
+            "connectome",
+            "neural_activity",
+            "simulation_state"
+          ]
+        },
+        "validation": {
+          "status": "rejected",
+          "screening_status": "excluded_unverifiable",
+          "full_text_status": "unavailable",
+          "checked_at": "2026-09-22",
+          "notes": "No uniquely identifiable scholarly source with this exact generic title was found.",
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported",
+          "exclusion_reason": "unverifiable"
+        },
+        "risk_flags": [
+          "claim_not_supported"
+        ],
+        "relations": []
+      },
+      "состав_кластера": [
+        "S077",
+        "S122",
+        "S138",
+        "S233"
+      ],
+      "validation": {
+        "status": "structurally_valid",
+        "checked_at": "2026-09-21",
+        "content_validation": "pending"
+      }
+    },
+    {
+      "id": "C41",
+      "тема": "DoomFly: симуляция с болью",
+      "синтез": "Pain feedback; aversive neurons; MaleCNS v1.0.",
+      "записей": 2,
+      "представитель": {
+        "id": "S200",
+        "название": "DoomFly: fly-connectome simulation controlling a Doom arena",
+        "авторы": "Alex Wormuth",
+        "год": 2026,
+        "издание": "GitHub software repository",
+        "модальность": "Connectome-derived neural activity and simulated visual input",
+        "задача": "Closed-loop game control with engineered aversive reinforcement",
+        "метод": "MaleCNS v1.0 graph simulation and ViZDoom",
+        "датасет": "MaleCNS v1.0",
+        "производительность": null,
+        "кросс_субъект": "Not applicable; no biological population validation",
+        "релевантность": 4,
+        "ограничения": "Experimental engineering model; current candidate failed visual, conditioning and survival gates; artificial dopamine input is not subjective pain",
+        "тип_источника": "фундаментальные_модели",
+        "identifiers": {
+          "doi": null,
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://github.com/nftechie/doomfly"
+        },
+        "provenance": {
+          "import_source": "data/staging/inbox/github-fly-resources-2026-09-23.intake.json",
+          "retrieved_at": "2026-09-23",
+          "search_stream": "user-supplied-github-fly-resources",
+          "query_or_seed": "https://github.com/nftechie/doomfly",
+          "iteration": "commit:71ecf53d78eaffaf1a57ed7b0ccf5d458abc9f33"
+        },
+        "evidence": {
+          "species": "Drosophila melanogaster",
+          "population": "simulated MaleCNS connectome",
+          "sample_size": null,
+          "target_construct": "not_applicable",
+          "target_label": null,
+          "access_status": "open",
+          "evidence_role": "simulation_foundation",
+          "subject_domain": "simulation",
+          "modalities": [
+            "connectome",
+            "neural_activity",
+            "simulation_state",
+            "behavior"
+          ]
+        },
+        "validation": {
+          "status": "verified_primary",
+          "screening_status": "included_core",
+          "full_text_status": "checked",
+          "checked_at": "2026-09-23",
+          "notes": "Repository and explicit negative validation results confirmed. Passing software tests is not biological validation.",
+          "split_unit": "not_applicable",
+          "cross_subject": "not_applicable",
+          "external_validation": "no",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported",
+          "exclusion_reason": null
+        },
+        "risk_flags": [
+          "synthetic_only",
+          "animal_to_human_transfer_unvalidated",
+          "future_or_recent_record_requires_recheck"
+        ],
+        "relations": []
+      },
+      "состав_кластера": [
+        "S200",
+        "S368"
+      ],
+      "validation": {
+        "status": "structurally_valid",
+        "checked_at": "2026-09-21",
+        "content_validation": "pending"
+      }
+    },
+    {
+      "id": "C42",
+      "тема": "Обзоры по детекции боли",
+      "синтез": "Multimodal fusion; wearable sensors; neuromorphic; IC architectures; generative models.",
+      "записей": 4,
+      "представитель": {
+        "id": "S148",
+        "название": "Rethinking Pain Assessment: Subjective Scales, Biomarkers, and Multimodal Integration",
+        "авторы": "Aifeng Liu; Longyao Zhang; Enyan Xue; Chao Zhang; Tianci Guo; Jida Wang; Dong Ming",
+        "год": 2026,
+        "издание": "Journal of Pain Research",
+        "модальность": null,
+        "задача": null,
+        "метод": null,
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "релевантность": 5,
+        "ограничения": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+        "тип_источника": "обзор",
+        "identifiers": {
+          "doi": "10.2147/JPR.S617733",
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://doi.org/10.2147/jpr.s617733"
+        },
+        "provenance": {
+          "import_source": "archive/2026-09-21/records.json",
+          "retrieved_at": "2026-09-22",
+          "search_stream": "relevance-5/registry-and-primary-review",
+          "query_or_seed": "Rethinking Pain Assessment: Subjective Scales, Biomarkers, and Multimodal Integration",
+          "iteration": 1
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "sample_size": null,
+          "target_construct": "unknown",
+          "target_label": null,
+          "access_status": "unknown",
+          "evidence_role": "context_only",
+          "subject_domain": "unknown",
+          "modalities": []
+        },
+        "validation": {
+          "status": "verified_metadata",
+          "screening_status": "included_core",
+          "full_text_status": "metadata_only",
+          "checked_at": "2026-09-22",
+          "notes": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported",
+          "exclusion_reason": null
+        },
+        "risk_flags": [
+          "metadata_only"
+        ],
+        "relations": []
+      },
+      "состав_кластера": [
+        "S148",
+        "S164",
+        "S195",
+        "S231"
+      ],
+      "validation": {
+        "status": "structurally_valid",
+        "checked_at": "2026-09-21",
+        "content_validation": "pending"
+      }
+    },
+    {
+      "id": "C43",
+      "тема": "Этические аспекты симуляции боли у Drosophila",
+      "синтез": "Философский анализ; affective indeterminacy; architectural audit; digital suffering; virtual brains.",
+      "записей": 4,
+      "представитель": {
+        "id": "S138",
+        "название": "Drosophila emulations are intrinsically affectively indeterminate",
+        "авторы": "Marek Dobeš",
+        "год": 2026,
+        "издание": "Journal of Multiscale Neuroscience",
+        "модальность": "Нейронная активность",
+        "задача": "Этические аспекты",
+        "метод": "Архитектурный аудит четырёх компонентных групп",
+        "датасет": "Не применимо",
+        "производительность": "Не применимо",
+        "кросс_субъект": "Не применимо",
+        "релевантность": 4,
+        "ограничения": "Философский анализ",
+        "тип_источника": "XAI_этика",
+        "identifiers": {
+          "doi": "10.56280/1765455593",
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://doi.org/10.56280/1765455593"
+        },
+        "provenance": {
+          "import_source": "archive/2026-09-21/records.json",
+          "retrieved_at": null,
+          "search_stream": null,
+          "query_or_seed": null,
+          "iteration": null
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "sample_size": null,
+          "target_construct": "not_applicable",
+          "target_label": null,
+          "access_status": "unknown",
+          "evidence_role": "context_only",
+          "subject_domain": "drosophila_adult",
+          "modalities": [
+            "neural_activity"
+          ]
+        },
+        "validation": {
+          "status": "verified_primary",
+          "screening_status": "included_core",
+          "full_text_status": "checked",
+          "checked_at": "2026-09-22",
+          "notes": "Perspective article proposing an audit framework; it explicitly concludes present affective indeterminacy rather than evidence of suffering or harmlessness.",
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported",
+          "exclusion_reason": null
+        },
+        "risk_flags": [
+          "animal_to_human_transfer_unvalidated"
+        ],
+        "relations": []
+      },
+      "состав_кластера": [
+        "S077",
+        "S122",
+        "S138",
+        "S233"
+      ],
+      "validation": {
+        "status": "structurally_valid",
+        "checked_at": "2026-09-21",
+        "content_validation": "pending"
+      }
+    },
+    {
+      "id": "C44",
+      "тема": "Цифровые двойники для SCS",
+      "синзез": "Biophysical digital twins; patient-specific models; tsDCS modeling; multi-scale.",
+      "записей": 1,
+      "представитель": {
+        "id": "S285",
+        "название": "The optimization of neuroprosthetic interfaces relying on biophysical and surrogate digital twins",
+        "авторы": "Claudio Verardo; Veronica Fossati; Laura Toni; Luca Pierantoni; Elena Losanno; Filippo Agnesi; Simone Romeni",
+        "год": 2026,
+        "издание": "npj Biomedical Innovations",
+        "модальность": null,
+        "задача": null,
+        "метод": null,
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "релевантность": 5,
+        "ограничения": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+        "тип_источника": "цифровые_двойники",
+        "identifiers": {
+          "doi": "10.1038/s44385-026-00076-8",
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://doi.org/10.1038/s44385-026-00076-8"
+        },
+        "provenance": {
+          "import_source": "archive/2026-09-21/records.json",
+          "retrieved_at": "2026-09-22",
+          "search_stream": "relevance-5/registry-and-primary-review",
+          "query_or_seed": "The optimization of neuroprosthetic interfaces relying on biophysical and surrogate digital twins",
+          "iteration": 1
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "sample_size": null,
+          "target_construct": "unknown",
+          "target_label": null,
+          "access_status": "unknown",
+          "evidence_role": "context_only",
+          "subject_domain": "unknown",
+          "modalities": []
+        },
+        "validation": {
+          "status": "verified_metadata",
+          "screening_status": "included_core",
+          "full_text_status": "metadata_only",
+          "checked_at": "2026-09-22",
+          "notes": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported",
+          "exclusion_reason": null
+        },
+        "risk_flags": [
+          "metadata_only"
+        ],
+        "relations": []
+      },
+      "состав_кластера": [
+        "S285"
+      ],
+      "validation": {
+        "status": "structurally_valid",
+        "checked_at": "2026-09-21",
+        "content_validation": "pending"
+      }
+    },
+    {
+      "id": "C45",
+      "тема": "GNN на коннектоме Drosophila",
+      "синтез": "flyGNN, LIF-симуляции; embodied locomotion control; Eon Systems whole-brain emulation.",
+      "записей": 3,
+      "представитель": {
+        "id": "S286",
+        "название": "Whole-Brain Connectomic Graph Model Enables Whole-Body Locomotion Control in Fruit Fly",
+        "авторы": "Zehao Jin; Yaoye Zhu; Chen Zhang; Yanan Sui",
+        "год": 2026,
+        "издание": "arXiv",
+        "модальность": "Нейронная активность",
+        "задача": "Управление локомоцией",
+        "метод": "flyGNN, graph neural networks",
+        "датасет": "FlyWire",
+        "производительность": null,
+        "кросс_субъект": "Не применимо",
+        "релевантность": 4,
+        "ограничения": null,
+        "тип_источника": "фундаментальные_модели",
+        "identifiers": {
+          "doi": null,
+          "pmid": null,
+          "arxiv_id": "2602.17997",
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://arxiv.org/abs/2602.17997"
+        },
+        "provenance": {
+          "import_source": "archive/2026-09-21/records.json",
+          "retrieved_at": null,
+          "search_stream": null,
+          "query_or_seed": null,
+          "iteration": null
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "sample_size": null,
+          "target_construct": "protective_behavior",
+          "target_label": null,
+          "access_status": "unknown",
+          "evidence_role": "simulation_foundation",
+          "subject_domain": "unknown",
+          "modalities": [
+            "connectome",
+            "movement_pose",
+            "neural_activity"
+          ]
+        },
+        "validation": {
+          "status": "verified_primary",
+          "screening_status": "included_core",
+          "full_text_status": "checked",
+          "checked_at": "2026-09-22",
+          "notes": "FlyGM uses the adult connectome as a graph-structured controller in a simulated biomechanical fly. It validates an embodied-control architecture, not biophysical neural dynamics, nociception, pain, or human transfer.",
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported",
+          "exclusion_reason": null
+        },
+        "risk_flags": [
+          "preprint",
+          "synthetic_only",
+          "animal_to_human_transfer_unvalidated"
+        ],
+        "relations": []
+      },
+      "состав_кластера": [
+        "S286",
+        "S292",
+        "S320"
+      ],
+      "validation": {
+        "status": "structurally_valid",
+        "checked_at": "2026-09-21",
+        "content_validation": "pending"
+      }
+    },
+    {
+      "id": "C46",
+      "тема": "Агентный AI для нейромодуляции",
+      "синтез": "Agentic AI для автономной адаптации стимуляции в реальном времени; brain sovereignty.",
+      "записей": 1,
+      "представитель": {
+        "id": "S313",
+        "название": "Agentic AI in Neurology",
+        "авторы": null,
+        "год": 2026,
+        "издание": "Inferensys",
+        "модальность": "Нейромодуляция",
+        "задача": "Агентный AI для нейромодуляции",
+        "метод": "Agentic AI",
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "релевантность": 4,
+        "ограничения": null,
+        "тип_источника": "агентный_AI",
+        "identifiers": {
+          "doi": null,
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": null
+        },
+        "provenance": {
+          "import_source": "archive/2026-09-21/records.json",
+          "retrieved_at": null,
+          "search_stream": null,
+          "query_or_seed": null,
+          "iteration": null
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "sample_size": null,
+          "target_construct": "unknown",
+          "target_label": null,
+          "access_status": "unknown",
+          "evidence_role": "not_assigned",
+          "subject_domain": "unknown",
+          "modalities": []
+        },
+        "validation": {
+          "status": "rejected",
+          "screening_status": "excluded_unverifiable",
+          "full_text_status": "unavailable",
+          "checked_at": "2026-09-22",
+          "notes": "No uniquely identifiable primary publication with this exact generic title was found.",
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported",
+          "exclusion_reason": "unverifiable"
+        },
+        "risk_flags": [
+          "claim_not_supported"
+        ],
+        "relations": []
+      },
+      "состав_кластера": [
+        "S313"
+      ],
+      "validation": {
+        "status": "structurally_valid",
+        "checked_at": "2026-09-21",
+        "content_validation": "pending"
+      }
+    },
+    {
+      "id": "C47",
+      "тема": "SNN для классификации боли",
+      "синтез": "LAST-PAIN/STAL: SNN с адаптивными порогами спайков; 80.43% accuracy для CLBP; ultra-low-power на нейроморфном железе.",
+      "записей": 1,
+      "представитель": {
+        "id": "S222",
+        "название": "A brain-inspired robot pain model based on a spiking neural network",
+        "авторы": "Hui Feng; Yi Zeng",
+        "год": 2022,
+        "издание": "Frontiers in Neurorobotics",
+        "модальность": "SNN",
+        "задача": "Робот-боль",
+        "метод": "SNN, STDP",
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": "Не применимо",
+        "релевантность": 4,
+        "ограничения": null,
+        "тип_источника": "фундаментальные_модели",
+        "identifiers": {
+          "doi": "10.3389/fnbot.2022.1025338",
+          "pmid": "36605522",
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9807619/"
+        },
+        "provenance": {
+          "import_source": "archive/2026-09-21/records.json",
+          "retrieved_at": null,
+          "search_stream": null,
+          "query_or_seed": null,
+          "iteration": null
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "sample_size": null,
+          "target_construct": "protective_behavior",
+          "target_label": null,
+          "access_status": "unknown",
+          "evidence_role": "method_baseline",
+          "subject_domain": "unknown",
+          "modalities": []
+        },
+        "validation": {
+          "status": "verified_primary",
+          "screening_status": "included_core",
+          "full_text_status": "checked",
+          "checked_at": "2026-09-22",
+          "notes": "The engineered internal variable called robot pain drives self-protective tasks. It is a conceptual robotic construct and cannot be treated as evidence of subjective pain, biological nociception or clinical transfer.",
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported",
+          "exclusion_reason": null
+        },
+        "risk_flags": [
+          "synthetic_only",
+          "claim_not_supported"
+        ],
+        "relations": []
+      },
+      "состав_кластера": [
+        "S222"
+      ],
+      "validation": {
+        "status": "structurally_valid",
+        "checked_at": "2026-09-21",
+        "content_validation": "pending"
+      }
+    },
+    {
+      "id": "C54",
+      "тема": "Вычислительные симуляторы и песочницы коннектома Drosophila",
+      "синтез": "Eon fly-brain, fly-brain-snntorch, FlyGym, claude-fly, DoomFly и FLYBOX как программные кандидаты для connectome-derived и embodied симуляции. Кластер подтверждает наличие реализаций, но не биологическую валидность, субъективную боль, перенос на человека, ECAP или SCS.",
+      "записей": 6,
+      "представитель": {
+        "id": "S732",
+        "название": "Emulation of the Drosophila Fly Brain",
+        "авторы": "Eon Systems PBC",
+        "год": 2026,
+        "издание": "GitHub software repository",
+        "модальность": "Connectome-derived spiking neural activity",
+        "задача": "Whole-brain LIF simulation and backend benchmarking",
+        "метод": "Brian2, Brian2CUDA, PyTorch, NEST GPU and GeNN",
+        "датасет": "FlyWire adult Drosophila connectome",
+        "производительность": null,
+        "кросс_субъект": "Not applicable; no population-level validation reported",
+        "релевантность": 5,
+        "ограничения": "Repository implementation; code was inspected but not executed locally; no nociception, pain, ECAP or human-transfer validation",
+        "тип_источника": "фундаментальные_модели",
+        "identifiers": {
+          "doi": null,
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://github.com/eonsystemspbc/fly-brain"
+        },
+        "provenance": {
+          "import_source": "data/staging/inbox/github-fly-resources-2026-09-23.intake.json",
+          "retrieved_at": "2026-09-23",
+          "search_stream": "user-supplied-github-fly-resources",
+          "query_or_seed": "https://github.com/eonsystemspbc/fly-brain",
+          "iteration": "commit:a3db62f9436074e485c0278290c2164ed6150808"
+        },
+        "evidence": {
+          "species": "Drosophila melanogaster",
+          "population": "simulated adult connectome",
+          "subject_domain": "simulation",
+          "modalities": [
+            "connectome",
+            "neural_activity",
+            "simulation_state"
+          ],
+          "sample_size": null,
+          "target_construct": "not_applicable",
+          "target_label": null,
+          "access_status": "open",
+          "evidence_role": "simulation_foundation"
+        },
+        "validation": {
+          "status": "verified_primary",
+          "screening_status": "included_core",
+          "full_text_status": "checked",
+          "checked_at": "2026-09-23",
+          "split_unit": "not_applicable",
+          "cross_subject": "not_applicable",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported",
+          "exclusion_reason": null,
+          "notes": "Official repository and README inspected at the pinned commit. GPL-2.0 metadata confirmed. Repository claims are not treated as independent biological validation."
+        },
+        "relations": [
+          {
+            "type": "code_for",
+            "target_id": null,
+            "external_id": "doi:10.1038/s41586-024-07763-9",
+            "note": "Repository states that its canonical Brian2 model is based on the published Drosophila computational brain model."
+          }
+        ],
+        "risk_flags": [
+          "synthetic_only",
+          "animal_to_human_transfer_unvalidated",
+          "future_or_recent_record_requires_recheck"
+        ]
+      },
+      "состав_кластера": [
+        "S200",
+        "S292",
+        "S732",
+        "S733",
+        "S734",
+        "S737"
+      ],
+      "validation": {
+        "status": "structurally_valid",
+        "checked_at": "2026-09-23",
+        "content_validation": "primary repository metadata reviewed; independent runtime reproduction pending"
+      }
+    }
+  ],
+  "retired_clusters": [
+    {
+      "id": "C48",
+      "тема": "Обзоры генеративных моделей для физиологических сигналов",
+      "reason": "all_legacy_member_ids_missing_from_canonical_records",
+      "original_member_ids": [
+        "S556",
+        "S560",
+        "S573"
+      ]
+    },
+    {
+      "id": "C49",
+      "тема": "Нейроморфные технологии для нейроинженерии",
+      "reason": "all_legacy_member_ids_missing_from_canonical_records",
+      "original_member_ids": [
+        "S585",
+        "S586",
+        "S587",
+        "S588",
+        "S589",
+        "S590",
+        "S591",
+        "S598",
+        "S599",
+        "S600",
+        "S601",
+        "S602",
+        "S603",
+        "S604"
+      ]
+    },
+    {
+      "id": "C50",
+      "тема": "NOCI-COMPILER: Цифровой алфавит боли",
+      "reason": "all_legacy_member_ids_missing_from_canonical_records",
+      "original_member_ids": [
+        "S614",
+        "S623",
+        "S636",
+        "S652",
+        "S664"
+      ]
+    },
+    {
+      "id": "C51",
+      "тема": "Maya-Vaidya SNN: ноцицептивная сенситизация",
+      "reason": "all_legacy_member_ids_missing_from_canonical_records",
+      "original_member_ids": [
+        "S615",
+        "S616",
+        "S624",
+        "S637",
+        "S653",
+        "S673"
+      ]
+    },
+    {
+      "id": "C52",
+      "тема": "Memristor-ноцицепция",
+      "reason": "all_legacy_member_ids_missing_from_canonical_records",
+      "original_member_ids": [
+        "S618",
+        "S626",
+        "S639",
+        "S655",
+        "S667"
+      ]
+    },
+    {
+      "id": "C53",
+      "тема": "Аналоговое подавление артефактов стимуляции для ECAP",
+      "reason": "all_legacy_member_ids_missing_from_canonical_records",
+      "original_member_ids": [
+        "S681",
+        "S682",
+        "S687",
+        "S700",
+        "S701",
+        "S718",
+        "S719",
+        "S729"
+      ]
+    },
+    {
+      "id": "C28",
+      "тема": "PainFusion+",
+      "reason": "all_members_became_aliases_during_curation",
+      "original_member_ids": [
+        "S085",
+        "S128"
+      ]
+    },
+    {
+      "id": "C25",
+      "тема": "External validation EEG ML",
+      "reason": "all_members_became_aliases_during_curation",
+      "original_member_ids": [
+        "S081",
+        "S117",
+        "S126",
+        "S145",
+        "S263"
+      ]
+    },
+    {
+      "id": "C26",
+      "тема": "RE-HPBS-IPIC: межсубъектная классификация",
+      "reason": "all_members_became_aliases_during_curation",
+      "original_member_ids": [
+        "S080",
+        "S125",
+        "S146",
+        "S226",
+        "S257"
+      ]
+    },
+    {
+      "id": "C24",
+      "тема": "MDNet: Embedded pain assessment",
+      "reason": "all_members_became_aliases_during_curation",
+      "original_member_ids": [
+        "S103",
+        "S265"
+      ]
+    },
+    {
+      "id": "C36",
+      "тема": "Клинический мониторинг боли (bi-modal)",
+      "reason": "all_members_became_aliases_during_curation",
+      "original_member_ids": [
+        "S116",
+        "S175",
+        "S176"
+      ]
+    }
+  ],
+  "unclustered_record_ids": [
+    "S001",
+    "S003",
+    "S014",
+    "S021",
+    "S022",
+    "S024",
+    "S026",
+    "S070",
+    "S071",
+    "S072",
+    "S078",
+    "S190",
+    "S191",
+    "S193",
+    "S214",
+    "S227",
+    "S250",
+    "S296",
+    "S310",
+    "S311",
+    "S330",
+    "S730",
+    "S731"
+  ],
+  "multiple_membership": {
+    "S008": 2,
+    "S018": 2,
+    "S019": 2,
+    "S029": 2,
+    "S031": 2,
+    "S033": 2,
+    "S035": 2,
+    "S037": 2,
+    "S039": 2,
+    "S040": 2,
+    "S046": 2,
+    "S061": 3,
+    "S062": 3,
+    "S065": 3,
+    "S077": 4,
+    "S082": 2,
+    "S083": 2,
+    "S084": 2,
+    "S086": 2,
+    "S088": 2,
+    "S090": 2,
+    "S092": 2,
+    "S097": 2,
+    "S098": 2,
+    "S099": 2,
+    "S106": 2,
+    "S122": 4,
+    "S138": 3,
+    "S144": 2,
+    "S148": 2,
+    "S150": 2,
+    "S167": 2,
+    "S187": 2,
+    "S192": 2,
+    "S200": 3,
+    "S231": 2,
+    "S233": 2,
+    "S240": 2,
+    "S241": 2,
+    "S289": 2,
+    "S292": 2,
+    "S357": 2,
+    "S368": 2
+  }
+}

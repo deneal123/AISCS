@@ -1,0 +1,1414 @@
+{
+  "meta": {
+    "название": "Системные требования и источники для диссертации",
+    "тема": "Синтетическое мультимодальное предобучение на коннектомной модели Drosophila для проверки переноса на межсубъектную оценку болевого состояния и условного прогноза ответа на SCS",
+    "версия": "1.1.0-validated-pass-1",
+    "дата": "2026-09-19",
+    "язык": "ru",
+    "всего_категорий": 9,
+    "всего_ресурсов": 104,
+    "исходная_тема": "Биологически обоснованная генерация синтетических ECAP-сигналов на основе коннектома Drosophila для кросс-субъектной детекции боли при SCS",
+    "дата_валидации": "2026-09-21",
+    "статус_валидации": "частично проверено; непроверенные ресурсы не являются доказательной базой",
+    "проверено_по_первичному_источнику": 9,
+    "требуют_точной_ссылки": 32,
+    "не_подтверждено": 20
+  },
+  "categories": [
+    {
+      "id": "C1",
+      "название": "Коннектом Drosophila и симуляция мозга",
+      "подкатегории": [
+        {
+          "id": "C1.1",
+          "название": "Данные коннектома",
+          "ресурсы": [
+            {
+              "название": "FlyWire Codex (API для скачивания)",
+              "ссылка": "https://codex.flywire.ai/api/download?data_version=783",
+              "назначение": "Основной источник коннектома взрослой мухи (v783: 139 255 нейронов, ~50M синапсов)",
+              "задачи": [
+                "Задача 1"
+              ],
+              "исходная_ссылка": "https://codex.flywire.ai/api/download",
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-21",
+              "примечание_валидации": "FAFB v783: мозг взрослой самки; 139255 нейронов. Для CNS/VNC использовать отдельные наборы."
+            },
+            {
+              "название": "FlyConnectome (Seung Lab)",
+              "ссылка": "https://github.com/seung-lab/FlyConnectome",
+              "назначение": "Программный доступ к данным FlyWire, CAVE tutorial (Jupyter notebook)",
+              "задачи": [
+                "Задача 1"
+              ],
+              "статус_валидации": "url_present_content_not_checked",
+              "проверено": null,
+              "примечание_валидации": "Точный URL присутствует, содержание еще не проверено."
+            },
+            {
+              "название": "murthylab/flywire-network-analysis",
+              "ссылка": "https://github.com/murthylab/flywire-network-analysis",
+              "назначение": "Скрипты сетевого анализа коннектома; публикация Network Statistics of the Whole-Brain Connectome of Drosophila",
+              "задачи": [
+                "Задача 1"
+              ],
+              "статус_валидации": "url_present_content_not_checked",
+              "проверено": null,
+              "примечание_валидации": "Точный URL присутствует, содержание еще не проверено."
+            },
+            {
+              "название": "connectome_data_prep",
+              "ссылка": "https://github.com/YijieYin/connectome_data_prep",
+              "назначение": "Подготовка данных FlyWire/FAFB; tinyurl-интерфейс для v783",
+              "задачи": [
+                "Задача 1"
+              ],
+              "статус_валидации": "url_present_content_not_checked",
+              "проверено": null,
+              "примечание_валидации": "Точный URL присутствует, содержание еще не проверено."
+            },
+            {
+              "название": "FlyWire v783 (browsable)",
+              "ссылка": "https://codex.flywire.ai/?dataset=fafb",
+              "назначение": "Веб-интерфейс для детального изучения коннектома",
+              "задачи": [
+                "Задача 1"
+              ],
+              "исходная_ссылка": "https://tinyurl.com/flywire783",
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-21",
+              "примечание_валидации": "Интерактивный просмотр FAFB; не функциональный симулятор."
+            }
+          ]
+        },
+        {
+          "id": "C1.2",
+          "название": "Embodied симуляция (мозг + тело)",
+          "ресурсы": [
+            {
+              "название": "NeuroMechFly v2 / FlyGym",
+              "ссылка": "https://flygym.readthedocs.io/latest/index.html",
+              "назначение": "Python-библиотека цифрового двойника мухи; симуляция сенсомоторного контроля, зрение, обоняние, ходьба",
+              "задачи": [
+                "Задача 2"
+              ],
+              "исходная_ссылка": "https://neuromechfly.org",
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-21",
+              "примечание_валидации": "Официальная документация embodied-модели; nociception/ECAP не реализованы автоматически."
+            },
+            {
+              "название": "Eon Systems: fly-brain",
+              "ссылка": "https://github.com/eonsystemspbc/fly-brain",
+              "назначение": "Whole-brain LIF-модель Drosophila; Brian2, Brian2CUDA, PyTorch, NEST GPU, нейроморфные чипы",
+              "задачи": [
+                "Задача 2",
+                "Задача 3"
+              ],
+              "статус_валидации": "url_present_content_not_checked",
+              "проверено": null,
+              "примечание_валидации": "Точный URL присутствует, содержание еще не проверено."
+            },
+            {
+              "название": "claude-fly",
+              "ссылка": "https://github.com/legacyindiesubmissions-ai/claude-fly",
+              "назначение": "Первая embodied whole-brain spiking simulation Drosophila (FlyWire v783, 138 639 нейронов, MuJoCo, $140 hardware)",
+              "задачи": [
+                "Задача 2",
+                "Задача 3"
+              ],
+              "статус_валидации": "url_present_content_not_checked",
+              "проверено": null,
+              "примечание_валидации": "Точный URL присутствует, содержание еще не проверено."
+            },
+            {
+              "название": "snedea/flybrain",
+              "ссылка": "https://github.com/snedea/flybrain",
+              "назначение": "Интерактивная симуляция 139K LIF-нейронов из FlyWire FAFB v783 в реальном времени через Web Worker",
+              "задачи": [
+                "Задача 2"
+              ],
+              "статус_валидации": "url_present_content_not_checked",
+              "проверено": null,
+              "примечание_валидации": "Точный URL присутствует, содержание еще не проверено."
+            },
+            {
+              "название": "philshiu/Drosophila_brain_model",
+              "ссылка": "https://github.com/philshiu/Drosophila_brain_model",
+              "назначение": "LIF-модель всего мозга Drosophila; spike times и rates всех нейронов",
+              "задачи": [
+                "Задача 1",
+                "Задача 2"
+              ],
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-21",
+              "примечание_валидации": "Открытая LIF-модель; требует отдельной проверки соответствия версии коннектома и воспроизводимости."
+            },
+            {
+              "название": "artem-x-meta/fly-arena",
+              "ссылка": "https://github.com/artem-x-meta/fly-arena",
+              "назначение": "Симулятор Drosophila с MaleCNS connectome + FlyGym/MuJoCo; автономное поведение, конкуренция за еду, neural state readout",
+              "задачи": [
+                "Задача 2",
+                "Задача 3"
+              ],
+              "статус_валидации": "url_present_content_not_checked",
+              "проверено": null,
+              "примечание_валидации": "Точный URL присутствует, содержание еще не проверено."
+            },
+            {
+              "название": "MakazhanAlpamys/soup-connectome",
+              "ссылка": "https://github.com/MakazhanAlpamys/soup-connectome",
+              "назначение": "Benchmark MaleCNS connectome; CPU/GPU, streamed residency",
+              "задачи": [
+                "Задача 2"
+              ],
+              "статус_валидации": "url_present_content_not_checked",
+              "проверено": null,
+              "примечание_валидации": "Точный URL присутствует, содержание еще не проверено."
+            },
+            {
+              "название": "chaobrain/fitting_drosophila_whole_brain",
+              "ссылка": "https://github.com/chaobrain/fitting_drosophila_whole_brain_spiking_model",
+              "назначение": "Двухстадийная SNN-модель для симуляции и предсказания динамики мозга Drosophila",
+              "задачи": [
+                "Задача 3"
+              ],
+              "статус_валидации": "url_present_content_not_checked",
+              "проверено": null,
+              "примечание_валидации": "Точный URL присутствует, содержание еще не проверено."
+            }
+          ]
+        },
+        {
+          "id": "C1.3",
+          "название": "Ноцицептивные цепи Drosophila (референсные работы)",
+          "ресурсы": [
+            {
+              "название": "Jessica Jones: Circuit Reconstruction",
+              "ссылка": null,
+              "назначение": "Реконструкция ноцицептивных цепей; md-нейроны → две downstream-пути (S283, S348)",
+              "задачи": [
+                "Задача 1",
+                "Задача 2"
+              ],
+              "исходная_ссылка": "https://jesmjones.github.io",
+              "статус_валидации": "needs_exact_url",
+              "проверено": null,
+              "примечание_валидации": "Общая страница домена не подтверждает конкретный ресурс; требуется точная первичная ссылка."
+            },
+            {
+              "название": "Ascending nociceptive pathways (bioRxiv 2025)",
+              "ссылка": "https://pubmed.ncbi.nlm.nih.gov/41280033/",
+              "назначение": "Восходящие пути: Ipsigoro → Goro; роль KCs в escape response (S029, S091)",
+              "задачи": [
+                "Задача 1",
+                "Задача 2"
+              ],
+              "исходная_ссылка": "https://www.biorxiv.org",
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-21",
+              "примечание_валидации": "Препринт; DOI 10.1101/2025.10.28.684868. Не считать рецензированной журнальной статьей."
+            },
+            {
+              "название": "MaleCNS connectome (Janelia)",
+              "ссылка": null,
+              "назначение": "Коннектом CNS самца Drosophila (166 700 нейронов, 25.5M соединений)",
+              "задачи": [
+                "Задача 1",
+                "Задача 2"
+              ],
+              "исходная_ссылка": "https://www.janelia.org",
+              "статус_валидации": "needs_exact_url",
+              "проверено": null,
+              "примечание_валидации": "Общая страница домена не подтверждает конкретный ресурс; требуется точная первичная ссылка."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "C2",
+      "название": "Нейроморфные вычисления и SNN",
+      "подкатегории": [
+        {
+          "id": "C2.1",
+          "название": "Симуляторы SNN",
+          "ресурсы": [
+            {
+              "название": "Brian 2",
+              "ссылка": "https://github.com/brian-team/brian2",
+              "назначение": "Бесплатный open-source симулятор SNN на Python; почти все платформы",
+              "задачи": [
+                "Задача 5"
+              ],
+              "статус_валидации": "url_present_content_not_checked",
+              "проверено": null,
+              "примечание_валидации": "Точный URL присутствует, содержание еще не проверено."
+            },
+            {
+              "название": "Brian2GeNN",
+              "ссылка": "https://github.com/brian-team/brian2genn",
+              "назначение": "Ускорение Brian 2 на NVIDIA GPU (в 10–100 раз быстрее CPU)",
+              "задачи": [
+                "Задача 5"
+              ],
+              "статус_валидации": "url_present_content_not_checked",
+              "проверено": null,
+              "примечание_валидации": "Точный URL присутствует, содержание еще не проверено."
+            },
+            {
+              "название": "GeNN",
+              "ссылка": null,
+              "назначение": "C++ мета-компилятор для ускорения SNN на GPU",
+              "задачи": [
+                "Задача 5"
+              ],
+              "исходная_ссылка": "https://genn-team.github.io",
+              "статус_валидации": "needs_exact_url",
+              "проверено": null,
+              "примечание_валидации": "Общая страница домена не подтверждает конкретный ресурс; требуется точная первичная ссылка."
+            },
+            {
+              "название": "NEST",
+              "ссылка": null,
+              "назначение": "C++/Python симулятор для динамических нейронных систем",
+              "задачи": [
+                "Задача 5"
+              ],
+              "исходная_ссылка": "https://www.nest-simulator.org",
+              "статус_валидации": "needs_exact_url",
+              "проверено": null,
+              "примечание_валидации": "Общая страница домена не подтверждает конкретный ресурс; требуется точная первичная ссылка."
+            },
+            {
+              "название": "sapicore",
+              "ссылка": "https://github.com/cplab/sapicore",
+              "назначение": "PyTorch-based SNN-симулятор для нейробиологически реалистичных моделей",
+              "задачи": [
+                "Задача 5"
+              ],
+              "статус_валидации": "url_present_content_not_checked",
+              "проверено": null,
+              "примечание_валидации": "Точный URL присутствует, содержание еще не проверено."
+            },
+            {
+              "название": "SNN Toolbox",
+              "ссылка": "https://github.com/NeuromorphicProcessorProject/snn_toolbox",
+              "назначение": "Конвертация ANN → SNN и запуск в спайковом симуляторе",
+              "задачи": [
+                "Задача 5"
+              ],
+              "статус_валидации": "url_present_content_not_checked",
+              "проверено": null,
+              "примечание_валидации": "Точный URL присутствует, содержание еще не проверено."
+            },
+            {
+              "название": "Norse",
+              "ссылка": "https://github.com/norse/norse",
+              "назначение": "Библиотека SNN на PyTorch; Jupyter notebooks для Colab",
+              "задачи": [
+                "Задача 5"
+              ],
+              "статус_валидации": "url_present_content_not_checked",
+              "проверено": null,
+              "примечание_валидации": "Точный URL присутствует, содержание еще не проверено."
+            },
+            {
+              "название": "snnTorch",
+              "ссылка": "https://github.com/jeshraghian/snntorch",
+              "назначение": "Python-библиотека для обучения SNN; Colab tutorials",
+              "задачи": [
+                "Задача 5"
+              ],
+              "статус_валидации": "url_present_content_not_checked",
+              "проверено": null,
+              "примечание_валидации": "Точный URL присутствует, содержание еще не проверено."
+            },
+            {
+              "название": "ModNEF",
+              "ссылка": "https://github.com/ModNEF",
+              "назначение": "Open-source SNN emulator для FPGA; Python API + VHDL generation",
+              "задачи": [
+                "Задача 5"
+              ],
+              "статус_валидации": "url_present_content_not_checked",
+              "проверено": null,
+              "примечание_валидации": "Точный URL присутствует, содержание еще не проверено."
+            }
+          ]
+        },
+        {
+          "id": "C2.2",
+          "название": "Нейроморфное железо",
+          "ресурсы": [
+            {
+              "название": "BrainChip Akida — MetaTF SDK",
+              "ссылка": null,
+              "назначение": "Python API (Keras-like) для SNN inference на Akida; pip install akida",
+              "задачи": [
+                "Задача 5"
+              ],
+              "исходная_ссылка": "https://doc.brainchipinc.com",
+              "статус_валидации": "needs_exact_url",
+              "проверено": null,
+              "примечание_валидации": "Общая страница домена не подтверждает конкретный ресурс; требуется точная первичная ссылка."
+            },
+            {
+              "название": "BrainChip Edge AI Box",
+              "ссылка": null,
+              "назначение": "Dev kit для Akida (AKD1000/AKD1500); PCIe inference",
+              "задачи": [
+                "Задача 5"
+              ],
+              "исходная_ссылка": "https://shop.brainchipinc.com",
+              "статус_валидации": "needs_exact_url",
+              "проверено": null,
+              "примечание_валидации": "Общая страница домена не подтверждает конкретный ресурс; требуется точная первичная ссылка."
+            },
+            {
+              "название": "BrainChip AKD1500 (open-source)",
+              "ссылка": null,
+              "назначение": "Arduino Nicla drivers, board libraries, Akida Engine",
+              "задачи": [
+                "Задача 5"
+              ],
+              "исходная_ссылка": "https://www.opensourceforu.com",
+              "статус_валидации": "needs_exact_url",
+              "проверено": null,
+              "примечание_валидации": "Общая страница домена не подтверждает конкретный ресурс; требуется точная первичная ссылка."
+            },
+            {
+              "название": "Edge Impulse + BrainChip AKD1000",
+              "ссылка": null,
+              "назначение": "Python Akida Library, Edge Impulse SDK, MetaTF Deployment Block",
+              "задачи": [
+                "Задача 5"
+              ],
+              "исходная_ссылка": "https://docs.edgeimpulse.com",
+              "статус_валидации": "needs_exact_url",
+              "проверено": null,
+              "примечание_валидации": "Общая страница домена не подтверждает конкретный ресурс; требуется точная первичная ссылка."
+            },
+            {
+              "название": "Catalyst N1 Neuromorphic Processor",
+              "ссылка": "https://huggingface.co/Catalyst-Neuromorphic/catalyst-n1",
+              "назначение": "Python SDK, CPU reference simulator (LIF), GPU simulator (PyTorch CUDA, 4–8x speedup)",
+              "задачи": [
+                "Задача 5"
+              ],
+              "статус_валидации": "url_present_content_not_checked",
+              "проверено": null,
+              "примечание_валидации": "Точный URL присутствует, содержание еще не проверено."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "C3",
+      "название": "Открытые датасеты",
+      "подкатегории": [
+        {
+          "id": "C3.1",
+          "название": "Датасеты боли (физиологические сигналы)",
+          "ресурсы": [
+            {
+              "название": "BioVid HeatPain Database",
+              "ссылка": "https://www.nit.ovgu.de/BioVid.html",
+              "данные": "ECG, sEMG, video лица (N = 90); острая тепловая боль; Part A–E",
+              "задачи": [
+                "Задача 4",
+                "Задача 5"
+              ],
+              "исходная_ссылка": "https://www.nit.ovgu.de/nit/en/BioVid-p-1358.html",
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-21",
+              "примечание_валидации": "Доступ для некоммерческих исследований по соглашению; Part A содержит 87 участников."
+            },
+            {
+              "название": "AI4Pain Grand Challenge",
+              "ссылка": "https://sites.google.com/view/ai4pain/challenge-details",
+              "данные": "fNIRS + видео лица (65 участников); No Pain / Low Pain / High Pain; EDA, BVP, RESP, SpO2",
+              "задачи": [
+                "Задача 4",
+                "Задача 5"
+              ],
+              "исходная_ссылка": "https://sites.google.com/view/ai4pain/home",
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-21",
+              "примечание_валидации": "65 участников, fNIRS+video, фиксированные train/validation/test."
+            },
+            {
+              "название": "PainMonit Dataset",
+              "ссылка": "https://figshare.com/articles/dataset/The_PainMonit_Database_An_Experimental_and_Clinical_Physiological_Signal_Dataset_for_Automated_Pain_Recognition/26965159",
+              "данные": "9 физиологических модальностей (BVP, 2×EDA, skin temperature, ECG, EMG, IBI, HR, respiration); 55 здоровых субъектов",
+              "задачи": [
+                "Задача 4",
+                "Задача 5"
+              ],
+              "исходная_ссылка": "https://www.mendeley.com",
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-21",
+              "примечание_валидации": "Figshare v3; PMED 55 и PMCD 49 участников; DOI 10.1038/s41597-024-03878-w."
+            },
+            {
+              "название": "PainMotion Dataset",
+              "ссылка": null,
+              "данные": "sEMG + ECG + кинематика верхних конечностей; DOMS vs musculoskeletal disorders; 6h4m данных",
+              "задачи": [
+                "Задача 4"
+              ],
+              "исходная_ссылка": "https://zenodo.org",
+              "статус_валидации": "needs_exact_url",
+              "проверено": null,
+              "примечание_валидации": "Общая страница домена не подтверждает конкретный ресурс; требуется точная первичная ссылка."
+            },
+            {
+              "название": "EmoPain Database",
+              "ссылка": null,
+              "данные": "IMU + sEMG; хроническая боль в спине; упражнения",
+              "задачи": [
+                "Задача 4",
+                "Задача 5"
+              ],
+              "исходная_ссылка": "https://www.nit.ovgu.de",
+              "статус_валидации": "needs_exact_url",
+              "проверено": null,
+              "примечание_валидации": "Общая страница домена не подтверждает конкретный ресурс; требуется точная первичная ссылка."
+            },
+            {
+              "название": "LENS Dataset",
+              "ссылка": null,
+              "данные": "sEMG + NIRS; интенсивность скелетно-мышечной боли; стандартизированный jaw-clenching task",
+              "задачи": [
+                "Задача 4"
+              ],
+              "исходная_ссылка": "https://odesi.ca",
+              "статус_валидации": "needs_exact_url",
+              "проверено": null,
+              "примечание_валидации": "Общая страница домена не подтверждает конкретный ресурс; требуется точная первичная ссылка."
+            }
+          ]
+        },
+        {
+          "id": "C3.2",
+          "название": "Датасеты ЭЭГ (хроническая боль)",
+          "ресурсы": [
+            {
+              "название": "OpenPain / OSF",
+              "ссылка": "https://osf.io/mj9xr/",
+              "данные": "ЭЭГ-BIDS; хроническая боль; open access",
+              "задачи": [
+                "Задача 4",
+                "Задача 5"
+              ],
+              "статус_валидации": "url_present_content_not_checked",
+              "проверено": null,
+              "примечание_валидации": "Точный URL присутствует, содержание еще не проверено."
+            },
+            {
+              "название": "PainLabMunich",
+              "ссылка": "https://osf.io/hbkmx/",
+              "данные": "Resting-state ЭЭГ; хроническая боль; PainLabMunich",
+              "задачи": [
+                "Задача 4"
+              ],
+              "статус_валидации": "url_present_content_not_checked",
+              "проверено": null,
+              "примечание_валидации": "Точный URL присутствует, содержание еще не проверено."
+            },
+            {
+              "название": "Chronic neuropathic pain EEG",
+              "ссылка": null,
+              "данные": "36 пациентов; eyes open/closed; painDETECT + BPI",
+              "задачи": [
+                "Задача 4"
+              ],
+              "исходная_ссылка": "https://europepmc.org",
+              "статус_валидации": "needs_exact_url",
+              "проверено": null,
+              "примечание_валидации": "Общая страница домена не подтверждает конкретный ресурс; требуется точная первичная ссылка."
+            },
+            {
+              "название": "ValidPain2 (Nociception Level Index)",
+              "ссылка": null,
+              "данные": "180 субъектов; ЭЭГ; 4 ch, 178 Hz, BIDS",
+              "задачи": [
+                "Задача 4"
+              ],
+              "исходная_ссылка": "https://eegdash.org",
+              "статус_валидации": "needs_exact_url",
+              "проверено": null,
+              "примечание_валидации": "Общая страница домена не подтверждает конкретный ресурс; требуется точная первичная ссылка."
+            },
+            {
+              "название": "Phantom Limb Pain EEG",
+              "ссылка": null,
+              "данные": "64/128 ch resting-state ЭЭГ; ампутанты с фантомной болью",
+              "задачи": [
+                "Задача 4"
+              ],
+              "исходная_ссылка": "https://nemar.org",
+              "статус_валидации": "needs_exact_url",
+              "проверено": null,
+              "примечание_валидации": "Общая страница домена не подтверждает конкретный ресурс; требуется точная первичная ссылка."
+            },
+            {
+              "название": "Expectation effects on nociception",
+              "ссылка": null,
+              "данные": "ЭЭГ-BIDS; expectation модулирует repetition suppression",
+              "задачи": [
+                "Задача 4"
+              ],
+              "исходная_ссылка": "https://nemar.org",
+              "статус_валидации": "needs_exact_url",
+              "проверено": null,
+              "примечание_валидации": "Общая страница домена не подтверждает конкретный ресурс; требуется точная первичная ссылка."
+            },
+            {
+              "название": "Zuo2025 (knee pain)",
+              "ссылка": null,
+              "данные": "30 ch ЭЭГ; knee pain; motor imagery",
+              "задачи": [
+                "Задача 4"
+              ],
+              "исходная_ссылка": "https://moabb.neurotechx.com",
+              "статус_валидации": "needs_exact_url",
+              "проверено": null,
+              "примечание_валидации": "Общая страница домена не подтверждает конкретный ресурс; требуется точная первичная ссылка."
+            }
+          ]
+        },
+        {
+          "id": "C3.3",
+          "название": "Датасеты fNIRS (боль)",
+          "ресурсы": [
+            {
+              "название": "Evoked fNIRS (thermal QST)",
+              "ссылка": null,
+              "данные": "200 MB; fNIRS; thermal quantitative sensory testing",
+              "задачи": [
+                "Задача 4"
+              ],
+              "исходная_ссылка": "https://data.mendeley.com",
+              "статус_валидации": "needs_exact_url",
+              "проверено": null,
+              "примечание_валидации": "Общая страница домена не подтверждает конкретный ресурс; требуется точная первичная ссылка."
+            },
+            {
+              "название": "Electrical_Thermal_FingerTapping_2015",
+              "ссылка": null,
+              "данные": "fNIRS; painful thermal + electrical stimuli; finger-tapping",
+              "задачи": [
+                "Задача 4"
+              ],
+              "исходная_ссылка": "https://nemar.org",
+              "статус_валидации": "needs_exact_url",
+              "проверено": null,
+              "примечание_валидации": "Общая страница домена не подтверждает конкретный ресурс; требуется точная первичная ссылка."
+            },
+            {
+              "название": "Electrical_Morphine_Placebo_2018",
+              "ссылка": null,
+              "данные": "fNIRS; morphine analgesia + placebo effects",
+              "задачи": [
+                "Задача 4"
+              ],
+              "исходная_ссылка": "https://nemar.org",
+              "статус_валидации": "needs_exact_url",
+              "проверено": null,
+              "примечание_валидации": "Общая страница домена не подтверждает конкретный ресурс; требуется точная первичная ссылка."
+            },
+            {
+              "название": "NITRC Open access fNIRS (pain)",
+              "ссылка": "http://www.nitrc.org/projects/yucel18pain/",
+              "данные": "fNIRS; painful stimuli; morphine vs placebo",
+              "задачи": [
+                "Задача 4"
+              ],
+              "статус_валидации": "url_present_content_not_checked",
+              "проверено": null,
+              "примечание_валидации": "Точный URL присутствует, содержание еще не проверено."
+            },
+            {
+              "название": "NITRC Electrical pain stimulus",
+              "ссылка": "http://www.nitrc.org/projects/yucel15pain",
+              "данные": "fNIRS; 11 subjects; innocuous + noxious electrical stimulus",
+              "задачи": [
+                "Задача 4"
+              ],
+              "статус_валидации": "url_present_content_not_checked",
+              "проверено": null,
+              "примечание_валидации": "Точный URL присутствует, содержание еще не проверено."
+            }
+          ]
+        },
+        {
+          "id": "C3.4",
+          "название": "Датасеты SCS/ECAP",
+          "ресурсы": [
+            {
+              "название": "data_CL_SCS (Figshare)",
+              "ссылка": null,
+              "данные": "ECAP-сигналы при postural changes during SCS",
+              "задачи": [
+                "Задача 4",
+                "Задача 5"
+              ],
+              "исходная_ссылка": "https://figshare.com",
+              "статус_валидации": "unverified",
+              "проверено": "2026-09-21",
+              "примечание_валидации": "Точная запись Figshare по указанному названию не подтверждена; общая ссылка удалена из рабочего поля."
+            },
+            {
+              "название": "ECAP + conductivity data (Figshare)",
+              "ссылка": null,
+              "данные": "ECAP amplitudes при разных directional contacts; conductivity of tissues",
+              "задачи": [
+                "Задача 4",
+                "Задача 5"
+              ],
+              "исходная_ссылка": "https://figshare.com",
+              "статус_валидации": "unverified",
+              "проверено": "2026-09-21",
+              "примечание_валидации": "Точная запись Figshare и состав данных не подтверждены; не использовать как доступный датасет."
+            },
+            {
+              "название": "Epidural spinal recordings (Newcastle)",
+              "ссылка": null,
+              "данные": "ECAPs, doublets, ESAPs, EMGs; SCS neural processes",
+              "задачи": [
+                "Задача 4"
+              ],
+              "исходная_ссылка": "https://apps-eprint4-l.ncl.ac.uk",
+              "статус_валидации": "partially_verified",
+              "проверено": "2026-09-21",
+              "примечание_валидации": "Подтверждена публикация о preclinical epidural recordings, но открытый датасет по указанной ссылке не подтвержден."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "C4",
+      "название": "ML-фреймворки и модели детекции боли",
+      "подкатегории": [
+        {
+          "id": "C4.1",
+          "название": "SOTA-модели (GitHub-репозитории)",
+          "ресурсы": [
+            {
+              "название": "VST-APA (Video Swin Transformers)",
+              "ссылка": "https://github.com/MRausus/VST-APA",
+              "назначение": "Pain detection; effectiveness, generalizability, explainability",
+              "задачи": [
+                "Задача 5"
+              ],
+              "статус_валидации": "url_present_content_not_checked",
+              "проверено": null,
+              "примечание_валидации": "Точный URL присутствует, содержание еще не проверено."
+            },
+            {
+              "название": "HCAT-Pain",
+              "ссылка": "https://github.com/AnupKumarGupta/HCAT-Pain",
+              "назначение": "Hierarchical Cross-Attention Transformer; non-contact multimodal pain classification",
+              "задачи": [
+                "Задача 5"
+              ],
+              "статус_валидации": "url_present_content_not_checked",
+              "проверено": null,
+              "примечание_валидации": "Точный URL присутствует, содержание еще не проверено."
+            },
+            {
+              "название": "Tiny-BioMoE",
+              "ссылка": "https://github.com/GkikasStefanos/Tiny-BioMoE",
+              "назначение": "Lightweight embedding model для биосигналов; pretrained weights",
+              "задачи": [
+                "Задача 5"
+              ],
+              "статус_валидации": "url_present_content_not_checked",
+              "проверено": null,
+              "примечание_валидации": "Точный URL присутствует, содержание еще не проверено."
+            },
+            {
+              "название": "Hierarchical Multimodal Fusion (X-ITE)",
+              "ссылка": "https://github.com/Satyajithchary/Hierarchical-Multimodal-Fusion-with-Phased-Training-for-X-ITE-Challenge",
+              "назначение": "Multimodal pain recognition; physiological + video + audio; 3-phase curriculum",
+              "задачи": [
+                "Задача 5"
+              ],
+              "статус_валидации": "url_present_content_not_checked",
+              "проверено": null,
+              "примечание_валидации": "Точный URL присутствует, содержание еще не проверено."
+            },
+            {
+              "название": "Cross-Spectral Attention Fusion (CSAF)",
+              "ссылка": "https://github.com/oussama123-ai/Cross-Spectral-Fusion-of-Thermal",
+              "назначение": "Thermal + RGB imaging; objective pain estimation",
+              "задачи": [
+                "Задача 5"
+              ],
+              "статус_валидации": "url_present_content_not_checked",
+              "проверено": null,
+              "примечание_валидации": "Точный URL присутствует, содержание еще не проверено."
+            },
+            {
+              "название": "PainFormer",
+              "ссылка": "https://github.com/GkikasStefanos/PainFormer",
+              "назначение": "Vision foundation model; 14 tasks/datasets; 10.9M samples",
+              "задачи": [
+                "Задача 5"
+              ],
+              "статус_валидации": "url_present_content_not_checked",
+              "проверено": null,
+              "примечание_валидации": "Точный URL присутствует, содержание еще не проверено."
+            },
+            {
+              "название": "Automatic-Recognition-VAS-Index",
+              "ссылка": "https://github.com/LorenzoGianassi/Automatic-Recognition-VAS-Index-with-Random-Forest",
+              "назначение": "Random Forest для pain index; BioVid dataset",
+              "задачи": [
+                "Задача 5"
+              ],
+              "статус_валидации": "url_present_content_not_checked",
+              "проверено": null,
+              "примечание_валидации": "Точный URL присутствует, содержание еще не проверено."
+            }
+          ]
+        },
+        {
+          "id": "C4.2",
+          "название": "ML-фреймворки",
+          "ресурсы": [
+            {
+              "название": "PyTorch Tabular",
+              "ссылка": "https://github.com/manujosephv/pytorch_tabular",
+              "назначение": "Deep learning для табличных данных; NODE, TabNet, категориальные энкодеры, TensorBoard/W&B",
+              "задачи": [
+                "Задача 5"
+              ],
+              "статус_валидации": "url_present_content_not_checked",
+              "проверено": null,
+              "примечание_валидации": "Точный URL присутствует, содержание еще не проверено."
+            },
+            {
+              "название": "sktime",
+              "ссылка": "https://github.com/sktime/sktime",
+              "назначение": "Time series classification; pain detection",
+              "задачи": [
+                "Задача 5"
+              ],
+              "статус_валидации": "url_present_content_not_checked",
+              "проверено": null,
+              "примечание_валидации": "Точный URL присутствует, содержание еще не проверено."
+            },
+            {
+              "название": "PyTorch Lightning",
+              "ссылка": "https://github.com/Lightning-AI/pytorch-lightning",
+              "назначение": "Упрощение training loop; experiment tracking",
+              "задачи": [
+                "Задача 5"
+              ],
+              "статус_валидации": "url_present_content_not_checked",
+              "проверено": null,
+              "примечание_валидации": "Точный URL присутствует, содержание еще не проверено."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "C5",
+      "название": "Модели SCS/ECAP и цифровые двойники",
+      "подкатегории": [
+        {
+          "id": "C5.1",
+          "название": "Ресурсы",
+          "ресурсы": [
+            {
+              "название": "RADO-SCS",
+              "ссылка": null,
+              "назначение": "Realistic Anatomically Detailed Open-Source SCS Model; CAD-derived human spinal anatomy",
+              "задачи": [
+                "Задача 4"
+              ],
+              "исходная_ссылка": "https://zenodo.org",
+              "статус_валидации": "needs_exact_url",
+              "проверено": null,
+              "примечание_валидации": "Общая страница домена не подтверждает конкретный ресурс; требуется точная первичная ссылка."
+            },
+            {
+              "название": "SCSInSCIMechanisms",
+              "ссылка": "https://github.com/jostrows9/SCSInSCIMechanisms",
+              "назначение": "Biophysical model + анализ epidural SCS при травме; Balaguer et al. (2025)",
+              "задачи": [
+                "Задача 4"
+              ],
+              "статус_валидации": "url_present_content_not_checked",
+              "проверено": null,
+              "примечание_валидации": "Точный URL присутствует, содержание еще не проверено."
+            },
+            {
+              "название": "SCS-network",
+              "ссылка": "https://github.com/lauramedlock/SCS-network",
+              "назначение": "SCS network model (Sagalajev et al. 2024); Python-симуляция",
+              "задачи": [
+                "Задача 4"
+              ],
+              "статус_валидации": "url_present_content_not_checked",
+              "проверено": null,
+              "примечание_валидации": "Точный URL присутствует, содержание еще не проверено."
+            },
+            {
+              "название": "NRV (NeuRon Virtualizer)",
+              "ссылка": "https://github.com/fkolbl/NRV",
+              "назначение": "Multi-scale Python framework для in-silico PNS stimulation",
+              "задачи": [
+                "Задача 4"
+              ],
+              "статус_валидации": "url_present_content_not_checked",
+              "проверено": null,
+              "примечание_валидации": "Точный URL присутствует, содержание еще не проверено."
+            },
+            {
+              "название": "OpenXstim",
+              "ссылка": "https://github.com/OpenMedTech-Lab/OpenXstim",
+              "назначение": "Open-source programmable electrical stimulator для transcutaneous SCS",
+              "задачи": [
+                "Задача 4"
+              ],
+              "статус_валидации": "url_present_content_not_checked",
+              "проверено": null,
+              "примечание_валидации": "Точный URL присутствует, содержание еще не проверено."
+            },
+            {
+              "название": "Digital Twins (npj Biomedical Innovations)",
+              "ссылка": null,
+              "назначение": "Biophysical + surrogate digital twins; hybrid modeling framework для SCS",
+              "задачи": [
+                "Задача 4",
+                "Задача 5"
+              ],
+              "исходная_ссылка": "https://www.nature.com",
+              "статус_валидации": "needs_exact_url",
+              "проверено": null,
+              "примечание_валидации": "Общая страница домена не подтверждает конкретный ресурс; требуется точная первичная ссылка."
+            },
+            {
+              "название": "Multi-scale digital twins (FAU)",
+              "ссылка": null,
+              "назначение": "Multi-scale digital twins of spinal cord; Pareto-optimal parameter exploration",
+              "задачи": [
+                "Задача 4"
+              ],
+              "исходная_ссылка": "https://www.pdh.med.fau.de",
+              "статус_валидации": "needs_exact_url",
+              "проверено": null,
+              "примечание_валидации": "Общая страница домена не подтверждает конкретный ресурс; требуется точная первичная ссылка."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "C6",
+      "название": "Облачные и вычислительные ресурсы",
+      "подкатегории": [
+        {
+          "id": "C6.1",
+          "название": "Ресурсы",
+          "ресурсы": [
+            {
+              "название": "Google Colab",
+              "ссылка": null,
+              "назначение": "Бесплатные GPU/TPU; Jupyter notebooks; SNN tutorials",
+              "задачи": [
+                "Задача 5"
+              ],
+              "исходная_ссылка": "https://colab.research.google.com",
+              "статус_валидации": "needs_exact_url",
+              "проверено": null,
+              "примечание_валидации": "Общая страница домена не подтверждает конкретный ресурс; требуется точная первичная ссылка."
+            },
+            {
+              "название": "Norse Colab Tutorials",
+              "ссылка": "https://github.com/norse/notebooks",
+              "назначение": "SNN tutorials в Colab; hardware acceleration (GPU/TPU)",
+              "задачи": [
+                "Задача 5"
+              ],
+              "статус_валидации": "url_present_content_not_checked",
+              "проверено": null,
+              "примечание_валидации": "Точный URL присутствует, содержание еще не проверено."
+            },
+            {
+              "название": "snnTorch Colab",
+              "ссылка": "https://github.com/jeshraghian/snntorch",
+              "назначение": "5+ Colab tutorials: Spike Encoding, Feedforward SNN, Training SNN",
+              "задачи": [
+                "Задача 5"
+              ],
+              "статус_валидации": "url_present_content_not_checked",
+              "проверено": null,
+              "примечание_валидации": "Точный URL присутствует, содержание еще не проверено."
+            },
+            {
+              "название": "EvoJAX SNN (Colab)",
+              "ссылка": null,
+              "назначение": "Evolving SNN with EvoJAX; чистый Jax; TPU-совместимый",
+              "задачи": [
+                "Задача 5"
+              ],
+              "исходная_ссылка": "https://nbviewer.org",
+              "статус_валидации": "needs_exact_url",
+              "проверено": null,
+              "примечание_валидации": "Общая страница домена не подтверждает конкретный ресурс; требуется точная первичная ссылка."
+            },
+            {
+              "название": "Radboud SNN Simulator (Colab)",
+              "ссылка": "https://github.com/adiehl96/SNN-computing",
+              "назначение": "Simulator of SNN for neuromorphic computing; Colab badge",
+              "задачи": [
+                "Задача 5"
+              ],
+              "статус_валидации": "url_present_content_not_checked",
+              "проверено": null,
+              "примечание_валидации": "Точный URL присутствует, содержание еще не проверено."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "C7",
+      "название": "Туториалы и документация",
+      "подкатегории": [
+        {
+          "id": "C7.1",
+          "название": "Ресурсы",
+          "ресурсы": [
+            {
+              "название": "FlyConnectome CAVE Tutorial",
+              "ссылка": "https://github.com/seung-lab/FlyConnectome/blob/main/CAVE%20tutorial.ipynb",
+              "назначение": "Jupyter tutorial для программного доступа к FlyWire",
+              "задачи": [
+                "Задача 1"
+              ],
+              "статус_валидации": "url_present_content_not_checked",
+              "проверено": null,
+              "примечание_валидации": "Точный URL присутствует, содержание еще не проверено."
+            },
+            {
+              "название": "NeuroMechFly v2 Docs",
+              "ссылка": "https://flygym.readthedocs.io/latest/index.html",
+              "назначение": "Документация: leg adhesion, rule-based controller, hybrid controller, vision, olfaction, RL-based navigation, Gym environment",
+              "задачи": [
+                "Задача 2"
+              ],
+              "исходная_ссылка": "https://neuromechfly.org",
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-21",
+              "примечание_валидации": "Официальная документация FlyGym."
+            },
+            {
+              "название": "Brian2GeNN Tutorial",
+              "ссылка": null,
+              "назначение": "Пример: LIF neurons with varying input currents; f/I curve",
+              "задачи": [
+                "Задача 5"
+              ],
+              "исходная_ссылка": "https://genn-team.github.io",
+              "статус_валидации": "needs_exact_url",
+              "проверено": null,
+              "примечание_валидации": "Общая страница домена не подтверждает конкретный ресурс; требуется точная первичная ссылка."
+            },
+            {
+              "название": "BrainChip MetaTF Docs",
+              "ссылка": null,
+              "назначение": "Akida ML framework; QuantizeML + Compilation packages",
+              "задачи": [
+                "Задача 5"
+              ],
+              "исходная_ссылка": "https://doc.brainchipinc.com",
+              "статус_валидации": "needs_exact_url",
+              "проверено": null,
+              "примечание_валидации": "Общая страница домена не подтверждает конкретный ресурс; требуется точная первичная ссылка."
+            },
+            {
+              "название": "PyTorch Tabular Docs",
+              "ссылка": "https://github.com/manujosephv/pytorch_tabular",
+              "назначение": "Полная документация; FeedForward + Category Embedding, TabNet, NODE",
+              "задачи": [
+                "Задача 5"
+              ],
+              "статус_валидации": "url_present_content_not_checked",
+              "проверено": null,
+              "примечание_валидации": "Точный URL присутствует, содержание еще не проверено."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "C8",
+      "название": "Референсные публикации и метаданные",
+      "подкатегории": [
+        {
+          "id": "C8.1",
+          "название": "Ресурсы",
+          "ресурсы": [
+            {
+              "название": "FlyWire: Method of the Year 2025 (Nature Methods)",
+              "ссылка": null,
+              "назначение": "Методология коннектомики; EM-based approach (S252, S445)",
+              "задачи": [
+                "Задача 1"
+              ],
+              "исходная_ссылка": "https://www.nature.com",
+              "статус_валидации": "needs_exact_url",
+              "проверено": null,
+              "примечание_валидации": "Общая страница домена не подтверждает конкретный ресурс; требуется точная первичная ссылка."
+            },
+            {
+              "название": "LIF model from Shiu et al. (Nature 2024)",
+              "ссылка": "https://www.nature.com/articles/s41586-024-07763-9",
+              "назначение": "Canonical LIF model; 91% prediction accuracy против экспериментальных данных Drosophila",
+              "задачи": [
+                "Задача 2"
+              ],
+              "статус_валидации": "url_present_content_not_checked",
+              "проверено": null,
+              "примечание_валидации": "Точный URL присутствует, содержание еще не проверено."
+            },
+            {
+              "название": "EVOKE Study (JPHV 2026)",
+              "ссылка": null,
+              "назначение": "CL-SCS vs OL-SCS; RR 1.47 для ≥50% pain relief (S357, S404)",
+              "задачи": [
+                "Задача 5"
+              ],
+              "исходная_ссылка": "https://www.jphv.org",
+              "статус_валидации": "needs_exact_url",
+              "проверено": null,
+              "примечание_валидации": "Общая страница домена не подтверждает конкретный ресурс; требуется точная первичная ссылка."
+            },
+            {
+              "название": "Control Signals in CL-SCS (Neuromodulation 2026)",
+              "ссылка": null,
+              "назначение": "Scoping review: 28 статей, 19 исследований; ни одна модель не интегрирует субъективные + биомаркеры (S079, S290)",
+              "задачи": [
+                "Задача 5"
+              ],
+              "исходная_ссылка": "https://www.neuromodulationjournal.org",
+              "статус_валидации": "needs_exact_url",
+              "проверено": null,
+              "примечание_валидации": "Общая страница домена не подтверждает конкретный ресурс; требуется точная первичная ссылка."
+            },
+            {
+              "название": "Eon Systems: Embodied whole-brain emulation",
+              "ссылка": null,
+              "назначение": "125 000 нейронов, 50M синапсов; NeuroMechFly v2; compound eye vision (S287, S254)",
+              "задачи": [
+                "Задача 2"
+              ],
+              "исходная_ссылка": "https://tech.yahoo.com",
+              "статус_валидации": "needs_exact_url",
+              "проверено": null,
+              "примечание_валидации": "Общая страница домена не подтверждает конкретный ресурс; требуется точная первичная ссылка."
+            },
+            {
+              "название": "DoomFly (Alex Wormuth)",
+              "ссылка": "https://github.com/nftechie/doomfly",
+              "назначение": "MaleCNS v1.0; PPL101 dopamine receptors; pain feedback (S121, S354)",
+              "задачи": [
+                "Задача 2",
+                "Задача 3"
+              ],
+              "статус_валидации": "url_present_content_not_checked",
+              "проверено": null,
+              "примечание_валидации": "Точный URL присутствует, содержание еще не проверено."
+            },
+            {
+              "название": "US20220323766A1",
+              "ссылка": "https://patents.google.com/patent/US20220323766A1/en",
+              "назначение": "d_total = d_EEG + I_ECAP; closed-loop SCS (S289, S392)",
+              "задачи": [
+                "Задача 4"
+              ],
+              "исходная_ссылка": "https://patents.google.com",
+              "статус_валидации": "partially_verified",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Идентификатор и страница патента подтверждены; патент не является эмпирическим доказательством (records S289; alias S392)."
+            },
+            {
+              "название": "US10842996",
+              "ссылка": null,
+              "назначение": "Analog SA rejection circuit для ECAP extraction (S681, S700)",
+              "задачи": [
+                "Задача 4"
+              ],
+              "исходная_ссылка": "https://patents.google.com",
+              "статус_валидации": "needs_exact_url",
+              "проверено": null,
+              "примечание_валидации": "Общая страница домена не подтверждает конкретный ресурс; требуется точная первичная ссылка."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "C9",
+      "название": "Системные требования",
+      "подкатегории": [
+        {
+          "id": "C9.1",
+          "название": "Минимальная конфигурация",
+          "ресурсы": [
+            {
+              "компонент": "CPU",
+              "требование": "16+ ядер (для Brian2/NEST CPU-симуляций)",
+              "статус_валидации": "unverified",
+              "проверено": null,
+              "примечание_валидации": "Нет проверяемой ссылки."
+            },
+            {
+              "компонент": "RAM",
+              "требование": "64 GB (коннектом v783 ~5M синапсов; MaleCNS ~25.5M)",
+              "статус_валидации": "unverified",
+              "проверено": null,
+              "примечание_валидации": "Нет проверяемой ссылки."
+            },
+            {
+              "компонент": "GPU",
+              "требование": "NVIDIA RTX 3090/4090 (24 GB VRAM) — для Brian2GeNN, PyTorch, transformer-моделей",
+              "статус_валидации": "unverified",
+              "проверено": null,
+              "примечание_валидации": "Нет проверяемой ссылки."
+            },
+            {
+              "компонент": "Storage",
+              "требование": "2 TB NVMe SSD (датасеты + симуляции + checkpoints)",
+              "статус_валидации": "unverified",
+              "проверено": null,
+              "примечание_валидации": "Нет проверяемой ссылки."
+            },
+            {
+              "компонент": "OS",
+              "требование": "Ubuntu 22.04+ / Windows 11 + WSL2",
+              "статус_валидации": "unverified",
+              "проверено": null,
+              "примечание_валидации": "Нет проверяемой ссылки."
+            },
+            {
+              "компонент": "Python",
+              "требование": "3.10–3.12 (совместимость с BrainChip MetaTF, PyTorch)",
+              "статус_валидации": "unverified",
+              "проверено": null,
+              "примечание_валидации": "Нет проверяемой ссылки."
+            },
+            {
+              "компонент": "CUDA",
+              "требование": "12.x",
+              "статус_валидации": "unverified",
+              "проверено": null,
+              "примечание_валидации": "Нет проверяемой ссылки."
+            }
+          ]
+        },
+        {
+          "id": "C9.2",
+          "название": "Рекомендуемая конфигурация",
+          "ресурсы": [
+            {
+              "компонент": "CPU",
+              "требование": "32+ ядер (AMD Threadripper / Intel Xeon)",
+              "статус_валидации": "unverified",
+              "проверено": null,
+              "примечание_валидации": "Нет проверяемой ссылки."
+            },
+            {
+              "компонент": "RAM",
+              "требование": "128–256 GB",
+              "статус_валидации": "unverified",
+              "проверено": null,
+              "примечание_валидации": "Нет проверяемой ссылки."
+            },
+            {
+              "компонент": "GPU",
+              "требование": "2× NVIDIA A100 80GB или 4× RTX 4090",
+              "статус_валидации": "unverified",
+              "проверено": null,
+              "примечание_валидации": "Нет проверяемой ссылки."
+            },
+            {
+              "компонент": "Storage",
+              "требование": "4 TB NVMe + 8 TB HDD (архив датасетов)",
+              "статус_валидации": "unverified",
+              "проверено": null,
+              "примечание_валидации": "Нет проверяемой ссылки."
+            },
+            {
+              "компонент": "Нейроморфное железо",
+              "требование": "BrainChip Akida dev kit / AKD1500 (для edge-валидации)",
+              "статус_валидации": "unverified",
+              "проверено": null,
+              "примечание_валидации": "Нет проверяемой ссылки."
+            }
+          ]
+        },
+        {
+          "id": "C9.3",
+          "название": "Программный стек",
+          "ресурсы": [
+            {
+              "группа": "Симуляция",
+              "компоненты": [
+                "Brian2 + Brian2GeNN (SNN)",
+                "NEST GPU (альтернатива)",
+                "FlyGym / NeuroMechFly v2 (embodied)",
+                "MuJoCo (физика)",
+                "FlyWire Codex API (коннектом)"
+              ],
+              "статус_валидации": "unverified",
+              "проверено": null,
+              "примечание_валидации": "Нет проверяемой ссылки."
+            },
+            {
+              "группа": "ML",
+              "компоненты": [
+                "PyTorch 2.x + Lightning",
+                "PyTorch Tabular",
+                "sktime (time series)",
+                "HuggingFace Transformers",
+                "snnTorch / Norse (SNN)"
+              ],
+              "статус_валидации": "unverified",
+              "проверено": null,
+              "примечание_валидации": "Нет проверяемой ссылки."
+            },
+            {
+              "группа": "SCS-модели",
+              "компоненты": [
+                "RADO-SCS (FEM)",
+                "SCSInSCIMechanisms",
+                "NRV (PNS)"
+              ],
+              "статус_валидации": "unverified",
+              "проверено": null,
+              "примечание_валидации": "Нет проверяемой ссылки."
+            },
+            {
+              "группа": "Нейроморфное железо",
+              "компоненты": [
+                "BrainChip MetaTF SDK",
+                "Edge Impulse (AKD1000)"
+              ],
+              "статус_валидации": "unverified",
+              "проверено": null,
+              "примечание_валидации": "Нет проверяемой ссылки."
+            },
+            {
+              "группа": "Данные",
+              "компоненты": [
+                "BioVid, AI4Pain, PainMonit, LENS",
+                "OpenPain, PainLabMunich (ЭЭГ)",
+                "fNIRS datasets (Mendeley, NEMAR)"
+              ],
+              "статус_валидации": "unverified",
+              "проверено": null,
+              "примечание_валидации": "Нет проверяемой ссылки."
+            },
+            {
+              "группа": "Облако",
+              "компоненты": [
+                "Google Colab (GPU/TPU) для прототипирования"
+              ],
+              "статус_валидации": "unverified",
+              "проверено": null,
+              "примечание_валидации": "Нет проверяемой ссылки."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "matrix_task_to_resources": [
+    {
+      "задача": "1. Формализация коннектома",
+      "ключевые_ресурсы": [
+        "FlyWire Codex",
+        "FlyConnectome",
+        "murthylab/flywire-network-analysis",
+        "philshiu/Drosophila_brain_model"
+      ]
+    },
+    {
+      "задача": "2. Embodied симуляция",
+      "ключевые_ресурсы": [
+        "NeuroMechFly v2/FlyGym",
+        "MuJoCo",
+        "Eon Systems fly-brain",
+        "claude-fly",
+        "fly-arena"
+      ]
+    },
+    {
+      "задача": "3. Синтетический датасет",
+      "ключевые_ресурсы": [
+        "Brian2/Brian2GeNN",
+        "NEST GPU",
+        "snnTorch",
+        "ModMix",
+        "diffusion models"
+      ]
+    },
+    {
+      "задача": "4. Cross-species adaptation",
+      "ключевые_ресурсы": [
+        "RADO-SCS",
+        "SCSInSCIMechanisms",
+        "DANN",
+        "meta-learning (VNS)",
+        "US20220323766A1"
+      ]
+    },
+    {
+      "задача": "5. Обучение и валидация",
+      "ключевые_ресурсы": [
+        "PyTorch Tabular",
+        "PainFormer",
+        "HCAT-Pain",
+        "GIAFormer",
+        "BioVid",
+        "AI4Pain",
+        "BrainChip Akida"
+      ]
+    },
+    {
+      "задача": "6. Этический аудит",
+      "ключевые_ресурсы": [
+        "Drosophila emulations (Scilit)",
+        "The Mousing Problem (Zenodo)",
+        "AI and Ethics"
+      ]
+    },
+    {
+      "задача": "7. Open science",
+      "ключевые_ресурсы": [
+        "GitHub",
+        "Zenodo",
+        "HuggingFace",
+        "OSF"
+      ]
+    }
+  ],
+  "notes": [
+    "BioVid требует соглашения для некоммерческого исследования; AI4PAIN использует регистрацию/EULA; PainMonit доступен через Figshare.",
+    "На первом проходе не подтвержден открытый человеческий набор, одновременно содержащий SCS/ECAP и клинический исход боли.",
+    "FlyWire FAFB v783 описывает мозг взрослой самки, а не VNC/тело; анатомическая связность не задает физиологическую динамику.",
+    "NeuroMechFly/FlyGym является embodied sensorimotor framework, но не содержит готовой модели ноцицепции, ECAP или человеческой SCS.",
+    "Непроверенные ресурсы и общие доменные ссылки нельзя использовать в ИПР, статье или заявке на новизну до валидации."
+  ]
+}

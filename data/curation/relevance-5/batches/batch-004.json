@@ -1,0 +1,913 @@
+{
+  "meta": {
+    "batch_id": "batch-004",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-22",
+    "scope": "relevance=5; status=unverified",
+    "status": "applied",
+    "reviewed_at": "2026-09-22",
+    "applied_at": "2026-09-22"
+  },
+  "source_ids": [
+    "S086",
+    "S129",
+    "S088",
+    "S119",
+    "S131",
+    "S179",
+    "S140",
+    "S158",
+    "S203",
+    "S217",
+    "S270",
+    "S007",
+    "S103",
+    "S265",
+    "S243",
+    "S276",
+    "S285",
+    "S298",
+    "S322",
+    "S337"
+  ],
+  "records": [
+    {
+      "id": "S086",
+      "title": "Hierarchical Cross-Attention Transformer for Non-contact Pain Classification",
+      "year": 2026,
+      "source_type": "метод"
+    },
+    {
+      "id": "S129",
+      "title": "HCAT-Pain (final)",
+      "year": 2026,
+      "source_type": "метод"
+    },
+    {
+      "id": "S088",
+      "title": "Cross-Domain Multimodal Pain Detection Using DANN–Transformer",
+      "year": 2026,
+      "source_type": "кросс_субъект"
+    },
+    {
+      "id": "S119",
+      "title": "DANN-Transformer for Cross-Domain Multimodal Pain Detection",
+      "year": 2026,
+      "source_type": "кросс_субъект"
+    },
+    {
+      "id": "S131",
+      "title": "DANN-Transformer (final)",
+      "year": 2026,
+      "source_type": "кросс_субъект"
+    },
+    {
+      "id": "S179",
+      "title": "DANN-Transformer for Cross-Domain Multimodal Pain (extended)",
+      "year": 2026,
+      "source_type": "кросс_субъект"
+    },
+    {
+      "id": "S140",
+      "title": "AI/ML-Based Closed-Loop SCS (Patent US20260216499)",
+      "year": 2026,
+      "source_type": "патент"
+    },
+    {
+      "id": "S158",
+      "title": "AI/ML-Based Closed-Loop SCS (Patent)",
+      "year": 2026,
+      "source_type": "патент"
+    },
+    {
+      "id": "S203",
+      "title": "AI/ML-Based Closed-Loop SCS (final)",
+      "year": 2026,
+      "source_type": "патент"
+    },
+    {
+      "id": "S217",
+      "title": "AI/ML-Based Closed-Loop SCS (Patent, extended)",
+      "year": 2026,
+      "source_type": "патент"
+    },
+    {
+      "id": "S270",
+      "title": "AI/ML-Based CL-SCS (final)",
+      "year": 2026,
+      "source_type": "патент"
+    },
+    {
+      "id": "S007",
+      "title": "MDNet: A Lightweight Multidomain 1-D CNN for Embedded Pain Assessment Using EDA Signals",
+      "year": 2026,
+      "source_type": "носимые_реальное_время"
+    },
+    {
+      "id": "S103",
+      "title": "MDNet: Lightweight 1-D CNN for Embedded Pain Assessment",
+      "year": 2026,
+      "source_type": "носимые_реальное_время"
+    },
+    {
+      "id": "S265",
+      "title": "MDNet: Embedded pain assessment (final)",
+      "year": 2026,
+      "source_type": "носимые_реальное_время"
+    },
+    {
+      "id": "S243",
+      "title": "ClinicalTrials NCT04662905: ECAP-controlled CL-SCS",
+      "year": 2026,
+      "source_type": "применение"
+    },
+    {
+      "id": "S276",
+      "title": "ClinicalTrials NCT04662905 (extended)",
+      "year": 2026,
+      "source_type": "применение"
+    },
+    {
+      "id": "S285",
+      "title": "Optimization of neuroprosthetic interfaces (digital twins)",
+      "year": 2026,
+      "source_type": "цифровые_двойники"
+    },
+    {
+      "id": "S298",
+      "title": "Digital twins for SCS optimization (extended)",
+      "year": 2026,
+      "source_type": "цифровые_двойники"
+    },
+    {
+      "id": "S322",
+      "title": "Digital twins for SCS (final)",
+      "year": 2026,
+      "source_type": "цифровые_двойники"
+    },
+    {
+      "id": "S337",
+      "title": "Digital twins for SCS (final extended)",
+      "year": 2026,
+      "source_type": "цифровые_двойники"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S086",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-22",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Hierarchical Cross-Attention Transformer for Non-contact Pain Classification",
+          "url": "https://api.crossref.org/works?query.title=Hierarchical+Cross-Attention+Transformer+for+Non-contact+Pain+Classification&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Hierarchical Cross-Attention Transformer for Non-contact Pain Classification\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Hierarchical+Cross-Attention+Transformer+for+Non-contact+Pain+Classification%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "primary source",
+          "query": "Hierarchical Cross-Attention Transformer for Non-contact Multimodal Pain Classification using Remote Physiological Signals and Visual Features",
+          "url": "https://dspace.iiti.ac.in/handle/123456789/18784",
+          "result": "exact source page checked"
+        }
+      ],
+      "updates": {
+        "название": "Hierarchical Cross-Attention Transformer for Non-contact Multimodal Pain Classification using Remote Physiological Signals and Visual Features",
+        "авторы": "Anup Kumar Gupta; Puneet Gupta; Abhinav Dhall",
+        "год": 2026,
+        "издание": "2026 IEEE 20th International Conference on Automatic Face and Gesture Recognition (FG)",
+        "модальность": null,
+        "задача": null,
+        "метод": null,
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "ограничения": "Official institutional repository metadata and abstract checked.",
+        "identifiers": {
+          "doi": "10.1109/FG67764.2026.11556963",
+          "exact_url": "https://dspace.iiti.ac.in/handle/123456789/18784"
+        },
+        "provenance": {
+          "retrieved_at": "2026-09-22",
+          "search_stream": "relevance-5/registry-and-primary-review",
+          "query_or_seed": "Hierarchical Cross-Attention Transformer for Non-contact Multimodal Pain Classification using Remote Physiological Signals and Visual Features",
+          "iteration": 1
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "subject_domain": "unknown",
+          "modalities": [],
+          "sample_size": null,
+          "target_construct": "unknown",
+          "target_label": null,
+          "evidence_role": "method_baseline"
+        },
+        "validation": {
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported"
+        },
+        "risk_flags": []
+      },
+      "claims": [
+        {
+          "claim": "The bibliographic source exists under the verified identifier.",
+          "target_variable": "source identity",
+          "population_or_data": "not extracted in metadata-only decisions",
+          "evidence": "doi=10.1109/FG67764.2026.11556963; exact title=Hierarchical Cross-Attention Transformer for Non-contact Multimodal Pain Classification using Remote Physiological Signals and Visual Features",
+          "limitation": "Official institutional repository metadata and abstract checked.",
+          "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+        }
+      ],
+      "notes": "Official institutional repository metadata and abstract checked."
+    },
+    {
+      "source_id": "S129",
+      "decision": "alias",
+      "canonical_id": "S086",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "HCAT-Pain",
+          "url": "https://api.crossref.org/works?query.title=HCAT-Pain&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"HCAT-Pain\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22HCAT-Pain%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "primary source",
+          "query": "Hierarchical Cross-Attention Transformer for Non-contact Multimodal Pain Classification using Remote Physiological Signals and Visual Features",
+          "url": "https://dspace.iiti.ac.in/handle/123456789/18784",
+          "result": "exact source page checked"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S088",
+      "decision": "verified_metadata",
+      "checked_at": "2026-09-22",
+      "full_text_status": "metadata_only",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Cross-Domain Multimodal Pain Detection Using DANN–Transformer",
+          "url": "https://api.crossref.org/works?query.title=Cross-Domain+Multimodal+Pain+Detection+Using+DANN%E2%80%93Transformer&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Cross-Domain Multimodal Pain Detection Using DANN–Transformer\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Cross-Domain+Multimodal+Pain+Detection+Using+DANN%E2%80%93Transformer%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "updates": {
+        "название": "Cross-Domain Multimodal Pain Detection Using a DANN–Transformer Architecture with Supervised Contrastive Warmup and Test-Time Augmentation",
+        "авторы": "Samia Bouchfar; Yassmine Bouchfar; Hamid El Malali; Azeddine Mouhsen; Lhoucine Ben Taleb; Mohammed Harmouchi",
+        "год": 2026,
+        "издание": "2026 International Conference on Intelligent Systems and Digital Applications (ISDA)",
+        "модальность": null,
+        "задача": null,
+        "метод": null,
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "ограничения": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+        "identifiers": {
+          "doi": "10.1109/ISDA70544.2026.11606012",
+          "exact_url": "https://doi.org/10.1109/isda70544.2026.11606012"
+        },
+        "provenance": {
+          "retrieved_at": "2026-09-22",
+          "search_stream": "relevance-5/registry-and-primary-review",
+          "query_or_seed": "Cross-Domain Multimodal Pain Detection Using a DANN–Transformer Architecture with Supervised Contrastive Warmup and Test-Time Augmentation",
+          "iteration": 1
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "subject_domain": "unknown",
+          "modalities": [],
+          "sample_size": null,
+          "target_construct": "unknown",
+          "target_label": null,
+          "evidence_role": "context_only"
+        },
+        "validation": {
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported"
+        },
+        "risk_flags": [
+          "metadata_only"
+        ]
+      },
+      "claims": [
+        {
+          "claim": "The bibliographic source exists under the verified identifier.",
+          "target_variable": "source identity",
+          "population_or_data": "not extracted in metadata-only decisions",
+          "evidence": "doi=10.1109/ISDA70544.2026.11606012; exact title=Cross-Domain Multimodal Pain Detection Using a DANN–Transformer Architecture with Supervised Contrastive Warmup and Test-Time Augmentation",
+          "limitation": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+          "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+        }
+      ],
+      "notes": "Bibliographic metadata confirmed; full text was not used for claim extraction."
+    },
+    {
+      "source_id": "S119",
+      "decision": "alias",
+      "canonical_id": "S088",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "DANN-Transformer for Cross-Domain Multimodal Pain Detection",
+          "url": "https://api.crossref.org/works?query.title=DANN-Transformer+for+Cross-Domain+Multimodal+Pain+Detection&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"DANN-Transformer for Cross-Domain Multimodal Pain Detection\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22DANN-Transformer+for+Cross-Domain+Multimodal+Pain+Detection%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S131",
+      "decision": "alias",
+      "canonical_id": "S088",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "DANN-Transformer",
+          "url": "https://api.crossref.org/works?query.title=DANN-Transformer&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"DANN-Transformer\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22DANN-Transformer%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S179",
+      "decision": "alias",
+      "canonical_id": "S088",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "DANN-Transformer for Cross-Domain Multimodal Pain",
+          "url": "https://api.crossref.org/works?query.title=DANN-Transformer+for+Cross-Domain+Multimodal+Pain&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"DANN-Transformer for Cross-Domain Multimodal Pain\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22DANN-Transformer+for+Cross-Domain+Multimodal+Pain%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S140",
+      "decision": "rejected",
+      "checked_at": "2026-09-22",
+      "exclusion_reason": "unverifiable",
+      "clear_fields": [
+        "авторы",
+        "издание",
+        "модальность",
+        "задача",
+        "метод",
+        "датасет",
+        "производительность",
+        "кросс_субъект"
+      ],
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "AI/ML-Based Closed-Loop SCS (Patent US20260216499)",
+          "url": "https://api.crossref.org/works?query.title=AI%2FML-Based+Closed-Loop+SCS+%28Patent+US20260216499%29&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"AI/ML-Based Closed-Loop SCS (Patent US20260216499)\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22AI%2FML-Based+Closed-Loop+SCS+%28Patent+US20260216499%29%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [
+        {
+          "claim": "Imported source claim is traceable to a primary record.",
+          "target_variable": "source identity",
+          "population_or_data": "not established",
+          "evidence": "No unique matching primary record was established.",
+          "limitation": "US20260216499 was not found in USPTO/Google Patents; no patent metadata may be cited.",
+          "permitted_conclusion": "Do not cite as evidence."
+        }
+      ],
+      "notes": "US20260216499 was not found in USPTO/Google Patents; no patent metadata may be cited."
+    },
+    {
+      "source_id": "S158",
+      "decision": "alias",
+      "canonical_id": "S140",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "AI/ML-Based Closed-Loop SCS (Patent)",
+          "url": "https://api.crossref.org/works?query.title=AI%2FML-Based+Closed-Loop+SCS+%28Patent%29&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"AI/ML-Based Closed-Loop SCS (Patent)\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22AI%2FML-Based+Closed-Loop+SCS+%28Patent%29%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S203",
+      "decision": "alias",
+      "canonical_id": "S140",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "AI/ML-Based Closed-Loop SCS",
+          "url": "https://api.crossref.org/works?query.title=AI%2FML-Based+Closed-Loop+SCS&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"AI/ML-Based Closed-Loop SCS\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22AI%2FML-Based+Closed-Loop+SCS%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S217",
+      "decision": "alias",
+      "canonical_id": "S140",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "AI/ML-Based Closed-Loop SCS (Patent, extended)",
+          "url": "https://api.crossref.org/works?query.title=AI%2FML-Based+Closed-Loop+SCS+%28Patent%2C+extended%29&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"AI/ML-Based Closed-Loop SCS (Patent, extended)\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22AI%2FML-Based+Closed-Loop+SCS+%28Patent%2C+extended%29%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S270",
+      "decision": "alias",
+      "canonical_id": "S140",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "AI/ML-Based CL-SCS",
+          "url": "https://api.crossref.org/works?query.title=AI%2FML-Based+CL-SCS&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"AI/ML-Based CL-SCS\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22AI%2FML-Based+CL-SCS%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S007",
+      "decision": "verified_metadata",
+      "checked_at": "2026-09-22",
+      "full_text_status": "metadata_only",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "MDNet: A Lightweight Multidomain 1-D CNN for Embedded Pain Assessment Using EDA Signals",
+          "url": "https://api.crossref.org/works?query.title=MDNet%3A+A+Lightweight+Multidomain+1-D+CNN+for+Embedded+Pain+Assessment+Using+EDA+Signals&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"MDNet: A Lightweight Multidomain 1-D CNN for Embedded Pain Assessment Using EDA Signals\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22MDNet%3A+A+Lightweight+Multidomain+1-D+CNN+for+Embedded+Pain+Assessment+Using+EDA+Signals%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "updates": {
+        "название": "MDNet: A Lightweight Multidomain 1-D CNN for Embedded Pain Assessment Using EDA Signals",
+        "авторы": "Sumair Aziz; Girija Chetty; Roland Goecke; Raul Fernandez Rojas",
+        "год": 2026,
+        "издание": "IEEE Internet of Things Journal",
+        "модальность": null,
+        "задача": null,
+        "метод": null,
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "ограничения": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+        "identifiers": {
+          "doi": "10.1109/JIOT.2026.3663683",
+          "exact_url": "https://doi.org/10.1109/jiot.2026.3663683"
+        },
+        "provenance": {
+          "retrieved_at": "2026-09-22",
+          "search_stream": "relevance-5/registry-and-primary-review",
+          "query_or_seed": "MDNet: A Lightweight Multidomain 1-D CNN for Embedded Pain Assessment Using EDA Signals",
+          "iteration": 1
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "subject_domain": "unknown",
+          "modalities": [],
+          "sample_size": null,
+          "target_construct": "unknown",
+          "target_label": null,
+          "evidence_role": "context_only"
+        },
+        "validation": {
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported"
+        },
+        "risk_flags": [
+          "metadata_only"
+        ]
+      },
+      "claims": [
+        {
+          "claim": "The bibliographic source exists under the verified identifier.",
+          "target_variable": "source identity",
+          "population_or_data": "not extracted in metadata-only decisions",
+          "evidence": "doi=10.1109/JIOT.2026.3663683; exact title=MDNet: A Lightweight Multidomain 1-D CNN for Embedded Pain Assessment Using EDA Signals",
+          "limitation": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+          "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+        }
+      ],
+      "notes": "Bibliographic metadata confirmed; full text was not used for claim extraction."
+    },
+    {
+      "source_id": "S103",
+      "decision": "alias",
+      "canonical_id": "S007",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "MDNet: Lightweight 1-D CNN for Embedded Pain Assessment",
+          "url": "https://api.crossref.org/works?query.title=MDNet%3A+Lightweight+1-D+CNN+for+Embedded+Pain+Assessment&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"MDNet: Lightweight 1-D CNN for Embedded Pain Assessment\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22MDNet%3A+Lightweight+1-D+CNN+for+Embedded+Pain+Assessment%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S265",
+      "decision": "alias",
+      "canonical_id": "S007",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "MDNet: Embedded pain assessment",
+          "url": "https://api.crossref.org/works?query.title=MDNet%3A+Embedded+pain+assessment&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"MDNet: Embedded pain assessment\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22MDNet%3A+Embedded+pain+assessment%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S243",
+      "decision": "partially_verified",
+      "checked_at": "2026-09-22",
+      "full_text_status": "metadata_only",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "ClinicalTrials NCT04662905: ECAP-controlled CL-SCS",
+          "url": "https://api.crossref.org/works?query.title=ClinicalTrials+NCT04662905%3A+ECAP-controlled+CL-SCS&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"ClinicalTrials NCT04662905: ECAP-controlled CL-SCS\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22ClinicalTrials+NCT04662905%3A+ECAP-controlled+CL-SCS%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "primary source",
+          "query": "Novel Treatment Delivery of ECAP-controlled Closed-loop SCS for Chronic Pain",
+          "url": "https://clinicaltrials.gov/study/NCT04662905",
+          "result": "exact source page checked"
+        }
+      ],
+      "updates": {
+        "название": "Novel Treatment Delivery of ECAP-controlled Closed-loop SCS for Chronic Pain",
+        "авторы": null,
+        "год": null,
+        "издание": null,
+        "модальность": null,
+        "задача": null,
+        "метод": null,
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "ограничения": "ClinicalTrials.gov registration verified; recruiting status and estimated 2027 completion mean no outcome claim is available.",
+        "identifiers": {
+          "dataset_id": "NCT04662905",
+          "exact_url": "https://clinicaltrials.gov/study/NCT04662905"
+        },
+        "provenance": {
+          "retrieved_at": "2026-09-22",
+          "search_stream": "relevance-5/registry-and-primary-review",
+          "query_or_seed": "Novel Treatment Delivery of ECAP-controlled Closed-loop SCS for Chronic Pain",
+          "iteration": 1
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "subject_domain": "unknown",
+          "modalities": [],
+          "sample_size": null,
+          "target_construct": "scs_response",
+          "target_label": null,
+          "evidence_role": "scs_ecap_validation"
+        },
+        "validation": {
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported"
+        },
+        "risk_flags": [
+          "metadata_only"
+        ],
+        "тип_источника": "применение"
+      },
+      "claims": [
+        {
+          "claim": "The bibliographic source exists under the verified identifier.",
+          "target_variable": "source identity",
+          "population_or_data": "not extracted in metadata-only decisions",
+          "evidence": "patent_id=NCT04662905; exact title=Novel Treatment Delivery of ECAP-controlled Closed-loop SCS for Chronic Pain",
+          "limitation": "ClinicalTrials.gov registration verified; recruiting status and estimated 2027 completion mean no outcome claim is available.",
+          "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+        }
+      ],
+      "notes": "ClinicalTrials.gov registration verified; recruiting status and estimated 2027 completion mean no outcome claim is available."
+    },
+    {
+      "source_id": "S276",
+      "decision": "alias",
+      "canonical_id": "S243",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "ClinicalTrials NCT04662905",
+          "url": "https://api.crossref.org/works?query.title=ClinicalTrials+NCT04662905&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"ClinicalTrials NCT04662905\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22ClinicalTrials+NCT04662905%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "primary source",
+          "query": "Novel Treatment Delivery of ECAP-controlled Closed-loop SCS for Chronic Pain",
+          "url": "https://clinicaltrials.gov/study/NCT04662905",
+          "result": "exact source page checked"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S285",
+      "decision": "verified_metadata",
+      "checked_at": "2026-09-22",
+      "full_text_status": "metadata_only",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Optimization of neuroprosthetic interfaces (digital twins)",
+          "url": "https://api.crossref.org/works?query.title=Optimization+of+neuroprosthetic+interfaces+%28digital+twins%29&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Optimization of neuroprosthetic interfaces (digital twins)\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Optimization+of+neuroprosthetic+interfaces+%28digital+twins%29%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "updates": {
+        "название": "The optimization of neuroprosthetic interfaces relying on biophysical and surrogate digital twins",
+        "авторы": "Claudio Verardo; Veronica Fossati; Laura Toni; Luca Pierantoni; Elena Losanno; Filippo Agnesi; Simone Romeni",
+        "год": 2026,
+        "издание": "npj Biomedical Innovations",
+        "модальность": null,
+        "задача": null,
+        "метод": null,
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "ограничения": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+        "identifiers": {
+          "doi": "10.1038/s44385-026-00076-8",
+          "exact_url": "https://doi.org/10.1038/s44385-026-00076-8"
+        },
+        "provenance": {
+          "retrieved_at": "2026-09-22",
+          "search_stream": "relevance-5/registry-and-primary-review",
+          "query_or_seed": "The optimization of neuroprosthetic interfaces relying on biophysical and surrogate digital twins",
+          "iteration": 1
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "subject_domain": "unknown",
+          "modalities": [],
+          "sample_size": null,
+          "target_construct": "unknown",
+          "target_label": null,
+          "evidence_role": "context_only"
+        },
+        "validation": {
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported"
+        },
+        "risk_flags": [
+          "metadata_only"
+        ]
+      },
+      "claims": [
+        {
+          "claim": "The bibliographic source exists under the verified identifier.",
+          "target_variable": "source identity",
+          "population_or_data": "not extracted in metadata-only decisions",
+          "evidence": "doi=10.1038/s44385-026-00076-8; exact title=The optimization of neuroprosthetic interfaces relying on biophysical and surrogate digital twins",
+          "limitation": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+          "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+        }
+      ],
+      "notes": "Bibliographic metadata confirmed; full text was not used for claim extraction."
+    },
+    {
+      "source_id": "S298",
+      "decision": "alias",
+      "canonical_id": "S285",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Digital twins for SCS optimization",
+          "url": "https://api.crossref.org/works?query.title=Digital+twins+for+SCS+optimization&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Digital twins for SCS optimization\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Digital+twins+for+SCS+optimization%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S322",
+      "decision": "alias",
+      "canonical_id": "S285",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Digital twins for SCS",
+          "url": "https://api.crossref.org/works?query.title=Digital+twins+for+SCS&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Digital twins for SCS\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Digital+twins+for+SCS%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S337",
+      "decision": "alias",
+      "canonical_id": "S285",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Digital twins for SCS",
+          "url": "https://api.crossref.org/works?query.title=Digital+twins+for+SCS&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Digital twins for SCS\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Digital+twins+for+SCS%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    }
+  ]
+}

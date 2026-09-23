@@ -1,0 +1,778 @@
+{
+  "meta": {
+    "batch_id": "r4-batch-006",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-22",
+    "scope": "relevance=4; status=unverified",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-22"
+  },
+  "source_ids": [
+    "S165",
+    "S186",
+    "S187",
+    "S309",
+    "S188",
+    "S230",
+    "S192",
+    "S223",
+    "S228",
+    "S244",
+    "S255",
+    "S303",
+    "S381",
+    "S269",
+    "S274",
+    "S281",
+    "S282",
+    "S286",
+    "S293",
+    "S294",
+    "S295",
+    "S334",
+    "S396",
+    "S310",
+    "S311"
+  ],
+  "records": [
+    {
+      "id": "S165",
+      "title": "AI-Driven Neuromodulation in Neurodegenerative Disease",
+      "year": 2025,
+      "source_type": "федеративное_SCS"
+    },
+    {
+      "id": "S186",
+      "title": "AI-Driven Neuromodulation in Neurodegenerative Disease",
+      "year": 2025,
+      "source_type": "федеративное_SCS"
+    },
+    {
+      "id": "S187",
+      "title": "Federated Adaptive Neuromodulation Network (FANN)",
+      "year": 2025,
+      "source_type": "федеративное_SCS"
+    },
+    {
+      "id": "S309",
+      "title": "Federated Adaptive Neuromodulation Network (FANN)",
+      "year": 2025,
+      "source_type": "федеративное_SCS"
+    },
+    {
+      "id": "S188",
+      "title": "Neuromorphic Neuromodulation: Low-Power Edge-Training",
+      "year": 2025,
+      "source_type": "федеративное_SCS"
+    },
+    {
+      "id": "S230",
+      "title": "Neuromorphic Neuromodulation: Low-Power Edge-Training (extended)",
+      "year": 2025,
+      "source_type": "федеративное_SCS"
+    },
+    {
+      "id": "S192",
+      "title": "PainDiffusion: Learning to Express Pain",
+      "year": 2025,
+      "source_type": "генеративные_модели"
+    },
+    {
+      "id": "S223",
+      "title": "PainDiffusion: Learning to Express Pain",
+      "year": 2025,
+      "source_type": "генеративные_модели"
+    },
+    {
+      "id": "S228",
+      "title": "Cloud-Powered Federated Learning for Global Healthcare Diagnostics",
+      "year": 2025,
+      "source_type": "федеративное_SCS"
+    },
+    {
+      "id": "S244",
+      "title": "A Wearable EMG-Driven Closed-Loop TENS Platform",
+      "year": 2025,
+      "source_type": "носимые_реальное_время"
+    },
+    {
+      "id": "S255",
+      "title": "PainDiffusion (extended)",
+      "year": 2025,
+      "source_type": "генеративные_модели"
+    },
+    {
+      "id": "S303",
+      "title": "PainDiffusion (extended)",
+      "year": 2025,
+      "source_type": "генеративные_модели"
+    },
+    {
+      "id": "S381",
+      "title": "PainDiffusion (final)",
+      "year": 2025,
+      "source_type": "генеративные_модели"
+    },
+    {
+      "id": "S269",
+      "title": "Neuromorphic Neuromodulation (final)",
+      "year": 2025,
+      "source_type": "федеративное_SCS"
+    },
+    {
+      "id": "S274",
+      "title": "A Wearable EMG-Driven CL-TENS Platform (extended)",
+      "year": 2025,
+      "source_type": "носимые_реальное_время"
+    },
+    {
+      "id": "S281",
+      "title": "Beyond Reflex: Nociception, Neural Circuits, Memory (Dissertation)",
+      "year": 2025,
+      "source_type": "диссертация"
+    },
+    {
+      "id": "S282",
+      "title": "Descending neurons integrate learnt information from mushroom body",
+      "year": 2025,
+      "source_type": "препринт"
+    },
+    {
+      "id": "S286",
+      "title": "Whole-Brain Connectomic GNN for Locomotion Control",
+      "year": 2025,
+      "source_type": "фундаментальные_модели"
+    },
+    {
+      "id": "S293",
+      "title": "flyGNN: Whole-Brain Connectomic GNN (extended)",
+      "year": 2025,
+      "source_type": "фундаментальные_модели"
+    },
+    {
+      "id": "S294",
+      "title": "Descending neurons integrate learnt information (extended)",
+      "year": 2025,
+      "source_type": "препринт"
+    },
+    {
+      "id": "S295",
+      "title": "Beyond Reflex (extended)",
+      "year": 2025,
+      "source_type": "диссертация"
+    },
+    {
+      "id": "S334",
+      "title": "Beyond Reflex (final)",
+      "year": 2025,
+      "source_type": "диссертация"
+    },
+    {
+      "id": "S396",
+      "title": "Beyond Reflex (final extended)",
+      "year": 2025,
+      "source_type": "диссертация"
+    },
+    {
+      "id": "S310",
+      "title": "Privacy-Preserving Latent Manifold Adaptation",
+      "year": 2025,
+      "source_type": "XAI_этика"
+    },
+    {
+      "id": "S311",
+      "title": "Data Flow+: Edge Computing and Local Intelligence",
+      "year": 2025,
+      "source_type": "федеративное_SCS"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S165",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-22",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "query": "Artificial Intelligence-Driven Neuromodulation in Neurodegenerative Disease: Precision in Chaos, Learning in Loss",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/41007681/",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "Artificial Intelligence-Driven Neuromodulation in Neurodegenerative Disease: Precision in Chaos, Learning in Loss",
+        "identifiers": {
+          "doi": "10.3390/biomedicines13092118",
+          "pmid": "41007681",
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://pubmed.ncbi.nlm.nih.gov/41007681/"
+        },
+        "evidence": {
+          "target_construct": "not_applicable",
+          "evidence_role": "context_only"
+        },
+        "risk_flags": [
+          "missing_cross_subject_validation"
+        ],
+        "авторы": "Andrea Calderone; Desiree Latella; Elvira La Fauci; Roberta Puleo; Arturo Sergi; Mariachiara De Francesco; Maria Mauro; Angela Foti; Leda Salemi; Rocco Salvatore Calabro",
+        "издание": "Biomedicines"
+      },
+      "claims": [
+        {
+          "claim": "The narrative review maps AI-supported adaptive neuromodulation approaches and their translational constraints in neurodegenerative rehabilitation.",
+          "target_variable": "not_applicable",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: 10.3390/biomedicines13092118",
+          "limitation": "Narrative review of AI-enabled neuromodulation in neurodegenerative rehabilitation. It is not an SCS trial, a pain study, or evidence for federated SCS-response prediction.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "Narrative review of AI-enabled neuromodulation in neurodegenerative rehabilitation. It is not an SCS trial, a pain study, or evidence for federated SCS-response prediction."
+    },
+    {
+      "source_id": "S186",
+      "decision": "alias",
+      "canonical_id": "S165",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "AI-Driven Neuromodulation in Neurodegenerative Disease",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/41007681/",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S187",
+      "decision": "rejected",
+      "checked_at": "2026-09-22",
+      "exclusion_reason": "unverifiable",
+      "searches": [
+        {
+          "query": "Federated Adaptive Neuromodulation Network (FANN)",
+          "url": "https://unpatentable.org/innovation/federated-adaptive-neuromodulation-network-fann-for-community-based-mental-health-treatment/",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "risk_flags": [
+          "claim_not_supported"
+        ]
+      },
+      "claims": [],
+      "notes": "The exact item is an idea-platform concept, not a scholarly publication, registered trial, patent, dataset, or validated neuromodulation system."
+    },
+    {
+      "source_id": "S309",
+      "decision": "alias",
+      "canonical_id": "S187",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Federated Adaptive Neuromodulation Network (FANN)",
+          "url": "https://unpatentable.org/innovation/federated-adaptive-neuromodulation-network-fann-for-community-based-mental-health-treatment/",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S188",
+      "decision": "alias",
+      "canonical_id": "S330",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Neuromorphic Neuromodulation: Low-Power Edge-Training",
+          "url": "https://www.medrxiv.org/content/10.1101/2025.09.22.25336341v2",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S230",
+      "decision": "alias",
+      "canonical_id": "S330",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Neuromorphic Neuromodulation: Low-Power Edge-Training (extended)",
+          "url": "https://www.medrxiv.org/content/10.1101/2025.09.22.25336341v2",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S192",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-22",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "query": "PainDiffusion: Learning to Express Pain",
+          "url": "https://arxiv.org/abs/2409.11635",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "PainDiffusion: Learning to Express Pain",
+        "identifiers": {
+          "doi": "10.1109/IROS60139.2025.11247588",
+          "pmid": null,
+          "arxiv_id": "2409.11635",
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://arxiv.org/abs/2409.11635"
+        },
+        "evidence": {
+          "target_construct": "experimental_pain_class",
+          "evidence_role": "method_baseline"
+        },
+        "risk_flags": [
+          "synthetic_only",
+          "missing_cross_subject_validation"
+        ],
+        "авторы": "Quang Tien Dam; Tri Tung Nguyen Nguyen; Yuuki Endo; Dinh Tuan Tran; Joo-Ho Lee",
+        "издание": "IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS 2025) / arXiv"
+      },
+      "claims": [
+        {
+          "claim": "PainDiffusion generates controllable facial pain expressions for virtual or robotic patient simulation and reports conference benchmark evaluation.",
+          "target_variable": "experimental_pain_class",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: 10.1109/IROS60139.2025.11247588",
+          "limitation": "The model synthesizes facial expressions for robotic-patient simulation from pain-stimulus controls. It is not a pain detector, physiological simulator, or clinical validation source.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "The model synthesizes facial expressions for robotic-patient simulation from pain-stimulus controls. It is not a pain detector, physiological simulator, or clinical validation source."
+    },
+    {
+      "source_id": "S223",
+      "decision": "alias",
+      "canonical_id": "S192",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "PainDiffusion: Learning to Express Pain",
+          "url": "https://arxiv.org/abs/2409.11635",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S228",
+      "decision": "verified_metadata",
+      "checked_at": "2026-09-22",
+      "full_text_status": "metadata_only",
+      "searches": [
+        {
+          "query": "Cloud-Powered Federated Learning for Global Healthcare Diagnostics: Privacy Preserving Multi-Cloud Architecture",
+          "url": "https://www.dsu.edu.in/images/Engineering/CSE-dept/Newsletter/CsOct-Dec_2025.pdf",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "Cloud-Powered Federated Learning for Global Healthcare Diagnostics: Privacy Preserving Multi-Cloud Architecture",
+        "identifiers": {
+          "doi": null,
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://www.dsu.edu.in/images/Engineering/CSE-dept/Newsletter/CsOct-Dec_2025.pdf"
+        },
+        "evidence": {
+          "target_construct": "not_applicable",
+          "evidence_role": "context_only"
+        },
+        "risk_flags": [
+          "metadata_only",
+          "missing_cross_subject_validation"
+        ],
+        "авторы": "Bharath M B; Mala B A; M Kiruthika; Pooja Shree H R; Sharanabasappa Tadkal",
+        "издание": "7th International Conference on Information Management & Machine Intelligence (ICIMMI 2025)"
+      },
+      "claims": [
+        {
+          "claim": "Conference metadata identifies a privacy-preserving multi-cloud federated-learning architecture for healthcare diagnostics.",
+          "target_variable": "not_applicable",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: https://www.dsu.edu.in/images/Engineering/CSE-dept/Newsletter/CsOct-Dec_2025.pdf",
+          "limitation": "The conference presentation and bibliographic identity are corroborated, but no DOI or primary full text was located and its claims were not checked. It is generic healthcare infrastructure, not SCS evidence.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "The conference presentation and bibliographic identity are corroborated, but no DOI or primary full text was located and its claims were not checked. It is generic healthcare infrastructure, not SCS evidence."
+    },
+    {
+      "source_id": "S244",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-22",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "query": "A Wearable EMG-Driven Closed-Loop TENS Platform for Real-Time, Personalized Pain Modulation",
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12390560/",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "A Wearable EMG-Driven Closed-Loop TENS Platform for Real-Time, Personalized Pain Modulation",
+        "identifiers": {
+          "doi": "10.3390/s25165113",
+          "pmid": "40871975",
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12390560/"
+        },
+        "evidence": {
+          "target_construct": "technical_signal_quality",
+          "evidence_role": "method_baseline"
+        },
+        "risk_flags": [
+          "claim_not_supported",
+          "missing_cross_subject_validation"
+        ],
+        "авторы": "Jiahao Du; Shengli Luo; Ping Shi",
+        "издание": "Sensors"
+      },
+      "claims": [
+        {
+          "claim": "The wearable six-channel TENS prototype demonstrates EMG-triggered closed-loop operation and bench-level timing and waveform performance.",
+          "target_variable": "technical_signal_quality",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: 10.3390/s25165113",
+          "limitation": "The paper validates hardware and EMG-trigger timing mainly on bench and synthetic input. Human analgesic testing remained a prospective protocol, so it cannot support efficacy claims.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "The paper validates hardware and EMG-trigger timing mainly on bench and synthetic input. Human analgesic testing remained a prospective protocol, so it cannot support efficacy claims."
+    },
+    {
+      "source_id": "S255",
+      "decision": "alias",
+      "canonical_id": "S192",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "PainDiffusion (extended)",
+          "url": "https://arxiv.org/abs/2409.11635",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S303",
+      "decision": "alias",
+      "canonical_id": "S192",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "PainDiffusion (extended)",
+          "url": "https://arxiv.org/abs/2409.11635",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S381",
+      "decision": "alias",
+      "canonical_id": "S192",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "PainDiffusion (final)",
+          "url": "https://arxiv.org/abs/2409.11635",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S269",
+      "decision": "alias",
+      "canonical_id": "S330",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Neuromorphic Neuromodulation (final)",
+          "url": "https://www.medrxiv.org/content/10.1101/2025.09.22.25336341v2",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S274",
+      "decision": "alias",
+      "canonical_id": "S244",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "A Wearable EMG-Driven CL-TENS Platform (extended)",
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12390560/",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S281",
+      "decision": "alias",
+      "canonical_id": "S013",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Beyond Reflex: Nociception, Neural Circuits, Memory (Dissertation)",
+          "url": "https://scholar.google.com/scholar?q=%22Beyond+Reflex%22+Nociception+Drosophila",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S282",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-22",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "query": "Descending neurons integrate learnt information from mushroom body with context to promote escape behaviour",
+          "url": "https://www.biorxiv.org/content/10.1101/2025.09.30.679458v1",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "Descending neurons integrate learnt information from mushroom body with context to promote escape behaviour",
+        "identifiers": {
+          "doi": "10.1101/2025.09.30.679458",
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://www.biorxiv.org/content/10.1101/2025.09.30.679458v1"
+        },
+        "evidence": {
+          "target_construct": "nociceptive_response",
+          "evidence_role": "simulation_foundation"
+        },
+        "risk_flags": [
+          "preprint",
+          "animal_to_human_transfer_unvalidated"
+        ],
+        "авторы": "Benjamin M W Jones; Samuel N Harris; Nicolo G Ceffa; Albert Cardona; Marta Zlatic",
+        "издание": "bioRxiv"
+      },
+      "claims": [
+        {
+          "claim": "The preprint identifies descending neurons that integrate learned mushroom-body information with nociceptive context to promote larval escape rolling.",
+          "target_variable": "nociceptive_response",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: 10.1101/2025.09.30.679458",
+          "limitation": "Larval Drosophila connectomics, imaging, neural manipulation and behavior identify a circuit for context-dependent rolling. This is nociceptive escape circuitry, not subjective pain or human transfer.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "Larval Drosophila connectomics, imaging, neural manipulation and behavior identify a circuit for context-dependent rolling. This is nociceptive escape circuitry, not subjective pain or human transfer."
+    },
+    {
+      "source_id": "S286",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-22",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "query": "Whole-Brain Connectomic Graph Model Enables Whole-Body Locomotion Control in Fruit Fly",
+          "url": "https://arxiv.org/abs/2602.17997",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "Whole-Brain Connectomic Graph Model Enables Whole-Body Locomotion Control in Fruit Fly",
+        "identifiers": {
+          "doi": null,
+          "pmid": null,
+          "arxiv_id": "2602.17997",
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://arxiv.org/abs/2602.17997"
+        },
+        "evidence": {
+          "target_construct": "protective_behavior",
+          "evidence_role": "simulation_foundation"
+        },
+        "risk_flags": [
+          "preprint",
+          "synthetic_only",
+          "animal_to_human_transfer_unvalidated"
+        ],
+        "авторы": "Zehao Jin; Yaoye Zhu; Chen Zhang; Yanan Sui",
+        "издание": "arXiv",
+        "год": 2026
+      },
+      "claims": [
+        {
+          "claim": "FlyGM embeds the adult Drosophila connectome into a graph policy and evaluates locomotion control in a biomechanical simulation.",
+          "target_variable": "protective_behavior",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: https://arxiv.org/abs/2602.17997",
+          "limitation": "FlyGM uses the adult connectome as a graph-structured controller in a simulated biomechanical fly. It validates an embodied-control architecture, not biophysical neural dynamics, nociception, pain, or human transfer.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "FlyGM uses the adult connectome as a graph-structured controller in a simulated biomechanical fly. It validates an embodied-control architecture, not biophysical neural dynamics, nociception, pain, or human transfer."
+    },
+    {
+      "source_id": "S293",
+      "decision": "alias",
+      "canonical_id": "S286",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "flyGNN: Whole-Brain Connectomic GNN (extended)",
+          "url": "https://arxiv.org/abs/2602.17997",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S294",
+      "decision": "alias",
+      "canonical_id": "S282",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Descending neurons integrate learnt information (extended)",
+          "url": "https://www.biorxiv.org/content/10.1101/2025.09.30.679458v1",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S295",
+      "decision": "alias",
+      "canonical_id": "S013",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Beyond Reflex (extended)",
+          "url": "https://scholar.google.com/scholar?q=%22Beyond+Reflex%22+Nociception+Drosophila",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S334",
+      "decision": "alias",
+      "canonical_id": "S013",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Beyond Reflex (final)",
+          "url": "https://scholar.google.com/scholar?q=%22Beyond+Reflex%22+Nociception+Drosophila",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S396",
+      "decision": "alias",
+      "canonical_id": "S013",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Beyond Reflex (final extended)",
+          "url": "https://scholar.google.com/scholar?q=%22Beyond+Reflex%22+Nociception+Drosophila",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S310",
+      "decision": "rejected",
+      "checked_at": "2026-09-22",
+      "exclusion_reason": "unverifiable",
+      "searches": [
+        {
+          "query": "Privacy-Preserving Latent Manifold Adaptation",
+          "url": "https://scholar.google.com/scholar?q=%22Privacy-Preserving+Latent+Manifold+Adaptation%22",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "risk_flags": [
+          "claim_not_supported"
+        ]
+      },
+      "claims": [],
+      "notes": "Only an unstable ResearchGate upload with anomalous citation metadata was found; no publisher, DOI, repository, proceedings record, or other primary bibliographic record could be verified."
+    },
+    {
+      "source_id": "S311",
+      "decision": "rejected",
+      "checked_at": "2026-09-22",
+      "exclusion_reason": "unverifiable",
+      "searches": [
+        {
+          "query": "Data Flow+: Edge Computing and Local Intelligence",
+          "url": "https://scholar.google.com/scholar?q=%22Data+Flow%2B%22+%22Edge+Computing+and+Local+Intelligence%22",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "risk_flags": [
+          "claim_not_supported"
+        ]
+      },
+      "claims": [],
+      "notes": "No exact scholarly source, stable repository record, patent, dataset, or software project matching this title was found."
+    }
+  ]
+}

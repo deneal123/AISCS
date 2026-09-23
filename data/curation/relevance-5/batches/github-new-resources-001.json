@@ -1,0 +1,59 @@
+{
+  "meta": {
+    "batch_id": "github-new-resources-001",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-23",
+    "scope": "Validation log and evidence-matrix registration for four newly published GitHub code entities",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-23"
+  },
+  "source_ids": ["S732", "S733", "S734", "S737"],
+  "records": [
+    {"id": "S732", "title": "Emulation of the Drosophila Fly Brain", "year": 2026, "source_type": "фундаментальные_модели"},
+    {"id": "S733", "title": "Fly Brain snnTorch", "year": 2026, "source_type": "фундаментальные_модели"},
+    {"id": "S734", "title": "FlyGym: Simulating embodied sensorimotor control with NeuroMechFly v2", "year": 2023, "source_type": "фундаментальные_модели"},
+    {"id": "S737", "title": "FLYBOX: an open-source connectome sandbox for a simulated fruit-fly nervous system", "year": 2026, "source_type": "фундаментальные_модели"}
+  ],
+  "decisions": [
+    {
+      "source_id": "S732",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-23",
+      "full_text_status": "checked",
+      "searches": [{"query": "https://github.com/eonsystemspbc/fly-brain", "url": "https://github.com/eonsystemspbc/fly-brain", "accessed_at": "2026-09-23"}],
+      "updates": {"identifiers": {"doi": null, "pmid": null, "arxiv_id": null, "patent_id": null, "dataset_id": null, "exact_url": "https://github.com/eonsystemspbc/fly-brain"}},
+      "claims": [{"claim": "The repository provides multiple implementations of an adult Drosophila connectome-derived LIF model and benchmark tooling.", "target_variable": "not_applicable", "population_or_data": "simulated adult Drosophila connectome", "evidence": "Repository README at commit a3db62f9436074e485c0278290c2164ed6150808", "limitation": "Code and benchmark artifacts were inspected but not independently executed; no nociception, pain, ECAP or human-transfer validation.", "permitted_conclusion": "Use as a candidate simulation backend and reproducibility target only."}],
+      "notes": "Primary repository metadata and README verified; independent execution pending."
+    },
+    {
+      "source_id": "S733",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-23",
+      "full_text_status": "checked",
+      "searches": [{"query": "https://github.com/Neuromorphicism/fly-brain-snntorch", "url": "https://github.com/Neuromorphicism/fly-brain-snntorch", "accessed_at": "2026-09-23"}],
+      "updates": {"identifiers": {"doi": null, "pmid": null, "arxiv_id": null, "patent_id": null, "dataset_id": null, "exact_url": "https://github.com/Neuromorphicism/fly-brain-snntorch"}},
+      "claims": [{"claim": "The repository provides a dense/sparse snnTorch port with synthetic sensory stimulation examples.", "target_variable": "not_applicable", "population_or_data": "simulated adult Drosophila connectome", "evidence": "Repository README at commit fe55fb0cff275a2b6b54926524c8d831838e32fc", "limitation": "Charts and runtime were not independently reproduced; sensory encoders are engineering inputs rather than validated natural transduction.", "permitted_conclusion": "Use as a candidate SNN implementation baseline only."}],
+      "notes": "Primary repository metadata and README verified; independent execution pending."
+    },
+    {
+      "source_id": "S734",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-23",
+      "full_text_status": "checked",
+      "searches": [{"query": "https://github.com/NeLy-EPFL/flygym", "url": "https://github.com/NeLy-EPFL/flygym", "accessed_at": "2026-09-23"}],
+      "updates": {"identifiers": {"doi": null, "pmid": null, "arxiv_id": null, "patent_id": null, "dataset_id": null, "exact_url": "https://github.com/NeLy-EPFL/flygym"}},
+      "claims": [{"claim": "The official FlyGym repository provides the NeuroMechFly v2 embodied sensorimotor simulation framework.", "target_variable": "not_applicable", "population_or_data": "adult Drosophila biomechanical digital twin", "evidence": "Official repository README at commit 38c8ec61034cd59bc5ba0de20688d4a3c0000d60 and release v2.1.0", "limitation": "Framework has no built-in pain, nociception, ECAP or SCS target and was not executed in this review.", "permitted_conclusion": "Use as an embodied simulation substrate, separately from biological pain claims."}],
+      "notes": "Official code entity linked to publication record S731."
+    },
+    {
+      "source_id": "S737",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-23",
+      "full_text_status": "checked",
+      "searches": [{"query": "https://github.com/gauravvvvvvvvvv/flybox", "url": "https://github.com/gauravvvvvvvvvv/flybox", "accessed_at": "2026-09-23"}],
+      "updates": {"identifiers": {"doi": null, "pmid": null, "arxiv_id": null, "patent_id": null, "dataset_id": null, "exact_url": "https://github.com/gauravvvvvvvvvv/flybox"}},
+      "claims": [{"claim": "FLYBOX provides an open interactive sandbox around a FlyBrain/MaleCNS simulation with explicit experimental encoders and decoders.", "target_variable": "not_applicable", "population_or_data": "simulated MaleCNS agents", "evidence": "Repository README at commit f95f708152e22393feb2952694d4fcf7129290a6", "limitation": "Repository explicitly disclaims complete biological simulation and natural behavior; runtime was not independently reproduced.", "permitted_conclusion": "Use as an experimental sandbox candidate, not biological validation."}],
+      "notes": "Primary repository metadata and README verified; independent execution pending."
+    }
+  ]
+}

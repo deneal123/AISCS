@@ -1,0 +1,1451 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "generated_at": "2026-09-23",
+    "scope": "relevance-5 evidence traceability",
+    "gate": "G0_REVISE",
+    "author_review_required": true,
+    "supervisor_decision_required": true
+  },
+  "columns": [
+    "claim",
+    "target_variable",
+    "population_or_data",
+    "source_ids",
+    "verified_evidence",
+    "limitations",
+    "permitted_conclusion"
+  ],
+  "rows": [
+    {
+      "batch_id": "batch-001",
+      "claim": "Synthetic-source domain adaptation can be evaluated on retrospective human pain benchmarks without labeled real target samples during training.",
+      "target_variable": "pain intensity",
+      "population_or_data": "UNBC-McMaster, BioVid, neonatal cohort",
+      "source_ids": [
+        "S149"
+      ],
+      "verified_evidence": "Publisher full text reports MAE 0.89 on UNBC, 78.3% accuracy on BioVid and 81.5% on the neonatal cohort.",
+      "limitations": "All real benchmark data are retrospective and used at least unlabeled during alignment; no fully independent fourth site.",
+      "permitted_conclusion": "Feasibility on the tested datasets only; not clinical validation and not evidence for Drosophila-to-human transfer."
+    },
+    {
+      "batch_id": "batch-001",
+      "claim": "The imported 96% value describes this paper.",
+      "target_variable": "performance",
+      "population_or_data": "unspecified",
+      "source_ids": [
+        "S149"
+      ],
+      "verified_evidence": "Unsupported; exact full text contains no matching headline 96% result.",
+      "limitations": "The original registry did not provide a locator.",
+      "permitted_conclusion": "Do not cite 96%; use the dataset-specific published metrics."
+    },
+    {
+      "batch_id": "batch-001",
+      "claim": "The method reports 87.68% participant-level accuracy for six-class recognition.",
+      "target_variable": "experimental pain class",
+      "population_or_data": "PainMonit PMED, 52 healthy participants",
+      "source_ids": [
+        "S039"
+      ],
+      "verified_evidence": "Elsevier full text reports 87.68% ± 0.41% across four subject-independent outer folds.",
+      "limitations": "Controlled thermal stimulation in healthy participants; no independent clinical cohort.",
+      "permitted_conclusion": "Cross-subject feasibility within PMED, not general clinical pain validity."
+    },
+    {
+      "batch_id": "batch-001",
+      "claim": "PainFusion+ reports 35.40% accuracy on its BioVid multimodal task.",
+      "target_variable": "experimental pain class",
+      "population_or_data": "BioVid",
+      "source_ids": [
+        "S036"
+      ],
+      "verified_evidence": "The open Elsevier article states 35.40% accuracy and describes the multimodal transformer.",
+      "limitations": "The exact split unit is not recorded in this curation pass; BioVid is experimental heat pain.",
+      "permitted_conclusion": "Method baseline for experimental multimodal classification only."
+    },
+    {
+      "batch_id": "batch-002",
+      "claim": "The bibliographic source exists under the verified identifier.",
+      "target_variable": "source identity",
+      "population_or_data": "not extracted in metadata-only decisions",
+      "source_ids": [
+        "S044"
+      ],
+      "verified_evidence": "doi=10.1016/j.jpain.2026.106416; exact title=External validation of EEG-based machine learning models for continuous pain prediction",
+      "limitations": "PubMed primary record and abstract checked; models did not beat the mean-rating dummy for continuous prediction.",
+      "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+    },
+    {
+      "batch_id": "batch-002",
+      "claim": "The bibliographic source exists under the verified identifier.",
+      "target_variable": "source identity",
+      "population_or_data": "not extracted in metadata-only decisions",
+      "source_ids": [
+        "S040"
+      ],
+      "verified_evidence": "doi=10.1016/j.inffus.2026.104173; exact title=GIAFormer: A Gradient-Infused Attention and Transformer for Pain Assessment with EDA-fNIRS Fusion",
+      "limitations": "Open publisher abstract checked; 65 AI4Pain subjects and LOSO accuracy 90.51% are publisher-reported.",
+      "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+    },
+    {
+      "batch_id": "batch-002",
+      "claim": "The bibliographic source exists under the verified identifier.",
+      "target_variable": "source identity",
+      "population_or_data": "not extracted in metadata-only decisions",
+      "source_ids": [
+        "S079"
+      ],
+      "verified_evidence": "doi=10.1016/j.neurom.2025.11.011; exact title=Control Signals in Closed-Loop Spinal Cord Stimulation in Patients with Chronic Pain: A Scoping Review",
+      "limitations": "Open publisher review checked; ECAP is a control signal, not a direct measure of pain.",
+      "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+    },
+    {
+      "batch_id": "batch-003",
+      "claim": "The bibliographic source exists under the verified identifier.",
+      "target_variable": "source identity",
+      "population_or_data": "not extracted in metadata-only decisions",
+      "source_ids": [
+        "S078"
+      ],
+      "verified_evidence": "doi=10.1016/B978-0-443-36528-7.00011-X; exact title=Physiologic closed loop controlled spinal cord stimulation",
+      "limitations": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+      "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+    },
+    {
+      "batch_id": "batch-003",
+      "claim": "The bibliographic source exists under the verified identifier.",
+      "target_variable": "source identity",
+      "population_or_data": "not extracted in metadata-only decisions",
+      "source_ids": [
+        "S004"
+      ],
+      "verified_evidence": "doi=10.1109/JBHI.2026.3650972; exact title=RE-HPBS-IPIC: A Resting EEG- and High-Activation Pain Brain Source-Driven Framework for Inter-Subject Pain Intensity Classification",
+      "limitations": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+      "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+    },
+    {
+      "batch_id": "batch-003",
+      "claim": "The bibliographic source exists under the verified identifier.",
+      "target_variable": "source identity",
+      "population_or_data": "not extracted in metadata-only decisions",
+      "source_ids": [
+        "S082"
+      ],
+      "verified_evidence": "doi=10.1016/j.bspc.2026.109815; exact title=Pain intensity classification and evaluation of individual differences in subjects based on hybrid CNN–BiLSTM approach",
+      "limitations": "Publisher abstract checked; LOSO evaluation is reported, but this does not establish clinical validity.",
+      "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+    },
+    {
+      "batch_id": "batch-004",
+      "claim": "The bibliographic source exists under the verified identifier.",
+      "target_variable": "source identity",
+      "population_or_data": "not extracted in metadata-only decisions",
+      "source_ids": [
+        "S086"
+      ],
+      "verified_evidence": "doi=10.1109/FG67764.2026.11556963; exact title=Hierarchical Cross-Attention Transformer for Non-contact Multimodal Pain Classification using Remote Physiological Signals and Visual Features",
+      "limitations": "Official institutional repository metadata and abstract checked.",
+      "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+    },
+    {
+      "batch_id": "batch-004",
+      "claim": "The bibliographic source exists under the verified identifier.",
+      "target_variable": "source identity",
+      "population_or_data": "not extracted in metadata-only decisions",
+      "source_ids": [
+        "S088"
+      ],
+      "verified_evidence": "doi=10.1109/ISDA70544.2026.11606012; exact title=Cross-Domain Multimodal Pain Detection Using a DANN–Transformer Architecture with Supervised Contrastive Warmup and Test-Time Augmentation",
+      "limitations": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+      "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+    },
+    {
+      "batch_id": "batch-004",
+      "claim": "Imported source claim is traceable to a primary record.",
+      "target_variable": "source identity",
+      "population_or_data": "not established",
+      "source_ids": [
+        "S140"
+      ],
+      "verified_evidence": "No unique matching primary record was established.",
+      "limitations": "US20260216499 was not found in USPTO/Google Patents; no patent metadata may be cited.",
+      "permitted_conclusion": "Do not cite as evidence."
+    },
+    {
+      "batch_id": "batch-004",
+      "claim": "The bibliographic source exists under the verified identifier.",
+      "target_variable": "source identity",
+      "population_or_data": "not extracted in metadata-only decisions",
+      "source_ids": [
+        "S007"
+      ],
+      "verified_evidence": "doi=10.1109/JIOT.2026.3663683; exact title=MDNet: A Lightweight Multidomain 1-D CNN for Embedded Pain Assessment Using EDA Signals",
+      "limitations": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+      "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+    },
+    {
+      "batch_id": "batch-004",
+      "claim": "The bibliographic source exists under the verified identifier.",
+      "target_variable": "source identity",
+      "population_or_data": "not extracted in metadata-only decisions",
+      "source_ids": [
+        "S243"
+      ],
+      "verified_evidence": "patent_id=NCT04662905; exact title=Novel Treatment Delivery of ECAP-controlled Closed-loop SCS for Chronic Pain",
+      "limitations": "ClinicalTrials.gov registration verified; recruiting status and estimated 2027 completion mean no outcome claim is available.",
+      "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+    },
+    {
+      "batch_id": "batch-004",
+      "claim": "The bibliographic source exists under the verified identifier.",
+      "target_variable": "source identity",
+      "population_or_data": "not extracted in metadata-only decisions",
+      "source_ids": [
+        "S285"
+      ],
+      "verified_evidence": "doi=10.1038/s44385-026-00076-8; exact title=The optimization of neuroprosthetic interfaces relying on biophysical and surrogate digital twins",
+      "limitations": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+      "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+    },
+    {
+      "batch_id": "batch-005",
+      "claim": "The bibliographic source exists under the verified identifier.",
+      "target_variable": "source identity",
+      "population_or_data": "not extracted in metadata-only decisions",
+      "source_ids": [
+        "S356"
+      ],
+      "verified_evidence": "doi=10.7759/cureus.102799; exact title=Impact of Evoked Compound Action Potential (ECAP)-Controlled Closed-Loop Spinal Cord Stimulation in Refractory Lumbar Radiculopathy: A Case Report",
+      "limitations": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+      "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+    },
+    {
+      "batch_id": "batch-005",
+      "claim": "The bibliographic source exists under the verified identifier.",
+      "target_variable": "source identity",
+      "population_or_data": "not extracted in metadata-only decisions",
+      "source_ids": [
+        "S357"
+      ],
+      "verified_evidence": "doi=10.21776/ub.jphv.2026.007.01.07; exact title=Closing the loop on chronic pain with ECAP-controlled closed-loop vs open-loop spinal cord stimulation: systematic and longitudinal pooled analysis of the EVOKE study",
+      "limitations": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+      "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+    },
+    {
+      "batch_id": "batch-005",
+      "claim": "The bibliographic source exists under the verified identifier.",
+      "target_variable": "source identity",
+      "population_or_data": "not extracted in metadata-only decisions",
+      "source_ids": [
+        "S238"
+      ],
+      "verified_evidence": "doi=10.1007/s40122-025-00808-5; exact title=Next-Generation SCS Programming Platform: Enhancing ECAP Fidelity and Objectivity to Improve Patient Experience",
+      "limitations": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+      "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+    },
+    {
+      "batch_id": "batch-005",
+      "claim": "The bibliographic source exists under the verified identifier.",
+      "target_variable": "source identity",
+      "population_or_data": "not extracted in metadata-only decisions",
+      "source_ids": [
+        "S360"
+      ],
+      "verified_evidence": "doi=10.1007/s40122-026-00821-2; exact title=Objective, Same-Day SCS Trials with ECAP-Controlled Closed-Loop Therapy: Depth of Response is Maintained from Trial to 12 months",
+      "limitations": "Full open article checked; single-center selected cohort of 15 limits generalization.",
+      "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+    },
+    {
+      "batch_id": "batch-005",
+      "claim": "Imported source claim is traceable to a primary record.",
+      "target_variable": "source identity",
+      "population_or_data": "not established",
+      "source_ids": [
+        "S361"
+      ],
+      "verified_evidence": "No unique matching primary record was established.",
+      "limitations": "Generic title could not be mapped uniquely to a primary publication; candidate records describe different cohorts.",
+      "permitted_conclusion": "Do not cite as evidence."
+    },
+    {
+      "batch_id": "batch-005",
+      "claim": "The bibliographic source exists under the verified identifier.",
+      "target_variable": "source identity",
+      "population_or_data": "not extracted in metadata-only decisions",
+      "source_ids": [
+        "S001"
+      ],
+      "verified_evidence": "doi=10.1038/s41928-025-01377-3; exact title=Ultrasound-induced wireless implantable stimulator for adaptive pain management",
+      "limitations": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+      "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+    },
+    {
+      "batch_id": "batch-005",
+      "claim": "The bibliographic source exists under the verified identifier.",
+      "target_variable": "source identity",
+      "population_or_data": "not extracted in metadata-only decisions",
+      "source_ids": [
+        "S002"
+      ],
+      "verified_evidence": "doi=10.1088/1741-2552/adbfbe; exact title=Feature extraction and prediction of spinal cord stimulation evoked compound action potentials in humans",
+      "limitations": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+      "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+    },
+    {
+      "batch_id": "batch-005",
+      "claim": "The bibliographic source exists under the verified identifier.",
+      "target_variable": "source identity",
+      "population_or_data": "not extracted in metadata-only decisions",
+      "source_ids": [
+        "S003"
+      ],
+      "verified_evidence": "doi=10.1371/journal.pone.0337726; exact title=Classification of chronic pain and spinal cord stimulation response using machine learning in magnetoencephalography data",
+      "limitations": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+      "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+    },
+    {
+      "batch_id": "batch-005",
+      "claim": "The bibliographic source exists under the verified identifier.",
+      "target_variable": "source identity",
+      "population_or_data": "not extracted in metadata-only decisions",
+      "source_ids": [
+        "S033"
+      ],
+      "verified_evidence": "doi=10.1038/s41598-025-92111-8; exact title=Machine learning predicts spinal cord stimulation surgery outcomes and reveals novel neural markers for chronic pain",
+      "limitations": "Open full article checked; this is an SCS responder study with a limited clinical cohort, not evidence for ECAP-based prediction.",
+      "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+    },
+    {
+      "batch_id": "batch-006",
+      "claim": "The bibliographic source exists under the verified identifier.",
+      "target_variable": "source identity",
+      "population_or_data": "not extracted in metadata-only decisions",
+      "source_ids": [
+        "S034"
+      ],
+      "verified_evidence": "doi=10.1227/neu.0000000000003715; exact title=Prediction of Response to Spinal Cord Stimulation Using Machine Learning Based on Radiomics and Patient-Reported Outcomes",
+      "limitations": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+      "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+    },
+    {
+      "batch_id": "batch-006",
+      "claim": "The bibliographic source exists under the verified identifier.",
+      "target_variable": "source identity",
+      "population_or_data": "not extracted in metadata-only decisions",
+      "source_ids": [
+        "S046"
+      ],
+      "verified_evidence": "doi=10.1016/j.neurom.2025.08.367; exact title=ID# 1907064 Explainable Machine Learning Pipeline Predicts Spinal Cord Stimulation Responders",
+      "limitations": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+      "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+    },
+    {
+      "batch_id": "batch-006",
+      "claim": "The bibliographic source exists under the verified identifier.",
+      "target_variable": "source identity",
+      "population_or_data": "not extracted in metadata-only decisions",
+      "source_ids": [
+        "S006"
+      ],
+      "verified_evidence": "doi=10.1016/j.neurom.2024.06.321; exact title=ID: 318164 Using Neural Networks to Detect Evoked Compound Action Potentials Elicited with Epidural Spinal Cord Stimulation",
+      "limitations": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+      "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+    },
+    {
+      "batch_id": "batch-006",
+      "claim": "The bibliographic source exists under the verified identifier.",
+      "target_variable": "source identity",
+      "population_or_data": "not extracted in metadata-only decisions",
+      "source_ids": [
+        "S236"
+      ],
+      "verified_evidence": "doi=10.1097/BRS.0000000000005445; exact title=ECAP-Controlled Closed-Loop Spinal Cord Stimulation for Chronic Nonsurgical Refractory Back Pain",
+      "limitations": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+      "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+    },
+    {
+      "batch_id": "batch-006",
+      "claim": "The bibliographic source exists under the verified identifier.",
+      "target_variable": "source identity",
+      "population_or_data": "not extracted in metadata-only decisions",
+      "source_ids": [
+        "S237"
+      ],
+      "verified_evidence": "doi=10.1136/rapm-2025-107051; exact title=Clinical utility of ECAP dosing in a real-world population delivered via EVOKE therapy: the ECAP study",
+      "limitations": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+      "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+    },
+    {
+      "batch_id": "batch-006",
+      "claim": "The bibliographic source exists under the verified identifier.",
+      "target_variable": "source identity",
+      "population_or_data": "not extracted in metadata-only decisions",
+      "source_ids": [
+        "S239"
+      ],
+      "verified_evidence": "doi=10.1016/j.jpain.2024.104646; exact title=Improvements in Therapy Experience With Evoked Compound Action Potential Controlled, Closed-Loop Spinal Cord Stimulation-Primary Outcome of the ECHO-MAC Randomized Clinical Trial",
+      "limitations": "PubMed primary abstract checked; the trial measures therapy experience and ECAP dose consistency, not ECAP as direct pain measurement.",
+      "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+    },
+    {
+      "batch_id": "batch-006",
+      "claim": "The bibliographic source exists under the verified identifier.",
+      "target_variable": "source identity",
+      "population_or_data": "not extracted in metadata-only decisions",
+      "source_ids": [
+        "S289"
+      ],
+      "verified_evidence": "patent_id=US20220323766A1; exact title=Systems and methods for providing neurostimulation therapy according to machine learning operations",
+      "limitations": "Patent identity and claims page checked; a patent is prior-art context, not empirical evidence.",
+      "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+    },
+    {
+      "batch_id": "batch-006",
+      "claim": "The bibliographic source exists under the verified identifier.",
+      "target_variable": "source identity",
+      "population_or_data": "not extracted in metadata-only decisions",
+      "source_ids": [
+        "S008"
+      ],
+      "verified_evidence": "doi=10.1088/2057-1976/ae34b4; exact title=Explainable AI for pain perception: subject-independent EEG decoding using DeepSHAP and CNNs",
+      "limitations": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+      "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+    },
+    {
+      "batch_id": "batch-006",
+      "claim": "The bibliographic source exists under the verified identifier.",
+      "target_variable": "source identity",
+      "population_or_data": "not extracted in metadata-only decisions",
+      "source_ids": [
+        "S014"
+      ],
+      "verified_evidence": "doi=10.1109/TBME.2024.3452708; exact title=Toward Objectification of Subjective Chronic Pain Based on Implicit Response in Biosignals",
+      "limitations": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+      "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+    },
+    {
+      "batch_id": "batch-006",
+      "claim": "The bibliographic source exists under the verified identifier.",
+      "target_variable": "source identity",
+      "population_or_data": "not extracted in metadata-only decisions",
+      "source_ids": [
+        "S016"
+      ],
+      "verified_evidence": "doi=10.3390/s25041150; exact title=A Multimodal Deep Learning Approach to Intraoperative Nociception Monitoring: Integrating Electroencephalogram, Photoplethysmography, and Electrocardiogram",
+      "limitations": "Open full article checked; target is intraoperative nociception under anesthesia, not conscious pain.",
+      "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+    },
+    {
+      "batch_id": "batch-007",
+      "claim": "The bibliographic source exists under the verified identifier.",
+      "target_variable": "source identity",
+      "population_or_data": "not extracted in metadata-only decisions",
+      "source_ids": [
+        "S037"
+      ],
+      "verified_evidence": "doi=10.1038/s41598-025-14238-y; exact title=A CrossMod-Transformer deep learning framework for multi-modal pain detection through EDA and ECG fusion",
+      "limitations": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+      "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+    },
+    {
+      "batch_id": "batch-007",
+      "claim": "The bibliographic source exists under the verified identifier.",
+      "target_variable": "source identity",
+      "population_or_data": "not extracted in metadata-only decisions",
+      "source_ids": [
+        "S072"
+      ],
+      "verified_evidence": "doi=10.1016/j.compbiomed.2025.111260; exact title=AI-based bi-modal fusion system for automated clinical pain monitoring",
+      "limitations": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+      "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+    },
+    {
+      "batch_id": "batch-007",
+      "claim": "Imported source claim is traceable to a primary record.",
+      "target_variable": "source identity",
+      "population_or_data": "not established",
+      "source_ids": [
+        "S011"
+      ],
+      "verified_evidence": "No unique matching primary record was established.",
+      "limitations": "No matching pain/SCS source was found; the exact-title Crossref hit was an unrelated crystal-growth article.",
+      "permitted_conclusion": "Do not cite as evidence."
+    },
+    {
+      "batch_id": "batch-007",
+      "claim": "The bibliographic source exists under the verified identifier.",
+      "target_variable": "source identity",
+      "population_or_data": "not extracted in metadata-only decisions",
+      "source_ids": [
+        "S069"
+      ],
+      "verified_evidence": "doi=10.1371/journal.pbio.3003948; exact title=Neural encoding of pain is robust within but unstable between individuals",
+      "limitations": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+      "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+    },
+    {
+      "batch_id": "batch-007",
+      "claim": "The bibliographic source exists under the verified identifier.",
+      "target_variable": "source identity",
+      "population_or_data": "not extracted in metadata-only decisions",
+      "source_ids": [
+        "S015"
+      ],
+      "verified_evidence": "doi=10.3390/s26103020; exact title=Real-Time Pain Assessment from Electrodermal Activity Using Deep Learning",
+      "limitations": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+      "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+    },
+    {
+      "batch_id": "batch-007",
+      "claim": "The bibliographic source exists under the verified identifier.",
+      "target_variable": "source identity",
+      "population_or_data": "not extracted in metadata-only decisions",
+      "source_ids": [
+        "S148"
+      ],
+      "verified_evidence": "doi=10.2147/JPR.S617733; exact title=Rethinking Pain Assessment: Subjective Scales, Biomarkers, and Multimodal Integration",
+      "limitations": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+      "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+    },
+    {
+      "batch_id": "batch-007",
+      "claim": "The bibliographic source exists under the verified identifier.",
+      "target_variable": "source identity",
+      "population_or_data": "not extracted in metadata-only decisions",
+      "source_ids": [
+        "S164"
+      ],
+      "verified_evidence": "doi=10.1109/ACCESS.2026.3713429; exact title=Transformer and Attention-Based Models for Automated Pain Assessment: A Systematic Review",
+      "limitations": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+      "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+    },
+    {
+      "batch_id": "batch-007",
+      "claim": "The bibliographic source exists under the verified identifier.",
+      "target_variable": "source identity",
+      "population_or_data": "not extracted in metadata-only decisions",
+      "source_ids": [
+        "S195"
+      ],
+      "verified_evidence": "doi=10.1186/s12967-026-08529-9; exact title=Current state of research and future developments of artificial intelligence in pain diagnosis and treatment",
+      "limitations": "PubMed primary record and abstract checked; this is a review, not empirical validation.",
+      "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+    },
+    {
+      "batch_id": "batch-007",
+      "claim": "The bibliographic source exists under the verified identifier.",
+      "target_variable": "source identity",
+      "population_or_data": "not extracted in metadata-only decisions",
+      "source_ids": [
+        "S005"
+      ],
+      "verified_evidence": "doi=10.1145/3737281; exact title=A Systematic Review of Multimodal Signal Fusion for Acute Pain Assessment Systems",
+      "limitations": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+      "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+    },
+    {
+      "batch_id": "batch-008",
+      "claim": "The bibliographic source exists under the verified identifier.",
+      "target_variable": "source identity",
+      "population_or_data": "not extracted in metadata-only decisions",
+      "source_ids": [
+        "S070"
+      ],
+      "verified_evidence": "doi=10.1109/MLSP62443.2025.11204206; exact title=Towards Generalizable Learning Models for EEG-Based Identification of Pain Perception",
+      "limitations": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+      "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+    },
+    {
+      "batch_id": "batch-008",
+      "claim": "The bibliographic source exists under the verified identifier.",
+      "target_variable": "source identity",
+      "population_or_data": "not extracted in metadata-only decisions",
+      "source_ids": [
+        "S284"
+      ],
+      "verified_evidence": "doi=10.1093/pnasnexus/pgae488; exact title=Neuromorphic neuromodulation: Towards the next generation of closed-loop neurostimulation",
+      "limitations": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+      "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+    },
+    {
+      "batch_id": "r4-batch-001",
+      "claim": "The reviewed preprint reports dopaminergic mushroom-body modulation of nociception-induced escape in adult Drosophila.",
+      "target_variable": "nociceptive_response",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S065"
+      ],
+      "verified_evidence": "Stable source: 10.7554/eLife.110557.1",
+      "limitations": "Reviewed preprint v1; anatomical tracing and perturbation support nociception-induced escape circuitry, not subjective pain or human transfer.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-001",
+      "claim": "The perspective argues that current Drosophila emulations do not establish a determinate affective state.",
+      "target_variable": "not_applicable",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S138"
+      ],
+      "verified_evidence": "Stable source: 10.56280/1765455593",
+      "limitations": "Perspective article proposing an audit framework; it explicitly concludes present affective indeterminacy rather than evidence of suffering or harmlessness.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-001",
+      "claim": "The repository connects a MaleCNS-derived simulation to engineered ViZDoom inputs and controls but does not demonstrate learned survival.",
+      "target_variable": "not_applicable",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S200"
+      ],
+      "verified_evidence": "Stable source: https://github.com/nftechie/doomfly",
+      "limitations": "Public implementation with explicit failed visual, conditioning and survival gates; engineered damage input is not natural nociception or pain.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-001",
+      "claim": "WO2026146221A1 describes federated predictive analysis across neural-interface users and devices.",
+      "target_variable": "not_applicable",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S144"
+      ],
+      "verified_evidence": "Stable source: WO2026146221A1",
+      "limitations": "Patent identity and abstract-level metadata confirmed; claimed federated predictive analysis is prior art, not empirical efficacy evidence.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-001",
+      "claim": "The preprint combines whole-brain activity imaging and subsequent EM in the same larval brain to identify a distributed nociceptive network.",
+      "target_variable": "nociceptive_response",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S212"
+      ],
+      "verified_evidence": "Stable source: 10.1101/2025.09.25.678485",
+      "limitations": "Preprint maps larval Drosophila nociceptive activity to EM anatomy; it is not a whole-brain simulator or evidence of subjective pain.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-001",
+      "claim": "The review surveys neuromorphic stimulation, biosignal inference and wearable or implantable biointerfaces while emphasizing translational evidence gaps.",
+      "target_variable": "not_applicable",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S231"
+      ],
+      "verified_evidence": "Stable source: https://pmc.ncbi.nlm.nih.gov/articles/PMC13210900/",
+      "limitations": "Broad review and context source; it does not demonstrate clinical superiority of neuromorphic systems or validate the dissertation transfer hypothesis.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-001",
+      "claim": "The source identity and bibliographic record were confirmed.",
+      "target_variable": "not_applicable",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S272"
+      ],
+      "verified_evidence": "Stable source: CN122075919A",
+      "limitations": "Patent publication identifier retained at metadata level; technical claims and relevance require translation and claims review.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-001",
+      "claim": "The article describes a multimodal closed-loop TENS prototype and reports only animal proof-of-concept efficacy.",
+      "target_variable": "nociceptive_response",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S273"
+      ],
+      "verified_evidence": "Stable source: 10.1002/adsu.70449",
+      "limitations": "Proof-of-concept efficacy is from a mouse hot-plate experiment; AI pain detection is a roadmap, not a validated human clinical result.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-001",
+      "claim": "The article classifies ECAP as a reactive biomarker for spinal activation in a physiologic closed-loop SCS example.",
+      "target_variable": "ecap_neural_recruitment",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S279"
+      ],
+      "verified_evidence": "Stable source: 10.1016/j.neurom.2026.03.010",
+      "limitations": "Framework/guidance article; its SCS case study treats ECAP as a reactive biomarker of spinal activation, not a direct pain measure or outcome predictor.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-001",
+      "claim": "The preprint and repository report an embodied FlyWire-based simulation with plasticity and divergent synthetic trajectories.",
+      "target_variable": "not_applicable",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S320"
+      ],
+      "verified_evidence": "Stable source: 10.5281/zenodo.19152238",
+      "limitations": "Identity and public artifacts are confirmed, but strong whole-brain behavior and individuality metrics are author-reported and not independently reproduced.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-002",
+      "claim": "The preprint reports on-device few-shot adaptation for seizure detection and prediction across EEG datasets.",
+      "target_variable": "not_applicable",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S330"
+      ],
+      "verified_evidence": "Stable source: 10.1101/2025.09.22.25336341",
+      "limitations": "The work concerns patient-specific seizure detection and prediction on neuromorphic hardware, not pain assessment or SCS-response prediction. It is retained only as methodological context.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-002",
+      "claim": "A six-swine anatomical and biophysical model demonstrates strong dependence of modeled ECAPs on stimulation configuration and anatomy.",
+      "target_variable": "ecap_neural_recruitment",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S363"
+      ],
+      "verified_evidence": "Stable source: 10.1016/j.neurom.2025.06.008",
+      "limitations": "The model uses imaging and epidural recordings from six swine. ECAP morphology and amplitude depend on stimulation and anatomy and may not directly represent neural recruitment; this is preclinical measurement-model evidence, not pain or outcome evidence.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-002",
+      "claim": "The institutional project article documents a complete male Drosophila CNS connectome resource exceeding 166,000 neurons.",
+      "target_variable": "not_applicable",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S368"
+      ],
+      "verified_evidence": "Stable source: https://blog.google/innovation-and-ai/technology/research/male-fruit-fly-brain-map/",
+      "limitations": "The institutional article confirms a male fly brain and ventral-nerve-cord map with more than 166,000 neurons. It is a communications article, not a methods paper, and does not establish a pain simulator or the original claim of an open-source simulation.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-002",
+      "claim": "US12642969B2 describes ECAP-informed adjustment of stimulation parameters for conditions associated with spinal cord injury.",
+      "target_variable": "ecap_neural_recruitment",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S099"
+      ],
+      "verified_evidence": "Stable source: US12642969B2",
+      "limitations": "Patent identity, grant date, assignee, inventor and ECAP-controlled SCI-stimulation scope are confirmed. A patent is not empirical evidence of safety, efficacy, pain measurement, or clinical outcome prediction.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-002",
+      "claim": "The APM generated a closed-loop program in 81 of 84 initial sessions and improved ECAP signal-quality measures in two single-arm feasibility studies.",
+      "target_variable": "ecap_neural_recruitment",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S162"
+      ],
+      "verified_evidence": "Stable source: 10.1007/s40122-025-00808-5",
+      "limitations": "Two prospective multicenter single-arm feasibility studies support programming feasibility and signal fidelity. They do not establish comparative analgesic efficacy or prediction of long-term SCS response.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-correction-001",
+      "claim": "The narrative review maps proposed AI uses across SCS selection, programming and closed-loop control while documenting major validation and governance gaps.",
+      "target_variable": "scs_response",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S060"
+      ],
+      "verified_evidence": "Stable source: 10.7860/JCDR/2026/86004.24236",
+      "limitations": "Narrative review, not a systematic review or clinical validation study. It explicitly characterizes the AI-SCS evidence as preliminary, heterogeneous, and lacking large prospective multicenter randomized trials.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-003",
+      "claim": "CN120478838B is a granted Chinese patent for a wearable pain-relief device and remote monitoring system.",
+      "target_variable": "clinical_function",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S245"
+      ],
+      "verified_evidence": "Stable source: CN120478838B",
+      "limitations": "Patent identity and translated title are confirmed. No empirical clinical validation or support for efficacy claims was established.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-003",
+      "claim": "The review supports multimodal composite SCI-pain biomarkers while warning that physiological features alone omit cognitive, emotional, demographic and cultural dimensions.",
+      "target_variable": "self_reported_pain",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S022"
+      ],
+      "verified_evidence": "Stable source: 10.1016/j.expneurol.2026.115649",
+      "limitations": "This is a review and position article, not a biomarker-validation cohort. It argues for multimodal composite biomarkers and cautions against reducing pain to physiology alone.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-003",
+      "claim": "US11666761B2 documents a patent family for machine-learning optimization of spinal-cord-stimulation parameters.",
+      "target_variable": "scs_response",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S098"
+      ],
+      "verified_evidence": "Stable source: US11666761B2",
+      "limitations": "The patent describes optimization concepts and possible feedback measures. It is not empirical evidence that an ML optimizer improves patient outcomes.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-003",
+      "claim": "The review surveys ML uses for SCS candidate selection, trial response and programming optimization.",
+      "target_variable": "scs_response",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S161"
+      ],
+      "verified_evidence": "Stable source: 10.1227/ons.0000000000000774",
+      "limitations": "Narrative review of ML applications in SCS; it does not itself externally validate a response-prediction model.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-003",
+      "claim": "US20250099764A1 describes filtering and matching of recorded neuromodulation waveforms.",
+      "target_variable": "technical_signal_quality",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S241"
+      ],
+      "verified_evidence": "Stable source: US20250099764A1",
+      "limitations": "Patent application describing waveform matching after filtering ECAP-related components. It provides no clinical proof of pain measurement or SCS efficacy.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-003",
+      "claim": "US20230123383A1 proposes neurostimulation control using multidimensional physiological and patient features.",
+      "target_variable": "scs_response",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S240"
+      ],
+      "verified_evidence": "Stable source: US20230123383A1",
+      "limitations": "Patent application describing multidimensional patient features and AI/ML-assisted neurostimulation. It is not outcome-validation evidence.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-003",
+      "claim": "The study evaluates reliability-aware EEG sample selection on 41 participants with self-reported thermal-pain labels.",
+      "target_variable": "experimental_pain_class",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S045"
+      ],
+      "verified_evidence": "Stable source: 10.1109/TNSRE.2026.3692232",
+      "limitations": "Forty-one participants received controlled thermal stimuli and supplied NRS labels. Five-fold validation and unseen stimulus types do not by themselves prove transfer to independent clinical cohorts.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-003",
+      "claim": "The indexed article evaluates an ECG pain-intensity architecture on BioVid.",
+      "target_variable": "experimental_pain_class",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S017"
+      ],
+      "verified_evidence": "Stable source: 10.1109/JIOT.2025.3590401",
+      "limitations": "Bibliographic identity and BioVid evaluation are confirmed from indexing metadata; the publisher full text was not checked, so reported performance is not promoted to a verified claim.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-003",
+      "claim": "The study tests EEG markers of later central neuropathic pain across two independently collected subacute-SCI datasets and reports 66.6% cross-dataset validation accuracy.",
+      "target_variable": "clinical_function",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S023"
+      ],
+      "verified_evidence": "Stable source: 10.3390/biomedicines13010213",
+      "limitations": "Two SCI datasets were recorded under similar protocols. Cross-dataset validation accuracy was 66.6%, materially below within-dataset estimates; this is prognostic neuropathic-pain evidence, not momentary pain measurement.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-004",
+      "claim": "The conference proceedings contain a paper on physiological and psychosocial fusion for sickle-cell pain intensity assessment.",
+      "target_variable": "self_reported_pain",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S074"
+      ],
+      "verified_evidence": "Stable source: https://www.proceedings.com/content/082/082935webtoc.pdf",
+      "limitations": "The exact conference paper and authors are confirmed in the proceedings contents, but the paper text, cohort, split and metrics were not verified.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-004",
+      "claim": "The protocol details optogenetic activation of class-IV multidendritic neurons to elicit nociceptive rolling in Drosophila larvae.",
+      "target_variable": "protective_behavior",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S090"
+      ],
+      "verified_evidence": "Stable source: 10.1101/pdb.prot108128",
+      "limitations": "This is an experimental protocol for activating larval nociceptors and eliciting rolling. It validates a nociceptive-behavior assay, not subjective pain or human transfer.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-004",
+      "claim": "KCS-FCnet is evaluated on the Brain Mediators of Pain dataset with subject-dependent and leave-one-subject-out analyses.",
+      "target_variable": "experimental_pain_class",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S189"
+      ],
+      "verified_evidence": "Stable source: 10.3390/app15094804",
+      "limitations": "The paper evaluates controlled no-pain versus high-pain EEG and includes LOSO analysis, but the reported headline metrics include subject-dependent results and are not clinical-pain validation.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-004",
+      "claim": "The conference paper evaluates a compact cross-attention, multi-window respiration pipeline for automatic pain recognition.",
+      "target_variable": "experimental_pain_class",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S190"
+      ],
+      "verified_evidence": "Stable source: 10.1145/3747327.3764782",
+      "limitations": "AI4PAIN challenge method using respiration signals. Benchmark evidence does not establish clinical generalization or an independent external cohort.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-004",
+      "claim": "The indexed article proposes multimodal expert models for pain-score regression in postoperative children.",
+      "target_variable": "self_reported_pain",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S193"
+      ],
+      "verified_evidence": "Stable source: 10.1109/TAFFC.2025.3567307",
+      "limitations": "Bibliographic identity and abstract-level claims are confirmed; the full paper, patient-level split and external validation were not checked.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-004",
+      "claim": "The ICPR workshop paper concerns data augmentation for multimodal pain detection.",
+      "target_variable": "experimental_pain_class",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S035"
+      ],
+      "verified_evidence": "Stable source: 10.1007/978-3-031-88220-3_11",
+      "limitations": "Bibliographic identity is confirmed; full-text claims, split design and augmentation gains were not independently checked.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-004",
+      "claim": "The paper evaluates a dual-ViT modality-agnostic fusion framework using facial video and fNIRS in the AI4PAIN challenge.",
+      "target_variable": "experimental_pain_class",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S191"
+      ],
+      "verified_evidence": "Stable source: 10.1109/ACIIW63320.2024.00007",
+      "limitations": "AI4PAIN benchmark paper reporting 46.76% multilevel accuracy. This is benchmark evidence, not independent clinical validation.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-004",
+      "claim": "The fly assay links capsaicin activation of transgenic nociceptors to behavioral and survival effects modulated by several analgesic classes.",
+      "target_variable": "nociceptive_response",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S027"
+      ],
+      "verified_evidence": "Stable source: 10.1371/journal.pone.0281874",
+      "limitations": "The assay uses transgenic TRPV1 expression, capsaicin exposure, behavior and survival. The authors use pain terminology, but these observables remain nociceptive and protective responses and cannot establish subjective human pain equivalence.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-004",
+      "claim": "The study evaluates CNN classification of simulated nerve compound action potentials from a human median-nerve geometry under varying noise and source counts.",
+      "target_variable": "not_applicable",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S048"
+      ],
+      "verified_evidence": "Stable source: 10.1186/s12938-023-01181-0",
+      "limitations": "The neural activity is generated from a finite-element model of a human median nerve; it concerns source classification for neural interfaces, not pain or ECAP/SCS outcomes.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-004",
+      "claim": "The scoping review maps deep-learning use with noninvasive sensors and identifies persistent external-validation and implementation gaps.",
+      "target_variable": "technical_signal_quality",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S075"
+      ],
+      "verified_evidence": "Stable source: 10.1007/s10916-025-02332-7",
+      "limitations": "Scoping review of 27 heterogeneous studies spanning pain, stress and hemodynamic deterioration; it explicitly calls for real-world and clinical-impact validation and is not effectiveness evidence.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-004",
+      "claim": "PainControl evaluates identity-preserving diffusion-based expression transfer and reports benefits chiefly when real pain-expression data are extremely scarce.",
+      "target_variable": "experimental_pain_class",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S084"
+      ],
+      "verified_evidence": "Stable source: 10.1186/s12938-026-01561-2",
+      "limitations": "Synthetic augmentation did not improve the classifier in the general regime and showed AU-intensity and temporal limitations; gains were confined to data-scarce regimes.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-005",
+      "claim": "The review proposes a decision-centered framework for evaluating wearable biosensor systems in personalized rehabilitation.",
+      "target_variable": "clinical_function",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S249"
+      ],
+      "verified_evidence": "Stable source: 10.3389/fbioe.2026.1948186",
+      "limitations": "Critical narrative review, not a trial. It emphasizes uncertainty, safe degradation, clinician oversight and patient-important outcomes as prerequisites for closed-loop rehabilitation systems.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-005",
+      "claim": "Eon documents a closed sensorimotor integration of a connectome-constrained fly model with NeuroMechFly and MuJoCo for a small behavior subset.",
+      "target_variable": "protective_behavior",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S253"
+      ],
+      "verified_evidence": "Stable source: https://eon.systems/updates/embodied-brain-emulation",
+      "limitations": "The company technical post documents integration of published components and explicitly lists major simplifications. It is non-peer-reviewed, work in progress, and does not independently validate behavioral fidelity, nociception or affect.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-005",
+      "claim": "The corticospinal fMRI model is evaluated across experimental and chronic-pain datasets and tracks TENS-associated changes.",
+      "target_variable": "self_reported_pain",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S025"
+      ],
+      "verified_evidence": "Stable source: 10.1016/j.xcrm.2026.102793",
+      "limitations": "The primary article reports independent-dataset tests across experimental pain, TENS and chronic pain. It is an fMRI biomarker study, not ECAP evidence or an SCS-response model; full authorship metadata remains to be completed.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-005",
+      "claim": "The review describes privacy and data-sharing motivations for federated learning in spine-surgery research.",
+      "target_variable": "not_applicable",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S042"
+      ],
+      "verified_evidence": "Stable source: 10.1007/s00586-024-08172-2",
+      "limitations": "Narrative review of federated learning opportunities in spine surgery; it is not a deployed federated SCS model or outcome-validation study.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-005",
+      "claim": "The conference paper evaluates GAN-derived thermal videos with RGB video for automatic pain assessment on BioVid.",
+      "target_variable": "experimental_pain_class",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S083"
+      ],
+      "verified_evidence": "Stable source: 10.1109/ACIIW63320.2024.00006",
+      "limitations": "The method generates synthetic thermal video from BioVid facial video and evaluates benchmark recognition. It does not create physiological ground truth or demonstrate clinical transfer.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-006",
+      "claim": "The narrative review maps AI-supported adaptive neuromodulation approaches and their translational constraints in neurodegenerative rehabilitation.",
+      "target_variable": "not_applicable",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S165"
+      ],
+      "verified_evidence": "Stable source: 10.3390/biomedicines13092118",
+      "limitations": "Narrative review of AI-enabled neuromodulation in neurodegenerative rehabilitation. It is not an SCS trial, a pain study, or evidence for federated SCS-response prediction.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-006",
+      "claim": "PainDiffusion generates controllable facial pain expressions for virtual or robotic patient simulation and reports conference benchmark evaluation.",
+      "target_variable": "experimental_pain_class",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S192"
+      ],
+      "verified_evidence": "Stable source: 10.1109/IROS60139.2025.11247588",
+      "limitations": "The model synthesizes facial expressions for robotic-patient simulation from pain-stimulus controls. It is not a pain detector, physiological simulator, or clinical validation source.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-006",
+      "claim": "Conference metadata identifies a privacy-preserving multi-cloud federated-learning architecture for healthcare diagnostics.",
+      "target_variable": "not_applicable",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S228"
+      ],
+      "verified_evidence": "Stable source: https://www.dsu.edu.in/images/Engineering/CSE-dept/Newsletter/CsOct-Dec_2025.pdf",
+      "limitations": "The conference presentation and bibliographic identity are corroborated, but no DOI or primary full text was located and its claims were not checked. It is generic healthcare infrastructure, not SCS evidence.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-006",
+      "claim": "The wearable six-channel TENS prototype demonstrates EMG-triggered closed-loop operation and bench-level timing and waveform performance.",
+      "target_variable": "technical_signal_quality",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S244"
+      ],
+      "verified_evidence": "Stable source: 10.3390/s25165113",
+      "limitations": "The paper validates hardware and EMG-trigger timing mainly on bench and synthetic input. Human analgesic testing remained a prospective protocol, so it cannot support efficacy claims.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-006",
+      "claim": "The preprint identifies descending neurons that integrate learned mushroom-body information with nociceptive context to promote larval escape rolling.",
+      "target_variable": "nociceptive_response",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S282"
+      ],
+      "verified_evidence": "Stable source: 10.1101/2025.09.30.679458",
+      "limitations": "Larval Drosophila connectomics, imaging, neural manipulation and behavior identify a circuit for context-dependent rolling. This is nociceptive escape circuitry, not subjective pain or human transfer.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-006",
+      "claim": "FlyGM embeds the adult Drosophila connectome into a graph policy and evaluates locomotion control in a biomechanical simulation.",
+      "target_variable": "protective_behavior",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S286"
+      ],
+      "verified_evidence": "Stable source: https://arxiv.org/abs/2602.17997",
+      "limitations": "FlyGM uses the adult connectome as a graph-structured controller in a simulated biomechanical fly. It validates an embodied-control architecture, not biophysical neural dynamics, nociception, pain, or human transfer.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-007",
+      "claim": "The doctoral thesis studies EEG functional-connectivity biomarkers and CNN-based transfer learning for pain assessment.",
+      "target_variable": "experimental_pain_class",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S071"
+      ],
+      "verified_evidence": "Stable source: https://repository.essex.ac.uk/38532/",
+      "limitations": "The institutional record and thesis PDF are available, and the abstract describes EEG functional-connectivity and transfer-learning analyses. Detailed cohorts, participant splits, metrics and external validation were not independently extracted.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-007",
+      "claim": "EPOC implements an event-driven neuromorphic processor with a unified neuromodulation-based online-learning framework.",
+      "target_variable": "not_applicable",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S229"
+      ],
+      "verified_evidence": "Stable source: 10.1109/TBCAS.2024.3470520",
+      "limitations": "Bibliographic metadata and abstract-level hardware claims are confirmed. Here neuromodulation denotes a learning mechanism in neuromorphic hardware, not therapeutic neuromodulation, SCS, ECAP or pain assessment.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-007",
+      "claim": "The review summarizes conserved Drosophila nociception mechanisms and thermal, chemical and mechanical behavioral assays.",
+      "target_variable": "nociceptive_response",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S012"
+      ],
+      "verified_evidence": "Stable source: 10.3389/fphys.2022.854124",
+      "limitations": "The review explicitly distinguishes subjective pain from objective nociception and surveys fly genetics, sensory neurons and behavioral assays. Conservation does not establish equivalence to human pain or a spinal-cord model.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-batch-007",
+      "claim": "BRP-SNN couples multimodal damage cues to an engineered internal state and tests alerting and avoidance tasks on robots.",
+      "target_variable": "protective_behavior",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S222"
+      ],
+      "verified_evidence": "Stable source: 10.3389/fnbot.2022.1025338",
+      "limitations": "The engineered internal variable called robot pain drives self-protective tasks. It is a conceptual robotic construct and cannot be treated as evidence of subjective pain, biological nociception or clinical transfer.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r3-batch-001",
+      "claim": "Infinite Sugar is an inspectable software artwork that visualizes connectome-derived activity in an embodied virtual fly.",
+      "target_variable": "not_applicable",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S201"
+      ],
+      "verified_evidence": "Stable source: https://github.com/cnqso/infinite-sugar",
+      "limitations": "The repository is a browser artwork using FlyWire connectivity and simplified LIF-style activity. Several body movements use supplied patterns; it is not a validated whole-brain emulation or nociception model.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r3-batch-001",
+      "claim": "Eon publicly describes a programme targeting future mouse-brain emulation after its embodied-fly work.",
+      "target_variable": "not_applicable",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S296"
+      ],
+      "verified_evidence": "Stable source: https://eon.systems/updates/first-multi-behavior-brain-upload",
+      "limitations": "The company states that mouse emulation is a future target and that data collection is underway. The page does not document a completed digital mouse-brain emulation or independent validation.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r3-batch-001",
+      "claim": "A 2014 conference abstract reports a decapitated-fly behavioral assay for noxious heat responses.",
+      "target_variable": "nociceptive_response",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S026"
+      ],
+      "verified_evidence": "Stable source: https://www.jstage.jst.go.jp/article/hikakuseiriseika/31/4/31_151/_pdf",
+      "limitations": "The exact conference abstract is identifiable, but no full peer-reviewed article or detailed protocol and results were located. The original card had no year and was misclassified as SCS-specific.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r3-batch-001",
+      "claim": "Repeated nociceptor activation and octopaminergic feedback increase sensory gain and nocifensive rolling in Drosophila larvae.",
+      "target_variable": "nociceptive_response",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S066"
+      ],
+      "verified_evidence": "Stable source: 10.1371/journal.pgen.1012122",
+      "limitations": "The experiments address experience-dependent sensitization of nocifensive rolling in Drosophila larvae. They do not establish subjective pain or a mapping to human spinal or SCS responses.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r3-batch-001",
+      "claim": "MuSACo selects relevant source subjects and adapts multimodal expression-recognition models to an unlabeled target subject.",
+      "target_variable": "experimental_pain_class",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S227"
+      ],
+      "verified_evidence": "Stable source: https://arxiv.org/abs/2508.12522",
+      "limitations": "The method evaluates subject-specific multimodal expression adaptation on BioVid and StressID. It is an affective-computing baseline, not external clinical pain validation or SCS evidence.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r3-batch-001",
+      "claim": "The study uses the fly connectome as a prior to improve estimation of causal neural interactions from perturbation data.",
+      "target_variable": "not_applicable",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S068"
+      ],
+      "verified_evidence": "Stable source: 10.1038/s41586-024-07982-0",
+      "limitations": "The study proposes causal effectome estimation using perturbations and a connectome prior. Simulation validation does not itself supply biological whole-brain dynamics or pain-related labels.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r3-batch-001",
+      "claim": "Drosophila epidermal cells respond to mechanical stimulation and modulate sensory-neuron activity and nocifensive behavior.",
+      "target_variable": "nociceptive_response",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S092"
+      ],
+      "verified_evidence": "Stable source: 10.7554/eLife.95379",
+      "limitations": "The work identifies epidermal contributions to larval mechanonociception and sensitization. Behavioral escape remains a nociceptive outcome, not evidence of subjective pain or human transfer.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r3-batch-001",
+      "claim": "Nature Methods selected electron-microscopy-based connectomics as its Method of the Year 2025 and contextualized FlyWire among recent advances.",
+      "target_variable": "not_applicable",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S252"
+      ],
+      "verified_evidence": "Stable source: 10.1038/s41592-025-02988-6",
+      "limitations": "This is an unsigned editorial selecting EM connectomics as Method of the Year, not an empirical FlyWire validation study or evidence about pain, behavior, or transfer.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r3-batch-001",
+      "claim": "STN-region electrically evoked potentials vary with stimulation and recording location and support electrode-location classification in four parkinsonian primates.",
+      "target_variable": "ecap_neural_recruitment",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S049"
+      ],
+      "verified_evidence": "Stable source: 10.1038/s41598-023-29439-6",
+      "limitations": "Four MPTP-treated non-human primates were used to classify electrode location from STN-region ECAPs. This DBS work concerns Parkinsonian neuroanatomy, not spinal ECAPs, pain, or clinical SCS response.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r3-batch-001",
+      "claim": "Mechanosensory integration and short-neuropeptide-F feedback facilitate robust larval mechanonociceptive escape.",
+      "target_variable": "nociceptive_response",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S030"
+      ],
+      "verified_evidence": "Stable source: 10.1038/nn.4580",
+      "limitations": "The circuit study explains modality-specific mechanonociceptive escape in larvae. It does not demonstrate subjective pain or justify direct mapping to human spinal physiology.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r3-batch-001",
+      "claim": "The prototype closes a loop between dorsal-horn nociceptive-spike detection and wireless neurostimulation.",
+      "target_variable": "nociceptive_response",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S021"
+      ],
+      "verified_evidence": "Stable source: 10.1109/IEMBS.2010.5626830",
+      "limitations": "The animal system detects dorsal-horn spiking responses to brush, pressure and pinch and triggers neurostimulation. It is not a human pain classifier, ECAP measurement, or clinical SCS-outcome study.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r3-batch-001",
+      "claim": "The survey categorizes edge-FL vulnerabilities, attack classes, defenses and benchmark gaps under resource constraints.",
+      "target_variable": "not_applicable",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S097"
+      ],
+      "verified_evidence": "Stable source: 10.3390/s26041275",
+      "limitations": "General structured survey of edge federated-learning security; it contains no pain, SCS, ECAP, or clinical-transfer validation.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r3-batch-001",
+      "claim": "CORDIS documents the CROSSBRAIN research programme on distributed multimodal actuation, nanomaterials and neuromorphic learning.",
+      "target_variable": "not_applicable",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S246"
+      ],
+      "verified_evidence": "Stable source: 10.3030/101070908",
+      "limitations": "The official record confirms the funded project, dates and objectives. A grant record is not a peer-reviewed result and does not validate pain assessment, SCS response, or clinical efficacy.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r3-batch-002",
+      "claim": "Conserved synaptic density and relative connectivity can maintain modeled postsynaptic responses as the larval nociceptive circuit grows.",
+      "target_variable": "nociceptive_response",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S061"
+      ],
+      "verified_evidence": "Stable source: 10.7554/eLife.108643.1",
+      "limitations": "The study combines EM reconstructions and passive single-cell modeling of a larval nociceptive circuit across development. It does not model whole-brain dynamics, subjective pain or human transfer.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r3-batch-002",
+      "claim": "Adult abdominal multidendritic neurons and distinct ascending pathways support rapid escape and sustained avoidance of noxious heat.",
+      "target_variable": "nociceptive_response",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S062"
+      ],
+      "verified_evidence": "Stable source: 10.1101/2025.10.28.684868",
+      "limitations": "The preprint identifies adult-fly nociceptors and ascending pathways supporting escape and sustained avoidance. Its discussion of pain criteria does not demonstrate subjective experience or human transfer.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r3-batch-002",
+      "claim": "The commentary links the adult fly connectome, computational brain model and later embodied demonstrations into a digital-organism narrative.",
+      "target_variable": "not_applicable",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S095"
+      ],
+      "verified_evidence": "Stable source: 10.59973/ipil.361",
+      "limitations": "The article is a News and Views interpretation of prior connectome and Eon work. Its 'first digital organism' framing is commentary, not independent empirical validation of a complete brain emulation or cognition.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r3-batch-002",
+      "claim": "The data descriptor provides injury and sham larval nociceptor translatomes under BioProject PRJNA1056042.",
+      "target_variable": "nociceptive_response",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S154"
+      ],
+      "verified_evidence": "Stable source: 10.3390/data10020011",
+      "limitations": "The dataset compares nociceptor-specific ribosome-bound RNA after UV injury versus sham in larvae. It is molecular translatomic data, not neural activity, behavior, subjective pain or human validation.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r3-batch-002",
+      "claim": "A 180 nm CMOS implementation demonstrates tunable firing regimes and robustness of a mixed-feedback current-mode silicon neuron.",
+      "target_variable": "technical_signal_quality",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S247"
+      ],
+      "verified_evidence": "Stable source: https://arxiv.org/abs/2512.01133",
+      "limitations": "The preprint validates an analog CMOS neuron circuit. 'Neuromodulable' describes electronic adaptation; it is not therapeutic neuromodulation, nociception, pain assessment, ECAP or SCS evidence.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r3-batch-002",
+      "claim": "The review summarizes known larval nociceptors, downstream circuits, nocifensive behaviors and neuromodulators.",
+      "target_variable": "nociceptive_response",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S152"
+      ],
+      "verified_evidence": "Stable source: 10.3389/fpain.2023.1076017",
+      "limitations": "The review covers larval nociceptive circuits, connectomics, behavior and neuromodulation. Cross-species relevance is hypothesis-generating and does not establish subjective pain or a human spinal mapping.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r3-batch-002",
+      "claim": "The paper builds a connectome-informed lightweight SNN of the Drosophila olfactory system and demonstrates real-time FPGA execution.",
+      "target_variable": "not_applicable",
+      "population_or_data": "as described by the primary source",
+      "source_ids": [
+        "S214"
+      ],
+      "verified_evidence": "Stable source: 10.3389/fnins.2024.1384336",
+      "limitations": "The model targets olfaction and associative learning and runs on FPGA hardware. It does not model nociception, whole-brain dynamics, pain or human transfer.",
+      "permitted_conclusion": "Use only within the documented scope and limitations."
+    },
+    {
+      "batch_id": "r4-github-refresh-001",
+      "claim": "DoomFly is an open closed-loop MaleCNS/ViZDoom engineering experiment with explicit negative validation results.",
+      "target_variable": "not_applicable",
+      "population_or_data": "simulated MaleCNS v1.0 connectome",
+      "source_ids": [
+        "S200"
+      ],
+      "verified_evidence": "Repository README and live-training protocol at commit 71ecf53d78eaffaf1a57ed7b0ccf5d458abc9f33",
+      "limitations": "Artificial sensory, controller and dopamine interfaces; failed gates; no biological pain or learning validation.",
+      "permitted_conclusion": "Use as a reproducible engineering comparator, not evidence of pain, nociception or learned survival."
+    },
+    {
+      "batch_id": "r4-github-refresh-001",
+      "claim": "The supplied claude-fly repository exists and describes an embodied FlyWire/NeuroMechFly simulation with two synthetic agents.",
+      "target_variable": "not_applicable",
+      "population_or_data": "repository-provided synthetic outputs",
+      "source_ids": [
+        "S292"
+      ],
+      "verified_evidence": "Repository README and files at commit 3a035275148e97539711728422548bffe2a77566",
+      "limitations": "Quantitative results were not reproduced; claimed Zenodo DOI did not resolve during review; clone instructions reference another repository.",
+      "permitted_conclusion": "Use only as a partially verified simulation candidate requiring independent reproduction."
+    }
+  ],
+  "author_review_required": true,
+  "supervisor_decision_required": true
+}

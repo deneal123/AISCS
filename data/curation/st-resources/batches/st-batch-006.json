@@ -1,0 +1,477 @@
+{
+  "meta": {
+    "batch_id": "st-batch-006",
+    "schema_version": "1.0.0",
+    "created_at": "2026-09-22",
+    "status": "applied",
+    "reviewed_at": "2026-09-22",
+    "applied_at": "2026-09-22"
+  },
+  "resource_ids": [
+    "ST072",
+    "ST073",
+    "ST074",
+    "ST076",
+    "ST077",
+    "ST078",
+    "ST087",
+    "ST088",
+    "ST089",
+    "ST090",
+    "ST091",
+    "ST092",
+    "ST093",
+    "ST094",
+    "ST095"
+  ],
+  "resources": [
+    {
+      "resource_id": "ST072",
+      "category_id": "C6",
+      "subcategory_id": "C6.1",
+      "name": "EvoJAX SNN (Colab)",
+      "status": "needs_exact_url",
+      "url": null
+    },
+    {
+      "resource_id": "ST073",
+      "category_id": "C6",
+      "subcategory_id": "C6.1",
+      "name": "Radboud SNN Simulator (Colab)",
+      "status": "url_present_content_not_checked",
+      "url": "https://github.com/adiehl96/SNN-computing"
+    },
+    {
+      "resource_id": "ST074",
+      "category_id": "C7",
+      "subcategory_id": "C7.1",
+      "name": "FlyConnectome CAVE Tutorial",
+      "status": "url_present_content_not_checked",
+      "url": "https://github.com/seung-lab/FlyConnectome/blob/main/CAVE%20tutorial.ipynb"
+    },
+    {
+      "resource_id": "ST076",
+      "category_id": "C7",
+      "subcategory_id": "C7.1",
+      "name": "Brian2GeNN Tutorial",
+      "status": "needs_exact_url",
+      "url": null
+    },
+    {
+      "resource_id": "ST077",
+      "category_id": "C7",
+      "subcategory_id": "C7.1",
+      "name": "BrainChip MetaTF Docs",
+      "status": "needs_exact_url",
+      "url": null
+    },
+    {
+      "resource_id": "ST078",
+      "category_id": "C7",
+      "subcategory_id": "C7.1",
+      "name": "PyTorch Tabular Docs",
+      "status": "url_present_content_not_checked",
+      "url": "https://github.com/manujosephv/pytorch_tabular"
+    },
+    {
+      "resource_id": "ST087",
+      "category_id": "C9",
+      "subcategory_id": "C9.1",
+      "name": "CPU",
+      "status": "unverified",
+      "url": null
+    },
+    {
+      "resource_id": "ST088",
+      "category_id": "C9",
+      "subcategory_id": "C9.1",
+      "name": "RAM",
+      "status": "unverified",
+      "url": null
+    },
+    {
+      "resource_id": "ST089",
+      "category_id": "C9",
+      "subcategory_id": "C9.1",
+      "name": "GPU",
+      "status": "unverified",
+      "url": null
+    },
+    {
+      "resource_id": "ST090",
+      "category_id": "C9",
+      "subcategory_id": "C9.1",
+      "name": "Storage",
+      "status": "unverified",
+      "url": null
+    },
+    {
+      "resource_id": "ST091",
+      "category_id": "C9",
+      "subcategory_id": "C9.1",
+      "name": "OS",
+      "status": "unverified",
+      "url": null
+    },
+    {
+      "resource_id": "ST092",
+      "category_id": "C9",
+      "subcategory_id": "C9.1",
+      "name": "Python",
+      "status": "unverified",
+      "url": null
+    },
+    {
+      "resource_id": "ST093",
+      "category_id": "C9",
+      "subcategory_id": "C9.1",
+      "name": "CUDA",
+      "status": "unverified",
+      "url": null
+    },
+    {
+      "resource_id": "ST094",
+      "category_id": "C9",
+      "subcategory_id": "C9.2",
+      "name": "CPU",
+      "status": "unverified",
+      "url": null
+    },
+    {
+      "resource_id": "ST095",
+      "category_id": "C9",
+      "subcategory_id": "C9.2",
+      "name": "RAM",
+      "status": "unverified",
+      "url": null
+    }
+  ],
+  "decisions": [
+    {
+      "resource_id": "ST072",
+      "decision": "partially_verified",
+      "exact_url": "https://github.com/google/evojax",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "EvoJAX official repository SNN Colab",
+          "url": "https://github.com/google/evojax",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "EvoJAX is an Apache-licensed JAX neuroevolution toolkit with notebook examples and optional GPU/TPU execution.",
+        "The project notes that Colab includes JAX and provides notebooks under its examples tree."
+      ],
+      "limitations": [
+        "No exact EvoJAX SNN Colab notebook matching the imported title was confirmed.",
+        "The Google repository was archived in August 2025 and is read-only.",
+        "General neuroevolution support does not establish a biologically grounded SNN simulator."
+      ],
+      "corrected_purpose": "Archived general JAX neuroevolution toolkit; no verified project-specific SNN notebook.",
+      "note": "The generic nbviewer link is replaced, but the imported SNN-specific identity remains unconfirmed."
+    },
+    {
+      "resource_id": "ST073",
+      "decision": "partially_verified",
+      "exact_url": "https://github.com/adiehl96/SNN-computing",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Radboud SNN Simulator repository",
+          "url": "https://github.com/adiehl96/SNN-computing",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "The MIT-licensed repository contains an SNN simulator example notebook and a Colab badge."
+      ],
+      "limitations": [
+        "The checked GitHub repository is a fork and explicitly labels itself legacy.",
+        "Maintenance moved to a Radboud GitLab instance; the current upstream contents and reproducibility were not verified.",
+        "No evidence establishes scalability to the target connectome."
+      ],
+      "corrected_purpose": "Legacy educational SNN notebook whose maintained upstream must be checked before reuse.",
+      "note": "Do not select it over maintained simulators without a local benchmark."
+    },
+    {
+      "resource_id": "ST074",
+      "decision": "verified_primary",
+      "exact_url": "https://github.com/seung-lab/FlyConnectome/blob/main/CAVE%20tutorial.ipynb",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "FlyConnectome CAVE tutorial official notebook",
+          "url": "https://github.com/seung-lab/FlyConnectome/blob/main/CAVE%20tutorial.ipynb",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "The Seung Lab FlyConnectome repository contains a 4,045-line CAVE tutorial notebook for programmatic connectome access."
+      ],
+      "limitations": [
+        "The notebook documents data access, not neuronal dynamics, nociception or simulation validity.",
+        "Authentication, materialization version and API outputs must be pinned in any reproducible extraction."
+      ],
+      "corrected_purpose": "Primary tutorial for programmatic CAVE/FlyConnectome data access.",
+      "note": "Use with an explicit materialization/version manifest."
+    },
+    {
+      "resource_id": "ST076",
+      "decision": "verified_primary",
+      "exact_url": "https://genn-team.github.io/genn/documentation/3/html/d3/d0c/brian2genn.html",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Brian2GeNN LIF f/I tutorial",
+          "url": "https://genn-team.github.io/genn/documentation/3/html/d3/d0c/brian2genn.html",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "The GeNN documentation gives a Brian2GeNN LIF example with varying input currents to construct an f/I curve.",
+        "It documents switching Brian2 to the GeNN device and configuring GeNN/CUDA paths."
+      ],
+      "limitations": [
+        "The page belongs to older GeNN 3 documentation and is an API example, not a current performance benchmark.",
+        "The example is too small to demonstrate benefit from GPU execution."
+      ],
+      "corrected_purpose": "Legacy official Brian2GeNN interface example for an LIF f/I curve.",
+      "note": "Retain as a minimal syntax example; use current package docs for environment setup."
+    },
+    {
+      "resource_id": "ST077",
+      "decision": "verified_primary",
+      "exact_url": "https://doc.brainchipinc.com/",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "BrainChip MetaTF official documentation",
+          "url": "https://doc.brainchipinc.com/",
+          "accessed_at": "2026-09-22"
+        },
+        {
+          "query": "MetaTF installation supported versions",
+          "url": "https://doc.brainchipinc.com/installation.html",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "The current MetaTF documentation describes akida-models, QuantizeML, CNN2SNN and the Akida runtime/software backend.",
+        "The current installation page documents Python 3.10-3.12 and versioned package dependencies."
+      ],
+      "limitations": [
+        "The runtime is a vendor stack governed by BrainChip licensing, not a wholly open-source framework.",
+        "Supported Python, TensorFlow and package versions change and must be locked per experiment."
+      ],
+      "corrected_purpose": "Official versioned documentation for quantization, conversion, simulation and Akida deployment.",
+      "note": "Duplicate role with ST026 is retained only as documentation rather than software identity."
+    },
+    {
+      "resource_id": "ST078",
+      "decision": "verified_primary",
+      "exact_url": "https://pytorch-tabular.readthedocs.io/en/latest/",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "PyTorch Tabular official documentation",
+          "url": "https://pytorch-tabular.readthedocs.io/en/latest/",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "The official documentation provides tutorials, API reference, model configuration, experiment tracking, cross-validation and explainability guides."
+      ],
+      "limitations": [
+        "The documentation is general-purpose and does not define participant-safe splits for pain datasets.",
+        "Specific model availability is version-dependent and must be pinned."
+      ],
+      "corrected_purpose": "Official PyTorch Tabular documentation for structured-feature baselines.",
+      "note": "The exact documentation URL replaces the redirected source repository link."
+    },
+    {
+      "resource_id": "ST087",
+      "decision": "rejected",
+      "exact_url": null,
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "primary documentation supporting 16+ CPU cores",
+          "url": "https://github.com/brian-team/brian2",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [],
+      "limitations": [
+        "The imported requirement (16+ CPU cores) has no workload benchmark, dependency lock or primary source.",
+        "A hardware estimate cannot be validated before a representative simulator and dataset pipeline are benchmarked."
+      ],
+      "corrected_purpose": "Superseded planning estimate; replace with measured peak memory, runtime, storage and compatibility results.",
+      "note": "Rejected as an evidence resource, not asserted to be technically impossible."
+    },
+    {
+      "resource_id": "ST088",
+      "decision": "rejected",
+      "exact_url": null,
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "primary documentation supporting 64 GB RAM",
+          "url": "https://www.nature.com/articles/s41586-024-07763-9",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [],
+      "limitations": [
+        "The imported requirement (64 GB RAM) has no workload benchmark, dependency lock or primary source.",
+        "A hardware estimate cannot be validated before a representative simulator and dataset pipeline are benchmarked."
+      ],
+      "corrected_purpose": "Superseded planning estimate; replace with measured peak memory, runtime, storage and compatibility results.",
+      "note": "Rejected as an evidence resource, not asserted to be technically impossible."
+    },
+    {
+      "resource_id": "ST089",
+      "decision": "rejected",
+      "exact_url": null,
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "primary documentation supporting RTX 3090/4090 with 24 GB VRAM",
+          "url": "https://github.com/brian-team/brian2genn",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [],
+      "limitations": [
+        "The imported requirement (RTX 3090/4090 with 24 GB VRAM) has no workload benchmark, dependency lock or primary source.",
+        "A hardware estimate cannot be validated before a representative simulator and dataset pipeline are benchmarked."
+      ],
+      "corrected_purpose": "Superseded planning estimate; replace with measured peak memory, runtime, storage and compatibility results.",
+      "note": "Rejected as an evidence resource, not asserted to be technically impossible."
+    },
+    {
+      "resource_id": "ST090",
+      "decision": "rejected",
+      "exact_url": null,
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "primary documentation supporting 2 TB NVMe SSD",
+          "url": "https://github.com/seung-lab/FlyConnectome",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [],
+      "limitations": [
+        "The imported requirement (2 TB NVMe SSD) has no workload benchmark, dependency lock or primary source.",
+        "A hardware estimate cannot be validated before a representative simulator and dataset pipeline are benchmarked."
+      ],
+      "corrected_purpose": "Superseded planning estimate; replace with measured peak memory, runtime, storage and compatibility results.",
+      "note": "Rejected as an evidence resource, not asserted to be technically impossible."
+    },
+    {
+      "resource_id": "ST091",
+      "decision": "partially_verified",
+      "exact_url": "https://doc.brainchipinc.com/installation.html",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "MetaTF supported operating systems",
+          "url": "https://doc.brainchipinc.com/installation.html",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "Current MetaTF documentation supports Windows 10/11 and manylinux-2.28-compatible Linux distributions including Ubuntu 22.04/24.04."
+      ],
+      "limitations": [
+        "This verifies one vendor dependency only, not the entire proposed simulator/ML stack.",
+        "WSL2 support and the claim that this is a minimum configuration were not established."
+      ],
+      "corrected_purpose": "Partial compatibility note for MetaTF; full-stack OS support requires a tested lockfile and CI matrix.",
+      "note": "Remove WSL2 and minimum-system wording until end-to-end testing exists."
+    },
+    {
+      "resource_id": "ST092",
+      "decision": "partially_verified",
+      "exact_url": "https://doc.brainchipinc.com/installation.html",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "MetaTF supported Python versions",
+          "url": "https://doc.brainchipinc.com/installation.html",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "Current MetaTF releases document Python 3.10-3.12 support."
+      ],
+      "limitations": [
+        "That range does not prove compatibility of every FlyWire, simulator and ML dependency.",
+        "A project Python version must be selected from a resolved dependency lock and CI results."
+      ],
+      "corrected_purpose": "Vendor-specific Python compatibility note, not a validated project-wide requirement.",
+      "note": "Use a tested lockfile rather than a prose version range."
+    },
+    {
+      "resource_id": "ST093",
+      "decision": "rejected",
+      "exact_url": null,
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "primary documentation supporting CUDA 12.x",
+          "url": "https://github.com/brian-team/brian2genn",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [],
+      "limitations": [
+        "The imported requirement (CUDA 12.x) has no workload benchmark, dependency lock or primary source.",
+        "A hardware estimate cannot be validated before a representative simulator and dataset pipeline are benchmarked."
+      ],
+      "corrected_purpose": "Superseded planning estimate; replace with measured peak memory, runtime, storage and compatibility results.",
+      "note": "Rejected as an evidence resource, not asserted to be technically impossible."
+    },
+    {
+      "resource_id": "ST094",
+      "decision": "rejected",
+      "exact_url": null,
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "primary documentation supporting 32+ CPU cores / Threadripper or Xeon",
+          "url": "https://github.com/nest/nest-simulator",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [],
+      "limitations": [
+        "The imported requirement (32+ CPU cores / Threadripper or Xeon) has no workload benchmark, dependency lock or primary source.",
+        "A hardware estimate cannot be validated before a representative simulator and dataset pipeline are benchmarked."
+      ],
+      "corrected_purpose": "Superseded planning estimate; replace with measured peak memory, runtime, storage and compatibility results.",
+      "note": "Rejected as an evidence resource, not asserted to be technically impossible."
+    },
+    {
+      "resource_id": "ST095",
+      "decision": "rejected",
+      "exact_url": null,
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "primary documentation supporting 128-256 GB RAM",
+          "url": "https://www.nature.com/articles/s41586-024-07763-9",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [],
+      "limitations": [
+        "The imported requirement (128-256 GB RAM) has no workload benchmark, dependency lock or primary source.",
+        "A hardware estimate cannot be validated before a representative simulator and dataset pipeline are benchmarked."
+      ],
+      "corrected_purpose": "Superseded planning estimate; replace with measured peak memory, runtime, storage and compatibility results.",
+      "note": "Rejected as an evidence resource, not asserted to be technically impossible."
+    }
+  ]
+}

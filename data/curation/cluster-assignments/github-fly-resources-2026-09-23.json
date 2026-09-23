@@ -1,0 +1,15 @@
+{
+  "meta": {
+    "batch_id": "github-fly-cluster-001",
+    "created_at": "2026-09-23",
+    "reviewed_at": "2026-09-23",
+    "content_validation": "primary repository metadata reviewed; independent runtime reproduction pending"
+  },
+  "cluster": {
+    "id": "C54",
+    "topic": "Вычислительные симуляторы и песочницы коннектома Drosophila",
+    "synthesis": "Eon fly-brain, fly-brain-snntorch, FlyGym, claude-fly, DoomFly и FLYBOX как программные кандидаты для connectome-derived и embodied симуляции. Кластер подтверждает наличие реализаций, но не биологическую валидность, субъективную боль, перенос на человека, ECAP или SCS.",
+    "representative_id": "S732",
+    "source_ids": ["S200", "S292", "S732", "S733", "S734", "S737"]
+  }
+}

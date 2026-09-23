@@ -1,0 +1,67 @@
+{
+  "meta": {
+    "batch_id": "r4-correction-001",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-22",
+    "scope": "correction of r4-batch-002 decision after exact primary match",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-22"
+  },
+  "source_ids": [
+    "S060"
+  ],
+  "records": [
+    {
+      "id": "S060",
+      "title": "Integration of AI into SCS: ethical and data-governance challenges",
+      "year": 2026,
+      "source_type": "XAI_этика"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S060",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-22",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "query": "Artificial Intelligence in Spinal Cord Stimulation and Neuromodulation: A Narrative Review of Clinical Applications, Emerging Evidence, and Future Directions",
+          "url": "https://www.jcdr.net/article_fulltext.asp?id=24236&issn=0973-709x&issue=9&page=UE01&volume=20&year=2026",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "Artificial Intelligence in Spinal Cord Stimulation and Neuromodulation: A Narrative Review of Clinical Applications, Emerging Evidence, and Future Directions",
+        "identifiers": {
+          "doi": "10.7860/JCDR/2026/86004.24236",
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://www.jcdr.net/article_fulltext.asp?id=24236&issn=0973-709x&issue=9&page=UE01&volume=20&year=2026"
+        },
+        "evidence": {
+          "target_construct": "scs_response",
+          "evidence_role": "context_only"
+        },
+        "risk_flags": [
+          "missing_cross_subject_validation"
+        ],
+        "авторы": "Chitra Kolla; Sheetal Madavi; Souvik Banik; Dhwani Sheth; Bhagyesh Sapkale",
+        "издание": "Journal of Clinical and Diagnostic Research"
+      },
+      "claims": [
+        {
+          "claim": "The narrative review maps proposed AI uses across SCS selection, programming and closed-loop control while documenting major validation and governance gaps.",
+          "target_variable": "scs_response",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: 10.7860/JCDR/2026/86004.24236",
+          "limitation": "Narrative review, not a systematic review or clinical validation study. It explicitly characterizes the AI-SCS evidence as preliminary, heterogeneous, and lacking large prospective multicenter randomized trials.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "Narrative review, not a systematic review or clinical validation study. It explicitly characterizes the AI-SCS evidence as preliminary, heterogeneous, and lacking large prospective multicenter randomized trials."
+    }
+  ]
+}

@@ -1,0 +1,2240 @@
+{
+  "meta": {
+    "version": "2.0.0",
+    "checked_at": "2026-09-22",
+    "scope": "structured source searches and review decisions",
+    "status": "in_progress",
+    "applied_batches": [
+      "batch-001",
+      "batch-002",
+      "batch-003",
+      "batch-004"
+    ]
+  },
+  "legacy_checks": [
+    {
+      "subject": "FlyWire FAFB v783",
+      "status": "verified_primary",
+      "primary_url": "https://www.nature.com/articles/s41586-024-07558-y",
+      "data_url": "https://codex.flywire.ai/api/download?data_version=783",
+      "verified_claims": [
+        "139255 neurons",
+        "54.5 million chemical synapses",
+        "adult female brain"
+      ],
+      "limitations": [
+        "brain only",
+        "not VNC or body",
+        "connectivity is not a physiological simulation"
+      ]
+    },
+    {
+      "subject": "NeuroMechFly v2 / FlyGym",
+      "status": "verified_primary",
+      "primary_url": "https://www.nature.com/articles/s41592-024-02497-y",
+      "data_url": "https://flygym.readthedocs.io/latest/index.html",
+      "verified_claims": [
+        "MuJoCo-based embodied adult Drosophila model",
+        "open FlyGym package"
+      ],
+      "limitations": [
+        "no ready-made nociception model",
+        "no ECAP observation model",
+        "no human SCS mapping"
+      ]
+    },
+    {
+      "subject": "BioVid Heat Pain Database",
+      "status": "verified_primary",
+      "primary_url": "https://www.nit.ovgu.de/BioVid.html",
+      "verified_claims": [
+        "90 recruited",
+        "87 subjects in Part A",
+        "video, GSR, ECG, EMG"
+      ],
+      "limitations": [
+        "experimental heat pain",
+        "healthy participants",
+        "agreement required",
+        "not SCS/ECAP"
+      ]
+    },
+    {
+      "subject": "AI4PAIN 2024",
+      "status": "verified_primary",
+      "primary_url": "https://sites.google.com/view/ai4pain/challenge-details",
+      "verified_claims": [
+        "65 participants",
+        "fNIRS and facial video",
+        "41/12/12 participant split"
+      ],
+      "limitations": [
+        "experimental pain classes",
+        "not SCS/ECAP"
+      ]
+    },
+    {
+      "subject": "PainMonit",
+      "status": "verified_primary",
+      "primary_url": "https://doi.org/10.1038/s41597-024-03878-w",
+      "data_url": "https://figshare.com/articles/dataset/The_PainMonit_Database_An_Experimental_and_Clinical_Physiological_Signal_Dataset_for_Automated_Pain_Recognition/26965159",
+      "verified_claims": [
+        "55 PMED participants",
+        "49 PMCD participants",
+        "multimodal physiology",
+        "self-report labels"
+      ],
+      "limitations": [
+        "PMED and PMCD are distinct domains",
+        "not SCS/ECAP"
+      ]
+    },
+    {
+      "subject": "adult Drosophila ascending nociception pathways",
+      "status": "verified_primary",
+      "primary_url": "https://pubmed.ncbi.nlm.nih.gov/41280033/",
+      "verified_claims": [
+        "thermal nociceptive response",
+        "escape",
+        "sustained avoidance"
+      ],
+      "limitations": [
+        "preprint",
+        "nociception is not human subjective pain",
+        "not an SCS model"
+      ]
+    },
+    {
+      "subject": "larval cold nociception circuitry",
+      "status": "verified_primary",
+      "primary_url": "https://pubmed.ncbi.nlm.nih.gov/40512662/",
+      "verified_claims": [
+        "cold-evoked neural and behavioral responses",
+        "functionally tested larval circuitry"
+      ],
+      "limitations": [
+        "larval model",
+        "not human subjective pain",
+        "not SCS/ECAP"
+      ]
+    },
+    {
+      "subject": "human SCS ECAP feature extraction",
+      "status": "verified_primary",
+      "primary_url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+      "verified_claims": [
+        "8 chronic-pain participants",
+        "ECAP/non-ECAP/artifact classification",
+        "inter-individual variability"
+      ],
+      "limitations": [
+        "ECAP processing, not direct pain measurement",
+        "small cohort"
+      ]
+    },
+    {
+      "subject": "open human SCS/ECAP dataset with pain outcomes",
+      "status": "not_confirmed",
+      "primary_url": null,
+      "verified_claims": [],
+      "limitations": [
+        "generic Figshare/Newcastle links in ST did not establish an accessible linked dataset"
+      ]
+    }
+  ],
+  "reviews": [
+    {
+      "batch_id": "batch-001",
+      "applied_at": "2026-09-22",
+      "source_ids": [
+        "S149",
+        "S210",
+        "S224",
+        "S256",
+        "S304",
+        "S380",
+        "S039",
+        "S056",
+        "S089",
+        "S118",
+        "S132",
+        "S178",
+        "S225",
+        "S258",
+        "S353",
+        "S366",
+        "S407",
+        "S036",
+        "S053",
+        "S085",
+        "S128"
+      ],
+      "decisions": [
+        {
+          "source_id": "S149",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "Frontiers",
+              "query": "\"Zero-shot multimodal pain estimation\"",
+              "url": "https://www.frontiersin.org/journals/artificial-intelligence/articles/10.3389/frai.2026.1827727/full",
+              "result": "Exact publisher article found; DOI and full text checked."
+            },
+            {
+              "service": "Crossref/DOI",
+              "query": "\"Zero-shot multimodal pain estimation\" DOI",
+              "url": "https://doi.org/10.3389/frai.2026.1827727",
+              "result": "DOI resolves to the same publisher article."
+            }
+          ],
+          "claims": [
+            {
+              "claim": "Synthetic-source domain adaptation can be evaluated on retrospective human pain benchmarks without labeled real target samples during training.",
+              "target_variable": "pain intensity",
+              "population_or_data": "UNBC-McMaster, BioVid, neonatal cohort",
+              "evidence": "Publisher full text reports MAE 0.89 on UNBC, 78.3% accuracy on BioVid and 81.5% on the neonatal cohort.",
+              "limitation": "All real benchmark data are retrospective and used at least unlabeled during alignment; no fully independent fourth site.",
+              "permitted_conclusion": "Feasibility on the tested datasets only; not clinical validation and not evidence for Drosophila-to-human transfer."
+            },
+            {
+              "claim": "The imported 96% value describes this paper.",
+              "target_variable": "performance",
+              "population_or_data": "unspecified",
+              "evidence": "Unsupported; exact full text contains no matching headline 96% result.",
+              "limitation": "The original registry did not provide a locator.",
+              "permitted_conclusion": "Do not cite 96%; use the dataset-specific published metrics."
+            }
+          ],
+          "notes": "Primary article checked. The source calls the setup zero-shot in the qualified sense of zero labeled real target examples, not classical zero-shot learning."
+        },
+        {
+          "source_id": "S210",
+          "decision": "alias",
+          "canonical_id": "S149",
+          "searches": [
+            {
+              "service": "Frontiers",
+              "query": "\"Zero-shot multimodal pain estimation\"",
+              "url": "https://www.frontiersin.org/journals/artificial-intelligence/articles/10.3389/frai.2026.1827727/full",
+              "result": "Exact publisher article found; DOI and full text checked."
+            },
+            {
+              "service": "Crossref/DOI",
+              "query": "\"Zero-shot multimodal pain estimation\" DOI",
+              "url": "https://doi.org/10.3389/frai.2026.1827727",
+              "result": "DOI resolves to the same publisher article."
+            }
+          ],
+          "claims": [],
+          "notes": "Название, год, издание и уникальная метрика соответствуют одной публикации; отдельная версия не обнаружена."
+        },
+        {
+          "source_id": "S224",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "GitHub",
+              "query": "site:github.com/oussama123-ai/ZSL_MPE",
+              "url": "https://github.com/oussama123-ai/ZSL_MPE",
+              "result": "Repository linked directly by the publisher article."
+            },
+            {
+              "service": "Frontiers",
+              "query": "\"Zero-shot multimodal pain estimation\"",
+              "url": "https://www.frontiersin.org/journals/artificial-intelligence/articles/10.3389/frai.2026.1827727/full",
+              "result": "Exact publisher article found; DOI and full text checked."
+            },
+            {
+              "service": "Crossref/DOI",
+              "query": "\"Zero-shot multimodal pain estimation\" DOI",
+              "url": "https://doi.org/10.3389/frai.2026.1827727",
+              "result": "DOI resolves to the same publisher article."
+            }
+          ],
+          "claims": [],
+          "notes": "Code repository verified through the publisher's full-text link; retained separately and linked with code_for."
+        },
+        {
+          "source_id": "S256",
+          "decision": "alias",
+          "canonical_id": "S149",
+          "searches": [
+            {
+              "service": "Frontiers",
+              "query": "\"Zero-shot multimodal pain estimation\"",
+              "url": "https://www.frontiersin.org/journals/artificial-intelligence/articles/10.3389/frai.2026.1827727/full",
+              "result": "Exact publisher article found; DOI and full text checked."
+            },
+            {
+              "service": "Crossref/DOI",
+              "query": "\"Zero-shot multimodal pain estimation\" DOI",
+              "url": "https://doi.org/10.3389/frai.2026.1827727",
+              "result": "DOI resolves to the same publisher article."
+            }
+          ],
+          "claims": [],
+          "notes": "Название, год, издание и уникальная метрика соответствуют одной публикации; отдельная версия не обнаружена."
+        },
+        {
+          "source_id": "S304",
+          "decision": "alias",
+          "canonical_id": "S149",
+          "searches": [
+            {
+              "service": "Frontiers",
+              "query": "\"Zero-shot multimodal pain estimation\"",
+              "url": "https://www.frontiersin.org/journals/artificial-intelligence/articles/10.3389/frai.2026.1827727/full",
+              "result": "Exact publisher article found; DOI and full text checked."
+            },
+            {
+              "service": "Crossref/DOI",
+              "query": "\"Zero-shot multimodal pain estimation\" DOI",
+              "url": "https://doi.org/10.3389/frai.2026.1827727",
+              "result": "DOI resolves to the same publisher article."
+            }
+          ],
+          "claims": [],
+          "notes": "Название, год, издание и уникальная метрика соответствуют одной публикации; отдельная версия не обнаружена."
+        },
+        {
+          "source_id": "S380",
+          "decision": "alias",
+          "canonical_id": "S149",
+          "searches": [
+            {
+              "service": "Frontiers",
+              "query": "\"Zero-shot multimodal pain estimation\"",
+              "url": "https://www.frontiersin.org/journals/artificial-intelligence/articles/10.3389/frai.2026.1827727/full",
+              "result": "Exact publisher article found; DOI and full text checked."
+            },
+            {
+              "service": "Crossref/DOI",
+              "query": "\"Zero-shot multimodal pain estimation\" DOI",
+              "url": "https://doi.org/10.3389/frai.2026.1827727",
+              "result": "DOI resolves to the same publisher article."
+            }
+          ],
+          "claims": [],
+          "notes": "Название, год, издание и уникальная метрика соответствуют одной публикации; отдельная версия не обнаружена."
+        },
+        {
+          "source_id": "S039",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "Elsevier",
+              "query": "\"Deep Multi-Head attention network\" \"Subject-Incremental\"",
+              "url": "https://www.sciencedirect.com/science/article/pii/S174680942601815X",
+              "result": "Exact publisher article and full text metadata found."
+            },
+            {
+              "service": "Crossref/DOI",
+              "query": "\"10.1016/j.bspc.2026.111261\"",
+              "url": "https://doi.org/10.1016/j.bspc.2026.111261",
+              "result": "DOI resolves to the same article."
+            }
+          ],
+          "claims": [
+            {
+              "claim": "The method reports 87.68% participant-level accuracy for six-class recognition.",
+              "target_variable": "experimental pain class",
+              "population_or_data": "PainMonit PMED, 52 healthy participants",
+              "evidence": "Elsevier full text reports 87.68% ± 0.41% across four subject-independent outer folds.",
+              "limitation": "Controlled thermal stimulation in healthy participants; no independent clinical cohort.",
+              "permitted_conclusion": "Cross-subject feasibility within PMED, not general clinical pain validity."
+            }
+          ],
+          "notes": "Primary publisher record and article text checked."
+        },
+        {
+          "source_id": "S056",
+          "decision": "alias",
+          "canonical_id": "S039",
+          "searches": [
+            {
+              "service": "Elsevier",
+              "query": "\"Deep Multi-Head attention network\" \"Subject-Incremental\"",
+              "url": "https://www.sciencedirect.com/science/article/pii/S174680942601815X",
+              "result": "Exact publisher article and full text metadata found."
+            },
+            {
+              "service": "Crossref/DOI",
+              "query": "\"10.1016/j.bspc.2026.111261\"",
+              "url": "https://doi.org/10.1016/j.bspc.2026.111261",
+              "result": "DOI resolves to the same article."
+            }
+          ],
+          "claims": [],
+          "notes": "Название, год, издание и уникальная метрика соответствуют одной публикации; отдельная версия не обнаружена."
+        },
+        {
+          "source_id": "S089",
+          "decision": "alias",
+          "canonical_id": "S039",
+          "searches": [
+            {
+              "service": "Elsevier",
+              "query": "\"Deep Multi-Head attention network\" \"Subject-Incremental\"",
+              "url": "https://www.sciencedirect.com/science/article/pii/S174680942601815X",
+              "result": "Exact publisher article and full text metadata found."
+            },
+            {
+              "service": "Crossref/DOI",
+              "query": "\"10.1016/j.bspc.2026.111261\"",
+              "url": "https://doi.org/10.1016/j.bspc.2026.111261",
+              "result": "DOI resolves to the same article."
+            }
+          ],
+          "claims": [],
+          "notes": "Название, год, издание и уникальная метрика соответствуют одной публикации; отдельная версия не обнаружена."
+        },
+        {
+          "source_id": "S118",
+          "decision": "alias",
+          "canonical_id": "S039",
+          "searches": [
+            {
+              "service": "Elsevier",
+              "query": "\"Deep Multi-Head attention network\" \"Subject-Incremental\"",
+              "url": "https://www.sciencedirect.com/science/article/pii/S174680942601815X",
+              "result": "Exact publisher article and full text metadata found."
+            },
+            {
+              "service": "Crossref/DOI",
+              "query": "\"10.1016/j.bspc.2026.111261\"",
+              "url": "https://doi.org/10.1016/j.bspc.2026.111261",
+              "result": "DOI resolves to the same article."
+            }
+          ],
+          "claims": [],
+          "notes": "Название, год, издание и уникальная метрика соответствуют одной публикации; отдельная версия не обнаружена."
+        },
+        {
+          "source_id": "S132",
+          "decision": "alias",
+          "canonical_id": "S039",
+          "searches": [
+            {
+              "service": "Elsevier",
+              "query": "\"Deep Multi-Head attention network\" \"Subject-Incremental\"",
+              "url": "https://www.sciencedirect.com/science/article/pii/S174680942601815X",
+              "result": "Exact publisher article and full text metadata found."
+            },
+            {
+              "service": "Crossref/DOI",
+              "query": "\"10.1016/j.bspc.2026.111261\"",
+              "url": "https://doi.org/10.1016/j.bspc.2026.111261",
+              "result": "DOI resolves to the same article."
+            }
+          ],
+          "claims": [],
+          "notes": "Название, год, издание и уникальная метрика соответствуют одной публикации; отдельная версия не обнаружена."
+        },
+        {
+          "source_id": "S178",
+          "decision": "alias",
+          "canonical_id": "S039",
+          "searches": [
+            {
+              "service": "Elsevier",
+              "query": "\"Deep Multi-Head attention network\" \"Subject-Incremental\"",
+              "url": "https://www.sciencedirect.com/science/article/pii/S174680942601815X",
+              "result": "Exact publisher article and full text metadata found."
+            },
+            {
+              "service": "Crossref/DOI",
+              "query": "\"10.1016/j.bspc.2026.111261\"",
+              "url": "https://doi.org/10.1016/j.bspc.2026.111261",
+              "result": "DOI resolves to the same article."
+            }
+          ],
+          "claims": [],
+          "notes": "Название, год, издание и уникальная метрика соответствуют одной публикации; отдельная версия не обнаружена."
+        },
+        {
+          "source_id": "S225",
+          "decision": "alias",
+          "canonical_id": "S039",
+          "searches": [
+            {
+              "service": "Elsevier",
+              "query": "\"Deep Multi-Head attention network\" \"Subject-Incremental\"",
+              "url": "https://www.sciencedirect.com/science/article/pii/S174680942601815X",
+              "result": "Exact publisher article and full text metadata found."
+            },
+            {
+              "service": "Crossref/DOI",
+              "query": "\"10.1016/j.bspc.2026.111261\"",
+              "url": "https://doi.org/10.1016/j.bspc.2026.111261",
+              "result": "DOI resolves to the same article."
+            }
+          ],
+          "claims": [],
+          "notes": "Название, год, издание и уникальная метрика соответствуют одной публикации; отдельная версия не обнаружена."
+        },
+        {
+          "source_id": "S258",
+          "decision": "alias",
+          "canonical_id": "S039",
+          "searches": [
+            {
+              "service": "Elsevier",
+              "query": "\"Deep Multi-Head attention network\" \"Subject-Incremental\"",
+              "url": "https://www.sciencedirect.com/science/article/pii/S174680942601815X",
+              "result": "Exact publisher article and full text metadata found."
+            },
+            {
+              "service": "Crossref/DOI",
+              "query": "\"10.1016/j.bspc.2026.111261\"",
+              "url": "https://doi.org/10.1016/j.bspc.2026.111261",
+              "result": "DOI resolves to the same article."
+            }
+          ],
+          "claims": [],
+          "notes": "Название, год, издание и уникальная метрика соответствуют одной публикации; отдельная версия не обнаружена."
+        },
+        {
+          "source_id": "S353",
+          "decision": "alias",
+          "canonical_id": "S039",
+          "searches": [
+            {
+              "service": "Elsevier",
+              "query": "\"Deep Multi-Head attention network\" \"Subject-Incremental\"",
+              "url": "https://www.sciencedirect.com/science/article/pii/S174680942601815X",
+              "result": "Exact publisher article and full text metadata found."
+            },
+            {
+              "service": "Crossref/DOI",
+              "query": "\"10.1016/j.bspc.2026.111261\"",
+              "url": "https://doi.org/10.1016/j.bspc.2026.111261",
+              "result": "DOI resolves to the same article."
+            }
+          ],
+          "claims": [],
+          "notes": "Название, год, издание и уникальная метрика соответствуют одной публикации; отдельная версия не обнаружена."
+        },
+        {
+          "source_id": "S366",
+          "decision": "alias",
+          "canonical_id": "S039",
+          "searches": [
+            {
+              "service": "Elsevier",
+              "query": "\"Deep Multi-Head attention network\" \"Subject-Incremental\"",
+              "url": "https://www.sciencedirect.com/science/article/pii/S174680942601815X",
+              "result": "Exact publisher article and full text metadata found."
+            },
+            {
+              "service": "Crossref/DOI",
+              "query": "\"10.1016/j.bspc.2026.111261\"",
+              "url": "https://doi.org/10.1016/j.bspc.2026.111261",
+              "result": "DOI resolves to the same article."
+            }
+          ],
+          "claims": [],
+          "notes": "Название, год, издание и уникальная метрика соответствуют одной публикации; отдельная версия не обнаружена."
+        },
+        {
+          "source_id": "S407",
+          "decision": "alias",
+          "canonical_id": "S039",
+          "searches": [
+            {
+              "service": "Elsevier",
+              "query": "\"Deep Multi-Head attention network\" \"Subject-Incremental\"",
+              "url": "https://www.sciencedirect.com/science/article/pii/S174680942601815X",
+              "result": "Exact publisher article and full text metadata found."
+            },
+            {
+              "service": "Crossref/DOI",
+              "query": "\"10.1016/j.bspc.2026.111261\"",
+              "url": "https://doi.org/10.1016/j.bspc.2026.111261",
+              "result": "DOI resolves to the same article."
+            }
+          ],
+          "claims": [],
+          "notes": "Название, год, издание и уникальная метрика соответствуют одной публикации; отдельная версия не обнаружена."
+        },
+        {
+          "source_id": "S036",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "Elsevier",
+              "query": "\"Multimodal pain assessment with transformers\"",
+              "url": "https://www.sciencedirect.com/science/article/pii/S0925231225027389",
+              "result": "Exact open publisher article found and content checked."
+            },
+            {
+              "service": "Crossref/DOI",
+              "query": "\"10.1016/j.neucom.2025.132066\"",
+              "url": "https://doi.org/10.1016/j.neucom.2025.132066",
+              "result": "DOI resolves to the same article."
+            }
+          ],
+          "claims": [
+            {
+              "claim": "PainFusion+ reports 35.40% accuracy on its BioVid multimodal task.",
+              "target_variable": "experimental pain class",
+              "population_or_data": "BioVid",
+              "evidence": "The open Elsevier article states 35.40% accuracy and describes the multimodal transformer.",
+              "limitation": "The exact split unit is not recorded in this curation pass; BioVid is experimental heat pain.",
+              "permitted_conclusion": "Method baseline for experimental multimodal classification only."
+            }
+          ],
+          "notes": "Primary open publisher article checked."
+        },
+        {
+          "source_id": "S053",
+          "decision": "alias",
+          "canonical_id": "S036",
+          "searches": [
+            {
+              "service": "Elsevier",
+              "query": "\"Multimodal pain assessment with transformers\"",
+              "url": "https://www.sciencedirect.com/science/article/pii/S0925231225027389",
+              "result": "Exact open publisher article found and content checked."
+            },
+            {
+              "service": "Crossref/DOI",
+              "query": "\"10.1016/j.neucom.2025.132066\"",
+              "url": "https://doi.org/10.1016/j.neucom.2025.132066",
+              "result": "DOI resolves to the same article."
+            }
+          ],
+          "claims": [],
+          "notes": "Название, год, издание и уникальная метрика соответствуют одной публикации; отдельная версия не обнаружена."
+        },
+        {
+          "source_id": "S085",
+          "decision": "alias",
+          "canonical_id": "S036",
+          "searches": [
+            {
+              "service": "Elsevier",
+              "query": "\"Multimodal pain assessment with transformers\"",
+              "url": "https://www.sciencedirect.com/science/article/pii/S0925231225027389",
+              "result": "Exact open publisher article found and content checked."
+            },
+            {
+              "service": "Crossref/DOI",
+              "query": "\"10.1016/j.neucom.2025.132066\"",
+              "url": "https://doi.org/10.1016/j.neucom.2025.132066",
+              "result": "DOI resolves to the same article."
+            }
+          ],
+          "claims": [],
+          "notes": "Название, год, издание и уникальная метрика соответствуют одной публикации; отдельная версия не обнаружена."
+        },
+        {
+          "source_id": "S128",
+          "decision": "alias",
+          "canonical_id": "S036",
+          "searches": [
+            {
+              "service": "Elsevier",
+              "query": "\"Multimodal pain assessment with transformers\"",
+              "url": "https://www.sciencedirect.com/science/article/pii/S0925231225027389",
+              "result": "Exact open publisher article found and content checked."
+            },
+            {
+              "service": "Crossref/DOI",
+              "query": "\"10.1016/j.neucom.2025.132066\"",
+              "url": "https://doi.org/10.1016/j.neucom.2025.132066",
+              "result": "DOI resolves to the same article."
+            }
+          ],
+          "claims": [],
+          "notes": "Название, год, издание и уникальная метрика соответствуют одной публикации; отдельная версия не обнаружена."
+        }
+      ]
+    },
+    {
+      "batch_id": "batch-002",
+      "applied_at": "2026-09-22",
+      "source_ids": [
+        "S044",
+        "S057",
+        "S081",
+        "S117",
+        "S126",
+        "S145",
+        "S263",
+        "S040",
+        "S055",
+        "S120",
+        "S130",
+        "S142",
+        "S180",
+        "S079",
+        "S123",
+        "S290",
+        "S300",
+        "S324",
+        "S339"
+      ],
+      "decisions": [
+        {
+          "source_id": "S044",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "External validation of EEG-based ML models for continuous pain prediction",
+              "url": "https://api.crossref.org/works?query.title=External+validation+of+EEG-based+ML+models+for+continuous+pain+prediction&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"External validation of EEG-based ML models for continuous pain prediction\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22External+validation+of+EEG-based+ML+models+for+continuous+pain+prediction%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "primary source",
+              "query": "External validation of EEG-based machine learning models for continuous pain prediction",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/42600964/",
+              "result": "exact source page checked"
+            }
+          ],
+          "claims": [
+            {
+              "claim": "The bibliographic source exists under the verified identifier.",
+              "target_variable": "source identity",
+              "population_or_data": "not extracted in metadata-only decisions",
+              "evidence": "doi=10.1016/j.jpain.2026.106416; exact title=External validation of EEG-based machine learning models for continuous pain prediction",
+              "limitation": "PubMed primary record and abstract checked; models did not beat the mean-rating dummy for continuous prediction.",
+              "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+            }
+          ],
+          "notes": "PubMed primary record and abstract checked; models did not beat the mean-rating dummy for continuous prediction."
+        },
+        {
+          "source_id": "S057",
+          "decision": "alias",
+          "canonical_id": "S044",
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "External validation of EEG-based ML models for continuous pain prediction",
+              "url": "https://api.crossref.org/works?query.title=External+validation+of+EEG-based+ML+models+for+continuous+pain+prediction&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"External validation of EEG-based ML models for continuous pain prediction\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22External+validation+of+EEG-based+ML+models+for+continuous+pain+prediction%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "primary source",
+              "query": "External validation of EEG-based machine learning models for continuous pain prediction",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/42600964/",
+              "result": "exact source page checked"
+            }
+          ],
+          "claims": [],
+          "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+        },
+        {
+          "source_id": "S081",
+          "decision": "alias",
+          "canonical_id": "S044",
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "External validation of EEG-based ML models for continuous pain prediction",
+              "url": "https://api.crossref.org/works?query.title=External+validation+of+EEG-based+ML+models+for+continuous+pain+prediction&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"External validation of EEG-based ML models for continuous pain prediction\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22External+validation+of+EEG-based+ML+models+for+continuous+pain+prediction%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "primary source",
+              "query": "External validation of EEG-based machine learning models for continuous pain prediction",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/42600964/",
+              "result": "exact source page checked"
+            }
+          ],
+          "claims": [],
+          "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+        },
+        {
+          "source_id": "S117",
+          "decision": "alias",
+          "canonical_id": "S044",
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "External validation of EEG-based ML models",
+              "url": "https://api.crossref.org/works?query.title=External+validation+of+EEG-based+ML+models&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"External validation of EEG-based ML models\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22External+validation+of+EEG-based+ML+models%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "primary source",
+              "query": "External validation of EEG-based machine learning models for continuous pain prediction",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/42600964/",
+              "result": "exact source page checked"
+            }
+          ],
+          "claims": [],
+          "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+        },
+        {
+          "source_id": "S126",
+          "decision": "alias",
+          "canonical_id": "S044",
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "External validation of EEG ML models",
+              "url": "https://api.crossref.org/works?query.title=External+validation+of+EEG+ML+models&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"External validation of EEG ML models\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22External+validation+of+EEG+ML+models%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "primary source",
+              "query": "External validation of EEG-based machine learning models for continuous pain prediction",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/42600964/",
+              "result": "exact source page checked"
+            }
+          ],
+          "claims": [],
+          "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+        },
+        {
+          "source_id": "S145",
+          "decision": "alias",
+          "canonical_id": "S044",
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "External validation EEG ML models",
+              "url": "https://api.crossref.org/works?query.title=External+validation+EEG+ML+models&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"External validation EEG ML models\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22External+validation+EEG+ML+models%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "primary source",
+              "query": "External validation of EEG-based machine learning models for continuous pain prediction",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/42600964/",
+              "result": "exact source page checked"
+            }
+          ],
+          "claims": [],
+          "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+        },
+        {
+          "source_id": "S263",
+          "decision": "alias",
+          "canonical_id": "S044",
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "External validation EEG ML",
+              "url": "https://api.crossref.org/works?query.title=External+validation+EEG+ML&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"External validation EEG ML\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22External+validation+EEG+ML%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "primary source",
+              "query": "External validation of EEG-based machine learning models for continuous pain prediction",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/42600964/",
+              "result": "exact source page checked"
+            }
+          ],
+          "claims": [],
+          "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+        },
+        {
+          "source_id": "S040",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "GIAFormer: Gradient-Infused Attention for Pain Assessment",
+              "url": "https://api.crossref.org/works?query.title=GIAFormer%3A+Gradient-Infused+Attention+for+Pain+Assessment&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"GIAFormer: Gradient-Infused Attention for Pain Assessment\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22GIAFormer%3A+Gradient-Infused+Attention+for+Pain+Assessment%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "primary source",
+              "query": "GIAFormer: A Gradient-Infused Attention and Transformer for Pain Assessment with EDA-fNIRS Fusion",
+              "url": "https://www.sciencedirect.com/science/article/pii/S1566253526000527",
+              "result": "exact source page checked"
+            }
+          ],
+          "claims": [
+            {
+              "claim": "The bibliographic source exists under the verified identifier.",
+              "target_variable": "source identity",
+              "population_or_data": "not extracted in metadata-only decisions",
+              "evidence": "doi=10.1016/j.inffus.2026.104173; exact title=GIAFormer: A Gradient-Infused Attention and Transformer for Pain Assessment with EDA-fNIRS Fusion",
+              "limitation": "Open publisher abstract checked; 65 AI4Pain subjects and LOSO accuracy 90.51% are publisher-reported.",
+              "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+            }
+          ],
+          "notes": "Open publisher abstract checked; 65 AI4Pain subjects and LOSO accuracy 90.51% are publisher-reported."
+        },
+        {
+          "source_id": "S055",
+          "decision": "alias",
+          "canonical_id": "S040",
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "GIAFormer: Gradient-Infused Attention",
+              "url": "https://api.crossref.org/works?query.title=GIAFormer%3A+Gradient-Infused+Attention&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"GIAFormer: Gradient-Infused Attention\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22GIAFormer%3A+Gradient-Infused+Attention%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "primary source",
+              "query": "GIAFormer: A Gradient-Infused Attention and Transformer for Pain Assessment with EDA-fNIRS Fusion",
+              "url": "https://www.sciencedirect.com/science/article/pii/S1566253526000527",
+              "result": "exact source page checked"
+            }
+          ],
+          "claims": [],
+          "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+        },
+        {
+          "source_id": "S120",
+          "decision": "alias",
+          "canonical_id": "S040",
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "GIAFormer: Gradient-Infused Attention",
+              "url": "https://api.crossref.org/works?query.title=GIAFormer%3A+Gradient-Infused+Attention&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"GIAFormer: Gradient-Infused Attention\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22GIAFormer%3A+Gradient-Infused+Attention%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "primary source",
+              "query": "GIAFormer: A Gradient-Infused Attention and Transformer for Pain Assessment with EDA-fNIRS Fusion",
+              "url": "https://www.sciencedirect.com/science/article/pii/S1566253526000527",
+              "result": "exact source page checked"
+            }
+          ],
+          "claims": [],
+          "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+        },
+        {
+          "source_id": "S130",
+          "decision": "alias",
+          "canonical_id": "S040",
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "GIAFormer",
+              "url": "https://api.crossref.org/works?query.title=GIAFormer&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"GIAFormer\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22GIAFormer%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "primary source",
+              "query": "GIAFormer: A Gradient-Infused Attention and Transformer for Pain Assessment with EDA-fNIRS Fusion",
+              "url": "https://www.sciencedirect.com/science/article/pii/S1566253526000527",
+              "result": "exact source page checked"
+            }
+          ],
+          "claims": [],
+          "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+        },
+        {
+          "source_id": "S142",
+          "decision": "alias",
+          "canonical_id": "S040",
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "GIAFormer: Gradient-Infused Attention",
+              "url": "https://api.crossref.org/works?query.title=GIAFormer%3A+Gradient-Infused+Attention&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"GIAFormer: Gradient-Infused Attention\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22GIAFormer%3A+Gradient-Infused+Attention%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "primary source",
+              "query": "GIAFormer: A Gradient-Infused Attention and Transformer for Pain Assessment with EDA-fNIRS Fusion",
+              "url": "https://www.sciencedirect.com/science/article/pii/S1566253526000527",
+              "result": "exact source page checked"
+            }
+          ],
+          "claims": [],
+          "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+        },
+        {
+          "source_id": "S180",
+          "decision": "alias",
+          "canonical_id": "S040",
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "GIAFormer",
+              "url": "https://api.crossref.org/works?query.title=GIAFormer&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"GIAFormer\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22GIAFormer%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "primary source",
+              "query": "GIAFormer: A Gradient-Infused Attention and Transformer for Pain Assessment with EDA-fNIRS Fusion",
+              "url": "https://www.sciencedirect.com/science/article/pii/S1566253526000527",
+              "result": "exact source page checked"
+            }
+          ],
+          "claims": [],
+          "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+        },
+        {
+          "source_id": "S079",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "Control Signals in Closed-Loop SCS: A Scoping Review",
+              "url": "https://api.crossref.org/works?query.title=Control+Signals+in+Closed-Loop+SCS%3A+A+Scoping+Review&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"Control Signals in Closed-Loop SCS: A Scoping Review\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Control+Signals+in+Closed-Loop+SCS%3A+A+Scoping+Review%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "primary source",
+              "query": "Control Signals in Closed-Loop Spinal Cord Stimulation in Patients with Chronic Pain: A Scoping Review",
+              "url": "https://www.sciencedirect.com/science/article/pii/S1094715925011705",
+              "result": "exact source page checked"
+            }
+          ],
+          "claims": [
+            {
+              "claim": "The bibliographic source exists under the verified identifier.",
+              "target_variable": "source identity",
+              "population_or_data": "not extracted in metadata-only decisions",
+              "evidence": "doi=10.1016/j.neurom.2025.11.011; exact title=Control Signals in Closed-Loop Spinal Cord Stimulation in Patients with Chronic Pain: A Scoping Review",
+              "limitation": "Open publisher review checked; ECAP is a control signal, not a direct measure of pain.",
+              "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+            }
+          ],
+          "notes": "Open publisher review checked; ECAP is a control signal, not a direct measure of pain."
+        },
+        {
+          "source_id": "S123",
+          "decision": "alias",
+          "canonical_id": "S079",
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "Control signals in closed-loop SCS (scoping review, extended)",
+              "url": "https://api.crossref.org/works?query.title=Control+signals+in+closed-loop+SCS+%28scoping+review%2C+extended%29&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"Control signals in closed-loop SCS (scoping review, extended)\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Control+signals+in+closed-loop+SCS+%28scoping+review%2C+extended%29%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "primary source",
+              "query": "Control Signals in Closed-Loop Spinal Cord Stimulation in Patients with Chronic Pain: A Scoping Review",
+              "url": "https://www.sciencedirect.com/science/article/pii/S1094715925011705",
+              "result": "exact source page checked"
+            }
+          ],
+          "claims": [],
+          "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+        },
+        {
+          "source_id": "S290",
+          "decision": "alias",
+          "canonical_id": "S079",
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "Closed-loop SCS control signals (Neuromodulation review)",
+              "url": "https://api.crossref.org/works?query.title=Closed-loop+SCS+control+signals+%28Neuromodulation+review%29&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"Closed-loop SCS control signals (Neuromodulation review)\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Closed-loop+SCS+control+signals+%28Neuromodulation+review%29%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "primary source",
+              "query": "Control Signals in Closed-Loop Spinal Cord Stimulation in Patients with Chronic Pain: A Scoping Review",
+              "url": "https://www.sciencedirect.com/science/article/pii/S1094715925011705",
+              "result": "exact source page checked"
+            }
+          ],
+          "claims": [],
+          "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+        },
+        {
+          "source_id": "S300",
+          "decision": "alias",
+          "canonical_id": "S079",
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "Closed-loop SCS control signals",
+              "url": "https://api.crossref.org/works?query.title=Closed-loop+SCS+control+signals&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"Closed-loop SCS control signals\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Closed-loop+SCS+control+signals%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "primary source",
+              "query": "Control Signals in Closed-Loop Spinal Cord Stimulation in Patients with Chronic Pain: A Scoping Review",
+              "url": "https://www.sciencedirect.com/science/article/pii/S1094715925011705",
+              "result": "exact source page checked"
+            }
+          ],
+          "claims": [],
+          "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+        },
+        {
+          "source_id": "S324",
+          "decision": "alias",
+          "canonical_id": "S079",
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "Closed-loop SCS control signals",
+              "url": "https://api.crossref.org/works?query.title=Closed-loop+SCS+control+signals&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"Closed-loop SCS control signals\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Closed-loop+SCS+control+signals%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "primary source",
+              "query": "Control Signals in Closed-Loop Spinal Cord Stimulation in Patients with Chronic Pain: A Scoping Review",
+              "url": "https://www.sciencedirect.com/science/article/pii/S1094715925011705",
+              "result": "exact source page checked"
+            }
+          ],
+          "claims": [],
+          "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+        },
+        {
+          "source_id": "S339",
+          "decision": "alias",
+          "canonical_id": "S079",
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "Closed-loop SCS control signals",
+              "url": "https://api.crossref.org/works?query.title=Closed-loop+SCS+control+signals&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"Closed-loop SCS control signals\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Closed-loop+SCS+control+signals%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "primary source",
+              "query": "Control Signals in Closed-Loop Spinal Cord Stimulation in Patients with Chronic Pain: A Scoping Review",
+              "url": "https://www.sciencedirect.com/science/article/pii/S1094715925011705",
+              "result": "exact source page checked"
+            }
+          ],
+          "claims": [],
+          "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+        }
+      ]
+    },
+    {
+      "batch_id": "batch-003",
+      "applied_at": "2026-09-22",
+      "source_ids": [
+        "S078",
+        "S124",
+        "S139",
+        "S202",
+        "S349",
+        "S364",
+        "S401",
+        "S004",
+        "S080",
+        "S125",
+        "S146",
+        "S226",
+        "S257",
+        "S082",
+        "S127",
+        "S143",
+        "S207",
+        "S264",
+        "S374"
+      ],
+      "decisions": [
+        {
+          "source_id": "S078",
+          "decision": "verified_metadata",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "Physiologic closed loop controlled spinal cord stimulation",
+              "url": "https://api.crossref.org/works?query.title=Physiologic+closed+loop+controlled+spinal+cord+stimulation&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"Physiologic closed loop controlled spinal cord stimulation\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Physiologic+closed+loop+controlled+spinal+cord+stimulation%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            }
+          ],
+          "claims": [
+            {
+              "claim": "The bibliographic source exists under the verified identifier.",
+              "target_variable": "source identity",
+              "population_or_data": "not extracted in metadata-only decisions",
+              "evidence": "doi=10.1016/B978-0-443-36528-7.00011-X; exact title=Physiologic closed loop controlled spinal cord stimulation",
+              "limitation": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+              "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+            }
+          ],
+          "notes": "Bibliographic metadata confirmed; full text was not used for claim extraction."
+        },
+        {
+          "source_id": "S124",
+          "decision": "alias",
+          "canonical_id": "S078",
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "Physiologic closed-loop SCS",
+              "url": "https://api.crossref.org/works?query.title=Physiologic+closed-loop+SCS&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"Physiologic closed-loop SCS\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Physiologic+closed-loop+SCS%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            }
+          ],
+          "claims": [],
+          "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+        },
+        {
+          "source_id": "S139",
+          "decision": "alias",
+          "canonical_id": "S078",
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "Physiologic closed loop controlled SCS (PCLC)",
+              "url": "https://api.crossref.org/works?query.title=Physiologic+closed+loop+controlled+SCS+%28PCLC%29&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"Physiologic closed loop controlled SCS (PCLC)\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Physiologic+closed+loop+controlled+SCS+%28PCLC%29%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            }
+          ],
+          "claims": [],
+          "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+        },
+        {
+          "source_id": "S202",
+          "decision": "alias",
+          "canonical_id": "S078",
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "Physiologic closed loop controlled SCS",
+              "url": "https://api.crossref.org/works?query.title=Physiologic+closed+loop+controlled+SCS&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"Physiologic closed loop controlled SCS\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Physiologic+closed+loop+controlled+SCS%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            }
+          ],
+          "claims": [],
+          "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+        },
+        {
+          "source_id": "S349",
+          "decision": "alias",
+          "canonical_id": "S078",
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "Physiologic closed loop controlled SCS (PCLC)",
+              "url": "https://api.crossref.org/works?query.title=Physiologic+closed+loop+controlled+SCS+%28PCLC%29&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"Physiologic closed loop controlled SCS (PCLC)\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Physiologic+closed+loop+controlled+SCS+%28PCLC%29%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            }
+          ],
+          "claims": [],
+          "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+        },
+        {
+          "source_id": "S364",
+          "decision": "alias",
+          "canonical_id": "S078",
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "Physiologic closed loop controlled SCS",
+              "url": "https://api.crossref.org/works?query.title=Physiologic+closed+loop+controlled+SCS&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"Physiologic closed loop controlled SCS\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Physiologic+closed+loop+controlled+SCS%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            }
+          ],
+          "claims": [],
+          "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+        },
+        {
+          "source_id": "S401",
+          "decision": "alias",
+          "canonical_id": "S078",
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "Physiologic PCLC SCS",
+              "url": "https://api.crossref.org/works?query.title=Physiologic+PCLC+SCS&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"Physiologic PCLC SCS\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Physiologic+PCLC+SCS%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            }
+          ],
+          "claims": [],
+          "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+        },
+        {
+          "source_id": "S004",
+          "decision": "verified_metadata",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "RE-HPBS-IPIC: A Resting EEG- and High-Activation Pain Brain Source-Driven Framework for Inter-Subject Pain Intensity Classification",
+              "url": "https://api.crossref.org/works?query.title=RE-HPBS-IPIC%3A+A+Resting+EEG-+and+High-Activation+Pain+Brain+Source-Driven+Framework+for+Inter-Subject+Pain+Intensity+Classification&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"RE-HPBS-IPIC: A Resting EEG- and High-Activation Pain Brain Source-Driven Framework for Inter-Subject Pain Intensity Classification\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22RE-HPBS-IPIC%3A+A+Resting+EEG-+and+High-Activation+Pain+Brain+Source-Driven+Framework+for+Inter-Subject+Pain+Intensity+Classification%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            }
+          ],
+          "claims": [
+            {
+              "claim": "The bibliographic source exists under the verified identifier.",
+              "target_variable": "source identity",
+              "population_or_data": "not extracted in metadata-only decisions",
+              "evidence": "doi=10.1109/JBHI.2026.3650972; exact title=RE-HPBS-IPIC: A Resting EEG- and High-Activation Pain Brain Source-Driven Framework for Inter-Subject Pain Intensity Classification",
+              "limitation": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+              "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+            }
+          ],
+          "notes": "Bibliographic metadata confirmed; full text was not used for claim extraction."
+        },
+        {
+          "source_id": "S080",
+          "decision": "alias",
+          "canonical_id": "S004",
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "RE-HPBS-IPIC: Inter-Subject Pain Intensity Classification",
+              "url": "https://api.crossref.org/works?query.title=RE-HPBS-IPIC%3A+Inter-Subject+Pain+Intensity+Classification&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"RE-HPBS-IPIC: Inter-Subject Pain Intensity Classification\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22RE-HPBS-IPIC%3A+Inter-Subject+Pain+Intensity+Classification%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            }
+          ],
+          "claims": [],
+          "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+        },
+        {
+          "source_id": "S125",
+          "decision": "alias",
+          "canonical_id": "S004",
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "Inter-subject pain intensity classification (RE-HPBS-IPIC, extended)",
+              "url": "https://api.crossref.org/works?query.title=Inter-subject+pain+intensity+classification+%28RE-HPBS-IPIC%2C+extended%29&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"Inter-subject pain intensity classification (RE-HPBS-IPIC, extended)\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Inter-subject+pain+intensity+classification+%28RE-HPBS-IPIC%2C+extended%29%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            }
+          ],
+          "claims": [],
+          "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+        },
+        {
+          "source_id": "S146",
+          "decision": "alias",
+          "canonical_id": "S004",
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "RE-HPBS-IPIC",
+              "url": "https://api.crossref.org/works?query.title=RE-HPBS-IPIC&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"RE-HPBS-IPIC\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22RE-HPBS-IPIC%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            }
+          ],
+          "claims": [],
+          "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+        },
+        {
+          "source_id": "S226",
+          "decision": "alias",
+          "canonical_id": "S004",
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "RE-HPBS-IPIC",
+              "url": "https://api.crossref.org/works?query.title=RE-HPBS-IPIC&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"RE-HPBS-IPIC\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22RE-HPBS-IPIC%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            }
+          ],
+          "claims": [],
+          "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+        },
+        {
+          "source_id": "S257",
+          "decision": "alias",
+          "canonical_id": "S004",
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "RE-HPBS-IPIC",
+              "url": "https://api.crossref.org/works?query.title=RE-HPBS-IPIC&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"RE-HPBS-IPIC\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22RE-HPBS-IPIC%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            }
+          ],
+          "claims": [],
+          "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+        },
+        {
+          "source_id": "S082",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "Pain intensity classification with hybrid CNN–BiLSTM",
+              "url": "https://api.crossref.org/works?query.title=Pain+intensity+classification+with+hybrid+CNN%E2%80%93BiLSTM&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"Pain intensity classification with hybrid CNN–BiLSTM\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Pain+intensity+classification+with+hybrid+CNN%E2%80%93BiLSTM%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "primary source",
+              "query": "Pain intensity classification and evaluation of individual differences in subjects based on hybrid CNN–BiLSTM approach",
+              "url": "https://www.sciencedirect.com/science/article/pii/S1746809426003691",
+              "result": "exact source page checked"
+            }
+          ],
+          "claims": [
+            {
+              "claim": "The bibliographic source exists under the verified identifier.",
+              "target_variable": "source identity",
+              "population_or_data": "not extracted in metadata-only decisions",
+              "evidence": "doi=10.1016/j.bspc.2026.109815; exact title=Pain intensity classification and evaluation of individual differences in subjects based on hybrid CNN–BiLSTM approach",
+              "limitation": "Publisher abstract checked; LOSO evaluation is reported, but this does not establish clinical validity.",
+              "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+            }
+          ],
+          "notes": "Publisher abstract checked; LOSO evaluation is reported, but this does not establish clinical validity."
+        },
+        {
+          "source_id": "S127",
+          "decision": "alias",
+          "canonical_id": "S082",
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "Hybrid CNN–BiLSTM for pain intensity",
+              "url": "https://api.crossref.org/works?query.title=Hybrid+CNN%E2%80%93BiLSTM+for+pain+intensity&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"Hybrid CNN–BiLSTM for pain intensity\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Hybrid+CNN%E2%80%93BiLSTM+for+pain+intensity%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "primary source",
+              "query": "Pain intensity classification and evaluation of individual differences in subjects based on hybrid CNN–BiLSTM approach",
+              "url": "https://www.sciencedirect.com/science/article/pii/S1746809426003691",
+              "result": "exact source page checked"
+            }
+          ],
+          "claims": [],
+          "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+        },
+        {
+          "source_id": "S143",
+          "decision": "alias",
+          "canonical_id": "S082",
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "Pain intensity classification CNN-BiLSTM",
+              "url": "https://api.crossref.org/works?query.title=Pain+intensity+classification+CNN-BiLSTM&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"Pain intensity classification CNN-BiLSTM\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Pain+intensity+classification+CNN-BiLSTM%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "primary source",
+              "query": "Pain intensity classification and evaluation of individual differences in subjects based on hybrid CNN–BiLSTM approach",
+              "url": "https://www.sciencedirect.com/science/article/pii/S1746809426003691",
+              "result": "exact source page checked"
+            }
+          ],
+          "claims": [],
+          "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+        },
+        {
+          "source_id": "S207",
+          "decision": "alias",
+          "canonical_id": "S082",
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "Pain intensity classification CNN-BiLSTM",
+              "url": "https://api.crossref.org/works?query.title=Pain+intensity+classification+CNN-BiLSTM&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"Pain intensity classification CNN-BiLSTM\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Pain+intensity+classification+CNN-BiLSTM%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "primary source",
+              "query": "Pain intensity classification and evaluation of individual differences in subjects based on hybrid CNN–BiLSTM approach",
+              "url": "https://www.sciencedirect.com/science/article/pii/S1746809426003691",
+              "result": "exact source page checked"
+            }
+          ],
+          "claims": [],
+          "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+        },
+        {
+          "source_id": "S264",
+          "decision": "alias",
+          "canonical_id": "S082",
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "Hybrid CNN–BiLSTM",
+              "url": "https://api.crossref.org/works?query.title=Hybrid+CNN%E2%80%93BiLSTM&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"Hybrid CNN–BiLSTM\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Hybrid+CNN%E2%80%93BiLSTM%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "primary source",
+              "query": "Pain intensity classification and evaluation of individual differences in subjects based on hybrid CNN–BiLSTM approach",
+              "url": "https://www.sciencedirect.com/science/article/pii/S1746809426003691",
+              "result": "exact source page checked"
+            }
+          ],
+          "claims": [],
+          "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+        },
+        {
+          "source_id": "S374",
+          "decision": "alias",
+          "canonical_id": "S082",
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "Hybrid CNN-BiLSTM for Pain Intensity",
+              "url": "https://api.crossref.org/works?query.title=Hybrid+CNN-BiLSTM+for+Pain+Intensity&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"Hybrid CNN-BiLSTM for Pain Intensity\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Hybrid+CNN-BiLSTM+for+Pain+Intensity%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "primary source",
+              "query": "Pain intensity classification and evaluation of individual differences in subjects based on hybrid CNN–BiLSTM approach",
+              "url": "https://www.sciencedirect.com/science/article/pii/S1746809426003691",
+              "result": "exact source page checked"
+            }
+          ],
+          "claims": [],
+          "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+        }
+      ]
+    },
+    {
+      "batch_id": "batch-004",
+      "applied_at": "2026-09-22",
+      "source_ids": [
+        "S086",
+        "S129",
+        "S088",
+        "S119",
+        "S131",
+        "S179",
+        "S140",
+        "S158",
+        "S203",
+        "S217",
+        "S270",
+        "S007",
+        "S103",
+        "S265",
+        "S243",
+        "S276",
+        "S285",
+        "S298",
+        "S322",
+        "S337"
+      ],
+      "decisions": [
+        {
+          "source_id": "S086",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "Hierarchical Cross-Attention Transformer for Non-contact Pain Classification",
+              "url": "https://api.crossref.org/works?query.title=Hierarchical+Cross-Attention+Transformer+for+Non-contact+Pain+Classification&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"Hierarchical Cross-Attention Transformer for Non-contact Pain Classification\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Hierarchical+Cross-Attention+Transformer+for+Non-contact+Pain+Classification%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "primary source",
+              "query": "Hierarchical Cross-Attention Transformer for Non-contact Multimodal Pain Classification using Remote Physiological Signals and Visual Features",
+              "url": "https://dspace.iiti.ac.in/handle/123456789/18784",
+              "result": "exact source page checked"
+            }
+          ],
+          "claims": [
+            {
+              "claim": "The bibliographic source exists under the verified identifier.",
+              "target_variable": "source identity",
+              "population_or_data": "not extracted in metadata-only decisions",
+              "evidence": "doi=10.1109/FG67764.2026.11556963; exact title=Hierarchical Cross-Attention Transformer for Non-contact Multimodal Pain Classification using Remote Physiological Signals and Visual Features",
+              "limitation": "Official institutional repository metadata and abstract checked.",
+              "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+            }
+          ],
+          "notes": "Official institutional repository metadata and abstract checked."
+        },
+        {
+          "source_id": "S129",
+          "decision": "alias",
+          "canonical_id": "S086",
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "HCAT-Pain",
+              "url": "https://api.crossref.org/works?query.title=HCAT-Pain&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"HCAT-Pain\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22HCAT-Pain%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "primary source",
+              "query": "Hierarchical Cross-Attention Transformer for Non-contact Multimodal Pain Classification using Remote Physiological Signals and Visual Features",
+              "url": "https://dspace.iiti.ac.in/handle/123456789/18784",
+              "result": "exact source page checked"
+            }
+          ],
+          "claims": [],
+          "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+        },
+        {
+          "source_id": "S088",
+          "decision": "verified_metadata",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "Cross-Domain Multimodal Pain Detection Using DANN–Transformer",
+              "url": "https://api.crossref.org/works?query.title=Cross-Domain+Multimodal+Pain+Detection+Using+DANN%E2%80%93Transformer&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"Cross-Domain Multimodal Pain Detection Using DANN–Transformer\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Cross-Domain+Multimodal+Pain+Detection+Using+DANN%E2%80%93Transformer%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            }
+          ],
+          "claims": [
+            {
+              "claim": "The bibliographic source exists under the verified identifier.",
+              "target_variable": "source identity",
+              "population_or_data": "not extracted in metadata-only decisions",
+              "evidence": "doi=10.1109/ISDA70544.2026.11606012; exact title=Cross-Domain Multimodal Pain Detection Using a DANN–Transformer Architecture with Supervised Contrastive Warmup and Test-Time Augmentation",
+              "limitation": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+              "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+            }
+          ],
+          "notes": "Bibliographic metadata confirmed; full text was not used for claim extraction."
+        },
+        {
+          "source_id": "S119",
+          "decision": "alias",
+          "canonical_id": "S088",
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "DANN-Transformer for Cross-Domain Multimodal Pain Detection",
+              "url": "https://api.crossref.org/works?query.title=DANN-Transformer+for+Cross-Domain+Multimodal+Pain+Detection&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"DANN-Transformer for Cross-Domain Multimodal Pain Detection\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22DANN-Transformer+for+Cross-Domain+Multimodal+Pain+Detection%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            }
+          ],
+          "claims": [],
+          "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+        },
+        {
+          "source_id": "S131",
+          "decision": "alias",
+          "canonical_id": "S088",
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "DANN-Transformer",
+              "url": "https://api.crossref.org/works?query.title=DANN-Transformer&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"DANN-Transformer\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22DANN-Transformer%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            }
+          ],
+          "claims": [],
+          "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+        },
+        {
+          "source_id": "S179",
+          "decision": "alias",
+          "canonical_id": "S088",
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "DANN-Transformer for Cross-Domain Multimodal Pain",
+              "url": "https://api.crossref.org/works?query.title=DANN-Transformer+for+Cross-Domain+Multimodal+Pain&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"DANN-Transformer for Cross-Domain Multimodal Pain\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22DANN-Transformer+for+Cross-Domain+Multimodal+Pain%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            }
+          ],
+          "claims": [],
+          "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+        },
+        {
+          "source_id": "S140",
+          "decision": "rejected",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "AI/ML-Based Closed-Loop SCS (Patent US20260216499)",
+              "url": "https://api.crossref.org/works?query.title=AI%2FML-Based+Closed-Loop+SCS+%28Patent+US20260216499%29&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"AI/ML-Based Closed-Loop SCS (Patent US20260216499)\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22AI%2FML-Based+Closed-Loop+SCS+%28Patent+US20260216499%29%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            }
+          ],
+          "claims": [
+            {
+              "claim": "Imported source claim is traceable to a primary record.",
+              "target_variable": "source identity",
+              "population_or_data": "not established",
+              "evidence": "No unique matching primary record was established.",
+              "limitation": "US20260216499 was not found in USPTO/Google Patents; no patent metadata may be cited.",
+              "permitted_conclusion": "Do not cite as evidence."
+            }
+          ],
+          "notes": "US20260216499 was not found in USPTO/Google Patents; no patent metadata may be cited."
+        },
+        {
+          "source_id": "S158",
+          "decision": "alias",
+          "canonical_id": "S140",
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "AI/ML-Based Closed-Loop SCS (Patent)",
+              "url": "https://api.crossref.org/works?query.title=AI%2FML-Based+Closed-Loop+SCS+%28Patent%29&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"AI/ML-Based Closed-Loop SCS (Patent)\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22AI%2FML-Based+Closed-Loop+SCS+%28Patent%29%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            }
+          ],
+          "claims": [],
+          "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+        },
+        {
+          "source_id": "S203",
+          "decision": "alias",
+          "canonical_id": "S140",
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "AI/ML-Based Closed-Loop SCS",
+              "url": "https://api.crossref.org/works?query.title=AI%2FML-Based+Closed-Loop+SCS&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"AI/ML-Based Closed-Loop SCS\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22AI%2FML-Based+Closed-Loop+SCS%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            }
+          ],
+          "claims": [],
+          "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+        },
+        {
+          "source_id": "S217",
+          "decision": "alias",
+          "canonical_id": "S140",
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "AI/ML-Based Closed-Loop SCS (Patent, extended)",
+              "url": "https://api.crossref.org/works?query.title=AI%2FML-Based+Closed-Loop+SCS+%28Patent%2C+extended%29&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"AI/ML-Based Closed-Loop SCS (Patent, extended)\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22AI%2FML-Based+Closed-Loop+SCS+%28Patent%2C+extended%29%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            }
+          ],
+          "claims": [],
+          "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+        },
+        {
+          "source_id": "S270",
+          "decision": "alias",
+          "canonical_id": "S140",
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "AI/ML-Based CL-SCS",
+              "url": "https://api.crossref.org/works?query.title=AI%2FML-Based+CL-SCS&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"AI/ML-Based CL-SCS\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22AI%2FML-Based+CL-SCS%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            }
+          ],
+          "claims": [],
+          "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+        },
+        {
+          "source_id": "S007",
+          "decision": "verified_metadata",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "MDNet: A Lightweight Multidomain 1-D CNN for Embedded Pain Assessment Using EDA Signals",
+              "url": "https://api.crossref.org/works?query.title=MDNet%3A+A+Lightweight+Multidomain+1-D+CNN+for+Embedded+Pain+Assessment+Using+EDA+Signals&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"MDNet: A Lightweight Multidomain 1-D CNN for Embedded Pain Assessment Using EDA Signals\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22MDNet%3A+A+Lightweight+Multidomain+1-D+CNN+for+Embedded+Pain+Assessment+Using+EDA+Signals%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            }
+          ],
+          "claims": [
+            {
+              "claim": "The bibliographic source exists under the verified identifier.",
+              "target_variable": "source identity",
+              "population_or_data": "not extracted in metadata-only decisions",
+              "evidence": "doi=10.1109/JIOT.2026.3663683; exact title=MDNet: A Lightweight Multidomain 1-D CNN for Embedded Pain Assessment Using EDA Signals",
+              "limitation": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+              "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+            }
+          ],
+          "notes": "Bibliographic metadata confirmed; full text was not used for claim extraction."
+        },
+        {
+          "source_id": "S103",
+          "decision": "alias",
+          "canonical_id": "S007",
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "MDNet: Lightweight 1-D CNN for Embedded Pain Assessment",
+              "url": "https://api.crossref.org/works?query.title=MDNet%3A+Lightweight+1-D+CNN+for+Embedded+Pain+Assessment&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"MDNet: Lightweight 1-D CNN for Embedded Pain Assessment\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22MDNet%3A+Lightweight+1-D+CNN+for+Embedded+Pain+Assessment%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            }
+          ],
+          "claims": [],
+          "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+        },
+        {
+          "source_id": "S265",
+          "decision": "alias",
+          "canonical_id": "S007",
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "MDNet: Embedded pain assessment",
+              "url": "https://api.crossref.org/works?query.title=MDNet%3A+Embedded+pain+assessment&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"MDNet: Embedded pain assessment\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22MDNet%3A+Embedded+pain+assessment%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            }
+          ],
+          "claims": [],
+          "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+        },
+        {
+          "source_id": "S243",
+          "decision": "partially_verified",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "ClinicalTrials NCT04662905: ECAP-controlled CL-SCS",
+              "url": "https://api.crossref.org/works?query.title=ClinicalTrials+NCT04662905%3A+ECAP-controlled+CL-SCS&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"ClinicalTrials NCT04662905: ECAP-controlled CL-SCS\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22ClinicalTrials+NCT04662905%3A+ECAP-controlled+CL-SCS%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "primary source",
+              "query": "Novel Treatment Delivery of ECAP-controlled Closed-loop SCS for Chronic Pain",
+              "url": "https://clinicaltrials.gov/study/NCT04662905",
+              "result": "exact source page checked"
+            }
+          ],
+          "claims": [
+            {
+              "claim": "The bibliographic source exists under the verified identifier.",
+              "target_variable": "source identity",
+              "population_or_data": "not extracted in metadata-only decisions",
+              "evidence": "patent_id=NCT04662905; exact title=Novel Treatment Delivery of ECAP-controlled Closed-loop SCS for Chronic Pain",
+              "limitation": "ClinicalTrials.gov registration verified; recruiting status and estimated 2027 completion mean no outcome claim is available.",
+              "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+            }
+          ],
+          "notes": "ClinicalTrials.gov registration verified; recruiting status and estimated 2027 completion mean no outcome claim is available."
+        },
+        {
+          "source_id": "S276",
+          "decision": "alias",
+          "canonical_id": "S243",
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "ClinicalTrials NCT04662905",
+              "url": "https://api.crossref.org/works?query.title=ClinicalTrials+NCT04662905&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"ClinicalTrials NCT04662905\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22ClinicalTrials+NCT04662905%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "primary source",
+              "query": "Novel Treatment Delivery of ECAP-controlled Closed-loop SCS for Chronic Pain",
+              "url": "https://clinicaltrials.gov/study/NCT04662905",
+              "result": "exact source page checked"
+            }
+          ],
+          "claims": [],
+          "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+        },
+        {
+          "source_id": "S285",
+          "decision": "verified_metadata",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "Optimization of neuroprosthetic interfaces (digital twins)",
+              "url": "https://api.crossref.org/works?query.title=Optimization+of+neuroprosthetic+interfaces+%28digital+twins%29&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"Optimization of neuroprosthetic interfaces (digital twins)\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Optimization+of+neuroprosthetic+interfaces+%28digital+twins%29%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            }
+          ],
+          "claims": [
+            {
+              "claim": "The bibliographic source exists under the verified identifier.",
+              "target_variable": "source identity",
+              "population_or_data": "not extracted in metadata-only decisions",
+              "evidence": "doi=10.1038/s44385-026-00076-8; exact title=The optimization of neuroprosthetic interfaces relying on biophysical and surrogate digital twins",
+              "limitation": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+              "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+            }
+          ],
+          "notes": "Bibliographic metadata confirmed; full text was not used for claim extraction."
+        },
+        {
+          "source_id": "S298",
+          "decision": "alias",
+          "canonical_id": "S285",
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "Digital twins for SCS optimization",
+              "url": "https://api.crossref.org/works?query.title=Digital+twins+for+SCS+optimization&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"Digital twins for SCS optimization\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Digital+twins+for+SCS+optimization%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            }
+          ],
+          "claims": [],
+          "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+        },
+        {
+          "source_id": "S322",
+          "decision": "alias",
+          "canonical_id": "S285",
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "Digital twins for SCS",
+              "url": "https://api.crossref.org/works?query.title=Digital+twins+for+SCS&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"Digital twins for SCS\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Digital+twins+for+SCS%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            }
+          ],
+          "claims": [],
+          "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+        },
+        {
+          "source_id": "S337",
+          "decision": "alias",
+          "canonical_id": "S285",
+          "searches": [
+            {
+              "service": "Crossref",
+              "query": "Digital twins for SCS",
+              "url": "https://api.crossref.org/works?query.title=Digital+twins+for+SCS&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+              "result": "registry response saved in discovery/registry-search.json"
+            },
+            {
+              "service": "PubMed",
+              "query": "\"Digital twins for SCS\"[Title]",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Digital+twins+for+SCS%22%5BTitle%5D&retmode=json&retmax=5",
+              "result": "registry response saved in discovery/registry-search.json"
+            }
+          ],
+          "claims": [],
+          "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+        }
+      ]
+    }
+  ]
+}

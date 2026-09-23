@@ -1,0 +1,17 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "generated_at": "2026-09-22",
+    "status": "complete",
+    "source_statuses": [
+      "needs_exact_url",
+      "unverified",
+      "url_present_content_not_checked",
+      "legacy_partial_without_claims"
+    ],
+    "resource_count": 0,
+    "batch_count": 0,
+    "batch_size_target": 15
+  },
+  "batches": []
+}

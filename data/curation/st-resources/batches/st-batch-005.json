@@ -1,0 +1,515 @@
+{
+  "meta": {
+    "batch_id": "st-batch-005",
+    "schema_version": "1.0.0",
+    "created_at": "2026-09-22",
+    "status": "applied",
+    "reviewed_at": "2026-09-22",
+    "applied_at": "2026-09-22"
+  },
+  "resource_ids": [
+    "ST029",
+    "ST030",
+    "ST052",
+    "ST053",
+    "ST054",
+    "ST055",
+    "ST056",
+    "ST057",
+    "ST058",
+    "ST059",
+    "ST060",
+    "ST061",
+    "ST069",
+    "ST070",
+    "ST071"
+  ],
+  "resources": [
+    {
+      "resource_id": "ST029",
+      "category_id": "C2",
+      "subcategory_id": "C2.2",
+      "name": "Edge Impulse + BrainChip AKD1000",
+      "status": "needs_exact_url",
+      "url": null
+    },
+    {
+      "resource_id": "ST030",
+      "category_id": "C2",
+      "subcategory_id": "C2.2",
+      "name": "Catalyst N1 Neuromorphic Processor",
+      "status": "url_present_content_not_checked",
+      "url": "https://huggingface.co/Catalyst-Neuromorphic/catalyst-n1"
+    },
+    {
+      "resource_id": "ST052",
+      "category_id": "C4",
+      "subcategory_id": "C4.1",
+      "name": "VST-APA (Video Swin Transformers)",
+      "status": "url_present_content_not_checked",
+      "url": "https://github.com/MRausus/VST-APA"
+    },
+    {
+      "resource_id": "ST053",
+      "category_id": "C4",
+      "subcategory_id": "C4.1",
+      "name": "HCAT-Pain",
+      "status": "url_present_content_not_checked",
+      "url": "https://github.com/AnupKumarGupta/HCAT-Pain"
+    },
+    {
+      "resource_id": "ST054",
+      "category_id": "C4",
+      "subcategory_id": "C4.1",
+      "name": "Tiny-BioMoE",
+      "status": "url_present_content_not_checked",
+      "url": "https://github.com/GkikasStefanos/Tiny-BioMoE"
+    },
+    {
+      "resource_id": "ST055",
+      "category_id": "C4",
+      "subcategory_id": "C4.1",
+      "name": "Hierarchical Multimodal Fusion (X-ITE)",
+      "status": "url_present_content_not_checked",
+      "url": "https://github.com/Satyajithchary/Hierarchical-Multimodal-Fusion-with-Phased-Training-for-X-ITE-Challenge"
+    },
+    {
+      "resource_id": "ST056",
+      "category_id": "C4",
+      "subcategory_id": "C4.1",
+      "name": "Cross-Spectral Attention Fusion (CSAF)",
+      "status": "url_present_content_not_checked",
+      "url": "https://github.com/oussama123-ai/Cross-Spectral-Fusion-of-Thermal"
+    },
+    {
+      "resource_id": "ST057",
+      "category_id": "C4",
+      "subcategory_id": "C4.1",
+      "name": "PainFormer",
+      "status": "url_present_content_not_checked",
+      "url": "https://github.com/GkikasStefanos/PainFormer"
+    },
+    {
+      "resource_id": "ST058",
+      "category_id": "C4",
+      "subcategory_id": "C4.1",
+      "name": "Automatic-Recognition-VAS-Index",
+      "status": "url_present_content_not_checked",
+      "url": "https://github.com/LorenzoGianassi/Automatic-Recognition-VAS-Index-with-Random-Forest"
+    },
+    {
+      "resource_id": "ST059",
+      "category_id": "C4",
+      "subcategory_id": "C4.2",
+      "name": "PyTorch Tabular",
+      "status": "url_present_content_not_checked",
+      "url": "https://github.com/manujosephv/pytorch_tabular"
+    },
+    {
+      "resource_id": "ST060",
+      "category_id": "C4",
+      "subcategory_id": "C4.2",
+      "name": "sktime",
+      "status": "url_present_content_not_checked",
+      "url": "https://github.com/sktime/sktime"
+    },
+    {
+      "resource_id": "ST061",
+      "category_id": "C4",
+      "subcategory_id": "C4.2",
+      "name": "PyTorch Lightning",
+      "status": "url_present_content_not_checked",
+      "url": "https://github.com/Lightning-AI/pytorch-lightning"
+    },
+    {
+      "resource_id": "ST069",
+      "category_id": "C6",
+      "subcategory_id": "C6.1",
+      "name": "Google Colab",
+      "status": "needs_exact_url",
+      "url": null
+    },
+    {
+      "resource_id": "ST070",
+      "category_id": "C6",
+      "subcategory_id": "C6.1",
+      "name": "Norse Colab Tutorials",
+      "status": "url_present_content_not_checked",
+      "url": "https://github.com/norse/notebooks"
+    },
+    {
+      "resource_id": "ST071",
+      "category_id": "C6",
+      "subcategory_id": "C6.1",
+      "name": "snnTorch Colab",
+      "status": "url_present_content_not_checked",
+      "url": "https://github.com/jeshraghian/snntorch"
+    }
+  ],
+  "decisions": [
+    {
+      "resource_id": "ST029",
+      "decision": "verified_primary",
+      "exact_url": "https://docs.edgeimpulse.com/hardware/boards/brainchip-akd1000",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Edge Impulse BrainChip AKD1000 deployment block",
+          "url": "https://docs.edgeimpulse.com/hardware/boards/brainchip-akd1000",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "Edge Impulse documents AKD1000 deployment through BrainChip MetaTF and AKD1000 deployment blocks.",
+        "The documented workflow uses the Akida Python library, Akida PCIe drivers and Edge Impulse Linux tooling."
+      ],
+      "limitations": [
+        "The documented AKD1000 binary workflow pins Python 3.8 and Akida 2.3.3; compatibility is version-sensitive.",
+        "This is a hardware deployment route, not evidence for biological fidelity, pain inference or clinical performance."
+      ],
+      "corrected_purpose": "Official integration documentation for deploying compatible Edge Impulse models to BrainChip AKD1000 hardware.",
+      "note": "The exact board-specific page replaces the former documentation homepage."
+    },
+    {
+      "resource_id": "ST030",
+      "decision": "partially_verified",
+      "exact_url": "https://huggingface.co/Catalyst-Neuromorphic/catalyst-n1",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Catalyst N1 neuromorphic processor SDK backends",
+          "url": "https://huggingface.co/Catalyst-Neuromorphic/catalyst-n1",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "The project card describes an Apache-2.0 128-core LIF neuromorphic processor, Verilog RTL, testbenches and a Python SDK.",
+        "The SDK documentation lists CPU, PyTorch-CUDA GPU and FPGA backends under one API."
+      ],
+      "limitations": [
+        "The imported 4-8x speedup is absent from the checked primary page and is removed as an unverified metric.",
+        "FPGA validation and benchmark statements are self-reported; no independent reproduction was located."
+      ],
+      "corrected_purpose": "Candidate open neuromorphic RTL/SDK stack requiring local reproduction before use.",
+      "note": "Keep as engineering prior art, not as validated performance evidence."
+    },
+    {
+      "resource_id": "ST052",
+      "decision": "partially_verified",
+      "exact_url": "https://github.com/MRausus/VST-APA",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "MRausus VST-APA",
+          "url": "https://github.com/MRausus/VST-APA",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "The public repository exists and contains one Video Swin Transformer pain-detection notebook."
+      ],
+      "limitations": [
+        "The repository has one commit, no README, release, paper identifier or documented evaluation protocol.",
+        "Effectiveness, generalizability and explainability claims were not confirmed and are removed."
+      ],
+      "corrected_purpose": "Unverified experimental notebook for Video Swin Transformer pain classification.",
+      "note": "Not suitable as evidence until code, data split, metrics and provenance are documented."
+    },
+    {
+      "resource_id": "ST053",
+      "decision": "partially_verified",
+      "exact_url": "https://github.com/AnupKumarGupta/HCAT-Pain",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "HCAT-Pain official repository",
+          "url": "https://github.com/AnupKumarGupta/HCAT-Pain",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "The authors describe a hierarchical cross-attention model using video-derived pulse, respiration and facial action units on AI4Pain data from 65 participants.",
+        "The page reports multiclass and binary pain-classification results for a 2026 FG paper."
+      ],
+      "limitations": [
+        "The repository explicitly states that implementation code has not yet been uploaded.",
+        "Reported results are author-provided and were not reproduced; dataset access remains subject to its EULA.",
+        "Video-derived proxies and facial behavior do not constitute a direct measure of subjective pain."
+      ],
+      "corrected_purpose": "Paper project page for a non-contact multimodal pain-classification method; implementation pending.",
+      "note": "Metadata and stated method are retained, but reproducibility is not established."
+    },
+    {
+      "resource_id": "ST054",
+      "decision": "verified_primary",
+      "exact_url": "https://github.com/GkikasStefanos/Tiny-BioMoE",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Tiny-BioMoE official repository",
+          "url": "https://github.com/GkikasStefanos/Tiny-BioMoE",
+          "accessed_at": "2026-09-22"
+        },
+        {
+          "query": "Tiny-BioMoE DOI",
+          "url": "https://doi.org/10.1145/3747327.3764788",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "The repository provides MIT-licensed model code and a downloadable pretrained checkpoint.",
+        "The published ICMI 2025 Companion paper is identified by DOI 10.1145/3747327.3764788.",
+        "The authors describe 7.34 million parameters, 192-dimensional embeddings and pretraining across ECG, EMG and EEG representations."
+      ],
+      "limitations": [
+        "The architecture consumes image-like signal representations and does not itself align fly and human modalities.",
+        "Suitability and performance for the dissertation datasets require independent evaluation."
+      ],
+      "corrected_purpose": "Published lightweight biosignal embedding baseline with openly released weights.",
+      "note": "Candidate representation baseline, not evidence of cross-species transfer."
+    },
+    {
+      "resource_id": "ST055",
+      "decision": "verified_primary",
+      "exact_url": "https://github.com/Satyajithchary/Hierarchical-Multimodal-Fusion-with-Phased-Training-for-X-ITE-Challenge",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Hierarchical Multimodal Fusion X-ITE official implementation",
+          "url": "https://github.com/Satyajithchary/Hierarchical-Multimodal-Fusion-with-Phased-Training-for-X-ITE-Challenge",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "The repository contains code for physiological, four-video-stream and audio fusion with a three-phase training procedure.",
+        "It reports a held-out test accuracy of 49.7%, macro F1 of 34.0% and ROC AUC of 0.533 on the binary X-ITE task."
+      ],
+      "limitations": [
+        "The reported result is near chance and predicts the high-pain class with only 1% recall.",
+        "The repository's claim that this behavior is clinically desirable is not supported by the reported discrimination metrics.",
+        "Code availability does not establish generalization or clinical utility."
+      ],
+      "corrected_purpose": "Reproducible negative/weak baseline for multimodal X-ITE experiments and failure analysis.",
+      "note": "Retain for architecture and ablation comparison; do not cite as effective pain recognition."
+    },
+    {
+      "resource_id": "ST056",
+      "decision": "verified_primary",
+      "exact_url": "https://doi.org/10.1371/journal.pdig.0001424",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Cross-spectral fusion thermal RGB pain PLOS",
+          "url": "https://doi.org/10.1371/journal.pdig.0001424",
+          "accessed_at": "2026-09-22"
+        },
+        {
+          "query": "CSAF official code",
+          "url": "https://github.com/oussama123-ai/Cross-Spectral-Fusion-of-Thermal",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "The peer-reviewed PLOS Digital Health article evaluates synchronized thermal and RGB video in 50 healthy adults and 30 postoperative adults.",
+        "The authors report combined-cohort MAE 0.87 versus 1.23 for the RGB-only baseline and provide code plus split metadata.",
+        "The target is participant-reported 0-10 NRS, with controlled and postoperative cohorts analyzed separately and together."
+      ],
+      "limitations": [
+        "Validation is adult-only, single-team and not an external multi-site prospective clinical validation.",
+        "Five-fold results and author-reported metrics require independent reproduction before model selection.",
+        "Thermal/RGB estimates of NRS are not a direct physiological measurement of pain."
+      ],
+      "corrected_purpose": "Primary multimodal human-pain study and codebase for thermal-plus-RGB comparison, DOI 10.1371/journal.pdig.0001424.",
+      "note": "Use the article, not the repository wording, as the primary evidence source."
+    },
+    {
+      "resource_id": "ST057",
+      "decision": "verified_primary",
+      "exact_url": "https://doi.org/10.1109/TAFFC.2025.3605475",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "PainFormer official repository",
+          "url": "https://github.com/GkikasStefanos/PainFormer",
+          "accessed_at": "2026-09-22"
+        },
+        {
+          "query": "PainFormer DOI",
+          "url": "https://doi.org/10.1109/TAFFC.2025.3605475",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "PainFormer is published in IEEE Transactions on Affective Computing under DOI 10.1109/TAFFC.2025.3605475.",
+        "The official repository releases MIT-licensed code and a pretrained checkpoint and reports pretraining on 14 tasks with 10.9 million samples."
+      ],
+      "limitations": [
+        "The scale values are author-reported and do not imply independent subjects or pain-specific samples.",
+        "It is a vision foundation model and does not validate physiological or cross-species transfer claims."
+      ],
+      "corrected_purpose": "Published vision representation baseline for human facial/affective and pain-assessment tasks.",
+      "note": "Retain as a comparator for human video representations only."
+    },
+    {
+      "resource_id": "ST058",
+      "decision": "partially_verified",
+      "exact_url": "https://github.com/LorenzoGianassi/Automatic-Recognition-VAS-Index-with-Random-Forest",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Automatic Recognition VAS Index Random Forest",
+          "url": "https://github.com/LorenzoGianassi/Automatic-Recognition-VAS-Index-with-Random-Forest",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "The course-project repository implements a Random Forest regressor for facial-landmark features and supports UNBC and BioVid inputs.",
+        "Its configuration exposes leave-one-subject-out, five-fold and leave-one-sequence-out evaluation modes."
+      ],
+      "limitations": [
+        "No peer-reviewed publication or stable dataset redistribution license is documented.",
+        "The README does not establish a validated performance advantage and linked dataset mirrors may not be authoritative."
+      ],
+      "corrected_purpose": "Exploratory classical-ML implementation for facial-feature pain-score regression.",
+      "note": "Use only as implementation prior art after replacing dataset links with official access routes."
+    },
+    {
+      "resource_id": "ST059",
+      "decision": "verified_primary",
+      "exact_url": "https://github.com/pytorch-tabular/pytorch_tabular",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "PyTorch Tabular official repository",
+          "url": "https://github.com/pytorch-tabular/pytorch_tabular",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "PyTorch Tabular is an MIT-licensed framework with a unified API for deep-learning models on tabular data.",
+        "It includes classification/regression models, tutorials, tests, logging integrations and PyTorch Lightning-based training."
+      ],
+      "limitations": [
+        "It is general-purpose infrastructure and supplies no pain-specific evidence or validation protocol.",
+        "The imported repository URL redirects to the current pytorch-tabular organization."
+      ],
+      "corrected_purpose": "Optional framework for structured-feature baselines and experiment plumbing.",
+      "note": "Do not treat library model availability as evidence of suitability for this corpus."
+    },
+    {
+      "resource_id": "ST060",
+      "decision": "verified_primary",
+      "exact_url": "https://github.com/sktime/sktime",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "sktime official repository",
+          "url": "https://github.com/sktime/sktime",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "sktime is a BSD-licensed time-series library supporting classification, regression, forecasting, clustering and validation utilities."
+      ],
+      "limitations": [
+        "The library is not pain-specific; the imported phrase 'pain detection' is removed.",
+        "Participant-level grouping and leakage controls must be implemented explicitly in project experiments."
+      ],
+      "corrected_purpose": "General time-series baseline and pipeline library for physiological-signal experiments.",
+      "note": "Candidate tooling only, with project-specific grouped evaluation required."
+    },
+    {
+      "resource_id": "ST061",
+      "decision": "verified_primary",
+      "exact_url": "https://github.com/Lightning-AI/lightning",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "PyTorch Lightning official repository",
+          "url": "https://github.com/Lightning-AI/lightning",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "The official Lightning repository provides PyTorch Lightning for structured training loops, accelerator/distributed execution and logging."
+      ],
+      "limitations": [
+        "It is engineering infrastructure, not a model, scientific method or validation result.",
+        "Reproducibility still requires pinned environments, seeds, dataset versions and saved split manifests."
+      ],
+      "corrected_purpose": "Training-loop and experiment-infrastructure candidate for reproducible PyTorch baselines.",
+      "note": "Exact current repository replaces the former redirected pytorch-lightning URL."
+    },
+    {
+      "resource_id": "ST069",
+      "decision": "verified_primary",
+      "exact_url": "https://research.google.com/colaboratory/faq.html",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Google Colab official FAQ GPU TPU limits",
+          "url": "https://research.google.com/colaboratory/faq.html",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "Google describes Colab as a hosted Jupyter service with a no-charge tier and optional GPU/TPU runtimes."
+      ],
+      "limitations": [
+        "Resources, accelerator types, usage limits and runtime duration are not guaranteed and change over time.",
+        "The free tier commonly permits at most 12-hour sessions and is unsuitable as the sole reproducibility environment.",
+        "Colab does not itself provide SNN tutorials; those belong to separate projects."
+      ],
+      "corrected_purpose": "Convenience notebook environment for demonstrations and smoke tests, not guaranteed experiment infrastructure.",
+      "note": "The exact FAQ is the primary source for availability and limit claims."
+    },
+    {
+      "resource_id": "ST070",
+      "decision": "verified_primary",
+      "exact_url": "https://github.com/norse/notebooks",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Norse notebook tutorials official",
+          "url": "https://github.com/norse/notebooks",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "The Norse project provides public introductory, supervised-learning, event-processing and neuroscience notebooks.",
+        "The repository states that notebooks can run in Colab and that local/Colab environments may use hardware acceleration."
+      ],
+      "limitations": [
+        "Browser-hosted execution uses CPU and may be slow for larger networks.",
+        "TPU compatibility is not demonstrated per notebook and Colab accelerator access is not guaranteed.",
+        "Tutorials are educational examples, not project benchmarks or biological validation."
+      ],
+      "corrected_purpose": "Educational Norse notebooks and smoke-test examples for differentiable SNN workflows.",
+      "note": "Retain GPU/TPU wording only as an environment option, not a tested guarantee."
+    },
+    {
+      "resource_id": "ST071",
+      "decision": "verified_primary",
+      "exact_url": "https://github.com/jeshraghian/snntorch",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "snnTorch official tutorials Colab",
+          "url": "https://github.com/jeshraghian/snntorch",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "The official repository links a Colab quickstart, examples and a tutorial series for gradient-based SNN learning.",
+        "snnTorch uses PyTorch autograd and can use CUDA when models and tensors are placed on a compatible GPU."
+      ],
+      "limitations": [
+        "The exact imported count of '5+ Colab tutorials' is not a stable software property and is removed.",
+        "Colab availability and accelerator assignment are controlled by Google and are not guaranteed.",
+        "Tutorial completion does not validate whole-connectome scale or biological realism."
+      ],
+      "corrected_purpose": "Educational snnTorch quickstart/tutorial material for baseline prototyping.",
+      "note": "The resource overlaps ST024 but is retained as a distinct training-material role."
+    }
+  ]
+}

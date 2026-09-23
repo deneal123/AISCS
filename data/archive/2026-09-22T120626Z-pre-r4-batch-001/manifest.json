@@ -1,0 +1,53 @@
+{
+  "snapshot_at": "2026-09-22T12:06:26+00:00",
+  "status": "immutable_pre_publish_snapshot",
+  "label": "pre-r4-batch-001",
+  "files": [
+    {
+      "name": "records.json",
+      "bytes": 577055,
+      "sha256": "A379F06CB3A6B0E5F95C21E92C7CD10E98642C819221F5E841D8D913BA1C20AA"
+    },
+    {
+      "name": "clusters.json",
+      "bytes": 136214,
+      "sha256": "C13263AB7958D17858F2CC384DA76BDB4C3A981D440017C1E95641417FE8DF7F"
+    },
+    {
+      "name": "ST.json",
+      "bytes": 139467,
+      "sha256": "D49324AC23A51A70E32550C84E8E4625DFF0874AA505490BB2E8D4CA66E61A2D"
+    },
+    {
+      "name": "aliases.json",
+      "bytes": 21867,
+      "sha256": "5C118790552B5471205743DE5AC83556E129684EDBEE93C154F053A0C45BE100"
+    },
+    {
+      "name": "vocabularies.json",
+      "bytes": 2942,
+      "sha256": "B890A4573E0C009295E1FB7AE165EFF5507B70E50F6059D9DF855501C02AF625"
+    },
+    {
+      "name": "source-record.schema.json",
+      "bytes": 4495,
+      "sha256": "063DF32C993E5D28536FDDB30FB6DE63D6FF2C1A47E3A9954C17832EE4CEFD5B"
+    },
+    {
+      "name": "audit-report.json",
+      "bytes": 11439,
+      "sha256": "9D8EC0B4C42BD0A8D7DAC96E727F8A4424B5D693E1A2B497F407F3F7E12EBA3A"
+    },
+    {
+      "name": "validation-log.json",
+      "bytes": 327062,
+      "sha256": "3550C6B0DDF1D2D28B1B55F6F36AC24A5B4BDD358096B6071AFD30A5C6AC878C"
+    },
+    {
+      "name": "evidence-matrix.json",
+      "bytes": 31487,
+      "sha256": "53019C13B7C5F0B8CED5A244D4769E4FDF04CA0A76730A2B5CFA5D53E488A667"
+    }
+  ],
+  "mutation_policy": "Do not edit; publish changes only to the working research JSON files."
+}

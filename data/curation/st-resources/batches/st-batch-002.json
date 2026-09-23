@@ -1,0 +1,517 @@
+{
+  "meta": {
+    "batch_id": "st-batch-002",
+    "schema_version": "1.0.0",
+    "created_at": "2026-09-22",
+    "status": "applied",
+    "reviewed_at": "2026-09-22",
+    "applied_at": "2026-09-22"
+  },
+  "resource_ids": [
+    "ST034",
+    "ST035",
+    "ST036",
+    "ST037",
+    "ST038",
+    "ST039",
+    "ST040",
+    "ST041",
+    "ST042",
+    "ST043",
+    "ST044",
+    "ST045",
+    "ST046",
+    "ST047",
+    "ST048"
+  ],
+  "resources": [
+    {
+      "resource_id": "ST034",
+      "category_id": "C3",
+      "subcategory_id": "C3.1",
+      "name": "PainMotion Dataset",
+      "status": "needs_exact_url",
+      "url": null
+    },
+    {
+      "resource_id": "ST035",
+      "category_id": "C3",
+      "subcategory_id": "C3.1",
+      "name": "EmoPain Database",
+      "status": "needs_exact_url",
+      "url": null
+    },
+    {
+      "resource_id": "ST036",
+      "category_id": "C3",
+      "subcategory_id": "C3.1",
+      "name": "LENS Dataset",
+      "status": "needs_exact_url",
+      "url": null
+    },
+    {
+      "resource_id": "ST037",
+      "category_id": "C3",
+      "subcategory_id": "C3.2",
+      "name": "OpenPain / OSF",
+      "status": "url_present_content_not_checked",
+      "url": "https://osf.io/mj9xr/"
+    },
+    {
+      "resource_id": "ST038",
+      "category_id": "C3",
+      "subcategory_id": "C3.2",
+      "name": "PainLabMunich",
+      "status": "url_present_content_not_checked",
+      "url": "https://osf.io/hbkmx/"
+    },
+    {
+      "resource_id": "ST039",
+      "category_id": "C3",
+      "subcategory_id": "C3.2",
+      "name": "Chronic neuropathic pain EEG",
+      "status": "needs_exact_url",
+      "url": null
+    },
+    {
+      "resource_id": "ST040",
+      "category_id": "C3",
+      "subcategory_id": "C3.2",
+      "name": "ValidPain2 (Nociception Level Index)",
+      "status": "needs_exact_url",
+      "url": null
+    },
+    {
+      "resource_id": "ST041",
+      "category_id": "C3",
+      "subcategory_id": "C3.2",
+      "name": "Phantom Limb Pain EEG",
+      "status": "needs_exact_url",
+      "url": null
+    },
+    {
+      "resource_id": "ST042",
+      "category_id": "C3",
+      "subcategory_id": "C3.2",
+      "name": "Expectation effects on nociception",
+      "status": "needs_exact_url",
+      "url": null
+    },
+    {
+      "resource_id": "ST043",
+      "category_id": "C3",
+      "subcategory_id": "C3.2",
+      "name": "Zuo2025 (knee pain)",
+      "status": "needs_exact_url",
+      "url": null
+    },
+    {
+      "resource_id": "ST044",
+      "category_id": "C3",
+      "subcategory_id": "C3.3",
+      "name": "Evoked fNIRS (thermal QST)",
+      "status": "needs_exact_url",
+      "url": null
+    },
+    {
+      "resource_id": "ST045",
+      "category_id": "C3",
+      "subcategory_id": "C3.3",
+      "name": "Electrical_Thermal_FingerTapping_2015",
+      "status": "needs_exact_url",
+      "url": null
+    },
+    {
+      "resource_id": "ST046",
+      "category_id": "C3",
+      "subcategory_id": "C3.3",
+      "name": "Electrical_Morphine_Placebo_2018",
+      "status": "needs_exact_url",
+      "url": null
+    },
+    {
+      "resource_id": "ST047",
+      "category_id": "C3",
+      "subcategory_id": "C3.3",
+      "name": "NITRC Open access fNIRS (pain)",
+      "status": "url_present_content_not_checked",
+      "url": "http://www.nitrc.org/projects/yucel18pain/"
+    },
+    {
+      "resource_id": "ST048",
+      "category_id": "C3",
+      "subcategory_id": "C3.3",
+      "name": "NITRC Electrical pain stimulus",
+      "status": "url_present_content_not_checked",
+      "url": "http://www.nitrc.org/projects/yucel15pain"
+    }
+  ],
+  "decisions": [
+    {
+      "resource_id": "ST034",
+      "decision": "verified_primary",
+      "exact_url": "https://zenodo.org/records/17704417",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "PainMotion Dataset DOMS musculoskeletal disorders",
+          "url": "https://zenodo.org/records/17704417",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "Zenodo record 10.5281/zenodo.17704417 provides ECG, sEMG, upper-limb inertial data and binary self-reported pain labels.",
+        "The record describes 17 healthy participants with DOMS and 6 participants with shoulder musculoskeletal disorders."
+      ],
+      "limitations": [
+        "Labels are binary self-reports collected during industrial tasks, not a continuous clinical pain endpoint.",
+        "Files total 12.5 GB; this audit checked metadata and file inventory, not the signal contents."
+      ],
+      "corrected_purpose": "Multimodal human musculoskeletal-pain dataset with ECG, sEMG, IMU and binary self-report labels.",
+      "note": "Version 1.0.1 and the exact Zenodo DOI were confirmed."
+    },
+    {
+      "resource_id": "ST035",
+      "decision": "verified_primary",
+      "exact_url": "https://www.ucl.ac.uk/uclic/research/affective-computing/emopain-dataset",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "UCL EmoPain dataset chronic pain IMU sEMG",
+          "url": "https://www.ucl.ac.uk/uclic/research/affective-computing/emopain-dataset",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "The UCL page describes 18 IMUs and four sEMG sensors for 12 healthy and 18 chronic-pain participants.",
+        "Protective behaviour was independently annotated by four domain experts."
+      ],
+      "limitations": [
+        "Access to the body-movement component requires contacting the dataset owner.",
+        "Protective behaviour is not interchangeable with pain intensity or a clinical outcome."
+      ],
+      "corrected_purpose": "Controlled-access movement, sEMG and annotation resource for chronic-pain protective behaviour research.",
+      "note": "The former generic NIT link was replaced with the official UCL dataset page."
+    },
+    {
+      "resource_id": "ST036",
+      "decision": "rejected",
+      "exact_url": null,
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "LENS Dataset sEMG NIRS jaw clenching pain",
+          "url": "https://www.google.com/search?q=%22LENS+Dataset%22+sEMG+NIRS+jaw+clenching+pain",
+          "accessed_at": "2026-09-22"
+        },
+        {
+          "query": "site:odesi.ca LENS pain dataset",
+          "url": "https://odesi.ca/",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [],
+      "limitations": [
+        "No primary dataset matching the imported name, modalities and jaw-clenching description was found.",
+        "The supplied odesi.ca domain is a catalogue landing page and does not identify this resource."
+      ],
+      "corrected_purpose": "Rejected candidate: no stable identifier or exact primary record could be established.",
+      "note": "Do not use the imported modality or task claims as facts unless a primary record is supplied."
+    },
+    {
+      "resource_id": "ST037",
+      "decision": "verified_primary",
+      "exact_url": "https://osf.io/mj9xr/",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "OSF mj9xr metadata",
+          "url": "https://api.osf.io/v2/nodes/mj9xr/",
+          "accessed_at": "2026-09-22"
+        },
+        {
+          "query": "OSF mj9xr file inventory",
+          "url": "https://api.osf.io/v2/nodes/mj9xr/files/osfstorage/",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "OSF identifies the project as Effects of analgesics on EEG biomarkers of chronic pain.",
+        "The public storage contains BIDS archives and clinical spreadsheets for two cohorts."
+      ],
+      "limitations": [
+        "The imported name OpenPain was incorrect and has been removed from the resource purpose.",
+        "The multi-gigabyte archives were not downloaded or independently checked for BIDS validity."
+      ],
+      "corrected_purpose": "Public OSF project containing BIDS EEG archives and clinical variables for analgesic effects on chronic-pain EEG biomarkers.",
+      "note": "Verified through the OSF API because the browser landing page returns an automated-access error."
+    },
+    {
+      "resource_id": "ST038",
+      "decision": "partially_verified",
+      "exact_url": "https://osf.io/srpbg/",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "OSF hbkmx",
+          "url": "https://api.osf.io/v2/nodes/hbkmx/",
+          "accessed_at": "2026-09-22"
+        },
+        {
+          "query": "PainLabMunich public resting-state EEG chronic pain dataset",
+          "url": "https://api.osf.io/v2/nodes/srpbg/",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "A public PainLabMunich OSF project exists for resting-state EEG from 101 chronic-pain patients and 88 matched controls."
+      ],
+      "limitations": [
+        "The imported OSF identifier hbkmx returns 404 and could not be validated.",
+        "The replacement srpbg project is a specific PainLabMunich dataset, not a generic record for every lab dataset."
+      ],
+      "corrected_purpose": "PainLabMunich resting-state EEG dataset for chronic-pain microstate analysis, represented by the verified srpbg project.",
+      "note": "Corrected to the closest documented primary project; original identifier remains disproven."
+    },
+    {
+      "resource_id": "ST039",
+      "decision": "verified_primary",
+      "exact_url": "https://data.mendeley.com/datasets/yj52xrfgtz/4",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "chronic neuropathic pain EEG painDETECT BPI 36",
+          "url": "https://data.mendeley.com/datasets/yj52xrfgtz/4",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "Mendeley Data DOI 10.17632/yj52xrfgtz.4 contains resting-state EEG and questionnaire data from 36 chronic neuropathic-pain patients.",
+        "The protocol includes five minutes eyes open, five minutes eyes closed, painDETECT and Brief Pain Inventory reports."
+      ],
+      "limitations": [
+        "The dataset has no healthy control group and contains heterogeneous etiologies and medication exposure.",
+        "It supports within-cohort association or stratification, not causal or population-wide pain inference."
+      ],
+      "corrected_purpose": "Resting-state EEG plus painDETECT and Brief Pain Inventory data for 36 chronic neuropathic-pain patients.",
+      "note": "Exact Mendeley version and data article were matched."
+    },
+    {
+      "resource_id": "ST040",
+      "decision": "verified_primary",
+      "exact_url": "https://openneuro.org/datasets/ds008115",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "OpenNeuro ds008115 ValidPain2",
+          "url": "https://openneuro.org/datasets/ds008115",
+          "accessed_at": "2026-09-22"
+        },
+        {
+          "query": "EEGDash DS008115 metadata",
+          "url": "https://eegdash.org/api/dataset/eegdash.dataset.DS008115.html",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "OpenNeuro identifier ds008115 resolves to the ValidPain2 EEG dataset under DOI 10.18112/openneuro.ds008115.v1.0.0.",
+        "Catalogue metadata reports 180 mechanically ventilated intensive-care patients, four EEG channels and three clinical-procedure tasks."
+      ],
+      "limitations": [
+        "Patients were unable to self-report pain; the target concerns responsiveness to potentially nociceptive procedures, not subjective pain intensity.",
+        "Signal files were not downloaded or independently quality-controlled in this audit."
+      ],
+      "corrected_purpose": "Frontal EEG dataset for responsiveness to potentially nociceptive procedures in mechanically ventilated ICU patients.",
+      "note": "Nociception-monitor output and behavioural responsiveness must remain distinct from subjective pain."
+    },
+    {
+      "resource_id": "ST041",
+      "decision": "verified_primary",
+      "exact_url": "https://nemar.org/dataset/on006921",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "NEMAR phantom limb pain resting-state EEG",
+          "url": "https://nemar.org/dataset/on006921",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "NEMAR on006921 provides 64/128-channel resting-state EEG from 38 participants across amputee and intact-control groups.",
+        "The BIDS dataset includes eyes-open/eyes-closed tasks and pain-related phenotype data."
+      ],
+      "limitations": [
+        "This is a resting-state group-comparison resource, not an evoked pain-intensity dataset.",
+        "NEMAR data-quality summaries were not yet published on the checked page."
+      ],
+      "corrected_purpose": "High-density resting-state EEG and phenotype data for phantom-limb-pain, amputee-control and intact-control groups.",
+      "note": "OpenNeuro DOI 10.18112/openneuro.ds006921.v1.1.1 is linked by NEMAR."
+    },
+    {
+      "resource_id": "ST042",
+      "decision": "verified_primary",
+      "exact_url": "https://openneuro.org/datasets/ds006374",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "OpenNeuro expectation repetition suppression nociception",
+          "url": "https://openneuro.org/datasets/ds006374",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "OpenNeuro ds006374 contains EEG and behavioural data from 36 participants under DOI 10.18112/openneuro.ds006374.v1.0.0.",
+        "The listed tasks are calibration, expectation/repetition-suppression and detection."
+      ],
+      "limitations": [
+        "The source supports study of expectation and nociceptive responses; it does not establish that expectation modulates repetition suppression.",
+        "The repository reports many BIDS warnings, so preprocessing assumptions require review before use."
+      ],
+      "corrected_purpose": "EEG/behavioural dataset for testing expectation effects on repetition suppression in nociception.",
+      "note": "The imported causal-sounding summary was narrowed to the study question."
+    },
+    {
+      "resource_id": "ST043",
+      "decision": "verified_primary",
+      "exact_url": "https://figshare.com/articles/dataset/28740260",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "MOABB Zuo2025 knee pain",
+          "url": "https://moabb.neurotechx.com/docs/generated/moabb.datasets.Zuo2025.html",
+          "accessed_at": "2026-09-22"
+        },
+        {
+          "query": "Zuo2025 Figshare dataset 28740260",
+          "url": "https://figshare.com/articles/dataset/28740260",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "The dataset contains 30-channel, 500-Hz EEG from 30 knee-pain patients performing left/right leg motor imagery.",
+        "The associated publication DOI is 10.1038/s41597-025-05767-2."
+      ],
+      "limitations": [
+        "The target is motor-imagery class, not pain intensity or nociceptive response.",
+        "MOABB reports 32 of 150 raw sessions missing and a label-mapping inconsistency between README and events metadata."
+      ],
+      "corrected_purpose": "Lower-limb motor-imagery EEG dataset from knee-pain patients; useful as clinical-domain representation data, not a pain-label benchmark.",
+      "note": "Exact Figshare record and known completeness caveats were captured."
+    },
+    {
+      "resource_id": "ST044",
+      "decision": "verified_primary",
+      "exact_url": "https://data.mendeley.com/datasets/kb9pb6tzkg/2",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Mendeley evoked fNIRS thermal QST",
+          "url": "https://data.mendeley.com/datasets/kb9pb6tzkg/2",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "Mendeley Data DOI 10.17632/kb9pb6tzkg.2 provides fNIRS data and code for 16 participants across cold/heat threshold and tolerance tasks.",
+        "The record includes raw and filtered haemoglobin signals plus k-fold and leave-one-subject-out training code."
+      ],
+      "limitations": [
+        "Threshold/tolerance task labels are protocol-derived and are not interchangeable with clinical pain states.",
+        "Published model results and code reproducibility were not independently rerun."
+      ],
+      "corrected_purpose": "Evoked fNIRS and code for thermal quantitative sensory testing across cold/heat threshold and tolerance conditions.",
+      "note": "Updated to the current Mendeley version 2 record."
+    },
+    {
+      "resource_id": "ST045",
+      "decision": "verified_primary",
+      "exact_url": "https://www.nemar.org/dataset/on005776",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "NEMAR Electrical Thermal FingerTapping 2015",
+          "url": "https://www.nemar.org/dataset/on005776",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "NEMAR on005776 contains NIRS data from 11 participants across electrical, thermal, finger-tapping, imagery and resting tasks.",
+        "The record links OpenNeuro DOI 10.18112/openneuro.ds005776.v1.0.1 and two associated publications."
+      ],
+      "limitations": [
+        "The catalogue description mixes painful stimulation and motor tasks; task-level event semantics must be inspected before modeling.",
+        "No independent signal-quality analysis was performed."
+      ],
+      "corrected_purpose": "BIDS fNIRS dataset combining noxious electrical/thermal stimulation and motor-control tasks.",
+      "note": "Exact NEMAR/OpenNeuro identifiers were recorded."
+    },
+    {
+      "resource_id": "ST046",
+      "decision": "verified_primary",
+      "exact_url": "https://www.nemar.org/dataset/on005777",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "NEMAR Electrical Morphine Placebo 2018",
+          "url": "https://www.nemar.org/dataset/on005777",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "NEMAR on005777 contains NIRS data from 14 participants under baseline, morphine and placebo conditions.",
+        "The record links OpenNeuro DOI 10.18112/openneuro.ds005777.v1.0.1 and article DOI 10.3389/fnhum.2018.00394."
+      ],
+      "limitations": [
+        "The small pharmacological experiment is not a general clinical-pain dataset.",
+        "No independent signal-quality or treatment-effect reproduction was performed."
+      ],
+      "corrected_purpose": "BIDS fNIRS dataset for neural responses to electrical stimulation under baseline, morphine and placebo conditions.",
+      "note": "Exact NEMAR/OpenNeuro identifiers were recorded."
+    },
+    {
+      "resource_id": "ST047",
+      "decision": "verified_primary",
+      "exact_url": "https://www.nitrc.org/projects/yucel18pain/",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "NITRC yucel18pain morphine placebo fNIRS",
+          "url": "https://www.nitrc.org/projects/yucel18pain/",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "The NITRC project page describes fNIRS during electrical pain under morphine and placebo conditions.",
+        "The page links the same 2018 study represented by the NEMAR/OpenNeuro on005777 record."
+      ],
+      "limitations": [
+        "This is an alternate project portal for the ST046 study, not an independent cohort.",
+        "The checked NITRC page does not establish that downloadable files remain available there."
+      ],
+      "corrected_purpose": "Legacy NITRC project page for the morphine/placebo fNIRS study also preserved in NEMAR/OpenNeuro.",
+      "note": "Count as source provenance, not as a second independent dataset."
+    },
+    {
+      "resource_id": "ST048",
+      "decision": "verified_primary",
+      "exact_url": "https://www.nitrc.org/projects/yucel15pain/",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "NITRC yucel15pain electrical pain fNIRS",
+          "url": "https://www.nitrc.org/projects/yucel15pain/",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "The NITRC page describes fNIRS from 11 participants receiving innocuous and noxious electrical stimuli.",
+        "The project links publication DOI 10.1038/srep09469."
+      ],
+      "limitations": [
+        "This portal overlaps the electrical-stimulation component represented in ST045 and is not an independent cohort.",
+        "Thermal and motor tasks available in the later NEMAR package are not established by this page alone."
+      ],
+      "corrected_purpose": "Legacy NITRC page for the 11-participant electrical-stimulation fNIRS study represented in the broader NEMAR package.",
+      "note": "Count as source provenance, not as a second independent dataset."
+    }
+  ]
+}

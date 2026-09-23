@@ -1,0 +1,59 @@
+{
+  "id": "S999999",
+  "название": "Replace with the exact source title",
+  "авторы": null,
+  "год": null,
+  "издание": null,
+  "модальность": null,
+  "задача": null,
+  "метод": null,
+  "датасет": null,
+  "производительность": null,
+  "кросс_субъект": null,
+  "релевантность": 3,
+  "ограничения": null,
+  "тип_источника": "метод",
+  "identifiers": {
+    "doi": null,
+    "pmid": null,
+    "arxiv_id": null,
+    "patent_id": null,
+    "dataset_id": null,
+    "exact_url": null
+  },
+  "provenance": {
+    "import_source": "data/staging/inbox/replace-me.json",
+    "retrieved_at": null,
+    "search_stream": null,
+    "query_or_seed": null,
+    "iteration": null
+  },
+  "evidence": {
+    "species": null,
+    "population": null,
+    "subject_domain": "unknown",
+    "modalities": [],
+    "sample_size": null,
+    "target_construct": "unknown",
+    "target_label": null,
+    "access_status": "unknown",
+    "evidence_role": "not_assigned"
+  },
+  "validation": {
+    "status": "unverified",
+    "screening_status": "pending",
+    "full_text_status": "not_checked",
+    "checked_at": null,
+    "split_unit": "not_reported",
+    "cross_subject": "not_reported",
+    "external_validation": "not_reported",
+    "calibration": "not_reported",
+    "uncertainty": "not_reported",
+    "exclusion_reason": null,
+    "notes": "Candidate record; not yet accepted as evidence."
+  },
+  "relations": [],
+  "risk_flags": [
+    "missing_primary_identifier"
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "meta": {
+    "batch_id": "r4-github-refresh-001",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-23",
+    "scope": "Refresh two existing relevance-4 GitHub repository records supplied by the author",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-23"
+  },
+  "source_ids": ["S200", "S292"],
+  "records": [
+    {"id": "S200", "title": "DoomFly: fly-connectome simulation controlling a Doom arena", "year": 2026, "source_type": "фундаментальные_модели"},
+    {"id": "S292", "title": "Embodied Whole-Brain Spiking Simulation of Drosophila (claude-fly)", "year": 2026, "source_type": "фундаментальные_модели"}
+  ],
+  "decisions": [
+    {
+      "source_id": "S200",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-23",
+      "full_text_status": "checked",
+      "searches": [
+        {"query": "https://github.com/nftechie/doomfly", "url": "https://github.com/nftechie/doomfly", "accessed_at": "2026-09-23"},
+        {"query": "DoomFly live training protocol", "url": "https://github.com/nftechie/doomfly/blob/main/docs/doom-live-training.md", "accessed_at": "2026-09-23"}
+      ],
+      "updates": {
+        "модальность": "Connectome-derived neural activity and simulated visual input",
+        "задача": "Closed-loop game control with engineered aversive reinforcement",
+        "метод": "MaleCNS v1.0 graph simulation and ViZDoom",
+        "датасет": "MaleCNS v1.0",
+        "производительность": null,
+        "кросс_субъект": "Not applicable; no biological population validation",
+        "ограничения": "Experimental engineering model; current candidate failed visual, conditioning and survival gates; artificial dopamine input is not subjective pain",
+        "identifiers": {"doi": null, "pmid": null, "arxiv_id": null, "patent_id": null, "dataset_id": null, "exact_url": "https://github.com/nftechie/doomfly"},
+        "provenance": {"import_source": "data/staging/inbox/github-fly-resources-2026-09-23.intake.json", "retrieved_at": "2026-09-23", "search_stream": "user-supplied-github-fly-resources", "query_or_seed": "https://github.com/nftechie/doomfly", "iteration": "commit:71ecf53d78eaffaf1a57ed7b0ccf5d458abc9f33"},
+        "evidence": {"species": "Drosophila melanogaster", "population": "simulated MaleCNS connectome", "subject_domain": "simulation", "modalities": ["connectome", "neural_activity", "simulation_state", "behavior"], "sample_size": null, "target_construct": "not_applicable", "target_label": null, "access_status": "open", "evidence_role": "simulation_foundation"},
+        "validation": {"split_unit": "not_applicable", "cross_subject": "not_applicable", "external_validation": "no", "calibration": "not_reported", "uncertainty": "not_reported"},
+        "risk_flags": ["synthetic_only", "animal_to_human_transfer_unvalidated", "future_or_recent_record_requires_recheck"]
+      },
+      "claims": [
+        {"claim": "DoomFly is an open closed-loop MaleCNS/ViZDoom engineering experiment with explicit negative validation results.", "target_variable": "not_applicable", "population_or_data": "simulated MaleCNS v1.0 connectome", "evidence": "Repository README and live-training protocol at commit 71ecf53d78eaffaf1a57ed7b0ccf5d458abc9f33", "limitation": "Artificial sensory, controller and dopamine interfaces; failed gates; no biological pain or learning validation.", "permitted_conclusion": "Use as a reproducible engineering comparator, not evidence of pain, nociception or learned survival."}
+      ],
+      "notes": "Repository and explicit negative validation results confirmed. Passing software tests is not biological validation."
+    },
+    {
+      "source_id": "S292",
+      "decision": "partially_verified",
+      "checked_at": "2026-09-23",
+      "full_text_status": "checked",
+      "searches": [
+        {"query": "https://github.com/legacyindiesubmissions-ai/claude-fly", "url": "https://github.com/legacyindiesubmissions-ai/claude-fly", "accessed_at": "2026-09-23"},
+        {"query": "10.5281/zenodo.19152238", "url": "https://doi.org/10.5281/zenodo.19152238", "accessed_at": "2026-09-23"}
+      ],
+      "updates": {
+        "название": "Emergent Individuality in Whole-Brain Connectome Simulations of Drosophila melanogaster (claude-fly)",
+        "авторы": "Enrique Manuel Rojas Aliaga",
+        "издание": "GitHub software repository",
+        "модальность": "Connectome-derived neural activity, movement and simulated sensory input",
+        "задача": "Embodied whole-brain connectome simulation",
+        "метод": "FlyWire v783, LIF dynamics, NeuroMechFly v2 and MuJoCo",
+        "датасет": "FlyWire v783",
+        "производительность": null,
+        "кросс_субъект": "Two simulated agents are described; no biological cross-subject validation",
+        "ограничения": "Repository claims and included outputs were not independently reproduced; README DOI was not resolvable during review and clone instructions reference another repository",
+        "identifiers": {"doi": null, "pmid": null, "arxiv_id": null, "patent_id": null, "dataset_id": null, "exact_url": "https://github.com/legacyindiesubmissions-ai/claude-fly"},
+        "provenance": {"import_source": "data/staging/inbox/github-fly-resources-2026-09-23.intake.json", "retrieved_at": "2026-09-23", "search_stream": "user-supplied-github-fly-resources", "query_or_seed": "https://github.com/legacyindiesubmissions-ai/claude-fly", "iteration": "commit:3a035275148e97539711728422548bffe2a77566"},
+        "evidence": {"species": "Drosophila melanogaster", "population": "two simulated adult agents described by the repository", "subject_domain": "simulation", "modalities": ["connectome", "neural_activity", "movement_pose", "behavior", "simulation_state"], "sample_size": 2, "target_construct": "not_applicable", "target_label": null, "access_status": "open", "evidence_role": "simulation_foundation"},
+        "validation": {"split_unit": "synthetic_individual", "cross_subject": "no", "external_validation": "not_reported", "calibration": "not_reported", "uncertainty": "not_reported"},
+        "risk_flags": ["synthetic_only", "animal_to_human_transfer_unvalidated", "claim_not_supported", "future_or_recent_record_requires_recheck"]
+      },
+      "claims": [
+        {"claim": "The supplied claude-fly repository exists and describes an embodied FlyWire/NeuroMechFly simulation with two synthetic agents.", "target_variable": "not_applicable", "population_or_data": "repository-provided synthetic outputs", "evidence": "Repository README and files at commit 3a035275148e97539711728422548bffe2a77566", "limitation": "Quantitative results were not reproduced; claimed Zenodo DOI did not resolve during review; clone instructions reference another repository.", "permitted_conclusion": "Use only as a partially verified simulation candidate requiring independent reproduction."}
+      ],
+      "notes": "Repository identity and README confirmed, reversing the earlier unverifiable decision. Scientific claims remain only partially verified."
+    }
+  ]
+}

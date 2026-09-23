@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.aspa.example/research/source-record.schema.json",
+  "title": "Aspa canonical research source record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "название",
+    "авторы",
+    "год",
+    "издание",
+    "модальность",
+    "задача",
+    "метод",
+    "датасет",
+    "производительность",
+    "кросс_субъект",
+    "релевантность",
+    "ограничения",
+    "тип_источника",
+    "identifiers",
+    "provenance",
+    "evidence",
+    "validation",
+    "risk_flags"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^S[0-9]{3,}$"
+    },
+    "название": {"type": "string", "minLength": 1},
+    "авторы": {"type": ["string", "null"]},
+    "год": {"type": ["integer", "null"], "minimum": 1900, "maximum": 2100},
+    "издание": {"type": ["string", "null"]},
+    "модальность": {"type": ["string", "null"]},
+    "задача": {"type": ["string", "null"]},
+    "метод": {"type": ["string", "null"]},
+    "датасет": {"type": ["string", "null"]},
+    "производительность": {"type": ["string", "null"]},
+    "кросс_субъект": {"type": ["string", "null"]},
+    "релевантность": {"type": "integer", "minimum": 1, "maximum": 5},
+    "ограничения": {"type": ["string", "null"]},
+    "тип_источника": {"type": "string", "minLength": 1},
+    "identifiers": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["doi", "pmid", "arxiv_id", "patent_id", "dataset_id", "exact_url"],
+      "properties": {
+        "doi": {"type": ["string", "null"]},
+        "pmid": {"type": ["string", "null"]},
+        "arxiv_id": {"type": ["string", "null"]},
+        "patent_id": {"type": ["string", "null"]},
+        "dataset_id": {"type": ["string", "null"]},
+        "exact_url": {"type": ["string", "null"], "format": "uri"}
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["import_source", "retrieved_at", "search_stream", "query_or_seed", "iteration"],
+      "properties": {
+        "import_source": {"type": "string"},
+        "retrieved_at": {"type": ["string", "null"], "format": "date"},
+        "search_stream": {"type": ["string", "null"]},
+        "query_or_seed": {"type": ["string", "null"]},
+        "iteration": {"type": ["string", "integer", "null"]}
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["species", "population", "sample_size", "target_construct", "target_label", "access_status", "evidence_role"],
+      "properties": {
+        "species": {"type": ["string", "null"]},
+        "population": {"type": ["string", "null"]},
+        "sample_size": {"type": ["string", "integer", "null"]},
+        "target_construct": {"type": "string"},
+        "target_label": {"type": ["string", "null"]},
+        "access_status": {"type": "string"},
+        "evidence_role": {"type": "string"}
+      }
+    },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "screening_status", "full_text_status", "checked_at", "notes"],
+      "properties": {
+        "status": {"type": "string"},
+        "screening_status": {"type": "string"},
+        "full_text_status": {"type": "string"},
+        "checked_at": {"type": ["string", "null"], "format": "date"},
+        "notes": {"type": ["string", "null"]}
+      }
+    },
+    "risk_flags": {
+      "type": "array",
+      "items": {"type": "string"},
+      "uniqueItems": true
+    }
+  }
+}

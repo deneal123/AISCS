@@ -1,0 +1,848 @@
+{
+  "meta": {
+    "batch_id": "batch-002",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-22",
+    "scope": "relevance=5; status=unverified",
+    "status": "applied",
+    "reviewed_at": "2026-09-22",
+    "applied_at": "2026-09-22"
+  },
+  "source_ids": [
+    "S044",
+    "S057",
+    "S081",
+    "S117",
+    "S126",
+    "S145",
+    "S263",
+    "S040",
+    "S055",
+    "S120",
+    "S130",
+    "S142",
+    "S180",
+    "S079",
+    "S123",
+    "S290",
+    "S300",
+    "S324",
+    "S339"
+  ],
+  "records": [
+    {
+      "id": "S044",
+      "title": "External validation of EEG-based ML models for continuous pain prediction",
+      "year": 2026,
+      "source_type": "метод"
+    },
+    {
+      "id": "S057",
+      "title": "External validation of EEG-based ML models for continuous pain prediction",
+      "year": 2026,
+      "source_type": "метод"
+    },
+    {
+      "id": "S081",
+      "title": "External validation of EEG-based ML models for continuous pain prediction",
+      "year": 2026,
+      "source_type": "метод"
+    },
+    {
+      "id": "S117",
+      "title": "External validation of EEG-based ML models (extended)",
+      "year": 2026,
+      "source_type": "метод"
+    },
+    {
+      "id": "S126",
+      "title": "External validation of EEG ML models (final)",
+      "year": 2026,
+      "source_type": "метод"
+    },
+    {
+      "id": "S145",
+      "title": "External validation EEG ML models (final)",
+      "year": 2026,
+      "source_type": "метод"
+    },
+    {
+      "id": "S263",
+      "title": "External validation EEG ML (final)",
+      "year": 2026,
+      "source_type": "метод"
+    },
+    {
+      "id": "S040",
+      "title": "GIAFormer: Gradient-Infused Attention for Pain Assessment",
+      "year": 2026,
+      "source_type": "метод"
+    },
+    {
+      "id": "S055",
+      "title": "GIAFormer: Gradient-Infused Attention",
+      "year": 2026,
+      "source_type": "метод"
+    },
+    {
+      "id": "S120",
+      "title": "GIAFormer: Gradient-Infused Attention (extended)",
+      "year": 2026,
+      "source_type": "метод"
+    },
+    {
+      "id": "S130",
+      "title": "GIAFormer (final)",
+      "year": 2026,
+      "source_type": "метод"
+    },
+    {
+      "id": "S142",
+      "title": "GIAFormer: Gradient-Infused Attention",
+      "year": 2026,
+      "source_type": "метод"
+    },
+    {
+      "id": "S180",
+      "title": "GIAFormer (final)",
+      "year": 2026,
+      "source_type": "метод"
+    },
+    {
+      "id": "S079",
+      "title": "Control Signals in Closed-Loop SCS: A Scoping Review",
+      "year": 2026,
+      "source_type": "обзор"
+    },
+    {
+      "id": "S123",
+      "title": "Control signals in closed-loop SCS (scoping review, extended)",
+      "year": 2026,
+      "source_type": "обзор"
+    },
+    {
+      "id": "S290",
+      "title": "Closed-loop SCS control signals (Neuromodulation review)",
+      "year": 2025,
+      "source_type": "обзор"
+    },
+    {
+      "id": "S300",
+      "title": "Closed-loop SCS control signals (extended)",
+      "year": 2025,
+      "source_type": "обзор"
+    },
+    {
+      "id": "S324",
+      "title": "Closed-loop SCS control signals (final)",
+      "year": 2025,
+      "source_type": "обзор"
+    },
+    {
+      "id": "S339",
+      "title": "Closed-loop SCS control signals (final extended)",
+      "year": 2025,
+      "source_type": "обзор"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S044",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-22",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "External validation of EEG-based ML models for continuous pain prediction",
+          "url": "https://api.crossref.org/works?query.title=External+validation+of+EEG-based+ML+models+for+continuous+pain+prediction&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"External validation of EEG-based ML models for continuous pain prediction\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22External+validation+of+EEG-based+ML+models+for+continuous+pain+prediction%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "primary source",
+          "query": "External validation of EEG-based machine learning models for continuous pain prediction",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/42600964/",
+          "result": "exact source page checked"
+        }
+      ],
+      "updates": {
+        "название": "External validation of EEG-based machine learning models for continuous pain prediction",
+        "авторы": "Tyler Mari; Jessica Henderson; Syed Hasan Ali; Danielle Hewitt; Christopher Brown; Andrej Stancak; Nicholas Fallon",
+        "год": 2026,
+        "издание": "The Journal of Pain",
+        "модальность": null,
+        "задача": null,
+        "метод": null,
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "ограничения": "PubMed primary record and abstract checked; models did not beat the mean-rating dummy for continuous prediction.",
+        "identifiers": {
+          "doi": "10.1016/j.jpain.2026.106416",
+          "exact_url": "https://pubmed.ncbi.nlm.nih.gov/42600964/"
+        },
+        "provenance": {
+          "retrieved_at": "2026-09-22",
+          "search_stream": "relevance-5/registry-and-primary-review",
+          "query_or_seed": "External validation of EEG-based machine learning models for continuous pain prediction",
+          "iteration": 1
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "subject_domain": "unknown",
+          "modalities": [],
+          "sample_size": null,
+          "target_construct": "unknown",
+          "target_label": null,
+          "evidence_role": "method_baseline"
+        },
+        "validation": {
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported"
+        },
+        "risk_flags": []
+      },
+      "claims": [
+        {
+          "claim": "The bibliographic source exists under the verified identifier.",
+          "target_variable": "source identity",
+          "population_or_data": "not extracted in metadata-only decisions",
+          "evidence": "doi=10.1016/j.jpain.2026.106416; exact title=External validation of EEG-based machine learning models for continuous pain prediction",
+          "limitation": "PubMed primary record and abstract checked; models did not beat the mean-rating dummy for continuous prediction.",
+          "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+        }
+      ],
+      "notes": "PubMed primary record and abstract checked; models did not beat the mean-rating dummy for continuous prediction."
+    },
+    {
+      "source_id": "S057",
+      "decision": "alias",
+      "canonical_id": "S044",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "External validation of EEG-based ML models for continuous pain prediction",
+          "url": "https://api.crossref.org/works?query.title=External+validation+of+EEG-based+ML+models+for+continuous+pain+prediction&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"External validation of EEG-based ML models for continuous pain prediction\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22External+validation+of+EEG-based+ML+models+for+continuous+pain+prediction%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "primary source",
+          "query": "External validation of EEG-based machine learning models for continuous pain prediction",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/42600964/",
+          "result": "exact source page checked"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S081",
+      "decision": "alias",
+      "canonical_id": "S044",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "External validation of EEG-based ML models for continuous pain prediction",
+          "url": "https://api.crossref.org/works?query.title=External+validation+of+EEG-based+ML+models+for+continuous+pain+prediction&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"External validation of EEG-based ML models for continuous pain prediction\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22External+validation+of+EEG-based+ML+models+for+continuous+pain+prediction%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "primary source",
+          "query": "External validation of EEG-based machine learning models for continuous pain prediction",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/42600964/",
+          "result": "exact source page checked"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S117",
+      "decision": "alias",
+      "canonical_id": "S044",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "External validation of EEG-based ML models",
+          "url": "https://api.crossref.org/works?query.title=External+validation+of+EEG-based+ML+models&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"External validation of EEG-based ML models\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22External+validation+of+EEG-based+ML+models%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "primary source",
+          "query": "External validation of EEG-based machine learning models for continuous pain prediction",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/42600964/",
+          "result": "exact source page checked"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S126",
+      "decision": "alias",
+      "canonical_id": "S044",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "External validation of EEG ML models",
+          "url": "https://api.crossref.org/works?query.title=External+validation+of+EEG+ML+models&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"External validation of EEG ML models\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22External+validation+of+EEG+ML+models%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "primary source",
+          "query": "External validation of EEG-based machine learning models for continuous pain prediction",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/42600964/",
+          "result": "exact source page checked"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S145",
+      "decision": "alias",
+      "canonical_id": "S044",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "External validation EEG ML models",
+          "url": "https://api.crossref.org/works?query.title=External+validation+EEG+ML+models&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"External validation EEG ML models\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22External+validation+EEG+ML+models%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "primary source",
+          "query": "External validation of EEG-based machine learning models for continuous pain prediction",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/42600964/",
+          "result": "exact source page checked"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S263",
+      "decision": "alias",
+      "canonical_id": "S044",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "External validation EEG ML",
+          "url": "https://api.crossref.org/works?query.title=External+validation+EEG+ML&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"External validation EEG ML\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22External+validation+EEG+ML%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "primary source",
+          "query": "External validation of EEG-based machine learning models for continuous pain prediction",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/42600964/",
+          "result": "exact source page checked"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S040",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-22",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "GIAFormer: Gradient-Infused Attention for Pain Assessment",
+          "url": "https://api.crossref.org/works?query.title=GIAFormer%3A+Gradient-Infused+Attention+for+Pain+Assessment&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"GIAFormer: Gradient-Infused Attention for Pain Assessment\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22GIAFormer%3A+Gradient-Infused+Attention+for+Pain+Assessment%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "primary source",
+          "query": "GIAFormer: A Gradient-Infused Attention and Transformer for Pain Assessment with EDA-fNIRS Fusion",
+          "url": "https://www.sciencedirect.com/science/article/pii/S1566253526000527",
+          "result": "exact source page checked"
+        }
+      ],
+      "updates": {
+        "название": "GIAFormer: A Gradient-Infused Attention and Transformer for Pain Assessment with EDA-fNIRS Fusion",
+        "авторы": "Muhammad Umar Khan; Girija Chetty; Stefanos Gkikas; Manolis Tsiknakis; Roland Goecke; Raul Fernandez-Rojas",
+        "год": 2026,
+        "издание": "Information Fusion",
+        "модальность": null,
+        "задача": null,
+        "метод": null,
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "ограничения": "Open publisher abstract checked; 65 AI4Pain subjects and LOSO accuracy 90.51% are publisher-reported.",
+        "identifiers": {
+          "doi": "10.1016/j.inffus.2026.104173",
+          "exact_url": "https://www.sciencedirect.com/science/article/pii/S1566253526000527"
+        },
+        "provenance": {
+          "retrieved_at": "2026-09-22",
+          "search_stream": "relevance-5/registry-and-primary-review",
+          "query_or_seed": "GIAFormer: A Gradient-Infused Attention and Transformer for Pain Assessment with EDA-fNIRS Fusion",
+          "iteration": 1
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "subject_domain": "unknown",
+          "modalities": [],
+          "sample_size": null,
+          "target_construct": "unknown",
+          "target_label": null,
+          "evidence_role": "method_baseline"
+        },
+        "validation": {
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported"
+        },
+        "risk_flags": []
+      },
+      "claims": [
+        {
+          "claim": "The bibliographic source exists under the verified identifier.",
+          "target_variable": "source identity",
+          "population_or_data": "not extracted in metadata-only decisions",
+          "evidence": "doi=10.1016/j.inffus.2026.104173; exact title=GIAFormer: A Gradient-Infused Attention and Transformer for Pain Assessment with EDA-fNIRS Fusion",
+          "limitation": "Open publisher abstract checked; 65 AI4Pain subjects and LOSO accuracy 90.51% are publisher-reported.",
+          "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+        }
+      ],
+      "notes": "Open publisher abstract checked; 65 AI4Pain subjects and LOSO accuracy 90.51% are publisher-reported."
+    },
+    {
+      "source_id": "S055",
+      "decision": "alias",
+      "canonical_id": "S040",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "GIAFormer: Gradient-Infused Attention",
+          "url": "https://api.crossref.org/works?query.title=GIAFormer%3A+Gradient-Infused+Attention&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"GIAFormer: Gradient-Infused Attention\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22GIAFormer%3A+Gradient-Infused+Attention%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "primary source",
+          "query": "GIAFormer: A Gradient-Infused Attention and Transformer for Pain Assessment with EDA-fNIRS Fusion",
+          "url": "https://www.sciencedirect.com/science/article/pii/S1566253526000527",
+          "result": "exact source page checked"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S120",
+      "decision": "alias",
+      "canonical_id": "S040",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "GIAFormer: Gradient-Infused Attention",
+          "url": "https://api.crossref.org/works?query.title=GIAFormer%3A+Gradient-Infused+Attention&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"GIAFormer: Gradient-Infused Attention\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22GIAFormer%3A+Gradient-Infused+Attention%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "primary source",
+          "query": "GIAFormer: A Gradient-Infused Attention and Transformer for Pain Assessment with EDA-fNIRS Fusion",
+          "url": "https://www.sciencedirect.com/science/article/pii/S1566253526000527",
+          "result": "exact source page checked"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S130",
+      "decision": "alias",
+      "canonical_id": "S040",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "GIAFormer",
+          "url": "https://api.crossref.org/works?query.title=GIAFormer&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"GIAFormer\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22GIAFormer%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "primary source",
+          "query": "GIAFormer: A Gradient-Infused Attention and Transformer for Pain Assessment with EDA-fNIRS Fusion",
+          "url": "https://www.sciencedirect.com/science/article/pii/S1566253526000527",
+          "result": "exact source page checked"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S142",
+      "decision": "alias",
+      "canonical_id": "S040",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "GIAFormer: Gradient-Infused Attention",
+          "url": "https://api.crossref.org/works?query.title=GIAFormer%3A+Gradient-Infused+Attention&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"GIAFormer: Gradient-Infused Attention\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22GIAFormer%3A+Gradient-Infused+Attention%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "primary source",
+          "query": "GIAFormer: A Gradient-Infused Attention and Transformer for Pain Assessment with EDA-fNIRS Fusion",
+          "url": "https://www.sciencedirect.com/science/article/pii/S1566253526000527",
+          "result": "exact source page checked"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S180",
+      "decision": "alias",
+      "canonical_id": "S040",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "GIAFormer",
+          "url": "https://api.crossref.org/works?query.title=GIAFormer&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"GIAFormer\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22GIAFormer%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "primary source",
+          "query": "GIAFormer: A Gradient-Infused Attention and Transformer for Pain Assessment with EDA-fNIRS Fusion",
+          "url": "https://www.sciencedirect.com/science/article/pii/S1566253526000527",
+          "result": "exact source page checked"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S079",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-22",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Control Signals in Closed-Loop SCS: A Scoping Review",
+          "url": "https://api.crossref.org/works?query.title=Control+Signals+in+Closed-Loop+SCS%3A+A+Scoping+Review&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Control Signals in Closed-Loop SCS: A Scoping Review\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Control+Signals+in+Closed-Loop+SCS%3A+A+Scoping+Review%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "primary source",
+          "query": "Control Signals in Closed-Loop Spinal Cord Stimulation in Patients with Chronic Pain: A Scoping Review",
+          "url": "https://www.sciencedirect.com/science/article/pii/S1094715925011705",
+          "result": "exact source page checked"
+        }
+      ],
+      "updates": {
+        "название": "Control Signals in Closed-Loop Spinal Cord Stimulation in Patients with Chronic Pain: A Scoping Review",
+        "авторы": "Prateek Dullur; Meenakshi Singhal; Brian Hong; Mehreen Ali; Yuan Yang; Ravishankar Iyer; Suguna Pappu",
+        "год": 2026,
+        "издание": "Neuromodulation: Technology at the Neural Interface",
+        "модальность": null,
+        "задача": null,
+        "метод": null,
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "ограничения": "Open publisher review checked; ECAP is a control signal, not a direct measure of pain.",
+        "identifiers": {
+          "doi": "10.1016/j.neurom.2025.11.011",
+          "exact_url": "https://www.sciencedirect.com/science/article/pii/S1094715925011705"
+        },
+        "provenance": {
+          "retrieved_at": "2026-09-22",
+          "search_stream": "relevance-5/registry-and-primary-review",
+          "query_or_seed": "Control Signals in Closed-Loop Spinal Cord Stimulation in Patients with Chronic Pain: A Scoping Review",
+          "iteration": 1
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "subject_domain": "unknown",
+          "modalities": [],
+          "sample_size": null,
+          "target_construct": "unknown",
+          "target_label": null,
+          "evidence_role": "method_baseline"
+        },
+        "validation": {
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported"
+        },
+        "risk_flags": []
+      },
+      "claims": [
+        {
+          "claim": "The bibliographic source exists under the verified identifier.",
+          "target_variable": "source identity",
+          "population_or_data": "not extracted in metadata-only decisions",
+          "evidence": "doi=10.1016/j.neurom.2025.11.011; exact title=Control Signals in Closed-Loop Spinal Cord Stimulation in Patients with Chronic Pain: A Scoping Review",
+          "limitation": "Open publisher review checked; ECAP is a control signal, not a direct measure of pain.",
+          "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+        }
+      ],
+      "notes": "Open publisher review checked; ECAP is a control signal, not a direct measure of pain."
+    },
+    {
+      "source_id": "S123",
+      "decision": "alias",
+      "canonical_id": "S079",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Control signals in closed-loop SCS (scoping review, extended)",
+          "url": "https://api.crossref.org/works?query.title=Control+signals+in+closed-loop+SCS+%28scoping+review%2C+extended%29&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Control signals in closed-loop SCS (scoping review, extended)\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Control+signals+in+closed-loop+SCS+%28scoping+review%2C+extended%29%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "primary source",
+          "query": "Control Signals in Closed-Loop Spinal Cord Stimulation in Patients with Chronic Pain: A Scoping Review",
+          "url": "https://www.sciencedirect.com/science/article/pii/S1094715925011705",
+          "result": "exact source page checked"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S290",
+      "decision": "alias",
+      "canonical_id": "S079",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Closed-loop SCS control signals (Neuromodulation review)",
+          "url": "https://api.crossref.org/works?query.title=Closed-loop+SCS+control+signals+%28Neuromodulation+review%29&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Closed-loop SCS control signals (Neuromodulation review)\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Closed-loop+SCS+control+signals+%28Neuromodulation+review%29%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "primary source",
+          "query": "Control Signals in Closed-Loop Spinal Cord Stimulation in Patients with Chronic Pain: A Scoping Review",
+          "url": "https://www.sciencedirect.com/science/article/pii/S1094715925011705",
+          "result": "exact source page checked"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S300",
+      "decision": "alias",
+      "canonical_id": "S079",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Closed-loop SCS control signals",
+          "url": "https://api.crossref.org/works?query.title=Closed-loop+SCS+control+signals&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Closed-loop SCS control signals\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Closed-loop+SCS+control+signals%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "primary source",
+          "query": "Control Signals in Closed-Loop Spinal Cord Stimulation in Patients with Chronic Pain: A Scoping Review",
+          "url": "https://www.sciencedirect.com/science/article/pii/S1094715925011705",
+          "result": "exact source page checked"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S324",
+      "decision": "alias",
+      "canonical_id": "S079",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Closed-loop SCS control signals",
+          "url": "https://api.crossref.org/works?query.title=Closed-loop+SCS+control+signals&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Closed-loop SCS control signals\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Closed-loop+SCS+control+signals%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "primary source",
+          "query": "Control Signals in Closed-Loop Spinal Cord Stimulation in Patients with Chronic Pain: A Scoping Review",
+          "url": "https://www.sciencedirect.com/science/article/pii/S1094715925011705",
+          "result": "exact source page checked"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S339",
+      "decision": "alias",
+      "canonical_id": "S079",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Closed-loop SCS control signals",
+          "url": "https://api.crossref.org/works?query.title=Closed-loop+SCS+control+signals&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Closed-loop SCS control signals\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Closed-loop+SCS+control+signals%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "primary source",
+          "query": "Control Signals in Closed-Loop Spinal Cord Stimulation in Patients with Chronic Pain: A Scoping Review",
+          "url": "https://www.sciencedirect.com/science/article/pii/S1094715925011705",
+          "result": "exact source page checked"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    }
+  ]
+}

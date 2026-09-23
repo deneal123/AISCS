@@ -1,0 +1,23 @@
+{
+  "snapshot_date": "2026-09-21",
+  "status": "immutable_raw_snapshot",
+  "purpose": "Исходное состояние research JSON до структурной очистки и валидации.",
+  "files": [
+    {
+      "name": "records.json",
+      "bytes": 241930,
+      "sha256": "F59BFADB6053478D5159CF84F9CC548BF1E1045EBAF939AC476C961EE8186870"
+    },
+    {
+      "name": "clusters.json",
+      "bytes": 52511,
+      "sha256": "DBC398E238FE85493E15FFB14267C1B802B34EF3E08F166D113EECFAEA2C5776"
+    },
+    {
+      "name": "ST.json",
+      "bytes": 39496,
+      "sha256": "F6F93F3988A178EBA7CD242ED1A590FB80AFF9153B1C4F8745174B1A2DDC16DD"
+    }
+  ],
+  "mutation_policy": "Не редактировать. Все исправления выполнять в рабочих JSON уровня research."
+}

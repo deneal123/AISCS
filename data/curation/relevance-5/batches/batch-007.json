@@ -1,0 +1,957 @@
+{
+  "meta": {
+    "batch_id": "batch-007",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-22",
+    "scope": "relevance=5; status=unverified",
+    "status": "applied",
+    "reviewed_at": "2026-09-22",
+    "applied_at": "2026-09-22"
+  },
+  "source_ids": [
+    "S037",
+    "S054",
+    "S141",
+    "S205",
+    "S072",
+    "S114",
+    "S174",
+    "S011",
+    "S069",
+    "S171",
+    "S015",
+    "S148",
+    "S194",
+    "S164",
+    "S195",
+    "S005",
+    "S101"
+  ],
+  "records": [
+    {
+      "id": "S037",
+      "title": "CrossMod-Transformer for multi-modal pain detection",
+      "year": 2025,
+      "source_type": "метод"
+    },
+    {
+      "id": "S054",
+      "title": "CrossMod-Transformer for multi-modal pain detection",
+      "year": 2025,
+      "source_type": "метод"
+    },
+    {
+      "id": "S141",
+      "title": "CrossMod-Transformer for EDA + ECG fusion",
+      "year": 2025,
+      "source_type": "метод"
+    },
+    {
+      "id": "S205",
+      "title": "CrossMod-Transformer (final)",
+      "year": 2025,
+      "source_type": "метод"
+    },
+    {
+      "id": "S072",
+      "title": "AI-based bi-modal fusion system for automated clinical pain monitoring",
+      "year": 2025,
+      "source_type": "метод"
+    },
+    {
+      "id": "S114",
+      "title": "AI-based bi-modal fusion system for pain monitoring",
+      "year": 2025,
+      "source_type": "метод"
+    },
+    {
+      "id": "S174",
+      "title": "AI-based bi-modal fusion system (extended)",
+      "year": 2025,
+      "source_type": "метод"
+    },
+    {
+      "id": "S011",
+      "title": "Детекция боли на основе данных со стимулятора спинного мозга",
+      "year": 2024,
+      "source_type": "метод"
+    },
+    {
+      "id": "S069",
+      "title": "Neural encoding of pain is robust within but unstable between individuals",
+      "year": 2024,
+      "source_type": "кросс_субъект"
+    },
+    {
+      "id": "S171",
+      "title": "Neural encoding of pain is robust within but unstable between individuals (extended)",
+      "year": 2024,
+      "source_type": "кросс_субъект"
+    },
+    {
+      "id": "S015",
+      "title": "Real-Time Pain Assessment from Electrodermal Activity Using Deep Learning",
+      "year": 2026,
+      "source_type": "носимые_реальное_время"
+    },
+    {
+      "id": "S148",
+      "title": "Rethinking Pain Assessment: Multimodal Integration",
+      "year": 2026,
+      "source_type": "обзор"
+    },
+    {
+      "id": "S194",
+      "title": "Rethinking Pain Assessment: Subjective Scales, Biomarkers, Multimodal",
+      "year": 2026,
+      "source_type": "обзор"
+    },
+    {
+      "id": "S164",
+      "title": "Transformer and Attention-Based Models for Pain Assessment",
+      "year": 2026,
+      "source_type": "обзор"
+    },
+    {
+      "id": "S195",
+      "title": "Current state of AI in pain diagnosis and treatment",
+      "year": 2026,
+      "source_type": "обзор"
+    },
+    {
+      "id": "S005",
+      "title": "A Systematic Review of Multimodal Signal Fusion for Acute Pain Assessment Systems",
+      "year": 2025,
+      "source_type": "обзор"
+    },
+    {
+      "id": "S101",
+      "title": "Systemic review of multimodal signal fusion for acute pain",
+      "year": 2025,
+      "source_type": "обзор"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S037",
+      "decision": "verified_metadata",
+      "checked_at": "2026-09-22",
+      "full_text_status": "metadata_only",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "CrossMod-Transformer for multi-modal pain detection",
+          "url": "https://api.crossref.org/works?query.title=CrossMod-Transformer+for+multi-modal+pain+detection&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"CrossMod-Transformer for multi-modal pain detection\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22CrossMod-Transformer+for+multi-modal+pain+detection%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "updates": {
+        "название": "A CrossMod-Transformer deep learning framework for multi-modal pain detection through EDA and ECG fusion",
+        "авторы": "Jaleh Farmani; Ghazal Bargshady; Stefanos Gkikas; Manolis Tsiknakis; Raul Fernandez Rojas",
+        "год": 2025,
+        "издание": "Scientific Reports",
+        "модальность": null,
+        "задача": null,
+        "метод": null,
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "ограничения": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+        "identifiers": {
+          "doi": "10.1038/s41598-025-14238-y",
+          "exact_url": "https://doi.org/10.1038/s41598-025-14238-y"
+        },
+        "provenance": {
+          "retrieved_at": "2026-09-22",
+          "search_stream": "relevance-5/registry-and-primary-review",
+          "query_or_seed": "A CrossMod-Transformer deep learning framework for multi-modal pain detection through EDA and ECG fusion",
+          "iteration": 1
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "subject_domain": "unknown",
+          "modalities": [],
+          "sample_size": null,
+          "target_construct": "unknown",
+          "target_label": null,
+          "evidence_role": "context_only"
+        },
+        "validation": {
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported"
+        },
+        "risk_flags": [
+          "metadata_only"
+        ]
+      },
+      "claims": [
+        {
+          "claim": "The bibliographic source exists under the verified identifier.",
+          "target_variable": "source identity",
+          "population_or_data": "not extracted in metadata-only decisions",
+          "evidence": "doi=10.1038/s41598-025-14238-y; exact title=A CrossMod-Transformer deep learning framework for multi-modal pain detection through EDA and ECG fusion",
+          "limitation": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+          "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+        }
+      ],
+      "notes": "Bibliographic metadata confirmed; full text was not used for claim extraction."
+    },
+    {
+      "source_id": "S054",
+      "decision": "alias",
+      "canonical_id": "S037",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "CrossMod-Transformer for multi-modal pain detection",
+          "url": "https://api.crossref.org/works?query.title=CrossMod-Transformer+for+multi-modal+pain+detection&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"CrossMod-Transformer for multi-modal pain detection\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22CrossMod-Transformer+for+multi-modal+pain+detection%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S141",
+      "decision": "alias",
+      "canonical_id": "S037",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "CrossMod-Transformer for EDA + ECG fusion",
+          "url": "https://api.crossref.org/works?query.title=CrossMod-Transformer+for+EDA+%2B+ECG+fusion&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"CrossMod-Transformer for EDA + ECG fusion\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22CrossMod-Transformer+for+EDA+%2B+ECG+fusion%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S205",
+      "decision": "alias",
+      "canonical_id": "S037",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "CrossMod-Transformer",
+          "url": "https://api.crossref.org/works?query.title=CrossMod-Transformer&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"CrossMod-Transformer\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22CrossMod-Transformer%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S072",
+      "decision": "verified_metadata",
+      "checked_at": "2026-09-22",
+      "full_text_status": "metadata_only",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "AI-based bi-modal fusion system for automated clinical pain monitoring",
+          "url": "https://api.crossref.org/works?query.title=AI-based+bi-modal+fusion+system+for+automated+clinical+pain+monitoring&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"AI-based bi-modal fusion system for automated clinical pain monitoring\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22AI-based+bi-modal+fusion+system+for+automated+clinical+pain+monitoring%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "updates": {
+        "название": "AI-based bi-modal fusion system for automated clinical pain monitoring",
+        "авторы": "Huibin Wang; Sören Nienaber; Laslo Dinges; Ayoub Al-Hamadi",
+        "год": 2025,
+        "издание": "Computers in Biology and Medicine",
+        "модальность": null,
+        "задача": null,
+        "метод": null,
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "ограничения": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+        "identifiers": {
+          "doi": "10.1016/j.compbiomed.2025.111260",
+          "exact_url": "https://doi.org/10.1016/j.compbiomed.2025.111260"
+        },
+        "provenance": {
+          "retrieved_at": "2026-09-22",
+          "search_stream": "relevance-5/registry-and-primary-review",
+          "query_or_seed": "AI-based bi-modal fusion system for automated clinical pain monitoring",
+          "iteration": 1
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "subject_domain": "unknown",
+          "modalities": [],
+          "sample_size": null,
+          "target_construct": "unknown",
+          "target_label": null,
+          "evidence_role": "context_only"
+        },
+        "validation": {
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported"
+        },
+        "risk_flags": [
+          "metadata_only"
+        ]
+      },
+      "claims": [
+        {
+          "claim": "The bibliographic source exists under the verified identifier.",
+          "target_variable": "source identity",
+          "population_or_data": "not extracted in metadata-only decisions",
+          "evidence": "doi=10.1016/j.compbiomed.2025.111260; exact title=AI-based bi-modal fusion system for automated clinical pain monitoring",
+          "limitation": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+          "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+        }
+      ],
+      "notes": "Bibliographic metadata confirmed; full text was not used for claim extraction."
+    },
+    {
+      "source_id": "S114",
+      "decision": "alias",
+      "canonical_id": "S072",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "AI-based bi-modal fusion system for pain monitoring",
+          "url": "https://api.crossref.org/works?query.title=AI-based+bi-modal+fusion+system+for+pain+monitoring&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"AI-based bi-modal fusion system for pain monitoring\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22AI-based+bi-modal+fusion+system+for+pain+monitoring%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S174",
+      "decision": "alias",
+      "canonical_id": "S072",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "AI-based bi-modal fusion system",
+          "url": "https://api.crossref.org/works?query.title=AI-based+bi-modal+fusion+system&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"AI-based bi-modal fusion system\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22AI-based+bi-modal+fusion+system%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S011",
+      "decision": "rejected",
+      "checked_at": "2026-09-22",
+      "exclusion_reason": "unverifiable",
+      "clear_fields": [
+        "авторы",
+        "издание",
+        "модальность",
+        "задача",
+        "метод",
+        "датасет",
+        "производительность",
+        "кросс_субъект"
+      ],
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Детекция боли на основе данных со стимулятора спинного мозга",
+          "url": "https://api.crossref.org/works?query.title=%D0%94%D0%B5%D1%82%D0%B5%D0%BA%D1%86%D0%B8%D1%8F+%D0%B1%D0%BE%D0%BB%D0%B8+%D0%BD%D0%B0+%D0%BE%D1%81%D0%BD%D0%BE%D0%B2%D0%B5+%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85+%D1%81%D0%BE+%D1%81%D1%82%D0%B8%D0%BC%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0+%D1%81%D0%BF%D0%B8%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE+%D0%BC%D0%BE%D0%B7%D0%B3%D0%B0&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Детекция боли на основе данных со стимулятора спинного мозга\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22%D0%94%D0%B5%D1%82%D0%B5%D0%BA%D1%86%D0%B8%D1%8F+%D0%B1%D0%BE%D0%BB%D0%B8+%D0%BD%D0%B0+%D0%BE%D1%81%D0%BD%D0%BE%D0%B2%D0%B5+%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85+%D1%81%D0%BE+%D1%81%D1%82%D0%B8%D0%BC%D1%83%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B0+%D1%81%D0%BF%D0%B8%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE+%D0%BC%D0%BE%D0%B7%D0%B3%D0%B0%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [
+        {
+          "claim": "Imported source claim is traceable to a primary record.",
+          "target_variable": "source identity",
+          "population_or_data": "not established",
+          "evidence": "No unique matching primary record was established.",
+          "limitation": "No matching pain/SCS source was found; the exact-title Crossref hit was an unrelated crystal-growth article.",
+          "permitted_conclusion": "Do not cite as evidence."
+        }
+      ],
+      "notes": "No matching pain/SCS source was found; the exact-title Crossref hit was an unrelated crystal-growth article."
+    },
+    {
+      "source_id": "S069",
+      "decision": "verified_metadata",
+      "checked_at": "2026-09-22",
+      "full_text_status": "metadata_only",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Neural encoding of pain is robust within but unstable between individuals",
+          "url": "https://api.crossref.org/works?query.title=Neural+encoding+of+pain+is+robust+within+but+unstable+between+individuals&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Neural encoding of pain is robust within but unstable between individuals\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Neural+encoding+of+pain+is+robust+within+but+unstable+between+individuals%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "updates": {
+        "название": "Neural encoding of pain is robust within but unstable between individuals",
+        "авторы": "Laura Tiemann; Felix S. Bott; Elisabeth S. May; Moritz M. Nickel; Vanessa D. Hohn; Cristina Gil Ávila; Nicolò Bruna; Paul Theo Zebhauser; Markus Ploner",
+        "год": 2026,
+        "издание": "PLOS Biology",
+        "модальность": null,
+        "задача": null,
+        "метод": null,
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "ограничения": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+        "identifiers": {
+          "doi": "10.1371/journal.pbio.3003948",
+          "exact_url": "https://doi.org/10.1371/journal.pbio.3003948"
+        },
+        "provenance": {
+          "retrieved_at": "2026-09-22",
+          "search_stream": "relevance-5/registry-and-primary-review",
+          "query_or_seed": "Neural encoding of pain is robust within but unstable between individuals",
+          "iteration": 1
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "subject_domain": "unknown",
+          "modalities": [],
+          "sample_size": null,
+          "target_construct": "unknown",
+          "target_label": null,
+          "evidence_role": "context_only"
+        },
+        "validation": {
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported"
+        },
+        "risk_flags": [
+          "metadata_only"
+        ]
+      },
+      "claims": [
+        {
+          "claim": "The bibliographic source exists under the verified identifier.",
+          "target_variable": "source identity",
+          "population_or_data": "not extracted in metadata-only decisions",
+          "evidence": "doi=10.1371/journal.pbio.3003948; exact title=Neural encoding of pain is robust within but unstable between individuals",
+          "limitation": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+          "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+        }
+      ],
+      "notes": "Bibliographic metadata confirmed; full text was not used for claim extraction."
+    },
+    {
+      "source_id": "S171",
+      "decision": "alias",
+      "canonical_id": "S069",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Neural encoding of pain is robust within but unstable between individuals",
+          "url": "https://api.crossref.org/works?query.title=Neural+encoding+of+pain+is+robust+within+but+unstable+between+individuals&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Neural encoding of pain is robust within but unstable between individuals\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Neural+encoding+of+pain+is+robust+within+but+unstable+between+individuals%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S015",
+      "decision": "verified_metadata",
+      "checked_at": "2026-09-22",
+      "full_text_status": "metadata_only",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Real-Time Pain Assessment from Electrodermal Activity Using Deep Learning",
+          "url": "https://api.crossref.org/works?query.title=Real-Time+Pain+Assessment+from+Electrodermal+Activity+Using+Deep+Learning&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Real-Time Pain Assessment from Electrodermal Activity Using Deep Learning\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Real-Time+Pain+Assessment+from+Electrodermal+Activity+Using+Deep+Learning%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "updates": {
+        "название": "Real-Time Pain Assessment from Electrodermal Activity Using Deep Learning",
+        "авторы": "Calvin Joseph; Maryam Ghahramani; Raul Fernandez Rojas",
+        "год": 2026,
+        "издание": "Sensors",
+        "модальность": null,
+        "задача": null,
+        "метод": null,
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "ограничения": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+        "identifiers": {
+          "doi": "10.3390/s26103020",
+          "exact_url": "https://doi.org/10.3390/s26103020"
+        },
+        "provenance": {
+          "retrieved_at": "2026-09-22",
+          "search_stream": "relevance-5/registry-and-primary-review",
+          "query_or_seed": "Real-Time Pain Assessment from Electrodermal Activity Using Deep Learning",
+          "iteration": 1
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "subject_domain": "unknown",
+          "modalities": [],
+          "sample_size": null,
+          "target_construct": "unknown",
+          "target_label": null,
+          "evidence_role": "context_only"
+        },
+        "validation": {
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported"
+        },
+        "risk_flags": [
+          "metadata_only"
+        ]
+      },
+      "claims": [
+        {
+          "claim": "The bibliographic source exists under the verified identifier.",
+          "target_variable": "source identity",
+          "population_or_data": "not extracted in metadata-only decisions",
+          "evidence": "doi=10.3390/s26103020; exact title=Real-Time Pain Assessment from Electrodermal Activity Using Deep Learning",
+          "limitation": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+          "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+        }
+      ],
+      "notes": "Bibliographic metadata confirmed; full text was not used for claim extraction."
+    },
+    {
+      "source_id": "S148",
+      "decision": "verified_metadata",
+      "checked_at": "2026-09-22",
+      "full_text_status": "metadata_only",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Rethinking Pain Assessment: Multimodal Integration",
+          "url": "https://api.crossref.org/works?query.title=Rethinking+Pain+Assessment%3A+Multimodal+Integration&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Rethinking Pain Assessment: Multimodal Integration\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Rethinking+Pain+Assessment%3A+Multimodal+Integration%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "updates": {
+        "название": "Rethinking Pain Assessment: Subjective Scales, Biomarkers, and Multimodal Integration",
+        "авторы": "Aifeng Liu; Longyao Zhang; Enyan Xue; Chao Zhang; Tianci Guo; Jida Wang; Dong Ming",
+        "год": 2026,
+        "издание": "Journal of Pain Research",
+        "модальность": null,
+        "задача": null,
+        "метод": null,
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "ограничения": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+        "identifiers": {
+          "doi": "10.2147/JPR.S617733",
+          "exact_url": "https://doi.org/10.2147/jpr.s617733"
+        },
+        "provenance": {
+          "retrieved_at": "2026-09-22",
+          "search_stream": "relevance-5/registry-and-primary-review",
+          "query_or_seed": "Rethinking Pain Assessment: Subjective Scales, Biomarkers, and Multimodal Integration",
+          "iteration": 1
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "subject_domain": "unknown",
+          "modalities": [],
+          "sample_size": null,
+          "target_construct": "unknown",
+          "target_label": null,
+          "evidence_role": "context_only"
+        },
+        "validation": {
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported"
+        },
+        "risk_flags": [
+          "metadata_only"
+        ]
+      },
+      "claims": [
+        {
+          "claim": "The bibliographic source exists under the verified identifier.",
+          "target_variable": "source identity",
+          "population_or_data": "not extracted in metadata-only decisions",
+          "evidence": "doi=10.2147/JPR.S617733; exact title=Rethinking Pain Assessment: Subjective Scales, Biomarkers, and Multimodal Integration",
+          "limitation": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+          "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+        }
+      ],
+      "notes": "Bibliographic metadata confirmed; full text was not used for claim extraction."
+    },
+    {
+      "source_id": "S194",
+      "decision": "alias",
+      "canonical_id": "S148",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Rethinking Pain Assessment: Subjective Scales, Biomarkers, Multimodal",
+          "url": "https://api.crossref.org/works?query.title=Rethinking+Pain+Assessment%3A+Subjective+Scales%2C+Biomarkers%2C+Multimodal&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Rethinking Pain Assessment: Subjective Scales, Biomarkers, Multimodal\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Rethinking+Pain+Assessment%3A+Subjective+Scales%2C+Biomarkers%2C+Multimodal%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S164",
+      "decision": "verified_metadata",
+      "checked_at": "2026-09-22",
+      "full_text_status": "metadata_only",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Transformer and Attention-Based Models for Pain Assessment",
+          "url": "https://api.crossref.org/works?query.title=Transformer+and+Attention-Based+Models+for+Pain+Assessment&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Transformer and Attention-Based Models for Pain Assessment\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Transformer+and+Attention-Based+Models+for+Pain+Assessment%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "updates": {
+        "название": "Transformer and Attention-Based Models for Automated Pain Assessment: A Systematic Review",
+        "авторы": "Sabrina Al Bukhari; Mehaboobathunnisa S. Hameed; Bart Michiels; Muhammad Kumail; Jinane Mounsef; Lars Arendt-Nielsen; Yacine Hadjiat",
+        "год": 2026,
+        "издание": "IEEE Access",
+        "модальность": null,
+        "задача": null,
+        "метод": null,
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "ограничения": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+        "identifiers": {
+          "doi": "10.1109/ACCESS.2026.3713429",
+          "exact_url": "https://doi.org/10.1109/access.2026.3713429"
+        },
+        "provenance": {
+          "retrieved_at": "2026-09-22",
+          "search_stream": "relevance-5/registry-and-primary-review",
+          "query_or_seed": "Transformer and Attention-Based Models for Automated Pain Assessment: A Systematic Review",
+          "iteration": 1
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "subject_domain": "unknown",
+          "modalities": [],
+          "sample_size": null,
+          "target_construct": "unknown",
+          "target_label": null,
+          "evidence_role": "context_only"
+        },
+        "validation": {
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported"
+        },
+        "risk_flags": [
+          "metadata_only"
+        ]
+      },
+      "claims": [
+        {
+          "claim": "The bibliographic source exists under the verified identifier.",
+          "target_variable": "source identity",
+          "population_or_data": "not extracted in metadata-only decisions",
+          "evidence": "doi=10.1109/ACCESS.2026.3713429; exact title=Transformer and Attention-Based Models for Automated Pain Assessment: A Systematic Review",
+          "limitation": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+          "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+        }
+      ],
+      "notes": "Bibliographic metadata confirmed; full text was not used for claim extraction."
+    },
+    {
+      "source_id": "S195",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-22",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Current state of AI in pain diagnosis and treatment",
+          "url": "https://api.crossref.org/works?query.title=Current+state+of+AI+in+pain+diagnosis+and+treatment&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Current state of AI in pain diagnosis and treatment\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Current+state+of+AI+in+pain+diagnosis+and+treatment%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "primary source",
+          "query": "Current state of research and future developments of artificial intelligence in pain diagnosis and treatment",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/42732075/",
+          "result": "exact source page checked"
+        }
+      ],
+      "updates": {
+        "название": "Current state of research and future developments of artificial intelligence in pain diagnosis and treatment",
+        "авторы": null,
+        "год": null,
+        "издание": null,
+        "модальность": null,
+        "задача": null,
+        "метод": null,
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "ограничения": "PubMed primary record and abstract checked; this is a review, not empirical validation.",
+        "identifiers": {
+          "doi": "10.1186/s12967-026-08529-9",
+          "exact_url": "https://pubmed.ncbi.nlm.nih.gov/42732075/"
+        },
+        "provenance": {
+          "retrieved_at": "2026-09-22",
+          "search_stream": "relevance-5/registry-and-primary-review",
+          "query_or_seed": "Current state of research and future developments of artificial intelligence in pain diagnosis and treatment",
+          "iteration": 1
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "subject_domain": "unknown",
+          "modalities": [],
+          "sample_size": null,
+          "target_construct": "unknown",
+          "target_label": null,
+          "evidence_role": "method_baseline"
+        },
+        "validation": {
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported"
+        },
+        "risk_flags": []
+      },
+      "claims": [
+        {
+          "claim": "The bibliographic source exists under the verified identifier.",
+          "target_variable": "source identity",
+          "population_or_data": "not extracted in metadata-only decisions",
+          "evidence": "doi=10.1186/s12967-026-08529-9; exact title=Current state of research and future developments of artificial intelligence in pain diagnosis and treatment",
+          "limitation": "PubMed primary record and abstract checked; this is a review, not empirical validation.",
+          "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+        }
+      ],
+      "notes": "PubMed primary record and abstract checked; this is a review, not empirical validation."
+    },
+    {
+      "source_id": "S005",
+      "decision": "verified_metadata",
+      "checked_at": "2026-09-22",
+      "full_text_status": "metadata_only",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "A Systematic Review of Multimodal Signal Fusion for Acute Pain Assessment Systems",
+          "url": "https://api.crossref.org/works?query.title=A+Systematic+Review+of+Multimodal+Signal+Fusion+for+Acute+Pain+Assessment+Systems&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"A Systematic Review of Multimodal Signal Fusion for Acute Pain Assessment Systems\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22A+Systematic+Review+of+Multimodal+Signal+Fusion+for+Acute+Pain+Assessment+Systems%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "updates": {
+        "название": "A Systematic Review of Multimodal Signal Fusion for Acute Pain Assessment Systems",
+        "авторы": "Muhammad Umar Khan; Girija Chetty; Roland Goecke; Raul Fernandez-Rojas",
+        "год": 2026,
+        "издание": "ACM Computing Surveys",
+        "модальность": null,
+        "задача": null,
+        "метод": null,
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "ограничения": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+        "identifiers": {
+          "doi": "10.1145/3737281",
+          "exact_url": "https://doi.org/10.1145/3737281"
+        },
+        "provenance": {
+          "retrieved_at": "2026-09-22",
+          "search_stream": "relevance-5/registry-and-primary-review",
+          "query_or_seed": "A Systematic Review of Multimodal Signal Fusion for Acute Pain Assessment Systems",
+          "iteration": 1
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "subject_domain": "unknown",
+          "modalities": [],
+          "sample_size": null,
+          "target_construct": "unknown",
+          "target_label": null,
+          "evidence_role": "context_only"
+        },
+        "validation": {
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported"
+        },
+        "risk_flags": [
+          "metadata_only"
+        ]
+      },
+      "claims": [
+        {
+          "claim": "The bibliographic source exists under the verified identifier.",
+          "target_variable": "source identity",
+          "population_or_data": "not extracted in metadata-only decisions",
+          "evidence": "doi=10.1145/3737281; exact title=A Systematic Review of Multimodal Signal Fusion for Acute Pain Assessment Systems",
+          "limitation": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+          "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+        }
+      ],
+      "notes": "Bibliographic metadata confirmed; full text was not used for claim extraction."
+    },
+    {
+      "source_id": "S101",
+      "decision": "alias",
+      "canonical_id": "S005",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Systemic review of multimodal signal fusion for acute pain",
+          "url": "https://api.crossref.org/works?query.title=Systemic+review+of+multimodal+signal+fusion+for+acute+pain&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Systemic review of multimodal signal fusion for acute pain\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Systemic+review+of+multimodal+signal+fusion+for+acute+pain%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    }
+  ]
+}

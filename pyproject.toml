@@ -1,0 +1,65 @@
+[project]
+name = "aspa-research-sidecar"
+version = "1.2.1"
+description = "Validated dissertation evidence registry with read-only HTTP and local MCP access"
+readme = "README.md"
+requires-python = ">=3.12,<3.14"
+dependencies = [
+    "fastapi==0.116.2",
+    "mcp==2.2.0",
+    "uvicorn==0.35.0",
+]
+
+[project.scripts]
+researchctl = "service.cli:main"
+research-mcp = "service.mcp_server:main"
+research-sidecar = "service.app:main"
+
+[project.optional-dependencies]
+dev = [
+    "httpx>=0.27,<1",
+    "pytest>=8,<9",
+    "ruff>=0.6,<1",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["service"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["E501"]
+"migrations/rebuild_2026_09_21.py" = ["E501"]
+"scripts/discover_relevance5.py" = ["E501"]
+"scripts/populate_batch_001.py" = ["E501"]
+"scripts/populate_remaining_batches.py" = ["E501"]
+"scripts/populate_st_batch_001.py" = ["E501"]
+"scripts/populate_st_batch_002.py" = ["E501"]
+"scripts/populate_st_batch_003.py" = ["E501"]
+"scripts/populate_st_batch_004.py" = ["E501"]
+"scripts/populate_st_batch_005.py" = ["E501"]
+"scripts/populate_st_batch_006.py" = ["E501"]
+"scripts/populate_st_batch_007.py" = ["E501"]
+"scripts/populate_r4_batch_001.py" = ["E501"]
+"scripts/populate_r4_batch_002.py" = ["E501"]
+"scripts/populate_r4_correction_001.py" = ["E501"]
+"scripts/populate_r4_batch_003.py" = ["E501"]
+"scripts/populate_r4_batch_004.py" = ["E501"]
+  "scripts/populate_r4_batch_005.py" = ["E501"]
+  "scripts/populate_r4_batch_006.py" = ["E501"]
+  "scripts/populate_r4_batch_007.py" = ["E501"]
+  "scripts/populate_r3_batch_001.py" = ["E501"]
+  "scripts/populate_r3_batch_002.py" = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"

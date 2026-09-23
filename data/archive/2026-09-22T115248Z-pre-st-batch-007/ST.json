@@ -1,0 +1,2239 @@
+{
+  "meta": {
+    "название": "Системные требования и источники для диссертации",
+    "тема": "Синтетическое мультимодальное предобучение на коннектомной модели Drosophila для проверки переноса на межсубъектную оценку болевого состояния и условного прогноза ответа на SCS",
+    "версия": "1.2.0",
+    "дата": "2026-09-19",
+    "язык": "ru",
+    "всего_категорий": 9,
+    "всего_ресурсов": 104,
+    "исходная_тема": "Биологически обоснованная генерация синтетических ECAP-сигналов на основе коннектома Drosophila для кросс-субъектной детекции боли при SCS",
+    "дата_валидации": "2026-09-22",
+    "статус_валидации": "частично проверено; непроверенные ресурсы не являются доказательной базой",
+    "проверено_по_первичному_источнику": 67,
+    "требуют_точной_ссылки": 0,
+    "не_подтверждено": 9,
+    "resource_schema_version": "1.2.0",
+    "resource_id_policy": "stable STNNN in document order",
+    "статусы_ресурсов": {
+      "partially_verified": 18,
+      "rejected": 10,
+      "unverified": 9,
+      "verified_primary": 67
+    },
+    "незавершенных_ресурсов": 9
+  },
+  "categories": [
+    {
+      "id": "C1",
+      "название": "Коннектом Drosophila и симуляция мозга",
+      "подкатегории": [
+        {
+          "id": "C1.1",
+          "название": "Данные коннектома",
+          "ресурсы": [
+            {
+              "название": "FlyWire Codex (API для скачивания)",
+              "ссылка": "https://codex.flywire.ai/api/download?data_version=783",
+              "назначение": "Основной источник коннектома взрослой мухи (v783: 139 255 нейронов, ~50M синапсов)",
+              "задачи": [
+                "Задача 1"
+              ],
+              "исходная_ссылка": "https://codex.flywire.ai/api/download",
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-21",
+              "примечание_валидации": "FAFB v783: мозг взрослой самки; 139255 нейронов. Для CNS/VNC использовать отдельные наборы.",
+              "resource_id": "ST001",
+              "проверенные_утверждения": [],
+              "ограничения_валидации": []
+            },
+            {
+              "название": "FlyConnectome (Seung Lab)",
+              "ссылка": "https://github.com/seung-lab/FlyConnectome",
+              "назначение": "Tutorials for programmatic FlyWire access through CAVE, meshes and Codex exports.",
+              "задачи": [
+                "Задача 1"
+              ],
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Repository content checked; simulation capability is not claimed.",
+              "resource_id": "ST002",
+              "проверенные_утверждения": [
+                "Repository contains CAVE and mesh-access notebooks for FlyWire.",
+                "README identifies Codex as the bulk-download source."
+              ],
+              "ограничения_валидации": [
+                "Data-access tutorials only; this is not a neural or embodied simulator."
+              ]
+            },
+            {
+              "название": "murthylab/flywire-network-analysis",
+              "ссылка": "https://github.com/murthylab/flywire-network-analysis",
+              "назначение": "Network-analysis scripts and derived products for the FlyWire v630 snapshot.",
+              "задачи": [
+                "Задача 1"
+              ],
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Retained as analysis prior art; version mismatch must be explicit.",
+              "resource_id": "ST003",
+              "проверенные_утверждения": [
+                "Repository contains scripts for network analyses of the FlyWire connectome.",
+                "README links the associated network and data preprints."
+              ],
+              "ограничения_валидации": [
+                "The published scripts describe the v630 snapshot, not current v783 data."
+              ]
+            },
+            {
+              "название": "connectome_data_prep",
+              "ссылка": "https://github.com/YijieYin/connectome_data_prep",
+              "назначение": "Research repository with preparation notebooks for FAFB, MaleCNS and related connectome data.",
+              "задачи": [
+                "Задача 1"
+              ],
+              "статус_валидации": "partially_verified",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Specific v783 convenience-interface claim was removed as unconfirmed.",
+              "resource_id": "ST004",
+              "проверенные_утверждения": [
+                "Repository exists and contains FAFB, maleCNS and other preparation workflows."
+              ],
+              "ограничения_валидации": [
+                "The repository landing page does not confirm the imported claim about a tinyurl v783 interface.",
+                "Individual notebooks and their data-version assumptions still require execution-level review."
+              ]
+            },
+            {
+              "название": "FlyWire v783 (browsable)",
+              "ссылка": "https://codex.flywire.ai/?dataset=fafb",
+              "назначение": "Веб-интерфейс для детального изучения коннектома",
+              "задачи": [
+                "Задача 1"
+              ],
+              "исходная_ссылка": "https://tinyurl.com/flywire783",
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-21",
+              "примечание_валидации": "Интерактивный просмотр FAFB; не функциональный симулятор.",
+              "resource_id": "ST005",
+              "проверенные_утверждения": [],
+              "ограничения_валидации": []
+            }
+          ]
+        },
+        {
+          "id": "C1.2",
+          "название": "Embodied симуляция (мозг + тело)",
+          "ресурсы": [
+            {
+              "название": "NeuroMechFly v2 / FlyGym",
+              "ссылка": "https://flygym.readthedocs.io/latest/index.html",
+              "назначение": "Python-библиотека цифрового двойника мухи; симуляция сенсомоторного контроля, зрение, обоняние, ходьба",
+              "задачи": [
+                "Задача 2"
+              ],
+              "исходная_ссылка": "https://neuromechfly.org",
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-21",
+              "примечание_валидации": "Официальная документация embodied-модели; nociception/ECAP не реализованы автоматически.",
+              "resource_id": "ST006",
+              "проверенные_утверждения": [],
+              "ограничения_валидации": []
+            },
+            {
+              "название": "Eon Systems: fly-brain",
+              "ссылка": "https://github.com/eonsystemspbc/fly-brain",
+              "назначение": "FlyWire v783 LIF benchmark implementation across six simulation backends.",
+              "задачи": [
+                "Задача 2",
+                "Задача 3"
+              ],
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Suitable simulator candidate only after local reproducibility and biological-scope checks.",
+              "resource_id": "ST007",
+              "проверенные_утверждения": [
+                "Repository provides Brian2, Brian2CUDA, PyTorch, NEST GPU, GeNN and Brian2GeNN backends.",
+                "README documents FlyWire v783 input files and reproducible benchmark commands."
+              ],
+              "ограничения_валидации": [
+                "This is a connectome-constrained LIF benchmark, not an embodied nociception model.",
+                "Repository-reported benchmark results were not independently rerun in this audit."
+              ]
+            },
+            {
+              "название": "claude-fly",
+              "ссылка": "https://github.com/legacyindiesubmissions-ai/claude-fly",
+              "назначение": "Experimental repository claiming FlyWire-derived spiking activity coupled to a simulated body.",
+              "задачи": [
+                "Задача 2",
+                "Задача 3"
+              ],
+              "статус_валидации": "partially_verified",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Do not cite as a validated whole-brain emulation or nociception model.",
+              "resource_id": "ST008",
+              "проверенные_утверждения": [
+                "Repository and accompanying 2026 Zenodo preprint are linked from the README.",
+                "README describes a FlyWire-derived spiking network coupled to NeuroMechFly/MuJoCo."
+              ],
+              "ограничения_валидации": [
+                "Scientific and behavioral claims are self-reported and not independently validated here.",
+                "The README clone command points to a differently named repository.",
+                "Claims of primacy and low-cost hardware are not evidence of biological fidelity."
+              ]
+            },
+            {
+              "название": "snedea/flybrain",
+              "ссылка": "https://github.com/snedea/flybrain",
+              "назначение": "Interactive browser LIF visualization derived from a reduced FlyWire v783 graph.",
+              "задачи": [
+                "Задача 2"
+              ],
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Candidate for software comparison, not direct biological ground truth.",
+              "resource_id": "ST009",
+              "проверенные_утверждения": [
+                "README states 139,255 LIF neurons and 2.7M connections from FlyWire FAFB v783.",
+                "The implementation runs in a browser Web Worker and exposes interactive stimuli."
+              ],
+              "ограничения_валидации": [
+                "Behavior-emergence statements are repository claims, not peer-reviewed validation.",
+                "The connection reduction from the source connectome requires methodological review."
+              ]
+            },
+            {
+              "название": "philshiu/Drosophila_brain_model",
+              "ссылка": "https://github.com/philshiu/Drosophila_brain_model",
+              "назначение": "LIF-модель всего мозга Drosophila; spike times и rates всех нейронов",
+              "задачи": [
+                "Задача 1",
+                "Задача 2"
+              ],
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-21",
+              "примечание_валидации": "Открытая LIF-модель; требует отдельной проверки соответствия версии коннектома и воспроизводимости.",
+              "resource_id": "ST010",
+              "проверенные_утверждения": [],
+              "ограничения_валидации": []
+            },
+            {
+              "название": "artem-x-meta/fly-arena",
+              "ссылка": "https://github.com/artem-x-meta/fly-arena",
+              "назначение": "Experimental MaleCNS/FlyGym environment with explicit hybrid behavioral controllers.",
+              "задачи": [
+                "Задача 2",
+                "Задача 3"
+              ],
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Useful integration scaffold; engineered behavior must not be attributed to the connectome.",
+              "resource_id": "ST011",
+              "проверенные_утверждения": [
+                "Repository combines MaleCNS data, a NeuroMechFly body and explicit controllers.",
+                "README documents local preparation, checksums and diagnostic/ablation controls."
+              ],
+              "ограничения_валидации": [
+                "The authors explicitly describe it as experimental and not physiologically validated.",
+                "Several displayed behaviors are engineered controllers and can run with the connectome disabled."
+              ]
+            },
+            {
+              "название": "MakazhanAlpamys/soup-connectome",
+              "ссылка": "https://github.com/MakazhanAlpamys/soup-connectome",
+              "назначение": "Infrastructure benchmark for resident and streamed execution of a MaleCNS-derived sparse graph.",
+              "задачи": [
+                "Задача 2"
+              ],
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Retain for runtime engineering only, not as neuroscience validation.",
+              "resource_id": "ST012",
+              "проверенные_утверждения": [
+                "Repository implements resident and streamed sparse-graph runtimes for MaleCNS data.",
+                "README labels measured, estimated and not-tested evidence separately."
+              ],
+              "ограничения_валидации": [
+                "No biological calibration or scientific fidelity claim is made.",
+                "Reported timings are host-specific infrastructure measurements."
+              ]
+            },
+            {
+              "название": "chaobrain/fitting_drosophila_whole_brain",
+              "ссылка": "https://github.com/chaobrain/fitting_drosophila_whole_brain_spiking_model",
+              "назначение": "Two-stage SNN/RNN workflow for fitting region-level Drosophila neural dynamics.",
+              "задачи": [
+                "Задача 3"
+              ],
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Promising simulation candidate subject to local reproduction and task-specific validation.",
+              "resource_id": "ST013",
+              "проверенные_утверждения": [
+                "Repository implements a two-stage SNN plus RNN activity-fitting workflow.",
+                "README identifies FlyWire 630/783 and Drosophila neural recordings as inputs.",
+                "README links the associated Nature Communications article DOI 10.1038/s41467-026-68453-w."
+              ],
+              "ограничения_валидации": [
+                "The local workflow was not executed in this audit.",
+                "Activity fitting does not establish nociception, pain or embodied behavior validity."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "C1.3",
+          "название": "Ноцицептивные цепи Drosophila (референсные работы)",
+          "ресурсы": [
+            {
+              "название": "Jessica Jones: Circuit Reconstruction",
+              "ссылка": "https://jesmjones.github.io/projects/01-circuits/",
+              "назначение": "Primary project page and preprint/code links for adult Drosophila nociceptive circuit reconstruction.",
+              "задачи": [
+                "Задача 1",
+                "Задача 2"
+              ],
+              "исходная_ссылка": "https://jesmjones.github.io",
+              "статус_валидации": "partially_verified",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Use only for nociceptive pathways and defensive behavior, not subjective pain.",
+              "resource_id": "ST014",
+              "проверенные_утверждения": [
+                "Author project page describes circuit reconstruction, optogenetics and behavior analysis for adult-fly nociception.",
+                "The page links preprint DOI 10.1101/2025.10.28.684868 and its analysis-code repository."
+              ],
+              "ограничения_валидации": [
+                "The imported md-neuron to two-pathway summary was not verified from the project page alone.",
+                "The linked work is a preprint and must not be treated as settled evidence of subjective pain."
+              ]
+            },
+            {
+              "название": "Ascending nociceptive pathways (bioRxiv 2025)",
+              "ссылка": "https://pubmed.ncbi.nlm.nih.gov/41280033/",
+              "назначение": "Восходящие пути: Ipsigoro → Goro; роль KCs в escape response (S029, S091)",
+              "задачи": [
+                "Задача 1",
+                "Задача 2"
+              ],
+              "исходная_ссылка": "https://www.biorxiv.org",
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-21",
+              "примечание_валидации": "Препринт; DOI 10.1101/2025.10.28.684868. Не считать рецензированной журнальной статьей.",
+              "resource_id": "ST015",
+              "проверенные_утверждения": [],
+              "ограничения_валидации": []
+            },
+            {
+              "название": "MaleCNS connectome (Janelia)",
+              "ссылка": "https://male-cns.janelia.org/download/",
+              "назначение": "Official MaleCNS v1.0 download and programmatic-access page for the complete male CNS connectome.",
+              "задачи": [
+                "Задача 1",
+                "Задача 2"
+              ],
+              "исходная_ссылка": "https://www.janelia.org",
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Use explicit release, filtering and count definitions in every derived dataset.",
+              "resource_id": "ST016",
+              "проверенные_утверждения": [
+                "Official project provides MaleCNS v1.0 annotations, connectivity, skeletons and neuPrint access.",
+                "Official project reports 166,700 neurons across brain and ventral nerve cord.",
+                "Dataset is licensed CC BY."
+              ],
+              "ограничения_валидации": [
+                "MaleCNS and female FAFB/FlyWire are different specimens and scopes.",
+                "The original 25.5M-connections wording was removed because the official download exposes multiple count definitions."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "C2",
+      "название": "Нейроморфные вычисления и SNN",
+      "подкатегории": [
+        {
+          "id": "C2.1",
+          "название": "Симуляторы SNN",
+          "ресурсы": [
+            {
+              "название": "Brian 2",
+              "ссылка": "https://github.com/brian-team/brian2",
+              "назначение": "General-purpose, equation-oriented SNN simulator and candidate reference CPU backend.",
+              "задачи": [
+                "Задача 5"
+              ],
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Software identity and maintained primary repository confirmed.",
+              "resource_id": "ST017",
+              "проверенные_утверждения": [
+                "Brian2 is a free, open-source, clock-driven Python simulator for spiking neural networks.",
+                "It supports code generation, examples, tutorials and extensible neuron/synapse equations."
+              ],
+              "ограничения_валидации": [
+                "A general simulator does not provide a FlyWire, nociception or ECAP model by itself.",
+                "Project compatibility must be tested against the selected Python and accelerator stack."
+              ]
+            },
+            {
+              "название": "Brian2GeNN",
+              "ссылка": "https://github.com/brian-team/brian2genn",
+              "назначение": "Beta Brian2-to-GeNN backend for accelerator execution of supported SNN simulations.",
+              "задачи": [
+                "Задача 5"
+              ],
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Benchmark claims must be reproduced on the chosen whole-brain workload.",
+              "resource_id": "ST018",
+              "проверенные_утверждения": [
+                "Brian2GeNN is a Brian2 backend interface for running supported models through GeNN on NVIDIA GPUs."
+              ],
+              "ограничения_валидации": [
+                "The maintainers label the software beta.",
+                "The imported 10-100x speedup is not a universal guarantee and was removed; performance depends on model and hardware.",
+                "The current GeNN project also supports AMD HIP, but Brian2GeNN's documented path is NVIDIA-focused."
+              ]
+            },
+            {
+              "название": "GeNN",
+              "ссылка": "https://github.com/genn-team/genn",
+              "назначение": "GPU-accelerated neuronal-network simulation environment based on generated CUDA/HIP code.",
+              "задачи": [
+                "Задача 5"
+              ],
+              "исходная_ссылка": "https://genn-team.github.io",
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Exact maintained repository replaces the former documentation-domain landing page.",
+              "resource_id": "ST019",
+              "проверенные_утверждения": [
+                "GeNN is a code-generation environment for neuronal-network simulation on NVIDIA CUDA and AMD HIP accelerators."
+              ],
+              "ограничения_валидации": [
+                "It is a simulation engine, not a biological model or dataset.",
+                "Supported model features and device memory limits require workload-specific testing."
+              ]
+            },
+            {
+              "название": "NEST",
+              "ссылка": "https://github.com/nest/nest-simulator",
+              "назначение": "Scalable point-neuron/network simulator and candidate independent backend for reproducibility checks.",
+              "задачи": [
+                "Задача 5"
+              ],
+              "исходная_ссылка": "https://www.nest-simulator.org",
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Exact maintained repository and project scope confirmed.",
+              "resource_id": "ST020",
+              "проверенные_утверждения": [
+                "NEST is an open-source simulator for the dynamics, size and structure of spiking neuronal networks.",
+                "It exposes Python and standalone interfaces and scales from laptops to compute clusters."
+              ],
+              "ограничения_валидации": [
+                "NEST focuses on network dynamics rather than exact single-neuron morphology.",
+                "No FlyWire, nociception or ECAP model is supplied by the framework itself."
+              ]
+            },
+            {
+              "название": "sapicore",
+              "ссылка": "https://github.com/cplab/sapicore",
+              "назначение": "PyTorch-based neuromorphic-modeling framework for prototype comparison.",
+              "задачи": [
+                "Задача 5"
+              ],
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Retain as a candidate only after scale and reproducibility benchmarking.",
+              "resource_id": "ST021",
+              "проверенные_утверждения": [
+                "sapicore is a public PyTorch-based framework for neuromorphic modeling with documentation and tutorials."
+              ],
+              "ограничения_валидации": [
+                "Repository metadata alone does not establish biological realism or suitability for a 100k-neuron connectome.",
+                "Activity is lower than the major general-purpose simulators and local execution has not been tested."
+              ]
+            },
+            {
+              "название": "SNN Toolbox",
+              "ссылка": "https://github.com/NeuromorphicProcessorProject/snn_toolbox",
+              "назначение": "ANN-to-SNN conversion toolbox for deployment experiments, not a FlyBrain simulator.",
+              "задачи": [
+                "Задача 5"
+              ],
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Scope narrowed to the functionality stated by the repository.",
+              "resource_id": "ST022",
+              "проверенные_утверждения": [
+                "The toolbox converts analog neural networks to spiking networks and runs them in supported spiking simulators."
+              ],
+              "ограничения_валидации": [
+                "Its primary use is ANN-to-SNN conversion, not connectome-constrained biological simulation.",
+                "The repository's last source push predates this audit by several years, so current dependency compatibility requires testing."
+              ]
+            },
+            {
+              "название": "Norse",
+              "ссылка": "https://github.com/norse/norse",
+              "назначение": "Differentiable PyTorch SNN component library for trainable baseline models and representation experiments.",
+              "задачи": [
+                "Задача 5"
+              ],
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Do not infer biological fidelity from bio-inspired components.",
+              "resource_id": "ST023",
+              "проверенные_утверждения": [
+                "Norse extends PyTorch with differentiable spiking-neuron components and provides notebooks, tasks and examples."
+              ],
+              "ограничения_валидации": [
+                "The library targets trainable deep SNNs and does not supply connectome or biological-validation data.",
+                "Repository performance statements are preliminary and workload-specific."
+              ]
+            },
+            {
+              "название": "snnTorch",
+              "ссылка": "https://github.com/jeshraghian/snntorch",
+              "назначение": "PyTorch library for gradient-based SNN baselines, training and interchange experiments.",
+              "задачи": [
+                "Задача 5"
+              ],
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Relevant to model comparison, not evidence for fly-to-human transfer.",
+              "resource_id": "ST024",
+              "проверенные_утверждения": [
+                "snnTorch provides gradient-based SNN learning integrated with PyTorch/autograd, surrogate gradients and NIR import/export."
+              ],
+              "ограничения_валидации": [
+                "It is a machine-learning library, not a biophysical connectome simulator.",
+                "GPU acceleration and feasible scale inherit PyTorch and require empirical benchmarking."
+              ]
+            },
+            {
+              "название": "ModNEF",
+              "ссылка": "https://doi.org/10.1145/3730581",
+              "назначение": "Published FPGA SNN-emulator architecture whose reusable source location remains unverified.",
+              "задачи": [
+                "Задача 5"
+              ],
+              "статус_валидации": "partially_verified",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Keep as hardware prior art, not as an immediately available implementation dependency.",
+              "resource_id": "ST025",
+              "проверенные_утверждения": [
+                "The ACM article describes ModNEF as a modular open-source FPGA SNN emulator evaluated on a Xilinx Zynq device with MNIST/N-MNIST."
+              ],
+              "ограничения_валидации": [
+                "The imported GitHub organization URL returns 404 and no stable source repository was confirmed.",
+                "The paper does not establish support for whole-connectome scale, biological models or the project's target hardware."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "C2.2",
+          "название": "Нейроморфное железо",
+          "ресурсы": [
+            {
+              "название": "BrainChip Akida — MetaTF SDK",
+              "ссылка": "https://doc.brainchipinc.com/",
+              "назначение": "Proprietary-core Akida development framework with Python APIs, conversion tools and a software simulator.",
+              "задачи": [
+                "Задача 5"
+              ],
+              "исходная_ссылка": "https://doc.brainchipinc.com",
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Licensing must be reviewed before reproducible dissertation artifacts depend on it.",
+              "resource_id": "ST026",
+              "проверенные_утверждения": [
+                "MetaTF bundles Python packages for creating, converting, simulating and deploying networks on the Akida platform.",
+                "The official getting-started guide documents pip installation and a software simulator."
+              ],
+              "ограничения_валидации": [
+                "BrainChip states that examples are Apache-licensed but the underlying Akida library is proprietary under an EULA.",
+                "This is a deployment SDK and simulator, not open biological-neural simulation software."
+              ]
+            },
+            {
+              "название": "BrainChip Edge AI Box",
+              "ссылка": "https://brainchip.com/wp-content/uploads/2025/04/AKD1000-Edge-AI-Box-Product-Brochure-V.2-Mar.-25.pdf",
+              "назначение": "Commercial AKD1000 Edge AI Box for Akida edge-inference demonstrations.",
+              "задачи": [
+                "Задача 5"
+              ],
+              "исходная_ссылка": "https://shop.brainchipinc.com",
+              "статус_валидации": "partially_verified",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Hardware purchase is optional and must follow a measured software-only feasibility comparison.",
+              "resource_id": "ST027",
+              "проверенные_утверждения": [
+                "The official product brief describes an Edge AI Box with an NXP i.MX 8M Plus and two AKD1000 accelerators."
+              ],
+              "ограничения_валидации": [
+                "The checked Edge AI Box is AKD1000-based; the imported AKD1000/AKD1500 wording was not confirmed.",
+                "It is commercial deployment hardware, not required for dataset or simulator validity."
+              ]
+            },
+            {
+              "название": "BrainChip AKD1500 (open-source)",
+              "ссылка": "https://brainchip.com/press/brainchip-launches-akd1500-pcie-card-for-edge-ai-evaluation-everywhere/",
+              "назначение": "Commercial AKD1500 neuromorphic accelerator with public examples and proprietary runtime components.",
+              "задачи": [
+                "Задача 5"
+              ],
+              "исходная_ссылка": "https://www.opensourceforu.com",
+              "статус_валидации": "partially_verified",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Do not describe the chip or complete software stack as open-source.",
+              "resource_id": "ST028",
+              "проверенные_утверждения": [
+                "BrainChip markets AKD1500 silicon and PCIe/M.2 evaluation hardware and publishes example projects in DevHub.",
+                "The official material states that tools/model examples are available without subscription fees."
+              ],
+              "ограничения_валидации": [
+                "AKD1500 hardware and the underlying Akida runtime are not established as open-source; the imported label is false as written.",
+                "No Arduino Nicla driver claim was verified for AKD1500."
+              ]
+            },
+            {
+              "название": "Edge Impulse + BrainChip AKD1000",
+              "ссылка": "https://docs.edgeimpulse.com/hardware/boards/brainchip-akd1000",
+              "назначение": "Official integration documentation for deploying compatible Edge Impulse models to BrainChip AKD1000 hardware.",
+              "задачи": [
+                "Задача 5"
+              ],
+              "исходная_ссылка": "https://docs.edgeimpulse.com",
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "The exact board-specific page replaces the former documentation homepage.",
+              "resource_id": "ST029",
+              "проверенные_утверждения": [
+                "Edge Impulse documents AKD1000 deployment through BrainChip MetaTF and AKD1000 deployment blocks.",
+                "The documented workflow uses the Akida Python library, Akida PCIe drivers and Edge Impulse Linux tooling."
+              ],
+              "ограничения_валидации": [
+                "The documented AKD1000 binary workflow pins Python 3.8 and Akida 2.3.3; compatibility is version-sensitive.",
+                "This is a hardware deployment route, not evidence for biological fidelity, pain inference or clinical performance."
+              ]
+            },
+            {
+              "название": "Catalyst N1 Neuromorphic Processor",
+              "ссылка": "https://huggingface.co/Catalyst-Neuromorphic/catalyst-n1",
+              "назначение": "Candidate open neuromorphic RTL/SDK stack requiring local reproduction before use.",
+              "задачи": [
+                "Задача 5"
+              ],
+              "статус_валидации": "partially_verified",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Keep as engineering prior art, not as validated performance evidence.",
+              "resource_id": "ST030",
+              "проверенные_утверждения": [
+                "The project card describes an Apache-2.0 128-core LIF neuromorphic processor, Verilog RTL, testbenches and a Python SDK.",
+                "The SDK documentation lists CPU, PyTorch-CUDA GPU and FPGA backends under one API."
+              ],
+              "ограничения_валидации": [
+                "The imported 4-8x speedup is absent from the checked primary page and is removed as an unverified metric.",
+                "FPGA validation and benchmark statements are self-reported; no independent reproduction was located."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "C3",
+      "название": "Открытые датасеты",
+      "подкатегории": [
+        {
+          "id": "C3.1",
+          "название": "Датасеты боли (физиологические сигналы)",
+          "ресурсы": [
+            {
+              "название": "BioVid HeatPain Database",
+              "ссылка": "https://www.nit.ovgu.de/BioVid.html",
+              "данные": "ECG, sEMG, video лица (N = 90); острая тепловая боль; Part A–E",
+              "задачи": [
+                "Задача 4",
+                "Задача 5"
+              ],
+              "исходная_ссылка": "https://www.nit.ovgu.de/nit/en/BioVid-p-1358.html",
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-21",
+              "примечание_валидации": "Доступ для некоммерческих исследований по соглашению; Part A содержит 87 участников.",
+              "resource_id": "ST031",
+              "проверенные_утверждения": [],
+              "ограничения_валидации": []
+            },
+            {
+              "название": "AI4Pain Grand Challenge",
+              "ссылка": "https://sites.google.com/view/ai4pain/challenge-details",
+              "данные": "fNIRS + видео лица (65 участников); No Pain / Low Pain / High Pain; EDA, BVP, RESP, SpO2",
+              "задачи": [
+                "Задача 4",
+                "Задача 5"
+              ],
+              "исходная_ссылка": "https://sites.google.com/view/ai4pain/home",
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-21",
+              "примечание_валидации": "65 участников, fNIRS+video, фиксированные train/validation/test.",
+              "resource_id": "ST032",
+              "проверенные_утверждения": [],
+              "ограничения_валидации": []
+            },
+            {
+              "название": "PainMonit Dataset",
+              "ссылка": "https://figshare.com/articles/dataset/The_PainMonit_Database_An_Experimental_and_Clinical_Physiological_Signal_Dataset_for_Automated_Pain_Recognition/26965159",
+              "данные": "9 физиологических модальностей (BVP, 2×EDA, skin temperature, ECG, EMG, IBI, HR, respiration); 55 здоровых субъектов",
+              "задачи": [
+                "Задача 4",
+                "Задача 5"
+              ],
+              "исходная_ссылка": "https://www.mendeley.com",
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-21",
+              "примечание_валидации": "Figshare v3; PMED 55 и PMCD 49 участников; DOI 10.1038/s41597-024-03878-w.",
+              "resource_id": "ST033",
+              "проверенные_утверждения": [],
+              "ограничения_валидации": []
+            },
+            {
+              "название": "PainMotion Dataset",
+              "ссылка": "https://zenodo.org/records/17704417",
+              "данные": "sEMG + ECG + кинематика верхних конечностей; DOMS vs musculoskeletal disorders; 6h4m данных",
+              "задачи": [
+                "Задача 4"
+              ],
+              "исходная_ссылка": "https://zenodo.org",
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Version 1.0.1 and the exact Zenodo DOI were confirmed.",
+              "resource_id": "ST034",
+              "проверенные_утверждения": [
+                "Zenodo record 10.5281/zenodo.17704417 provides ECG, sEMG, upper-limb inertial data and binary self-reported pain labels.",
+                "The record describes 17 healthy participants with DOMS and 6 participants with shoulder musculoskeletal disorders."
+              ],
+              "ограничения_валидации": [
+                "Labels are binary self-reports collected during industrial tasks, not a continuous clinical pain endpoint.",
+                "Files total 12.5 GB; this audit checked metadata and file inventory, not the signal contents."
+              ],
+              "назначение": "Multimodal human musculoskeletal-pain dataset with ECG, sEMG, IMU and binary self-report labels."
+            },
+            {
+              "название": "EmoPain Database",
+              "ссылка": "https://www.ucl.ac.uk/uclic/research/affective-computing/emopain-dataset",
+              "данные": "IMU + sEMG; хроническая боль в спине; упражнения",
+              "задачи": [
+                "Задача 4",
+                "Задача 5"
+              ],
+              "исходная_ссылка": "https://www.nit.ovgu.de",
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "The former generic NIT link was replaced with the official UCL dataset page.",
+              "resource_id": "ST035",
+              "проверенные_утверждения": [
+                "The UCL page describes 18 IMUs and four sEMG sensors for 12 healthy and 18 chronic-pain participants.",
+                "Protective behaviour was independently annotated by four domain experts."
+              ],
+              "ограничения_валидации": [
+                "Access to the body-movement component requires contacting the dataset owner.",
+                "Protective behaviour is not interchangeable with pain intensity or a clinical outcome."
+              ],
+              "назначение": "Controlled-access movement, sEMG and annotation resource for chronic-pain protective behaviour research."
+            },
+            {
+              "название": "LENS Dataset",
+              "ссылка": null,
+              "данные": "sEMG + NIRS; интенсивность скелетно-мышечной боли; стандартизированный jaw-clenching task",
+              "задачи": [
+                "Задача 4"
+              ],
+              "исходная_ссылка": "https://odesi.ca",
+              "статус_валидации": "rejected",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Do not use the imported modality or task claims as facts unless a primary record is supplied.",
+              "resource_id": "ST036",
+              "проверенные_утверждения": [],
+              "ограничения_валидации": [
+                "No primary dataset matching the imported name, modalities and jaw-clenching description was found.",
+                "The supplied odesi.ca domain is a catalogue landing page and does not identify this resource."
+              ],
+              "назначение": "Rejected candidate: no stable identifier or exact primary record could be established."
+            }
+          ]
+        },
+        {
+          "id": "C3.2",
+          "название": "Датасеты ЭЭГ (хроническая боль)",
+          "ресурсы": [
+            {
+              "название": "OpenPain / OSF",
+              "ссылка": "https://osf.io/mj9xr/",
+              "данные": "ЭЭГ-BIDS; хроническая боль; open access",
+              "задачи": [
+                "Задача 4",
+                "Задача 5"
+              ],
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Verified through the OSF API because the browser landing page returns an automated-access error.",
+              "resource_id": "ST037",
+              "проверенные_утверждения": [
+                "OSF identifies the project as Effects of analgesics on EEG biomarkers of chronic pain.",
+                "The public storage contains BIDS archives and clinical spreadsheets for two cohorts."
+              ],
+              "ограничения_валидации": [
+                "The imported name OpenPain was incorrect and has been removed from the resource purpose.",
+                "The multi-gigabyte archives were not downloaded or independently checked for BIDS validity."
+              ],
+              "назначение": "Public OSF project containing BIDS EEG archives and clinical variables for analgesic effects on chronic-pain EEG biomarkers."
+            },
+            {
+              "название": "PainLabMunich",
+              "ссылка": "https://osf.io/srpbg/",
+              "данные": "Resting-state ЭЭГ; хроническая боль; PainLabMunich",
+              "задачи": [
+                "Задача 4"
+              ],
+              "статус_валидации": "partially_verified",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Corrected to the closest documented primary project; original identifier remains disproven.",
+              "resource_id": "ST038",
+              "проверенные_утверждения": [
+                "A public PainLabMunich OSF project exists for resting-state EEG from 101 chronic-pain patients and 88 matched controls."
+              ],
+              "ограничения_валидации": [
+                "The imported OSF identifier hbkmx returns 404 and could not be validated.",
+                "The replacement srpbg project is a specific PainLabMunich dataset, not a generic record for every lab dataset."
+              ],
+              "назначение": "PainLabMunich resting-state EEG dataset for chronic-pain microstate analysis, represented by the verified srpbg project."
+            },
+            {
+              "название": "Chronic neuropathic pain EEG",
+              "ссылка": "https://data.mendeley.com/datasets/yj52xrfgtz/4",
+              "данные": "36 пациентов; eyes open/closed; painDETECT + BPI",
+              "задачи": [
+                "Задача 4"
+              ],
+              "исходная_ссылка": "https://europepmc.org",
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Exact Mendeley version and data article were matched.",
+              "resource_id": "ST039",
+              "проверенные_утверждения": [
+                "Mendeley Data DOI 10.17632/yj52xrfgtz.4 contains resting-state EEG and questionnaire data from 36 chronic neuropathic-pain patients.",
+                "The protocol includes five minutes eyes open, five minutes eyes closed, painDETECT and Brief Pain Inventory reports."
+              ],
+              "ограничения_валидации": [
+                "The dataset has no healthy control group and contains heterogeneous etiologies and medication exposure.",
+                "It supports within-cohort association or stratification, not causal or population-wide pain inference."
+              ],
+              "назначение": "Resting-state EEG plus painDETECT and Brief Pain Inventory data for 36 chronic neuropathic-pain patients."
+            },
+            {
+              "название": "ValidPain2 (Nociception Level Index)",
+              "ссылка": "https://openneuro.org/datasets/ds008115",
+              "данные": "180 субъектов; ЭЭГ; 4 ch, 178 Hz, BIDS",
+              "задачи": [
+                "Задача 4"
+              ],
+              "исходная_ссылка": "https://eegdash.org",
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Nociception-monitor output and behavioural responsiveness must remain distinct from subjective pain.",
+              "resource_id": "ST040",
+              "проверенные_утверждения": [
+                "OpenNeuro identifier ds008115 resolves to the ValidPain2 EEG dataset under DOI 10.18112/openneuro.ds008115.v1.0.0.",
+                "Catalogue metadata reports 180 mechanically ventilated intensive-care patients, four EEG channels and three clinical-procedure tasks."
+              ],
+              "ограничения_валидации": [
+                "Patients were unable to self-report pain; the target concerns responsiveness to potentially nociceptive procedures, not subjective pain intensity.",
+                "Signal files were not downloaded or independently quality-controlled in this audit."
+              ],
+              "назначение": "Frontal EEG dataset for responsiveness to potentially nociceptive procedures in mechanically ventilated ICU patients."
+            },
+            {
+              "название": "Phantom Limb Pain EEG",
+              "ссылка": "https://nemar.org/dataset/on006921",
+              "данные": "64/128 ch resting-state ЭЭГ; ампутанты с фантомной болью",
+              "задачи": [
+                "Задача 4"
+              ],
+              "исходная_ссылка": "https://nemar.org",
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "OpenNeuro DOI 10.18112/openneuro.ds006921.v1.1.1 is linked by NEMAR.",
+              "resource_id": "ST041",
+              "проверенные_утверждения": [
+                "NEMAR on006921 provides 64/128-channel resting-state EEG from 38 participants across amputee and intact-control groups.",
+                "The BIDS dataset includes eyes-open/eyes-closed tasks and pain-related phenotype data."
+              ],
+              "ограничения_валидации": [
+                "This is a resting-state group-comparison resource, not an evoked pain-intensity dataset.",
+                "NEMAR data-quality summaries were not yet published on the checked page."
+              ],
+              "назначение": "High-density resting-state EEG and phenotype data for phantom-limb-pain, amputee-control and intact-control groups."
+            },
+            {
+              "название": "Expectation effects on nociception",
+              "ссылка": "https://openneuro.org/datasets/ds006374",
+              "данные": "ЭЭГ-BIDS; expectation модулирует repetition suppression",
+              "задачи": [
+                "Задача 4"
+              ],
+              "исходная_ссылка": "https://nemar.org",
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "The imported causal-sounding summary was narrowed to the study question.",
+              "resource_id": "ST042",
+              "проверенные_утверждения": [
+                "OpenNeuro ds006374 contains EEG and behavioural data from 36 participants under DOI 10.18112/openneuro.ds006374.v1.0.0.",
+                "The listed tasks are calibration, expectation/repetition-suppression and detection."
+              ],
+              "ограничения_валидации": [
+                "The source supports study of expectation and nociceptive responses; it does not establish that expectation modulates repetition suppression.",
+                "The repository reports many BIDS warnings, so preprocessing assumptions require review before use."
+              ],
+              "назначение": "EEG/behavioural dataset for testing expectation effects on repetition suppression in nociception."
+            },
+            {
+              "название": "Zuo2025 (knee pain)",
+              "ссылка": "https://figshare.com/articles/dataset/28740260",
+              "данные": "30 ch ЭЭГ; knee pain; motor imagery",
+              "задачи": [
+                "Задача 4"
+              ],
+              "исходная_ссылка": "https://moabb.neurotechx.com",
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Exact Figshare record and known completeness caveats were captured.",
+              "resource_id": "ST043",
+              "проверенные_утверждения": [
+                "The dataset contains 30-channel, 500-Hz EEG from 30 knee-pain patients performing left/right leg motor imagery.",
+                "The associated publication DOI is 10.1038/s41597-025-05767-2."
+              ],
+              "ограничения_валидации": [
+                "The target is motor-imagery class, not pain intensity or nociceptive response.",
+                "MOABB reports 32 of 150 raw sessions missing and a label-mapping inconsistency between README and events metadata."
+              ],
+              "назначение": "Lower-limb motor-imagery EEG dataset from knee-pain patients; useful as clinical-domain representation data, not a pain-label benchmark."
+            }
+          ]
+        },
+        {
+          "id": "C3.3",
+          "название": "Датасеты fNIRS (боль)",
+          "ресурсы": [
+            {
+              "название": "Evoked fNIRS (thermal QST)",
+              "ссылка": "https://data.mendeley.com/datasets/kb9pb6tzkg/2",
+              "данные": "200 MB; fNIRS; thermal quantitative sensory testing",
+              "задачи": [
+                "Задача 4"
+              ],
+              "исходная_ссылка": "https://data.mendeley.com",
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Updated to the current Mendeley version 2 record.",
+              "resource_id": "ST044",
+              "проверенные_утверждения": [
+                "Mendeley Data DOI 10.17632/kb9pb6tzkg.2 provides fNIRS data and code for 16 participants across cold/heat threshold and tolerance tasks.",
+                "The record includes raw and filtered haemoglobin signals plus k-fold and leave-one-subject-out training code."
+              ],
+              "ограничения_валидации": [
+                "Threshold/tolerance task labels are protocol-derived and are not interchangeable with clinical pain states.",
+                "Published model results and code reproducibility were not independently rerun."
+              ],
+              "назначение": "Evoked fNIRS and code for thermal quantitative sensory testing across cold/heat threshold and tolerance conditions."
+            },
+            {
+              "название": "Electrical_Thermal_FingerTapping_2015",
+              "ссылка": "https://www.nemar.org/dataset/on005776",
+              "данные": "fNIRS; painful thermal + electrical stimuli; finger-tapping",
+              "задачи": [
+                "Задача 4"
+              ],
+              "исходная_ссылка": "https://nemar.org",
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Exact NEMAR/OpenNeuro identifiers were recorded.",
+              "resource_id": "ST045",
+              "проверенные_утверждения": [
+                "NEMAR on005776 contains NIRS data from 11 participants across electrical, thermal, finger-tapping, imagery and resting tasks.",
+                "The record links OpenNeuro DOI 10.18112/openneuro.ds005776.v1.0.1 and two associated publications."
+              ],
+              "ограничения_валидации": [
+                "The catalogue description mixes painful stimulation and motor tasks; task-level event semantics must be inspected before modeling.",
+                "No independent signal-quality analysis was performed."
+              ],
+              "назначение": "BIDS fNIRS dataset combining noxious electrical/thermal stimulation and motor-control tasks."
+            },
+            {
+              "название": "Electrical_Morphine_Placebo_2018",
+              "ссылка": "https://www.nemar.org/dataset/on005777",
+              "данные": "fNIRS; morphine analgesia + placebo effects",
+              "задачи": [
+                "Задача 4"
+              ],
+              "исходная_ссылка": "https://nemar.org",
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Exact NEMAR/OpenNeuro identifiers were recorded.",
+              "resource_id": "ST046",
+              "проверенные_утверждения": [
+                "NEMAR on005777 contains NIRS data from 14 participants under baseline, morphine and placebo conditions.",
+                "The record links OpenNeuro DOI 10.18112/openneuro.ds005777.v1.0.1 and article DOI 10.3389/fnhum.2018.00394."
+              ],
+              "ограничения_валидации": [
+                "The small pharmacological experiment is not a general clinical-pain dataset.",
+                "No independent signal-quality or treatment-effect reproduction was performed."
+              ],
+              "назначение": "BIDS fNIRS dataset for neural responses to electrical stimulation under baseline, morphine and placebo conditions."
+            },
+            {
+              "название": "NITRC Open access fNIRS (pain)",
+              "ссылка": "https://www.nitrc.org/projects/yucel18pain/",
+              "данные": "fNIRS; painful stimuli; morphine vs placebo",
+              "задачи": [
+                "Задача 4"
+              ],
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Count as source provenance, not as a second independent dataset.",
+              "resource_id": "ST047",
+              "проверенные_утверждения": [
+                "The NITRC project page describes fNIRS during electrical pain under morphine and placebo conditions.",
+                "The page links the same 2018 study represented by the NEMAR/OpenNeuro on005777 record."
+              ],
+              "ограничения_валидации": [
+                "This is an alternate project portal for the ST046 study, not an independent cohort.",
+                "The checked NITRC page does not establish that downloadable files remain available there."
+              ],
+              "назначение": "Legacy NITRC project page for the morphine/placebo fNIRS study also preserved in NEMAR/OpenNeuro."
+            },
+            {
+              "название": "NITRC Electrical pain stimulus",
+              "ссылка": "https://www.nitrc.org/projects/yucel15pain/",
+              "данные": "fNIRS; 11 subjects; innocuous + noxious electrical stimulus",
+              "задачи": [
+                "Задача 4"
+              ],
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Count as source provenance, not as a second independent dataset.",
+              "resource_id": "ST048",
+              "проверенные_утверждения": [
+                "The NITRC page describes fNIRS from 11 participants receiving innocuous and noxious electrical stimuli.",
+                "The project links publication DOI 10.1038/srep09469."
+              ],
+              "ограничения_валидации": [
+                "This portal overlaps the electrical-stimulation component represented in ST045 and is not an independent cohort.",
+                "Thermal and motor tasks available in the later NEMAR package are not established by this page alone."
+              ],
+              "назначение": "Legacy NITRC page for the 11-participant electrical-stimulation fNIRS study represented in the broader NEMAR package."
+            }
+          ]
+        },
+        {
+          "id": "C3.4",
+          "название": "Датасеты SCS/ECAP",
+          "ресурсы": [
+            {
+              "название": "data_CL_SCS (Figshare)",
+              "ссылка": null,
+              "данные": "ECAP-сигналы при postural changes during SCS",
+              "задачи": [
+                "Задача 4",
+                "Задача 5"
+              ],
+              "исходная_ссылка": "https://figshare.com",
+              "статус_валидации": "rejected",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Do not treat the imported ECAP/posture description as an available dataset.",
+              "resource_id": "ST049",
+              "проверенные_утверждения": [],
+              "ограничения_валидации": [
+                "No exact Figshare record, DOI or primary page matching data_CL_SCS and the imported postural-ECAP description was found."
+              ],
+              "назначение": "Rejected dataset candidate without a stable identifier or primary record."
+            },
+            {
+              "название": "ECAP + conductivity data (Figshare)",
+              "ссылка": null,
+              "данные": "ECAP amplitudes при разных directional contacts; conductivity of tissues",
+              "задачи": [
+                "Задача 4",
+                "Задача 5"
+              ],
+              "исходная_ссылка": "https://figshare.com",
+              "статус_валидации": "rejected",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "A general Figshare domain cannot substantiate availability or contents.",
+              "resource_id": "ST050",
+              "проверенные_утверждения": [],
+              "ограничения_валидации": [
+                "No exact Figshare record or DOI matching the claimed combination of ECAP amplitudes, directional contacts and tissue conductivity was found."
+              ],
+              "назначение": "Rejected dataset candidate without a stable identifier or verified composition."
+            },
+            {
+              "название": "Epidural spinal recordings (Newcastle)",
+              "ссылка": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12803051/",
+              "данные": "ECAPs, doublets, ESAPs, EMGs; SCS neural processes",
+              "задачи": [
+                "Задача 4"
+              ],
+              "исходная_ссылка": "https://apps-eprint4-l.ncl.ac.uk",
+              "статус_валидации": "partially_verified",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Retained as measurement-model evidence, not as an available validation dataset.",
+              "resource_id": "ST051",
+              "проверенные_утверждения": [
+                "The publication characterizes ECAPs, doublets, ESAPs and EMG in preclinical epidural spinal recordings."
+              ],
+              "ограничения_валидации": [
+                "The checked source is a preclinical publication, not a confirmed openly downloadable human dataset.",
+                "Species and recording geometry limit direct use for human SCS outcome prediction."
+              ],
+              "назначение": "Preclinical publication on electrophysiological components and artifacts in epidural spinal recordings."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "C4",
+      "название": "ML-фреймворки и модели детекции боли",
+      "подкатегории": [
+        {
+          "id": "C4.1",
+          "название": "SOTA-модели (GitHub-репозитории)",
+          "ресурсы": [
+            {
+              "название": "VST-APA (Video Swin Transformers)",
+              "ссылка": "https://github.com/MRausus/VST-APA",
+              "назначение": "Unverified experimental notebook for Video Swin Transformer pain classification.",
+              "задачи": [
+                "Задача 5"
+              ],
+              "статус_валидации": "partially_verified",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Not suitable as evidence until code, data split, metrics and provenance are documented.",
+              "resource_id": "ST052",
+              "проверенные_утверждения": [
+                "The public repository exists and contains one Video Swin Transformer pain-detection notebook."
+              ],
+              "ограничения_валидации": [
+                "The repository has one commit, no README, release, paper identifier or documented evaluation protocol.",
+                "Effectiveness, generalizability and explainability claims were not confirmed and are removed."
+              ]
+            },
+            {
+              "название": "HCAT-Pain",
+              "ссылка": "https://github.com/AnupKumarGupta/HCAT-Pain",
+              "назначение": "Paper project page for a non-contact multimodal pain-classification method; implementation pending.",
+              "задачи": [
+                "Задача 5"
+              ],
+              "статус_валидации": "partially_verified",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Metadata and stated method are retained, but reproducibility is not established.",
+              "resource_id": "ST053",
+              "проверенные_утверждения": [
+                "The authors describe a hierarchical cross-attention model using video-derived pulse, respiration and facial action units on AI4Pain data from 65 participants.",
+                "The page reports multiclass and binary pain-classification results for a 2026 FG paper."
+              ],
+              "ограничения_валидации": [
+                "The repository explicitly states that implementation code has not yet been uploaded.",
+                "Reported results are author-provided and were not reproduced; dataset access remains subject to its EULA.",
+                "Video-derived proxies and facial behavior do not constitute a direct measure of subjective pain."
+              ]
+            },
+            {
+              "название": "Tiny-BioMoE",
+              "ссылка": "https://github.com/GkikasStefanos/Tiny-BioMoE",
+              "назначение": "Published lightweight biosignal embedding baseline with openly released weights.",
+              "задачи": [
+                "Задача 5"
+              ],
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Candidate representation baseline, not evidence of cross-species transfer.",
+              "resource_id": "ST054",
+              "проверенные_утверждения": [
+                "The repository provides MIT-licensed model code and a downloadable pretrained checkpoint.",
+                "The published ICMI 2025 Companion paper is identified by DOI 10.1145/3747327.3764788.",
+                "The authors describe 7.34 million parameters, 192-dimensional embeddings and pretraining across ECG, EMG and EEG representations."
+              ],
+              "ограничения_валидации": [
+                "The architecture consumes image-like signal representations and does not itself align fly and human modalities.",
+                "Suitability and performance for the dissertation datasets require independent evaluation."
+              ]
+            },
+            {
+              "название": "Hierarchical Multimodal Fusion (X-ITE)",
+              "ссылка": "https://github.com/Satyajithchary/Hierarchical-Multimodal-Fusion-with-Phased-Training-for-X-ITE-Challenge",
+              "назначение": "Reproducible negative/weak baseline for multimodal X-ITE experiments and failure analysis.",
+              "задачи": [
+                "Задача 5"
+              ],
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Retain for architecture and ablation comparison; do not cite as effective pain recognition.",
+              "resource_id": "ST055",
+              "проверенные_утверждения": [
+                "The repository contains code for physiological, four-video-stream and audio fusion with a three-phase training procedure.",
+                "It reports a held-out test accuracy of 49.7%, macro F1 of 34.0% and ROC AUC of 0.533 on the binary X-ITE task."
+              ],
+              "ограничения_валидации": [
+                "The reported result is near chance and predicts the high-pain class with only 1% recall.",
+                "The repository's claim that this behavior is clinically desirable is not supported by the reported discrimination metrics.",
+                "Code availability does not establish generalization or clinical utility."
+              ]
+            },
+            {
+              "название": "Cross-Spectral Attention Fusion (CSAF)",
+              "ссылка": "https://doi.org/10.1371/journal.pdig.0001424",
+              "назначение": "Primary multimodal human-pain study and codebase for thermal-plus-RGB comparison, DOI 10.1371/journal.pdig.0001424.",
+              "задачи": [
+                "Задача 5"
+              ],
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Use the article, not the repository wording, as the primary evidence source.",
+              "resource_id": "ST056",
+              "проверенные_утверждения": [
+                "The peer-reviewed PLOS Digital Health article evaluates synchronized thermal and RGB video in 50 healthy adults and 30 postoperative adults.",
+                "The authors report combined-cohort MAE 0.87 versus 1.23 for the RGB-only baseline and provide code plus split metadata.",
+                "The target is participant-reported 0-10 NRS, with controlled and postoperative cohorts analyzed separately and together."
+              ],
+              "ограничения_валидации": [
+                "Validation is adult-only, single-team and not an external multi-site prospective clinical validation.",
+                "Five-fold results and author-reported metrics require independent reproduction before model selection.",
+                "Thermal/RGB estimates of NRS are not a direct physiological measurement of pain."
+              ]
+            },
+            {
+              "название": "PainFormer",
+              "ссылка": "https://doi.org/10.1109/TAFFC.2025.3605475",
+              "назначение": "Published vision representation baseline for human facial/affective and pain-assessment tasks.",
+              "задачи": [
+                "Задача 5"
+              ],
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Retain as a comparator for human video representations only.",
+              "resource_id": "ST057",
+              "проверенные_утверждения": [
+                "PainFormer is published in IEEE Transactions on Affective Computing under DOI 10.1109/TAFFC.2025.3605475.",
+                "The official repository releases MIT-licensed code and a pretrained checkpoint and reports pretraining on 14 tasks with 10.9 million samples."
+              ],
+              "ограничения_валидации": [
+                "The scale values are author-reported and do not imply independent subjects or pain-specific samples.",
+                "It is a vision foundation model and does not validate physiological or cross-species transfer claims."
+              ]
+            },
+            {
+              "название": "Automatic-Recognition-VAS-Index",
+              "ссылка": "https://github.com/LorenzoGianassi/Automatic-Recognition-VAS-Index-with-Random-Forest",
+              "назначение": "Exploratory classical-ML implementation for facial-feature pain-score regression.",
+              "задачи": [
+                "Задача 5"
+              ],
+              "статус_валидации": "partially_verified",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Use only as implementation prior art after replacing dataset links with official access routes.",
+              "resource_id": "ST058",
+              "проверенные_утверждения": [
+                "The course-project repository implements a Random Forest regressor for facial-landmark features and supports UNBC and BioVid inputs.",
+                "Its configuration exposes leave-one-subject-out, five-fold and leave-one-sequence-out evaluation modes."
+              ],
+              "ограничения_валидации": [
+                "No peer-reviewed publication or stable dataset redistribution license is documented.",
+                "The README does not establish a validated performance advantage and linked dataset mirrors may not be authoritative."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "C4.2",
+          "название": "ML-фреймворки",
+          "ресурсы": [
+            {
+              "название": "PyTorch Tabular",
+              "ссылка": "https://github.com/pytorch-tabular/pytorch_tabular",
+              "назначение": "Optional framework for structured-feature baselines and experiment plumbing.",
+              "задачи": [
+                "Задача 5"
+              ],
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Do not treat library model availability as evidence of suitability for this corpus.",
+              "resource_id": "ST059",
+              "проверенные_утверждения": [
+                "PyTorch Tabular is an MIT-licensed framework with a unified API for deep-learning models on tabular data.",
+                "It includes classification/regression models, tutorials, tests, logging integrations and PyTorch Lightning-based training."
+              ],
+              "ограничения_валидации": [
+                "It is general-purpose infrastructure and supplies no pain-specific evidence or validation protocol.",
+                "The imported repository URL redirects to the current pytorch-tabular organization."
+              ]
+            },
+            {
+              "название": "sktime",
+              "ссылка": "https://github.com/sktime/sktime",
+              "назначение": "General time-series baseline and pipeline library for physiological-signal experiments.",
+              "задачи": [
+                "Задача 5"
+              ],
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Candidate tooling only, with project-specific grouped evaluation required.",
+              "resource_id": "ST060",
+              "проверенные_утверждения": [
+                "sktime is a BSD-licensed time-series library supporting classification, regression, forecasting, clustering and validation utilities."
+              ],
+              "ограничения_валидации": [
+                "The library is not pain-specific; the imported phrase 'pain detection' is removed.",
+                "Participant-level grouping and leakage controls must be implemented explicitly in project experiments."
+              ]
+            },
+            {
+              "название": "PyTorch Lightning",
+              "ссылка": "https://github.com/Lightning-AI/lightning",
+              "назначение": "Training-loop and experiment-infrastructure candidate for reproducible PyTorch baselines.",
+              "задачи": [
+                "Задача 5"
+              ],
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Exact current repository replaces the former redirected pytorch-lightning URL.",
+              "resource_id": "ST061",
+              "проверенные_утверждения": [
+                "The official Lightning repository provides PyTorch Lightning for structured training loops, accelerator/distributed execution and logging."
+              ],
+              "ограничения_валидации": [
+                "It is engineering infrastructure, not a model, scientific method or validation result.",
+                "Reproducibility still requires pinned environments, seeds, dataset versions and saved split manifests."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "C5",
+      "название": "Модели SCS/ECAP и цифровые двойники",
+      "подкатегории": [
+        {
+          "id": "C5.1",
+          "название": "Ресурсы",
+          "ресурсы": [
+            {
+              "название": "RADO-SCS",
+              "ссылка": "https://zenodo.org/records/3732197",
+              "назначение": "Open CAD/STL anatomical resource for constructing conventional, high-frequency, DRG and trans-spinal stimulation models.",
+              "задачи": [
+                "Задача 4"
+              ],
+              "исходная_ссылка": "https://zenodo.org",
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Exact Zenodo record and model/software distinction were confirmed.",
+              "resource_id": "ST062",
+              "проверенные_утверждения": [
+                "Zenodo DOI 10.5281/zenodo.3732197 provides RADO-SCS 3.0 CAD/STL anatomy for T9-T11 and clinical leads.",
+                "The record documents a 0.1-mm anatomical representation and a FEM-to-axon modeling workflow."
+              ],
+              "ограничения_валидации": [
+                "RADO-SCS is a CAD-derived model resource, not executable SCS modeling software.",
+                "It does not include pathological or patient-specific spinal anatomy."
+              ]
+            },
+            {
+              "название": "SCSInSCIMechanisms",
+              "ссылка": "https://github.com/jostrows9/SCSInSCIMechanisms",
+              "назначение": "NEURON-based biophysical SCS model and analysis code for motor-circuit mechanisms after spinal-cord injury.",
+              "задачи": [
+                "Задача 4"
+              ],
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Relevant as mechanistic software, not as a pain-outcome model.",
+              "resource_id": "ST063",
+              "проверенные_утверждения": [
+                "Repository contains NEURON simulation and EMG-analysis code underlying Balaguer et al. (2025).",
+                "It models interaction of epidural SCS, supraspinal input and motoneuron pools after spinal injury."
+              ],
+              "ограничения_валидации": [
+                "The model addresses motor control after spinal-cord injury, not chronic-pain relief or ECAP prediction.",
+                "Local reproducibility and parameter provenance were not independently tested."
+              ]
+            },
+            {
+              "название": "SCS-network",
+              "ссылка": "https://github.com/lauramedlock/SCS-network",
+              "назначение": "NEURON/NetPyNE implementation of a published spinal-cord-stimulation network model.",
+              "задачи": [
+                "Задача 4"
+              ],
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Execution and numerical reproduction remain a later feasibility gate.",
+              "resource_id": "ST064",
+              "проверенные_утверждения": [
+                "Repository provides NEURON/NetPyNE code intended to reproduce the SCS network model from Sagalajev et al.",
+                "The README links DOI 10.1016/j.neuron.2023.10.021."
+              ],
+              "ограничения_валидации": [
+                "The repository is small and has no release package or automated reproducibility evidence.",
+                "Its pain-suppression mechanism is a model hypothesis, not a clinical-outcome predictor."
+              ]
+            },
+            {
+              "название": "NRV (NeuRon Virtualizer)",
+              "ссылка": "https://github.com/nrv-framework/NRV",
+              "назначение": "General multiscale Python framework for in-silico peripheral-nerve stimulation.",
+              "задачи": [
+                "Задача 4"
+              ],
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Potential component only; spinal-cord applicability requires a separate model.",
+              "resource_id": "ST065",
+              "проверенные_утверждения": [
+                "NRV is an actively developed Python library for peripheral nervous-system stimulation modeling.",
+                "The repository includes documentation, examples, tests and tutorials."
+              ],
+              "ограничения_валидации": [
+                "NRV targets peripheral nerves and is not a ready-made spinal-cord or ECAP model.",
+                "Its redirected organization URL should replace the former personal-repository URL."
+              ]
+            },
+            {
+              "название": "OpenXstim",
+              "ссылка": "https://github.com/OpenMedTech-Lab/OpenXstim",
+              "назначение": "Open programmable transcutaneous current-stimulator hardware design for engineering reference only.",
+              "задачи": [
+                "Задача 4"
+              ],
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Not authorized here for human use or self-experimentation.",
+              "resource_id": "ST066",
+              "проверенные_утверждения": [
+                "Repository publishes an open design for a programmable transcutaneous current stimulator."
+              ],
+              "ограничения_валидации": [
+                "This is stimulation hardware, not a validated SCS simulator, dataset or clinical device.",
+                "Safety, regulatory status and suitability for any human experiment are not established by the repository."
+              ]
+            },
+            {
+              "название": "Digital Twins (npj Biomedical Innovations)",
+              "ссылка": "https://www.nature.com/articles/s44385-026-00076-8",
+              "назначение": "Review framework for biophysical and surrogate digital twins used to optimize neural interfaces, including SCS.",
+              "задачи": [
+                "Задача 4",
+                "Задача 5"
+              ],
+              "исходная_ссылка": "https://www.nature.com",
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Use for modeling requirements and limitations, not implementation evidence.",
+              "resource_id": "ST067",
+              "проверенные_утверждения": [
+                "The 2026 review describes hybrid volume-conduction, neural-response and transduction models plus surrogate optimization.",
+                "It surveys SCS among several neuroprosthetic applications and identifies calibration and personalization limits."
+              ],
+              "ограничения_валидации": [
+                "This is a review and conceptual framework, not a released SCS digital-twin implementation or dataset.",
+                "The paper notes that subject-specific calibration remains early and assumptions are substantial."
+              ]
+            },
+            {
+              "название": "Multi-scale digital twins (FAU)",
+              "ссылка": "https://www.pdh.med.fau.de/research/neural-engineering/epidural-spinal-cord-stimulation/",
+              "назначение": "FAU research-program page on multiscale spinal-cord digital twins and Pareto-oriented eSCS design.",
+              "задачи": [
+                "Задача 4"
+              ],
+              "исходная_ссылка": "https://www.pdh.med.fau.de",
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Treat as prospective prior art, not a reusable artifact.",
+              "resource_id": "ST068",
+              "проверенные_утверждения": [
+                "The FAU project page states an aim to create multiscale spinal-cord digital twins and explore Pareto-optimal parameter solutions."
+              ],
+              "ограничения_валидации": [
+                "The page describes an ongoing research direction and provides no validated software, dataset or clinical results.",
+                "No patient-specific pain or ECAP prediction claim is supported."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "C6",
+      "название": "Облачные и вычислительные ресурсы",
+      "подкатегории": [
+        {
+          "id": "C6.1",
+          "название": "Ресурсы",
+          "ресурсы": [
+            {
+              "название": "Google Colab",
+              "ссылка": "https://research.google.com/colaboratory/faq.html",
+              "назначение": "Convenience notebook environment for demonstrations and smoke tests, not guaranteed experiment infrastructure.",
+              "задачи": [
+                "Задача 5"
+              ],
+              "исходная_ссылка": "https://colab.research.google.com",
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "The exact FAQ is the primary source for availability and limit claims.",
+              "resource_id": "ST069",
+              "проверенные_утверждения": [
+                "Google describes Colab as a hosted Jupyter service with a no-charge tier and optional GPU/TPU runtimes."
+              ],
+              "ограничения_валидации": [
+                "Resources, accelerator types, usage limits and runtime duration are not guaranteed and change over time.",
+                "The free tier commonly permits at most 12-hour sessions and is unsuitable as the sole reproducibility environment.",
+                "Colab does not itself provide SNN tutorials; those belong to separate projects."
+              ]
+            },
+            {
+              "название": "Norse Colab Tutorials",
+              "ссылка": "https://github.com/norse/notebooks",
+              "назначение": "Educational Norse notebooks and smoke-test examples for differentiable SNN workflows.",
+              "задачи": [
+                "Задача 5"
+              ],
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Retain GPU/TPU wording only as an environment option, not a tested guarantee.",
+              "resource_id": "ST070",
+              "проверенные_утверждения": [
+                "The Norse project provides public introductory, supervised-learning, event-processing and neuroscience notebooks.",
+                "The repository states that notebooks can run in Colab and that local/Colab environments may use hardware acceleration."
+              ],
+              "ограничения_валидации": [
+                "Browser-hosted execution uses CPU and may be slow for larger networks.",
+                "TPU compatibility is not demonstrated per notebook and Colab accelerator access is not guaranteed.",
+                "Tutorials are educational examples, not project benchmarks or biological validation."
+              ]
+            },
+            {
+              "название": "snnTorch Colab",
+              "ссылка": "https://github.com/jeshraghian/snntorch",
+              "назначение": "Educational snnTorch quickstart/tutorial material for baseline prototyping.",
+              "задачи": [
+                "Задача 5"
+              ],
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "The resource overlaps ST024 but is retained as a distinct training-material role.",
+              "resource_id": "ST071",
+              "проверенные_утверждения": [
+                "The official repository links a Colab quickstart, examples and a tutorial series for gradient-based SNN learning.",
+                "snnTorch uses PyTorch autograd and can use CUDA when models and tensors are placed on a compatible GPU."
+              ],
+              "ограничения_валидации": [
+                "The exact imported count of '5+ Colab tutorials' is not a stable software property and is removed.",
+                "Colab availability and accelerator assignment are controlled by Google and are not guaranteed.",
+                "Tutorial completion does not validate whole-connectome scale or biological realism."
+              ]
+            },
+            {
+              "название": "EvoJAX SNN (Colab)",
+              "ссылка": "https://github.com/google/evojax",
+              "назначение": "Archived general JAX neuroevolution toolkit; no verified project-specific SNN notebook.",
+              "задачи": [
+                "Задача 5"
+              ],
+              "исходная_ссылка": "https://nbviewer.org",
+              "статус_валидации": "partially_verified",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "The generic nbviewer link is replaced, but the imported SNN-specific identity remains unconfirmed.",
+              "resource_id": "ST072",
+              "проверенные_утверждения": [
+                "EvoJAX is an Apache-licensed JAX neuroevolution toolkit with notebook examples and optional GPU/TPU execution.",
+                "The project notes that Colab includes JAX and provides notebooks under its examples tree."
+              ],
+              "ограничения_валидации": [
+                "No exact EvoJAX SNN Colab notebook matching the imported title was confirmed.",
+                "The Google repository was archived in August 2025 and is read-only.",
+                "General neuroevolution support does not establish a biologically grounded SNN simulator."
+              ]
+            },
+            {
+              "название": "Radboud SNN Simulator (Colab)",
+              "ссылка": "https://github.com/adiehl96/SNN-computing",
+              "назначение": "Legacy educational SNN notebook whose maintained upstream must be checked before reuse.",
+              "задачи": [
+                "Задача 5"
+              ],
+              "статус_валидации": "partially_verified",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Do not select it over maintained simulators without a local benchmark.",
+              "resource_id": "ST073",
+              "проверенные_утверждения": [
+                "The MIT-licensed repository contains an SNN simulator example notebook and a Colab badge."
+              ],
+              "ограничения_валидации": [
+                "The checked GitHub repository is a fork and explicitly labels itself legacy.",
+                "Maintenance moved to a Radboud GitLab instance; the current upstream contents and reproducibility were not verified.",
+                "No evidence establishes scalability to the target connectome."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "C7",
+      "название": "Туториалы и документация",
+      "подкатегории": [
+        {
+          "id": "C7.1",
+          "название": "Ресурсы",
+          "ресурсы": [
+            {
+              "название": "FlyConnectome CAVE Tutorial",
+              "ссылка": "https://github.com/seung-lab/FlyConnectome/blob/main/CAVE%20tutorial.ipynb",
+              "назначение": "Primary tutorial for programmatic CAVE/FlyConnectome data access.",
+              "задачи": [
+                "Задача 1"
+              ],
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Use with an explicit materialization/version manifest.",
+              "resource_id": "ST074",
+              "проверенные_утверждения": [
+                "The Seung Lab FlyConnectome repository contains a 4,045-line CAVE tutorial notebook for programmatic connectome access."
+              ],
+              "ограничения_валидации": [
+                "The notebook documents data access, not neuronal dynamics, nociception or simulation validity.",
+                "Authentication, materialization version and API outputs must be pinned in any reproducible extraction."
+              ]
+            },
+            {
+              "название": "NeuroMechFly v2 Docs",
+              "ссылка": "https://flygym.readthedocs.io/latest/index.html",
+              "назначение": "Документация: leg adhesion, rule-based controller, hybrid controller, vision, olfaction, RL-based navigation, Gym environment",
+              "задачи": [
+                "Задача 2"
+              ],
+              "исходная_ссылка": "https://neuromechfly.org",
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-21",
+              "примечание_валидации": "Официальная документация FlyGym.",
+              "resource_id": "ST075",
+              "проверенные_утверждения": [],
+              "ограничения_валидации": []
+            },
+            {
+              "название": "Brian2GeNN Tutorial",
+              "ссылка": "https://genn-team.github.io/genn/documentation/3/html/d3/d0c/brian2genn.html",
+              "назначение": "Legacy official Brian2GeNN interface example for an LIF f/I curve.",
+              "задачи": [
+                "Задача 5"
+              ],
+              "исходная_ссылка": "https://genn-team.github.io",
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Retain as a minimal syntax example; use current package docs for environment setup.",
+              "resource_id": "ST076",
+              "проверенные_утверждения": [
+                "The GeNN documentation gives a Brian2GeNN LIF example with varying input currents to construct an f/I curve.",
+                "It documents switching Brian2 to the GeNN device and configuring GeNN/CUDA paths."
+              ],
+              "ограничения_валидации": [
+                "The page belongs to older GeNN 3 documentation and is an API example, not a current performance benchmark.",
+                "The example is too small to demonstrate benefit from GPU execution."
+              ]
+            },
+            {
+              "название": "BrainChip MetaTF Docs",
+              "ссылка": "https://doc.brainchipinc.com/",
+              "назначение": "Official versioned documentation for quantization, conversion, simulation and Akida deployment.",
+              "задачи": [
+                "Задача 5"
+              ],
+              "исходная_ссылка": "https://doc.brainchipinc.com",
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Duplicate role with ST026 is retained only as documentation rather than software identity.",
+              "resource_id": "ST077",
+              "проверенные_утверждения": [
+                "The current MetaTF documentation describes akida-models, QuantizeML, CNN2SNN and the Akida runtime/software backend.",
+                "The current installation page documents Python 3.10-3.12 and versioned package dependencies."
+              ],
+              "ограничения_валидации": [
+                "The runtime is a vendor stack governed by BrainChip licensing, not a wholly open-source framework.",
+                "Supported Python, TensorFlow and package versions change and must be locked per experiment."
+              ]
+            },
+            {
+              "название": "PyTorch Tabular Docs",
+              "ссылка": "https://pytorch-tabular.readthedocs.io/en/latest/",
+              "назначение": "Official PyTorch Tabular documentation for structured-feature baselines.",
+              "задачи": [
+                "Задача 5"
+              ],
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "The exact documentation URL replaces the redirected source repository link.",
+              "resource_id": "ST078",
+              "проверенные_утверждения": [
+                "The official documentation provides tutorials, API reference, model configuration, experiment tracking, cross-validation and explainability guides."
+              ],
+              "ограничения_валидации": [
+                "The documentation is general-purpose and does not define participant-safe splits for pain datasets.",
+                "Specific model availability is version-dependent and must be pinned."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "C8",
+      "название": "Референсные публикации и метаданные",
+      "подкатегории": [
+        {
+          "id": "C8.1",
+          "название": "Ресурсы",
+          "ресурсы": [
+            {
+              "название": "FlyWire: Method of the Year 2025 (Nature Methods)",
+              "ссылка": "https://www.nature.com/articles/s41592-025-02988-6",
+              "назначение": "Editorial context for EM-based connectomics and the methodological significance of FlyWire-scale reconstructions.",
+              "задачи": [
+                "Задача 1"
+              ],
+              "исходная_ссылка": "https://www.nature.com",
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Resource title was broader than the verified editorial scope and is corrected in purpose.",
+              "resource_id": "ST079",
+              "проверенные_утверждения": [
+                "Nature Methods selected electron-microscopy-based connectomics as Method of the Year 2025.",
+                "The editorial discusses whole-brain Drosophila/FlyWire and other connectomics achievements."
+              ],
+              "ограничения_валидации": [
+                "The award is for EM-based connectomics broadly, not for FlyWire alone.",
+                "An editorial distinction is not validation of a particular simulator or pain-transfer hypothesis."
+              ]
+            },
+            {
+              "название": "LIF model from Shiu et al. (Nature 2024)",
+              "ссылка": "https://www.nature.com/articles/s41586-024-07763-9",
+              "назначение": "Primary whole-central-brain LIF model for experimentally testable feeding and grooming sensorimotor circuits.",
+              "задачи": [
+                "Задача 2"
+              ],
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "The imported global 91% accuracy claim was narrowed to the actual evaluation.",
+              "resource_id": "ST080",
+              "проверенные_утверждения": [
+                "The article implements a Brian2 LIF model of 127,400 central-brain neurons using FlyWire connectivity and transmitter identity.",
+                "Feeding and grooming predictions were tested with optogenetics, imaging and behaviour; one unbiased cell-type screen exceeded 90% accuracy."
+              ],
+              "ограничения_валидации": [
+                "The greater-than-90% result is task- and screen-specific, not 91% whole-brain prediction accuracy.",
+                "The authors note zero baseline firing, missing neuromodulation and inaccurate absolute firing-rate assumptions."
+              ]
+            },
+            {
+              "название": "EVOKE Study (JPHV 2026)",
+              "ссылка": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11103285/",
+              "назначение": "Primary EVOKE randomized-trial evidence for ECAP-controlled closed-loop versus open-loop SCS.",
+              "задачи": [
+                "Задача 5"
+              ],
+              "исходная_ссылка": "https://www.jphv.org",
+              "статус_валидации": "partially_verified",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Underlying trial verified; the imported secondary-publication attribution remains unverified.",
+              "resource_id": "ST081",
+              "проверенные_утверждения": [
+                "The EVOKE blinded randomized trial NCT02924129 compared ECAP-controlled closed-loop with fixed-output open-loop SCS.",
+                "At 36 months the publication reports 77.6% versus 49.3% achieving at least 50% overall back/leg pain reduction."
+              ],
+              "ограничения_валидации": [
+                "The imported JPHV 2026 pooled-analysis identity was not confirmed as a stable primary publication.",
+                "The RR 1.47 figure must not replace the directly reported time-specific trial results and confidence intervals."
+              ]
+            },
+            {
+              "название": "Control Signals in CL-SCS (Neuromodulation 2026)",
+              "ссылка": "https://www.neuromodulationjournal.org/article/S1094-7159%2825%2901170-5/fulltext",
+              "назначение": "Scoping review of control signals used in closed-loop SCS for chronic pain.",
+              "задачи": [
+                "Задача 5"
+              ],
+              "исходная_ссылка": "https://www.neuromodulationjournal.org",
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Exact DOI 10.1016/j.neurom.2025.11.011 and counts were confirmed.",
+              "resource_id": "ST082",
+              "проверенные_утверждения": [
+                "The scoping review screened 688 unique articles and retained 28 publications covering 19 unique studies.",
+                "It categorized three subjective-state, seven position/movement and nine ECAP-control studies and found no fully integrated subjective-plus-biophysical model."
+              ],
+              "ограничения_валидации": [
+                "The result is a literature-gap statement, not proof that such integration improves outcomes.",
+                "ECAP is treated as spinal activation and a proxy for delivery changes, not direct pain intensity."
+              ]
+            },
+            {
+              "название": "Eon Systems: Embodied whole-brain emulation",
+              "ссылка": "https://eon.systems/updates/embodied-brain-emulation",
+              "назначение": "Company technical account of an experimental FlyWire-LIF and NeuroMechFly/MuJoCo integration.",
+              "задачи": [
+                "Задача 2"
+              ],
+              "исходная_ссылка": "https://tech.yahoo.com",
+              "статус_валидации": "partially_verified",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Do not cite it as validated brain upload, nociception model or emergent-behaviour evidence.",
+              "resource_id": "ST083",
+              "проверенные_утверждения": [
+                "Eon describes integration of a FlyWire-derived LIF brain model with a NeuroMechFly/MuJoCo body.",
+                "The page identifies the work as an integration of existing brain and body models and discusses roughly 140,000 neurons and 50 million synapses."
+              ],
+              "ограничения_валидации": [
+                "The source is a company-authored demonstration, not peer-reviewed independent validation of embodied whole-brain emulation.",
+                "The demonstrated behaviours and brain-body interface require code, protocol and ablation review before scientific use."
+              ]
+            },
+            {
+              "название": "DoomFly (Alex Wormuth)",
+              "ссылка": "https://github.com/nftechie/doomfly",
+              "назначение": "Experimental MaleCNS-to-ViZDoom integration with explicit negative validation results and engineered reinforcement.",
+              "задачи": [
+                "Задача 2",
+                "Задача 3"
+              ],
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Retain as falsifiable implementation evidence; do not cite as successful learning, pain or whole-brain emulation.",
+              "resource_id": "ST084",
+              "проверенные_утверждения": [
+                "The repository connects a retained MaleCNS graph to engineered ViZDoom visual inputs and fixed motor readouts.",
+                "Its experimental rule applies artificial damage input to two PPL101 cells and modifies selected KC-to-MBON11 weights."
+              ],
+              "ограничения_валидации": [
+                "The repository explicitly reports failed visual, conditioning and survival validation gates.",
+                "Artificial game damage is an engineering reinforcement signal, not a natural nociceptor model or pain label.",
+                "PPL101 and MBON11 are spectator readouts and learned survival has not been demonstrated."
+              ]
+            },
+            {
+              "название": "US20220323766A1",
+              "ссылка": "https://patents.google.com/patent/US20220323766A1/en",
+              "назначение": "Patent prior art for EEG/ECAP-informed machine-learning control of neurostimulation.",
+              "задачи": [
+                "Задача 4"
+              ],
+              "исходная_ссылка": "https://patents.google.com",
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "The imported equation is confirmed as an embodiment, not an established clinical method.",
+              "resource_id": "ST085",
+              "проверенные_утверждения": [
+                "The patent application describes ML processing of EEG features and embodiments combining EEG and ECAP-derived information for neurostimulation control.",
+                "It defines d_EEG from pain/paresthesia-related feature distances and an embodiment where d_total combines d_EEG with I_ECAP."
+              ],
+              "ограничения_валидации": [
+                "A patent application describes claimed embodiments and is not empirical validation, clinical efficacy evidence or a released algorithm.",
+                "Its pain-state EEG assumptions and combined metric require independent prospective validation."
+              ]
+            },
+            {
+              "название": "US10842996",
+              "ссылка": "https://patents.google.com/patent/US10842996B2/en",
+              "назначение": "Granted patent prior art for simultaneous stimulation/recording and analog-plus-digital artifact rejection in ECAP sensing.",
+              "задачи": [
+                "Задача 4"
+              ],
+              "исходная_ссылка": "https://patents.google.com",
+              "статус_валидации": "verified_primary",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Exact B2 identifier and artifact-rejection embodiment were confirmed.",
+              "resource_id": "ST086",
+              "проверенные_утверждения": [
+                "The granted patent describes neural stimulation and recording for closed-loop control.",
+                "One embodiment tunes an analog stimulation-artifact simulator and subtracts the artificial artifact before digital residual processing to extract ECAPs."
+              ],
+              "ограничения_валидации": [
+                "The patent is prior art, not validation of signal quality, clinical outcome or commercial implementation.",
+                "Artifact rejection does not turn ECAP into a direct measure of pain."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "C9",
+      "название": "Системные требования",
+      "подкатегории": [
+        {
+          "id": "C9.1",
+          "название": "Минимальная конфигурация",
+          "ресурсы": [
+            {
+              "компонент": "CPU",
+              "требование": "16+ ядер (для Brian2/NEST CPU-симуляций)",
+              "статус_валидации": "rejected",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Rejected as an evidence resource, not asserted to be technically impossible.",
+              "resource_id": "ST087",
+              "проверенные_утверждения": [],
+              "ограничения_валидации": [
+                "The imported requirement (16+ CPU cores) has no workload benchmark, dependency lock or primary source.",
+                "A hardware estimate cannot be validated before a representative simulator and dataset pipeline are benchmarked."
+              ],
+              "назначение": "Superseded planning estimate; replace with measured peak memory, runtime, storage and compatibility results."
+            },
+            {
+              "компонент": "RAM",
+              "требование": "64 GB (коннектом v783 ~5M синапсов; MaleCNS ~25.5M)",
+              "статус_валидации": "rejected",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Rejected as an evidence resource, not asserted to be technically impossible.",
+              "resource_id": "ST088",
+              "проверенные_утверждения": [],
+              "ограничения_валидации": [
+                "The imported requirement (64 GB RAM) has no workload benchmark, dependency lock or primary source.",
+                "A hardware estimate cannot be validated before a representative simulator and dataset pipeline are benchmarked."
+              ],
+              "назначение": "Superseded planning estimate; replace with measured peak memory, runtime, storage and compatibility results."
+            },
+            {
+              "компонент": "GPU",
+              "требование": "NVIDIA RTX 3090/4090 (24 GB VRAM) — для Brian2GeNN, PyTorch, transformer-моделей",
+              "статус_валидации": "rejected",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Rejected as an evidence resource, not asserted to be technically impossible.",
+              "resource_id": "ST089",
+              "проверенные_утверждения": [],
+              "ограничения_валидации": [
+                "The imported requirement (RTX 3090/4090 with 24 GB VRAM) has no workload benchmark, dependency lock or primary source.",
+                "A hardware estimate cannot be validated before a representative simulator and dataset pipeline are benchmarked."
+              ],
+              "назначение": "Superseded planning estimate; replace with measured peak memory, runtime, storage and compatibility results."
+            },
+            {
+              "компонент": "Storage",
+              "требование": "2 TB NVMe SSD (датасеты + симуляции + checkpoints)",
+              "статус_валидации": "rejected",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Rejected as an evidence resource, not asserted to be technically impossible.",
+              "resource_id": "ST090",
+              "проверенные_утверждения": [],
+              "ограничения_валидации": [
+                "The imported requirement (2 TB NVMe SSD) has no workload benchmark, dependency lock or primary source.",
+                "A hardware estimate cannot be validated before a representative simulator and dataset pipeline are benchmarked."
+              ],
+              "назначение": "Superseded planning estimate; replace with measured peak memory, runtime, storage and compatibility results."
+            },
+            {
+              "компонент": "OS",
+              "требование": "Ubuntu 22.04+ / Windows 11 + WSL2",
+              "статус_валидации": "partially_verified",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Remove WSL2 and minimum-system wording until end-to-end testing exists.",
+              "resource_id": "ST091",
+              "проверенные_утверждения": [
+                "Current MetaTF documentation supports Windows 10/11 and manylinux-2.28-compatible Linux distributions including Ubuntu 22.04/24.04."
+              ],
+              "ограничения_валидации": [
+                "This verifies one vendor dependency only, not the entire proposed simulator/ML stack.",
+                "WSL2 support and the claim that this is a minimum configuration were not established."
+              ],
+              "ссылка": "https://doc.brainchipinc.com/installation.html",
+              "назначение": "Partial compatibility note for MetaTF; full-stack OS support requires a tested lockfile and CI matrix."
+            },
+            {
+              "компонент": "Python",
+              "требование": "3.10–3.12 (совместимость с BrainChip MetaTF, PyTorch)",
+              "статус_валидации": "partially_verified",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Use a tested lockfile rather than a prose version range.",
+              "resource_id": "ST092",
+              "проверенные_утверждения": [
+                "Current MetaTF releases document Python 3.10-3.12 support."
+              ],
+              "ограничения_валидации": [
+                "That range does not prove compatibility of every FlyWire, simulator and ML dependency.",
+                "A project Python version must be selected from a resolved dependency lock and CI results."
+              ],
+              "ссылка": "https://doc.brainchipinc.com/installation.html",
+              "назначение": "Vendor-specific Python compatibility note, not a validated project-wide requirement."
+            },
+            {
+              "компонент": "CUDA",
+              "требование": "12.x",
+              "статус_валидации": "rejected",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Rejected as an evidence resource, not asserted to be technically impossible.",
+              "resource_id": "ST093",
+              "проверенные_утверждения": [],
+              "ограничения_валидации": [
+                "The imported requirement (CUDA 12.x) has no workload benchmark, dependency lock or primary source.",
+                "A hardware estimate cannot be validated before a representative simulator and dataset pipeline are benchmarked."
+              ],
+              "назначение": "Superseded planning estimate; replace with measured peak memory, runtime, storage and compatibility results."
+            }
+          ]
+        },
+        {
+          "id": "C9.2",
+          "название": "Рекомендуемая конфигурация",
+          "ресурсы": [
+            {
+              "компонент": "CPU",
+              "требование": "32+ ядер (AMD Threadripper / Intel Xeon)",
+              "статус_валидации": "rejected",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Rejected as an evidence resource, not asserted to be technically impossible.",
+              "resource_id": "ST094",
+              "проверенные_утверждения": [],
+              "ограничения_валидации": [
+                "The imported requirement (32+ CPU cores / Threadripper or Xeon) has no workload benchmark, dependency lock or primary source.",
+                "A hardware estimate cannot be validated before a representative simulator and dataset pipeline are benchmarked."
+              ],
+              "назначение": "Superseded planning estimate; replace with measured peak memory, runtime, storage and compatibility results."
+            },
+            {
+              "компонент": "RAM",
+              "требование": "128–256 GB",
+              "статус_валидации": "rejected",
+              "проверено": "2026-09-22",
+              "примечание_валидации": "Rejected as an evidence resource, not asserted to be technically impossible.",
+              "resource_id": "ST095",
+              "проверенные_утверждения": [],
+              "ограничения_валидации": [
+                "The imported requirement (128-256 GB RAM) has no workload benchmark, dependency lock or primary source.",
+                "A hardware estimate cannot be validated before a representative simulator and dataset pipeline are benchmarked."
+              ],
+              "назначение": "Superseded planning estimate; replace with measured peak memory, runtime, storage and compatibility results."
+            },
+            {
+              "компонент": "GPU",
+              "требование": "2× NVIDIA A100 80GB или 4× RTX 4090",
+              "статус_валидации": "unverified",
+              "проверено": null,
+              "примечание_валидации": "Нет проверяемой ссылки.",
+              "resource_id": "ST096",
+              "проверенные_утверждения": [],
+              "ограничения_валидации": []
+            },
+            {
+              "компонент": "Storage",
+              "требование": "4 TB NVMe + 8 TB HDD (архив датасетов)",
+              "статус_валидации": "unverified",
+              "проверено": null,
+              "примечание_валидации": "Нет проверяемой ссылки.",
+              "resource_id": "ST097",
+              "проверенные_утверждения": [],
+              "ограничения_валидации": []
+            },
+            {
+              "компонент": "Нейроморфное железо",
+              "требование": "BrainChip Akida dev kit / AKD1500 (для edge-валидации)",
+              "статус_валидации": "unverified",
+              "проверено": null,
+              "примечание_валидации": "Нет проверяемой ссылки.",
+              "resource_id": "ST098",
+              "проверенные_утверждения": [],
+              "ограничения_валидации": []
+            }
+          ]
+        },
+        {
+          "id": "C9.3",
+          "название": "Программный стек",
+          "ресурсы": [
+            {
+              "группа": "Симуляция",
+              "компоненты": [
+                "Brian2 + Brian2GeNN (SNN)",
+                "NEST GPU (альтернатива)",
+                "FlyGym / NeuroMechFly v2 (embodied)",
+                "MuJoCo (физика)",
+                "FlyWire Codex API (коннектом)"
+              ],
+              "статус_валидации": "unverified",
+              "проверено": null,
+              "примечание_валидации": "Нет проверяемой ссылки.",
+              "resource_id": "ST099",
+              "проверенные_утверждения": [],
+              "ограничения_валидации": []
+            },
+            {
+              "группа": "ML",
+              "компоненты": [
+                "PyTorch 2.x + Lightning",
+                "PyTorch Tabular",
+                "sktime (time series)",
+                "HuggingFace Transformers",
+                "snnTorch / Norse (SNN)"
+              ],
+              "статус_валидации": "unverified",
+              "проверено": null,
+              "примечание_валидации": "Нет проверяемой ссылки.",
+              "resource_id": "ST100",
+              "проверенные_утверждения": [],
+              "ограничения_валидации": []
+            },
+            {
+              "группа": "SCS-модели",
+              "компоненты": [
+                "RADO-SCS (FEM)",
+                "SCSInSCIMechanisms",
+                "NRV (PNS)"
+              ],
+              "статус_валидации": "unverified",
+              "проверено": null,
+              "примечание_валидации": "Нет проверяемой ссылки.",
+              "resource_id": "ST101",
+              "проверенные_утверждения": [],
+              "ограничения_валидации": []
+            },
+            {
+              "группа": "Нейроморфное железо",
+              "компоненты": [
+                "BrainChip MetaTF SDK",
+                "Edge Impulse (AKD1000)"
+              ],
+              "статус_валидации": "unverified",
+              "проверено": null,
+              "примечание_валидации": "Нет проверяемой ссылки.",
+              "resource_id": "ST102",
+              "проверенные_утверждения": [],
+              "ограничения_валидации": []
+            },
+            {
+              "группа": "Данные",
+              "компоненты": [
+                "BioVid, AI4Pain, PainMonit, LENS",
+                "OpenPain, PainLabMunich (ЭЭГ)",
+                "fNIRS datasets (Mendeley, NEMAR)"
+              ],
+              "статус_валидации": "unverified",
+              "проверено": null,
+              "примечание_валидации": "Нет проверяемой ссылки.",
+              "resource_id": "ST103",
+              "проверенные_утверждения": [],
+              "ограничения_валидации": []
+            },
+            {
+              "группа": "Облако",
+              "компоненты": [
+                "Google Colab (GPU/TPU) для прототипирования"
+              ],
+              "статус_валидации": "unverified",
+              "проверено": null,
+              "примечание_валидации": "Нет проверяемой ссылки.",
+              "resource_id": "ST104",
+              "проверенные_утверждения": [],
+              "ограничения_валидации": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "matrix_task_to_resources": [
+    {
+      "задача": "1. Формализация коннектома",
+      "ключевые_ресурсы": [
+        "FlyWire Codex",
+        "FlyConnectome",
+        "murthylab/flywire-network-analysis",
+        "philshiu/Drosophila_brain_model"
+      ]
+    },
+    {
+      "задача": "2. Embodied симуляция",
+      "ключевые_ресурсы": [
+        "NeuroMechFly v2/FlyGym",
+        "MuJoCo",
+        "Eon Systems fly-brain",
+        "claude-fly",
+        "fly-arena"
+      ]
+    },
+    {
+      "задача": "3. Синтетический датасет",
+      "ключевые_ресурсы": [
+        "Brian2/Brian2GeNN",
+        "NEST GPU",
+        "snnTorch",
+        "ModMix",
+        "diffusion models"
+      ]
+    },
+    {
+      "задача": "4. Cross-species adaptation",
+      "ключевые_ресурсы": [
+        "RADO-SCS",
+        "SCSInSCIMechanisms",
+        "DANN",
+        "meta-learning (VNS)",
+        "US20220323766A1"
+      ]
+    },
+    {
+      "задача": "5. Обучение и валидация",
+      "ключевые_ресурсы": [
+        "PyTorch Tabular",
+        "PainFormer",
+        "HCAT-Pain",
+        "GIAFormer",
+        "BioVid",
+        "AI4Pain",
+        "BrainChip Akida"
+      ]
+    },
+    {
+      "задача": "6. Этический аудит",
+      "ключевые_ресурсы": [
+        "Drosophila emulations (Scilit)",
+        "The Mousing Problem (Zenodo)",
+        "AI and Ethics"
+      ]
+    },
+    {
+      "задача": "7. Open science",
+      "ключевые_ресурсы": [
+        "GitHub",
+        "Zenodo",
+        "HuggingFace",
+        "OSF"
+      ]
+    }
+  ],
+  "notes": [
+    "BioVid требует соглашения для некоммерческого исследования; AI4PAIN использует регистрацию/EULA; PainMonit доступен через Figshare.",
+    "На первом проходе не подтвержден открытый человеческий набор, одновременно содержащий SCS/ECAP и клинический исход боли.",
+    "FlyWire FAFB v783 описывает мозг взрослой самки, а не VNC/тело; анатомическая связность не задает физиологическую динамику.",
+    "NeuroMechFly/FlyGym является embodied sensorimotor framework, но не содержит готовой модели ноцицепции, ECAP или человеческой SCS.",
+    "Непроверенные ресурсы и общие доменные ссылки нельзя использовать в ИПР, статье или заявке на новизну до валидации."
+  ]
+}

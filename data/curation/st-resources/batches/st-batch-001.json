@@ -1,0 +1,368 @@
+{
+  "meta": {
+    "batch_id": "st-batch-001",
+    "schema_version": "1.0.0",
+    "created_at": "2026-09-22",
+    "status": "applied",
+    "reviewed_at": "2026-09-22",
+    "applied_at": "2026-09-22"
+  },
+  "resource_ids": [
+    "ST002",
+    "ST003",
+    "ST004",
+    "ST007",
+    "ST008",
+    "ST009",
+    "ST011",
+    "ST012",
+    "ST013",
+    "ST014",
+    "ST016"
+  ],
+  "resources": [
+    {
+      "resource_id": "ST002",
+      "category_id": "C1",
+      "subcategory_id": "C1.1",
+      "name": "FlyConnectome (Seung Lab)",
+      "status": "url_present_content_not_checked",
+      "url": "https://github.com/seung-lab/FlyConnectome"
+    },
+    {
+      "resource_id": "ST003",
+      "category_id": "C1",
+      "subcategory_id": "C1.1",
+      "name": "murthylab/flywire-network-analysis",
+      "status": "url_present_content_not_checked",
+      "url": "https://github.com/murthylab/flywire-network-analysis"
+    },
+    {
+      "resource_id": "ST004",
+      "category_id": "C1",
+      "subcategory_id": "C1.1",
+      "name": "connectome_data_prep",
+      "status": "url_present_content_not_checked",
+      "url": "https://github.com/YijieYin/connectome_data_prep"
+    },
+    {
+      "resource_id": "ST007",
+      "category_id": "C1",
+      "subcategory_id": "C1.2",
+      "name": "Eon Systems: fly-brain",
+      "status": "url_present_content_not_checked",
+      "url": "https://github.com/eonsystemspbc/fly-brain"
+    },
+    {
+      "resource_id": "ST008",
+      "category_id": "C1",
+      "subcategory_id": "C1.2",
+      "name": "claude-fly",
+      "status": "url_present_content_not_checked",
+      "url": "https://github.com/legacyindiesubmissions-ai/claude-fly"
+    },
+    {
+      "resource_id": "ST009",
+      "category_id": "C1",
+      "subcategory_id": "C1.2",
+      "name": "snedea/flybrain",
+      "status": "url_present_content_not_checked",
+      "url": "https://github.com/snedea/flybrain"
+    },
+    {
+      "resource_id": "ST011",
+      "category_id": "C1",
+      "subcategory_id": "C1.2",
+      "name": "artem-x-meta/fly-arena",
+      "status": "url_present_content_not_checked",
+      "url": "https://github.com/artem-x-meta/fly-arena"
+    },
+    {
+      "resource_id": "ST012",
+      "category_id": "C1",
+      "subcategory_id": "C1.2",
+      "name": "MakazhanAlpamys/soup-connectome",
+      "status": "url_present_content_not_checked",
+      "url": "https://github.com/MakazhanAlpamys/soup-connectome"
+    },
+    {
+      "resource_id": "ST013",
+      "category_id": "C1",
+      "subcategory_id": "C1.2",
+      "name": "chaobrain/fitting_drosophila_whole_brain",
+      "status": "url_present_content_not_checked",
+      "url": "https://github.com/chaobrain/fitting_drosophila_whole_brain_spiking_model"
+    },
+    {
+      "resource_id": "ST014",
+      "category_id": "C1",
+      "subcategory_id": "C1.3",
+      "name": "Jessica Jones: Circuit Reconstruction",
+      "status": "needs_exact_url",
+      "url": null
+    },
+    {
+      "resource_id": "ST016",
+      "category_id": "C1",
+      "subcategory_id": "C1.3",
+      "name": "MaleCNS connectome (Janelia)",
+      "status": "needs_exact_url",
+      "url": null
+    }
+  ],
+  "decisions": [
+    {
+      "resource_id": "ST002",
+      "decision": "verified_primary",
+      "exact_url": "https://github.com/seung-lab/FlyConnectome",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "seung-lab FlyConnectome programmatic access CAVE tutorial",
+          "url": "https://github.com/seung-lab/FlyConnectome",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "Repository contains CAVE and mesh-access notebooks for FlyWire.",
+        "README identifies Codex as the bulk-download source."
+      ],
+      "limitations": [
+        "Data-access tutorials only; this is not a neural or embodied simulator."
+      ],
+      "corrected_purpose": "Tutorials for programmatic FlyWire access through CAVE, meshes and Codex exports.",
+      "note": "Repository content checked; simulation capability is not claimed."
+    },
+    {
+      "resource_id": "ST003",
+      "decision": "verified_primary",
+      "exact_url": "https://github.com/murthylab/flywire-network-analysis",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "murthylab flywire network analysis v630",
+          "url": "https://github.com/murthylab/flywire-network-analysis",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "Repository contains scripts for network analyses of the FlyWire connectome.",
+        "README links the associated network and data preprints."
+      ],
+      "limitations": [
+        "The published scripts describe the v630 snapshot, not current v783 data."
+      ],
+      "corrected_purpose": "Network-analysis scripts and derived products for the FlyWire v630 snapshot.",
+      "note": "Retained as analysis prior art; version mismatch must be explicit."
+    },
+    {
+      "resource_id": "ST004",
+      "decision": "partially_verified",
+      "exact_url": "https://github.com/YijieYin/connectome_data_prep",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "YijieYin connectome_data_prep FlyWire FAFB MaleCNS",
+          "url": "https://github.com/YijieYin/connectome_data_prep",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "Repository exists and contains FAFB, maleCNS and other preparation workflows."
+      ],
+      "limitations": [
+        "The repository landing page does not confirm the imported claim about a tinyurl v783 interface.",
+        "Individual notebooks and their data-version assumptions still require execution-level review."
+      ],
+      "corrected_purpose": "Research repository with preparation notebooks for FAFB, MaleCNS and related connectome data.",
+      "note": "Specific v783 convenience-interface claim was removed as unconfirmed."
+    },
+    {
+      "resource_id": "ST007",
+      "decision": "verified_primary",
+      "exact_url": "https://github.com/eonsystemspbc/fly-brain",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "eonsystemspbc fly-brain Brian2CUDA PyTorch NEST GPU GeNN",
+          "url": "https://github.com/eonsystemspbc/fly-brain",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "Repository provides Brian2, Brian2CUDA, PyTorch, NEST GPU, GeNN and Brian2GeNN backends.",
+        "README documents FlyWire v783 input files and reproducible benchmark commands."
+      ],
+      "limitations": [
+        "This is a connectome-constrained LIF benchmark, not an embodied nociception model.",
+        "Repository-reported benchmark results were not independently rerun in this audit."
+      ],
+      "corrected_purpose": "FlyWire v783 LIF benchmark implementation across six simulation backends.",
+      "note": "Suitable simulator candidate only after local reproducibility and biological-scope checks."
+    },
+    {
+      "resource_id": "ST008",
+      "decision": "partially_verified",
+      "exact_url": "https://github.com/legacyindiesubmissions-ai/claude-fly",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "legacyindiesubmissions-ai claude-fly embodied Drosophila simulation",
+          "url": "https://github.com/legacyindiesubmissions-ai/claude-fly",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "Repository and accompanying 2026 Zenodo preprint are linked from the README.",
+        "README describes a FlyWire-derived spiking network coupled to NeuroMechFly/MuJoCo."
+      ],
+      "limitations": [
+        "Scientific and behavioral claims are self-reported and not independently validated here.",
+        "The README clone command points to a differently named repository.",
+        "Claims of primacy and low-cost hardware are not evidence of biological fidelity."
+      ],
+      "corrected_purpose": "Experimental repository claiming FlyWire-derived spiking activity coupled to a simulated body.",
+      "note": "Do not cite as a validated whole-brain emulation or nociception model."
+    },
+    {
+      "resource_id": "ST009",
+      "decision": "verified_primary",
+      "exact_url": "https://github.com/snedea/flybrain",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "snedea flybrain 139255 LIF Web Worker",
+          "url": "https://github.com/snedea/flybrain",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "README states 139,255 LIF neurons and 2.7M connections from FlyWire FAFB v783.",
+        "The implementation runs in a browser Web Worker and exposes interactive stimuli."
+      ],
+      "limitations": [
+        "Behavior-emergence statements are repository claims, not peer-reviewed validation.",
+        "The connection reduction from the source connectome requires methodological review."
+      ],
+      "corrected_purpose": "Interactive browser LIF visualization derived from a reduced FlyWire v783 graph.",
+      "note": "Candidate for software comparison, not direct biological ground truth."
+    },
+    {
+      "resource_id": "ST011",
+      "decision": "verified_primary",
+      "exact_url": "https://github.com/artem-x-meta/fly-arena",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "artem-x-meta fly-arena MaleCNS FlyGym MuJoCo",
+          "url": "https://github.com/artem-x-meta/fly-arena",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "Repository combines MaleCNS data, a NeuroMechFly body and explicit controllers.",
+        "README documents local preparation, checksums and diagnostic/ablation controls."
+      ],
+      "limitations": [
+        "The authors explicitly describe it as experimental and not physiologically validated.",
+        "Several displayed behaviors are engineered controllers and can run with the connectome disabled."
+      ],
+      "corrected_purpose": "Experimental MaleCNS/FlyGym environment with explicit hybrid behavioral controllers.",
+      "note": "Useful integration scaffold; engineered behavior must not be attributed to the connectome."
+    },
+    {
+      "resource_id": "ST012",
+      "decision": "verified_primary",
+      "exact_url": "https://github.com/MakazhanAlpamys/soup-connectome",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "MakazhanAlpamys soup-connectome MaleCNS benchmark",
+          "url": "https://github.com/MakazhanAlpamys/soup-connectome",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "Repository implements resident and streamed sparse-graph runtimes for MaleCNS data.",
+        "README labels measured, estimated and not-tested evidence separately."
+      ],
+      "limitations": [
+        "No biological calibration or scientific fidelity claim is made.",
+        "Reported timings are host-specific infrastructure measurements."
+      ],
+      "corrected_purpose": "Infrastructure benchmark for resident and streamed execution of a MaleCNS-derived sparse graph.",
+      "note": "Retain for runtime engineering only, not as neuroscience validation."
+    },
+    {
+      "resource_id": "ST013",
+      "decision": "verified_primary",
+      "exact_url": "https://github.com/chaobrain/fitting_drosophila_whole_brain_spiking_model",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "chaobrain fitting Drosophila whole brain spiking model",
+          "url": "https://github.com/chaobrain/fitting_drosophila_whole_brain_spiking_model",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "Repository implements a two-stage SNN plus RNN activity-fitting workflow.",
+        "README identifies FlyWire 630/783 and Drosophila neural recordings as inputs.",
+        "README links the associated Nature Communications article DOI 10.1038/s41467-026-68453-w."
+      ],
+      "limitations": [
+        "The local workflow was not executed in this audit.",
+        "Activity fitting does not establish nociception, pain or embodied behavior validity."
+      ],
+      "corrected_purpose": "Two-stage SNN/RNN workflow for fitting region-level Drosophila neural dynamics.",
+      "note": "Promising simulation candidate subject to local reproduction and task-specific validation."
+    },
+    {
+      "resource_id": "ST014",
+      "decision": "partially_verified",
+      "exact_url": "https://jesmjones.github.io/projects/01-circuits/",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Jessica Jones Circuit Reconstruction Drosophila nociception",
+          "url": "https://jesmjones.github.io/projects/01-circuits/",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "Author project page describes circuit reconstruction, optogenetics and behavior analysis for adult-fly nociception.",
+        "The page links preprint DOI 10.1101/2025.10.28.684868 and its analysis-code repository."
+      ],
+      "limitations": [
+        "The imported md-neuron to two-pathway summary was not verified from the project page alone.",
+        "The linked work is a preprint and must not be treated as settled evidence of subjective pain."
+      ],
+      "corrected_purpose": "Primary project page and preprint/code links for adult Drosophila nociceptive circuit reconstruction.",
+      "note": "Use only for nociceptive pathways and defensive behavior, not subjective pain."
+    },
+    {
+      "resource_id": "ST016",
+      "decision": "verified_primary",
+      "exact_url": "https://male-cns.janelia.org/download/",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Janelia MaleCNS v1.0 download 166700 neurons",
+          "url": "https://male-cns.janelia.org/download/",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "verified_claims": [
+        "Official project provides MaleCNS v1.0 annotations, connectivity, skeletons and neuPrint access.",
+        "Official project reports 166,700 neurons across brain and ventral nerve cord.",
+        "Dataset is licensed CC BY."
+      ],
+      "limitations": [
+        "MaleCNS and female FAFB/FlyWire are different specimens and scopes.",
+        "The original 25.5M-connections wording was removed because the official download exposes multiple count definitions."
+      ],
+      "corrected_purpose": "Official MaleCNS v1.0 download and programmatic-access page for the complete male CNS connectome.",
+      "note": "Use explicit release, filtering and count definitions in every derived dataset."
+    }
+  ]
+}

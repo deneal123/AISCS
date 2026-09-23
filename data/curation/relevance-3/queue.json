@@ -1,0 +1,60 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "generated_at": "2026-09-22",
+    "relevance": 3,
+    "status": "complete",
+    "batch_size_target": 20,
+    "source_count": 34,
+    "batch_count": 2,
+    "remaining_unverified_count": 0
+  },
+  "batches": [
+    {
+      "batch_id": "r3-batch-001",
+      "source_ids": [
+        "S201",
+        "S137",
+        "S234",
+        "S296",
+        "S335",
+        "S395",
+        "S026",
+        "S066",
+        "S094",
+        "S227",
+        "S068",
+        "S092",
+        "S252",
+        "S049",
+        "S030",
+        "S021",
+        "S028",
+        "S067",
+        "S097",
+        "S246"
+      ],
+      "path": "R:\\Aspa\\research\\data\\curation\\relevance-3\\batches\\r3-batch-001.json"
+    },
+    {
+      "batch_id": "r3-batch-002",
+      "source_ids": [
+        "S250",
+        "S314",
+        "S061",
+        "S062",
+        "S169",
+        "S095",
+        "S154",
+        "S168",
+        "S247",
+        "S152",
+        "S214",
+        "S266",
+        "S307",
+        "S157"
+      ],
+      "path": "R:\\Aspa\\research\\data\\curation\\relevance-3\\batches\\r3-batch-002.json"
+    }
+  ]
+}

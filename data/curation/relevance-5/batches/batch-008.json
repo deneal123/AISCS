@@ -1,0 +1,389 @@
+{
+  "meta": {
+    "batch_id": "batch-008",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-22",
+    "scope": "relevance=5; status=unverified",
+    "status": "applied",
+    "reviewed_at": "2026-09-22",
+    "applied_at": "2026-09-22"
+  },
+  "source_ids": [
+    "S070",
+    "S112",
+    "S147",
+    "S163",
+    "S172",
+    "S284",
+    "S297",
+    "S321",
+    "S336"
+  ],
+  "records": [
+    {
+      "id": "S070",
+      "title": "Towards Generalizable Learning Models for EEG-Based Identification of Pain",
+      "year": 2025,
+      "source_type": "препринт"
+    },
+    {
+      "id": "S112",
+      "title": "Towards Generalizable Learning Models for EEG-Based Pain Identification",
+      "year": 2025,
+      "source_type": "препринт"
+    },
+    {
+      "id": "S147",
+      "title": "Towards Generalizable Learning Models for EEG Pain",
+      "year": 2025,
+      "source_type": "препринт"
+    },
+    {
+      "id": "S163",
+      "title": "Towards Generalizable Learning Models for EEG Pain",
+      "year": 2025,
+      "source_type": "препринт"
+    },
+    {
+      "id": "S172",
+      "title": "Towards Generalizable Learning Models for EEG Pain (final)",
+      "year": 2025,
+      "source_type": "препринт"
+    },
+    {
+      "id": "S284",
+      "title": "Neuromorphic Neuromodulation: Low-Power Edge-Training",
+      "year": 2025,
+      "source_type": "федеративное_SCS"
+    },
+    {
+      "id": "S297",
+      "title": "Neuromorphic Neuromodulation (extended)",
+      "year": 2025,
+      "source_type": "федеративное_SCS"
+    },
+    {
+      "id": "S321",
+      "title": "Neuromorphic Neuromodulation (final)",
+      "year": 2025,
+      "source_type": "федеративное_SCS"
+    },
+    {
+      "id": "S336",
+      "title": "Neuromorphic Neuromodulation (final extended)",
+      "year": 2025,
+      "source_type": "федеративное_SCS"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S070",
+      "decision": "verified_metadata",
+      "checked_at": "2026-09-22",
+      "full_text_status": "metadata_only",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Towards Generalizable Learning Models for EEG-Based Identification of Pain",
+          "url": "https://api.crossref.org/works?query.title=Towards+Generalizable+Learning+Models+for+EEG-Based+Identification+of+Pain&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Towards Generalizable Learning Models for EEG-Based Identification of Pain\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Towards+Generalizable+Learning+Models+for+EEG-Based+Identification+of+Pain%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "updates": {
+        "название": "Towards Generalizable Learning Models for EEG-Based Identification of Pain Perception",
+        "авторы": "Mathis Rezzouk; Fabrice Gagnon; Alyson Champagne; Mathieu Roy; Philippe Albouy; Michel-Pierre Coll; Cem Subakan",
+        "год": 2025,
+        "издание": "2025 IEEE 35th International Workshop on Machine Learning for Signal Processing (MLSP)",
+        "модальность": null,
+        "задача": null,
+        "метод": null,
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "ограничения": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+        "identifiers": {
+          "doi": "10.1109/MLSP62443.2025.11204206",
+          "exact_url": "https://doi.org/10.1109/mlsp62443.2025.11204206"
+        },
+        "provenance": {
+          "retrieved_at": "2026-09-22",
+          "search_stream": "relevance-5/registry-and-primary-review",
+          "query_or_seed": "Towards Generalizable Learning Models for EEG-Based Identification of Pain Perception",
+          "iteration": 1
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "subject_domain": "unknown",
+          "modalities": [],
+          "sample_size": null,
+          "target_construct": "unknown",
+          "target_label": null,
+          "evidence_role": "context_only"
+        },
+        "validation": {
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported"
+        },
+        "risk_flags": [
+          "metadata_only"
+        ]
+      },
+      "claims": [
+        {
+          "claim": "The bibliographic source exists under the verified identifier.",
+          "target_variable": "source identity",
+          "population_or_data": "not extracted in metadata-only decisions",
+          "evidence": "doi=10.1109/MLSP62443.2025.11204206; exact title=Towards Generalizable Learning Models for EEG-Based Identification of Pain Perception",
+          "limitation": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+          "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+        }
+      ],
+      "notes": "Bibliographic metadata confirmed; full text was not used for claim extraction."
+    },
+    {
+      "source_id": "S112",
+      "decision": "alias",
+      "canonical_id": "S070",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Towards Generalizable Learning Models for EEG-Based Pain Identification",
+          "url": "https://api.crossref.org/works?query.title=Towards+Generalizable+Learning+Models+for+EEG-Based+Pain+Identification&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Towards Generalizable Learning Models for EEG-Based Pain Identification\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Towards+Generalizable+Learning+Models+for+EEG-Based+Pain+Identification%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S147",
+      "decision": "alias",
+      "canonical_id": "S070",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Towards Generalizable Learning Models for EEG Pain",
+          "url": "https://api.crossref.org/works?query.title=Towards+Generalizable+Learning+Models+for+EEG+Pain&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Towards Generalizable Learning Models for EEG Pain\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Towards+Generalizable+Learning+Models+for+EEG+Pain%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S163",
+      "decision": "alias",
+      "canonical_id": "S070",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Towards Generalizable Learning Models for EEG Pain",
+          "url": "https://api.crossref.org/works?query.title=Towards+Generalizable+Learning+Models+for+EEG+Pain&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Towards Generalizable Learning Models for EEG Pain\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Towards+Generalizable+Learning+Models+for+EEG+Pain%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S172",
+      "decision": "alias",
+      "canonical_id": "S070",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Towards Generalizable Learning Models for EEG Pain",
+          "url": "https://api.crossref.org/works?query.title=Towards+Generalizable+Learning+Models+for+EEG+Pain&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Towards Generalizable Learning Models for EEG Pain\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Towards+Generalizable+Learning+Models+for+EEG+Pain%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S284",
+      "decision": "verified_metadata",
+      "checked_at": "2026-09-22",
+      "full_text_status": "metadata_only",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Neuromorphic Neuromodulation: Low-Power Edge-Training",
+          "url": "https://api.crossref.org/works?query.title=Neuromorphic+Neuromodulation%3A+Low-Power+Edge-Training&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Neuromorphic Neuromodulation: Low-Power Edge-Training\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Neuromorphic+Neuromodulation%3A+Low-Power+Edge-Training%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "updates": {
+        "название": "Neuromorphic neuromodulation: Towards the next generation of closed-loop neurostimulation",
+        "авторы": "Luis Fernando Herbozo Contreras; Nhan Duy Truong; Jason K Eshraghian; Zhangyu Xu; Zhaojing Huang; Thomas Vincenzo Bersani–Veroni; Isabelle Aguilar; Wing Hang Leung; Armin Nikpour; Omid Kavehei",
+        "год": 2024,
+        "издание": "PNAS Nexus",
+        "модальность": null,
+        "задача": null,
+        "метод": null,
+        "датасет": null,
+        "производительность": null,
+        "кросс_субъект": null,
+        "ограничения": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+        "identifiers": {
+          "doi": "10.1093/pnasnexus/pgae488",
+          "exact_url": "https://doi.org/10.1093/pnasnexus/pgae488"
+        },
+        "provenance": {
+          "retrieved_at": "2026-09-22",
+          "search_stream": "relevance-5/registry-and-primary-review",
+          "query_or_seed": "Neuromorphic neuromodulation: Towards the next generation of closed-loop neurostimulation",
+          "iteration": 1
+        },
+        "evidence": {
+          "species": null,
+          "population": null,
+          "subject_domain": "unknown",
+          "modalities": [],
+          "sample_size": null,
+          "target_construct": "unknown",
+          "target_label": null,
+          "evidence_role": "context_only"
+        },
+        "validation": {
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported"
+        },
+        "risk_flags": [
+          "metadata_only"
+        ]
+      },
+      "claims": [
+        {
+          "claim": "The bibliographic source exists under the verified identifier.",
+          "target_variable": "source identity",
+          "population_or_data": "not extracted in metadata-only decisions",
+          "evidence": "doi=10.1093/pnasnexus/pgae488; exact title=Neuromorphic neuromodulation: Towards the next generation of closed-loop neurostimulation",
+          "limitation": "Bibliographic metadata confirmed; full text was not used for claim extraction.",
+          "permitted_conclusion": "Cite existence and metadata only unless full-text claim extraction is recorded."
+        }
+      ],
+      "notes": "Bibliographic metadata confirmed; full text was not used for claim extraction."
+    },
+    {
+      "source_id": "S297",
+      "decision": "alias",
+      "canonical_id": "S284",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Neuromorphic Neuromodulation",
+          "url": "https://api.crossref.org/works?query.title=Neuromorphic+Neuromodulation&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Neuromorphic Neuromodulation\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Neuromorphic+Neuromodulation%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S321",
+      "decision": "alias",
+      "canonical_id": "S284",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Neuromorphic Neuromodulation",
+          "url": "https://api.crossref.org/works?query.title=Neuromorphic+Neuromodulation&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Neuromorphic Neuromodulation\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Neuromorphic+Neuromodulation%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    },
+    {
+      "source_id": "S336",
+      "decision": "alias",
+      "canonical_id": "S284",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "service": "Crossref",
+          "query": "Neuromorphic Neuromodulation",
+          "url": "https://api.crossref.org/works?query.title=Neuromorphic+Neuromodulation&rows=5&select=DOI%2Ctitle%2Cauthor%2Cpublished-online%2Cpublished-print%2Ccontainer-title%2CURL%2Ctype",
+          "result": "registry response saved in discovery/registry-search.json"
+        },
+        {
+          "service": "PubMed",
+          "query": "\"Neuromorphic Neuromodulation\"[Title]",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22Neuromorphic+Neuromodulation%22%5BTitle%5D&retmode=json&retmax=5",
+          "result": "registry response saved in discovery/registry-search.json"
+        }
+      ],
+      "claims": [],
+      "notes": "The abbreviated/final/extended label does not identify a separate publication or version."
+    }
+  ]
+}

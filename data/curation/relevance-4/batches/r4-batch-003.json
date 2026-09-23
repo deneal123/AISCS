@@ -1,0 +1,818 @@
+{
+  "meta": {
+    "batch_id": "r4-batch-003",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-22",
+    "scope": "relevance=4; status=unverified",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-22"
+  },
+  "source_ids": [
+    "S220",
+    "S221",
+    "S245",
+    "S350",
+    "S022",
+    "S024",
+    "S160",
+    "S098",
+    "S161",
+    "S373",
+    "S241",
+    "S240",
+    "S018",
+    "S045",
+    "S058",
+    "S107",
+    "S283",
+    "S348",
+    "S017",
+    "S019",
+    "S023",
+    "S073",
+    "S115"
+  ],
+  "records": [
+    {
+      "id": "S220",
+      "title": "CN122075919A – Closed-loop pain management system",
+      "year": 2026,
+      "source_type": "патент"
+    },
+    {
+      "id": "S221",
+      "title": "MenstruEase: Closed-Loop Smart TENS System",
+      "year": 2026,
+      "source_type": "применение"
+    },
+    {
+      "id": "S245",
+      "title": "CN120478838B – Wearable pain relief device",
+      "year": 2026,
+      "source_type": "патент"
+    },
+    {
+      "id": "S350",
+      "title": "Anatomical Data Driven Modeling of ECAP (Swine)",
+      "year": 2026,
+      "source_type": "метод"
+    },
+    {
+      "id": "S022",
+      "title": "Machine learning for discovery of clinical pain biomarkers following spinal cord injury",
+      "year": 2025,
+      "source_type": "метод"
+    },
+    {
+      "id": "S024",
+      "title": "Pain Sense: Intelligent Pain Mapping System for Spinal Cord Injuries",
+      "year": 2025,
+      "source_type": "применение"
+    },
+    {
+      "id": "S160",
+      "title": "Anatomical Data Driven Modeling of ECAP Recordings",
+      "year": 2025,
+      "source_type": "метод"
+    },
+    {
+      "id": "S098",
+      "title": "Machine learning to optimize spinal cord stimulation",
+      "year": 2024,
+      "source_type": "патент"
+    },
+    {
+      "id": "S161",
+      "title": "Machine Learning in SCS for Pain",
+      "year": 2024,
+      "source_type": "обзор"
+    },
+    {
+      "id": "S373",
+      "title": "Machine Learning in SCS for Pain (extended)",
+      "year": 2024,
+      "source_type": "обзор"
+    },
+    {
+      "id": "S241",
+      "title": "ECAP-Filtered Neuromodulation Waveform Matching",
+      "year": 2024,
+      "source_type": "патент"
+    },
+    {
+      "id": "S240",
+      "title": "Systems and methods for providing neurostimulation using multi-dimensional features",
+      "year": 2022,
+      "source_type": "патент"
+    },
+    {
+      "id": "S018",
+      "title": "Estimation and Localization of Chronic Pain level from EEG Signals",
+      "year": 2026,
+      "source_type": "метод"
+    },
+    {
+      "id": "S045",
+      "title": "EEG-Based Pain Classification via Sample Selection",
+      "year": 2026,
+      "source_type": "метод"
+    },
+    {
+      "id": "S058",
+      "title": "EEG-Based Pain Classification via Sample Selection",
+      "year": 2026,
+      "source_type": "метод"
+    },
+    {
+      "id": "S107",
+      "title": "Circuit Reconstruction of nociceptive circuits in fly CNS",
+      "year": 2026,
+      "source_type": "метод"
+    },
+    {
+      "id": "S283",
+      "title": "Circuit Reconstruction (Jessica Jones, 2026)",
+      "year": 2026,
+      "source_type": "метод"
+    },
+    {
+      "id": "S348",
+      "title": "Circuit Reconstruction (Jessica Jones, 2026)",
+      "year": 2026,
+      "source_type": "метод"
+    },
+    {
+      "id": "S017",
+      "title": "Toward Efficient ECG-Based Pain Intensity Recognition",
+      "year": 2025,
+      "source_type": "метод"
+    },
+    {
+      "id": "S019",
+      "title": "DeepPainSense: Real-Time, Explainable Multimodal System",
+      "year": 2025,
+      "source_type": "XAI"
+    },
+    {
+      "id": "S023",
+      "title": "Generalisation of EEG-Based Pain Biomarker Classification for Central Neuropathic Pain in Subacute SCI",
+      "year": 2025,
+      "source_type": "кросс_субъект"
+    },
+    {
+      "id": "S073",
+      "title": "Enhanced deep learning framework for real-time pain assessment",
+      "year": 2025,
+      "source_type": "метод"
+    },
+    {
+      "id": "S115",
+      "title": "Enhanced deep learning framework for real-time pain assessment",
+      "year": 2025,
+      "source_type": "метод"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S220",
+      "decision": "alias",
+      "canonical_id": "S272",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "CN122075919A - Closed-loop pain management system",
+          "url": "https://patents.google.com/patent/CN122075919A/en",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S221",
+      "decision": "alias",
+      "canonical_id": "S273",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "MenstruEase: Closed-Loop Smart TENS System",
+          "url": "https://doi.org/10.1002/adsu.70449",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S245",
+      "decision": "verified_metadata",
+      "checked_at": "2026-09-22",
+      "full_text_status": "metadata_only",
+      "searches": [
+        {
+          "query": "A wearable pain relief device and remote monitoring system therefor",
+          "url": "https://patents.google.com/patent/CN120478838B/en",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "A wearable pain relief device and remote monitoring system therefor",
+        "identifiers": {
+          "doi": null,
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": "CN120478838B",
+          "dataset_id": null,
+          "exact_url": "https://patents.google.com/patent/CN120478838B/en"
+        },
+        "evidence": {
+          "target_construct": "clinical_function",
+          "evidence_role": "context_only"
+        },
+        "risk_flags": [
+          "patent_not_empirical_evidence",
+          "metadata_only"
+        ],
+        "издание": "China patent metadata"
+      },
+      "claims": [
+        {
+          "claim": "CN120478838B is a granted Chinese patent for a wearable pain-relief device and remote monitoring system.",
+          "target_variable": "clinical_function",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: CN120478838B",
+          "limitation": "Patent identity and translated title are confirmed. No empirical clinical validation or support for efficacy claims was established.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "Patent identity and translated title are confirmed. No empirical clinical validation or support for efficacy claims was established."
+    },
+    {
+      "source_id": "S350",
+      "decision": "alias",
+      "canonical_id": "S363",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Anatomical Data Driven Modeling of ECAP (Swine)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/40767809/",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S022",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-22",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "query": "Machine learning for discovery of clinical pain biomarkers following spinal cord injury",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/41539462/",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "Machine learning for discovery of clinical pain biomarkers following spinal cord injury",
+        "identifiers": {
+          "doi": "10.1016/j.expneurol.2026.115649",
+          "pmid": "41539462",
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://pubmed.ncbi.nlm.nih.gov/41539462/"
+        },
+        "evidence": {
+          "target_construct": "self_reported_pain",
+          "evidence_role": "context_only"
+        },
+        "risk_flags": [
+          "missing_cross_subject_validation"
+        ],
+        "авторы": "Roxana Florea; Ki-Soo Jeong; Carl Y Saab",
+        "издание": "Experimental Neurology",
+        "год": 2026
+      },
+      "claims": [
+        {
+          "claim": "The review supports multimodal composite SCI-pain biomarkers while warning that physiological features alone omit cognitive, emotional, demographic and cultural dimensions.",
+          "target_variable": "self_reported_pain",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: 10.1016/j.expneurol.2026.115649",
+          "limitation": "This is a review and position article, not a biomarker-validation cohort. It argues for multimodal composite biomarkers and cautions against reducing pain to physiology alone.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "This is a review and position article, not a biomarker-validation cohort. It argues for multimodal composite biomarkers and cautions against reducing pain to physiology alone."
+    },
+    {
+      "source_id": "S024",
+      "decision": "rejected",
+      "checked_at": "2026-09-22",
+      "exclusion_reason": "unverifiable",
+      "searches": [
+        {
+          "query": "Pain Sense: Intelligent Pain Mapping System for Spinal Cord Injuries",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/?term=%22Pain+Sense%22+%22Spinal+Cord+Injuries%22",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "risk_flags": [
+          "claim_not_supported"
+        ]
+      },
+      "claims": [],
+      "notes": "No uniquely identifiable primary publication or registered dataset with this exact title was found."
+    },
+    {
+      "source_id": "S160",
+      "decision": "alias",
+      "canonical_id": "S363",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Anatomical Data Driven Modeling of ECAP Recordings",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/40767809/",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S098",
+      "decision": "verified_metadata",
+      "checked_at": "2026-09-22",
+      "full_text_status": "metadata_only",
+      "searches": [
+        {
+          "query": "Machine learning to optimize spinal cord stimulation",
+          "url": "https://patents.google.com/patent/US11666761B2/en",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "Machine learning to optimize spinal cord stimulation",
+        "identifiers": {
+          "doi": null,
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": "US11666761B2",
+          "dataset_id": null,
+          "exact_url": "https://patents.google.com/patent/US11666761B2/en"
+        },
+        "evidence": {
+          "target_construct": "scs_response",
+          "evidence_role": "context_only"
+        },
+        "risk_flags": [
+          "patent_not_empirical_evidence",
+          "metadata_only"
+        ],
+        "авторы": "Michael A. Moffitt; Natalie A. Brill; Jianwen Gu; Juan Gabriel Hincapie Ordonez; Changfang Zhu; Hemant Bokil; Stephen Carcieri",
+        "издание": "Google Patents / USPTO publication metadata",
+        "год": 2023
+      },
+      "claims": [
+        {
+          "claim": "US11666761B2 documents a patent family for machine-learning optimization of spinal-cord-stimulation parameters.",
+          "target_variable": "scs_response",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: US11666761B2",
+          "limitation": "The patent describes optimization concepts and possible feedback measures. It is not empirical evidence that an ML optimizer improves patient outcomes.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "The patent describes optimization concepts and possible feedback measures. It is not empirical evidence that an ML optimizer improves patient outcomes."
+    },
+    {
+      "source_id": "S161",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-22",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "query": "Machine Learning in Spinal Cord Stimulation for Chronic Pain",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/37219574/",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "Machine Learning in Spinal Cord Stimulation for Chronic Pain",
+        "identifiers": {
+          "doi": "10.1227/ons.0000000000000774",
+          "pmid": "37219574",
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://pubmed.ncbi.nlm.nih.gov/37219574/"
+        },
+        "evidence": {
+          "target_construct": "scs_response",
+          "evidence_role": "context_only"
+        },
+        "risk_flags": [
+          "missing_cross_subject_validation"
+        ],
+        "авторы": "Varun Hariharan; Tessa A Harland; Christopher Young; Amit Sagar; Maria Merlano Gomez; Julie G Pilitsis",
+        "издание": "Operative Neurosurgery",
+        "год": 2023
+      },
+      "claims": [
+        {
+          "claim": "The review surveys ML uses for SCS candidate selection, trial response and programming optimization.",
+          "target_variable": "scs_response",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: 10.1227/ons.0000000000000774",
+          "limitation": "Narrative review of ML applications in SCS; it does not itself externally validate a response-prediction model.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "Narrative review of ML applications in SCS; it does not itself externally validate a response-prediction model."
+    },
+    {
+      "source_id": "S373",
+      "decision": "alias",
+      "canonical_id": "S161",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Machine Learning in SCS for Pain (extended)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/37219574/",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S241",
+      "decision": "verified_metadata",
+      "checked_at": "2026-09-22",
+      "full_text_status": "metadata_only",
+      "searches": [
+        {
+          "query": "ECAP-filtered neuromodulation waveform matching",
+          "url": "https://patents.google.com/patent/US20250099764A1/en",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "ECAP-filtered neuromodulation waveform matching",
+        "identifiers": {
+          "doi": null,
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": "US20250099764A1",
+          "dataset_id": null,
+          "exact_url": "https://patents.google.com/patent/US20250099764A1/en"
+        },
+        "evidence": {
+          "target_construct": "technical_signal_quality",
+          "evidence_role": "context_only"
+        },
+        "risk_flags": [
+          "patent_not_empirical_evidence",
+          "ecap_not_pain_measure",
+          "metadata_only"
+        ],
+        "издание": "Google Patents / USPTO application metadata",
+        "год": 2025
+      },
+      "claims": [
+        {
+          "claim": "US20250099764A1 describes filtering and matching of recorded neuromodulation waveforms.",
+          "target_variable": "technical_signal_quality",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: US20250099764A1",
+          "limitation": "Patent application describing waveform matching after filtering ECAP-related components. It provides no clinical proof of pain measurement or SCS efficacy.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "Patent application describing waveform matching after filtering ECAP-related components. It provides no clinical proof of pain measurement or SCS efficacy."
+    },
+    {
+      "source_id": "S240",
+      "decision": "verified_metadata",
+      "checked_at": "2026-09-22",
+      "full_text_status": "metadata_only",
+      "searches": [
+        {
+          "query": "Systems and methods for providing neurostimulation therapy using multi-dimensional patient features",
+          "url": "https://patents.google.com/patent/US20230123383A1/en",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "Systems and methods for providing neurostimulation therapy using multi-dimensional patient features",
+        "identifiers": {
+          "doi": null,
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": "US20230123383A1",
+          "dataset_id": null,
+          "exact_url": "https://patents.google.com/patent/US20230123383A1/en"
+        },
+        "evidence": {
+          "target_construct": "scs_response",
+          "evidence_role": "context_only"
+        },
+        "risk_flags": [
+          "patent_not_empirical_evidence",
+          "metadata_only"
+        ],
+        "издание": "Google Patents / USPTO application metadata",
+        "год": 2023
+      },
+      "claims": [
+        {
+          "claim": "US20230123383A1 proposes neurostimulation control using multidimensional physiological and patient features.",
+          "target_variable": "scs_response",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: US20230123383A1",
+          "limitation": "Patent application describing multidimensional patient features and AI/ML-assisted neurostimulation. It is not outcome-validation evidence.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "Patent application describing multidimensional patient features and AI/ML-assisted neurostimulation. It is not outcome-validation evidence."
+    },
+    {
+      "source_id": "S018",
+      "decision": "rejected",
+      "checked_at": "2026-09-22",
+      "exclusion_reason": "unverifiable",
+      "searches": [
+        {
+          "query": "Estimation and Localization of Chronic Pain level from EEG Signals",
+          "url": "https://dl.acm.org/action/doSearch?AllField=%22Estimation+and+Localization+of+Chronic+Pain+level+from+EEG+Signals%22",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "risk_flags": [
+          "claim_not_supported"
+        ]
+      },
+      "claims": [],
+      "notes": "No exact ACM record, DOI, authorship record or stable primary publication was found for the supplied title."
+    },
+    {
+      "source_id": "S045",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-22",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "query": "EEG-Based Pain Classification via Sample Selection to Mitigate Subjective Label Bias",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/42118625/",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "EEG-Based Pain Classification via Sample Selection to Mitigate Subjective Label Bias",
+        "identifiers": {
+          "doi": "10.1109/TNSRE.2026.3692232",
+          "pmid": "42118625",
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://pubmed.ncbi.nlm.nih.gov/42118625/"
+        },
+        "evidence": {
+          "target_construct": "experimental_pain_class",
+          "evidence_role": "human_validation"
+        },
+        "risk_flags": [
+          "missing_cross_subject_validation"
+        ],
+        "авторы": "Euijin Jung; Sung Chan Jun; Jinung An",
+        "издание": "IEEE Transactions on Neural Systems and Rehabilitation Engineering"
+      },
+      "claims": [
+        {
+          "claim": "The study evaluates reliability-aware EEG sample selection on 41 participants with self-reported thermal-pain labels.",
+          "target_variable": "experimental_pain_class",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: 10.1109/TNSRE.2026.3692232",
+          "limitation": "Forty-one participants received controlled thermal stimuli and supplied NRS labels. Five-fold validation and unseen stimulus types do not by themselves prove transfer to independent clinical cohorts.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "Forty-one participants received controlled thermal stimuli and supplied NRS labels. Five-fold validation and unseen stimulus types do not by themselves prove transfer to independent clinical cohorts."
+    },
+    {
+      "source_id": "S058",
+      "decision": "alias",
+      "canonical_id": "S045",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "EEG-Based Pain Classification via Sample Selection",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/42118625/",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S107",
+      "decision": "alias",
+      "canonical_id": "S167",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Circuit Reconstruction of nociceptive circuits in fly CNS",
+          "url": "https://scholar.google.com/scholar?q=%22Circuit+Reconstruction%22+Jones+FlyWire",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S283",
+      "decision": "alias",
+      "canonical_id": "S167",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Circuit Reconstruction (Jessica Jones, 2026)",
+          "url": "https://scholar.google.com/scholar?q=%22Circuit+Reconstruction%22+%22Jessica+Jones%22+FlyWire",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S348",
+      "decision": "alias",
+      "canonical_id": "S167",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Circuit Reconstruction (Jessica Jones, 2026)",
+          "url": "https://scholar.google.com/scholar?q=%22Circuit+Reconstruction%22+%22Jessica+Jones%22+FlyWire",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S017",
+      "decision": "verified_metadata",
+      "checked_at": "2026-09-22",
+      "full_text_status": "metadata_only",
+      "searches": [
+        {
+          "query": "Toward Efficient ECG-Based Pain Intensity Recognition: An End-to-End Neural Network Using Multiple Temporal Feature Compression and Fusion",
+          "url": "https://doi.org/10.1109/JIOT.2025.3590401",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "Toward Efficient ECG-Based Pain Intensity Recognition: An End-to-End Neural Network Using Multiple Temporal Feature Compression and Fusion",
+        "identifiers": {
+          "doi": "10.1109/JIOT.2025.3590401",
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://doi.org/10.1109/JIOT.2025.3590401"
+        },
+        "evidence": {
+          "target_construct": "experimental_pain_class",
+          "evidence_role": "method_baseline"
+        },
+        "risk_flags": [
+          "metadata_only"
+        ],
+        "авторы": "Rongjian Qiu; Kan Xie; Shengli Xie; Junjie Yang; Yuan Xie; Shihan Qiu; Wenfang Bai",
+        "издание": "IEEE Internet of Things Journal"
+      },
+      "claims": [
+        {
+          "claim": "The indexed article evaluates an ECG pain-intensity architecture on BioVid.",
+          "target_variable": "experimental_pain_class",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: 10.1109/JIOT.2025.3590401",
+          "limitation": "Bibliographic identity and BioVid evaluation are confirmed from indexing metadata; the publisher full text was not checked, so reported performance is not promoted to a verified claim.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "Bibliographic identity and BioVid evaluation are confirmed from indexing metadata; the publisher full text was not checked, so reported performance is not promoted to a verified claim."
+    },
+    {
+      "source_id": "S019",
+      "decision": "rejected",
+      "checked_at": "2026-09-22",
+      "exclusion_reason": "unverifiable",
+      "searches": [
+        {
+          "query": "DeepPainSense: A Real-Time, Explainable Multimodal System for Chronic Pain and Emotional State Detection",
+          "url": "https://scholar.google.com/scholar?q=%22DeepPainSense%22+%22Chronic+Pain%22",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "risk_flags": [
+          "claim_not_supported"
+        ]
+      },
+      "claims": [],
+      "notes": "Only an inconsistent ResearchGate entry was found; no stable IEEE record, DOI or primary publication could be confirmed."
+    },
+    {
+      "source_id": "S023",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-22",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "query": "Generalisation of EEG-Based Pain Biomarker Classification for Predicting Central Neuropathic Pain in Subacute Spinal Cord Injury",
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11759196/",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "Generalisation of EEG-Based Pain Biomarker Classification for Predicting Central Neuropathic Pain in Subacute Spinal Cord Injury",
+        "identifiers": {
+          "doi": "10.3390/biomedicines13010213",
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11759196/"
+        },
+        "evidence": {
+          "target_construct": "clinical_function",
+          "evidence_role": "human_validation"
+        },
+        "risk_flags": [],
+        "авторы": "Keri Anderson; Sebastian Stein; Ho Suen; Mariel Purcell; Maurizio Belci; Euan McCaughey; Ronali McLean; Aye Khine; Aleksandra Vuckovic",
+        "издание": "Biomedicines"
+      },
+      "claims": [
+        {
+          "claim": "The study tests EEG markers of later central neuropathic pain across two independently collected subacute-SCI datasets and reports 66.6% cross-dataset validation accuracy.",
+          "target_variable": "clinical_function",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: 10.3390/biomedicines13010213",
+          "limitation": "Two SCI datasets were recorded under similar protocols. Cross-dataset validation accuracy was 66.6%, materially below within-dataset estimates; this is prognostic neuropathic-pain evidence, not momentary pain measurement.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "Two SCI datasets were recorded under similar protocols. Cross-dataset validation accuracy was 66.6%, materially below within-dataset estimates; this is prognostic neuropathic-pain evidence, not momentary pain measurement."
+    },
+    {
+      "source_id": "S073",
+      "decision": "rejected",
+      "checked_at": "2026-09-22",
+      "exclusion_reason": "unverifiable",
+      "searches": [
+        {
+          "query": "Enhanced deep learning framework for real-time pain assessment",
+          "url": "https://dl.acm.org/action/doSearch?AllField=%22Enhanced+deep+learning+framework+for+real-time+pain+assessment%22",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "risk_flags": [
+          "claim_not_supported"
+        ]
+      },
+      "claims": [],
+      "notes": "No exact ACM primary record, DOI or uniquely identifiable publication was found."
+    },
+    {
+      "source_id": "S115",
+      "decision": "alias",
+      "canonical_id": "S073",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Enhanced deep learning framework for real-time pain assessment",
+          "url": "https://dl.acm.org/action/doSearch?AllField=%22Enhanced+deep+learning+framework+for+real-time+pain+assessment%22",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    }
+  ]
+}

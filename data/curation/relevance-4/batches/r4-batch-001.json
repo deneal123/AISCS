@@ -1,0 +1,885 @@
+{
+  "meta": {
+    "batch_id": "r4-batch-001",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-22",
+    "scope": "relevance=4; status=unverified",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-22"
+  },
+  "source_ids": [
+    "S167",
+    "S065",
+    "S170",
+    "S198",
+    "S138",
+    "S199",
+    "S232",
+    "S200",
+    "S144",
+    "S204",
+    "S212",
+    "S215",
+    "S271",
+    "S150",
+    "S216",
+    "S231",
+    "S248",
+    "S272",
+    "S273",
+    "S279",
+    "S316",
+    "S320",
+    "S313",
+    "S327",
+    "S342"
+  ],
+  "records": [
+    {
+      "id": "S167",
+      "title": "Circuit Reconstruction of nociceptive circuits (extended)",
+      "year": 2026,
+      "source_type": "метод"
+    },
+    {
+      "id": "S065",
+      "title": "Dopaminergic modulation of mushroom body output neurons",
+      "year": 2026,
+      "source_type": "метод"
+    },
+    {
+      "id": "S170",
+      "title": "Dopaminergic modulation of mushroom body output neurons (extended)",
+      "year": 2026,
+      "source_type": "метод"
+    },
+    {
+      "id": "S198",
+      "title": "Dopaminergic Modulation of Mushroom Body (final)",
+      "year": 2026,
+      "source_type": "метод"
+    },
+    {
+      "id": "S138",
+      "title": "Drosophila emulations are affectively indeterminate",
+      "year": 2026,
+      "source_type": "XAI_этика"
+    },
+    {
+      "id": "S199",
+      "title": "Drosophila emulations are affectively indeterminate (final)",
+      "year": 2026,
+      "source_type": "XAI_этика"
+    },
+    {
+      "id": "S232",
+      "title": "Drosophila emulations are affectively indeterminate (extended)",
+      "year": 2026,
+      "source_type": "XAI_этика"
+    },
+    {
+      "id": "S200",
+      "title": "DoomFly: Fly brain plays Doom (final)",
+      "year": 2026,
+      "source_type": "фундаментальные_модели"
+    },
+    {
+      "id": "S144",
+      "title": "WO2026146221A1 – Adaptive neural interfaces",
+      "year": 2026,
+      "source_type": "патент"
+    },
+    {
+      "id": "S204",
+      "title": "WO2026146221A1 – Adaptive neural interfaces (final)",
+      "year": 2026,
+      "source_type": "патент"
+    },
+    {
+      "id": "S212",
+      "title": "Combining brain-wide activity imaging with EM (extended)",
+      "year": 2026,
+      "source_type": "препринт"
+    },
+    {
+      "id": "S215",
+      "title": "WO2026146221A1 (extended)",
+      "year": 2026,
+      "source_type": "патент"
+    },
+    {
+      "id": "S271",
+      "title": "WO2026146221A1 (final)",
+      "year": 2026,
+      "source_type": "патент"
+    },
+    {
+      "id": "S150",
+      "title": "Real-time gait phase detection with FL",
+      "year": 2026,
+      "source_type": "федеративное_SCS"
+    },
+    {
+      "id": "S216",
+      "title": "Real-time gait phase detection with FL (extended)",
+      "year": 2026,
+      "source_type": "федеративное_SCS"
+    },
+    {
+      "id": "S231",
+      "title": "Neuromorphic Technologies for Neuroengineering",
+      "year": 2026,
+      "source_type": "обзор"
+    },
+    {
+      "id": "S248",
+      "title": "Neuromorphic Technologies for Neuroengineering (extended)",
+      "year": 2026,
+      "source_type": "обзор"
+    },
+    {
+      "id": "S272",
+      "title": "CN122075919A (final)",
+      "year": 2026,
+      "source_type": "патент"
+    },
+    {
+      "id": "S273",
+      "title": "MenstruEase (final)",
+      "year": 2026,
+      "source_type": "применение"
+    },
+    {
+      "id": "S279",
+      "title": "PCLC case study (extended)",
+      "year": 2026,
+      "source_type": "препринт"
+    },
+    {
+      "id": "S316",
+      "title": "Real-time detection of gait phase with FL (extended)",
+      "year": 2026,
+      "source_type": "федеративное_SCS"
+    },
+    {
+      "id": "S320",
+      "title": "Emergent Individuality in Whole-Brain Connectome (extended)",
+      "year": 2026,
+      "source_type": "фундаментальные_модели"
+    },
+    {
+      "id": "S313",
+      "title": "Agentic AI in Neurology",
+      "year": 2026,
+      "source_type": "агентный_AI"
+    },
+    {
+      "id": "S327",
+      "title": "Agentic AI in Neurology (extended)",
+      "year": 2026,
+      "source_type": "агентный_AI"
+    },
+    {
+      "id": "S342",
+      "title": "Agentic AI in Neurology (final)",
+      "year": 2026,
+      "source_type": "агентный_AI"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S167",
+      "decision": "rejected",
+      "checked_at": "2026-09-22",
+      "exclusion_reason": "unverifiable",
+      "searches": [
+        {
+          "query": "Circuit Reconstruction of nociceptive circuits (extended)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/?term=%22Circuit+Reconstruction%22+nociceptive+Drosophila+Jones",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "risk_flags": [
+          "claim_not_supported"
+        ]
+      },
+      "claims": [],
+      "notes": "The vague title and author could not be mapped uniquely to a 2026 primary source; established older circuit papers are not the same record."
+    },
+    {
+      "source_id": "S065",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-22",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "query": "Dopaminergic Modulation of Mushroom Body Output Neurons Mediates Nociception-Induced Escape in Drosophila",
+          "url": "https://elifesciences.org/reviewed-preprints/110557",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "Dopaminergic Modulation of Mushroom Body Output Neurons Mediates Nociception-Induced Escape in Drosophila",
+        "identifiers": {
+          "doi": "10.7554/eLife.110557.1",
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://elifesciences.org/reviewed-preprints/110557"
+        },
+        "evidence": {
+          "target_construct": "nociceptive_response",
+          "evidence_role": "simulation_foundation"
+        },
+        "risk_flags": [
+          "preprint",
+          "animal_to_human_transfer_unvalidated"
+        ],
+        "авторы": "Chi-Lien Yang; Chia-Wen Chen; Kuan-Lin Feng; Hsiao-Chien Peng; Ming-Chin Wu; Ching-Che Charng; Li-An Chu; Yeong-Ray Wen; Ann-Shyn Chiang",
+        "издание": "eLife reviewed preprint"
+      },
+      "claims": [
+        {
+          "claim": "The reviewed preprint reports dopaminergic mushroom-body modulation of nociception-induced escape in adult Drosophila.",
+          "target_variable": "nociceptive_response",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: 10.7554/eLife.110557.1",
+          "limitation": "Reviewed preprint v1; anatomical tracing and perturbation support nociception-induced escape circuitry, not subjective pain or human transfer.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "Reviewed preprint v1; anatomical tracing and perturbation support nociception-induced escape circuitry, not subjective pain or human transfer."
+    },
+    {
+      "source_id": "S170",
+      "decision": "alias",
+      "canonical_id": "S065",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Dopaminergic modulation extended",
+          "url": "https://elifesciences.org/reviewed-preprints/110557",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S198",
+      "decision": "alias",
+      "canonical_id": "S065",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Dopaminergic modulation final",
+          "url": "https://elifesciences.org/reviewed-preprints/110557",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S138",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-22",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "query": "Drosophila emulations are intrinsically affectively indeterminate",
+          "url": "https://doi.org/10.56280/1765455593",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "Drosophila emulations are intrinsically affectively indeterminate",
+        "identifiers": {
+          "doi": "10.56280/1765455593",
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://doi.org/10.56280/1765455593"
+        },
+        "evidence": {
+          "target_construct": "not_applicable",
+          "evidence_role": "context_only"
+        },
+        "risk_flags": [
+          "animal_to_human_transfer_unvalidated"
+        ],
+        "авторы": "Marek Dobeš",
+        "издание": "Journal of Multiscale Neuroscience"
+      },
+      "claims": [
+        {
+          "claim": "The perspective argues that current Drosophila emulations do not establish a determinate affective state.",
+          "target_variable": "not_applicable",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: 10.56280/1765455593",
+          "limitation": "Perspective article proposing an audit framework; it explicitly concludes present affective indeterminacy rather than evidence of suffering or harmlessness.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "Perspective article proposing an audit framework; it explicitly concludes present affective indeterminacy rather than evidence of suffering or harmlessness."
+    },
+    {
+      "source_id": "S199",
+      "decision": "alias",
+      "canonical_id": "S138",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Affective indeterminacy final",
+          "url": "https://doi.org/10.56280/1765455593",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S232",
+      "decision": "alias",
+      "canonical_id": "S138",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Affective indeterminacy extended",
+          "url": "https://doi.org/10.56280/1765455593",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S200",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-22",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "query": "DoomFly: fly-connectome simulation controlling a Doom arena",
+          "url": "https://github.com/nftechie/doomfly",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "DoomFly: fly-connectome simulation controlling a Doom arena",
+        "identifiers": {
+          "doi": null,
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://github.com/nftechie/doomfly"
+        },
+        "evidence": {
+          "target_construct": "not_applicable",
+          "evidence_role": "simulation_foundation"
+        },
+        "risk_flags": [
+          "synthetic_only",
+          "animal_to_human_transfer_unvalidated"
+        ],
+        "авторы": "Alex Wormuth",
+        "издание": "GitHub software repository"
+      },
+      "claims": [
+        {
+          "claim": "The repository connects a MaleCNS-derived simulation to engineered ViZDoom inputs and controls but does not demonstrate learned survival.",
+          "target_variable": "not_applicable",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: https://github.com/nftechie/doomfly",
+          "limitation": "Public implementation with explicit failed visual, conditioning and survival gates; engineered damage input is not natural nociception or pain.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "Public implementation with explicit failed visual, conditioning and survival gates; engineered damage input is not natural nociception or pain."
+    },
+    {
+      "source_id": "S144",
+      "decision": "verified_metadata",
+      "checked_at": "2026-09-22",
+      "full_text_status": "metadata_only",
+      "searches": [
+        {
+          "query": "Method and apparatus for adaptive neural interfaces",
+          "url": "https://patents.google.com/patent/WO2026146221A1/en",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "Method and apparatus for adaptive neural interfaces",
+        "identifiers": {
+          "doi": null,
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": "WO2026146221A1",
+          "dataset_id": null,
+          "exact_url": "https://patents.google.com/patent/WO2026146221A1/en"
+        },
+        "evidence": {
+          "target_construct": "not_applicable",
+          "evidence_role": "context_only"
+        },
+        "risk_flags": [
+          "patent_not_empirical_evidence",
+          "metadata_only"
+        ],
+        "авторы": "ONWARD MEDICAL NV",
+        "издание": "WIPO patent publication"
+      },
+      "claims": [
+        {
+          "claim": "WO2026146221A1 describes federated predictive analysis across neural-interface users and devices.",
+          "target_variable": "not_applicable",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: WO2026146221A1",
+          "limitation": "Patent identity and abstract-level metadata confirmed; claimed federated predictive analysis is prior art, not empirical efficacy evidence.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "Patent identity and abstract-level metadata confirmed; claimed federated predictive analysis is prior art, not empirical efficacy evidence."
+    },
+    {
+      "source_id": "S204",
+      "decision": "alias",
+      "canonical_id": "S144",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "WO2026146221A1 final",
+          "url": "https://patents.google.com/patent/WO2026146221A1/en",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S212",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-22",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "query": "Combining brain-wide activity imaging with electron microscopy reveals a distributed nociceptive network in the brain",
+          "url": "https://doi.org/10.1101/2025.09.25.678485",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "Combining brain-wide activity imaging with electron microscopy reveals a distributed nociceptive network in the brain",
+        "identifiers": {
+          "doi": "10.1101/2025.09.25.678485",
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://doi.org/10.1101/2025.09.25.678485"
+        },
+        "evidence": {
+          "target_construct": "nociceptive_response",
+          "evidence_role": "simulation_foundation"
+        },
+        "risk_flags": [
+          "preprint",
+          "animal_to_human_transfer_unvalidated"
+        ],
+        "авторы": "N. Randel; C. Wang; M. S. Clayton; K. Wang; S. Pang; S. C. Xu; A. Champion; H. F. Hess; A. Cardona; P. J. Keller; M. Zlatic",
+        "издание": "bioRxiv"
+      },
+      "claims": [
+        {
+          "claim": "The preprint combines whole-brain activity imaging and subsequent EM in the same larval brain to identify a distributed nociceptive network.",
+          "target_variable": "nociceptive_response",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: 10.1101/2025.09.25.678485",
+          "limitation": "Preprint maps larval Drosophila nociceptive activity to EM anatomy; it is not a whole-brain simulator or evidence of subjective pain.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "Preprint maps larval Drosophila nociceptive activity to EM anatomy; it is not a whole-brain simulator or evidence of subjective pain."
+    },
+    {
+      "source_id": "S215",
+      "decision": "alias",
+      "canonical_id": "S144",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "WO2026146221A1 extended",
+          "url": "https://patents.google.com/patent/WO2026146221A1/en",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S271",
+      "decision": "alias",
+      "canonical_id": "S144",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "WO2026146221A1 final",
+          "url": "https://patents.google.com/patent/WO2026146221A1/en",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S150",
+      "decision": "rejected",
+      "checked_at": "2026-09-22",
+      "exclusion_reason": "unverifiable",
+      "searches": [
+        {
+          "query": "Real-time gait phase detection with federated learning",
+          "url": "https://scholar.google.com/scholar?q=%22Real-time+gait+phase+detection%22+%22federated+learning%22",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "risk_flags": [
+          "claim_not_supported"
+        ]
+      },
+      "claims": [],
+      "notes": "No exact primary source matching the imported federated-learning title was found; nearby gait-phase papers use other methods."
+    },
+    {
+      "source_id": "S216",
+      "decision": "alias",
+      "canonical_id": "S150",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Real-time gait phase detection extended",
+          "url": "https://scholar.google.com/scholar?q=%22Real-time+gait+phase+detection%22+%22federated+learning%22",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S231",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-22",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "query": "Neuromorphic Technologies for Neuroengineering: From Adaptive Stimulation to SNN-Based Inference and Deployable Biointerfaces",
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13210900/",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "Neuromorphic Technologies for Neuroengineering: From Adaptive Stimulation to SNN-Based Inference and Deployable Biointerfaces",
+        "identifiers": {
+          "doi": null,
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13210900/"
+        },
+        "evidence": {
+          "target_construct": "not_applicable",
+          "evidence_role": "context_only"
+        },
+        "risk_flags": [],
+        "издание": "Open-access review indexed in PubMed Central"
+      },
+      "claims": [
+        {
+          "claim": "The review surveys neuromorphic stimulation, biosignal inference and wearable or implantable biointerfaces while emphasizing translational evidence gaps.",
+          "target_variable": "not_applicable",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: https://pmc.ncbi.nlm.nih.gov/articles/PMC13210900/",
+          "limitation": "Broad review and context source; it does not demonstrate clinical superiority of neuromorphic systems or validate the dissertation transfer hypothesis.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "Broad review and context source; it does not demonstrate clinical superiority of neuromorphic systems or validate the dissertation transfer hypothesis."
+    },
+    {
+      "source_id": "S248",
+      "decision": "alias",
+      "canonical_id": "S231",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Neuromorphic technologies extended",
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13210900/",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S272",
+      "decision": "verified_metadata",
+      "checked_at": "2026-09-22",
+      "full_text_status": "metadata_only",
+      "searches": [
+        {
+          "query": "CN122075919A",
+          "url": "https://patents.google.com/patent/CN122075919A/en",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "CN122075919A",
+        "identifiers": {
+          "doi": null,
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": "CN122075919A",
+          "dataset_id": null,
+          "exact_url": "https://patents.google.com/patent/CN122075919A/en"
+        },
+        "evidence": {
+          "target_construct": "not_applicable",
+          "evidence_role": "context_only"
+        },
+        "risk_flags": [
+          "patent_not_empirical_evidence",
+          "metadata_only"
+        ]
+      },
+      "claims": [
+        {
+          "claim": "The source identity and bibliographic record were confirmed.",
+          "target_variable": "not_applicable",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: CN122075919A",
+          "limitation": "Patent publication identifier retained at metadata level; technical claims and relevance require translation and claims review.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "Patent publication identifier retained at metadata level; technical claims and relevance require translation and claims review."
+    },
+    {
+      "source_id": "S273",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-22",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "query": "MenstruEase: A Closed-Loop Smart TENS System for Personalized Management of Primary Dysmenorrhea",
+          "url": "https://doi.org/10.1002/adsu.70449",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "MenstruEase: A Closed-Loop Smart TENS System for Personalized Management of Primary Dysmenorrhea",
+        "identifiers": {
+          "doi": "10.1002/adsu.70449",
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://doi.org/10.1002/adsu.70449"
+        },
+        "evidence": {
+          "target_construct": "nociceptive_response",
+          "evidence_role": "context_only"
+        },
+        "risk_flags": [
+          "animal_to_human_transfer_unvalidated"
+        ],
+        "авторы": "Sixun Chen; Sukhera Ahmad Yar; Sabrina Han; Peiran Wang; Wenqing Xiong; Xingyi Yang; Boyuan Gao; Farah Deeba; Xingyi Ma",
+        "издание": "Advanced Sustainable Systems"
+      },
+      "claims": [
+        {
+          "claim": "The article describes a multimodal closed-loop TENS prototype and reports only animal proof-of-concept efficacy.",
+          "target_variable": "nociceptive_response",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: 10.1002/adsu.70449",
+          "limitation": "Proof-of-concept efficacy is from a mouse hot-plate experiment; AI pain detection is a roadmap, not a validated human clinical result.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "Proof-of-concept efficacy is from a mouse hot-plate experiment; AI pain detection is a roadmap, not a validated human clinical result."
+    },
+    {
+      "source_id": "S279",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-22",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "query": "Principles of Physiologic Closed-Loop Controllers in Neuromodulation",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/42059841/",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "Principles of Physiologic Closed-Loop Controllers in Neuromodulation",
+        "identifiers": {
+          "doi": "10.1016/j.neurom.2026.03.010",
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://pubmed.ncbi.nlm.nih.gov/42059841/"
+        },
+        "evidence": {
+          "target_construct": "ecap_neural_recruitment",
+          "evidence_role": "scs_ecap_validation"
+        },
+        "risk_flags": [
+          "ecap_not_pain_measure"
+        ],
+        "авторы": "Victoria S. Marks et al.",
+        "издание": "Neuromodulation"
+      },
+      "claims": [
+        {
+          "claim": "The article classifies ECAP as a reactive biomarker for spinal activation in a physiologic closed-loop SCS example.",
+          "target_variable": "ecap_neural_recruitment",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: 10.1016/j.neurom.2026.03.010",
+          "limitation": "Framework/guidance article; its SCS case study treats ECAP as a reactive biomarker of spinal activation, not a direct pain measure or outcome predictor.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "Framework/guidance article; its SCS case study treats ECAP as a reactive biomarker of spinal activation, not a direct pain measure or outcome predictor."
+    },
+    {
+      "source_id": "S316",
+      "decision": "alias",
+      "canonical_id": "S150",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Real-time gait phase detection extended",
+          "url": "https://scholar.google.com/scholar?q=%22Real-time+gait+phase+detection%22+%22federated+learning%22",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S320",
+      "decision": "partially_verified",
+      "checked_at": "2026-09-22",
+      "full_text_status": "metadata_only",
+      "searches": [
+        {
+          "query": "Emergent Individuality and Neural Integration in Whole-Brain Connectome Simulations of Drosophila melanogaster",
+          "url": "https://doi.org/10.5281/zenodo.19152238",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "название": "Emergent Individuality and Neural Integration in Whole-Brain Connectome Simulations of Drosophila melanogaster",
+        "identifiers": {
+          "doi": "10.5281/zenodo.19152238",
+          "pmid": null,
+          "arxiv_id": null,
+          "patent_id": null,
+          "dataset_id": null,
+          "exact_url": "https://doi.org/10.5281/zenodo.19152238"
+        },
+        "evidence": {
+          "target_construct": "not_applicable",
+          "evidence_role": "simulation_foundation"
+        },
+        "risk_flags": [
+          "preprint",
+          "synthetic_only",
+          "animal_to_human_transfer_unvalidated"
+        ],
+        "авторы": "Enrique Manuel Rojas Aliaga",
+        "издание": "Zenodo preprint and public code repository"
+      },
+      "claims": [
+        {
+          "claim": "The preprint and repository report an embodied FlyWire-based simulation with plasticity and divergent synthetic trajectories.",
+          "target_variable": "not_applicable",
+          "population_or_data": "as described by the primary source",
+          "evidence": "Stable source: 10.5281/zenodo.19152238",
+          "limitation": "Identity and public artifacts are confirmed, but strong whole-brain behavior and individuality metrics are author-reported and not independently reproduced.",
+          "permitted_conclusion": "Use only within the documented scope and limitations."
+        }
+      ],
+      "notes": "Identity and public artifacts are confirmed, but strong whole-brain behavior and individuality metrics are author-reported and not independently reproduced."
+    },
+    {
+      "source_id": "S313",
+      "decision": "rejected",
+      "checked_at": "2026-09-22",
+      "exclusion_reason": "unverifiable",
+      "searches": [
+        {
+          "query": "Agentic AI in Neurology",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/?term=%22Agentic+AI+in+Neurology%22",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "updates": {
+        "risk_flags": [
+          "claim_not_supported"
+        ]
+      },
+      "claims": [],
+      "notes": "No uniquely identifiable primary publication with this exact generic title was found."
+    },
+    {
+      "source_id": "S327",
+      "decision": "alias",
+      "canonical_id": "S313",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Agentic AI in Neurology extended",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/?term=%22Agentic+AI+in+Neurology%22",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    },
+    {
+      "source_id": "S342",
+      "decision": "alias",
+      "canonical_id": "S313",
+      "reason": "confirmed_title_variant_of_same_primary_source",
+      "checked_at": "2026-09-22",
+      "searches": [
+        {
+          "query": "Agentic AI in Neurology final",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/?term=%22Agentic+AI+in+Neurology%22",
+          "accessed_at": "2026-09-22"
+        }
+      ],
+      "claims": [],
+      "notes": "The final/extended/abbreviated label does not identify a separate source version."
+    }
+  ]
+}
