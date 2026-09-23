@@ -1,0 +1,28 @@
+[submodule "backend"]
+	path = backend
+	url = https://github.com/deneal123/AISCS.git
+	branch = backend
+[submodule "frontend"]
+	path = frontend
+	url = https://github.com/deneal123/AISCS.git
+	branch = frontend
+[submodule "presentation"]
+	path = presentation
+	url = https://github.com/deneal123/AISCS.git
+	branch = presentation
+[submodule "publications"]
+	path = publications
+	url = https://github.com/deneal123/AISCS.git
+	branch = publications
+[submodule "text"]
+	path = text
+	url = https://github.com/deneal123/AISCS.git
+	branch = text
+[submodule "research"]
+	path = research
+	url = https://github.com/deneal123/AISCS.git
+	branch = research
+[submodule "agents"]
+	path = agents
+	url = https://github.com/deneal123/AISCS.git
+	branch = agents
