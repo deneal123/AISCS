@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none">
+  <!-- Геометрия знака выровнена по эталону InCellCorp (дизайн-система общая):
+       внутренний квадрат был на ~28% крупнее, углы почти острые, обводка толще,
+       а цвет — off-ramp #0048ea вместо бренд-токена blue-500 #2D5BFF. -->
+  <rect x="2" y="2" width="28" height="28" rx="3" stroke="#2D5BFF" stroke-width="2.5" />
+  <rect x="11" y="11" width="10" height="10" rx="1.5" fill="#2D5BFF" />
+</svg>

@@ -1,0 +1,36 @@
+:root {
+  --xy-edge-stroke-default: #8a8f98;
+  --xy-edge-stroke-width-default: 1.25;
+  --xy-edge-stroke-selected-default: #2D5BFF;
+  --xy-connectionline-stroke-default: #8a8f98;
+  --xy-connectionline-stroke-width-default: 1.25;
+  --xy-node-color-default: inherit;
+  --xy-node-border-default: 1px solid rgba(255, 255, 255, 0.08);
+  --xy-node-background-color-default: #151515;
+  --xy-node-group-background-color-default: rgba(255, 255, 255, 0.04);
+  --xy-node-boxshadow-hover-default: 0 1px 4px 1px rgba(0, 0, 0, 0.16);
+  --xy-node-boxshadow-selected-default: 0 0 0 1px #2D5BFF;
+  --xy-handle-background-color-default: #2D5BFF;
+  --xy-handle-border-color-default: #0f1720;
+  --xy-selection-background-color-default: rgba(45, 91, 255, 0.08);
+  --xy-selection-border-default: 1px dotted rgba(45, 91, 255, 0.8);
+  --xy-controls-button-background-color-default: #1b1b1b;
+  --xy-controls-button-background-color-hover-default: #222;
+  --xy-controls-button-color-default: inherit;
+  --xy-controls-button-color-hover-default: inherit;
+  --xy-controls-button-border-color-default: rgba(255, 255, 255, 0.08);
+  --xy-controls-box-shadow-default: 0 0 2px 1px rgba(0, 0, 0, 0.24);
+  --xy-minimap-background-color-default: #0f0f0f;
+  --xy-background-pattern-dots-color-default: #2a2a2a;
+  --xy-background-pattern-line-color-default: #1f1f1f;
+  --xy-background-pattern-cross-color-default: #1f1f1f;
+}
+
+.dark .react-flow {
+  --xy-node-background-color-default: #1a202c;
+  --xy-node-border-default: 1px solid #2d3748;
+  --xy-edge-stroke-default: #8a8f98;
+  --xy-edge-stroke-selected-default: #2D5BFF;
+  --xy-selection-background-color-default: rgba(45, 91, 255, 0.08);
+  --xy-selection-border-default: 1px dotted rgba(45, 91, 255, 0.8);
+}

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#050505" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+    <!-- SEO Meta Tags -->
+    <meta
+      name="description"
+      content="GPTHub — рабочее пространство InCellCorp, где команда ИИ-агентов решает задачи: диалог, веб-поиск, глубокое исследование, генерация изображений и презентаций — с памятью между сессиями."
+    />
+    <meta name="keywords" content="AI, GPT, ИИ-агенты, оркестрация, RAG, веб-поиск, deep research, рабочее пространство, InCellCorp" />
+    <meta name="author" content="InCellCorp" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://gpthub.incellcorp.ru/" />
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="GPTHub" />
+    <meta property="og:title" content="GPTHub — единое рабочее пространство с ИИ" />
+    <meta
+      property="og:description"
+      content="Команда ИИ-агентов в одном окне: диалог, веб-поиск, глубокое исследование, генерация изображений и презентаций. Память между сессиями."
+    />
+    <meta property="og:image" content="%PUBLIC_URL%/og-cover.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:url" content="https://gpthub.incellcorp.ru/" />
+    <meta property="og:locale" content="ru_RU" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="GPTHub — единое рабочее пространство с ИИ" />
+    <meta
+      name="twitter:description"
+      content="Команда ИИ-агентов в одном окне: диалог, веб-поиск, Deep Research, генерация изображений и презентаций. Память между сессиями."
+    />
+    <meta name="twitter:image" content="%PUBLIC_URL%/og-cover.png" />
+
+    <!-- Preconnect для ускорения загрузки шрифтов -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+    <!-- DNS prefetch как fallback -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+
+    <!-- Иконки: SVG (совр. браузеры) + PNG/ICO-фолбэки + apple-touch-icon. -->
+    <link rel="icon" type="image/svg+xml" href="%PUBLIC_URL%/favicon-gpthub.svg?v=3" />
+    <link rel="icon" type="image/png" sizes="32x32" href="%PUBLIC_URL%/favicon-32x32.png?v=3" />
+    <link rel="icon" type="image/png" sizes="16x16" href="%PUBLIC_URL%/favicon-16x16.png?v=3" />
+    <link rel="icon" type="image/png" sizes="256x256" href="%PUBLIC_URL%/favicon-256x256.png?v=3" />
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico?v=3" />
+    <link rel="apple-touch-icon" sizes="180x180" href="%PUBLIC_URL%/apple-touch-icon.png?v=3" />
+    <meta name="apple-mobile-web-app-title" content="GPTHub" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <!-- Оптимизированная загрузка шрифтов: только нужные веса, display=swap для FOUT вместо FOIT -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap&subset=cyrillic,latin"
+      rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap&subset=cyrillic,latin"
+        rel="stylesheet"
+      />
+    </noscript>
+    <title>GPTHub — единое рабочее пространство с ИИ</title>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "GPTHub",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Web",
+        "url": "https://gpthub.incellcorp.ru/",
+        "description": "Рабочее пространство с ИИ: команда агентов решает задачи в одном окне — диалог, веб-поиск, глубокое исследование, генерация изображений и презентаций, память между сессиями.",
+        "publisher": { "@type": "Organization", "name": "InCellCorp" }
+      }
+    </script>
+    <style>
+      html, body {
+        font-size: 16px;
+        margin: 0;
+        padding: 0;
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+        background: #080808;
+        color: #f0f0f0;
+      }
+      #root {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      * { box-sizing: border-box; }
+      /* Бренд: синее выделение (красный зарезервирован для ошибок). */
+      ::selection { background: rgba(45, 91, 255, 0.28); color: inherit; }
+      ::-moz-selection { background: rgba(45, 91, 255, 0.28); color: inherit; }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

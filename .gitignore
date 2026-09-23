@@ -1,0 +1,13 @@
+node_modules/
+build/
+coverage/
+.env
+.env.*
+test-results/
+tmp_e2e/
+axe-report.json
+npm-debug.log*
+
+# Граф знаний (`make graph GRAPH_TARGET=frontend`) — 19 МБ дев-артефактов.
+# Корневой .gitignore сюда НЕ достаёт: для суперпроекта сабмодуль это гитлинк.
+graphify-out/

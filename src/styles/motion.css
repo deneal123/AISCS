@@ -1,0 +1,612 @@
+/*
+ * Моушн-слой InCellCorp — scroll-reveal, keyframes, micro-motions, ambient,
+ * hero-orb + killswitches. Порт docs/design_transfer/07,08,09 в чистый CSS.
+ * Проект хранит токены в JS (theme/tokens.js), поэтому здесь литеральные
+ * значения фирменной палитры (blue-500 #2D5BFF, iris-500 #5E7BFF, cyan #3DD9BC,
+ * violet #7C5BFF, magenta #B45CFF, spectral pink #FF7AD9 / amber #FFC56E).
+ */
+
+/* ─── Единый источник высоты sticky-шапки ────────────────────────────────────
+   Раньше высота «шапки» была рассыпана литералами: Header рендерился в 65px
+   (36px контент + 28px py + 1px бордер), герои вычитали 61px (перелёт на 4px),
+   а чат и якоря секций — 76px (мёртвая зона в 15px под чатом). Один var,
+   на который ссылаются Header, оба героя, чат-вьюпорт и scroll-margin якорей. */
+:root {
+  --app-header-h: 64px;
+}
+
+/* ─── Scroll-reveal (Reveal.jsx) ─────────────────────────────────────────── */
+.in-view-reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 640ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 640ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+.in-view-reveal[data-reveal-variant="deep"] {
+  transform: translateY(32px);
+  transition: opacity 780ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 780ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.in-view-reveal[data-reveal-variant="soft"] {
+  transform: translateY(10px);
+  transition: opacity 500ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.in-view-reveal[data-reveal-variant="rise"] {
+  transform: translateY(26px) scale(0.96);
+  filter: blur(4px);
+  transition: opacity 720ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 720ms cubic-bezier(0.16, 1, 0.3, 1),
+    filter 720ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.in-view-reveal.in {
+  opacity: 1;
+  transform: none;
+  /* Reveal — one-shot: после появления слой композитора больше не нужен.
+     Без сброса will-change оставался навсегда на всех 57 reveal-блоках. */
+  will-change: auto;
+}
+.in-view-reveal[data-reveal-variant="rise"].in {
+  filter: none;
+}
+
+/* Каскад прямых детей */
+.stagger-children > * {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 520ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 520ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.stagger-children.in > * {
+  opacity: 1;
+  transform: none;
+}
+.stagger-children.in > *:nth-child(1) { transition-delay: 0ms; }
+.stagger-children.in > *:nth-child(2) { transition-delay: 60ms; }
+.stagger-children.in > *:nth-child(3) { transition-delay: 130ms; }
+.stagger-children.in > *:nth-child(4) { transition-delay: 210ms; }
+.stagger-children.in > *:nth-child(5) { transition-delay: 300ms; }
+.stagger-children.in > *:nth-child(6) { transition-delay: 400ms; }
+.stagger-children.in > *:nth-child(7) { transition-delay: 480ms; }
+.stagger-children.in > *:nth-child(8) { transition-delay: 560ms; }
+
+/* SectionHeader внутренний стаггер (eyebrow→title→copy→action) на .in родителя */
+.section-header-eyebrow,
+.section-header-title,
+.section-header-copy,
+.section-header-action {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 480ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 480ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.in .section-header-eyebrow { opacity: 1; transform: none; transition-delay: 0ms; }
+.in .section-header-title { opacity: 1; transform: none; transition-delay: 55ms; }
+.in .section-header-copy { opacity: 1; transform: none; transition-delay: 110ms; }
+.in .section-header-action { opacity: 1; transform: none; transition-delay: 165ms; }
+.eyebrow-line { width: 0; transition: width 400ms 80ms cubic-bezier(0.16, 1, 0.3, 1); }
+.in .eyebrow-line { width: 20px; }
+
+/* Печать / статический рендер (нет скролла → IntersectionObserver не сработает):
+   показываем ВЕСЬ reveal-контент, иначе секции ниже фолда ушли бы пустыми. */
+@media print {
+  .in-view-reveal,
+  .stagger-children > *,
+  .section-header-eyebrow,
+  .section-header-title,
+  .section-header-copy,
+  .section-header-action {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+  .eyebrow-line { width: 20px !important; }
+}
+
+/* ─── Keyframes ──────────────────────────────────────────────────────────── */
+@keyframes grid-breathe { 0%, 100% { opacity: 0.75; } 50% { opacity: 1; } }
+@keyframes mesh-drift {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(-1.5%, 1%, 0) scale(1.05); }
+}
+@keyframes orb-drift {
+  0% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.6; }
+  33% { transform: translate3d(2%, -1.5%, 0) scale(1.04); opacity: 0.72; }
+  66% { transform: translate3d(-1.5%, 1%, 0) scale(0.97); opacity: 0.65; }
+  100% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.6; }
+}
+@keyframes ambient-glow {
+  0% { opacity: 0.68; transform: scale(0.95) translate3d(-2%, 1.5%, 0); }
+  100% { opacity: 1; transform: scale(1.05) translate3d(2%, -1.5%, 0); }
+}
+@keyframes button-sheen {
+  0% { transform: translateX(-120%); }
+  18% { transform: translateX(120%); }
+  100% { transform: translateX(120%); }
+}
+@keyframes cta-scan {
+  0% { transform: translateX(-120%); opacity: 0; }
+  18% { opacity: 0.78; }
+  44% { transform: translateX(120%); opacity: 0; }
+  100% { transform: translateX(120%); opacity: 0; }
+}
+@keyframes grad-shift {
+  0% { background-position: 0% 50%; }
+  45% { background-position: 58% 50%; }
+  100% { background-position: 100% 50%; }
+}
+@keyframes pulse-blue {
+  0% { box-shadow: 0 0 0 0 rgba(45, 91, 255, 0.5); }
+  70% { box-shadow: 0 0 0 8px rgba(45, 91, 255, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(45, 91, 255, 0); }
+}
+@keyframes pulse-green {
+  0% { box-shadow: 0 0 0 0 rgba(43, 192, 122, 0.6); }
+  70% { box-shadow: 0 0 0 6px rgba(43, 192, 122, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(43, 192, 122, 0); }
+}
+@keyframes counter-tick {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes hero-orb-spin { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+@keyframes aura-pulse { 0%, 100% { opacity: 0.7; } 50% { opacity: 1; } }
+
+/* ─── Micro-motions ──────────────────────────────────────────────────────── */
+.tag-pill {
+  transition: border-color 180ms cubic-bezier(0.16, 1, 0.3, 1),
+    color 180ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.tag-pill:hover {
+  border-color: rgba(102, 133, 255, 0.48);
+  color: #fff;
+  box-shadow: 0 0 10px rgba(45, 91, 255, 0.12);
+}
+.footer-link { position: relative; }
+.footer-link::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 100%;
+  height: 1px;
+  background: #6685ff;
+  opacity: 0.7;
+  transition: right 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.footer-link:hover::after { right: 0; }
+.link-arrow { display: inline-block; transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1); }
+a:hover .link-arrow,
+button:hover .link-arrow { transform: translate(2px, -2px); }
+/* .hero-pill — sheen-луч КАПАБИЛИТИ-ПИЛЮЛИ героя (10% / 9s), ровно как в
+   эталоне. У кнопок свой, более выраженный луч (20% / 7.2s) — он живёт прямо
+   в варианте Button.primary (theme.js), поэтому классом их вешать не нужно. */
+.hero-pill {
+  position: relative;
+  overflow: hidden;
+}
+.hero-pill::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+  transform: translateX(-120%);
+  animation: button-sheen 9s ease-in-out infinite;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+/* ─── Золотая бегущая грань ──────────────────────────────────────────────────
+   Световой штрих янтаря (#FFC56E — spectral-amber системы) бежит по ПЕРИМЕТРУ
+   элемента. Реализация: conic-градиент под маской xor — светится только рамка,
+   заливка не трогается (янтарь в системе допустим как свет, но не как фон).
+   Ставится ТОЧЕЧНО: конверсионные элементы и рекомендованный тариф. Иначе
+   получатся «фонарики» по всему экрану.
+   `--gold-angle` регистрируется через @property, чтобы угол можно было
+   анимировать; без поддержки — грань просто статична (не ломается). */
+@property --gold-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.gold-edge,
+.gold-edge-hover,
+.gold-edge-focus {
+  position: relative;
+  isolation: isolate;
+}
+.gold-edge::before,
+.gold-edge-hover::before,
+.gold-edge-focus::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  padding: 1.5px; /* толщина грани */
+  filter: drop-shadow(0 0 7px rgba(255, 197, 110, 0.55));
+  background: conic-gradient(
+    from var(--gold-angle),
+    transparent 0turn,
+    transparent 0.52turn,
+    rgba(255, 197, 110, 0.1) 0.62turn,
+    rgba(255, 197, 110, 0.7) 0.72turn,
+    #ffe7b0 0.78turn,
+    rgba(255, 197, 110, 0.7) 0.84turn,
+    rgba(255, 197, 110, 0.1) 0.94turn,
+    transparent 1turn
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  animation: gold-edge-run 5.5s linear infinite;
+  pointer-events: none;
+}
+/* На карточках грань зажигается при наведении — «награда» за внимание.
+   `animation-play-state: paused` обязателен: conic-градиент с маской и
+   drop-shadow — самая дорогая анимация проекта, и в скрытом состоянии
+   (opacity: 0) она всё равно перерисовывалась каждый кадр на каждой карточке. */
+.gold-edge-hover::before {
+  opacity: 0;
+  animation-play-state: paused;
+  transition: opacity 320ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.gold-edge-hover:hover::before,
+.gold-edge-hover:focus-within::before {
+  opacity: 1;
+  animation-play-state: running;
+}
+/* Только фокус (композер чата: грань зажигается, когда пишешь, — при простом
+   наведении не отвлекает). */
+.gold-edge-focus::before {
+  opacity: 0;
+  animation-play-state: paused;
+  transition: opacity 320ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.gold-edge-focus:focus-within::before {
+  opacity: 1;
+  animation-play-state: running;
+}
+@keyframes gold-edge-run {
+  to {
+    --gold-angle: 360deg;
+  }
+}
+
+/* ─── Кольцо контекста (ContextGauge) ────────────────────────────────────────
+   Индикатор заполнения контекстного окна в композере чата. Кольцо живёт всё
+   время, поэтому анимации здесь дешёвые (opacity/transform), без conic-маски
+   золотой грани — она самая дорогая в проекте и на постоянном элементе не
+   оправдана. Свечение усиливается по мере заполнения, оттенок не меняется:
+   красного в системе нет, тревога передаётся яркостью. */
+@keyframes ctx-gauge-busy {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(0.94);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+}
+/* Кольцо сжалось — вспышка «контекст освободился». Ловит глаз в момент, когда
+   заполнение падает, иначе пользователь не замечает, что сжатие сработало. */
+@keyframes ctx-gauge-relief {
+  0% {
+    filter: drop-shadow(0 0 10px rgba(255, 231, 176, 0.9));
+    transform: scale(1.14);
+  }
+  100% {
+    filter: drop-shadow(0 0 3px rgba(255, 197, 110, 0.55));
+    transform: scale(1);
+  }
+}
+/* Пульс на высоком заполнении — «пора сжимать». */
+@keyframes ctx-gauge-alert {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 3px rgba(255, 197, 110, 0.55));
+  }
+  50% {
+    filter: drop-shadow(0 0 9px rgba(255, 231, 176, 0.85));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ctx-gauge-ring,
+  .ctx-gauge-busy {
+    animation: none !important;
+  }
+}
+
+/* ─── AgentOrbit: живая орбита оркестрации ───────────────────────────────── */
+/* Ломаное кольцо орбиты медленно вращается (transform-box — чтобы % считались
+   от viewBox SVG, иначе вращение уедет от центра). */
+.orbit-ring {
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  animation: orbit-ring-spin 48s linear infinite;
+}
+.orbit-ring-rev {
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  animation: orbit-ring-spin 72s linear infinite reverse;
+}
+@keyframes orbit-ring-spin {
+  to { transform: rotate(360deg); }
+}
+/* Бегущий пунктир по активному коннектору — «данные текут в оркестратор». */
+.orbit-flow {
+  animation: orbit-flow 700ms linear infinite;
+}
+@keyframes orbit-flow {
+  to { stroke-dashoffset: 10; }
+}
+/* Импульс-кольцо вокруг активного узла. */
+.orbit-node-pulse {
+  animation: orbit-node-pulse 1.8s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+@keyframes orbit-node-pulse {
+  0% { transform: scale(1); opacity: 0.55; }
+  70%, 100% { transform: scale(1.9); opacity: 0; }
+}
+
+
+/* ─── Hero orb (WebGL halo + CSS-фолбэк) ─────────────────────────────────── */
+.hero-orb { position: relative; width: 100%; height: 540px; overflow: hidden; }
+.hero-orb::before {
+  content: "";
+  position: absolute;
+  inset: 10% 2% 8%;
+  border-radius: 28px;
+  background: radial-gradient(
+    ellipse 56% 50% at 50% 50%,
+    rgba(94, 123, 255, 0.34),
+    rgba(180, 92, 255, 0.2) 44%,
+    rgba(61, 217, 188, 0.1) 64%,
+    transparent 78%
+  );
+  filter: blur(22px);
+  animation: ambient-glow 8.5s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+.hero-orb canvas { position: relative; z-index: 1; display: block; width: 100%; height: 100%; }
+
+.hero-orb-fallback {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(64%, 360px);
+  aspect-ratio: 1 / 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 50%, #0a0c1a 0%, rgba(7, 9, 20, 0) 72%);
+  box-shadow: 0 0 90px rgba(94, 123, 255, 0.3), 0 0 180px rgba(180, 92, 255, 0.15),
+    inset 0 0 60px rgba(0, 0, 0, 0.6);
+  z-index: 1;
+}
+.hero-orb-fallback::before {
+  content: "";
+  position: absolute;
+  inset: -10%;
+  border-radius: 50%;
+  background: conic-gradient(from 210deg, #5e7bff, #3dd9bc, #7c5bff, #b45cff, #ff7ad9, #5e7bff);
+  -webkit-mask: radial-gradient(circle at 50% 50%, transparent 52%, #000 62%, #000 86%, transparent 99%);
+  mask: radial-gradient(circle at 50% 50%, transparent 52%, #000 62%, #000 86%, transparent 99%);
+  filter: blur(2px) saturate(1.1);
+  animation: hero-orb-spin 26s linear infinite;
+}
+.hero-orb-fallback-sheen {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 36% 30%, rgba(255, 255, 255, 0.55), transparent 26%),
+    radial-gradient(circle at 60% 72%, rgba(124, 91, 255, 0.35), transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(94, 123, 255, 0.12), transparent 60%);
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+/* ─── «Рёбра»-фон на всю страницу: CSS-фолбэк (когда WebGL off/reduced) ────── */
+.fins-fallback {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+    92deg,
+    transparent 0,
+    transparent 20px,
+    rgba(94, 123, 255, 0.045) 20px,
+    rgba(94, 123, 255, 0.045) 21px
+  );
+  -webkit-mask-image: radial-gradient(110% 85% at 74% 30%, #000 0%, rgba(0, 0, 0, 0.4) 46%, transparent 80%);
+  mask-image: radial-gradient(110% 85% at 74% 30%, #000 0%, rgba(0, 0, 0, 0.4) 46%, transparent 80%);
+  opacity: 0.6;
+}
+.fins-fallback::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(50% 50% at 74% 26%, rgba(61, 217, 188, 0.05), transparent 60%),
+    radial-gradient(46% 50% at 84% 44%, rgba(180, 92, 255, 0.05), transparent 62%);
+}
+
+/* ─── Iridescent text (hero title) ───────────────────────────────────────── */
+.iridescent-text {
+  background: linear-gradient(
+    105deg,
+    #3dd9bc 0%, #5e7bff 22%, #7c5bff 40%, #b45cff 58%, #ff7ad9 74%, #ffc56e 88%, #3dd9bc 100%
+  );
+  /* 280%, как в эталоне (было 200% — свип шёл заметно короче), + синее
+     drop-shadow-свечение под акцентом, которого у нас не было вовсе. */
+  background-size: 280% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 28px rgba(94, 123, 255, 0.34));
+  animation: grad-shift 11s ease-in-out infinite alternate;
+}
+
+/* ─── Якоря секций: отступ под sticky-хедер (единый --app-header-h) */
+:where(#features, #use-cases, #how, #why, #metrics, #trust, #faq, #cta) {
+  scroll-margin-top: var(--app-header-h);
+}
+
+/* Плавный скролл по якорям (гейтится reduced-motion ниже). */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ─── DisclosureCard / FAQ (native <details>) ────────────────────────────── */
+.disclosure {
+  border: 1px solid rgba(140, 160, 255, 0.16);
+  background: rgba(16, 20, 38, 0.55);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05) inset,
+    0 10px 30px rgba(0, 0, 0, 0.45);
+  transition: border-color 200ms cubic-bezier(0.16, 1, 0.3, 1),
+    background 200ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+/* Живой hover, как у карточек эталона: ярче бордер/фон + lift-тень. */
+.disclosure:hover,
+.disclosure:has(> summary:focus-visible) {
+  border-color: rgba(140, 160, 255, 0.34);
+  background: rgba(22, 28, 52, 0.62);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.07) inset,
+    0 24px 60px rgba(0, 0, 0, 0.55), 0 0 36px rgba(94, 123, 255, 0.16);
+}
+.disclosure[open] {
+  border-color: rgba(140, 160, 255, 0.34);
+  background: rgba(22, 28, 52, 0.62);
+}
+.disclosure > summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 20px;
+  font-weight: 600;
+  font-size: 15px;
+  color: #d6ddf0;
+  user-select: none;
+  transition: color 200ms cubic-bezier(0.16, 1, 0.3, 1),
+    background 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.disclosure:hover > summary { color: #fff; }
+/* Открытый заголовок отделён линией и лёгким синим тинтом (эталон). */
+.disclosure[open] > summary {
+  color: #fff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  background: rgba(45, 91, 255, 0.04);
+}
+.disclosure > summary::-webkit-details-marker { display: none; }
+.disclosure > summary:focus-visible {
+  outline: 2px solid #2d5bff;
+  outline-offset: -2px;
+  border-radius: 12px;
+}
+/* Chevron приглушён и загорается синим только на раскрытии. */
+.disclosure > summary .disclosure-chevron {
+  flex-shrink: 0;
+  transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1),
+    color 220ms cubic-bezier(0.16, 1, 0.3, 1);
+  color: #5c6376;
+}
+.disclosure[open] > summary .disclosure-chevron {
+  transform: rotate(180deg);
+  color: #6685ff;
+}
+.disclosure-body {
+  padding: 16px 20px 18px;
+  color: #8a90a2;
+  font-size: 14px;
+  line-height: 1.65;
+}
+.disclosure[open] .disclosure-body { animation: dc-body-in 320ms cubic-bezier(0.16, 1, 0.3, 1); }
+@keyframes dc-body-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ─── Reduced-motion & capture killswitch (JS-моушн гейтить отдельно) ─────── */
+html.figma-capture *,
+html.figma-capture *::before,
+html.figma-capture *::after {
+  animation: none !important;
+  transition: none !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+  .in-view-reveal,
+  .stagger-children > * {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+}
+
+/* Мобильный blur-off ≤640px уже в theme.js (GPU-стоимость) — не дублируем. */
+
+/* ─── A11y: видимый фокус для клавиатурной навигации ───────────────────────── */
+/* Базовая линия только для :focus-visible (клавиатура), не для mouse/touch.
+   Chakra-компоненты со своим boxShadow-фокусом не затрагиваются (у них
+   outline:none + собственное кольцо); правило ловит ссылки и кастомные
+   интерактивные элементы, у которых кольца не было. */
+/* Цвет = blue[300] (непрозрачный, 6.4:1). Раньше здесь стоял полупрозрачный
+   rgba(45,91,255,.7) — 2.4:1, ниже требования SC 2.4.11 к индикатору фокуса, и
+   он конкурировал с правилом той же специфичности в theme.js. Источник один. */
+:focus-visible {
+  outline: 2px solid #6685ff;
+  outline-offset: 2px;
+}
+
+/* ─── Skeleton loading (брендовый glass-shimmer) ───────────────────────────── */
+@keyframes skeleton-shimmer {
+  0% { background-position: 180% 0; }
+  100% { background-position: -180% 0; }
+}
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background-color: rgba(140, 160, 255, 0.06);
+  background-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(140, 160, 255, 0.1) 40%,
+    rgba(94, 123, 255, 0.16) 50%,
+    rgba(140, 160, 255, 0.1) 60%,
+    transparent 100%
+  );
+  background-size: 220% 100%;
+  background-repeat: no-repeat;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+  border-radius: 10px;
+}
+/* reduced-motion: плоский блок без бегущего блика (глобальный killswitch выше
+   гасит анимацию, здесь убираем статичный градиент, чтобы не «замирал» блик). */
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    background-image: none !important;
+    animation: none !important;
+  }
+}

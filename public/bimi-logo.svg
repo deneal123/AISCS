@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.2" baseProfile="tiny-ps" viewBox="0 0 400 400">
+  <title>GPTHub</title>
+  <rect x="0" y="0" width="400" height="400" fill="#0B0D16"/>
+  <circle cx="290" cy="120" r="19" fill="#2D5BFF"/>
+  <g fill="none" stroke="#FFFFFF" stroke-width="40" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 204 172 A 60 60 0 1 0 204 248"/>
+    <path d="M 204 248 L 204 208 L 168 208"/>
+    <path d="M 236 130 L 236 280"/>
+    <path d="M 300 130 L 300 280"/>
+    <path d="M 236 205 L 300 205"/>
+  </g>
+</svg>
