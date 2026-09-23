@@ -1,0 +1,32 @@
+\begin{frame}{Цепочка переноса}
+\centering
+\Large simulation $\rightarrow$ representation $\rightarrow$ human dataset $\rightarrow$ SCS
+\vspace{0.5cm}
+\small
+
+Каждый переход имеет собственные вход, выход, обучающие данные, независимый тест и
+критерий опровержения. Межвидовая биологическая эквивалентность не предполагается.
+\end{frame}
+\begin{frame}{Кандидаты человеческих наборов}
+\small
+\begin{tabular}{lll}
+\toprule Набор & Модальности & Целевая переменная \\ \midrule
+BioVid A & video, EDA, ECG, EMG & experimental class \\
+PainMonit PMED & BVP, EDA, ECG, EMG & experimental class \\
+PainMonit PMCD & BVP, EDA, EMG & self-report \\
+AI4PAIN & fNIRS, face video & experimental class \\ \bottomrule
+\end{tabular}
+\vspace{0.3cm}
+
+Наборы с разными целями не объединяются в одну метрику.
+\Evidence{S280, S291, S730; ST031--ST033}
+\end{frame}
+\begin{frame}{Протокол переноса}
+\begin{itemize}
+  \item отдельные encoders и masks для несопоставимых модальностей;
+  \item разбиение по участникам, а не по окнам;
+  \item human-only, naive/random synthetic и biological synthetic controls;
+  \item participant-level bootstrap, calibration и uncertainty.
+\end{itemize}
+\ResultPending{participant manifest и основной/внешний набор ещё не утверждены.}
+\end{frame}

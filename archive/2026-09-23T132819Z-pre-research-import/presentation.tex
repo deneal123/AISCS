@@ -1,0 +1,30 @@
+% !TEX program = xelatex
+\documentclass[aspectratio=169,11pt]{beamer}
+\usepackage{fontspec}
+\usepackage[main=russian,english]{babel}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{xcolor}
+\setmainfont{Arial}
+\setsansfont{Arial}
+\definecolor{aspaBlue}{HTML}{123A63}
+\definecolor{aspaLight}{HTML}{EEF4F8}
+\setbeamercolor{structure}{fg=aspaBlue}
+\setbeamercolor{block title}{fg=white,bg=aspaBlue}
+\setbeamercolor{block body}{fg=black,bg=aspaLight}
+\setbeamertemplate{navigation symbols}{}
+\input{config/metadata.tex}
+\newcommand{\Evidence}[1]{\hfill{\tiny\color{gray}Evidence: #1}}
+\newcommand{\ResultPending}[1]{\begin{block}{Результат ещё не получен}\small #1\end{block}}
+\title{\WorkingTitle}
+\subtitle{\PresentationStatus}
+\author{\AuthorName}
+\institute{\InstitutionName}
+\date{Рабочая версия, 2026}
+\begin{document}
+\input{slides/01-title.tex}
+\input{slides/02-problem-contract.tex}
+\input{slides/03-transfer-data.tex}
+\input{slides/04-ecap-experiments.tex}
+\input{slides/05-results-limits.tex}
+\end{document}

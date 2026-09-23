@@ -1,0 +1,82 @@
+{
+  "snapshot_at": "2026-09-23T13:36:10+00:00",
+  "status": "immutable_sidecar_snapshot",
+  "label": "pre-portable-document-layout",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 723,
+      "sha256": "12522064BDDD7A32D35BDB9A11BE79E0FAB80BEA699428BAB2E8991B62D34A33"
+    },
+    {
+      "path": "TODO.md",
+      "bytes": 623,
+      "sha256": "9C13D1A4AA842A301B1B0BD3510E122F8E1F7EC80F5CED4E8E1843AA5094CC0A"
+    },
+    {
+      "path": "assets/source/README.md",
+      "bytes": 166,
+      "sha256": "042EFF1D24796D6511012DE46AE1EF15C5AEFB8A0A103613E3AA87E0A2727D56"
+    },
+    {
+      "path": "config/metadata.tex",
+      "bytes": 493,
+      "sha256": "9C180F80306A6F265366845CAC01C01B9792FF42B2EDBC0A141D84069A86FCAA"
+    },
+    {
+      "path": "data/document-registry.schema.json",
+      "bytes": 1520,
+      "sha256": "CA840D82D1704F8A3F2446A7359C5FA5E4A948B604FA1C15FF86C5D813FFB667"
+    },
+    {
+      "path": "data/presentation.json",
+      "bytes": 1111,
+      "sha256": "C6F20829F502FBB7F68A90D926BDD76E47996902A5C1D2B8AA2EF72B21ADE50A"
+    },
+    {
+      "path": "data/research-snapshot/snapshot.json",
+      "bytes": 68129,
+      "sha256": "C85C4E3C7CD06D59BCB0B29DC47101B4B7BBEE14DE7105E7FEEB09803BFA86B7"
+    },
+    {
+      "path": "docs/git-branch.md",
+      "bytes": 519,
+      "sha256": "014EBD9A14A380EE711DD65C8E186A55B2E4D9584C4040FECB486ACA27FE2052"
+    },
+    {
+      "path": "docs/outline.md",
+      "bytes": 556,
+      "sha256": "5577D6AE47D2F143C394779ED699E965AE7FAEE3FD8F1BC25F10AF6AC373D4AA"
+    },
+    {
+      "path": "presentation.tex",
+      "bytes": 1056,
+      "sha256": "9F6C4F8853922952F239040DE11C71F05B438EFCB06299C44E2A7B4651C0FD53"
+    },
+    {
+      "path": "slides/01-title.tex",
+      "bytes": 505,
+      "sha256": "530FA918FDD3B2E3E71FBEC40EDFAEDE6A6E50F07B9F1A1F2C207C1A27962CB4"
+    },
+    {
+      "path": "slides/02-problem-contract.tex",
+      "bytes": 2042,
+      "sha256": "23EE1478FFBAE64EA2905E606A266575AA4174BFAE60792C7ED41A72EC804D15"
+    },
+    {
+      "path": "slides/03-transfer-data.tex",
+      "bytes": 1642,
+      "sha256": "3288968B9BD9371796899A5F78FBB424AD4DA6647487A2CB4F4B79928EDD7A89"
+    },
+    {
+      "path": "slides/04-ecap-experiments.tex",
+      "bytes": 1688,
+      "sha256": "663E455BDF6CAFB2868C925F3CF1EB187160E0803A00B25EB0E0324BC596972C"
+    },
+    {
+      "path": "slides/05-results-limits.tex",
+      "bytes": 1309,
+      "sha256": "030CF0BEE2CE41E0FA494917D6AD19D657B6B590798BA696A6AD6184C0BFF6C0"
+    }
+  ]
+}

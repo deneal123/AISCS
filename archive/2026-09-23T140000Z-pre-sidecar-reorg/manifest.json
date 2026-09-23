@@ -1,0 +1,12 @@
+﻿{
+    "snapshot_at":  "2026-09-23T14:00:00+03:00",
+    "status":  "immutable_pre_reorganization_snapshot",
+    "sidecar":  "presentation",
+    "files":  [
+                  {
+                      "path":  "example.tex",
+                      "bytes":  42532,
+                      "sha256":  "5CEA097B31C07EC76F16E3CBD51A119C6CA57855511CB6C2DE94AE62B16C58A8"
+                  }
+              ]
+}

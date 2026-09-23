@@ -1,0 +1,9 @@
+{
+  "meta":{"schema_version":"1.0.0","sidecar_version":"1.0.0","updated_at":"2026-09-23"},
+  "release_approvals":{"author_review":false,"supervisor_review":false,"defense_requisites_approved":false},
+  "documents":[{
+    "id":"PRES-001","title":"Рабочая презентация к защите диссертации","kind":"dissertation_defense_presentation","language":"ru","status":"draft","source_dir":".","entrypoint":"presentation.tex","primary_output":null,"research_snapshot":"data/research-snapshot/snapshot.json",
+    "evidence_refs":["S029","S062","S090","S105","S159","S162","S280","S291","S730","S731","ST031","ST032","ST033"],"immutable":false,"immutable_files":[],
+    "traceability":[{"slides":"02-04","section":"scientific-contract","target_construct":"construct_boundaries","refs":["S029","S062","S090","S731"]},{"slides":"05-07","section":"human-transfer","target_construct":"human_experimental_nociception","refs":["S280","S291","S730","ST031","ST032","ST033"]},{"slides":"08-09","section":"ecap-like","target_construct":"ecap_like_observation","refs":["S105","S159","S162"]}]
+  }]
+}
