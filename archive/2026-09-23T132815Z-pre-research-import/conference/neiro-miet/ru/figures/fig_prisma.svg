@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="469.764pt" height="131.2992pt" viewBox="0 0 469.764 131.2992" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-09-15T16:25:14.331729</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.1, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 131.2992 
+L 469.764 131.2992 
+L 469.764 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 3.77442 36.2202 
+L 99.48564 36.2202 
+L 99.48564 9.4662 
+L 3.77442 9.4662 
+z
+" clip-path="url(#pa41889e281)" style="fill: #ffffff; stroke: #000000; stroke-width: 0.7; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 125.16426 36.2202 
+L 220.87548 36.2202 
+L 220.87548 9.4662 
+L 125.16426 9.4662 
+z
+" clip-path="url(#pa41889e281)" style="fill: #ffffff; stroke: #000000; stroke-width: 0.7; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 246.5541 36.2202 
+L 342.26532 36.2202 
+L 342.26532 9.4662 
+L 246.5541 9.4662 
+z
+" clip-path="url(#pa41889e281)" style="fill: #ffffff; stroke: #000000; stroke-width: 0.7; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 367.94394 36.2202 
+L 463.65516 36.2202 
+L 463.65516 9.4662 
+L 367.94394 9.4662 
+z
+" clip-path="url(#pa41889e281)" style="fill: #ffffff; stroke: #000000; stroke-width: 0.7; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 246.5541 79.0266 
+L 342.26532 79.0266 
+L 342.26532 56.2857 
+L 246.5541 56.2857 
+z
+" clip-path="url(#pa41889e281)" style="fill: #ffffff; stroke: #000000; stroke-width: 0.7; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_7">
+    <path d="M 367.94394 79.0266 
+L 463.65516 79.0266 
+L 463.65516 56.2857 
+L 367.94394 56.2857 
+z
+" clip-path="url(#pa41889e281)" style="fill: #ffffff; stroke: #000000; stroke-width: 0.7; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_8">
+    <path d="M 246.5541 120.4953 
+L 342.26532 120.4953 
+L 342.26532 97.7544 
+L 246.5541 97.7544 
+z
+" clip-path="url(#pa41889e281)" style="fill: #ffffff; stroke: #000000; stroke-width: 0.7; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_9">
+    <path d="M 367.94394 120.4953 
+L 463.65516 120.4953 
+L 463.65516 97.7544 
+L 367.94394 97.7544 
+z
+" clip-path="url(#pa41889e281)" style="fill: #ffffff; stroke: #000000; stroke-width: 0.7; stroke-linejoin: miter"/>
+   </g>
+   <g id="text_1">
+    <text style="font-size: 9px; font-family: 'Times New Roman'" transform="translate(35.029249 15.455817)">Найдено</text>
+    <text style="font-size: 9px; font-family: 'Times New Roman'" transform="translate(28.503546 24.996696)">PubMed 343</text>
+    <text style="font-size: 9px; font-family: 'Times New Roman'" transform="translate(10.997139 34.528434)">Другие источники 60</text>
+   </g>
+   <g id="text_2">
+    <text style="font-size: 9px; font-family: 'Times New Roman'" transform="translate(142.619557 15.455817)">После удаления</text>
+    <text style="font-size: 9px; font-family: 'Times New Roman'" transform="translate(143.551901 24.996696)">дубликатов 382</text>
+    <text style="font-size: 9px; font-family: 'Times New Roman'" transform="translate(153.861823 34.528434)">Удален 21</text>
+   </g>
+   <g id="text_3">
+    <text style="font-size: 9px; font-family: 'Times New Roman'" transform="translate(260.709632 15.460387)">Просмотрено 382</text>
+    <text style="font-size: 9px; font-family: 'Times New Roman'" transform="translate(272.621273 24.992126)">Исключено</text>
+    <text style="font-size: 9px; font-family: 'Times New Roman'" transform="translate(287.65971 34.523864)">185</text>
+   </g>
+   <g id="text_4">
+    <text style="font-size: 9px; font-family: 'Times New Roman'" transform="translate(394.577831 15.460387)">Запрошено</text>
+    <text style="font-size: 9px; font-family: 'Times New Roman'" transform="translate(393.397987 24.992126)">197 полных</text>
+    <text style="font-size: 9px; font-family: 'Times New Roman'" transform="translate(401.481112 34.523864)">текстов</text>
+   </g>
+   <g id="text_5">
+    <text style="font-size: 9px; font-family: 'Times New Roman'" transform="translate(270.023226 65.039207)">Не получено</text>
+    <text style="font-size: 9px; font-family: 'Times New Roman'" transform="translate(289.90971 74.570945)">65</text>
+   </g>
+   <g id="text_6">
+    <text style="font-size: 9px; font-family: 'Times New Roman'" transform="translate(395.047519 65.039207)">Проверено</text>
+    <text style="font-size: 9px; font-family: 'Times New Roman'" transform="translate(409.04955 74.570945)">132</text>
+   </g>
+   <g id="text_7">
+    <text style="font-size: 9px; font-family: 'Times New Roman'" transform="translate(272.621273 106.507907)">Исключено</text>
+    <text style="font-size: 9px; font-family: 'Times New Roman'" transform="translate(292.15971 116.039645)">2</text>
+   </g>
+   <g id="text_8">
+    <text style="font-size: 9px; font-family: 'Times New Roman'" transform="translate(396.256894 106.507907)">Включено</text>
+    <text style="font-size: 9px; font-family: 'Times New Roman'" transform="translate(409.04955 116.039645)">130</text>
+   </g>
+   <g id="patch_10">
+    <path d="M 99.48564 22.8432 
+Q 112.32495 22.8432 124.381636 22.8432 
+" style="fill: none; stroke: #000000; stroke-width: 0.7; stroke-linecap: round"/>
+    <path d="M 120.781636 21.0432 
+L 124.381636 22.8432 
+L 120.781636 24.6432 
+" style="fill: none; stroke: #000000; stroke-width: 0.7; stroke-linecap: round"/>
+   </g>
+   <g id="patch_11">
+    <path d="M 220.87548 22.8432 
+Q 233.71479 22.8432 245.771476 22.8432 
+" style="fill: none; stroke: #000000; stroke-width: 0.7; stroke-linecap: round"/>
+    <path d="M 242.171476 21.0432 
+L 245.771476 22.8432 
+L 242.171476 24.6432 
+" style="fill: none; stroke: #000000; stroke-width: 0.7; stroke-linecap: round"/>
+   </g>
+   <g id="patch_12">
+    <path d="M 342.26532 22.8432 
+Q 355.10463 22.8432 367.161316 22.8432 
+" style="fill: none; stroke: #000000; stroke-width: 0.7; stroke-linecap: round"/>
+    <path d="M 363.561316 21.0432 
+L 367.161316 22.8432 
+L 363.561316 24.6432 
+" style="fill: none; stroke: #000000; stroke-width: 0.7; stroke-linecap: round"/>
+   </g>
+   <g id="patch_13">
+    <path d="M 416.032992 36.2202 
+Q 416.032992 46.25295 416.032992 55.503076 
+" style="fill: none; stroke: #000000; stroke-width: 0.7; stroke-linecap: round"/>
+    <path d="M 417.832992 51.903076 
+L 416.032992 55.503076 
+L 414.232992 51.903076 
+" style="fill: none; stroke: #000000; stroke-width: 0.7; stroke-linecap: round"/>
+   </g>
+   <g id="patch_14">
+    <path d="M 386.6193 36.2202 
+Q 340.631226 46.25295 295.407791 56.118886 
+" style="fill: none; stroke: #000000; stroke-width: 0.7; stroke-linecap: round"/>
+    <path d="M 299.308728 57.110195 
+L 295.407791 56.118886 
+L 298.5414 53.592922 
+" style="fill: none; stroke: #000000; stroke-width: 0.7; stroke-linecap: round"/>
+   </g>
+   <g id="patch_15">
+    <path d="M 416.032992 79.0266 
+Q 416.032992 88.3905 416.032992 96.971776 
+" style="fill: none; stroke: #000000; stroke-width: 0.7; stroke-linecap: round"/>
+    <path d="M 417.832992 93.371776 
+L 416.032992 96.971776 
+L 414.232992 93.371776 
+" style="fill: none; stroke: #000000; stroke-width: 0.7; stroke-linecap: round"/>
+   </g>
+   <g id="patch_16">
+    <path d="M 386.6193 79.0266 
+Q 340.631226 88.3905 295.41004 97.598249 
+" style="fill: none; stroke: #000000; stroke-width: 0.7; stroke-linecap: round"/>
+    <path d="M 299.296795 98.643779 
+L 295.41004 97.598249 
+L 298.578517 95.116163 
+" style="fill: none; stroke: #000000; stroke-width: 0.7; stroke-linecap: round"/>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="pa41889e281">
+   <rect x="1.44" y="1.44" width="466.884" height="128.4192"/>
+  </clipPath>
+ </defs>
+</svg>

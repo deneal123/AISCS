@@ -1,0 +1,162 @@
+\relax 
+\citation{wang2018oecnn}
+\citation{wang2019dal}
+\citation{huang2021mtlface}
+\citation{chen2014cacd}
+\citation{ricanek2006morph}
+\citation{moschoglou2017agedb}
+\citation{panis2016fgnet}
+\citation{wang2024cacon}
+\citation{wang2025ordcon}
+\citation{yao2024synthageing}
+\citation{chen2020simclr}
+\@writefile{toc}{\contentsline {section}{\numberline {I}Introduction}{1}{}\protected@file@percent }
+\newlabel{sec:intro}{{I}{1}{}{section.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {II}Related Work and Positioning}{1}{}\protected@file@percent }
+\newlabel{sec:related}{{II}{1}{}{section.2}{}}
+\citation{wang2018oecnn}
+\citation{wang2019dal}
+\citation{huang2021mtlface}
+\citation{wang2024cacon}
+\citation{yao2024synthageing}
+\citation{wang2025ordcon}
+\citation{zheng2017calfw}
+\citation{huang2007lfw}
+\citation{deng2020retinaface}
+\citation{gebru2021datasheets}
+\citation{schroff2015facenet}
+\@writefile{toc}{\contentsline {section}{\numberline {III}Data: Naturally-Anchored Longitudinal Pairs}{2}{}\protected@file@percent }
+\newlabel{sec:data}{{III}{2}{}{section.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-A}}Age Extraction}{2}{}\protected@file@percent }
+\newlabel{sec:data-age}{{\mbox  {III-A}}{2}{}{subsection.3.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-B}}Persons and Leakage-Safe Split}{2}{}\protected@file@percent }
+\newlabel{sec:data-persons}{{\mbox  {III-B}}{2}{}{subsection.3.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-C}}Auditing the Automatic Supervision}{2}{}\protected@file@percent }
+\newlabel{sec:data-audit}{{\mbox  {III-C}}{2}{}{subsection.3.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-D}}Curation Pipeline and Its Largest Finding}{2}{}\protected@file@percent }
+\newlabel{sec:data-curation}{{\mbox  {III-D}}{2}{}{subsection.3.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-E}}Dataset Datasheet (Summary)}{2}{}\protected@file@percent }
+\newlabel{sec:data-datasheet}{{\mbox  {III-E}}{2}{}{subsection.3.5}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {IV}Method, Protocol and Statistics}{2}{}\protected@file@percent }
+\newlabel{sec:method}{{IV}{2}{}{section.4}{}}
+\citation{deng2019arcface}
+\citation{kim2022adaface}
+\@writefile{lot}{\contentsline {table}{\numberline {I}{\ignorespaces Positioning vs.\ Prior Work.}}{3}{}\protected@file@percent }
+\newlabel{tab:positioning}{{I}{3}{}{table.1}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {II}{\ignorespaces Dataset Scale (Raw Mined) and After Curation (Sec.~\ref {sec:data-curation}).}}{3}{}\protected@file@percent }
+\newlabel{tab:scale}{{II}{3}{}{table.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {III}{\ignorespaces Age-Extraction Audit: LLM vs.\ Regex (33{,}697 Captioned Multi-Photo Posts).}}{3}{}\protected@file@percent }
+\newlabel{tab:age}{{III}{3}{}{table.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {IV}{\ignorespaces Small manual validation (one annotator; a sanity check, \emph  {not} a certified audit---no inter-annotator $\kappa $). Samples are drawn from the curated corpus and were not used to tune thresholds or filtering rules.}}{3}{}\protected@file@percent }
+\newlabel{tab:humanval}{{IV}{3}{}{table.4}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {V}{\ignorespaces LLM Group-Integrity Classification (33{,}697 Posts).}}{3}{}\protected@file@percent }
+\newlabel{tab:integrity}{{V}{3}{}{table.5}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {VI}{\ignorespaces Dedup-Threshold Sensitivity: near-duplicate removal alone, on the pre-curation groups (the separate group-integrity prune removes a further ${\approx }500$ positives to reach the headline 31{,}865). Stable across 0.93--0.97.}}{3}{}\protected@file@percent }
+\newlabel{tab:dedupsens}{{VI}{3}{}{table.6}{}}
+\citation{delong1988}
+\citation{zoss2022fran}
+\citation{yao2024synthageing}
+\@writefile{toc}{\contentsline {section}{\numberline {V}Results}{4}{}\protected@file@percent }
+\newlabel{sec:results}{{V}{4}{}{section.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-A}}Main Effect and Supervision-Source Ablation}{4}{}\protected@file@percent }
+\newlabel{sec:res-main}{{\mbox  {V-A}}{4}{}{subsection.5.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-B}}Real Pairs Outperform Synthetic Aging}{4}{}\protected@file@percent }
+\newlabel{sec:res-synth}{{\mbox  {V-B}}{4}{}{subsection.5.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-C}}Headroom Curve and the Strong-Backbone Regime}{4}{}\protected@file@percent }
+\newlabel{sec:res-headroom}{{\mbox  {V-C}}{4}{}{subsection.5.3}{}}
+\citation{deng2019arcface}
+\citation{deng2020subcenter}
+\@writefile{lot}{\contentsline {table}{\numberline {VII}{\ignorespaces Main Result: Weak FaceNet Frozen vs.\ $+$pairs, Three Seeds, Curated Data. Pre-clean gain shown for reference.}}{5}{}\protected@file@percent }
+\newlabel{tab:main}{{VII}{5}{}{table.7}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {VIII}{\ignorespaces Operating Points and 95\% Bootstrap CIs (FaceNet Frozen vs.\ $+$pairs, Seed 42). All values are ROC-AUC unless noted; LFW is shown as ROC-AUC for consistency (its 10-fold accuracy is in Table~\ref {tab:main}). External CIs are pair-level; the internal test additionally uses an identity-level bootstrap (text).}}{5}{}\protected@file@percent }
+\newlabel{tab:stats}{{VIII}{5}{}{table.8}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {IX}{\ignorespaces Real vs.\ Synthetic Positives (FaceNet, Curated Data). FRAN-gm matches the synthetic age-gap to the real-pair distribution (median 9~y); the cruder domain proxy reaches 0.761 / 0.594.}}{5}{}\protected@file@percent }
+\newlabel{tab:synth}{{IX}{5}{}{table.9}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-D}}Data-Scaling Law}{5}{}\protected@file@percent }
+\newlabel{sec:res-scaling}{{\mbox  {V-D}}{5}{}{subsection.5.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-E}}Mechanism --- the Age Shortcut}{5}{}\protected@file@percent }
+\newlabel{sec:res-shortcut}{{\mbox  {V-E}}{5}{}{subsection.5.5}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {X}{\ignorespaces Look-alike impostors break modern face recognition (25$+$ ROC-AUC; rank $=$ impostor rank under an independent miner). \emph  {Top:} frozen recognizers on the \emph  {full} 25$+$ set ($n_{\text  {pos}}\!=\!1208$, $n_{\text  {neg}}\!=\!31\,590$), valid because no frozen model has seen any of our data. \emph  {Bottom:} the effect of our supervision, necessarily test-only ($n_{\text  {pos}}\!=\!141$, $n_{\text  {neg}}\!=\!4762$). The blocks use different impostor pools and are \emph  {not} comparable across blocks: rank-$k$ difficulty grows with pool size.}}{5}{}\protected@file@percent }
+\newlabel{tab:lookalike}{{X}{5}{}{table.10}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {XI}{\ignorespaces Headroom: FG-NET Large-Gap by Backbone Strength (Curated Data, lr 3e-5).}}{6}{}\protected@file@percent }
+\newlabel{tab:headroom}{{XI}{6}{}{table.11}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {XII}{\ignorespaces Data-Scaling Law (FaceNet, Curated; val/test Fixed; mean $\pm $ std over three seeds).}}{6}{}\protected@file@percent }
+\newlabel{tab:scaling}{{XII}{6}{}{table.12}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces The age shortcut: on an identity-only test (age-matched negatives), the frozen model falls to near-chance; fine-tuning on our pairs restores discrimination by identity.}}{6}{}\protected@file@percent }
+\newlabel{fig:shortcut}{{1}{6}{}{figure.1}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {XIII}{\ignorespaces Age-Leakage Linear Probe (Curated Data; Chance $=$ 0.25).}}{6}{}\protected@file@percent }
+\newlabel{tab:leakage}{{XIII}{6}{}{table.13}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-F}}Objective Comparison: Training the SOTA Objective on Our Data}{6}{}\protected@file@percent }
+\newlabel{sec:res-objective}{{\mbox  {V-F}}{6}{}{subsection.5.6}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {XIV}{\ignorespaces Objective Comparison (FaceNet, Curated Data): contrastive, ArcFace and CosFace coincide on the FG-NET large-gap primary endpoint; SphereFace (no $\lambda $-annealing) trails on our sparse few-shot identities.}}{6}{}\protected@file@percent }
+\newlabel{tab:objective}{{XIV}{6}{}{table.14}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-G}}Apparent-Demographic Audit}{6}{}\protected@file@percent }
+\newlabel{sec:res-fairness}{{\mbox  {V-G}}{6}{}{subsection.5.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-H}}Cross-Source Transfer}{7}{}\protected@file@percent }
+\newlabel{sec:res-cross}{{\mbox  {V-H}}{7}{}{subsection.5.8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-I}}Cross-Platform Transfer (Independent, Non-VK Source)}{7}{}\protected@file@percent }
+\newlabel{sec:res-crossplatform}{{\mbox  {V-I}}{7}{}{subsection.5.9}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-J}}Calibration}{7}{}\protected@file@percent }
+\newlabel{sec:res-calib}{{\mbox  {V-J}}{7}{}{subsection.5.10}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-K}}Disentanglement}{7}{}\protected@file@percent }
+\newlabel{sec:res-disentangle}{{\mbox  {V-K}}{7}{}{subsection.5.11}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-L}}Hard-Negative Mining}{7}{}\protected@file@percent }
+\newlabel{sec:res-hardneg}{{\mbox  {V-L}}{7}{}{subsection.5.12}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {VI}Discussion}{7}{}\protected@file@percent }
+\newlabel{sec:discussion}{{VI}{7}{}{section.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-A}}Scope of the Claims}{7}{}\protected@file@percent }
+\newlabel{sec:scope}{{\mbox  {VI-A}}{7}{}{subsection.6.1}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {XV}{\ignorespaces Apparent Gender/Age Strata (FaceNet, Curated; 95\% Paired-Bootstrap CI of the Gain).}}{8}{}\protected@file@percent }
+\newlabel{tab:strata}{{XV}{8}{}{table.15}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {XVI}{\ignorespaces Cross-Platform Transfer: a VK-trained model on an independent Reddit (non-VK) then/now test set (frozen vs.\ $+$pairs, trained on VK only; 396 posts $\rightarrow $ 1{,}575 positive pairs after the multi-person-collage filter).}}{8}{}\protected@file@percent }
+\newlabel{tab:crossplatform}{{XVI}{8}{}{table.16}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {XVII}{\ignorespaces Cross-source transfer, both directions. VK$\to $Reddit is the main cross-platform test; Reddit$\to $VK is a small 220-person \emph  {pilot} supporting source non-specificity, not a headline claim (single run).}}{8}{}\protected@file@percent }
+\newlabel{tab:crosssource}{{XVII}{8}{}{table.17}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {XVIII}{\ignorespaces Hard-Negative Mining (FaceNet, Curated Data; External Benchmarks). $+$hard-neg is mean $\pm $ std over three seeds; frozen and $+$pairs as in Table~\ref {tab:main}.}}{8}{}\protected@file@percent }
+\newlabel{tab:hardneg}{{XVIII}{8}{}{table.18}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {VII}Limitations}{8}{}\protected@file@percent }
+\newlabel{sec:limitations}{{VII}{8}{}{section.7}{}}
+\citation{gdpr2016}
+\citation{gebru2021datasheets}
+\@writefile{toc}{\contentsline {section}{\numberline {VIII}Ethics, Legal Basis and Data Governance}{9}{}\protected@file@percent }
+\newlabel{sec:ethics}{{VIII}{9}{}{section.8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VIII-A}}Ethical Approval and Legal Basis}{9}{}\protected@file@percent }
+\newlabel{sec:eth-legal}{{\mbox  {VIII-A}}{9}{}{subsection.8.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VIII-B}}De-identification and Release Policy}{9}{}\protected@file@percent }
+\newlabel{sec:eth-deid}{{\mbox  {VIII-B}}{9}{}{subsection.8.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VIII-C}}DPIA and Minimization}{9}{}\protected@file@percent }
+\newlabel{sec:eth-dpia}{{\mbox  {VIII-C}}{9}{}{subsection.8.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VIII-D}}Minors}{9}{}\protected@file@percent }
+\newlabel{sec:eth-minors}{{\mbox  {VIII-D}}{9}{}{subsection.8.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VIII-E}}Subject Rights}{9}{}\protected@file@percent }
+\newlabel{sec:eth-rights}{{\mbox  {VIII-E}}{9}{}{subsection.8.5}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {IX}Reproducibility}{9}{}\protected@file@percent }
+\newlabel{sec:repro}{{IX}{9}{}{section.9}{}}
+\bibstyle{IEEEtran}
+\bibdata{../../../shared/refs}
+\bibcite{wang2018oecnn}{1}
+\bibcite{wang2019dal}{2}
+\bibcite{huang2021mtlface}{3}
+\bibcite{chen2014cacd}{4}
+\bibcite{ricanek2006morph}{5}
+\bibcite{moschoglou2017agedb}{6}
+\bibcite{panis2016fgnet}{7}
+\bibcite{wang2024cacon}{8}
+\bibcite{wang2025ordcon}{9}
+\bibcite{yao2024synthageing}{10}
+\bibcite{chen2020simclr}{11}
+\bibcite{zheng2017calfw}{12}
+\bibcite{huang2007lfw}{13}
+\bibcite{deng2020retinaface}{14}
+\bibcite{gebru2021datasheets}{15}
+\bibcite{schroff2015facenet}{16}
+\bibcite{deng2019arcface}{17}
+\bibcite{kim2022adaface}{18}
+\bibcite{delong1988}{19}
+\bibcite{zoss2022fran}{20}
+\bibcite{deng2020subcenter}{21}
+\bibcite{gdpr2016}{22}
+\@writefile{toc}{\contentsline {section}{\numberline {X}Conclusion and Future Work}{10}{}\protected@file@percent }
+\newlabel{sec:conclusion}{{X}{10}{}{section.10}{}}
+\@writefile{toc}{\contentsline {section}{References}{10}{}\protected@file@percent }
+\gdef \@abspage@last{10}

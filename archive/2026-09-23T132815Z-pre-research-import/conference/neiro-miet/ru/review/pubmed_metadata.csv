@@ -1,0 +1,364 @@
+﻿pmid,pmcid,doi,publication_types,mesh_humans,mesh_animals,mesh_terms,checked_at
+27885969,PMC5493079,10.1186/s13054-016-1208-6,Conference Proceedings,no,no,NR,2026-09-12
+35041590,,10.1111/ner.13510,Journal Article,yes,no,Action Potentials; Electric Stimulation; Evoked Potentials; Feasibility Studies; Humans; Spinal Cord; Spinal Cord Stimulation,2026-09-12
+38139521,PMC10747670,10.3390/s23249675,Journal Article,yes,no,Humans; Pain Measurement; Shoulder Pain,2026-09-12
+40100883,PMC11957733,10.1371/journal.pone.0315343,Comparative Study; Journal Article,yes,no,Humans; Machine Learning; Surveys and Questionnaires; Wearable Electronic Devices,2026-09-12
+40796769,PMC12344049,10.1038/s41598-025-14238-y,Journal Article,yes,no,"Deep Learning; Electrocardiography; Female; Galvanic Skin Response; Humans; Male; Pain; Pain Measurement; Signal Processing, Computer-Assisted",2026-09-12
+40164059,,10.1097/cin.0000000000001302,Journal Article,yes,no,"Convolutional Neural Networks; Deep Learning; Facial Expression; Humans; Infant; Infant, Newborn; Neural Networks, Computer; Pain Measurement",2026-09-12
+29546805,PMC5858615,10.1177/1744806918763658,"Journal Article; Research Support, N.I.H., Extramural; Research Support, Non-U.S. Gov't",yes,yes,Animals; Automation; Facial Expression; Humans; Mice; Nerve Net; Pain; Postoperative Care; Video Recording,2026-09-12
+40006452,PMC11860027,10.3390/s25041223,Journal Article,yes,no,"Deep Learning; Delivery of Health Care; Facial Expression; Humans; Internet of Things; Neural Networks, Computer; Pain; Pain Measurement; Video Recording",2026-09-12
+40096220,PMC11902865,10.3390/s25051436,Journal Article,yes,no,"Algorithms; Electrocardiography; Federated Learning; Humans; Machine Learning; Neural Networks, Computer; Pain; Pain Measurement; Signal Processing, Computer-Assisted; Wavelet Analysis",2026-09-12
+35088735,,10.1016/j.neurom.2021.11.014,Journal Article; Multicenter Study,yes,no,"Action Potentials; Electrodes, Implanted; Evoked Potentials; Humans; Prospective Studies; Spinal Cord Stimulation",2026-09-12
+39453291,,10.1016/j.neurom.2024.08.005,Journal Article; Observational Study,yes,no,Adult; Aged; Chronic Pain; Female; Humans; Male; Middle Aged; Pain Measurement; Pilot Projects; Prospective Studies; Raynaud Disease; Spinal Cord Stimulation; Treatment Outcome,2026-09-12
+41153333,PMC12564096,10.3390/diagnostics15202661,Journal Article,no,no,NR,2026-09-12
+37106687,PMC10135816,10.3390/bioengineering10040500,Journal Article; Review,no,no,NR,2026-09-12
+40271647,PMC12353991,10.1097/aco.0000000000001508,Journal Article; Review,yes,no,"Acute Pain; Algorithms; Anesthesia, Conduction; Artificial Intelligence; Chronic Pain; Humans; Machine Learning; Pain Management; Pain Measurement; Ultrasonography, Interventional",2026-09-12
+38231823,,10.1109/tbme.2024.3355215,"Journal Article; Research Support, Non-U.S. Gov't",yes,no,"Adolescent; Child; Child, Preschool; Deep Learning; Electroencephalography; Female; Humans; Male; Pain; Pain Measurement; Scalp; Signal Processing, Computer-Assisted",2026-09-12
+37100924,PMC10133304,10.1038/s41746-023-00810-1,Journal Article; Review,no,no,NR,2026-09-12
+29946251,PMC6006917,10.3389/fnagi.2018.00117,Journal Article,no,no,NR,2026-09-12
+37972595,,10.1016/j.neuron.2023.10.021,"Journal Article; Research Support, Non-U.S. Gov't",yes,yes,Animals; Electric Stimulation; Humans; Pain; Paresthesia; Rats; Sensation; Spinal Cord; Spinal Cord Stimulation; Swine,2026-09-12
+35878817,,10.1016/j.expneurol.2022.114178,"Journal Article; Research Support, Non-U.S. Gov't; Review",yes,no,Humans; Neuronal Plasticity; Recovery of Function; Spinal Cord; Spinal Cord Injuries; Spinal Cord Stimulation,2026-09-12
+40039359,,10.1109/embc53108.2024.10781616,Journal Article,yes,no,Acute Pain; Algorithms; Deep Learning; Facial Expression; Humans; Pain Measurement; Video Recording,2026-09-12
+40652630,,10.1016/j.sleep.2025.106664,"Case Reports; Journal Article; Research Support, N.I.H., Extramural; Research Support, Non-U.S. Gov't; Review",yes,no,Aged; Chronic Pain; Female; Humans; Neuralgia; Restless Legs Syndrome; Spinal Cord Stimulation; Treatment Outcome,2026-09-12
+30625000,,10.1080/17434440.2019.1567325,Journal Article; Review,yes,no,"Algorithms; Chronic Pain; Feedback; Ganglia, Spinal; Humans; Spinal Cord Stimulation; Wireless Technology",2026-09-12
+41681083,,10.1080/14737175.2026.2632285,Journal Article; Review,yes,yes,Animals; Extremities; Humans; Pain Management; Spinal Cord; Spinal Cord Stimulation; Torso,2026-09-12
+24974775,,10.1111/ner.12170,"Journal Article; Research Support, Non-U.S. Gov't",yes,no,"Electric Stimulation; Humans; Models, Neurological; Nervous System; Nervous System Diseases; Neurotransmitter Agents; Posture; Signal Processing, Computer-Assisted",2026-09-12
+39097739,PMC11297625,10.1186/s12904-024-01526-z,Journal Article,yes,no,"Adult; Aged; Aged, 80 and over; Cancer Pain; Cohort Studies; Electrocardiography; Female; Galvanic Skin Response; Humans; Male; Middle Aged; Pain Management; Pain Measurement",2026-09-12
+41366265,PMC12689790,10.1038/s41598-025-27404-z,Journal Article,no,yes,Animals; Cats; Facial Expression; Female; Generative Artificial Intelligence; Male; Pain Measurement,2026-09-12
+41930234,PMC13039019,10.3389/fpain.2026.1752958,Journal Article; Review,no,no,NR,2026-09-12
+42558820,PMC13438283,10.3389/fped.2026.1784197,Journal Article,no,no,NR,2026-09-12
+39788578,PMC11774282,10.22514/jofph.2024.008,Journal Article,no,yes,"Animals; Deep Learning; Disease Models, Animal; Facial Expression; Mice; Neural Networks, Computer; Pain Measurement; Trigeminal Neuralgia",2026-09-12
+39845012,PMC11750553,10.1016/j.heliyon.2024.e41558,Journal Article,no,no,NR,2026-09-12
+33018277,,10.1109/embc44109.2020.9176644,Journal Article,yes,no,"Algorithms; Electroencephalography; Humans; Neural Networks, Computer; Pain; Pain Perception",2026-09-12
+39333541,PMC11436824,10.1038/s41597-024-03878-w,"Dataset; Journal Article; Research Support, Non-U.S. Gov't",yes,no,Algorithms; Humans; Machine Learning; Pain; Pain Measurement; Skin Temperature,2026-09-12
+23574118,PMC3691100,10.1056/nejmoa1204471,"Journal Article; Research Support, N.I.H., Extramural; Research Support, U.S. Gov't, Non-P.H.S.",yes,no,"Adult; Analgesics, Opioid; Artificial Intelligence; Brain; Brain Mapping; Female; Hot Temperature; Humans; Magnetic Resonance Imaging; Male; Pain; Pain Measurement; Piperidines; ROC Curve; Remifentanil; Sensitivity and Specificity; Young Adult",2026-09-12
+41251282,,10.1111/joor.70108,Journal Article,yes,no,Adult; Facial Pain; Female; Humans; Machine Learning; Magnetic Resonance Imaging; Male; Middle Aged; Pain Measurement; Predictive Value of Tests; Retrospective Studies; Severity of Illness Index; Temporomandibular Joint Disorders,2026-09-12
+36994457,PMC10041392,10.1002/jsp2.1230,Journal Article; Review,no,no,NR,2026-09-12
+42514252,PMC13412368,10.3390/life16071185,Journal Article; Review,no,no,NR,2026-09-12
+37104439,PMC10141195,10.3390/vetsci10040283,Journal Article,no,no,NR,2026-09-12
+38199191,,10.1016/j.ijmedinf.2023.105337,"Journal Article; Research Support, Non-U.S. Gov't",yes,no,Artificial Intelligence; Humans; Machine Learning; Pain; Reproducibility of Results; Software,2026-09-12
+38607660,PMC11053395,10.2196/51250,Journal Article; Meta-Analysis; Systematic Review,yes,no,Algorithms; Area Under Curve; Artificial Intelligence; Humans; Pain; Pain Measurement,2026-09-12
+40516197,,10.1016/j.jclinane.2025.111898,"Journal Article; Research Support, Non-U.S. Gov't",yes,no,Adult; Aged; Deep Learning; Facial Pain; Female; Humans; Male; Middle Aged; Pain Measurement; Postoperative Pain; ROC Curve,2026-09-12
+41924082,PMC13037636,10.2147/jpr.s578721,Journal Article; Review,no,no,NR,2026-09-12
+42032954,PMC13071591,10.11817/j.issn.1672-7347.2026.250554,English Abstract; Journal Article,yes,no,Aged; Electroencephalography; Female; Humans; Male; Middle Aged; Pain Management; Pain Measurement; Retrospective Studies; Spinal Cord Stimulation; Support Vector Machine,2026-09-12
+39338237,PMC11432921,10.3390/jpm14090983,Journal Article; Review,no,no,NR,2026-09-12
+37416623,PMC10322534,10.1155/2023/6018736,Journal Article; Review,yes,no,"Algorithms; Artificial Intelligence; Humans; Machine Learning; Neural Networks, Computer; Physicians",2026-09-12
+42277490,,10.1007/s11916-026-01517-0,Journal Article; Review,yes,no,Artificial Intelligence; Humans; Machine Learning; Neuralgia; Spinal Cord Stimulation,2026-09-12
+42160993,,10.1016/j.artmed.2026.103455,Journal Article; Scoping Review,yes,no,Aged; Humans; Machine Learning; Natural Language Processing; Pain Management; Pain Measurement; Soft Computing,2026-09-12
+42243763,PMC13455303,10.1186/s12911-026-03571-5,Journal Article; Systematic Review,yes,no,Artificial Intelligence; Child; Humans; Pain Management; Pain Measurement; Pediatrics; Soft Computing,2026-09-12
+37205356,PMC10187402,10.21203/rs.3.pex-2191/v1,Journal Article; Preprint,no,no,NR,2026-09-12
+41983382,PMC13080763,10.1111/nicc.70478,Journal Article,yes,no,Adult; Critical Care; Deep Learning; Facial Expression; Female; Humans; Intensive Care Units; Male; Middle Aged; Pain Measurement; Reproducibility of Results; Support Vector Machine,2026-09-12
+37004311,,10.1016/j.pedn.2023.03.008,Journal Article; Observational Study,yes,no,Adolescent; Child; Computers; Facial Expression; Female; Humans; Postoperative Pain; Reproducibility of Results; Self Report,2026-09-12
+35643846,,10.1016/j.neurom.2022.04.039,Journal Article,yes,no,Action Potentials; Chronic Pain; Humans; Pain Measurement; Quality of Life; Spinal Cord Stimulation; Surveys and Questionnaires,2026-09-12
+38334268,,10.1111/jan.16063,Journal Article,yes,no,"Aged; Aged, 80 and over; Chronic Pain; Dementia; Facial Expression; Female; Humans; Male; Pain Measurement",2026-09-12
+36085672,,10.1109/embc48229.2022.9871536,Journal Article,yes,no,"Algorithms; Databases, Factual; Humans; Machine Learning; Pain; Pain Measurement",2026-09-12
+36939418,PMC10018439,10.1007/978-3-031-16437-8_72,Journal Article,no,no,NR,2026-09-12
+42486150,,10.2460/javma.26.04.0301,Journal Article,no,no,NR,2026-09-12
+39511381,PMC11543859,10.1038/s41598-024-78494-0,Journal Article,no,yes,Acute Pain; Animals; Deep Learning; Facial Expression; Female; Goats; Male; Pain Measurement; Support Vector Machine; Video Recording,2026-09-12
+26034245,PMC4485009,10.1542/peds.2015-0029,"Journal Article; Research Support, N.I.H., Extramural",yes,no,"Adolescent; Appendectomy; Child; Child, Preschool; Diagnosis, Computer-Assisted; Facial Expression; Female; Humans; Laparoscopy; Male; Pain Measurement; Postoperative Pain; ROC Curve; Reproducibility of Results",2026-09-12
+41589968,PMC12838980,10.3390/biomimetics11010051,Journal Article,no,no,NR,2026-09-12
+38846372,PMC11155325,10.1177/20552076241259664,Journal Article,no,no,NR,2026-09-12
+39717789,PMC11663861,10.3389/fvets.2024.1442634,Journal Article,no,no,NR,2026-09-12
+41245089,PMC12617409,10.1093/pnasnexus/pgaf352,Journal Article,no,no,NR,2026-09-12
+34242161,,10.1109/tbme.2021.3096137,"Journal Article; Research Support, N.I.H., Extramural",yes,no,Algorithms; Child; Galvanic Skin Response; Humans; Machine Learning; Pain; Pain Measurement,2026-09-12
+30440413,PMC6436808,10.1109/embc.2018.8512389,"Journal Article; Research Support, N.I.H., Extramural",yes,no,Algorithms; Galvanic Skin Response; Humans; Machine Learning; Pain; Pain Measurement; Sensitivity and Specificity,2026-09-12
+30713485,PMC6352979,,Journal Article,no,no,NR,2026-09-12
+40251301,PMC12008390,10.1038/s41598-025-97885-5,Journal Article,yes,no,Adult; Aged; Attention; Deep Learning; Facial Expression; Female; Humans; Long Short Term Memory; Male; Middle Aged; Pain; Pain Measurement; Video Recording,2026-09-12
+42488365,PMC13388622,10.1007/s11571-026-10517-0,Journal Article,no,no,NR,2026-09-12
+35688852,PMC9187730,10.1038/s41598-022-13348-1,"Journal Article; Research Support, Non-U.S. Gov't",yes,yes,"Animals; Cats; Emotions; Face; Facial Expression; Facial Recognition; Humans; Pain; Recognition, Psychology",2026-09-12
+39543343,PMC11564822,10.1038/s41598-024-78406-2,Journal Article,no,yes,"Animals; Artificial Intelligence; Cats; Face; Facial Expression; Image Processing, Computer-Assisted; Male; Pain; Pain Measurement; Pattern Recognition, Automated; Video Recording",2026-09-12
+36764062,,10.1016/j.cmpb.2023.107365,Journal Article; Systematic Review,yes,no,"Algorithms; Databases, Factual; Deep Learning; Humans; Pain; Pain Measurement",2026-09-12
+31825861,,10.1109/tpami.2019.2958341,"Journal Article; Research Support, Non-U.S. Gov't",yes,no,Algorithms; Facial Expression; Humans; Machine Learning; Pain; Pain Measurement,2026-09-12
+42288571,PMC13522443,10.1038/s41598-026-57148-3,Journal Article,yes,no,Face; Facial Expression; Female; Humans; Intensive Care Units; Machine Learning; Male; Middle Aged; Pain Measurement,2026-09-12
+36086417,,10.1109/embc48229.2022.9871990,Journal Article,yes,no,Humans; Machine Learning; Neoplasms; Pain; Pain Measurement; Photoplethysmography,2026-09-12
+40595349,PMC12218136,10.1038/s41598-025-09046-3,Journal Article,yes,no,"Aged; Aged, 80 and over; Databases, Factual; Facial Expression; Female; Hip Fractures; Humans; Male; Pain; Pain Measurement",2026-09-12
+40039519,,10.1109/embc53108.2024.10781536,Journal Article,yes,no,Algorithms; Cancer Pain; Detection Algorithms; Female; Humans; Machine Learning; Male; Middle Aged; Neoplasms; Pain Measurement; Wearable Electronic Devices; Wrist,2026-09-12
+34068462,PMC8125973,10.3390/s21093273,Journal Article,yes,no,"Databases, Factual; Facial Expression; Humans; Neural Networks, Computer; Pain; Pain Measurement",2026-09-12
+41206302,,10.1016/j.pmn.2025.10.003,Journal Article; Systematic Review,yes,no,Autonomic Nervous System; Heart Rate; Humans; Pain Measurement; Photoplethysmography; Postoperative Pain,2026-09-12
+41894538,PMC13029810,10.1371/journal.pdig.0001301,Journal Article,no,no,NR,2026-09-12
+42619466,,10.1016/j.ostima.2025.100381,Journal Article,no,no,NR,2026-09-12
+32881257,,10.1111/ner.13252,Journal Article; Review,yes,no,Biomarkers; Chronic Pain; Humans; Pain Management; Spinal Cord; Spinal Cord Stimulation,2026-09-12
+41605141,,10.1109/tnsre.2026.3658636,Journal Article,yes,no,"Action Potentials; Algorithms; Artifacts; Computer Simulation; Electric Stimulation; Evoked Potentials; Humans; Models, Neurological; Reproducibility of Results; Sensitivity and Specificity; Spinal Cord; Spinal Cord Injuries; Spinal Cord Stimulation",2026-09-12
+38994344,PMC11236545,10.3389/fmed.2024.1309720,Journal Article,no,no,NR,2026-09-12
+41749681,PMC12938521,10.3390/bioengineering13020141,Journal Article,no,no,NR,2026-09-12
+39932700,,10.1177/17531934241307515,Journal Article; Review,yes,no,Cervical Cord; Hand Strength; Humans; Paralysis; Spinal Cord Injuries; Spinal Cord Stimulation; Upper Extremity,2026-09-12
+33108311,PMC7704279,10.2196/18659,Journal Article,no,no,NR,2026-09-12
+39380108,PMC11463084,10.1186/s13018-024-05134-8,Clinical Trial Protocol; Journal Article,yes,no,Aged; Cell Phone; Equivalence Trials as Topic; Exercise Therapy; Feasibility Studies; Female; Generative Artificial Intelligence; Humans; Male; Middle Aged; Osteoarthritis; Prospective Studies; Quality of Life; Sarcopenia; Treatment Outcome; Wearable Electronic Devices,2026-09-12
+40745441,PMC12314105,10.1038/s41598-025-13433-1,Journal Article,yes,no,Adult; Algorithms; Electroencephalography; Female; Humans; Leg; Machine Learning; Male; Pain; Pain Measurement; Regional Blood Flow; Walking; Young Adult,2026-09-12
+41348694,PMC12680202,10.1371/journal.pone.0337726,Journal Article,yes,no,Adult; Chronic Pain; Female; Humans; Machine Learning; Magnetoencephalography; Male; Middle Aged; Pain Measurement; Spinal Cord Stimulation,2026-09-12
+36277167,PMC9582446,10.3389/frai.2022.942248,Journal Article,no,no,NR,2026-09-12
+40731063,PMC12307811,10.1038/s41598-025-12476-8,Journal Article,yes,no,Adult; Electrocardiography; Female; Humans; Machine Learning; Male; Pain; Pain Measurement; Support Vector Machine; Young Adult,2026-09-12
+38852434,PMC11418354,10.1016/j.clinph.2024.05.007,Journal Article; Review,yes,no,Deep Brain Stimulation; Humans; Movement Disorders; Neurophysiology; Transcranial Direct Current Stimulation; Transcranial Magnetic Stimulation,2026-09-12
+24850309,PMC4121459,10.1007/s13311-014-0280-3,Journal Article; Review,yes,no,"Cerebral Cortex; Deep Brain Stimulation; Epilepsy; Feedback, Physiological; Humans; Movement Disorders; Pain Management; Spinal Cord Stimulation; Treatment Outcome; Vagus Nerve",2026-09-12
+42268376,PMC13250572,10.1093/pm/pnag039,Journal Article; Review,yes,yes,Action Potentials; Animals; Chronic Pain; Evoked Potentials; Humans; Pain Management; Spinal Cord; Spinal Cord Stimulation,2026-09-12
+41579132,,10.1016/j.neurom.2025.12.002,Journal Article; Meta-Analysis; Systematic Review,yes,no,Chronic Pain; Humans; Pain Management; Pain Measurement; Randomized Controlled Trials as Topic; Spinal Cord Stimulation; Treatment Outcome,2026-09-12
+36220864,PMC9553970,10.1038/s41598-022-21264-7,"Journal Article; Research Support, U.S. Gov't, Non-P.H.S.",yes,no,"Amputees; Artificial Limbs; Cervical Cord; Feedback, Sensory; Hand; Humans; Touch; Upper Extremity",2026-09-12
+37638532,,10.1111/papr.13290,"Journal Article; Research Support, Non-U.S. Gov't; Review",yes,no,Brain; Chronic Pain; Humans; Pain Management; Spinal Cord; Spinal Cord Stimulation,2026-09-12
+35510947,,10.1227/neu.0000000000001989,"Comment; Journal Article; Research Support, Non-U.S. Gov't",yes,no,"Analgesics, Opioid; Drug Tapering; Humans; Machine Learning; Spinal Cord; Spinal Cord Stimulation",2026-09-12
+42670051,PMC13527223,10.1002/brb3.71713,Journal Article; Review,yes,yes,Animals; Chronic Pain; Comorbidity; Humans; Low Back Pain; Major Depressive Disorder; Precision Medicine,2026-09-12
+39223215,PMC11369161,10.1038/s41598-024-71278-6,Comparative Study; Journal Article,yes,no,"Artificial Intelligence; Facial Expression; Female; Humans; Infant, Newborn; Intensive Care Units, Neonatal; Male; Pain Measurement; Procedural Pain",2026-09-12
+39831333,,10.1111/papr.70010,Case Reports; Comparative Study; Journal Article,yes,no,"Cancer Pain; Electric Stimulation Therapy; Ganglia, Spinal; Humans; Pain Management; Pain Measurement; Retrospective Studies; Spinal Cord Stimulation; Treatment Outcome",2026-09-12
+41851189,PMC13000268,10.1038/s41598-026-39604-2,Comparative Study; Journal Article,yes,yes,Animal Welfare; Animals; Artificial Intelligence; Cattle; Deep Learning; Humans; Pain; Pain Measurement; Veterinarians; Video Recording,2026-09-12
+39754012,PMC11698723,10.1038/s41598-024-83950-y,"Comparative Study; Journal Article; Research Support, Non-U.S. Gov't",yes,yes,"Acute Pain; Animals; Artificial Intelligence; Behavior, Animal; Facial Expression; Humans; Pain Measurement; Sheep; Video Recording",2026-09-12
+34300578,PMC8309734,10.3390/s21144838,Journal Article,yes,no,"Databases, Factual; Hot Temperature; Humans; Machine Learning; Pain; Pain Measurement",2026-09-12
+34876922,PMC8645396,10.1155/2021/7344102,Journal Article; Retracted Publication,yes,no,"Aged; Aged, 80 and over; Chronic Pain; Computational Biology; Functional Neuroimaging; Humans; Magnetic Resonance Imaging; Neural Networks, Computer; Neuralgia; Osteoarthritis, Knee; Pain Measurement; Photic Stimulation; Quality of Life; Visual Cortex",2026-09-12
+35174358,PMC8846566,10.3389/fpain.2021.788606,Journal Article,no,no,NR,2026-09-12
+42197756,PMC13210414,10.3390/s26102947,Journal Article,yes,no,"Female; Hemodynamics; Humans; Male; Pain; Pain Measurement; Spectroscopy, Near-Infrared",2026-09-12
+40382393,PMC12085662,10.1038/s41598-025-02247-w,Journal Article,yes,no,"Adolescent; Child; Child, Preschool; Critical Illness; Deep Learning; Facial Expression; Female; Humans; Infant; Intensive Care Units, Pediatric; Male; Pain; Pain Measurement",2026-09-12
+40982036,PMC12454492,10.1007/s10143-025-03769-7,Journal Article; Meta-Analysis; Systematic Review,yes,no,"Chronic Pain; Electric Stimulation Therapy; Ganglia, Spinal; Humans; Pain Management; Spinal Cord Stimulation; Treatment Outcome",2026-09-12
+32793402,PMC7423325,10.1109/bibm47256.2019.8983282,Journal Article,no,no,NR,2026-09-12
+41274668,PMC12658508,10.1136/bmjhci-2024-101283,Journal Article,yes,no,"Female; Humans; Infant, Newborn; Intensive Care Units, Neonatal; Male; Monitoring, Physiologic; Pain; Pain Measurement; Phlebotomy; Reproducibility of Results; Wireless Technology",2026-09-12
+41504676,,10.1016/j.neurom.2025.11.011,Journal Article; Scoping Review,yes,no,Chronic Pain; Humans; Spinal Cord Stimulation,2026-09-12
+36085712,,10.1109/embc48229.2022.9871770,Journal Article,yes,no,"Emotions; Facial Expression; Humans; Neural Networks, Computer; Pain; Pain Measurement",2026-09-12
+41145516,PMC12559740,10.1038/s41597-025-05982-x,"Dataset; Journal Article; Research Support, Non-U.S. Gov't",yes,no,Brain; Humans; Magnetic Resonance Imaging; Pain; Spinal Cord,2026-09-12
+37440335,PMC10498882,10.1097/ajp.0000000000001146,"Journal Article; Randomized Controlled Trial; Research Support, Non-U.S. Gov't",yes,no,Chronic Pain; Cost-Benefit Analysis; Humans; Leg; Pain; Quality-Adjusted Life Years; Spinal Cord; Spinal Cord Stimulation,2026-09-12
+31831532,PMC6924806,10.1136/bmjopen-2019-030482,"Journal Article; Research Support, Non-U.S. Gov't",yes,no,Facial Expression; Humans; Infant; Machine Learning; Meta-Analysis as Topic; Pain Measurement; Research Design; Systematic Reviews as Topic,2026-09-12
+36995101,,10.1227/neu.0000000000002474,Journal Article,yes,no,Humans; Pain; Smartphone; Speech; Spinal Diseases; Spine,2026-09-12
+36561927,PMC9764200,10.1016/j.dib.2022.108802,Journal Article,no,no,NR,2026-09-12
+39732802,PMC11682341,10.1038/s41598-024-82631-0,Journal Article,yes,no,"Electroencephalography; Female; Heel; Humans; Infant, Newborn; Machine Learning; Male; Pain; Pain Measurement; Support Vector Machine",2026-09-12
+39941230,PMC11816796,10.3390/diagnostics15030300,Journal Article; Review,no,no,NR,2026-09-12
+27148029,PMC4830829,10.3389/fncom.2016.00032,Journal Article,no,no,NR,2026-09-12
+35743636,PMC9225619,10.3390/jpm12060851,Journal Article,no,no,NR,2026-09-12
+40355693,PMC13103195,10.1007/s10278-025-01534-2,Journal Article,yes,no,"Adult; Deep Learning; Emergency Service, Hospital; Female; Humans; Male; Middle Aged; Pain; Pain Measurement; Prospective Studies; Retrospective Studies; Video Recording",2026-09-12
+35372435,PMC8968070,10.3389/fmed.2022.851690,Journal Article,no,no,NR,2026-09-12
+38428929,PMC11270042,10.30802/aalas-jaalas-23-000056,"Journal Article; Research Support, Non-U.S. Gov't",no,yes,"Animals; Deep Learning; Facial Expression; Female; Image Processing, Computer-Assisted; Macaca fuscata; Male; Pain Measurement; Video Recording",2026-09-12
+37674052,PMC10482887,10.1038/s41598-023-41774-2,"Journal Article; Research Support, Non-U.S. Gov't",no,yes,Animals; Communications Media; Deep Learning; Face; Lagomorpha; Postoperative Pain; Rabbits,2026-09-12
+37146182,PMC10436358,10.1097/j.pain.0000000000002900,"Journal Article; Research Support, Non-U.S. Gov't",yes,no,"Adolescent; Child; Deep Learning; Facial Expression; Humans; Infant; Neural Networks, Computer; Pain Measurement; Postoperative Pain",2026-09-12
+28207407,,10.1109/tcyb.2017.2662199,Journal Article,yes,no,"Emotions; Facial Expression; Humans; Neural Networks, Computer; Pain",2026-09-12
+37399159,,10.1109/jbhi.2023.3291955,Journal Article,yes,no,"Acute Pain; Deep Learning; Galvanic Skin Response; Humans; Machine Learning; Neural Networks, Computer",2026-09-12
+40554083,,10.1016/j.ridd.2025.105058,Journal Article; Systematic Review,yes,no,Artificial Intelligence; Automated Facial Recognition; Cerebral Palsy; Facial Expression; Humans; Mobile Applications; Pain; Pain Measurement,2026-09-12
+33127478,,10.1016/j.neuroimage.2020.117506,"Journal Article; Research Support, Non-U.S. Gov't",yes,no,Adult; Brain; Cluster Analysis; Female; Functional Neuroimaging; Humans; Least-Squares Analysis; Machine Learning; Magnetic Resonance Imaging; Male; Nociceptive Pain; Pain Measurement; Supervised Machine Learning; Young Adult,2026-09-12
+37333009,PMC10273207,10.3389/fneur.2023.1195923,Journal Article,no,no,NR,2026-09-12
+32645045,PMC7347182,10.1371/journal.pone.0235545,"Journal Article; Research Support, Non-U.S. Gov't",yes,no,Adult; Electromyography; Facial Expression; Facial Muscles; Female; Humans; Male; Pain Measurement; Pain Threshold,2026-09-12
+39356566,,10.1097/anc.0000000000001205,Journal Article; Validation Study,yes,no,"Algorithms; Artificial Intelligence; Datasets as Topic; Female; Humans; Infant, Newborn; Male; Pain; Pain Measurement; Reproducibility of Results",2026-09-12
+40580152,,10.1111/papr.70058,Journal Article,yes,no,Adult; Aged; Chronic Pain; Clinical Trials as Topic; Cohort Studies; Female; Humans; Low Back Pain; Male; Middle Aged; Pain Measurement; Patient Reported Outcome Measures; Quality of Life; Sample Size; Spinal Cord Stimulation,2026-09-12
+39833558,,10.1007/s10916-025-02148-5,Journal Article,yes,no,Adult; Algorithms; Female; Humans; Machine Learning; Male; Middle Aged; Natural Language Processing; Pain Management; Referral and Consultation; Spinal Cord Stimulation; Triage,2026-09-12
+33266297,PMC7760072,10.3390/ani10122258,Journal Article,no,no,NR,2026-09-12
+37665749,,10.1515/sjpain-2023-0011,Journal Article,yes,no,Humans; Neoplasms; Pain,2026-09-12
+42365063,,10.1038/s41598-026-58562-3,Journal Article,no,no,NR,2026-09-12
+39371148,PMC11451669,10.1101/2024.09.18.24313903,Journal Article; Preprint,no,no,NR,2026-09-12
+35179133,PMC9514733,10.1227/neu.0000000000001855,Journal Article,yes,no,Chronic Pain; Cohort Studies; Humans; Logistic Models; Machine Learning; Spinal Cord Stimulation; Treatment Outcome,2026-09-12
+37691581,,10.1080/17434440.2023.2255520,Journal Article; Systematic Review,yes,no,Chronic Pain; Humans; Intractable Pain; Spinal Cord; Spinal Cord Stimulation; Treatment Outcome,2026-09-12
+41336249,,10.1109/embc58623.2025.11253317,Journal Article,yes,no,Algorithms; Computer Simulation; Finite Element Analysis; Humans; Magnetic Resonance Imaging; Normal Distribution; Spinal Cord; Spinal Cord Stimulation,2026-09-12
+41595284,PMC12841086,10.3390/healthcare14020149,Journal Article; Review,no,no,NR,2026-09-12
+41926484,PMC13046245,10.1371/journal.pone.0345287,Journal Article,yes,no,"Action Potentials; Computer Simulation; Humans; Models, Neurological; Nerve Fibers; Spinal Cord; Spinal Cord Stimulation",2026-09-12
+40024188,,10.1016/j.compbiomed.2025.109908,Journal Article,yes,no,"Deep Learning; Facial Expression; Female; Humans; Infant, Newborn; Male; Pain; Pain Measurement",2026-09-12
+39557021,,10.1159/000541986,Journal Article,yes,no,"Aged; Brain; Electroencephalography; Female; Gait Disorders, Neurologic; Humans; Locomotion; Magnetoencephalography; Male; Middle Aged; Spinal Cord Stimulation; Supranuclear Palsy, Progressive",2026-09-12
+40989383,PMC12453799,10.7717/peerj-cs.3158,Journal Article,no,no,NR,2026-09-12
+34998276,PMC8742908,10.1001/jamaneurol.2021.4998,"Journal Article; Randomized Controlled Trial; Research Support, Non-U.S. Gov't",yes,no,Chronic Pain; Female; Humans; Leg; Middle Aged; Pain Measurement; Quality of Life; Spinal Cord; Spinal Cord Stimulation; Treatment Outcome,2026-09-12
+37491149,PMC11041592,10.1136/rapm-2023-104639,Journal Article; Multicenter Study; Randomized Controlled Trial,yes,no,Chronic Pain; Double-Blind Method; Humans; Pain Measurement; Quality of Life; Spinal Cord; Spinal Cord Stimulation; Treatment Outcome,2026-09-12
+26095007,,10.1111/ner.12319,Journal Article,yes,no,"Cadaver; Humans; Nonlinear Dynamics; Posture; Spectroscopy, Near-Infrared; Spinal Cord; Spinal Cord Stimulation; Subarachnoid Space; Tomography Scanners, X-Ray Computed; Tomography, X-Ray Computed",2026-09-12
+36608962,,10.1016/j.neurom.2022.11.002,Journal Article; Multicenter Study,yes,no,Chronic Pain; Humans; Intractable Pain; Leg; Low Back Pain; Pain Measurement; Prospective Studies; Spinal Cord; Spinal Cord Stimulation; Treatment Outcome,2026-09-12
+40378232,PMC12585107,10.1093/pm/pnaf058,"Journal Article; Randomized Controlled Trial; Research Support, Non-U.S. Gov't",yes,no,Adult; Aged; Chronic Pain; Cross-Over Studies; Female; Humans; Male; Middle Aged; Pain Management; Pain Measurement; Spinal Cord Stimulation; Treatment Outcome,2026-09-12
+33768664,PMC8359972,10.1111/papr.13008,"Journal Article; Multicenter Study; Research Support, Non-U.S. Gov't",yes,no,"Analgesics, Opioid; Chronic Pain; Humans; Prospective Studies; Quality of Life; Spinal Cord; Spinal Cord Stimulation; Treatment Outcome",2026-09-12
+40590186,PMC12594148,10.1097/brs.0000000000005445,Clinical Trial; Journal Article; Multicenter Study,yes,no,Action Potentials; Adult; Aged; Back Pain; Chronic Pain; Female; Follow-Up Studies; Humans; Male; Middle Aged; Pain Measurement; Patient Reported Outcome Measures; Prospective Studies; Quality of Life; Spinal Cord Stimulation; Treatment Outcome,2026-09-12
+37640452,PMC11103285,10.1136/rapm-2023-104751,Comparative Study; Journal Article; Multicenter Study; Randomized Controlled Trial,yes,no,Action Potentials; Adult; Aged; Chronic Pain; Female; Humans; Male; Middle Aged; Pain Measurement; Quality of Life; Single-Blind Method; Spinal Cord Stimulation; Time Factors; Treatment Outcome,2026-09-12
+42134463,PMC13276974,10.1016/j.neuroimage.2026.122002,Journal Article,yes,no,Adult; Aged; Chronic Pain; Cluster Analysis; Clustering Algorithms; Electroencephalography; Female; Humans; Male; Middle Aged; Pain Measurement; Patient Reported Outcome Measures; Spinal Cord Stimulation; Unsupervised Machine Learning,2026-09-12
+34086704,PMC8177539,10.1371/journal.pone.0241532,"Journal Article; Research Support, Non-U.S. Gov't",no,yes,Animals; Emotions; Face; Facial Expression; Heart Rate; Horses; Pain; Social Isolation; Transportation; Video Recording,2026-09-12
+28922517,,10.1111/ner.12684,Journal Article; Multicenter Study,yes,no,"Adult; Aged; Australia; Chronic Pain; Feedback, Physiological; Female; Follow-Up Studies; Humans; Male; Middle Aged; Pain Measurement; Retrospective Studies; Spinal Cord Stimulation; Treatment Outcome",2026-09-12
+39610577,PMC11602419,10.7759/cureus.72562,Journal Article; Scoping Review,no,no,NR,2026-09-12
+41866084,,10.1016/j.toxicon.2026.109073,Case Reports; Journal Article,yes,no,"Apomorphine; Botulinum Toxins; Humans; Multiple System Atrophy; Muscular Atrophy, Spinal; Spinal Curvatures; Wearable Electronic Devices",2026-09-12
+31876094,,10.1111/ner.13091,Journal Article,yes,no,Electrocardiography; Failed Back Surgery Syndrome; Heart Rate; Humans; Reproducibility of Results; Spinal Cord Stimulation; Wearable Electronic Devices,2026-09-12
+42149411,,10.1111/papr.70166,Journal Article; Systematic Review,yes,no,Back Pain; Chronic Pain; Evoked Potentials; Humans; Leg; Musculoskeletal Pain; Pain Management; Spinal Cord Stimulation; Treatment Outcome,2026-09-12
+23707278,,10.1016/j.pain.2013.04.044,"Journal Article; Meta-Analysis; Research Support, Non-U.S. Gov't",yes,no,"Aged; Aged, 80 and over; Capsaicin; Clinical Trials as Topic; Databases, Factual; Double-Blind Method; Female; Follow-Up Studies; Humans; Male; Neuralgia; Sensory System Agents; Transdermal Patch",2026-09-12
+41069191,PMC13142174,10.1097/wco.0000000000001431,Journal Article; Review,yes,yes,Animals; Humans; Movement; Optogenetics; Recovery of Function; Spinal Cord Injuries; Spinal Cord Stimulation,2026-09-12
+41793211,,10.1111/psyp.70276,Journal Article; Review,yes,no,Galvanic Skin Response; Humans; Machine Learning; Pain; Pain Measurement; Psychophysiology; Sympathetic Nervous System; Wearable Electronic Devices,2026-09-12
+32434351,,10.21037/apm-20-642,Comment; Journal Article,yes,no,Humans; Pain; Spinal Cord Stimulation,2026-09-12
+39540033,PMC11559421,10.2147/jpr.s491574,Journal Article,no,no,NR,2026-09-12
+40461564,PMC12134349,10.1038/s41598-025-04552-w,Journal Article,yes,no,Algorithms; Attention; Deep Learning; Facial Expression; Humans; Pain; Pain Measurement,2026-09-12
+41248315,PMC12622856,10.2196/77345,"Journal Article; Research Support, Non-U.S. Gov't; Validation Study",yes,no,"Adult; Aged; Algorithms; Diagnosis, Differential; Female; Humans; Male; Middle Aged; Musculoskeletal Diseases; Netherlands; ROC Curve; Reproducibility of Results; Surveys and Questionnaires; Triage",2026-09-12
+39967417,PMC11836425,10.1093/ageing/afaf027,Journal Article; Multicenter Study,yes,no,"Aged; Aged, 80 and over; Cross-Sectional Studies; Dementia; Female; Hospitals, General; Humans; London; Male; Pain; Pain Measurement; Predictive Value of Tests; Psychometrics; Reproducibility of Results",2026-09-12
+37531954,,10.1088/1741-2552/aceca4,"Journal Article; Research Support, Non-U.S. Gov't",yes,no,"Action Potentials; Cochlear Implants; Electric Stimulation; Evoked Potentials; Evoked Potentials, Auditory; Humans; Posture; Spinal Cord; Spinal Cord Stimulation",2026-09-12
+31215720,PMC6920600,10.1111/ner.12965,Journal Article,yes,no,"Computer Simulation; Evoked Potentials; Humans; Models, Anatomic; Pain Management; Spinal Cord; Spinal Cord Stimulation",2026-09-12
+37112321,PMC10143826,10.3390/s23083980,Journal Article,yes,no,"Algorithms; Blood Volume; Heart Rate; Humans; Neural Networks, Computer; Pain; Pain Measurement",2026-09-12
+35221908,PMC8874020,10.3389/fnins.2022.831627,Journal Article,no,no,NR,2026-09-12
+40457422,PMC12131339,10.1186/s44158-025-00249-8,Journal Article; Review,no,no,NR,2026-09-12
+41499809,,10.1088/2057-1976/ae34b4,Journal Article,yes,no,"Adult; Algorithms; Brain-Computer Interfaces; Classification Algorithms; Convolutional Neural Networks; Deep Learning; Electroencephalography; Female; Humans; Male; Neural Networks, Computer; Pain; Pain Perception; Signal Processing, Computer-Assisted",2026-09-12
+36850556,PMC9960387,10.3390/s23041959,Journal Article,yes,no,"Artificial Intelligence; Galvanic Skin Response; Humans; Neural Networks, Computer; Pain; Research",2026-09-12
+37268666,PMC10238514,10.1038/s41598-023-35846-6,"Journal Article; Research Support, Non-U.S. Gov't",yes,yes,Animals; Cats; Face; Facial Expression; Humans; Nose; Pain; Pain Measurement,2026-09-12
+34242325,PMC8270203,10.1371/journal.pone.0254108,"Journal Article; Research Support, U.S. Gov't, Non-P.H.S.",yes,no,"Algorithms; Galvanic Skin Response; Generalization, Stimulus; Humans; Machine Learning; Models, Theoretical; Pain; Physiology",2026-09-12
+31627305,PMC6833075,10.3390/s19204503,Journal Article,yes,no,"Databases, Factual; Deep Learning; Humans; Image Processing, Computer-Assisted; Machine Learning; Models, Biological; Neural Networks, Computer; Nociceptive Pain",2026-09-12
+42600964,,10.1016/j.jpain.2026.106416,Journal Article,no,no,NR,2026-09-12
+37331703,PMC10594024,10.1016/j.jped.2023.05.005,"Journal Article; Research Support, Non-U.S. Gov't; Review",yes,no,"Artificial Intelligence; Humans; Infant, Newborn; Intensive Care Units, Neonatal; Pain; Pain Measurement",2026-09-12
+35295796,PMC8915628,10.3389/fpain.2022.827551,Journal Article,no,no,NR,2026-09-12
+42023252,PMC13097579,10.1002/ibra.70010,Journal Article; Review,no,no,NR,2026-09-12
+31626215,,10.17116/jnevro201911909123,Journal Article,yes,no,Chronic Pain; Electric Stimulation Therapy; Humans; Ischemia; Microcirculation; Spinal Cord; Spinal Cord Stimulation,2026-09-12
+40970148,PMC12442815,10.2147/jmdh.s531709,Journal Article,no,no,NR,2026-09-12
+37993169,PMC10668325,10.1136/bmjopen-2023-073534,"Clinical Trial Protocol; Journal Article; Research Support, Non-U.S. Gov't",yes,no,Artificial Intelligence; Feasibility Studies; Humans; Neurological Rehabilitation; Pain; Physical Therapy Modalities,2026-09-12
+40073452,,10.1088/1741-2552/adbfbe,Journal Article; Observational Study,yes,no,Action Potentials; Adult; Artifacts; Chronic Pain; Evoked Potentials; Female; Humans; Male; Middle Aged; Spinal Cord; Spinal Cord Stimulation,2026-09-12
+31133782,PMC6513974,10.3389/fnins.2019.00437,Journal Article,no,no,NR,2026-09-12
+33318354,,10.4103/0028-3886.302465,Journal Article; Review,yes,no,Chronic Pain; Humans; Pain Management; Spinal Cord Stimulation,2026-09-12
+38508591,PMC12015077,10.1136/rapm-2024-105346,"Journal Article; Research Support, Non-U.S. Gov't",yes,no,Adult; Aged; Biomarkers; Chronic Pain; Female; Humans; Male; Middle Aged; Pain Management; Pain Measurement; Spinal Cord; Spinal Cord Stimulation; Treatment Outcome,2026-09-12
+37217725,PMC10330878,10.1038/s41593-023-01338-z,"Journal Article; Research Support, N.I.H., Extramural; Research Support, U.S. Gov't, Non-P.H.S.",yes,no,"Chronic Pain; Electrodes, Implanted; Gyrus Cinguli; Humans; Prefrontal Cortex",2026-09-12
+32322387,PMC7161193,10.1186/s40035-020-00191-5,"Journal Article; Research Support, Non-U.S. Gov't; Review",yes,no,"Antiparkinson Agents; Deep Brain Stimulation; Electric Stimulation Therapy; Gait Disorders, Neurologic; Humans; Parkinson Disease; Risk Factors; Transcranial Direct Current Stimulation; Transcranial Magnetic Stimulation",2026-09-12
+32382799,,10.1007/s00482-020-00473-x,Journal Article; Review,yes,no,Algorithms; Artificial Intelligence; Humans; Pain; Pain Measurement; Pain Threshold,2026-09-12
+39086767,PMC11288915,10.3389/fvets.2024.1436795,Journal Article; Review,no,no,NR,2026-09-12
+35382385,PMC8972989,10.1007/s11227-022-04439-x,Journal Article,no,no,NR,2026-09-12
+38062194,PMC10703818,10.1038/s41598-023-49031-2,Journal Article,no,yes,"Acute Pain; Animals; Cats; Deep Learning; Machine Learning; Neural Networks, Computer; Smartphone",2026-09-12
+38458198,,10.1016/j.neuron.2024.02.012,"Journal Article; Research Support, Non-U.S. Gov't",yes,no,Adult; Electric Stimulation; Female; Hemodynamics; Humans; Male; Spinal Cord; Ultrasonography,2026-09-12
+35547946,PMC8975206,10.1002/pne2.12060,Journal Article; Review,no,no,NR,2026-09-12
+39146173,,10.1109/jbhi.2024.3443651,"Journal Article; Research Support, Non-U.S. Gov't",yes,no,"Adult; Algorithms; Brain; Electroencephalography; Emotions; Female; Humans; Male; Parkinson Disease; Signal Processing, Computer-Assisted; Supervised Machine Learning; Young Adult",2026-09-12
+39490365,,10.1016/j.tvir.2024.100990,Journal Article; Review,yes,no,"Artificial Intelligence; Attitude of Health Personnel; Health Knowledge, Attitudes, Practice; Health Services Accessibility; Health Status Disparities; Healthcare Disparities; Humans; Musculoskeletal Diseases; Pain Management; Radiography, Interventional; Risk Factors; Treatment Outcome",2026-09-12
+32940398,,10.1111/ner.13267,Journal Article,yes,no,Chronic Pain; Health Status; Humans; Neuralgia; Pain Measurement; Quality of Life; Spinal Cord Stimulation; Surveys and Questionnaires,2026-09-12
+32910099,,10.1097/j.pain.0000000000002035,"Journal Article; Multicenter Study; Research Support, Non-U.S. Gov't",yes,no,Failed Back Surgery Syndrome; Humans; Pain Management; Pain Measurement; Quality of Life; Spinal Cord; Spinal Cord Stimulation; Treatment Outcome,2026-09-12
+42268377,PMC13250577,10.1093/pm/pnag040,Historical Article; Journal Article; Review,yes,no,"Chronic Pain; History, 20th Century; History, 21st Century; Humans; Pain Management; Spinal Cord Stimulation",2026-09-12
+29300278,,10.1097/j.pain.0000000000001135,"Journal Article; Research Support, Non-U.S. Gov't",yes,no,"Databases, Genetic; Female; Genetic Association Studies; Genetic Pleiotropy; Genetic Predisposition to Disease; Genetic Variation; Humans; Male; Pain; PubMed",2026-09-12
+38184347,,10.1016/j.artmed.2023.102724,"Journal Article; Research Support, Non-U.S. Gov't",yes,no,"Artificial Intelligence; Health Personnel; Humans; Infant, Newborn; Neural Networks, Computer; Pain; Parents",2026-09-12
+33019243,,10.1109/embc44109.2020.9175247,Journal Article,yes,no,"Algorithms; Databases, Genetic; Humans; Neural Networks, Computer; Pain; Recognition, Psychology",2026-09-12
+36551010,PMC9774603,10.3390/bioengineering9120804,Journal Article,no,no,NR,2026-09-12
+36437161,,10.1016/j.neurom.2022.10.050,Journal Article; Randomized Controlled Trial,yes,no,Action Potentials; Chronic Pain; Evoked Potentials; Humans; Sleep Quality; Spinal Cord; Spinal Cord Stimulation; Treatment Outcome,2026-09-12
+39094810,,10.1016/j.jpain.2024.104646,"Journal Article; Multicenter Study; Randomized Controlled Trial; Research Support, Non-U.S. Gov't",yes,no,Action Potentials; Adult; Aged; Chronic Pain; Cross-Over Studies; Female; Humans; Male; Middle Aged; Neuralgia; Prospective Studies; Single-Blind Method; Spinal Cord Stimulation; Treatment Outcome,2026-09-12
+35737453,PMC9264122,10.2196/36998,Journal Article,no,no,NR,2026-09-12
+30906841,PMC6428053,10.1016/j.smhl.2018.01.002,Journal Article,no,no,NR,2026-09-12
+35603938,PMC9514737,10.1227/neu.0000000000002047,Comment; Letter,yes,no,Humans; Machine Learning; Spinal Cord; Spinal Cord Stimulation,2026-09-12
+38430433,PMC11111436,10.1007/s40122-024-00584-8,Journal Article; Review,no,no,NR,2026-09-12
+42662082,PMC13519607,10.1016/j.dib.2026.113141,Journal Article,no,no,NR,2026-09-12
+41843272,,10.1007/s13246-026-01720-8,Journal Article,yes,no,"Convolutional Neural Networks; Deep Learning; Female; Humans; Infant; Infant, Newborn; Pain; Pain Measurement",2026-09-12
+29105225,,10.1111/ner.12719,Journal Article; Observational Study,yes,no,"Adult; Aged; Aged, 80 and over; Chronic Pain; Disability Evaluation; Exercise; Failed Back Surgery Syndrome; Female; Humans; Male; Middle Aged; Pain Measurement; Sleep; Spinal Cord Stimulation; Statistics, Nonparametric; Surveys and Questionnaires; Treatment Outcome; Young Adult",2026-09-12
+41381876,,10.1038/s41390-025-04669-8,Journal Article,yes,no,"Deep Learning; Female; Humans; Infant, Newborn; Large Language Models; Male; Pain; Pain Measurement",2026-09-12
+34201268,PMC8227650,10.3390/s21123956,Journal Article,yes,no,Acute Pain; Galvanic Skin Response; Humans; Smartphone; Wrist; Wrist Joint,2026-09-12
+35467563,,10.1227/neu.0000000000002017,Comment; Letter,yes,no,Humans; Machine Learning; Spinal Cord; Spinal Cord Injuries; Spinal Cord Stimulation,2026-09-12
+31870766,,10.1016/s1474-4422(19)30414-4,"Journal Article; Randomized Controlled Trial; Research Support, Non-U.S. Gov't",yes,no,Adult; Aged; Back Pain; Chronic Pain; Double-Blind Method; Female; Humans; Leg; Male; Middle Aged; Pain Management; Pain Measurement; Spinal Cord; Spinal Cord Stimulation; Treatment Outcome,2026-09-12
+42029549,PMC13108428,10.1155/prm/5131891,Journal Article; Validation Study,yes,no,Biomarkers; Datasets as Topic; Electrocardiography; Heart Rate; Humans; Machine Learning; Pain; Pain Management; Pain Measurement; Precision Medicine; Random Forest; Reproducibility of Results; Sensitivity and Specificity,2026-09-12
+30540621,PMC6377310,10.1097/j.pain.0000000000001417,Journal Article,yes,no,Adolescent; Adult; Algorithms; Autonomic Nervous System; Back Pain; Brain; Humans; Machine Learning; Middle Aged; Neuroimaging; Pain Measurement; Young Adult,2026-09-12
+40969592,PMC12443153,10.1097/pr9.0000000000001332,Journal Article,no,no,NR,2026-09-12
+39523286,PMC11841932,10.1007/978-3-031-64892-2_31,Journal Article; Review,yes,no,Algorithms; Chronic Pain; Humans; Machine Learning; Pain Management; Patient Selection; Spinal Cord Stimulation,2026-09-12
+37219574,PMC10586864,10.1227/ons.0000000000000774,"Journal Article; Research Support, N.I.H., Extramural; Research Support, Non-U.S. Gov't",yes,no,Chronic Pain; Humans; Machine Learning; Neuralgia; Quality of Life; Spinal Cord Stimulation,2026-09-12
+30544420,PMC6310598,10.1097/md.0000000000013421,Journal Article,yes,no,"Diagnosis, Computer-Assisted; Facial Expression; Humans; Machine Learning; Meta-Analysis as Topic; Pain Measurement; Pattern Recognition, Automated; Systematic Reviews as Topic",2026-09-12
+41173924,PMC12578783,10.1038/s41598-025-21987-3,Journal Article,yes,no,"Adult; Databases, Factual; Facial Expression; Female; Hot Temperature; Humans; Machine Learning; Male; Neural Networks, Computer; Pain; Pain Measurement",2026-09-12
+38176698,PMC10982524,10.4097/kja.23583,Journal Article,yes,no,"Analgesia; Anesthesia, General; Artificial Intelligence; Facial Expression; Humans; Machine Learning; Nociception; Pain Measurement; Pilot Projects; Postoperative Pain; Vital Signs",2026-09-12
+40102462,PMC11920397,10.1038/s41598-025-92111-8,Journal Article,yes,no,Adult; Aged; Biomarkers; Chronic Pain; Electroencephalography; Female; Humans; Machine Learning; Male; Middle Aged; Pain Measurement; Spinal Cord Stimulation; Treatment Outcome,2026-09-12
+35384918,PMC12245366,10.1227/neu.0000000000001969,Journal Article,yes,no,"Analgesics, Opioid; Drug Tapering; Humans; Logistic Models; Machine Learning; Spinal Cord Stimulation",2026-09-12
+39254621,,10.1016/j.neurom.2024.07.003,Journal Article,yes,no,Adult; Aged; Chronic Pain; Female; Humans; Male; Middle Aged; Pain Measurement; Spinal Cord Stimulation; Treatment Outcome,2026-09-12
+32403963,,10.1080/00325481.2020.1769393,Journal Article; Review,yes,no,"Chronic Disease; Ganglia, Spinal; Humans; Neuralgia; Serotonin; Spinal Cord Stimulation; gamma-Aminobutyric Acid",2026-09-12
+40766435,PMC12324369,10.1101/2025.07.29.667254,Journal Article; Preprint,no,no,NR,2026-09-12
+38220575,,10.1093/cercor/bhad504,"Journal Article; Research Support, Non-U.S. Gov't",yes,no,Amputees; Brain; Electroencephalography; Humans; Phantom Limb; Upper Extremity,2026-09-12
+42653377,PMC13512981,10.3390/ijms27167373,Journal Article; Review,yes,yes,Action Potentials; Animals; Evoked Potentials; Humans; Neuralgia; Neuroglia; Spinal Cord Dorsal Horn; Spinal Cord Stimulation,2026-09-12
+39316050,PMC11459174,10.1073/pnas.2319316121,"Journal Article; Observational Study; Research Support, Non-U.S. Gov't",yes,no,"Aged; Autonomic Nervous System; Female; Heart Rate; Humans; Male; Models, Biological; Monitoring, Intraoperative; Nociception; Postoperative Pain; Prospective Studies",2026-09-12
+42533023,PMC13424116,10.1038/s41598-026-54248-y,"Journal Article; Research Support, Non-U.S. Gov't",yes,no,"Convolutional Neural Networks; Facial Expression; Female; Humans; Infant, Newborn; Intensive Care Units, Neonatal; Neural Networks, Computer; Pain; Pain Measurement; Reproducibility of Results",2026-09-12
+36085748,,10.1109/embc48229.2022.9871228,Journal Article,yes,no,"Galvanic Skin Response; Humans; Monitoring, Ambulatory; Pain; Pain Measurement; Smartphone",2026-09-12
+34539444,PMC8440852,10.3389/fphys.2021.720464,Journal Article,no,no,NR,2026-09-12
+30828946,,10.1111/ner.12932,Clinical Trial Protocol; Journal Article,yes,no,Action Potentials; Chronic Pain; Double-Blind Method; Equivalence Trials as Topic; Female; Follow-Up Studies; Humans; Male; Multicenter Studies as Topic; Pain Measurement; Randomized Controlled Trials as Topic; Spinal Cord; Spinal Cord Stimulation; Treatment Outcome,2026-09-12
+38257551,PMC11154386,10.3390/s24020458,Journal Article,yes,no,"Humans; Oxyhemoglobins; Pain; Pain Measurement; Spectroscopy, Near-Infrared",2026-09-12
+38601923,PMC11004333,10.3389/fpain.2024.1372814,Journal Article,no,no,NR,2026-09-12
+42496586,,10.1515/sjpain-2026-0015,Journal Article,yes,no,Cancer Pain; Deep Learning; Humans; Pain Measurement,2026-09-12
+42197989,PMC13210486,10.3390/s26103181,Journal Article,yes,no,"Algorithms; Anxiety; Female; Galvanic Skin Response; Heart Rate; Humans; Machine Learning; Monitoring, Physiologic; Pain; Pain Measurement; Wearable Electronic Devices",2026-09-12
+40918059,PMC12410463,10.1016/j.dib.2025.111992,Journal Article,no,no,NR,2026-09-12
+42536272,,10.1007/s11916-026-01539-8,Journal Article; Review,yes,no,"Cancer Pain; Carcinoma, Squamous Cell; Combined Modality Therapy; Humans; Mouth Neoplasms; Neuralgia; Pain Management; Quality of Life",2026-09-12
+33644268,PMC7887380,10.1016/j.dib.2021.106796,Journal Article,no,no,NR,2026-09-12
+35546868,PMC8974881,10.1002/pne2.12007,Journal Article,no,no,NR,2026-09-12
+39869898,PMC11811662,10.2196/67969,Journal Article,yes,no,Adult; Aged; Female; Humans; Machine Learning; Male; Middle Aged; Pain Measurement; Postoperative Pain,2026-09-12
+37415829,PMC10321707,10.3389/fpain.2023.1150264,Journal Article,no,no,NR,2026-09-12
+32291588,,10.1007/s00482-020-00468-8,Journal Article,yes,no,Algorithms; Artificial Intelligence; Humans; Machine Learning; Pain; Pain Measurement,2026-09-12
+33348218,PMC7856028,10.1016/j.compbiomed.2020.104150,"Journal Article; Research Support, N.I.H., Extramural; Research Support, Non-U.S. Gov't",yes,no,"Deep Learning; Emotions; Humans; Infant, Newborn; Postoperative Pain",2026-09-12
+39470012,PMC11724649,10.1021/acs.jnatprod.4c00439,"Journal Article; Research Support, N.I.H., Extramural; Review",yes,no,"Biological Products; Databases, Factual; Humans; Pain; Retrospective Studies",2026-09-12
+38083549,,10.1109/embc40787.2023.10340960,"Journal Article; Research Support, Non-U.S. Gov't",yes,no,"Algorithms; Face; Humans; Infant, Newborn; Pain Measurement; Research Design; Video Recording",2026-09-12
+42534983,PMC13422498,10.3389/fpain.2026.1820044,Journal Article; Systematic Review,no,no,NR,2026-09-12
+38751011,PMC11309338,10.1097/ajp.0000000000001223,Journal Article; Network Meta-Analysis; Systematic Review,yes,no,Back Pain; Chronic Pain; Cost-Benefit Analysis; Humans; Quality-Adjusted Life Years; Randomized Controlled Trials as Topic; Spinal Cord Stimulation,2026-09-12
+38490687,PMC12322467,10.1136/rapm-2024-105370,"Journal Article; Randomized Controlled Trial; Research Support, Non-U.S. Gov't",yes,no,Action Potentials; Adult; Aged; Chronic Pain; Double-Blind Method; Evoked Potentials; Female; Follow-Up Studies; Humans; Male; Middle Aged; Pain Measurement; Spinal Cord; Spinal Cord Stimulation; Time Factors; Treatment Outcome,2026-09-12
+37436342,,10.1016/j.neurom.2023.05.003,Journal Article; Systematic Review,yes,no,Chronic Pain; Deep Brain Stimulation; Electric Stimulation Therapy; Follow-Up Studies; Humans; Pain Management; Randomized Controlled Trials as Topic; Spinal Cord Stimulation; Transcutaneous Electric Nerve Stimulation; Treatment Outcome,2026-09-12
+31637517,,10.1007/s00702-019-02092-y,Journal Article; Review,yes,no,"Chronic Pain; Deep Brain Stimulation; Headache Disorders, Primary; Humans; Neuralgia; Spinal Cord Stimulation; Transcranial Direct Current Stimulation; Transcranial Magnetic Stimulation; Transcutaneous Electric Nerve Stimulation; Vagus Nerve Stimulation",2026-09-12
+40063194,,10.1007/s11916-025-01374-3,Journal Article; Review,yes,no,Chronic Pain; Electric Stimulation Therapy; Humans; Neurosurgical Procedures; Pain Management,2026-09-12
+25549368,,,English Abstract; Journal Article; Review,yes,no,"Defibrillators, Implantable; Heart Failure; Humans; Hypertension; Molecular Targeted Therapy; Pacemaker, Artificial; Sleep Wake Disorders; Spinal Cord Stimulation; Stem Cell Transplantation",2026-09-12
+42268393,,10.1007/s00482-026-00951-8,English Abstract; Journal Article; Review,yes,no,Evidence-Based Medicine; Humans; Neuralgia; Spinal Cord Stimulation,2026-09-12
+42275267,,10.1159/000552993,Journal Article,no,no,NR,2026-09-12
+33533723,PMC7889419,10.2196/23920,"Journal Article; Observational Study; Research Support, Non-U.S. Gov't",yes,no,"Adult; Aged; Aged, 80 and over; Analgesia; Female; Humans; Male; Middle Aged; Neural Networks, Computer; Pain Measurement; Photoplethysmography; Postoperative Pain; Young Adult",2026-09-12
+32615330,,10.1016/j.jmig.2020.06.011,Journal Article,yes,no,"Adult; Biosensing Techniques; Endometriosis; Female; Humans; Inventions; Laparoscopy; Minimally Invasive Surgical Procedures; Monitoring, Physiologic; Pain Measurement; Peritoneal Diseases; Pilot Projects; Postoperative Pain; Postoperative Period; Prospective Studies; Retrospective Studies; Sleep; Surveys and Questionnaires; Telemedicine; Wireless Technology; Young Adult",2026-09-12
+40066435,PMC11891568,10.1002/pne2.70001,Journal Article,no,no,NR,2026-09-12
+32047606,PMC6979466,10.12688/f1000research.20441.1,Journal Article; Review,yes,no,Brain; Chronic Pain; Connectome; Electroencephalography; Humans; Magnetic Resonance Imaging; Pain Management; Reproducibility of Results,2026-09-12
+40001978,PMC11851851,10.3390/biology14020210,Journal Article,no,no,NR,2026-09-12
+34891494,,10.1109/embc46164.2021.9630002,Journal Article,yes,no,Heart Rate; Humans; Pain Measurement; Photoplethysmography; Respiratory Rate; Wrist,2026-09-12
+37582839,PMC10427619,10.1038/s41746-023-00892-x,Journal Article,no,no,NR,2026-09-12
+41076564,PMC13020546,10.1097/wco.0000000000001433,Journal Article; Review,yes,no,Humans; Movement; Pain Management; Recovery of Function; Spinal Cord; Spinal Cord Stimulation,2026-09-12
+39409338,PMC11478472,10.3390/s24196298,Journal Article,yes,no,"Aged; Aged, 80 and over; Algorithms; Artificial Intelligence; Communication Disorders; Dementia; Feasibility Studies; Female; Humans; Male; Pain; Pain Measurement; Pilot Projects; Prospective Studies; Wearable Electronic Devices",2026-09-12
+34665834,PMC8525760,10.1371/journal.pone.0258672,"Journal Article; Research Support, Non-U.S. Gov't",yes,yes,"Algorithms; Animals; Automated Facial Recognition; Databases, Factual; Deep Learning; Facial Recognition; Horses; Humans; Image Interpretation, Computer-Assisted; Neural Networks, Computer; Orchiectomy; Pain Measurement; Video Recording",2026-09-12
+33949957,PMC8135033,10.2196/25258,"Journal Article; Research Support, Non-U.S. Gov't",yes,no,"Adult; Aged; Aged, 80 and over; Algorithms; Galvanic Skin Response; Humans; Machine Learning; Middle Aged; Pain; Pain Measurement; Young Adult",2026-09-12
+41540230,PMC12824274,10.1038/s41746-025-02241-6,Journal Article,no,no,NR,2026-09-12
+41313209,PMC12661616,10.2196/75671,Journal Article; Scoping Review,yes,no,Cues; Dementia; Facial Expression; Humans; Pain; Pain Measurement,2026-09-12
+32822348,PMC7444520,10.1371/journal.pone.0232412,Journal Article,yes,no,"Attention; Humans; Image Processing, Computer-Assisted; Neural Networks, Computer; Pain Perception",2026-09-12
+26474183,PMC4608770,10.1371/journal.pone.0140330,"Clinical Trial; Journal Article; Research Support, Non-U.S. Gov't",yes,no,"Adolescent; Adult; Aged; Electromyography; Female; Humans; Male; Middle Aged; Pain; Pain Measurement; Signal Processing, Computer-Assisted; Support Vector Machine",2026-09-12
+41008735,PMC12468818,10.3390/diagnostics15182362,Journal Article,no,no,NR,2026-09-12
+37284926,PMC10290021,10.1007/s40122-023-00526-w,Journal Article; Review,no,no,NR,2026-09-12
+34047710,PMC8196363,10.2196/25079,"Journal Article; Observational Study; Research Support, Non-U.S. Gov't",yes,no,Acute Pain; Electrocardiography; Humans; Machine Learning; Support Vector Machine; Wearable Electronic Devices,2026-09-12
+41142570,PMC12551228,10.3389/fvets.2025.1619794,Journal Article,no,no,NR,2026-09-12
+42189831,PMC13210372,10.1371/journal.pdig.0001442,Journal Article,no,no,NR,2026-09-12
+40168574,,,Journal Article,yes,no,Adult; Aged; Chronic Pain; Double-Blind Method; Female; Humans; Male; Middle Aged; Neuralgia; Patient Satisfaction; Prospective Studies; Spinal Cord Stimulation; Surveys and Questionnaires,2026-09-12
+26792251,,10.1111/ner.12377,Journal Article,yes,no,"Adult; Aged; Chronic Pain; Disability Evaluation; Female; Humans; Low Back Pain; Male; Middle Aged; Outcome Assessment, Health Care; Pain Measurement; Spinal Cord Stimulation; Walking; Young Adult",2026-09-12
+38775675,,10.1097/anc.0000000000001145,Journal Article; Validation Study,yes,no,"Facial Expression; Female; Humans; Infant, Newborn; Intensive Care Units, Neonatal; Male; Neonatal Nursing; Nurses, Neonatal; Pain; Pain Measurement; Reproducibility of Results; Retrospective Studies; Supervised Machine Learning",2026-09-12
+42636251,PMC13502692,10.1371/journal.pone.0354510,Journal Article,yes,no,Adult; Artificial Intelligence; Avatar; Boosting Machine Learning Algorithms; Electroencephalography; Female; Humans; Male; Pain; Pain Management; Pain Measurement; Virtual Reality; Young Adult,2026-09-12
+36365785,PMC9654781,10.3390/s22218087,Journal Article,yes,no,"Algorithms; Humans; Machine Learning; Neural Networks, Computer; Pain; Pain Measurement",2026-09-12
+40218599,PMC11991361,10.3390/s25072086,Journal Article,yes,no,Adult; Blood Volume; Chronic Pain; Electromyography; Female; Heart Rate; Humans; Machine Learning; Male; Middle Aged; Pain Measurement; Respiratory Rate; Skin Temperature,2026-09-12
+41336133,,10.1109/embc58623.2025.11253087,Journal Article,yes,no,"Adult; Blood Pressure; Electric Stimulation Therapy; Epidural Space; Female; Humans; Hypotension, Orthostatic; Male; Middle Aged; Spinal Cord Injuries; Spinal Cord Stimulation",2026-09-12
+41536646,PMC12798540,10.1093/biomethods/bpaf093,Journal Article; Review,no,no,NR,2026-09-12
+37716244,,10.1016/j.compbiomed.2023.107462,"Journal Article; Research Support, Non-U.S. Gov't",yes,no,"Face; Humans; Infant, Newborn; Pain; Pain Management; Pain Measurement",2026-09-12
+38322690,PMC10841123,10.12998/wjcc.v12.i4.681,Journal Article; Review,no,no,NR,2026-09-12
+42377977,PMC13317760,10.1002/ejp.70313,Journal Article,yes,no,Adult; Brain; Electroencephalography; Female; Hot Temperature; Humans; Machine Learning; Male; Pain; Pain Measurement; Predictive Learning Models; Young Adult,2026-09-12
+38083793,,10.1109/embc40787.2023.10341072,"Journal Article; Research Support, Non-U.S. Gov't",yes,no,"Analgesia, Patient-Controlled; Analgesics, Opioid; Electrocardiography; Humans; Postoperative Pain; Wearable Electronic Devices",2026-09-12
+40879389,,10.1227/neu.0000000000003715,Journal Article,yes,no,Adult; Aged; Chronic Pain; Female; Humans; Machine Learning; Magnetic Resonance Imaging; Male; Middle Aged; Patient Reported Outcome Measures; Radiomics; Spinal Cord Stimulation; Treatment Outcome,2026-09-12
+34793655,,,Journal Article,yes,no,"Biomarkers; Decision Support Systems, Clinical; Humans; Insular Cortex; Machine Learning; Magnetic Resonance Imaging; Pilot Projects; Prospective Studies",2026-09-12
+41398270,PMC12822141,10.1186/s12911-025-03305-z,Journal Article; Observational Study,yes,no,Adult; Aged; Boosting Machine Learning Algorithms; Classification Algorithms; Electrocardiography; Female; Heart Rate; Humans; Machine Learning; Male; Middle Aged; Photoplethysmography; Postoperative Pain; Prediction Algorithms; Predictive Learning Models; Random Forest; Republic of Korea; Retrospective Studies,2026-09-12
+33499930,PMC7839230,10.1186/s13643-020-01542-z,"Journal Article; Research Support, N.I.H., Extramural",no,no,Checklist; Consensus; Publications; Research Report; Systematic Reviews as Topic,2026-09-12
+40127903,PMC11931409,10.1136/bmj-2024-082505,Journal Article,no,no,NR,2026-09-12
+32609091,PMC7367536,10.2196/17783,Journal Article,no,no,NR,2026-09-12
+28952933,PMC5718188,10.1109/tbme.2017.2756870,"Journal Article; Research Support, N.I.H., Extramural; Research Support, U.S. Gov't, Non-P.H.S.",yes,no,"Adult; Algorithms; Brain; Decision Trees; Electroencephalography; Female; Gyrus Cinguli; Hot Temperature; Humans; Machine Learning; Male; Pain; Pain Threshold; Signal Processing, Computer-Assisted; Young Adult",2026-09-12
+28195170,PMC5316889,10.1038/ncomms14211,"Journal Article; Research Support, N.I.H., Extramural; Research Support, N.I.H., Intramural; Research Support, Non-U.S. Gov't",yes,no,Brain; Brain Mapping; Cerebral Cortex; Humans; Magnetic Resonance Imaging; Nociception; Nucleus Accumbens; Pain; Perception; Physical Stimulation; Prefrontal Cortex; Self-Control,2026-09-12
+39286765,PMC11404079,10.1016/j.ynpai.2024.100164,Journal Article,no,no,NR,2026-09-12
+42205768,PMC13208079,10.1016/j.dib.2026.112842,Journal Article,no,no,NR,2026-09-12
+42220843,PMC13218711,10.7759/cureus.107883,Journal Article,no,no,NR,2026-09-12
+42197829,PMC13211154,10.3390/s26103020,Journal Article,yes,no,"Convolutional Neural Networks; Deep Learning; Galvanic Skin Response; Humans; Pain; Pain Measurement; Signal Processing, Computer-Assisted; Wearable Electronic Devices",2026-09-12
+40689618,,10.1097/spc.0000000000000767,Journal Article; Review,yes,no,Chronic Pain; Cost-Benefit Analysis; Humans; Pain Management; Patient Satisfaction; Patient Selection; Spinal Cord Stimulation,2026-09-12
+42244836,PMC13232929,10.1097/ea9.0000000000000111,Journal Article,no,no,NR,2026-09-12
+20172803,PMC3103750,10.1109/tbme.2009.2039214,"Journal Article; Research Support, N.I.H., Extramural; Research Support, U.S. Gov't, Non-P.H.S.",yes,no,"Algorithms; Artificial Intelligence; Humans; Image Enhancement; Image Interpretation, Computer-Assisted; Infant, Newborn; Pain; Pain Measurement; Pattern Recognition, Automated; Reproducibility of Results; Sensitivity and Specificity; Signal Processing, Computer-Assisted; Whole Body Imaging",2026-09-12
+38097809,PMC11404213,10.1038/s41551-023-01153-8,Journal Article,yes,no,"Adult; Aged; Amputation, Surgical; Feedback, Sensory; Female; Foot; Gait; Humans; Male; Middle Aged; Phantom Limb; Spinal Cord Stimulation",2026-09-12
+37976486,,,"Journal Article; Multicenter Study; Observational Study; Research Support, Non-U.S. Gov't",yes,no,Chronic Pain; Humans; Intractable Pain; Low Back Pain; Neuralgia; Pain Measurement; Prospective Studies; Spinal Cord; Spinal Cord Stimulation; Treatment Outcome,2026-09-12
+42454002,PMC13367641,10.2147/jpr.s617733,Journal Article; Review,no,no,NR,2026-09-12
+39917118,PMC11801105,10.7759/cureus.77074,Journal Article; Review,no,no,NR,2026-09-12
+41628204,,,Journal Article; Review,yes,no,Chronic Pain; Deep Brain Stimulation; Electric Stimulation Therapy; Humans; Pain Management; Spinal Cord Stimulation,2026-09-12
+41779995,,,Case Reports; Journal Article,yes,no,"Aged; Chronic Pain; Diabetic Neuropathies; Electrodes, Implanted; Humans; Male; Spinal Cord Stimulation; Spinal Stenosis; Urinary Bladder; Urinary Bladder, Overactive",2026-09-12
+35551868,,10.1016/j.neurom.2022.04.037,Clinical Trial; Journal Article,yes,no,Failed Back Surgery Syndrome; Humans; Leg; Pain Measurement; Quality of Life; Spinal Cord; Spinal Cord Stimulation; Treatment Outcome,2026-09-12
+35718398,,10.1016/j.nec.2022.02.006,Journal Article; Review,yes,no,"Chronic Pain; Ganglia, Spinal; Humans; Spinal Cord; Spinal Cord Stimulation; Technology",2026-09-12
+32291559,,10.1007/s10143-020-01299-y,Journal Article; Review,yes,no,Chronic Pain; Evoked Potentials; Humans; Pain Management; Software; Spinal Cord; Spinal Cord Stimulation,2026-09-12
+35961888,,10.1016/j.neurom.2022.06.006,Journal Article,yes,yes,Action Potentials; Animals; Evoked Potentials; Humans; Lumbar Vertebrae; Rats; Spinal Cord; Spinal Cord Stimulation,2026-09-12
+41448516,,10.1016/j.jpain.2025.105645,Consensus Statement; Journal Article; Review,yes,no,Biomedical Research; Data Collection; Humans; Pain,2026-09-12
+39993299,PMC11894359,10.2196/53026,Journal Article; Review,no,no,NR,2026-09-12
+32023344,PMC8184296,10.1093/neuros/nyaa003,"Journal Article; Multicenter Study; Research Support, Non-U.S. Gov't",yes,no,Adult; Aged; Chronic Pain; Female; Humans; Male; Middle Aged; Pain Management; Pain Measurement; Prospective Studies; Quality of Life; Spinal Cord; Spinal Cord Stimulation; Time Factors; Treatment Outcome,2026-09-12
+40210645,PMC11985987,10.1038/s41597-025-04733-2,Dataset; Journal Article,yes,no,Adult; Humans; Pain; Pain Measurement; Speech,2026-09-12
+38276326,PMC10818383,10.3390/s24020634,Journal Article,yes,no,"Electromyography; Humans; Muscle, Skeletal; Spinal Cord; Spinal Cord Injuries; Spinal Cord Stimulation; Supervised Machine Learning",2026-09-12
+42677780,,10.3897/folmed.68.e177992,Journal Article; Review,yes,no,Chronic Pain; Humans; Neuralgia; Retrospective Studies; Spinal Cord Stimulation,2026-09-12
+35322975,,,Journal Article; Review,yes,no,"Algorithms; Artificial Intelligence; Forecasting; Humans; Infant, Newborn; Machine Learning; Pain",2026-09-12
+40394275,,10.1007/s11916-025-01400-4,Journal Article; Review,yes,no,Artificial Intelligence; Chronic Pain; Humans; Pain Management; Spinal Cord Stimulation; Treatment Outcome,2026-09-12
+30906508,PMC6430129,10.1109/taffc.2015.2462830,Journal Article,no,no,NR,2026-09-12
+36780223,PMC9972204,10.2196/41992,"Journal Article; Research Support, Non-U.S. Gov't",yes,no,Artificial Intelligence; Feasibility Studies; Humans; Infant; Pain; Pain Measurement; Procedural Pain,2026-09-12
+42478905,PMC13397339,10.2340/jrm.v58.45747,Journal Article; Scoping Review,yes,no,Digital Health; Digital Technology; Electric Stimulation Therapy; Humans; Spinal Cord Injuries,2026-09-12
+41139722,,10.1038/s41393-025-01133-6,"Journal Article; Research Support, Non-U.S. Gov't; Systematic Review",yes,no,Brain-Computer Interfaces; Electric Stimulation Therapy; Exoskeleton Device; Humans; Recovery of Function; Spinal Cord Injuries; Spinal Cord Stimulation,2026-09-12
+34335157,PMC8320888,10.3389/fnins.2021.673998,Journal Article,no,no,NR,2026-09-12
+29869557,,10.2217/pmt-2018-0028,Biography; Historical Article; Interview,yes,no,"Chronic Pain; Databases, Genetic; History, 20th Century; History, 21st Century; Humans; Precision Medicine; Transcriptome",2026-09-12
+41510853,,10.4103/neurol-india.neurol-india-d-25-00281,Journal Article; Review,yes,no,Brain-Computer Interfaces; Combined Modality Therapy; Humans; Neuronal Plasticity; Recovery of Function; Spinal Cord Injuries; Spinal Cord Stimulation; Transcranial Direct Current Stimulation; Transcranial Magnetic Stimulation,2026-09-12
+32166849,,10.1111/ner.13138,Journal Article,yes,no,Failed Back Surgery Syndrome; Humans; Pain Management; Pain Measurement; Spinal Cord; Spinal Cord Stimulation; Treatment Outcome,2026-09-12
+41963979,PMC13067708,10.1186/s13030-026-00357-z,Letter,no,no,NR,2026-09-12
+41996452,PMC13089622,10.2196/97777,Journal Article,no,no,NR,2026-09-12
+38904643,,10.1016/j.neurom.2024.04.006,Consensus Statement; Journal Article; Review,yes,no,Chronic Pain; Consensus; Humans; Salvage Therapy; Spinal Cord Stimulation; Treatment Outcome,2026-09-12
+33782057,PMC8005924,10.1136/bmj.n71,"Journal Article; Research Support, N.I.H., Extramural; Research Support, Non-U.S. Gov't",yes,no,Humans; Medical Writing; Meta-Analysis as Topic; Practice Guidelines as Topic; Quality Control; Research Design; Statistics as Topic; Systematic Reviews as Topic; Terminology as Topic,2026-09-12
+32694387,PMC7680716,10.1097/j.pain.0000000000001939,"Journal Article; Research Support, N.I.H., Extramural; Review",yes,no,Humans; Pain,2026-09-12
+40247335,PMC12004839,10.1186/s12916-025-04057-3,Journal Article,yes,no,Artificial Intelligence; Dementia; Humans; Pain; Pain Management; Pain Measurement,2026-09-12
+29076307,,10.1117/1.jbo.22.10.106013,Journal Article,yes,no,"Algorithms; Female; Humans; Male; Nonverbal Communication; Oxyhemoglobins; Pain Measurement; Spectroscopy, Near-Infrared; Support Vector Machine",2026-09-12
+42122048,PMC13163485,10.3390/diagnostics16091346,Journal Article,no,no,NR,2026-09-12
+40084580,,10.1701/4460.44555,Journal Article; Review,yes,no,Acute Pain; Algorithms; Artificial Intelligence; Chronic Pain; Deep Learning; Humans; Machine Learning; Natural Language Processing; Pain; Pain Management; Pain Measurement; Telemedicine,2026-09-12
+42076555,PMC13120223,10.3390/s26082447,Journal Article; Review,yes,no,"Algorithms; Humans; Internet of Things; Machine Learning; Monitoring, Physiologic; Pain; Pain Measurement; Wearable Electronic Devices",2026-09-12
+34206077,PMC8229776,10.3390/ani11061643,Journal Article; Review,no,no,NR,2026-09-12
+42422598,PMC13342171,10.3389/frhs.2026.1829082,Journal Article,no,no,NR,2026-09-12
+38124717,PMC10730685,10.3389/fphys.2023.1294577,Journal Article,no,no,NR,2026-09-12
+37137496,PMC10155050,10.1136/bmj-2022-073538,Journal Article,yes,no,"Checklist; Humans; Meta-Analysis as Topic; Models, Statistical; Prognosis; Systematic Reviews as Topic",2026-09-12
+32033240,PMC7038688,10.3390/s20030839,Journal Article,yes,no,"Algorithms; Attention; Calibration; Databases, Factual; Diagnosis, Computer-Assisted; Face; Facial Expression; Healthy Volunteers; Humans; Image Processing, Computer-Assisted; Machine Learning; Models, Statistical; Neural Networks, Computer; Pain; Pain Measurement; Pattern Recognition, Automated; Reproducibility of Results; Temperature; Video Recording",2026-09-12
+39088473,PMC11293669,10.1371/journal.pone.0307970,Journal Article,yes,no,"Adult; Algorithms; Female; Humans; Machine Learning; Male; Neural Networks, Computer; Pain; Pain Measurement; Uncertainty",2026-09-12
+33338024,,10.1109/jbhi.2020.3045743,"Journal Article; Research Support, Non-U.S. Gov't",yes,no,Aged; Artificial Intelligence; Dementia; Facial Expression; Humans; Pain; Pain Measurement,2026-09-12
+31789599,PMC6915456,10.2196/13671,Journal Article,yes,no,"Acute Pain; Adult; Analgesics, Opioid; Anemia, Sickle Cell; Emergency Service, Hospital; Feasibility Studies; Female; Heart Rate; Hospitalization; Humans; Machine Learning; Male; Middle Aged; Mobile Applications; Nursing Staff; Pain Management; Pain Measurement; Predictive Value of Tests; Support Vector Machine; Telemedicine; Wearable Electronic Devices",2026-09-12
+38083562,,10.1109/embc40787.2023.10340199,Journal Article,yes,no,Humans; Mobile Applications; Pain; Pain Measurement; Patients; Wearable Electronic Devices,2026-09-12
+37237618,PMC10215219,10.3390/bioengineering10050548,Journal Article; Review,no,no,NR,2026-09-12
+36458955,PMC9933069,10.1093/jamia/ocac231,"Journal Article; Research Support, N.I.H., Extramural; Scoping Review",yes,no,Adult; Artificial Intelligence; Hospitalization; Humans; Machine Learning; Pain; Pain Measurement,2026-09-12
+33408199,PMC7789448,10.1136/bmjopen-2020-039292,"Journal Article; Research Support, N.I.H., Extramural",yes,no,"Acute Pain; Humans; Infant; Infant, Newborn; Machine Learning; Pain Management; Pain Measurement; Prospective Studies",2026-09-12
+36772482,PMC9919606,10.3390/s23031443,Journal Article,yes,no,Electrocardiography; Emotions; Fear; Humans; Learning; Pain,2026-09-12
+37627921,PMC10453072,10.3390/diagnostics13162661,Journal Article,no,no,NR,2026-09-12
+33409286,PMC7779395,10.3389/fmed.2020.566278,Journal Article,no,no,NR,2026-09-12
+42621863,PMC13487592,10.1016/j.dib.2026.113131,Journal Article,no,no,NR,2026-09-12
+36409624,PMC10184564,10.1097/j.pain.0000000000002825,"Journal Article; Research Support, Non-U.S. Gov't; Systematic Review",yes,no,Adult; Biomarkers; Chronic Pain; Cross-Sectional Studies; Electroencephalography; Humans; Magnetoencephalography,2026-09-12

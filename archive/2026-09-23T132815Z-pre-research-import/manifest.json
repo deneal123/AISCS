@@ -1,0 +1,272 @@
+{
+  "snapshot_at": "2026-09-23T13:28:15+00:00",
+  "status": "immutable_sidecar_snapshot",
+  "label": "pre-research-import",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 1606,
+      "sha256": "AD8CE074E4C4894675ED1E83A55600270CECE9C70DAEC114E0464FE74FD42377"
+    },
+    {
+      "path": "TODO.md",
+      "bytes": 853,
+      "sha256": "B8EE508500DEBF312BD26899F56A3E964746B9F29A598A042118C73FA70326D6"
+    },
+    {
+      "path": "conference/neiro-miet/ru/README.md",
+      "bytes": 11778,
+      "sha256": "03A871E0B2DA2BFFD282DEEC93C7938B368C53AE8117DBFD350A06F958DBEC99"
+    },
+    {
+      "path": "conference/neiro-miet/ru/article.docx",
+      "bytes": 200129,
+      "sha256": "A1F833CDD8E664176D8D1F7383D9C7F3A983B0E8A1E26FBF0710C7F4A59B057E"
+    },
+    {
+      "path": "conference/neiro-miet/ru/article.html",
+      "bytes": 266108,
+      "sha256": "2EAD7CB3522ADA428C3F2351DDB65F90E653763AE9276FF486D3BA0572DEA578"
+    },
+    {
+      "path": "conference/neiro-miet/ru/article.pdf",
+      "bytes": 412630,
+      "sha256": "3D65F0CC94BAA2D167A47BC1DDD03A9DE917B12B56058197A8B54BCEBCC8F777"
+    },
+    {
+      "path": "conference/neiro-miet/ru/article.preview.pdf",
+      "bytes": 461155,
+      "sha256": "AA4BAEEAF0B239E0C5F5592C162FE310927934A354E98F3219E0B742F81570FE"
+    },
+    {
+      "path": "conference/neiro-miet/ru/build.ps1",
+      "bytes": 4594,
+      "sha256": "941554BC113628BA59AFF17396430CF0EE2887C2E98061610DF5683A9C97CF6F"
+    },
+    {
+      "path": "conference/neiro-miet/ru/build_article.py",
+      "bytes": 24723,
+      "sha256": "D9EEB710EA592D079C5FC40ADACC245474A2403266BF2B21A0BEEF8C0D9D298E"
+    },
+    {
+      "path": "conference/neiro-miet/ru/export_word_pdf.ps1",
+      "bytes": 551,
+      "sha256": "5007634B8B0D2058F575C93DEE3135FFF9C16B700A59EFDE0AC44CB350E1AB89"
+    },
+    {
+      "path": "conference/neiro-miet/ru/figures/fig_prisma.png",
+      "bytes": 78900,
+      "sha256": "C684A4841D95ED8E9EB6D5F180F6865C0A57397B6965D86E95D1E8D517066753"
+    },
+    {
+      "path": "conference/neiro-miet/ru/figures/fig_prisma.svg",
+      "bytes": 8678,
+      "sha256": "9731CC979BCC2F848533D37B197694AB0F6F4A6D900E5C8A7DCF7916BFE06754"
+    },
+    {
+      "path": "conference/neiro-miet/ru/figures/fig_scs.png",
+      "bytes": 73336,
+      "sha256": "46BF453AB0FF16293EDC4FF1A529B9BC77759CDC606DBEE189CF0E4907C229D3"
+    },
+    {
+      "path": "conference/neiro-miet/ru/figures/fig_scs.svg",
+      "bytes": 5673,
+      "sha256": "5C3EF1558BA75437BE04510D8B41F66CC90D0BBEFF2EB08453D778229187D45E"
+    },
+    {
+      "path": "conference/neiro-miet/ru/manuscript.md",
+      "bytes": 39908,
+      "sha256": "294F955EF484635AB73188D13AFFDC6980D77902955999DAFF3A1632A36C7C37"
+    },
+    {
+      "path": "conference/neiro-miet/ru/release_manifest.json",
+      "bytes": 620,
+      "sha256": "287509C118983536A5E22B399C722A9EAE8EDF11E4CF4419C632B29BC6B1523D"
+    },
+    {
+      "path": "conference/neiro-miet/ru/render_pdf.py",
+      "bytes": 4425,
+      "sha256": "5EAF7BBA18D64EF75E68E2F36A0FBDEB5D123B82E32415FAD2FC81432684231F"
+    },
+    {
+      "path": "conference/neiro-miet/ru/review/__pycache__/audit_existing_records.cpython-314.pyc",
+      "bytes": 78597,
+      "sha256": "D559E8763420861A4C278ED088EA0468A156C36DC102F053D1A46240ED2AB130"
+    },
+    {
+      "path": "conference/neiro-miet/ru/review/__pycache__/run_review.cpython-314.pyc",
+      "bytes": 33989,
+      "sha256": "3A0DAA852D01EF1BA272C2FD70B1A4E768DCB181F08102FE034AB71AF4F5444D"
+    },
+    {
+      "path": "conference/neiro-miet/ru/review/article_bibliography.csv",
+      "bytes": 14271,
+      "sha256": "2BB3C72AA26A570CF0C29E2A2E92241FEE2918D89AA97953263D90F4CE2B670D"
+    },
+    {
+      "path": "conference/neiro-miet/ru/review/audit_existing_records.py",
+      "bytes": 55680,
+      "sha256": "2BC5174E6CCB89A339D3C4CBEFE9887085C828EC782F2ECC01CE8A05F40B69CA"
+    },
+    {
+      "path": "conference/neiro-miet/ru/review/bibliography.csv",
+      "bytes": 22752,
+      "sha256": "A9D69CC7E61D2E03B9281ED1A1296766900B5FF3605F26914845F10EEB2EFB90"
+    },
+    {
+      "path": "conference/neiro-miet/ru/review/corpus_metrics.json",
+      "bytes": 742,
+      "sha256": "7B221E002F7212C23A4D11160BAC9E5299F54BA32F1BB7E3A7B3A6B745FA8941"
+    },
+    {
+      "path": "conference/neiro-miet/ru/review/curated_core.csv",
+      "bytes": 18619,
+      "sha256": "A329745484344A8537C776C2B4EE7DCD5629A2730E69562727B5FA872B109D30"
+    },
+    {
+      "path": "conference/neiro-miet/ru/review/doi_verification.csv",
+      "bytes": 13676,
+      "sha256": "826EB1D3A3735472D4718C307FAD52A8633FD15FDA02CB03B38BADF5F108686E"
+    },
+    {
+      "path": "conference/neiro-miet/ru/review/extraction.csv",
+      "bytes": 72488,
+      "sha256": "B5098000D510F6A64C32240D870CF05EDE3408D51CCABA5D8AA858BFD20FDEF4"
+    },
+    {
+      "path": "conference/neiro-miet/ru/review/full_text_status.csv",
+      "bytes": 44704,
+      "sha256": "31C6222353BB886A4FCCE7239357FCC50E99518957C820A9544193A3D22EF778"
+    },
+    {
+      "path": "conference/neiro-miet/ru/review/identifier_verification.csv",
+      "bytes": 31487,
+      "sha256": "ABF3302C3C5F5129477872D250040D386549E6BE20E0ADB5F15E968284207498"
+    },
+    {
+      "path": "conference/neiro-miet/ru/review/included_studies_bibliography.csv",
+      "bytes": 30528,
+      "sha256": "2C58403E61504FCC2F7DD7E784CD041D990FFE57D014EF3A3FC29D718754D82B"
+    },
+    {
+      "path": "conference/neiro-miet/ru/review/pmc_full_text_audit.csv",
+      "bytes": 96433,
+      "sha256": "810DA6112564F94413C00038F3F98051124A431DC6C709B09689C454CB80BA65"
+    },
+    {
+      "path": "conference/neiro-miet/ru/review/prisma_counts.json",
+      "bytes": 403,
+      "sha256": "4CF5851323A33EA89B217D56DF88A39674B792AEA658343146BC8959004E588A"
+    },
+    {
+      "path": "conference/neiro-miet/ru/review/protocol.md",
+      "bytes": 14147,
+      "sha256": "564CD78323FBF9D42778D2412AB154040E6BA190208A6FBB4EDE343EB9403F45"
+    },
+    {
+      "path": "conference/neiro-miet/ru/review/pubmed_metadata.csv",
+      "bytes": 70450,
+      "sha256": "074B6C4F2A14AF6A9A4D59FA6945499577C81E23CBF94E95270F2D46BA5657D7"
+    },
+    {
+      "path": "conference/neiro-miet/ru/review/raw_pubmed.json",
+      "bytes": 804967,
+      "sha256": "637161EF0BED1548D18F03370B48B8A035035F1B8A81E94B0BBE9010AB995DC5"
+    },
+    {
+      "path": "conference/neiro-miet/ru/review/records.csv",
+      "bytes": 767047,
+      "sha256": "73208AC11C550AD27505B318A11C626C3FD15CDFCD931B3EB1715973F2665FA5"
+    },
+    {
+      "path": "conference/neiro-miet/ru/review/records_public.csv",
+      "bytes": 96376,
+      "sha256": "72F47144F1DE6BFD9C1552F0B1B5A955203004EFA8FA5F2046E58A08B70C67B4"
+    },
+    {
+      "path": "conference/neiro-miet/ru/review/risk_of_bias.csv",
+      "bytes": 255810,
+      "sha256": "6488671319E286B60E5E3072173C95F9E1AF9D0AAEBC76537730B6FAAE3A62FD"
+    },
+    {
+      "path": "conference/neiro-miet/ru/review/run_review.py",
+      "bytes": 25564,
+      "sha256": "E097A0916E01A4F3170D9F2A20B3591BF621B02F812982872B8127BADCD2DA9C"
+    },
+    {
+      "path": "conference/neiro-miet/ru/review/screening.csv",
+      "bytes": 96979,
+      "sha256": "3924D75562749D27ECC3D3B4F80BC0E26A42528A225DDCFCBAB1AFD0111E0C6D"
+    },
+    {
+      "path": "conference/neiro-miet/ru/review/search_log.csv",
+      "bytes": 2064,
+      "sha256": "59B695AF25A5833AFEB7D01946E55670FA614A1331344AF0DB70D7BA0DBA17D4"
+    },
+    {
+      "path": "conference/neiro-miet/ru/review/verification_raw.json",
+      "bytes": 22659,
+      "sha256": "0BA7C7B69F92696E0789173E668B973B630AD79AFF398D830F3FCB8F3240FD26"
+    },
+    {
+      "path": "conference/neiro-miet/ru/validate_artifacts.py",
+      "bytes": 44676,
+      "sha256": "05F13A05CB234616DD47F36642DA813FDC726F969671E75F593C9D9B83BCDE19"
+    },
+    {
+      "path": "conference/neiro-miet/ru/validation_word_stats.json",
+      "bytes": 222,
+      "sha256": "755D47077C237B0A73013465E9EF441FF976366F055990C07B179943AF7CFA8F"
+    },
+    {
+      "path": "data/document-registry.schema.json",
+      "bytes": 1520,
+      "sha256": "CA840D82D1704F8A3F2446A7359C5FA5E4A948B604FA1C15FF86C5D813FFB667"
+    },
+    {
+      "path": "data/publications.json",
+      "bytes": 2360,
+      "sha256": "187A617E646BE414B57384196662703A9BCAF830374C91EB516E868057C0469B"
+    },
+    {
+      "path": "data/research-snapshot/snapshot.json",
+      "bytes": 59494,
+      "sha256": "AECADB0A067AF80CE7FF02E01950C537CA2F6557CD768FFA1AC76945673526A1"
+    },
+    {
+      "path": "docs/git-branch.md",
+      "bytes": 579,
+      "sha256": "42C2B27E38BB308C4E79303BA2F154F0A8B39FD5381A2B28453176FF135B6F97"
+    },
+    {
+      "path": "docs/outline.md",
+      "bytes": 560,
+      "sha256": "A25FBA0C934B539EA05DA371DCEEA979DA47411B51D8232E346A09097AA020B6"
+    },
+    {
+      "path": "templates/abstract/main.tex",
+      "bytes": 496,
+      "sha256": "A759D3E81157C534F47D3508071934655CC449703DE03EFB9CA950EAEA28227D"
+    },
+    {
+      "path": "templates/article/main.tex",
+      "bytes": 1493,
+      "sha256": "2221A69AB68D7D1799A4E3203BACA43DA787860D325B878B8D7266A986DCEED0"
+    },
+    {
+      "path": "templates/submission-package/README.md",
+      "bytes": 441,
+      "sha256": "98A3297CAA04CD44598494F15FBB84C5B84AD12A6771AC4E49B481D210116FB8"
+    },
+    {
+      "path": "templates/submission-package/manifest.template.json",
+      "bytes": 120,
+      "sha256": "10D06BFF6159BDA38C1D48CDA65CB08FED6EB30FCFC7BBD65BF44AA265AE7992"
+    },
+    {
+      "path": "templates/supplement/main.tex",
+      "bytes": 687,
+      "sha256": "C911E475553CB6253B2F4AEFDA7F2C42781A2533352181445F68C1FCA067F057"
+    }
+  ]
+}

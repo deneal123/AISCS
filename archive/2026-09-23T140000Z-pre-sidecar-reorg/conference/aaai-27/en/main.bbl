@@ -1,0 +1,152 @@
+\begin{thebibliography}{22}
+\providecommand{\natexlab}[1]{#1}
+
+\bibitem[{Chen, Chen, and Hsu(2014)}]{chen2014cacd}
+Chen, B.-C.; Chen, C.-S.; and Hsu, W.~H. 2014.
+\newblock Cross-Age Reference Coding for Age-Invariant Face Recognition and
+  Retrieval.
+\newblock In \emph{Proc. Eur. Conf. Comput. Vis. (ECCV)}, 768--783.
+
+\bibitem[{Chen et~al.(2020)Chen, Kornblith, Norouzi, and
+  Hinton}]{chen2020simclr}
+Chen, T.; Kornblith, S.; Norouzi, M.; and Hinton, G. 2020.
+\newblock A Simple Framework for Contrastive Learning of Visual
+  Representations.
+\newblock In \emph{Proc. Int. Conf. Mach. Learn. (ICML)}, 1597--1607.
+
+\bibitem[{DeLong, DeLong, and Clarke-Pearson(1988)}]{delong1988}
+DeLong, E.~R.; DeLong, D.~M.; and Clarke-Pearson, D.~L. 1988.
+\newblock Comparing the Areas under Two or More Correlated Receiver Operating
+  Characteristic Curves: A Nonparametric Approach.
+\newblock \emph{Biometrics}, 44(3): 837--845.
+
+\bibitem[{Deng et~al.(2020{\natexlab{a}})Deng, Guo, Liu, Gong, and
+  Zafeiriou}]{deng2020subcenter}
+Deng, J.; Guo, J.; Liu, T.; Gong, M.; and Zafeiriou, S. 2020{\natexlab{a}}.
+\newblock Sub-center {ArcFace}: Boosting Face Recognition by Large-Scale Noisy
+  Web Faces.
+\newblock In \emph{Proc. Eur. Conf. Comput. Vis. (ECCV)}, 741--757.
+
+\bibitem[{Deng et~al.(2020{\natexlab{b}})Deng, Guo, Ververas, Kotsia, and
+  Zafeiriou}]{deng2020retinaface}
+Deng, J.; Guo, J.; Ververas, E.; Kotsia, I.; and Zafeiriou, S.
+  2020{\natexlab{b}}.
+\newblock {RetinaFace}: Single-Shot Multi-Level Face Localisation in the Wild.
+\newblock In \emph{Proc. IEEE/CVF Conf. Comput. Vis. Pattern Recognit. (CVPR)},
+  5203--5212.
+
+\bibitem[{Deng et~al.(2019)Deng, Guo, Xue, and Zafeiriou}]{deng2019arcface}
+Deng, J.; Guo, J.; Xue, N.; and Zafeiriou, S. 2019.
+\newblock {ArcFace}: Additive Angular Margin Loss for Deep Face Recognition.
+\newblock In \emph{Proc. IEEE/CVF Conf. Comput. Vis. Pattern Recognit. (CVPR)},
+  4690--4699.
+
+\bibitem[{{European Parliament and Council of the European
+  Union}(2016)}]{gdpr2016}
+{European Parliament and Council of the European Union}. 2016.
+\newblock Regulation (EU) 2016/679 (General Data Protection Regulation).
+\newblock Official Journal of the European Union, L119.
+
+\bibitem[{Gebru et~al.(2021)Gebru, Morgenstern, Vecchione, Vaughan, Wallach,
+  Daum{\'e}~III, and Crawford}]{gebru2021datasheets}
+Gebru, T.; Morgenstern, J.; Vecchione, B.; Vaughan, J.~W.; Wallach, H.;
+  Daum{\'e}~III, H.; and Crawford, K. 2021.
+\newblock Datasheets for Datasets.
+\newblock \emph{Commun. ACM}, 64(12): 86--92.
+
+\bibitem[{Huang et~al.(2007)Huang, Ramesh, Berg, and
+  Learned-Miller}]{huang2007lfw}
+Huang, G.~B.; Ramesh, M.; Berg, T.; and Learned-Miller, E. 2007.
+\newblock Labeled Faces in the Wild: A Database for Studying Face Recognition
+  in Unconstrained Environments.
+\newblock Technical Report 07-49, Univ. of Massachusetts, Amherst.
+
+\bibitem[{Huang, Zhang, and Shan(2021)}]{huang2021mtlface}
+Huang, Z.; Zhang, J.; and Shan, H. 2021.
+\newblock When Age-Invariant Face Recognition Meets Face Age Synthesis: A
+  Multi-Task Learning Framework.
+\newblock In \emph{Proc. IEEE/CVF Conf. Comput. Vis. Pattern Recognit. (CVPR)},
+  7282--7291.
+
+\bibitem[{Kim, Jain, and Liu(2022)}]{kim2022adaface}
+Kim, M.; Jain, A.~K.; and Liu, X. 2022.
+\newblock {AdaFace}: Quality Adaptive Margin for Face Recognition.
+\newblock In \emph{Proc. IEEE/CVF Conf. Comput. Vis. Pattern Recognit. (CVPR)},
+  18750--18759.
+
+\bibitem[{Moschoglou et~al.(2017)Moschoglou, Papaioannou, Sagonas, Deng,
+  Kotsia, and Zafeiriou}]{moschoglou2017agedb}
+Moschoglou, S.; Papaioannou, A.; Sagonas, C.; Deng, J.; Kotsia, I.; and
+  Zafeiriou, S. 2017.
+\newblock {AgeDB}: The First Manually Collected, In-the-Wild Age Database.
+\newblock In \emph{Proc. IEEE Conf. Comput. Vis. Pattern Recognit. Workshops
+  (CVPRW)}, 51--59.
+
+\bibitem[{Panis et~al.(2016)Panis, Lanitis, Tsapatsoulis, and
+  Cootes}]{panis2016fgnet}
+Panis, G.; Lanitis, A.; Tsapatsoulis, N.; and Cootes, T.~F. 2016.
+\newblock Overview of Research on Facial Ageing Using the {FG-NET} Ageing
+  Database.
+\newblock \emph{IET Biometrics}, 5(2): 37--46.
+
+\bibitem[{Ricanek and Tesafaye(2006)}]{ricanek2006morph}
+Ricanek, K.; and Tesafaye, T. 2006.
+\newblock {MORPH}: A Longitudinal Image Database of Normal Adult
+  Age-Progression.
+\newblock In \emph{Proc. IEEE Int. Conf. Autom. Face Gesture Recognit. (FG)},
+  341--345.
+
+\bibitem[{Schroff, Kalenichenko, and Philbin(2015)}]{schroff2015facenet}
+Schroff, F.; Kalenichenko, D.; and Philbin, J. 2015.
+\newblock {FaceNet}: A Unified Embedding for Face Recognition and Clustering.
+\newblock In \emph{Proc. IEEE Conf. Comput. Vis. Pattern Recognit. (CVPR)},
+  815--823.
+
+\bibitem[{Wang et~al.(2019)Wang, Gong, Li, and Liu}]{wang2019dal}
+Wang, H.; Gong, D.; Li, Z.; and Liu, W. 2019.
+\newblock Decorrelated Adversarial Learning for Age-Invariant Face Recognition.
+\newblock In \emph{Proc. IEEE/CVF Conf. Comput. Vis. Pattern Recognit. (CVPR)},
+  3527--3536.
+
+\bibitem[{Wang, Sanchez, and Li(2024)}]{wang2024cacon}
+Wang, H.; Sanchez, V.; and Li, C.-T. 2024.
+\newblock Cross-Age Contrastive Learning for Age-Invariant Face Recognition.
+\newblock In \emph{Proc. IEEE Int. Conf. Acoust. Speech Signal Process.
+  (ICASSP)}.
+\newblock ArXiv:2312.11195.
+
+\bibitem[{Wang, Sanchez, and Li(2025)}]{wang2025ordcon}
+Wang, H.; Sanchez, V.; and Li, C.-T. 2025.
+\newblock From Age Estimation to Age-Invariant Face Recognition: Generalized
+  Age Feature Extraction Using Order-Enhanced Contrastive Learning.
+\newblock \emph{arXiv preprint arXiv:2501.01760}.
+
+\bibitem[{Wang et~al.(2018)Wang, Gong, Zhou, Ji, Wang, Li, Liu, and
+  Mei}]{wang2018oecnn}
+Wang, Y.; Gong, D.; Zhou, Z.; Ji, X.; Wang, H.; Li, Z.; Liu, W.; and Mei, T.
+  2018.
+\newblock Orthogonal Deep Features Decomposition for Age-Invariant Face
+  Recognition.
+\newblock In \emph{Proc. Eur. Conf. Comput. Vis. (ECCV)}, 738--753.
+
+\bibitem[{Yao et~al.(2024)Yao, Farooq, Lemley, and
+  Corcoran}]{yao2024synthageing}
+Yao, W.; Farooq, M.~A.; Lemley, J.; and Corcoran, P. 2024.
+\newblock Synthetic Face Ageing: Evaluation, Analysis and Facilitation of
+  Age-Robust Facial Recognition Algorithms.
+\newblock \emph{arXiv preprint arXiv:2406.06932}.
+
+\bibitem[{Zheng, Deng, and Hu(2017)}]{zheng2017calfw}
+Zheng, T.; Deng, W.; and Hu, J. 2017.
+\newblock Cross-Age {LFW}: A Database for Studying Cross-Age Face Recognition
+  in Unconstrained Environments.
+\newblock \emph{arXiv:1708.08197}.
+
+\bibitem[{Zoss et~al.(2022)Zoss, Chandran, Sifakis, Gross, Gotardo, and
+  Bradley}]{zoss2022fran}
+Zoss, G.; Chandran, P.; Sifakis, E.; Gross, M.; Gotardo, P.; and Bradley, D.
+  2022.
+\newblock Production-Ready Face Re-Aging for Visual Effects.
+\newblock \emph{ACM Trans. Graph. (SIGGRAPH Asia)}, 41(6): 1--12.
+
+\end{thebibliography}

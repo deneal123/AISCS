@@ -1,0 +1,52 @@
+\begin{thebibliography}{7}
+\providecommand{\natexlab}[1]{#1}
+
+\bibitem[{Gebru et~al.(2021)Gebru, Morgenstern, Vecchione, Vaughan, Wallach,
+  Daum{\'e}~III, and Crawford}]{gebru2021datasheets}
+Gebru, T.; Morgenstern, J.; Vecchione, B.; Vaughan, J.~W.; Wallach, H.;
+  Daum{\'e}~III, H.; and Crawford, K. 2021.
+\newblock Datasheets for Datasets.
+\newblock \emph{Commun. ACM}, 64(12): 86--92.
+
+\bibitem[{Huang, Zhang, and Shan(2021)}]{huang2021mtlface}
+Huang, Z.; Zhang, J.; and Shan, H. 2021.
+\newblock When Age-Invariant Face Recognition Meets Face Age Synthesis: A
+  Multi-Task Learning Framework.
+\newblock In \emph{Proc. IEEE/CVF Conf. Comput. Vis. Pattern Recognit. (CVPR)},
+  7282--7291.
+
+\bibitem[{Wang et~al.(2019)Wang, Gong, Li, and Liu}]{wang2019dal}
+Wang, H.; Gong, D.; Li, Z.; and Liu, W. 2019.
+\newblock Decorrelated Adversarial Learning for Age-Invariant Face Recognition.
+\newblock In \emph{Proc. IEEE/CVF Conf. Comput. Vis. Pattern Recognit. (CVPR)},
+  3527--3536.
+
+\bibitem[{Wang, Sanchez, and Li(2024)}]{wang2024cacon}
+Wang, H.; Sanchez, V.; and Li, C.-T. 2024.
+\newblock Cross-Age Contrastive Learning for Age-Invariant Face Recognition.
+\newblock In \emph{Proc. IEEE Int. Conf. Acoust. Speech Signal Process.
+  (ICASSP)}.
+\newblock ArXiv:2312.11195.
+
+\bibitem[{Wang, Sanchez, and Li(2025)}]{wang2025ordcon}
+Wang, H.; Sanchez, V.; and Li, C.-T. 2025.
+\newblock From Age Estimation to Age-Invariant Face Recognition: Generalized
+  Age Feature Extraction Using Order-Enhanced Contrastive Learning.
+\newblock \emph{arXiv preprint arXiv:2501.01760}.
+
+\bibitem[{Wang et~al.(2018)Wang, Gong, Zhou, Ji, Wang, Li, Liu, and
+  Mei}]{wang2018oecnn}
+Wang, Y.; Gong, D.; Zhou, Z.; Ji, X.; Wang, H.; Li, Z.; Liu, W.; and Mei, T.
+  2018.
+\newblock Orthogonal Deep Features Decomposition for Age-Invariant Face
+  Recognition.
+\newblock In \emph{Proc. Eur. Conf. Comput. Vis. (ECCV)}, 738--753.
+
+\bibitem[{Yao et~al.(2024)Yao, Farooq, Lemley, and
+  Corcoran}]{yao2024synthageing}
+Yao, W.; Farooq, M.~A.; Lemley, J.; and Corcoran, P. 2024.
+\newblock Synthetic Face Ageing: Evaluation, Analysis and Facilitation of
+  Age-Robust Facial Recognition Algorithms.
+\newblock \emph{arXiv preprint arXiv:2406.06932}.
+
+\end{thebibliography}

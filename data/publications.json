@@ -1,0 +1,47 @@
+{
+  "meta": {"schema_version": "1.0.0", "sidecar_version": "1.0.0", "updated_at": "2026-09-23"},
+  "release_approvals": {"author_review": false, "coauthor_review": false, "venue_requirements_checked": false},
+  "documents": [
+    {
+      "id": "PUB-001",
+      "title": "Методы оценки болевого состояния по биомедицинским данным: целевые переменные, доступные наборы данных и требования к валидации",
+      "kind": "conference_review_article",
+      "language": "ru",
+      "venue": "Международная научно-техническая конференция «Микроэлектронные имплантируемые нейроинтерфейсы 2026» (МИН-2026)",
+      "status": "submitted",
+      "authors": ["Д. Ф. Вольхин", "Д. И. Рябкин", "А. Ю. Герасименко"],
+      "deadline": null,
+      "source_dir": "conference/neiro-miet/ru",
+      "entrypoint": null,
+      "primary_output": "conference/neiro-miet/ru/article.pdf",
+      "research_snapshot": null,
+      "evidence_refs": [],
+      "approvals": ["submitted_version_locked"],
+      "immutable": true,
+      "immutable_tree_sha256": "FF1CCD1F87DDC2521937C66A551FE71E7C054579E32457661452EBB2363E2D1E",
+      "immutable_files": [
+        {"path": "conference/neiro-miet/ru/article.docx", "sha256": "A1F833CDD8E664176D8D1F7383D9C7F3A983B0E8A1E26FBF0710C7F4A59B057E"},
+        {"path": "conference/neiro-miet/ru/article.pdf", "sha256": "3D65F0CC94BAA2D167A47BC1DDD03A9DE917B12B56058197A8B54BCEBCC8F777"},
+        {"path": "conference/neiro-miet/ru/article.preview.pdf", "sha256": "AA4BAEEAF0B239E0C5F5592C162FE310927934A354E98F3219E0B742F81570FE"}
+      ]
+    },
+    {
+      "id": "PUB-TEMPLATE-001",
+      "title": "Шаблон новой публикации по диссертации",
+      "kind": "template",
+      "language": "ru",
+      "venue": null,
+      "status": "template",
+      "authors": [],
+      "deadline": null,
+      "source_dir": "documents/_templates/article",
+      "entrypoint": "documents/_templates/article/main.tex",
+      "primary_output": null,
+      "research_snapshot": "data/research-snapshot/snapshot.json",
+      "evidence_refs": [],
+      "approvals": [],
+      "immutable": false,
+      "immutable_files": []
+    }
+  ]
+}

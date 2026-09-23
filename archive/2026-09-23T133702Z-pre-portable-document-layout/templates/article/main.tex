@@ -1,0 +1,24 @@
+% !TEX program = xelatex
+\documentclass[12pt,a4paper]{article}
+\usepackage{fontspec}
+\usepackage[main=russian,english]{babel}
+\usepackage[margin=25mm]{geometry}
+\setmainfont{Times New Roman}
+\newcommand{\ResultPending}[1]{\par\noindent\fbox{\parbox{0.94\linewidth}{Результат ожидается: #1}}\par}
+\title{Шаблон новой публикации по диссертации}
+\author{Авторские сведения заполняются после выбора площадки}
+\date{Черновик}
+\begin{document}
+\maketitle
+\begin{abstract}
+Каркас предназначен для новой публикации. Он не изменяет поданную статью МИН-2026.
+\end{abstract}
+\section{Постановка задачи}
+Симуляция, перенос на человеческие данные и клиническая SCS-проверка рассматриваются раздельно.
+\section{Методы}
+\ResultPending{зафиксировать эксперимент, baseline и независимое разбиение}
+\section{Результаты}
+\ResultPending{внести только воспроизводимые результаты после прохождения шлюза}
+\section{Ограничения}
+ECAP не является прямой мерой боли; симуляционная метка не является субъективной болью человека.
+\end{document}

@@ -1,0 +1,98 @@
+\relax 
+\providecommand \babel@aux [2]{\global \let \babel@toc \@gobbletwo }
+\@nameuse{bbl@beforestart}
+\catcode `"\active 
+\citation{wang2018oecnn}
+\citation{wang2019dal}
+\citation{huang2021mtlface}
+\citation{chen2014cacd}
+\citation{ricanek2006morph}
+\citation{moschoglou2017agedb}
+\citation{panis2016fgnet}
+\citation{wang2024cacon}
+\citation{wang2025ordcon}
+\citation{yao2024synthageing}
+\citation{chen2020simclr}
+\citation{zheng2017calfw}
+\citation{huang2007lfw}
+\babel@aux{russian}{}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Введение}{1}{}\protected@file@percent }
+\newlabel{sec:intro}{{1}{1}{}{section.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Связанные работы и позиционирование}{1}{}\protected@file@percent }
+\newlabel{sec:related}{{2}{1}{}{section.2}{}}
+\citation{deng2020retinaface}
+\citation{gebru2021datasheets}
+\citation{schroff2015facenet}
+\citation{deng2019arcface}
+\citation{kim2022adaface}
+\citation{delong1988}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Данные: естественно-заякоренные longitudinal-пары}{2}{}\protected@file@percent }
+\newlabel{sec:data}{{3}{2}{}{section.3}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Метод, протокол и статистика}{2}{}\protected@file@percent }
+\newlabel{sec:method}{{4}{2}{}{section.4}{}}
+\citation{delong1988}
+\citation{deng2019arcface}
+\citation{deng2020subcenter}
+\citation{zoss2022fran}
+\citation{yao2024synthageing}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Масштаб набора (сырой майнинг) и после очистки. Удаление near-duplicate-кадров примерно вдвое сокращает число позитивов.}}{3}{}\protected@file@percent }
+\newlabel{tab:scale}{{1}{3}{}{table.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Результаты}{3}{}\protected@file@percent }
+\newlabel{sec:results}{{5}{3}{}{section.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Главный эффект и абляция источника супервизии}{3}{}\protected@file@percent }
+\newlabel{sec:res-main}{{5.1}{3}{}{subsection.5.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Реальные пары превосходят синтетическое старение}{3}{}\protected@file@percent }
+\newlabel{sec:res-synth}{{5.2}{3}{}{subsection.5.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Headroom и масштабирование по данным}{3}{}\protected@file@percent }
+\newlabel{sec:res-headroom}{{5.3}{3}{}{subsection.5.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Главный результат: слабый FaceNet frozen против $+$pairs, три сида, очищенные данные (прирост до очистки — для справки). Эффект сосредоточен на подмножестве FG-NET с большим разрывом.}}{4}{}\protected@file@percent }
+\newlabel{tab:main}{{2}{4}{}{table.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Операционные точки и 95\% bootstrap-ДИ (FaceNet frozen против $+$pairs, сид 42). LFW показан как ROC-AUC для единообразия.}}{4}{}\protected@file@percent }
+\newlabel{tab:stats}{{3}{4}{}{table.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Сравнение целей (FaceNet, очищенные): контрастив, ArcFace и CosFace совпадают на основной точке; sub-center ничего не добавляет; SphereFace отстаёт на разреженных few-shot личностях.}}{4}{}\protected@file@percent }
+\newlabel{tab:objective}{{4}{4}{}{table.4}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Реальные против синтетических позитивов (FaceNet, очищенные). FRAN-gm согласует синтетический возрастной разрыв с распределением реальных пар (медиана 9 лет).}}{4}{}\protected@file@percent }
+\newlabel{tab:synth}{{5}{4}{}{table.5}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Кривая headroom: прирост $+$pairs на FG-NET большом разрыве монотонно сжимается с усилением frozen-backbone, пересекая ноль для сильных насыщенных моделей.}}{4}{}\protected@file@percent }
+\newlabel{fig:headroom}{{1}{4}{}{figure.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Закон масштабирования: внешний (FG-NET большой разрыв) и внутренний (our.25+) ROC-AUC против числа обучающих личностей (лог-шкала). Около 96\% прироста достигается на 10\% личностей; полосы — $\pm $1 std по трём сидам, пунктир — frozen-базлайны.}}{5}{}\protected@file@percent }
+\newlabel{fig:scaling}{{2}{5}{}{figure.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4}Механизм: возрастной shortcut}{5}{}\protected@file@percent }
+\newlabel{sec:res-shortcut}{{5.4}{5}{}{subsection.5.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.5}Кросс-платформенный и кросс-исходный перенос}{5}{}\protected@file@percent }
+\newlabel{sec:res-cross}{{5.5}{5}{}{subsection.5.5}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Возрастной shortcut: на тесте только-по-идентичности (age-matched негативы) frozen-модель падает почти до случайности; дообучение на наших парах восстанавливает различение по идентичности.}}{5}{}\protected@file@percent }
+\newlabel{fig:shortcut}{{3}{5}{}{figure.3}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Обсуждение}{5}{}\protected@file@percent }
+\newlabel{sec:discussion}{{6}{5}{}{section.6}{}}
+\citation{gdpr2016}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Внешнее обобщение. Прирост $+$pairs над frozen (95\% ДИ) держится на трёх независимых оценках — FG-NET большой разрыв, child$\leftrightarrow $adult подмножество FG-NET и кросс-платформенный Reddit — везде выше случайности, наибольший на in-protocol FG-NET и меньший (но положительный) на более шумном Reddit.}}{6}{}\protected@file@percent }
+\newlabel{fig:external}{{4}{6}{}{figure.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {7}Ограничения}{6}{}\protected@file@percent }
+\newlabel{sec:limitations}{{7}{6}{}{section.7}{}}
+\citation{gebru2021datasheets}
+\bibstyle{IEEEtran}
+\bibdata{../../../shared/refs}
+\bibcite{wang2018oecnn}{1}
+\bibcite{wang2019dal}{2}
+\bibcite{huang2021mtlface}{3}
+\bibcite{chen2014cacd}{4}
+\bibcite{ricanek2006morph}{5}
+\bibcite{moschoglou2017agedb}{6}
+\bibcite{panis2016fgnet}{7}
+\bibcite{wang2024cacon}{8}
+\bibcite{wang2025ordcon}{9}
+\bibcite{yao2024synthageing}{10}
+\bibcite{chen2020simclr}{11}
+\bibcite{zheng2017calfw}{12}
+\bibcite{huang2007lfw}{13}
+\bibcite{deng2020retinaface}{14}
+\bibcite{gebru2021datasheets}{15}
+\bibcite{schroff2015facenet}{16}
+\bibcite{deng2019arcface}{17}
+\bibcite{kim2022adaface}{18}
+\bibcite{delong1988}{19}
+\bibcite{deng2020subcenter}{20}
+\bibcite{zoss2022fran}{21}
+\bibcite{gdpr2016}{22}
+\gdef \@abspage@last{8}

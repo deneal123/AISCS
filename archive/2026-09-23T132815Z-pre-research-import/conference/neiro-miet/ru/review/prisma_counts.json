@@ -1,0 +1,13 @@
+{
+  "records_identified_databases": 343,
+  "records_identified_other_methods": 60,
+  "duplicate_records_removed": 21,
+  "records_screened": 382,
+  "records_excluded_title_abstract": 185,
+  "reports_sought_for_retrieval": 197,
+  "reports_not_retrieved": 65,
+  "reports_assessed_for_eligibility": 132,
+  "reports_excluded_full_text": 2,
+  "studies_included": 130,
+  "records_uncertain": 65
+}

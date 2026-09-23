@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="469.764pt" height="101.664pt" viewBox="0 0 469.764 101.664" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-09-15T16:25:14.481128</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.1, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 101.664 
+L 469.764 101.664 
+L 469.764 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 8.44326 45.8928 
+L 129.8331 45.8928 
+L 129.8331 17.904 
+L 8.44326 17.904 
+z
+" clip-path="url(#pdf3a54cef8)" style="fill: #ffffff; stroke: #000000; stroke-width: 0.7; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 148.50846 45.8928 
+L 288.57366 45.8928 
+L 288.57366 17.904 
+L 148.50846 17.904 
+z
+" clip-path="url(#pdf3a54cef8)" style="fill: #ffffff; stroke: #000000; stroke-width: 0.7; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 8.44326 91.992 
+L 129.8331 91.992 
+L 129.8331 64.0032 
+L 8.44326 64.0032 
+z
+" clip-path="url(#pdf3a54cef8)" style="fill: #ffffff; stroke: #000000; stroke-width: 0.7; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 148.50846 91.992 
+L 288.57366 91.992 
+L 288.57366 64.0032 
+L 148.50846 64.0032 
+z
+" clip-path="url(#pdf3a54cef8)" style="fill: #ffffff; stroke: #000000; stroke-width: 0.7; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 328.2588 68.9424 
+L 456.6519 68.9424 
+L 456.6519 40.9536 
+L 328.2588 40.9536 
+z
+" clip-path="url(#pdf3a54cef8)" style="fill: #ffffff; stroke: #000000; stroke-width: 0.7; stroke-linejoin: miter"/>
+   </g>
+   <g id="text_1">
+    <text style="font-size: 9px; font-family: 'Times New Roman'; text-anchor: middle" x="69.13818" y="34.047326" transform="rotate(-0 69.13818 34.047326)">ECAP, импеданс, поза</text>
+   </g>
+   <g id="text_2">
+    <text style="font-size: 9px; font-family: 'Times New Roman'" transform="translate(179.438169 24.511017)">Технический контур</text>
+    <text style="font-size: 9px; font-family: 'Times New Roman'" transform="translate(179.495826 34.042755)">Вовлечение волокон</text>
+    <text style="font-size: 9px; font-family: 'Times New Roman'" transform="translate(170.967623 43.583634)">Качество и безопасность</text>
+   </g>
+   <g id="text_3">
+    <text style="font-size: 9px; font-family: 'Times New Roman'" transform="translate(29.224586 75.380657)">NRS/EMA, функция,</text>
+    <text style="font-size: 9px; font-family: 'Times New Roman'" transform="translate(14.051149 84.921536)">активность, сон, физиология</text>
+   </g>
+   <g id="text_4">
+    <text style="font-size: 9px; font-family: 'Times New Roman'" transform="translate(178.548013 75.380657)">Клинический контур</text>
+    <text style="font-size: 9px; font-family: 'Times New Roman'" transform="translate(177.002544 84.912395)">Изменение состояния</text>
+   </g>
+   <g id="text_5">
+    <text style="font-size: 9px; font-family: 'Times New Roman'" transform="translate(352.974178 52.331057)">Поддержка решений</text>
+    <text style="font-size: 9px; font-family: 'Times New Roman'" transform="translate(359.696756 61.862795)">врача и пациента</text>
+   </g>
+   <g id="patch_7">
+    <path d="M 129.8331 31.73376 
+Q 139.17078 31.73376 147.725836 31.73376 
+" style="fill: none; stroke: #000000; stroke-width: 0.7; stroke-linecap: round"/>
+    <path d="M 144.125836 29.93376 
+L 147.725836 31.73376 
+L 144.125836 33.53376 
+" style="fill: none; stroke: #000000; stroke-width: 0.7; stroke-linecap: round"/>
+   </g>
+   <g id="patch_8">
+    <path d="M 129.8331 77.83296 
+Q 139.17078 77.83296 147.725836 77.83296 
+" style="fill: none; stroke: #000000; stroke-width: 0.7; stroke-linecap: round"/>
+    <path d="M 144.125836 76.03296 
+L 147.725836 77.83296 
+L 144.125836 79.63296 
+" style="fill: none; stroke: #000000; stroke-width: 0.7; stroke-linecap: round"/>
+   </g>
+   <g id="patch_9">
+    <path d="M 288.57366 31.73376 
+Q 308.41623 40.45968 327.542389 48.870553 
+" style="fill: none; stroke: #000000; stroke-width: 0.7; stroke-linecap: round"/>
+    <path d="M 324.971555 45.773649 
+L 327.542389 48.870553 
+L 323.522365 49.069077 
+" style="fill: none; stroke: #000000; stroke-width: 0.7; stroke-linecap: round"/>
+   </g>
+   <g id="patch_10">
+    <path d="M 288.57366 77.83296 
+Q 308.41623 66.80208 327.57477 56.151466 
+" style="fill: none; stroke: #000000; stroke-width: 0.7; stroke-linecap: round"/>
+    <path d="M 323.553695 56.327417 
+L 327.57477 56.151466 
+L 325.302885 59.473896 
+" style="fill: none; stroke: #000000; stroke-width: 0.7; stroke-linecap: round"/>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="pdf3a54cef8">
+   <rect x="1.44" y="1.44" width="466.884" height="98.784"/>
+  </clipPath>
+ </defs>
+</svg>

@@ -1,0 +1,452 @@
+[
+  {
+    "doi": "10.1016/j.cmpb.2023.107365",
+    "crossref_title": "Automatic assessment of pain based on deep learning methods: A systematic review",
+    "crossref_year": "2023",
+    "openalex_id": "https://openalex.org/W4319455197",
+    "openalex_title": "Automatic assessment of pain based on deep learning methods: A systematic review",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.1016/j.dib.2025.111992",
+    "crossref_title": "Multimodal insights into diverse pain experiences: PhysioPain dataset",
+    "crossref_year": "2025",
+    "openalex_id": "https://openalex.org/W4413323648",
+    "openalex_title": "Multimodal insights into diverse pain experiences: PhysioPain dataset",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.1016/j.dib.2026.113131",
+    "crossref_title": "RheumaPain: a multimodal biosignal dataset for objective pain assessment in pediatric rheumatic diseases",
+    "crossref_year": "2026",
+    "openalex_id": "https://openalex.org/W7172336728",
+    "openalex_title": "RheumaPain: a multimodal biosignal dataset for objective pain assessment in pediatric rheumatic diseases",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.1016/j.jpain.2026.106416",
+    "crossref_title": "External Validation of EEG-Based Machine Learning Models for Continuous Pain Prediction",
+    "crossref_year": "2026",
+    "openalex_id": "https://openalex.org/W7203486271",
+    "openalex_title": "External Validation of EEG-Based Machine Learning Models for Continuous Pain Prediction",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.1016/j.pain.2004.09.012",
+    "crossref_title": "Core outcome measures for chronic pain clinical trials: IMMPACT recommendations",
+    "crossref_year": "2005",
+    "openalex_id": "https://openalex.org/W3194956376",
+    "openalex_title": "Core outcome measures for chronic pain clinical trials: IMMPACT recommendations",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.1016/j.pain.2011.11.023",
+    "crossref_title": "Compound action potentials recorded in the human spinal cord during neurostimulation for pain relief",
+    "crossref_year": "2012",
+    "openalex_id": "https://openalex.org/W1990309003",
+    "openalex_title": "Compound action potentials recorded in the human spinal cord during neurostimulation for pain relief",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.1016/s0304-3959(01)00349-9",
+    "crossref_title": "Clinical importance of changes in chronic pain intensity measured on an 11-point numerical pain rating scale",
+    "crossref_year": "2001",
+    "openalex_id": "https://openalex.org/W2132309748",
+    "openalex_title": "Clinical importance of changes in chronic pain intensity measured on an 11-point numerical pain rating scale",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.1016/s1474-4422(19)30414-4",
+    "crossref_title": "Long-term safety and efficacy of closed-loop spinal cord stimulation to treat chronic back and leg pain (Evoke): a double-blind, randomised, controlled trial",
+    "crossref_year": "2020",
+    "openalex_id": "https://openalex.org/W2994842882",
+    "openalex_title": "Long-term safety and efficacy of closed-loop spinal cord stimulation to treat chronic back and leg pain (Evoke): a double-blind, randomised, controlled trial",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.1038/ncomms14211",
+    "crossref_title": "Quantifying cerebral contributions to pain beyond nociception",
+    "crossref_year": "2017",
+    "openalex_id": "https://openalex.org/W2588447348",
+    "openalex_title": "Quantifying cerebral contributions to pain beyond nociception",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.1038/s41593-023-01338-z",
+    "crossref_title": "First-in-human prediction of chronic pain state using intracranial neural biomarkers",
+    "crossref_year": "2023",
+    "openalex_id": "https://openalex.org/W4377245549",
+    "openalex_title": "First-in-human prediction of chronic pain state using intracranial neural biomarkers",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.1038/s41597-024-03878-w",
+    "crossref_title": "An Experimental and Clinical Physiological Signal Dataset for Automated Pain Recognition",
+    "crossref_year": "2024",
+    "openalex_id": "https://openalex.org/W4402901048",
+    "openalex_title": "An Experimental and Clinical Physiological Signal Dataset for Automated Pain Recognition",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.1038/s41597-025-04733-2",
+    "crossref_title": "TAME Pain data release: using audio signals to characterize pain",
+    "crossref_year": "2025",
+    "openalex_id": "https://openalex.org/W4409332041",
+    "openalex_title": "TAME Pain data release: using audio signals to characterize pain",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.1038/s41597-025-05982-x",
+    "crossref_title": "CoSpine open access simultaneous cortico-spinal fMRI database of thermal pain and motor tasks",
+    "crossref_year": "2025",
+    "openalex_id": "https://openalex.org/W4415585911",
+    "openalex_title": "CoSpine open access simultaneous cortico-spinal fMRI database of thermal pain and motor tasks",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.1038/s41598-025-92111-8",
+    "crossref_title": "Machine learning predicts spinal cord stimulation surgery outcomes and reveals novel neural markers for chronic pain",
+    "crossref_year": "2025",
+    "openalex_id": "https://openalex.org/W4408562101",
+    "openalex_title": "Machine learning predicts spinal cord stimulation surgery outcomes and reveals novel neural markers for chronic pain",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.1038/s41746-023-00810-1",
+    "crossref_title": "A systematic review of neurophysiological sensing for the assessment of acute pain",
+    "crossref_year": "2023",
+    "openalex_id": "https://openalex.org/W4367049970",
+    "openalex_title": "A systematic review of neurophysiological sensing for the assessment of acute pain",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.1038/s41746-023-00892-x",
+    "crossref_title": "Objective wearable measures correlate with self-reported chronic pain levels in people with spinal cord stimulation systems",
+    "crossref_year": "2023",
+    "openalex_id": "https://openalex.org/W4385837313",
+    "openalex_title": "Objective wearable measures correlate with self-reported chronic pain levels in people with spinal cord stimulation systems",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.1038/s41746-025-02241-6",
+    "crossref_title": "Pain assessment using physiological responses/markers in different types of pain: a scoping review",
+    "crossref_year": "2026",
+    "openalex_id": "https://openalex.org/W7124252304",
+    "openalex_title": "Pain assessment using physiological responses/markers in different types of pain: a scoping review",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.1056/nejmoa1204471",
+    "crossref_title": "An fMRI-Based Neurologic Signature of Physical Pain",
+    "crossref_year": "2013",
+    "openalex_id": "https://openalex.org/W4245057219",
+    "openalex_title": "An fMRI-Based Neurologic Signature of Physical Pain",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.1073/pnas.2319316121",
+    "crossref_title": "Monitoring surgical nociception using multisensor physiological models",
+    "crossref_year": "2024",
+    "openalex_id": "https://openalex.org/W4402760975",
+    "openalex_title": "Monitoring surgical nociception using multisensor physiological models",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.1088/1741-2552/aceca4",
+    "crossref_title": "Evoked compound action potentials during spinal cord stimulation: effects of posture and pulse width on signal features and neural activation within the spinal cord",
+    "crossref_year": "2023",
+    "openalex_id": "https://openalex.org/W4385478865",
+    "openalex_title": "Evoked compound action potentials during spinal cord stimulation: effects of posture and pulse width on signal features and neural activation within the spinal cord",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.1088/2057-1976/ae34b4",
+    "crossref_title": "Explainable AI for pain perception: subject-independent EEG decoding using DeepSHAP and CNNs",
+    "crossref_year": "2026",
+    "openalex_id": "https://openalex.org/W7118782216",
+    "openalex_title": "Explainable AI for pain perception: subject-independent EEG decoding using DeepSHAP and CNNs",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.1097/j.pain.0000000000001939",
+    "crossref_title": "The revised International Association for the Study of Pain definition of pain: concepts, challenges, and compromises",
+    "crossref_year": "2020",
+    "openalex_id": "https://openalex.org/W3043476716",
+    "openalex_title": "The revised International Association for the Study of Pain definition of pain: concepts, challenges, and compromises",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.1109/cybconf.2013.6617456",
+    "crossref_title": "The biovid heat pain database data for the advancement and systematic validation of an automated pain recognition system",
+    "crossref_year": "2013",
+    "openalex_id": "https://openalex.org/W1985941926",
+    "openalex_title": "The biovid heat pain database data for the advancement and systematic validation of an automated pain recognition system",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.1109/embc.2018.8513575",
+    "crossref_title": "Continuous Pain Intensity Estimation from Autonomic Signals with Recurrent Neural Networks",
+    "crossref_year": "2018",
+    "openalex_id": "https://openalex.org/W2898878959",
+    "openalex_title": "Continuous Pain Intensity Estimation from Autonomic Signals with Recurrent Neural Networks",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.1109/fg.2011.5771462",
+    "crossref_title": "Painful data: The UNBC-McMaster shoulder pain expression archive database",
+    "crossref_year": "2011",
+    "openalex_id": "https://openalex.org/W2101545465",
+    "openalex_title": "Painful data: The UNBC-McMaster shoulder pain expression archive database",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.1109/fg.2018.00044",
+    "crossref_title": "Deep Multimodal Pain Recognition: A Database and Comparison of Spatio-Temporal Visual Modalities",
+    "crossref_year": "2018",
+    "openalex_id": "https://openalex.org/W2786403656",
+    "openalex_title": "Deep Multimodal Pain Recognition: A Database and Comparison of Spatio-Temporal Visual Modalities",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.1109/jstsp.2016.2535962",
+    "crossref_title": "Methods for Person-Centered Continuous Pain Intensity Assessment From Bio-Physiological Channels",
+    "crossref_year": "2016",
+    "openalex_id": "https://openalex.org/W2314785176",
+    "openalex_title": "Methods for Person-Centered Continuous Pain Intensity Assessment From Bio-Physiological Channels",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.1109/taffc.2015.2462830",
+    "crossref_title": "The Automatic Detection of Chronic Pain-Related Expression: Requirements, Challenges and the Multimodal EmoPain Dataset",
+    "crossref_year": "2016",
+    "openalex_id": "https://openalex.org/W2162825184",
+    "openalex_title": "The Automatic Detection of Chronic Pain-Related Expression: Requirements, Challenges and the Multimodal EmoPain Dataset",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.1109/taffc.2019.2946774",
+    "crossref_title": "Automatic Recognition Methods Supporting Pain Assessment: A Survey",
+    "crossref_year": "2022",
+    "openalex_id": "https://openalex.org/W2979431738",
+    "openalex_title": "Automatic Recognition Methods Supporting Pain Assessment: A Survey",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.1109/taffc.2024.3390837",
+    "crossref_title": "The EmoPain@Home Dataset: Capturing Pain Level and Activity Recognition for People With Chronic Pain in Their Homes",
+    "crossref_year": "2025",
+    "openalex_id": "https://openalex.org/W4394938946",
+    "openalex_title": "The EmoPain@Home Dataset: Capturing Pain Level and Activity Recognition for People With Chronic Pain in Their Homes",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.1111/nicc.70478",
+    "crossref_title": "Assessment of Pain Intensity Using Deep Learning Models in Non‐Communicative Intensive Care Patients",
+    "crossref_year": "2026",
+    "openalex_id": "https://openalex.org/W7154515418",
+    "openalex_title": "Assessment of Pain Intensity Using Deep Learning Models in Non‐Communicative Intensive Care Patients",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.1136/bmj-2024-082505",
+    "crossref_title": "PROBAST+AI: an updated quality, risk of bias, and applicability assessment tool for prediction models using regression or artificial intelligence methods",
+    "crossref_year": "2025",
+    "openalex_id": "https://openalex.org/W4408806526",
+    "openalex_title": "PROBAST+AI: an updated quality, risk of bias, and applicability assessment tool for prediction models using regression or artificial intelligence methods",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.1136/bmj.n71",
+    "crossref_title": "The PRISMA 2020 statement: an updated guideline for reporting systematic reviews",
+    "crossref_year": "2021",
+    "openalex_id": "https://openalex.org/W3118615836",
+    "openalex_title": "The PRISMA 2020 statement: an updated guideline for reporting systematic reviews",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.1136/rapm-2024-105346",
+    "crossref_title": "First evidence of a biomarker-based dose-response relationship in chronic pain using physiological closed-loop spinal cord stimulation",
+    "crossref_year": "2024",
+    "openalex_id": "https://openalex.org/W4393020075",
+    "openalex_title": "First evidence of a biomarker-based dose-response relationship in chronic pain using physiological closed-loop spinal cord stimulation",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.1145/3449068",
+    "crossref_title": "Chronic Pain Protective Behavior Detection with Deep Learning",
+    "crossref_year": "2021",
+    "openalex_id": "https://openalex.org/W3110177420",
+    "openalex_title": "Chronic Pain Protective Behavior Detection with Deep Learning",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.1155/prm/5131891",
+    "crossref_title": "Machine Learning and ECG‐Derived Biomarkers for Objective Pain Assessment: An Explainable AI Approach Toward Precision Pain Management",
+    "crossref_year": "2026",
+    "openalex_id": "https://openalex.org/W7155486150",
+    "openalex_title": "Machine Learning and ECG‐Derived Biomarkers for Objective Pain Assessment: An Explainable AI Approach Toward Precision Pain Management",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.1186/s13643-020-01542-z",
+    "crossref_title": "PRISMA-S: an extension to the PRISMA Statement for Reporting Literature Searches in Systematic Reviews",
+    "crossref_year": "2021",
+    "openalex_id": "https://openalex.org/W3123497531",
+    "openalex_title": "PRISMA-S: an extension to the PRISMA Statement for Reporting Literature Searches in Systematic Reviews",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.1227/neu.0000000000001855",
+    "crossref_title": "Development of Machine Learning–Based Models to Predict Treatment Response to Spinal Cord Stimulation",
+    "crossref_year": "2022",
+    "openalex_id": "https://openalex.org/W4212895422",
+    "openalex_title": "Development of Machine Learning–Based Models to Predict Treatment Response to Spinal Cord Stimulation",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.1371/journal.pone.0140330",
+    "crossref_title": "Pain Intensity Recognition Rates via Biopotential Feature Patterns with Support Vector Machines",
+    "crossref_year": "2015",
+    "openalex_id": "https://openalex.org/W2216029612",
+    "openalex_title": "Pain Intensity Recognition Rates via Biopotential Feature Patterns with Support Vector Machines",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.1371/journal.pone.0254108",
+    "crossref_title": "Exploration of physiological sensors, features, and machine learning models for pain intensity estimation",
+    "crossref_year": "2021",
+    "openalex_id": "https://openalex.org/W3182971338",
+    "openalex_title": "Exploration of physiological sensors, features, and machine learning models for pain intensity estimation",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.1371/journal.pone.0307970",
+    "crossref_title": "Uncertainty quantification in neural-network based pain intensity estimation",
+    "crossref_year": "2024",
+    "openalex_id": "https://openalex.org/W4401211220",
+    "openalex_title": "Uncertainty quantification in neural-network based pain intensity estimation",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.1371/journal.pone.0337726",
+    "crossref_title": "Classification of chronic pain and spinal cord stimulation response using machine learning in magnetoencephalography data",
+    "crossref_year": "2025",
+    "openalex_id": "https://openalex.org/W4417091371",
+    "openalex_title": "Classification of chronic pain and spinal cord stimulation response using machine learning in magnetoencephalography data",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.3389/fnins.2021.673998",
+    "crossref_title": "The Evoked Compound Action Potential as a Predictor for Perception in Chronic Pain Patients: Tools for Automatic Spinal Cord Stimulator Programming and Control",
+    "crossref_year": "2021",
+    "openalex_id": "https://openalex.org/W3178106888",
+    "openalex_title": "The Evoked Compound Action Potential as a Predictor for Perception in Chronic Pain Patients: Tools for Automatic Spinal Cord Stimulator Programming and Control",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.3389/fphys.2023.1294577",
+    "crossref_title": "Transformer encoder with multiscale deep learning for pain classification using physiological signals",
+    "crossref_year": "2023",
+    "openalex_id": "https://openalex.org/W4389397172",
+    "openalex_title": "Transformer encoder with multiscale deep learning for pain classification using physiological signals",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.3390/s21123956",
+    "crossref_title": "Real-Time High-Level Acute Pain Detection Using a Smartphone and a Wrist-Worn Electrodermal Activity Sensor",
+    "crossref_year": "2021",
+    "openalex_id": "https://openalex.org/W3170744252",
+    "openalex_title": "Real-Time High-Level Acute Pain Detection Using a Smartphone and a Wrist-Worn Electrodermal Activity Sensor",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.3390/s26102947",
+    "crossref_title": "Connectivity-Based Pain Recognition from fNIRS: Parsimonious Subject-Independent Classification",
+    "crossref_year": "2026",
+    "openalex_id": "https://openalex.org/W7160661760",
+    "openalex_title": "Connectivity-Based Pain Recognition from fNIRS: Parsimonious Subject-Independent Classification",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.3390/s26103020",
+    "crossref_title": "Real-Time Pain Assessment from Electrodermal Activity Using Deep Learning",
+    "crossref_year": "2026",
+    "openalex_id": "https://openalex.org/W7160835082",
+    "openalex_title": "Real-Time Pain Assessment from Electrodermal Activity Using Deep Learning",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.3390/s26103181",
+    "crossref_title": "Multimodal Detection of Pain and Anticipation Anxiety from Ultra-Short Duration Wearable Sensors Measurements",
+    "crossref_year": "2026",
+    "openalex_id": "https://openalex.org/W7161546277",
+    "openalex_title": "Multimodal Detection of Pain and Anticipation Anxiety from Ultra-Short Duration Wearable Sensors Measurements",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.3791/59057",
+    "crossref_title": "Multi-Modal Signals for Analyzing Pain Responses to Thermal and Electrical Stimuli",
+    "crossref_year": "2019",
+    "openalex_id": "https://openalex.org/W2934455382",
+    "openalex_title": "Multi-Modal Signals for Analyzing Pain Responses to Thermal and Electrical Stimuli",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  },
+  {
+    "doi": "10.7326/m18-0850",
+    "crossref_title": "PRISMA Extension for Scoping Reviews (PRISMA-ScR): Checklist and Explanation",
+    "crossref_year": "2018",
+    "openalex_id": "https://openalex.org/W2891378911",
+    "openalex_title": "PRISMA Extension for Scoping Reviews (PRISMA-ScR): Checklist and Explanation",
+    "verified_crossref": "yes",
+    "verified_openalex": "yes"
+  }
+]

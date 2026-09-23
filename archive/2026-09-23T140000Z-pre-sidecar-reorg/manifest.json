@@ -1,0 +1,1312 @@
+﻿{
+    "snapshot_at":  "2026-09-23T14:00:00+03:00",
+    "status":  "immutable_pre_reorganization_snapshot",
+    "sidecar":  "publications",
+    "files":  [
+                  {
+                      "path":  ".gitignore",
+                      "bytes":  1391,
+                      "sha256":  "DF164811D0985C0228ABEE67C8F969450A4F332A49B6DAE28016421EB2AB60D9"
+                  },
+                  {
+                      "path":  "_attic/fig_agegap.pdf",
+                      "bytes":  16928,
+                      "sha256":  "16CCC573C9330D3A9DBDA1A99AF223BAB249EA5FF525FCBC946C0681E4606842"
+                  },
+                  {
+                      "path":  "_attic/fig_agegap.png",
+                      "bytes":  96034,
+                      "sha256":  "10348C1E88175094B153F95425F1E45E329D830C20A9119E0E5DAEE394C6BA6D"
+                  },
+                  {
+                      "path":  "_attic/IEEEtran_bst.disabled",
+                      "bytes":  39651,
+                      "sha256":  "152174490BF12257C1E20F8FF385DA6A125615DA11F34AB0257A116F334E0EB3"
+                  },
+                  {
+                      "path":  "_attic/IEEEtran_cls.disabled",
+                      "bytes":  36200,
+                      "sha256":  "1BC3AA96AAE7C5A8D6F00D11467088296BAB549F5B2E48229D3B32905F1F098F"
+                  },
+                  {
+                      "path":  "_attic/SKILL.md",
+                      "bytes":  10882,
+                      "sha256":  "E41CE3F83E58C6861AD3BE5519C9DEADE3936DE5CB1CEBDAD088E0AEF343BF6A"
+                  },
+                  {
+                      "path":  "_attic/TODO.md",
+                      "bytes":  0,
+                      "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+                  },
+                  {
+                      "path":  "build_submission.py",
+                      "bytes":  7069,
+                      "sha256":  "A58880C9B2C65F8231A958C889B85DAB5F67D02CFA9071749E44B88088B02B99"
+                  },
+                  {
+                      "path":  "conference/aaai-27/en/aaai2027.bst",
+                      "bytes":  31700,
+                      "sha256":  "C7D4C41C5D3D466A9CEE8C8EBE1B05A75672A23C45F20A496EC7E854871AECAF"
+                  },
+                  {
+                      "path":  "conference/aaai-27/en/aaai2027.sty",
+                      "bytes":  17345,
+                      "sha256":  "369F6565FDE377FB496C416C57F3FF1A6F76E6DA72135CAA772B6413CAD2DA28"
+                  },
+                  {
+                      "path":  "conference/aaai-27/en/figures/fig_external.pdf",
+                      "bytes":  36626,
+                      "sha256":  "0E4ED762A21BC81E276C6DB9426FC413768BC7FE33B59B9CEFAE7A8411F123E2"
+                  },
+                  {
+                      "path":  "conference/aaai-27/en/figures/fig_fairness.pdf",
+                      "bytes":  37744,
+                      "sha256":  "D5141187F5070D4C33A66CAC747F99BB7D54AEB4D24B2D6C809ADA7D36A452A8"
+                  },
+                  {
+                      "path":  "conference/aaai-27/en/figures/fig_headroom.pdf",
+                      "bytes":  40120,
+                      "sha256":  "FB99A054651D9E6964A1798BB15278BB77B915F121D404EFE50B4832A4570101"
+                  },
+                  {
+                      "path":  "conference/aaai-27/en/figures/fig_scaling.pdf",
+                      "bytes":  38996,
+                      "sha256":  "28175144E8AD12EB84FAE32849D9A8237B34E1B6565C822D2FC1D1825F79E89A"
+                  },
+                  {
+                      "path":  "conference/aaai-27/en/figures/fig_shortcut.pdf",
+                      "bytes":  35278,
+                      "sha256":  "5F0C1CCB7D41E33B43EA879FAD127B754A41535FD371549194298D556AE59002"
+                  },
+                  {
+                      "path":  "conference/aaai-27/en/figures/fig_sota.pdf",
+                      "bytes":  64582,
+                      "sha256":  "44F483A7F0F31B6AE6CA09B6C3AEEB7FF33AA6F3F1AB6E787108FDA9236BB5D0"
+                  },
+                  {
+                      "path":  "conference/aaai-27/en/main.aux",
+                      "bytes":  3728,
+                      "sha256":  "D7F3C5A0F9A3DB4B791ED1BBBBF954E9EC3D50E2C8D64EDDF0031AE2AC3E41A2"
+                  },
+                  {
+                      "path":  "conference/aaai-27/en/main.bbl",
+                      "bytes":  6896,
+                      "sha256":  "1D63213AE7A3BE34A3BC9AAE29BAE181D65C5B7443FF5AA1795BA39F2EDA132B"
+                  },
+                  {
+                      "path":  "conference/aaai-27/en/main.blg",
+                      "bytes":  1048,
+                      "sha256":  "DA0D445593AF138276BDD7AC93F49BF5C0C9B710B845652AA4515F9BEC27344F"
+                  },
+                  {
+                      "path":  "conference/aaai-27/en/main.log",
+                      "bytes":  20890,
+                      "sha256":  "00B2D57A8D35ED60820A7FE9918497A2C2108099CAC9013AB2EC4E3843335F2E"
+                  },
+                  {
+                      "path":  "conference/aaai-27/en/main.pdf",
+                      "bytes":  433164,
+                      "sha256":  "1A237D9905E8B3100D83020E76AEC17B6909F252CA20AEE6562E88FC2DBE51A4"
+                  },
+                  {
+                      "path":  "conference/aaai-27/en/main.tex",
+                      "bytes":  33234,
+                      "sha256":  "6B7B4EDBBD04D82A582EC74940EA6249A3DC3E19BD28636A5B1589007FCD1AE1"
+                  },
+                  {
+                      "path":  "conference/aaai-27/en/README.md",
+                      "bytes":  3797,
+                      "sha256":  "7BFCD6BD42490F8AAB6FBD6D130A76C67CA0FAFCC49AA5FD5A29DE44752B09BC"
+                  },
+                  {
+                      "path":  "conference/aaai-27/en/refs.bib",
+                      "bytes":  7781,
+                      "sha256":  "A2218E55C5DBB569222EE55BA5BCE783F7373F75CBCDCA11436F3FE205CB659A"
+                  },
+                  {
+                      "path":  "conference/aaai-27/en/ReproducibilityChecklist.aux",
+                      "bytes":  32,
+                      "sha256":  "BE3D8A27AB932481A725A941648E689BE09CACDCFCA75E9F47D30BB4C40CC38B"
+                  },
+                  {
+                      "path":  "conference/aaai-27/en/ReproducibilityChecklist.log",
+                      "bytes":  11856,
+                      "sha256":  "19DAB4840D6932BD820EA3E03548C6D1F082CC5DD04320C270F858338FD71EDA"
+                  },
+                  {
+                      "path":  "conference/aaai-27/en/ReproducibilityChecklist.pdf",
+                      "bytes":  99110,
+                      "sha256":  "82AFE11C5B8AF9F873C3276367822358F5D26680B3884ADA3BFE14DD2178F38C"
+                  },
+                  {
+                      "path":  "conference/aaai-27/en/ReproducibilityChecklist.tex",
+                      "bytes":  8338,
+                      "sha256":  "64C5B7B80BD0E7C404C4C80801A2EC7691A2E7F3E487430AF6AD24502559A36D"
+                  },
+                  {
+                      "path":  "conference/aaai-27/en/supplement.aux",
+                      "bytes":  2105,
+                      "sha256":  "2ACDD16D786418C1CE960BB15F369D1D94E096D63BA9C8DD39B646C5D972E086"
+                  },
+                  {
+                      "path":  "conference/aaai-27/en/supplement.bbl",
+                      "bytes":  2281,
+                      "sha256":  "518325D35CC36A3C75D8101C8C3D0D1A091F9D6C01EEB407B84BCA27EADA6DB7"
+                  },
+                  {
+                      "path":  "conference/aaai-27/en/supplement.blg",
+                      "bytes":  1037,
+                      "sha256":  "968C468DCF696F0E1F29955C207738CE9760386CEA0F4A92866C33D13A2F37DA"
+                  },
+                  {
+                      "path":  "conference/aaai-27/en/supplement.log",
+                      "bytes":  20518,
+                      "sha256":  "5DF0B94AC1E343B5E4ED4F8A7959C102FA144DDB7CCC5BAFF87C2B811D48D180"
+                  },
+                  {
+                      "path":  "conference/aaai-27/en/supplement.pdf",
+                      "bytes":  328788,
+                      "sha256":  "0D757193216DB1DFFBAAADAB7DABAEB26EB65968D14A90F272F0231312424DF7"
+                  },
+                  {
+                      "path":  "conference/aaai-27/en/supplement.tex",
+                      "bytes":  20349,
+                      "sha256":  "7298B352D2B0858AA446BB2028C41C4993BA63AEC00A5E0C405D1C42BACE73A6"
+                  },
+                  {
+                      "path":  "conference/aaai-27/ru/main_ru.aux",
+                      "bytes":  7917,
+                      "sha256":  "362F14BEE615A8A6F7B7CE30E841F95584DC4F92F37794CD8B86277FFCFA877D"
+                  },
+                  {
+                      "path":  "conference/aaai-27/ru/main_ru.bbl",
+                      "bytes":  6148,
+                      "sha256":  "BBB30E513B2E230144635EAE6AE0E8BAE77F8B4638D182A00CBD13EA6DF8FDD7"
+                  },
+                  {
+                      "path":  "conference/aaai-27/ru/main_ru.blg",
+                      "bytes":  1559,
+                      "sha256":  "67A12E02BF8AE5F8E996D0A3EFB80005B41391C4696C1F01159BDC5134A11ACA"
+                  },
+                  {
+                      "path":  "conference/aaai-27/ru/main_ru.log",
+                      "bytes":  83238,
+                      "sha256":  "7A1A8B03D78E74D9247F60FFF4ADC5040DA7743983A638A65744BC4F1EA0A7BE"
+                  },
+                  {
+                      "path":  "conference/aaai-27/ru/main_ru.pdf",
+                      "bytes":  480722,
+                      "sha256":  "5F0AF0FDC80FD0E62AD2DAADECBB7C66D42CB62F55F9FEFA46AC4768FD08A525"
+                  },
+                  {
+                      "path":  "conference/aaai-27/ru/main_ru.tex",
+                      "bytes":  52552,
+                      "sha256":  "6557CD230AA9E88495536B778E50E0A63FA0CBE08CCE133898E8C7B4DA357D19"
+                  },
+                  {
+                      "path":  "conference/aaai-27/ru/README.md",
+                      "bytes":  1397,
+                      "sha256":  "7875FA3EF8BFD8324E8A97DB0D6972EA1332B69AE23CE52E7CC9B5CD33BDB772"
+                  },
+                  {
+                      "path":  "conference/aaai-27/ru/supplement_ru.aux",
+                      "bytes":  8477,
+                      "sha256":  "E72AFDCFE5CB8FB59AF7F615EC55F632F9F8D966D87315C8FFAEE5A8A6B2C8E9"
+                  },
+                  {
+                      "path":  "conference/aaai-27/ru/supplement_ru.bbl",
+                      "bytes":  2613,
+                      "sha256":  "706C4EE3AF4C4F5642602081C92CEF9183AE7E965916C5D803FCA6836BC40853"
+                  },
+                  {
+                      "path":  "conference/aaai-27/ru/supplement_ru.blg",
+                      "bytes":  1543,
+                      "sha256":  "BA6DB7EBB54EA23EF33901D911EEBBDA09B3FAFE862AB036ACB754F5A79AEB8F"
+                  },
+                  {
+                      "path":  "conference/aaai-27/ru/supplement_ru.log",
+                      "bytes":  80204,
+                      "sha256":  "8203B8AE9604EA5D1537FAF9E2DB091C98814FA17BF09E5FFD420F4A28B00FF7"
+                  },
+                  {
+                      "path":  "conference/aaai-27/ru/supplement_ru.pdf",
+                      "bytes":  368554,
+                      "sha256":  "8AC962B1FEA5D991D8BE4108C56648C3A4721A9A2FDF9CA3615CB887F088BD24"
+                  },
+                  {
+                      "path":  "conference/aaai-27/ru/supplement_ru.tex",
+                      "bytes":  32162,
+                      "sha256":  "5B6886282FB33A51B7B98CEAE65BC8E946ED7293CF639E805A65C02C50045E66"
+                  },
+                  {
+                      "path":  "conference/neiro-miet/ru/article.docx",
+                      "bytes":  200129,
+                      "sha256":  "A1F833CDD8E664176D8D1F7383D9C7F3A983B0E8A1E26FBF0710C7F4A59B057E"
+                  },
+                  {
+                      "path":  "conference/neiro-miet/ru/article.html",
+                      "bytes":  266108,
+                      "sha256":  "2EAD7CB3522ADA428C3F2351DDB65F90E653763AE9276FF486D3BA0572DEA578"
+                  },
+                  {
+                      "path":  "conference/neiro-miet/ru/article.pdf",
+                      "bytes":  412630,
+                      "sha256":  "3D65F0CC94BAA2D167A47BC1DDD03A9DE917B12B56058197A8B54BCEBCC8F777"
+                  },
+                  {
+                      "path":  "conference/neiro-miet/ru/article.preview.pdf",
+                      "bytes":  461155,
+                      "sha256":  "AA4BAEEAF0B239E0C5F5592C162FE310927934A354E98F3219E0B742F81570FE"
+                  },
+                  {
+                      "path":  "conference/neiro-miet/ru/build.ps1",
+                      "bytes":  4594,
+                      "sha256":  "941554BC113628BA59AFF17396430CF0EE2887C2E98061610DF5683A9C97CF6F"
+                  },
+                  {
+                      "path":  "conference/neiro-miet/ru/build_article.py",
+                      "bytes":  24723,
+                      "sha256":  "D9EEB710EA592D079C5FC40ADACC245474A2403266BF2B21A0BEEF8C0D9D298E"
+                  },
+                  {
+                      "path":  "conference/neiro-miet/ru/export_word_pdf.ps1",
+                      "bytes":  551,
+                      "sha256":  "5007634B8B0D2058F575C93DEE3135FFF9C16B700A59EFDE0AC44CB350E1AB89"
+                  },
+                  {
+                      "path":  "conference/neiro-miet/ru/figures/fig_prisma.png",
+                      "bytes":  78900,
+                      "sha256":  "C684A4841D95ED8E9EB6D5F180F6865C0A57397B6965D86E95D1E8D517066753"
+                  },
+                  {
+                      "path":  "conference/neiro-miet/ru/figures/fig_prisma.svg",
+                      "bytes":  8678,
+                      "sha256":  "9731CC979BCC2F848533D37B197694AB0F6F4A6D900E5C8A7DCF7916BFE06754"
+                  },
+                  {
+                      "path":  "conference/neiro-miet/ru/figures/fig_scs.png",
+                      "bytes":  73336,
+                      "sha256":  "46BF453AB0FF16293EDC4FF1A529B9BC77759CDC606DBEE189CF0E4907C229D3"
+                  },
+                  {
+                      "path":  "conference/neiro-miet/ru/figures/fig_scs.svg",
+                      "bytes":  5673,
+                      "sha256":  "5C3EF1558BA75437BE04510D8B41F66CC90D0BBEFF2EB08453D778229187D45E"
+                  },
+                  {
+                      "path":  "conference/neiro-miet/ru/manuscript.md",
+                      "bytes":  39908,
+                      "sha256":  "294F955EF484635AB73188D13AFFDC6980D77902955999DAFF3A1632A36C7C37"
+                  },
+                  {
+                      "path":  "conference/neiro-miet/ru/README.md",
+                      "bytes":  11778,
+                      "sha256":  "03A871E0B2DA2BFFD282DEEC93C7938B368C53AE8117DBFD350A06F958DBEC99"
+                  },
+                  {
+                      "path":  "conference/neiro-miet/ru/release_manifest.json",
+                      "bytes":  620,
+                      "sha256":  "287509C118983536A5E22B399C722A9EAE8EDF11E4CF4419C632B29BC6B1523D"
+                  },
+                  {
+                      "path":  "conference/neiro-miet/ru/render_pdf.py",
+                      "bytes":  4425,
+                      "sha256":  "5EAF7BBA18D64EF75E68E2F36A0FBDEB5D123B82E32415FAD2FC81432684231F"
+                  },
+                  {
+                      "path":  "conference/neiro-miet/ru/review/__pycache__/audit_existing_records.cpython-314.pyc",
+                      "bytes":  78597,
+                      "sha256":  "D559E8763420861A4C278ED088EA0468A156C36DC102F053D1A46240ED2AB130"
+                  },
+                  {
+                      "path":  "conference/neiro-miet/ru/review/__pycache__/run_review.cpython-314.pyc",
+                      "bytes":  33989,
+                      "sha256":  "3A0DAA852D01EF1BA272C2FD70B1A4E768DCB181F08102FE034AB71AF4F5444D"
+                  },
+                  {
+                      "path":  "conference/neiro-miet/ru/review/article_bibliography.csv",
+                      "bytes":  14271,
+                      "sha256":  "2BB3C72AA26A570CF0C29E2A2E92241FEE2918D89AA97953263D90F4CE2B670D"
+                  },
+                  {
+                      "path":  "conference/neiro-miet/ru/review/audit_existing_records.py",
+                      "bytes":  55680,
+                      "sha256":  "2BC5174E6CCB89A339D3C4CBEFE9887085C828EC782F2ECC01CE8A05F40B69CA"
+                  },
+                  {
+                      "path":  "conference/neiro-miet/ru/review/bibliography.csv",
+                      "bytes":  22752,
+                      "sha256":  "A9D69CC7E61D2E03B9281ED1A1296766900B5FF3605F26914845F10EEB2EFB90"
+                  },
+                  {
+                      "path":  "conference/neiro-miet/ru/review/corpus_metrics.json",
+                      "bytes":  742,
+                      "sha256":  "7B221E002F7212C23A4D11160BAC9E5299F54BA32F1BB7E3A7B3A6B745FA8941"
+                  },
+                  {
+                      "path":  "conference/neiro-miet/ru/review/curated_core.csv",
+                      "bytes":  18619,
+                      "sha256":  "A329745484344A8537C776C2B4EE7DCD5629A2730E69562727B5FA872B109D30"
+                  },
+                  {
+                      "path":  "conference/neiro-miet/ru/review/doi_verification.csv",
+                      "bytes":  13676,
+                      "sha256":  "826EB1D3A3735472D4718C307FAD52A8633FD15FDA02CB03B38BADF5F108686E"
+                  },
+                  {
+                      "path":  "conference/neiro-miet/ru/review/extraction.csv",
+                      "bytes":  72488,
+                      "sha256":  "B5098000D510F6A64C32240D870CF05EDE3408D51CCABA5D8AA858BFD20FDEF4"
+                  },
+                  {
+                      "path":  "conference/neiro-miet/ru/review/full_text_status.csv",
+                      "bytes":  44704,
+                      "sha256":  "31C6222353BB886A4FCCE7239357FCC50E99518957C820A9544193A3D22EF778"
+                  },
+                  {
+                      "path":  "conference/neiro-miet/ru/review/identifier_verification.csv",
+                      "bytes":  31487,
+                      "sha256":  "ABF3302C3C5F5129477872D250040D386549E6BE20E0ADB5F15E968284207498"
+                  },
+                  {
+                      "path":  "conference/neiro-miet/ru/review/included_studies_bibliography.csv",
+                      "bytes":  30528,
+                      "sha256":  "2C58403E61504FCC2F7DD7E784CD041D990FFE57D014EF3A3FC29D718754D82B"
+                  },
+                  {
+                      "path":  "conference/neiro-miet/ru/review/pmc_full_text_audit.csv",
+                      "bytes":  96433,
+                      "sha256":  "810DA6112564F94413C00038F3F98051124A431DC6C709B09689C454CB80BA65"
+                  },
+                  {
+                      "path":  "conference/neiro-miet/ru/review/prisma_counts.json",
+                      "bytes":  403,
+                      "sha256":  "4CF5851323A33EA89B217D56DF88A39674B792AEA658343146BC8959004E588A"
+                  },
+                  {
+                      "path":  "conference/neiro-miet/ru/review/protocol.md",
+                      "bytes":  14147,
+                      "sha256":  "564CD78323FBF9D42778D2412AB154040E6BA190208A6FBB4EDE343EB9403F45"
+                  },
+                  {
+                      "path":  "conference/neiro-miet/ru/review/pubmed_metadata.csv",
+                      "bytes":  70450,
+                      "sha256":  "074B6C4F2A14AF6A9A4D59FA6945499577C81E23CBF94E95270F2D46BA5657D7"
+                  },
+                  {
+                      "path":  "conference/neiro-miet/ru/review/raw_pubmed.json",
+                      "bytes":  804967,
+                      "sha256":  "637161EF0BED1548D18F03370B48B8A035035F1B8A81E94B0BBE9010AB995DC5"
+                  },
+                  {
+                      "path":  "conference/neiro-miet/ru/review/records.csv",
+                      "bytes":  767047,
+                      "sha256":  "73208AC11C550AD27505B318A11C626C3FD15CDFCD931B3EB1715973F2665FA5"
+                  },
+                  {
+                      "path":  "conference/neiro-miet/ru/review/records_public.csv",
+                      "bytes":  96376,
+                      "sha256":  "72F47144F1DE6BFD9C1552F0B1B5A955203004EFA8FA5F2046E58A08B70C67B4"
+                  },
+                  {
+                      "path":  "conference/neiro-miet/ru/review/risk_of_bias.csv",
+                      "bytes":  255810,
+                      "sha256":  "6488671319E286B60E5E3072173C95F9E1AF9D0AAEBC76537730B6FAAE3A62FD"
+                  },
+                  {
+                      "path":  "conference/neiro-miet/ru/review/run_review.py",
+                      "bytes":  25564,
+                      "sha256":  "E097A0916E01A4F3170D9F2A20B3591BF621B02F812982872B8127BADCD2DA9C"
+                  },
+                  {
+                      "path":  "conference/neiro-miet/ru/review/screening.csv",
+                      "bytes":  96979,
+                      "sha256":  "3924D75562749D27ECC3D3B4F80BC0E26A42528A225DDCFCBAB1AFD0111E0C6D"
+                  },
+                  {
+                      "path":  "conference/neiro-miet/ru/review/search_log.csv",
+                      "bytes":  2064,
+                      "sha256":  "59B695AF25A5833AFEB7D01946E55670FA614A1331344AF0DB70D7BA0DBA17D4"
+                  },
+                  {
+                      "path":  "conference/neiro-miet/ru/review/verification_raw.json",
+                      "bytes":  22659,
+                      "sha256":  "0BA7C7B69F92696E0789173E668B973B630AD79AFF398D830F3FCB8F3240FD26"
+                  },
+                  {
+                      "path":  "conference/neiro-miet/ru/validate_artifacts.py",
+                      "bytes":  44676,
+                      "sha256":  "05F13A05CB234616DD47F36642DA813FDC726F969671E75F593C9D9B83BCDE19"
+                  },
+                  {
+                      "path":  "conference/neiro-miet/ru/validation_word_stats.json",
+                      "bytes":  222,
+                      "sha256":  "755D47077C237B0A73013465E9EF441FF976366F055990C07B179943AF7CFA8F"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/en/main.aux",
+                      "bytes":  13747,
+                      "sha256":  "506C84B58272187498E468AB640B57B108721A073A808C83B2054DE0C75A0014"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/en/main.bbl",
+                      "bytes":  6148,
+                      "sha256":  "0412382A9A28FD24626EC719D6DE2ADA29F3FDC7B3027CC196AA6D1B415F6966"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/en/main.blg",
+                      "bytes":  1556,
+                      "sha256":  "78AE112AB9B2AA4A05B14DFF1D06CC8655087B2E67B97A24A68DAFD727B898CF"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/en/main.log",
+                      "bytes":  22824,
+                      "sha256":  "9149AC1C428679E083C0CF05FD10842339C11AF471B2BD2C826ED2F2C2F1F128"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/en/main.pdf",
+                      "bytes":  333644,
+                      "sha256":  "EAA4C44DE212E9BA5882587F1002A1E2571A2B16EB5EFAA9E2C8F28F6AB2054E"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/en/main.tex",
+                      "bytes":  61571,
+                      "sha256":  "7C065DCC86EF6FDFC64B2287E2293F082A49797F439D6F5B028C2429121FE95C"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/en/supplement.aux",
+                      "bytes":  6005,
+                      "sha256":  "73980D97B8D139143CA065585D71DF93FD65ACE8A21F9C5349B0C101AD7D7C77"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/en/supplement.bbl",
+                      "bytes":  0,
+                      "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/en/supplement.blg",
+                      "bytes":  1050,
+                      "sha256":  "27098AB1E218BCEC4DF7139699529EAECD4665D1567D65D986613C53B80712AE"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/en/supplement.log",
+                      "bytes":  25381,
+                      "sha256":  "CB9F71813E7A7AEF45924EFB77D1F0381ABA6BA615EDFD87F6C5E95BF8A0549C"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/en/supplement.out",
+                      "bytes":  822,
+                      "sha256":  "0E0C10A2FCE4DCE987A6BCFDBBB476BC67545EE7A4686C7EB4B9DADD7FD4317C"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/en/supplement.pdf",
+                      "bytes":  346251,
+                      "sha256":  "561ADF58BF43FF6529A2E09FEC11944A5DFB7A065CE57A3167774FB5472A96D1"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/en/supplement.tex",
+                      "bytes":  13439,
+                      "sha256":  "0E313C7CE1D79E0656A6DF56B57249B9DB710D0AFB75627B5BABBBD2F67A63EF"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/INFO.md",
+                      "bytes":  24257,
+                      "sha256":  "DCD66121F75BE6063F2B1E93F691A25961160639AAC3B9C3FA567E489FC9B334"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/README.md",
+                      "bytes":  1724,
+                      "sha256":  "D78CC40004A56B64D900F03F04AD1F0CA077822362C0D319FBA34B7D3D4A292B"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/ru/main_ru.aux",
+                      "bytes":  19653,
+                      "sha256":  "F7B08B2F7DA941972E1B7721B5A0C8D12C55FE46BC1FEF4D6041C4B89DF6F7D2"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/ru/main_ru.bbl",
+                      "bytes":  6148,
+                      "sha256":  "0412382A9A28FD24626EC719D6DE2ADA29F3FDC7B3027CC196AA6D1B415F6966"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/ru/main_ru.blg",
+                      "bytes":  1559,
+                      "sha256":  "67A12E02BF8AE5F8E996D0A3EFB80005B41391C4696C1F01159BDC5134A11ACA"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/ru/main_ru.log",
+                      "bytes":  93688,
+                      "sha256":  "BEE84F45AFCED6E3485F6874715625211C5461CC877E2036D6B1C6102AE3E308"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/ru/main_ru.pdf",
+                      "bytes":  664910,
+                      "sha256":  "2169D0569E2BF10685CD4E079E5843A78313780F02B2A4FE82C2A8DDA4EFADEB"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/ru/main_ru.tex",
+                      "bytes":  98360,
+                      "sha256":  "134392B8F4E5C36A0C28A50CDE07C7EAA79CDB8DD1748C4CB0274923126ABA55"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/submission/coi.aux",
+                      "bytes":  32,
+                      "sha256":  "FBABE80C887F95A1EDE6847F22DD91B380BDA9D17AE8BFAA72E1741B16AA41E9"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/submission/coi.log",
+                      "bytes":  5712,
+                      "sha256":  "4BCB8EBCFB1E85B2A1BC9F960E6E05D3F24E92E322C2181671FE27905C8BEB2E"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/submission/coi.pdf",
+                      "bytes":  62853,
+                      "sha256":  "655844E434F51584A5D21229A64EB523A9D4EB83AD728EA153D5BFBB52D5E87B"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/submission/coi.tex",
+                      "bytes":  1491,
+                      "sha256":  "F2A4B13B2EECC6BDDE267CA6439FE62B4D451FB3902E139A306DC63A95F1A6AC"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/submission/cover_letter.aux",
+                      "bytes":  32,
+                      "sha256":  "BE3D8A27AB932481A725A941648E689BE09CACDCFCA75E9F47D30BB4C40CC38B"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/submission/cover_letter.log",
+                      "bytes":  5861,
+                      "sha256":  "E6ABF163B1A5FCEF07EFDDF50A8DA0254789434B04CA2CE68CACE56277AD2091"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/submission/cover_letter.pdf",
+                      "bytes":  81687,
+                      "sha256":  "7FA339C6661ACCAC7DD22942ADA8B67248549BA59A919809529408C2B76DEB02"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/submission/cover_letter.tex",
+                      "bytes":  6617,
+                      "sha256":  "E7D9A8C67EBE0574629E937777CDB067ABB77A300FE099DA7217E43C345D39CD"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/submission/ethics_request_hse.md",
+                      "bytes":  7796,
+                      "sha256":  "03EF7443058AB92CFCB0AF3DB4E96726511392AA847F5C88F3B10332E8744E25"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/submission/manuscript/figures/fig_shortcut.pdf",
+                      "bytes":  35278,
+                      "sha256":  "5F0C1CCB7D41E33B43EA879FAD127B754A41535FD371549194298D556AE59002"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/submission/manuscript/IEEEtran.cls",
+                      "bytes":  288451,
+                      "sha256":  "B0EB3567B81AEC7FE98144A3AD283EEAC2D31035BB19E0D9DCBA7DA190F18D9D"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/submission/manuscript/main.aux",
+                      "bytes":  13731,
+                      "sha256":  "B71D69B773B9E789B3F01AB71960859D38CA2BB653DDB320F993B6B293475E3A"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/submission/manuscript/main.bbl",
+                      "bytes":  6148,
+                      "sha256":  "0412382A9A28FD24626EC719D6DE2ADA29F3FDC7B3027CC196AA6D1B415F6966"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/submission/manuscript/main.blg",
+                      "bytes":  1539,
+                      "sha256":  "2AC869F592134E503C6DDE10FED34CCA0DF30C8BC3753D77B6730ADC45FBB643"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/submission/manuscript/main.log",
+                      "bytes":  22075,
+                      "sha256":  "F987326A7E91877472C4BC9241EF94346E96A2A9225B964BB70FCB02AC436CF6"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/submission/manuscript/main.pdf",
+                      "bytes":  333597,
+                      "sha256":  "0B6F4E15848794712B42CD834D056D4181B3852332A42CDBE5EE5D33D78A26F9"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/submission/manuscript/main.tex",
+                      "bytes":  61247,
+                      "sha256":  "DACFC19896C14981F6208371577FE6E56CB81E8AD700F6D7EC273EE4B172A37F"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/submission/manuscript/refs.bib",
+                      "bytes":  7591,
+                      "sha256":  "47E17026ED2D469B39E8F29322E9EDD9436656EC8E74B0FE90B756200640FD0E"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/submission/portal_answers.md",
+                      "bytes":  7306,
+                      "sha256":  "B0FBCE82DECC42C38C70C197C43798DBCCEEA2B8FF4A5C7B64560EB9165C7BFE"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/submission/strip_comments.py",
+                      "bytes":  1977,
+                      "sha256":  "3C2E20557B3B2CCB55EC19C31A9C69AFE106D4F7881D5EFDBEAEECC069D8F9C1"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/submission/SUBMISSION.md",
+                      "bytes":  7408,
+                      "sha256":  "7D3E3B4D653D14F514D56635A1B2564A38D4030CEC8E394E16AA8A2AE34067F9"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/submission/supplement/figures/fig_external.pdf",
+                      "bytes":  36626,
+                      "sha256":  "0E4ED762A21BC81E276C6DB9426FC413768BC7FE33B59B9CEFAE7A8411F123E2"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/submission/supplement/figures/fig_fairness.pdf",
+                      "bytes":  37744,
+                      "sha256":  "D5141187F5070D4C33A66CAC747F99BB7D54AEB4D24B2D6C809ADA7D36A452A8"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/submission/supplement/figures/fig_headroom.pdf",
+                      "bytes":  40120,
+                      "sha256":  "FB99A054651D9E6964A1798BB15278BB77B915F121D404EFE50B4832A4570101"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/submission/supplement/figures/fig_scaling.pdf",
+                      "bytes":  38996,
+                      "sha256":  "28175144E8AD12EB84FAE32849D9A8237B34E1B6565C822D2FC1D1825F79E89A"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/submission/supplement/figures/fig_sota.pdf",
+                      "bytes":  64582,
+                      "sha256":  "44F483A7F0F31B6AE6CA09B6C3AEEB7FF33AA6F3F1AB6E787108FDA9236BB5D0"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/submission/supplement/supplement.aux",
+                      "bytes":  6005,
+                      "sha256":  "73980D97B8D139143CA065585D71DF93FD65ACE8A21F9C5349B0C101AD7D7C77"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/submission/supplement/supplement.bbl",
+                      "bytes":  0,
+                      "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/submission/supplement/supplement.blg",
+                      "bytes":  1050,
+                      "sha256":  "27098AB1E218BCEC4DF7139699529EAECD4665D1567D65D986613C53B80712AE"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/submission/supplement/supplement.log",
+                      "bytes":  25025,
+                      "sha256":  "2982537179E8274822FE4D83AA1499DF84D7FC47DBF82D1908945FD33961A161"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/submission/supplement/supplement.out",
+                      "bytes":  822,
+                      "sha256":  "0E0C10A2FCE4DCE987A6BCFDBBB476BC67545EE7A4686C7EB4B9DADD7FD4317C"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/submission/supplement/supplement.pdf",
+                      "bytes":  346181,
+                      "sha256":  "0E7182E3438A7469F8AB8E3ECE3025E3D957F5CB5D952AE45E06DA153B496595"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/submission/supplement/supplement.tex",
+                      "bytes":  13110,
+                      "sha256":  "38A7D2EE348BC412B9864F11D9D7D78B9CCFFAE734FACBAC50DF83340602D300"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/submission/upload_manuscript.zip",
+                      "bytes":  439674,
+                      "sha256":  "7F52A51BB95B6C3DC57D7D083C20D3D107ECDF7E41DC7F9C07F7E3A8D33DFDFD"
+                  },
+                  {
+                      "path":  "papers/journal-1-tbiom/submission/upload_supplement.zip",
+                      "bytes":  515031,
+                      "sha256":  "E63E03530FA2B939F9D4EF2FF636519671323F89509E59B42BC6349F243D261D"
+                  },
+                  {
+                      "path":  "papers/journal-1-tnnls/en/main.aux",
+                      "bytes":  15885,
+                      "sha256":  "BB769C4B96B9214832C4BDF822A70CA1DBFBEF31F8C5830D503B4D72C3093CFC"
+                  },
+                  {
+                      "path":  "papers/journal-1-tnnls/en/main.bbl",
+                      "bytes":  6148,
+                      "sha256":  "0412382A9A28FD24626EC719D6DE2ADA29F3FDC7B3027CC196AA6D1B415F6966"
+                  },
+                  {
+                      "path":  "papers/journal-1-tnnls/en/main.blg",
+                      "bytes":  1556,
+                      "sha256":  "78AE112AB9B2AA4A05B14DFF1D06CC8655087B2E67B97A24A68DAFD727B898CF"
+                  },
+                  {
+                      "path":  "papers/journal-1-tnnls/en/main.log",
+                      "bytes":  24854,
+                      "sha256":  "9E28A5AF714622A451DFA094E427C50CB2AF9D673C0A89B12C29022007C1A378"
+                  },
+                  {
+                      "path":  "papers/journal-1-tnnls/en/main.pdf",
+                      "bytes":  550902,
+                      "sha256":  "407B0EF4372BDC586DC60F36327BB6F9D68F24C0819EFC084EE64BABFC27A041"
+                  },
+                  {
+                      "path":  "papers/journal-1-tnnls/en/main.tex",
+                      "bytes":  64403,
+                      "sha256":  "0A5856EA9D063BC6BEE3321DADE24BFC821EAA12E476D76B02FF6E20C51BD527"
+                  },
+                  {
+                      "path":  "papers/journal-1-tnnls/en/supplement.aux",
+                      "bytes":  2244,
+                      "sha256":  "F72B88D9F8272B211848443B98ED3B018298BA6DB1D06FF2F0EA0833C4F72A0C"
+                  },
+                  {
+                      "path":  "papers/journal-1-tnnls/en/supplement.log",
+                      "bytes":  22324,
+                      "sha256":  "52C2B2233816D6E10ED4938207B06DB16B411DFCFDFD600D104BECDEF0EA95A8"
+                  },
+                  {
+                      "path":  "papers/journal-1-tnnls/en/supplement.out",
+                      "bytes":  574,
+                      "sha256":  "3D37E6C82F928E1491B51A11C7485649E450C6D07C0E7553AF38BF865E83D2FC"
+                  },
+                  {
+                      "path":  "papers/journal-1-tnnls/en/supplement.pdf",
+                      "bytes":  125952,
+                      "sha256":  "9E8789934FF5C31778B7B936E8F60ED611E03FF1F04EA2A70DCE3F3A5B67FEC5"
+                  },
+                  {
+                      "path":  "papers/journal-1-tnnls/en/supplement.tex",
+                      "bytes":  10946,
+                      "sha256":  "0B83CCE9D5154DF6E710AF6B26B3A7D20BBD39BE205F326E8E9D16A7D9973986"
+                  },
+                  {
+                      "path":  "papers/journal-1-tnnls/README.md",
+                      "bytes":  1778,
+                      "sha256":  "5F8387E3FDA96776906531A0105B03F183D69E0A2FCE9FD0537AC3E52C670A11"
+                  },
+                  {
+                      "path":  "papers/journal-1-tnnls/ru/main_ru.aux",
+                      "bytes":  19653,
+                      "sha256":  "EEFADEED275069E0787C5720608CE42F0B8E61B8203C8F78D8C8AA833FE4DE0A"
+                  },
+                  {
+                      "path":  "papers/journal-1-tnnls/ru/main_ru.bbl",
+                      "bytes":  6148,
+                      "sha256":  "0412382A9A28FD24626EC719D6DE2ADA29F3FDC7B3027CC196AA6D1B415F6966"
+                  },
+                  {
+                      "path":  "papers/journal-1-tnnls/ru/main_ru.blg",
+                      "bytes":  1559,
+                      "sha256":  "67A12E02BF8AE5F8E996D0A3EFB80005B41391C4696C1F01159BDC5134A11ACA"
+                  },
+                  {
+                      "path":  "papers/journal-1-tnnls/ru/main_ru.log",
+                      "bytes":  94089,
+                      "sha256":  "4CDB2BC83D8156F00DF934723CE335088414853AAC3AC5D7BA69CF3A1EAFC935"
+                  },
+                  {
+                      "path":  "papers/journal-1-tnnls/ru/main_ru.pdf",
+                      "bytes":  665274,
+                      "sha256":  "89EEC2F70A32B3AEC94CDA82A476C633D1DFCAAEF8795377527A306BA0904BEC"
+                  },
+                  {
+                      "path":  "papers/journal-1-tnnls/ru/main_ru.tex",
+                      "bytes":  99203,
+                      "sha256":  "BFEE1A5B15CBCB082245AD698F6ABDBE61E6B29A5B3877002EA1CD271D318B96"
+                  },
+                  {
+                      "path":  "papers/journal-1-tnnls/submission/manuscript/figures/fig_external.pdf",
+                      "bytes":  36626,
+                      "sha256":  "0E4ED762A21BC81E276C6DB9426FC413768BC7FE33B59B9CEFAE7A8411F123E2"
+                  },
+                  {
+                      "path":  "papers/journal-1-tnnls/submission/manuscript/figures/fig_fairness.pdf",
+                      "bytes":  37744,
+                      "sha256":  "D5141187F5070D4C33A66CAC747F99BB7D54AEB4D24B2D6C809ADA7D36A452A8"
+                  },
+                  {
+                      "path":  "papers/journal-1-tnnls/submission/manuscript/figures/fig_headroom.pdf",
+                      "bytes":  40120,
+                      "sha256":  "FB99A054651D9E6964A1798BB15278BB77B915F121D404EFE50B4832A4570101"
+                  },
+                  {
+                      "path":  "papers/journal-1-tnnls/submission/manuscript/figures/fig_scaling.pdf",
+                      "bytes":  38996,
+                      "sha256":  "28175144E8AD12EB84FAE32849D9A8237B34E1B6565C822D2FC1D1825F79E89A"
+                  },
+                  {
+                      "path":  "papers/journal-1-tnnls/submission/manuscript/figures/fig_shortcut.pdf",
+                      "bytes":  35278,
+                      "sha256":  "5F0C1CCB7D41E33B43EA879FAD127B754A41535FD371549194298D556AE59002"
+                  },
+                  {
+                      "path":  "papers/journal-1-tnnls/submission/manuscript/figures/fig_sota.pdf",
+                      "bytes":  64582,
+                      "sha256":  "44F483A7F0F31B6AE6CA09B6C3AEEB7FF33AA6F3F1AB6E787108FDA9236BB5D0"
+                  },
+                  {
+                      "path":  "papers/journal-1-tnnls/submission/manuscript/IEEEtran.cls",
+                      "bytes":  288451,
+                      "sha256":  "B0EB3567B81AEC7FE98144A3AD283EEAC2D31035BB19E0D9DCBA7DA190F18D9D"
+                  },
+                  {
+                      "path":  "papers/journal-1-tnnls/submission/manuscript/main.aux",
+                      "bytes":  15869,
+                      "sha256":  "32EAF8294727C1C0A40F561334BD1368051AE0A4A0027D136ECE1DEDBD2B1D8D"
+                  },
+                  {
+                      "path":  "papers/journal-1-tnnls/submission/manuscript/main.bbl",
+                      "bytes":  6148,
+                      "sha256":  "0412382A9A28FD24626EC719D6DE2ADA29F3FDC7B3027CC196AA6D1B415F6966"
+                  },
+                  {
+                      "path":  "papers/journal-1-tnnls/submission/manuscript/main.blg",
+                      "bytes":  1539,
+                      "sha256":  "2AC869F592134E503C6DDE10FED34CCA0DF30C8BC3753D77B6730ADC45FBB643"
+                  },
+                  {
+                      "path":  "papers/journal-1-tnnls/submission/manuscript/main.log",
+                      "bytes":  23594,
+                      "sha256":  "F6E6DEDEF31A570CB7DE8AC57AF94561410700CB522163391A1F4E00114B9D6E"
+                  },
+                  {
+                      "path":  "papers/journal-1-tnnls/submission/manuscript/main.pdf",
+                      "bytes":  548756,
+                      "sha256":  "9533481F013039C780FAC78CC99D25B760CB4D2739595C941FE719E750009AF9"
+                  },
+                  {
+                      "path":  "papers/journal-1-tnnls/submission/manuscript/main.tex",
+                      "bytes":  61946,
+                      "sha256":  "1366A5BD42061C8C01FA00FC65F0D98CF75A442BAAD13562F9595B3F78A3FB44"
+                  },
+                  {
+                      "path":  "papers/journal-1-tnnls/submission/manuscript/refs.bib",
+                      "bytes":  7591,
+                      "sha256":  "47E17026ED2D469B39E8F29322E9EDD9436656EC8E74B0FE90B756200640FD0E"
+                  },
+                  {
+                      "path":  "papers/journal-1-tnnls/submission/strip_comments.py",
+                      "bytes":  1977,
+                      "sha256":  "3C2E20557B3B2CCB55EC19C31A9C69AFE106D4F7881D5EFDBEAEECC069D8F9C1"
+                  },
+                  {
+                      "path":  "papers/journal-1-tnnls/submission/SUBMISSION.md",
+                      "bytes":  3802,
+                      "sha256":  "F1C3AAAE5048B9D426A477B4DB3EB08219908240A8655E2927D3404E302510BB"
+                  },
+                  {
+                      "path":  "papers/journal-1-tnnls/submission/supplement/supplement.aux",
+                      "bytes":  2244,
+                      "sha256":  "F72B88D9F8272B211848443B98ED3B018298BA6DB1D06FF2F0EA0833C4F72A0C"
+                  },
+                  {
+                      "path":  "papers/journal-1-tnnls/submission/supplement/supplement.bbl",
+                      "bytes":  0,
+                      "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+                  },
+                  {
+                      "path":  "papers/journal-1-tnnls/submission/supplement/supplement.blg",
+                      "bytes":  1050,
+                      "sha256":  "27098AB1E218BCEC4DF7139699529EAECD4665D1567D65D986613C53B80712AE"
+                  },
+                  {
+                      "path":  "papers/journal-1-tnnls/submission/supplement/supplement.log",
+                      "bytes":  22324,
+                      "sha256":  "EA6F04FE4D972CEA7E4CFB39F08201870EAE73886F4437F6040922B695F92C3E"
+                  },
+                  {
+                      "path":  "papers/journal-1-tnnls/submission/supplement/supplement.out",
+                      "bytes":  574,
+                      "sha256":  "3D37E6C82F928E1491B51A11C7485649E450C6D07C0E7553AF38BF865E83D2FC"
+                  },
+                  {
+                      "path":  "papers/journal-1-tnnls/submission/supplement/supplement.pdf",
+                      "bytes":  125952,
+                      "sha256":  "A5DF64B901AEA21CAE0835035D63A4C506038ED81625834EAF68A174D9AE0541"
+                  },
+                  {
+                      "path":  "papers/journal-1-tnnls/submission/supplement/supplement.tex",
+                      "bytes":  10610,
+                      "sha256":  "F94DDBA5E9C07280EBA722AD4D94FAD12AEDFCE49E4F1F3EB3F4760F8FB2D1F2"
+                  },
+                  {
+                      "path":  "papers/journal-1-tnnls/submission/title_page_en.docx",
+                      "bytes":  1604,
+                      "sha256":  "9DDBBF759564217A0C7E515B0CEBF77A58D9A055FD5B0001A2918EF7AC52C355"
+                  },
+                  {
+                      "path":  "papers/journal-2/en/.gitkeep",
+                      "bytes":  0,
+                      "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+                  },
+                  {
+                      "path":  "papers/journal-2/README.md",
+                      "bytes":  402,
+                      "sha256":  "EE0AD47BA3D37C65C3B1C20611C47954926E1C2CAADE585AD3B70583C3DF1987"
+                  },
+                  {
+                      "path":  "papers/journal-2/ru/.gitkeep",
+                      "bytes":  0,
+                      "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+                  },
+                  {
+                      "path":  "README.md",
+                      "bytes":  2889,
+                      "sha256":  "E7F233CA772BCE7CE062B45F7854D5E0D944F88FB95ECA39624330864EBF10B4"
+                  },
+                  {
+                      "path":  "shared/figures/fig_external.pdf",
+                      "bytes":  36626,
+                      "sha256":  "0E4ED762A21BC81E276C6DB9426FC413768BC7FE33B59B9CEFAE7A8411F123E2"
+                  },
+                  {
+                      "path":  "shared/figures/fig_external.png",
+                      "bytes":  50639,
+                      "sha256":  "BA82BE159C7917408940F6E5230D265A703559B8CCDDC1F6ECC571729B00AEE6"
+                  },
+                  {
+                      "path":  "shared/figures/fig_external_ru.pdf",
+                      "bytes":  40411,
+                      "sha256":  "51C21420EA20489532C6C66BA499366127D14E491DC6A107B11EC037F21B1CF0"
+                  },
+                  {
+                      "path":  "shared/figures/fig_external_ru.png",
+                      "bytes":  51933,
+                      "sha256":  "0D481F7C95800BC75D8569ADE3568F993B3654F2233A8D707688BFC6D1864A10"
+                  },
+                  {
+                      "path":  "shared/figures/fig_fairness.pdf",
+                      "bytes":  37744,
+                      "sha256":  "D5141187F5070D4C33A66CAC747F99BB7D54AEB4D24B2D6C809ADA7D36A452A8"
+                  },
+                  {
+                      "path":  "shared/figures/fig_fairness.png",
+                      "bytes":  71749,
+                      "sha256":  "69BCCF31A81460F221B11FC1380EC29B1DE7BCE5DD646DE71AE5F6E4A1F3972C"
+                  },
+                  {
+                      "path":  "shared/figures/fig_fairness_ru.pdf",
+                      "bytes":  39166,
+                      "sha256":  "D27973A033E8FD41EF746E549838A1E6CEF04373164B99528427EFE009FE292A"
+                  },
+                  {
+                      "path":  "shared/figures/fig_fairness_ru.png",
+                      "bytes":  74439,
+                      "sha256":  "BC31A26CD37B4B5CE1C99F44DAEC43666DB4857A3EDFFF76DF99F5BB58465800"
+                  },
+                  {
+                      "path":  "shared/figures/fig_headroom.pdf",
+                      "bytes":  40120,
+                      "sha256":  "FB99A054651D9E6964A1798BB15278BB77B915F121D404EFE50B4832A4570101"
+                  },
+                  {
+                      "path":  "shared/figures/fig_headroom.png",
+                      "bytes":  76621,
+                      "sha256":  "DFAE8E88B22D5C098AFA0B431B49BD342D096D4AB005143EBB1368620D704634"
+                  },
+                  {
+                      "path":  "shared/figures/fig_headroom_ru.pdf",
+                      "bytes":  40753,
+                      "sha256":  "DCF435685B855DF7B4896E47B98979595751070C49EBFF9798A0E6C349FB9341"
+                  },
+                  {
+                      "path":  "shared/figures/fig_headroom_ru.png",
+                      "bytes":  76441,
+                      "sha256":  "9C0A8F870A207BA26F53DE6748AB511AC51DDE924EB21A5E16334538D7C0141C"
+                  },
+                  {
+                      "path":  "shared/figures/fig_scaling.pdf",
+                      "bytes":  38996,
+                      "sha256":  "28175144E8AD12EB84FAE32849D9A8237B34E1B6565C822D2FC1D1825F79E89A"
+                  },
+                  {
+                      "path":  "shared/figures/fig_scaling.png",
+                      "bytes":  68641,
+                      "sha256":  "754232B903007537D3217071A5D60FFA514A3EF55AF8FACC5B6A08DA61A99CF7"
+                  },
+                  {
+                      "path":  "shared/figures/fig_scaling_ru.pdf",
+                      "bytes":  41504,
+                      "sha256":  "7551EAC7A5C980836DC0981DAE6EE879E611F85611957BEEF71F0B03CB929105"
+                  },
+                  {
+                      "path":  "shared/figures/fig_scaling_ru.png",
+                      "bytes":  70995,
+                      "sha256":  "5F8F9AEB2281086836D10AFEECAA13CD6D8B812307205412ADDAD4A92A094209"
+                  },
+                  {
+                      "path":  "shared/figures/fig_shortcut.pdf",
+                      "bytes":  35278,
+                      "sha256":  "5F0C1CCB7D41E33B43EA879FAD127B754A41535FD371549194298D556AE59002"
+                  },
+                  {
+                      "path":  "shared/figures/fig_shortcut.png",
+                      "bytes":  57353,
+                      "sha256":  "2D5B68CD8F3CDFBE7B6A0B3E966696A514AB594DDB81B0C2D52F9F10C2CA50FE"
+                  },
+                  {
+                      "path":  "shared/figures/fig_shortcut_ru.pdf",
+                      "bytes":  39038,
+                      "sha256":  "FAD52A162D43630D28C6C3DD009793FC74C6CD801316383CC546861BDD8AB452"
+                  },
+                  {
+                      "path":  "shared/figures/fig_shortcut_ru.png",
+                      "bytes":  58095,
+                      "sha256":  "8266D118BC3C95CC65BDDBFD65D6A61B387EB5AC61760A6A7CEE0172067A789E"
+                  },
+                  {
+                      "path":  "shared/figures/fig_sota.pdf",
+                      "bytes":  64582,
+                      "sha256":  "44F483A7F0F31B6AE6CA09B6C3AEEB7FF33AA6F3F1AB6E787108FDA9236BB5D0"
+                  },
+                  {
+                      "path":  "shared/figures/fig_sota.png",
+                      "bytes":  97714,
+                      "sha256":  "0B16AA1789BCEC8FB9771AAD4794E7E30A2F63DFCF6A6DD06F0D2E4EBD467E1C"
+                  },
+                  {
+                      "path":  "shared/figures/fig_sota_ru.pdf",
+                      "bytes":  66016,
+                      "sha256":  "BA4460B9DEF7576A89E5F70C4BBD6E018369FA18D14F838F16AC6768D4D48E00"
+                  },
+                  {
+                      "path":  "shared/figures/fig_sota_ru.png",
+                      "bytes":  98770,
+                      "sha256":  "A8EAD28BD79070BFB0322355B422CFA3331EA82E95450804BE3DF6856AFE230D"
+                  },
+                  {
+                      "path":  "shared/refs.bib",
+                      "bytes":  7781,
+                      "sha256":  "A2218E55C5DBB569222EE55BA5BCE783F7373F75CBCDCA11436F3FE205CB659A"
+                  },
+                  {
+                      "path":  "shared/vendor/aaai2027/AuthorKit27/aaai2027.bib",
+                      "bytes":  4814,
+                      "sha256":  "FF8A860F20602B2645723856B80F0A0AD28EE7EC270158254400FDB80B429E45"
+                  },
+                  {
+                      "path":  "shared/vendor/aaai2027/AuthorKit27/aaai2027.bst",
+                      "bytes":  30207,
+                      "sha256":  "5DB7765BA99DE5C1E4686F9B3940A0ADD9C5E702F2164514462BEC130CCB6E3C"
+                  },
+                  {
+                      "path":  "shared/vendor/aaai2027/AuthorKit27/aaai2027.sty",
+                      "bytes":  16915,
+                      "sha256":  "391BCE82815BF698B8E382DD3AE7E30C75D7AB46DF140CB295B1266016BC8623"
+                  },
+                  {
+                      "path":  "shared/vendor/aaai2027/AuthorKit27/AnonymousSubmission2027.pdf",
+                      "bytes":  1548952,
+                      "sha256":  "AD424E5A94CE98DA7CB10ED07B12EF20571E72F649B7C2B30E6AF0F234A0C96A"
+                  },
+                  {
+                      "path":  "shared/vendor/aaai2027/AuthorKit27/AnonymousSubmission2027.tex",
+                      "bytes":  59071,
+                      "sha256":  "035EBDB17E57885A1FD43A188FD17777BDBF90F1FDA1A1E000C49C7F52CE1F9D"
+                  },
+                  {
+                      "path":  "shared/vendor/aaai2027/AuthorKit27/CameraReady2027.pdf",
+                      "bytes":  1562820,
+                      "sha256":  "CFA0A7E59C31FCB39C2BBD492673EB969AFC269FB0E568B5C692AC3A53F1FEF5"
+                  },
+                  {
+                      "path":  "shared/vendor/aaai2027/AuthorKit27/CameraReady2027.tex",
+                      "bytes":  57156,
+                      "sha256":  "DB509CB393DAE5C113BF29633E17D31A5FEFA610AAD09056569034F9BCFF5B46"
+                  },
+                  {
+                      "path":  "shared/vendor/aaai2027/AuthorKit27/Figures/figure1.pdf",
+                      "bytes":  252557,
+                      "sha256":  "29E16580AAE21C9C7785B6851D244A9948C6CCF96E308EE366FA651DB22C922B"
+                  },
+                  {
+                      "path":  "shared/vendor/aaai2027/AuthorKit27/Figures/figure2.pdf",
+                      "bytes":  1099641,
+                      "sha256":  "8899687A74776C5BA3179F630F14A946C36278560A997FBAC0CDE58CDCA1750F"
+                  },
+                  {
+                      "path":  "shared/vendor/aaai2027/AuthorKit27/ReproducibilityChecklist.pdf",
+                      "bytes":  95814,
+                      "sha256":  "7FCC703769036E3566DACCD59560AACA9B187F49DA79FC9D1E13155B61E7DD9E"
+                  },
+                  {
+                      "path":  "shared/vendor/aaai2027/AuthorKit27/ReproducibilityChecklist.tex",
+                      "bytes":  8729,
+                      "sha256":  "06A3459158089BF1C64B738986118F1D1566E816DA4B710C6397561E33C3D5E6"
+                  },
+                  {
+                      "path":  "shared/vendor/aaai2027/AuthorKit27/Word/AnonymousSubmission2027.docx",
+                      "bytes":  77532,
+                      "sha256":  "1CAAC0D7BB5FDD7E18D05D0B18256FFFF2F0BE611C2BF99232BB51E21657F341"
+                  },
+                  {
+                      "path":  "shared/vendor/aaai2027/AuthorKit27/Word/AnonymousSubmission2027.pdf",
+                      "bytes":  360969,
+                      "sha256":  "44907864EA8AD847A566EAB48A488CA7B5C2CA8388CB130EBA7AEFB476DB7E83"
+                  },
+                  {
+                      "path":  "shared/vendor/aaai2027/AuthorKit27/Word/CameraReady2027.docx",
+                      "bytes":  77786,
+                      "sha256":  "9C7E05FD22998B0FC02A9D4DF4846C061D0204C89EF551100873038CA88211E3"
+                  },
+                  {
+                      "path":  "shared/vendor/aaai2027/AuthorKit27/Word/CameraReady2027.pdf",
+                      "bytes":  366630,
+                      "sha256":  "AD2973BA70448627A17D145A183C78737F4B999A543B3BCB18C8B17ACAABC944"
+                  },
+                  {
+                      "path":  "shared/vendor/aaai2027/AuthorKit27/Word/ReproducibilityChecklist.docx",
+                      "bytes":  26940,
+                      "sha256":  "CF04A01CA595B6B4B469D1BE53A9E6F4484233FE8AC0FEFA4DBFD23E0B3DE180"
+                  },
+                  {
+                      "path":  "shared/vendor/aaai2027/AuthorKit27/Word/ReproducibilityChecklist.pdf",
+                      "bytes":  177641,
+                      "sha256":  "DC9228C4C3C892BE8E9EB813F0FE2C9E2CAFD91A0D0EFCF972306EDA51E3E87B"
+                  },
+                  {
+                      "path":  "shared/vendor/ieee-tbiom/bare_conf.tex",
+                      "bytes":  39378,
+                      "sha256":  "D93A2804A2652762F5FD055FED226E87516471C92A236A928C54A1E3E54CB898"
+                  },
+                  {
+                      "path":  "shared/vendor/ieee-tbiom/bare_conf_compsoc.tex",
+                      "bytes":  21502,
+                      "sha256":  "E86A4E1267113743860C0865297CD19E7728DE3C2076E9C0DF1FD3E3F26D1139"
+                  },
+                  {
+                      "path":  "shared/vendor/ieee-tbiom/bare_jrnl.tex",
+                      "bytes":  22504,
+                      "sha256":  "A3D13E90DB0CE427A1A73491E4D5BF8D69AABC95ADEE188DC1CA55887FA74DD8"
+                  },
+                  {
+                      "path":  "shared/vendor/ieee-tbiom/bare_jrnl_compsoc.tex",
+                      "bytes":  27604,
+                      "sha256":  "D07F45C7F0F4DE884F4AE1671AF5AE13EF02658349F58927F461765DD19F03DC"
+                  },
+                  {
+                      "path":  "shared/vendor/ieee-tbiom/bare_jrnl_comsoc.tex",
+                      "bytes":  31693,
+                      "sha256":  "FC9D0CAB24FDC201F219BAF8FA44E13A210C0D4D0786C3967D49A7FA8E64F5AA"
+                  },
+                  {
+                      "path":  "shared/vendor/ieee-tbiom/bare_jrnl_transmag.tex",
+                      "bytes":  29030,
+                      "sha256":  "CC85F920957DE857CF04D10478398031C02851E816FB1F118D3FBAEDFFEAE8B5"
+                  },
+                  {
+                      "path":  "shared/vendor/ieee-tbiom/changelog.txt",
+                      "bytes":  27569,
+                      "sha256":  "19523F3E8B722181A82F0609702101F05FE82C8E9FC1EDB3E6A6CE71AED0AB07"
+                  },
+                  {
+                      "path":  "shared/vendor/ieee-tbiom/download",
+                      "bytes":  66445,
+                      "sha256":  "3734AD9BF755E4437D7ED07F9941BAD066A1A8F53C1F28B04FE29213F3697A12"
+                  },
+                  {
+                      "path":  "shared/vendor/ieee-tbiom/IEEEabrv.bib",
+                      "bytes":  5191,
+                      "sha256":  "99DE53A65E058CC1351E6AFE6E3FADA2B7C51EF5DDC2267D9B91CA6808D7F3E6"
+                  },
+                  {
+                      "path":  "shared/vendor/ieee-tbiom/IEEEfull.bib",
+                      "bytes":  17394,
+                      "sha256":  "A9429129AC25A932E044A37447CD5596B577F761C0CFE69CE2867D4617462123"
+                  },
+                  {
+                      "path":  "shared/vendor/ieee-tbiom/IEEEtran.bst",
+                      "bytes":  39651,
+                      "sha256":  "152174490BF12257C1E20F8FF385DA6A125615DA11F34AB0257A116F334E0EB3"
+                  },
+                  {
+                      "path":  "shared/vendor/ieee-tbiom/IEEEtran.cls",
+                      "bytes":  36200,
+                      "sha256":  "1BC3AA96AAE7C5A8D6F00D11467088296BAB549F5B2E48229D3B32905F1F098F"
+                  },
+                  {
+                      "path":  "shared/vendor/ieee-tbiom/IEEEtran_bst_HOWTO.pdf",
+                      "bytes":  19159,
+                      "sha256":  "D9A697D249FCA949466D2C6694075B12419A1DFB6BFD1E46090A2A4815497CFB"
+                  },
+                  {
+                      "path":  "shared/vendor/ieee-tbiom/IEEEtran_HOWTO.pdf",
+                      "bytes":  288304,
+                      "sha256":  "C972ACA108FDA004C3514D63658E02816DA2E54D9A1451E870B9BD970E003F55"
+                  },
+                  {
+                      "path":  "shared/vendor/ieee-tbiom/IEEEtranN.bst",
+                      "bytes":  59215,
+                      "sha256":  "B445BC94CFDE36BB836A4C6F5CE7149F1488D76DFE8ACD39A8771F084BA8F348"
+                  },
+                  {
+                      "path":  "shared/vendor/ieee-tbiom/IEEEtranS.bst",
+                      "bytes":  305669,
+                      "sha256":  "242D27D7C13113953D1FE8471C8CE0BEB16FE5F8454251373DC3AA7A3D299D34"
+                  },
+                  {
+                      "path":  "shared/vendor/ieee-tbiom/IEEEtranSA.bst",
+                      "bytes":  63175,
+                      "sha256":  "E3EF2ED08A15F40E4AAAE253FD94AA0768E6C98FE5F2B01BDAACA0E9111AC505"
+                  },
+                  {
+                      "path":  "shared/vendor/ieee-tbiom/IEEEtranSN.bst",
+                      "bytes":  62786,
+                      "sha256":  "DBC06025913688CB0B7BAE081E60347023AC30A47C390CF501DB14C0B0FC7FAD"
+                  },
+                  {
+                      "path":  "shared/vendor/ieee-tbiom/README",
+                      "bytes":  671626,
+                      "sha256":  "462B4D99A973A5433FFA42DE4D96E25C90E87FC44C2EBE598270AF8CFD932922"
+                  },
+                  {
+                      "path":  "shared/vendor/ieee-tbiom/README (1)",
+                      "bytes":  65396,
+                      "sha256":  "081E0F526C7B6A81801073F2110BEFFCCFFF3AF1F2AF511EABCF8F5275D86C07"
+                  },
+                  {
+                      "path":  "shared/vendor/ieee-tbiom/Transactions-instructions-only.pdf",
+                      "bytes":  5601,
+                      "sha256":  "7A7EE7726B193C5498C15528158390FDBAC3EE47EF20F0FD46CE4C13437AE6B4"
+                  },
+                  {
+                      "path":  "shared/vendor/ieee-tnnls/bare_jrnl_new_sample4.pdf",
+                      "bytes":  235172,
+                      "sha256":  "30C9326F0F9E3A65F62D87C748ADD8C8C7600CC0CC13E44D4F05098C669F64C5"
+                  },
+                  {
+                      "path":  "shared/vendor/ieee-tnnls/bare_jrnl_new_sample4.tex",
+                      "bytes":  26316,
+                      "sha256":  "A1225C6DDB0C828596FAD8285D4344A654E1597D62E757D0109B07E4F579E4FC"
+                  },
+                  {
+                      "path":  "shared/vendor/ieee-tnnls/fig1.png",
+                      "bytes":  37986,
+                      "sha256":  "966FA8E10ADB05F5BC7BC32E6DEBC68BE14E2C4CB5C7A6784CAC4324472D6C8E"
+                  },
+                  {
+                      "path":  "shared/vendor/ieee-tnnls/IEEEtran.cls",
+                      "bytes":  288451,
+                      "sha256":  "B0EB3567B81AEC7FE98144A3AD283EEAC2D31035BB19E0D9DCBA7DA190F18D9D"
+                  },
+                  {
+                      "path":  "shared/vendor/ieee-tnnls/New_IEEEtran_how-to.pdf",
+                      "bytes":  252730,
+                      "sha256":  "3AD40A6F9F6B8AC10BAA9DCD3CDA9D6E83DAE8577D950C09FA73A5D97146FF43"
+                  },
+                  {
+                      "path":  "shared/vendor/ieee-tnnls/New_IEEEtran_how-to.tex",
+                      "bytes":  33827,
+                      "sha256":  "417B40378EC1C1124918F000EAB2F9A27F9CC37D576EF17B77D78347E00C0CD3"
+                  },
+                  {
+                      "path":  "shared/vendor/neiro-miet/example.docx",
+                      "bytes":  70962,
+                      "sha256":  "6EEEDD924B8E84BF956C8291FD076E3B2395CF09900E14E59A6F0FDD934E20D8"
+                  },
+                  {
+                      "path":  "shared/vendor/neiro-miet/rule.docx",
+                      "bytes":  67936,
+                      "sha256":  "5B389688736388EA32EB70E9A959ED29598E23A5545D1DB91128C5E3FCAF030C"
+                  }
+              ]
+}

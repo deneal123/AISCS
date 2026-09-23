@@ -1,0 +1,176 @@
+\relax 
+\providecommand \babel@aux [2]{\global \let \babel@toc \@gobbletwo }
+\@nameuse{bbl@beforestart}
+\catcode `"\active 
+\babel@aux{russian}{}
+\@writefile{toc}{\contentsline {section}{\numberline {I}Введение}{1}{}\protected@file@percent }
+\newlabel{sec:intro}{{I}{1}{}{section.1}{}}
+\citation{wang2018oecnn}
+\citation{wang2019dal}
+\citation{huang2021mtlface}
+\citation{chen2014cacd}
+\citation{ricanek2006morph}
+\citation{moschoglou2017agedb}
+\citation{panis2016fgnet}
+\citation{wang2024cacon}
+\citation{wang2025ordcon}
+\citation{yao2024synthageing}
+\citation{chen2020simclr}
+\citation{wang2018oecnn}
+\citation{wang2019dal}
+\citation{huang2021mtlface}
+\citation{wang2024cacon}
+\citation{yao2024synthageing}
+\citation{wang2025ordcon}
+\citation{zheng2017calfw}
+\citation{huang2007lfw}
+\citation{deng2020retinaface}
+\citation{gebru2021datasheets}
+\@writefile{toc}{\contentsline {section}{\numberline {II}Связанные работы и позиционирование}{2}{}\protected@file@percent }
+\newlabel{sec:related}{{II}{2}{}{section.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {III}Данные: «естественно заякоренные» longitudinal-пары}{2}{}\protected@file@percent }
+\newlabel{sec:data}{{III}{2}{}{section.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-A}}Извлечение возраста}{2}{}\protected@file@percent }
+\newlabel{sec:data-age}{{\mbox  {III-A}}{2}{}{subsection.3.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-B}}Личности и leakage-safe сплит}{2}{}\protected@file@percent }
+\newlabel{sec:data-persons}{{\mbox  {III-B}}{2}{}{subsection.3.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-C}}Аудит автоматической супервизии}{2}{}\protected@file@percent }
+\newlabel{sec:data-audit}{{\mbox  {III-C}}{2}{}{subsection.3.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-D}}Конвейер курирования и его главная находка}{2}{}\protected@file@percent }
+\newlabel{sec:data-curation}{{\mbox  {III-D}}{2}{}{subsection.3.4}{}}
+\citation{schroff2015facenet}
+\@writefile{lot}{\contentsline {table}{\numberline {I}{\ignorespaces Позиционирование относительно предшественников.}}{3}{}\protected@file@percent }
+\newlabel{tab:positioning}{{I}{3}{}{table.1}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {II}{\ignorespaces Масштаб датасета (сырой mining) и после курирования (разд.~\ref {sec:data-curation}).}}{3}{}\protected@file@percent }
+\newlabel{tab:scale}{{II}{3}{}{table.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {III}{\ignorespaces Аудит извлечения возраста: LLM против regex (33\,697 постов с подписью).}}{3}{}\protected@file@percent }
+\newlabel{tab:age}{{III}{3}{}{table.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {IV}{\ignorespaces Малая ручная валидация (один аннотатор; sanity-check, \emph  {не} сертифицированный аудит --- без $\kappa $). Выборка из очищенного корпуса; не использовалась для подбора порогов или правил фильтрации.}}{3}{}\protected@file@percent }
+\newlabel{tab:humanval}{{IV}{3}{}{table.4}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {V}{\ignorespaces LLM-классификация целостности групп (33\,697 постов).}}{3}{}\protected@file@percent }
+\newlabel{tab:integrity}{{V}{3}{}{table.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-E}}Карточка датасета (кратко)}{3}{}\protected@file@percent }
+\newlabel{sec:data-datasheet}{{\mbox  {III-E}}{3}{}{subsection.3.5}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {VI}{\ignorespaces Чувствительность к порогу дедупа: только удаление near-duplicate, на до-курационных группах (отдельный prune целостности убирает ещё ${\approx }500$ позитивов до headline-значения 31\,865). Стабильно на 0.93--0.97.}}{3}{}\protected@file@percent }
+\newlabel{tab:dedupsens}{{VI}{3}{}{table.6}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {IV}Метод, протокол и статистика}{3}{}\protected@file@percent }
+\newlabel{sec:method}{{IV}{3}{}{section.4}{}}
+\citation{deng2019arcface}
+\citation{kim2022adaface}
+\citation{delong1988}
+\citation{zoss2022fran}
+\citation{yao2024synthageing}
+\@writefile{toc}{\contentsline {section}{\numberline {V}Результаты}{4}{}\protected@file@percent }
+\newlabel{sec:results}{{V}{4}{}{section.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-A}}Главный эффект и абляция источника супервизии}{4}{}\protected@file@percent }
+\newlabel{sec:res-main}{{\mbox  {V-A}}{4}{}{subsection.5.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-B}}Реальные пары превосходят синтетическое старение}{4}{}\protected@file@percent }
+\newlabel{sec:res-synth}{{\mbox  {V-B}}{4}{}{subsection.5.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {VII}{\ignorespaces Главный результат: слабый FaceNet frozen против $+$pairs, три сида, очищенные данные. Прирост до чистки --- для сравнения.}}{5}{}\protected@file@percent }
+\newlabel{tab:main}{{VII}{5}{}{table.7}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {VIII}{\ignorespaces Операционные точки и 95\% bootstrap-CI (FaceNet frozen vs.\ $+$pairs, сид 42). Все значения --- ROC-AUC; LFW показан как ROC-AUC для согласованности (его 10-кратная точность --- в Таблице~\ref {tab:main}). Внешние CI --- pair-level; внутренний тест дополнительно использует identity-level bootstrap (см.\ текст).}}{5}{}\protected@file@percent }
+\newlabel{tab:stats}{{VIII}{5}{}{table.8}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {IX}{\ignorespaces Реальные против синтетических позитивов (FaceNet, очищенные данные). FRAN-gm согласует синтетический возрастной разрыв с реальным распределением (медиана 9 лет); более грубый домен-прокси даёт 0.761 / 0.594.}}{5}{}\protected@file@percent }
+\newlabel{tab:synth}{{IX}{5}{}{table.9}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-C}}Кривая headroom и режим сильных backbone}{5}{}\protected@file@percent }
+\newlabel{sec:res-headroom}{{\mbox  {V-C}}{5}{}{subsection.5.3}{}}
+\citation{deng2019arcface}
+\citation{deng2020subcenter}
+\@writefile{lot}{\contentsline {table}{\numberline {X}{\ignorespaces Похожие импостеры ломают современное распознавание лиц (25$+$ ROC-AUC; rank --- ранг импостера по независимому майнеру). \emph  {Сверху:} замороженные распознаватели на \emph  {полном} наборе 25$+$ ($n_{\text  {pos}}\!=\!1208$, $n_{\text  {neg}}\!=\!31\,590$) --- это корректно, т.к.\ ни одна замороженная модель не видела наших данных. \emph  {Снизу:} эффект нашей супервизии, неизбежно только на тесте ($n_{\text  {pos}}\!=\!141$, $n_{\text  {neg}}\!=\!4762$). Блоки используют разные пулы импостеров и \emph  {не} сравнимы между собой: сложность rank-$k$ растёт с размером пула.}}{6}{}\protected@file@percent }
+\newlabel{tab:lookalike}{{X}{6}{}{table.10}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Кривая headroom: прирост от $+$pairs на FG-NET large-gap монотонно убывает с усилением frozen-backbone, пересекая ноль для сильных насыщенных моделей.}}{6}{}\protected@file@percent }
+\newlabel{fig:headroom}{{1}{6}{}{figure.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-D}}Закон масштабирования данных}{6}{}\protected@file@percent }
+\newlabel{sec:res-scaling}{{\mbox  {V-D}}{6}{}{subsection.5.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Закон масштабирования: внешний (FG-NET large-gap) и внутренний (our.25+) ROC-AUC против числа обучающих личностей (лог-шкала). Около 96\% прироста достигается на 10\% личностей; затенённые полосы --- $\pm $1 std по трём сидам, пунктир --- frozen-базлайны.}}{6}{}\protected@file@percent }
+\newlabel{fig:scaling}{{2}{6}{}{figure.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-E}}Механизм --- возрастной обходной признак}{6}{}\protected@file@percent }
+\newlabel{sec:res-shortcut}{{\mbox  {V-E}}{6}{}{subsection.5.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-F}}Сравнение целевых функций: обучение SOTA-цели на наших данных}{6}{}\protected@file@percent }
+\newlabel{sec:res-objective}{{\mbox  {V-F}}{6}{}{subsection.5.6}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {XI}{\ignorespaces Headroom: FG-NET large-gap по силе backbone (очищенные данные, lr 3e-5).}}{7}{}\protected@file@percent }
+\newlabel{tab:headroom}{{XI}{7}{}{table.11}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {XII}{\ignorespaces Закон масштабирования (FaceNet, очищенные; val/test фиксированы; среднее $\pm $ std по трём сидам).}}{7}{}\protected@file@percent }
+\newlabel{tab:scaling}{{XII}{7}{}{table.12}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Возрастной обходной признак. На identity-only тесте (age-matched негативы) frozen падает почти до уровня случайного угадывания; дообучение на наших парах восстанавливает различение по личности.}}{7}{}\protected@file@percent }
+\newlabel{fig:shortcut}{{3}{7}{}{figure.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {XIII}{\ignorespaces Линейный probe age-leakage (очищенные данные; случайность $=$ 0.25).}}{7}{}\protected@file@percent }
+\newlabel{tab:leakage}{{XIII}{7}{}{table.13}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Сравнение целевых функций: контрастив, ArcFace и CosFace совпадают на кросс-возрастном переносе; SphereFace (труднее всего оптимизировать, без $\lambda $-annealing) отстаёт. ArcFace/CosFace чуть меньше забывают на лёгких бенчмарках.}}{7}{}\protected@file@percent }
+\newlabel{fig:sota}{{4}{7}{}{figure.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-G}}Аудит по кажущимся стратам}{7}{}\protected@file@percent }
+\newlabel{sec:res-fairness}{{\mbox  {V-G}}{7}{}{subsection.5.7}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {XIV}{\ignorespaces Сравнение целевых функций (FaceNet, очищенные данные): контрастив, ArcFace и CosFace совпадают на primary endpoint (FG-NET large-gap); SphereFace (без $\lambda $-annealing) отстаёт на разреженных few-shot личностях.}}{8}{}\protected@file@percent }
+\newlabel{tab:objective}{{XIV}{8}{}{table.14}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Аудит по кажущимся стратам: frozen против $+$pairs ROC-AUC по стратам кажущихся пола/возраста. Все страты улучшаются; максимальный прирост --- у младшей группы (0--17), где frozen слабее всего. Усы --- 95\% парный bootstrap-CI прироста, $n$ --- число позитивных пар на страту (у разрежённой страты 45+, $n{=}153$, интервал соответственно широк).}}{8}{}\protected@file@percent }
+\newlabel{fig:fairness}{{5}{8}{}{figure.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-H}}Перенос между источниками}{8}{}\protected@file@percent }
+\newlabel{sec:res-cross}{{\mbox  {V-H}}{8}{}{subsection.5.8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-I}}Перенос между платформами (независимый не-VK источник)}{8}{}\protected@file@percent }
+\newlabel{sec:res-crossplatform}{{\mbox  {V-I}}{8}{}{subsection.5.9}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-J}}Калибровка}{8}{}\protected@file@percent }
+\newlabel{sec:res-calib}{{\mbox  {V-J}}{8}{}{subsection.5.10}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-K}}Disentanglement}{8}{}\protected@file@percent }
+\newlabel{sec:res-disentangle}{{\mbox  {V-K}}{8}{}{subsection.5.11}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {XV}{\ignorespaces Кажущиеся страты пол/возраст (FaceNet, очищенные; 95\% парный bootstrap-CI прироста).}}{9}{}\protected@file@percent }
+\newlabel{tab:strata}{{XV}{9}{}{table.15}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Внешняя генерализация. Прирост $+$pairs над frozen (с 95\% CI) держится на трёх независимых оценках --- FG-NET large-gap, child$\leftrightarrow $adult подмножество FG-NET и кросс-платформенный Reddit --- каждая заметно выше случайности. Прирост максимален на in-protocol FG-NET и меньше (но положителен) на более шумном кросс-платформенном Reddit.}}{9}{}\protected@file@percent }
+\newlabel{fig:external}{{6}{9}{}{figure.6}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {XVI}{\ignorespaces Перенос между платформами: VK-обученная модель на независимом Reddit (не-VK) then/now-тесте (frozen против $+$pairs, обучение только на VK; 396 постов $\rightarrow $ 1\,575 поз.\ пар после фильтра мульти-человек-коллажей).}}{9}{}\protected@file@percent }
+\newlabel{tab:crossplatform}{{XVI}{9}{}{table.16}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-L}}Майнинг hard-негативов}{9}{}\protected@file@percent }
+\newlabel{sec:res-hardneg}{{\mbox  {V-L}}{9}{}{subsection.5.12}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {XVII}{\ignorespaces Кросс-источниковый перенос, оба направления. VK$\to $Reddit --- основной кросс-платформенный тест; Reddit$\to $VK --- малый 220-персонный \emph  {pilot} в поддержку неспецифичности источника, не headline-заявка (один прогон).}}{9}{}\protected@file@percent }
+\newlabel{tab:crosssource}{{XVII}{9}{}{table.17}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {XVIII}{\ignorespaces Майнинг hard-негативов (FaceNet, очищенные данные; внешние бенчмарки). $+$hard-нег --- среднее $\pm $ std по трём сидам; frozen и $+$pairs как в Таблице~\ref {tab:main}.}}{9}{}\protected@file@percent }
+\newlabel{tab:hardneg}{{XVIII}{9}{}{table.18}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {VI}Обсуждение}{9}{}\protected@file@percent }
+\newlabel{sec:discussion}{{VI}{9}{}{section.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-A}}Границы утверждений}{10}{}\protected@file@percent }
+\newlabel{sec:scope}{{\mbox  {VI-A}}{10}{}{subsection.6.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {VII}Ограничения}{10}{}\protected@file@percent }
+\newlabel{sec:limitations}{{VII}{10}{}{section.7}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {VIII}Этика, правовая основа и data governance}{10}{}\protected@file@percent }
+\newlabel{sec:ethics}{{VIII}{10}{}{section.8}{}}
+\citation{gdpr2016}
+\citation{gebru2021datasheets}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VIII-A}}Этическое одобрение и правовая основа}{11}{}\protected@file@percent }
+\newlabel{sec:eth-legal}{{\mbox  {VIII-A}}{11}{}{subsection.8.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VIII-B}}Обезличивание и политика релиза}{11}{}\protected@file@percent }
+\newlabel{sec:eth-deid}{{\mbox  {VIII-B}}{11}{}{subsection.8.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VIII-C}}DPIA и минимизация}{11}{}\protected@file@percent }
+\newlabel{sec:eth-dpia}{{\mbox  {VIII-C}}{11}{}{subsection.8.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VIII-D}}Несовершеннолетние}{11}{}\protected@file@percent }
+\newlabel{sec:eth-minors}{{\mbox  {VIII-D}}{11}{}{subsection.8.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VIII-E}}Права субъектов}{11}{}\protected@file@percent }
+\newlabel{sec:eth-rights}{{\mbox  {VIII-E}}{11}{}{subsection.8.5}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {IX}Воспроизводимость}{11}{}\protected@file@percent }
+\newlabel{sec:repro}{{IX}{11}{}{section.9}{}}
+\bibstyle{IEEEtran}
+\bibdata{../../../shared/refs}
+\bibcite{wang2018oecnn}{1}
+\bibcite{wang2019dal}{2}
+\bibcite{huang2021mtlface}{3}
+\bibcite{chen2014cacd}{4}
+\bibcite{ricanek2006morph}{5}
+\bibcite{moschoglou2017agedb}{6}
+\bibcite{panis2016fgnet}{7}
+\bibcite{wang2024cacon}{8}
+\bibcite{wang2025ordcon}{9}
+\bibcite{yao2024synthageing}{10}
+\bibcite{chen2020simclr}{11}
+\bibcite{zheng2017calfw}{12}
+\bibcite{huang2007lfw}{13}
+\bibcite{deng2020retinaface}{14}
+\bibcite{gebru2021datasheets}{15}
+\bibcite{schroff2015facenet}{16}
+\bibcite{deng2019arcface}{17}
+\bibcite{kim2022adaface}{18}
+\bibcite{delong1988}{19}
+\bibcite{zoss2022fran}{20}
+\bibcite{deng2020subcenter}{21}
+\bibcite{gdpr2016}{22}
+\@writefile{toc}{\contentsline {section}{\numberline {X}Заключение и дальнейшая работа}{12}{}\protected@file@percent }
+\newlabel{sec:conclusion}{{X}{12}{}{section.10}{}}
+\@writefile{toc}{\contentsline {section}{{\cyrillictext  \CYRS \cyrp \cyri \cyrs \cyro \cyrk \ \cyrl \cyri \cyrt \cyre \cyrr \cyra \cyrt \cyru \cyrr \cyrery }}{12}{}\protected@file@percent }
+\gdef \@abspage@last{13}
