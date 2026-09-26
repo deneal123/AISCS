@@ -1,0 +1,1354 @@
+{
+  "meta": {
+    "schema_version": "1.0.0",
+    "created_at": "2026-09-23",
+    "cutoff": "2026-09-24",
+    "gate": "G0_REVISE",
+    "ranking_policy": "prohibited",
+    "status": "unranked_catalogue_first_cycle",
+    "generated_at": "2026-09-24"
+  },
+  "morphological_matrix": {
+    "axes": {
+      "drosophila_model": [
+        "larva",
+        "adult",
+        "ventral_nerve_cord",
+        "brain_and_cord",
+        "restricted_nociceptive_circuit",
+        "embodied_simulation"
+      ],
+      "observation": [
+        "spikes",
+        "calcium_activity",
+        "population_dynamics",
+        "kinematics",
+        "protective_behavior"
+      ],
+      "perturbation": [
+        "thermal",
+        "mechanical",
+        "chemical",
+        "optogenetic",
+        "electrical"
+      ],
+      "bridge_mechanism": [
+        "representation_transfer",
+        "causal_invariants",
+        "system_identification",
+        "domain_adaptation",
+        "hybrid_digital_twin"
+      ],
+      "scs_task": [
+        "ecap_forward_model",
+        "artifact_removal",
+        "recruitment_estimation",
+        "parameter_selection",
+        "closed_loop_control",
+        "clinical_response_prediction"
+      ],
+      "validation_level": [
+        "drosophila_simulation",
+        "experimental_fly_data",
+        "physical_measurement_model",
+        "human_ecap",
+        "clinical_scs_outcome"
+      ]
+    },
+    "raw_combinations_count": 22500,
+    "enumeration_policy": "The Cartesian space is represented by equivalence classes after semantic and physical constraints; no surviving class is ranked.",
+    "equivalence_rules": [
+      "Stimulus modalities that use the same state-transition and readout mechanism share one class.",
+      "Observation variants sharing one latent-state estimator share one class.",
+      "Larval and adult implementations remain separate when circuit topology changes the mechanism."
+    ],
+    "exclusion_rules": [
+      "Exclude any chain that maps a fly signal directly to human ECAP without a physical observation model.",
+      "Exclude any chain that treats ECAP as subjective pain.",
+      "Exclude clinical-response claims without patient-linked longitudinal outcomes.",
+      "Exclude combinations lacking a falsifiable human-only and randomized-control comparison."
+    ],
+    "represented_equivalence_classes": 15
+  },
+  "variants": [
+    {
+      "id": "NV-001",
+      "title": "Connectome-pretrained ECAP recruitment representation",
+      "problem": "Existing Drosophila connectome models and human SCS/ECAP models are separate; the transfer object and measurement operator are not jointly formalized.",
+      "mechanism": "representation_transfer",
+      "bridge": "Drosophila connectome-constrained nociceptive dynamics are encoded as an abstract state; a separate physical ECAP observation model maps human neural recruitment, after which the representation is tested for the SCS task recruitment_estimation.",
+      "expected_new_result": "A reproducible two-model method and falsifiable experiment showing whether the Drosophila-derived constraint contributes beyond human-only and degree-preserving rewired-connectome controls with shared initialization.",
+      "axes": {
+        "drosophila_model": [
+          "restricted_nociceptive_circuit",
+          "brain_and_cord"
+        ],
+        "observation": [
+          "spikes",
+          "population_dynamics"
+        ],
+        "perturbation": [
+          "mechanical",
+          "electrical"
+        ],
+        "bridge_mechanism": [
+          "representation_transfer"
+        ],
+        "scs_task": [
+          "recruitment_estimation"
+        ],
+        "validation_level": [
+          "drosophila_simulation",
+          "experimental_fly_data",
+          "physical_measurement_model",
+          "human_ecap"
+        ]
+      },
+      "closest_analogue_refs": [
+        "S149",
+        "S738",
+        "S739",
+        "S105",
+        "S159",
+        "S162",
+        "S741",
+        "S743",
+        "S744",
+        "S746",
+        "S747",
+        "S007",
+        "S070",
+        "S088",
+        "S005",
+        "S026",
+        "S164",
+        "S148",
+        "S098",
+        "S099",
+        "S144",
+        "S240",
+        "S241",
+        "S245",
+        "S748"
+      ],
+      "difference_from_analogues": "Patent WO2025224687A1 already discloses simulated ECAP training data, growth-curve labeling and encoder-decoder artifact-removal pretraining. The remaining proposed distinction is the explicitly tested contribution of connectome-constrained Drosophila dynamics plus a separate physical ECAP operator; none of the cited analogues establishes that complete chain. S747 additionally couples rat neural-response classification to adaptive SCS, but has no Drosophila connectome, physical ECAP operator, held-out-animal test or human validation. S007 and S070 provide human experimental-pain cross-subject baselines, while S088 is unresolved cross-dataset prior art; none implements a Drosophila-connectome-to-physical-ECAP-to-SCS chain. S026 supports only a brain-independent fly protective-behavior observable, while S005 and S164 document heterogeneous human pain baselines and generalization gaps; none supplies an ECAP formation operator or SCS validation bridge. S148 independently requires non-interchangeable subjective, behavioral, functional and mechanistic layers, reinforcing that a fly observable or ECAP recruitment signal cannot be relabeled as subjective pain. Patent review adds ML SCS-parameter search (S098), ECAP-guided functional control (S099), federated adaptive neural interfaces (S144), population-relative multimodal control (S240), explicit body-channel/ECAP separation (S241), and a wearable multimodal stimulation loop (S245); none combines Drosophila connectome dynamics with a validated human ECAP/SCS transfer experiment. The open 2026 ModMix extension (S748) strengthens prior art for physiological-modality augmentation under limited data, but it does not provide Drosophila-derived representations, a physical ECAP operator, or an SCS task.",
+      "required_data": [
+        "Drosophila connectome and activity/behavior comparator",
+        "human ECAP recordings with stimulation geometry"
+      ],
+      "falsification_experiment": "On predefined subject-level splits, compare the complete model with human-only, degree-preserving rewired-connectome ensemble with shared initialization, shuffled-dynamics, and no-physical-operator controls; reject the candidate if it gives no prespecified gain or worsens calibration.",
+      "permitted_conclusion": "Methodological transfer for the tested ECAP/SCS task only; no claim that Drosophila experiences human pain or directly models the human spinal cord.",
+      "prior_art_outcome": "partial_analogues_only",
+      "prior_art_cutoff": "2026-09-24",
+      "search_trace_ids": [
+        "NS-01",
+        "NS-02",
+        "NS-03",
+        "NS-06",
+        "NS-07",
+        "NS-09",
+        "NS-16",
+        "NS-05",
+        "NS-13",
+        "NS-12",
+        "NS-17",
+        "NS-10"
+      ],
+      "open_condition": "A final no-direct-analogue statement remains blocked until all open search streams and citation snowballing are complete."
+    },
+    {
+      "id": "NV-002",
+      "title": "Causal perturbation invariants for ECAP recruitment",
+      "problem": "Existing Drosophila connectome models and human SCS/ECAP models are separate; the transfer object and measurement operator are not jointly formalized.",
+      "mechanism": "causal_invariants",
+      "bridge": "Drosophila connectome-constrained nociceptive dynamics are encoded as an abstract state; a separate physical ECAP observation model maps human neural recruitment, after which the representation is tested for the SCS task recruitment_estimation.",
+      "expected_new_result": "A reproducible two-model method and falsifiable experiment showing whether the Drosophila-derived constraint contributes beyond human-only and degree-preserving rewired-connectome controls with shared initialization.",
+      "axes": {
+        "drosophila_model": [
+          "restricted_nociceptive_circuit",
+          "brain_and_cord"
+        ],
+        "observation": [
+          "spikes",
+          "population_dynamics"
+        ],
+        "perturbation": [
+          "mechanical",
+          "electrical"
+        ],
+        "bridge_mechanism": [
+          "causal_invariants"
+        ],
+        "scs_task": [
+          "recruitment_estimation"
+        ],
+        "validation_level": [
+          "drosophila_simulation",
+          "experimental_fly_data",
+          "physical_measurement_model",
+          "human_ecap"
+        ]
+      },
+      "closest_analogue_refs": [
+        "S149",
+        "S738",
+        "S739",
+        "S105",
+        "S159",
+        "S162",
+        "S741",
+        "S743",
+        "S744",
+        "S746",
+        "S747",
+        "S007",
+        "S070",
+        "S088",
+        "S005",
+        "S026",
+        "S164",
+        "S148",
+        "S098",
+        "S099",
+        "S144",
+        "S240",
+        "S241",
+        "S245",
+        "S748"
+      ],
+      "difference_from_analogues": "Patent WO2025224687A1 already discloses simulated ECAP training data, growth-curve labeling and encoder-decoder artifact-removal pretraining. The remaining proposed distinction is the explicitly tested contribution of connectome-constrained Drosophila dynamics plus a separate physical ECAP operator; none of the cited analogues establishes that complete chain. S747 additionally couples rat neural-response classification to adaptive SCS, but has no Drosophila connectome, physical ECAP operator, held-out-animal test or human validation. S007 and S070 provide human experimental-pain cross-subject baselines, while S088 is unresolved cross-dataset prior art; none implements a Drosophila-connectome-to-physical-ECAP-to-SCS chain. S026 supports only a brain-independent fly protective-behavior observable, while S005 and S164 document heterogeneous human pain baselines and generalization gaps; none supplies an ECAP formation operator or SCS validation bridge. S148 independently requires non-interchangeable subjective, behavioral, functional and mechanistic layers, reinforcing that a fly observable or ECAP recruitment signal cannot be relabeled as subjective pain. Patent review adds ML SCS-parameter search (S098), ECAP-guided functional control (S099), federated adaptive neural interfaces (S144), population-relative multimodal control (S240), explicit body-channel/ECAP separation (S241), and a wearable multimodal stimulation loop (S245); none combines Drosophila connectome dynamics with a validated human ECAP/SCS transfer experiment. The open 2026 ModMix extension (S748) strengthens prior art for physiological-modality augmentation under limited data, but it does not provide Drosophila-derived representations, a physical ECAP operator, or an SCS task.",
+      "required_data": [
+        "Drosophila connectome and activity/behavior comparator",
+        "human ECAP recordings with stimulation geometry"
+      ],
+      "falsification_experiment": "On predefined subject-level splits, compare the complete model with human-only, degree-preserving rewired-connectome ensemble with shared initialization, shuffled-dynamics, and no-physical-operator controls; reject the candidate if it gives no prespecified gain or worsens calibration.",
+      "permitted_conclusion": "Methodological transfer for the tested ECAP/SCS task only; no claim that Drosophila experiences human pain or directly models the human spinal cord.",
+      "prior_art_outcome": "partial_analogues_only",
+      "prior_art_cutoff": "2026-09-24",
+      "search_trace_ids": [
+        "NS-01",
+        "NS-02",
+        "NS-03",
+        "NS-06",
+        "NS-07",
+        "NS-09",
+        "NS-16",
+        "NS-05",
+        "NS-13",
+        "NS-12",
+        "NS-17",
+        "NS-10"
+      ],
+      "open_condition": "A final no-direct-analogue statement remains blocked until all open search streams and citation snowballing are complete."
+    },
+    {
+      "id": "NV-003",
+      "title": "System identification from fly dynamics to an ECAP forward model",
+      "problem": "Existing Drosophila connectome models and human SCS/ECAP models are separate; the transfer object and measurement operator are not jointly formalized.",
+      "mechanism": "system_identification",
+      "bridge": "Drosophila connectome-constrained nociceptive dynamics are encoded as an abstract state; a separate physical ECAP observation model maps human neural recruitment, after which the representation is tested for the SCS task ecap_forward_model.",
+      "expected_new_result": "A reproducible two-model method and falsifiable experiment showing whether the Drosophila-derived constraint contributes beyond human-only and degree-preserving rewired-connectome controls with shared initialization.",
+      "axes": {
+        "drosophila_model": [
+          "restricted_nociceptive_circuit",
+          "brain_and_cord"
+        ],
+        "observation": [
+          "spikes",
+          "population_dynamics"
+        ],
+        "perturbation": [
+          "mechanical",
+          "electrical"
+        ],
+        "bridge_mechanism": [
+          "system_identification"
+        ],
+        "scs_task": [
+          "ecap_forward_model"
+        ],
+        "validation_level": [
+          "drosophila_simulation",
+          "experimental_fly_data",
+          "physical_measurement_model",
+          "human_ecap"
+        ]
+      },
+      "closest_analogue_refs": [
+        "S149",
+        "S738",
+        "S739",
+        "S105",
+        "S159",
+        "S162",
+        "S741",
+        "S743",
+        "S744",
+        "S746",
+        "S747",
+        "S007",
+        "S070",
+        "S088",
+        "S005",
+        "S026",
+        "S164",
+        "S148",
+        "S098",
+        "S099",
+        "S144",
+        "S240",
+        "S241",
+        "S245",
+        "S748"
+      ],
+      "difference_from_analogues": "Patent WO2025224687A1 already discloses simulated ECAP training data, growth-curve labeling and encoder-decoder artifact-removal pretraining. The remaining proposed distinction is the explicitly tested contribution of connectome-constrained Drosophila dynamics plus a separate physical ECAP operator; none of the cited analogues establishes that complete chain. S747 additionally couples rat neural-response classification to adaptive SCS, but has no Drosophila connectome, physical ECAP operator, held-out-animal test or human validation. S007 and S070 provide human experimental-pain cross-subject baselines, while S088 is unresolved cross-dataset prior art; none implements a Drosophila-connectome-to-physical-ECAP-to-SCS chain. S026 supports only a brain-independent fly protective-behavior observable, while S005 and S164 document heterogeneous human pain baselines and generalization gaps; none supplies an ECAP formation operator or SCS validation bridge. S148 independently requires non-interchangeable subjective, behavioral, functional and mechanistic layers, reinforcing that a fly observable or ECAP recruitment signal cannot be relabeled as subjective pain. Patent review adds ML SCS-parameter search (S098), ECAP-guided functional control (S099), federated adaptive neural interfaces (S144), population-relative multimodal control (S240), explicit body-channel/ECAP separation (S241), and a wearable multimodal stimulation loop (S245); none combines Drosophila connectome dynamics with a validated human ECAP/SCS transfer experiment. The open 2026 ModMix extension (S748) strengthens prior art for physiological-modality augmentation under limited data, but it does not provide Drosophila-derived representations, a physical ECAP operator, or an SCS task.",
+      "required_data": [
+        "Drosophila connectome and activity/behavior comparator",
+        "human ECAP recordings with stimulation geometry"
+      ],
+      "falsification_experiment": "On predefined subject-level splits, compare the complete model with human-only, degree-preserving rewired-connectome ensemble with shared initialization, shuffled-dynamics, and no-physical-operator controls; reject the candidate if it gives no prespecified gain or worsens calibration.",
+      "permitted_conclusion": "Methodological transfer for the tested ECAP/SCS task only; no claim that Drosophila experiences human pain or directly models the human spinal cord.",
+      "prior_art_outcome": "partial_analogues_only",
+      "prior_art_cutoff": "2026-09-24",
+      "search_trace_ids": [
+        "NS-01",
+        "NS-02",
+        "NS-03",
+        "NS-06",
+        "NS-07",
+        "NS-09",
+        "NS-16",
+        "NS-05",
+        "NS-13",
+        "NS-12",
+        "NS-17",
+        "NS-10"
+      ],
+      "open_condition": "A final no-direct-analogue statement remains blocked until all open search streams and citation snowballing are complete."
+    },
+    {
+      "id": "NV-004",
+      "title": "Hybrid connectome and volume-conductor ECAP digital twin",
+      "problem": "Existing Drosophila connectome models and human SCS/ECAP models are separate; the transfer object and measurement operator are not jointly formalized.",
+      "mechanism": "hybrid_digital_twin",
+      "bridge": "Drosophila connectome-constrained nociceptive dynamics are encoded as an abstract state; a separate physical ECAP observation model maps human neural recruitment, after which the representation is tested for the SCS task ecap_forward_model.",
+      "expected_new_result": "A reproducible two-model method and falsifiable experiment showing whether the Drosophila-derived constraint contributes beyond human-only and degree-preserving rewired-connectome controls with shared initialization.",
+      "axes": {
+        "drosophila_model": [
+          "restricted_nociceptive_circuit",
+          "brain_and_cord"
+        ],
+        "observation": [
+          "spikes",
+          "population_dynamics"
+        ],
+        "perturbation": [
+          "mechanical",
+          "electrical"
+        ],
+        "bridge_mechanism": [
+          "hybrid_digital_twin"
+        ],
+        "scs_task": [
+          "ecap_forward_model"
+        ],
+        "validation_level": [
+          "drosophila_simulation",
+          "experimental_fly_data",
+          "physical_measurement_model",
+          "human_ecap"
+        ]
+      },
+      "closest_analogue_refs": [
+        "S149",
+        "S738",
+        "S739",
+        "S105",
+        "S159",
+        "S162",
+        "S741",
+        "S743",
+        "S744",
+        "S746",
+        "S747",
+        "S007",
+        "S070",
+        "S088",
+        "S005",
+        "S026",
+        "S164",
+        "S148",
+        "S098",
+        "S099",
+        "S144",
+        "S240",
+        "S241",
+        "S245",
+        "S748"
+      ],
+      "difference_from_analogues": "Patent WO2025224687A1 already discloses simulated ECAP training data, growth-curve labeling and encoder-decoder artifact-removal pretraining. The remaining proposed distinction is the explicitly tested contribution of connectome-constrained Drosophila dynamics plus a separate physical ECAP operator; none of the cited analogues establishes that complete chain. S747 additionally couples rat neural-response classification to adaptive SCS, but has no Drosophila connectome, physical ECAP operator, held-out-animal test or human validation. S007 and S070 provide human experimental-pain cross-subject baselines, while S088 is unresolved cross-dataset prior art; none implements a Drosophila-connectome-to-physical-ECAP-to-SCS chain. S026 supports only a brain-independent fly protective-behavior observable, while S005 and S164 document heterogeneous human pain baselines and generalization gaps; none supplies an ECAP formation operator or SCS validation bridge. S148 independently requires non-interchangeable subjective, behavioral, functional and mechanistic layers, reinforcing that a fly observable or ECAP recruitment signal cannot be relabeled as subjective pain. Patent review adds ML SCS-parameter search (S098), ECAP-guided functional control (S099), federated adaptive neural interfaces (S144), population-relative multimodal control (S240), explicit body-channel/ECAP separation (S241), and a wearable multimodal stimulation loop (S245); none combines Drosophila connectome dynamics with a validated human ECAP/SCS transfer experiment. The open 2026 ModMix extension (S748) strengthens prior art for physiological-modality augmentation under limited data, but it does not provide Drosophila-derived representations, a physical ECAP operator, or an SCS task.",
+      "required_data": [
+        "Drosophila connectome and activity/behavior comparator",
+        "human ECAP recordings with stimulation geometry"
+      ],
+      "falsification_experiment": "On predefined subject-level splits, compare the complete model with human-only, degree-preserving rewired-connectome ensemble with shared initialization, shuffled-dynamics, and no-physical-operator controls; reject the candidate if it gives no prespecified gain or worsens calibration.",
+      "permitted_conclusion": "Methodological transfer for the tested ECAP/SCS task only; no claim that Drosophila experiences human pain or directly models the human spinal cord.",
+      "prior_art_outcome": "partial_analogues_only",
+      "prior_art_cutoff": "2026-09-24",
+      "search_trace_ids": [
+        "NS-01",
+        "NS-02",
+        "NS-03",
+        "NS-06",
+        "NS-07",
+        "NS-09",
+        "NS-16",
+        "NS-05",
+        "NS-13",
+        "NS-12",
+        "NS-17",
+        "NS-10"
+      ],
+      "open_condition": "A final no-direct-analogue statement remains blocked until all open search streams and citation snowballing are complete."
+    },
+    {
+      "id": "NV-005",
+      "title": "Domain-randomized transfer for patient-specific ECAP calibration",
+      "problem": "Existing Drosophila connectome models and human SCS/ECAP models are separate; the transfer object and measurement operator are not jointly formalized.",
+      "mechanism": "domain_adaptation",
+      "bridge": "Drosophila connectome-constrained nociceptive dynamics are encoded as an abstract state; a separate physical ECAP observation model maps human neural recruitment, after which the representation is tested for the SCS task recruitment_estimation.",
+      "expected_new_result": "A reproducible two-model method and falsifiable experiment showing whether the Drosophila-derived constraint contributes beyond human-only and degree-preserving rewired-connectome controls with shared initialization.",
+      "axes": {
+        "drosophila_model": [
+          "restricted_nociceptive_circuit",
+          "brain_and_cord"
+        ],
+        "observation": [
+          "spikes",
+          "population_dynamics"
+        ],
+        "perturbation": [
+          "mechanical",
+          "electrical"
+        ],
+        "bridge_mechanism": [
+          "domain_adaptation"
+        ],
+        "scs_task": [
+          "recruitment_estimation"
+        ],
+        "validation_level": [
+          "drosophila_simulation",
+          "experimental_fly_data",
+          "physical_measurement_model",
+          "human_ecap"
+        ]
+      },
+      "closest_analogue_refs": [
+        "S149",
+        "S738",
+        "S739",
+        "S105",
+        "S159",
+        "S162",
+        "S741",
+        "S743",
+        "S744",
+        "S746",
+        "S747",
+        "S007",
+        "S070",
+        "S088",
+        "S005",
+        "S026",
+        "S164",
+        "S148",
+        "S098",
+        "S099",
+        "S144",
+        "S240",
+        "S241",
+        "S245",
+        "S748"
+      ],
+      "difference_from_analogues": "Patent WO2025224687A1 already discloses simulated ECAP training data, growth-curve labeling and encoder-decoder artifact-removal pretraining. The remaining proposed distinction is the explicitly tested contribution of connectome-constrained Drosophila dynamics plus a separate physical ECAP operator; none of the cited analogues establishes that complete chain. S747 additionally couples rat neural-response classification to adaptive SCS, but has no Drosophila connectome, physical ECAP operator, held-out-animal test or human validation. S007 and S070 provide human experimental-pain cross-subject baselines, while S088 is unresolved cross-dataset prior art; none implements a Drosophila-connectome-to-physical-ECAP-to-SCS chain. S026 supports only a brain-independent fly protective-behavior observable, while S005 and S164 document heterogeneous human pain baselines and generalization gaps; none supplies an ECAP formation operator or SCS validation bridge. S148 independently requires non-interchangeable subjective, behavioral, functional and mechanistic layers, reinforcing that a fly observable or ECAP recruitment signal cannot be relabeled as subjective pain. Patent review adds ML SCS-parameter search (S098), ECAP-guided functional control (S099), federated adaptive neural interfaces (S144), population-relative multimodal control (S240), explicit body-channel/ECAP separation (S241), and a wearable multimodal stimulation loop (S245); none combines Drosophila connectome dynamics with a validated human ECAP/SCS transfer experiment. The open 2026 ModMix extension (S748) strengthens prior art for physiological-modality augmentation under limited data, but it does not provide Drosophila-derived representations, a physical ECAP operator, or an SCS task.",
+      "required_data": [
+        "Drosophila connectome and activity/behavior comparator",
+        "human ECAP recordings with stimulation geometry"
+      ],
+      "falsification_experiment": "On predefined subject-level splits, compare the complete model with human-only, degree-preserving rewired-connectome ensemble with shared initialization, shuffled-dynamics, and no-physical-operator controls; reject the candidate if it gives no prespecified gain or worsens calibration.",
+      "permitted_conclusion": "Methodological transfer for the tested ECAP/SCS task only; no claim that Drosophila experiences human pain or directly models the human spinal cord.",
+      "prior_art_outcome": "partial_analogues_only",
+      "prior_art_cutoff": "2026-09-24",
+      "search_trace_ids": [
+        "NS-01",
+        "NS-02",
+        "NS-03",
+        "NS-06",
+        "NS-07",
+        "NS-09",
+        "NS-16",
+        "NS-05",
+        "NS-13",
+        "NS-12",
+        "NS-17",
+        "NS-10"
+      ],
+      "open_condition": "A final no-direct-analogue statement remains blocked until all open search streams and citation snowballing are complete."
+    },
+    {
+      "id": "NV-006",
+      "title": "Protective-behavior representation for SCS parameter selection",
+      "problem": "Existing Drosophila connectome models and human SCS/ECAP models are separate; the transfer object and measurement operator are not jointly formalized.",
+      "mechanism": "representation_transfer",
+      "bridge": "Drosophila connectome-constrained nociceptive dynamics are encoded as an abstract state; a separate physical ECAP observation model maps human neural recruitment, after which the representation is tested for the SCS task parameter_selection.",
+      "expected_new_result": "A reproducible two-model method and falsifiable experiment showing whether the Drosophila-derived constraint contributes beyond human-only and degree-preserving rewired-connectome controls with shared initialization.",
+      "axes": {
+        "drosophila_model": [
+          "restricted_nociceptive_circuit",
+          "brain_and_cord"
+        ],
+        "observation": [
+          "spikes",
+          "population_dynamics"
+        ],
+        "perturbation": [
+          "mechanical",
+          "electrical"
+        ],
+        "bridge_mechanism": [
+          "representation_transfer"
+        ],
+        "scs_task": [
+          "parameter_selection"
+        ],
+        "validation_level": [
+          "drosophila_simulation",
+          "experimental_fly_data",
+          "physical_measurement_model",
+          "human_ecap"
+        ]
+      },
+      "closest_analogue_refs": [
+        "S149",
+        "S738",
+        "S739",
+        "S105",
+        "S159",
+        "S162",
+        "S741",
+        "S743",
+        "S744",
+        "S746",
+        "S747",
+        "S007",
+        "S070",
+        "S088",
+        "S005",
+        "S026",
+        "S164",
+        "S148",
+        "S098",
+        "S099",
+        "S144",
+        "S240",
+        "S241",
+        "S245",
+        "S748"
+      ],
+      "difference_from_analogues": "Patent WO2025224687A1 already discloses simulated ECAP training data, growth-curve labeling and encoder-decoder artifact-removal pretraining. The remaining proposed distinction is the explicitly tested contribution of connectome-constrained Drosophila dynamics plus a separate physical ECAP operator; none of the cited analogues establishes that complete chain. S747 additionally couples rat neural-response classification to adaptive SCS, but has no Drosophila connectome, physical ECAP operator, held-out-animal test or human validation. S007 and S070 provide human experimental-pain cross-subject baselines, while S088 is unresolved cross-dataset prior art; none implements a Drosophila-connectome-to-physical-ECAP-to-SCS chain. S026 supports only a brain-independent fly protective-behavior observable, while S005 and S164 document heterogeneous human pain baselines and generalization gaps; none supplies an ECAP formation operator or SCS validation bridge. S148 independently requires non-interchangeable subjective, behavioral, functional and mechanistic layers, reinforcing that a fly observable or ECAP recruitment signal cannot be relabeled as subjective pain. Patent review adds ML SCS-parameter search (S098), ECAP-guided functional control (S099), federated adaptive neural interfaces (S144), population-relative multimodal control (S240), explicit body-channel/ECAP separation (S241), and a wearable multimodal stimulation loop (S245); none combines Drosophila connectome dynamics with a validated human ECAP/SCS transfer experiment. The open 2026 ModMix extension (S748) strengthens prior art for physiological-modality augmentation under limited data, but it does not provide Drosophila-derived representations, a physical ECAP operator, or an SCS task.",
+      "required_data": [
+        "Drosophila connectome and activity/behavior comparator",
+        "human ECAP recordings with stimulation geometry"
+      ],
+      "falsification_experiment": "On predefined subject-level splits, compare the complete model with human-only, degree-preserving rewired-connectome ensemble with shared initialization, shuffled-dynamics, and no-physical-operator controls; reject the candidate if it gives no prespecified gain or worsens calibration.",
+      "permitted_conclusion": "Methodological transfer for the tested ECAP/SCS task only; no claim that Drosophila experiences human pain or directly models the human spinal cord.",
+      "prior_art_outcome": "partial_analogues_only",
+      "prior_art_cutoff": "2026-09-24",
+      "search_trace_ids": [
+        "NS-01",
+        "NS-02",
+        "NS-03",
+        "NS-06",
+        "NS-07",
+        "NS-09",
+        "NS-16",
+        "NS-05",
+        "NS-13",
+        "NS-12",
+        "NS-17",
+        "NS-10"
+      ],
+      "open_condition": "A final no-direct-analogue statement remains blocked until all open search streams and citation snowballing are complete."
+    },
+    {
+      "id": "NV-007",
+      "title": "Connectome-conditioned stimulation-artifact separation",
+      "problem": "Existing Drosophila connectome models and human SCS/ECAP models are separate; the transfer object and measurement operator are not jointly formalized.",
+      "mechanism": "system_identification",
+      "bridge": "Drosophila connectome-constrained nociceptive dynamics are encoded as an abstract state; a separate physical ECAP observation model maps human neural recruitment, after which the representation is tested for the SCS task artifact_removal.",
+      "expected_new_result": "A reproducible two-model method and falsifiable experiment showing whether the Drosophila-derived constraint contributes beyond human-only and degree-preserving rewired-connectome controls with shared initialization.",
+      "axes": {
+        "drosophila_model": [
+          "restricted_nociceptive_circuit",
+          "brain_and_cord"
+        ],
+        "observation": [
+          "spikes",
+          "population_dynamics"
+        ],
+        "perturbation": [
+          "mechanical",
+          "electrical"
+        ],
+        "bridge_mechanism": [
+          "system_identification"
+        ],
+        "scs_task": [
+          "artifact_removal"
+        ],
+        "validation_level": [
+          "drosophila_simulation",
+          "experimental_fly_data",
+          "physical_measurement_model",
+          "human_ecap"
+        ]
+      },
+      "closest_analogue_refs": [
+        "S149",
+        "S738",
+        "S739",
+        "S105",
+        "S159",
+        "S162",
+        "S741",
+        "S743",
+        "S744",
+        "S746",
+        "S747",
+        "S007",
+        "S070",
+        "S088",
+        "S005",
+        "S026",
+        "S164",
+        "S148",
+        "S098",
+        "S099",
+        "S144",
+        "S240",
+        "S241",
+        "S245",
+        "S748"
+      ],
+      "difference_from_analogues": "Patent WO2025224687A1 already discloses simulated ECAP training data, growth-curve labeling and encoder-decoder artifact-removal pretraining. The remaining proposed distinction is the explicitly tested contribution of connectome-constrained Drosophila dynamics plus a separate physical ECAP operator; none of the cited analogues establishes that complete chain. S747 additionally couples rat neural-response classification to adaptive SCS, but has no Drosophila connectome, physical ECAP operator, held-out-animal test or human validation. S007 and S070 provide human experimental-pain cross-subject baselines, while S088 is unresolved cross-dataset prior art; none implements a Drosophila-connectome-to-physical-ECAP-to-SCS chain. S026 supports only a brain-independent fly protective-behavior observable, while S005 and S164 document heterogeneous human pain baselines and generalization gaps; none supplies an ECAP formation operator or SCS validation bridge. S148 independently requires non-interchangeable subjective, behavioral, functional and mechanistic layers, reinforcing that a fly observable or ECAP recruitment signal cannot be relabeled as subjective pain. Patent review adds ML SCS-parameter search (S098), ECAP-guided functional control (S099), federated adaptive neural interfaces (S144), population-relative multimodal control (S240), explicit body-channel/ECAP separation (S241), and a wearable multimodal stimulation loop (S245); none combines Drosophila connectome dynamics with a validated human ECAP/SCS transfer experiment. The open 2026 ModMix extension (S748) strengthens prior art for physiological-modality augmentation under limited data, but it does not provide Drosophila-derived representations, a physical ECAP operator, or an SCS task.",
+      "required_data": [
+        "Drosophila connectome and activity/behavior comparator",
+        "human ECAP recordings with stimulation geometry"
+      ],
+      "falsification_experiment": "On predefined subject-level splits, compare the complete model with human-only, degree-preserving rewired-connectome ensemble with shared initialization, shuffled-dynamics, and no-physical-operator controls; reject the candidate if it gives no prespecified gain or worsens calibration.",
+      "permitted_conclusion": "Methodological transfer for the tested ECAP/SCS task only; no claim that Drosophila experiences human pain or directly models the human spinal cord.",
+      "prior_art_outcome": "partial_analogues_only",
+      "prior_art_cutoff": "2026-09-24",
+      "search_trace_ids": [
+        "NS-01",
+        "NS-02",
+        "NS-03",
+        "NS-06",
+        "NS-07",
+        "NS-09",
+        "NS-16",
+        "NS-05",
+        "NS-13",
+        "NS-12",
+        "NS-17",
+        "NS-10"
+      ],
+      "open_condition": "A final no-direct-analogue statement remains blocked until all open search streams and citation snowballing are complete."
+    },
+    {
+      "id": "NV-008",
+      "title": "Causal latent state for adaptive SCS programming",
+      "problem": "Existing Drosophila connectome models and human SCS/ECAP models are separate; the transfer object and measurement operator are not jointly formalized.",
+      "mechanism": "causal_invariants",
+      "bridge": "Drosophila connectome-constrained nociceptive dynamics are encoded as an abstract state; a separate physical ECAP observation model maps human neural recruitment, after which the representation is tested for the SCS task parameter_selection.",
+      "expected_new_result": "A reproducible two-model method and falsifiable experiment showing whether the Drosophila-derived constraint contributes beyond human-only and degree-preserving rewired-connectome controls with shared initialization.",
+      "axes": {
+        "drosophila_model": [
+          "restricted_nociceptive_circuit",
+          "brain_and_cord"
+        ],
+        "observation": [
+          "spikes",
+          "population_dynamics"
+        ],
+        "perturbation": [
+          "mechanical",
+          "electrical"
+        ],
+        "bridge_mechanism": [
+          "causal_invariants"
+        ],
+        "scs_task": [
+          "parameter_selection"
+        ],
+        "validation_level": [
+          "drosophila_simulation",
+          "experimental_fly_data",
+          "physical_measurement_model",
+          "human_ecap"
+        ]
+      },
+      "closest_analogue_refs": [
+        "S149",
+        "S738",
+        "S739",
+        "S105",
+        "S159",
+        "S162",
+        "S741",
+        "S743",
+        "S744",
+        "S746",
+        "S747",
+        "S007",
+        "S070",
+        "S088",
+        "S005",
+        "S026",
+        "S164",
+        "S148",
+        "S098",
+        "S099",
+        "S144",
+        "S240",
+        "S241",
+        "S245",
+        "S748"
+      ],
+      "difference_from_analogues": "Patent WO2025224687A1 already discloses simulated ECAP training data, growth-curve labeling and encoder-decoder artifact-removal pretraining. The remaining proposed distinction is the explicitly tested contribution of connectome-constrained Drosophila dynamics plus a separate physical ECAP operator; none of the cited analogues establishes that complete chain. S747 additionally couples rat neural-response classification to adaptive SCS, but has no Drosophila connectome, physical ECAP operator, held-out-animal test or human validation. S007 and S070 provide human experimental-pain cross-subject baselines, while S088 is unresolved cross-dataset prior art; none implements a Drosophila-connectome-to-physical-ECAP-to-SCS chain. S026 supports only a brain-independent fly protective-behavior observable, while S005 and S164 document heterogeneous human pain baselines and generalization gaps; none supplies an ECAP formation operator or SCS validation bridge. S148 independently requires non-interchangeable subjective, behavioral, functional and mechanistic layers, reinforcing that a fly observable or ECAP recruitment signal cannot be relabeled as subjective pain. Patent review adds ML SCS-parameter search (S098), ECAP-guided functional control (S099), federated adaptive neural interfaces (S144), population-relative multimodal control (S240), explicit body-channel/ECAP separation (S241), and a wearable multimodal stimulation loop (S245); none combines Drosophila connectome dynamics with a validated human ECAP/SCS transfer experiment. The open 2026 ModMix extension (S748) strengthens prior art for physiological-modality augmentation under limited data, but it does not provide Drosophila-derived representations, a physical ECAP operator, or an SCS task.",
+      "required_data": [
+        "Drosophila connectome and activity/behavior comparator",
+        "human ECAP recordings with stimulation geometry"
+      ],
+      "falsification_experiment": "On predefined subject-level splits, compare the complete model with human-only, degree-preserving rewired-connectome ensemble with shared initialization, shuffled-dynamics, and no-physical-operator controls; reject the candidate if it gives no prespecified gain or worsens calibration.",
+      "permitted_conclusion": "Methodological transfer for the tested ECAP/SCS task only; no claim that Drosophila experiences human pain or directly models the human spinal cord.",
+      "prior_art_outcome": "partial_analogues_only",
+      "prior_art_cutoff": "2026-09-24",
+      "search_trace_ids": [
+        "NS-01",
+        "NS-02",
+        "NS-03",
+        "NS-06",
+        "NS-07",
+        "NS-09",
+        "NS-16",
+        "NS-05",
+        "NS-13",
+        "NS-12",
+        "NS-17",
+        "NS-10"
+      ],
+      "open_condition": "A final no-direct-analogue statement remains blocked until all open search streams and citation snowballing are complete."
+    },
+    {
+      "id": "NV-009",
+      "title": "Uncertainty-aware hybrid model for closed-loop SCS",
+      "problem": "Existing Drosophila connectome models and human SCS/ECAP models are separate; the transfer object and measurement operator are not jointly formalized.",
+      "mechanism": "hybrid_digital_twin",
+      "bridge": "Drosophila connectome-constrained nociceptive dynamics are encoded as an abstract state; a separate physical ECAP observation model maps human neural recruitment, after which the representation is tested for the SCS task closed_loop_control.",
+      "expected_new_result": "A reproducible two-model method and falsifiable experiment showing whether the Drosophila-derived constraint contributes beyond human-only and degree-preserving rewired-connectome controls with shared initialization.",
+      "axes": {
+        "drosophila_model": [
+          "restricted_nociceptive_circuit",
+          "brain_and_cord"
+        ],
+        "observation": [
+          "spikes",
+          "population_dynamics"
+        ],
+        "perturbation": [
+          "mechanical",
+          "electrical"
+        ],
+        "bridge_mechanism": [
+          "hybrid_digital_twin"
+        ],
+        "scs_task": [
+          "closed_loop_control"
+        ],
+        "validation_level": [
+          "drosophila_simulation",
+          "experimental_fly_data",
+          "physical_measurement_model",
+          "human_ecap"
+        ]
+      },
+      "closest_analogue_refs": [
+        "S149",
+        "S738",
+        "S739",
+        "S105",
+        "S159",
+        "S162",
+        "S741",
+        "S743",
+        "S744",
+        "S746",
+        "S747",
+        "S007",
+        "S070",
+        "S088",
+        "S005",
+        "S026",
+        "S164",
+        "S148",
+        "S098",
+        "S099",
+        "S144",
+        "S240",
+        "S241",
+        "S245",
+        "S748"
+      ],
+      "difference_from_analogues": "Patent WO2025224687A1 already discloses simulated ECAP training data, growth-curve labeling and encoder-decoder artifact-removal pretraining. The remaining proposed distinction is the explicitly tested contribution of connectome-constrained Drosophila dynamics plus a separate physical ECAP operator; none of the cited analogues establishes that complete chain. S747 additionally couples rat neural-response classification to adaptive SCS, but has no Drosophila connectome, physical ECAP operator, held-out-animal test or human validation. S007 and S070 provide human experimental-pain cross-subject baselines, while S088 is unresolved cross-dataset prior art; none implements a Drosophila-connectome-to-physical-ECAP-to-SCS chain. S026 supports only a brain-independent fly protective-behavior observable, while S005 and S164 document heterogeneous human pain baselines and generalization gaps; none supplies an ECAP formation operator or SCS validation bridge. S148 independently requires non-interchangeable subjective, behavioral, functional and mechanistic layers, reinforcing that a fly observable or ECAP recruitment signal cannot be relabeled as subjective pain. Patent review adds ML SCS-parameter search (S098), ECAP-guided functional control (S099), federated adaptive neural interfaces (S144), population-relative multimodal control (S240), explicit body-channel/ECAP separation (S241), and a wearable multimodal stimulation loop (S245); none combines Drosophila connectome dynamics with a validated human ECAP/SCS transfer experiment. The open 2026 ModMix extension (S748) strengthens prior art for physiological-modality augmentation under limited data, but it does not provide Drosophila-derived representations, a physical ECAP operator, or an SCS task.",
+      "required_data": [
+        "Drosophila connectome and activity/behavior comparator",
+        "human ECAP recordings with stimulation geometry"
+      ],
+      "falsification_experiment": "On predefined subject-level splits, compare the complete model with human-only, degree-preserving rewired-connectome ensemble with shared initialization, shuffled-dynamics, and no-physical-operator controls; reject the candidate if it gives no prespecified gain or worsens calibration.",
+      "permitted_conclusion": "Methodological transfer for the tested ECAP/SCS task only; no claim that Drosophila experiences human pain or directly models the human spinal cord.",
+      "prior_art_outcome": "partial_analogues_only",
+      "prior_art_cutoff": "2026-09-24",
+      "search_trace_ids": [
+        "NS-01",
+        "NS-02",
+        "NS-03",
+        "NS-06",
+        "NS-07",
+        "NS-09",
+        "NS-16",
+        "NS-05",
+        "NS-13",
+        "NS-12",
+        "NS-17",
+        "NS-10"
+      ],
+      "open_condition": "A final no-direct-analogue statement remains blocked until all open search streams and citation snowballing are complete."
+    },
+    {
+      "id": "NV-010",
+      "title": "Synthetic connectome pretraining for closed-loop control",
+      "problem": "Existing Drosophila connectome models and human SCS/ECAP models are separate; the transfer object and measurement operator are not jointly formalized.",
+      "mechanism": "representation_transfer",
+      "bridge": "Drosophila connectome-constrained nociceptive dynamics are encoded as an abstract state; a separate physical ECAP observation model maps human neural recruitment, after which the representation is tested for the SCS task closed_loop_control.",
+      "expected_new_result": "A reproducible two-model method and falsifiable experiment showing whether the Drosophila-derived constraint contributes beyond human-only and degree-preserving rewired-connectome controls with shared initialization.",
+      "axes": {
+        "drosophila_model": [
+          "restricted_nociceptive_circuit",
+          "brain_and_cord"
+        ],
+        "observation": [
+          "spikes",
+          "population_dynamics"
+        ],
+        "perturbation": [
+          "mechanical",
+          "electrical"
+        ],
+        "bridge_mechanism": [
+          "representation_transfer"
+        ],
+        "scs_task": [
+          "closed_loop_control"
+        ],
+        "validation_level": [
+          "drosophila_simulation",
+          "experimental_fly_data",
+          "physical_measurement_model",
+          "human_ecap"
+        ]
+      },
+      "closest_analogue_refs": [
+        "S149",
+        "S738",
+        "S739",
+        "S105",
+        "S159",
+        "S162",
+        "S741",
+        "S743",
+        "S744",
+        "S746",
+        "S747",
+        "S007",
+        "S070",
+        "S088",
+        "S005",
+        "S026",
+        "S164",
+        "S148",
+        "S098",
+        "S099",
+        "S144",
+        "S240",
+        "S241",
+        "S245",
+        "S748"
+      ],
+      "difference_from_analogues": "Patent WO2025224687A1 already discloses simulated ECAP training data, growth-curve labeling and encoder-decoder artifact-removal pretraining. The remaining proposed distinction is the explicitly tested contribution of connectome-constrained Drosophila dynamics plus a separate physical ECAP operator; none of the cited analogues establishes that complete chain. S747 additionally couples rat neural-response classification to adaptive SCS, but has no Drosophila connectome, physical ECAP operator, held-out-animal test or human validation. S007 and S070 provide human experimental-pain cross-subject baselines, while S088 is unresolved cross-dataset prior art; none implements a Drosophila-connectome-to-physical-ECAP-to-SCS chain. S026 supports only a brain-independent fly protective-behavior observable, while S005 and S164 document heterogeneous human pain baselines and generalization gaps; none supplies an ECAP formation operator or SCS validation bridge. S148 independently requires non-interchangeable subjective, behavioral, functional and mechanistic layers, reinforcing that a fly observable or ECAP recruitment signal cannot be relabeled as subjective pain. Patent review adds ML SCS-parameter search (S098), ECAP-guided functional control (S099), federated adaptive neural interfaces (S144), population-relative multimodal control (S240), explicit body-channel/ECAP separation (S241), and a wearable multimodal stimulation loop (S245); none combines Drosophila connectome dynamics with a validated human ECAP/SCS transfer experiment. The open 2026 ModMix extension (S748) strengthens prior art for physiological-modality augmentation under limited data, but it does not provide Drosophila-derived representations, a physical ECAP operator, or an SCS task.",
+      "required_data": [
+        "Drosophila connectome and activity/behavior comparator",
+        "human ECAP recordings with stimulation geometry"
+      ],
+      "falsification_experiment": "On predefined subject-level splits, compare the complete model with human-only, degree-preserving rewired-connectome ensemble with shared initialization, shuffled-dynamics, and no-physical-operator controls; reject the candidate if it gives no prespecified gain or worsens calibration.",
+      "permitted_conclusion": "Methodological transfer for the tested ECAP/SCS task only; no claim that Drosophila experiences human pain or directly models the human spinal cord.",
+      "prior_art_outcome": "partial_analogues_only",
+      "prior_art_cutoff": "2026-09-24",
+      "search_trace_ids": [
+        "NS-01",
+        "NS-02",
+        "NS-03",
+        "NS-06",
+        "NS-07",
+        "NS-09",
+        "NS-16",
+        "NS-05",
+        "NS-13",
+        "NS-12",
+        "NS-17",
+        "NS-10"
+      ],
+      "open_condition": "A final no-direct-analogue statement remains blocked until all open search streams and citation snowballing are complete."
+    },
+    {
+      "id": "NV-011",
+      "title": "Cross-connectome domain adaptation for ECAP robustness",
+      "problem": "Existing Drosophila connectome models and human SCS/ECAP models are separate; the transfer object and measurement operator are not jointly formalized.",
+      "mechanism": "domain_adaptation",
+      "bridge": "Drosophila connectome-constrained nociceptive dynamics are encoded as an abstract state; a separate physical ECAP observation model maps human neural recruitment, after which the representation is tested for the SCS task ecap_forward_model.",
+      "expected_new_result": "A reproducible two-model method and falsifiable experiment showing whether the Drosophila-derived constraint contributes beyond human-only and degree-preserving rewired-connectome controls with shared initialization.",
+      "axes": {
+        "drosophila_model": [
+          "restricted_nociceptive_circuit",
+          "brain_and_cord"
+        ],
+        "observation": [
+          "spikes",
+          "population_dynamics"
+        ],
+        "perturbation": [
+          "mechanical",
+          "electrical"
+        ],
+        "bridge_mechanism": [
+          "domain_adaptation"
+        ],
+        "scs_task": [
+          "ecap_forward_model"
+        ],
+        "validation_level": [
+          "drosophila_simulation",
+          "experimental_fly_data",
+          "physical_measurement_model",
+          "human_ecap"
+        ]
+      },
+      "closest_analogue_refs": [
+        "S149",
+        "S738",
+        "S739",
+        "S105",
+        "S159",
+        "S162",
+        "S741",
+        "S743",
+        "S744",
+        "S746",
+        "S747",
+        "S007",
+        "S070",
+        "S088",
+        "S005",
+        "S026",
+        "S164",
+        "S148",
+        "S098",
+        "S099",
+        "S144",
+        "S240",
+        "S241",
+        "S245",
+        "S748"
+      ],
+      "difference_from_analogues": "Patent WO2025224687A1 already discloses simulated ECAP training data, growth-curve labeling and encoder-decoder artifact-removal pretraining. The remaining proposed distinction is the explicitly tested contribution of connectome-constrained Drosophila dynamics plus a separate physical ECAP operator; none of the cited analogues establishes that complete chain. S747 additionally couples rat neural-response classification to adaptive SCS, but has no Drosophila connectome, physical ECAP operator, held-out-animal test or human validation. S007 and S070 provide human experimental-pain cross-subject baselines, while S088 is unresolved cross-dataset prior art; none implements a Drosophila-connectome-to-physical-ECAP-to-SCS chain. S026 supports only a brain-independent fly protective-behavior observable, while S005 and S164 document heterogeneous human pain baselines and generalization gaps; none supplies an ECAP formation operator or SCS validation bridge. S148 independently requires non-interchangeable subjective, behavioral, functional and mechanistic layers, reinforcing that a fly observable or ECAP recruitment signal cannot be relabeled as subjective pain. Patent review adds ML SCS-parameter search (S098), ECAP-guided functional control (S099), federated adaptive neural interfaces (S144), population-relative multimodal control (S240), explicit body-channel/ECAP separation (S241), and a wearable multimodal stimulation loop (S245); none combines Drosophila connectome dynamics with a validated human ECAP/SCS transfer experiment. The open 2026 ModMix extension (S748) strengthens prior art for physiological-modality augmentation under limited data, but it does not provide Drosophila-derived representations, a physical ECAP operator, or an SCS task.",
+      "required_data": [
+        "Drosophila connectome and activity/behavior comparator",
+        "human ECAP recordings with stimulation geometry"
+      ],
+      "falsification_experiment": "On predefined subject-level splits, compare the complete model with human-only, degree-preserving rewired-connectome ensemble with shared initialization, shuffled-dynamics, and no-physical-operator controls; reject the candidate if it gives no prespecified gain or worsens calibration.",
+      "permitted_conclusion": "Methodological transfer for the tested ECAP/SCS task only; no claim that Drosophila experiences human pain or directly models the human spinal cord.",
+      "prior_art_outcome": "partial_analogues_only",
+      "prior_art_cutoff": "2026-09-24",
+      "search_trace_ids": [
+        "NS-01",
+        "NS-02",
+        "NS-03",
+        "NS-06",
+        "NS-07",
+        "NS-09",
+        "NS-16",
+        "NS-05",
+        "NS-13",
+        "NS-12",
+        "NS-17",
+        "NS-10"
+      ],
+      "open_condition": "A final no-direct-analogue statement remains blocked until all open search streams and citation snowballing are complete."
+    },
+    {
+      "id": "NV-012",
+      "title": "Graph-motif transfer into an ECAP observation operator",
+      "problem": "Existing Drosophila connectome models and human SCS/ECAP models are separate; the transfer object and measurement operator are not jointly formalized.",
+      "mechanism": "representation_transfer",
+      "bridge": "Drosophila connectome-constrained nociceptive dynamics are encoded as an abstract state; a separate physical ECAP observation model maps human neural recruitment, after which the representation is tested for the SCS task ecap_forward_model.",
+      "expected_new_result": "A reproducible two-model method and falsifiable experiment showing whether the Drosophila-derived constraint contributes beyond human-only and degree-preserving rewired-connectome controls with shared initialization.",
+      "axes": {
+        "drosophila_model": [
+          "restricted_nociceptive_circuit",
+          "brain_and_cord"
+        ],
+        "observation": [
+          "spikes",
+          "population_dynamics"
+        ],
+        "perturbation": [
+          "mechanical",
+          "electrical"
+        ],
+        "bridge_mechanism": [
+          "representation_transfer"
+        ],
+        "scs_task": [
+          "ecap_forward_model"
+        ],
+        "validation_level": [
+          "drosophila_simulation",
+          "experimental_fly_data",
+          "physical_measurement_model",
+          "human_ecap"
+        ]
+      },
+      "closest_analogue_refs": [
+        "S149",
+        "S738",
+        "S739",
+        "S105",
+        "S159",
+        "S162",
+        "S741",
+        "S743",
+        "S744",
+        "S746",
+        "S747",
+        "S007",
+        "S070",
+        "S088",
+        "S005",
+        "S026",
+        "S164",
+        "S148",
+        "S098",
+        "S099",
+        "S144",
+        "S240",
+        "S241",
+        "S245",
+        "S748"
+      ],
+      "difference_from_analogues": "Patent WO2025224687A1 already discloses simulated ECAP training data, growth-curve labeling and encoder-decoder artifact-removal pretraining. The remaining proposed distinction is the explicitly tested contribution of connectome-constrained Drosophila dynamics plus a separate physical ECAP operator; none of the cited analogues establishes that complete chain. S747 additionally couples rat neural-response classification to adaptive SCS, but has no Drosophila connectome, physical ECAP operator, held-out-animal test or human validation. S007 and S070 provide human experimental-pain cross-subject baselines, while S088 is unresolved cross-dataset prior art; none implements a Drosophila-connectome-to-physical-ECAP-to-SCS chain. S026 supports only a brain-independent fly protective-behavior observable, while S005 and S164 document heterogeneous human pain baselines and generalization gaps; none supplies an ECAP formation operator or SCS validation bridge. S148 independently requires non-interchangeable subjective, behavioral, functional and mechanistic layers, reinforcing that a fly observable or ECAP recruitment signal cannot be relabeled as subjective pain. Patent review adds ML SCS-parameter search (S098), ECAP-guided functional control (S099), federated adaptive neural interfaces (S144), population-relative multimodal control (S240), explicit body-channel/ECAP separation (S241), and a wearable multimodal stimulation loop (S245); none combines Drosophila connectome dynamics with a validated human ECAP/SCS transfer experiment. The open 2026 ModMix extension (S748) strengthens prior art for physiological-modality augmentation under limited data, but it does not provide Drosophila-derived representations, a physical ECAP operator, or an SCS task.",
+      "required_data": [
+        "Drosophila connectome and activity/behavior comparator",
+        "human ECAP recordings with stimulation geometry"
+      ],
+      "falsification_experiment": "On predefined subject-level splits, compare the complete model with human-only, degree-preserving rewired-connectome ensemble with shared initialization, shuffled-dynamics, and no-physical-operator controls; reject the candidate if it gives no prespecified gain or worsens calibration.",
+      "permitted_conclusion": "Methodological transfer for the tested ECAP/SCS task only; no claim that Drosophila experiences human pain or directly models the human spinal cord.",
+      "prior_art_outcome": "partial_analogues_only",
+      "prior_art_cutoff": "2026-09-24",
+      "search_trace_ids": [
+        "NS-01",
+        "NS-02",
+        "NS-03",
+        "NS-06",
+        "NS-07",
+        "NS-09",
+        "NS-16",
+        "NS-05",
+        "NS-13",
+        "NS-12",
+        "NS-17",
+        "NS-10"
+      ],
+      "open_condition": "A final no-direct-analogue statement remains blocked until all open search streams and citation snowballing are complete."
+    },
+    {
+      "id": "NV-013",
+      "title": "Multi-fidelity system identification for SCS control",
+      "problem": "Existing Drosophila connectome models and human SCS/ECAP models are separate; the transfer object and measurement operator are not jointly formalized.",
+      "mechanism": "system_identification",
+      "bridge": "Drosophila connectome-constrained nociceptive dynamics are encoded as an abstract state; a separate physical ECAP observation model maps human neural recruitment, after which the representation is tested for the SCS task closed_loop_control.",
+      "expected_new_result": "A reproducible two-model method and falsifiable experiment showing whether the Drosophila-derived constraint contributes beyond human-only and degree-preserving rewired-connectome controls with shared initialization.",
+      "axes": {
+        "drosophila_model": [
+          "restricted_nociceptive_circuit",
+          "brain_and_cord"
+        ],
+        "observation": [
+          "spikes",
+          "population_dynamics"
+        ],
+        "perturbation": [
+          "mechanical",
+          "electrical"
+        ],
+        "bridge_mechanism": [
+          "system_identification"
+        ],
+        "scs_task": [
+          "closed_loop_control"
+        ],
+        "validation_level": [
+          "drosophila_simulation",
+          "experimental_fly_data",
+          "physical_measurement_model",
+          "human_ecap"
+        ]
+      },
+      "closest_analogue_refs": [
+        "S149",
+        "S738",
+        "S739",
+        "S105",
+        "S159",
+        "S162",
+        "S741",
+        "S743",
+        "S744",
+        "S746",
+        "S747",
+        "S007",
+        "S070",
+        "S088",
+        "S005",
+        "S026",
+        "S164",
+        "S148",
+        "S098",
+        "S099",
+        "S144",
+        "S240",
+        "S241",
+        "S245",
+        "S748"
+      ],
+      "difference_from_analogues": "Patent WO2025224687A1 already discloses simulated ECAP training data, growth-curve labeling and encoder-decoder artifact-removal pretraining. The remaining proposed distinction is the explicitly tested contribution of connectome-constrained Drosophila dynamics plus a separate physical ECAP operator; none of the cited analogues establishes that complete chain. S747 additionally couples rat neural-response classification to adaptive SCS, but has no Drosophila connectome, physical ECAP operator, held-out-animal test or human validation. S007 and S070 provide human experimental-pain cross-subject baselines, while S088 is unresolved cross-dataset prior art; none implements a Drosophila-connectome-to-physical-ECAP-to-SCS chain. S026 supports only a brain-independent fly protective-behavior observable, while S005 and S164 document heterogeneous human pain baselines and generalization gaps; none supplies an ECAP formation operator or SCS validation bridge. S148 independently requires non-interchangeable subjective, behavioral, functional and mechanistic layers, reinforcing that a fly observable or ECAP recruitment signal cannot be relabeled as subjective pain. Patent review adds ML SCS-parameter search (S098), ECAP-guided functional control (S099), federated adaptive neural interfaces (S144), population-relative multimodal control (S240), explicit body-channel/ECAP separation (S241), and a wearable multimodal stimulation loop (S245); none combines Drosophila connectome dynamics with a validated human ECAP/SCS transfer experiment. The open 2026 ModMix extension (S748) strengthens prior art for physiological-modality augmentation under limited data, but it does not provide Drosophila-derived representations, a physical ECAP operator, or an SCS task.",
+      "required_data": [
+        "Drosophila connectome and activity/behavior comparator",
+        "human ECAP recordings with stimulation geometry"
+      ],
+      "falsification_experiment": "On predefined subject-level splits, compare the complete model with human-only, degree-preserving rewired-connectome ensemble with shared initialization, shuffled-dynamics, and no-physical-operator controls; reject the candidate if it gives no prespecified gain or worsens calibration.",
+      "permitted_conclusion": "Methodological transfer for the tested ECAP/SCS task only; no claim that Drosophila experiences human pain or directly models the human spinal cord.",
+      "prior_art_outcome": "partial_analogues_only",
+      "prior_art_cutoff": "2026-09-24",
+      "search_trace_ids": [
+        "NS-01",
+        "NS-02",
+        "NS-03",
+        "NS-06",
+        "NS-07",
+        "NS-09",
+        "NS-16",
+        "NS-05",
+        "NS-13",
+        "NS-12",
+        "NS-17",
+        "NS-10"
+      ],
+      "open_condition": "A final no-direct-analogue statement remains blocked until all open search streams and citation snowballing are complete."
+    },
+    {
+      "id": "NV-014",
+      "title": "Causal connectome constraints for SCS-response modelling",
+      "problem": "Existing Drosophila connectome models and human SCS/ECAP models are separate; the transfer object and measurement operator are not jointly formalized.",
+      "mechanism": "causal_invariants",
+      "bridge": "Drosophila connectome-constrained nociceptive dynamics are encoded as an abstract state; a separate physical ECAP observation model maps human neural recruitment, after which the representation is tested for the SCS task clinical_response_prediction.",
+      "expected_new_result": "A reproducible two-model method and falsifiable experiment showing whether the Drosophila-derived constraint contributes beyond human-only and degree-preserving rewired-connectome controls with shared initialization.",
+      "axes": {
+        "drosophila_model": [
+          "restricted_nociceptive_circuit",
+          "brain_and_cord"
+        ],
+        "observation": [
+          "spikes",
+          "population_dynamics"
+        ],
+        "perturbation": [
+          "mechanical",
+          "electrical"
+        ],
+        "bridge_mechanism": [
+          "causal_invariants"
+        ],
+        "scs_task": [
+          "clinical_response_prediction"
+        ],
+        "validation_level": [
+          "drosophila_simulation",
+          "experimental_fly_data",
+          "physical_measurement_model",
+          "human_ecap",
+          "clinical_scs_outcome"
+        ]
+      },
+      "closest_analogue_refs": [
+        "S149",
+        "S738",
+        "S739",
+        "S105",
+        "S159",
+        "S162",
+        "S741",
+        "S743",
+        "S744",
+        "S746",
+        "S747",
+        "S007",
+        "S070",
+        "S088",
+        "S005",
+        "S026",
+        "S164",
+        "S148",
+        "S098",
+        "S099",
+        "S144",
+        "S240",
+        "S241",
+        "S245",
+        "S748"
+      ],
+      "difference_from_analogues": "Patent WO2025224687A1 already discloses simulated ECAP training data, growth-curve labeling and encoder-decoder artifact-removal pretraining. The remaining proposed distinction is the explicitly tested contribution of connectome-constrained Drosophila dynamics plus a separate physical ECAP operator; none of the cited analogues establishes that complete chain. S747 additionally couples rat neural-response classification to adaptive SCS, but has no Drosophila connectome, physical ECAP operator, held-out-animal test or human validation. S007 and S070 provide human experimental-pain cross-subject baselines, while S088 is unresolved cross-dataset prior art; none implements a Drosophila-connectome-to-physical-ECAP-to-SCS chain. S026 supports only a brain-independent fly protective-behavior observable, while S005 and S164 document heterogeneous human pain baselines and generalization gaps; none supplies an ECAP formation operator or SCS validation bridge. S148 independently requires non-interchangeable subjective, behavioral, functional and mechanistic layers, reinforcing that a fly observable or ECAP recruitment signal cannot be relabeled as subjective pain. Patent review adds ML SCS-parameter search (S098), ECAP-guided functional control (S099), federated adaptive neural interfaces (S144), population-relative multimodal control (S240), explicit body-channel/ECAP separation (S241), and a wearable multimodal stimulation loop (S245); none combines Drosophila connectome dynamics with a validated human ECAP/SCS transfer experiment. The open 2026 ModMix extension (S748) strengthens prior art for physiological-modality augmentation under limited data, but it does not provide Drosophila-derived representations, a physical ECAP operator, or an SCS task.",
+      "required_data": [
+        "Drosophila connectome and activity/behavior comparator",
+        "human ECAP recordings with stimulation geometry",
+        "patient-linked longitudinal SCS outcome"
+      ],
+      "falsification_experiment": "On predefined subject-level splits, compare the complete model with human-only, degree-preserving rewired-connectome ensemble with shared initialization, shuffled-dynamics, and no-physical-operator controls; reject the candidate if it gives no prespecified gain or worsens calibration.",
+      "permitted_conclusion": "Methodological transfer for the tested ECAP/SCS task only; no claim that Drosophila experiences human pain or directly models the human spinal cord.",
+      "prior_art_outcome": "partial_analogues_only",
+      "prior_art_cutoff": "2026-09-24",
+      "search_trace_ids": [
+        "NS-01",
+        "NS-02",
+        "NS-03",
+        "NS-06",
+        "NS-07",
+        "NS-09",
+        "NS-16",
+        "NS-05",
+        "NS-13",
+        "NS-12",
+        "NS-17",
+        "NS-10"
+      ],
+      "open_condition": "A final no-direct-analogue statement remains blocked until all open search streams and citation snowballing are complete."
+    },
+    {
+      "id": "NV-015",
+      "title": "Hybrid Drosophila-to-SCS model for conditional response prediction",
+      "problem": "Existing Drosophila connectome models and human SCS/ECAP models are separate; the transfer object and measurement operator are not jointly formalized.",
+      "mechanism": "hybrid_digital_twin",
+      "bridge": "Drosophila connectome-constrained nociceptive dynamics are encoded as an abstract state; a separate physical ECAP observation model maps human neural recruitment, after which the representation is tested for the SCS task clinical_response_prediction.",
+      "expected_new_result": "A reproducible two-model method and falsifiable experiment showing whether the Drosophila-derived constraint contributes beyond human-only and degree-preserving rewired-connectome controls with shared initialization.",
+      "axes": {
+        "drosophila_model": [
+          "restricted_nociceptive_circuit",
+          "brain_and_cord"
+        ],
+        "observation": [
+          "spikes",
+          "population_dynamics"
+        ],
+        "perturbation": [
+          "mechanical",
+          "electrical"
+        ],
+        "bridge_mechanism": [
+          "hybrid_digital_twin"
+        ],
+        "scs_task": [
+          "clinical_response_prediction"
+        ],
+        "validation_level": [
+          "drosophila_simulation",
+          "experimental_fly_data",
+          "physical_measurement_model",
+          "human_ecap",
+          "clinical_scs_outcome"
+        ]
+      },
+      "closest_analogue_refs": [
+        "S149",
+        "S738",
+        "S739",
+        "S105",
+        "S159",
+        "S162",
+        "S741",
+        "S743",
+        "S744",
+        "S746",
+        "S747",
+        "S007",
+        "S070",
+        "S088",
+        "S005",
+        "S026",
+        "S164",
+        "S148",
+        "S098",
+        "S099",
+        "S144",
+        "S240",
+        "S241",
+        "S245",
+        "S748"
+      ],
+      "difference_from_analogues": "Patent WO2025224687A1 already discloses simulated ECAP training data, growth-curve labeling and encoder-decoder artifact-removal pretraining. The remaining proposed distinction is the explicitly tested contribution of connectome-constrained Drosophila dynamics plus a separate physical ECAP operator; none of the cited analogues establishes that complete chain. S747 additionally couples rat neural-response classification to adaptive SCS, but has no Drosophila connectome, physical ECAP operator, held-out-animal test or human validation. S007 and S070 provide human experimental-pain cross-subject baselines, while S088 is unresolved cross-dataset prior art; none implements a Drosophila-connectome-to-physical-ECAP-to-SCS chain. S026 supports only a brain-independent fly protective-behavior observable, while S005 and S164 document heterogeneous human pain baselines and generalization gaps; none supplies an ECAP formation operator or SCS validation bridge. S148 independently requires non-interchangeable subjective, behavioral, functional and mechanistic layers, reinforcing that a fly observable or ECAP recruitment signal cannot be relabeled as subjective pain. Patent review adds ML SCS-parameter search (S098), ECAP-guided functional control (S099), federated adaptive neural interfaces (S144), population-relative multimodal control (S240), explicit body-channel/ECAP separation (S241), and a wearable multimodal stimulation loop (S245); none combines Drosophila connectome dynamics with a validated human ECAP/SCS transfer experiment. The open 2026 ModMix extension (S748) strengthens prior art for physiological-modality augmentation under limited data, but it does not provide Drosophila-derived representations, a physical ECAP operator, or an SCS task.",
+      "required_data": [
+        "Drosophila connectome and activity/behavior comparator",
+        "human ECAP recordings with stimulation geometry",
+        "patient-linked longitudinal SCS outcome"
+      ],
+      "falsification_experiment": "On predefined subject-level splits, compare the complete model with human-only, degree-preserving rewired-connectome ensemble with shared initialization, shuffled-dynamics, and no-physical-operator controls; reject the candidate if it gives no prespecified gain or worsens calibration.",
+      "permitted_conclusion": "Methodological transfer for the tested ECAP/SCS task only; no claim that Drosophila experiences human pain or directly models the human spinal cord.",
+      "prior_art_outcome": "partial_analogues_only",
+      "prior_art_cutoff": "2026-09-24",
+      "search_trace_ids": [
+        "NS-01",
+        "NS-02",
+        "NS-03",
+        "NS-06",
+        "NS-07",
+        "NS-09",
+        "NS-16",
+        "NS-05",
+        "NS-13",
+        "NS-12",
+        "NS-17",
+        "NS-10"
+      ],
+      "open_condition": "A final no-direct-analogue statement remains blocked until all open search streams and citation snowballing are complete."
+    }
+  ]
+}

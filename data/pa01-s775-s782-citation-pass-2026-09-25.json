@@ -1,0 +1,144 @@
+{
+  "meta": {
+    "checked_at": "2026-09-25T14:08:51Z",
+    "status": "in_progress",
+    "scope": "Bounded backward/forward citation screen for S775 and S782",
+    "source_ids": [
+      "S775",
+      "S782"
+    ],
+    "method": "Publisher reference list for S782; OpenAlex exact DOI lookup and newest-citing-works pages for S775 and S782; primary publisher/preprint pages checked for relevant leads.; direct primary-text full-text citation and targeted exact/synonym/author discovery queries checked on 2026-09-25."
+  },
+  "backward": {
+    "seed": "S782, Centralized brain networks controlling antennal grooming coordination",
+    "primary_url": "https://www.nature.com/articles/s41467-026-72152-x",
+    "locator": "References 47-48; publisher full text lines 699-700",
+    "screened_references": 2,
+    "already_catalogued": [
+      {
+        "source_id": "S775",
+        "title": "A Drosophila computational brain model reveals sensorimotor processing",
+        "doi": "10.1038/s41586-024-07763-9",
+        "relevance": "Existing whole-brain connectome LIF dynamics model with experimental neural/behavioral comparison."
+      },
+      {
+        "source_id": "S744",
+        "title": "Connectome-constrained networks predict neural activity across the fly visual system",
+        "doi": "10.1038/s41586-024-07939-3",
+        "relevance": "Existing connectome-constrained visual-circuit activity model; narrower than whole-brain grooming."
+      }
+    ],
+    "result": "No new backward primary source was required from this two-reference focused model screen. S782 itself is already catalogued."
+  },
+  "forward": {
+    "database": "OpenAlex Works API",
+    "retrieved_at": "2026-09-25T13:48:25Z",
+    "queries": [
+      "https://api.openalex.org/works?filter=doi:10.1038%2Fs41586-024-07763-9&select=id,doi,display_name,cited_by_count,updated_date&per-page=1",
+      "https://api.openalex.org/works?filter=cites:W4403062868&select=id,doi,display_name,publication_year,publication_date,primary_location&sort=publication_date:desc&per-page=20",
+      "https://api.openalex.org/works?filter=doi:10.1038%2Fs41467-026-72152-x&select=id,doi,display_name,cited_by_count,updated_date&per-page=1",
+      "https://api.openalex.org/works?filter=cites:W7155399663&select=id,doi,display_name,publication_year,publication_date,primary_location&sort=publication_date:desc&per-page=20"
+    ],
+    "screened": {
+      "S775": {
+        "openalex_id": "W4403062868",
+        "indexed_cited_by_count": 86,
+        "updated_date": "2026-09-25T08:18:29.962427",
+        "newest_page_size": 20,
+        "newest_page_date_range": "2026-04-07..2026-09-10",
+        "new_related_lead": {
+          "title": "A comprehensive mechanosensory connectome reveals a somatotopically organized neural circuit architecture controlling stimulus-aimed grooming of the Drosophila head",
+          "doi": "10.7554/eLife.108044.3",
+          "url": "https://elifesciences.org/articles/108044",
+          "locator": "Abstract, Results, version history; publisher page",
+          "classification": "Related primary circuit/behavior lead, not a connectome-driven dynamical simulation. Keep separate from direct model analogues.",
+          "catalogued": false
+        },
+        "new_direct_model_analogue": true,
+        "new_model_analogue": "arXiv:2609.01330v1 (Liew et al.); discovered by targeted primary-text/search pass. A method-level connectome-LIF analogue, not a nociception, behavior-validation, or human transfer analogue.; published in NeurIPS 2025 Main Conference, DOI 10.52202/085713-5498 (same title and authors; not a second work).",
+        "index_coverage_caveat": "Not present in the previously screened OpenAlex newest-20 page; direct primary reference list / targeted exact-synonym-author lookup recovered it. This demonstrates citation-index incompleteness."
+      },
+      "S782": {
+        "openalex_id": "W7155399663",
+        "indexed_cited_by_count": 1,
+        "updated_date": "2026-09-25T08:18:29.962427",
+        "newest_page_size": 1,
+        "newest_page_date_range": "2026-07-20..2026-07-20",
+        "screened_work": "The embodied brain: Bridging the brain, body, and behavior with biorealistic neuromechanical models",
+        "doi": "10.1016/j.conb.2026.103244",
+        "classification": "Broad review, not a new primary Drosophila connectome model.",
+        "new_direct_model_analogue": false
+      }
+    },
+    "limits": [
+      "OpenAlex is an index, not a complete citation graph; the S775 screen covered only its 20 newest indexed citing works, not all 86.",
+      "The S782 citation count/page is an early index snapshot; zero additional citing works in that page is not evidence of no citations.",
+      "This pass did not satisfy exact/synonym/author query coverage, complete backward/forward snowballing, or PA-01 saturation.",
+      "A targeted primary-text search recovered arXiv:2609.01330v1 citing S775 as reference 46 although absent from the earlier OpenAlex newest-20 slice; the exact/synonym/author probes were bounded discovery queries, not comprehensive database searches or a saturation test."
+    ]
+  },
+  "primary_checks": [
+    {
+      "url": "https://www.nature.com/articles/s41467-026-72152-x",
+      "locator": "References 47-48 and abstract; confirms S782 uses the Lappalainen and Shiu model papers as background and studies antennal grooming network coordination."
+    },
+    {
+      "url": "https://elifesciences.org/articles/108044",
+      "locator": "Abstract, Results, version history; connectome-based mechanosensory circuit anatomy and stimulus-aimed grooming, without a fitted dynamic connectome model."
+    },
+    {
+      "url": "https://www.biorxiv.org/content/10.64898/2026.08.21.745055v1.full",
+      "locator": "Full text and abstract; connectome-constrained whole-brain spontaneous-activity dynamics. This existing S739 record was recovered in the forward page and was not a new source."
+    },
+    {
+      "url": "https://arxiv.org/html/2609.01330v1",
+      "locator": "Methods ?3 (full adult FAFB connectome, conductance-based LIF, oriented visual stimuli); Limitations (no in-vivo validation; simplified LIF); References [46] cites Shiu et al., the existing S775 paper. This is a visual-method analogue, not nociception/ECAP/SCS evidence."
+    },
+    {
+      "url": "https://papers.nips.cc/paper_files/paper/2025/hash/f11922f49803b5327c904df814ac5964-Abstract-Conference.html",
+      "locator": "Official NeurIPS 2025 Main Conference proceedings entry; title/authors and DOI 10.52202/085713-5498 match the arXiv work."
+    },
+    {
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13246004/fullTextXML",
+      "locator": "Primary eLife full-text JATS for Calle-Schuler et al., eLife 14:RP108044 (DOI 10.7554/eLife.108044.3); Abstract/Results describe connectome anatomy and stimulus-aimed grooming. It is a circuit/behavior lead, not a dynamics-model analogue."
+    }
+  ],
+  "conclusion": "A new method-level connectome-constrained dynamics analogue was identified in the primary reference list of arXiv:2609.01330v1 (citing S775); its optic-lobe visual task lacks in-vivo validation and is not a nociception, grooming/escape, pain, ECAP, or SCS analogue. The separate Calle-Schuler eLife lead remains related circuit/behavior prior art without fitted dynamics. PA-01 remains open: the sampled citation/index and targeted query coverage do not complete NS-01-NS-04 exact/synonym/author searches, full backward/forward snowballing, or saturation.",
+  "targeted_queries": [
+    {
+      "query": "\"Connectome-Based Modelling Reveals Orientation Maps in the Drosophila Optic Lobe\"",
+      "purpose": "Exact-title discovery for recent connectome-constrained Drosophila model papers.",
+      "result": "Located arXiv:2609.01330v1; primary full text includes S775 as reference 46."
+    },
+    {
+      "query": "\"whole-brain\" OR \"brain-wide\" connectome Drosophila (\"leaky integrate-and-fire\" OR spiking OR LIF)",
+      "purpose": "Synonym/model-class sweep for brain-wide connectome dynamics.",
+      "result": "This bounded web-indexed query returned the Liew et al. preprint as a method-level comparator; not a systematic database export."
+    },
+    {
+      "query": "Liew Lin Chen Zhang Drosophila connectome orientation maps",
+      "purpose": "Author/title variant check for the newly located lead.",
+      "result": "Confirmed same arXiv v1 primary source; no separate version/independent study established."
+    }
+  ],
+  "additional_primary_leads": [
+    {
+      "title": "Connectome-Based Modelling Reveals Orientation Maps in the Drosophila Optic Lobe",
+      "authors": "Jia-Nuo Liew; Shenghan Lin; Bowen Chen; Wei Zhang; Xiaowei Zhu; Wei Zhang; Xiaolin Hu",
+      "arxiv_id": "2609.01330v1",
+      "url": "https://arxiv.org/html/2609.01330",
+      "retrieved_at": "2026-09-25",
+      "citation_relation": "Cites S775 (Shiu et al. 2024) as reference 46; primary text lines 267-268.",
+      "primary_locators": [
+        "Abstract and Methods > LIF model, HTML lines 60-63 and 111-118: FAFB connectome with 138,639 neurons and 1,508,983 synapses; conductance-based LIF simulation driven by visual stimulus inputs.",
+        "Discussion > Limitations, HTML lines 212-214: authors state there is no in-vivo validation and simplified LIF omits nonlinear firing dynamics and neurotransmitter effects.",
+        "References, HTML lines 267-268: S775 is explicitly cited as Shiu et al. 2024, Nature 634:210-219.",
+        "Appendix A, HTML lines 755-757: code/data URL https://github.com/JNLiew/flylif_orientation_maps."
+      ],
+      "classification": "New primary method-level connectome-dynamics analogue for NS-02; narrower optic-lobe visual coding task. It does not model nociception, grooming/escape behavior, or measure experimental neural/behavioral validation, human pain, ECAP, or SCS outcomes.",
+      "publication_status": "arXiv v1 submitted 2026-09-01; arXiv page comments state \"NeurIPS 2025\", which was not independently verified against proceedings in this pass.",
+      "catalogued": false,
+      "triage": "Add as a candidate for later canonical-card review; this bounded audit itself does not publish or validate a corpus card."
+    }
+  ]
+}

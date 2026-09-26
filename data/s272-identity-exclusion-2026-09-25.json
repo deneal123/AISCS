@@ -1,0 +1,20 @@
+{
+  "meta": {
+    "schema_version": "1.0.0",
+    "checked_at": "2026-09-25"
+  },
+  "source_id": "S272",
+  "candidate_patent_id": "CN122075919A",
+  "decision": "excluded_unverifiable_until_primary_publication_is_attributed",
+  "locators": [
+    {
+      "url": "https://eureka.patsnap.com/topic-patents-autonomic-nervous-system",
+      "locator": "Topical index search snippet mentions CN122075919A without a standalone document or claims"
+    },
+    {
+      "url": "https://patents.google.com/patent/CN122075919A/en",
+      "locator": "Exact candidate URL returned no attributable document in this dated access attempt"
+    }
+  ],
+  "boundary": "A third-party topical index mentions candidate number CN122075919A, but the direct document route and official publication text were not recovered on 2026-09-25. Title, inventors, assignee, abstract and claims remain unidentified. Excluded from evidence pending an attributable primary patent record; this is not proof that the publication does not exist."
+}

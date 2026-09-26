@@ -1,0 +1,544 @@
+{
+    "meta": {
+        "schema_version": "1.0.0",
+        "checked_at": "2026-09-26",
+        "status": "in_progress",
+        "scope": "65 targeted 2026 source-version and owner-route rechecks plus the S780 JAMA correction; full 2026 corpus remains open",
+        "decision": "targeted_owner_and_version_routes_rechecked_full_2026_corpus_still_open"
+    },
+    "entries": [
+        {
+            "source_id": "S007",
+            "current_version": "Crossref and IEEE owner metadata identify DOI 10.1109/JIOT.2026.3663683, VOR, IEEE Internet of Things Journal 13(9):19300-19311, issue date 1 May 2026. IEEE Date of Publication is 11 Feb 2026 (online-first), distinct from the May issue date. Owner direct route is bot-blocked; reader route exposes metadata, not full text.",
+            "source_url": "https://api.crossref.org/works/10.1109%2FJIOT.2026.3663683 ; https://api.crossref.org/works/10.1109%2FJIOT.2026.3663683/transform ; https://api.crossref.org/works?filter=updates:10.1109%2FJIOT.2026.3663683 ; https://ieeexplore.ieee.org/document/11393541/ ; https://r.jina.ai/https://ieeexplore.ieee.org/document/11393541/",
+            "access_boundary": "Crossref owner deposit and IEEE page rendered through a reader route were inspected; direct IEEE/Xplore staging routes returned bot blocks. Article is closed access. TechRxiv search was blocked (403); no PMC or PubMed record was located. These are bounded route checks.",
+            "correction_retraction_check": "No update appeared in the Crossref updates query or retrieved owner page; the Crossmark API endpoint returned 404 including its positive control, so Crossmark status is unavailable. Empty relations are not proof of no correction; later owner refresh remains open.",
+            "preprint_journal_relation": "No owner-stated relation surfaced in Crossref or retrieved IEEE metadata. TechRxiv was blocked; no global absence claim."
+        },
+        {
+            "source_id": "S015",
+            "current_version": "DOI 10.3390/s26103020; MDPI Sensors 26(10):3020, VOR dated 11 May 2026, CC BY 4.0. MDPI version notes archived on publication day label the PDF Version of Record; publisher-hosted PDF and PMC13211154 full text are currently accessible, despite live www.mdpi.com article routes returning 403. PMC record is one version and has no related-article/preprint marker.",
+            "source_url": "https://api.crossref.org/works/10.3390%2Fs26103020 ; https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=42197829&retmode=xml ; https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pmc&id=13211154&retmode=xml ; https://pmc.ncbi.nlm.nih.gov/articles/PMC13211154/ ; https://mdpi-res.com/d_attachment/sensors/sensors-26-03020/article_deploy/sensors-26-03020.pdf ; https://web.archive.org/web/20260511120556id_/https://www.mdpi.com/1424-8220/26/10/3020/notes ; https://www.mdpi.com/1424-8220/26/10/3020/notes",
+            "access_boundary": "Current verification fetched publisher-hosted VOR PDF (HTTP 200) and PMC full text (HTTP 200); the live MDPI landing/notes/pdf/xml routes are bot-blocked. PubMed and PMC XML confirm identity/version. Archived owner notes are a dated snapshot only. Archived HTML rights metadata says CC BY/3.0 while the VOR, Crossref and PMC state CC BY 4.0; retain this conflict.",
+            "correction_retraction_check": "No correction/retraction marker surfaced in Crossref update routes, PubMed XML, PMC JATS, the publisher VOR PDF or dated version-notes snapshot. Live MDPI Crossmark widget/policy route was inaccessible, so current visible Crossmark state is undetermined.",
+            "preprint_journal_relation": "No owner-stated preprint relation surfaced in the VOR PDF, publisher XML, PMC or PubMed records. Preprints.org search was blocked; this does not exclude an unlinked preprint."
+        },
+        {
+            "source_id": "S025",
+            "current_version": "DOI 10.1016/j.xcrm.2026.102793; Cell Reports Medicine 7(7):102793. NLM/PMC identifies PMID 42309066 and PMC13400141 (single JATS version); the PMC full-text XML is accessible. Online date 18 June 2026 differs from the 21 July 2026 issue/cover date. Crossref and Elsevier declare VOR, full OA CC BY-NC-ND 4.0; Cell Press/ScienceDirect pages are bot-blocked.",
+            "source_url": "https://api.crossref.org/works/10.1016%2Fj.xcrm.2026.102793 ; https://api.elsevier.com/content/article/PII:S2666379126002107?httpAccept=text/xml ; https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=42309066&retmode=xml ; https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pmc&id=13400141&retmode=xml ; https://pmc.ncbi.nlm.nih.gov/articles/PMC13400141/ ; https://www.cell.com/cell-reports-medicine/fulltext/S2666-3791(26)00210-7 ; https://www.sciencedirect.com/science/article/pii/S2666379126002107",
+            "access_boundary": "PMC/NLM full-text JATS is accessible and identifies a single PMC version. Elsevier API returns coredata only; direct Cell Press and ScienceDirect pages returned 403. Thus the article body is available from the PMC archive, while the publisher-rendered route remains blocked.",
+            "correction_retraction_check": "PubMed XML and PMC JATS have no correction/retraction relation; Crossref update queries returned no target, but owner Crossmark status could not be rendered. The absence of a relation field is not treated as proof of no update.",
+            "preprint_journal_relation": "No owner-stated preprint relation was found in PMC/NLM or the Crossref record. A differently titled bioRxiv work cited in the article is a reference, not a declared version of this article."
+        },
+        {
+            "source_id": "S034",
+            "current_version": "Crossref owner deposit, Ovid page metadata and PubMed citation identify VOR Neurosurgery 98(4):895-903, print 1 April 2026, online 29 August 2025; no version split is indicated.",
+            "source_url": "https://api.crossref.org/works/10.1227%2Fneu.0000000000003715 ; https://www.ovid.com/jnls/neurosurgery/abstract/10.1227/neu.0000000000003715~prediction-of-response-to-spinal-cord-stimulation-using ; https://pubmed.ncbi.nlm.nih.gov/40879389/ ; https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=40879389&retmode=xml ; https://crossmark.crossref.org/dialog/?doi=10.1227%2Fneu.0000000000003715&domain=www.ovid.com&date_stamp=2026-09-26 ; https://api.crossref.org/works?filter=updates:10.1227%2Fneu.0000000000003715&rows=20",
+            "access_boundary": "Ovid metadata page and Crossmark dialog were retrievable for this check; full article method text and LWW journal landing page remain inaccessible in the checked environment. PubMed is citation/abstract only.",
+            "correction_retraction_check": "Checked 2026-09-26: Crossref Crossmark dialog HTTP 200 affirmatively states \"Document is current\" and lists no update events; the dialog identifies the matching title and online/print dates. Crossref owner relation is empty and the updates filter returned zero records; PubMed efetch contains no CommentsCorrections or update tags. The direct LWW journals page was Cloudflare-blocked; Crossmark current-state is a bounded depositor status and does not guarantee future/global absence.",
+            "preprint_journal_relation": "No owner-stated preprint relation found in the checked Crossref/Ovid/PubMed routes. S320 is a Zenodo software/preprint resource with no independently established journal-version relation to this article."
+        },
+        {
+            "source_id": "S044",
+            "current_version": "Publisher VOR PDF hosted by University of Liverpool repository confirms The Journal of Pain 49 (2026), article 106416, online date 14 Aug 2026; Crossref issue date is Dec 2026 and PubMed is ahead-of-print. Publisher Crossmark dialog currently states Document is current and VOR valid from 14 Aug 2026. The VOR explicitly cites the bioRxiv preprint DOI 10.1101/2023.11.09.566379 on printed p.11.",
+            "source_url": "https://livrepository.liverpool.ac.uk/3204021/1/1-s2.0-S1526590026002348-main.pdf ; https://api.crossref.org/works/10.1016%2Fj.jpain.2026.106416 ; https://crossmark.crossref.org/dialog-content?doi=10.1016/j.jpain.2026.106416&domain=pdf ; https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=42600964&retmode=xml ; https://api.biorxiv.org/pubs/biorxiv/10.1101.2023.11.09.566379",
+            "access_boundary": "Publisher-generated VOR PDF was accessible from the University of Liverpool repository and independently inspected; direct ScienceDirect/journal pages were Cloudflare-blocked. Current Crossmark dialog was directly retrieved and reports Document is current. Repository OAI labels dc:type NonPeerReviewed while the landing calls the file Published Version; preserve this repository metadata discrepancy.",
+            "correction_retraction_check": "Crossmark dialog reports Document is current and lists no updates; PubMed has no CommentsCorrectionsList. This is the visible Crossmark state at check time, not a future guarantee.",
+            "preprint_journal_relation": "The VOR itself states that a preprint is available at bioRxiv DOI 10.1101/2023.11.09.566379. Crossref does not register that relation; bioRxiv published-version API says no linked journal article was found. The relation is evidenced by the publisher PDF text, not by the preprint-side API."
+        },
+        {
+            "source_id": "S066",
+            "current_version": "PLOS publisher article page, checked 2026-09-25, selects Version 2; selector labels Version 1 \"Uncorrected Proof\". Publisher-deposited Crossref update-to/updated-by is a self-reference (same DOI), type new_version, dated 2026-05-07.",
+            "source_url": "https://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1012122 ; https://api.crossref.org/works/10.1371%2Fjournal.pgen.1012122",
+            "access_boundary": "PLOS publisher page and Crossref DOI record were directly accessible. The PLOS page exposed selected current version and prior uncorrected-proof label.",
+            "correction_retraction_check": "Checked publisher page and Crossref update fields: event is a self-referential new_version, not a separate correction/retraction DOI. No distinct correction/retraction notice surfaced in these checked routes; no global absence claim.",
+            "preprint_journal_relation": "Crossref record for bioRxiv DOI 10.1101/2025.07.17.665309 gives relation is-preprint-of DOI 10.1371/journal.pgen.1012122 (asserted-by subject); exact title and six authors match PLOS article. https://api.crossref.org/works/10.1101%2F2025.07.17.665309"
+        },
+        {
+            "source_id": "S279",
+            "current_version": "Crossref publisher deposit identifies Version of Record, volume 29, issue 5, pages 679-700, July 2026; PubMed E-utilities gives article date 2026-04-30 and the same issue/pages.",
+            "source_url": "https://api.crossref.org/works/10.1016%2Fj.neurom.2026.03.010 ; https://api.crossref.org/works?filter=updates:10.1016%2Fj.neurom.2026.03.010 ; https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=42059841&retmode=xml ; https://www.neuromodulationjournal.org/article/S1094-7159(26)00070-X/fulltext ; https://www.sciencedirect.com/science/article/pii/S109471592600070X",
+            "access_boundary": "Crossref DOI deposit, reverse-update query, and PubMed E-utilities record directly retrieved. Neuromodulation and ScienceDirect full-text owner pages returned HTTP 403.",
+            "correction_retraction_check": "Crossref relation is empty; update-to and updated-by are absent; reverse updates query total-results 0. PubMed CommentsCorrectionsList is empty. Owner-rendered notices/CrossMark could not be checked on the 403-blocked pages; no global absence claim.",
+            "preprint_journal_relation": "No explicit preprint or journal-version relation appears in the checked Crossref record. A preprint relation is not asserted from absent metadata."
+        },
+        {
+            "source_id": "S286",
+            "current_version": "arXiv v3, 2026-06-14",
+            "source_url": "https://arxiv.org/abs/2602.17997",
+            "access_boundary": "arXiv abstract page and submission history checked; publisher or downstream journal identity is not established solely by an empty journal-ref field",
+            "correction_retraction_check": "No arXiv withdrawal notice appears on the checked abstract page; a later notice remains possible.",
+            "preprint_journal_relation": "No journal-ref on the checked arXiv page; no journal link asserted."
+        },
+        {
+            "source_id": "S320",
+            "current_version": "Zenodo metadata version 1.0.0; publication_date 2026-03-21; related identifier points to author software",
+            "source_url": "https://zenodo.org/api/records/19152238",
+            "access_boundary": "Zenodo record and existing archived primary PDF; no journal version established from record relations",
+            "correction_retraction_check": "No update-to relation appeared in the checked Crossref DOI record or correction notice in the checked PubMed/Zenodo record as applicable; absence across all registries is not established.",
+            "preprint_journal_relation": "No link established in the checked primary record; S320 is a Zenodo preprint with author software relation, not an independent journal report."
+        },
+        {
+            "source_id": "S357",
+            "current_version": "JPHV DOI 10.21776/ub.jphv.2026.007.01.07 resolves to owner article 306 and Crossref citation JPHV 7(1), 37-44, March 2026. Owner OAI-PMH confirms publishedVersion and peer-reviewed status, but its dc:date is 2025-03-01 while issue/source and Crossref say 2026-03-01; preserve this owner-side date conflict. The journal landing/PDF routes returned 403; only OAI metadata was accessible.",
+            "source_url": "https://api.crossref.org/works/10.21776%2Fub.jphv.2026.007.01.07 ; https://jphv.ub.ac.id/index.php/jphv/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai:jphv.ub.ac.id:article/306 ; https://jphv.ub.ac.id/index.php/jphv/article/view/306 ; https://jphv.ub.ac.id/index.php/jphv/article/view/306/93",
+            "access_boundary": "Crossref and publisher OAI-PMH GetRecord were directly retrievable; the owner human landing and galley/PDF routes returned Cloudflare 403. This pass verifies metadata only, not article full text.",
+            "correction_retraction_check": "Crossref record and UNIXSD deposit expose no registered update/Crossmark data; publisher human page is blocked, so page-level notices remain uninspected. No global absence claim.",
+            "preprint_journal_relation": "No owner-stated preprint relation appears in Crossref or publisher OAI metadata. The OAI dc:relation is a galley link, not a preprint relation."
+        },
+        {
+            "source_id": "S363",
+            "current_version": "DOI 10.1016/j.neurom.2025.06.008; Neuromodulation 29(1):40-55, Jan 2026 VOR, with NLM online article date 6 Aug 2025. Crossref and Elsevier metadata declare VOR/open access CC BY 4.0; NLM CopyrightInformation says All rights reserved, an unresolved rights-text conflict. Publisher-authored full text was read in a 15 Sep 2025 archive snapshot; live publisher pages are now Cloudflare-blocked.",
+            "source_url": "https://api.crossref.org/works/10.1016%2Fj.neurom.2025.06.008 ; https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=40767809&retmode=xml ; https://api.elsevier.com/content/article/PII:S1094715925002399?httpAccept=text/xml ; https://web.archive.org/web/20250915025158id_/https://www.neuromodulationjournal.org/article/S1094-7159(25)00239-9/fulltext ; https://www.neuromodulationjournal.org/article/S1094-7159(25)00239-9/fulltext",
+            "access_boundary": "Crossref/NLM/Elsevier metadata were directly retrievable. Archived publisher-authored full text is accessible at the dated 2025-09-15 snapshot; live Neuromodulation and ScienceDirect routes return Cloudflare challenge and Elsevier API currently returns coredata only. NLM rights wording conflicts with Crossref/Elsevier CC BY 4.0; not adjudicated here.",
+            "correction_retraction_check": "NLM XML has no CommentsCorrectionsList; Crossref relation/update query has no registered update, while live owner page notices and Crossmark widget are inaccessible. No global absence claim.",
+            "preprint_journal_relation": "No owner-stated preprint relation surfaced in NLM, Crossref or the dated owner HTML snapshot; this does not exclude an unlinked preprint."
+        },
+        {
+            "source_id": "S738",
+            "current_version": "Nature publisher article page identifies current version of record; online 2026-06-08 and issue dated 2026-08-27.",
+            "source_url": "https://www.nature.com/articles/s41586-026-10735-w",
+            "access_boundary": "Full Nature publisher article page directly inspected, including reference 216. Direct bioRxiv version-history route remains unavailable/rate-limited in this bounded recheck.",
+            "correction_retraction_check": "No correction/retraction marker found on inspected Nature article page; Crossref update-to/updated-by fields are empty. This is a bounded check, not proof of global absence.",
+            "preprint_journal_relation": "Nature publisher article reference 216 cites exact bioRxiv DOI 10.1101/2025.07.31.667571 and same title, directly establishing a publisher-cited preprint relation. Crossref has no formal relation field; bioRxiv owner page/version history could not be read in this pass."
+        },
+        {
+            "source_id": "S740",
+            "current_version": "author preprint v2, 30 April 2026",
+            "source_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13142387/fullTextXML",
+            "access_boundary": "Primary PMC JATS version number and publication date; bioRxiv page may rate-limit direct requests",
+            "correction_retraction_check": "JATS marks the record as preprint and contains no journal correction; this does not prove that no later notice exists.",
+            "preprint_journal_relation": "No journal article is established by this primary preprint version record."
+        },
+        {
+            "source_id": "S741",
+            "current_version": "arXiv v1, 2026-04-05",
+            "source_url": "https://arxiv.org/abs/2604.04033",
+            "access_boundary": "arXiv abstract page and submission history checked; publisher or downstream journal identity is not established solely by an empty journal-ref field",
+            "correction_retraction_check": "No arXiv withdrawal notice appears on the checked abstract page; a later notice remains possible.",
+            "preprint_journal_relation": "No journal-ref on the checked arXiv page; no journal link asserted."
+        },
+        {
+            "source_id": "S754",
+            "current_version": "PubMed citation: online ahead of print 23 June 2026; no volume, issue or page assignment in checked record",
+            "source_url": "https://pubmed.ncbi.nlm.nih.gov/42524811/",
+            "access_boundary": "PubMed citation/abstract only; full method remains unavailable",
+            "correction_retraction_check": "No update-to relation appeared in the checked Crossref DOI record or correction notice in the checked PubMed/Zenodo record as applicable; absence across all registries is not established.",
+            "preprint_journal_relation": "No link established in the checked primary record; S320 is a Zenodo preprint with author software relation, not an independent journal report."
+        },
+        {
+            "source_id": "S144",
+            "current_version": "WIPO PATENTSCOPE result row confirms WO/2026/146221, title, publication 09.07.2026, and applicant ONWARD MEDICAL N.V. The exact-record detail URL is a JSF shell; the claims/PDF endpoint returns 403. WIPO does not show kind code A1 in the retrieved row.",
+            "source_url": "https://patentscope.wipo.int/search/en/result.jsf?query=adaptive+neural+interface ; https://patentscope.wipo.int/search/docs2/pct/WO2026146221/pdf/1",
+            "access_boundary": "WIPO official search row returned HTTP 200 and visibly contains the record. The PDF endpoint returned HTTP 403 login gate. The exact-record detail page was HTTP 200 shell only; no claims text was retrieved.",
+            "correction_retraction_check": "No correction/retraction/version fields were checked or inferred from the search result. Legal owner, inventor, priority and filing details remain unverified.",
+            "preprint_journal_relation": "Not applicable to the patent bibliographic identity check; no assertion about related publication made."
+        },
+        {
+            "source_id": "S159",
+            "current_version": "IEEE Xplore staging page canonical URL https://xplorestaging.ieee.org/document/11367103 and owner VOR PDF identify DOI 10.1109/TNSRE.2026.3658636, IEEE Transactions on Neural Systems and Rehabilitation Engineering 34 (2026):880-893. PDF first page states publication 28 January 2026 and current version 6 February 2026; CC BY 4.0.",
+            "source_url": "https://ieeexplore.ieee.org/document/11367103/ ; https://xplorestaging.ieee.org/document/11367103 ; http://xplorestaging.ieee.org/ielx8/7333/11311371/11367103.pdf?arnumber=11367103 ; https://api.crossref.org/works/10.1109%2FTNSRE.2026.3658636 ; https://crossmark.crossref.org/dialog/?doi=10.1109/TNSRE.2026.3658636",
+            "access_boundary": "IEEE staging page and publisher VOR PDF were available in existing same-day source captures; Crossref UNIXSD VOR resource points to the IEEE public page and staging PDF. Direct Xplore page remains WAF-blocked, and current direct staging request returned HTTP 418 during this check. Crossmark endpoint says data unavailable, so it gives no affirmative current-status result.",
+            "correction_retraction_check": "Crossref update-to/updated-by and relation fields were empty, reverse update query returned 0; NLM CommentsCorrectionsList empty; PDF has no visible correction/retraction notice. Crossmark returned no data. These bounded registry/document checks do not establish global absence.",
+            "preprint_journal_relation": "No explicit preprint relation surfaced in the checked Crossref/Xplore page data; absence of a registered relation does not establish absence of an unlinked preprint."
+        },
+        {
+            "source_id": "S285",
+            "current_version": "Nature publisher article page identifies Review, published and Version of Record 14 April 2026, npj Biomedical Innovations volume 3, article 28. Crossmark currently states Document is current and lists no updates.",
+            "source_url": "https://www.nature.com/articles/s44385-026-00076-8 ; https://crossmark.crossref.org/dialog/?doi=10.1038/s44385-026-00076-8 ; https://api.crossref.org/works/10.1038%2Fs44385-026-00076-8 ; https://pubmed.ncbi.nlm.nih.gov/42032316/",
+            "access_boundary": "Nature official page opened and article identity/date/volume/type inspected; official Crossmark dialog opened directly and says Document is current. Worker also retrieved the publisher PDF and Crossref/PubMed records. Local direct Nature request returned a client challenge; page content was inspected via the web reader.",
+            "correction_retraction_check": "Crossmark says Document is current and lists no updates at this check; no correction link surfaced on inspected Nature page. Crossref update/relation fields and PubMed CommentsCorrectionsList are empty. Bounded to these routes and date; no global absence claim.",
+            "preprint_journal_relation": "No linked preprint surfaced in the checked Nature article page, Crossref relations, or PubMed record. This does not rule out an unlinked preprint."
+        },
+        {
+            "source_id": "S356",
+            "current_version": "Official Cureus 8-page article PDF identifies the Version of Record, DOI 10.7759/cureus.102799, Cureus 18(2):e102799, published 2026-02-01. It is a single-patient case report; the observed outcomes are reported at the end of a five-day SCS trial.",
+            "source_url": "https://assets.cureus.com/uploads/case_report/pdf/460390/20260202-302464-fuovtq.pdf ; https://doi.org/10.7759/cureus.102799",
+            "access_boundary": "Publisher-hosted PDF directly opened and read; page 1 confirms identity, date, author list and open-access status; pages 1 and 4-5 report one patient and five-day outcomes. No publisher correction page or Crossmark route checked in this pass.",
+            "correction_retraction_check": "Not checked beyond the retrieved PDF, which contains no correction/retraction notice in the inspected pages. This does not establish absence of a separate update.",
+            "preprint_journal_relation": "No preprint route checked in this pass; no relation inferred."
+        },
+        {
+            "source_id": "S004",
+            "current_version": "NLM PubMed XML, Crossref and IEEE rendered owner metadata agree on DOI 10.1109/JBHI.2026.3650972 and VOR citation IEEE JBHI 30(6):5039-5051 (June 2026); IEEE Date of Publication is 21 Jan 2026. Crossref deposits VOR; no correction signal in NLM XML. Direct IEEE is WAF-blocked; reader route exposes metadata/abstract only, article full text gated. Crossmark is not registered in the retrieved deposit; no owner-stated preprint relation surfaced. Empty relations do not establish global absence.",
+            "source_url": "https://doi.org/10.1109/JBHI.2026.3650972 ; https://api.crossref.org/works/10.1109%2FJBHI.2026.3650972 ; https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=41564065&retmode=xml ; https://ieeexplore.ieee.org/document/11359943/ ; https://r.jina.ai/https://ieeexplore.ieee.org/document/11359943/",
+            "access_boundary": "NLM XML and Crossref metadata were directly retrieved; IEEE direct landing returned WAF challenge. Reader-rendered IEEE owner metadata/abstract were accessible, while article PDF remained gated. PMC ID converter reports no PMC record. This check does not establish global absence of a repository copy.",
+            "correction_retraction_check": "NLM XML has no CommentsCorrections/update/erratum/retraction elements. The retrieved Crossref deposit has no Crossmark registration, and no notice marker appeared in the retrieved reader-rendered IEEE page. Direct IEEE was WAF-blocked, so owner page notices could not be fully inspected; no global absence claim.",
+            "preprint_journal_relation": "No preprint relation was stated in the retrieved NLM, IEEE rendered metadata or Crossref record. Empty registry relations do not rule out an unlinked preprint."
+        },
+        {
+            "source_id": "S036",
+            "current_version": "Elsevier owner coredata and Crossref identify DOI 10.1016/j.neucom.2025.132066, Neurocomputing 664:132066, cover date 2026-02-01, VOR link and OA CC BY-NC-ND 4.0. Anonymous Elsevier API returns coredata only; ScienceDirect body is 403. No PMID/PMCID located.",
+            "source_url": "https://api.elsevier.com/content/article/pii/S0925231225027389?httpAccept=text/xml ; https://api.elsevier.com/content/abstract/doi/10.1016/j.neucom.2025.132066?httpAccept=text/xml ; https://api.crossref.org/works/10.1016%2Fj.neucom.2025.132066 ; https://www.sciencedirect.com/science/article/pii/S0925231225027389 ; https://linkinghub.elsevier.com/retrieve/pii/S0925231225027389",
+            "access_boundary": "Elsevier article/abstract API returns metadata coredata only without abstract/full text; ScienceDirect returns 403 bot challenge. No PubMed, PMC, or Europe PMC record. OA declaration is not evidence that article body is accessible here.",
+            "correction_retraction_check": "Crossref/Elsevier deposits declare Crossmark policy, but owner Crossmark status could not be retrieved because ScienceDirect is blocked. No update record surfaced in checked deposit; correction/retraction status remains unverified, not absent.",
+            "preprint_journal_relation": "No owner-stated preprint relation surfaced in retrievable metadata. Full text was unavailable to inspect; an unlinked preprint cannot be excluded."
+        },
+        {
+            "source_id": "S045",
+            "current_version": "DOI 10.1109/TNSRE.2026.3692232; IEEE TNSRE 34 (2026):2480-2490, VOR, CC BY 4.0. NLM XML and Crossref confirm identity; Crossref-deposited VOR PDF route was reported accessible in a worker check but returned HTTP 418 on this independent recheck, so its live availability is variable. Crossref has no issue field; do not describe an issue number as confirmed.",
+            "source_url": "https://api.crossref.org/works/10.1109%2FTNSRE.2026.3692232 ; https://xplorestaging.ieee.org/ielx8/7333/11311371/11515232.pdf?arnumber=11515232 ; https://ieeexplore.ieee.org/document/11515232/ ; https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=42118625&retmode=xml ; https://crossmark.crossref.org/dialog/?doi=10.1109/TNSRE.2026.3692232",
+            "access_boundary": "NLM XML and Crossref metadata are accessible. IEEE direct HTML/WAF and staging PDF route was 418 on independent recheck (a Pi probe previously received the PDF); owner full-text availability is therefore variable in this environment. CC BY 4.0 is declared in Crossref and the retrieved publisher PDF report.",
+            "correction_retraction_check": "NLM XML has no CommentsCorrectionsList; the Crossmark dialog says data for this content is not currently available, so Crossmark state is indeterminate. Do not infer absence from the empty Crossref relation.",
+            "preprint_journal_relation": "No preprint relation surfaced in the retrieved IEEE PDF, NLM or Crossref routes; this does not rule out an unlinked preprint."
+        },
+        {
+            "source_id": "S079",
+            "current_version": "DOI 10.1016/j.neurom.2025.11.011; Neuromodulation 29(6):913-920, Aug 2026 per NLM and Elsevier coverDate; electronic date 8 Jan 2026. Crossref instead reports published-print Jan 2026, a genuine owner-metadata conflict. Elsevier declares VOR and OA CC BY 4.0, but publisher pages/PDF routes are bot-blocked and Elsevier API is metadata-only.",
+            "source_url": "https://api.crossref.org/works/10.1016%2Fj.neurom.2025.11.011 ; https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=41504676&retmode=xml ; https://api.elsevier.com/content/article/PII:S1094715925011705?httpAccept=text/xml ; https://linkinghub.elsevier.com/retrieve/pii/S1094715925011705 ; https://www.sciencedirect.com/science/article/pii/S1094715925011705 ; https://www.neuromodulationjournal.org/article/S1094-7159(25)01170-5/fulltext",
+            "access_boundary": "NLM XML and Elsevier coredata metadata are accessible and corroborate issue citation/CC BY license; human-facing publisher, ScienceDirect and PDF routes return bot challenges. No PMC deposit. OA metadata does not establish that the full article body was retrievable.",
+            "correction_retraction_check": "PubMed has no CommentsCorrections/UpdateList. Crossref update query returned zero; Elsevier Crossmark policy is declared but widget/content could not be inspected because owner pages are blocked. No global absence claim.",
+            "preprint_journal_relation": "No owner-stated preprint relation surfaced in Crossref, Elsevier API or NLM XML. Empty Crossref relation and no PubMed link do not rule out an unlinked preprint."
+        },
+        {
+            "source_id": "S086",
+            "current_version": "IEEE publisher metadata identifies DOI 10.1109/FG67764.2026.11556963, FG 2026 proceedings, pages 1-9, conference 25-29 May and Xplore-added 17 June. IIT Indore DSpace owner record confirms identity/abstract but explicitly has no attached files. IEEE full text is paywalled/WAF-blocked; no manuscript copy is deposited at the checked repository item.",
+            "source_url": "https://api.crossref.org/works/10.1109%2FFG67764.2026.11556963 ; https://ieeexplore.ieee.org/document/11556963/ ; https://r.jina.ai/https://ieeexplore.ieee.org/document/11556963/ ; https://dspace.iiti.ac.in/handle/123456789/18784",
+            "access_boundary": "IEEE direct and IIT DSpace page return WAF/safeline blocks. Reader-rendered IEEE page shows abstract/intro and the DSpace item confirms no files associated; neither provides the publisher article PDF. Crossref declares VOR metadata only.",
+            "correction_retraction_check": "No update appears in the Crossref deposit/update route; IEEE correction/Crossmark surfaces could not be inspected because Xplore is blocked. Do not infer absence.",
+            "preprint_journal_relation": "No owner-stated preprint relation in retrieved IEEE/Crossref/DSpace metadata; the DSpace record is metadata only and no manuscript was attached."
+        },
+        {
+            "source_id": "S005",
+            "current_version": "DOI 10.1145/3737281; ACM Computing Surveys 58(2):1-35, online 2025-09-09/print 2026-01-31. ACM Crossmark states Document is current. Canberra copy is an accessible 34-page ACM-typeset PDF but differs from final 1-35 pagination and is not confirmed as VOR; the ACM-hosted VOR PDF is blocked. Final article number unknown.",
+            "source_url": "https://api.crossref.org/works/10.1145%2F3737281 ; https://crossmark.crossref.org/dialog-content?doi=10.1145/3737281&domain=pdf ; https://researchsystem.canberra.edu.au/ws/portalfiles/portal/118630433/3737281.pdf ; https://unsworks.unsw.edu.au/bitstreams/95f27f8e-.../download ; https://dl.acm.org/doi/10.1145/3737281",
+            "access_boundary": "Canberra 34-page ACM-typeset PDF and a separate UNSWorks item are retrievable; ACM landing/VOR PDF is 403. Canberra pagination and metadata do not establish it as final VOR. UNSWorks labels its PDF AAM, while contents contain submission-template markers; exact version remains unresolved.",
+            "correction_retraction_check": "ACM Crossmark dialog reports Document is current as of retrieval. Crossref update relation is empty; ACM owner OAI route returned permission error. This is a bounded Crossmark observation, not a guarantee of no other notice.",
+            "preprint_journal_relation": "No owner-stated preprint link surfaced in Crossref, Crossmark or repository metadata checked. No global absence claim."
+        },
+        {
+            "source_id": "S039",
+            "current_version": "Elsevier owner API/LinkingHub and Crossref identify DOI 10.1016/j.bspc.2026.111261, Biomedical Signal Processing and Control 128:111261, cover date 2026-12-01. Crossmark dialog currently says Document is current. Guest APIs expose coredata only; ScienceDirect page/full text are 403 and access is closed.",
+            "source_url": "https://api.elsevier.com/content/article/PII:S174680942601815X?httpAccept=text/xml ; https://api.elsevier.com/content/abstract/pii/S174680942601815X?httpAccept=application/json ; https://api.crossref.org/works/10.1016%2Fj.bspc.2026.111261 ; https://linkinghub.elsevier.com/retrieve/pii/S174680942601815X ; https://crossmark.crossref.org/dialog/?doi=10.1016/j.bspc.2026.111261&domain=publisher ; https://www.sciencedirect.com/science/article/pii/S174680942601815X",
+            "access_boundary": "Elsevier APIs provide coredata metadata only; LinkHub confirms the article title but not body. ScienceDirect article/abstract routes are Cloudflare 403; full text and article-page notices cannot be rechecked. Crossmark dialog was directly retrievable and says Document is current.",
+            "correction_retraction_check": "Elsevier Crossmark dialog currently reports Document is current; Crossref updates filter returns zero and owner deposit has no update child. Bounded registered/visible state, not proof against an unregistered notice.",
+            "preprint_journal_relation": "No owner-stated preprint relation was found in the accessible LinkHub/coredata/Crossref metadata. Article body and any author note remain inaccessible, so relation is unresolved."
+        },
+        {
+            "source_id": "S078",
+            "current_version": "Elsevier DOI/LinkHub identifies book chapter \"Physiologic closed loop controlled spinal cord stimulation,\" in A Modern Atlas for Implantable Devices of the Spine, Brain, and Nerve (2026), pp. 283-297, DOI 10.1016/B978-0-443-36528-7.00011-X. Crossref labels its TDM link VOR; Elsevier owner API returns coredata only. Full text is paywalled/inaccessible.",
+            "source_url": "https://doi.org/10.1016/B978-0-443-36528-7.00011-X ; https://linkinghub.elsevier.com/retrieve/pii/B978044336528700011X ; https://api.elsevier.com/content/article/PII:B978044336528700011X?httpAccept=text/xml ; https://www.sciencedirect.com/science/article/pii/B978044336528700011X ; https://api.crossref.org/works/10.1016%2FB978-0-443-36528-7.00011-X",
+            "access_boundary": "DOI resolver, LinkHub and Elsevier coredata expose chapter metadata; ScienceDirect/permission landing does not yield chapter text. No PMC/PubMed record. Crossref VOR content label identifies a version link, not retrieved full text.",
+            "correction_retraction_check": "No Crossmark block/update record appeared in the owner deposit; publisher page notice state is unknown because the full page is blocked. Empty relation is not absence proof.",
+            "preprint_journal_relation": "No owner-stated preprint relation or repository full text surfaced in checked DOI/Elsevier metadata. Off-registry manuscript status remains unknown."
+        },
+        {
+            "source_id": "S082",
+            "current_version": "Elsevier/Crossref identify DOI 10.1016/j.bspc.2026.109815, Biomedical Signal Processing and Control 119:109815 (June 2026; Elsevier cover date 15 June). LinkHub and anonymous APIs expose coredata only; prior owner-page rendering exposed the title/abstract, but a live recheck now returns 403. Publisher VOR body was not retrieved.",
+            "source_url": "https://api.crossref.org/works/10.1016%2Fj.bspc.2026.109815 ; https://api.elsevier.com/content/article/PII:S1746809426003691?httpAccept=text/xml ; https://api.elsevier.com/content/abstract/doi/10.1016/j.bspc.2026.109815 ; https://linkinghub.elsevier.com/retrieve/pii/S1746809426003691 ; https://www.sciencedirect.com/science/article/pii/S1746809426003691",
+            "access_boundary": "Crossref, Elsevier coredata and LinkHub metadata are accessible. Prior rendered owner page yielded abstract, but direct ScienceDirect was 403 on this recheck and anonymous APIs return no abstract/full text. The source is closed access; no PMC full text.",
+            "correction_retraction_check": "Owner Crossref deposit carries Crossmark policy but live Crossmark/ScienceDirect body is inaccessible. Update/relation fields do not establish absence; status beyond deposited metadata remains unknown.",
+            "preprint_journal_relation": "No owner-stated preprint relation surfaced in Crossref/Elsevier metadata. Because the owner body is not retrievable, no global absence claim."
+        },
+        {
+            "source_id": "S008",
+            "current_version": "IOP owner-rendered PDF/text identifies publisher VOR, Biomed. Phys. Eng. Express 12(1) (2026) 015046, online 2026-01-15/issue 2026-02-01, CC BY 4.0. Crossmark currently says Document is current. Direct IOP page/PDF is bot-challenged; complete publisher body was retrieved through a text-rendering route.",
+            "source_url": "https://iopscience.iop.org/article/10.1088/2057-1976/ae34b4 ; https://r.jina.ai/https://iopscience.iop.org/article/10.1088/2057-1976/ae34b4/pdf ; https://crossmark.crossref.org/dialog-content?doi=10.1088/2057-1976/ae34b4&domain=pdf ; https://api.crossref.org/works/10.1088%2F2057-1976%2Fae34b4 ; https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=41499809&retmode=xml",
+            "access_boundary": "Direct IOP and PubMed HTML/PDF were challenged; the full publisher PDF and article text were retrievable through the rendering route, which reports 13 pages and VOR/CC BY 4.0. No PMC full text. Crossmark dialog is currently accessible and says Document is current.",
+            "correction_retraction_check": "IOP Crossmark dialog states Document is current and lists no updates; PubMed XML has no CommentsCorrections block. This is current observed Crossmark state, not a future/global guarantee.",
+            "preprint_journal_relation": "No owner-stated preprint relation surfaced in the article body, Crossref or PubMed. The 2021 bioRxiv item cited in references is a distinct cited work, not this article version."
+        },
+        {
+            "source_id": "S022",
+            "current_version": "Elsevier/Crossref and NLM identify DOI 10.1016/j.expneurol.2026.115649 (PMID 41539462), Experimental Neurology 398:115649. NLM and publisher API indicate online publication 13 Jan 2026 and April 2026 issue; Crossref VOR deposit and Elsevier API declare full OA CC BY-NC 4.0. Publisher API returned coredata only and ScienceDirect full-text page returned 403; the article body was not retrieved on the owner route.",
+            "source_url": "https://api.crossref.org/works/10.1016%2Fj.expneurol.2026.115649 ; https://api.elsevier.com/content/article/PII:S0014488626000129?httpAccept=text/xml ; https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=41539462&retmode=xml ; https://www.sciencedirect.com/science/article/pii/S0014488626000129 ; https://linkinghub.elsevier.com/retrieve/pii/S0014488626000129",
+            "access_boundary": "Direct recheck retrieved Elsevier coredata XML and NLM/PubMed XML; ScienceDirect returned 403 bot challenge. Elsevier API exposed metadata only, not article body; no PMC deposit was found. OA license metadata is not evidence that the full text was accessible in this environment.",
+            "correction_retraction_check": "The Elsevier Crossmark deposit was retrieved without update elements; NLM XML has no CommentsCorrections block. Publisher page-level notices are inaccessible behind 403; no global absence claim.",
+            "preprint_journal_relation": "No owner-stated preprint relation surfaced in Crossref, Elsevier API or NLM XML. An empty Crossref relation alone is not treated as proof of absence."
+        },
+        {
+            "source_id": "S088",
+            "current_version": "IEEE/Crossref owner deposit identifies proceedings article DOI 10.1109/ISDA70544.2026.11606012, 2026 ISDA, pages 1-8. Direct IEEE/Xplore and the Crossref-deposited VOR PDF route are WAF-blocked; retrieved evidence remains owner-deposited bibliographic metadata, with article body inaccessible.",
+            "source_url": "https://api.crossref.org/works/10.1109%2FISDA70544.2026.11606012 ; https://doi.org/10.1109/ISDA70544.2026.11606012 ; https://ieeexplore.ieee.org/document/11606012/ ; http://xplorestaging.ieee.org/ielx8/11605974/11605976/11606012.pdf?arnumber=11606012",
+            "access_boundary": "Crossref/IEEE DOI deposit metadata are retrievable; direct IEEE document, abstract/stamp, and staging PDF routes return 418/202 empty WAF responses. No full text, PMC, PubMed or repository manuscript was retrieved. Therefore retain crossref_metadata_screened.",
+            "correction_retraction_check": "Crossref deposit has no Crossmark registration/update relation and updates query is empty; Xplore correction surfaces are blocked. No global absence claim.",
+            "preprint_journal_relation": "No owner-stated preprint relation surfaced in the owner deposit or tested repositories, but publisher body is inaccessible and an unlinked manuscript cannot be excluded."
+        },
+        {
+            "source_id": "S097",
+            "current_version": "MDPI Sensors 26(4):1275, DOI 10.3390/s26041275, PMID 41755214, PMCID PMC12944444; published 2026-02-15, CC BY 4.0. The owner CDN exposes Edition A at the unversioned PDF URL (53 pp., 2,961,029 B, SHA-256 4BE5FF94F310C522B6ECFF331325CC3C8B51915845CA9053F2101DB6A2D31F68) and Edition B at the -v2 PDF URL (51 pp., 3,254,125 B, SHA-256 8245788F10FF5464D13FB0655E0B77DF3FC9DAFABB07C0B06A29D5B62546A12B). Current owner JATS and PMC JATS match Edition B; same DOI, no correction/erratum notice or new DOI surfaced. Crossmark current-state cannot be retrieved.",
+            "source_url": "https://mdpi-res.com/d_attachment/sensors/sensors-26-01275/article_deploy/sensors-26-01275.pdf ; https://mdpi-res.com/d_attachment/sensors/sensors-26-01275/article_deploy/sensors-26-01275-v2.pdf ; https://mdpi-res.com/d_attachment/sensors/sensors-26-01275/article_deploy/sensors-26-01275.xml ; https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pmc&id=PMC12944444&retmode=xml ; https://pmc.ncbi.nlm.nih.gov/articles/PMC12944444/ ; https://www.mdpi.com/1424-8220/26/4/1275 ; https://crossmark.crossref.org/dialog/?doi=10.3390/s26041275",
+            "access_boundary": "Both publisher-CDN PDF editions and current JATS XML are accessible (HTTP 200); PMC full JATS is also accessible. Canonical www.mdpi.com landing/notes route is 403. Edition A (53 pp; 2,961,029 bytes; SHA-256 4BE5FF94F310C522B6ECFF331325CC3C8B51915845CA9053F2101DB6A2D31F68) is `.../sensors-26-01275.pdf`; Edition B (51 pp; 3,254,125 bytes; SHA-256 8245788F10FF5464D13FB0655E0B77DF3FC9DAFABB07C0B06A29D5B62546A12B) is `.../sensors-26-01275-v2.pdf`. Directly fetched file hashes/page counts match these values. Current owner JATS and PMC JATS are Edition B; unversioned CDN PDF remains Edition A.",
+            "correction_retraction_check": "Publisher PDF/JATS, PubMed and PMC show no linked correction/retraction record; two materially different same-DOI editions are present, with Edition B replacing A in current JATS/PMC. MDPI landing/notes are blocked and Crossmark status unavailable, so do not certify absence of a corrigendum or describe B as a formal correction.",
+            "preprint_journal_relation": "PMC marks pmc-prop-preprint=no and no owner relation to a preprint was found in JATS/DOI deposit. MDPI Preprints.org search was blocked; no global absence claim."
+        },
+        {
+            "source_id": "S273",
+            "current_version": "Wiley DOI 10.1002/adsu.70449; Advanced Sustainable Systems 10(4), article e70449. Crossmark dialog currently reports Document is current. DOI resolution/landing/full XML/PDF/OAI routes are Cloudflare-blocked; retrievable primary content is publisher-deposited Crossref metadata/abstract and the Crossmark status, not the article body.",
+            "source_url": "https://api.crossref.org/works/10.1002/adsu.70449 ; https://doi.org/10.1002/adsu.70449 ; https://crossmark.crossref.org/dialog-content?doi=10.1002/adsu.70449&domain=pdf&date_stamp=2026-03-30 ; https://onlinelibrary.wiley.com/doi/full/10.1002/adsu.70449",
+            "access_boundary": "Crossref DOI-owner metadata/abstract and Wiley Crossmark dialog were accessible. Publisher landing, HTML, XML, PDF and OAI routes return Cloudflare 403; no article body or repository copy was retrieved. Crossmark currently says Document is current.",
+            "correction_retraction_check": "Wiley Crossmark currently reports Document is current and lists no update; this bounded live check supports no visible Crossmark update at retrieval. Do not infer absence of a notice outside Crossmark.",
+            "preprint_journal_relation": "No owner-stated preprint relation was visible in the accessible Crossref deposit. Wiley article body is blocked, so preprint/version status beyond registered metadata is unresolved."
+        },
+        {
+            "source_id": "S748",
+            "current_version": "MDPI Computers 15(2):127, DOI 10.3390/computers15020127. Publisher-hosted VOR PDF (9 pp.) and full JATS XML are accessible from mdpi-res; CC BY 4.0. The owner article explicitly calls it a revised and expanded version of the ICPR 2024 workshop paper \"ModMix: Data Augmentation for Multimodal Pain Detection,\" DOI 10.1007/978-3-031-88220-3_11. This is a conference-paper lineage, not a preprint relation.",
+            "source_url": "https://mdpi-res.com/d_attachment/computers/computers-15-00127/article_deploy/computers-15-00127.pdf ; https://mdpi-res.com/d_attachment/computers/computers-15-00127/article_deploy/computers-15-00127.xml ; https://www.mdpi.com/2073-431X/15/2/127 ; https://api.crossref.org/works/10.3390%2Fcomputers15020127 ; https://api.crossref.org/works/10.1007%2F978-3-031-88220-3_11",
+            "access_boundary": "Publisher CDN VOR PDF (9 pp.) and JATS full text retrieved with HTTP 200; canonical MDPI landing and OAI remain 403. Owner article text includes revision/expansion statement and DOI of earlier workshop paper. No PMC/Europe PMC article copy.",
+            "correction_retraction_check": "Crossref owner deposit has a Crossmark block but the live MDPI Crossmark status/landing is blocked; no update marker surfaced in retrieved PDF/JATS/deposit. Status is unresolved; do not certify absence of correction.",
+            "preprint_journal_relation": "The owner identifies an earlier ICPR 2024 workshop paper as a revised/expanded precursor (DOI 10.1007/978-3-031-88220-3_11). This is not a preprint link. No separate preprint relation established."
+        },
+        {
+            "source_id": "S763",
+            "current_version": "bioRxiv DOI 10.64898/2026.04.29.721658; owner serves v2 dated 2026-05-05 as the most recent version (v1 2026-05-03). Full v2 HTML/PDF and article-info are accessible. V2 contains a minor self-described author-order/name correction; no journal publication link surfaced in checked owner/Crossref routes. Crossmark dialog says CrossMark data is not currently available.",
+            "source_url": "https://www.biorxiv.org/content/10.64898/2026.04.29.721658v2.full ; https://www.biorxiv.org/content/10.64898/2026.04.29.721658v2.full.pdf ; https://www.biorxiv.org/content/10.64898/2026.04.29.721658v2.article-info ; https://www.biorxiv.org/content/10.64898/2026.04.29.721658v1.full ; https://api.biorxiv.org/pubs/biorxiv/10.64898/2026.04.29.721658 ; https://api.crossref.org/works/10.64898%2F2026.04.29.721658 ; https://crossmark.crossref.org/dialog/?doi=10.64898/2026.04.29.721658",
+            "access_boundary": "Owner v2 HTML/PDF/article-info and v1 HTML are directly retrievable; v2 is explicitly the latest. Crossref is an openRxiv posted-content record. Some bioRxiv API/page routes rate-limited or returned empty bodies; those do not negate the accessible full text. No PubMed/PMC article record.",
+            "correction_retraction_check": "Owner v2 article-info/full text discloses a minor v1-to-v2 author-list/order self-correction and figure-title wording fix; this is a version note, not an erratum/retraction. Crossmark dialog explicitly says data is not currently available. No correction/retraction notice surfaced, but no Crossmark-current claim.",
+            "preprint_journal_relation": "No owner-registered journal version/link surfaced in the bioRxiv published-version endpoint, Crossref, Europe PMC or PubMed checked; details endpoint returned empty body and API result has a degraded empty-DOI status. State as no link registered in checked owner routes, not a global absence claim."
+        },
+        {
+            "source_id": "S780",
+            "current_version": "The 24-month Evoke report DOI 10.1001/jamaneurol.2021.4998 has a separate published correction, now canonical S805: JAMA Neurol 2022;79(4):420, DOI 10.1001/jamaneurol.2022.0022, online 14 February 2022. The notice says the closed-loop and open-loop Subthreshold values were switched in Figure 4C and that the article was corrected online. The notice is not a new trial or an outcome update.",
+            "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8845020/ ; https://jamanetwork.com/journals/jamaneurology/fullarticle/2789149 ; https://pmc.ncbi.nlm.nih.gov/articles/PMC8742908/",
+            "access_boundary": "NLM PMC8845020 correction citation, notice paragraph and reference 1 were directly fetched and checked on 2026-09-26. The JAMA-hosted correction page returned an automated-access block in the Pi worker check; the NLM copy is the accessible primary text for the same DOI. This check establishes the stated correction, not the absence of later notices.",
+            "correction_retraction_check": "Positive correction identified and registered as S805, relation corrects S780. Figure 4C Subthreshold group values were switched. Do not treat an empty update query as a zero-update result for S780; later-dated owner refresh remains open for SRC-08.",
+            "preprint_journal_relation": "Not applicable to this correction check; S805 is a separate correction notice, not a preprint or independent clinical study."
+        },
+        {
+            "source_id": "S148",
+            "current_version": "Dove Press owner full-text page identifies the Journal of Pain Research 2026;19:617733 version of record, DOI 10.2147/JPR.S617733, published 10 July 2026. The owner page and publication date were fetched again on 2026-09-26; no distinct article version was identified on the checked route.",
+            "source_url": "https://www.dovepress.com/rethinking-pain-assessment-subjective-scales-biomarkers-and-multimodal-peer-reviewed-fulltext-article-JPR ; https://doi.org/10.2147/JPR.S617733",
+            "access_boundary": "Dove Press owner HTML was directly fetched; the DOI and publication date appear in its metadata and article history. The worker also checked its publisher PDF. A journal-wide notice index or live Crossmark status was not independently inspected in this pass.",
+            "correction_retraction_check": "No article-specific correction/retraction marker surfaced on the checked owner article page or DOI deposit. This bounded screen does not certify a zero-update queue; publisher-wide notice routes still need a later refresh.",
+            "preprint_journal_relation": "No owner-stated preprint link was identified in the checked article page; absence outside that owner route is unresolved."
+        },
+        {
+            "source_id": "S732",
+            "current_version": "Eon Systems fly-brain repository main HEAD is a3db62f9436074e485c0278290c2164ed6150808, matching the canonical pin; git ls-remote was independently checked on 2026-09-26. The latest commit is dated 29 August 2026 according to the owner's commit metadata. No tagged release was reported in the checked owner route.",
+            "source_url": "https://github.com/eonsystemspbc/fly-brain ; https://github.com/eonsystemspbc/fly-brain/commit/a3db62f9436074e485c0278290c2164ed6150808 ; https://raw.githubusercontent.com/eonsystemspbc/fly-brain/a3db62f9436074e485c0278290c2164ed6150808/README.md",
+            "access_boundary": "The Git ref was directly checked with git ls-remote. Repository metadata and README/preprint links were checked by Pi through owner routes; bioRxiv HTML was rate-limited and its details endpoint returned an empty body.",
+            "correction_retraction_check": "No Git tag/release or owner issue labelled as a correction surfaced in the worker's owner-route screen. A repository commit is the relevant version unit; these GitHub observations are not a scientific-paper retraction clearance.",
+            "preprint_journal_relation": "Owner README links Shiu et al. bioRxiv v1, DOI 10.1101/2023.05.02.539144; owner blog also cites the Nature article DOI 10.1038/s41586-024-07763-9 as a model source. These are provenance links, not versions of the S732 repository itself."
+        },
+        {
+            "source_id": "S733",
+            "current_version": "Neuromorphicism fly-brain-snntorch main HEAD is fe55fb0cff275a2b6b54926524c8d831838e32fc, matching the canonical pin; independently confirmed with git ls-remote on 2026-09-26. Owner commit metadata dates this README typo fix to 20 September 2026. No tagged release was reported.",
+            "source_url": "https://github.com/Neuromorphicism/fly-brain-snntorch ; https://github.com/Neuromorphicism/fly-brain-snntorch/commit/fe55fb0cff275a2b6b54926524c8d831838e32fc",
+            "access_boundary": "The Git ref was independently checked. GitHub REST metadata returned 403 in the Codex session, so release/tag and README-link details are limited to the Pi owner's route and the previous canonical repository audit.",
+            "correction_retraction_check": "No version drift in the checked main ref. GitHub commits and releases are not a formal correction/retraction register for cited papers; no global absence claim follows.",
+            "preprint_journal_relation": "The repository describes itself as a port of the Shiu Brian2 fly-brain implementation. No self-DOI or owner-declared journal version for this repository surfaced in the checked README and metadata routes."
+        },
+        {
+            "source_id": "S164",
+            "current_version": "The Aalborg University VBN-hosted PDF for DOI 10.1109/ACCESS.2026.3713429 explicitly labels itself Publisher's PDF / Version of record. The article first page states received 18 May, accepted 24 June, date of publication 14 July and date of current version 22 July 2026; IEEE Access 14:108508-108538. The PDF cover and first article page were independently inspected on 2026-09-26.",
+            "source_url": "https://vbn.aau.dk/ws/files/846863920/Transformer_and_Attention-Based_Models_for_Automated_Pain_Assessment_A_Systematic_Review.pdf ; https://vbn.aau.dk/en/publications/transformer-and-attention-based-models-for-automated-pain-assessm/ ; https://doi.org/10.1109/ACCESS.2026.3713429",
+            "access_boundary": "VBN owner PDF was directly downloaded and its cover/first page read. Direct IEEE Xplore article and PDF routes were blocked by WAF; the VBN copy supplies publisher-generated version/date evidence. OpenAlex's acceptedVersion label conflicts with the owner PDF's explicit Version of record label.",
+            "correction_retraction_check": "The checked VBN owner record and available Crossref metadata showed no registered notice; IEEE's own update/correction tab was inaccessible. The two July dates on the PDF are ordinary publication/current-version stamps, not evidence of a post-publication corrigendum.",
+            "preprint_journal_relation": "VBN links the IEEE published version and its deposited publisher PDF. No owner-stated separate preprint surfaced in the checked VBN record."
+        },
+        {
+            "source_id": "S360",
+            "current_version": "NLM PMC13009343 directly confirms the Springer Pain and Therapy report DOI 10.1007/s40122-026-00821-2, first online 3 March 2026, 15(2):569-583. The NLM copy and DOI citation were rechecked on 2026-09-26.",
+            "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13009343/ ; https://link.springer.com/article/10.1007/s40122-026-00821-2",
+            "access_boundary": "The PMC primary full-text copy was directly fetched. The worker read the Springer owner page and registry metadata; Crossmark XML negotiation returned 406, so live Crossmark state was not obtained by that route.",
+            "correction_retraction_check": "No notice surfaced in the checked NLM and Springer/Crossref routes. The unavailable Crossmark XML and future notice refresh prevent a global absence claim.",
+            "preprint_journal_relation": "No owner-declared preprint link surfaced in the checked Springer and NLM records; this is bounded to those records."
+        },
+        {
+            "source_id": "S149",
+            "current_version": "Frontiers owner JATS for DOI 10.3389/frai.2026.1827727 explicitly labels Version of Record and online publication 7 August 2026; the XML was directly fetched on 2026-09-26. Owner HTML JSON-LD has dateModified 25 September 2026, but no scientific version-change notice accompanies that timestamp on the checked page.",
+            "source_url": "https://www.frontiersin.org/journals/artificial-intelligence/articles/10.3389/frai.2026.1827727/xml ; https://www.frontiersin.org/journals/artificial-intelligence/articles/10.3389/frai.2026.1827727/full",
+            "access_boundary": "Frontiers owner full HTML and XML were directly fetched. The page's dateModified is a CMS metadata value; its cause was not established. CrossMark widget execution was not independently checked.",
+            "correction_retraction_check": "No article-specific correction/retraction notice or alternate article-version element surfaced in the checked owner HTML/JATS. Do not classify the 25 September dateModified as a correction or certify that no later notices exist.",
+            "preprint_journal_relation": "No owner-stated preprint relation surfaced in the checked article XML; the separate S224 repository is code for this paper, not a preprint version."
+        },
+        {
+            "source_id": "S224",
+            "current_version": "The ZSL_MPE repository main HEAD is 642231de35e21171bb52838c08b954e266fe0861, independently confirmed with git ls-remote on 2026-09-26. The owner's checked commit history dates the last README update to 15 April 2026; no tagged code release was reported.",
+            "source_url": "https://github.com/oussama123-ai/ZSL_MPE ; https://github.com/oussama123-ai/ZSL_MPE/commit/642231de35e21171bb52838c08b954e266fe0861",
+            "access_boundary": "The Git ref was independently checked. Pi also checked the owner README and history; its article metadata discussion refers to related S149, not to a DOI for S224 itself.",
+            "correction_retraction_check": "No main-branch version drift relative to the canonical pin was found. GitHub does not provide an article-style correction register for this code artifact.",
+            "preprint_journal_relation": "The README cites the related pain-estimation paper but contains no separately registered preprint or DOI for the code repository in the checked owner text. Do not infer a 2025 paper version from its BibTeX key alone."
+        },
+        {
+            "source_id": "S040",
+            "current_version": "Elsevier's Article Retrieval API directly returned DOI 10.1016/j.inffus.2026.104173 and PII S1566253526000527 for the GIAFormer article on 2026-09-26. Owner metadata identify the published article; the ScienceDirect full page could not be inspected for any current on-page version or notice.",
+            "source_url": "https://api.elsevier.com/content/article/pii/S1566253526000527?httpAccept=text/xml ; https://www.sciencedirect.com/science/article/pii/S1566253526000527 ; https://doi.org/10.1016/j.inffus.2026.104173",
+            "access_boundary": "Elsevier owner coredata was directly fetched and matched the DOI/PII. ScienceDirect HTML and full text returned robot/CAPTCHA block; Crossref lookup suffered a DNS failure in the independent repeat. Thus current on-page correction status was not independently checked.",
+            "correction_retraction_check": "No update was reported in the worker's accessible Elsevier/Crossref metadata. The publisher article page and Crossmark dialog remained unavailable, so this is an unresolved update screen rather than an absence finding.",
+            "preprint_journal_relation": "No owner-declared preprint link surfaced in available Elsevier coredata; publisher full text was inaccessible and an unlinked preprint cannot be excluded."
+        },
+        {
+            "source_id": "S739",
+            "current_version": "bioRxiv posted-content DOI 10.64898/2026.08.21.745055 was deposited with publication date 25 August 2026; this was independently confirmed from the Crossref owner deposit on 2026-09-26. The worker's bioRxiv Article Info/History route still selected v1; the bioRxiv page was unavailable to the independent repeat.",
+            "source_url": "https://www.biorxiv.org/content/10.64898/2026.08.21.745055v1 ; https://api.crossref.org/works/10.64898%2F2026.08.21.745055",
+            "access_boundary": "Crossref's publisher-deposited record was directly fetched; its relation object was empty. The independent bioRxiv full-page request did not yield inspectable content, so the version selector is supported by the Pi owner-route result and earlier canonical check, with that access limit explicit.",
+            "correction_retraction_check": "No update was present in the fetched Crossref DOI record; the worker found no newer linked bioRxiv version or notice in checked owner routes. This does not establish a global zero-update state.",
+            "preprint_journal_relation": "No journal link was visible in the checked bioRxiv Article Info/History route or Crossref deposit. An unlinked publication remains possible."
+        },
+        {
+            "source_id": "S764",
+            "current_version": "PLOS ONE owner article page directly confirmed DOI 10.1371/journal.pone.0345287 and publication date 2 April 2026 on 2026-09-26. It links a Figshare data deposit DOI 10.6084/m9.figshare.29558654; versions of that deposit must be tracked separately from the article.",
+            "source_url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0345287 ; https://doi.org/10.6084/m9.figshare.29558654",
+            "access_boundary": "The PLOS owner HTML was directly fetched and the date, DOI and Data Availability link checked. The worker separately inspected PLOS article and Figshare routes; a full independent Figshare version inspection was not done here.",
+            "correction_retraction_check": "No article-specific notice surfaced in the checked PLOS article page. The site's general corrections-policy link is not an article correction. Separate Figshare data versions are not paper revisions; later owner and registry update refresh is still needed.",
+            "preprint_journal_relation": "No author-stated preprint link surfaced in the checked PLOS page. The Figshare link is supporting data, not a preprint."
+        },
+        {
+            "source_id": "S069",
+            "current_version": "PLOS Biology owner page selects Version 2 and labels Version 1 Uncorrected Proof. The publisher-deposited Crossref record has a self-referential new_version update dated 14 August 2026; directly checked on 2026-09-26. This is a version event under the same DOI, not a separate correction notice.",
+            "source_url": "https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3003948 ; https://api.crossref.org/works/10.1371%2Fjournal.pbio.3003948",
+            "access_boundary": "PLOS owner HTML and Crossref publisher deposit were directly fetched; the page version selector and self-update relation agree. Full diff between uncorrected proof and VOR was not independently extracted.",
+            "correction_retraction_check": "Positive self new_version relation on 14 August 2026. No distinct correction/retraction DOI or notice surfaced in the checked PLOS article page and Crossref deposit; later publisher notice refresh remains open.",
+            "preprint_journal_relation": "No owner-stated preprint link surfaced in the checked PLOS page; Version 1 is an uncorrected proof of this article, not an independently identified preprint."
+        },
+        {
+            "source_id": "S249",
+            "current_version": "Frontiers owner JATS directly confirms Version of Record and electronic publication on 18 September 2026 for DOI 10.3389/fbioe.2026.1948186. Owner HTML has a later CMS modification timestamp, which is not by itself a scientific version event.",
+            "source_url": "https://www.frontiersin.org/journals/bioengineering-and-biotechnology/articles/10.3389/fbioe.2026.1948186/xml ; https://www.frontiersin.org/journals/bioengineering-and-biotechnology/articles/10.3389/fbioe.2026.1948186/full",
+            "access_boundary": "The owner XML was directly fetched on 2026-09-26. Pi additionally checked the Frontiers HTML/PDF and live Crossmark dialog, which reported Document is current; this is a dated status only.",
+            "correction_retraction_check": "No article-level notice or alternate version element surfaced in the checked owner XML/HTML; the reported Crossmark dialog displayed no updates at check time. Later notices are not excluded.",
+            "preprint_journal_relation": "No owner-stated preprint link surfaced in the checked article XML; absence outside the checked owner routes is unresolved."
+        },
+        {
+            "source_id": "S253",
+            "current_version": "Eon owner article retains publication date 10 March 2026 but was silently revised by 2 July 2026. Directly fetched Wayback captures from 21 June and 2 July: the later copy adds the Is this an upload? section and changes fidelity-framework wording; the current owner page contains the later section. No owner version number or update date is displayed.",
+            "source_url": "https://eon.systems/updates/embodied-brain-emulation ; https://web.archive.org/web/20260621id_/https://eon.systems/updates/embodied-brain-emulation ; https://web.archive.org/web/20260702id_/https://eon.systems/updates/embodied-brain-emulation",
+            "access_boundary": "The live owner page and both dated archived captures were independently fetched and compared for the named text. Archive dates bound the change interval; they do not establish the exact edit timestamp. This owner article is context, not a peer-reviewed experimental result.",
+            "correction_retraction_check": "Positive unlabelled page revision between 21 June and 2 July. No explicit correction/retraction notice surfaced on the checked owner page; do not present the revision as a scientific corrigendum or as proof of the article's original wording.",
+            "preprint_journal_relation": "The page cites Shiu et al. Nature DOI 10.1038/s41586-024-07763-9 as a component source. It does not assign a DOI or journal version to the Eon post itself."
+        },
+        {
+            "source_id": "S212",
+            "current_version": "The bioRxiv owner v3 route reports a 3 August 2026 posting in the worker check; a separate direct bioRxiv retry was rate-limited (429). An independently fetched text rendering of that v3 page shows a different title from the current Europe PMC full-text JATS: bioRxiv rendering says distributed brain network for processing threatening somatosensory stimuli, while Europe PMC JATS says distributed nociceptive network in the brain. The canonical card currently uses the latter. Resolve this title/version discrepancy before claiming an exact owner-current title.",
+            "source_url": "https://www.biorxiv.org/content/10.1101/2025.09.25.678485v3 ; https://www.ebi.ac.uk/europepmc/webservices/rest/PPR1092389/fullTextXML ; https://doi.org/10.1101/2025.09.25.678485",
+            "access_boundary": "Europe PMC's primary preprint JATS was directly fetched; bioRxiv direct HTML returned 429, and the v3 text rendering was obtained through a reader proxy. The proxy/owner title mismatch is retained, not resolved by guessing. The bioRxiv details API returned an empty body in the worker check.",
+            "correction_retraction_check": "The checked routes did not show a separate correction/retraction notice. A v3 posting is a positive preprint version signal, and its title provenance is unresolved; do not infer no further update from a 429 owner route.",
+            "preprint_journal_relation": "The bioRxiv published-version endpoint reported no linked journal article in the worker check; no owner-declared journal DOI was independently established."
+        },
+        {
+            "source_id": "S231",
+            "current_version": "MDPI Sensors 26(10):3049 was published 12 May 2026 (NLM PMC13210900). The MDPI owner Article Versions Notes report an updated VOR PDF/XML on 20 May and an HTML update on 3 September 2026. The notes were independently read through a text-rendering proxy because direct www.mdpi.com access returned 403. S231's canonical card now records these version events.",
+            "source_url": "https://www.mdpi.com/1424-8220/26/10/3049/notes ; https://pmc.ncbi.nlm.nih.gov/articles/PMC13210900/ ; https://mdpi-res.com/d_attachment/sensors/sensors-26-03049/article_deploy/sensors-26-03049.pdf",
+            "access_boundary": "NLM full text and a publisher-hosted PDF were directly fetched; MDPI notes were read via a reader of the owner page. The earlier and later scientific text/PDF have not been compared. A version log is not evidence that results changed.",
+            "correction_retraction_check": "Positive PDF/XML and HTML version events; no separate corrigendum/retraction was identified in the checked MDPI/NLM/Crossref routes. Live Crossmark widget status was not independently obtained.",
+            "preprint_journal_relation": "No owner-stated preprint link surfaced in the checked JATS or version notes; this is a bounded screen."
+        },
+        {
+            "source_id": "S233",
+            "current_version": "Zenodo owner API record 18911337 directly confirms DOI 10.5281/zenodo.18911337, 8 March 2026 deposit and last metadata update the same day. Its /versions endpoint returned exactly one record, 18911337, on 2026-09-26. The metadata revision counter is not an additional version.",
+            "source_url": "https://zenodo.org/api/records/18911337 ; https://zenodo.org/api/records/18911337/versions ; https://zenodo.org/records/18911337",
+            "access_boundary": "The owner API record and version listing were directly fetched; version count one describes only the Zenodo concept record's versions as visible now.",
+            "correction_retraction_check": "No version successor or correction/retraction relation surfaced in the checked Zenodo API record. Later deposits or unindexed notices are not excluded.",
+            "preprint_journal_relation": "No journal DOI or published-version relation was present in the checked Zenodo related identifiers; this is a Zenodo preprint deposit."
+        },
+        {
+            "source_id": "S737",
+            "current_version": "FLYBOX main HEAD is 5880d221e21b1f3385b7246a6ffc3b2cf0029c2c, independently confirmed with git ls-remote on 2026-09-26. Its pinned CITATION.cff declares software version 0.2.0 released 19 September 2026; both fields were fetched from owner GitHub. ST007 already pins this HEAD for the runtime audit; the older f95f708 provenance is historical.",
+            "source_url": "https://github.com/gauravvvvvvvvvv/flybox/commit/5880d221e21b1f3385b7246a6ffc3b2cf0029c2c ; https://raw.githubusercontent.com/gauravvvvvvvvvv/flybox/5880d221e21b1f3385b7246a6ffc3b2cf0029c2c/CITATION.cff",
+            "access_boundary": "The Git ref and pinned citation file were directly checked. Repository main may move later; current checked head does not supersede the immutable ST007 pin.",
+            "correction_retraction_check": "Positive ordinary development commits since the historical f95f708 commit; no formal correction/retraction artifact surfaced in the worker's GitHub owner-route check. Do not interpret code commits as scientific validation.",
+            "preprint_journal_relation": "No self DOI, preprint or journal article for FLYBOX was stated in the checked owner citation file or repository documentation."
+        },
+        {
+            "source_id": "S782",
+            "current_version": "Nature Communications DOI 10.1038/s41467-026-72152-x has online publication 23 April 2026 and publisher-labeled Version of record dated 29 June 2026; both dates were independently read from the Nature owner page on 2026-09-26. Its current Crossmark status was reported as Document is current in the earlier owner check.",
+            "source_url": "https://www.nature.com/articles/s41467-026-72152-x ; https://doi.org/10.1038/s41467-026-72152-x",
+            "access_boundary": "Nature owner HTML was directly fetched. The difference between online and VOR dates is publisher metadata, not evidence of a correction. The article and metadata do not explicitly link the same-topic bioRxiv candidate DOI 10.1101/2024.12.17.628844.",
+            "correction_retraction_check": "No article-level correction/retraction notice surfaced in the checked Nature page; Crossref/PMC routes in the worker check likewise showed no linked notice. Later owner refresh is still required.",
+            "preprint_journal_relation": "The candidate bioRxiv 10.1101/2024.12.17.628844 has a similar title/authors, but the publisher and checked preprint routes did not declare a version relation; leave it unconfirmed."
+        },
+        {
+            "source_id": "S368",
+            "current_version": "Google Blog owner page was published 3 September 2026 and explicitly says Updated September 21, 2026; both dates were independently read from the current HTML on 2026-09-26. This is an owner-post revision, not a new peer-reviewed dataset or article.",
+            "source_url": "https://blog.google/innovation-and-ai/technology/research/male-fruit-fly-brain-map/",
+            "access_boundary": "Owner HTML was directly fetched; the visible update marker and JSON-LD dateModified agree. No dated older text capture was compared, so the changed wording cannot be specified from this check.",
+            "correction_retraction_check": "Positive owner update marker on 21 September. No explicit correction/retraction notice surfaced in the checked post; no DOI/Crossmark route applies to the blog itself.",
+            "preprint_journal_relation": "The post links underlying Cell and Current Biology articles and data resources. Those are distinct primary sources, not a journal version of S368."
+        },
+        {
+            "source_id": "S292",
+            "current_version": "The claude-fly owner repository main HEAD is 3a035275148e97539711728422548bffe2a77566, independently checked with git ls-remote on 2026-09-26. Related Zenodo record 19152238 is version 1.0.0, deposited 21 March 2026; its API record was directly fetched. Repository commits after that deposit are code-side changes, not a new Zenodo version.",
+            "source_url": "https://github.com/legacyindiesubmissions-ai/claude-fly ; https://zenodo.org/api/records/19152238 ; https://doi.org/10.5281/zenodo.19152238",
+            "access_boundary": "Git head and Zenodo API metadata were directly fetched. The worker checked Git history and Zenodo's version listing, which had one record; the relation between accounts and any scientific equivalence of the code/deposit were not independently evaluated.",
+            "correction_retraction_check": "Positive repository-side commits after the March Zenodo deposit. No correction/retraction artifact surfaced in the checked GitHub/Zenodo owner routes; later changes are possible.",
+            "preprint_journal_relation": "Zenodo is a versioned preprint/deposit linked from the project context, not a peer-reviewed journal version of the GitHub repository. No journal DOI for S292 was owner-declared in the checked routes."
+        },
+        {
+            "source_id": "S138",
+            "current_version": "Neural Press owner article confirms DOI 10.56280/1765455593 and pages 103-109. Owner online date 10 September and Crossref date/pagination differ; retain both with owner citation as current.",
+            "source_url": "https://www.neuralpress.org/articles/jmn/5/3/dobes-drosophila ; https://api.crossref.org/works/10.56280/1765455593",
+            "access_boundary": "Owner page and citation directly fetched; no full version comparison. Crossref discrepancy is metadata, not a demonstrated correction.",
+            "correction_retraction_check": "No separate correction or retraction appeared on checked owner page; later notices remain possible.",
+            "preprint_journal_relation": "No owner-declared preprint relation found in the checked citation."
+        },
+        {
+            "source_id": "S099",
+            "current_version": "Official USPTO Gazette week 22 confirms US12642969B2, Dinsmoor/Medtronic and grant on 2 June 2026. The granted patent remains technical prior art, not an SCS outcome study.",
+            "source_url": "https://patentsgazette.uspto.gov/week22/OG/html/1547-1/US12642969-20260602.html",
+            "access_boundary": "Official grant HTML directly fetched. Worker searched official Gazette correction/reexamination notices for weeks 22-38; Patent Public Search API and Justia were blocked. Family state remains open.",
+            "correction_retraction_check": "No matching notice was found in the bounded Gazette weeks searched. This does not establish absence of later family or legal-status events.",
+            "preprint_journal_relation": "Patent application/grant relation is tracked by official bibliographic identifiers; no journal/preprint relation applies."
+        },
+        {
+            "source_id": "S162",
+            "current_version": "Springer original DOI 10.1007/s40122-025-00808-5 is a corrected Version of Record. Publisher correction S806, DOI 10.1007/s40122-026-00838-7, published 28 April 2026 replaces Standard Method with Artefact Model Method in one recording-configuration sentence.",
+            "source_url": "https://link.springer.com/article/10.1007/s40122-025-00808-5 ; https://link.springer.com/article/10.1007/s40122-026-00838-7 ; https://pmc.ncbi.nlm.nih.gov/articles/PMC13172225/",
+            "access_boundary": "Original and correction owner pages were checked; NLM confirms correction PMID 42047715. The notice gives no new sample or outcome and is recorded separately as context-only S806.",
+            "correction_retraction_check": "Positive linked correction: S806 corrects S162. No additional retraction or concern surfaced in checked Springer/NLM routes; no global absence claim.",
+            "preprint_journal_relation": "Original owner declaration says the work was not previously published; conference posters are distinct from preprints."
+        },
+        {
+            "source_id": "S330",
+            "current_version": "medRxiv owner v2 for DOI 10.1101/2025.09.22.25336341 is current on the checked route; v2 source XML posted 15 August 2026 and has article-version 1.2. The v1 and v2 titles differ.",
+            "source_url": "https://www.medrxiv.org/content/medrxiv/early/2026/08/15/2025.09.22.25336341.source.xml",
+            "access_boundary": "Owner v2 source XML directly fetched. Earlier v1 wording was checked by worker; scientific text changes were not exhaustively diffed.",
+            "correction_retraction_check": "Positive preprint version change v1 to v2; no separate correction/retraction notice surfaced on checked medRxiv route.",
+            "preprint_journal_relation": "No journal DOI is declared by the checked medRxiv API; do not call v2 a published journal article."
+        },
+        {
+            "source_id": "S200",
+            "current_version": "DoomFly owner GitHub main HEAD was 71ecf53d78eaffaf1a57ed7b0ccf5d458abc9f33 on 26 September 2026.",
+            "source_url": "https://github.com/nftechie/doomfly/commit/71ecf53d78eaffaf1a57ed7b0ccf5d458abc9f33",
+            "access_boundary": "Git HEAD independently checked with ls-remote. Repository HEAD can move; code availability is not measured behavioral validation.",
+            "correction_retraction_check": "No formal release/correction artifact surfaced in worker owner-route check; development commits are not scientific corrigenda.",
+            "preprint_journal_relation": "No owner-declared journal or preprint DOI on the checked repository route."
+        },
+        {
+            "source_id": "S084",
+            "current_version": "Springer DOI 10.1186/s12938-026-01561-2 owner page reports first online 12 April 2026 and Version of Record valid from 27 May 2026.",
+            "source_url": "https://link.springer.com/article/10.1186/s12938-026-01561-2",
+            "access_boundary": "Springer owner article was directly fetched. Date distinction is publication metadata, not an independently identified content correction.",
+            "correction_retraction_check": "Worker Crossmark view said document current at check time; no notice on checked owner page. Later notices remain open.",
+            "preprint_journal_relation": "No owner-declared preprint/journal predecessor relation was found in checked page."
+        },
+        {
+            "source_id": "S018",
+            "current_version": "ACM publisher-deposited Crossref record identifies DOI 10.1145/3812836.3814769 as proceedings Version of Record, published 20 June 2026, pages 130-135 and CC BY.",
+            "source_url": "https://api.crossref.org/works/10.1145%2F3812836.3814769 ; https://dl.acm.org/doi/10.1145/3812836.3814769",
+            "access_boundary": "Crossref publisher deposit independently fetched; ACM full article page returned 403. Full text and owner notice surface remain unresolved.",
+            "correction_retraction_check": "No correction/retraction relation is recorded in checked deposit; blocked ACM page prevents a complete owner notice check.",
+            "preprint_journal_relation": "No owner-stated preprint link was established from accessible deposit."
+        },
+        {
+            "source_id": "S013",
+            "current_version": "University of Washington repository issue date is 5 February 2026, while its downloaded thesis PDF title/copyright page states 2025. Canonical year follows repository issue date; degree/title-page date discrepancy is retained.",
+            "source_url": "https://digital.lib.washington.edu/researchworks/items/622bc2dc-af95-4861-bc13-a91cab65eac8 ; https://digital.lib.washington.edu/bitstreams/72513a4e-85b8-48f2-a5c0-f2446d758fe3/download",
+            "access_boundary": "Owner repository record and 124-page thesis PDF directly checked. Exact issue date is a repository metadata field, not a new thesis edition.",
+            "correction_retraction_check": "No correction/version notice surfaced in checked repository record; date mismatch alone does not prove revision.",
+            "preprint_journal_relation": "No journal DOI or published-version link was established on checked thesis route."
+        },
+        {
+            "source_id": "S060",
+            "current_version": "JCDR owner article confirms DOI 10.7860/JCDR/2026/86004.24236 and publication 1 September 2026. Its Emendations: 6 display is production metadata without an identified correction notice.",
+            "source_url": "https://www.jcdr.net/article_fulltext.asp?id=24236&issn=0973-709x&issue=9&page=UE01&volume=20&year=2026 ; https://doi.org/10.7860/JCDR/2026/86004.24236",
+            "access_boundary": "Publisher article route directly fetched. Do not interpret the numeric emendations field as an independently described scientific correction.",
+            "correction_retraction_check": "No explicit article correction/retraction notice surfaced on checked owner page; later notices remain open.",
+            "preprint_journal_relation": "No owner-declared preprint relation found in checked page."
+        },
+        {
+            "source_id": "S075",
+            "current_version": "Springer owner DOI page reports Version of Record 30 January 2026 and no later article version on its checked Crossmark view.",
+            "source_url": "https://link.springer.com/article/10.1007/s10916-025-02332-7",
+            "access_boundary": "Springer owner article directly fetched; worker checked Crossmark. Current status is dated and does not establish future stability.",
+            "correction_retraction_check": "Crossmark displayed document current at check time; no separate notice surfaced on checked page.",
+            "preprint_journal_relation": "No owner-declared preprint/journal predecessor relation found in checked page."
+        }
+    ],
+    "remaining": [
+        "Recheck every other 2026 canonical source and preprint-journal link",
+        "Later dated correction/retraction refresh",
+        "Full text for S034, S754 and S357 if lawfully available"
+    ]
+}

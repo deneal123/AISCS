@@ -1,0 +1,190 @@
+{
+  "meta": {
+    "schema_version": "1.0.0",
+    "checked_at": "2026-09-25",
+    "scope": "Current repository HEADs for seven 2026 code-only cards",
+    "status": "code_head_rechecked",
+    "boundary": "A current default-branch HEAD is not the commit used in a manuscript, runtime study or published simulation. Historical ST pins stay immutable."
+  },
+  "rows": [
+    {
+      "source_id": "S200",
+      "repo": "nftechie/doomfly",
+      "source_url": "https://github.com/nftechie/doomfly",
+      "resource_id": "ST084",
+      "pinned_commit": "71ecf53d78eaffaf1a57ed7b0ccf5d458abc9f33",
+      "head_commit": "71ecf53d78eaffaf1a57ed7b0ccf5d458abc9f33",
+      "head_date": "2026-09-09T15:11:10Z",
+      "head_message_first_line": "Fix spectator pistol orientation and barrel-mounted flash",
+      "default_branch": "main",
+      "archived": false,
+      "disabled": false,
+      "pin_relation": "matches_current_head",
+      "locators": [
+        {
+          "url": "https://api.github.com/repos/nftechie/doomfly",
+          "locator": "default_branch, archived, disabled"
+        },
+        {
+          "url": "https://api.github.com/repos/nftechie/doomfly/commits/main",
+          "locator": "sha, commit.committer.date, commit.message"
+        }
+      ]
+    },
+    {
+      "source_id": "S201",
+      "repo": "cnqso/infinite-sugar",
+      "source_url": "https://github.com/cnqso/infinite-sugar",
+      "resource_id": null,
+      "pinned_commit": null,
+      "head_commit": "fdbbd866b203a709a164970b0a8996108edd57a5",
+      "head_date": "2026-09-14T13:01:11Z",
+      "head_message_first_line": "Favicon",
+      "default_branch": "main",
+      "archived": false,
+      "disabled": false,
+      "pin_relation": "no_active_ST_resource",
+      "locators": [
+        {
+          "url": "https://api.github.com/repos/cnqso/infinite-sugar",
+          "locator": "default_branch, archived, disabled"
+        },
+        {
+          "url": "https://api.github.com/repos/cnqso/infinite-sugar/commits/main",
+          "locator": "sha, commit.committer.date, commit.message"
+        }
+      ]
+    },
+    {
+      "source_id": "S224",
+      "repo": "oussama123-ai/ZSL_MPE",
+      "source_url": "https://github.com/oussama123-ai/ZSL_MPE",
+      "resource_id": null,
+      "pinned_commit": null,
+      "head_commit": "642231de35e21171bb52838c08b954e266fe0861",
+      "head_date": "2026-04-15T22:05:00Z",
+      "head_message_first_line": "Update README.md",
+      "default_branch": "main",
+      "archived": false,
+      "disabled": false,
+      "pin_relation": "no_active_ST_resource",
+      "locators": [
+        {
+          "url": "https://api.github.com/repos/oussama123-ai/ZSL_MPE",
+          "locator": "default_branch, archived, disabled"
+        },
+        {
+          "url": "https://api.github.com/repos/oussama123-ai/ZSL_MPE/commits/main",
+          "locator": "sha, commit.committer.date, commit.message"
+        }
+      ]
+    },
+    {
+      "source_id": "S292",
+      "repo": "legacyindiesubmissions-ai/claude-fly",
+      "source_url": "https://github.com/legacyindiesubmissions-ai/claude-fly",
+      "resource_id": "ST008",
+      "pinned_commit": "3a035275148e97539711728422548bffe2a77566",
+      "head_commit": "3a035275148e97539711728422548bffe2a77566",
+      "head_date": "2026-04-10T16:48:01Z",
+      "head_message_first_line": "Add Claude fly v3, lite version, log replay, and all experiment data",
+      "default_branch": "main",
+      "archived": false,
+      "disabled": false,
+      "pin_relation": "matches_current_head",
+      "locators": [
+        {
+          "url": "https://api.github.com/repos/legacyindiesubmissions-ai/claude-fly",
+          "locator": "default_branch, archived, disabled"
+        },
+        {
+          "url": "https://api.github.com/repos/legacyindiesubmissions-ai/claude-fly/commits/main",
+          "locator": "sha, commit.committer.date, commit.message"
+        }
+      ]
+    },
+    {
+      "source_id": "S732",
+      "repo": "eonsystemspbc/fly-brain",
+      "source_url": "https://github.com/eonsystemspbc/fly-brain",
+      "resource_id": "ST007",
+      "pinned_commit": "a3db62f9436074e485c0278290c2164ed6150808",
+      "head_commit": "a3db62f9436074e485c0278290c2164ed6150808",
+      "head_date": "2026-08-29T12:48:23Z",
+      "head_message_first_line": "add LICENSE",
+      "default_branch": "main",
+      "archived": false,
+      "disabled": false,
+      "pin_relation": "matches_current_head",
+      "locators": [
+        {
+          "url": "https://api.github.com/repos/eonsystemspbc/fly-brain",
+          "locator": "default_branch, archived, disabled"
+        },
+        {
+          "url": "https://api.github.com/repos/eonsystemspbc/fly-brain/commits/main",
+          "locator": "sha, commit.committer.date, commit.message"
+        }
+      ]
+    },
+    {
+      "source_id": "S733",
+      "repo": "Neuromorphicism/fly-brain-snntorch",
+      "source_url": "https://github.com/Neuromorphicism/fly-brain-snntorch",
+      "resource_id": "ST105",
+      "pinned_commit": "fe55fb0cff275a2b6b54926524c8d831838e32fc",
+      "head_commit": "fe55fb0cff275a2b6b54926524c8d831838e32fc",
+      "head_date": "2026-09-20T19:26:59Z",
+      "head_message_first_line": "fix typo in README",
+      "default_branch": "main",
+      "archived": false,
+      "disabled": false,
+      "pin_relation": "matches_current_head",
+      "locators": [
+        {
+          "url": "https://api.github.com/repos/Neuromorphicism/fly-brain-snntorch",
+          "locator": "default_branch, archived, disabled"
+        },
+        {
+          "url": "https://api.github.com/repos/Neuromorphicism/fly-brain-snntorch/commits/main",
+          "locator": "sha, commit.committer.date, commit.message"
+        }
+      ]
+    },
+    {
+      "source_id": "S737",
+      "repo": "gauravvvvvvvvvv/flybox",
+      "source_url": "https://github.com/gauravvvvvvvvvv/flybox",
+      "resource_id": "ST107",
+      "pinned_commit": "f95f708152e22393feb2952694d4fcf7129290a6",
+      "head_commit": "5880d221e21b1f3385b7246a6ffc3b2cf0029c2c",
+      "head_date": "2026-09-25T03:59:16Z",
+      "head_message_first_line": "ui: align homepage nav and Product Hunt badge",
+      "default_branch": "main",
+      "archived": false,
+      "disabled": false,
+      "pin_relation": "historical_immutable_pin",
+      "locators": [
+        {
+          "url": "https://api.github.com/repos/gauravvvvvvvvvv/flybox",
+          "locator": "default_branch, archived, disabled"
+        },
+        {
+          "url": "https://api.github.com/repos/gauravvvvvvvvvv/flybox/commits/main",
+          "locator": "sha, commit.committer.date, commit.message"
+        }
+      ],
+      "runtime_review": {
+        "status": "reproduced_at_head",
+        "commit": "5880d221e21b1f3385b7246a6ffc3b2cf0029c2c",
+        "compare_url": "https://github.com/gauravvvvvvvvvv/flybox/compare/f95f708152e22393feb2952694d4fcf7129290a6...5880d221e21b1f3385b7246a6ffc3b2cf0029c2c",
+        "material_changes": [
+          "frontend/src/connectome.ts",
+          "frontend/src/simulation.worker.ts",
+          "docs/BROWSER_RUNTIME.md"
+        ],
+        "boundary": "New runtime capability is software execution evidence, not float-backend parity or biological validation."
+      }
+    }
+  ]
+}

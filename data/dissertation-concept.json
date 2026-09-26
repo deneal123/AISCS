@@ -1,0 +1,208 @@
+{
+  "meta": {
+    "schema_version": "1.0.0",
+    "created_at": "2026-09-23",
+    "gate": "G0_REVISE",
+    "author_review_required": true,
+    "supervisor_decision_required": true
+  },
+  "title_ru": "Методы коннектомно-ограниченного моделирования нейродинамики Drosophila и переноса представлений в физически обоснованные модели ECAP для адаптивной спинальной нейростимуляции",
+  "title_en": "Connectome-constrained modelling of Drosophila neural dynamics and representation transfer to physically grounded ECAP models for adaptive spinal cord stimulation",
+  "architecture": {
+    "id": "ARCH-DROSOPHILA-ECAP-SCS-01",
+    "chain": [
+      "Drosophila connectome-constrained dynamics",
+      "abstract nociceptive-response representation",
+      "separate human ECAP physical observation model",
+      "SCS programming or evaluation task"
+    ]
+  },
+  "scientific_problem": "There is no validated method for testing whether constraints learned from a compact, experimentally tractable connectome improve human ECAP/SCS modelling beyond human-only and randomized synthetic controls.",
+  "object": "Neural dynamics and evoked electrophysiological responses under external stimulation.",
+  "subject": "Methods for connectome-constrained simulation, representation transfer, and physical ECAP observation in adaptive SCS tasks.",
+  "goal": "Develop and falsifiably evaluate a two-model method in which Drosophila connectome dynamics constrain a transferable representation and a separate physical operator maps human neural recruitment to ECAP for an SCS task.",
+  "hypothesis": {
+    "id": "H-DES-01",
+    "text": "A representation pretrained on biologically constrained Drosophila neural dynamics, when connected to a separately validated ECAP observation model, improves a predeclared human ECAP/SCS metric over human-only, degree-preserving rewired-connectome ensemble with shared initialization, shuffled-dynamics, and naive-synthetic controls without worsening calibration."
+  },
+  "actuality": [
+    {
+      "id": "ACT-01",
+      "text": "Whole adult Drosophila brain-and-cord connectomes now support circuit-scale computational models.",
+      "source_refs": [
+        "S738",
+        "S739",
+        "S740"
+      ],
+      "locator_refs": [
+        "EV:S738",
+        "EV:S739",
+        "EV:S740"
+      ]
+    },
+    {
+      "id": "ACT-02",
+      "text": "Human ECAP provides an objective neural-recruitment signal but is not a direct pain measure.",
+      "source_refs": [
+        "S105",
+        "S162"
+      ],
+      "locator_refs": [
+        "EV:S105",
+        "EV:S162"
+      ]
+    },
+    {
+      "id": "ACT-03",
+      "text": "Synthetic pain domain adaptation already exists, so synthetic pretraining alone cannot constitute novelty.",
+      "source_refs": [
+        "S149"
+      ],
+      "locator_refs": [
+        "EV:S149"
+      ]
+    },
+    {
+      "id": "ACT-04",
+      "text": "Existing SCS-response prediction does not establish a Drosophila-to-ECAP transfer chain.",
+      "source_refs": [
+        "S033",
+        "S105"
+      ],
+      "locator_refs": [
+        "EV:S033",
+        "EV:S105"
+      ]
+    }
+  ],
+  "tasks": [
+    {
+      "id": "TASK-01",
+      "text": "Construct and validate a bounded Drosophila nociceptive-dynamics simulator."
+    },
+    {
+      "id": "TASK-02",
+      "text": "Define the transferable state and randomized biological controls."
+    },
+    {
+      "id": "TASK-03",
+      "text": "Implement the independent ECAP forward/measurement model."
+    },
+    {
+      "id": "TASK-04",
+      "text": "Evaluate transfer on subject-level human ECAP data."
+    },
+    {
+      "id": "TASK-05",
+      "text": "Evaluate an SCS programming task and calibration against baselines."
+    },
+    {
+      "id": "TASK-06",
+      "text": "Conditionally evaluate clinical response only with linked outcome data."
+    }
+  ],
+  "novelty_claims": [
+    {
+      "id": "NOV-01",
+      "text": "Candidate method: a two-model Drosophila-dynamics and human-ECAP bridge with an explicit physical observation operator.",
+      "source_refs": [
+        "S738",
+        "S739",
+        "S105"
+      ],
+      "locator_refs": [
+        "NS-01",
+        "NS-02",
+        "NS-07"
+      ]
+    },
+    {
+      "id": "NOV-02",
+      "text": "Candidate experiment: isolate biological contribution using degree-preserving rewired-connectome ensemble with shared initialization, shuffled-dynamics, naive-synthetic, and human-only controls.",
+      "source_refs": [
+        "S149",
+        "S739",
+        "S741",
+        "S743",
+        "S744"
+      ],
+      "locator_refs": [
+        "NS-02",
+        "NS-06"
+      ]
+    },
+    {
+      "id": "NOV-03",
+      "text": "Candidate system result: uncertainty-aware SCS parameter estimation that abstains outside the validated ECAP domain.",
+      "source_refs": [
+        "S105",
+        "S159",
+        "S162"
+      ],
+      "locator_refs": [
+        "NS-08",
+        "NS-09",
+        "NS-10"
+      ]
+    }
+  ],
+  "defense_propositions": [
+    {
+      "id": "DEF-01",
+      "text": "The Drosophila simulator reproduces predefined neural and behavioral nociceptive-response observables.",
+      "source_refs": [
+        "S066",
+        "S738",
+        "S740"
+      ],
+      "locator_refs": [
+        "EV:S066",
+        "EV:S738",
+        "EV:S740"
+      ]
+    },
+    {
+      "id": "DEF-02",
+      "text": "The physical ECAP operator reproduces predefined waveform and recruitment characteristics independently of the fly model.",
+      "source_refs": [
+        "S105",
+        "S159",
+        "S162"
+      ],
+      "locator_refs": [
+        "EV:S105",
+        "EV:S159",
+        "EV:S162"
+      ]
+    },
+    {
+      "id": "DEF-03",
+      "text": "The complete transfer method is assessed only by prospective baselines and subject-level held-out data.",
+      "source_refs": [
+        "S149",
+        "S105"
+      ],
+      "locator_refs": [
+        "EV:S149",
+        "EV:S105"
+      ]
+    }
+  ],
+  "falsification": [
+    "Reject the simulator claim if it fails predefined fly activity or behavior observables.",
+    "Reject the ECAP-like claim if waveform/latency/recruitment tolerances fail on human ECAP.",
+    "Reject the transfer hypothesis if the primary metric does not improve or calibration worsens.",
+    "Do not make a clinical-response claim without linked longitudinal SCS outcomes."
+  ],
+  "forbidden_claims": [
+    "Drosophila simulation represents subjective human pain.",
+    "The fly nervous system is a direct digital twin of the human spinal cord.",
+    "ECAP is a direct measure of pain.",
+    "Simulation-only results prove clinical SCS effectiveness."
+  ],
+  "specialty_alignment": {
+    "specialty": "2.2.12 Приборы, системы и изделия медицинского назначения",
+    "status": "passport_text_review_required",
+    "boundary": "The defensible contribution must be a medical-instrumentation modelling, measurement, or control method, not merely software implementation."
+  }
+}

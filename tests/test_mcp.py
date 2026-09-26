@@ -8,6 +8,7 @@ from pathlib import Path
 import pytest
 from mcp import Client, StdioServerParameters
 
+from service.completeness import migrate_record
 from service.core import DataError, load_json, sha256
 from service.mcp_server import ResearchMcpService, create_server
 
@@ -38,6 +39,8 @@ def test_mcp_protocol_initialization_discovery_resource_and_read_tool() -> None:
                 "search_resources",
                 "get_cluster",
                 "search_evidence",
+                "search_novelty",
+                "get_dissertation_concept",
                 "save_candidate",
                 "publish_candidate",
                 "review_batch",
@@ -49,6 +52,10 @@ def test_mcp_protocol_initialization_discovery_resource_and_read_tool() -> None:
             assert "research://guide" in resource_uris
             assert "research://scientific-contract" in resource_uris
             assert "research://human-dataset-matrix" in resource_uris
+            assert "research://completeness" in resource_uris
+            assert "research://novelty-landscape" in resource_uris
+            assert "research://dissertation-concept" in resource_uris
+            assert "research://runtime-audit" in resource_uris
             templates = await client.list_resource_templates()
             assert {
                 "research://source/{source_id}",
@@ -61,6 +68,12 @@ def test_mcp_protocol_initialization_discovery_resource_and_read_tool() -> None:
             result = await client.call_tool("status", {})
             assert result.is_error is not True
             assert result.structured_content["integrity"]["ok"] is True
+            novelty = await client.call_tool("search_novelty", {"query": "closed-loop"})
+            assert novelty.is_error is not True
+            assert novelty.structured_content["total"] >= 1
+            concept_result = await client.call_tool("get_dissertation_concept", {})
+            assert concept_result.is_error is not True
+            assert concept_result.structured_content["meta"]["gate"] == "G0_REVISE"
 
     asyncio.run(exercise())
 
@@ -94,7 +107,7 @@ def _candidate(data: Path, *, source_id: str, url: str) -> dict:
     candidate["название"] = f"MCP integration fixture {source_id}"
     candidate["identifiers"]["exact_url"] = url
     candidate["provenance"]["import_source"] = "mcp-test"
-    return candidate
+    return migrate_record(candidate, checked_at="2026-09-23")
 
 
 def test_mcp_write_flow_is_dry_run_then_snapshot_and_atomic_publish(tmp_path: Path) -> None:

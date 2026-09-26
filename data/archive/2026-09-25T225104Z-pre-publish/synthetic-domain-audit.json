@@ -1,0 +1,521 @@
+{
+  "meta": {
+    "schema_version": "1.0.0",
+    "generated_at": "2026-09-24",
+    "records_count": 9,
+    "gate": "G0_REVISE",
+    "scope": "Empirical synthetic pain and domain-adaptation sources; S224 is code for S149, not independent empirical evidence"
+  },
+  "construct_boundary": "Generated images or expressions, stimulus-conditioned video, and pain estimation are different endpoints. Unlabeled target data used in adaptation are still real data.",
+  "entries": [
+    {
+      "source_id": "S035",
+      "extraction": {
+        "real_data_provenance": {
+          "state": "unavailable_after_search",
+          "value": null,
+          "reason": "Publisher chapter preview: abstract and metadata only; methods and provenance inaccessible",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://link.springer.com/chapter/10.1007/978-3-031-88220-3_11",
+              "locator": "Publisher chapter preview: abstract and metadata only; methods and provenance inaccessible"
+            }
+          ]
+        },
+        "leakage_control": {
+          "state": "unavailable_after_search",
+          "value": null,
+          "reason": "Publisher chapter preview: no accessible fold or augmentation leakage protocol",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://link.springer.com/chapter/10.1007/978-3-031-88220-3_11",
+              "locator": "Publisher chapter preview: no accessible fold or augmentation leakage protocol"
+            }
+          ]
+        },
+        "split_unit": {
+          "state": "unavailable_after_search",
+          "value": null,
+          "reason": "Publisher chapter preview: no accessible split method",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://link.springer.com/chapter/10.1007/978-3-031-88220-3_11",
+              "locator": "Publisher chapter preview: no accessible split method"
+            }
+          ]
+        },
+        "external_test": {
+          "state": "unavailable_after_search",
+          "value": null,
+          "reason": "Publisher chapter preview: no accessible independent test description",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://link.springer.com/chapter/10.1007/978-3-031-88220-3_11",
+              "locator": "Publisher chapter preview: no accessible independent test description"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S083",
+      "extraction": {
+        "real_data_provenance": {
+          "state": "reported",
+          "value": "SpeakingFaces paired RGB/thermal data train the GAN; several facial databases pretrain features; BioVid Part A real RGB videos supply the pain labels and test folds",
+          "reason": "Extracted from primary material.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://arxiv.org/html/2407.19811v1",
+              "locator": "Sections III-E and IV; Table I; BioVid Part A, 87 people and 8,700 clips"
+            }
+          ]
+        },
+        "leakage_control": {
+          "state": "reported",
+          "value": "BioVid recognition uses LOSO; whether any identity overlaps among external pretraining sets and BioVid is not documented",
+          "reason": "Extracted from primary material.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://arxiv.org/html/2407.19811v1",
+              "locator": "Sections III-E and IV: pretraining datasets and LOSO, without cross-dataset identity matching"
+            }
+          ]
+        },
+        "split_unit": {
+          "state": "reported",
+          "value": "Participant; leave-one-subject-out on BioVid Part A",
+          "reason": "Extracted from primary material.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://arxiv.org/html/2407.19811v1",
+              "locator": "Section IV, final paragraph: LOSO"
+            }
+          ]
+        },
+        "external_test": {
+          "state": "reported",
+          "value": "No independent external model test; MIntPAIN appears only as another study's result in Table VIII",
+          "reason": "Extracted from primary material.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://arxiv.org/html/2407.19811v1",
+              "locator": "Section V, Table VIII: separate MIntPAIN and 'Our BioVid' rows"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S084",
+      "extraction": {
+        "real_data_provenance": {
+          "state": "reported",
+          "value": "UNBC trains generator and classifier; UofR supplies 394 driver frames and classifier training/test data; 250 generated identities produce 197,000 synthetic images",
+          "reason": "Extracted from primary material.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://link.springer.com/article/10.1186/s12938-026-01561-2",
+              "locator": "Methods, Datasets, Generation of synthetic datasets and Pairwise pain detection model training"
+            }
+          ]
+        },
+        "leakage_control": {
+          "state": "reported",
+          "value": "Authors exclude synthetic images corresponding to test-fold expressions; generator-training and driver-identity exclusion from UofR test folds is not established",
+          "reason": "Extracted from primary material.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://link.springer.com/article/10.1186/s12938-026-01561-2",
+              "locator": "Methods, Pairwise pain detection model training: fivefold protocol and test-fold synthetic exclusion; compare Datasets"
+            }
+          ]
+        },
+        "split_unit": {
+          "state": "not_reported",
+          "value": null,
+          "reason": "Methods, Pairwise pain detection model training: fivefold UofR cross-validation is named, but frame/video/person grouping is not stated",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://link.springer.com/article/10.1186/s12938-026-01561-2",
+              "locator": "Methods, Pairwise pain detection model training: fivefold UofR cross-validation is named, but frame/video/person grouping is not stated"
+            }
+          ]
+        },
+        "external_test": {
+          "state": "reported",
+          "value": "No separate external cohort: UofR dementia images are the fivefold test target, while all UNBC data are used in training",
+          "reason": "Extracted from primary material.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://link.springer.com/article/10.1186/s12938-026-01561-2",
+              "locator": "Methods, Pairwise pain detection model training; Results, Downstream task performance"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S088",
+      "extraction": {
+        "real_data_provenance": {
+          "state": "unavailable_after_search",
+          "value": null,
+          "reason": "Publisher DOI/Crossref metadata: full methods and dataset provenance inaccessible",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://doi.org/10.1109/ISDA70544.2026.11606012",
+              "locator": "Publisher DOI/Crossref metadata: full methods and dataset provenance inaccessible"
+            }
+          ]
+        },
+        "leakage_control": {
+          "state": "unavailable_after_search",
+          "value": null,
+          "reason": "Publisher DOI/Crossref metadata: no accessible adaptation or test leakage protocol",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://doi.org/10.1109/ISDA70544.2026.11606012",
+              "locator": "Publisher DOI/Crossref metadata: no accessible adaptation or test leakage protocol"
+            }
+          ]
+        },
+        "split_unit": {
+          "state": "unavailable_after_search",
+          "value": null,
+          "reason": "Publisher DOI/Crossref metadata: no accessible split method",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://doi.org/10.1109/ISDA70544.2026.11606012",
+              "locator": "Publisher DOI/Crossref metadata: no accessible split method"
+            }
+          ]
+        },
+        "external_test": {
+          "state": "unavailable_after_search",
+          "value": null,
+          "reason": "Publisher DOI/Crossref metadata: no accessible independent test description",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://doi.org/10.1109/ISDA70544.2026.11606012",
+              "locator": "Publisher DOI/Crossref metadata: no accessible independent test description"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S149",
+      "extraction": {
+        "real_data_provenance": {
+          "state": "reported",
+          "value": "50,000 labeled synthetic scenarios; approximately 8,000 unlabeled real recordings for adaptation; UNBC, BioVid and neonatal labeled benchmark folds for evaluation",
+          "reason": "Extracted from primary material.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.frontiersin.org/journals/artificial-intelligence/articles/10.3389/frai.2026.1827727/full",
+              "locator": "Sections 2.4, 3.1.2 and 4.1"
+            }
+          ]
+        },
+        "leakage_control": {
+          "state": "reported",
+          "value": "Five-subject UNBC validation tuned hyperparameters; all folds used full unlabeled real pool without test-subject exclusion; no test pain labels were used for training or selection",
+          "reason": "Extracted from primary material.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.frontiersin.org/journals/artificial-intelligence/articles/10.3389/frai.2026.1827727/full",
+              "locator": "Section 4.7 Experimental protocol and leakage controls"
+            }
+          ]
+        },
+        "split_unit": {
+          "state": "reported",
+          "value": "Participant-disjoint labeled test folds; unlabeled adaptation pool is not restricted per participant/fold",
+          "reason": "Extracted from primary material.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.frontiersin.org/journals/artificial-intelligence/articles/10.3389/frai.2026.1827727/full",
+              "locator": "Sections 4.1 and 4.7"
+            }
+          ]
+        },
+        "external_test": {
+          "state": "reported",
+          "value": "No fully held-out fourth external dataset; three benchmark datasets contributed unlabeled real adaptation data in at least one condition",
+          "reason": "Extracted from primary material.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.frontiersin.org/journals/artificial-intelligence/articles/10.3389/frai.2026.1827727/full",
+              "locator": "Section 6.8.1.4 Absence of a fourth, fully external dataset"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S192",
+      "extraction": {
+        "real_data_provenance": {
+          "state": "reported",
+          "value": "BioVid Part C real video, biomedical and heat-stimulus streams from 87 subjects train and assess the expression generator",
+          "reason": "Extracted from primary material.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://arxiv.org/html/2409.11635",
+              "locator": "Sections I and IV-A Dataset"
+            }
+          ]
+        },
+        "leakage_control": {
+          "state": "reported",
+          "value": "61 training and 26 validation subjects are separate; no additional independent-site validation is reported",
+          "reason": "Extracted from primary material.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://arxiv.org/html/2409.11635",
+              "locator": "Section IV-A Dataset"
+            }
+          ]
+        },
+        "split_unit": {
+          "state": "reported",
+          "value": "Participant; 61 subjects train and 26 subjects validate",
+          "reason": "Extracted from primary material.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://arxiv.org/html/2409.11635",
+              "locator": "Section IV-A Dataset"
+            }
+          ]
+        },
+        "external_test": {
+          "state": "reported",
+          "value": "No independent external dataset; clinician preference study evaluates generated expressions from BioVid-conditioned samples",
+          "reason": "Extracted from primary material.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://arxiv.org/html/2409.11635",
+              "locator": "Sections I and IV; qualitative results"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S748",
+      "extraction": {
+        "real_data_provenance": {
+          "state": "reported",
+          "value": "X-ITE 134 healthy participants and BioVid Part A 87 healthy participants (80 analyzed); physiological ECG, EDA and EMG features only; binary extreme labels",
+          "reason": "Both real-data inputs and exclusions are stated.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://mdpi-res.com/d_attachment/computers/computers-15-00127/article_deploy/computers-15-00127.pdf",
+              "locator": "§4 and §5.1, pp. 8–9"
+            }
+          ]
+        },
+        "leakage_control": {
+          "state": "reported",
+          "value": "For each target participant, 2500 X-ITE training observations are sampled from the other 133 participants; 500 ModMix points are added to training. The paper does not give a code-level fold audit or explicit hyperparameter selection unit.",
+          "reason": "The stated protocol excludes the tested person from the training sample; implementation details remain unverified.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://mdpi-res.com/d_attachment/computers/computers-15-00127/article_deploy/computers-15-00127.pdf",
+              "locator": "§5.1–5.3 and §6.1, pp. 8–10"
+            }
+          ]
+        },
+        "split_unit": {
+          "state": "reported",
+          "value": "participant (per-trial held-out person; not a fixed 30-person external cohort)",
+          "reason": "The paper explicitly states the subject-exclusion rule.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://mdpi-res.com/d_attachment/computers/computers-15-00127/article_deploy/computers-15-00127.pdf",
+              "locator": "§5.1 and §6.1, pp. 8–10"
+            }
+          ]
+        },
+        "external_test": {
+          "state": "reported",
+          "value": "No external test of ModMix: BioVid final comparison omits augmentation after inconsistent preliminary results",
+          "reason": "The second benchmark tests the base RBF model and random forest without ModMix.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://mdpi-res.com/d_attachment/computers/computers-15-00127/article_deploy/computers-15-00127.pdf",
+              "locator": "§6.2, p. 12"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S758",
+      "extraction": {
+        "real_data_provenance": {
+          "state": "reported",
+          "value": "Synthetic 5,355 neutral/expressive identity pairs; labeled UNBC and UofR real images train PwCT, while UofR folds from 95 older adults are evaluated",
+          "reason": "Extracted from primary preprint version 3.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://arxiv.org/html/2507.19673",
+              "locator": "v3, Section III dataset and Section VI external evaluation, training configurations"
+            }
+          ]
+        },
+        "leakage_control": {
+          "state": "not_reported",
+          "value": null,
+          "reason": "Section VI states fivefold UofR cross-validation but does not state whether folds separate participant identities or how synthetic identities and real data are deduplicated across folds.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://arxiv.org/html/2507.19673",
+              "locator": "v3, Section VI, first three paragraphs"
+            }
+          ]
+        },
+        "split_unit": {
+          "state": "not_reported",
+          "value": null,
+          "reason": "Fivefold UofR cross-validation is reported without explicit participant, video or frame grouping.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://arxiv.org/html/2507.19673",
+              "locator": "v3, Section VI, training configurations"
+            }
+          ]
+        },
+        "external_test": {
+          "state": "reported",
+          "value": "No untouched real external cohort: UofR contributes both training and validation folds; UNBC is also in real training.",
+          "reason": "Extracted from primary preprint version 3.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://arxiv.org/html/2507.19673",
+              "locator": "v3, Section VI, UofR fivefold training and evaluation"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S759",
+      "extraction": {
+        "real_data_provenance": {
+          "state": "reported",
+          "value": "82,500 synthetic frames from 2,500 identities and UNBC real frames from 25 participants. Official code loads real UNBC PSPI/AU labels and fine-tunes on each fold's training subjects after synthetic pretraining; the paper's exact reported-run provenance to this commit is not verified.",
+          "reason": "Preprint v5 and pinned official author code; paper/code discrepancy retained.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://arxiv.org/html/2509.16727",
+              "locator": "v5, Abstract and Section 5 Datasets and Class Imbalance, Implementation Details, Ablation Studies"
+            },
+            {
+              "url": "https://github.com/TaatiTeam/Pain-in-3D/blob/b580e7c7d9af16d8df862bb4697ce2133ced9d37/README.md",
+              "locator": "Training, Stage 2: synthetic checkpoint followed by UNBC fivefold fine-tuning"
+            },
+            {
+              "url": "https://github.com/TaatiTeam/Pain-in-3D/blob/b580e7c7d9af16d8df862bb4697ce2133ced9d37/data/unbc_loader.py",
+              "locator": "Lines 87-114: label_AU_* and label_pspi loaded from UNBC annotations"
+            },
+            {
+              "url": "https://github.com/TaatiTeam/Pain-in-3D/blob/b580e7c7d9af16d8df862bb4697ce2133ced9d37/data/unbc_loader.py",
+              "locator": "Lines 149-184: subject-disjoint train and validation groups for each fold"
+            },
+            {
+              "url": "https://github.com/TaatiTeam/Pain-in-3D/blob/b580e7c7d9af16d8df862bb4697ce2133ced9d37/train_unbc.py",
+              "locator": "Lines 28-40, 60-64 and 114-121: UNBC datamodule, synthetic checkpoint, trainer.fit and test"
+            }
+          ]
+        },
+        "leakage_control": {
+          "state": "reported",
+          "value": "Synthetic identity-disjoint 70/20/10 and UNBC subject-disjoint fivefold splits are reported; official code uses labeled real training subjects inside each fold. Exact reported-run configuration and neutral-reference selection across folds have not been independently reproduced.",
+          "reason": "Preprint v5 and pinned official author code; no runtime reproduction.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://arxiv.org/html/2509.16727",
+              "locator": "v5, Section 5 Implementation Details and paragraph after Table 4"
+            },
+            {
+              "url": "https://github.com/TaatiTeam/Pain-in-3D/blob/b580e7c7d9af16d8df862bb4697ce2133ced9d37/README.md",
+              "locator": "Training, Stage 2: synthetic checkpoint followed by UNBC fivefold fine-tuning"
+            },
+            {
+              "url": "https://github.com/TaatiTeam/Pain-in-3D/blob/b580e7c7d9af16d8df862bb4697ce2133ced9d37/data/unbc_loader.py",
+              "locator": "Lines 87-114: label_AU_* and label_pspi loaded from UNBC annotations"
+            },
+            {
+              "url": "https://github.com/TaatiTeam/Pain-in-3D/blob/b580e7c7d9af16d8df862bb4697ce2133ced9d37/data/unbc_loader.py",
+              "locator": "Lines 149-184: subject-disjoint train and validation groups for each fold"
+            },
+            {
+              "url": "https://github.com/TaatiTeam/Pain-in-3D/blob/b580e7c7d9af16d8df862bb4697ce2133ced9d37/train_unbc.py",
+              "locator": "Lines 28-40, 60-64 and 114-121: UNBC datamodule, synthetic checkpoint, trainer.fit and test"
+            }
+          ]
+        },
+        "split_unit": {
+          "state": "reported",
+          "value": "Identity for synthetic 70/20/10 split; participant for UNBC fivefold test splits",
+          "reason": "Extracted from primary preprint version 5.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://arxiv.org/html/2509.16727",
+              "locator": "v5, Section 5 Implementation Details and Performance Comparison"
+            }
+          ]
+        },
+        "external_test": {
+          "state": "reported",
+          "value": "No independent second real dataset; evaluation uses UNBC fivefold CV only.",
+          "reason": "Extracted from primary preprint version 5.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://arxiv.org/html/2509.16727",
+              "locator": "v5, Section 5 Experiments and Performance Comparison"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

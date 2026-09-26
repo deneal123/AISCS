@@ -11,6 +11,7 @@ from typing import Any
 from .core import DataError, ResearchRepository, default_data_dir
 from .curation import build_queue, cluster_apply, cluster_check, review_apply, review_check
 from .integrity import validate_repository
+from .novelty import novelty_summary, search_novelty
 from .pipeline import (
     atomic_write_json,
     new_candidate,
@@ -45,6 +46,23 @@ def build_parser() -> argparse.ArgumentParser:
 
     subparsers.add_parser("validate", help="run all repository integrity gates")
     subparsers.add_parser("stats", help="show corpus and evidence counters")
+    subparsers.add_parser("completeness", help="show schema-2 terminal-resolution report")
+    subparsers.add_parser("novelty-check", help="validate and summarize the novelty catalogue")
+    migrate_v2 = subparsers.add_parser(
+        "migrate-v2", help="preview or apply the one-time schema-2 migration"
+    )
+    migrate_v2.add_argument("--apply", action="store_true")
+    novelty_queue = subparsers.add_parser(
+        "novelty-queue", help="show open prior-art search streams"
+    )
+    novelty_queue.add_argument("--status", default="open")
+    novelty_search = subparsers.add_parser(
+        "novelty-search", help="search the unranked novelty catalogue"
+    )
+    novelty_search.add_argument("query", nargs="?", default=None)
+    novelty_search.add_argument("--prior-art-outcome")
+    novelty_search.add_argument("--limit", type=int, default=50)
+    novelty_search.add_argument("--offset", type=int, default=0)
 
     new = subparsers.add_parser("new", help="generate the next canonical-id candidate")
     new.add_argument("title")
@@ -133,6 +151,56 @@ def main(argv: list[str] | None = None) -> int:
         repository = ResearchRepository(root)
         if args.command == "stats":
             emit({"meta": repository.metadata(), "evidence": repository.evidence_summary()})
+        elif args.command == "completeness":
+            emit(repository.completeness_report())
+        elif args.command == "novelty-check":
+            report = validate_repository(root)
+            emit({"ok": report["ok"], "errors": report["errors"], **novelty_summary(root)})
+            return 0 if report["ok"] else 1
+        elif args.command == "migrate-v2":
+            records = json.loads((root / "records.json").read_text(encoding="utf-8"))
+            current = records.get("meta", {}).get("schema_version")
+            if current == "2.0.0":
+                emit({"ok": True, "applied": False, "status": "already_schema_2"})
+            else:
+                if root != default_data_dir().resolve():
+                    raise DataError(
+                        "schema-2 migration currently supports only the canonical data dir"
+                    )
+                from migrations.upgrade_schema_2_0 import migrate
+
+                outputs = migrate()
+                if args.apply:
+                    for name, payload in outputs.items():
+                        atomic_write_json(root / name, payload)
+                emit(
+                    {
+                        "ok": True,
+                        "applied": args.apply,
+                        "files": sorted(outputs),
+                        "records": len(outputs["records.json"]["sources"]),
+                    }
+                )
+        elif args.command == "novelty-queue":
+            protocol = json.loads((root / "search-protocol.json").read_text(encoding="utf-8"))
+            items = [
+                item
+                for item in protocol.get("search_streams", [])
+                if args.status == "all" or item.get("status") == args.status
+            ]
+            emit({"items": items, "total": len(items), "status": args.status})
+        elif args.command == "novelty-search":
+            if args.limit < 1 or args.limit > 500 or args.offset < 0:
+                raise DataError("limit must be 1..500 and offset must be non-negative")
+            emit(
+                search_novelty(
+                    root,
+                    query=args.query,
+                    prior_art_outcome=args.prior_art_outcome,
+                    limit=args.limit,
+                    offset=args.offset,
+                )
+            )
         elif args.command == "new":
             candidate = new_candidate(root, args.title)
             if args.output:

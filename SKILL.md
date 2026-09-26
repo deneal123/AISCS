@@ -46,8 +46,10 @@ Verify at least:
 - split unit, cross-subject or external validation where reported;
 - whether full text or only metadata was checked.
 
-Use `null` for unknown values. Never write `Не указано`, invent a metric, infer an
-author list from memory, or upgrade a validation status without primary evidence.
+Schema 2.0 requires a `field_resolution` entry for every nullable scientific field.
+Use `reported`, `not_reported`, `not_applicable`, or `unavailable_after_search` with
+a reason, date, and locator. Never leave `unknown`, an empty string, an unexplained
+`null`, or `Не указано`; never invent a metric or upgrade a status without primary evidence.
 
 ## Safe write workflow
 
@@ -72,7 +74,8 @@ uv run --frozen researchctl publish data/staging/inbox/source.json --apply
 ```
 
 Publishing creates a hashed pre-change snapshot and adds new records to the
-unclustered queue. Do not assign a cluster automatically merely because terms
+unclustered queue. Only the two newest rollback snapshots and explicitly pinned
+migration baselines are retained under `data/archive/`. Do not assign a cluster automatically merely because terms
 overlap.
 
 ## Deduplication

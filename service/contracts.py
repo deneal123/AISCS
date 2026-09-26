@@ -7,8 +7,8 @@ importing FastAPI or loading the corpus.
 from __future__ import annotations
 
 SERVICE_NAME = "research"
-SERVICE_VERSION = "1.2.1"
-DATA_SCHEMA_VERSION = "1.2.0"
+SERVICE_VERSION = "1.3.0"
+DATA_SCHEMA_VERSION = "2.0.0"
 
 ERROR_CODES = frozenset(
     {

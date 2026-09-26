@@ -1,0 +1,159 @@
+{
+    "meta": {
+        "schema_version": "1.0.0",
+        "checked_at": "2026-09-25",
+        "status": "batch_screened_with_access_limits",
+        "scope": "Ten relevance-5 cards on the SRC-07 Crossref metadata route; publisher version, correction/retraction markers and preprint links",
+        "boundary": "Checked pages and registry fields do not prove global absence of later changes. No full-corpus closure is claimed. Existing source-card content was not overwritten."
+    },
+    "registry_screen": {
+        "crossref": "For all ten DOIs, update-to, updated-by and relation fields were empty in the worker's dated query.",
+        "pubmed": "For PMID records S004, S008, S015, S034 and S044, no CommentsCorrections, ErratumIn, RetractionIn or UpdateOf tag was found.",
+        "openalex": "is_retracted=false for all ten queried records.",
+        "boundary": "These are checked registry fields only; empty fields and flags do not prove global absence."
+    },
+    "entries": [
+        {
+            "source_id": "S004",
+            "doi": "10.1109/JBHI.2026.3650972",
+            "publisher_url": "https://doi.org/10.1109/JBHI.2026.3650972",
+            "current_version": "2026 Jun;30(6):5039-5051, PMID 41564065; existing abstract-only record",
+            "access": "IEEE direct fetch returned an empty/202 response; publisher metadata only partially visible through reader route. Existing source card already states abstract-only and full-text limits.",
+            "correction_retraction": "No marker found in checked Crossref/PubMed/OpenAlex fields; direct IEEE page markers unconfirmed.",
+            "preprint_journal_relation": "No linked preprint established in checked publisher/registry routes.",
+            "source_card_action": "checked-existing; no overwrite"
+        },
+        {
+            "source_id": "S005",
+            "doi": "10.1145/3737281",
+            "publisher_url": "https://dl.acm.org/doi/10.1145/3737281",
+            "current_version": "ACM Computing Surveys 58(2), Article 48, September 2025; current publisher article is 35 pages",
+            "access": "The ACM landing page returned Cloudflare 403. The University of Canberra repository labels its 34-page ACM-typeset PDF as a final published version, but the PDF itself prints ACM 1557-7341/2025/5-ART with an unfinished article-number placeholder; it does not establish byte identity with the 35-page VOR. The full review text is checked, while the exact repository version remains unresolved.",
+            "correction_retraction": "No marker found in checked Crossref/OpenAlex fields; current ACM landing-page markers could not be directly inspected.",
+            "preprint_journal_relation": "No linked preprint established in checked publisher route.",
+            "source_card_action": "checked-existing; no overwrite"
+        },
+        {
+            "source_id": "S007",
+            "doi": "10.1109/JIOT.2026.3663683",
+            "publisher_url": "https://doi.org/10.1109/JIOT.2026.3663683",
+            "current_version": "IEEE Internet of Things Journal, 2026, 13(9):19300-19311; publisher DOI and existing author-portal metadata agree",
+            "access": "IEEE direct fetch returned an empty/202 response; metadata was partially visible through the University of Canberra author portal. Existing source card already records metadata-only limits.",
+            "correction_retraction": "No marker found in checked Crossref/OpenAlex fields; direct IEEE page markers unconfirmed.",
+            "preprint_journal_relation": "No linked preprint established in checked publisher/registry routes.",
+            "source_card_action": "checked-existing; no overwrite"
+        },
+        {
+            "source_id": "S008",
+            "doi": "10.1088/2057-1976/ae34b4",
+            "publisher_url": "https://iopscience.iop.org/article/10.1088/2057-1976/ae34b4",
+            "current_version": "Biomedical Physics & Engineering Express 12(1), 015046 (2026); existing full publisher-PDF audit is data/evidence-review-ledger.json#s008-primary-fulltext-audit.json",
+            "access": "Direct IOP page was CAPTCHA limited; the prior full publisher version-of-record PDF audit remains authoritative and was not overwritten.",
+            "correction_retraction": "No marker found in checked Crossref/PubMed/OpenAlex fields; direct IOP page markers unconfirmed.",
+            "preprint_journal_relation": "No linked preprint established in checked publisher/registry routes.",
+            "source_card_action": "checked-existing; preserve full-text audit"
+        },
+        {
+            "source_id": "S015",
+            "doi": "10.3390/s26103020",
+            "publisher_url": "https://www.mdpi.com/1424-8220/26/10/3020",
+            "current_version": "Sensors 26(10):3020, published 11 May 2026; publisher page/article body and PubMed record identify the same version",
+            "access": "MDPI direct fetch returned 403; article body was available through the publisher DOI/indexed full-text route. Existing checked full-text card retained.",
+            "correction_retraction": "No marker found in checked Crossref/PubMed/OpenAlex fields; direct MDPI page markers unconfirmed.",
+            "preprint_journal_relation": "No linked preprint established in checked publisher/registry routes.",
+            "source_card_action": "checked-existing; no overwrite"
+        },
+        {
+            "source_id": "S034",
+            "doi": "10.1227/neu.0000000000003715",
+            "publisher_url": "https://www.ovid.com/jnls/neurosurgery/abstract/10.1227/neu.0000000000003715~prediction-of-response-to-spinal-cord-stimulation-using",
+            "current_version": "Neurosurgery 98(4):895-903 (1 April 2026); Epub 29 August 2025, PMID 40879389",
+            "access": "Publisher page showed a Crossmark Check for updates widget, but no notice content was retrievable. PubMed abstract/citation only; existing card's method-access boundary remains.",
+            "correction_retraction": "No correction/retraction record found in checked Crossref/PubMed/OpenAlex fields. Crossmark widget present; actual update status unresolved.",
+            "preprint_journal_relation": "No linked preprint established in checked publisher/registry routes.",
+            "source_card_action": "checked-existing; retain abstract-only limits and Crossmark unresolved status"
+        },
+        {
+            "source_id": "S036",
+            "doi": "10.1016/j.neucom.2025.132066",
+            "publisher_url": "https://www.sciencedirect.com/science/article/pii/S0925231225027389",
+            "current_version": "Neurocomputing 664, 132066, 1 February 2026; ScienceDirect publisher search result identifies open-access article",
+            "access": "ScienceDirect page returned CAPTCHA/403 on direct fetch, but the publisher page was indexed and its title, issue date and DOI were visible. No full new revision comparison performed.",
+            "correction_retraction": "No marker found in checked Crossref/OpenAlex fields; publisher correction/retraction area not directly inspected.",
+            "preprint_journal_relation": "No linked preprint established in checked publisher/registry routes.",
+            "source_card_action": "checked-existing; no overwrite"
+        },
+        {
+            "source_id": "S039",
+            "doi": "10.1016/j.bspc.2026.111261",
+            "publisher_url": "https://www.sciencedirect.com/science/article/abs/pii/S174680942601815X",
+            "current_version": "ScienceDirect currently assigns Biomedical Signal Processing and Control 128, 111261 to the scheduled 1 December 2026 issue (future relative to this 25 September 2026 screen); publisher article text is indexed. Do not treat the scheduled issue date as an already-issued print/issue version.",
+            "access": "Publisher article text and issue information were visible in indexed ScienceDirect result; direct page fetch is CAPTCHA limited.",
+            "correction_retraction": "No marker found in checked Crossref/OpenAlex fields or indexed article text. Global absence not established.",
+            "preprint_journal_relation": "No linked preprint established in checked publisher/registry routes.",
+            "source_card_action": "checked-existing; no overwrite"
+        },
+        {
+            "source_id": "S040",
+            "doi": "10.1016/j.inffus.2026.104173",
+            "publisher_url": "https://www.sciencedirect.com/science/article/pii/S1566253526000527",
+            "current_version": "Information Fusion 131, article 104173 (July 2026); publisher page/title and author metadata indexed",
+            "access": "ScienceDirect direct page returned CAPTCHA/403; indexed publisher and author-portal records confirmed the current citation. Existing checked abstract card retained.",
+            "correction_retraction": "No marker found in checked Crossref/OpenAlex fields; publisher correction/retraction area not directly inspected.",
+            "preprint_journal_relation": "No linked preprint established in checked publisher/registry routes.",
+            "source_card_action": "checked-existing; no overwrite"
+        },
+        {
+            "source_id": "S044",
+            "doi": "10.1016/j.jpain.2026.106416",
+            "publisher_url": "https://www.sciencedirect.com/science/article/pii/S1526590026002348",
+            "current_version": "Journal of Pain, online 14 August 2026, article 106416, PMID 42600964; publisher article indexed",
+            "access": "ScienceDirect publisher result and PubMed abstract/citation checked; full direct page fetch CAPTCHA limited.",
+            "correction_retraction": "No marker found in checked Crossref/PubMed/OpenAlex fields or indexed publisher article text.",
+            "preprint_journal_relation": "Publisher article text explicitly links bioRxiv DOI 10.1101/2023.11.09.566379. The preprint is titled External Validation of Machine Learning and EEG for Continuous Pain Intensity Prediction in Healthy Individuals; author list and validation sample/metrics match the journal article. This is an author-declared link visible in publisher text, not a Crossref relation field.",
+            "source_card_action": "checked-existing; preprint relation needs insertion into canonical relations after card schema review"
+        }
+    ],
+    "remaining": [
+        "Confirm unresolved publisher-side correction/retraction markers for blocked pages, especially S005, S036 and S040.",
+        "Resolve S034 Crossmark Check for updates widget; no notice content was retrievable.",
+        "Review whether to add S044's explicit publisher-stated bioRxiv relation to the canonical source record without treating versions as independent evidence.",
+        "Repeat a later dated correction/retraction/version refresh; this ten-card pass does not close SRC-07 or establish full coverage of 81 records."
+    ],
+    "follow_up_checks_2026_09_26": [
+        {
+            "source_id": "S044",
+            "checked_at": "2026-09-26",
+            "check": "Live Crossmark dialog and repository copy of publisher-generated VOR PDF rechecked after the 2026-09-25 batch.",
+            "crossmark_url": "https://crossmark.crossref.org/dialog/?doi=10.1016%2Fj.jpain.2026.106416",
+            "crossmark_result": "HTTP 200; dialog identifies the DOI and article title \"External validation of EEG-based machine learning models for continuous pain prediction\" and states \"Document is current\" / \"Any future updates will be listed below\". The visible dialog lists no update records. This is the current Crossmark state at retrieval only.",
+            "publisher_version_url": "https://livrepository.liverpool.ac.uk/3204021/1/1-s2.0-S1526590026002348-main.pdf",
+            "version_result": "HTTP 200; PDF header is %PDF-1.7, 6,770,335 bytes. Prior direct PDF inspection recorded a publisher-generated VOR and the author-declared bioRxiv DOI 10.1101/2023.11.09.566379 on printed p.11; this live fetch confirms availability, not a new independent page-level transcription.",
+            "boundary": "Crossmark reflects its visible state at check time and does not establish future global absence of updates. The owner-hosted/publisher-generated VOR copy is served by the institutional repository; repository OAI type discrepancy recorded in data/src07-version-recheck-audit.json remains.",
+            "action": "Supersedes only the earlier batch-level statement that S044 preprint relation had not been reconfirmed in the API-focused pass; it does not close the ten-card batch or SRC-07."
+        },
+        {
+            "source_id": "S034",
+            "checked_at": "2026-09-26",
+            "check": "Direct live Crossref Crossmark dialog rechecked after the 2026-09-25 batch.",
+            "crossmark_url": "https://crossmark.crossref.org/dialog/?doi=10.1227%2Fneu.0000000000003715",
+            "crossmark_result": "HTTP 200; status is \"Document is current\"; dialog identifies the matching article title, Published Online 2025-08-29 and Published Print 2026-04. No update records are listed in the dialog. Update policy links to https://doi.org/10.1097/lww.0000000000001000. This records visible Crossmark state only.",
+            "publisher_url": "https://www.ovid.com/jnls/neurosurgery/abstract/10.1227/neu.0000000000003715~prediction-of-response-to-spinal-cord-stimulation-using",
+            "publisher_access": "The direct Ovid page remained HTTP 402 Payment Required in web retrieval; full text and page-level notices could not be inspected.",
+            "boundary": "Crossmark current-state is not a global or future guarantee, and the abstract-only method-access limit remains.",
+            "action": "Resolves the formerly unavailable Crossmark status for this bounded check; does not close S034 method access or SRC-07."
+        },
+        {
+            "source_id": "S005",
+            "checked_at": "2026-09-26",
+            "check": "The repository-PDF identity question was rechecked against the accessible Crossref owner deposit and the indexed repository PDF, with an independent Pi review of PDF metadata and ACM class output.",
+            "crossref_url": "https://api.crossref.org/works/10.1145%2F3737281",
+            "crossref_result": "HTTP 200; current deposit identifies ACM Computing Surveys 58(2), pages 1-35; no article-number field. Published online 2025-09-09 and print 2026-01-31.",
+            "repository_pdf_url": "https://researchsystem.canberra.edu.au/ws/portalfiles/portal/118630433/3737281.pdf",
+            "repository_pdf_result": "Indexed primary PDF exposes the page-1 imprint \"ACM 1557-7341/2025/5-ART\" with an unfilled article slot and DOI; repository record labels the 34-page item final published version. Pi inspection additionally found PDF Subject \"ACM Comput. Surv. 0.0\", no ACM Reference Format block, and no volume/issue/article footer. These markers conflict with the 35-page current Crossref citation and do not establish an exact VOR copy.",
+            "owner_access": "ACM landing and VOR PDF remain HTTP 403 in this environment; exact byte/content identity with ACM VOR is unresolved.",
+            "boundary": "Class-rendering markers and pagination support classifying the deposited file as not demonstrated to be the exact finalized VOR; they do not establish that its article content differs from the VOR. Preserve the repository label and the exact-identity uncertainty.",
+            "action": "Clarifies the version-access status only; S005 correction/retraction markers and full SRC-07 coverage remain open."
+        }
+    ]
+}

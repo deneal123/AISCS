@@ -11,17 +11,17 @@ def resource_map(payload: dict) -> dict[str, dict]:
     return {resource["resource_id"]: resource for _, _, resource in iter_resources(payload)}
 
 
-def test_st_schema_1_2_has_stable_unique_ids_and_matching_counters() -> None:
+def test_st_schema_2_has_stable_unique_ids_and_matching_counters() -> None:
     payload = load_json(DATA / "ST.json")
     resources = resource_map(payload)
-    assert payload["meta"]["resource_schema_version"] == "1.2.0"
-    assert len(resources) == 104
-    assert set(resources) == {f"ST{index:03d}" for index in range(1, 105)}
+    assert payload["meta"]["resource_schema_version"] == "2.0.0"
+    assert len(resources) == 109
+    assert set(resources) == {f"ST{index:03d}" for index in range(1, 110)}
     assert payload["meta"]["незавершенных_ресурсов"] == 0
     assert payload["meta"]["статусы_ресурсов"] == {
         "partially_verified": 19,
         "rejected": 18,
-        "verified_primary": 67,
+        "verified_primary": 72,
     }
 
 
@@ -41,38 +41,41 @@ def test_applied_st_batches_changed_no_resource_outside_manifest() -> None:
     transitions = (
         (
             "st-batch-001",
-            DATA / "archive" / "2026-09-22T111833Z-pre-st-batch-001" / "ST.json",
-            DATA / "archive" / "2026-09-22T113215Z-pre-st-batch-002" / "ST.json",
+            ROOT / "tests" / "fixtures" / "history" / "archive" / "2026-09-22T111833Z-pre-st-batch-001" / "ST.json",
+            ROOT / "tests" / "fixtures" / "history" / "archive" / "2026-09-22T113215Z-pre-st-batch-002" / "ST.json",
         ),
         (
             "st-batch-002",
-            DATA / "archive" / "2026-09-22T113215Z-pre-st-batch-002" / "ST.json",
-            DATA / "archive" / "2026-09-22T113545Z-pre-st-batch-003" / "ST.json",
+            ROOT / "tests" / "fixtures" / "history" / "archive" / "2026-09-22T113215Z-pre-st-batch-002" / "ST.json",
+            ROOT / "tests" / "fixtures" / "history" / "archive" / "2026-09-22T113545Z-pre-st-batch-003" / "ST.json",
         ),
         (
             "st-batch-003",
-            DATA / "archive" / "2026-09-22T113545Z-pre-st-batch-003" / "ST.json",
-            DATA / "archive" / "2026-09-22T114144Z-pre-st-batch-004" / "ST.json",
+            ROOT / "tests" / "fixtures" / "history" / "archive" / "2026-09-22T113545Z-pre-st-batch-003" / "ST.json",
+            ROOT / "tests" / "fixtures" / "history" / "archive" / "2026-09-22T114144Z-pre-st-batch-004" / "ST.json",
         ),
         (
             "st-batch-004",
-            DATA / "archive" / "2026-09-22T114144Z-pre-st-batch-004" / "ST.json",
-            DATA / "archive" / "2026-09-22T114825Z-pre-st-batch-005" / "ST.json",
+            ROOT / "tests" / "fixtures" / "history" / "archive" / "2026-09-22T114144Z-pre-st-batch-004" / "ST.json",
+            ROOT / "tests" / "fixtures" / "history" / "archive" / "2026-09-22T114825Z-pre-st-batch-005" / "ST.json",
         ),
         (
             "st-batch-005",
-            DATA / "archive" / "2026-09-22T114825Z-pre-st-batch-005" / "ST.json",
-            DATA / "archive" / "2026-09-22T115248Z-pre-st-batch-006" / "ST.json",
+            ROOT / "tests" / "fixtures" / "history" / "archive" / "2026-09-22T114825Z-pre-st-batch-005" / "ST.json",
+            ROOT / "tests" / "fixtures" / "history" / "archive" / "2026-09-22T115248Z-pre-st-batch-006" / "ST.json",
         ),
         (
             "st-batch-006",
-            DATA / "archive" / "2026-09-22T115248Z-pre-st-batch-006" / "ST.json",
-            DATA / "archive" / "2026-09-22T115248Z-pre-st-batch-007" / "ST.json",
+            ROOT / "tests" / "fixtures" / "history" / "archive" / "2026-09-22T115248Z-pre-st-batch-006" / "ST.json",
+            ROOT / "tests" / "fixtures" / "history" / "archive" / "2026-09-22T115248Z-pre-st-batch-007" / "ST.json",
         ),
         (
             "st-batch-007",
-            DATA / "archive" / "2026-09-22T115248Z-pre-st-batch-007" / "ST.json",
-            DATA / "ST.json",
+            ROOT / "tests" / "fixtures" / "history" / "archive" / "2026-09-22T115248Z-pre-st-batch-007" / "ST.json",
+            DATA
+            / "archive"
+            / "2026-09-23T202748Z-pre-schema-2-novelty-revision"
+            / "ST.json",
         ),
     )
     for batch_id, before_path, after_path in transitions:

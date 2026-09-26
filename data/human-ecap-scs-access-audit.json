@@ -1,0 +1,943 @@
+{
+  "meta": {
+    "schema_version": "1.0.0",
+    "audited_at": "2026-09-26",
+    "scope": "Human epidural SCS ECAP measurements with a possible patient-linked clinical pain outcome",
+    "decision": "no_owner_confirmed_usable_dataset",
+    "rule": "A publication, trial registry entry, or data-sharing promise does not establish access to a patient-linked analysis table or raw ECAP signals. Do not select a primary dataset until the owner confirms exact fields, linkage, and delivery route, and the responsible institution and legal/consent review separately establish permission for the proposed secondary use."
+  },
+  "candidates": [
+    {
+      "id": "HES-EVOKE-NCT02924129",
+      "name": "EVOKE randomized trial",
+      "owner": "Saluda Medical Americas, Inc.",
+      "trial_id": "NCT02924129",
+      "source_refs": [
+        "S779",
+        "S780",
+        "S781"
+      ],
+      "owner_confirmation_received": false,
+      "decision": "request_scope_and_reconcile_sharing_conflict",
+      "checks": {
+        "access_procedure": {
+          "state": "conflicting",
+          "finding": "The sponsor-authored article offers anonymized individual and trial-level analysis data to qualified researchers after proposal, statistical analysis plan, and data-sharing agreement review, for an initial 12 months. The sponsor-submitted trial registry instead records IPD Sharing: NO.",
+          "locators": [
+            {
+              "url": "https://rapm.bmj.com/content/49/5/346.abstract",
+              "locator": "Data availability statement"
+            },
+            {
+              "url": "https://clinicaltrials.gov/api/v2/studies/NCT02924129",
+              "locator": "protocolSection.ipdSharingStatementModule.ipdSharing = NO"
+            }
+          ]
+        },
+        "ethics_secondary_use": {
+          "state": "unconfirmed",
+          "finding": "The publication reports trial-level ethics approval, but no responsible-institution determination is recorded for this project's proposed secondary analysis. Original-study approval does not establish approval or exemption for this reuse.",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11103285/",
+              "locator": "Methods > Participants and Ethics statements; evidence for original trial only"
+            }
+          ]
+        },
+        "consent_dua": {
+          "state": "partial",
+          "finding": "Written participant consent and IRB approval are reported; the article requires a data-sharing agreement. The actual consent scope and executable agreement for this project's proposed reuse have not been inspected or approved.",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11103285/",
+              "locator": "Methods > Participants and Ethics statements"
+            },
+            {
+              "url": "https://rapm.bmj.com/content/49/5/346.abstract",
+              "locator": "Data availability statement"
+            }
+          ]
+        },
+        "patient_linkage": {
+          "state": "partial",
+          "finding": "The publication analyzes clinical outcomes and objective neural activation in one trial, but no owner-provided data dictionary confirms that shared patient-level ECAP features, timestamps, and pain outcomes retain a common pseudonymous identifier.",
+          "locators": [
+            {
+              "url": "https://rapm.bmj.com/content/49/5/346.abstract",
+              "locator": "Abstract: 36-month pain outcomes and objective neural activation; Data availability statement"
+            }
+          ]
+        },
+        "outcomes": {
+          "state": "confirmed_in_study",
+          "finding": "Overall back and leg pain response at 36 months and holistic outcomes were measured in the trial; inclusion of these fields in any released analysis dataset remains unconfirmed.",
+          "locators": [
+            {
+              "url": "https://rapm.bmj.com/content/49/5/346.abstract",
+              "locator": "Abstract > Methods and Results"
+            }
+          ]
+        },
+        "ecap_signal": {
+          "state": "partial",
+          "finding": "Objective neural activation and ECAP-controlled dosing were analyzed. Neither the data-sharing statement nor registry specifies whether pulse-level ECAP waveforms or patient-level ECAP feature series are available to external researchers.",
+          "locators": [
+            {
+              "url": "https://rapm.bmj.com/content/49/5/346.abstract",
+              "locator": "Abstract; Data availability statement"
+            }
+          ]
+        }
+      },
+      "owner_questions": [
+        "Does the article's request policy override or supplement the trial registry IPD Sharing: NO entry?",
+        "Which ECAP waveform or feature fields, stimulation settings, timestamps, and pain outcomes would be supplied with a stable patient key?",
+        "What consent restrictions, de-identification terms, DUA, eligibility rules, and delivery method apply to this project?"
+      ],
+      "required_fit_review_2026_09_25": {
+        "unit": {
+          "state": "reported_in_study_not_confirmed_in_release",
+          "finding": "The RCT randomized 134 participants; ECAPs were measured on every stimulation pulse in both modes and clinical outcomes were assessed longitudinally. The requested row unit and stable key in any externally shared analysis set are not specified.",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11041592/",
+              "locator": "Methods > Study design and participants; Intervention and comparator"
+            },
+            {
+              "url": "https://clinicaltrials.gov/api/v2/studies/NCT02924129",
+              "locator": "protocolSection.designModule and outcomesModule"
+            }
+          ]
+        },
+        "labels": {
+          "state": "reported_in_study_not_confirmed_in_release",
+          "finding": "Published study outcomes include 0-100 mm pain VAS and multidomain clinical measures through follow-up; these demonstrate study labels only, not fields in the sponsor analysis release.",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11041592/",
+              "locator": "Methods > Outcome measures"
+            },
+            {
+              "url": "https://clinicaltrials.gov/api/v2/studies/NCT02924129",
+              "locator": "outcomesModule"
+            }
+          ]
+        },
+        "electrode_geometry": {
+          "state": "partially_reported_release_schema_unconfirmed",
+          "finding": "The paper reports two percutaneous leads in the dorsal epidural space over the dorsal column. Participant-level vertebral/contact positions and geometry fields in a release are unconfirmed.",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11041592/",
+              "locator": "Methods > Intervention and comparator"
+            }
+          ]
+        },
+        "explicit_permission_secondary_use": {
+          "state": "conditional_request_route_conflicts_with_registry",
+          "finding": "Saluda states anonymized individual and trial-level analysis data may be requested by qualified researchers after proposal and statistical analysis plan approval and data-sharing agreement; availability excludes trials in ongoing or planned regulatory submissions, and access is 12 months. The sponsor-submitted registry states IPD Sharing: NO. No approval for this project, executed DSA, consent scope, or ethics/legal determination exists.",
+          "locators": [
+            {
+              "url": "https://rapm.bmj.com/content/49/5/346.abstract",
+              "locator": "Data availability statement"
+            },
+            {
+              "url": "https://saludamedical.com/us/contact-us/",
+              "locator": "Saluda request/contact route"
+            },
+            {
+              "url": "https://clinicaltrials.gov/api/v2/studies/NCT02924129",
+              "locator": "protocolSection.ipdSharingStatementModule.ipdSharing = NO"
+            }
+          ]
+        },
+        "required_patient_linked_clinical_outcome": {
+          "state": "not_confirmed_in_shareable_data",
+          "finding": "Pain outcomes and ECAP/neural activation were both studied, but the shared dataset fields, common pseudonymous patient key, timestamps and visit linkage are not described. This required endpoint is unmet pending owner confirmation.",
+          "locators": [
+            {
+              "url": "https://rapm.bmj.com/content/49/5/346.abstract",
+              "locator": "Abstract and Data availability statement"
+            }
+          ]
+        }
+      },
+      "open_data_route_recheck_2026_09_25": {
+        "open_linked_dataset_verified": false,
+        "publication_access": {
+          "urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC11103285/",
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC11041592/"
+          ],
+          "locator": "Data availability statement: anonymized individual and trial-level analysis datasets may be requested by qualified researchers after research proposal and SAP approval plus executed DSA; regulatory-submission exclusion; access window 12 months. This is conditional sponsor-controlled access, not an open release."
+        },
+        "as_of": "2026-09-25",
+        "linkage_and_permission": "Published ECAP-controlled dosing and clinical pain outcomes are aggregate. No public row-level ECAP waveform/features, timestamp/stimulation series, pain/function labels with shared patient key, data dictionary, or secondary-use permission. Original written consent/IRB reporting does not establish permission for this proposed secondary analysis; the DSA and proposal must be approved.",
+        "registry": {
+          "url": "https://clinicaltrials.gov/api/v2/studies/NCT02924129",
+          "locator": "protocolSection.ipdSharingStatementModule.ipdSharing = NO; status COMPLETED; lastUpdatePostDateStruct = 2024-01-03; hasResults = true; postedResults = aggregate participant flow, baseline, outcome, and adverse-event summaries (reported 3- and 12-month timeframes), with no participant rows or common patient identifier."
+        },
+        "public_artifacts": [
+          {
+            "url": "https://cdn.clinicaltrials.gov/large-docs/29/NCT02924129/Prot_000.pdf",
+            "locator": "Posted protocol, no individual-level dataset; registry document metadata says hasIcf=false, so consent form is not public."
+          },
+          {
+            "url": "https://cdn.clinicaltrials.gov/large-docs/29/NCT02924129/SAP_001.pdf",
+            "locator": "Posted statistical analysis plan, not study data; marked sponsor confidential."
+          }
+        ],
+        "res05_remaining": [
+          "Resolve registry IPD=NO versus article conditional request policy with the data controller, without treating the latter as current access.",
+          "Obtain written confirmation of available ECAP/stimulation/time and pain/function fields, common pseudonymous linkage, visit windows, codebook, and delivery.",
+          "Obtain institution/legal/IRB determination, applicable consent scope, sponsor data-controller authorization, and an executed DSA for this secondary use."
+        ]
+      }
+    },
+    {
+      "id": "HES-ECAP-NCT04319887",
+      "name": "ECAP prospective multicenter study",
+      "owner": "Saluda Medical Pty Ltd",
+      "trial_id": "NCT04319887",
+      "source_refs": [
+        "S237"
+      ],
+      "owner_confirmation_received": false,
+      "decision": "request_scope_and_reconcile_sharing_conflict",
+      "checks": {
+        "access_procedure": {
+          "state": "conflicting",
+          "finding": "The sponsor-authored ECAP study article repeats a qualified-researcher request route with proposal, statistical analysis plan, agreement, and initial 12-month access; the sponsor-submitted trial registry records IPD Sharing: NO.",
+          "locators": [
+            {
+              "url": "https://rapm.bmj.com/content/early/2025/12/01/rapm-2025-107051.abstract",
+              "locator": "Data availability statement"
+            },
+            {
+              "url": "https://clinicaltrials.gov/api/v2/studies/NCT04319887",
+              "locator": "protocolSection.ipdSharingStatementModule.ipdSharing = NO"
+            }
+          ]
+        },
+        "ethics_secondary_use": {
+          "state": "unconfirmed",
+          "finding": "The article reports study consent, but no responsible-institution determination is recorded for this project's proposed secondary analysis. Original-study consent does not establish approval or exemption for this reuse.",
+          "locators": [
+            {
+              "url": "https://rapm.bmj.com/content/early/2025/12/01/rapm-2025-107051",
+              "locator": "Methods > Study design and population; evidence for original study only"
+            }
+          ]
+        },
+        "consent_dua": {
+          "state": "partial",
+          "finding": "The study reports written informed consent and the article requires a data-sharing agreement; consent for this reuse and an executable agreement have not been confirmed by the owner.",
+          "locators": [
+            {
+              "url": "https://rapm.bmj.com/content/early/2025/12/01/rapm-2025-107051",
+              "locator": "Methods > Study design and population; Data availability statement"
+            }
+          ]
+        },
+        "patient_linkage": {
+          "state": "partial",
+          "finding": "The study included patients with both clinical outcomes and objective device metrics at the temporary trial and post-implant visit. The owner has not confirmed linked row-level fields or identifiers in a shareable dataset.",
+          "locators": [
+            {
+              "url": "https://rapm.bmj.com/content/early/2025/12/01/rapm-2025-107051",
+              "locator": "Methods > Study design and population"
+            }
+          ]
+        },
+        "outcomes": {
+          "state": "confirmed_in_study",
+          "finding": "PROMIS-29 and clinical response measures at trial end and maximal analgesic effect were collected; release of patient-level outcome fields is unconfirmed.",
+          "locators": [
+            {
+              "url": "https://rapm.bmj.com/content/early/2025/12/01/rapm-2025-107051.abstract",
+              "locator": "Abstract > Methods and Results"
+            }
+          ]
+        },
+        "ecap_signal": {
+          "state": "partial",
+          "finding": "The study analyzed objective ECAP neural-dose metrics. The shared-data granularity, especially pulse-level waveforms versus visit summaries, is not specified.",
+          "locators": [
+            {
+              "url": "https://rapm.bmj.com/content/early/2025/12/01/rapm-2025-107051.abstract",
+              "locator": "Abstract > Methods and Results; Data availability statement"
+            }
+          ]
+        }
+      },
+      "owner_questions": [
+        "Can qualified researchers request this study's patient-linked ECAP and PROMIS/pain analysis fields despite the trial registry IPD Sharing: NO entry?",
+        "Are raw waveforms, pulse-level ECAP features, visit summaries, stimulation parameters, and patient keys included?",
+        "Which consent, DUA, access duration, and secure-transfer requirements apply?"
+      ],
+      "required_fit_review_2026_09_25": {
+        "unit": {
+          "state": "reported_in_study_not_confirmed_in_release",
+          "finding": "The prospective study enrolled up to 300 participants. ECAP records are generated per stimulation pulse; the paper describes trial-end and post-implant patient outcomes. The released analysis row unit/key is unspecified.",
+          "locators": [
+            {
+              "url": "https://clinicaltrials.gov/api/v2/studies/NCT04319887",
+              "locator": "designModule, outcomesModule"
+            },
+            {
+              "url": "https://rapm.bmj.com/content/early/2025/12/01/rapm-2025-107051",
+              "locator": "Methods > Study design and population"
+            }
+          ]
+        },
+        "labels": {
+          "state": "reported_in_study_not_confirmed_in_release",
+          "finding": "Study endpoints include VAS pain, PROMIS-29, PROMIS-10 Global, POMS 2-A Short, PGIC and therapy satisfaction, alongside ECAP/neural-dose metrics. Patient-level released label fields are unconfirmed.",
+          "locators": [
+            {
+              "url": "https://clinicaltrials.gov/api/v2/studies/NCT04319887",
+              "locator": "outcomesModule"
+            },
+            {
+              "url": "https://rapm.bmj.com/content/early/2025/12/01/rapm-2025-107051",
+              "locator": "Abstract > outcomes"
+            }
+          ]
+        },
+        "electrode_geometry": {
+          "state": "reported_in_study_release_schema_unconfirmed",
+          "finding": "The study uses one or two 12-contact percutaneous Evoke leads in the dorsal epidural space. Actual participant-specific placement/contact geometry in an external release is not specified.",
+          "locators": [
+            {
+              "url": "https://link.springer.com/article/10.1007/s40122-026-00821-2",
+              "locator": "Methods > study and leads"
+            }
+          ]
+        },
+        "explicit_permission_secondary_use": {
+          "state": "conditional_request_route_conflicts_with_registry",
+          "finding": "Saluda offers anonymized individual/trial-level analysis data to qualified researchers after proposal, statistical analysis plan and DSA review; a pending/planned regulatory submission can exclude a trial and access is limited to 12 months. ClinicalTrials.gov records IPD Sharing: NO. No project-specific approval, executed DSA, or secondary-use determination is present.",
+          "locators": [
+            {
+              "url": "https://rapm.bmj.com/content/early/2025/12/01/rapm-2025-107051",
+              "locator": "Data availability statement"
+            },
+            {
+              "url": "https://saludamedical.com/us/contact-us/",
+              "locator": "Saluda request/contact route"
+            },
+            {
+              "url": "https://clinicaltrials.gov/api/v2/studies/NCT04319887",
+              "locator": "protocolSection.ipdSharingStatementModule.ipdSharing = NO"
+            }
+          ]
+        },
+        "required_patient_linked_clinical_outcome": {
+          "state": "not_confirmed_in_shareable_data",
+          "finding": "The study reports pain/PROMIS outcomes and ECAP/device measures, but neither stable patient linkage nor inclusion of patient-level outcomes and signal/features in the requested analysis dataset is confirmed. This required endpoint remains unmet.",
+          "locators": [
+            {
+              "url": "https://rapm.bmj.com/content/early/2025/12/01/rapm-2025-107051",
+              "locator": "Methods and Data availability statement"
+            }
+          ]
+        }
+      },
+      "open_data_route_recheck_2026_09_25": {
+        "open_linked_dataset_verified": false,
+        "publication_access": {
+          "urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC11103285/",
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC11041592/",
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC12015077/"
+          ],
+          "locator": "The first two Saluda-sponsored articles specify qualified-researcher access only after proposal/SAP review and DSA, with regulatory-submission exclusion and 12-month access. The 2025 pooled dose-response paper states data available upon request. These are gated request statements, not open data."
+        },
+        "as_of": "2026-09-25",
+        "linkage_and_permission": "Public outcomes and ECAP metrics are cohort summaries. No patient-level linked ECAP waveform/features, stimulation settings/timestamps, and pain/function file was located. Written trial consent/IRB and a study protocol do not establish permission for independent secondary reuse; the DSA/access terms are not publicly executed.",
+        "registry": {
+          "url": "https://clinicaltrials.gov/api/v2/studies/NCT04319887",
+          "locator": "protocolSection.ipdSharingStatementModule.ipdSharing = NO; status COMPLETED; lastUpdatePostDateStruct and resultsFirstPostDateStruct = 2024-12-31; hasResults = true; results contain aggregate participant flow, baseline, ECAP and pain/PROMIS outcome summaries, no participant rows or common patient identifier."
+        },
+        "public_artifacts": [
+          {
+            "url": "https://cdn.clinicaltrials.gov/large-docs/87/NCT04319887/Prot_SAP_001.pdf",
+            "locator": "Registry-posted protocol/SAP document; protocol and workflow, not an analysis dataset. No public patient-level export, codebook, or signed secondary-use permission."
+          }
+        ],
+        "res05_remaining": [
+          "Clarify registry IPD=NO against the conditional publication request route with the data controller.",
+          "Obtain a field-level data dictionary and written confirmation that an eligible release retains shared pseudonymous participant keys across ECAP, stimulation/time, and pain/function observations.",
+          "Document consent scope, institutional/legal/IRB determination, sponsor approval, and executed DSA before considering the study for RES-05."
+        ]
+      }
+    },
+    {
+      "id": "HES-UMN-NCT04938245",
+      "name": "Improving Spinal Cord Stimulation With ECAPS",
+      "owner": "University of Minnesota",
+      "trial_id": "NCT04938245",
+      "source_refs": [
+        "S105"
+      ],
+      "owner_confirmation_received": false,
+      "decision": "request_route_documented_release_not_located",
+      "checks": {
+        "access_procedure": {
+          "state": "partial",
+          "finding": "The owner-submitted registry promises anonymized data in Zenodo or an equivalent repository for five years, but an exact trial-ID search located no accession on 2026-09-24. The published study instead states that its data are available from the corresponding author on request, subject to ethics or IRB restrictions. The owner has not confirmed the field list or suitability for this project.",
+          "locators": [
+            {
+              "url": "https://clinicaltrials.gov/api/v2/studies/NCT04938245",
+              "locator": "protocolSection.ipdSharingStatementModule and statusModule"
+            },
+            {
+              "url": "https://zenodo.org/api/records/?q=NCT04938245&size=5",
+              "locator": "hits.total = 0 on 2026-09-24; exact trial-ID search only"
+            },
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/adbfbe/pdf",
+              "locator": "KГ¶nig et al. 2025, Data availability statement"
+            }
+          ]
+        },
+        "ethics_secondary_use": {
+          "state": "unconfirmed",
+          "finding": "The registered planned release and published technical-study methods do not establish an ethics/IRB determination for this project's proposed secondary clinical analysis. Any owner release would still require the responsible institution to determine the applicable review.",
+          "locators": [
+            {
+              "url": "https://clinicaltrials.gov/api/v2/studies/NCT04938245",
+              "locator": "protocolSection.ipdSharingStatementModule; planned repository access only"
+            },
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+              "locator": "Article record; original ECAP feature study, not this proposed secondary-use determination"
+            }
+          ]
+        },
+        "consent_dua": {
+          "state": "unconfirmed",
+          "finding": "The registry promises anonymized preprocessing but does not give the release license, participant-consent scope, or a DUA. No data package has been retrieved.",
+          "locators": [
+            {
+              "url": "https://clinicaltrials.gov/api/v2/studies/NCT04938245",
+              "locator": "protocolSection.ipdSharingStatementModule"
+            }
+          ]
+        },
+        "patient_linkage": {
+          "state": "unconfirmed",
+          "finding": "The article analyzes ECAPs from eight chronic-pain participants; the planned release has no published schema establishing stable participant linkage to pain relief.",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+              "locator": "Abstract > Approach and Main results"
+            },
+            {
+              "url": "https://clinicaltrials.gov/api/v2/studies/NCT04938245",
+              "locator": "protocolSection.ipdSharingStatementModule"
+            }
+          ]
+        },
+        "outcomes": {
+          "state": "partial",
+          "finding": "Correlation of ECAP signals to pain relief is a registered other outcome over two weeks, but the ECAP feature paper reports signal classification and prediction rather than a validated patient-level pain-outcome dataset.",
+          "locators": [
+            {
+              "url": "https://clinicaltrials.gov/api/v2/studies/NCT04938245",
+              "locator": "protocolSection.outcomesModule.otherOutcomes"
+            },
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+              "locator": "Abstract > Approach and Main results"
+            }
+          ]
+        },
+        "ecap_signal": {
+          "state": "confirmed_in_study",
+          "finding": "ECAP waveforms from eight participants and features across stimulation settings were analyzed; the contents of a future public release remain unconfirmed.",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+              "locator": "Abstract > Approach"
+            }
+          ]
+        }
+      },
+      "owner_questions": [
+        "Can the corresponding author provide data under the article's request policy, and how does that route relate to the planned public repository release?",
+        "What is the accession, release date, license, and data dictionary for the promised repository deposit?",
+        "Will participant-linked pain-relief outcomes, stimulation parameters, waveforms, and ECAP features share a stable anonymized key?",
+        "What consent and reuse restrictions apply to the released data?"
+      ],
+      "owner_route_review_2026_09_25": {
+        "registry_state": "RECRUITING; last update posted 2025-12-17; primary completion estimated 2026-12-31",
+        "ipd_sharing": "YES, planned anonymized and preprocessed Zenodo-or-equivalent deposit for five years; no current accession established",
+        "exact_trial_id_zenodo_hits": 0,
+        "contact_route": [
+          {
+            "name": "David Darrow",
+            "role": "registry central contact",
+            "email": "darro015@umn.edu"
+          },
+          {
+            "name": "Alexander Herman",
+            "role": "registry central contact",
+            "email": "herma686@umn.edu"
+          }
+        ],
+        "draft_request": "docs/data-requests/nct04938245-owner-request-2026-09-25.md",
+        "sent": false,
+        "decision": "Request draft ready; owner has not confirmed access, reuse terms, waveform/outcome fields or patient linkage.",
+        "locators": [
+          {
+            "url": "https://clinicaltrials.gov/api/v2/studies/NCT04938245",
+            "locator": "protocolSection.statusModule, contactsLocationsModule.centralContacts, ipdSharingStatementModule"
+          },
+          {
+            "url": "https://zenodo.org/api/records?q=NCT04938245",
+            "locator": "hits.total = 0, exact NCT04938245 query on 2026-09-25"
+          }
+        ]
+      },
+      "required_fit_review_2026_09_25": {
+        "unit": {
+          "state": "reported_in_study_release_not_deposited",
+          "finding": "The technical article analyzes repeated pulse-level responses from eight chronic-pain participants. The registry promises a preprocessed anonymized data deposit, but no schema or package is available to confirm the row unit or stable participant key.",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+              "locator": "Abstract > Approach"
+            },
+            {
+              "url": "https://clinicaltrials.gov/api/v2/studies/NCT04938245",
+              "locator": "protocolSection.ipdSharingStatementModule"
+            }
+          ]
+        },
+        "labels": {
+          "state": "signals_labeled_in_paper_clinical_endpoint_not_linked_in_release",
+          "finding": "The paper classifies waveforms as non-ECAP, ECAP or artifact and analyzes AUC, peak-to-peak, stimulation amplitude, pulse width and polarity. The registry lists correlation of ECAP signals to pain relief, but no released participant-level pain label/table is present.",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+              "locator": "Abstract > Approach and Main results"
+            },
+            {
+              "url": "https://clinicaltrials.gov/api/v2/studies/NCT04938245",
+              "locator": "protocolSection.outcomesModule.otherOutcomes"
+            }
+          ]
+        },
+        "electrode_geometry": {
+          "state": "reported_in_study_release_schema_unconfirmed",
+          "finding": "The article uses two percutaneous leads; the two caudal electrodes stimulate and remaining contacts record, with individual lead offset/position differences. Geometry and contact-position fields in a future repository/request package are unspecified.",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+              "locator": "Abstract > Approach"
+            },
+            {
+              "url": "https://www.frontiersin.org/journals/pain-research/articles/10.3389/fpain.2023.1072786/full",
+              "locator": "Methods > lead positions and stimulation"
+            }
+          ]
+        },
+        "explicit_permission_secondary_use": {
+          "state": "planned_repository_promise_no_package_or_terms",
+          "finding": "ClinicalTrials.gov (IPD Sharing: YES) promises anonymized/preprocessed data on Zenodo or an equivalent repository for five years. Exact trial-ID Zenodo query returned zero records. The 2025 article gives a corresponding-author request route, subject to ethics/IRB restrictions; no consent scope, license/DUA, approved request, or executable dataset is confirmed. A separate 2023 two-participant technical paper says its data are Abbott proprietary/confidential; that statement is not generalized to this distinct eight-participant paper.",
+          "locators": [
+            {
+              "url": "https://clinicaltrials.gov/api/v2/studies/NCT04938245",
+              "locator": "protocolSection.ipdSharingStatementModule.ipdSharing = YES; planned deposit"
+            },
+            {
+              "url": "https://zenodo.org/api/records/?q=NCT04938245&size=5",
+              "locator": "hits.total = 0; exact trial-ID query on 2026-09-25"
+            },
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+              "locator": "Article and corresponding-author link"
+            },
+            {
+              "url": "https://www.frontiersin.org/journals/pain-research/articles/10.3389/fpain.2023.1072786/full",
+              "locator": "Data availability statement; separate n=2 technical article"
+            }
+          ]
+        },
+        "required_patient_linked_clinical_outcome": {
+          "state": "not_confirmed_in_available_data",
+          "finding": "Pain relief is a registered study outcome, but the available eight-participant ECAP paper addresses signal classification/prediction and does not provide a patient-linked pain outcome table. The promised deposit is absent. This required endpoint is unmet.",
+          "locators": [
+            {
+              "url": "https://clinicaltrials.gov/api/v2/studies/NCT04938245",
+              "locator": "otherOutcomes > correlation of ECAP signals to pain relief"
+            },
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+              "locator": "Abstract; signal analysis endpoints"
+            },
+            {
+              "url": "https://zenodo.org/api/records/?q=NCT04938245&size=5",
+              "locator": "hits.total = 0 on 2026-09-25"
+            }
+          ]
+        }
+      },
+      "open_data_route_recheck_2026_09_25": {
+        "open_linked_dataset_verified": false,
+        "publication_access": {
+          "urls": [
+            "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+            "https://iopscience.iop.org/article/10.1088/1741-2552/adbfbe",
+            "https://doi.org/10.3389/fpain.2023.1072786"
+          ],
+          "locator": "2025 Feature extraction and prediction paper: data available upon request from corresponding author, subject to ethics/IRB restrictions; 8 participants and 30 sessions, not a public linked-data package. Companion methods article (PMC10020336) states its Abbott-funded data are proprietary/confidential and Abbott is not obligated to release to third parties. IOP /data and PDF routes presented an access challenge; no challenge was bypassed."
+        },
+        "repository_checks": [
+          {
+            "url": "https://zenodo.org/api/records?q=NCT04938245",
+            "locator": "Exact trial-ID query returned hits.total = 0 on 2026-09-25; no promised deposit found."
+          },
+          {
+            "url": "https://conservancy.umn.edu/",
+            "locator": "UMN Digital Conservancy search by trial ID/title/authors returned no trial-linked dataset, per bounded repository check."
+          }
+        ],
+        "as_of": "2026-09-25",
+        "linkage_and_permission": "Registry outcomes explicitly include ECAP-to-pain-relief and ECAP-to-programming-parameter correlations, but results are not posted and no Zenodo accession or patient-level file is available. Consent under UMN IRB STUDY00013100 is reported for original study; there is no public DUA, license, or secondary-use scope. Planned registry sharing remains prospective and unfulfilled.",
+        "registry": {
+          "url": "https://clinicaltrials.gov/api/v2/studies/NCT04938245",
+          "locator": "Current API: RECRUITING, lastUpdatePostDateStruct = 2025-12-17, estimated completion 2026-12-31, hasResults = false; ipdSharing = YES, future promise for preprocessed anonymized data at Zenodo or equivalent for five years; no access URL/criteria is specified."
+        },
+        "res05_remaining": [
+          "Recheck for the promised Zenodo/equivalent release after the study completes; do not substitute the IPD=YES commitment for access.",
+          "If a dataset appears, verify participant-level ECAP-to-pain linkage, stimulation settings and time/session fields, keys, schema, missingness and license.",
+          "Obtain the actual data-use terms, consent scope, and University of Minnesota IRB/institutional determination for secondary use; request approval only through an authorized route."
+        ]
+      },
+      "open_data_route_recheck_2026_09_26": {
+        "open_linked_dataset_verified": false,
+        "as_of": "2026-09-26",
+        "registry": {
+          "url": "https://clinicaltrials.gov/api/v2/studies/NCT04938245",
+          "locator": "Live official API recheck: overallStatus RECRUITING, statusVerifiedDate 2025-12, lastUpdatePostDateStruct.date 2025-12-17, estimated study completion 2026-12-31, ipdSharing YES with a future five-year Zenodo-or-equivalent promise. No participant data or dataset URL is included."
+        },
+        "repository_checks": [
+          {
+            "url": "https://zenodo.org/api/records/?q=%22NCT04938245%22&size=10",
+            "locator": "Live exact-ID query on 2026-09-26 returned hits.total = 0."
+          }
+        ],
+        "linkage_and_permission": "The planned repository deposit remains unfulfilled at this check. Registry metadata does not specify the released fields, patient key, consent scope, license/DUA, or whether ECAP and pain outcomes will be linked. No owner confirmation or project-specific secondary-use determination is recorded."
+      }
+    },
+    {
+      "id": "HES-NIJHUIS-RWE-2024",
+      "name": "European multicenter real-world ECAP-controlled SCS cohort",
+      "owner": "Study investigators and Saluda Medical; exact data controller and release authority unconfirmed",
+      "trial_id": "NL7889",
+      "trial_ids": [
+        "NL7889",
+        "NCT05272137",
+        "ISRCTN27710516"
+      ],
+      "source_doi": "10.1007/s40122-024-00628-z",
+      "source_refs": [
+        "S793"
+      ],
+      "owner_confirmation_received": false,
+      "decision": "request_scope_and_reuse_terms",
+      "checks": {
+        "access_procedure": {
+          "state": "unconfirmed",
+          "finding": "The article says all data generated or analyzed are included in the published article; it does not offer a row-level ECAP/pain export or a request procedure. The corresponding author is named, but authority to share raw data is not established.",
+          "locators": [
+            {
+              "url": "https://link.springer.com/article/10.1007/s40122-024-00628-z",
+              "locator": "Data Availability; Author information > Corresponding author"
+            }
+          ]
+        },
+        "ethics_secondary_use": {
+          "state": "unconfirmed",
+          "finding": "The article describes ethical review/affirmation and written consent for its observational study; no responsible-institution determination is recorded for this project's proposed secondary analysis. Original-study review and consent do not establish approval or exemption for this reuse.",
+          "locators": [
+            {
+              "url": "https://link.springer.com/article/10.1007/s40122-024-00628-z",
+              "locator": "Methods > Ethical Approval; evidence for original observational study only"
+            }
+          ]
+        },
+        "consent_dua": {
+          "state": "partial",
+          "finding": "Written consent for use of data in the observational study is reported. Independent secondary reuse, data-controller approval and DUA terms are not established.",
+          "locators": [
+            {
+              "url": "https://link.springer.com/article/10.1007/s40122-024-00628-z",
+              "locator": "Ethical Approval; written consent and NL7889/NCT05272137/ISRCTN27710516 registrations"
+            }
+          ]
+        },
+        "patient_linkage": {
+          "state": "unconfirmed",
+          "finding": "The publisher abstract gives baseline VNRS n=135; the full Results distinguish the all-patient cohort baseline n=148 from the stimulation-naive subgroup baseline n=135. The three objective dose metrics use n=236, n=230 and n=254. These denominators are not interchangeable, and the unit, populations, overlap and observation windows needed for a linked analysis are not reconciled in the article. No externally deliverable patient key, visit linkage or ECAP waveform granularity is confirmed.",
+          "locators": [
+            {
+              "url": "https://link.springer.com/article/10.1007/s40122-024-00628-z",
+              "locator": "Abstract (baseline n=135); Results > Pain Relief Outcomes: All Patients (baseline VNRS n=148) and Stimulation-Naive Patients (baseline n=135); Results > objective neural metrics (n=236/230/254); Data Availability (published article only)"
+            }
+          ]
+        },
+        "outcomes": {
+          "state": "confirmed_in_study",
+          "finding": "Patient-reported pain outcomes are published as study summaries; availability in a linked external table is unconfirmed.",
+          "locators": [
+            {
+              "url": "https://link.springer.com/article/10.1007/s40122-024-00628-z",
+              "locator": "Results > pain outcomes; Data Availability"
+            }
+          ]
+        },
+        "ecap_signal": {
+          "state": "partial",
+          "finding": "The article reports objective ECAP-controlled dosing/device metrics; raw ECAP waveforms or participant-level feature series are not identified as shareable.",
+          "locators": [
+            {
+              "url": "https://link.springer.com/article/10.1007/s40122-024-00628-z",
+              "locator": "Results > objective neural metrics; Data Availability"
+            }
+          ]
+        }
+      },
+      "owner_route_review_2026_09_25": {
+        "corresponding_author": "Harold Nijhuis",
+        "email": "h.nijhuis@antoniusziekenhuis.nl",
+        "source": "Publisher article, Author information > Corresponding author",
+        "draft_request": "docs/data-requests/nijhuis-rwe-owner-request-2026-09-25.md",
+        "sent": false,
+        "boundary": "An email address and study consent statement do not establish owner approval or permission for secondary data release."
+      },
+      "required_fit_review_2026_09_25": {
+        "unit": {
+          "state": "published_denominators_incompatible_or_unreconciled",
+          "finding": "Baseline VNRS uses n=148 in the full Results and n=135 for the stimulation-naive subgroup; objective metrics use n=236, n=230 and n=254. Unit, overlap, inclusion and time windows are unreconciled and there is no external patient-level table.",
+          "locators": [
+            {
+              "url": "https://link.springer.com/article/10.1007/s40122-024-00628-z",
+              "locator": "Results > pain and objective neural metrics"
+            }
+          ]
+        },
+        "labels": {
+          "state": "aggregate_labels_reported_row_labels_unavailable",
+          "finding": "Published pain labels are VNRS at baseline, 3, 6 and 12 months; objective metrics are percent time above threshold, dose ratio and dose accuracy. Data Availability says data are included in the article; no row-level labels are offered.",
+          "locators": [
+            {
+              "url": "https://link.springer.com/article/10.1007/s40122-024-00628-z",
+              "locator": "Results; Data Availability"
+            }
+          ]
+        },
+        "electrode_geometry": {
+          "state": "general_configuration_reported_individual_geometry_unavailable",
+          "finding": "One or two percutaneous leads are placed posterior epidural over dorsal columns. The article does not identify patient-level vertebral/contact geometry available for reuse.",
+          "locators": [
+            {
+              "url": "https://link.springer.com/article/10.1007/s40122-024-00628-z",
+              "locator": "Methods > Settings"
+            }
+          ]
+        },
+        "explicit_permission_secondary_use": {
+          "state": "no_row_level_request_route_or_secondary_permission",
+          "finding": "The article states that all data generated/analyzed are included in the published article and reports written consent for use in this observational study. It provides no external row-level release procedure, and original study consent does not establish permission for this independent secondary analysis.",
+          "locators": [
+            {
+              "url": "https://link.springer.com/article/10.1007/s40122-024-00628-z",
+              "locator": "Data Availability; Methods > Study Design"
+            }
+          ]
+        },
+        "required_patient_linked_clinical_outcome": {
+          "state": "published_cohort_only_linkage_unavailable",
+          "finding": "Pain outcomes and objective ECAP-controlled metrics are reported in one observational cohort, but denominators differ and no patient-level common key, observation linkage or delivery route is provided. Required linkage is not established.",
+          "locators": [
+            {
+              "url": "https://link.springer.com/article/10.1007/s40122-024-00628-z",
+              "locator": "Results; Data Availability"
+            }
+          ]
+        }
+      },
+      "open_data_route_recheck_2026_09_25": {
+        "open_linked_dataset_verified": false,
+        "publication_access": {
+          "urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC11393244/",
+            "https://link.springer.com/article/10.1007/s40122-024-00628-z",
+            "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11393244/supplementaryFiles"
+          ],
+          "locator": "2024 paper Data Availability says all generated/analyzed data are included in the published article; this is aggregate tables/figures, not a separate row-level dataset. Supplementary archive is six figure images only; no CSV/XLSX, codebook, participant key, raw waveform, or linked export."
+        },
+        "as_of": "2026-09-25",
+        "cross_registry": [
+          {
+            "url": "https://www.isrctn.com/api/query/format/who?q=ISRCTN27710516",
+            "locator": "Official WHO XML: results_IPD_plan = Yes but results_IPD_description says data are not expected to be made available because device data are sponsor-internal; sites may request their own copy."
+          },
+          {
+            "url": "https://clinicaltrials.gov/api/v2/studies/NCT05272137",
+            "locator": "German registration for the same multicountry study; ipdSharing = NO."
+          }
+        ],
+        "registry": {
+          "url": "https://onderzoekmetmensen.nl/api/v1/trial/29510",
+          "locator": "Official OMON API identifies romero_case_id NL7889. IPD_plan = Yes, but IPD_description says encrypted de-identified device data go to a central database in EU/Australia hosted and owned/managed by Saluda Medical, with site-specific access; this is sponsor-internal transfer, not public/external-researcher access."
+        },
+        "res05_remaining": [
+          "Do not interpret OMON IPD_plan=Yes as a public access grant; reconcile it against ISRCTN sponsor-internal/not-expected wording and NCT05272137 IPD=NO.",
+          "Require owner confirmation of the data unit, overlap, inclusion windows, common linkage key, ECAP waveform/feature and stimulation/time fields, and pain/function labels.",
+          "Obtain controller/site authorization, consent-scope review, institutional/legal/IRB determination, and a secondary-use DUA; no outgoing request has been sent."
+        ],
+        "linkage_and_permission": "Article reports aggregate pain timepoints and ECAP-controlled device metrics, but pain denominators (n=148/135 and follow-ups) and ECAP metric denominators (n=236/230/254) are unreconciled; no patient-level common key or timestamped stimulation export is available. Written consent and OMON consent to transfer device data to Saluda cover the original collection/transfer, not independent secondary reuse; no external permission or DUA is published."
+      }
+    },
+    {
+      "id": "HES-ENDLESS-NCT07211308",
+      "name": "ENDLESS European multicentre DTM-SCS cohort",
+      "owner": "Universitair Ziekenhuis Brussel and ENDLESS academic consortium; investigator-initiated, Medtronic-funded",
+      "trial_id": "NCT07211308",
+      "source_doi": "10.3389/fpain.2026.1922595",
+      "source_refs": [],
+      "owner_confirmation_received": false,
+      "decision": "future_conditional_candidate_no_current_dataset_access",
+      "checks": {
+        "access_procedure": {
+          "state": "partial",
+          "finding": "The open-access 2026 protocol states that pseudonymised study-data access may be considered after project completion under controlled conditions, with appropriate approvals including ethics review where applicable and a data-use agreement. It does not offer an open repository deposit or an immediate external request route. The study is recruiting, with estimated completion in 2029.",
+          "locators": [
+            {
+              "url": "https://www.frontiersin.org/journals/pain-research/articles/10.3389/fpain.2026.1922595/full",
+              "locator": "Sections 3.6 Data management and 6 Dissemination plan"
+            },
+            {
+              "url": "https://clinicaltrials.gov/api/v2/studies/NCT07211308",
+              "locator": "statusModule: RECRUITING; lastUpdatePostDateStruct 2026-08-17; completionDateStruct 2029-01-01; ipdSharingStatementModule.ipdSharing = UNDECIDED"
+            }
+          ]
+        },
+        "ethics_secondary_use": {
+          "state": "unconfirmed",
+          "finding": "The protocol requires appropriate approval, including ethical review where applicable, for any reuse. Project-specific external secondary-use approval has not been obtained.",
+          "locators": [
+            {
+              "url": "https://www.frontiersin.org/journals/pain-research/articles/10.3389/fpain.2026.1922595/full",
+              "locator": "Section 6 Dissemination plan"
+            }
+          ]
+        },
+        "consent_dua": {
+          "state": "partial",
+          "finding": "The protocol describes informed consent and requires a data-use agreement for reuse, but the participant consent scope and an executable agreement for this proposed analysis are not available.",
+          "locators": [
+            {
+              "url": "https://www.frontiersin.org/journals/pain-research/articles/10.3389/fpain.2026.1922595/full",
+              "locator": "Sections 3.2 participant recruitment and 6 Dissemination plan"
+            }
+          ]
+        },
+        "patient_linkage": {
+          "state": "partial",
+          "finding": "The protocol assigns a unique centre and patient study code, stores the identifying key locally, and plans repeated-measures analyses within patients. This supports planned linkage inside the study but does not establish a released dataset, cross-site linked export, or delivery of the key to external researchers.",
+          "locators": [
+            {
+              "url": "https://www.frontiersin.org/journals/pain-research/articles/10.3389/fpain.2026.1922595/full",
+              "locator": "Sections 3.6 Data management and 3.7 Data analysis"
+            }
+          ]
+        },
+        "outcomes": {
+          "state": "planned",
+          "finding": "Planned assessments include pain VAS/EMA at baseline and 1, 6, and 12 months, plus disability, medication use, quality of life, and other outcomes; results are not yet available as a dataset.",
+          "locators": [
+            {
+              "url": "https://www.frontiersin.org/journals/pain-research/articles/10.3389/fpain.2026.1922595/full",
+              "locator": "Abstract; Table 1; Section 3.2 Outcome measures"
+            }
+          ]
+        },
+        "ecap_signal": {
+          "state": "planned",
+          "finding": "For closed-loop DTM SCS, the protocol plans in-clinic ECAP streams collected as JSON files for signal-stability assessment, plus interval-level IPG programming and technical reports. The article does not specify waveform fields, sampling, electrode geometry in each file, a patient-linked export schema, or external delivery of these files; collection is prospective and access remains unconfirmed.",
+          "locators": [
+            {
+              "url": "https://www.frontiersin.org/journals/pain-research/articles/10.3389/fpain.2026.1922595/full",
+              "locator": "Section 3.4.3 Feasibility related outcome: in-clinic ECAP streams through JSON files; Table 1 technical IPG/ECAP data; Section 3.6 device-derived JSON/IPG reports"
+            }
+          ]
+        }
+      },
+      "open_data_route_recheck_2026_09_26": {
+        "open_linked_dataset_verified": false,
+        "as_of": "2026-09-26",
+        "publication_access": {
+          "url": "https://www.frontiersin.org/journals/pain-research/articles/10.3389/fpain.2026.1922595/full",
+          "locator": "This is an open-access protocol article; it describes secure project collection in Qualtrics/REDCap and source device CSV/JSON/session reports, but no published linked participant dataset. Article is not equivalent to open data."
+        },
+        "registry": {
+          "url": "https://clinicaltrials.gov/api/v2/studies/NCT07211308",
+          "locator": "Official ClinicalTrials.gov API: recruiting; status verified 2026-08; last update posted 2026-08-17; estimated primary completion 2028-01-01 and study completion 2029-01-01; ipdSharingStatementModule.ipdSharing = UNDECIDED. Central contacts include Maarten Moens and Lisa Goudman."
+        },
+        "res05_remaining": [
+          "Do not treat open access to the protocol as open access to participant data; the published route is conditional controlled access that may be considered only after project completion.",
+          "Before selection, obtain owner confirmation of which participants have closed-loop ECAP, the ECAP feature/raw waveform schema, timestamps and stimulation settings, pain/outcome fields, patient-level overlap, and delivery format.",
+          "Confirm consent scope, ethics/institutional approval, data controller permissions, and an executable DUA; no request has been sent."
+        ],
+        "linkage_and_permission": "Protocol plans pseudonymous within-patient linkage and contains a well-matched planned longitudinal cohort, but currently has no results/data release, raw ECAP field specification, open route, or project-specific secondary-use authorization."
+      }
+    }
+  ],
+  "screened_open_near_matches_2026_09_26": [
+    {
+      "name": "Processed Data Underlying Figures 3-7 from Nakagawa et al. (2024)",
+      "url": "https://figshare.com/articles/dataset/Processed_Data_Underlying_Figures_3_7_from_Nakagawa_et_al_2024_/29035697",
+      "access_state": "open_download",
+      "locator": "Figshare dataset description and downloadable Excel/README; posted 2025-05-12.",
+      "exclusion_reason": "Human transcutaneous SCS spinal-reflex amplitudes, not epidural SCS ECAP recordings; no chronic-pain patient outcomes or linked longitudinal clinical cohort."
+    },
+    {
+      "name": "EV176 real-world ECAP closed-loop SCS registry study abstract",
+      "url": "https://www.sciencedirect.com/science/article/abs/pii/S1094715925008955",
+      "access_state": "open_abstract_only_no_dataset_route",
+      "locator": "2026 Neuromodulation congress abstract; sponsor-maintained prospective registry, recruiting up to 500 participants at 20 sites; plans pain/QoL, stimulation and ECAP measures at 6, 12 and 24 months; no dataset access or sharing procedure stated.",
+      "exclusion_reason": "A study description and open abstract do not provide a patient-linked data release or external access procedure."
+    },
+    {
+      "name": "Electrically evoked compound action potential (ECAP) for all participants",
+      "url": "https://plos.figshare.com/articles/dataset/_Electrically_evoked_compound_action_potential_ECAP_for_all_participants_/782182",
+      "access_state": "open_download",
+      "locator": "Figshare record description; posted 2013-08-26.",
+      "exclusion_reason": "Auditory/cochlear ECAPs, not spinal cord stimulation or chronic pain outcomes."
+    },
+    {
+      "name": "HOPE Trial: Targeting the Conus Medullaris With ECAP-Controlled Closed-Loop SCS for Chronic Pelvic Pain",
+      "url": "https://clinicaltrials.gov/api/v2/studies/NCT06413277",
+      "access_state": "registry_only_ipd_no",
+      "locator": "Official ClinicalTrials.gov API (record lastUpdatePostDate 2024-05-14): prospective observational cohort, estimated enrollment 20; primary pain VAS at baseline and 3, 6, and 12 months; secondary outcomes include PDI, SF-MPQ2, EQ-5D-5L, PSQI, HADS, PCS, PGIC, and device settings including ECAP target, stimulation parameters, programmed electrodes, and usage. The registry records ipdSharing=NO. At retrieval on 2026-09-26 the record says RECRUITING, but its status verification and last update date remain 2024-05; estimated primary completion 2026-01-01 is not a verified completed study or data release.",
+      "exclusion_reason": "The registry describes a study collecting ECAP device data and longitudinal pain outcomes, but supplies no patient-level data, external access procedure, linkage schema, consent scope, or secondary-use DUA. IPD Sharing: NO. It is a relevant registry lead, not an accessible dataset or owner confirmation."
+    },
+    {
+      "name": "Medtronic clinical data sharing through the Yale YODA Project",
+      "url": "https://yoda.yale.edu/about/data-holders/medtronicrhbmp-2/",
+      "access_state": "historical_program_out_of_scope",
+      "locator": "YODA's Medtronic data-holder page scopes the partnership to clinical research data for recombinant human bone morphogenetic protein-2 (rhBMP-2); the project overview says external requests for those data ran June 2013-June 2015. Checked 2026-09-26.",
+      "exclusion_reason": "The verified YODA-Medtronic sharing programme covered rhBMP-2 spinal-fusion trials, not SCS/ECAP, and its stated request period has ended. It does not provide an access route to the human epidural ECAP/SCS dataset required here."
+    }
+  ],
+  "excluded_near_match": {
+    "id": "HDS-PAINMONIT-PMCD",
+    "reason": "Open human pain self-report physiology, but no ECAP or SCS measurements; it cannot satisfy the patient-linked ECAP/SCS endpoint.",
+    "source_url": "https://figshare.com/articles/dataset/The_PainMonit_Database_An_Experimental_and_Clinical_Physiological_Signal_Dataset_for_Automated_Pain_Recognition/26965159"
+  }
+}

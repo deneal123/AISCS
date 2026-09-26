@@ -1,0 +1,879 @@
+{
+    "meta": {
+        "schema_version": "1.0.0",
+        "checked_at": "2026-09-25",
+        "scope": "SRC-07 complete 2026 source coverage and remaining primary-route queue",
+        "total_sources": 81,
+        "route_counts": {
+            "crossref_metadata_screened": 1,
+            "identity_rejected": 10,
+            "primary_route_pending": 1,
+            "primary_route_screened": 69
+        },
+        "status": "in_progress",
+        "boundary": "Primary owner routes were rechecked for a targeted subset; blocked full text, page notices, unlinked preprints, date conflicts, later changes and the remaining 2026 corpus remain open."
+    },
+    "rows": [
+        {
+            "source_id": "S004",
+            "title": "RE-HPBS-IPIC: A Resting EEG- and High-Activation Pain Brain Source-Driven Framework for Inter-Subject Pain Intensity Classification",
+            "validation_status": "partially_verified",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-retry-2026-09-25.json",
+                "src07-relevance5-publisher-batch-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "IEEE direct owner route is WAF-blocked; reader route exposed metadata/abstract only and article full text remains gated. Online-first 2026-01-21 and June issue dates are distinct. Crossmark absent in retrieved deposit; later owner-page notice refresh and any unlinked preprint remain open."
+        },
+        {
+            "source_id": "S005",
+            "title": "A Systematic Review of Multimodal Signal Fusion for Acute Pain Assessment Systems",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-retry-2026-09-25.json",
+                "src07-relevance5-publisher-batch-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Canberra ACM-typeset copy (34 pages) differs from final 1-35 VOR pagination; formal VOR version remains unconfirmed because ACM PDF is 403. Crossmark currently says Document is current. UNSWorks AAM label conflicts with submission-template markers; article number and exact repository version remain unknown."
+        },
+        {
+            "source_id": "S007",
+            "title": "MDNet: A Lightweight Multidomain 1-D CNN for Embedded Pain Assessment Using EDA Signals",
+            "validation_status": "partially_verified",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-retry-2026-09-25.json",
+                "src07-relevance5-publisher-batch-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Owner metadata date 2026-02-11 (online) differs from 2026-05-01 issue date. IEEE full text/WAF and TechRxiv search remain inaccessible; Crossmark endpoint was unusable even on positive control. No global absence claim; a later date/version refresh remains open."
+        },
+        {
+            "source_id": "S008",
+            "title": "Explainable AI for pain perception: subject-independent EEG decoding using DeepSHAP and CNNs",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-sweep-2026-09-25.json",
+                "src07-relevance5-publisher-batch-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Full publisher VOR body is retrievable only via rendered route; direct IOP/PubMed pages are challenged. Crossmark currently says Document is current; no PMCID. Any separate AAM or unlinked preprint remains unverified."
+        },
+        {
+            "source_id": "S013",
+            "title": "Beyond Reflex: Nociception, Neural Circuits, and the Transformation of Threat into Memory in Drosophila melanogaster",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-three-source-recovery-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Later dated refresh and check correction/version relations against the primary owner. Current route is a dated partial check, not global currency proof."
+        },
+        {
+            "source_id": "S015",
+            "title": "Real-Time Pain Assessment from Electrodermal Activity Using Deep Learning",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-sweep-2026-09-25.json",
+                "src07-relevance5-publisher-batch-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Full text is now directly verified via publisher-hosted VOR PDF and PMC13211154; live www.mdpi.com is blocked. Dated owner Version Notes call PDF VOR; XML Update event is not an article correction. CC BY 4.0 conflicts with archived HTML dc.rights CC BY/3.0; live Crossmark and preprint-platform state remain unresolved."
+        },
+        {
+            "source_id": "S018",
+            "title": "Estimation and Localization of Chronic Pain level from EEG Signals",
+            "validation_status": "verified_metadata",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-three-source-recovery-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Later dated refresh and check correction/version relations against the primary owner. Current route is a dated partial check, not global currency proof."
+        },
+        {
+            "source_id": "S022",
+            "title": "Machine learning for discovery of clinical pain biomarkers following spinal cord injury",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-sweep-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "NLM and Elsevier metadata confirm online 2026-01-13 and Apr 2026 issue; Crossref VOR/CC BY-NC 4.0 declares OA. ScienceDirect full text remains 403 and Elsevier API returned metadata only; no body was verified on publisher routes. Owner page correction state and any unlinked preprint remain open."
+        },
+        {
+            "source_id": "S025",
+            "title": "A predictive corticospinal model for pain perception",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-sweep-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Full PMC JATS at PMC13400141 is accessible (single PMC version); publisher Cell Press/ScienceDirect are 403 and Elsevier API is metadata-only. Online 2026-06-18 vs issue 2026-07-21 are distinct. Publisher-rendered Crossmark status and any unlinked preprint remain unresolved."
+        },
+        {
+            "source_id": "S028",
+            "title": "The FlyWire Connectome: What a Complete Brain Map Tells Us About Building Conscious AI",
+            "validation_status": "rejected",
+            "route": "identity_rejected",
+            "evidence_artifacts": [],
+            "remaining": "Recheck identity only if new primary lead appears; no publication-version claim can be made from the rejected card."
+        },
+        {
+            "source_id": "S034",
+            "title": "Prediction of Response to Spinal Cord Stimulation Using Machine Learning Based on Radiomics and Patient-Reported Outcomes",
+            "validation_status": "partially_verified",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-sweep-2026-09-25.json",
+                "src07-relevance5-publisher-batch-2026-09-25.json"
+            ],
+            "remaining": "Ovid/Wolters Kluwer owner abstract page and NLM E-utilities confirm identity and issue; full text gated. No notice surfaced on visible owner page or Crossref relation fields; Crossmark endpoint, separate notices, preprint and supplement remain unverified."
+        },
+        {
+            "source_id": "S036",
+            "title": "Multimodal pain assessment with transformers",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-sweep-2026-09-25.json",
+                "src07-relevance5-publisher-batch-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Elsevier APIs return coredata only and ScienceDirect is 403; full text unavailable. Crossmark status and owner-page notices remain unverified; no global absence claim."
+        },
+        {
+            "source_id": "S039",
+            "title": "Deep Multi-Head attention network with Subject-Incremental learning for Cross-Subject generalization in objective pain monitoring using multimodal physiological signals",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-retry-2026-09-25.json",
+                "src07-relevance5-publisher-batch-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Current Elsevier coredata and Crossmark show VOR metadata and Document is current, but publisher body/abstract page is 403 and closed access. Prior card assertion that full text was checked/open is not supported by this pass; any author-stated preprint relation remains unknown."
+        },
+        {
+            "source_id": "S040",
+            "title": "GIAFormer: A Gradient-Infused Attention and Transformer for Pain Assessment with EDA-fNIRS Fusion",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-retry-2026-09-25.json",
+                "src07-relevance5-publisher-batch-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Elsevier Article Retrieval API and Crossref confirm identity, VOR link and July 2026 cover date; ScienceDirect HTML blocked (403), redirect stub has no content. No update surfaced in metadata; on-page notices and preprint remain unverified."
+        },
+        {
+            "source_id": "S044",
+            "title": "External validation of EEG-based machine learning models for continuous pain prediction",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-sweep-2026-09-25.json",
+                "src07-relevance5-publisher-batch-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Crossmark currently reports Document is current; VOR p.11 explicitly identifies bioRxiv DOI 10.1101/2023.11.09.566379. Crossref print Dec 2026 vs online 2026-08-14 are distinct. Preserve Liverpool OAI NonPeerReviewed vs Published Version discrepancy and lack of bioRxiv-side published-version linkage."
+        },
+        {
+            "source_id": "S045",
+            "title": "EEG-Based Pain Classification via Sample Selection to Mitigate Subjective Label Bias",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-sweep-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "IEEE Crossref metadata omits issue number. Publisher VOR PDF route was HTTP 418 on independent recheck after another probe retrieved PDF; availability varies. Crossmark dialog currently says data not available, so current owner Crossmark state is indeterminate; later recheck remains open."
+        },
+        {
+            "source_id": "S060",
+            "title": "Artificial Intelligence in Spinal Cord Stimulation and Neuromodulation: A Narrative Review of Clinical Applications, Emerging Evidence, and Future Directions",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-retry-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Publisher page checked directly: final issue entry, published 2026-09-01, JCDR 20(9):UE01-UE05. No article-level correction/retraction or explicit preprint link surfaced on the inspected page; later dated refresh remains."
+        },
+        {
+            "source_id": "S065",
+            "title": "Dopaminergic Modulation of Mushroom Body Output Neurons Mediates Nociception-Induced Escape in Drosophila",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-retry-2026-09-25.json"
+            ],
+            "remaining": "eLife owner API checked: reviewed preprint v1, published/reviewed 2026-04-14, preprint DOI 10.64898/2026.01.04.697536; eLife article endpoint returned not found. No owner API correction or final-article relation field; no human-pain inference. Later dated refresh remains."
+        },
+        {
+            "source_id": "S066",
+            "title": "A positive feedback loop between sensory and octopaminergic neurons underlies nociceptive plasticity in Drosophila larvae",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-sweep-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Checked 2026-09-25: PLOS selects Version 2 and labels Version 1 Uncorrected Proof; publisher Crossref new_version is self-referential on the same DOI (2026-05-07), and Crossref preprint DOI 10.1101/2025.07.17.665309 asserts is-preprint-of to this journal DOI. No distinct correction/retraction notice surfaced on these routes; later corpus-wide refresh remains required."
+        },
+        {
+            "source_id": "S069",
+            "title": "Neural encoding of pain is robust within but unstable between individuals",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-retry-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "PLOS publisher page confirms 2026-08-10 publication; version selector has v2 current and v1 uncorrected proof. No correction/retraction notice or preprint link surfaced on page. Crossref self-referential new_version is version metadata, not an erratum; later dated refresh remains."
+        },
+        {
+            "source_id": "S075",
+            "title": "Deep Learning and Noninvasive Sensors for Detecting Physiological Dysregulation: A Scoping Review",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-sweep-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Springer owner article page confirms exact identity, VOR and 2026-01-30 publication; no correction/erratum/retraction or linked-preprint marker surfaced on page or NLM/Crossref. CrossMark widget is present but status endpoint failed/unread; publisher-page check is dated, not a guarantee of no later update."
+        },
+        {
+            "source_id": "S077",
+            "title": "The Fly's Last Second: Welfare states in connectome simulations",
+            "validation_status": "rejected",
+            "route": "identity_rejected",
+            "evidence_artifacts": [],
+            "remaining": "Recheck identity only if new primary lead appears; no publication-version claim can be made from the rejected card."
+        },
+        {
+            "source_id": "S078",
+            "title": "Physiologic closed loop controlled spinal cord stimulation",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-retry-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Elsevier LinkHub/owner API confirm book-chapter metadata and VOR TDM link only; chapter body is inaccessible. Publisher notice/Crossmark state remains unknown; exact print day/month unresolved."
+        },
+        {
+            "source_id": "S079",
+            "title": "Control Signals in Closed-Loop Spinal Cord Stimulation in Patients with Chronic Pain: A Scoping Review",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-retry-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "NLM/Elsevier confirm Neuromodulation 29(6):913-920, Aug 2026, while Crossref reports published-print Jan 2026; conflict remains unresolved. Publisher declares CC BY 4.0 OA, but human-facing full-text routes are blocked and API is metadata-only. No global absence claim."
+        },
+        {
+            "source_id": "S082",
+            "title": "Pain intensity classification and evaluation of individual differences in subjects based on hybrid CNN–BiLSTM approach",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-retry-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Elsevier APIs return metadata only; a prior owner-page rendering exposed abstract, but live page is 403 and full body remains inaccessible. Owner Crossmark/page-notice state and any unlinked preprint remain unresolved."
+        },
+        {
+            "source_id": "S084",
+            "title": "PainControl: Identity-Preserving Pain Expression Transfer with Generative Diffusion Models",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-sweep-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Springer/BMC owner article page confirms VOR, identity, 2026-04-12 and article 75; no correction/retraction or linked preprint surfaced. CrossMark machinery is present but no direct CrossMark status lookup; PubMed HTML blocked, EPMC owner API has no commentCorrectionList. No global absence claim."
+        },
+        {
+            "source_id": "S086",
+            "title": "Hierarchical Cross-Attention Transformer for Non-contact Multimodal Pain Classification using Remote Physiological Signals and Visual Features",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-sweep-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "IEEE VOR PDF is blocked; official DSpace record contains metadata/abstract but explicitly no attached file. Crossmark/version/owner notices and any unlinked preprint remain bounded/unresolved."
+        },
+        {
+            "source_id": "S088",
+            "title": "Cross-Domain Multimodal Pain Detection Using a DANN–Transformer Architecture with Supervised Contrastive Warmup and Test-Time Augmentation",
+            "validation_status": "verified_metadata",
+            "route": "crossref_metadata_screened",
+            "evidence_artifacts": [
+                "src07-crossref-retry-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Only owner-deposited Crossref/IEEE VOR metadata were retrieved; IEEE/Xplore page and VOR PDF returned WAF blocks. No article body, Crossmark status, or owner version note could be checked; retain crossref_metadata_screened and no global absence claim."
+        },
+        {
+            "source_id": "S097",
+            "title": "Federated Learning in Edge Computing: Vulnerabilities, Attacks, and Defenses—A Survey",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-sweep-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Two owner-hosted editions under one DOI: Edition A unversioned CDN PDF, 53 pp., 2,961,029 B, SHA-256 4BE5FF94F310C522B6ECFF331325CC3C8B51915845CA9053F2101DB6A2D31F68; Edition B at the `-v2.pdf` URL, 51 pp., 3,254,125 B, SHA-256 8245788F10FF5464D13FB0655E0B77DF3FC9DAFABB07C0B06A29D5B62546A12B. Current JATS/PMC agree with B; Crossmark and MDPI notes page are blocked, so whether B is a formal correction is unresolved."
+        },
+        {
+            "source_id": "S099",
+            "title": "Spinal cord injury therapy based on evoked compound action potentials",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-s099-uspto-primary-recheck-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Later dated check for USPTO corrections, reexamination and family updates; a dated grant page is not proof of global absence."
+        },
+        {
+            "source_id": "S122",
+            "title": "Ethics of whole-brain connectome simulations",
+            "validation_status": "rejected",
+            "route": "identity_rejected",
+            "evidence_artifacts": [],
+            "remaining": "Recheck identity only if new primary lead appears; no publication-version claim can be made from the rejected card."
+        },
+        {
+            "source_id": "S138",
+            "title": "Drosophila emulations are intrinsically affectively indeterminate",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-sweep-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Neural Press owner page/PDF confirm identity, online date 2026-09-10 and pages 103-109. Crossref reports pages 103-107 and conflicting date; canonical card now prefers publisher pagination and preserves discrepancy. No notice surfaced on page/PDF; silent version change not established."
+        },
+        {
+            "source_id": "S140",
+            "title": "AI/ML-Based Closed-Loop SCS (Patent US20260216499)",
+            "validation_status": "rejected",
+            "route": "identity_rejected",
+            "evidence_artifacts": [],
+            "remaining": "Recheck identity only if new primary lead appears; no publication-version claim can be made from the rejected card."
+        },
+        {
+            "source_id": "S144",
+            "title": "Method and apparatus for adaptive neural interfaces",
+            "validation_status": "partially_verified",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "WIPO record confirms bibliographic identity, publication date and applicant. Claims/PDF remain inaccessible (403); A1 kind code, legal owner, inventors, priority and filing details are unverified."
+        },
+        {
+            "source_id": "S148",
+            "title": "Rethinking Pain Assessment: Subjective Scales, Biomarkers, and Multimodal Integration",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-retry-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Dove Press owner full-text page and Crossref confirm identity/VOR; no correction/retraction/erratum or linked-preprint marker surfaced on the two routes. Journal correction index, issue TOC and CrossMark state not checked; empty relation is not global absence evidence."
+        },
+        {
+            "source_id": "S149",
+            "title": "Zero-shot multimodal pain estimation via synthetic pain simulation and domain-invariant learning",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-sweep-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Frontiers article HTML/JATS and Crossref confirm identity/VOR; reverse update query returned zero. No article-specific correction/retraction or linked preprint surfaced; page dateModified 2026-09-25 unexplained, CrossMark widget script was not executed. No global absence claim."
+        },
+        {
+            "source_id": "S150",
+            "title": "Real-time gait phase detection with FL",
+            "validation_status": "rejected",
+            "route": "identity_rejected",
+            "evidence_artifacts": [],
+            "remaining": "Recheck identity only if new primary lead appears; no publication-version claim can be made from the rejected card."
+        },
+        {
+            "source_id": "S159",
+            "title": "Biphasic Electrostimulation Artifact Model for ECAP Extraction in Spinal Cord Stimulation",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-sweep-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "IEEE staging page and publisher VOR PDF confirm identity and dated version; public Xplore remains blocked, and Crossmark has no data. Later publisher notices and any unlinked preprint remain unresolved."
+        },
+        {
+            "source_id": "S162",
+            "title": "Next-Generation SCS Programming Platform: Enhancing ECAP Fidelity and Objectivity to Improve Patient Experience",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-retry-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Springer article page and linked Correction DOI 10.1007/s40122-026-00838-7 confirm correction published 2026-04-28 (Pain Ther 15:921). It replaces ?Standard Method? with ?Artefact Model Method? in the sentence on (7, 9)/(6, 8) configurations; no measurements/results changed. No retraction surfaced."
+        },
+        {
+            "source_id": "S164",
+            "title": "Transformer and Attention-Based Models for Automated Pain Assessment: A Systematic Review",
+            "validation_status": "partially_verified",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-sweep-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Aalborg University VBN owner record identifies the IEEE Access VOR (online 2026-08-03, vol 14, pp 108508-108538); IEEE Xplore and hosted PDF are blocked. No correction/retraction/preprint surfaced in VBN/Crossref; publisher-only markers and byte identity remain unverified."
+        },
+        {
+            "source_id": "S167",
+            "title": "Circuit Reconstruction of nociceptive circuits (extended)",
+            "validation_status": "rejected",
+            "route": "identity_rejected",
+            "evidence_artifacts": [],
+            "remaining": "Recheck identity only if new primary lead appears; no publication-version claim can be made from the rejected card."
+        },
+        {
+            "source_id": "S200",
+            "title": "DoomFly: fly-connectome simulation controlling a Doom arena",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-code-repository-recheck-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Later dated refresh and check correction/version relations against the primary owner. Current route is a dated partial check, not global currency proof."
+        },
+        {
+            "source_id": "S201",
+            "title": "Infinite Sugar",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-code-repository-recheck-2026-09-25.json"
+            ],
+            "remaining": "Later dated refresh and check correction/version relations against the primary owner. Current route is a dated partial check, not global currency proof."
+        },
+        {
+            "source_id": "S212",
+            "title": "Combining brain-wide activity imaging with electron microscopy reveals a distributed nociceptive network in the brain",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-sweep-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "bioRxiv/openRxiv owner APIs and Europe PMC confirm a 2025 preprint record; bioRxiv pubs endpoint says no articles found for a published version. An accepted 2026-08-03 date is unlinked/unverified; DOI landing was rate-limited. No update marker confirmed because retrieved Crossref excerpt omitted relation fields."
+        },
+        {
+            "source_id": "S224",
+            "title": "ZSL_MPE: code for Zero-shot multimodal pain estimation via synthetic pain simulation and domain-invariant learning",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-code-repository-recheck-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Later dated refresh and check correction/version relations against the primary owner. Current route is a dated partial check, not global currency proof."
+        },
+        {
+            "source_id": "S227",
+            "title": "MuSACo: Multimodal Subject-Specific Selection and Adaptation for Expression Recognition with Co-Training",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-s227-wacv-recheck-2026-09-25.json"
+            ],
+            "remaining": "Later dated refresh and check correction/version relations against the primary owner. Current route is a dated partial check, not global currency proof."
+        },
+        {
+            "source_id": "S231",
+            "title": "Neuromorphic Technologies for Neuroengineering: From Adaptive Stimulation to SNN-Based Inference and Deployable Biointerfaces",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-s231-primary-recheck-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Later dated refresh and check correction/version relations against the primary owner. Current route is a dated partial check, not global currency proof."
+        },
+        {
+            "source_id": "S233",
+            "title": "The Mousing Problem: Why Whole-Brain Emulation Makes AI Suffering Measurable, and What Existing Neuroscience Already Tells Us About It",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-three-source-recovery-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Later dated refresh and check correction/version relations against the primary owner. Current route is a dated partial check, not global currency proof."
+        },
+        {
+            "source_id": "S245",
+            "title": "A wearable pain relief device and remote monitoring system therefor",
+            "validation_status": "partially_verified",
+            "route": "primary_route_pending",
+            "evidence_artifacts": [],
+            "remaining": "Official CNIPA query retrieved the record for application CN202510586600.9 and confirmed CN120478838A (publication 2025-08-15) plus CN120478838B (granted 2026-02-03), title, patentee, inventors and abstract. The official response did not include claims. Claims 1-3 and a 20-patient example are mirror-only; keep partially_verified and do not treat patent assertions as efficacy evidence."
+        },
+        {
+            "source_id": "S246",
+            "title": "CROSSBRAIN: Distributed and federated cross-modality actuation through advanced nanomaterials and neuromorphic learning",
+            "validation_status": "partially_verified",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-retry-2026-09-25.json"
+            ],
+            "remaining": "CORDIS owner fact sheet confirms CROSSBRAIN, grant 101070908, DOI 10.3030/101070908; project active through 2026-10-31, last updated 2026-04-24. This is a project/grant record, not a peer-reviewed article; reporting/results tabs not inspected."
+        },
+        {
+            "source_id": "S249",
+            "title": "Decision-Centered Wearable Biosensors for Personalized Rehabilitation: Integrating Multimodal Monitoring, Artificial Intelligence, and Closed-Loop Intervention",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-retry-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Frontiers owner HTML/JATS confirms VOR and publication 2026-09-18; no correction/retraction or linked preprint markers surfaced in article XML. CrossMark status not queried; page dateModified 2026-09-25 is not an established version event."
+        },
+        {
+            "source_id": "S250",
+            "title": "Brain Sovereignty Demands Privacy-Enhancing AI by Default",
+            "validation_status": "rejected",
+            "route": "identity_rejected",
+            "evidence_artifacts": [],
+            "remaining": "Recheck identity only if new primary lead appears; no publication-version claim can be made from the rejected card."
+        },
+        {
+            "source_id": "S253",
+            "title": "How the Eon Team Produced a Virtual Embodied Fly",
+            "validation_status": "partially_verified",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-three-owner-pages-review-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Later dated owner-page refresh; any linked peer-reviewed study must be evaluated independently."
+        },
+        {
+            "source_id": "S272",
+            "title": "CN122075919A",
+            "validation_status": "rejected",
+            "route": "identity_rejected",
+            "evidence_artifacts": [
+                "s272-identity-exclusion-2026-09-25.json"
+            ],
+            "remaining": "Reopen only if an official patent publication with attributable title and text is recovered; candidate number alone supports no claim."
+        },
+        {
+            "source_id": "S273",
+            "title": "MenstruEase: A Closed-Loop Smart TENS System for Personalized Management of Primary Dysmenorrhea",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-sweep-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Wiley Crossmark currently says Document is current, but article landing/fulltext/PDF/OAI routes return 403; article body and owner-stated preprint status are not verifiable. No global absence claim."
+        },
+        {
+            "source_id": "S279",
+            "title": "Principles of Physiologic Closed-Loop Controllers in Neuromodulation",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-retry-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Direct Crossref and PubMed E-utilities recheck confirms VOR/issue metadata and PubMed article date 2026-04-30; Crossref update fields/relation and PubMed CommentsCorrectionsList are empty, reverse-updates query total-results 0. Elsevier/journal full-text pages return 403; owner-only notices/CrossMark and any preprint relation remain unverified. No global absence claim."
+        },
+        {
+            "source_id": "S285",
+            "title": "The optimization of neuroprosthetic interfaces relying on biophysical and surrogate digital twins",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-sweep-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Nature page and Crossmark confirm VOR/current status as of 2026-09-25 on checked routes. Later updates and any unlinked preprint remain possible."
+        },
+        {
+            "source_id": "S286",
+            "title": "Whole-Brain Connectomic Graph Model Enables Whole-Body Locomotion Control in Fruit Fly",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Later dated refresh and check correction/version relations against the primary owner. Current route is a dated partial check, not global currency proof."
+        },
+        {
+            "source_id": "S292",
+            "title": "Emergent Individuality in Whole-Brain Connectome Simulations of Drosophila melanogaster (claude-fly)",
+            "validation_status": "partially_verified",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-code-repository-recheck-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Later dated refresh and check correction/version relations against the primary owner. Current route is a dated partial check, not global currency proof."
+        },
+        {
+            "source_id": "S296",
+            "title": "Eon Systems: mouse-brain emulation programme",
+            "validation_status": "partially_verified",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-three-owner-pages-review-2026-09-25.json"
+            ],
+            "remaining": "Later dated owner-page refresh; any linked peer-reviewed study must be evaluated independently."
+        },
+        {
+            "source_id": "S313",
+            "title": "Agentic AI in Neurology",
+            "validation_status": "rejected",
+            "route": "identity_rejected",
+            "evidence_artifacts": [],
+            "remaining": "Recheck identity only if new primary lead appears; no publication-version claim can be made from the rejected card."
+        },
+        {
+            "source_id": "S320",
+            "title": "Emergent Individuality and Neural Integration in Whole-Brain Connectome Simulations of Drosophila melanogaster",
+            "validation_status": "partially_verified",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Later dated refresh and check correction/version relations against the primary owner. Current route is a dated partial check, not global currency proof."
+        },
+        {
+            "source_id": "S330",
+            "title": "Towards Personalized Edge-AI for Medicine: Efficient Neuromorphic Frameworks for Seizure Detection and Prediction",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-retry-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "medRxiv/openRxiv owner API confirms versions v1/v2 and `published: NA` (no linked journal DOI surfaced); v2 HTML was blocked (403). No correction marker in API; future publication and page-only notices remain unverified."
+        },
+        {
+            "source_id": "S356",
+            "title": "Impact of Evoked Compound Action Potential (ECAP)-Controlled Closed-Loop Spinal Cord Stimulation in Refractory Lumbar Radiculopathy: A Case Report",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-retry-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Cureus owner PDF confirms Version of Record and full text; this is one case with outcomes reported after a five-day trial. Correction/retraction, Crossmark, and any preprint relation remain unchecked."
+        },
+        {
+            "source_id": "S357",
+            "title": "Closing the loop on chronic pain with ECAP-controlled closed-loop vs open-loop spinal cord stimulation: systematic and longitudinal pooled analysis of the EVOKE study",
+            "validation_status": "partially_verified",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-sweep-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Publisher OAI confirms publishedVersion but its dc:date 2025-03-01 conflicts with issue/Crossref 2026-03-01. Human owner landing/galley routes are 403; only Crossref and OAI metadata verified. Full text and later notice refresh remain open."
+        },
+        {
+            "source_id": "S360",
+            "title": "Objective, Same-Day SCS Trials with ECAP-Controlled Closed-Loop Therapy: Depth of Response is Maintained from Trial to 12 months",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-sweep-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Springer owner article page and PMC full text confirm VOR 2026-03-03; no article-level correction/retraction/preprint marker surfaced. CORDIS S246 is separately confirmed as an active context-only project; Crossref emptiness is not global absence evidence."
+        },
+        {
+            "source_id": "S361",
+            "title": "Long-Term Outcomes of Closed Loop SCS",
+            "validation_status": "rejected",
+            "route": "identity_rejected",
+            "evidence_artifacts": [],
+            "remaining": "Recheck identity only if new primary lead appears; no publication-version claim can be made from the rejected card."
+        },
+        {
+            "source_id": "S363",
+            "title": "Anatomical Data Driven Modeling of Evoked Compound Action Potentials Recordings During Spinal Cord Stimulation in a Swine Model",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-sweep-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Current VOR citation 29(1):40-55 Jan 2026; online date 2025-08-06. Archived owner full text was read but live publisher routes now 403. NLM copyright says all rights reserved while Crossref/Elsevier state CC BY 4.0; rights discrepancy unresolved."
+        },
+        {
+            "source_id": "S368",
+            "title": "5 amazing visuals show how the male fruit fly's brain map is advancing neuroscience",
+            "validation_status": "partially_verified",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-three-owner-pages-review-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Later dated owner-page refresh; any linked peer-reviewed study must be evaluated independently."
+        },
+        {
+            "source_id": "S732",
+            "title": "Emulation of the Drosophila Fly Brain",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-code-repository-recheck-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Later dated refresh and check correction/version relations against the primary owner. Current route is a dated partial check, not global currency proof."
+        },
+        {
+            "source_id": "S733",
+            "title": "Fly Brain snnTorch",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-code-repository-recheck-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Later dated refresh and check correction/version relations against the primary owner. Current route is a dated partial check, not global currency proof."
+        },
+        {
+            "source_id": "S737",
+            "title": "FLYBOX: an open-source connectome sandbox for a simulated fruit-fly nervous system",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-code-repository-recheck-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Later dated refresh and check correction/version relations against the primary owner. Current route is a dated partial check, not global currency proof."
+        },
+        {
+            "source_id": "S738",
+            "title": "Distributed control circuits across a brain-and-cord connectome",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-sweep-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Checked 2026-09-25: Nature reference 216 cites bioRxiv DOI 10.1101/2025.07.31.667571 with the same title, establishing the publisher-cited preprint relation. Nature page and Crossref update fields show no correction/retraction marker in checked routes; direct bioRxiv version history remained unavailable. Later corpus-wide refresh remains required."
+        },
+        {
+            "source_id": "S739",
+            "title": "Connectome-constrained modeling identifies neurons and synapses that sustain spontaneous activity in Drosophila",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-sweep-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "bioRxiv owner article/Info-History confirms v1 only (posted 2026-08-25), no correction/retraction marker or journal DOI surfaced. Crossref has no version/preprint publication relation; owner route checked, current only as of 2026-09-25."
+        },
+        {
+            "source_id": "S740",
+            "title": "Connectome simulations identify a central pattern generator circuit for fly walking",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-sweep-2026-09-25.json"
+            ],
+            "remaining": "bioRxiv owner pages confirm v2 current (posted 2026-04-30), no correction/retraction notice or published-journal DOI surfaced. NLM classifies as preprint; no owner evidence of journal linkage, not a global absence claim."
+        },
+        {
+            "source_id": "S741",
+            "title": "Topological Sensitivity in Connectome-Constrained Neural Networks",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Later dated refresh and check correction/version relations against the primary owner. Current route is a dated partial check, not global currency proof."
+        },
+        {
+            "source_id": "S748",
+            "title": "Randomized Modality Mixing with Patchwise RBF Networks for Robust Multimodal Pain Recognition",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-sweep-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Publisher VOR PDF and JATS are retrievable and identify a revised/expanded relation to an ICPR 2024 workshop article. MDPI landing/Crossmark status remains blocked; no formal correction status can be certified."
+        },
+        {
+            "source_id": "S754",
+            "title": "Proof of Concept of Natural Language Processing in Predicting Patient-Reported Outcomes in Spinal Cord Stimulation",
+            "validation_status": "partially_verified",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-retry-2026-09-25.json"
+            ],
+            "remaining": "Crossref owner deposit and NLM E-utilities confirm ahead-of-print article identity (2026-06; PubMed supplied-by-publisher, no issue/pages). ScienceDirect and journal owner page blocked (403); page version/CrossMark/correction notices and preprint search remain unverified."
+        },
+        {
+            "source_id": "S763",
+            "title": "Central versus peripheral neural control of a coordinated walking pattern in Drosophila",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-sweep-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "bioRxiv owner confirms v2 (2026-05-05) most recent; it contains a disclosed author-order/name self-correction from v1. No owner-registered journal link found in checked routes; Crossmark has no record, and some API responses are degraded. Preserve Crossref date metadata discrepancy and do not generalize absence."
+        },
+        {
+            "source_id": "S764",
+            "title": "Directional leads applied to spinal cord stimulation: A computational modelling study",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-sweep-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "PLOS owner page confirms VOR, published 2026-04-02, with no article-level correction/retraction/preprint marker surfaced; related route/API exposes no amendment fields. Crossref/PMC update relations not rechecked, so no global absence claim."
+        },
+        {
+            "source_id": "S782",
+            "title": "Centralized brain networks controlling antennal grooming coordination",
+            "validation_status": "verified_primary",
+            "route": "primary_route_screened",
+            "evidence_artifacts": [
+                "src07-crossref-sweep-2026-09-25.json",
+                "src07-version-recheck-audit.json"
+            ],
+            "remaining": "Nature owner page confirms VOR 2026-06-29; publisher-endorsed CrossMark says Document is current, no updates listed. Candidate bioRxiv DOI 10.1101/2024.12.17.628844 is unlinked in Crossref and owner API timed out, so relation/version linkage remains unverified."
+        }
+    ],
+    "primary_route_pending_source_ids": [
+        "S245"
+    ]
+}

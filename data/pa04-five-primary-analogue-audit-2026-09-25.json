@@ -1,0 +1,58 @@
+{
+  "date": "2026-09-25",
+  "batch_sha256": "D9D2D0F23251B9DADB4D13BFE5FEA78D7C1CDBFD713A3A56A3EC67A9407009E3",
+  "source_ids": [
+    "S784",
+    "S785",
+    "S786",
+    "S787",
+    "S788"
+  ],
+  "source_locators": [
+    {
+      "source_id": "S784",
+      "stream": "NS-09",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22188868/",
+      "locator": "Abstract, Results: A-beta recruitment and painful-area coverage",
+      "boundary": "Human ECAP recruitment and painful-area coverage; pain-intensity response is not measured by ECAP."
+    },
+    {
+      "source_id": "S785",
+      "stream": "NS-07",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24111244/",
+      "locator": "Abstract: hybrid three-dimensional electrical and neural forward model",
+      "boundary": "Simulated ECAP forward model; no independent patient validation established in the accessible abstract."
+    },
+    {
+      "source_id": "S786",
+      "stream": "NS-08",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30273153/",
+      "locator": "Abstract: electrode double-layer mechanism and saline comparison",
+      "boundary": "Bench electrode pulse artifact model; not human SCS artifact-removal validation."
+    },
+    {
+      "source_id": "S787",
+      "stream": "NS-09",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8320888/",
+      "locator": "Methods, ECAP acquisition and growth curves; Results, ET-PT and ET-DT",
+      "boundary": "14 participants and 112 repeated curves; perception/discomfort thresholds, not pain relief."
+    },
+    {
+      "source_id": "S788",
+      "stream": "NS-10",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28922517/",
+      "locator": "Abstract, Materials and Methods and Results: 51 trialed, 36 implanted, six-month outcomes",
+      "boundary": "AVALON preliminary single-arm outcomes; no randomized comparator or prognostic ECAP model."
+    }
+  ],
+  "registration_correction": {
+    "avalon": "ACTRN12615000713594",
+    "panorama": "NCT02161627",
+    "locators": [
+      "https://airr.anzca.edu.au/anzcacrisjspui/handle/11055/573?mode=full",
+      "https://www.accessdata.fda.gov/cdrh_docs/pdf19/P190002B.pdf",
+      "https://clinicaltrials.gov/api/v2/studies/NCT02161627"
+    ]
+  },
+  "remaining": "Complete citation snowballing and later dated refresh before PA-04 closure."
+}

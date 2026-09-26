@@ -1,0 +1,29 @@
+{
+  "meta": {
+    "schema_version": "1.0.0",
+    "checked_at": "2026-09-25",
+    "status": "owner_pages_primary_text_checked"
+  },
+  "entries": [
+    {
+      "source_id": "S253",
+      "url": "https://eon.systems/updates/embodied-brain-emulation",
+      "locator": "Research, March 10 2026; How does the fly work?; What the current embodied fly is not; Is this an upload?",
+      "decision": "Owner technical description of one fly embodiment demo; not independent experimental validation."
+    },
+    {
+      "source_id": "S296",
+      "url": "https://eon.systems/updates/first-multi-behavior-brain-upload",
+      "locator": "Announcement, March 7 2026, paragraphs 1-6: fly demo and future mouse target",
+      "decision": "Same Eon demonstration as S253; mouse programme remains future work."
+    },
+    {
+      "source_id": "S368",
+      "url": "https://blog.google/innovation-and-ai/technology/research/male-fruit-fly-brain-map/",
+      "locator": "Google Research article, posted September 3 and updated September 21 2026; introduction and five visuals",
+      "decision": "Anatomical map and communications article only; no dynamic simulation or clinical/pain endpoint."
+    }
+  ],
+  "same_project_note": "S296 is the March 7 announcement and S253 the March 10 technical description of one Eon fly embodiment demonstration; they are not independent replications.",
+  "remaining": "Four patent owner routes, publisher correction/preprint relation checks, and later dated refresh remain for SRC-07."
+}

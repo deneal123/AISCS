@@ -1,0 +1,27 @@
+{
+  "meta": {
+    "schema_version": "1.0.0",
+    "checked_at": "2026-09-25",
+    "source_id": "S231",
+    "status": "primary_jats_checked"
+  },
+  "identifiers": {
+    "doi": "10.3390/s26103049",
+    "pmid": "42197858",
+    "pmcid": "PMC13210900"
+  },
+  "edition": "Sensors 26(10):3049",
+  "article_type": "review-article",
+  "locators": [
+    {
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13210900/fullTextXML",
+      "locator": "article/@article-type; article-meta/article-id, contrib-group, volume, issue; body"
+    },
+    {
+      "url": "https://api.crossref.org/works/10.3390%2Fs26103049",
+      "locator": "message.DOI, author, volume, issue, page, relation, update-to"
+    }
+  ],
+  "correction_boundary": "Crossref relation and update-to fields were empty on this dated check; this does not prove absence of a correction in every registry.",
+  "scientific_boundary": "This is a broad review without new participants or a patient-level ECAP-to-pain outcome dataset."
+}

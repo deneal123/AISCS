@@ -1,0 +1,1069 @@
+{
+  "meta": {
+    "schema_version": "1.0.0",
+    "checked_at": "2026-09-26",
+    "status": "draft_matrix_text_review_pending_evd03_and_source_cards",
+    "gate": "G0_REVISE",
+    "matrix_rows_scanned": 159,
+    "matrix_rows_manually_reviewed_in_five_fields": 159,
+    "contextual_rows_screened": 71,
+    "contextual_rows_manually_reviewed": 71,
+    "contextual_rows_pending_semantic_review": 0,
+    "unflagged_rows_manually_reviewed": 88,
+    "unflagged_rows_without_manual_semantic_review": 0,
+    "direct_equivalence_regex_hits": 1,
+    "unresolved_direct_equivalence_hits": 0,
+    "boundary": "Review of five matrix text fields does not prove that all source cards or primary publications preserve every scientific boundary."
+  },
+  "contract_basis": [
+    "scientific-contract.json:meta.invariants",
+    "scientific-contract.json:entities",
+    "dissertation-concept.json:forbidden_claims"
+  ],
+  "rules": [
+    {
+      "id": "FT-01",
+      "from": "controlled acute experimental pain class",
+      "to": "chronic clinical pain or SCS outcome",
+      "prohibited_transfer": "Do not treat an acute stimulus or experimental pain classifier score as a chronic-pain severity or treatment-response metric.",
+      "required_bridge": "A separate patient-linked chronic-pain cohort, prespecified outcome and horizon, participant-disjoint test and calibration are required.",
+      "contract_entities": [
+        "ENT-01",
+        "ENT-06"
+      ],
+      "source_refs": [
+        "S015",
+        "S071",
+        "S749"
+      ]
+    },
+    {
+      "id": "FT-02",
+      "from": "Drosophila nociceptive activity or protective behavior",
+      "to": "subjective human pain",
+      "prohibited_transfer": "Do not name an animal neural response, withdrawal or rolling score as felt pain intensity.",
+      "required_bridge": "Report the stimulus, neural response and behavior separately; any human pain endpoint requires a separate human study and its own label.",
+      "contract_entities": [
+        "ENT-01",
+        "ENT-02",
+        "ENT-03"
+      ],
+      "source_refs": [
+        "S152",
+        "S212"
+      ]
+    },
+    {
+      "id": "FT-03",
+      "from": "Drosophila connectome dynamics or simulated latent state",
+      "to": "human spinal recruitment or ECAP waveform",
+      "prohibited_transfer": "Do not equate fly cells, synapses or simulation states with human spinal anatomy or a recorded ECAP.",
+      "required_bridge": "Define species-agnostic observables, a physical stimulation/volume-conductor/neural-recruitment observation operator and held-out human comparator tests.",
+      "contract_entities": [
+        "ENT-04",
+        "ENT-05"
+      ],
+      "source_refs": [
+        "S740",
+        "S105",
+        "S766"
+      ]
+    },
+    {
+      "id": "FT-04",
+      "from": "ECAP recruitment amplitude, threshold or neural dose",
+      "to": "patient-reported pain intensity",
+      "prohibited_transfer": "Do not call ECAP a direct pain biomarker or substitute ECAP amplitude for a patient's pain report.",
+      "required_bridge": "Analyze neural recruitment and pain outcomes as different variables with participant-linked, temporally aligned data and independent validation.",
+      "contract_entities": [
+        "ENT-05",
+        "ENT-06"
+      ],
+      "source_refs": [
+        "S105",
+        "S236",
+        "S767",
+        "S787"
+      ]
+    },
+    {
+      "id": "FT-05",
+      "from": "ECAP feedback control or accurate dose delivery",
+      "to": "SCS clinical treatment effect",
+      "prohibited_transfer": "Do not infer analgesic efficacy from controller stability or achieved neural dose alone.",
+      "required_bridge": "Use a prespecified clinical outcome and appropriate comparator; keep the intervention contrast separate from feedback-signal measurement.",
+      "contract_entities": [
+        "ENT-05",
+        "ENT-06"
+      ],
+      "source_refs": [
+        "S236",
+        "S779",
+        "S780",
+        "S781"
+      ]
+    },
+    {
+      "id": "FT-06",
+      "from": "repeated pulses, curves or visits",
+      "to": "independent patients",
+      "prohibited_transfer": "Do not count repeated ECAP curves, pulses or longitudinal visits as independent participants or external validation.",
+      "required_bridge": "Preserve participant IDs, cluster inference by participant and report the participant denominator and disjoint split.",
+      "contract_entities": [
+        "ENT-05",
+        "ENT-06"
+      ],
+      "source_refs": [
+        "S765",
+        "S787"
+      ]
+    },
+    {
+      "id": "FT-07",
+      "from": "multiple reports from one registered SCS trial",
+      "to": "independent replication",
+      "prohibited_transfer": "Do not count EVOKE 12-, 24- and 36-month reports as three independent trial validations.",
+      "required_bridge": "Group publications by trial ID and cohort, and identify any separately enrolled replication cohort.",
+      "contract_entities": [
+        "ENT-06"
+      ],
+      "source_refs": [
+        "S779",
+        "S780",
+        "S781"
+      ]
+    },
+    {
+      "id": "FT-08",
+      "from": "animal mechanical-response classes or simulated behavior",
+      "to": "human SCS outcome",
+      "prohibited_transfer": "Do not transfer animal stimulus classes or simulated actions directly into human analgesic responder labels.",
+      "required_bridge": "Use a separate human SCS cohort with a validated patient-reported target, follow-up and disjoint evaluation.",
+      "contract_entities": [
+        "ENT-02",
+        "ENT-03",
+        "ENT-06"
+      ],
+      "source_refs": [
+        "S747",
+        "S253"
+      ]
+    },
+    {
+      "id": "FT-09",
+      "from": "randomized closed-loop SCS intervention comparison",
+      "to": "individual baseline prognosis",
+      "prohibited_transfer": "Do not describe an intervention-arm difference as a validated preimplant individual response predictor.",
+      "required_bridge": "Specify baseline predictors and response label, fit without outcome leakage and validate at the patient level in an independent cohort.",
+      "contract_entities": [
+        "ENT-06"
+      ],
+      "source_refs": [
+        "S779",
+        "S780",
+        "S781",
+        "S788"
+      ]
+    },
+    {
+      "id": "FT-10",
+      "from": "anatomical map or company simulation demonstration",
+      "to": "independent biological nociception validation",
+      "prohibited_transfer": "Do not treat a connectome map, software demo or company announcement as an experimental pain or nociception result.",
+      "required_bridge": "Identify the exact graph release and separately recorded biological stimulus, neural and behavioral comparator cohorts.",
+      "contract_entities": [
+        "ENT-02",
+        "ENT-03",
+        "ENT-04"
+      ],
+      "source_refs": [
+        "S253",
+        "S296",
+        "S368"
+      ]
+    }
+  ],
+  "matrix_screen": {
+    "fields": [
+      "claim",
+      "target_variable",
+      "verified_evidence",
+      "limitations",
+      "permitted_conclusion"
+    ],
+    "contextual_rows": [
+      {
+        "row_index": 6,
+        "batch_id": "batch-002",
+        "source_ids": [
+          "S079"
+        ],
+        "context_types": [
+          "ecap_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 13,
+        "batch_id": "batch-004",
+        "source_ids": [
+          "S243"
+        ],
+        "context_types": [
+          "ecap_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 14,
+        "batch_id": "closed-loop-model-review-2026-09-24",
+        "source_ids": [
+          "S285"
+        ],
+        "context_types": [
+          "ecap_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 15,
+        "batch_id": "ecap-scs-review-2026-09-24",
+        "source_ids": [
+          "S356"
+        ],
+        "context_types": [
+          "ecap_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 16,
+        "batch_id": "ecap-scs-review-2026-09-24",
+        "source_ids": [
+          "S357"
+        ],
+        "context_types": [
+          "ecap_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 18,
+        "batch_id": "ecap-measurement-core-2026-09-24",
+        "source_ids": [
+          "S360"
+        ],
+        "context_types": [
+          "ecap_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 20,
+        "batch_id": "ecap-measurement-core-2026-09-24",
+        "source_ids": [
+          "S105"
+        ],
+        "context_types": [
+          "ecap_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 22,
+        "batch_id": "batch-005",
+        "source_ids": [
+          "S033"
+        ],
+        "context_types": [
+          "ecap_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 26,
+        "batch_id": "priority-full-text-2026-09-24",
+        "source_ids": [
+          "S236"
+        ],
+        "context_types": [
+          "ecap_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 27,
+        "batch_id": "priority-full-text-2026-09-24",
+        "source_ids": [
+          "S237"
+        ],
+        "context_types": [
+          "ecap_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 30,
+        "batch_id": "human-generalization-review-2026-09-24",
+        "source_ids": [
+          "S008"
+        ],
+        "context_types": [
+          "ecap_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 32,
+        "batch_id": "batch-006",
+        "source_ids": [
+          "S016"
+        ],
+        "context_types": [
+          "nociception_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 33,
+        "batch_id": "priority-full-text-2026-09-24",
+        "source_ids": [
+          "S037"
+        ],
+        "context_types": [
+          "ecap_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 35,
+        "batch_id": "priority-full-text-2026-09-24",
+        "source_ids": [
+          "S069"
+        ],
+        "context_types": [
+          "ecap_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 36,
+        "batch_id": "priority-full-text-2026-09-24",
+        "source_ids": [
+          "S015"
+        ],
+        "context_types": [
+          "ecap_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 42,
+        "batch_id": "closed-loop-model-review-2026-09-24",
+        "source_ids": [
+          "S284"
+        ],
+        "context_types": [
+          "ecap_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 43,
+        "batch_id": "r4-batch-001",
+        "source_ids": [
+          "S065"
+        ],
+        "context_types": [
+          "nociception_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 45,
+        "batch_id": "r4-batch-001",
+        "source_ids": [
+          "S200"
+        ],
+        "context_types": [
+          "nociception_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 46,
+        "batch_id": "r4-batch-001",
+        "source_ids": [
+          "S212"
+        ],
+        "context_types": [
+          "ecap_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 49,
+        "batch_id": "ecap-measurement-core-2026-09-24",
+        "source_ids": [
+          "S279"
+        ],
+        "context_types": [
+          "ecap_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 52,
+        "batch_id": "ecap-measurement-core-2026-09-24",
+        "source_ids": [
+          "S363"
+        ],
+        "context_types": [
+          "ecap_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 55,
+        "batch_id": "neuromodulation-patent-review-2026-09-24",
+        "source_ids": [
+          "S099"
+        ],
+        "context_types": [
+          "ecap_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 61,
+        "batch_id": "neuromodulation-patent-review-2026-09-24",
+        "source_ids": [
+          "S241"
+        ],
+        "context_types": [
+          "ecap_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 63,
+        "batch_id": "r4-batch-003",
+        "source_ids": [
+          "S045"
+        ],
+        "context_types": [
+          "ecap_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 65,
+        "batch_id": "r4-batch-003",
+        "source_ids": [
+          "S023"
+        ],
+        "context_types": [
+          "ecap_and_pain",
+          "nociception_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 67,
+        "batch_id": "r4-batch-004",
+        "source_ids": [
+          "S090"
+        ],
+        "context_types": [
+          "nociception_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 73,
+        "batch_id": "r4-batch-004",
+        "source_ids": [
+          "S027"
+        ],
+        "context_types": [
+          "nociception_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 74,
+        "batch_id": "r4-batch-004",
+        "source_ids": [
+          "S048"
+        ],
+        "context_types": [
+          "ecap_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 79,
+        "batch_id": "r4-batch-005",
+        "source_ids": [
+          "S025"
+        ],
+        "context_types": [
+          "ecap_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 85,
+        "batch_id": "r4-batch-006",
+        "source_ids": [
+          "S282"
+        ],
+        "context_types": [
+          "nociception_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 86,
+        "batch_id": "r4-batch-006",
+        "source_ids": [
+          "S286"
+        ],
+        "context_types": [
+          "nociception_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 87,
+        "batch_id": "remaining-metadata-review-2026-09-24",
+        "source_ids": [
+          "S071"
+        ],
+        "context_types": [
+          "ecap_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 88,
+        "batch_id": "remaining-metadata-review-2026-09-24",
+        "source_ids": [
+          "S229"
+        ],
+        "context_types": [
+          "ecap_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 89,
+        "batch_id": "r4-batch-007",
+        "source_ids": [
+          "S012"
+        ],
+        "context_types": [
+          "nociception_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 90,
+        "batch_id": "r4-batch-007",
+        "source_ids": [
+          "S222"
+        ],
+        "context_types": [
+          "nociception_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 93,
+        "batch_id": "pain-baseline-review-2026-09-24",
+        "source_ids": [
+          "S026"
+        ],
+        "context_types": [
+          "ecap_and_pain",
+          "nociception_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 97,
+        "batch_id": "r3-batch-001",
+        "source_ids": [
+          "S092"
+        ],
+        "context_types": [
+          "nociception_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 99,
+        "batch_id": "r3-batch-001",
+        "source_ids": [
+          "S049"
+        ],
+        "context_types": [
+          "ecap_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 101,
+        "batch_id": "r3-batch-001",
+        "source_ids": [
+          "S021"
+        ],
+        "context_types": [
+          "ecap_and_pain",
+          "nociception_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 102,
+        "batch_id": "r3-batch-001",
+        "source_ids": [
+          "S097"
+        ],
+        "context_types": [
+          "ecap_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 105,
+        "batch_id": "r3-batch-002",
+        "source_ids": [
+          "S029"
+        ],
+        "context_types": [
+          "ecap_and_pain",
+          "nociception_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 108,
+        "batch_id": "r3-batch-002",
+        "source_ids": [
+          "S247"
+        ],
+        "context_types": [
+          "ecap_and_pain",
+          "nociception_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 109,
+        "batch_id": "r3-batch-002",
+        "source_ids": [
+          "S152"
+        ],
+        "context_types": [
+          "nociception_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 110,
+        "batch_id": "r3-batch-002",
+        "source_ids": [
+          "S214"
+        ],
+        "context_types": [
+          "nociception_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 111,
+        "batch_id": "r4-github-refresh-001",
+        "source_ids": [
+          "S200"
+        ],
+        "context_types": [
+          "nociception_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 113,
+        "batch_id": "github-new-resources-001",
+        "source_ids": [
+          "S732"
+        ],
+        "context_types": [
+          "ecap_and_pain",
+          "nociception_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 115,
+        "batch_id": "github-new-resources-001",
+        "source_ids": [
+          "S734"
+        ],
+        "context_types": [
+          "ecap_and_pain",
+          "nociception_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 119,
+        "batch_id": "frontier-refresh-2026-09-23",
+        "source_ids": [
+          "S740"
+        ],
+        "context_types": [
+          "ecap_and_pain",
+          "nociception_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 122,
+        "batch_id": "connectome-prior-art-refresh-2026-09-24",
+        "source_ids": [
+          "S743"
+        ],
+        "context_types": [
+          "ecap_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 126,
+        "batch_id": "closed-loop-model-review-2026-09-24",
+        "source_ids": [
+          "S747"
+        ],
+        "context_types": [
+          "ecap_and_pain",
+          "nociception_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 127,
+        "batch_id": "remaining-metadata-review-2026-09-24",
+        "source_ids": [
+          "S748"
+        ],
+        "context_types": [
+          "ecap_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 130,
+        "batch_id": "ns07-anaya-fulltext-2026-09-24",
+        "source_ids": [
+          "S766"
+        ],
+        "context_types": [
+          "ecap_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 131,
+        "batch_id": "ns09-recruitment-review-2026-09-24",
+        "source_ids": [
+          "S767"
+        ],
+        "context_types": [
+          "ecap_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 132,
+        "batch_id": "ns07-zhang-primary-review-2026-09-24",
+        "source_ids": [
+          "S768"
+        ],
+        "context_types": [
+          "ecap_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 133,
+        "batch_id": "ns03-lehman-primary-review-2026-09-24",
+        "source_ids": [
+          "S769"
+        ],
+        "context_types": [
+          "ecap_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 137,
+        "batch_id": "ns01-ns02-primary-refresh-2026-09-25",
+        "source_ids": [
+          "S775"
+        ],
+        "context_types": [
+          "ecap_and_pain",
+          "nociception_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 138,
+        "batch_id": "ns03-backward-primary-2026-09-25",
+        "source_ids": [
+          "S776",
+          "S777",
+          "S778"
+        ],
+        "context_types": [
+          "ecap_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 139,
+        "batch_id": "ns10-evoke-one-trial-review-2026-09-25",
+        "source_ids": [
+          "S779",
+          "S780",
+          "S781"
+        ],
+        "context_types": [
+          "ecap_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 140,
+        "batch_id": "ns04-model-perturbation-primary-2026-09-25",
+        "source_ids": [
+          "S782",
+          "S783"
+        ],
+        "context_types": [
+          "ecap_and_pain",
+          "nociception_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 141,
+        "batch_id": "pa04-five-analogue-s784-2026-09-25",
+        "source_ids": [
+          "S784"
+        ],
+        "context_types": [
+          "ecap_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 144,
+        "batch_id": "pa04-five-analogue-s787-2026-09-25",
+        "source_ids": [
+          "S787"
+        ],
+        "context_types": [
+          "ecap_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 146,
+        "batch_id": "pa04-frequency-rat-s789-2026-09-25",
+        "source_ids": [
+          "S789"
+        ],
+        "context_types": [
+          "ecap_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 149,
+        "batch_id": "pa04-s793-vnrs-2026-09-25",
+        "source_ids": [
+          "S793"
+        ],
+        "context_types": [
+          "ecap_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 150,
+        "batch_id": "pa04-s793-neural-dose-2026-09-25",
+        "source_ids": [
+          "S793"
+        ],
+        "context_types": [
+          "ecap_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 151,
+        "batch_id": "ns03-saved-primary-leads-2026-09-25",
+        "source_ids": [
+          "S794",
+          "S795"
+        ],
+        "context_types": [
+          "ecap_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 152,
+        "batch_id": "ns03-ohyama-primary-2026-09-25",
+        "source_ids": [
+          "S797"
+        ],
+        "context_types": [
+          "ecap_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 153,
+        "batch_id": "ns05-wang-cross-species-eeg-2026-09-25",
+        "source_ids": [
+          "S796"
+        ],
+        "context_types": [
+          "ecap_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 155,
+        "batch_id": "evd03-clinical-ecap-primary-2026-09-25",
+        "source_ids": [
+          "S799"
+        ],
+        "context_types": [
+          "ecap_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 156,
+        "batch_id": "evd03-clinical-ecap-primary-2026-09-25",
+        "source_ids": [
+          "S800"
+        ],
+        "context_types": [
+          "ecap_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 157,
+        "batch_id": "ns03-pan-primary-2026-09-26",
+        "source_ids": [
+          "S802"
+        ],
+        "context_types": [
+          "ecap_and_pain",
+          "nociception_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      },
+      {
+        "row_index": 158,
+        "batch_id": "ns11-calodney-conference-primary-2026-09-26",
+        "source_ids": [
+          "S804"
+        ],
+        "context_types": [
+          "ecap_and_pain"
+        ],
+        "review_decision": "scoped_text_review_no_direct_equivalence_in_five_fields"
+      }
+    ],
+    "direct_equivalence_hits": [
+      {
+        "row_index": 27,
+        "batch_id": "priority-full-text-2026-09-24",
+        "source_ids": [
+          "S237"
+        ],
+        "pattern": "ecap_is_pain",
+        "matched_text": "ECAP directly measures pain",
+        "review_decision": "negated_prohibition"
+      }
+    ],
+    "incremental_review": {
+      "new_or_changed_contextual_batches": [
+        "ecap-measurement-core-2026-09-24",
+        "pa03-ns06-s791-s792-2026-09-25",
+        "pa04-s793-vnrs-2026-09-25",
+        "pa04-s793-neural-dose-2026-09-25",
+        "ns03-saved-primary-leads-2026-09-25",
+        "ns05-wang-cross-species-eeg-2026-09-25"
+      ],
+      "removed_historical_batch": "remaining-metadata-review-2026-09-24/S228",
+      "basis": "Six contextual rows new to the earlier 150-row audit were inspected in their current five fields; S228 rejected row was removed. Existing review decisions remain bounded to matrix text.",
+      "latest": "2026-09-26: reconciled all 159 live row indices and re-screened five fields; 71 contextual rows have scoped text review, including S804. This does not establish source-card or primary-text saturation."
+    }
+  },
+  "target_corrections": {
+    "source_ids": [
+      "S149",
+      "S023",
+      "S154",
+      "S253",
+      "S273"
+    ],
+    "audits": [
+      "evidence-review-ledger.json#four-construct-target-corrections-2026-09-25.json",
+      "evidence-review-ledger.json#s273-behavior-target-correction-2026-09-25.json"
+    ]
+  },
+  "source_card_corrections": {
+    "source_ids": [
+      "S023",
+      "S149",
+      "S154",
+      "S273",
+      "S083",
+      "S084"
+    ],
+    "audit": "evidence-review-ledger.json#four-source-card-construct-corrections-2026-09-25.json"
+  },
+  "remaining": [
+    "Complete EVD-03 primary-locator review and SRC-08 dependency",
+    "Semantically inspect remaining source-card conclusions and primary-text consistency; the all-card regex screen alone is insufficient",
+    "Obtain author review of the forbidden-transfer list before EVD-04 closure"
+  ],
+  "source_card_screen": {
+    "cards_scanned": 204,
+    "current_canonical_cards": 212,
+    "cards_added_since_last_card_screen": 8,
+    "direct_equivalence_regex_hits": [],
+    "primary_rechecked_this_pass": [
+      "S083",
+      "S084"
+    ],
+    "construct_decisions": {
+      "S083": "Mixed real BioVid human RGB with generated thermal video; heat-stimulus classes remain experimental, not chronic clinical pain.",
+      "S084": "Real UNBC/UofR human faces plus generated identities; AU-derived PSPI is facial expression, not self-reported pain or SCS outcome."
+    },
+    "primary_urls": {
+      "S083": "https://arxiv.org/html/2407.19811",
+      "S084": "https://link.springer.com/article/10.1186/s12938-026-01561-2"
+    },
+    "boundary": "The earlier regex scan covered 204 cards, before eight further cards were added. It is not semantic or primary-text review of every current card; the added cards remain outside that screen."
+  }
+}

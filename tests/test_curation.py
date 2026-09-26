@@ -88,11 +88,11 @@ def test_applied_batch_is_idempotent() -> None:
 
 
 def test_batch_008_changed_no_source_outside_manifest() -> None:
-    before = load_json(DATA / "archive" / "2026-09-22T104041Z-pre-batch-008" / "records.json")[
+    before = load_json(ROOT / "tests" / "fixtures" / "history" / "archive" / "2026-09-22T104041Z-pre-batch-008" / "records.json")[
         "sources"
     ]
     after = load_json(
-        DATA / "archive" / "2026-09-22T105635Z-pre-relevance5-finalization" / "records.json"
+        ROOT / "tests" / "fixtures" / "history" / "archive" / "2026-09-22T105635Z-pre-relevance5-finalization" / "records.json"
     )["sources"]
     manifest = load_json(DATA / "curation" / "relevance-5" / "batches" / "batch-008.json")[
         "source_ids"
@@ -110,7 +110,17 @@ def test_batch_008_changed_no_source_outside_manifest() -> None:
 def test_all_relevance_5_records_have_terminal_decisions() -> None:
     records = load_json(DATA / "records.json")["sources"]
     relevance5 = [item for item in records if item["релевантность"] == 5]
-    assert len(relevance5) == 53
+    assert len(relevance5) >= 82
+    assert {"S784", "S785", "S786", "S787", "S788"} <= {item["id"] for item in relevance5}
+    assert "S749" in {item["id"] for item in relevance5}
+    assert "S762" in {item["id"] for item in relevance5}
+    assert "S763" in {item["id"] for item in relevance5}
+    assert "S764" in {item["id"] for item in relevance5}
+    assert "S765" in {item["id"] for item in relevance5}
+    assert "S766" in {item["id"] for item in relevance5}
+    assert "S767" in {item["id"] for item in relevance5}
+    assert "S768" in {item["id"] for item in relevance5}
+    assert {"S779", "S780", "S781"} <= {item["id"] for item in relevance5}
     assert not {
         item["id"]
         for item in relevance5
@@ -200,8 +210,8 @@ def test_cluster_assignment_is_dry_run_then_atomic_apply(tmp_path: Path) -> None
                 "id": "C999",
                 "topic": "Test cluster",
                 "synthesis": "Test-only assignment.",
-                "representative_id": "S002",
-                "source_ids": ["S002", "S003"],
+                "representative_id": "S105",
+                "source_ids": ["S105", "S003"],
             },
         },
     )
@@ -216,4 +226,4 @@ def test_cluster_assignment_is_dry_run_then_atomic_apply(tmp_path: Path) -> None
     assert applied["applied"] is True
     clusters = load_json(data / "clusters.json")
     added = next(item for item in clusters["clusters"] if item["id"] == "C999")
-    assert added["состав_кластера"] == ["S002", "S003"]
+    assert added["состав_кластера"] == ["S105", "S003"]

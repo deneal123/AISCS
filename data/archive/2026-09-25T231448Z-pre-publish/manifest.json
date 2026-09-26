@@ -1,0 +1,139 @@
+{
+  "snapshot_at": "2026-09-25T23:14:48+00:00",
+  "status": "immutable_pre_publish_snapshot",
+  "label": "pre-publish",
+  "files": [
+    {
+      "name": "records.json",
+      "bytes": 4868349,
+      "sha256": "7FC2D20D0F4B6F24403872FA2AC884BD4457C173873AE51784128542EE05BC47"
+    },
+    {
+      "name": "clusters.json",
+      "bytes": 1043292,
+      "sha256": "2D811DF7C5B5B772E38943077727553E1F4715247BDB4A1AB509F4425AAB665D"
+    },
+    {
+      "name": "ST.json",
+      "bytes": 382185,
+      "sha256": "CF99DD3373925BC4632763E594FAC9CF4A46A053DA182006E2AE1AD644F23EA2"
+    },
+    {
+      "name": "aliases.json",
+      "bytes": 39367,
+      "sha256": "ACFBA5059AF3E834D3793F7999323A92070B30BF771BF6EB5AC3E3B8D18BD683"
+    },
+    {
+      "name": "vocabularies.json",
+      "bytes": 3934,
+      "sha256": "E2913FD356A0E394A2F54E116FC13788DD5AF7184D75D64D7669C3515CF688C2"
+    },
+    {
+      "name": "source-record.schema.json",
+      "bytes": 9683,
+      "sha256": "B7F91C5386E3BBE38BB97EF3B2121A3A3AA7F5F800C092733197A5264DDF58A1"
+    },
+    {
+      "name": "audit-report.json",
+      "bytes": 10390,
+      "sha256": "939A996217F9AFC462A5F7870E47EE59F972AF3C6207362D334F3BC07CFBDAFC"
+    },
+    {
+      "name": "validation-log.json",
+      "bytes": 536801,
+      "sha256": "D9D525BB09D8313E58C67F76E7CD91D18ED1AB79297284036C212400A8760E1D"
+    },
+    {
+      "name": "evidence-matrix.json",
+      "bytes": 239640,
+      "sha256": "D87EEA33954081ABC5F7809753A59560C60C3C787FFDC8584078E99B094AF16A"
+    },
+    {
+      "name": "evidence-review-ledger.json",
+      "bytes": 29930,
+      "sha256": "546127C50514ECE167DF8F5DDF95EA3A66DD5932F5215C4D4EDF4F10FF97F95F"
+    },
+    {
+      "name": "scientific-contract.json",
+      "bytes": 20475,
+      "sha256": "4077CDA7FD880B1D1E3EB1212575776300B2A0BD1641B12F4DB1C65334B64E41"
+    },
+    {
+      "name": "human-dataset-matrix.json",
+      "bytes": 14467,
+      "sha256": "23C57DE7BCD3A37EF1C3EC99763104C12D9066D8CEEEC5D37775C689BAA7F97F"
+    },
+    {
+      "name": "completeness-report.json",
+      "bytes": 289,
+      "sha256": "9984A0472664F3517A9FD4C018D96EA8CD9C12CF5FD72E43CBD0AE08AFFCC05B"
+    },
+    {
+      "name": "search-protocol.json",
+      "bytes": 61319,
+      "sha256": "54DE66D8A618AF2D7690CC5B169C0BC3B537DAD9FE9FA22773DCE3448882878E"
+    },
+    {
+      "name": "novelty-landscape.json",
+      "bytes": 75307,
+      "sha256": "42BCAFD9ED40646AF362540783B5F656CBD72047D5A960E4D3269789F3B6CE19"
+    },
+    {
+      "name": "dissertation-concept.json",
+      "bytes": 7129,
+      "sha256": "2437D01D55A017C8A257D061DE1D91F810FD711A2B8E1A0CFA0F42F54F4ED4B6"
+    },
+    {
+      "name": "runtime-audit.json",
+      "bytes": 5975,
+      "sha256": "8D2C3D0A620BB1DAF900332A329AB077BE2F4D4F07701ED2504FA8A44F5A5B77"
+    },
+    {
+      "name": "ecap-scs-audit.json",
+      "bytes": 71076,
+      "sha256": "9F9FADCC7044DF4B615235C1EA08F53F5A8B7317DC742B85704F0A527358A9E4"
+    },
+    {
+      "name": "drosophila-connectome-audit.json",
+      "bytes": 78641,
+      "sha256": "16B421E87883D873DD123D23282AE654888CF87A519A4C6DA12CF896FBD1115F"
+    },
+    {
+      "name": "drosophila-nociception-audit.json",
+      "bytes": 139446,
+      "sha256": "0B5CB0A6204E7F534F8426A5FBC1A8EFE8A7E39B6EB5A6E7BFC2DF6A9515FCA7"
+    },
+    {
+      "name": "synthetic-domain-audit.json",
+      "bytes": 22812,
+      "sha256": "F534A39DC54A011CA9E0D21E635DC4F77D2EE61A067195E3A0F07E4ABA7E9A34"
+    },
+    {
+      "name": "ns06-prior-art-audit.json",
+      "bytes": 40987,
+      "sha256": "DB7A0434B3C77BA81469BA06688B8CBF1AC94497DB61E2A1992234420244A377"
+    },
+    {
+      "name": "scs-outcome-audit.json",
+      "bytes": 32379,
+      "sha256": "9629C974C8D18A88BC611F04167B6C767785A98F9901CB88B8EA48BD9C9B92F2"
+    },
+    {
+      "name": "ns11-prediction-audit.json",
+      "bytes": 36556,
+      "sha256": "361678A841BFD0F689EF0A974310B240EBCB5A8622C4CDE7854B5A70B1293AB4"
+    },
+    {
+      "name": "human-ecap-scs-access-audit.json",
+      "bytes": 58436,
+      "sha256": "7B8B186DA480703216CEAE0273395434EA68B50F9CE383609A01189D19E90A45"
+    },
+    {
+      "name": "TODO.md",
+      "source": "../TODO.md",
+      "bytes": 139323,
+      "sha256": "4E240FD8163BB1F028318E9AEB6E76EB0081B12D48F75CD8713B8DE58C899AD7"
+    }
+  ],
+  "mutation_policy": "Do not edit; publish changes only to the working research JSON files."
+}

@@ -1,0 +1,43 @@
+{
+  "meta": {
+    "schema_version": "1.0.0",
+    "checked_at": "2026-09-25",
+    "status": "in_progress",
+    "scope": "NS-04 electrical/optogenetic Drosophila model comparison"
+  },
+  "catalogued_source_ids": [
+    "S775",
+    "S782",
+    "S783"
+  ],
+  "unindexed_primary_leads": [
+    {
+      "title": "Connectome-Based Modelling Reveals Orientation Maps in the Drosophila Optic Lobe",
+      "doi": "10.52202/085713-5498",
+      "preprint": "arXiv:2609.01330v1",
+      "primary_urls": [
+        "https://arxiv.org/html/2609.01330v1",
+        "https://papers.nips.cc/paper_files/paper/2025/hash/f11922f49803b5327c904df814ac5964-Abstract-Conference.html"
+      ],
+      "primary_locator": "arXiv Methods ?3; Limitations; References [46]; official NeurIPS 2025 Main Conference page",
+      "classification": "Whole adult FAFB connectome with conductance-based LIF for a visual orientation task. Method-level connectome-dynamics analogue; authors state no in-vivo validation. Not nociception, pain, ECAP or SCS. The arXiv and NeurIPS DOI are one work, not independent sources.",
+      "catalogued": false
+    },
+    {
+      "title": "A comprehensive mechanosensory connectome reveals a somatotopically organized neural circuit architecture controlling stimulus-aimed grooming of the Drosophila head",
+      "doi": "10.7554/eLife.108044.3",
+      "primary_urls": [
+        "https://elifesciences.org/articles/108044",
+        "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13246004/fullTextXML"
+      ],
+      "primary_locator": "Publisher version of record 2026-06-08; primary full-text Abstract/Results describe connectome anatomy and stimulus-aimed grooming; no connectome-dynamics simulation method identified.",
+      "classification": "Related circuit/behavior comparator, not a connectome-dynamics model or cross-species transfer. Keep distinct from Liew.",
+      "catalogued": false
+    }
+  ],
+  "remaining": [
+    "Complete exact/synonym/author searches",
+    "Backward and forward citation snowballing",
+    "Later dated update"
+  ]
+}

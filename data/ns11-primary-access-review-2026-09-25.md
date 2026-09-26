@@ -1,0 +1,20 @@
+# NS-11 primary access review
+
+Checked 2026-09-25 for S034, S046, S755, and S762. This records exact primary access routes and what their returned contents establish. It does not treat search results or abstracts as substitutes for unavailable full methods.
+
+| Source | Route and observed access | What the primary content establishes | Unresolved from full Methods |
+|---|---|---|---|
+| S034 | [PubMed PMID 40879389](https://pubmed.ncbi.nlm.nih.gov/40879389/) opened to author abstract. [DOI](https://doi.org/10.1227/neu.0000000000003715) directs to Wolters Kluwer/Ovid; publisher full-text route was not accessible via this check. | Abstract names “50% Responder” and “70% Responder” targets and imaging radiomics plus clinical data. | Operational target definitions, follow-up, number of prediction observations, linkage and split. No full Methods text obtained. |
+| S046 | [ScienceDirect abstract](https://www.sciencedirect.com/science/article/abs/pii/S1094715925006439) opened. Publisher [PDF](https://www.neuromodulationjournal.org/article/S1094-7159%2825%2900643-9/pdf) and [fulltext](https://www.neuromodulationjournal.org/article/S1094-7159%2825%2900643-9/fulltext) returned 403. | The publisher abstract says the responder score requires two of three components within three months; its Methods sentence stops after “reduction in morphine milligram”. Reports 16 participants and pre-op EEG/baseline data. | Composite components/thresholds, direct patient-level predictor/outcome linkage, prediction denominator, and split. No expanded Methods obtained. |
+| S755 | [PubMed PMID 31932490](https://pubmed.ncbi.nlm.nih.gov/31932490/) opened to author abstract. BMJ DOI route was inaccessible. A [BMJ publisher preview hosted on ResearchGate](https://www.researchgate.net/publication/338549708_Choice_of_spinal_cord_stimulation_versus_targeted_drug_delivery_in_the_management_of_chronic_pain_a_predictive_formula_for_outcomes) exposes its first page (abstract and part of Introduction), but no Methods. The [BMJ PDF route](https://rapm.bmj.com/content/45/2/131.full.pdf) was inaccessible. | Retrospective Cleveland Clinic records for SCS trials (1994–2013); two clinical cohorts; n=945 total, including 119 who proceeded to TDD after SCS failure. | SCS-success operational threshold, outcome horizon, exact formula-analysis denominator/linkage, and split. Abstract/preview do not supply these. |
+| S762 | [PubMed PMID 32910099](https://pubmed.ncbi.nlm.nih.gov/32910099/) opened to author abstract. [LWW DOI route](https://journals.lww.com/10.1097/j.pain.0000000000002035) was not accessible via retrieval. [VUB institutional listing](https://researchportal.vub.be/en/publications/high-dose-spinal-cord-stimulation-for-patients-with-failed-back-s/) provides bibliography and abstract only. | Abstract states baseline and 1-, 3-, 12-month assessments; 194 recruited, 185 baseline, 92 still receiving HD-SCS at month 12; prediction concerns a 12-month holistic responder combining pain, medication, ODI and EQ-5D domains. | Component thresholds and composite rule, prediction denominator, predictor/outcome linkage, and split. No full Methods or supplement obtained. |
+
+## Decision
+
+The audit JSON preserves reported fields only where the accessible primary text states them. In particular, S034/S762 prediction sample sizes and S046/S755 analysis denominators are not inferred from cohort-flow figures. No patient-disjoint split is claimed for these four sources. PA-05 remains open because the required target, follow-up, and patient-level linkage cannot all be confirmed for every analogy from the accessible primary texts.
+
+## Validation
+
+- `uv run --frozen researchctl validate`: passed; 200 source records, zero integrity errors or warnings.
+- `scripts/check.ps1`: passed after the parallel PA-03 migration lint fixes; 64 tests passed, with one Starlette deprecation warning.
+- `git diff --check` on the permitted audit JSON, this artifact, and PA-05 TODO section: passed (Git reports the repository's existing LF-to-CRLF normalization warning for `TODO.md`).

@@ -1,0 +1,37 @@
+{
+  "meta": {
+    "schema_version": "1.0.0",
+    "checked_at": "2026-09-25",
+    "source_id": "S227",
+    "status": "proceedings_version_verified"
+  },
+  "proceedings_doi": "10.1109/WACV61042.2026.00352",
+  "edition": "2026 IEEE/CVF Winter Conference on Applications of Computer Vision (WACV):3606-3616",
+  "arxiv_id": "2508.12522",
+  "arxiv_versions": [
+    {
+      "version": "v1",
+      "date": "2025-08-17"
+    },
+    {
+      "version": "v2",
+      "date": "2025-12-08"
+    }
+  ],
+  "locators": [
+    {
+      "url": "https://api.crossref.org/works/10.1109%2FWACV61042.2026.00352",
+      "locator": "message.DOI, title, author, container-title, page, published, relation"
+    },
+    {
+      "url": "https://arxiv.org/abs/2508.12522",
+      "locator": "title, authors, WACV 2026 comment, submission history"
+    },
+    {
+      "url": "https://wacv.thecvf.com/Conferences/2026/AcceptedPapers",
+      "locator": "Accepted Papers: matching title and authors"
+    }
+  ],
+  "identity_boundary": "Exact title and authors plus arXiv WACV comment support one study with preprint and proceedings versions. Crossref relation is empty, so this is a curated bibliographic identity, not a registered Crossref preprint-journal relation.",
+  "scientific_boundary": "BioVid/StressID expression adaptation is not patient-linked SCS outcome prediction or a human ECAP transfer validation."
+}

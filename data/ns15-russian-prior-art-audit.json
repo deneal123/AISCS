@@ -1,0 +1,171 @@
+{
+  "meta": {
+    "schema_version": "1.0.0",
+    "checked_at": "2026-09-26",
+    "status": "in_progress",
+    "scope": "NS-15 Russian-language dissertations and primary catalogue records",
+    "decision": "one Bogacheva author abstract method-verified from official institute copy; bounded RSL and official university screen added; no combined Russian direct analogue established; broader NS-15 search remains incomplete"
+  },
+  "queries": [
+    "\"спинномозговая стимуляция\"",
+    "электростимуляция спинного мозга",
+    "\"коннектом\"",
+    "ноцицепция Drosophila",
+    "\"Drosophila\" коннектом",
+    "site:search.rsl.ru/ru/record Drosophila диссертация коннектом",
+    "site:search.rsl.ru/ru/record \"спинного мозга\" стимуляция автореферат диссертация",
+    "site:search.rsl.ru/ru/record Drosophila melanogaster диссертация",
+    "site:search.rsl.ru/ru/record \"электростимуляция спинного мозга\" автореферат",
+    "site:search.rsl.ru/ru/record \"стимуляция спинного мозга\" \"болев\" автореферат",
+    "site:search.rsl.ru/ru/record Drosophila \"нервных центров\" автореферат",
+    "site:search.rsl.ru/ru/record \"коннектом\" диссертация",
+    "site:search.rsl.ru/ru/record \"замкнутом контуре\" стимуляция спинного мозга диссертация"
+  ],
+  "rsl_catalogue_leads": [
+    {
+      "catalogue_id": "01004299840",
+      "author": "Исагулян Эмиль Давидович",
+      "title": "Хроническая электростимуляция спинного и головного мозга в лечении нейрогенных болевых синдромов",
+      "year": 2006,
+      "scope": "Clinical spinal/brain stimulation for neurogenic pain; catalogue title only",
+      "url": "https://search.rsl.ru/ru/record/01004299840",
+      "access_level": "primary_catalogue_record_only",
+      "locator": "RSL record HTML title and MARC bibliographic fields",
+      "full_method_status": "not_checked",
+      "direct_analogue_status": "not_established_from_catalogue"
+    },
+    {
+      "catalogue_id": "01003027412",
+      "author": "Богачева Ирина Николаевна",
+      "title": "Нейрональные механизмы формирования локомоторного паттерна при электрической стимуляции спинного мозга",
+      "year": 2006,
+      "scope": "Inspected official author-abstract text: mammalian spinal electrical stimulation and locomotor stepping/EMG in decerebrated cats and intact/spinalized rats; no Drosophila, ECAP or nociception method found.",
+      "url": "https://www.infran.ru/Diss-Sovet/Bogacheva-text-autoreferat.doc",
+      "access_level": "official_repository_full_text_open",
+      "locator": "Title; methods sections for decerebrated cats and intact/spinalized rats; locomotor stepping and EMG during epidural spinal stimulation",
+      "full_method_status": "inspected_2026-09-25",
+      "direct_analogue_status": "not_established_from_inspected_primary_text"
+    },
+    {
+      "catalogue_id": "01010888313",
+      "author": "Курмуков Анвар Илдарович",
+      "title": "Иерархическая структура коннектомов головного мозга",
+      "year": 2021,
+      "scope": "Official HSE defense summary verifies multimodal noninvasive human neuroimaging and graph/connectome prediction. No Drosophila model, spinal stimulation, ECAP or cross-species transfer is stated in the summary.",
+      "url": "https://search.rsl.ru/ru/record/01010888313",
+      "access_level": "primary_catalogue_and_official_institutional_summary",
+      "locator": "RSL record HTML title and MARC bibliographic fields",
+      "full_method_status": "not_checked",
+      "direct_analogue_status": "not_established_from_official_summary",
+      "official_institutional_dissertation_url": "https://www.hse.ru/sci/diss/497745031",
+      "institutional_record_checked_at": "2026-09-26",
+      "institutional_record_locator": "Official HSE dissertation page, title and dissertation summary: multimodal noninvasive neuroimaging; anatomy/functional brain networks; predictive models for neurodegenerative and psychiatric diseases; human brain network/connectome analysis. The listed full PDF was not method-inspected in this screen."
+    },
+    {
+      "catalogue_id": "01009687642",
+      "author": "Якимова Анна Олеговна",
+      "title": "Нарушения формирования нервных центров и поведения у мутантов по гену sbr (Dm nxf1) Drosophila melanogaster",
+      "year": 2018,
+      "scope": "Drosophila neural development and behavior; no connectome simulation established by catalogue title",
+      "url": "https://search.rsl.ru/ru/record/01009687642",
+      "access_level": "primary_catalogue_record_only",
+      "locator": "RSL record HTML title and MARC bibliographic fields",
+      "full_method_status": "not_checked",
+      "direct_analogue_status": "not_established_from_catalogue"
+    },
+    {
+      "catalogue_id": "01000275094",
+      "author": "Благоразумова, Галина Петровна",
+      "title": "Электростимуляция спинного мозга при спондилогенных миелорадикулоишемиях",
+      "year": 1998,
+      "scope": "RSL bibliographic record verifies a dissertation abstract on spinal-cord electrostimulation for spondylogenic myeloradiculoischemia; catalogue title alone does not establish ECAP control, closed-loop methods, or a Drosophila/connectome relation.",
+      "url": "https://search.rsl.ru/ru/record/01000275094",
+      "access_level": "primary_catalogue_record_only_in_this_screen",
+      "locator": "RSL record heading and MARC fields 001/100/245/260/300/852; author, exact title, St Petersburg, 1998, 21-page dissertation abstract; catalogue advertises its reader as open, but full text was not retrieved in this screen.",
+      "full_method_status": "not_checked_reader_content_not_retrieved",
+      "direct_analogue_status": "not_established_from_catalogue"
+    }
+  ],
+  "access_boundaries": [
+    {
+      "site": "eLIBRARY.RU",
+      "status": "blocked_from_current_environment",
+      "checked_at": "2026-09-25",
+      "url": "https://www.elibrary.ru/defaultx.asp",
+      "locator": "GET redirects with HTTP 302 Location: /ip_blocked.asp; this does not establish database coverage"
+    }
+  ],
+  "remaining": [
+    "Check lawful RSL reader access to two identified author abstracts and extract methods only if text opens",
+    "Authorized eLIBRARY search and independent official university repositories",
+    "Exact/synonym/author searches, backward/forward snowballing and later dated update",
+    "Full methods of remaining relevant dissertations; only Bogacheva author abstract has been method-checked from an official repository copy",
+    "Method-inspect newly identified RSL candidate 01000275094 only if its official reader or an official institutional copy yields the text.",
+    "Inspect candidate 01000302220 only if methods become relevant to neural-circuit/nociception scope; catalogue title currently does not support such an inference.",
+    "Continue systematic RSL and official university dissertation searches and deduplicated citation snowballing; document exact query coverage before any absence claim."
+  ],
+  "abstract_catalogue_leads": [
+    {
+      "catalogue_id": "01003269330",
+      "dissertation_catalogue_id": "01004299840",
+      "author": "Исагулян Эмиль Давидович",
+      "title": "Хроническая электростимуляция спинного и головного мозга в лечении нейрогенных болевых синдромов",
+      "url": "https://search.rsl.ru/ru/record/01003269330",
+      "locator": "RSL record HTML title: author abstract for the dissertation",
+      "full_method_status": "not_checked",
+      "viewer_access": "not_verified_in_current_environment"
+    },
+    {
+      "catalogue_id": "01003282807",
+      "dissertation_catalogue_id": "01003027412",
+      "author": "Богачева Ирина Николаевна",
+      "title": "Нейрональные механизмы формирования локомоторного паттерна при электрической стимуляции спинного мозга",
+      "url": "https://search.rsl.ru/ru/record/01003282807",
+      "locator": "Official Pavlov Institute author abstract; methods describe cat/rat spinal stimulation and locomotion; direct DOC retrieval returned HTTP 200 on 2026-09-25",
+      "full_method_status": "inspected_2026-09-25",
+      "viewer_access": "RSL viewer route returns JavaScript HTML; official Pavlov repository copy is openly retrievable",
+      "official_repository_url": "https://www.infran.ru/Diss-Sovet/Bogacheva-text-autoreferat.doc"
+    }
+  ],
+  "screened_records": [
+    {
+      "catalogue_id": "01000302220",
+      "author": "Васенкова, Ирина Александровна",
+      "title": "Анализ взаимосвязи клеточного и нейроэндокринного ответов на стресс у Drosophila",
+      "year": 2000,
+      "url": "https://search.rsl.ru/ru/record/01000302220",
+      "primary_locator": "RSL heading and MARC fields 001/100/245/260/300/856; 124-page Russian biology dissertation; catalogue exposes a PDF link and declares open access.",
+      "screen_disposition": "possible adjacent Drosophila physiology lead; no methods inspected, and title alone does not establish connectome, nociception or transfer relevance.",
+      "deduplication": "distinct RSL record, not one of the four existing 2006/2021/2018 leads"
+    },
+    {
+      "catalogue_id": "01000341361",
+      "author": "Савицкая, Екатерина Евгеньевна",
+      "title": "Механизм действия Su(Hw) инсулятора Drosophila melanogaster",
+      "year": 2001,
+      "url": "https://search.rsl.ru/ru/record/01000341361",
+      "primary_locator": "RSL heading and MARC fields 001/100/245/260/300/650/856; molecular-genetics dissertation record.",
+      "screen_disposition": "screened out as unrelated at catalogue scope; title/classification concern molecular genetics, no connectome/nociception/ECAP/SCS signal; full text not inspected.",
+      "deduplication": "distinct contextual record, excluded from direct-analogue candidate count"
+    }
+  ],
+  "screening_runs": [
+    {
+      "checked_at": "2026-09-26",
+      "scope": "bounded discovery screen of RSL indexed dissertation/author-abstract records and official HSE dissertation page; Drosophila/connectome/nociception, spinal stimulation/pain/ECAP/closed-loop, and cross-species transfer terms.",
+      "methods": [
+        "Search-engine site-scoped queries targeting search.rsl.ru/ru/record with Russian and English species/connectome, pain/stimulation, and closed-loop terms.",
+        "Opened RSL primary catalogue pages for Bogacheva 01003282807, Blagorazumova 01000275094, Vasen(k)ova 01000302220, and Savitskaya 01000341361; inspected displayed headings and MARC fields where page content was available.",
+        "Official HSE dissertation page surfaced with title/summary in search results; direct page fetch timed out. The displayed search-result content supports only the listed dissertation summary; underlying thesis PDF was not inspected.",
+        "No eLIBRARY searches were performed because existing audit records its current-environment IP-block redirect; this screen does not infer anything from that inaccessible database."
+      ],
+      "incremental_findings": [
+        "Official HSE defense summary for Kurmukov corroborates human multimodal noninvasive neuroimaging/connectome prediction, not Drosophila or ECAP/SCS transfer.",
+        "RSL record 01000275094 adds a bibliographic SCS/pain-related dissertation abstract candidate, but reader text/method was not retrieved; keep distinct from method-verified evidence.",
+        "RSL record 01000302220 is an adjacent Drosophila stress/neuroendocrine dissertation; title-only and not evidence of connectome or nociception methods."
+      ],
+      "deduplication": "Kurmukov 01010888313 is an existing candidate, enriched by official HSE dissertation page; Bogacheva 01003282807 and Isagulyan 01003269330/01004299840 remain existing paired author-abstract/dissertation entries; additional records are keyed by distinct RSL catalogue IDs. No extra count is assigned to a record plus its paired dissertation/abstract entry.",
+      "coverage_limit": "This bounded indexed search is not an exhaustive RSL, university-repository, eLIBRARY, dissertation, or forward/backward citation search; no negative-absence claim is made."
+    }
+  ]
+}

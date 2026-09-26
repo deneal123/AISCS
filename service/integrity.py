@@ -9,7 +9,9 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import urlsplit
 
+from .completeness import RESOLUTION_STATES, completeness_summary, validate_resolutions
 from .core import DataError, load_json, sha256
+from .novelty import validate_novelty_artifacts
 
 LEGACY_FIELDS = (
     "название",
@@ -56,6 +58,8 @@ def validate_source_record(
     for field in LEGACY_FIELDS:
         if record.get(field) == "Не указано":
             errors.append(f"{source_id}: placeholder remains in {field}")
+    if schema.get("title", "").endswith("schema 2.0"):
+        errors.extend(validate_resolutions(record))
 
     validation = record.get("validation")
     evidence = record.get("evidence")
@@ -167,6 +171,351 @@ def _load_required(root: Path, name: str, errors: list[str]) -> dict[str, Any]:
     except DataError as exc:
         errors.append(str(exc))
         return {}
+
+
+def _validate_ecap_scs_audit(
+    audit: dict[str, Any], canonical_ids: set[str]
+) -> list[str]:
+    errors: list[str] = []
+    if audit.get("meta", {}).get("schema_version") != "1.0.0":
+        errors.append("ECAP/SCS audit: unsupported schema version")
+    dimensions = ("sample", "electrode_geometry", "stimulation", "split_unit", "metrics")
+    allowed_states = {
+        "reported",
+        "not_reported",
+        "not_applicable",
+        "unavailable_after_search",
+    }
+    entries = audit.get("entries")
+    if not isinstance(entries, list) or not entries:
+        return errors + ["ECAP/SCS audit: non-empty entries array required"]
+    seen: set[str] = set()
+    for entry in entries:
+        if not isinstance(entry, dict):
+            errors.append("ECAP/SCS audit: entry must be an object")
+            continue
+        source_id = entry.get("source_id")
+        if source_id not in canonical_ids:
+            errors.append(f"ECAP/SCS audit: missing source {source_id!r}")
+        if source_id in seen:
+            errors.append(f"ECAP/SCS audit: duplicate source {source_id}")
+        seen.add(source_id)
+        extraction = entry.get("extraction")
+        if not isinstance(extraction, dict):
+            errors.append(f"ECAP/SCS audit: {source_id} lacks extraction")
+            continue
+        if set(extraction) != set(dimensions):
+            errors.append(f"ECAP/SCS audit: {source_id} requires exactly {dimensions}")
+        for dimension in dimensions:
+            item = extraction.get(dimension)
+            if not isinstance(item, dict):
+                errors.append(f"ECAP/SCS audit: {source_id}.{dimension} must be an object")
+                continue
+            state = item.get("state")
+            value = item.get("value")
+            if state not in allowed_states:
+                errors.append(f"ECAP/SCS audit: {source_id}.{dimension} bad state {state!r}")
+            if state == "reported" and value in (None, "", []):
+                errors.append(f"ECAP/SCS audit: {source_id}.{dimension} reported without value")
+            if state != "reported" and value is not None:
+                errors.append(
+                    f"ECAP/SCS audit: {source_id}.{dimension} terminal state must use null"
+                )
+            if not item.get("reason") or not item.get("checked_at"):
+                errors.append(f"ECAP/SCS audit: {source_id}.{dimension} lacks reason/date")
+            locators = item.get("locators")
+            if not isinstance(locators, list) or not locators:
+                errors.append(f"ECAP/SCS audit: {source_id}.{dimension} lacks locators")
+                continue
+            for locator in locators:
+                if (
+                    not isinstance(locator, dict)
+                    or not locator.get("url")
+                    or not locator.get("locator")
+                ):
+                    errors.append(f"ECAP/SCS audit: {source_id}.{dimension} has invalid locator")
+    if audit.get("meta", {}).get("records_count") != len(entries):
+        errors.append("ECAP/SCS audit: records_count mismatch")
+    return errors
+
+
+def _validate_drosophila_connectome_audit(
+    audit: dict[str, Any], canonical_ids: set[str]
+) -> list[str]:
+    errors: list[str] = []
+    label = "Drosophila connectome audit"
+    if audit.get("meta", {}).get("schema_version") != "1.0.0":
+        errors.append(f"{label}: unsupported schema version")
+    dimensions = (
+        "connectome_version",
+        "organism_sex_stage",
+        "dynamic_model",
+        "experimental_comparator",
+        "scope_boundary",
+    )
+    allowed_states = {
+        "reported",
+        "not_reported",
+        "not_applicable",
+        "unavailable_after_search",
+    }
+    entries = audit.get("entries")
+    if not isinstance(entries, list) or not entries:
+        return errors + [f"{label}: non-empty entries array required"]
+    seen: set[str] = set()
+    for entry in entries:
+        if not isinstance(entry, dict):
+            errors.append(f"{label}: entry must be an object")
+            continue
+        source_id = entry.get("source_id")
+        if source_id not in canonical_ids:
+            errors.append(f"{label}: missing source {source_id!r}")
+        if source_id in seen:
+            errors.append(f"{label}: duplicate source {source_id}")
+        seen.add(source_id)
+        extraction = entry.get("extraction")
+        if not isinstance(extraction, dict):
+            errors.append(f"{label}: {source_id} lacks extraction")
+            continue
+        if set(extraction) != set(dimensions):
+            errors.append(f"{label}: {source_id} requires exactly {dimensions}")
+        for dimension in dimensions:
+            item = extraction.get(dimension)
+            if not isinstance(item, dict):
+                errors.append(f"{label}: {source_id}.{dimension} must be an object")
+                continue
+            state = item.get("state")
+            value = item.get("value")
+            if state not in allowed_states:
+                errors.append(f"{label}: {source_id}.{dimension} bad state {state!r}")
+            if state == "reported" and value in (None, "", []):
+                errors.append(f"{label}: {source_id}.{dimension} lacks value")
+            if state != "reported" and value is not None:
+                errors.append(f"{label}: {source_id}.{dimension} terminal value must be null")
+            if not item.get("reason") or not item.get("checked_at"):
+                errors.append(f"{label}: {source_id}.{dimension} lacks reason/date")
+            locators = item.get("locators")
+            if not isinstance(locators, list) or not locators:
+                errors.append(f"{label}: {source_id}.{dimension} lacks locators")
+                continue
+            if any(
+                not isinstance(locator, dict)
+                or not locator.get("url")
+                or not locator.get("locator")
+                for locator in locators
+            ):
+                errors.append(f"{label}: {source_id}.{dimension} has invalid locator")
+    if audit.get("meta", {}).get("records_count") != len(entries):
+        errors.append(f"{label}: records_count mismatch")
+    return errors
+
+
+def _validate_human_ecap_access_audit(
+    audit: dict[str, Any], canonical_ids: set[str]
+) -> list[str]:
+    label = "human ECAP/SCS access audit"
+    errors: list[str] = []
+    if audit.get("meta", {}).get("schema_version") != "1.0.0":
+        errors.append(f"{label}: unsupported schema version")
+    candidates = audit.get("candidates")
+    if not isinstance(candidates, list) or not candidates:
+        return errors + [f"{label}: non-empty candidates required"]
+    dimensions = {
+        "access_procedure",
+        "ethics_secondary_use",
+        "consent_dua",
+        "patient_linkage",
+        "outcomes",
+        "ecap_signal",
+    }
+    allowed = {
+        "confirmed_by_owner",
+        "confirmed_by_institution",
+        "confirmed_in_study",
+        "partial",
+        "planned",
+        "unconfirmed",
+        "conflicting",
+    }
+    seen: set[str] = set()
+    for candidate in candidates:
+        if not isinstance(candidate, dict):
+            errors.append(f"{label}: candidate must be an object")
+            continue
+        candidate_id = candidate.get("id")
+        if not isinstance(candidate_id, str) or candidate_id in seen:
+            errors.append(f"{label}: candidate IDs must be present and unique")
+        else:
+            seen.add(candidate_id)
+        if not candidate.get("owner") or not candidate.get("trial_id"):
+            errors.append(f"{label}: {candidate_id} lacks owner/trial")
+        source_refs = candidate.get("source_refs")
+        if not isinstance(source_refs, list) or any(
+            ref not in canonical_ids for ref in source_refs
+        ):
+            errors.append(f"{label}: {candidate_id} has an unknown source reference")
+        checks = candidate.get("checks")
+        if not isinstance(checks, dict) or set(checks) != dimensions:
+            errors.append(f"{label}: {candidate_id} requires exactly {sorted(dimensions)}")
+            continue
+        for dimension, item in checks.items():
+            if not isinstance(item, dict) or item.get("state") not in allowed:
+                errors.append(f"{label}: {candidate_id}.{dimension} invalid state")
+                continue
+            if (
+                not item.get("finding")
+                or not isinstance(item.get("locators"), list)
+                or not item["locators"]
+            ):
+                errors.append(f"{label}: {candidate_id}.{dimension} lacks finding/locators")
+                continue
+            for locator in item["locators"]:
+                if (
+                    not isinstance(locator, dict)
+                    or not locator.get("url")
+                    or not locator.get("locator")
+                ):
+                    errors.append(f"{label}: {candidate_id}.{dimension} invalid locator")
+        if candidate.get("owner_confirmation_received") and not candidate.get(
+            "owner_confirmation_evidence"
+        ):
+            errors.append(f"{label}: {candidate_id} lacks owner confirmation evidence")
+        if candidate.get("decision") == "usable":
+            if not candidate.get("owner_confirmation_received"):
+                errors.append(
+                    f"{label}: {candidate_id} cannot be usable without owner confirmation"
+                )
+            elif (
+                not isinstance(checks.get("ethics_secondary_use"), dict)
+                or checks["ethics_secondary_use"].get("state") != "confirmed_by_institution"
+            ):
+                errors.append(
+                    f"{label}: {candidate_id} cannot be usable without institutional ethics "
+                    "determination"
+                )
+            elif any(
+                not isinstance(checks.get(dimension), dict)
+                or checks[dimension].get("state") != "confirmed_by_owner"
+                for dimension in dimensions - {"ethics_secondary_use"}
+            ):
+                errors.append(
+                    f"{label}: {candidate_id} cannot be usable with unresolved owner-controlled "
+                    "checks"
+                )
+    if audit.get("meta", {}).get("decision") == "owner_confirmed_usable_dataset" and not any(
+        item.get("decision") == "usable" for item in candidates if isinstance(item, dict)
+    ):
+        errors.append(f"{label}: positive decision lacks a usable candidate")
+    return errors
+
+
+def _validate_resolution_audit(
+    audit: dict[str, Any],
+    canonical_ids: set[str],
+    *,
+    label: str,
+    dimensions: set[str],
+) -> list[str]:
+    errors: list[str] = []
+    if audit.get("meta", {}).get("schema_version") != "1.0.0":
+        errors.append(f"{label}: unsupported schema version")
+    entries = audit.get("entries")
+    if not isinstance(entries, list) or not entries:
+        return errors + [f"{label}: non-empty entries array required"]
+    states = {"reported", "not_reported", "not_applicable", "unavailable_after_search"}
+    seen: set[str] = set()
+    for entry in entries:
+        if not isinstance(entry, dict):
+            errors.append(f"{label}: entry must be an object")
+            continue
+        source_id = entry.get("source_id")
+        if source_id not in canonical_ids or source_id in seen:
+            errors.append(f"{label}: missing or duplicate source {source_id!r}")
+        seen.add(source_id)
+        extraction = entry.get("extraction")
+        if not isinstance(extraction, dict) or set(extraction) != dimensions:
+            errors.append(f"{label}: {source_id} requires {sorted(dimensions)}")
+            continue
+        for dimension, item in extraction.items():
+            if not isinstance(item, dict):
+                errors.append(f"{label}: {source_id}.{dimension} must be an object")
+                continue
+            state = item.get("state")
+            value = item.get("value")
+            if (
+                state not in states
+                or (state == "reported" and value in (None, "", []))
+                or (state != "reported" and value is not None)
+            ):
+                errors.append(f"{label}: {source_id}.{dimension} has invalid state/value")
+            if not item.get("reason") or not item.get("checked_at"):
+                errors.append(f"{label}: {source_id}.{dimension} lacks reason/date")
+            locators = item.get("locators")
+            if not isinstance(locators, list) or not locators or any(
+                not isinstance(locator, dict)
+                or not locator.get("url")
+                or not locator.get("locator")
+                for locator in locators
+            ):
+                errors.append(f"{label}: {source_id}.{dimension} lacks primary locator")
+    if audit.get("meta", {}).get("records_count") != len(entries):
+        errors.append(f"{label}: records_count mismatch")
+    return errors
+
+
+def _validate_ns06_prior_art_audit(
+    audit: dict[str, Any], canonical_ids: set[str], variant_ids: set[str]
+) -> list[str]:
+    label = "NS-06 prior-art audit"
+    errors: list[str] = []
+    if audit.get("meta", {}).get("schema_version") != "1.0.0":
+        errors.append(f"{label}: unsupported schema version")
+    if audit.get("meta", {}).get("status") != "open":
+        errors.append(f"{label}: status must remain open while remaining checks exist")
+    baseline = audit.get("s149_baseline", {})
+    if baseline.get("source_id") != "S149" or not baseline.get("mechanism"):
+        errors.append(f"{label}: missing S149 mechanism baseline")
+    baseline_locator = baseline.get("locator")
+    if (
+        not isinstance(baseline_locator, dict)
+        or not baseline_locator.get("url")
+        or not baseline_locator.get("section")
+    ):
+        errors.append(f"{label}: S149 baseline lacks primary locator")
+    entries = audit.get("analogue_decisions")
+    if not isinstance(entries, list) or not entries:
+        return errors + [f"{label}: non-empty analogue_decisions required"]
+    seen: set[str] = set()
+    for entry in entries:
+        if not isinstance(entry, dict):
+            errors.append(f"{label}: analogue entry must be an object")
+            continue
+        source_id = entry.get("source_id")
+        if source_id not in canonical_ids or source_id in seen:
+            errors.append(f"{label}: unknown or duplicate source {source_id!r}")
+        seen.add(source_id)
+        if not entry.get("mechanism") or not entry.get("relation_to_s149"):
+            errors.append(f"{label}: {source_id} lacks mechanism decision")
+        locator = entry.get("locator")
+        if not isinstance(locator, dict) or not locator.get("url") or not locator.get("section"):
+            errors.append(f"{label}: {source_id} lacks primary locator")
+    if not {"S758", "S759"}.issubset(seen):
+        errors.append(f"{label}: new synthetic analogues are missing")
+    decisions = audit.get("variant_decisions", [])
+    if not isinstance(decisions, list) or not decisions:
+        errors.append(f"{label}: variant decisions required")
+    else:
+        for item in decisions:
+            if not isinstance(item, dict) or item.get("variant_id") not in variant_ids:
+                errors.append(f"{label}: unknown variant decision")
+            elif not item.get("decision") or not item.get("reason"):
+                errors.append(f"{label}: incomplete variant decision")
+    forward = audit.get("citation_search", {}).get("s149_forward", {})
+    if forward.get("state") == "no_indexed_citation_found" and not forward.get("limit"):
+        errors.append(f"{label}: zero-indexed-citation claim lacks coverage limit")
+    if not audit.get("remaining"):
+        errors.append(f"{label}: open audit lacks remaining checks")
+    return errors
 
 
 def _validate_scientific_artifacts(
@@ -322,6 +671,18 @@ def validate_repository(root: Path | str) -> dict[str, Any]:
     vocab = _load_required(root, "vocabularies.json", errors)
     contract_path = root / "scientific-contract.json"
     matrix_path = root / "human-dataset-matrix.json"
+    novelty_path = root / "novelty-landscape.json"
+    concept_path = root / "dissertation-concept.json"
+    search_path = root / "search-protocol.json"
+    runtime_path = root / "runtime-audit.json"
+    ecap_scs_audit_path = root / "ecap-scs-audit.json"
+    connectome_audit_path = root / "drosophila-connectome-audit.json"
+    nociception_audit_path = root / "drosophila-nociception-audit.json"
+    synthetic_audit_path = root / "synthetic-domain-audit.json"
+    ns06_audit_path = root / "ns06-prior-art-audit.json"
+    scs_outcome_audit_path = root / "scs-outcome-audit.json"
+    ns11_audit_path = root / "ns11-prediction-audit.json"
+    human_ecap_access_path = root / "human-ecap-scs-access-audit.json"
     has_scientific_artifacts = contract_path.is_file() or matrix_path.is_file()
     if (root / "staging").is_dir() or has_scientific_artifacts:
         contract = _load_required(root, "scientific-contract.json", errors)
@@ -329,6 +690,69 @@ def validate_repository(root: Path | str) -> dict[str, Any]:
     else:
         contract = {}
         human_datasets = {}
+    has_novelty_artifacts = (
+        novelty_path.is_file() or concept_path.is_file() or search_path.is_file()
+    )
+    if has_novelty_artifacts:
+        novelty = _load_required(root, "novelty-landscape.json", errors)
+        concept = _load_required(root, "dissertation-concept.json", errors)
+        search_protocol = _load_required(root, "search-protocol.json", errors)
+        completeness = _load_required(root, "completeness-report.json", errors)
+        runtime_audit = _load_required(root, runtime_path.name, errors)
+        ecap_scs_audit = (
+            _load_required(root, ecap_scs_audit_path.name, errors)
+            if ecap_scs_audit_path.is_file()
+            else {}
+        )
+        connectome_audit = (
+            _load_required(root, connectome_audit_path.name, errors)
+            if connectome_audit_path.is_file()
+            else {}
+        )
+        nociception_audit = (
+            _load_required(root, nociception_audit_path.name, errors)
+            if nociception_audit_path.is_file()
+            else {}
+        )
+        synthetic_audit = (
+            _load_required(root, synthetic_audit_path.name, errors)
+            if synthetic_audit_path.is_file()
+            else {}
+        )
+        ns06_audit = (
+            _load_required(root, ns06_audit_path.name, errors)
+            if ns06_audit_path.is_file()
+            else {}
+        )
+        scs_outcome_audit = (
+            _load_required(root, scs_outcome_audit_path.name, errors)
+            if scs_outcome_audit_path.is_file()
+            else {}
+        )
+        ns11_audit = (
+            _load_required(root, ns11_audit_path.name, errors)
+            if ns11_audit_path.is_file()
+            else {}
+        )
+        human_ecap_access = (
+            _load_required(root, human_ecap_access_path.name, errors)
+            if human_ecap_access_path.is_file()
+            else {}
+        )
+    else:
+        novelty = {}
+        concept = {}
+        search_protocol = {}
+        completeness = {}
+        runtime_audit = {}
+        ecap_scs_audit = {}
+        connectome_audit = {}
+        nociception_audit = {}
+        synthetic_audit = {}
+        ns06_audit = {}
+        scs_outcome_audit = {}
+        ns11_audit = {}
+        human_ecap_access = {}
     if errors:
         return {"ok": False, "errors": errors, "warnings": warnings, "counts": {}}
 
@@ -343,6 +767,17 @@ def validate_repository(root: Path | str) -> dict[str, Any]:
         errors.append("records: duplicate ids")
     if records.get("meta", {}).get("records_count") != len(sources):
         errors.append("records: meta.records_count mismatch")
+    runtime_candidates = runtime_audit.get("candidates", [])
+    if not isinstance(runtime_candidates, list):
+        errors.append("runtime audit: candidates must be an array")
+        runtime_candidates = []
+    runtime_ids = [
+        item.get("resource_id") for item in runtime_candidates if isinstance(item, dict)
+    ]
+    if len(runtime_ids) != len(runtime_candidates) or len(runtime_ids) != len(
+        set(runtime_ids)
+    ):
+        errors.append("runtime audit: candidate resource IDs must be present and unique")
     for record in sources:
         if isinstance(record, dict):
             errors.extend(validate_source_record(record, schema, vocab))
@@ -357,7 +792,105 @@ def validate_repository(root: Path | str) -> dict[str, Any]:
     if len(exact_keys) != len(set(exact_keys)):
         errors.append("records: exact duplicates remain")
 
+    identifier_fields = ("doi", "pmid", "arxiv_id", "patent_id", "dataset_id")
+    seen_identifiers: dict[tuple[str, str], str] = {}
+    for record in sources:
+        if not isinstance(record, dict):
+            continue
+        source_id = str(record.get("id"))
+        identifiers = record.get("identifiers", {})
+        for field in identifier_fields:
+            raw_value = identifiers.get(field) if isinstance(identifiers, dict) else None
+            if not isinstance(raw_value, str) or not raw_value.strip():
+                continue
+            value = raw_value.strip().casefold()
+            if field == "doi":
+                value = value.removeprefix("https://doi.org/").removeprefix("doi:")
+            key = (field, value)
+            previous = seen_identifiers.get(key)
+            if previous:
+                errors.append(
+                    f"records: duplicate {field} {raw_value!r} in {previous} and {source_id}"
+                )
+            else:
+                seen_identifiers[key] = source_id
+
     canonical_ids = set(ids)
+    if ecap_scs_audit:
+        errors.extend(_validate_ecap_scs_audit(ecap_scs_audit, canonical_ids))
+    if connectome_audit:
+        errors.extend(_validate_drosophila_connectome_audit(connectome_audit, canonical_ids))
+    if nociception_audit:
+        errors.extend(
+            _validate_resolution_audit(
+                nociception_audit,
+                canonical_ids,
+                label="Drosophila nociception audit",
+                dimensions={"stimulus", "neural_response", "behavior", "pain_boundary"},
+            )
+        )
+        ns03 = next(
+            (
+                item
+                for item in search_protocol.get("search_streams", [])
+                if item.get("id") == "NS-03"
+            ),
+            {},
+        )
+        candidate_ids = nociception_audit.get("meta", {}).get("candidate_source_ids", [])
+        remaining_ids = nociception_audit.get("meta", {}).get("remaining_source_ids", [])
+        reviewed_ids = [entry.get("source_id") for entry in nociception_audit.get("entries", [])]
+        if (
+            not isinstance(candidate_ids, list)
+            or not isinstance(remaining_ids, list)
+            or len(candidate_ids) != len(set(candidate_ids))
+            or len(remaining_ids) != len(set(remaining_ids))
+            or set(candidate_ids) != set(ns03.get("source_ids", []))
+            or set(reviewed_ids) & set(remaining_ids)
+            or set(reviewed_ids) | set(remaining_ids) != set(candidate_ids)
+        ):
+            errors.append("Drosophila nociception audit: NS-03 candidate coverage mismatch")
+    if human_ecap_access:
+        errors.extend(_validate_human_ecap_access_audit(human_ecap_access, canonical_ids))
+    if synthetic_audit:
+        errors.extend(
+            _validate_resolution_audit(
+                synthetic_audit,
+                canonical_ids,
+                label="synthetic/domain audit",
+                dimensions={
+                    "real_data_provenance",
+                    "leakage_control",
+                    "split_unit",
+                    "external_test",
+                },
+            )
+        )
+    if ns06_audit:
+        variant_ids = {
+            variant.get("id")
+            for variant in novelty.get("variants", [])
+            if isinstance(variant, dict)
+        }
+        errors.extend(_validate_ns06_prior_art_audit(ns06_audit, canonical_ids, variant_ids))
+    if scs_outcome_audit:
+        errors.extend(
+            _validate_resolution_audit(
+                scs_outcome_audit,
+                canonical_ids,
+                label="SCS outcome audit",
+                dimensions={"input_role", "target_role", "study_design", "prognostic_validation"},
+            )
+        )
+    if ns11_audit:
+        errors.extend(
+            _validate_resolution_audit(
+                ns11_audit,
+                canonical_ids,
+                label="NS-11 prediction audit",
+                dimensions={"target", "follow_up", "patient_linkage"},
+            )
+        )
     for record in sources:
         if not isinstance(record, dict):
             continue
@@ -391,6 +924,11 @@ def validate_repository(root: Path | str) -> dict[str, Any]:
                 break
             current = str(entry.get("canonical_id"))
 
+    canonical_by_id = {
+        source["id"]: source
+        for source in sources
+        if isinstance(source, dict) and isinstance(source.get("id"), str)
+    }
     active_clusters = clusters.get("clusters", [])
     if clusters.get("meta", {}).get("clusters_count") != len(active_clusters):
         errors.append("clusters: meta.clusters_count mismatch")
@@ -408,9 +946,16 @@ def validate_repository(root: Path | str) -> dict[str, Any]:
         missing = set(members) - canonical_ids
         if missing:
             errors.append(f"clusters: missing refs in {cluster_id}: {sorted(missing)}")
-        representative = (cluster.get("представитель") or {}).get("id")
+        representative_record = cluster.get("представитель") or {}
+        representative = representative_record.get("id")
         if representative not in members:
             errors.append(f"clusters: invalid representative in {cluster_id}")
+        if (
+            str(records.get("meta", {}).get("schema_version", "")).startswith("2.")
+            and representative in canonical_by_id
+            and representative_record != canonical_by_id[representative]
+        ):
+            errors.append(f"clusters: stale representative in {cluster_id}: {representative}")
     cluster_meta = clusters.get("meta", {})
     if cluster_meta.get("cluster_references_count") != len(refs):
         errors.append("clusters: reference count mismatch")
@@ -418,6 +963,16 @@ def validate_repository(root: Path | str) -> dict[str, Any]:
         errors.append("clusters: unique reference count mismatch")
     if set(clusters.get("unclustered_record_ids", [])) != canonical_ids - set(refs):
         errors.append("clusters: unclustered_record_ids mismatch")
+    unclustered_decisions = clusters.get("unclustered_decisions", {})
+    if not isinstance(unclustered_decisions, dict):
+        errors.append("clusters: unclustered_decisions must be an object")
+    else:
+        misplaced_decisions = set(unclustered_decisions) - (canonical_ids - set(refs))
+        if misplaced_decisions:
+            errors.append(
+                "clusters: unclustered_decisions reference clustered or unknown records: "
+                f"{sorted(misplaced_decisions)}"
+            )
     expected_multi = {source_id: count for source_id, count in Counter(refs).items() if count > 1}
     if clusters.get("multiple_membership", {}) != expected_multi:
         errors.append("clusters: multiple_membership mismatch")
@@ -439,7 +994,7 @@ def validate_repository(root: Path | str) -> dict[str, Any]:
             continue
         status = resource["статус_валидации"]
         resource_statuses[status] += 1
-        if resource_schema == "1.2.0":
+        if resource_schema in {"1.2.0", "2.0.0"}:
             resource_id = resource.get("resource_id")
             if not isinstance(resource_id, str) or not re.fullmatch(r"ST\d{3,}", resource_id):
                 errors.append(f"ST: invalid resource_id {resource_id!r}")
@@ -458,9 +1013,35 @@ def validate_repository(root: Path | str) -> dict[str, Any]:
                     errors.append(f"ST: verified resource {resource_id} lacks exact URL")
                 if not resource.get("проверено"):
                     errors.append(f"ST: verified resource {resource_id} lacks checked date")
-    if resource_schema == "1.2.0":
+            if resource_schema == "2.0.0":
+                technical = resource.get("technical_resolution")
+                expected = {"version_or_commit", "license", "data_access", "reproducibility"}
+                if not isinstance(technical, dict) or set(technical) != expected:
+                    errors.append(f"ST: incomplete technical resolution for {resource_id}")
+                else:
+                    for field, resolution in technical.items():
+                        state = resolution.get("state") if isinstance(resolution, dict) else None
+                        if state not in RESOLUTION_STATES:
+                            errors.append(
+                                f"ST: invalid {field} resolution state for {resource_id}"
+                            )
+                        if not resolution.get("reason") or not resolution.get("checked_at"):
+                            errors.append(f"ST: incomplete {field} resolution for {resource_id}")
+                        if not resolution.get("locators"):
+                            errors.append(f"ST: missing {field} locator for {resource_id}")
+                        if state == "reported" and resolution.get("value") is None:
+                            errors.append(f"ST: reported {field} lacks value for {resource_id}")
+                        if state != "reported" and resolution.get("value") is not None:
+                            errors.append(f"ST: terminal {field} has value for {resource_id}")
+    if resource_schema in {"1.2.0", "2.0.0"}:
         if len(resource_ids) != len(set(resource_ids)):
             errors.append("ST: duplicate resource IDs")
+        missing_runtime_resources = set(runtime_ids) - set(resource_ids)
+        if missing_runtime_resources:
+            errors.append(
+                "runtime audit: missing ST resource IDs "
+                f"{sorted(missing_runtime_resources)}"
+            )
         if resources.get("meta", {}).get("статусы_ресурсов") != dict(
             sorted(resource_statuses.items())
         ):
@@ -480,6 +1061,48 @@ def validate_repository(root: Path | str) -> dict[str, Any]:
                 contract, human_datasets, canonical_ids, set(resource_ids), vocab
             )
         )
+
+    if novelty or concept or search_protocol:
+        errors.extend(
+            validate_novelty_artifacts(
+                novelty, concept, search_protocol, canonical_ids, set(resource_ids)
+            )
+        )
+        current_completeness = completeness_summary(
+            [item for item in sources if isinstance(item, dict)]
+        )
+        if completeness.get("records") != len(sources):
+            errors.append("completeness report: record count mismatch")
+        if completeness.get("unresolved_count") != current_completeness["unresolved_count"]:
+            errors.append("completeness report: unresolved count mismatch")
+        if completeness.get("states") != current_completeness["states"]:
+            errors.append("completeness report: state counters mismatch")
+        if current_completeness["unresolved_count"]:
+            errors.append("completeness report: unresolved source fields remain")
+
+    review_ledger_path = root / "evidence-review-ledger.json"
+    if review_ledger_path.is_file():
+        try:
+            review_ledger = load_json(review_ledger_path)
+            review_entries = review_ledger.get("entries")
+            if not isinstance(review_entries, dict) or review_ledger.get("meta", {}).get(
+                "entry_count"
+            ) != len(review_entries):
+                errors.append("evidence review ledger: entry count mismatch")
+            else:
+                for name, entry in review_entries.items():
+                    if (
+                        not isinstance(name, str)
+                        or not re.fullmatch(r"[A-Za-z0-9_-]+\.json", name)
+                        or not isinstance(entry, dict)
+                        or not re.fullmatch(
+                            r"[0-9a-f]{64}", str(entry.get("sha256_original", ""))
+                        )
+                        or not isinstance(entry.get("review"), dict)
+                    ):
+                        errors.append(f"evidence review ledger: malformed entry {name}")
+        except (DataError, AttributeError) as exc:
+            errors.append(f"evidence review ledger: {exc}")
 
     manifest_count = 0
     for manifest_path in sorted((root / "archive").glob("*/manifest.json")):
@@ -514,5 +1137,9 @@ def validate_repository(root: Path | str) -> dict[str, Any]:
         "retired_clusters": len(clusters.get("retired_clusters", [])),
         "resources": len(resource_items),
         "archive_manifests": manifest_count,
+        "novelty_variants": len(novelty.get("variants", [])),
+        "unresolved_fields": (
+            completeness.get("unresolved_count") if completeness else None
+        ),
     }
     return {"ok": not errors, "errors": errors, "warnings": warnings, "counts": counts}

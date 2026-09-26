@@ -1,0 +1,38 @@
+{
+  "meta": {
+    "schema_version": "1.0.0",
+    "checked_at": "2026-09-25",
+    "status": "three_rejected_sources_recovered"
+  },
+  "entries": [
+    {
+      "source_id": "S013",
+      "status": "verified_primary",
+      "primary_urls": [
+        "https://digital.lib.washington.edu/researchworks/items/622bc2dc-af95-4861-bc13-a91cab65eac8",
+        "https://digital.lib.washington.edu/bitstreams/72513a4e-85b8-48f2-a5c0-f2446d758fe3/download"
+      ],
+      "locator": "repository citation meta tags; PDF title page, Abstract, Chapter 2 Results pp. 19-36 and Methods pp. 44-59",
+      "boundary": "Thesis Chapter 2 overlaps S029; adult nociceptive behavior is not subjective pain or human transfer."
+    },
+    {
+      "source_id": "S018",
+      "status": "verified_metadata",
+      "primary_urls": [
+        "https://api.crossref.org/works/10.1145%2F3812836.3814769"
+      ],
+      "locator": "Crossref message.DOI, title, author, container-title, page, published",
+      "boundary": "ACM page HTTP 403; methods, cohort, outcome and split remain unverified."
+    },
+    {
+      "source_id": "S233",
+      "status": "verified_primary_context_only",
+      "primary_urls": [
+        "https://zenodo.org/api/records/18911337",
+        "https://zenodo.org/api/records/18911337/files/Devadas_MousingProblem_Zenodo_March2026.docx/content"
+      ],
+      "locator": "Zenodo metadata.title, doi, creators, publication_date, resource_type, files; author DOCX title page, abstract and conclusion",
+      "boundary": "Position paper, no new empirical simulation or suffering measurement."
+    }
+  ]
+}

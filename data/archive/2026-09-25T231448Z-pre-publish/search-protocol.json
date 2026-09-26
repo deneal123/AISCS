@@ -1,0 +1,1304 @@
+{
+  "meta": {
+    "schema_version": "1.0.0",
+    "created_at": "2026-09-23",
+    "cutoff": "2026-09-25",
+    "status": "first_cycle_open"
+  },
+  "databases": [
+    "PubMed",
+    "Crossref",
+    "OpenAlex",
+    "IEEE Xplore",
+    "arXiv",
+    "bioRxiv",
+    "ClinicalTrials.gov",
+    "WIPO Patentscope",
+    "EPO Espacenet",
+    "USPTO",
+    "FIPS",
+    "Russian State Library",
+    "eLIBRARY",
+    "official code repositories"
+  ],
+  "languages": [
+    "en",
+    "ru"
+  ],
+  "primary_source_policy": "Search engines and aggregators may discover records; technical claims require a publisher, registry, patent office, dataset owner, or official repository.",
+  "search_streams": [
+    {
+      "id": "NS-01",
+      "topic": "Drosophila brain-and-cord connectome",
+      "status": "initial_pass_recorded",
+      "source_ids": [
+        "S738",
+        "S763",
+        "S773",
+        "S774"
+      ],
+      "queries_required": [
+        "exact phrase",
+        "synonym expansion",
+        "author search"
+      ],
+      "snowballing": "backward_and_forward_required",
+      "coverage_note": "Primary connectome/data or dynamics comparator cards were added on 2026-09-25; backward and forward citation screening and a later dated refresh remain open."
+    },
+    {
+      "id": "NS-02",
+      "topic": "connectome-constrained Drosophila dynamics",
+      "status": "initial_pass_recorded",
+      "source_ids": [
+        "S739",
+        "S740",
+        "S741",
+        "S743",
+        "S744",
+        "S745",
+        "S775"
+      ],
+      "queries_required": [
+        "exact phrase",
+        "synonym expansion",
+        "author search"
+      ],
+      "snowballing": "backward_and_forward_required",
+      "coverage_note": "Primary connectome/data or dynamics comparator cards were added on 2026-09-25; backward and forward citation screening and a later dated refresh remain open."
+    },
+    {
+      "id": "NS-03",
+      "topic": "Drosophila nociception and sensitization circuits",
+      "status": "initial_pass_recorded",
+      "source_ids": [
+        "S012",
+        "S013",
+        "S026",
+        "S027",
+        "S029",
+        "S030",
+        "S031",
+        "S065",
+        "S066",
+        "S090",
+        "S092",
+        "S152",
+        "S154",
+        "S212",
+        "S282",
+        "S760",
+        "S761",
+        "S769",
+        "S776",
+        "S777",
+        "S778",
+        "S794",
+        "S795",
+        "S797",
+        "S801",
+        "S802",
+        "S803"
+      ],
+      "queries_required": [
+        "exact phrase",
+        "synonym expansion",
+        "author search"
+      ],
+      "snowballing": "backward_and_forward_required",
+      "coverage_note": "Twenty-seven canonical candidates have source-specific stimulus, neural-response, behavior and pain-boundary extraction. S776 distinguishes heat behavior from vibration calcium imaging; S777 has expression/GRASP evidence without a measured stimulus-evoked neural response; S778 gives peripheral nerve firing and rolling. S797 separates MD IV thermogenetic activation, chordotonal vibration, GCaMP signals, larval escape, EM anatomy and a simple steady-state rate model. Backward and forward citation screening remains open; no subjective-pain or human SCS inference follows. Two candidates, S794-S795, were independently reconciled from saved primary leads; both have relevant larval nociception behavior, neither has direct stimulus-evoked neural response. S797 was independently reconciled from the S282 v1 bibliography. S212/S282 citation relationship for S794-S795 remains unverified; count 27 is not an itemized inventory. Five independently checked bibliography leads and their scope/status are itemized in drosophila-nociception-audit.json, but they are only a partial screen and do not reconcile the aggregate 27. S282 v1 pp. 38 and 32 were checked against Pulver (2009; PMCID PMC2694103) and Ainsley et al. (2003; PMID 12956960). Pulver abstract and indexed figure legends indicate a neuronal activation/tool comparator without a direct noxious-stimulus assay; methods-level screen remains pending because the linked PMC author manuscript returned reCAPTCHA. Ainsley full publisher VoR PDF was checked via a Wayback capture: it reports spontaneous crawling, no direct neural recording, and a hot-probe comparison marked data not shown; S282 v1 p. 24 cites it as ppk-driver provenance in Methods/Fly Stocks, not as nociception evidence. S801 is a separate 2013 natural-wasp-attack study (PLOS DOI 10.1371/journal.pone.0078704), published from S777 reference #9 after primary full-text review; class-IV perturbation and larval rolling are behavior evidence without direct neural recording. S802 (Pan et al. 2023, DOI 10.1016/j.cub.2023.02.032) was published from S769 References #46 after primary full-text review; it separates heat, gentle touch, C4da activation, A08n spikelets, Cho calcium signals, rolling and crawling. NS-03 now has 26 canonical candidates with four-field extraction. The independent 28-work bibliography has 11 exact DOI matches and 17 DOI-unmatched screened leads; one additional lead, Honjo and Tracey (2018; 10.1371/journal.pgen.1007464), has been selected for canonical-card review after independent full-text triage; it remains DOI-unmatched and is not yet a canonical source. The historical aggregate 27 remains unreconciled.",
+      "unindexed_primary_leads": [],
+      "indexed_primary_leads": [
+        {
+          "title": "Descending GABAergic pathway links brain sugar-sensing to peripheral nociceptive gating in Drosophila",
+          "url": "https://www.nature.com/articles/s41467-023-42202-9",
+          "locator": "Abstract and Figure 2: larval mechanical and chemical nociception, optogenetic gating and rolling",
+          "status": "primary_full_text_canonical_card_and_audit_recorded",
+          "source_id": "S760"
+        },
+        {
+          "title": "Nociceptive interneurons control modular motor pathways to promote escape behavior in Drosophila",
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5869015/",
+          "locator": "Abstract and Results: larval nociceptor activation and divergent escape motor outputs",
+          "status": "primary_full_text_canonical_card_and_audit_recorded",
+          "source_id": "S761"
+        },
+        {
+          "title": "Neural circuits underlying context-dependent competition between defensive actions in Drosophila larvae",
+          "url": "https://www.nature.com/articles/s41467-025-56185-2",
+          "locator": "Results Figure 4 and Methods: 50 mN and 46 °C nociceptive assays; Figures 6-7 calcium imaging and circuit perturbations",
+          "status": "primary_full_text_canonical_card_and_audit_recorded",
+          "source_id": "S769"
+        },
+        {
+          "doi": "10.1371/journal.pone.0071706",
+          "title": "High-Throughput Analysis of Stimulus-Evoked Behaviors in Drosophila Larva Reveals Multiple Modality-Specific Escape Strategies",
+          "url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0071706",
+          "locator": "Abstract; Figure 2: noxious heat, class IV neurons, rolling and context-dependent escape",
+          "status": "primary_full_text_canonical_card_and_audit_recorded",
+          "boundary": "Larval behavior and sensory-neuron tests; no brain-wide imaging/EM or subjective pain endpoint.",
+          "source_id": "S776"
+        },
+        {
+          "doi": "10.1073/pnas.1820840116",
+          "title": "Drosophila melanogaster foraging regulates a nociceptive-like escape behavior through a developmentally plastic sensory circuit",
+          "url": "https://www.pnas.org/doi/10.1073/pnas.1820840116",
+          "locator": "Abstract and Results: foraging-dependent larval escape and sensory circuit plasticity",
+          "status": "primary_full_text_canonical_card_and_audit_recorded",
+          "boundary": "Developmental sensory modulation, not S212's brain-wide network or a human pain measure.",
+          "source_id": "S777"
+        },
+        {
+          "doi": "10.1016/S0092-8674(03)00272-1",
+          "title": "painless, a Drosophila Gene Essential for Nociception",
+          "url": "https://web.archive.org/web/20230522064658/https://www.cell.com/cell/fulltext/S0092-8674(03)00272-1",
+          "locator": "Archived Cell publisher full text, Results Figures 1-3 and Experimental Procedures",
+          "status": "primary_full_text_canonical_card_and_audit_recorded",
+          "boundary": "Foundational molecular nociceptor assay, not a central connectome or subjective pain measure.",
+          "source_id": "S778"
+        },
+        {
+          "doi": "10.1016/j.cub.2007.11.029",
+          "title": "Nociceptive neurons protect Drosophila larvae from parasitoid wasps",
+          "url": "https://courses.cit.cornell.edu/bionb491/labresources/week7%2C%20Mar%202-4/Hwangetal2007.pdf",
+          "locator": "Primary author manuscript verified; Summary, Results Figures 1-5 and Experimental Procedures inspected. Perturbation is not direct neural recording. S212/S282 citation relationship unverified.",
+          "status": "primary_full_text_verified_card_and_audit_recorded; S212/S282 citation relationship unverified",
+          "source_id": "S794"
+        },
+        {
+          "doi": "10.1016/j.cub.2009.12.057",
+          "title": "Pickpocket is a DEG/ENaC protein required for mechanical nociception in Drosophila larvae",
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2995491/",
+          "locator": "Primary PMC author manuscript verified; Summary, Results Figure 3 legend and Behavioral Assays inspected. Modality-specific phenotype; no direct neural recording. S212/S282 citation relationship unverified.",
+          "status": "primary_full_text_verified_card_and_audit_recorded; S212/S282 citation relationship unverified",
+          "source_id": "S795"
+        },
+        {
+          "doi": "10.1038/nature14297",
+          "title": "A multilevel multimodal circuit enhances action selection in Drosophila",
+          "url": "https://www.nature.com/articles/nature14297",
+          "locator": "Fig. 1; Fig. 3; Extended Data Figs. 1 and 8; Methods",
+          "status": "primary_full_text_canonical_card_and_audit_recorded",
+          "boundary": "Larval neural and behavior assays, not subjective pain or human ECAP/SCS; steady-state rate model is not a dynamic connectome simulation.",
+          "source_id": "S797"
+        },
+        {
+          "doi": "10.1371/journal.pone.0078704",
+          "title": "Larval Defense against Attack from Parasitoid Wasps Requires Nociceptive Neurons",
+          "url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0078704",
+          "locator": "Abstract; Results/Figs. 1-3; Materials and Methods > Behavioral Analysis",
+          "status": "primary_full_text_canonical_card_and_audit_recorded",
+          "source_id": "S801",
+          "boundary": "Natural wasp attack and class-IV perturbation predict larval defensive behavior, not direct neural activity or subjective pain."
+        },
+        {
+          "doi": "10.1016/j.cub.2023.02.032",
+          "title": "Cross-modal modulation gates nociceptive inputs in Drosophila",
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10089977/",
+          "locator": "Abstract; Results/Figs. 1A-C, 1E, 2A, 4D; Fig. S1A-B; Methods",
+          "status": "primary_full_text_canonical_card_and_audit_recorded",
+          "source_id": "S802",
+          "boundary": "Separate larval heat, touch, optogenetic, electrophysiology, calcium and behavior assays; no subjective pain or human SCS inference."
+        },
+        {
+          "doi": "10.1371/journal.pgen.1007464",
+          "title": "BMP signaling downstream of the Highwire E3 ligase sensitizes nociceptors",
+          "url": "https://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1007464",
+          "locator": "Abstract; Results, Figs. 1-7 (especially Figs. 5-7); Methods: Thermal nociception assay, Optogenetic nociception assay, Calcium imaging, pMad staining and image analysis.",
+          "status": "primary_full_text_canonical_card_and_audit_recorded",
+          "source_id": "S803",
+          "boundary": "GCaMP6m terminal fluorescence is optical calcium physiology, not electrophysiology; pMad is a pathway reporter. Larval behavior and neural measures do not establish subjective pain or human SCS relevance."
+        }
+      ]
+    },
+    {
+      "id": "NS-04",
+      "topic": "Drosophila electrical or optogenetic perturbation models",
+      "status": "initial_pass_recorded",
+      "source_ids": [
+        "S775",
+        "S782",
+        "S783"
+      ],
+      "queries_required": [
+        "exact phrase",
+        "synonym expansion",
+        "author search"
+      ],
+      "snowballing": "backward_and_forward_required",
+      "coverage_note": "S775, S782 and S783 have primary full-text cards for fly connectome dynamics with optogenetic or behavioral comparison. Exact/synonym/author searches, full backward/forward citation snowballing and a later dated update remain open. None measures human pain, ECAP or SCS outcome."
+    },
+    {
+      "id": "NS-05",
+      "topic": "connectome representation transfer across species",
+      "status": "second_pass_recorded",
+      "source_ids": [
+        "S742",
+        "S743",
+        "S744",
+        "S745",
+        "S772",
+        "S796"
+      ],
+      "queries_required": [
+        "exact phrase",
+        "synonym expansion",
+        "author search"
+      ],
+      "snowballing": "backward_and_forward_required",
+      "coverage_note": "S772 establishes cross-species structural comparison of mesoscale community motifs in published inter-areal connectomes. Its human functional-connectivity analysis is within human data; no Drosophila-to-human dynamical representation, causal-invariant, ECAP or SCS transfer is tested. Exact/synonym/author search and backward/forward citation screening remain open. S796 is a verified canine/human seizure-EEG transfer analogue with distinct unsupervised and semi-supervised target-trial scenarios; it does not validate fly-to-ECAP/SCS transfer."
+    },
+    {
+      "id": "NS-06",
+      "topic": "synthetic pretraining and domain adaptation for pain",
+      "status": "second_pass_recorded",
+      "source_ids": [
+        "S083",
+        "S084",
+        "S149",
+        "S748",
+        "S758",
+        "S759"
+      ],
+      "queries_required": [
+        "exact phrase",
+        "synonym expansion",
+        "author search"
+      ],
+      "snowballing": "backward_and_forward_required",
+      "coverage_note": "2026-09-26 bounded first later-dated refresh after S791/S792 discovery: primary S149, S791 and S792 pages were searched, along with exact S088 title/DOI and synthetic pain/domain-adaptation terms. No new direct analogue or mechanism class was primary-confirmed. OpenAlex citations and the complete S792 citing set were not independently resolved; IEEE S088 full text remains inaccessible. One clean later-dated refresh is recorded, but NS-06 is not saturated and the S088 full method remains required."
+    },
+    {
+      "id": "NS-07",
+      "topic": "physical and volume-conductor ECAP models",
+      "status": "initial_pass_recorded",
+      "source_ids": [
+        "S105",
+        "S363",
+        "S764",
+        "S766",
+        "S768",
+        "S785"
+      ],
+      "queries_required": [
+        "exact phrase",
+        "synonym expansion",
+        "author search"
+      ],
+      "snowballing": "backward_and_forward_required",
+      "indexed_primary_leads": [
+        {
+          "doi": "10.1109/EMBC.2013.6611057",
+          "source_id": "S785",
+          "title": "A model of evoked potentials in spinal cord stimulation",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/24111244/",
+          "locator": "Abstract: hybrid three-dimensional electrical and neural forward model",
+          "status": "primary_card_and_pa04_audit_recorded",
+          "boundary": "Simulated ECAP forward model; no independent patient validation established in the accessible abstract."
+        }
+      ]
+    },
+    {
+      "id": "NS-08",
+      "topic": "SCS stimulation-artifact removal",
+      "status": "initial_pass_recorded",
+      "source_ids": [
+        "S159",
+        "S746",
+        "S765",
+        "S770",
+        "S771",
+        "S786"
+      ],
+      "queries_required": [
+        "exact phrase",
+        "synonym expansion",
+        "author search"
+      ],
+      "snowballing": "backward_and_forward_required",
+      "indexed_primary_leads": [
+        {
+          "doi": "10.1109/TNSRE.2018.2870169",
+          "source_id": "S786",
+          "title": "Cause of Pulse Artefacts Inherent to the Electrodes of Neuromodulation Implants",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/30273153/",
+          "locator": "Abstract: electrode double-layer mechanism and saline comparison",
+          "status": "primary_card_and_pa04_audit_recorded",
+          "boundary": "Bench electrode pulse artifact model; not human SCS artifact-removal validation."
+        }
+      ]
+    },
+    {
+      "id": "NS-09",
+      "topic": "ECAP neural recruitment estimation",
+      "status": "second_pass_recorded",
+      "source_ids": [
+        "S098",
+        "S099",
+        "S105",
+        "S144",
+        "S162",
+        "S240",
+        "S241",
+        "S245",
+        "S272",
+        "S363",
+        "S746",
+        "S764",
+        "S766",
+        "S767",
+        "S768",
+        "S784",
+        "S787",
+        "S789"
+      ],
+      "queries_required": [
+        "exact phrase",
+        "synonym expansion",
+        "author search"
+      ],
+      "snowballing": "backward_and_forward_required",
+      "indexed_primary_leads": [
+        {
+          "doi": "10.1016/j.pain.2011.11.023",
+          "source_id": "S784",
+          "title": "Compound action potentials recorded in the human spinal cord during neurostimulation for pain relief",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/22188868/",
+          "locator": "Abstract, Results: A-beta recruitment and painful-area coverage",
+          "status": "primary_card_and_pa04_audit_recorded",
+          "boundary": "Human ECAP recruitment and painful-area coverage; pain-intensity response is not measured by ECAP."
+        },
+        {
+          "doi": "10.3389/fnins.2021.673998",
+          "source_id": "S787",
+          "title": "The Evoked Compound Action Potential as a Predictor for Perception in Chronic Pain Patients: Tools for Automatic Spinal Cord Stimulator Programming and Control",
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8320888/",
+          "locator": "Methods, ECAP acquisition and growth curves; Results, ET-PT and ET-DT",
+          "status": "primary_card_and_pa04_audit_recorded",
+          "boundary": "14 participants and 112 repeated curves; perception/discomfort thresholds, not pain relief."
+        },
+        {
+          "doi": "10.3389/fnins.2021.625835",
+          "source_id": "S789",
+          "title": "The Effect of Spinal Cord Stimulation Frequency on the Neural Response and Perceived Sensation in Patients With Chronic Pain",
+          "url": "https://www.frontiersin.org/journals/neuroscience/articles/10.3389/fnins.2021.625835/full",
+          "locator": "Methods > Patient Recruitment and Frequency Sweeps; Results > Figs 3-4; Discussion",
+          "status": "primary_card_and_pa04_audit_recorded",
+          "boundary": "Human ECAP amplitude and separately rated stimulation-induced paresthesia diverge with frequency; neither is a measured analgesia endpoint. Repeated sweeps are not independent patients."
+        }
+      ]
+    },
+    {
+      "id": "NS-10",
+      "topic": "closed-loop SCS parameter programming",
+      "status": "second_pass_recorded",
+      "source_ids": [
+        "S098",
+        "S099",
+        "S144",
+        "S162",
+        "S240",
+        "S241",
+        "S245",
+        "S272",
+        "S746",
+        "S747",
+        "S779",
+        "S780",
+        "S781",
+        "S788",
+        "S790",
+        "S805"
+      ],
+      "queries_required": [
+        "exact phrase",
+        "synonym expansion",
+        "author search"
+      ],
+      "snowballing": "backward_and_forward_required",
+      "unindexed_primary_leads": [],
+      "coverage_note": "EVOKE 3/12-month Lancet (S779), 24-month JAMA (S780) and 36-month RAPM (S781) reports are indexed as one randomized cohort, NCT02924129. The separate JAMA Figure 4C correction is S805, not a fourth trial report. The Lancet method is abstract-only here; JAMA full text distinguishes 134 randomized primary-outcome records from 92 24-month completers. The 36-month analysis was not prespecified and used LOCF. ECAP is feedback for the intervention, not a pain measure or baseline outcome predictor. Broader snowballing remains open.",
+      "indexed_primary_leads": [
+        {
+          "doi": "10.1016/S1474-4422(19)30414-4",
+          "title": "Long-term safety and efficacy of closed-loop spinal cord stimulation to treat chronic back and leg pain (Evoke)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/31870766/",
+          "locator": "Primary PubMed abstract: 134 randomized; 118 in 12-month ITT analysis; >=50% overall back/leg pain reduction without increased medication",
+          "status": "canonical_card_and_outcome_audit_recorded",
+          "boundary": "ECAP-controlled stimulation is the intervention; clinical pain is a separate patient-reported endpoint.",
+          "source_id": "S779"
+        },
+        {
+          "doi": "10.1001/jamaneurol.2021.4998",
+          "title": "Durability of Clinical and Quality-of-Life Outcomes of Closed-Loop Spinal Cord Stimulation for Chronic Back and Leg Pain",
+          "url": "https://jamanetwork.com/journals/jamaneurology/fullarticle/2788004",
+          "locator": "Abstract; Methods; Figure 1 CONSORT; Results: 24-month secondary analysis of the same EVOKE RCT, 134 randomized in primary-outcome analysis with missing values carried forward, 92 completers for secondary outcomes",
+          "status": "canonical_card_and_outcome_audit_recorded",
+          "boundary": "Same NCT02924129 cohort as the 12-month paper, not an independent trial or prospective pain-prediction model.",
+          "correction_doi": "10.1001/jamaneurol.2022.0022",
+          "source_id": "S780"
+        },
+        {
+          "doi": "10.1001/jamaneurol.2022.0022",
+          "source_id": "S805",
+          "title": "Error in Figure",
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8845020/",
+          "locator": "JAMA Neurol 2022;79(4):420; notice paragraph: Figure 4C closed-loop and open-loop Subthreshold values switched; original report in reference 1",
+          "status": "correction_notice_canonical_card_recorded",
+          "boundary": "Corrects S780 device-performance Figure 4C only; no new cohort, efficacy estimate or independent replication."
+        },
+        {
+          "doi": "10.1136/rapm-2023-104751",
+          "source_id": "S781",
+          "title": "ECAP-controlled closed-loop versus open-loop SCS for the treatment of chronic pain: 36-month results of the EVOKE blinded randomized clinical trial",
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11103285/",
+          "locator": "Methods, Statistical analysis; Results, Figure 2 and Figure 3; Discussion, Strengths and limitations",
+          "status": "primary_full_text_canonical_card_and_outcome_audit_recorded",
+          "boundary": "Same NCT02924129 cohort; non-prespecified 36-month follow-up, not independent trial or prognostic model."
+        },
+        {
+          "doi": "10.1111/ner.12684",
+          "source_id": "S788",
+          "title": "Effective Relief of Pain and Associated Symptoms With Closed-Loop Spinal Cord Stimulation System: Preliminary Results of the Avalon Study",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/28922517/",
+          "locator": "Abstract, Materials and Methods and Results: 51 trialed, 36 implanted, six-month outcomes",
+          "status": "primary_card_and_pa04_audit_recorded",
+          "boundary": "AVALON preliminary single-arm outcomes; no randomized comparator or prognostic ECAP model."
+        },
+        {
+          "doi": "10.1186/s42234-023-00134-1",
+          "source_id": "S790",
+          "title": "Evoked compound action potential (ECAP)-controlled closed-loop spinal cord stimulation in an experimental model of neuropathic pain in rats",
+          "url": "https://link.springer.com/article/10.1186/s42234-023-00134-1",
+          "locator": "Methods > Animals, Experimental design and Pain hypersensitivity assessment; Results > Fig. 8",
+          "status": "primary_card_and_pa04_audit_recorded",
+          "boundary": "ECAP-controlled SCS reduced rat SNI mechanical/cold hypersensitivity in paw-withdrawal assays; no patient pain or human clinical response was measured. SCS-ON/OFF assignment was not randomized and the tester was not blinded."
+        }
+      ]
+    },
+    {
+      "id": "NS-11",
+      "topic": "SCS clinical-response prediction",
+      "status": "second_pass_recorded",
+      "source_ids": [
+        "S033",
+        "S034",
+        "S046",
+        "S749",
+        "S750",
+        "S751",
+        "S752",
+        "S753",
+        "S754",
+        "S755",
+      "S756",
+      "S757",
+      "S762",
+      "S804"
+      ],
+      "queries_required": [
+        "exact phrase",
+        "synonym expansion",
+        "author search"
+      ],
+      "snowballing": "backward_and_forward_required"
+    },
+    {
+      "id": "NS-12",
+      "topic": "neuromodulation digital twins and system identification",
+      "status": "second_pass_recorded",
+      "source_ids": [
+        "S098",
+        "S099",
+        "S144",
+        "S240",
+        "S241",
+        "S245",
+        "S272",
+        "S747"
+      ],
+      "queries_required": [
+        "exact phrase",
+        "synonym expansion",
+        "author search"
+      ],
+      "snowballing": "backward_and_forward_required"
+    },
+    {
+      "id": "NS-13",
+      "topic": "patents joining connectomes, ECAP and SCS",
+      "status": "second_pass_recorded",
+      "source_ids": [
+        "S098",
+        "S099",
+        "S144",
+        "S240",
+        "S241",
+        "S245",
+        "S272",
+        "S746",
+        "S770",
+        "S771"
+      ],
+      "queries_required": [
+        "exact phrase",
+        "synonym expansion",
+        "author search"
+      ],
+      "snowballing": "backward_and_forward_required"
+    },
+    {
+      "id": "NS-14",
+      "topic": "ClinicalTrials linking ECAP telemetry and outcomes",
+      "status": "initial_pass_recorded",
+      "source_ids": [
+        "S105",
+        "S237",
+        "S779",
+        "S780",
+        "S781"
+      ],
+      "queries_required": [
+        "exact phrase",
+        "synonym expansion",
+        "author search"
+      ],
+      "snowballing": "backward_and_forward_required",
+      "coverage_note": "Twenty-four ClinicalTrials.gov registrations have been audited against trial-linked ECAP and pain/outcome fields. The broader full-page query set contains a union of 458 registration IDs; only bounded manual triage has been completed, so this stream is not saturated. Trial registrations do not establish downloadable patient-linked waveforms/outcomes; article linkage and additional triage remain open."
+    },
+    {
+      "id": "NS-15",
+      "topic": "Russian-language prior art and dissertations",
+      "status": "initial_pass_recorded",
+      "source_ids": [],
+      "queries_required": [
+        "exact phrase",
+        "synonym expansion",
+        "author search"
+      ],
+      "snowballing": "backward_and_forward_required",
+      "coverage_note": "Four primary RSL catalogue records were verified as bibliographic leads. Their full methods were not accessed. eLIBRARY defaultx.asp redirects to ip_blocked.asp from this environment. RSL broader queries, eLIBRARY via an authorized route, official university repositories, backward/forward citations and a later update remain open."
+    },
+    {
+      "id": "NS-16",
+      "topic": "citation and author snowballing for direct analogues",
+      "status": "second_pass_recorded",
+      "source_ids": [
+        "S741",
+        "S742",
+        "S743",
+        "S744",
+        "S745",
+        "S747",
+        "S748"
+      ],
+      "queries_required": [
+        "exact phrase",
+        "synonym expansion",
+        "author search"
+      ],
+      "snowballing": "backward_and_forward_required"
+    },
+    {
+      "id": "NS-17",
+      "topic": "human cross-subject and cross-dataset experimental-pain baselines",
+      "status": "initial_pass_recorded",
+      "source_ids": [
+        "S004",
+        "S005",
+        "S007",
+        "S008",
+        "S014",
+        "S017",
+        "S070",
+        "S072",
+        "S088",
+        "S148",
+        "S164"
+      ],
+      "queries_required": [
+        "exact DOI and title",
+        "primary abstract or full text",
+        "dataset and split verification"
+      ],
+      "snowballing": "backward_and_forward_required"
+    }
+  ],
+  "saturation_rule": "Close only after all streams and backward/forward citation checks are complete and two consecutive dated query refreshes add neither a direct analogue nor a new mechanism class.",
+  "negative_claim_template": "Прямой аналог не найден по документированному протоколу поиска на дату среза.",
+  "search_runs": [
+    {
+      "id": "NS-RUN-2026-09-24-01",
+      "date": "2026-09-24",
+      "queries": [
+        "Drosophila connectome constrained ECAP spinal cord stimulation representation transfer",
+        "connectome-constrained neural dynamics transfer learning ECAP SCS",
+        "connectome-constrained random graph controls initialization"
+      ],
+      "primary_urls": [
+        "https://arxiv.org/abs/2604.04033",
+        "https://arxiv.org/abs/2305.17300",
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC12648571/",
+        "https://www.nature.com/articles/s41586-024-07939-3",
+        "https://openreview.net/forum?id=CJzi3dRlJE-"
+      ],
+      "new_mechanism_classes": [
+        "degree-preserving graph null with shared initialization",
+        "partial-observation identifiability in connectome-constrained RNNs",
+        "connectome-to-unrelated-AI-task transfer precedent"
+      ],
+      "direct_drosophila_ecap_scs_analogue_found": false,
+      "saturation": false
+    },
+    {
+      "id": "NS-RUN-2026-09-24-02",
+      "date": "2026-09-24",
+      "queries": [
+        "ECAP neural network simulated data artifact classification patent",
+        "Using Neural Networks to Detect Evoked Compound Action Potentials SCS",
+        "ECAP closed-loop SCS response prediction 2026"
+      ],
+      "primary_urls": [
+        "https://patents.google.com/patent/WO2025224687A1/en",
+        "https://pubmed.ncbi.nlm.nih.gov/40879389/",
+        "https://www.sciencedirect.com/science/article/abs/pii/S1094715925006439",
+        "https://assets.cureus.com/uploads/case_report/pdf/460390/20260202-302464-fuovtq.pdf",
+        "https://jphv.ub.ac.id/index.php/jphv/article/view/306"
+      ],
+      "new_mechanism_classes": [
+        "growth-curve-derived ECAP labels",
+        "clinically weighted threshold samples",
+        "encoder-decoder artifact-removal pretraining"
+      ],
+      "direct_drosophila_ecap_scs_analogue_found": false,
+      "saturation": false
+    },
+    {
+      "id": "NS-RUN-2026-09-24-03",
+      "date": "2026-09-24",
+      "queries": [
+        "primary article behind ultrasound-induced wireless implantable stimulator adaptive pain management",
+        "neuromorphic neuromodulation on-chip closed-loop review",
+        "biophysical surrogate digital twin neural interface volume conduction recording"
+      ],
+      "primary_urls": [
+        "https://www.nature.com/articles/s41928-025-01377-3",
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC13095316/",
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC11565243/",
+        "https://www.nature.com/articles/s44385-026-00076-8"
+      ],
+      "new_mechanism_classes": [
+        "animal neural-classifier-to-SCS closed loop",
+        "explicit VC-neural-response-recording-transduction decomposition"
+      ],
+      "direct_drosophila_ecap_scs_analogue_found": false,
+      "saturation": false
+    },
+    {
+      "id": "NS-RUN-2026-09-24-04",
+      "date": "2026-09-24",
+      "queries": [
+        "inter-subject EEG pain classification primary abstract",
+        "LOSO EDA pain AI4Pain BioVid primary record",
+        "EEG painful thermal versus aversive auditory cross-participant",
+        "X-ITE EDA EMG pain fusion primary abstract",
+        "DANN Transformer cross-domain pain IEEE primary record"
+      ],
+      "primary_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/41564065/",
+        "https://doi.org/10.1109/JIOT.2026.3663683",
+        "https://pubmed.ncbi.nlm.nih.gov/41499809/",
+        "https://arxiv.org/abs/2508.11691",
+        "https://pubmed.ncbi.nlm.nih.gov/41192117/",
+        "https://doi.org/10.1109/ISDA70544.2026.11606012"
+      ],
+      "new_mechanism_classes": [
+        "resting-EEG-guided transfer",
+        "embedded multidomain EDA CNN",
+        "participant-held-out EEG stimulus benchmark",
+        "cross-dataset adversarial pain adaptation"
+      ],
+      "direct_drosophila_ecap_scs_analogue_found": false,
+      "saturation": false
+    },
+    {
+      "id": "NS-RUN-2026-09-24-05",
+      "date": "2026-09-24",
+      "queries": [
+        "multimodal acute pain fusion systematic review full text",
+        "chronic pain biosignal classification primary abstract",
+        "BioVid ECG efficient pain classification",
+        "Drosophila decapitated noxious heat painless",
+        "transformer attention pain systematic review generalization"
+      ],
+      "primary_urls": [
+        "https://researchsystem.canberra.edu.au/ws/portalfiles/portal/118630433/3737281.pdf",
+        "https://pubmed.ncbi.nlm.nih.gov/39222459/",
+        "https://doi.org/10.1109/JIOT.2025.3590401",
+        "https://www.jstage.jst.go.jp/article/hikakuseiriseika/31/4/31_151/_pdf",
+        "https://vbn.aau.dk/en/publications/transformer-and-attention-based-models-for-automated-pain-assessm/"
+      ],
+      "new_mechanism_classes": [
+        "brain-independent Drosophila heat-evoked protective behavior",
+        "multimodal generalization-gap synthesis"
+      ],
+      "direct_drosophila_ecap_scs_analogue_found": false,
+      "saturation": false
+    },
+    {
+      "id": "NS-RUN-2026-09-24-06",
+      "date": "2026-09-24",
+      "queries": [
+        "pain assessment subjective scales biomarkers multimodal integration primary full text"
+      ],
+      "primary_urls": [
+        "https://www.dovepress.com/rethinking-pain-assessment-subjective-scales-biomarkers-and-multimodal-peer-reviewed-fulltext-article-JPR"
+      ],
+      "new_mechanism_classes": [
+        "four-layer non-interchangeable pain-assessment framework"
+      ],
+      "direct_drosophila_ecap_scs_analogue_found": false,
+      "saturation": false
+    },
+    {
+      "id": "NS-RUN-2026-09-24-07",
+      "date": "2026-09-24",
+      "queries": [
+        "machine learning optimize spinal cord stimulation patent",
+        "ECAP spinal cord injury therapy patent",
+        "adaptive neural interface federated learning patent",
+        "multidimensional patient features neurostimulation patent",
+        "ECAP filtered waveform channel impulse response patent",
+        "multimodal wearable pain estimate closed loop patent",
+        "exact CN122075919A"
+      ],
+      "primary_urls": [
+        "https://patents.google.com/patent/US11666761B2/en",
+        "https://patents.justia.com/patent/12642969",
+        "https://eureka.patsnap.com/patent/WO2026146221A1",
+        "https://patents.google.com/patent/US20230123383A1/en",
+        "https://patents.google.com/patent/US20250099764A1/en",
+        "https://patents.google.com/patent/CN120478838B/en",
+        "https://patents.google.com/patent/CN122075919A/en"
+      ],
+      "new_mechanism_classes": [
+        "ML SCS parameter search",
+        "ECAP-guided SCI functional control",
+        "population-relative multimodal neurostimulation control",
+        "explicit ECAP/body-channel signal separation",
+        "wearable pain-estimate stimulation loop"
+      ],
+      "direct_drosophila_ecap_scs_analogue_found": false,
+      "saturation": false
+    },
+    {
+      "id": "NS-RUN-2026-09-24-08",
+      "date": "2026-09-24",
+      "queries": [
+        "exact title and DOI search for remaining verified_metadata records",
+        "ModMix author and version search",
+        "institutional full-text search for EEG pain transfer thesis"
+      ],
+      "primary_urls": [
+        "https://link.springer.com/chapter/10.1007/978-3-031-88220-3_11",
+        "https://repository.essex.ac.uk/38532/1/YiyuanHan_Thesis_CSEE.pdf",
+        "https://doi.org/10.1109/ICICNCT66124.2025.11232711",
+        "https://hzo-py.github.io/publication/pain",
+        "https://www.dsu.edu.in/images/Engineering/CSE-dept/Newsletter/CsOct-Dec_2025.pdf",
+        "https://pubmed.ncbi.nlm.nih.gov/39356594/",
+        "https://www.mdpi.com/2073-431X/15/2/127"
+      ],
+      "new_mechanism_classes": [
+        "ModMix patchwise RBF journal extension"
+      ],
+      "direct_drosophila_ecap_scs_analogue_found": false,
+      "saturation": false
+    },
+    {
+      "id": "NS-RUN-2026-09-24-09",
+      "date": "2026-09-24",
+      "queries": [
+        "exact: Zero-shot multimodal pain estimation via synthetic pain simulation and domain-invariant learning",
+        "synonym: synthetic pain domain adaptation facial expression generative 2025 2026",
+        "author: Babak Taati Muhammad Muzammil synthetic pain expression",
+        "backward: 3DPain references SynPain",
+        "forward: SynPain cited by 3DPain"
+      ],
+      "primary_urls": [
+        "https://www.frontiersin.org/journals/artificial-intelligence/articles/10.3389/frai.2026.1827727/full",
+        "https://arxiv.org/html/2507.19673",
+        "https://arxiv.org/html/2509.16727"
+      ],
+      "new_mechanism_classes": [
+        "demographically balanced synthetic facial-expression augmentation",
+        "AU-controlled 3D face synthesis with neutral-reference pain estimation"
+      ],
+      "direct_drosophila_ecap_scs_analogue_found": false,
+      "saturation": false
+    },
+    {
+      "id": "NS-RUN-2026-09-24-10",
+      "date": "2026-09-24",
+      "queries": [
+        "forward citation search for DOI 10.3389/frai.2026.1827727 in OpenAlex",
+        "exact DOI/title web search excluding the publisher",
+        "author search El Othmani Naouali 2026 pain adaptation",
+        "3DPain v5 real UNBC training-fold label and code availability search"
+      ],
+      "primary_urls": [
+        "https://api.openalex.org/works/W7196979222",
+        "https://www.frontiersin.org/journals/artificial-intelligence/articles/10.3389/frai.2026.1827727/full",
+        "https://arxiv.org/html/2509.16727",
+        "https://pubmed.ncbi.nlm.nih.gov/42268755/"
+      ],
+      "new_mechanism_classes": [],
+      "direct_drosophila_ecap_scs_analogue_found": false,
+      "saturation": false
+    },
+    {
+      "id": "NS-RUN-2026-09-24-11",
+      "date": "2026-09-24",
+      "queries": [
+        "spinal cord stimulation ECAP computational model volume conductor extracellular potential finite element",
+        "evoked compound action potential spinal cord stimulation biophysical model electrode geometry reciprocity",
+        "Anaya Zander Lempka ECAP computational modeling backward reference search"
+      ],
+      "primary_urls": [
+        "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0345287",
+        "https://pubmed.ncbi.nlm.nih.gov/40767809/",
+        "https://pubmed.ncbi.nlm.nih.gov/31215720/"
+      ],
+      "new_mechanism_classes": [],
+      "direct_drosophila_ecap_scs_analogue_found": false,
+      "saturation": false
+    },
+    {
+      "id": "NS-RUN-2026-09-24-12",
+      "date": "2026-09-24",
+      "queries": [
+        "spinal cord stimulation ECAP stimulation artifact removal exponential polynomial",
+        "Ramadan Konig Zhang Ross Netoff Darrow ECAP artifact backward references",
+        "SCS evoked compound action potential artifact cancellation IEEE publisher patent"
+      ],
+      "primary_urls": [
+        "https://www.frontiersin.org/journals/pain-research/articles/10.3389/fpain.2023.1072786/full",
+        "https://pubmed.ncbi.nlm.nih.gov/41605141/"
+      ],
+      "new_mechanism_classes": [],
+      "direct_drosophila_ecap_scs_analogue_found": false,
+      "saturation": false
+    },
+    {
+      "id": "NS-RUN-2026-09-24-13",
+      "date": "2026-09-24",
+      "queries": [
+        "Anaya Zander Graham Sankarasubramanian Lempka evoked potentials computational model full text",
+        "PMC6920600 FEM sensory axon reciprocity clinical ECAP Figure 2C limitations"
+      ],
+      "primary_urls": [
+        "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_xml/PMC6920600/unicode",
+        "https://pubmed.ncbi.nlm.nih.gov/31215720/"
+      ],
+      "new_mechanism_classes": [],
+      "direct_drosophila_ecap_scs_analogue_found": false,
+      "saturation": false
+    },
+    {
+      "id": "NS-RUN-2026-09-24-14",
+      "date": "2026-09-24",
+      "queries": [
+        "ECAP posture pulse width constant amplitude neural recruitment Brucker-Hahn Zander",
+        "spinal ECAP growth curve electrode spinal cord distance model patient"
+      ],
+      "primary_urls": [
+        "https://iopscience.iop.org/article/10.1088/1741-2552/aceca4/pdf",
+        "https://pubmed.ncbi.nlm.nih.gov/37531954/"
+      ],
+      "new_mechanism_classes": [],
+      "direct_drosophila_ecap_scs_analogue_found": false,
+      "saturation": false
+    },
+    {
+      "id": "NS-RUN-2026-09-24-15",
+      "date": "2026-09-24",
+      "queries": [
+        "Anaya 2019 forward citation spinal ECAP Zhang 2021 simulation",
+        "10.7507/1001-5515.202007016 volume conductor multicompartment SFAP"
+      ],
+      "primary_urls": [
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC9927682/",
+        "https://pubmed.ncbi.nlm.nih.gov/33913282/"
+      ],
+      "new_mechanism_classes": [],
+      "direct_drosophila_ecap_scs_analogue_found": false,
+      "saturation": false
+    },
+    {
+      "id": "NS-RUN-2026-09-24-16",
+      "date": "2026-09-24",
+      "queries": [
+        "Drosophila larvae nociceptive defensive circuit 2025 connectome",
+        "context-dependent competition defensive actions Drosophila nociception 10.1038/s41467-025-56185-2"
+      ],
+      "primary_urls": [
+        "https://www.nature.com/articles/s41467-025-56185-2",
+        "https://pubmed.ncbi.nlm.nih.gov/39875414/"
+      ],
+      "new_mechanism_classes": [
+        "context-dependent larval startle/escape competition"
+      ],
+      "direct_drosophila_ecap_scs_analogue_found": false,
+      "saturation": false
+    },
+    {
+      "id": "NS-RUN-2026-09-24-17",
+      "date": "2026-09-24",
+      "queries": [
+        "early ECAP stimulus artifact removal patent cochlear neural stimulator Strahl",
+        "eCAP recording artifact electrical-equivalent model Fridman Karunasiri"
+      ],
+      "primary_urls": [
+        "https://patents.google.com/patent/WO2010032132A1/en",
+        "https://patents.google.com/patent/US7835804B2/en"
+      ],
+      "new_mechanism_classes": [
+        "cochlear ECAP waveform cost-function artifact separation",
+        "electrical-equivalent eCAP artifact measurement model"
+      ],
+      "direct_drosophila_ecap_scs_analogue_found": false,
+      "saturation": false
+    },
+    {
+      "id": "NS-RUN-2026-09-25-01",
+      "date": "2026-09-25",
+      "queries": [
+        "OpenAlex forward citations of DOI 10.3389/frai.2026.1827727 / W7196979222",
+        "Exact DOI and title Zero-shot multimodal pain estimation via synthetic pain simulation and domain-invariant learning",
+        "El Othmani Naouali synthetic pain domain adaptation 2026",
+        "Crossref citation count and relation for DOI 10.3389/frai.2026.1827727"
+      ],
+      "primary_urls": [
+        "https://www.frontiersin.org/journals/artificial-intelligence/articles/10.3389/frai.2026.1827727/full",
+        "https://api.openalex.org/works/W7196979222",
+        "https://api.openalex.org/works?filter=cites:W7196979222&per-page=25",
+        "https://api.crossref.org/works/10.3389/frai.2026.1827727"
+      ],
+      "new_mechanism_classes": [],
+      "direct_drosophila_ecap_scs_analogue_found": false,
+      "saturation": false
+    },
+    {
+      "id": "NS-RUN-2026-09-25-02",
+      "date": "2026-09-25",
+      "queries": [
+        "cross-species connectome graph motif Betzel Bassett weighted stochastic blockmodel",
+        "10.1038/s41467-017-02681-z Drosophila human inter-areal community motif"
+      ],
+      "primary_urls": [
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC5783945/",
+        "https://www.nature.com/articles/s41467-017-02681-z"
+      ],
+      "new_mechanism_classes": [
+        "cross-species inter-areal structural community-motif comparison"
+      ],
+      "direct_drosophila_ecap_scs_analogue_found": false,
+      "saturation": false
+    },
+    {
+      "id": "NS-RUN-2026-09-25-03",
+      "date": "2026-09-25",
+      "queries": [
+        "Backward references of S212 DOI 10.1101/2025.09.25.678485",
+        "Backward references of S282 DOI 10.1101/2025.09.30.679458",
+        "Forward citing works of both seeds in OpenAlex, Europe PMC and Crossref"
+      ],
+      "primary_urls": [
+        "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0071706",
+        "https://www.pnas.org/doi/10.1073/pnas.1820840116",
+        "https://doi.org/10.1016/S0092-8674(03)00272-1"
+      ],
+      "new_mechanism_classes": [
+        "modality-specific larval escape",
+        "developmental sensory modulation",
+        "painless molecular nociception"
+      ],
+      "direct_drosophila_ecap_scs_analogue_found": false,
+      "saturation": false
+    },
+    {
+      "id": "NS-RUN-2026-09-25-04",
+      "date": "2026-09-25",
+      "queries": [
+        "Evoke ECAP closed-loop randomized trial 12 month Mekhail",
+        "Evoke 24 month NCT02924129 JAMA Neurology secondary analysis",
+        "10.1016/S1474-4422(19)30414-4 and 10.1001/jamaneurol.2021.4998 duplicate check"
+      ],
+      "primary_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/31870766/",
+        "https://jamanetwork.com/journals/jamaneurology/fullarticle/2788004",
+        "https://doi.org/10.1001/jamaneurol.2022.0022"
+      ],
+      "new_mechanism_classes": [
+        "ECAP-controlled randomized SCS dosing with patient-reported pain outcome"
+      ],
+      "direct_drosophila_ecap_scs_analogue_found": false,
+      "saturation": false
+    },
+    {
+      "id": "NS-RUN-2026-09-25-05",
+      "date": "2026-09-25",
+      "queries": [
+        "EVOKE NCT02924129 36-month primary report DOI 10.1136/rapm-2023-104751",
+        "PMID 37640452 full text and duplicate screen"
+      ],
+      "primary_urls": [
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC11103285/",
+        "https://pubmed.ncbi.nlm.nih.gov/37640452/"
+      ],
+      "new_mechanism_classes": [],
+      "direct_drosophila_ecap_scs_analogue_found": false,
+      "saturation": false
+    },
+    {
+      "id": "NS-RUN-2026-09-25-06",
+      "date": "2026-09-25",
+      "queries": [
+        "NCT02924129 EVOKE ClinicalTrials.gov",
+        "NCT04319887 ECAP ClinicalTrials.gov",
+        "NCT04938245 Improving Spinal Cord Stimulation With ECAPS ClinicalTrials.gov"
+      ],
+      "primary_urls": [
+        "https://clinicaltrials.gov/api/v2/studies/NCT02924129",
+        "https://clinicaltrials.gov/api/v2/studies/NCT04319887",
+        "https://clinicaltrials.gov/api/v2/studies/NCT04938245"
+      ],
+      "new_mechanism_classes": [],
+      "direct_drosophila_ecap_scs_analogue_found": false,
+      "saturation": false
+    },
+    {
+      "id": "NS-RUN-2026-09-25-07",
+      "date": "2026-09-25",
+      "queries": [
+        "Drosophila connectome model optogenetic behavioral comparison antennal grooming",
+        "Drosophila connectome-informed spiking model optogenetic halting"
+      ],
+      "primary_urls": [
+        "https://www.nature.com/articles/s41467-026-72152-x",
+        "https://www.nature.com/articles/s41586-024-07854-7",
+        "https://www.nature.com/articles/s41586-024-07763-9"
+      ],
+      "new_mechanism_classes": [],
+      "direct_drosophila_ecap_scs_analogue_found": false,
+      "saturation": false
+    },
+    {
+      "id": "NS-RUN-2026-09-25-08",
+      "date": "2026-09-25",
+      "queries": [
+        "\"спинномозговая стимуляция\"",
+        "электростимуляция спинного мозга",
+        "\"коннектом\"",
+        "ноцицепция Drosophila",
+        "\"Drosophila\" коннектом"
+      ],
+      "primary_urls": [
+        "https://search.rsl.ru/ru/record/01004299840",
+        "https://search.rsl.ru/ru/record/01003027412",
+        "https://search.rsl.ru/ru/record/01010888313",
+        "https://search.rsl.ru/ru/record/01009687642"
+      ],
+      "new_mechanism_classes": [],
+      "direct_drosophila_ecap_scs_analogue_found": false,
+      "saturation": false
+    },
+    {
+      "id": "NS-RUN-2026-09-25-09",
+      "date": "2026-09-25",
+      "queries": [
+        "evoked compound action potential spinal cord stimulation",
+        "ECAP closed loop spinal cord stimulation",
+        "Saluda Evoke ECAP"
+      ],
+      "primary_urls": [
+        "https://clinicaltrials.gov/api/v2/studies/NCT04627974",
+        "https://clinicaltrials.gov/api/v2/studies/NCT06229470"
+      ],
+      "new_mechanism_classes": [],
+      "direct_drosophila_ecap_scs_analogue_found": false,
+      "saturation": false
+    },
+    {
+      "id": "NS-RUN-2026-09-25-10",
+      "date": "2026-09-25",
+      "queries": [
+        "PA-04 backward primary citation screen: Parker 2012, Laird 2013, Single 2018, Pilitsis 2021, Russo 2018",
+        "AVALON ACTRN12615000713594 versus Panorama NCT02161627"
+      ],
+      "primary_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/22188868/",
+        "https://pubmed.ncbi.nlm.nih.gov/24111244/",
+        "https://pubmed.ncbi.nlm.nih.gov/30273153/",
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC8320888/",
+        "https://pubmed.ncbi.nlm.nih.gov/28922517/",
+        "https://www.accessdata.fda.gov/cdrh_docs/pdf19/P190002B.pdf",
+        "https://airr.anzca.edu.au/anzcacrisjspui/handle/11055/573?mode=full",
+        "https://clinicaltrials.gov/api/v2/studies/NCT02161627"
+      ],
+      "new_mechanism_classes": [],
+      "direct_drosophila_ecap_scs_analogue_found": false,
+      "saturation": false
+    },
+    {
+      "id": "NS-RUN-2026-09-25-11",
+      "date": "2026-09-25",
+      "queries": [
+        "PA-04 bounded backward citation screen from S787 and related ECAP primary articles; Gmel frequency and Versantvoort rat SNI"
+      ],
+      "primary_urls": [
+        "https://www.frontiersin.org/journals/neuroscience/articles/10.3389/fnins.2021.625835/full",
+        "https://link.springer.com/article/10.1186/s42234-023-00134-1"
+      ],
+      "new_mechanism_classes": [],
+      "direct_drosophila_ecap_scs_analogue_found": false,
+      "saturation": false
+    },
+    {
+      "id": "NS-RUN-2026-09-25-12",
+      "date": "2026-09-25",
+      "queries": [
+        "Backward citation screen from S782 publisher references 47-48 (Shiu 2024; Lappalainen 2024)",
+        "OpenAlex citing works for DOI 10.1038/s41586-024-07763-9, newest 20, checked 2026-09-25",
+        "OpenAlex citing works for DOI 10.1038/s41467-026-72152-x, newest page, checked 2026-09-25"
+      ],
+      "primary_urls": [
+        "https://www.nature.com/articles/s41467-026-72152-x",
+        "https://elifesciences.org/articles/108044",
+        "https://www.biorxiv.org/content/10.64898/2026.08.21.745055v1.full"
+      ],
+      "new_mechanism_classes": [],
+      "direct_drosophila_ecap_scs_analogue_found": false,
+      "saturation": false
+    },
+    {
+      "id": "NS-RUN-2026-09-25-13",
+      "date": "2026-09-25",
+      "queries": [
+        "NS-05: cross-species neural dynamics representation transfer; mouse monkey human motor cortex; rat pig human neural-state latent transfer",
+        "NS-05: canine-to-human EEG domain adaptation and graph-motif/connectome comparison across Drosophila and mammals",
+        "NS-05: backward/forward citation screen from S772; Europe PMC discovery and primary publisher/author verification; indexing and owner-access limits remain"
+      ],
+      "primary_urls": [
+        "https://academic.oup.com/nsr/article/12/6/nwaf086/8052010",
+        "https://arxiv.org/html/2412.17842",
+        "https://www.biorxiv.org/content/10.64898/2026.03.06.709637v2",
+        "https://www.biorxiv.org/content/10.64898/2025.12.03.692227v1",
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC8519013/",
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC5783945/"
+      ],
+      "new_mechanism_classes": [
+        "cross-species EEG feature alignment for seizure detection, without Drosophila connectome or ECAP",
+        "cross-mammal neural-dynamics alignment and latent-state transfer, without Drosophila or SCS"
+      ],
+      "direct_drosophila_ecap_scs_analogue_found": false,
+      "saturation": false
+    },
+    {
+      "id": "NS-RUN-2026-09-25-14",
+      "date": "2026-09-25",
+      "queries": [
+        "PA-04 / NS-09 citation lead: PMID 39321832; DOI 10.1088/1741-2552/ad7f8b; Deshmukh epidural spinal recording artifacts swine",
+        "Verma 2023 PMID 36855060 and Deshmukh 2025 consortium overlap, article version and artifact scope"
+      ],
+      "primary_urls": [
+        "https://iopscience.iop.org/article/10.1088/1741-2552/ad7f8b",
+        "https://pubmed.ncbi.nlm.nih.gov/39321832/",
+        "https://link.springer.com/article/10.1186/s42234-023-00106-5"
+      ],
+      "new_mechanism_classes": [],
+      "direct_drosophila_ecap_scs_analogue_found": false,
+      "saturation": false,
+      "notes": "Primary publisher text checked through accessible text-reader route; direct IOP fetch showed CAPTCHA. Seven swine enrolled, six analyzed, denominators vary across subanalyses. Same consortium as Verma 2023; no external validation, human pain outcome or physical forward operator. Citation-index coverage remains bounded."
+    },
+    {
+      "id": "NS-RUN-2026-09-25-15",
+      "date": "2026-09-25",
+      "queries": [
+        "PA-04 / NS-09 citation leads: Calvert et al. PMID 35551869 DOI 10.1016/j.neurom.2022.03.007; full author manuscript, Methods 2.1-2.7, Results 3.1-3.3, Figs. 1-8, Discussion",
+        "PA-04 / NS-09 citation leads: Verma et al. PMID 36855060 DOI 10.1186/s42234-023-00106-5; full publisher Methods, Results Figs. 1-3 and 6-8, Discussion, data availability; consortium overlap with S798"
+      ],
+      "primary_urls": [
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC9643656/",
+        "https://pubmed.ncbi.nlm.nih.gov/35551869/",
+        "https://link.springer.com/article/10.1186/s42234-023-00106-5",
+        "https://pubmed.ncbi.nlm.nih.gov/36855060/"
+      ],
+      "new_mechanism_classes": [],
+      "direct_drosophila_ecap_scs_analogue_found": false,
+      "saturation": false,
+      "notes": "Calvert: 4 sheep, two 24-contact arrays, spatial ECAP plus synchronized EMG; no analgesia outcome or physical forward operator; publisher PDF not checked, author manuscript checked. Verma: 10 swine with smaller analysis denominators (n=5/n=4), epidural ECAP/EMG/stimulation artifact; Abbott data proprietary/confidential. S800 and S798 have substantial author overlap and are same-consortium evidence, not independent validation. Exact citation coverage remains bounded."
+    },
+    {
+      "id": "NS-RUN-2026-09-25-16",
+      "date": "2026-09-25",
+      "queries": [
+        "PA-05 / NS-11 exact primary abstract and publisher access review: S034 PMID 40879389 DOI 10.1227/neu.0000000000003715",
+        "PA-05 / NS-11 official conference abstract and fulltext access: S046 DOI 10.1016/j.neurom.2025.08.367",
+        "PA-05 / NS-11 official author abstract and BMJ full-text/data access: S755 PMID 31932490 DOI 10.1136/rapm-2019-100859",
+        "PA-05 / NS-11 official abstract and institutional/publisher access: S762 PMID 32910099 DOI 10.1097/j.pain.0000000000002035"
+      ],
+      "primary_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/40879389/",
+        "https://www.sciencedirect.com/science/article/abs/pii/S1094715925006439",
+        "https://pubmed.ncbi.nlm.nih.gov/31932490/",
+        "https://rapm.bmj.com/content/45/2/131",
+        "https://pubmed.ncbi.nlm.nih.gov/32910099/",
+        "https://journals.lww.com/10.1097/j.pain.0000000000002035",
+        "https://researchportal.vub.be/en/publications/high-dose-spinal-cord-stimulation-for-patients-with-failed-back-s/"
+      ],
+      "new_mechanism_classes": [],
+      "direct_drosophila_ecap_scs_analogue_found": false,
+      "saturation": false,
+      "notes": "Official abstracts verified. S034 and S046 full-text routes remain blocked; S755 BMJ full text/PDF return 403 and only publisher abstract/article-info plus first-page preview are available; S762 PubMed/LWW/institutional routes expose abstract only. Exact thresholds/rules and patient-level analysis linkage or split remain unreported/unavailable; cohort totals are not substituted for model denominators. This is a bounded source-access pass, not a saturated NS-11 citation search."
+    },
+    {
+      "id": "NS-RUN-2026-09-26-01",
+      "date": "2026-09-26",
+      "queries": [
+        "NS-06: exact DOI/title search for S149, Zero-shot multimodal pain estimation via synthetic pain simulation and domain-invariant learning; exact forward-citation query for OpenAlex W7196979222",
+        "NS-06: exact title/author search for S088, Cross-Domain Multimodal Pain Detection Using a DANN-Transformer Architecture with Supervised Contrastive Warmup and Test-Time Augmentation; locate IEEE full method or an author/institution copy",
+        "NS-06: exact title/DOI search for S791 arXiv:1910.08173 and S792 DOI 10.1016/j.imavis.2021.104167; inspect primary publisher/version pages and citation listing",
+        "NS-06: synonym search for synthetic pain domain adaptation, DANN Transformer PainMonit BioVid, and weakly-supervised pain-domain adaptation; screen candidates against primary full text"
+      ],
+      "primary_urls": [
+        "https://www.frontiersin.org/journals/artificial-intelligence/articles/10.3389/frai.2026.1827727/full",
+        "https://pubmed.ncbi.nlm.nih.gov/42630337/",
+        "https://api.openalex.org/works?filter=cites:W7196979222&per-page=25",
+        "https://www.sciencedirect.com/science/article/pii/S026288562100072X",
+        "https://arxiv.org/html/2008.06392",
+        "https://arxiv.org/abs/1910.08173",
+        "https://ieeexplore.ieee.org/document/11606012/",
+        "https://ieeexplore.ieee.org/ielx8/11605974/11605976/11606012.pdf?arnumber=11606012"
+      ],
+      "new_mechanism_classes": [],
+      "direct_drosophila_ecap_scs_analogue_found": false,
+      "saturation": false,
+      "notes": "Bounded first later-dated refresh after the 2026-09-25 S791/S792 discovery. Manual web search returned the existing primary S149 paper and the already-known S791/S792 family; no new direct analogue or mechanism class was primary-confirmed. The S792 publisher page displays 24 citing records, but this pass did not resolve the complete citing set or primary-verify every citation. OpenAlex cites API and IEEE Xplore document/PDF routes were inaccessible through the web reader. No full S088 method was obtained; keep title_only and do not use the secondary abstract as method evidence. The refresh was performed manually; eight supplementary Pi jobs were cancelled before producing results due to runaway event growth and are not evidence. Pi cancellation time: 2026-09-25T21:06:10.243Z (2026-09-26T00:06:10.243+03:00)."
+    },
+    {
+      "id": "NS-RUN-2026-09-26-02",
+      "date": "2026-09-26",
+      "queries": [
+        "NS-11: exact-title and DOI search for Calodney et al., Spinal Cord Stimulation and Patient Selection: Predictive Modeling in a Global Device Registry, 10.1016/j.neurom.2025.08.396",
+        "NS-11: author/sponsor poster search for the Product Surveillance Registry 721-patient six-month SCS responder analysis"
+      ],
+      "primary_urls": [
+        "https://www.sciencedirect.com/science/article/pii/S1094715925006725",
+        "https://www.medtronic.com/content/dam/medtronic-wide/public/united-states/education-training-research/clinical-evidence/scs-patient-selection-poster-nans.pdf"
+      ],
+      "new_mechanism_classes": [],
+      "direct_drosophila_ecap_scs_analogue_found": false,
+      "saturation": false,
+      "notes": "A bounded NS-11 source screen found a conference abstract and author/sponsor poster on 721 registry participants, six-month pain response of at least two points, and an 80/20 train/test partition. Poster prose says 274/363 combined back-and-leg-pain responders, while its Table 1 and the publisher abstract give 267/363; the inconsistent prose is preserved as a version discrepancy. No ECAP predictor or patient-level dataset access is stated. Published as canonical S804 and indexed in ns11-prediction-audit.json; citation snowballing and full-method access remain open."
+    }
+  ]
+}

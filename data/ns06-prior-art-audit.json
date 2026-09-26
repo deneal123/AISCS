@@ -1,0 +1,647 @@
+{
+  "meta": {
+    "schema_version": "1.0.0",
+    "checked_at": "2026-09-26",
+    "stream": "NS-06",
+    "status": "open",
+    "selection": "Synthetic pain data, synthetic-to-real transfer, and pain domain adaptation with empirical or primary methodological claims"
+  },
+  "construct_boundary": "Facial pain-expression labels, PSPI scores, experimental-pain classes and clinical pain reports are not interchangeable. An ECAP recruitment signal is a different measurement target.",
+  "s149_baseline": {
+    "source_id": "S149",
+    "mechanism": "Synthetic-source unsupervised domain adaptation: diffusion-generated facial/physiological/temporal pain scenarios, multimodal fusion, contrastive and adversarial alignment with unlabeled real target recordings, plus consistency regularization",
+    "real_data_role": "Unlabeled target-domain adaptation is performed on real recordings; retrospective labeled datasets are used for evaluation, with full unlabeled pools entering folds",
+    "locator": {
+      "url": "https://www.frontiersin.org/journals/artificial-intelligence/articles/10.3389/frai.2026.1827727/full",
+      "section": "Sections 2.4, 3.2-3.4, 4.3-4.4 and 6.8"
+    }
+  },
+  "analogue_decisions": [
+    {
+      "source_id": "S035",
+      "mechanism": "ModMix conference version; multimodal augmentation, with full methods unavailable",
+      "relation_to_s149": "possible adjacent data augmentation; no accessible evidence of an S149-equivalent synthetic-source unlabeled-target alignment pipeline",
+      "certainty": "limited_full_text",
+      "locator": {
+        "url": "https://link.springer.com/chapter/10.1007/978-3-031-88220-3_11",
+        "section": "publisher chapter abstract and preview"
+      }
+    },
+    {
+      "source_id": "S083",
+      "mechanism": "RGB-to-thermal video synthesis from paired real data, then supervised BioVid pain recognition",
+      "relation_to_s149": "synthesizes one sensor modality; pain labels and evaluation come from real BioVid, without synthetic-source unlabeled-target multimodal pain adaptation",
+      "certainty": "primary_full_text",
+      "locator": {
+        "url": "https://arxiv.org/html/2407.19811v1",
+        "section": "Sections III-E, IV and V"
+      }
+    },
+    {
+      "source_id": "S084",
+      "mechanism": "Identity-preserving diffusion transfer of real pain expressions onto synthetic faces",
+      "relation_to_s149": "visual identity augmentation using real expression sources and labeled real training; no fully generated multimodal source or unlabeled-target alignment",
+      "certainty": "primary_full_text",
+      "locator": {
+        "url": "https://link.springer.com/article/10.1186/s12938-026-01561-2",
+        "section": "Methods and Results, expression transfer and classifier experiments"
+      }
+    },
+    {
+      "source_id": "S088",
+      "mechanism": "Cross-Domain Multimodal Pain Detection Using a DANN–Transformer Architecture with Supervised Contrastive Warmup and Test-Time Augmentation (Bouchfar et al., 2026, ISDA proceedings; Crossref/publisher metadata verified). The current method-level description (skin temperature, EDA, ECG, EMG; DANN/cross-attention Transformer; 20-epoch supervised-contrastive warmup; PainMonit labeled source to BioVid unlabeled target) comes only from Semantic Scholar abstract, not the inaccessible IEEE full text.",
+      "relation_to_s149": "If the secondary abstract is accurate, this is a close multimodal real-source unlabeled-target pain-adaptation analogue. It differs from S149 in source generation (PainMonit real labeled recordings versus S149 synthetic multimodal scenarios), and the reported adaptation method differs (DANN/cross-attention Transformer and supervised-contrastive warmup versus S149 contrastive/adversarial/consistency stages). The method and target label construct remain unverified from primary full text, so do not use this row to claim exact mechanism separation.",
+      "certainty": "publisher_metadata_secondary_abstract_primary_methods_unavailable",
+      "locator": {
+        "url": "https://doi.org/10.1109/ISDA70544.2026.11606012",
+        "section": "publisher DOI metadata/title; full method text unavailable"
+      },
+      "primary_access_review": {
+        "checked_at": "2026-09-24",
+        "crossref": {
+          "url": "https://api.crossref.org/works/10.1109/ISDA70544.2026.11606012",
+          "locator": "message.resource.primary.URL identifies IEEE document 11606012; message.link[0] lists a version-of-record PDF for similarity checking; abstract is absent",
+          "result": "Publisher metadata identifies a PDF location but does not disclose method, datasets or metrics."
+        },
+        "publisher_document": {
+          "url": "https://ieeexplore.ieee.org/document/11606012",
+          "result": "HTTP 202 with an empty response in this environment"
+        },
+        "publisher_pdf": {
+          "url": "https://ieeexplore.ieee.org/ielx8/11605974/11605976/11606012.pdf?arnumber=11606012",
+          "result": "HTTP 418 from both IEEE document PDF path and Crossref-listed staging host in this environment"
+        },
+        "decision": "Publisher metadata/title are confirmed, but the full-text methods remain unavailable. Keep method-level dataset, label, split, modality, metrics and adaptation claims unverified unless explicitly attributed to the secondary index."
+      },
+      "followup_access_review": {
+        "checked_at": "2026-09-24",
+        "locators": [
+          {
+            "url": "https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=11606012",
+            "locator": "Publisher PDF access attempt returned HTTP 418; no method text obtained"
+          },
+          {
+            "url": "https://api.openalex.org/works/W7169883718",
+            "locator": "open_access.oa_status=closed and has_fulltext=false; an index access flag, not a scientific-method source"
+          }
+        ],
+        "decision": "No primary method text obtained in this pass; retain title_only and do not infer modalities, dataset, split or results."
+      },
+      "second_access_review": {
+        "checked_at": "2026-09-25",
+        "locators": [
+          {
+            "url": "https://api.crossref.org/works/10.1109/ISDA70544.2026.11606012",
+            "locator": "message.resource.primary.URL: IEEE document 11606012; link intended for similarity checking, not reader access"
+          },
+          {
+            "url": "https://ieeexplore.ieee.org/document/11606012/",
+            "locator": "Publisher document request: HTTP 202, empty body in this environment"
+          },
+          {
+            "url": "https://api.openalex.org/works/W7169883718",
+            "locator": "Open-access index reports closed and no repository full text; discovery/access evidence only"
+          }
+        ],
+        "author_copy_search": "No indexed author manuscript, preprint or institutional deposit with the full method was found in the bounded search.",
+        "decision": "The full method remains unavailable. Publisher metadata confirms exact identity only; do not infer cohort, labels, split, augmentation leakage or quantitative results from title or secondary abstract."
+      },
+      "secondary_abstract_review": {
+        "checked_at": "2026-09-25",
+        "primary_access": {
+          "crossref": {
+            "url": "https://api.crossref.org/works/10.1109/ISDA70544.2026.11606012",
+            "result": "HTTP 200 metadata; exact title, authors, venue and pages; no abstract; PDF link marked similarity-checking."
+          },
+          "publisher_document": {
+            "url": "https://ieeexplore.ieee.org/document/11606012/",
+            "result": "HTTP 202 with empty body; direct and slash URL both returned 0 bytes."
+          },
+          "publisher_pdf": {
+            "url": "https://ieeexplore.ieee.org/ielx8/11605974/11605976/11606012.pdf?arnumber=11606012",
+            "result": "HTTP 418 access/bot challenge. Crossref-listed xplorestaging PDF also returned HTTP 418."
+          },
+          "author_copy_search": {
+            "locators": [
+              "https://arxiv.org/search/?query=10.1109%2FISDA70544.2026.11606012&searchtype=all",
+              "https://github.com/SamiaBCH",
+              "https://r.jina.ai/https://ieeexplore.ieee.org/document/11606012/"
+            ],
+            "result": "No author manuscript found in bounded arXiv/GitHub/repository search. Jina proxy returned landing page and contents headings, but the PDF reports access denied and no methods text was obtained. CORE returned 429 and BASE denied this environment; absence claims remain bounded."
+          }
+        },
+        "secondary_index": {
+          "url": "https://api.semanticscholar.org/graph/v1/paper/DOI:10.1109/ISDA70544.2026.11606012",
+          "result": "HTTP 200, abstract available; index labels paper closed access. The abstract reports skin temperature, EDA, ECG, EMG; DANN/cross-attention Transformer; 20-epoch supervised contrastive warmup; Focal/ordinal loss, weighted sampling, and threshold-calibrated test-time augmentation; PainMonit labeled source to BioVid unlabeled target.",
+          "limit": "Third-party abstract only, not checked against version-of-record full text. Do not treat its metrics, split, cohort, or implementation details as primary-verified."
+        },
+        "decision": "Full primary methods remain unavailable. Treat the described method and PainMonit-to-BioVid setup as secondary-index claims. Do not classify PSPI/NRS/clinical constructs or assert exact method separation from S149 without the publisher text."
+      },
+      "metadata_review_2026_09_25": {
+        "checked_at": "2026-09-25",
+        "primary_metadata": {
+          "url": "https://api.crossref.org/works/10.1109/ISDA70544.2026.11606012",
+          "result": "HTTP 200; exact title, six authors (Samia Bouchfar, Yassmine Bouchfar, Hamid El Malali, Azeddine Mouhsen, Lhoucine Ben Taleb, Mohammed Harmouchi), venue and May 2026 publication date verified. Abstract absent. resource.primary points to IEEE document 11606012.",
+          "limit": "Crossref is DOI metadata, not the paper methods."
+        },
+        "publisher_route": {
+          "url": "https://ieeexplore.ieee.org/document/11606012/",
+          "result": "Earlier direct checks on 2026-09-25 returned HTTP 202 with empty body; PDF route returned HTTP 418 as already recorded in secondary_abstract_review."
+        },
+        "secondary_abstract": {
+          "url": "https://api.semanticscholar.org/graph/v1/paper/DOI:10.1109/ISDA70544.2026.11606012",
+          "result": "Index abstract only; four physiological channels, DANN/cross-attention Transformer, supervised contrastive warmup, test-time augmentation, PainMonit-to-BioVid source/target roles are reported there.",
+          "unverified_fields": [
+            "dataset label operationalization",
+            "PSPI vs NRS vs self-report or clinical outcome",
+            "participant and split unit",
+            "target-label use beyond abstract description",
+            "leakage controls",
+            "test-time augmentation protocol",
+            "metrics"
+          ]
+        },
+        "decision": "Publisher metadata is verified; no primary method text found. Preserve title and author metadata as verified, retain secondary method claims as unverified, and do not state PSPI/NRS/clinical equivalence or exact relation to S149 as established."
+      }
+    },
+    {
+      "source_id": "S192",
+      "mechanism": "Heat-stimulus and physiological-signal-conditioned diffusion generation of facial-expression video",
+      "relation_to_s149": "generation endpoint is expression video; real BioVid Part C subjects train the generator and no synthetic-source pain estimator with unlabeled-target alignment is shown",
+      "certainty": "primary_full_text",
+      "locator": {
+        "url": "https://arxiv.org/html/2409.11635",
+        "section": "Methods and Experiments"
+      }
+    },
+    {
+      "source_id": "S748",
+      "mechanism": "Journal extension of ModMix using randomized modality mixing and patchwise RBF networks",
+      "relation_to_s149": "augmentation of multimodal experimental-pain recognition rather than a demonstrated fully synthetic-source multimodal pain estimator; full fold details unavailable",
+      "certainty": "publisher_abstract_only",
+      "locator": {
+        "url": "https://www.mdpi.com/2073-431X/15/2/127",
+        "section": "publisher abstract; full methods inaccessible on review date"
+      }
+    },
+    {
+      "source_id": "S758",
+      "mechanism": "Demographically balanced synthetic facial-expression pairs and age-matched augmentation of a real-data-trained detector",
+      "relation_to_s149": "visual-only pain-expression augmentation with labeled UNBC and UofR training folds; not zero-real-label synthetic-source domain adaptation",
+      "certainty": "primary_full_text",
+      "locator": {
+        "url": "https://arxiv.org/html/2507.19673",
+        "section": "v3, Sections III and VI; Tables XIV-XV"
+      }
+    },
+    {
+      "source_id": "S759",
+      "mechanism": "AU-controlled 3D facial synthesis and visual neutral-reference ViTPain pretraining",
+      "relation_to_s149": "Visual PSPI synthetic pretraining followed by supervised real UNBC fivefold fine-tuning in official code, rather than S149's multimodal synthetic-source unlabeled-target alignment; paper v5 wording conflicts with code.",
+      "certainty": "primary_full_text_and_author_code_with_result_provenance_limit",
+      "locator": {
+        "url": "https://arxiv.org/html/2509.16727",
+        "section": "v5, Sections 3-5, especially Implementation Details and Ablation Studies"
+      }
+    },
+    {
+      "source_id": "S791",
+      "related_version_ids": [
+        "S792"
+      ],
+      "family": "Praveen / Granger / Cardinal weakly supervised pain-domain-adaptation family",
+      "mechanism": "FG 2020 WSDA author manuscript: I3D video model with multiple-instance learning and adversarial domain alignment; RECOLA affective-intensity annotations as fully annotated source labels and weakly sequence-labeled UNBC-McMaster target. UNBC frames carry PSPI-derived expression scores, quantized to ordinal levels; weak target labels are used during adaptation.",
+      "relation_to_s149": "Direct prior art for pain-domain adaptation on face videos, not for synthetic-source learning. It is not unlabeled-target UDA: weak target pain-expression labels are used. It therefore blocks novelty claims around pain-domain adaptation alone while remaining different from S149 synthetic multimodal source generation.",
+      "certainty": "primary_author_manuscript",
+      "locator": {
+        "url": "https://arxiv.org/html/1910.08173v1",
+        "section": "Sections III-A and III-B and IV-A in the initial author manuscript; not assumed identical to the FG 2020 proceedings text"
+      },
+      "locators": [
+        {
+          "url": "https://arxiv.org/html/1910.08173v1",
+          "section": "Sections III-A and III-B: source/target loss and adversarial alignment; Section IV-A: UNBC PSPI and RECOLA labels; Sections IV-B and IV-C: results"
+        },
+        {
+          "url": "https://doi.org/10.1109/FG47880.2020.00139",
+          "section": "IEEE proceedings DOI metadata for the FG 2020 version"
+        },
+        {
+          "url": "https://arxiv.org/abs/1910.08173",
+          "section": "Author manuscript version history; v3 dated 2024-07-06, do not silently treat later revision as identical to conference version"
+        },
+        {
+          "url": "https://recola.human-ist.ch/data/emoSPACE13_RECOLA_Database.pdf",
+          "section": "Primary corpus paper, corpus annotations: continuous arousal and valence; not pain scales"
+        },
+        {
+          "url": "https://arxiv.org/html/1910.08173v3",
+          "section": "Later 2024 author revision; retained for version history, not used as evidence that FG 2020 had identical methods"
+        },
+        {
+          "url": "https://arxiv.org/html/1910.08173v1",
+          "section": "Section IV-A stated count and enumerated PSPI mapping"
+        }
+      ],
+      "label_constructs": {
+        "UNBC_target": "PSPI facial-action score, a video-derived pain-expression label; weak sequence target labels are used in training. This is not a patient self-report or clinical outcome.",
+        "RECOLA_source": "The WSDA manuscript reports continuous source labels from RECOLA (-1 to +1); the primary RECOLA corpus paper identifies annotations as perceived emotion arousal and valence. These are affect labels, not pain or NRS labels; exact cross-label mapping in the WSDA implementation is not resolved here.",
+        "NRS_or_clinical_outcome": "Not reported as the modeled outcome in the reviewed method.",
+        "UNBC_quantization_discrepancy": "The method text calls the mapping five ordinal levels, but the listed mapping 0(0), 1(1), 2(2), 3(3), 4-5(4), 6-15(5) has six output groups 0-5. Do not silently resolve the author inconsistency."
+      },
+      "scope_limits": "Facial pain-expression prediction with cross-label source transfer from affect annotations; no synthetic pain source, patient-reported NRS endpoint, clinical pain outcome, SCS response or ECAP. Do not describe RECOLA annotations as labeled pain."
+    },
+    {
+      "source_id": "S792",
+      "related_version_ids": [
+        "S791"
+      ],
+      "family": "Praveen / Granger / Cardinal weakly supervised pain-domain-adaptation family",
+      "mechanism": "2021 Image and Vision Computing journal extension WSDA-OR: adversarial domain adaptation and multiple-instance regression with Gaussian ordinal target-label modeling and adaptive pooling. Main transfer is fully labeled RECOLA to weakly labeled UNBC-McMaster. Separate sequence-level experiments use BioVid Part A (pain levels 0-4) and a private fatigue cohort.",
+      "relation_to_s149": "Direct prior art for weakly supervised pain-domain adaptation, but not synthetic-source learning or unlabeled-target adaptation. Target sequence pain labels are required. BioVid Part A extension increases relevance to pain-domain transfer, but its label scale is not a patient-reported NRS or clinical pain endpoint in this study.",
+      "certainty": "primary_author_manuscript_and_publisher_affiliated_record",
+      "locator": {
+        "url": "https://arxiv.org/html/2008.06392",
+        "section": "Sections 3-4, especially 4.1 and 4.6; Table 4"
+      },
+      "locators": [
+        {
+          "url": "https://arxiv.org/html/2008.06392",
+          "section": "Sections 3 and 4.1: RECOLA source, UNBC target, PSPI, weak labels and participant split; Section 4.6/Table 4: BioVid Part A and fatigue transfer experiments"
+        },
+        {
+          "url": "https://doi.org/10.1016/j.imavis.2021.104167",
+          "section": "Publisher DOI for the peer-reviewed 2021 IVC paper"
+        },
+        {
+          "url": "https://pure.etsmtl.ca/en/publications/deep-domain-adaptation-with-ordinal-regression-for-pain-assessmen/",
+          "section": "ETS publisher-affiliated record and article metadata"
+        },
+        {
+          "url": "https://recola.human-ist.ch/data/emoSPACE13_RECOLA_Database.pdf",
+          "section": "Primary corpus paper, corpus annotations: continuous arousal and valence; not pain scales"
+        },
+        {
+          "url": "https://arxiv.org/html/2008.06392",
+          "section": "Section 4.1 stated count and enumerated PSPI mapping"
+        }
+      ],
+      "label_constructs": {
+        "UNBC_target": "PSPI frame scores 0-15, quantized to ordinal levels; sequence-level weak pain-expression labels are used for target adaptation. These are not patient-reported or clinical outcome measures.",
+        "BioVid_Part_A": "Pain-intensity categories 0-4 at sequence/subsequence level in experimental heat-pain recordings; 20 of 87 participants were held out for test. This is an experimental benchmark category, not an NRS or patient-linked clinical outcome reported by this model.",
+        "NRS_or_clinical_outcome": "No NRS endpoint or patient-linked clinical pain outcome reported in reviewed method.",
+        "RECOLA_source": "The WSDA-OR manuscript reports continuous -1 to +1 source intensity labels; the primary RECOLA corpus paper identifies annotations as perceived emotion arousal and valence. They are not pain or NRS labels; exact cross-label mapping is not resolved here.",
+        "UNBC_quantization_discrepancy": "The method text calls the mapping five ordinal levels, but the listed mapping 0(0), 1(1), 2(2), 3(3), 4-5(4), 6-15(5) has six output groups 0-5. Do not silently resolve the author inconsistency."
+      },
+      "scope_limits": "Keep BioVid experiment separate from UNBC main evaluation and the non-pain private fatigue cohort. No synthetic pain source, SCS response or ECAP."
+    }
+  ],
+  "citation_search": {
+    "s149_forward": {
+      "state": "no_indexed_citation_found",
+      "checked_at": "2026-09-25",
+      "openalex_work_id": "W7196979222",
+      "indexed_cited_by_count": 0,
+      "limit": "OpenAlex coverage and web indexing are incomplete; zero indexed citations is not proof that no citing work exists.",
+      "locators": [
+        {
+          "url": "https://api.openalex.org/works/W7196979222",
+          "section": "cited_by_count and updated_date, checked 2026-09-24"
+        },
+        {
+          "url": "https://www.frontiersin.org/journals/artificial-intelligence/articles/10.3389/frai.2026.1827727/full",
+          "section": "exact DOI/title web search seed"
+        },
+        {
+          "url": "https://api.openalex.org/works/W7196979222",
+          "section": "cited_by_count=0; updated_date=2026-09-24T07:57:37Z, retrieved 2026-09-25"
+        },
+        {
+          "url": "https://api.openalex.org/works?filter=cites:W7196979222&per-page=25",
+          "section": "meta.count=0; exact OpenAlex cites filter, retrieved 2026-09-25"
+        },
+        {
+          "url": "https://api.crossref.org/works/10.3389/frai.2026.1827727",
+          "section": "is-referenced-by-count=0; indexed date 2026-08-07, retrieved 2026-09-25"
+        },
+        {
+          "url": "https://www.frontiersin.org/journals/artificial-intelligence/articles/10.3389/frai.2026.1827727/full",
+          "section": "Exact DOI/title and author-search seed; no new citing primary paper found in this pass"
+        },
+        {
+          "url": "https://api.semanticscholar.org/graph/v1/paper/DOI:10.3389/frai.2026.1827727",
+          "section": "2026-09-25 citation endpoint reports no indexed citing works; separate from the S088 paper abstract endpoint"
+        },
+        {
+          "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=CITES:10.3389/frai.2026.1827727&format=json",
+          "section": "2026-09-25 Europe PMC cites query hitCount=0"
+        }
+      ],
+      "dated_refreshes": [
+        {
+          "date": "2026-09-24",
+          "indexed_cited_by_count": 0,
+          "new_direct_analogue": false,
+          "new_mechanism_class": false,
+          "status": "initial_pass"
+        },
+        {
+          "date": "2026-09-25",
+          "indexed_cited_by_count": 0,
+          "new_direct_analogue": true,
+          "new_mechanism_class": false,
+          "status": "first_later_dated_refresh_new_prior_art_family_found",
+          "coverage_limit": "OpenAlex record updated 2026-09-24; Crossref record last indexed 2026-08-07. Zero indexed citations is not zero actual citations. The 2026-09-25 expanded pain-domain search added one previously unindexed prior-art family (S791/S792); it does not cite S149."
+        },
+        {
+          "date": "2026-09-26",
+          "new_direct_analogue": false,
+          "new_mechanism_class": false,
+          "status": "first_clean_later_dated_refresh_bounded_coverage",
+          "primary_locators": [
+            {
+              "url": "https://www.frontiersin.org/journals/artificial-intelligence/articles/10.3389/frai.2026.1827727/full",
+              "locator": "S149 exact DOI/title and author search; existing primary work rechecked"
+            },
+            {
+              "url": "https://www.sciencedirect.com/science/article/pii/S026288562100072X",
+              "locator": "S792 publisher page; existing WSDA-OR family rechecked; page displays a cited-by listing but complete citing set not screened"
+            },
+            {
+              "url": "https://arxiv.org/abs/1910.08173",
+              "locator": "S791 primary preprint identity/title search; no new direct analogue primary-confirmed"
+            },
+            {
+              "url": "https://ieeexplore.ieee.org/document/11606012/",
+              "locator": "S088 primary document route attempted through web reader; inaccessible, no method text obtained"
+            },
+            {
+              "url": "https://ieeexplore.ieee.org/ielx8/11605974/11605976/11606012.pdf?arnumber=11606012",
+              "locator": "S088 primary PDF route attempted through web reader; inaccessible, no method text obtained"
+            }
+          ],
+          "coverage_limit": "OpenAlex cites API and IEEE Xplore routes were inaccessible through the web reader; the S792 publisher citing list was not exhaustively screened. The eight supplementary Pi jobs were cancelled without results and are excluded as evidence."
+        }
+      ]
+    },
+    "verified_family_link": {
+      "citing_source_id": "S759",
+      "cited_source_id": "S758",
+      "relation": "3DPain cites Syn Pain; shared authorship does not make the two methods identical",
+      "locator": {
+        "url": "https://arxiv.org/html/2509.16727",
+        "section": "v5, References [35] and Related Works"
+      }
+    },
+    "s088_forward_and_reverse": {
+      "checked_at": "2026-09-25",
+      "run_window_utc": "2026-09-25T18:55:48Z/2026-09-25T18:59:49Z",
+      "identity": {
+        "doi": "10.1109/ISDA70544.2026.11606012",
+        "openalex_work_id": "W7169883718",
+        "semantic_scholar_paper_id": null,
+        "title": "Cross-Domain Multimodal Pain Detection Using a DANN–Transformer Architecture with Supervised Contrastive Warmup and Test-Time Augmentation"
+      },
+      "indexed_cited_by": {
+        "crossref": {
+          "url": "https://api.crossref.org/works/10.1109/ISDA70544.2026.11606012",
+          "result": "Initial worker query HTTP 200: is-referenced-by-count=0; reference-count=20; relation empty. A subsequent direct query from this environment returned HTTP 429."
+        },
+        "openalex": {
+          "url": "https://api.openalex.org/works/doi:10.1109/ISDA70544.2026.11606012",
+          "result": "cited_by_count=0, cited_by_api_url=null; explicit cites filter returned HTTP 429 during worker check."
+        },
+        "semantic_scholar": {
+          "url": "https://api.semanticscholar.org/graph/v1/paper/DOI:10.1109/ISDA70544.2026.11606012/citations?fields=citingPaper.title,citingPaper.year&limit=100",
+          "result": "Empty citations array in worker check and independently rechecked directly."
+        },
+        "open_citations": {
+          "url": "https://opencitations.net/index/api/v1/citations/10.1109/ISDA70544.2026.11606012",
+          "result": "Empty array in worker check and independently rechecked directly."
+        },
+        "europe_pmc": {
+          "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=CITES:10.1109/ISDA70544.2026.11606012&format=json",
+          "result": "Worker reported hitCount=0; Europe PMC coverage is incomplete for this conference record."
+        },
+        "openalex_filter_limit": "Rate-limited HTTP 429; not a verified empty result.",
+        "ieee_xplore": {
+          "url": "https://ieeexplore.ieee.org/document/11606012/citations",
+          "result": "Worker-reported proxy response empty; independent direct request returned HTTP 202 with zero-byte body, so publisher cited-by page could not be independently read in this environment."
+        }
+      },
+      "backward_reference_metadata": {
+        "crossref_reference_count": 20,
+        "doi_resolved_count": 14,
+        "locator": "https://api.crossref.org/works/10.1109/ISDA70544.2026.11606012",
+        "limit": "Deposited bibliography metadata is discovery evidence; six no-DOI references and two mismatched deposited referents were not primary-resolved. S2 reported 23 but elided its reference list."
+      },
+      "s149_relation": {
+        "finding": "Semantic Scholar recommendation of S149 is a recommender relation, not a citation edge. S149 was published after S088 was added to IEEE Xplore; S149 primary full-text search showed no S088 DOI, IEEE number, Bouchfar author, or exact title. The primary direction S149->S088 therefore was not found; the reverse direction is chronologically incompatible with the recorded publication dates.",
+        "primary_locator": "https://www.frontiersin.org/journals/artificial-intelligence/articles/10.3389/frai.2026.1827727/full",
+        "discovery_locator": "https://api.semanticscholar.org/recommendations/v1/papers/forpaper/DOI:10.1109/ISDA70544.2026.11606012?limit=20",
+        "limit": "S088 reference list is unavailable in primary full text, and index metadata is incomplete; do not treat this as exhaustive reference-content verification."
+      },
+      "coverage_limit": "S088 is a 2026 proceedings item with short indexing history. Zero reachable index counts do not establish zero actual citations. IEEE primary cited-by route was inaccessible on independent direct check; Google Scholar linked by IEEE was HTTP 403 in worker pass."
+    }
+  },
+  "next_refresh_plan": {
+    "earliest_date": "2026-09-27",
+    "stream": "NS-06",
+    "queries": [
+      "OpenAlex forward citations of DOI 10.3389/frai.2026.1827727 / W7196979222 and exact DOI/title/author search for S149",
+      "Exact DOI/title and author search for S791 FG 2020: 10.1109/FG47880.2020.00139 and arXiv:1910.08173",
+      "Exact DOI/title and author search for S792 journal extension: 10.1016/j.imavis.2021.104167 and arXiv:2008.06392; screen newer cited records from the publisher list against primary full texts",
+      "Search new primary works on synthetic pain generation and synthetic-to-real pain domain adaptation; distinguish them from S149 and S791/S792",
+      "Backward and forward citation verification for any newly discovered candidate, retaining label-construct, version, and source-access boundaries"
+    ],
+    "decision_rule": "Record a new dated search run with exact queries and primary locators. The 2026-09-26 run is the first later-dated refresh with no newly primary-confirmed direct analogue or mechanism class; a second consecutive clean dated refresh is not eligible before 2026-09-27. Keep saturation false until the two-refresh rule, full stream/citation checks, and full primary S088 method are resolved."
+  },
+  "s759_revision_check": {
+    "state": "protocol_changed_between_versions",
+    "finding": "Version 1 describes subject-independent UNBC fivefold evaluation with synthetic augmentation and end-to-end fine-tuning. Version 5 uses a different ViTPain architecture and calls UNBC reserved for evaluation while also reporting fivefold cross-validation, weighted sampling and fine-tuning. The version-1 training protocol cannot be assumed for version 5.",
+    "locators": [
+      {
+        "url": "https://arxiv.org/html/2509.16727v1",
+        "section": "v1, Section 5 Datasets, Performance Comparison and Implementation Details"
+      },
+      {
+        "url": "https://arxiv.org/html/2509.16727",
+        "section": "v5, Sections 4-5, especially Implementation Details and Ablation Studies"
+      }
+    ]
+  },
+  "variant_decisions": [
+    {
+      "variant_id": "NV-005",
+      "decision": "mechanistically_distinct_if_tested",
+      "reason": "Its claimed contribution requires a Drosophila-connectome constraint and a separate physical human ECAP operator with human-only and graph-null controls; S149 has neither, while domain adaptation alone is prior art."
+    },
+    {
+      "variant_id": "NV-010",
+      "decision": "mechanistically_distinct_if_tested",
+      "reason": "Closed-loop SCS control from connectome-derived state plus physical ECAP observation differs in target and operator from S149 pain-estimation UDA; synthetic pretraining alone is prior art."
+    },
+    {
+      "variant_id": "NV-011",
+      "decision": "mechanistically_distinct_if_tested",
+      "reason": "Cross-connectome robustness for physical ECAP formation differs from S149 synthetic facial/physiological pain estimation, provided the separate measurement operator and connectome contribution survive ablations."
+    }
+  ],
+  "remaining": [
+    "S088 version-of-record full methods remain inaccessible; verified publisher metadata and secondary-index method claims are separated. Exact PSPI/NRS/clinical label construct, source-target protocol and split remain unverified from the primary paper.",
+    "Seven Pi worker handles from 2026-09-25 lost status observability after the submitting bridge returned a pi-wait error. Last bridge snapshot was running with agent_settled=false; the current bridge reports unknown jobId. See pi_worker_run_2026_09_25.pending_unverified.",
+    "One bounded later-dated NS-06 refresh on 2026-09-26 found no new direct analogue or mechanism class in manual primary-source search. One clean refresh is counted; next eligible refresh is 2026-09-27. Citation coverage remains bounded and saturation is false.",
+    "Link S759 reported-result runs to a code commit or manifest if exact provenance is required; executable protocol is resolved but the manuscript conflict remains documented."
+  ],
+  "s759_author_code_check": {
+    "state": "executable_protocol_resolved_reported_runs_unverified",
+    "checked_at": "2026-09-24",
+    "commit": "b580e7c7d9af16d8df862bb4697ce2133ced9d37",
+    "finding": "Official code loads labeled UNBC PSPI/AU data and trains on real training subjects in every fivefold split after synthetic pretraining; the v5 manuscript's evaluation-only wording conflicts with this. No run manifest links its reported metrics to the pinned code commit.",
+    "locators": [
+      {
+        "url": "https://arxiv.org/html/2509.16727",
+        "section": "v5, Section 5 Implementation Details and Ablation Studies"
+      },
+      {
+        "url": "https://github.com/TaatiTeam/Pain-in-3D/blob/b580e7c7d9af16d8df862bb4697ce2133ced9d37/README.md",
+        "section": "Training, Stage 2: synthetic checkpoint followed by UNBC fivefold fine-tuning"
+      },
+      {
+        "url": "https://github.com/TaatiTeam/Pain-in-3D/blob/b580e7c7d9af16d8df862bb4697ce2133ced9d37/data/unbc_loader.py",
+        "section": "Lines 87-114: label_AU_* and label_pspi loaded from UNBC annotations"
+      },
+      {
+        "url": "https://github.com/TaatiTeam/Pain-in-3D/blob/b580e7c7d9af16d8df862bb4697ce2133ced9d37/data/unbc_loader.py",
+        "section": "Lines 149-184: subject-disjoint train and validation groups for each fold"
+      },
+      {
+        "url": "https://github.com/TaatiTeam/Pain-in-3D/blob/b580e7c7d9af16d8df862bb4697ce2133ced9d37/train_unbc.py",
+        "section": "Lines 28-40, 60-64 and 114-121: UNBC datamodule, synthetic checkpoint, trainer.fit and test"
+      }
+    ]
+  },
+  "pi_worker_run_2026_09_25": {
+    "mode": "read_only_primary_checks; no worker was authorized to edit canonical files",
+    "submitted_at": "2026-09-25T18:55:22Z",
+    "output_updated_at": "2026-09-25T19:02:27Z",
+    "bridge_error": "pi-batch exited with \"Picodex tool pi-wait returned an error\" while polling pending jobs; it is not recorded as a job completion.",
+    "status_check": "The current session bridge pi-status returned \"unknown jobId\" for each pending ID because job receipts are local to the bridge process that submitted them. Exact Pi thread files exist, but none of the seven contains an agent_settled marker; no terminal result was established.",
+    "settled": [
+      {
+        "label": "s088-citation-trail",
+        "job_id": "49bb5358-c44e-4f6d-bcf2-d5d9a02a101c",
+        "thread_id": "0c4f3724-91dc-4caa-868d-5870f20e7fd4",
+        "agent_settled": true,
+        "exit_code": 0
+      },
+      {
+        "label": "s149-forward-citations",
+        "job_id": "01b96ccf-8048-4fd6-b789-4822f58574f5",
+        "thread_id": "7d58a55e-8b30-49a0-a340-a77b10a55fc0",
+        "agent_settled": true,
+        "exit_code": 0
+      },
+      {
+        "label": "s791-primary-method",
+        "job_id": "fd119143-900d-4525-ac82-b2653fd241ec",
+        "thread_id": "75440615-0e22-4962-97d3-6cd3d4532f0c",
+        "agent_settled": true,
+        "exit_code": 0
+      }
+    ],
+    "pending_unverified": [
+      {
+        "label": "s088-owner-fulltext",
+        "job_id": "a10b640d-bbde-44ac-a538-3f229e6ed30c",
+        "thread_id": "72bb4975-f11f-4412-8afc-1443eb6c9246",
+        "last_reported_status": "running",
+        "agent_settled": false,
+        "exit_code": null
+      },
+      {
+        "label": "s149-backward-analogs",
+        "job_id": "805cc7e8-2493-49d2-a541-3f8bf534f9ad",
+        "thread_id": "57b12816-038a-48ab-bfdd-85f1fe9e8d2f",
+        "last_reported_status": "running",
+        "agent_settled": false,
+        "exit_code": null
+      },
+      {
+        "label": "s792-primary-method",
+        "job_id": "f3f9438e-99e7-48b9-a30b-bf2a21720f1e",
+        "thread_id": "888bb69d-6c20-4f57-a0a4-8d1c113b1327",
+        "last_reported_status": "running",
+        "agent_settled": false,
+        "exit_code": null
+      },
+      {
+        "label": "s791-s792-citations",
+        "job_id": "976325c3-2ac4-4a10-834b-d3e358d96062",
+        "thread_id": "5d0846dc-fefd-48ad-84f2-cc48bcb9a8d3",
+        "last_reported_status": "running",
+        "agent_settled": false,
+        "exit_code": null
+      },
+      {
+        "label": "synthetic-pain-search",
+        "job_id": "9c321103-12d7-4993-b88f-302f3f784817",
+        "thread_id": "194deb78-6a6d-4e7e-97cf-293e7b318845",
+        "last_reported_status": "running",
+        "agent_settled": false,
+        "exit_code": null
+      },
+      {
+        "label": "s758-s759-version-construct",
+        "job_id": "e727de45-f360-41b9-95a7-6b2badf2aa04",
+        "thread_id": "c4c405ca-087e-47e0-b487-54e3eccf14fa",
+        "last_reported_status": "running",
+        "agent_settled": false,
+        "exit_code": null
+      },
+      {
+        "label": "nrs-clinical-distinction",
+        "job_id": "aea3fc71-4462-4806-8872-5a6544402526",
+        "thread_id": "f98326c7-9e77-4014-be64-074e8a0c870c",
+        "last_reported_status": "running",
+        "agent_settled": false,
+        "exit_code": null
+      }
+    ],
+    "handling": "Do not infer that these seven jobs are active or completed now. Their current terminal state is unverified; retain exact handles for possible continuation/status recovery through their owning bridge only."
+  },
+  "ns06_refreshes": [
+    {
+      "id": "NS-RUN-2026-09-26-01",
+      "date": "2026-09-26",
+      "run_window_utc": "2026-09-25T21:02:44Z/2026-09-25T21:10:06Z",
+      "run_window_local": "2026-09-26T00:02:44+03:00/2026-09-26T00:10:06+03:00",
+      "result": "No new direct analogue or mechanism class was primary-confirmed in the bounded manual refresh.",
+      "new_direct_analogue": false,
+      "new_mechanism_class": false,
+      "saturation": false,
+      "saturation_clock": {
+        "previous_new_analogue_discovery_date": "2026-09-25",
+        "clean_later_dated_refreshes": 1,
+        "next_eligible_refresh_date": "2026-09-27",
+        "completed_rule": "second of two required consecutive later-dated clean refreshes not yet performed"
+      },
+      "s088": "Full primary method not obtained; IEEE document and PDF routes inaccessible through web reader; method remains title_only.",
+      "pi_worker_execution": {
+        "submitted": 8,
+        "terminal_status": "all_cancelled",
+        "terminal_at_utc": "2026-09-25T21:06:10.243Z",
+        "terminal_at_local": "2026-09-26T00:06:10.243+03:00",
+        "peak_observed": "4 active and 4 queued immediately after submission",
+        "event_counts_at_cancellation": [
+          11699,
+          15727,
+          17814,
+          20675
+        ],
+        "global_capacity_view": "overview tool unavailable; counts are local observations only",
+        "evidence_use": "cancelled worker outputs are not used as search evidence"
+      }
+    }
+  ]
+}

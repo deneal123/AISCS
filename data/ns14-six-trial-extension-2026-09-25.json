@@ -1,0 +1,24 @@
+{
+  "meta": {
+    "schema_version": "1.0.0",
+    "checked_at": "2026-09-25"
+  },
+  "new_trial_ids": [
+    "NCT06246526",
+    "NCT06413277",
+    "NCT06775535",
+    "NCT07267715",
+    "NCT07413731",
+    "NCT07502612"
+  ],
+  "official_api_urls": [
+    "https://clinicaltrials.gov/api/v2/studies/NCT06246526",
+    "https://clinicaltrials.gov/api/v2/studies/NCT06413277",
+    "https://clinicaltrials.gov/api/v2/studies/NCT06775535",
+    "https://clinicaltrials.gov/api/v2/studies/NCT07267715",
+    "https://clinicaltrials.gov/api/v2/studies/NCT07413731",
+    "https://clinicaltrials.gov/api/v2/studies/NCT07502612"
+  ],
+  "decision": "add_registry_metadata_only",
+  "boundary": "Six additional registrations, no results or participant-linked ECAP/pain release. Query saturation and later dated update remain open. NCT07413731 and NCT07502612 have the same sponsor; independent cohorts are not assumed."
+}

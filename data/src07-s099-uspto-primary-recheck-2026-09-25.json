@@ -1,0 +1,18 @@
+{
+  "source_id": "S099",
+  "checked_at": "2026-09-25",
+  "query": "US12642969B2 site:patentsgazette.uspto.gov",
+  "route": "USPTO Official Gazette, June 2 2026, week 22",
+  "locators": [
+    {
+      "url": "https://patentsgazette.uspto.gov/week22/OG/patentee/alphaD.html",
+      "locator": "Dinsmoor, David A.; to Medtronic, Inc.; Spinal cord injury therapy based on evoked compound action potentials; patent 12642969"
+    },
+    {
+      "url": "https://patentsgazette.uspto.gov/week22/OG/html/1547-1/US12642969-20260602.html",
+      "locator": "US 12,642,969 B2 front matter: 21 claims, application 17/810,459, prior publication US 2023/0047655 A1; claim 1: SCI symptom therapy adjusted using sensed ECAP characteristics"
+    }
+  ],
+  "decision": "Official USPTO record confirms the June 2 2026 grant and its 2023 application publication. Claim 1 concerns spinal-cord-injury symptom therapy and ECAP feedback; it does not establish an analgesic outcome or empirical validation.",
+  "remaining": "Check later corrections, reexamination and family updates at a subsequent dated cut; the Official Gazette entry alone does not prove global absence of updates. SRC-07 remains open."
+}

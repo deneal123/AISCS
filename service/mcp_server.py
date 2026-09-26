@@ -15,6 +15,7 @@ from .contracts import SERVICE_VERSION
 from .core import DataError, ResearchRepository, default_data_dir
 from .curation import cluster_apply, cluster_check, resolve_batch, review_apply, review_check
 from .integrity import validate_repository
+from .novelty import search_novelty as search_novelty_catalogue
 from .pipeline import atomic_write_json, publish_candidates, review_candidates, snapshot_repository
 
 SERVER_INSTRUCTIONS = (
@@ -22,7 +23,9 @@ SERVER_INSTRUCTIONS = (
     "not subjective pain; ECAP is not a direct measure of pain; verified_primary confirms the "
     "primary source was checked, not that its claims were independently reproduced. Keep "
     "Drosophila simulation, transfer to human pain datasets, and clinical SCS validation as "
-    "separate evidence levels. Mutating tools require an explicit apply=true where offered."
+    "separate evidence levels. The required bridge uses a Drosophila dynamics model and a "
+    "separate physical human ECAP observation model; the fly is not a direct digital twin of "
+    "the human spinal cord. Mutating tools require an explicit apply=true where offered."
 )
 
 READ_ONLY = ToolAnnotations(readOnlyHint=True, destructiveHint=False, openWorldHint=False)
@@ -124,6 +127,25 @@ class ResearchMcpService:
             query=query, source_id=source_id, limit=limit, offset=offset
         )
 
+    def search_novelty(
+        self,
+        query: str | None = None,
+        prior_art_outcome: str | None = None,
+        limit: int = 50,
+        offset: int = 0,
+    ) -> dict[str, Any]:
+        limit, offset = _bounded_page(limit, offset)
+        return search_novelty_catalogue(
+            self.data_dir,
+            query=query,
+            prior_art_outcome=prior_art_outcome,
+            limit=limit,
+            offset=offset,
+        )
+
+    def get_dissertation_concept(self) -> dict[str, Any]:
+        return self.repository.dissertation_concept()
+
     def save_candidate(
         self, filename: str, candidate: dict[str, Any] | list[Any]
     ) -> dict[str, Any]:
@@ -220,6 +242,13 @@ class ResearchMcpService:
             "data/human-dataset-matrix.json",
             "data/source-record.schema.json",
             "data/vocabularies.json",
+            "data/completeness-report.json",
+            "data/search-protocol.json",
+            "data/novelty-landscape.json",
+            "data/dissertation-concept.json",
+            "data/runtime-audit.json",
+            "docs/novelty-landscape.md",
+            "docs/dissertation-concept.md",
         }
         if relative_path not in allowed:
             raise DataError("resource is not allowlisted")
@@ -303,6 +332,21 @@ def create_server(data_dir: Path | str | None = None) -> MCPServer:
         """Search traceable claims, evidence, limitations, and permitted conclusions."""
         return service.search_evidence(query, source_id, limit, offset)
 
+    @server.tool(annotations=READ_ONLY)
+    def search_novelty(
+        query: str | None = None,
+        prior_art_outcome: str | None = None,
+        limit: int = 50,
+        offset: int = 0,
+    ) -> dict[str, Any]:
+        """Search unranked Drosophila x ECAP x SCS novelty variants."""
+        return service.search_novelty(query, prior_art_outcome, limit, offset)
+
+    @server.tool(annotations=READ_ONLY)
+    def get_dissertation_concept() -> dict[str, Any]:
+        """Return the umbrella topic, goal, hypothesis, tasks, and traceable claims."""
+        return service.get_dissertation_concept()
+
     @server.tool(annotations=WRITE)
     def save_candidate(filename: str, candidate: dict[str, Any] | list[Any]) -> dict[str, Any]:
         """Validate and atomically save a new, non-overwriting inbox candidate."""
@@ -351,6 +395,26 @@ def create_server(data_dir: Path | str | None = None) -> MCPServer:
     @server.resource("research://human-dataset-matrix", mime_type="application/json")
     def human_dataset_matrix() -> str:
         return service.read_text("data/human-dataset-matrix.json")
+
+    @server.resource("research://completeness", mime_type="application/json")
+    def completeness() -> str:
+        return service.read_text("data/completeness-report.json")
+
+    @server.resource("research://search-protocol", mime_type="application/json")
+    def search_protocol() -> str:
+        return service.read_text("data/search-protocol.json")
+
+    @server.resource("research://novelty-landscape", mime_type="application/json")
+    def novelty_landscape() -> str:
+        return service.read_text("data/novelty-landscape.json")
+
+    @server.resource("research://dissertation-concept", mime_type="application/json")
+    def dissertation_concept() -> str:
+        return service.read_text("data/dissertation-concept.json")
+
+    @server.resource("research://runtime-audit", mime_type="application/json")
+    def runtime_audit() -> str:
+        return service.read_text("data/runtime-audit.json")
 
     @server.resource("research://schema/source-record", mime_type="application/schema+json")
     def source_schema() -> str:

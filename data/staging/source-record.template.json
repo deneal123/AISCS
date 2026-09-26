@@ -31,12 +31,12 @@
   "evidence": {
     "species": null,
     "population": null,
-    "subject_domain": "unknown",
+    "subject_domain": "unavailable_after_search",
     "modalities": [],
     "sample_size": null,
-    "target_construct": "unknown",
+    "target_construct": "unavailable_after_search",
     "target_label": null,
-    "access_status": "unknown",
+    "access_status": "unavailable_after_search",
     "evidence_role": "not_assigned"
   },
   "validation": {
@@ -55,5 +55,439 @@
   "relations": [],
   "risk_flags": [
     "missing_primary_identifier"
-  ]
+  ],
+  "field_resolution": {
+    "авторы": {
+      "state": "unavailable_after_search",
+      "value": null,
+      "reason": "Значение не удалось установить по доступному первичному или библиографическому источнику; отсутствие зафиксировано без догадки.",
+      "checked_at": "2026-09-23",
+      "locators": [
+        {
+          "url": "local:validation-log",
+          "locator": "canonical field авторы"
+        }
+      ]
+    },
+    "год": {
+      "state": "unavailable_after_search",
+      "value": null,
+      "reason": "Значение не удалось установить по доступному первичному или библиографическому источнику; отсутствие зафиксировано без догадки.",
+      "checked_at": "2026-09-23",
+      "locators": [
+        {
+          "url": "local:validation-log",
+          "locator": "canonical field год"
+        }
+      ]
+    },
+    "издание": {
+      "state": "unavailable_after_search",
+      "value": null,
+      "reason": "Значение не удалось установить по доступному первичному или библиографическому источнику; отсутствие зафиксировано без догадки.",
+      "checked_at": "2026-09-23",
+      "locators": [
+        {
+          "url": "local:validation-log",
+          "locator": "canonical field издание"
+        }
+      ]
+    },
+    "модальность": {
+      "state": "unavailable_after_search",
+      "value": null,
+      "reason": "Значение не удалось установить по доступному первичному или библиографическому источнику; отсутствие зафиксировано без догадки.",
+      "checked_at": "2026-09-23",
+      "locators": [
+        {
+          "url": "local:validation-log",
+          "locator": "canonical field модальность"
+        }
+      ]
+    },
+    "задача": {
+      "state": "unavailable_after_search",
+      "value": null,
+      "reason": "Значение не удалось установить по доступному первичному или библиографическому источнику; отсутствие зафиксировано без догадки.",
+      "checked_at": "2026-09-23",
+      "locators": [
+        {
+          "url": "local:validation-log",
+          "locator": "canonical field задача"
+        }
+      ]
+    },
+    "метод": {
+      "state": "unavailable_after_search",
+      "value": null,
+      "reason": "Значение не удалось установить по доступному первичному или библиографическому источнику; отсутствие зафиксировано без догадки.",
+      "checked_at": "2026-09-23",
+      "locators": [
+        {
+          "url": "local:validation-log",
+          "locator": "canonical field метод"
+        }
+      ]
+    },
+    "датасет": {
+      "state": "unavailable_after_search",
+      "value": null,
+      "reason": "Значение не удалось установить по доступному первичному или библиографическому источнику; отсутствие зафиксировано без догадки.",
+      "checked_at": "2026-09-23",
+      "locators": [
+        {
+          "url": "local:validation-log",
+          "locator": "canonical field датасет"
+        }
+      ]
+    },
+    "производительность": {
+      "state": "unavailable_after_search",
+      "value": null,
+      "reason": "Значение не удалось установить по доступному первичному или библиографическому источнику; отсутствие зафиксировано без догадки.",
+      "checked_at": "2026-09-23",
+      "locators": [
+        {
+          "url": "local:validation-log",
+          "locator": "canonical field производительность"
+        }
+      ]
+    },
+    "кросс_субъект": {
+      "state": "unavailable_after_search",
+      "value": null,
+      "reason": "Значение не удалось установить по доступному первичному или библиографическому источнику; отсутствие зафиксировано без догадки.",
+      "checked_at": "2026-09-23",
+      "locators": [
+        {
+          "url": "local:validation-log",
+          "locator": "canonical field кросс_субъект"
+        }
+      ]
+    },
+    "ограничения": {
+      "state": "unavailable_after_search",
+      "value": null,
+      "reason": "Значение не удалось установить по доступному первичному или библиографическому источнику; отсутствие зафиксировано без догадки.",
+      "checked_at": "2026-09-23",
+      "locators": [
+        {
+          "url": "local:validation-log",
+          "locator": "canonical field ограничения"
+        }
+      ]
+    },
+    "identifiers.doi": {
+      "state": "not_applicable",
+      "value": null,
+      "reason": "Поле неприменимо к типу и роли данного источника.",
+      "checked_at": "2026-09-23",
+      "locators": [
+        {
+          "url": "local:validation-log",
+          "locator": "canonical field identifiers.doi"
+        }
+      ]
+    },
+    "identifiers.pmid": {
+      "state": "not_applicable",
+      "value": null,
+      "reason": "Поле неприменимо к типу и роли данного источника.",
+      "checked_at": "2026-09-23",
+      "locators": [
+        {
+          "url": "local:validation-log",
+          "locator": "canonical field identifiers.pmid"
+        }
+      ]
+    },
+    "identifiers.arxiv_id": {
+      "state": "not_applicable",
+      "value": null,
+      "reason": "Поле неприменимо к типу и роли данного источника.",
+      "checked_at": "2026-09-23",
+      "locators": [
+        {
+          "url": "local:validation-log",
+          "locator": "canonical field identifiers.arxiv_id"
+        }
+      ]
+    },
+    "identifiers.patent_id": {
+      "state": "not_applicable",
+      "value": null,
+      "reason": "Поле неприменимо к типу и роли данного источника.",
+      "checked_at": "2026-09-23",
+      "locators": [
+        {
+          "url": "local:validation-log",
+          "locator": "canonical field identifiers.patent_id"
+        }
+      ]
+    },
+    "identifiers.dataset_id": {
+      "state": "not_applicable",
+      "value": null,
+      "reason": "Поле неприменимо к типу и роли данного источника.",
+      "checked_at": "2026-09-23",
+      "locators": [
+        {
+          "url": "local:validation-log",
+          "locator": "canonical field identifiers.dataset_id"
+        }
+      ]
+    },
+    "identifiers.exact_url": {
+      "state": "unavailable_after_search",
+      "value": null,
+      "reason": "Значение не удалось установить по доступному первичному или библиографическому источнику; отсутствие зафиксировано без догадки.",
+      "checked_at": "2026-09-23",
+      "locators": [
+        {
+          "url": "local:validation-log",
+          "locator": "canonical field identifiers.exact_url"
+        }
+      ]
+    },
+    "provenance.retrieved_at": {
+      "state": "unavailable_after_search",
+      "value": null,
+      "reason": "Значение не удалось установить по доступному первичному или библиографическому источнику; отсутствие зафиксировано без догадки.",
+      "checked_at": "2026-09-23",
+      "locators": [
+        {
+          "url": "local:validation-log",
+          "locator": "canonical field provenance.retrieved_at"
+        }
+      ]
+    },
+    "provenance.search_stream": {
+      "state": "unavailable_after_search",
+      "value": null,
+      "reason": "Значение не удалось установить по доступному первичному или библиографическому источнику; отсутствие зафиксировано без догадки.",
+      "checked_at": "2026-09-23",
+      "locators": [
+        {
+          "url": "local:validation-log",
+          "locator": "canonical field provenance.search_stream"
+        }
+      ]
+    },
+    "provenance.query_or_seed": {
+      "state": "unavailable_after_search",
+      "value": null,
+      "reason": "Значение не удалось установить по доступному первичному или библиографическому источнику; отсутствие зафиксировано без догадки.",
+      "checked_at": "2026-09-23",
+      "locators": [
+        {
+          "url": "local:validation-log",
+          "locator": "canonical field provenance.query_or_seed"
+        }
+      ]
+    },
+    "provenance.iteration": {
+      "state": "unavailable_after_search",
+      "value": null,
+      "reason": "Значение не удалось установить по доступному первичному или библиографическому источнику; отсутствие зафиксировано без догадки.",
+      "checked_at": "2026-09-23",
+      "locators": [
+        {
+          "url": "local:validation-log",
+          "locator": "canonical field provenance.iteration"
+        }
+      ]
+    },
+    "evidence.species": {
+      "state": "unavailable_after_search",
+      "value": null,
+      "reason": "Значение не удалось установить по доступному первичному или библиографическому источнику; отсутствие зафиксировано без догадки.",
+      "checked_at": "2026-09-23",
+      "locators": [
+        {
+          "url": "local:validation-log",
+          "locator": "canonical field evidence.species"
+        }
+      ]
+    },
+    "evidence.population": {
+      "state": "unavailable_after_search",
+      "value": null,
+      "reason": "Значение не удалось установить по доступному первичному или библиографическому источнику; отсутствие зафиксировано без догадки.",
+      "checked_at": "2026-09-23",
+      "locators": [
+        {
+          "url": "local:validation-log",
+          "locator": "canonical field evidence.population"
+        }
+      ]
+    },
+    "evidence.subject_domain": {
+      "state": "unavailable_after_search",
+      "value": null,
+      "reason": "Значение не удалось установить по доступному первичному или библиографическому источнику; отсутствие зафиксировано без догадки.",
+      "checked_at": "2026-09-23",
+      "locators": [
+        {
+          "url": "local:validation-log",
+          "locator": "canonical field evidence.subject_domain"
+        }
+      ]
+    },
+    "evidence.modalities": {
+      "state": "not_applicable",
+      "value": null,
+      "reason": "Поле неприменимо к типу и роли данного источника.",
+      "checked_at": "2026-09-23",
+      "locators": [
+        {
+          "url": "local:validation-log",
+          "locator": "canonical field evidence.modalities"
+        }
+      ]
+    },
+    "evidence.sample_size": {
+      "state": "unavailable_after_search",
+      "value": null,
+      "reason": "Значение не удалось установить по доступному первичному или библиографическому источнику; отсутствие зафиксировано без догадки.",
+      "checked_at": "2026-09-23",
+      "locators": [
+        {
+          "url": "local:validation-log",
+          "locator": "canonical field evidence.sample_size"
+        }
+      ]
+    },
+    "evidence.target_construct": {
+      "state": "unavailable_after_search",
+      "value": null,
+      "reason": "Значение не удалось установить по доступному первичному или библиографическому источнику; отсутствие зафиксировано без догадки.",
+      "checked_at": "2026-09-23",
+      "locators": [
+        {
+          "url": "local:validation-log",
+          "locator": "canonical field evidence.target_construct"
+        }
+      ]
+    },
+    "evidence.target_label": {
+      "state": "unavailable_after_search",
+      "value": null,
+      "reason": "Значение не удалось установить по доступному первичному или библиографическому источнику; отсутствие зафиксировано без догадки.",
+      "checked_at": "2026-09-23",
+      "locators": [
+        {
+          "url": "local:validation-log",
+          "locator": "canonical field evidence.target_label"
+        }
+      ]
+    },
+    "evidence.access_status": {
+      "state": "unavailable_after_search",
+      "value": null,
+      "reason": "Значение не удалось установить по доступному первичному или библиографическому источнику; отсутствие зафиксировано без догадки.",
+      "checked_at": "2026-09-23",
+      "locators": [
+        {
+          "url": "local:validation-log",
+          "locator": "canonical field evidence.access_status"
+        }
+      ]
+    },
+    "validation.checked_at": {
+      "state": "unavailable_after_search",
+      "value": null,
+      "reason": "Значение не удалось установить по доступному первичному или библиографическому источнику; отсутствие зафиксировано без догадки.",
+      "checked_at": "2026-09-23",
+      "locators": [
+        {
+          "url": "local:validation-log",
+          "locator": "canonical field validation.checked_at"
+        }
+      ]
+    },
+    "validation.split_unit": {
+      "state": "reported",
+      "value": "not_reported",
+      "reason": "Значение сохранено из проверенной канонической карточки.",
+      "checked_at": "2026-09-23",
+      "locators": [
+        {
+          "url": "local:validation-log",
+          "locator": "canonical field validation.split_unit"
+        }
+      ]
+    },
+    "validation.cross_subject": {
+      "state": "reported",
+      "value": "not_reported",
+      "reason": "Значение сохранено из проверенной канонической карточки.",
+      "checked_at": "2026-09-23",
+      "locators": [
+        {
+          "url": "local:validation-log",
+          "locator": "canonical field validation.cross_subject"
+        }
+      ]
+    },
+    "validation.external_validation": {
+      "state": "reported",
+      "value": "not_reported",
+      "reason": "Значение сохранено из проверенной канонической карточки.",
+      "checked_at": "2026-09-23",
+      "locators": [
+        {
+          "url": "local:validation-log",
+          "locator": "canonical field validation.external_validation"
+        }
+      ]
+    },
+    "validation.calibration": {
+      "state": "reported",
+      "value": "not_reported",
+      "reason": "Значение сохранено из проверенной канонической карточки.",
+      "checked_at": "2026-09-23",
+      "locators": [
+        {
+          "url": "local:validation-log",
+          "locator": "canonical field validation.calibration"
+        }
+      ]
+    },
+    "validation.uncertainty": {
+      "state": "reported",
+      "value": "not_reported",
+      "reason": "Значение сохранено из проверенной канонической карточки.",
+      "checked_at": "2026-09-23",
+      "locators": [
+        {
+          "url": "local:validation-log",
+          "locator": "canonical field validation.uncertainty"
+        }
+      ]
+    },
+    "validation.exclusion_reason": {
+      "state": "not_applicable",
+      "value": null,
+      "reason": "Поле неприменимо к типу и роли данного источника.",
+      "checked_at": "2026-09-23",
+      "locators": [
+        {
+          "url": "local:validation-log",
+          "locator": "canonical field validation.exclusion_reason"
+        }
+      ]
+    },
+    "validation.notes": {
+      "state": "reported",
+      "value": "Candidate record; not yet accepted as evidence.",
+      "reason": "Значение сохранено из проверенной канонической карточки.",
+      "checked_at": "2026-09-23",
+      "locators": [
+        {
+          "url": "local:validation-log",
+          "locator": "canonical field validation.notes"
+        }
+      ]
+    }
+  }
 }

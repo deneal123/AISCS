@@ -1,0 +1,38 @@
+{
+  "date": "2026-09-25",
+  "gate": "G0_REVISE",
+  "source_ids": [
+    "S789",
+    "S790"
+  ],
+  "staging_sha256": {
+    "S789": "6853B50AFA6C32DE78168D4B6A0E95583F965B6DBF19F2666878D64D2336D1C1",
+    "S790": "DC43DB52760D4608B06D376BB9F5872B5FC81C9B29779C25A10BDD442965EA52"
+  },
+  "primary_locators": [
+    {
+      "source_id": "S789",
+      "url": "https://www.frontiersin.org/journals/neuroscience/articles/10.3389/fnins.2021.625835/full",
+      "locator": "Methods > Patient Recruitment and Frequency Sweeps; Results > Figs 3-4; Discussion",
+      "boundary": "Human ECAP amplitude and separately rated stimulation-induced paresthesia diverge with frequency; neither is a measured analgesia endpoint. Repeated sweeps are not independent patients."
+    },
+    {
+      "source_id": "S790",
+      "url": "https://link.springer.com/article/10.1186/s42234-023-00134-1",
+      "locator": "Methods > Animals, Experimental design and Pain hypersensitivity assessment; Results > Fig. 8",
+      "boundary": "ECAP-controlled SCS reduced rat SNI mechanical/cold hypersensitivity in paw-withdrawal assays; no patient pain or human clinical response was measured. SCS-ON/OFF assignment was not randomized and the tester was not blinded."
+    }
+  ],
+  "cohort_overlap": {
+    "source_id": "S789",
+    "related_doi": "10.3389/fnins.2023.1297814",
+    "status": "same recruited 20-patient study setup; distinct analysis, not an independent cohort",
+    "url": "https://www.frontiersin.org/journals/neuroscience/articles/10.3389/fnins.2023.1297814/full",
+    "locator": "Introduction, final paragraph; Methods 2.1; Results 3.1"
+  },
+  "pending_leads": [
+    "10.3389/fnins.2023.1297814",
+    "10.1136/rapm-2026-107607"
+  ],
+  "remaining": "Complete forward/backward citation screening and a later dated refresh before PA-04 closure."
+}

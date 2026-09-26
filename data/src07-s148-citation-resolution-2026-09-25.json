@@ -1,0 +1,20 @@
+{
+  "source_id": "S148",
+  "checked_at": "2026-09-25",
+  "decision": "Use primary JATS/PubMed volume 19, article identifier 617733; retain Crossref page 1-18 as unresolved conflicting metadata.",
+  "locators": [
+    {
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13367641/fullTextXML",
+      "locator": "front/article-meta/volume=19 and elocation-id=617733"
+    },
+    {
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42454002/",
+      "locator": "Citation: 2026 Jul 10;19:617733"
+    },
+    {
+      "url": "https://api.crossref.org/works/10.2147%2FJPR.S617733",
+      "locator": "message.volume='Volume 19'; message.page='1-18'"
+    }
+  ],
+  "remaining": "SRC-07 full 2026 corpus and later dated refresh remain open."
+}

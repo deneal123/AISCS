@@ -3,15 +3,31 @@ from copy import deepcopy
 from pathlib import Path
 
 from service.core import load_json
-from service.pipeline import new_candidate, review_candidates
+from service.pipeline import new_candidate, review_candidates, snapshot_repository
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"
 
 
+def test_snapshot_retention_preserves_pinned_baseline(tmp_path: Path) -> None:
+    data = tmp_path / "data"
+    data.mkdir()
+    (data / "records.json").write_text('{"sources": []}', encoding="utf-8")
+    pinned = snapshot_repository(data, label="baseline")
+    (pinned / ".keep").write_text("historical migration fixture", encoding="utf-8")
+    first = snapshot_repository(data, label="first")
+    second = snapshot_repository(data, label="second")
+    third = snapshot_repository(data, label="third")
+    assert pinned.is_dir()
+    assert not first.exists()
+    assert second.is_dir() and third.is_dir()
+    assert len(list((data / "archive").glob("*/manifest.json"))) == 3
+
+
 def test_new_candidate_uses_next_free_id() -> None:
     candidate = new_candidate(DATA, "A newly discovered source")
-    assert candidate["id"] == "S738"
+    current_ids = [int(item["id"][1:]) for item in load_json(DATA / "records.json")["sources"]]
+    assert candidate["id"] == f"S{max(current_ids) + 1:03d}"
     assert candidate["название"] == "A newly discovered source"
     assert candidate["validation"]["status"] == "unverified"
 

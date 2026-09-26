@@ -78,6 +78,10 @@ class ResearchRepository:
         "vocabularies.json",
         "scientific-contract.json",
         "human-dataset-matrix.json",
+        "completeness-report.json",
+        "search-protocol.json",
+        "novelty-landscape.json",
+        "dissertation-concept.json",
     )
 
     def __init__(self, data_dir: Path | str | None = None) -> None:
@@ -294,6 +298,12 @@ class ResearchRepository:
             "offset": offset,
             "gate": payload.get("meta", {}).get("gate"),
         }
+
+    def completeness_report(self) -> dict[str, Any]:
+        return deepcopy(load_json(self.data_dir / "completeness-report.json"))
+
+    def dissertation_concept(self) -> dict[str, Any]:
+        return deepcopy(load_json(self.data_dir / "dissertation-concept.json"))
 
     def get_source_context(self, source_id: str) -> dict[str, Any] | None:
         source = self.get_source(source_id)

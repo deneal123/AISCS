@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import shutil
 import tempfile
 from copy import deepcopy
@@ -11,6 +12,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from .completeness import completeness_summary, migrate_record
 from .core import DataError, load_json, sha256
 from .integrity import LEGACY_FIELDS, validate_repository, validate_source_record
 
@@ -24,9 +26,54 @@ CANONICAL_FILES = (
     "audit-report.json",
     "validation-log.json",
     "evidence-matrix.json",
+    "evidence-review-ledger.json",
     "scientific-contract.json",
     "human-dataset-matrix.json",
+    "completeness-report.json",
+    "search-protocol.json",
+    "novelty-landscape.json",
+    "dissertation-concept.json",
+    "runtime-audit.json",
+    "ecap-scs-audit.json",
+    "drosophila-connectome-audit.json",
+    "drosophila-nociception-audit.json",
+    "synthetic-domain-audit.json",
+    "ns06-prior-art-audit.json",
+    "scs-outcome-audit.json",
+    "ns11-prediction-audit.json",
+    "human-ecap-scs-access-audit.json",
 )
+
+ARCHIVE_RETENTION = 2
+
+
+def prune_archive_snapshots(root: Path | str, keep_latest: int = ARCHIVE_RETENTION) -> list[Path]:
+    """Retain recent rollback snapshots and any explicitly pinned historical baseline."""
+    if keep_latest < 1:
+        raise ValueError("keep_latest must be positive")
+    root = Path(root).resolve()
+    archive_root = (root / "archive").resolve()
+    if not archive_root.is_relative_to(root) or not archive_root.is_dir():
+        return []
+    dated = sorted(
+        [
+            path
+            for path in archive_root.iterdir()
+            if path.is_dir()
+            and not path.is_symlink()
+            and re.fullmatch(r"\d{4}-\d{2}-\d{2}T\d{6}Z(?:-.+)?", path.name)
+            and (path / "manifest.json").is_file()
+            and not (path / ".keep").exists()
+        ],
+        key=lambda path: (path.stat().st_mtime_ns, path.name),
+    )
+    removed: list[Path] = []
+    for path in dated[:-keep_latest]:
+        if path.resolve().parent != archive_root:
+            raise DataError(f"unsafe archive path: {path}")
+        shutil.rmtree(path)
+        removed.append(path)
+    return removed
 
 
 def utc_now() -> datetime:
@@ -74,6 +121,18 @@ def snapshot_repository(root: Path | str, label: str | None = None) -> Path:
         target = destination / name
         shutil.copy2(source, target)
         entries.append({"name": name, "bytes": target.stat().st_size, "sha256": sha256(target)})
+    todo_source = root.parent / "TODO.md"
+    if todo_source.is_file():
+        todo_target = destination / "TODO.md"
+        shutil.copy2(todo_source, todo_target)
+        entries.append(
+            {
+                "name": "TODO.md",
+                "source": "../TODO.md",
+                "bytes": todo_target.stat().st_size,
+                "sha256": sha256(todo_target),
+            }
+        )
     manifest = {
         "snapshot_at": utc_now().isoformat(timespec="seconds"),
         "status": "immutable_pre_publish_snapshot",
@@ -82,6 +141,7 @@ def snapshot_repository(root: Path | str, label: str | None = None) -> Path:
         "mutation_policy": "Do not edit; publish changes only to the working research JSON files.",
     }
     atomic_write_json(destination / "manifest.json", manifest)
+    prune_archive_snapshots(root)
     return destination
 
 
@@ -121,7 +181,7 @@ def new_candidate(root: Path | str, title: str) -> dict[str, Any]:
     template["название"] = title.strip()
     template["provenance"]["retrieved_at"] = utc_now().date().isoformat()
     template["validation"]["notes"] = "Generated candidate; requires primary-source review."
-    return template
+    return migrate_record(template, checked_at=utc_now().date().isoformat())
 
 
 def _duplicate_key(record: dict[str, Any]) -> str:
@@ -224,6 +284,7 @@ def publish_candidates(
     snapshot = snapshot_repository(root, label="pre-publish")
     records_payload = load_json(root / "records.json")
     clusters_payload = load_json(root / "clusters.json")
+    completeness_payload = load_json(root / "completeness-report.json")
     records_payload = deepcopy(records_payload)
     clusters_payload = deepcopy(clusters_payload)
     records_payload["sources"].extend(deepcopy(review["candidates"]))
@@ -250,8 +311,13 @@ def publish_candidates(
     cluster_meta["unclustered_records_count"] = len(unclustered)
     cluster_meta["updated_at"] = utc_now().date().isoformat()
 
+    summary = completeness_summary(records_payload["sources"])
+    completeness_payload.update(summary)
+    completeness_payload.setdefault("meta", {})["generated_at"] = utc_now().date().isoformat()
+
     atomic_write_json(root / "records.json", records_payload)
     atomic_write_json(root / "clusters.json", clusters_payload)
+    atomic_write_json(root / "completeness-report.json", completeness_payload)
     final_report = validate_repository(root)
     if not final_report["ok"]:
         raise DataError(

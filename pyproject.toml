@@ -1,6 +1,6 @@
 [project]
 name = "aspa-research-sidecar"
-version = "1.2.1"
+version = "1.3.0"
 description = "Validated dissertation evidence registry with read-only HTTP and local MCP access"
 readme = "README.md"
 requires-python = ">=3.12,<3.14"
@@ -39,6 +39,8 @@ select = ["E", "F", "I", "B", "UP"]
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = ["E501"]
 "migrations/rebuild_2026_09_21.py" = ["E501"]
+"migrations/upgrade_schema_2_0.py" = ["E501"]
+"scripts/generate_novelty_baseline.py" = ["E501"]
 "scripts/discover_relevance5.py" = ["E501"]
 "scripts/populate_batch_001.py" = ["E501"]
 "scripts/populate_remaining_batches.py" = ["E501"]

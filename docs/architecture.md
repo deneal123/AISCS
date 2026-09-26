@@ -28,6 +28,8 @@ researchctl publish -- pre-change snapshot + atomic JSON writes + integrity gate
 - `service/contracts.py` — стабильные имена сервиса, версия, endpoints и коды ошибок.
 - `service/core.py` — загрузка JSON, кеш по mtime/size, поиск, алиасы, сводки и экспорт.
 - `service/integrity.py` — независимый от FastAPI блокирующий контроль целостности.
+- `service/completeness.py` — терминальное разрешение nullable-полей schema 2.0.
+- `service/novelty.py` — проверка и поиск по неранжированному novelty landscape.
 - `service/pipeline.py` — staging, снимки и публикация новых записей.
 - `service/app.py` — тонкий HTTP-транспорт без операций записи.
 - `service/mcp_server.py` — локальный stdio MCP-транспорт; мутации делегируются существующим
@@ -41,11 +43,15 @@ researchctl publish -- pre-change snapshot + atomic JSON writes + integrity gate
 - `data/clusters.json` — тематические представления, не отдельные источники;
 - `data/ST.json` — реестр программ, наборов и инфраструктурных ресурсов;
 - `data/source-record.schema.json` + `data/vocabularies.json` — контракт карточки;
-- `data/archive/*/manifest.json` — неизменяемые снимки и SHA-256;
+- `data/archive/*/manifest.json` — два последних снимка отката и помеченные базовые срезы с SHA-256;
 - `data/audit-report.json`, `data/validation-log.json` — отчёты конкретного прохода,
   а не замена данным.
 - `data/scientific-contract.json`, `data/human-dataset-matrix.json` — проверяемые
   научные границы, переходы, STOP-критерии и совместимость человеческих наборов.
+- `data/completeness-report.json` — нулевой остаток необъяснённых полей;
+- `data/search-protocol.json`, `data/novelty-landscape.json` и
+  `data/dissertation-concept.json` — prior-art протокол, каталог классов и единый паспорт.
+- `data/runtime-audit.json` — исполнимые проверки и решения по стеку симуляции.
 
 ## MCP-контур
 
@@ -68,7 +74,8 @@ service/mcp_server.py
 ```
 
 Статические MCP resources ограничены руководством, TODO, аудитом, матрицей доказательств,
-научным контрактом, матрицей человеческих наборов, схемой и словарями. Динамические
+научным контрактом, полнотой, поисковым протоколом, каталогом новизны, рабочим паспортом,
+матрицей человеческих наборов, схемой и словарями. Динамические
 resources доступны только для `source/{id}` и `cluster/{id}`.
 Пользовательские пути не передаются произвольно: candidate-файлы ограничены inbox, review-
 партии — `data/curation/relevance-*`, кластерные манифесты — `data/curation/cluster-assignments`.

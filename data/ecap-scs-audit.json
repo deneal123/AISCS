@@ -1,0 +1,1632 @@
+{
+  "meta": {
+    "schema_version": "1.0.0",
+    "generated_at": "2026-09-25",
+    "records_count": 24,
+    "scope": "Core empirical and framework records used to define the ECAP measurement/operator and closed-loop SCS evidence boundary",
+    "gate": "G0_REVISE"
+  },
+  "construct_boundary": "ECAP is an evoked neural-response/recruitment signal whose observed waveform depends on anatomy, stimulation, electrode geometry, volume conduction, hardware and artifact processing; it is not a direct pain measure.",
+  "entries": [
+    {
+      "source_id": "S105",
+      "extraction": {
+        "sample": {
+          "state": "reported",
+          "value": "8 chronic-pain participants",
+          "reason": "Value extracted from the primary source.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+              "locator": "Approach"
+            }
+          ]
+        },
+        "electrode_geometry": {
+          "state": "reported",
+          "value": "Two percutaneous leads; two most caudal contacts stimulated and remaining contacts recorded",
+          "reason": "Value extracted from the primary source.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+              "locator": "Approach"
+            }
+          ]
+        },
+        "stimulation": {
+          "state": "reported",
+          "value": "Amplitude, pulse width and polarity varied by pulse",
+          "reason": "Value extracted from the primary source.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+              "locator": "Approach and Main results"
+            }
+          ]
+        },
+        "split_unit": {
+          "state": "reported",
+          "value": "Individual recording/pulse; no held-out-participant test",
+          "reason": "Value extracted from the primary source.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+              "locator": "Approach"
+            }
+          ]
+        },
+        "metrics": {
+          "state": "reported",
+          "value": "AUC d'=2.44 versus P2P d'=2.27; current difference about 1.25 mA",
+          "reason": "Value extracted from the primary source.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+              "locator": "Main results"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S159",
+      "extraction": {
+        "sample": {
+          "state": "reported",
+          "value": "2 patients; 9 months; 208336 retained signals; 900 settings",
+          "reason": "Value extracted from the primary source.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/41605141/",
+              "locator": "Methods and Results tables"
+            }
+          ]
+        },
+        "electrode_geometry": {
+          "state": "unavailable_after_search",
+          "value": null,
+          "reason": "Exact contact geometry not recoverable from the primary abstract",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/41605141/",
+              "locator": "Exact contact geometry not recoverable from the primary abstract"
+            }
+          ]
+        },
+        "stimulation": {
+          "state": "reported",
+          "value": "Biphasic stimulation across multiple neurostimulation scenarios",
+          "reason": "Value extracted from the primary source.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/41605141/",
+              "locator": "Abstract"
+            }
+          ]
+        },
+        "split_unit": {
+          "state": "reported",
+          "value": "Recording; no held-out-patient validation",
+          "reason": "Value extracted from the primary source.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/41605141/",
+              "locator": "Methods and validation summary"
+            }
+          ]
+        },
+        "metrics": {
+          "state": "reported",
+          "value": "Bilinear growth-curve E-score; BEAM highest among comparisons",
+          "reason": "Value extracted from the primary source.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/41605141/",
+              "locator": "Abstract"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S162",
+      "extraction": {
+        "sample": {
+          "state": "reported",
+          "value": "84 initial sessions: Freshwater 34 and Rosella 50",
+          "reason": "Value extracted from the primary source.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13009299/",
+              "locator": "Abstract and Results"
+            }
+          ]
+        },
+        "electrode_geometry": {
+          "state": "reported",
+          "value": "Multiple sensing configurations across the implanted lead; corrected (7,9) and (6,8) recording configurations",
+          "reason": "Value extracted from the primary source.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13009299/",
+              "locator": "Methods: APM Platform; correction"
+            }
+          ]
+        },
+        "stimulation": {
+          "state": "reported",
+          "value": "Four to eight anode/cathode and pulse-width candidates ramped to participant discomfort",
+          "reason": "Value extracted from the primary source.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13009299/",
+              "locator": "Methods: APM Platform"
+            }
+          ]
+        },
+        "split_unit": {
+          "state": "reported",
+          "value": "Participant/session in two single-arm feasibility studies",
+          "reason": "Value extracted from the primary source.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13009299/",
+              "locator": "Methods: Study Population"
+            }
+          ]
+        },
+        "metrics": {
+          "state": "reported",
+          "value": "81/84 success; 11.9 min; SNR 4.6±1.2; +35% SNR; -75% artifact leakage",
+          "reason": "Value extracted from the primary source.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13009299/",
+              "locator": "Abstract and Results"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S236",
+      "extraction": {
+        "sample": {
+          "state": "reported",
+          "value": "68 adults with chronic nonsurgical refractory back pain",
+          "reason": "Value extracted from the primary source.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12594148/",
+              "locator": "Abstract and Methods"
+            }
+          ]
+        },
+        "electrode_geometry": {
+          "state": "not_reported",
+          "value": null,
+          "reason": "The clinical subgroup report does not make contact geometry a study variable",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12594148/",
+              "locator": "The clinical subgroup report does not make contact geometry a study variable"
+            }
+          ]
+        },
+        "stimulation": {
+          "state": "reported",
+          "value": "ECAP-controlled closed-loop SCS with patient-specific neural-dose target",
+          "reason": "Value extracted from the primary source.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12594148/",
+              "locator": "Methods"
+            }
+          ]
+        },
+        "split_unit": {
+          "state": "reported",
+          "value": "Participant; single-treatment subgroup without concurrent comparator",
+          "reason": "Value extracted from the primary source.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12594148/",
+              "locator": "Methods"
+            }
+          ]
+        },
+        "metrics": {
+          "state": "reported",
+          "value": "12-month responder rates and ECAP target error within 3.5 µV",
+          "reason": "Value extracted from the primary source.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12594148/",
+              "locator": "Results"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S237",
+      "extraction": {
+        "sample": {
+          "state": "reported",
+          "value": "231 implanted; 220 with required outcome and device data at 22 US sites",
+          "reason": "Value extracted from the primary source.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://rapm.bmj.com/content/early/2025/12/01/rapm-2025-107051",
+              "locator": "Methods and supplemental Table 1"
+            }
+          ]
+        },
+        "electrode_geometry": {
+          "state": "not_reported",
+          "value": null,
+          "reason": "Lead/contact geometry is not the reported comparison variable",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://rapm.bmj.com/content/early/2025/12/01/rapm-2025-107051",
+              "locator": "Lead/contact geometry is not the reported comparison variable"
+            }
+          ]
+        },
+        "stimulation": {
+          "state": "reported",
+          "value": "EVOKE ECAP-controlled SCS with neural-dose target",
+          "reason": "Value extracted from the primary source.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://rapm.bmj.com/content/early/2025/12/01/rapm-2025-107051",
+              "locator": "Methods"
+            }
+          ]
+        },
+        "split_unit": {
+          "state": "reported",
+          "value": "Participant; prospective single-arm observational cohort",
+          "reason": "Value extracted from the primary source.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://rapm.bmj.com/content/early/2025/12/01/rapm-2025-107051",
+              "locator": "Study design and population"
+            }
+          ]
+        },
+        "metrics": {
+          "state": "reported",
+          "value": "Dose ratio about 1.3; dose accuracy 2.8 µV; VAS and multidomain MCID outcomes",
+          "reason": "Value extracted from the primary source.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://rapm.bmj.com/content/early/2025/12/01/rapm-2025-107051",
+              "locator": "Results"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S239",
+      "extraction": {
+        "sample": {
+          "state": "reported",
+          "value": "42 participants in the intent-to-treat set",
+          "reason": "Value extracted from the primary source.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/39094810/",
+              "locator": "Abstract"
+            }
+          ]
+        },
+        "electrode_geometry": {
+          "state": "not_reported",
+          "value": null,
+          "reason": "Geometry is discussed as changing electrode-to-cord spacing, not extracted as a fixed configuration; Abstract",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/39094810/",
+              "locator": "Geometry is discussed as changing electrode-to-cord spacing, not extracted as a fixed configuration; Abstract"
+            }
+          ]
+        },
+        "stimulation": {
+          "state": "reported",
+          "value": "ECAP-controlled closed-loop versus open-loop SCS in randomized crossover periods",
+          "reason": "Value extracted from the primary source.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/39094810/",
+              "locator": "Abstract and NCT04765735 protocol"
+            }
+          ]
+        },
+        "split_unit": {
+          "state": "reported",
+          "value": "Participant; randomized single-blind crossover",
+          "reason": "Value extracted from the primary source.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/39094810/",
+              "locator": "Abstract"
+            }
+          ]
+        },
+        "metrics": {
+          "state": "reported",
+          "value": "97.6% reduced sensation; lower CI 87.4%; 37/42 preference; ECAP SD 8.72 versus 19.95 µV",
+          "reason": "Value extracted from the primary source.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/39094810/",
+              "locator": "Abstract"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S279",
+      "extraction": {
+        "sample": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Non-empirical framework article; Abstract",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/42059841/",
+              "locator": "Non-empirical framework article; Abstract"
+            }
+          ]
+        },
+        "electrode_geometry": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Framework does not report an experimental electrode configuration; Abstract",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/42059841/",
+              "locator": "Framework does not report an experimental electrode configuration; Abstract"
+            }
+          ]
+        },
+        "stimulation": {
+          "state": "reported",
+          "value": "Generic physiologic closed-loop neuromodulation controller",
+          "reason": "Value extracted from the primary source.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/42059841/",
+              "locator": "Rationale"
+            }
+          ]
+        },
+        "split_unit": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "No empirical train/test or cohort split; Abstract",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/42059841/",
+              "locator": "No empirical train/test or cohort split; Abstract"
+            }
+          ]
+        },
+        "metrics": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "No empirical performance result is claimed; Abstract",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/42059841/",
+              "locator": "No empirical performance result is claimed; Abstract"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S356",
+      "extraction": {
+        "sample": {
+          "state": "reported",
+          "value": "One male in his 40s",
+          "reason": "Value extracted from the primary source.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://assets.cureus.com/uploads/case_report/pdf/460390/20260202-302464-fuovtq.pdf",
+              "locator": "Case Presentation pp. 2-4"
+            }
+          ]
+        },
+        "electrode_geometry": {
+          "state": "reported",
+          "value": "One 12-contact lead placed at T7",
+          "reason": "Value extracted from the primary source.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://assets.cureus.com/uploads/case_report/pdf/460390/20260202-302464-fuovtq.pdf",
+              "locator": "Case Presentation pp. 2-4"
+            }
+          ]
+        },
+        "stimulation": {
+          "state": "reported",
+          "value": "Five-day ECAP-controlled closed-loop trial with reported pulse parameters and target",
+          "reason": "Value extracted from the primary source.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://assets.cureus.com/uploads/case_report/pdf/460390/20260202-302464-fuovtq.pdf",
+              "locator": "Case Presentation pp. 2-4"
+            }
+          ]
+        },
+        "split_unit": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Single uncontrolled case; Case Presentation",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://assets.cureus.com/uploads/case_report/pdf/460390/20260202-302464-fuovtq.pdf",
+              "locator": "Single uncontrolled case; Case Presentation"
+            }
+          ]
+        },
+        "metrics": {
+          "state": "reported",
+          "value": "24.2 million adjustments, 100% utilization and short-term NRS/function changes",
+          "reason": "Value extracted from the primary source.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://assets.cureus.com/uploads/case_report/pdf/460390/20260202-302464-fuovtq.pdf",
+              "locator": "Case Presentation and Conclusions"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S360",
+      "extraction": {
+        "sample": {
+          "state": "reported",
+          "value": "15 selected day-0 responders; 13 implanted; 11 complete at 12 months",
+          "reason": "Value extracted from the primary source.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13009343/",
+              "locator": "Abstract and Methods"
+            }
+          ]
+        },
+        "electrode_geometry": {
+          "state": "reported",
+          "value": "One or two 12-contact percutaneous leads in the dorsal epidural space",
+          "reason": "Value extracted from the primary source.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13009343/",
+              "locator": "Methods: Participants"
+            }
+          ]
+        },
+        "stimulation": {
+          "state": "reported",
+          "value": "ECAP-controlled closed-loop SCS with day-0 calibration and permanent-phase logs",
+          "reason": "Value extracted from the primary source.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13009343/",
+              "locator": "Methods: neural metrics"
+            }
+          ]
+        },
+        "split_unit": {
+          "state": "reported",
+          "value": "Participant; selected single-center longitudinal subgroup",
+          "reason": "Value extracted from the primary source.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13009343/",
+              "locator": "Methods and Limitations"
+            }
+          ]
+        },
+        "metrics": {
+          "state": "reported",
+          "value": "Pain reduction, responder rate, multidomain outcomes and ECAP neural-dose metrics through 12 months",
+          "reason": "Value extracted from the primary source.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13009343/",
+              "locator": "Results"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S363",
+      "extraction": {
+        "sample": {
+          "state": "reported",
+          "value": "Imaging and epidural recordings from six swine",
+          "reason": "Value extracted from the primary source.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40767809/",
+              "locator": "Materials and Methods"
+            }
+          ]
+        },
+        "electrode_geometry": {
+          "state": "reported",
+          "value": "Imaging-derived dorsal-CSF thickness and mediolateral lead location represented in the FEM",
+          "reason": "Value extracted from the primary source.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40767809/",
+              "locator": "Results"
+            }
+          ]
+        },
+        "stimulation": {
+          "state": "reported",
+          "value": "Tonic waveform and contact configuration coupled to multicompartment cable models",
+          "reason": "Value extracted from the primary source.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40767809/",
+              "locator": "Materials and Methods and Results"
+            }
+          ]
+        },
+        "split_unit": {
+          "state": "reported",
+          "value": "Animal; no held-out-animal validation reported",
+          "reason": "Value extracted from the primary source.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40767809/",
+              "locator": "Materials and Methods"
+            }
+          ]
+        },
+        "metrics": {
+          "state": "reported",
+          "value": "Qualitative morphology/amplitude dependence at similar modeled neural activation",
+          "reason": "Value extracted from the primary source.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40767809/",
+              "locator": "Results and Conclusions"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S764",
+      "extraction": {
+        "sample": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Extracted from the publisher full text; limits are stated rather than inferred.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0345287",
+              "locator": "Methods > Simulation model of SCS-induced electric field: anatomical simulation without participants"
+            }
+          ]
+        },
+        "electrode_geometry": {
+          "state": "reported",
+          "value": "Eight-layer human thoracic FEM; traditional eight-contact percutaneous lead versus segmented directional lead; orientation and contact angle varied",
+          "reason": "Extracted from the publisher full text; limits are stated rather than inferred.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0345287",
+              "locator": "Methods > Simulation model of SCS-induced electric field; Fig. 1; Table 1"
+            }
+          ]
+        },
+        "stimulation": {
+          "state": "reported",
+          "value": "Bipolar monophasic stimulation; COMSOL electric field drives multicompartment dorsal-column fibers; reciprocity maps membrane currents to recording contacts",
+          "reason": "Extracted from the publisher full text; limits are stated rather than inferred.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0345287",
+              "locator": "Methods > Simulation model of SCS-induced electric field; Multi-compartment cable model; Calculation of simulated ECAP signals"
+            }
+          ]
+        },
+        "split_unit": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Extracted from the publisher full text; limits are stated rather than inferred.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0345287",
+              "locator": "Methods and Limitations: no enrolled cohort or patient-level train/test split"
+            }
+          ]
+        },
+        "metrics": {
+          "state": "reported",
+          "value": "At 8 mA, simulated E3-E0 ECAP amplitude 244.8 microvolts for the traditional lead and 363.6 microvolts for the directional lead; these are model outputs",
+          "reason": "Extracted from the publisher full text; limits are stated rather than inferred.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0345287",
+              "locator": "Discussion, E3-E0 comparison; Fig. 3B"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S765",
+      "extraction": {
+        "sample": {
+          "state": "reported",
+          "value": "Two human chronic-pain trial participants; 20 repeated observations across visits and stimulation settings",
+          "reason": "Checked against the publisher full text; repeated observations are distinguished from participants.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.frontiersin.org/journals/pain-research/articles/10.3389/fpain.2023.1072786/full",
+              "locator": "Methods 3.1 Participants; Methods 3.4.5 Statistics, Table 3"
+            }
+          ]
+        },
+        "electrode_geometry": {
+          "state": "reported",
+          "value": "Two externalized percutaneous eight-contact epidural leads offset by 1-2 contacts; caudal stimulation and cephalad recording",
+          "reason": "Checked against the publisher full text; repeated observations are distinguished from participants.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.frontiersin.org/journals/pain-research/articles/10.3389/fpain.2023.1072786/full",
+              "locator": "Methods 3.1-3.3; Discussion 5.1"
+            }
+          ]
+        },
+        "stimulation": {
+          "state": "reported",
+          "value": "Biphasic interleaved stimulation; anodic and cathodic evoked responses analyzed separately; artifact fits on 0.375-4 ms poststimulus average",
+          "reason": "Checked against the publisher full text; repeated observations are distinguished from participants.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.frontiersin.org/journals/pain-research/articles/10.3389/fpain.2023.1072786/full",
+              "locator": "Methods 3.3 and 3.4.2-3.4.3"
+            }
+          ]
+        },
+        "split_unit": {
+          "state": "reported",
+          "value": "20 observations are one or more concatenated trials per participant, visit and setting; no held-out-patient test",
+          "reason": "Checked against the publisher full text; repeated observations are distinguished from participants.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.frontiersin.org/journals/pain-research/articles/10.3389/fpain.2023.1072786/full",
+              "locator": "Methods 3.1 and 3.4.5, Table 3"
+            }
+          ]
+        },
+        "metrics": {
+          "state": "reported",
+          "value": "Double exponential gave best artifact fit; polynomial gave similar N1 time and P2-N1 amplitude with shorter fitting time in the tested recordings",
+          "reason": "Checked against the publisher full text; repeated observations are distinguished from participants.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.frontiersin.org/journals/pain-research/articles/10.3389/fpain.2023.1072786/full",
+              "locator": "Results 4.1.1, Figure 5; Discussion 5.3"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S766",
+      "extraction": {
+        "sample": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Extracted from the PMC author manuscript, with model outputs separated from clinical evidence.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_xml/PMC6920600/unicode",
+              "locator": "Methods and Study limitations: canonical simulation; Figure 2C uses one previously published clinical trace"
+            }
+          ]
+        },
+        "electrode_geometry": {
+          "state": "reported",
+          "value": "Lower-thoracic human-anatomy FEM, eight-contact percutaneous epidural lead, caudal C7 stimulation and inactive recording contacts referenced to rostral C0",
+          "reason": "Extracted from the PMC author manuscript, with model outputs separated from clinical evidence.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_xml/PMC6920600/unicode",
+              "locator": "Methods > FEM of SCS; Calculation of ECAP recordings; Figure 1"
+            }
+          ]
+        },
+        "stimulation": {
+          "state": "reported",
+          "value": "Current-controlled monopolar cathodic stimulation, 1-10 mA, 50 Hz, 210 microseconds; COMSOL resistive volume conductor and NEURON dorsal-column axons; reciprocity maps membrane currents to lead voltages",
+          "reason": "Extracted from the PMC author manuscript, with model outputs separated from clinical evidence.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_xml/PMC6920600/unicode",
+              "locator": "Methods > FEM of SCS; Assessment of direct axonal response; Calculation of ECAP recordings"
+            }
+          ]
+        },
+        "split_unit": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Extracted from the PMC author manuscript, with model outputs separated from clinical evidence.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_xml/PMC6920600/unicode",
+              "locator": "Methods: simulation; no patient-level train/test split"
+            }
+          ]
+        },
+        "metrics": {
+          "state": "reported",
+          "value": "Figure 2C: published clinical versus model P2-N1 amplitude 200 versus 216 microvolts at assumed discomfort threshold; triphasic morphology and similar latency. This is a comparator, not held-out-patient validation.",
+          "reason": "Extracted from the PMC author manuscript, with model outputs separated from clinical evidence.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_xml/PMC6920600/unicode",
+              "locator": "Results > Model-based ECAP recordings, Figure 2C; Study limitations"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S767",
+      "extraction": {
+        "sample": {
+          "state": "reported",
+          "value": "56 SCS trial participants, 479 experimental trials; 195 excluded and 284 growth-curve datasets retained from 45 participants",
+          "reason": "Extracted from the publisher PDF; human observations and model conclusions are separated.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/aceca4/pdf",
+              "locator": "section 3 Results opening paragraph; Figure 5"
+            }
+          ]
+        },
+        "electrode_geometry": {
+          "state": "reported",
+          "value": "Conventional eight-contact percutaneous trial leads, usually staggered near T9; stimulation on one end and bipolar ECAP recording on the opposite end",
+          "reason": "Extracted from the publisher PDF; human observations and model conclusions are separated.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/aceca4/pdf",
+              "locator": "section 2.1 Experimental data acquisition; Figure 1"
+            }
+          ]
+        },
+        "stimulation": {
+          "state": "reported",
+          "value": "Cathodic-leading symmetric biphasic pulses at 50 Hz; pulse widths 90-300 microseconds; growth-curve sweeps across posture and electrode configurations",
+          "reason": "Extracted from the publisher PDF; human observations and model conclusions are separated.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/aceca4/pdf",
+              "locator": "section 2.1 Experimental data acquisition"
+            }
+          ]
+        },
+        "split_unit": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Extracted from the publisher PDF; human observations and model conclusions are separated.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/aceca4/pdf",
+              "locator": "sections 2.1 and 3: descriptive repeated recordings, without patient-level train/test split"
+            }
+          ]
+        },
+        "metrics": {
+          "state": "reported",
+          "value": "Human supine versus seated ECAP threshold 65.7% lower and growth rate 178.5% higher. Model fixed 25 microvolt ECAP required 94% more activated axons for 4.4 mm versus 2.0 mm dorsal CSF. The latter is simulated, not directly measured in people.",
+          "reason": "Extracted from the publisher PDF; human observations and model conclusions are separated.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/aceca4/pdf",
+              "locator": "Abstract Main results; section 3.3; section 4.3 and Figure 8"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S768",
+      "extraction": {
+        "sample": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Checked in the primary Chinese journal text and English abstract; model output is not clinical validation.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9927682/",
+              "locator": "section 1.1: MRI measurements from 15 volunteers belong to an earlier source study; current study simulates anatomy"
+            }
+          ]
+        },
+        "electrode_geometry": {
+          "state": "reported",
+          "value": "T10-centered 3-D conductor, 26 superficial white-matter regions, eight-contact 1.3-mm lead; differential E8-E7 ECAP recording relative to E2 reference",
+          "reason": "Checked in the primary Chinese journal text and English abstract; model output is not clinical validation.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9927682/",
+              "locator": "sections 1.1 and 1.3, Figures 1 and 3"
+            }
+          ]
+        },
+        "stimulation": {
+          "state": "reported",
+          "value": "ANSYS conductor potentials drive NEURON multicompartment sensory fibers; 210-microsecond pulse; reciprocity projects membrane currents to single-fiber potentials summed into ECAP",
+          "reason": "Checked in the primary Chinese journal text and English abstract; model output is not clinical validation.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9927682/",
+              "locator": "sections 1.1-1.4, Figures 1-4"
+            }
+          ]
+        },
+        "split_unit": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Checked in the primary Chinese journal text and English abstract; model output is not clinical validation.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9927682/",
+              "locator": "sections 1-2: simulation without a patient-level split"
+            }
+          ]
+        },
+        "metrics": {
+          "state": "reported",
+          "value": "Simulation: no more than 10% dorsal-column activation produced peaks from large fibers; at least 20% produced a slow-conduction peak from smaller fibers",
+          "reason": "Checked in the primary Chinese journal text and English abstract; model output is not clinical validation.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9927682/",
+              "locator": "English Abstract; section 2 Results"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S784",
+      "extraction": {
+        "sample": {
+          "state": "reported",
+          "value": "Patients undergoing therapeutic spinal cord stimulation; abstract does not report denominator",
+          "reason": "Primary abstract or full text at the named locator; access and design limits retained.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/22188868/",
+              "locator": "Abstract, Results: A-beta recruitment and painful-area coverage"
+            }
+          ]
+        },
+        "electrode_geometry": {
+          "state": "not_reported",
+          "value": null,
+          "reason": "Primary abstract or full text at the named locator; access and design limits retained.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/22188868/",
+              "locator": "Abstract, Results: A-beta recruitment and painful-area coverage"
+            }
+          ]
+        },
+        "stimulation": {
+          "state": "reported",
+          "value": "Epidural compound-action-potential recording over stimulation-current sweeps",
+          "reason": "Primary abstract or full text at the named locator; access and design limits retained.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/22188868/",
+              "locator": "Abstract, Results: A-beta recruitment and painful-area coverage"
+            }
+          ]
+        },
+        "split_unit": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Primary abstract or full text at the named locator; access and design limits retained.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/22188868/",
+              "locator": "Abstract, Results: A-beta recruitment and painful-area coverage"
+            }
+          ]
+        },
+        "metrics": {
+          "state": "reported",
+          "value": "A-beta recruitment threshold and ECAP growth; amplitude correlated with painful-area coverage",
+          "reason": "Primary abstract or full text at the named locator; access and design limits retained.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/22188868/",
+              "locator": "Abstract, Results: A-beta recruitment and painful-area coverage"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S785",
+      "extraction": {
+        "sample": {
+          "state": "reported",
+          "value": "Human spinal geometry and fiber simulation; no independent patient cohort established in abstract",
+          "reason": "Primary abstract or full text at the named locator; access and design limits retained.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/24111244/",
+              "locator": "Abstract: hybrid three-dimensional electrical and neural forward model"
+            }
+          ]
+        },
+        "electrode_geometry": {
+          "state": "not_reported",
+          "value": null,
+          "reason": "Primary abstract or full text at the named locator; access and design limits retained.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/24111244/",
+              "locator": "Abstract: hybrid three-dimensional electrical and neural forward model"
+            }
+          ]
+        },
+        "stimulation": {
+          "state": "reported",
+          "value": "Hybrid three-dimensional volume-conductor electric model and neural-fiber model",
+          "reason": "Primary abstract or full text at the named locator; access and design limits retained.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/24111244/",
+              "locator": "Abstract: hybrid three-dimensional electrical and neural forward model"
+            }
+          ]
+        },
+        "split_unit": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Primary abstract or full text at the named locator; access and design limits retained.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/24111244/",
+              "locator": "Abstract: hybrid three-dimensional electrical and neural forward model"
+            }
+          ]
+        },
+        "metrics": {
+          "state": "reported",
+          "value": "Model reproduces observed threshold and propagation features qualitatively",
+          "reason": "Primary abstract or full text at the named locator; access and design limits retained.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/24111244/",
+              "locator": "Abstract: hybrid three-dimensional electrical and neural forward model"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S786",
+      "extraction": {
+        "sample": {
+          "state": "reported",
+          "value": "Saline bench measurements; no human ECAP outcome cohort",
+          "reason": "Primary abstract or full text at the named locator; access and design limits retained.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/30273153/",
+              "locator": "Abstract: electrode double-layer mechanism and saline comparison"
+            }
+          ]
+        },
+        "electrode_geometry": {
+          "state": "not_reported",
+          "value": null,
+          "reason": "Primary abstract or full text at the named locator; access and design limits retained.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/30273153/",
+              "locator": "Abstract: electrode double-layer mechanism and saline comparison"
+            }
+          ]
+        },
+        "stimulation": {
+          "state": "reported",
+          "value": "Electrode double-layer concentration-gradient model compared with saline measurements",
+          "reason": "Primary abstract or full text at the named locator; access and design limits retained.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/30273153/",
+              "locator": "Abstract: electrode double-layer mechanism and saline comparison"
+            }
+          ]
+        },
+        "split_unit": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Primary abstract or full text at the named locator; access and design limits retained.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/30273153/",
+              "locator": "Abstract: electrode double-layer mechanism and saline comparison"
+            }
+          ]
+        },
+        "metrics": {
+          "state": "reported",
+          "value": "Compact artifact model agrees with saline measurements in the author abstract",
+          "reason": "Primary abstract or full text at the named locator; access and design limits retained.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/30273153/",
+              "locator": "Abstract: electrode double-layer mechanism and saline comparison"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S787",
+      "extraction": {
+        "sample": {
+          "state": "reported",
+          "value": "14 chronic-pain participants; 112 ECAP growth curves",
+          "reason": "Primary abstract or full text at the named locator; access and design limits retained.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8320888/",
+              "locator": "Methods, ECAP acquisition and growth curves; Results, ET-PT and ET-DT"
+            }
+          ]
+        },
+        "electrode_geometry": {
+          "state": "not_reported",
+          "value": null,
+          "reason": "Primary abstract or full text at the named locator; access and design limits retained.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8320888/",
+              "locator": "Methods, ECAP acquisition and growth curves; Results, ET-PT and ET-DT"
+            }
+          ]
+        },
+        "stimulation": {
+          "state": "reported",
+          "value": "Artifact-reduced ECAP sweeps across posture and pulse width; ET, PT and DT correlation",
+          "reason": "Primary abstract or full text at the named locator; access and design limits retained.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8320888/",
+              "locator": "Methods, ECAP acquisition and growth curves; Results, ET-PT and ET-DT"
+            }
+          ]
+        },
+        "split_unit": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Primary abstract or full text at the named locator; access and design limits retained.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8320888/",
+              "locator": "Methods, ECAP acquisition and growth curves; Results, ET-PT and ET-DT"
+            }
+          ]
+        },
+        "metrics": {
+          "state": "reported",
+          "value": "ECAP threshold correlated with perception and discomfort thresholds (r=0.93 each)",
+          "reason": "Primary abstract or full text at the named locator; access and design limits retained.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8320888/",
+              "locator": "Methods, ECAP acquisition and growth curves; Results, ET-PT and ET-DT"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S789",
+      "extraction": {
+        "sample": {
+          "state": "reported",
+          "value": "20 chronic-pain patients recruited; 16 patients/22 analyzable ECAP sweeps; 13 patients/18 sensation sweeps",
+          "reason": "Primary full text at the named locator; cohort and construct limits retained.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://www.frontiersin.org/journals/neuroscience/articles/10.3389/fnins.2021.625835/full",
+              "locator": "Methods > Patient Recruitment and Frequency Sweeps; Results > Figs 3-4; Discussion"
+            }
+          ]
+        },
+        "electrode_geometry": {
+          "state": "not_reported",
+          "value": null,
+          "reason": "Primary full text at the named locator; cohort and construct limits retained.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://www.frontiersin.org/journals/neuroscience/articles/10.3389/fnins.2021.625835/full",
+              "locator": "Methods > Patient Recruitment and Frequency Sweeps; Results > Figs 3-4; Discussion"
+            }
+          ]
+        },
+        "stimulation": {
+          "state": "reported",
+          "value": "Within-patient frequency sweeps at fixed stimulation current and pulse width (2-455 Hz)",
+          "reason": "Primary full text at the named locator; cohort and construct limits retained.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://www.frontiersin.org/journals/neuroscience/articles/10.3389/fnins.2021.625835/full",
+              "locator": "Methods > Patient Recruitment and Frequency Sweeps; Results > Figs 3-4; Discussion"
+            }
+          ]
+        },
+        "split_unit": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Primary full text at the named locator; cohort and construct limits retained.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://www.frontiersin.org/journals/neuroscience/articles/10.3389/fnins.2021.625835/full",
+              "locator": "Methods > Patient Recruitment and Frequency Sweeps; Results > Figs 3-4; Discussion"
+            }
+          ]
+        },
+        "metrics": {
+          "state": "reported",
+          "value": "ECAP amplitude fell as frequency rose, while reported stimulation sensation increased; no pain-relief endpoint measured",
+          "reason": "Primary full text at the named locator; cohort and construct limits retained.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://www.frontiersin.org/journals/neuroscience/articles/10.3389/fnins.2021.625835/full",
+              "locator": "Methods > Patient Recruitment and Frequency Sweeps; Results > Figs 3-4; Discussion"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S790",
+      "extraction": {
+        "sample": {
+          "state": "reported",
+          "value": "45 adult male Sprague-Dawley rats total, including SNI and sham groups; per-assay group sizes vary",
+          "reason": "Primary full text at the named locator; cohort and construct limits retained.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://link.springer.com/article/10.1186/s42234-023-00134-1",
+              "locator": "Methods > Animals, Experimental design and Pain hypersensitivity assessment; Results > Fig. 8"
+            }
+          ]
+        },
+        "electrode_geometry": {
+          "state": "reported",
+          "value": "Six-contact epidural lead",
+          "reason": "Primary full text at the named locator; cohort and construct limits retained.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://link.springer.com/article/10.1186/s42234-023-00134-1",
+              "locator": "Methods > Animals, Experimental design and Pain hypersensitivity assessment; Results > Fig. 8"
+            }
+          ]
+        },
+        "stimulation": {
+          "state": "reported",
+          "value": "Six-contact epidural lead; 30-minute 50-Hz, 200-us ECAP-controlled stimulation; von Frey and acetone assays",
+          "reason": "Primary full text at the named locator; cohort and construct limits retained.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://link.springer.com/article/10.1186/s42234-023-00134-1",
+              "locator": "Methods > Animals, Experimental design and Pain hypersensitivity assessment; Results > Fig. 8"
+            }
+          ]
+        },
+        "split_unit": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Primary full text at the named locator; cohort and construct limits retained.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://link.springer.com/article/10.1186/s42234-023-00134-1",
+              "locator": "Methods > Animals, Experimental design and Pain hypersensitivity assessment; Results > Fig. 8"
+            }
+          ]
+        },
+        "metrics": {
+          "state": "reported",
+          "value": "ECAP target tracking and reduced mechanical and cold hypersensitivity in stimulated SNI rats; outcomes are von Frey paw-withdrawal threshold and acetone-evoked paw-withdrawal latency",
+          "reason": "Primary full text at the named locator; cohort and construct limits retained.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://link.springer.com/article/10.1186/s42234-023-00134-1",
+              "locator": "Methods > Animals, Experimental design and Pain hypersensitivity assessment; Results > Fig. 8"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S798",
+      "extraction": {
+        "sample": {
+          "state": "reported",
+          "value": "Seven swine enrolled; six analyzed; analysis-specific subsets vary.",
+          "reason": "Publisher primary full text checked via accessible text-reader route; denominator and technical-signal scope retained.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/ad7f8b",
+              "locator": "Methods 2.1-2.4; Results 3.1-3.7 and figure/table denominators"
+            }
+          ]
+        },
+        "electrode_geometry": {
+          "state": "reported",
+          "value": "Epidural recordings with Abbott Octrode lead in a swine SCS model; no human lead geometry.",
+          "reason": "Publisher primary full text checked via accessible text-reader route; denominator and technical-signal scope retained.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/ad7f8b",
+              "locator": "Methods 2.1-2.4; Figs. 1-3"
+            }
+          ]
+        },
+        "stimulation": {
+          "state": "reported",
+          "value": "Epidural SCS stimulation with recordings examined for capacitive decay, muscle EMG bleed-through and motion contamination.",
+          "reason": "Publisher primary full text checked via accessible text-reader route; denominator and technical-signal scope retained.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/ad7f8b",
+              "locator": "Methods 2.1-2.4; Results 3.1-3.7, Figs. 1-13"
+            }
+          ]
+        },
+        "split_unit": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Publisher primary full text checked via accessible text-reader route; denominator and technical-signal scope retained.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/ad7f8b",
+              "locator": "Methods 2.1-2.4; experimental artifact characterization, no train/test or participant-level prediction split"
+            }
+          ]
+        },
+        "metrics": {
+          "state": "reported",
+          "value": "Qualitative artifact characterization: capacitive decay can resemble ECAP; EMG bleed-through and motion can contaminate recordings. No clinical analgesia or prediction metric.",
+          "reason": "Publisher primary full text checked via accessible text-reader route; denominator and technical-signal scope retained.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/ad7f8b",
+              "locator": "Results 3.1-3.7, Figs. 1-13 and Tables 1-2; Discussion 4.1 and 4.7"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S799",
+      "extraction": {
+        "sample": {
+          "state": "reported",
+          "value": "Four sheep; recordings from all four, with duration approximately two to six months and animal-specific session counts.",
+          "reason": "Primary author manuscript checked; empirical sheep physiology is separated from human pain and physical-model claims.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9643656/",
+              "locator": "Methods 2.1 and 2.6"
+            }
+          ]
+        },
+        "electrode_geometry": {
+          "state": "reported",
+          "value": "Two custom 24-contact epidural arrays over lumbosacral cord; rostral-caudal and medial-lateral coverage; bilateral surface EMG on six trunk/hindleg muscles.",
+          "reason": "Primary author manuscript checked; empirical sheep physiology is separated from human pain and physical-model claims.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9643656/",
+              "locator": "Methods 2.2-2.5; Fig. 1"
+            }
+          ]
+        },
+        "stimulation": {
+          "state": "reported",
+          "value": "Charge-balanced biphasic SCS; randomized sweeps of 10-15 amplitudes (up to 1500 μA) and 10-100 Hz; 167 μs cathodic and 500 μs anodic phases; ECAP and synchronized EMG recorded.",
+          "reason": "Primary author manuscript checked; empirical sheep physiology is separated from human pain and physical-model claims.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9643656/",
+              "locator": "Methods 2.4-2.6"
+            }
+          ]
+        },
+        "split_unit": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Primary author manuscript checked; empirical sheep physiology is separated from human pain and physical-model claims.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9643656/",
+              "locator": "Methods 2.1-2.7; experimental repeated-measures physiology study without a prediction train/test split"
+            }
+          ]
+        },
+        "metrics": {
+          "state": "reported",
+          "value": "Descriptive spatial ECAP and synchronized EMG results; lateral stimulation yielded preferential ipsilateral ECAP and EMG responses. No predictive validation metric or analgesia outcome.",
+          "reason": "Primary author manuscript checked; empirical sheep physiology is separated from human pain and physical-model claims.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9643656/",
+              "locator": "Abstract Results; Results 3.1-3.3, Figs. 1-8; Discussion"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S800",
+      "extraction": {
+        "sample": {
+          "state": "reported",
+          "value": "Ten acute domestic swine (six male, four female); denominator varies by analysis, including n=5 referencing comparisons and n=4 lead-migration analyses.",
+          "reason": "Primary publisher full text checked; animal denominator, proprietary data boundary and absence of clinical pain outcome retained.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://link.springer.com/article/10.1186/s42234-023-00106-5",
+              "locator": "Methods > Subjects; Results, Figs. 2 and 4"
+            }
+          ]
+        },
+        "electrode_geometry": {
+          "state": "reported",
+          "value": "Two eight-contact epidural Octrode leads; contacts 7-8 on caudal lead stimulated and rostral lead recorded; local-tissue, differential and lead-contact referencing compared.",
+          "reason": "Primary publisher full text checked; animal denominator, proprietary data boundary and absence of clinical pain outcome retained.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://link.springer.com/article/10.1186/s42234-023-00106-5",
+              "locator": "Methods > Stimulation and recording; Fig. 1"
+            }
+          ]
+        },
+        "stimulation": {
+          "state": "reported",
+          "value": "Asymmetric charge-balanced anodic-leading pulse (400 μs anodic, 80 μs cathodic with cathodic amplitude five-fold); 38 Hz; amplitude sweeps set relative to motor threshold.",
+          "reason": "Primary publisher full text checked; animal denominator, proprietary data boundary and absence of clinical pain outcome retained.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://link.springer.com/article/10.1186/s42234-023-00106-5",
+              "locator": "Methods > Stimulation and recording"
+            }
+          ]
+        },
+        "split_unit": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Descriptive acute animal physiology experiments; no predictive train/test split or held-out-subject evaluation.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://link.springer.com/article/10.1186/s42234-023-00106-5",
+              "locator": "Methods > Subjects and Stimulation and recording; this is descriptive animal physiology, not a predictive model"
+            }
+          ]
+        },
+        "metrics": {
+          "state": "reported",
+          "value": "Reference choice changed artifact and ECAP magnitude (referencing comparisons n=5); lead shifts altered ECAP latency/strength (lead-migration analyses n=4); local muscle EMG could spill into epidural recordings.",
+          "reason": "Primary publisher full text checked; animal denominator, proprietary data boundary and absence of clinical pain outcome retained.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://link.springer.com/article/10.1186/s42234-023-00106-5",
+              "locator": "Results, Figs. 2-8; Discussion > Local back muscle activation"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "ns07_forward_model_review": {
+    "checked_at": "2026-09-24",
+    "status": "first_pass_recorded",
+    "direct_model_sources": [
+      "S363",
+      "S764",
+      "S766",
+      "S768"
+    ],
+    "empirical_ecap_source": "S105",
+    "historical_primary_lead": {
+      "source_id": "S766",
+      "doi": "10.1111/ner.12965",
+      "pmid": "31215720",
+      "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_xml/PMC6920600/unicode",
+      "locator": "Methods > FEM of SCS; Multicompartment cable model; Calculation of ECAP recordings; Results Figure 2C; Study limitations",
+      "status": "full_author_manuscript_checked"
+    },
+    "decision": "S766 and S768 directly establish FEM/multicompartment/reciprocity ECAP forward modeling as prior art; S363 and S764 add adjacent models. S768's activation fractions are simulation outputs, not measured human recruitment or analgesic response. S105 remains empirical signal analysis.",
+    "remaining": "Finish backward/forward primary citation screening for historical models and patent families, then perform a later dated refresh; NS-07 and PA-04 remain open."
+  },
+  "ns08_artifact_review": {
+    "checked_at": "2026-09-24",
+    "status": "additional_primary_pass_recorded",
+    "direct_sources": [
+      "S159",
+      "S765"
+    ],
+    "patent_source": "S746",
+    "decision": "S765 establishes curve-fit artifact subtraction and polarity-dependent ECAP distortion as prior art on human SCS recordings. It is a two-person technical comparison, not evidence of patient-independent performance or analgesic outcome prediction. Earlier WO2010032132A1 claims a waveform-cost/source-separation method in a cochlear ECAP example, whereas US7835804B2 claims an electrical-equivalent eCAP artifact measurement model. Neither patent establishes human SCS artifact-removal accuracy or pain outcomes.",
+    "remaining": "Complete exact/synonym/author search and backward/forward citations across publisher, IEEE and patent sources; run a later dated refresh before claiming saturation.",
+    "historical_patent_sources": [
+      "S770",
+      "S771"
+    ]
+  },
+  "ns09_recruitment_review": {
+    "checked_at": "2026-09-25",
+    "status": "additional_primary_pass_recorded",
+    "human_source": "S767",
+    "physical_model_sources": [
+      "S363",
+      "S764",
+      "S766",
+      "S767"
+    ],
+    "decision": "S767 documents substantial ECAP threshold/growth variability in people and uses a physical model to show that a fixed recorded amplitude need not mean fixed dorsal-column recruitment. Recruitment equivalence is a simulation conclusion, not a directly observed patient-level axon count or pain outcome. S798 adds an empirical swine artifact characterization: seven enrolled, six analyzed with analysis-specific denominators; capacitive decay, EMG bleed-through and motion may resemble or contaminate ECAP. This is same-consortium evidence related to Verma et al. 2023, not external validation; it contains no human pain outcome or physical ECAP forward operator. S799 adds an independent-group ovine physiological comparator: four sheep with spatial epidural ECAP and synchronized EMG, without a pain endpoint or physical forward operator. Its Discussion explicitly calls for future human work; this is not external validation of S798 or of any human pain model. S800 contributes a separate acute swine study: ten animals overall, but n=5 and n=4 in specific referencing and migration analyses; ECAP, EMG and stimulation artifact mix in epidural recordings. It shares a consortium with S798 and has proprietary source data, so it is not independent validation.",
+    "denominator": "56 enrolled participants; 479 trials; 195 trials excluded; 284 growth curves from 45 participants analyzed. Eleven participants had all trials excluded.",
+    "remaining": "Complete exact/synonym/author and backward/forward citation screening, including earlier human and animal ECAP threshold and artifact studies; later dated refresh required before NS-09 or PA-04 closure. S798 and S800 characterize related artifact risks; S799 adds independent-group sheep physiology. None provides a human pain endpoint or physical forward operator, and the search remains open.",
+    "additional_empirical_artifact_sources": [
+      "S798"
+    ],
+    "physiological_comparator_sources": [
+      "S799"
+    ],
+    "artifact_study_sources": [
+      "S798",
+      "S800"
+    ]
+  }
+}

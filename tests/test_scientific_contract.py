@@ -29,6 +29,20 @@ def test_scientific_contract_and_human_matrix_pass_repository_gate() -> None:
     matrix = load_json(DATA / "human-dataset-matrix.json")
     assert len(contract["entities"]) == 6
     assert len(contract["experiments"]) == 4
+    assert [item["from"] for item in contract["transfer_chain"]] == [
+        "connectome_constrained_drosophila_simulation",
+        "abstract_nociceptive_dynamics",
+        "human_neural_recruitment_interface",
+        "physical_ecap_observation",
+    ]
+    assert [item["to"] for item in contract["transfer_chain"]] == [
+        "abstract_nociceptive_dynamics",
+        "human_neural_recruitment_interface",
+        "physical_ecap_observation",
+        "scs_programming_or_evaluation_task",
+    ]
+    assert contract["entities"][3]["name"] == "transferable_nociceptive_dynamics"
+    assert contract["experiments"][2]["name"] == "physical_ecap_observation_validation"
     assert {item["id"] for item in contract["stop_criteria"]} == {
         "STOP-H1",
         "STOP-H2-A",
@@ -59,7 +73,9 @@ def test_scientific_artifact_gate_rejects_bad_reference_and_mixed_target() -> No
     assert any("mixed targets" in error for error in errors)
 
 
-def test_todo_progress_is_exactly_63_of_165() -> None:
+def test_todo_progress_matches_checkboxes() -> None:
     todo = (ROOT / "TODO.md").read_text(encoding="utf-8")
-    assert todo.count("- [x]") + todo.count(". [x]") == 63
-    assert todo.count("- [ ]") + todo.count(". [ ]") == 102
+    done = todo.count("- [x]") + todo.count(". [x]")
+    open_items = todo.count("- [ ]") + todo.count(". [ ]")
+    assert done + open_items == 43
+    assert f"**Прогресс:** {done} из 43 пунктов." in todo

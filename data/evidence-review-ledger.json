@@ -1,0 +1,658 @@
+{
+  "meta": {
+    "schema_version": "1.0",
+    "compiled_at": "2026-09-25",
+    "scope": "EVD-03 primary-locator and matrix-correction reviews",
+    "entry_count": 27,
+    "original_files_retained": false
+  },
+  "entries": {
+    "eight-nociception-claim-locator-review-2026-09-25.json": {
+      "sha256_original": "1b574df28b950120210821b37ae1c1710927395d8b11d3f0f9d229d90b732658",
+      "review": {
+        "meta": {
+          "schema_version": "1.0.0",
+          "checked_at": "2026-09-25"
+        },
+        "source_ids": [
+          "S027",
+          "S066",
+          "S092",
+          "S030",
+          "S029",
+          "S012",
+          "S152",
+          "S282"
+        ],
+        "status": "primary_locators_reused_from_reviewed_nociception_audit",
+        "locator_source": "data/drosophila-nociception-audit.json",
+        "boundary": "The locators support the respective reported assays or review scope. Neural activity, defensive behavior, and subjective pain are distinct; S012 and S152 are reviews, and S282 imaging and behavior cohorts differ."
+      }
+    },
+    "five-code-claim-locator-review-2026-09-25.json": {
+      "sha256_original": "f0af98a7b05eb683eeb399de4e24aed690cdd706b1e7cdca93266d1e99b5753c",
+      "review": {
+        "meta": {
+          "schema_version": "1.0.0",
+          "checked_at": "2026-09-25"
+        },
+        "source_ids": [
+          "S292",
+          "S732",
+          "S733",
+          "S734",
+          "S737"
+        ],
+        "status": "five_pinned_code_locators_reviewed",
+        "boundary": "Repository descriptions are software-source evidence. They do not establish biological fidelity, subjective pain, human ECAP or SCS efficacy; S292 is companion code to S320."
+      }
+    },
+    "five-identity-locator-review-2026-09-25.json": {
+      "sha256_original": "7ddd5de8979a2cde5651ab629cc06e24ed175149991ae2d23c6da22b8d500233",
+      "review": {
+        "meta": {
+          "schema_version": "1.0.0",
+          "checked_at": "2026-09-25"
+        },
+        "source_ids": [
+          "S044",
+          "S040",
+          "S079",
+          "S082",
+          "S086"
+        ],
+        "status": "five_identity_locators_reviewed",
+        "boundary": "Official citation/DOI metadata establishes source identity only. It is not evidence for clinical validation or source-specific methods."
+      }
+    },
+    "five-review-claim-locator-review-2026-09-25.json": {
+      "sha256_original": "1dd2dcced6f5a8ac97609337ff5669d283a4958fa1cf4d1063bc2f6f95391093",
+      "review": {
+        "meta": {
+          "schema_version": "1.0.0",
+          "checked_at": "2026-09-25"
+        },
+        "source_ids": [
+          "S231",
+          "S273",
+          "S060",
+          "S022",
+          "S161"
+        ],
+        "status": "five_review_context_locators_reviewed",
+        "boundary": "Narrative reviews and the mouse TENS proof of concept do not establish human SCS efficacy, ECAP as pain, or a validated fly-to-human transfer."
+      }
+    },
+    "four-construct-target-corrections-2026-09-25.json": {
+      "sha256_original": "6524c4a4700f6b1321010a151003469efd6736014e40d6947cc7cca017a1dc86",
+      "review": {
+        "meta": {
+          "schema_version": "1.0.0",
+          "checked_at": "2026-09-25",
+          "gate": "G0_REVISE",
+          "scope": "EVD-04 target-variable corrections in existing evidence rows"
+        },
+        "corrections": [
+          {
+            "source_id": "S149",
+            "batch_id": "batch-001",
+            "old_target": "pain intensity",
+            "corrected_target": "Dataset-specific UNBC pain regression, BioVid four-class heat-stimulus recognition and neonatal binary pain/no-pain classification (separate N-PASS subset); no common endpoint",
+            "reason": "The three benchmark tasks use different labels, scales and populations and must not be represented by one pain-intensity metric.",
+            "primary_locator": {
+              "url": "https://www.frontiersin.org/journals/artificial-intelligence/articles/10.3389/frai.2026.1827727/full",
+              "locator": "Methods > 4.3 neonatal annotations; Results > Tables 9-11; Section 5.2.3"
+            }
+          },
+          {
+            "source_id": "S023",
+            "batch_id": "r4-batch-003",
+            "old_target": "clinical_function",
+            "corrected_target": "Future central neuropathic-pain development within six months after subacute spinal-cord injury (PDP versus PNP)",
+            "reason": "The classifier target is later neuropathic-pain status, not a measure of clinical function or momentary pain intensity.",
+            "primary_locator": {
+              "url": "https://eprints.gla.ac.uk/345351/",
+              "locator": "Published-version abstract, Methods: datasets A/B and PDP versus PNP within six months"
+            }
+          },
+          {
+            "source_id": "S154",
+            "batch_id": "r3-batch-002",
+            "old_target": "nociceptive_response",
+            "corrected_target": "Nociceptor ribosome-bound RNA abundance after larval UV injury versus sham (translatomic assay)",
+            "reason": "The source is an injury/sham molecular dataset, not a direct neural-activity or protective-behavior measurement.",
+            "primary_locator": {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12377072/",
+              "locator": "Methods > Translating Ribosome Affinity Purification and RNA sequencing; Data Records"
+            }
+          },
+          {
+            "source_id": "S253",
+            "batch_id": "r4-batch-005",
+            "old_target": "protective_behavior",
+            "corrected_target": "Engineered virtual-fly sensorimotor behavior: food navigation, feeding and grooming",
+            "reason": "The demonstrated behaviors are engineered feeding, grooming and navigation; escape was not implemented in the body model.",
+            "primary_locator": {
+              "url": "https://eon.systems/updates/embodied-brain-emulation",
+              "locator": "How does the fly work?; Behaviors; What the current embodied fly is not"
+            }
+          }
+        ],
+        "boundary": "These corrections align construct labels with primary reports; they do not complete source-card review, EVD-03 or author acceptance."
+      }
+    },
+    "four-source-card-construct-corrections-2026-09-25.json": {
+      "sha256_original": "b83ef590020802d7f4b4220ac0ec928d293af2aa59987199983ead9a3351ca8c",
+      "review": {
+        "meta": {
+          "checked_at": "2026-09-25",
+          "gate": "G0_REVISE",
+          "snapshot": "R:\\Aspa\\research\\data\\archive\\2026-09-25T123226Z-pre-four-source-card-construct-corrections"
+        },
+        "primary_locators": {
+          "S023": "https://eprints.gla.ac.uk/345351/",
+          "S149": "https://www.frontiersin.org/journals/artificial-intelligence/articles/10.3389/frai.2026.1827727/full",
+          "S154": "https://www.mdpi.com/2306-5729/10/2/11",
+          "S273": "https://advanced.onlinelibrary.wiley.com/doi/abs/10.1002/adsu.70449"
+        },
+        "changes": {
+          "S023": [
+            {
+              "field": "evidence.target_construct",
+              "old": "clinical_function",
+              "new": "future_neuropathic_pain_onset",
+              "locator": "Abstract, Methods: PDP versus PNP within six months after subacute SCI"
+            },
+            {
+              "field": "evidence.target_label",
+              "old": null,
+              "new": "PDP versus PNP within six months after subacute spinal cord injury",
+              "locator": "Abstract, Methods: datasets A (N=20) and B (N=35)"
+            },
+            {
+              "field": "evidence.species",
+              "old": null,
+              "new": "Homo sapiens",
+              "locator": "Abstract, Methods: participants with subacute spinal cord injury"
+            },
+            {
+              "field": "evidence.population",
+              "old": null,
+              "new": "Participants with subacute spinal cord injury without neuropathic pain at EEG recording",
+              "locator": "Abstract, Methods: cohort eligibility and six-month follow-up"
+            },
+            {
+              "field": "evidence.sample_size",
+              "old": null,
+              "new": "Dataset A N=20; dataset B N=35",
+              "locator": "Abstract, Methods: datasets A and B"
+            },
+            {
+              "field": "evidence.subject_domain",
+              "old": "unavailable_after_search",
+              "new": "human_clinical",
+              "locator": "Abstract, Methods: participant population"
+            },
+            {
+              "field": "evidence.access_status",
+              "old": "unavailable_after_search",
+              "new": "open",
+              "locator": "Text > 345351.pdf, Published Version"
+            }
+          ],
+          "S149": [
+            {
+              "field": "evidence.target_construct",
+              "old": "experimental_pain_class",
+              "new": "mixed_pain_benchmark_labels",
+              "locator": "Section 4.1 Benchmark datasets; Section 4.3 neonatal cohort"
+            },
+            {
+              "field": "evidence.target_label",
+              "old": "continuous 0-10 pain intensity / dataset-specific pain labels",
+              "new": "UNBC PSPI facial-action score (0-16 converted to 0-10); BioVid four heat-intensity classes; neonatal binary pain/no-pain, with separate N-PASS subset regression",
+              "locator": "Sections 4.1 and 4.3; Tables 9-11"
+            }
+          ],
+          "S154": [
+            {
+              "field": "evidence.target_construct",
+              "old": "nociceptive_response",
+              "new": "nociceptor_translatomic_response",
+              "locator": "Abstract; Section 2.1 Data Description: TRAP RNA-seq after UV versus sham"
+            },
+            {
+              "field": "evidence.target_label",
+              "old": null,
+              "new": "Larval nociceptor ribosome-bound RNA abundance 24 h after UV versus sham injury",
+              "locator": "Abstract; Section 2.1 Data Description"
+            },
+            {
+              "field": "evidence.population",
+              "old": null,
+              "new": "Third-instar Drosophila larvae",
+              "locator": "Abstract; Section 2.1 Data Description"
+            },
+            {
+              "field": "evidence.access_status",
+              "old": "unavailable_after_search",
+              "new": "open",
+              "locator": "Publisher article, Abstract and Sections 1-2"
+            }
+          ],
+          "S273": [
+            {
+              "field": "evidence.target_construct",
+              "old": "nociceptive_response",
+              "new": "protective_behavior",
+              "locator": "Abstract: mouse hot-plate paw-withdrawal latency"
+            },
+            {
+              "field": "evidence.target_label",
+              "old": null,
+              "new": "Female mouse hot-plate paw-withdrawal latency after TENS-equivalent stimulation",
+              "locator": "Abstract: female-mouse proof-of-concept and paw-withdrawal latency"
+            },
+            {
+              "field": "evidence.species",
+              "old": null,
+              "new": "Mus musculus",
+              "locator": "Abstract: female mice in hot-plate model"
+            },
+            {
+              "field": "evidence.population",
+              "old": null,
+              "new": "Female mice in a hot-plate proof-of-concept experiment",
+              "locator": "Abstract: female-mouse proof-of-concept"
+            },
+            {
+              "field": "evidence.subject_domain",
+              "old": "unavailable_after_search",
+              "new": "animal_other",
+              "locator": "Abstract: female-mouse hot-plate model"
+            }
+          ]
+        },
+        "boundary": "Card and matrix targets are aligned for these four sources only; full source-card review and EVD-03 dependency remain open."
+      }
+    },
+    "remaining-identity-locator-review-2026-09-25.json": {
+      "sha256_original": "9db5fd80174a3d1e9daf6527fd67ffd94e48fc1fbda4297e6c8579cba1a8396d",
+      "review": {
+        "meta": {
+          "schema_version": "1.0.0",
+          "checked_at": "2026-09-25"
+        },
+        "source_ids": [
+          "S243",
+          "S033",
+          "S289",
+          "S016",
+          "S195"
+        ],
+        "status": "five_identity_locators_reviewed",
+        "boundary": "Official study, article and DOI records and the patent publication cover establish identity only. They do not establish study methods or outcomes."
+      }
+    },
+    "s006-primary-identity-locators-2026-09-25.json": {
+      "sha256_original": "5c88767e0a6f2f59b36e47a408489908a97fb6185f20fcb9043ddf8b2b10fe07",
+      "review": {
+        "source_id": "S006",
+        "checked_at": "2026-09-25",
+        "decision": "Replace the matrix's OpenAlex-only link with two direct identity locators: DOI registry metadata and the official conference program.",
+        "locators": [
+          {
+            "url": "https://api.crossref.org/works/10.1016%2Fj.neurom.2024.06.321",
+            "locator": "message.DOI, title, container-title, volume=27, issue=7, page=S176, published October 2024"
+          },
+          {
+            "url": "https://www.neuromodulation.org/uploads/1/4/5/5/145560650/nans2024_program_web.pdf",
+            "locator": "NANS 2024 Program Book, p. 9, Abstract Award Winners > Oral Abstract Winners: title and presenter"
+          }
+        ],
+        "boundary": "The two locators establish identity and presentation only. They contain no analyzable cohort, neural-network architecture, performance or patient-level validation."
+      }
+    },
+    "s036-s039-evidence-locator-review-2026-09-25.json": {
+      "sha256_original": "7439e39a96c299c33b45e043aba06ad07b24ea3b21d518c867a1cacea0041304",
+      "review": {
+        "meta": {
+          "schema_version": "1.0.0",
+          "checked_at": "2026-09-25"
+        },
+        "source_ids": [
+          "S036",
+          "S039"
+        ],
+        "status": "two_primary_abstract_locators_reviewed",
+        "boundary": "Publisher abstracts support the stated metrics only. They do not establish independent clinical validation or an unreported split unit for S036."
+      }
+    },
+    "s061-claim-locator-review-2026-09-25.json": {
+      "sha256_original": "00c7bfc062b0a172c62252a73ea7156f39fb54534ede792779f842709f8f2cc6",
+      "review": {
+        "meta": {
+          "schema_version": "1.0.0",
+          "checked_at": "2026-09-25"
+        },
+        "source_id": "S061",
+        "status": "primary_figure_located",
+        "boundary": "EM-based structural comparison and passive single-cell model responses are not direct developmental neural recordings, whole-brain dynamics or subjective pain measurements."
+      }
+    },
+    "s065-s212-evidence-locator-review-2026-09-25.json": {
+      "sha256_original": "15ef9123867e8dfbc30bdd6aece00958b076b129b982fa4e3119afd2e4f9fa44",
+      "review": {
+        "meta": {
+          "schema_version": "1.0.0",
+          "checked_at": "2026-09-25"
+        },
+        "source_ids": [
+          "S065",
+          "S212"
+        ],
+        "status": "two_nociception_locators_reviewed",
+        "boundary": "S065 is an adult behavioral circuit proposal with an incomplete eLife evidence assessment. S212 imaging/EM and separate behavior cohorts are distinct. Neither measures subjective pain."
+      }
+    },
+    "s149-evidence-locator-review-2026-09-25.json": {
+      "sha256_original": "eee85e35384f08932b36875a19ee46b676e2034856b4342b7f74ab48b9008cd0",
+      "review": {
+        "meta": {
+          "schema_version": "1.0.0",
+          "checked_at": "2026-09-25",
+          "status": "two_s149_locators_reviewed"
+        },
+        "source_id": "S149",
+        "publisher_url": "https://www.frontiersin.org/journals/artificial-intelligence/articles/10.3389/frai.2026.1827727/full",
+        "claims_reviewed": 2,
+        "boundary": "These primary locators support only synthetic-source unsupervised domain adaptation on tested retrospective benchmarks. They do not demonstrate clinical deployment or fly-to-human transfer. The unlocated 96% imported claim remains prohibited."
+      }
+    },
+    "s201-claim-locator-review-2026-09-25.json": {
+      "sha256_original": "2114a3fb35137db5983a295bf3e9cd1792593b793f69822e14ff3c664bf4c3a6",
+      "review": {
+        "meta": {
+          "schema_version": "1.0.0",
+          "checked_at": "2026-09-25"
+        },
+        "source_id": "S201",
+        "pinned_commit": "fdbbd866b203a709a164970b0a8996108edd57a5",
+        "status": "pinned_readme_located",
+        "boundary": "The README is the author's software description; the artwork does not independently validate neural or pain-related biology."
+      }
+    },
+    "s227-claim-locator-review-2026-09-25.json": {
+      "sha256_original": "f00a12e5fa7ab5988704352d5decc38c1e89a9e17754affd71c5281d4b543660",
+      "review": {
+        "meta": {
+          "schema_version": "1.0.0",
+          "checked_at": "2026-09-25"
+        },
+        "source_id": "S227",
+        "status": "author_preprint_method_located",
+        "version": "arXiv:2508.12522v2",
+        "boundary": "The author preprint and WACV proceedings describe the same work. Expression recognition on BioVid, StressID, and BAH is not external clinical pain or SCS validation."
+      }
+    },
+    "s228-rejected-row-removal-2026-09-25.json": {
+      "sha256_original": "ed1f9e4b03e04130e915c438c3dec3b5a796fae4a66811f730be479bbbf1b77c",
+      "review": {
+        "checked_at": "2026-09-25",
+        "source_id": "S228",
+        "decision": "Remove the rejected, dissertation-irrelevant presentation notice from the claim evidence matrix; retain its source card and rejection rationale in the canonical registry.",
+        "basis": [
+          {
+            "url": "https://www.dsu.edu.in/images/Engineering/CSE-dept/Newsletter/CsOct-Dec_2025.pdf",
+            "locator": "EDUINSIDE newsletter, Oct-Dec 2025, p. 103, Faculty Achievements: presentation announcement only; this item contains no paper, scientific methods or pain/ECAP/SCS outcome"
+          },
+          {
+            "url": "data/records.json",
+            "locator": "S228 validation.status=rejected and screening_status=excluded_irrelevant; limitations explain that the item concerns no Drosophila, ECAP or SCS evidence"
+          }
+        ],
+        "traceability": "S228 remains in records.json. Its removal from evidence-matrix.json does not erase the negative screening decision or turn the 98.21% claim into a result."
+      }
+    },
+    "s273-behavior-target-correction-2026-09-25.json": {
+      "sha256_original": "ca6cc383e9bdf0baf4fd506debda3b53256317d0b04a63b14ee9c992953e2381",
+      "review": {
+        "meta": {
+          "schema_version": "1.0.0",
+          "checked_at": "2026-09-25",
+          "gate": "G0_REVISE"
+        },
+        "source_id": "S273",
+        "old_target": "nociceptive_response",
+        "corrected_target": "Mouse hot-plate paw-withdrawal latency (protective behavior); separately, sEMG/EDA controller inputs",
+        "primary_locator": {
+          "url": "https://advanced.onlinelibrary.wiley.com/doi/abs/10.1002/adsu.70449",
+          "locator": "Publisher abstract, proof-of-concept mouse hot-plate result"
+        },
+        "boundary": "Paw withdrawal is a protective behavior and cannot establish human pain relief or a neural recording."
+      }
+    },
+    "s284-publisher-locator-review-2026-09-25.json": {
+      "sha256_original": "fe48f2a147ea01f9a2c61701a44bf5b7478cd3b6e5aa9cb21cbbcec9e1e990e2",
+      "review": {
+        "reviewed_at": "2026-09-25",
+        "source_id": "S284",
+        "primary_url": "https://academic.oup.com/pnasnexus/article/3/11/pgae488/7852878",
+        "primary_locator": "Publisher full text, Abstract; Future brain stimulation devices will use advanced algorithms; Challenges with current responsive neurostimulation devices; Conclusions",
+        "matrix_claim": "A perspective identifies on-chip low-power inference and learning as unresolved requirements for responsive implantable neuromodulation.",
+        "finding": "The publisher labels the article a review/perspective and presents low-latency, low-power and on-chip learning as design challenges and proposals. Its examples focus largely on brain stimulation and epilepsy. It does not validate ECAP measurement, SCS pain outcomes or a deployed chronic-pain algorithm.",
+        "decision": "Replace the PMC locator with the accessible publisher article and name exact supporting sections; retain the existing claim boundary."
+      }
+    },
+    "s320-evidence-locator-review-2026-09-25.json": {
+      "sha256_original": "4ecbe75316cdec78c38d97878143c7ba40bd9da6c49c4d22300a65d067429b3c",
+      "review": {
+        "meta": {
+          "schema_version": "1.0.0",
+          "checked_at": "2026-09-25"
+        },
+        "source_id": "S320",
+        "status": "primary_pdf_locator_reused",
+        "primary_pdf_sha256": "3C3FDEC049B5D9E811FC99E7942542B22A55634274B38C1E1066EABDEF3607C2",
+        "boundary": "The PDF was checked in the existing connectome audit; the results are author-reported and were not independently reproduced."
+      }
+    },
+    "six-neuromodulation-context-locator-review-2026-09-25.json": {
+      "sha256_original": "ed33fbb710db08275dbb9cb287f85c7688a37641c70172afa8fc8e8811331f33",
+      "review": {
+        "meta": {
+          "schema_version": "1.0.0",
+          "checked_at": "2026-09-25"
+        },
+        "source_ids": [
+          "S049",
+          "S021",
+          "S097",
+          "S246",
+          "S095",
+          "S247"
+        ],
+        "status": "primary_abstract_or_section_located",
+        "boundary": "S049 concerns Parkinsonian STN DBS in four nonhuman primates, not spinal-cord stimulation or pain. S021 is an animal dorsal-horn prototype, not clinical efficacy. S097 is a survey; S246 is an EU project report with in-vitro results; S095 is commentary; S247 is a silicon circuit, not a biological neuron recording.",
+        "access_note": "S021 and S049 are anchored to primary PubMed abstracts; S247 to the author version-specific arXiv abstract. Full-method claims are not inferred from these abstracts."
+      }
+    },
+    "sixteen-primary-claim-locator-review-2026-09-25.json": {
+      "sha256_original": "0a49014d6fd1cf5dfad070dc069226fa45419009575af8895e62cd1f37b7cf11",
+      "review": {
+        "meta": {
+          "schema_version": "1.0.0",
+          "checked_at": "2026-09-25"
+        },
+        "source_ids": [
+          "S138",
+          "S330",
+          "S045",
+          "S023",
+          "S048",
+          "S075",
+          "S084",
+          "S249",
+          "S025",
+          "S042",
+          "S083",
+          "S165",
+          "S192",
+          "S244",
+          "S222",
+          "S252"
+        ],
+        "status": "sixteen_primary_locators_reviewed",
+        "access_corrections": {
+          "S025": "PMC13400141",
+          "S165": "PMC12467075",
+          "S244": "PMC12390560",
+          "S222": "PMC9807619"
+        },
+        "identifier_correction": {
+          "S025": "PMID 42309066"
+        },
+        "claim_corrections": {
+          "S023": "66.6% A-to-B; 59.5% B-to-A",
+          "S042": "Privacy and sharing are barriers motivating FL.",
+          "S075": "Gap is real-world and clinical-impact evaluation."
+        },
+        "boundaries": "S084 significance was restricted to 6.25% real-data subsampling. S045 and S042 have publisher abstracts only; S083 and S192 are author preprint abstracts for proceedings; S330 full text was blocked, so its abstract alone supports the claim."
+      }
+    },
+    "three-benchmark-locator-review-2026-09-25.json": {
+      "sha256_original": "18f7ea5bb795325e3e44b44572cd21c689398244114975fc61c61e4edb71520c",
+      "review": {
+        "meta": {
+          "schema_version": "1.0.0",
+          "checked_at": "2026-09-25"
+        },
+        "source_ids": [
+          "S189",
+          "S190",
+          "S191"
+        ],
+        "status": "three_benchmark_locators_reviewed",
+        "boundary": "Subject-dependent results and challenge classification do not establish independent clinical-pain validation."
+      }
+    },
+    "three-drosophila-source-locator-review-2026-09-25.json": {
+      "sha256_original": "af1cd15466ba9722f65031548f7b8c66145b8a0864e11cdb74b840a006ede76c",
+      "review": {
+        "meta": {
+          "schema_version": "1.0.0",
+          "checked_at": "2026-09-25"
+        },
+        "source_ids": [
+          "S090",
+          "S200",
+          "S368"
+        ],
+        "rows_reviewed": 4,
+        "status": "primary_fragments_located",
+        "boundary": "The larval protocol measures rolling, the Google article describes an anatomical map, and DOOMFLY reports failed learning gates. None is evidence of subjective pain or human transfer."
+      }
+    },
+    "three-fly-claim-locator-review-2026-09-25.json": {
+      "sha256_original": "3f2a341d5a2e3f0d2fdc9f81ef87ffa9fbecd9345172b3735a1d6d76c09d076c",
+      "review": {
+        "meta": {
+          "schema_version": "1.0.0",
+          "checked_at": "2026-09-25"
+        },
+        "source_ids": [
+          "S154",
+          "S068",
+          "S286"
+        ],
+        "status": "primary_sections_located",
+        "boundary": "S154 is molecular translatomic data, not an evoked neural or behavioral outcome. S068 validates its estimator in simulation, not a whole-brain biological perturbation dataset. S286 tests simulated locomotion, not protective behavior or nociception."
+      }
+    },
+    "three-olfactory-eon-locator-review-2026-09-25.json": {
+      "sha256_original": "a8d2ccba8281616f39adaa9bb12c15e4b69bd107f33192651f3a3410719b23c5",
+      "review": {
+        "meta": {
+          "schema_version": "1.0.0",
+          "checked_at": "2026-09-25"
+        },
+        "source_ids": [
+          "S214",
+          "S253",
+          "S296"
+        ],
+        "status": "primary_sections_located",
+        "boundary": "S214 is a restricted olfactory SNN and FPGA demonstration. S253 and S296 are first-party project descriptions; they do not independently validate whole-brain behavioral fidelity, future mouse emulation, nociception or human transfer."
+      }
+    },
+    "three-unverified-row-removal-2026-09-25.json": {
+      "sha256_original": "680eb413a3575505d0803735bbdac7c42076c880deca30e6642dd67296fdabb8",
+      "review": {
+        "meta": {
+          "schema_version": "1.0.0",
+          "checked_at": "2026-09-25"
+        },
+        "removed_source_ids": [
+          "S011",
+          "S140",
+          "S361"
+        ],
+        "reason": "These rejected candidates have no uniquely identified primary record and explicitly forbid citation as evidence. The evidence matrix must not assert positive primary traceability for them.",
+        "source_records_retained": true,
+        "s011_note_correction": "Broad Crossref query was not an exact-title match.",
+        "verification_boundary": "Negative registry searches are dated search observations, not proof that a source can never exist. A 2026-09-25 Google Patents request returned HTTP 503 and cannot strengthen S140's status."
+      }
+    },
+    "two-patent-index-row-removal-2026-09-25.json": {
+      "sha256_original": "279435ae1620ecb874145815e395784fafc379d40e09431333beb4ceda14c11e",
+      "review": {
+        "meta": {
+          "schema_version": "1.0.0",
+          "checked_at": "2026-09-25"
+        },
+        "removed_source_ids": [
+          "S144",
+          "S272"
+        ],
+        "source_records_retained": true,
+        "decision": "S144 has an indexed patent disclosure but no checked official publication text; S272 has only a candidate identifier. Neither supports a positive primary-locator claim in the evidence matrix.",
+        "remaining": "Keep both as search leads; restore a technical evidence row only after an official patent publication and exact paragraph/claim locator are checked.",
+        "locators": [
+          {
+            "source_id": "S144",
+            "url": "https://eureka.patsnap.com/patent/WO2026146221A1",
+            "locator": "Third-party indexed disclosure; WIPO primary text not retrieved"
+          },
+          {
+            "source_id": "S272",
+            "url": "https://patents.google.com/patent/CN122075919A/en",
+            "locator": "Exact publication URL unresolved; no primary text or claims retrieved"
+          }
+        ]
+      }
+    },
+    "s008-primary-fulltext-audit.json": {
+      "sha256_original": "e15550b870568963e0d0e50d942bd738ad1ba75a8a16ffd2e7e0a4809aeac60d",
+      "review": {
+        "meta": {
+          "schema_version": "1.0.0",
+          "checked_at": "2026-09-25",
+          "source_id": "S008",
+          "status": "primary_full_text_checked"
+        },
+        "primary_url": "https://iopscience.iop.org/article/10.1088/2057-1976/ae34b4/pdf",
+        "retrieval": "Publisher PDF text rendered through https://r.jina.ai/https://iopscience.iop.org/article/10.1088/2057-1976/ae34b4/pdf; direct IOP PDF returned Radware CAPTCHA in this environment.",
+        "source_dataset": {
+          "doi": "10.1038/s41467-018-06875-x",
+          "n_source": 51,
+          "n_analyzed": 50,
+          "assay": "motor-condition laser-evoked EEG"
+        },
+        "model_split": "Participant LOSO after complete-cohort supervised feature-mask selection; z-score fitted in training folds.",
+        "reported_metric": "95.85% +/- 5% mean subject accuracy",
+        "internal_denominator_issue": "Section 3.2: 383 correct of 400 test trials (95.75% pooled); Section 3.3: SHAP array described for 50 subjects x 40 trials. No reconciliation supplied.",
+        "boundary": "Experimental stimulus class in healthy adults; no external clinical pain or SCS validation."
+      }
+    }
+  }
+}
