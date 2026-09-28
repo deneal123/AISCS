@@ -8,6 +8,7 @@ from datetime import date
 from pathlib import Path
 from typing import Any
 
+from .completeness import completeness_summary
 from .core import DataError, load_json
 from .integrity import validate_repository
 from .pipeline import atomic_write_json, snapshot_repository
@@ -381,12 +382,16 @@ def _rebuild_cluster_indexes(clusters: dict[str, Any], records: list[dict[str, A
     )
 
 
-def _status_screening(outcome: str, exclusion_reason: str | None) -> str:
+def _status_screening(
+    outcome: str, exclusion_reason: str | None, current_status: str | None = None
+) -> str:
     if outcome == "rejected":
         return {
             "duplicate": "excluded_duplicate",
             "irrelevant": "excluded_irrelevant",
         }.get(exclusion_reason, "excluded_unverifiable")
+    if current_status == "included_context":
+        return "included_context"
     return "included_core"
 
 
@@ -417,6 +422,7 @@ def review_apply(root: Path | str, batch: Path | str, *, apply: bool = False) ->
         "validation-log.json",
         "audit-report.json",
         "evidence-matrix.json",
+        "completeness-report.json",
     ]
     originals = {name: (root / name).read_bytes() for name in names}
     try:
@@ -425,6 +431,7 @@ def review_apply(root: Path | str, batch: Path | str, *, apply: bool = False) ->
         clusters_payload = load_json(root / "clusters.json")
         audit_payload = load_json(root / "audit-report.json")
         matrix_payload = load_json(root / "evidence-matrix.json")
+        completeness_payload = load_json(root / "completeness-report.json")
         records = records_payload.get("sources", [])
         by_id = {record["id"]: record for record in records}
         aliases = aliases_payload.setdefault("aliases", {})
@@ -458,7 +465,9 @@ def review_apply(root: Path | str, batch: Path | str, *, apply: bool = False) ->
                 {
                     "status": outcome,
                     "screening_status": _status_screening(
-                        outcome, decision.get("exclusion_reason")
+                        outcome,
+                        decision.get("exclusion_reason"),
+                        validation.get("screening_status"),
                     ),
                     "checked_at": decision.get("checked_at", date.today().isoformat()),
                     "exclusion_reason": decision.get("exclusion_reason"),
@@ -632,6 +641,9 @@ def review_apply(root: Path | str, batch: Path | str, *, apply: bool = False) ->
             ),
         ]
 
+        completeness_payload.update(completeness_summary(records))
+        completeness_payload.setdefault("meta", {})["generated_at"] = date.today().isoformat()
+
         for name, value in (
             ("records.json", records_payload),
             ("aliases.json", aliases_payload),
@@ -639,6 +651,7 @@ def review_apply(root: Path | str, batch: Path | str, *, apply: bool = False) ->
             ("validation-log.json", validation_log),
             ("audit-report.json", audit_payload),
             ("evidence-matrix.json", matrix_payload),
+            ("completeness-report.json", completeness_payload),
         ):
             atomic_write_json(root / name, value)
         final = validate_repository(root)

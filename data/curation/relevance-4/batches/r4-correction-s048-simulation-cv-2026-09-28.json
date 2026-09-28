@@ -1,0 +1,151 @@
+{
+  "meta": {
+    "batch_id": "r4-correction-s048-simulation-cv-2026-09-28",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-28",
+    "scope": "Correct S048 simulated-nCAP accuracy and within-dataset split; preserve no-human boundary",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-28"
+  },
+  "source_ids": [
+    "S048"
+  ],
+  "records": [
+    {
+      "id": "S048",
+      "title": "Selective peripheral nerve recording using simulated human median nerve activity and convolutional neural networks",
+      "year": 2023,
+      "source_type": "метод"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S048",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-28",
+      "full_text_status": "checked",
+      "notes": "Cadaver-derived human median-nerve geometry is used only to generate simulated nCAPs. Reported accuracy and mean +/- SD concern simulated fascicle-source classification, not recorded human ECAP, pain or SCS response; no in-vivo human participants or external human validation.",
+      "searches": [
+        {
+          "service": "Europe PMC publisher-deposited JATS",
+          "query": "PMC10704747 fullTextXML; Methods Performance evaluation",
+          "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10704747/fullTextXML",
+          "accessed_at": "2026-09-28"
+        }
+      ],
+      "updates": {
+        "производительность": "Simulated fascicle-source nCAP classification only: ESCAPE-NET accuracy 97.8 +/- 0.1% for 3 classes at 5% noise and 52.5 +/- 0.3% for 10 classes at 15% noise (Abstract); no in-vivo human validation.",
+        "кросс_субъект": "not_applicable",
+        "ограничения": "Finite-element median-nerve simulation with simplified homogeneous geometry, fixed 56-channel interface, Gaussian noise and non-overlapping nCAPs. No in-vivo human signals, patient split, ECAP, pain or SCS outcome. Methods report threefold within-simulation cross-validation, not clinical external validation.",
+        "validation": {
+          "split_unit": "trial",
+          "cross_subject": "not_applicable",
+          "uncertainty": "yes",
+          "checked_at": "2026-09-28",
+          "notes": "Cadaver-derived human median-nerve geometry is used only to generate simulated nCAPs. Reported accuracy and mean +/- SD concern simulated fascicle-source classification, not recorded human ECAP, pain or SCS response; no in-vivo human participants or external human validation."
+        },
+        "field_resolution": {
+          "производительность": {
+            "state": "reported",
+            "value": "Simulated fascicle-source nCAP classification only: ESCAPE-NET accuracy 97.8 +/- 0.1% for 3 classes at 5% noise and 52.5 +/- 0.3% for 10 classes at 15% noise (Abstract); no in-vivo human validation.",
+            "reason": "Abstract reports mean +/- SD accuracy for generated nCAP classification; not a human performance estimate.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10704747/fullTextXML",
+                "locator": "Abstract/Results; Fig. 1"
+              }
+            ]
+          },
+          "кросс_субъект": {
+            "state": "not_applicable",
+            "value": null,
+            "reason": "No recruited subjects or participant-wise validation; the nerve geometry is cadaver-derived, while signals are simulated.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10704747/fullTextXML",
+                "locator": "Methods/Human median nerve; Methods/Performance evaluation"
+              }
+            ]
+          },
+          "ограничения": {
+            "state": "reported",
+            "value": "Finite-element median-nerve simulation with simplified homogeneous geometry, fixed 56-channel interface, Gaussian noise and non-overlapping nCAPs. No in-vivo human signals, patient split, ECAP, pain or SCS outcome. Methods report threefold within-simulation cross-validation, not clinical external validation.",
+            "reason": "The Methods and Discussion specify simulation setup and limitations.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10704747/fullTextXML",
+                "locator": "Methods/Performance evaluation; Discussion/Assumptions and limitations"
+              }
+            ]
+          },
+          "validation.split_unit": {
+            "state": "reported",
+            "value": "trial",
+            "reason": "Each simulated nCAP is a generated trial; Methods/Performance evaluation states threefold CV with 20,000 train and 10,000 test simulated nCAPs per fold, within each of ten datasets per condition. No participant split.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10704747/fullTextXML",
+                "locator": "Methods/Performance evaluation"
+              }
+            ]
+          },
+          "validation.cross_subject": {
+            "state": "not_applicable",
+            "value": null,
+            "reason": "No subject cohort or subject-wise split in the simulated-nCAP experiment.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10704747/fullTextXML",
+                "locator": "Methods/Human median nerve; Methods/Performance evaluation"
+              }
+            ]
+          },
+          "validation.uncertainty": {
+            "state": "reported",
+            "value": "yes",
+            "reason": "Descriptive mean +/- SD across ten simulated datasets is reported; this does not establish predictive uncertainty, calibration, or clinical confidence intervals.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10704747/fullTextXML",
+                "locator": "Abstract/Results; Methods/Performance evaluation"
+              }
+            ]
+          },
+          "validation.notes": {
+            "state": "reported",
+            "value": "Cadaver-derived human median-nerve geometry is used only to generate simulated nCAPs. Reported accuracy and mean +/- SD concern simulated fascicle-source classification, not recorded human ECAP, pain or SCS response; no in-vivo human participants or external human validation.",
+            "reason": "Separate simulated nCAP accuracy from human physiological or clinical outcomes.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10704747/fullTextXML",
+                "locator": "Abstract; Methods/Human median nerve; Methods/Performance evaluation"
+              }
+            ]
+          },
+          "validation.checked_at": {
+            "state": "reported",
+            "value": "2026-09-28",
+            "reason": "Dated full-text recheck of publisher-deposited JATS.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10704747/fullTextXML",
+                "locator": "Article front matter; Abstract; Methods/Performance evaluation"
+              }
+            ]
+          }
+        },
+        "identifiers": {
+          "doi": "10.1186/s12938-023-01181-0"
+        }
+      }
+    }
+  ]
+}

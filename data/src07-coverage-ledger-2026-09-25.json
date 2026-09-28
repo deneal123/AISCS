@@ -2,16 +2,16 @@
     "meta": {
         "schema_version": "1.0.0",
         "checked_at": "2026-09-25",
-        "scope": "SRC-07 complete 2026 source coverage and remaining primary-route queue",
+        "scope": "All 81 SRC-07 records have dated dispositions: 71 primary-route screens (including S088 owner abstract and S245 terminal claim-text STOP), 0 Crossref-only metadata screens, and 10 terminal identity rejections. S088/S245 received bounded owner-route follow-ups on 2026-09-27; the original all-record cut remains dated 2026-09-26.",
         "total_sources": 81,
         "route_counts": {
-            "crossref_metadata_screened": 1,
+            "primary_route_screened": 71,
+            "crossref_metadata_screened": 0,
             "identity_rejected": 10,
-            "primary_route_pending": 1,
-            "primary_route_screened": 69
+            "primary_route_pending": 0
         },
-        "status": "in_progress",
-        "boundary": "Primary owner routes were rechecked for a targeted subset; blocked full text, page notices, unlinked preprints, date conflicts, later changes and the remaining 2026 corpus remain open."
+        "status": "bounded_snapshot_complete_with_terminal_stops",
+        "boundary": "The all-record cut is 2026-09-26; only S088/S245 routes were refreshed on 2026-09-27. Empty update relations and blocked routes do not prove global absence; S245 official claims and S088 full body remain unavailable, rejected identities are not publication-version evidence, and later changes remain possible."
     },
     "rows": [
         {
@@ -212,10 +212,8 @@
             "title": "Dopaminergic Modulation of Mushroom Body Output Neurons Mediates Nociception-Induced Escape in Drosophila",
             "validation_status": "verified_primary",
             "route": "primary_route_screened",
-            "evidence_artifacts": [
-                "src07-crossref-retry-2026-09-25.json"
-            ],
-            "remaining": "eLife owner API checked: reviewed preprint v1, published/reviewed 2026-04-14, preprint DOI 10.64898/2026.01.04.697536; eLife article endpoint returned not found. No owner API correction or final-article relation field; no human-pain inference. Later dated refresh remains."
+            "evidence_artifacts": "src07-crossref-retry-2026-09-25.json src07-version-recheck-audit.json",
+            "remaining": "Versioned eLife owner API route directly confirms reviewed-preprint v1 on 2026-09-26; unversioned API route now returns 404 and HTML is Cloudflare challenged. No final journal VoR was established. Version check is bounded to the retrieved endpoints."
         },
         {
             "source_id": "S066",
@@ -317,12 +315,12 @@
             "source_id": "S088",
             "title": "Cross-Domain Multimodal Pain Detection Using a DANN–Transformer Architecture with Supervised Contrastive Warmup and Test-Time Augmentation",
             "validation_status": "verified_metadata",
-            "route": "crossref_metadata_screened",
+            "route": "primary_route_screened",
             "evidence_artifacts": [
                 "src07-crossref-retry-2026-09-25.json",
                 "src07-version-recheck-audit.json"
             ],
-            "remaining": "Only owner-deposited Crossref/IEEE VOR metadata were retrieved; IEEE/Xplore page and VOR PDF returned WAF blocks. No article body, Crossmark status, or owner version note could be checked; retain crossref_metadata_screened and no global absence claim."
+            "remaining": "2026-09-27 owner-route refresh: IEEE Xplore abstract landing and REST abstract/keywords/figures/references returned content in one session (5 captions, 20 references); an independent replay was challenged. The article body/PDF remains login/WAF-gated. No full methods, model denominator, participant split or full-text metric verification. Caption values are caption-scoped only. No global absence of updates or unlinked preprints is inferred."
         },
         {
             "source_id": "S097",
@@ -470,10 +468,8 @@
             "title": "Infinite Sugar",
             "validation_status": "verified_primary",
             "route": "primary_route_screened",
-            "evidence_artifacts": [
-                "src07-code-repository-recheck-2026-09-25.json"
-            ],
-            "remaining": "Later dated refresh and check correction/version relations against the primary owner. Current route is a dated partial check, not global currency proof."
+            "evidence_artifacts": "src07-code-repository-recheck-2026-09-25.json src07-version-recheck-audit.json",
+            "remaining": "GitHub owner API directly confirms current HEAD fdbbd866… dated 2026-09-14 and empty tags/releases. This establishes repository state only; it does not exclude off-site work or later changes."
         },
         {
             "source_id": "S212",
@@ -502,10 +498,8 @@
             "title": "MuSACo: Multimodal Subject-Specific Selection and Adaptation for Expression Recognition with Co-Training",
             "validation_status": "verified_primary",
             "route": "primary_route_screened",
-            "evidence_artifacts": [
-                "src07-s227-wacv-recheck-2026-09-25.json"
-            ],
-            "remaining": "Later dated refresh and check correction/version relations against the primary owner. Current route is a dated partial check, not global currency proof."
+            "evidence_artifacts": "src07-s227-wacv-recheck-2026-09-25.json src07-version-recheck-audit.json",
+            "remaining": "arXiv API confirms v2 and Crossref confirms WACV proceedings metadata; IEEE Xplore page returned HTTP 202/empty to Pi, so publisher notices remain unavailable. No registered preprint relation or global absence claim."
         },
         {
             "source_id": "S231",
@@ -533,19 +527,17 @@
             "source_id": "S245",
             "title": "A wearable pain relief device and remote monitoring system therefor",
             "validation_status": "partially_verified",
-            "route": "primary_route_pending",
-            "evidence_artifacts": [],
-            "remaining": "Official CNIPA query retrieved the record for application CN202510586600.9 and confirmed CN120478838A (publication 2025-08-15) plus CN120478838B (granted 2026-02-03), title, patentee, inventors and abstract. The official response did not include claims. Claims 1-3 and a 20-patient example are mirror-only; keep partially_verified and do not treat patent assertions as efficacy evidence."
+            "route": "primary_route_screened",
+            "evidence_artifacts": ["src07-version-recheck-audit.json"],
+            "remaining": "STOP-SRC07-CLAIMS (2026-09-27): an independently replayed CNIPA signed query returned identity, abstract and A/B publication history for application 2025105866009 (CN120478838A published 2025-08-15; CN120478838B granted 2026-02-03). Both records have hasSl=0, while exact official A/B document routes remain anti-bot challenged. The earlier error_code 10001 is superseded for the query route, but official claims text is still unavailable. Claims 1-3 and the patient example remain mirror-only; patent assertions are not efficacy evidence."
         },
         {
             "source_id": "S246",
             "title": "CROSSBRAIN: Distributed and federated cross-modality actuation through advanced nanomaterials and neuromorphic learning",
             "validation_status": "partially_verified",
             "route": "primary_route_screened",
-            "evidence_artifacts": [
-                "src07-crossref-retry-2026-09-25.json"
-            ],
-            "remaining": "CORDIS owner fact sheet confirms CROSSBRAIN, grant 101070908, DOI 10.3030/101070908; project active through 2026-10-31, last updated 2026-04-24. This is a project/grant record, not a peer-reviewed article; reporting/results tabs not inspected."
+            "evidence_artifacts": "src07-crossref-retry-2026-09-25.json src07-version-recheck-audit.json",
+            "remaining": "CORDIS owner fact sheet and reporting XML confirm grant/project dates and signed status; rendered page and XML update dates differ. Grant/project record is not an article, and publication-level corrections/patent registers remain outside this checked route set."
         },
         {
             "source_id": "S249",
@@ -646,10 +638,8 @@
             "title": "Eon Systems: mouse-brain emulation programme",
             "validation_status": "partially_verified",
             "route": "primary_route_screened",
-            "evidence_artifacts": [
-                "src07-three-owner-pages-review-2026-09-25.json"
-            ],
-            "remaining": "Later dated owner-page refresh; any linked peer-reviewed study must be evaluated independently."
+            "evidence_artifacts": "src07-three-owner-pages-review-2026-09-25.json src07-version-recheck-audit.json",
+            "remaining": "Current owner page metadata confirms publication date; Pi reports no body changes through checked Wayback captures, bounded to those captures. Mouse emulation remains a stated future goal; patent route checks were blocked and no global absence is claimed."
         },
         {
             "source_id": "S313",
@@ -678,7 +668,7 @@
                 "src07-crossref-retry-2026-09-25.json",
                 "src07-version-recheck-audit.json"
             ],
-            "remaining": "medRxiv/openRxiv owner API confirms versions v1/v2 and `published: NA` (no linked journal DOI surfaced); v2 HTML was blocked (403). No correction marker in API; future publication and page-only notices remain unverified."
+            "remaining": "medRxiv owner API confirms v1/v2, changed v2 title dated 2026-08-18, and `published: NA` (no linked journal DOI surfaced); v2 source XML confirms the title and article-version 1.2. V2 HTML/PDF body was blocked, so scientific content changes remain unverified. No correction marker in API; future publication and page-only notices remain unverified."
         },
         {
             "source_id": "S356",
@@ -870,10 +860,8 @@
                 "src07-crossref-sweep-2026-09-25.json",
                 "src07-version-recheck-audit.json"
             ],
-            "remaining": "Nature owner page confirms VOR 2026-06-29; publisher-endorsed CrossMark says Document is current, no updates listed. Candidate bioRxiv DOI 10.1101/2024.12.17.628844 is unlinked in Crossref and owner API timed out, so relation/version linkage remains unverified."
+            "remaining": "Nature owner page confirms VOR 2026-06-29; publisher-endorsed CrossMark says Document is current, no updates listed. Candidate bioRxiv DOI 10.1101/2024.12.17.628844 is unlinked in checked Crossref relations; bioRxiv owner pubs API returned HTTP 200 on 2026-09-28 with an empty published-version collection. Relation/version linkage remains unverified."
         }
     ],
-    "primary_route_pending_source_ids": [
-        "S245"
-    ]
+    "primary_route_pending_source_ids": []
 }

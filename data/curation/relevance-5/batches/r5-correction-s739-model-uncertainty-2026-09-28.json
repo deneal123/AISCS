@@ -1,0 +1,98 @@
+{
+  "meta": {
+    "batch_id": "r5-correction-s739-model-uncertainty-2026-09-28",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-28",
+    "scope": "Separate S739 model-replicate dispersion from absent independent-animal uncertainty",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-28"
+  },
+  "source_ids": [
+    "S739"
+  ],
+  "records": [
+    {
+      "id": "S739",
+      "title": "Connectome-constrained modeling identifies neurons and synapses that sustain spontaneous activity in Drosophila",
+      "year": 2026,
+      "source_type": "препринт"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S739",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-28",
+      "full_text_status": "checked",
+      "notes": "Preprint v1. FlyWire v783 constrains a resting-state rate model. Empirical analyses use one example head-fixed adult fly recording; n=5 independently trained models per condition are model replicates, not five animals. The first half of that recording was used for fitting and the second half held out; no independent-animal validation, nociceptive, ECAP or clinical comparator. Methods Statistical analysis reports mean +/- s.d. for model/noise replicates; there is no uncertainty estimate over independently held-out flies. Methods states no separate validation segment was held out.",
+      "searches": [
+        {
+          "service": "bioRxiv publisher full text v1",
+          "query": "10.64898/2026.08.21.745055 v1 Methods Statistical analysis",
+          "url": "https://www.biorxiv.org/content/10.64898/2026.08.21.745055v1.full",
+          "accessed_at": "2026-09-28"
+        }
+      ],
+      "updates": {
+        "identifiers": {
+          "exact_url": "https://www.biorxiv.org/content/10.64898/2026.08.21.745055v1.full"
+        },
+        "validation": {
+          "uncertainty": "yes",
+          "notes": "Preprint v1. FlyWire v783 constrains a resting-state rate model. Empirical analyses use one example head-fixed adult fly recording; n=5 independently trained models per condition are model replicates, not five animals. The first half of that recording was used for fitting and the second half held out; no independent-animal validation, nociceptive, ECAP or clinical comparator. Methods Statistical analysis reports mean +/- s.d. for model/noise replicates; there is no uncertainty estimate over independently held-out flies. Methods states no separate validation segment was held out.",
+          "checked_at": "2026-09-28"
+        },
+        "field_resolution": {
+          "identifiers.exact_url": {
+            "state": "reported",
+            "value": "https://www.biorxiv.org/content/10.64898/2026.08.21.745055v1.full",
+            "reason": "Direct full-text v1 route contains Methods and figure locators.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/10.64898/2026.08.21.745055v1.full",
+                "locator": "Methods > Experimental whole-brain calcium imaging data; Methods > Statistical analysis; Methods > Model fitting and validation segment; Figure 1 caption"
+              }
+            ]
+          },
+          "validation.uncertainty": {
+            "state": "reported",
+            "value": "yes",
+            "reason": "Methods Statistical analysis reports model/noise replicate dispersion; one-fly design has no between-fly estimate.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/10.64898/2026.08.21.745055v1.full",
+                "locator": "Methods > Experimental whole-brain calcium imaging data; Methods > Statistical analysis; Methods > Model fitting and validation segment; Figure 1 caption"
+              }
+            ]
+          },
+          "validation.notes": {
+            "state": "reported",
+            "value": "Preprint v1. FlyWire v783 constrains a resting-state rate model. Empirical analyses use one example head-fixed adult fly recording; n=5 independently trained models per condition are model replicates, not five animals. The first half of that recording was used for fitting and the second half held out; no independent-animal validation, nociceptive, ECAP or clinical comparator. Methods Statistical analysis reports mean +/- s.d. for model/noise replicates; there is no uncertainty estimate over independently held-out flies. Methods states no separate validation segment was held out.",
+            "reason": "Separates temporal test half, missing validation segment and model-replicate dispersion.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/10.64898/2026.08.21.745055v1.full",
+                "locator": "Methods > Experimental whole-brain calcium imaging data; Methods > Statistical analysis; Methods > Model fitting and validation segment; Figure 1 caption"
+              }
+            ]
+          },
+          "validation.checked_at": {
+            "state": "reported",
+            "value": "2026-09-28",
+            "reason": "Dated primary full-text recheck.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/10.64898/2026.08.21.745055v1.full",
+                "locator": "Methods > Experimental whole-brain calcium imaging data; Methods > Statistical analysis; Methods > Model fitting and validation segment; Figure 1 caption"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

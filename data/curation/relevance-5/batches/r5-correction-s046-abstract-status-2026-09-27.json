@@ -1,0 +1,71 @@
+{
+  "meta": {
+    "batch_id": "r5-correction-s046-abstract-status-2026-09-27",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-27",
+    "scope": "Correct S046 full-text access claim to abstract-only primary review",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-27"
+  },
+  "source_ids": [
+    "S046"
+  ],
+  "records": [
+    {
+      "id": "S046",
+      "название": "ID# 1907064 Explainable Machine Learning Pipeline Predicts Spinal Cord Stimulation Responders",
+      "год": 2025,
+      "тип_источника": "XAI"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "S046",
+      "decision": "partially_verified",
+      "full_text_status": "metadata_only",
+      "notes": "Official Neuromodulation 2025 conference abstract on page S194 reports 16 patients, preoperative EEG, and a three-month two-of-three composite responder; the Methods sentence is truncated after morphine milligram reduction. The publisher article route presents abstract only and the linked full-text/PDF route returned 403. No complete methods, model-specific denominator, patient-disjoint split or full responder rule were verified; this is an abstract-level report, not ECAP-based clinical validation.",
+      "searches": [
+        {
+          "service": "Neuromodulation publisher",
+          "query": "DOI 10.1016/j.neurom.2025.08.367 full abstract and PDF access",
+          "url": "https://www.neuromodulationjournal.org/article/S1094-7159(25)00643-9/pdf",
+          "accessed_at": "2026-09-27"
+        }
+      ],
+      "updates": {
+        "field_resolution": {
+          "validation.notes": {
+            "state": "reported",
+            "value": "Official Neuromodulation 2025 conference abstract on page S194 reports 16 patients, preoperative EEG, and a three-month two-of-three composite responder; the Methods sentence is truncated after morphine milligram reduction. The publisher article route presents abstract only and the linked full-text/PDF route returned 403. No complete methods, model-specific denominator, patient-disjoint split or full responder rule were verified; this is an abstract-level report, not ECAP-based clinical validation.",
+            "reason": "Publisher identifies this as an abstract-only supplement item; full method and endpoint rule were not available.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://www.neuromodulationjournal.org/article/S1094-7159(25)00643-9/pdf",
+                "locator": "Volume 28 issue 7 supplement S194, Abstract only; Get full text access route returned 403"
+              }
+            ]
+          },
+          "validation.checked_at": {
+            "state": "reported",
+            "value": "2026-09-27",
+            "reason": "Dated publisher abstract and full-text access check.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://www.neuromodulationjournal.org/article/S1094-7159(25)00643-9/pdf",
+                "locator": "Publisher abstract-only PDF/article access page"
+              }
+            ]
+          }
+        },
+        "identifiers": {
+          "doi": "10.1016/j.neurom.2025.08.367"
+        }
+      },
+      "claims": [],
+      "source_id": "S046",
+      "checked_at": "2026-09-27"
+    }
+  ]
+}

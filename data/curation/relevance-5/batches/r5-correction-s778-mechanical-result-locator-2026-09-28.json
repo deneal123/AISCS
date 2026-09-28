@@ -1,0 +1,87 @@
+{
+  "meta": {
+    "batch_id": "r5-correction-s778-mechanical-result-locator-2026-09-28",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-28",
+    "scope": "Correct misattribution of S778 45 mN mechanical rolling percentages to heat-probe Figure 2E",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-28"
+  },
+  "source_ids": [
+    "S778"
+  ],
+  "records": [
+    {
+      "id": "S778",
+      "title": "painless, a Drosophila Gene Essential for Nociception",
+      "year": 2003,
+      "source_type": "метод"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S778",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-28",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "service": "Archived Cell publisher full text",
+          "query": "S778 Results 45 mN von Frey 92% 13% and Figure 2E heat probe",
+          "url": "https://web.archive.org/web/20230522064658/https://www.cell.com/cell/fulltext/S0092-8674(03)00272-1",
+          "accessed_at": "2026-09-28"
+        }
+      ],
+      "updates": {
+        "identifiers": {
+          "doi": "10.1016/S0092-8674(03)00272-1"
+        },
+        "производительность": "Results prose: a 45 mN von Frey mechanical filament evoked rolling in 92% of wild-type larvae (n=36) versus 13% of painless1 mutants (n=31); the mechanical percentages are not assigned to Figure 2E. Figure 2E concerns heat-probe responses. Figure 3C-E reports temperature-linked peripheral nerve firing in wild type and its absence in painless mutants.",
+        "field_resolution": {
+          "производительность": {
+            "state": "reported",
+            "value": "Results prose: a 45 mN von Frey mechanical filament evoked rolling in 92% of wild-type larvae (n=36) versus 13% of painless1 mutants (n=31); the mechanical percentages are not assigned to Figure 2E. Figure 2E concerns heat-probe responses. Figure 3C-E reports temperature-linked peripheral nerve firing in wild type and its absence in painless mutants.",
+            "reason": "The archived publisher Results prose reports the 45 mN percentages; Figure 2E is a heat-probe panel and cannot locate the mechanical result.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://web.archive.org/web/20230522064658/https://www.cell.com/cell/fulltext/S0092-8674(03)00272-1",
+                "locator": "Results > Forward Genetic Analysis of Nociception: 45 mN von Frey rolling percentages in prose; Figure 2E: heat-probe response; Results > Temperature-Dependent Spiking and Figure 3C-E: nerve firing."
+              }
+            ]
+          },
+          "validation.checked_at": {
+            "state": "reported",
+            "value": "2026-09-28",
+            "reason": "Archived publisher full text rechecked on this date.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://web.archive.org/web/20230522064658/https://www.cell.com/cell/fulltext/S0092-8674(03)00272-1",
+                "locator": "Results > Forward Genetic Analysis of Nociception: 45 mN mechanical rolling in prose; Figure 2E: heat-probe response; Figure 3C-E: nerve firing."
+              }
+            ]
+          },
+          "validation.notes": {
+            "state": "reported",
+            "value": "Corrects panel locator only; the 92%/13% group values and separate nerve-firing result are unchanged. Larval defensive behavior and peripheral neural firing remain distinct from subjective pain and human ECAP/SCS.",
+            "reason": "Correct the panel locator while preserving the numeric result and construct boundary.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://web.archive.org/web/20230522064658/https://www.cell.com/cell/fulltext/S0092-8674(03)00272-1",
+                "locator": "Results > Forward Genetic Analysis of Nociception: 45 mN mechanical rolling in prose; Figure 2E: heat-probe response; Figure 3C-E: nerve firing."
+              }
+            ]
+          }
+        },
+        "validation": {
+          "checked_at": "2026-09-28",
+          "notes": "Corrects panel locator only; the 92%/13% group values and separate nerve-firing result are unchanged. Larval defensive behavior and peripheral neural firing remain distinct from subjective pain and human ECAP/SCS."
+        }
+      },
+      "claims": [],
+      "notes": "Corrects panel locator only; the 92%/13% group values and separate nerve-firing result are unchanged. Larval defensive behavior and peripheral neural firing remain distinct from subjective pain and human ECAP/SCS."
+    }
+  ]
+}

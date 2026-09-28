@@ -1,6 +1,6 @@
-# EXP-02 — ECAP forward and measurement specification (draft)
+# EXP-02 — ECAP forward and measurement conditional specification
 
-**Status:** design draft; not a validated ECAP model and not executable as a participant-level experiment. `EXP-01` remains open, so this specification is conditional and does not close the dependency. No simulations or clinical analyses were run to prepare it.
+**Status (2026-09-26):** conditional measurement specification with `STOP-EXP02-VALIDATION` for execution on the current snapshot. The equations, source-specific montages and output vector below define what must be measured; they are not a calibrated model. No authorized independent human raw-ECAP comparator with exact lead geometry, artifact chain and participant split is selected, and `EXP-01` has `STOP-EXP01-INPUT`. Numeric ECAP-like tolerance bounds therefore remain `null` in the [scientific contract](../../data/scientific-contract.json). Do not claim waveform fidelity, unique axon recruitment, a valid Drosophila→human transfer operator, analgesia or clinical benefit. Reopen after lawful comparator access, frozen device/geometry metadata and prespecified participant-level tolerances; then execute the checks below. No simulation or clinical analysis was run to prepare this specification.
 
 ## 1. Scope and claim boundary
 

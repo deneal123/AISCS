@@ -1,0 +1,83 @@
+{
+  "meta": {
+    "batch_id": "r5-correction-s001-briefing-species-2026-09-28",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-28",
+    "scope": "Remove unsupported animal attribution from S001 briefing task field while preserving contextual screening",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-28"
+  },
+  "source_ids": [
+    "S001"
+  ],
+  "records": [
+    {
+      "id": "S001",
+      "title": "Ultrasound-induced wireless implantable stimulator for adaptive pain management",
+      "year": 2025,
+      "source_type": "применение"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S001",
+      "decision": "partially_verified",
+      "checked_at": "2026-09-28",
+      "full_text_status": "unavailable",
+      "notes": "Accessible publisher preview confirms the system concept and pain-severity classification but does not disclose species, neural-recording modality, label definition, sample, split, metric or efficacy. The Research Briefing full text is subscription-only; the linked original experiment is S747 and must be cited separately for those details. The 2026-09-28 recheck removed an unsupported animal-species attribution from this briefing card task field; the linked original study S747 is separately reviewed as a rat experiment.",
+      "searches": [
+        {
+          "service": "Nature Electronics publisher",
+          "query": "S001 Research Briefing DOI 10.1038/s41928-025-01377-3 visible summary species",
+          "url": "https://www.nature.com/articles/s41928-025-01377-3",
+          "accessed_at": "2026-09-28"
+        }
+      ],
+      "updates": {
+        "задача": "Publisher Research Briefing describing an ultrasound-powered wireless spinal stimulator with ML-based pain-severity classification and automatic stimulation-level selection; species is not stated in the accessible briefing preview.",
+        "identifiers": {
+          "doi": "10.1038/s41928-025-01377-3"
+        },
+        "field_resolution": {
+          "задача": {
+            "state": "reported",
+            "value": "Publisher Research Briefing describing an ultrasound-powered wireless spinal stimulator with ML-based pain-severity classification and automatic stimulation-level selection; species is not stated in the accessible briefing preview.",
+            "reason": "The accessible publisher summary reports the system concept but no species; the rat experiment belongs to the separately checked S747 primary study.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.nature.com/articles/s41928-025-01377-3",
+                "locator": "Research Briefing visible summary and Additional information (link to S747); no species is stated in the accessible preview"
+              }
+            ]
+          },
+          "validation.notes": {
+            "state": "reported",
+            "value": "Accessible publisher preview confirms the system concept and pain-severity classification but does not disclose species, neural-recording modality, label definition, sample, split, metric or efficacy. The Research Briefing full text is subscription-only; the linked original experiment is S747 and must be cited separately for those details. The 2026-09-28 recheck removed an unsupported animal-species attribution from this briefing card task field; the linked original study S747 is separately reviewed as a rat experiment.",
+            "reason": "Dated primary-preview recheck and bounded correction to contextual source card.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.nature.com/articles/s41928-025-01377-3",
+                "locator": "Research Briefing visible summary and Additional information (link to S747); no species is stated in the accessible preview"
+              }
+            ]
+          },
+          "validation.checked_at": {
+            "state": "reported",
+            "value": "2026-09-28",
+            "reason": "Dated primary-preview recheck.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.nature.com/articles/s41928-025-01377-3",
+                "locator": "Research Briefing visible summary and Additional information (link to S747); no species is stated in the accessible preview"
+              }
+            ]
+          }
+        }
+      },
+      "claims": []
+    }
+  ]
+}

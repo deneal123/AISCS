@@ -1,9 +1,9 @@
 {
   "meta": {
     "version": "2.0.0",
-    "checked_at": "2026-09-24",
+    "checked_at": "2026-09-28",
     "scope": "structured source searches and review decisions",
-    "status": "schema_2_terminal_resolution_complete_G0_REVISE",
+    "status": "all_source_validation_complete_author_review_pending",
     "applied_batches": [
       "batch-001",
       "batch-002",
@@ -24,7 +24,69 @@
       "r3-batch-001",
       "r3-batch-002",
       "r4-github-refresh-001",
-      "github-new-resources-001"
+      "github-new-resources-001",
+      "r4-correction-002",
+      "r5-correction-001",
+      "r5-correction-s823-calibration",
+      "r5-correction-s755-fulltext",
+      "r5-correction-s822-title",
+      "r5-correction-s755-access-flag",
+      "r5-correction-s762-fulltext",
+      "r5-correction-s105-vor-2026-09-27",
+      "r5-correction-s755-formula-consistency-2026-09-27",
+      "r5-correction-s036-rua-fulltext-2026-09-27",
+      "r5-correction-s046-abstract-status-2026-09-27",
+      "r5-correction-s039-s082-publisher-access-2026-09-27",
+      "r4-correction-s074-ieee-abstract-2026-09-27",
+      "r5-correction-s212-v3-title-version-2026-09-27",
+      "src04-s833-screening-context-2026-09-27",
+      "r4-correction-s834-figure-n-2026-09-27",
+      "r5-correction-s072-abstract-percent-unit-2026-09-27",
+      "r5-correction-s040-giaformer-fulltext-2026-09-27",
+      "r5-correction-s040-table3-dispersion-locator-2026-09-27",
+      "r5-correction-s834-trpa1-identity-and-study-fields-2026-09-28",
+      "r5-correction-s782-author-and-preprint-route-2026-09-28",
+      "r5-correction-s763-owner-v2-self-correction-2026-09-28",
+      "r5-correction-s357-fulltext-effect-inconsistency-2026-09-28",
+      "r5-correction-s243-registry-2026-09-28",
+      "r5-correction-s786-s788-primary-boundaries-2026-09-28",
+      "r5-correction-s001-briefing-species-2026-09-28",
+      "r4-correction-s192-generative-target-2026-09-28",
+      "r5-correction-s006-metadata-boundary-2026-09-28",
+      "r4-correction-s095-year-fulltext-2026-09-28",
+      "r4-correction-s252-access-depth-2026-09-28",
+      "r4-correction-s212-v3-figure6-2026-09-28",
+      "r5-correction-s775-flywire-v630-2026-09-28",
+      "r5-correction-s774-elife-v1-locators-2026-09-28",
+      "r5-correction-s778-mechanical-result-locator-2026-09-28",
+      "r5-correction-s016-nociception-study-fields-2026-09-28",
+      "r5-correction-s164-review-modality-target-2026-09-28",
+      "r5-correction-s072-abstract-population-boundary-2026-09-28",
+      "r5-correction-s015-cohort-and-validation-2026-09-28",
+      "r5-correction-s037-denominator-and-dispersion-2026-09-28",
+      "r5-correction-s014-chronic-pain-case-status-2026-09-28",
+      "r5-correction-s214-publication-status-2026-09-28",
+      "r5-correction-s739-exemplar-fly-split-2026-09-28",
+      "r5-correction-s744-model-sample-external-comparison-2026-09-28",
+      "r5-correction-s747-classifier-domain-accuracy-2026-09-28",
+      "r4-correction-s249-review-validation-2026-09-28",
+      "r4-correction-s048-simulation-cv-2026-09-28",
+      "r4-correction-s042-spine-surgery-review-2026-09-28",
+      "r5-correction-s356-figure5-outcomes-2026-09-28",
+      "r4-correction-s292-pinned-repo-provenance-2026-09-28",
+      "r5-correction-s357-secondary-review-role-2026-09-28",
+      "r3-correction-s026-jstage-abstract-scope-2026-09-28",
+      "r5-correction-s044-abstract-samples-validation-2026-09-28",
+      "r5-correction-s159-escore-definition-2026-09-28",
+      "r4-correction-s025-lasso-pcr-target-2026-09-28",
+      "r4-correction-s165-neurodegeneration-review-scope-2026-09-28",
+      "r4-correction-s099-uspto-claim1-scope-2026-09-28",
+      "r4-correction-s060-review-access-limits-2026-09-28",
+      "r5-correction-s739-model-uncertainty-2026-09-28",
+      "r5-correction-s193-pain-score-rater-boundary-2026-09-28",
+      "r5-correction-s739-temporal-split-unit-2026-09-28",
+      "r4-correction-s029-behavior-modality-2026-09-28",
+      "r5-correction-s004-pain-class-origin-2026-09-28"
     ],
     "applied_resource_batches": [
       "st-batch-001",
@@ -7894,6 +7956,1682 @@
           "notes": "Primary repository metadata and README verified; independent execution pending."
         }
       ]
+    },
+    {
+      "batch_id": "r4-correction-002",
+      "applied_at": "2026-09-26",
+      "source_ids": [
+        "S075"
+      ],
+      "decisions": [
+        {
+          "source_id": "S075",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "PubMed/NCBI",
+              "query": "41615529 exact PMID",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/41615529/",
+              "accessed_at": "2026-09-26"
+            },
+            {
+              "service": "Europe PMC full-text XML",
+              "query": "PMC12858468 exact PMCID",
+              "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12858468/fullTextXML",
+              "accessed_at": "2026-09-26"
+            }
+          ],
+          "claims": [],
+          "notes": "Corrected an inherited single-target technical-signal-quality assignment. This heterogeneous scoping review is context only; no pooled pain, ECAP or SCS performance estimate is inferred."
+        }
+      ]
+    },
+    {
+      "batch_id": "r5-correction-001",
+      "applied_at": "2026-09-27",
+      "source_ids": [
+        "S079"
+      ],
+      "decisions": [
+        {
+          "source_id": "S079",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "PubMed/NCBI",
+              "query": "41504676 exact PMID",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/41504676/",
+              "accessed_at": "2026-09-27"
+            },
+            {
+              "service": "Neuromodulation owner journal",
+              "query": "10.1016/j.neurom.2025.11.011 exact DOI and full-text access",
+              "url": "https://www.neuromodulationjournal.org/article/S1094-7159%2825%2901170-5/fulltext",
+              "accessed_at": "2026-09-27"
+            }
+          ],
+          "claims": [],
+          "notes": "PubMed PMID 41504676 author abstract checked directly for PRISMA-ScR date, screening counts and distinct signal categories. Publisher officially indexes the article as open access CC BY 4.0, but direct full HTML fetch returned HTTP 403 here. Full-text status remains metadata_only; no per-study methods, linked participant data or predictor validation inferred."
+        }
+      ]
+    },
+    {
+      "batch_id": "r5-correction-s823-calibration",
+      "applied_at": "2026-09-27",
+      "source_ids": [
+        "S823"
+      ],
+      "decisions": [
+        {
+          "source_id": "S823",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "PMC primary full text",
+              "query": "PMC3898224 validation.calibration applicability and UVC exposure details",
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3898224/",
+              "accessed_at": "2026-09-27"
+            }
+          ],
+          "claims": [],
+          "notes": "Full open-access PMC primary text and exact PubMed identity reviewed. UVC stimulus is 0.17, 1.2, or 8 mW/cm2 for 5 s in Fig. 1; UVA/UVB and a separate 45-46 C heat assay are distinct. Fig. 4 reports direct extracellular v'ada mdIV electrophysiology after UVC. Writhing is visually scored larval behavior; mdIV inactivation suppresses it (Fig. 1), and antioxidant manipulations support ROS involvement (Figs. 2 and 5). Fig. 1 sample n counts trials of five larvae, not individual animals. No subjective-pain or human transfer inference. Stimulus intensity and duration describe exposure dosimetry, not predictive-model calibration; this mechanistic study has no model-calibration analysis."
+        }
+      ]
+    },
+    {
+      "batch_id": "r5-correction-s755-fulltext",
+      "applied_at": "2026-09-27",
+      "source_ids": [
+        "S755"
+      ],
+      "decisions": [
+        {
+          "source_id": "S755",
+          "decision": "partially_verified",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "BMJ publisher JATS full text",
+              "query": "10.1136/rapm-2019-100859 exact success definition analysis denominator and validation split",
+              "url": "https://rapm.bmj.com/content/rapm/45/2/131.source.xml",
+              "accessed_at": "2026-09-27"
+            }
+          ],
+          "claims": [],
+          "notes": "Publisher BMJ full-text JATS XML checked 2026-09-27. Methods defines at least 50% pain relief from SCS trial and subsequent implant; Results and Table 1 report 945 included, 826 SCS successes and 119 failures subsequently treated with TDD. The model-specific complete-case N, fixed outcome horizon and unit of the stated cross-validation are not reported; no patient-disjoint or external validation is inferred. Data availability is by reasonable request; no ECAP predictor is described."
+        }
+      ]
+    },
+    {
+      "batch_id": "r5-correction-s822-title",
+      "applied_at": "2026-09-27",
+      "source_ids": [
+        "S822"
+      ],
+      "decisions": [
+        {
+          "source_id": "S822",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "eLife Version of Record",
+              "query": "10.7554/eLife.12959 exact article title and author identity",
+              "url": "https://elifesciences.org/articles/12959",
+              "accessed_at": "2026-09-27"
+            }
+          ],
+          "claims": [],
+          "notes": "Primary eLife full text and figure descriptions checked; PubMed PMID 26880554 confirms identity. Local noxious heating uses an infrared laser; Figs. 1-2 report Class IV extracellular firing and dendritic calcium responses, and Fig. 5 links heat-evoked activity-pattern manipulation to larval rolling/avoidance. Figure-specific animal/cell counts must not be pooled. Calcium fluorescence is not electrophysiology, and larval escape does not establish subjective pain or human transfer."
+        }
+      ]
+    },
+    {
+      "batch_id": "r5-correction-s755-access-flag",
+      "applied_at": "2026-09-27",
+      "source_ids": [
+        "S755"
+      ],
+      "decisions": [
+        {
+          "source_id": "S755",
+          "decision": "partially_verified",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "BMJ publisher JATS full text",
+              "query": "10.1136/rapm-2019-100859 full-text access and missing model fields",
+              "url": "https://rapm.bmj.com/content/rapm/45/2/131.source.xml",
+              "accessed_at": "2026-09-27"
+            }
+          ],
+          "claims": [],
+          "notes": "Publisher BMJ full-text JATS XML checked 2026-09-27. Methods defines at least 50% pain relief from SCS trial and subsequent implant; Results and Table 1 report 945 included, 826 SCS successes and 119 failures subsequently treated with TDD. The model-specific complete-case N, fixed outcome horizon and unit of the stated cross-validation are not reported; no patient-disjoint or external validation is inferred. Data availability is by reasonable request; no ECAP predictor is described."
+        }
+      ]
+    },
+    {
+      "batch_id": "r5-correction-s762-fulltext",
+      "applied_at": "2026-09-27",
+      "source_ids": [
+        "S762"
+      ],
+      "decisions": [
+        {
+          "source_id": "S762",
+          "decision": "partially_verified",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "Internet Archive capture of LWW publisher full text",
+              "query": "10.1097/j.pain.0000000000002035 exact holistic-responder thresholds and model split",
+              "url": "https://web.archive.org/web/20210930010639id_/https://journals.lww.com/pain/fulltext/2021/02000/high_dose_spinal_cord_stimulation_for_patients.23.aspx",
+              "accessed_at": "2026-09-27"
+            }
+          ],
+          "claims": [],
+          "notes": "The 2021 Internet Archive capture of the original LWW publisher full text was reviewed directly on 2026-09-27; live LWW access returned 403. Methods §2.5 and Figure 3 define the four-part 12-month holistic response; separate four-week trial-success thresholds are not interchangeable. Logistic/CART methods report 80/20 train-validation with five random validation sets. Cohort flow is 194 recruited, 185 baseline and 92 remaining on HD-SCS at 12 months, but prediction-specific N, absolute split Ns, patient-disjointness and row linkage are not printed. No ECAP predictor or external cohort is established."
+        }
+      ]
+    },
+    {
+      "batch_id": "r5-correction-s105-vor-2026-09-27",
+      "applied_at": "2026-09-27",
+      "source_ids": [
+        "S105"
+      ],
+      "decisions": [
+        {
+          "source_id": "S105",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "IOP publisher Version of Record",
+              "query": "10.1088/1741-2552/adbfbe recruited versus selected participants sessions and waveform cross-validation",
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/adbfbe/pdf",
+              "accessed_at": "2026-09-27"
+            }
+          ],
+          "claims": [],
+          "notes": "IOP Version of Record checked through text rendering of the official publisher PDF URL after direct IOP GET returned a Radware CAPTCHA. Methods 2.2 p. 3: 15 recruited, 30 sessions from eight selected, two sessions excluded. Methods 2.7 p. 5: outer cross-validation selects every 11th waveform, not a held-out participant. Table 1 p. 8: AUC median d-prime 2.44 for ECAP versus non-ECAP. Data availability p. 15: author request subject to ethics/IRB restrictions. No patient-level clinical pain outcome or independent validation."
+        }
+      ]
+    },
+    {
+      "batch_id": "r5-correction-s755-formula-consistency-2026-09-27",
+      "applied_at": "2026-09-27",
+      "source_ids": [
+        "S755"
+      ],
+      "decisions": [
+        {
+          "source_id": "S755",
+          "decision": "partially_verified",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "BMJ publisher JATS full text",
+              "query": "10.1136/rapm-2019-100859 exact success definition analysis denominator and validation split",
+              "url": "https://rapm.bmj.com/content/rapm/45/2/131.source.xml",
+              "accessed_at": "2026-09-27"
+            }
+          ],
+          "claims": [],
+          "notes": "Publisher BMJ full-text JATS XML checked 2026-09-27. Methods defines at least 50% pain relief from trial and subsequent implant. Results/Table 1 report 945 included (826 successes, 119 failures); the exact model complete-case N and fixed outcome horizon are not reported. Results narrative includes a +0.468 postlaminectomy coefficient omitted from Table 4. Discussion states 95% cross-validation accuracy without a printed split, denominator or confusion matrix; Results separately reports AUC 0.7414. No patient-disjoint or external validation is inferred. Data are available on reasonable request; no ECAP predictor is described."
+        }
+      ]
+    },
+    {
+      "batch_id": "r5-correction-s036-rua-fulltext-2026-09-27",
+      "applied_at": "2026-09-27",
+      "source_ids": [
+        "S036"
+      ],
+      "decisions": [
+        {
+          "source_id": "S036",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "University of Alicante RUA repository",
+              "query": "10.1016/j.neucom.2025.132066 publisher full text / RUA handle 10045/160724",
+              "url": "https://rua.ua.es/server/api/core/bitstreams/ab49f761-3afc-4a6d-9e37-79a56266ab0d/content",
+              "accessed_at": "2026-09-27"
+            }
+          ],
+          "claims": [],
+          "notes": "Official RUA ORIGINAL bitstream for the publisher article checked; RUA API MD5 matches the fetched PDF. Methods §4.1 p. 4 describes BioVid subset A and class labels. Table 2 p. 5 reports PainFusion+ frozen-ViViT accuracy 35.40% default split, 33.85% demographic hold-out, and 40.25% LOSO. Methods §4.1 says default split is class-stratified 80% training, 10% of training validation, 20% test, but does not state participant-disjointness; LOSO is the separate across-individual protocol. The text describes a 90-person healthy-adult BioVid dataset but does not separately identify the analyzed denominator. No chronic-pain, ECAP or SCS validation is established."
+        }
+      ]
+    },
+    {
+      "batch_id": "r5-correction-s046-abstract-status-2026-09-27",
+      "applied_at": "2026-09-27",
+      "source_ids": [
+        "S046"
+      ],
+      "decisions": [
+        {
+          "source_id": "S046",
+          "decision": "partially_verified",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "Neuromodulation publisher",
+              "query": "DOI 10.1016/j.neurom.2025.08.367 full abstract and PDF access",
+              "url": "https://www.neuromodulationjournal.org/article/S1094-7159(25)00643-9/pdf",
+              "accessed_at": "2026-09-27"
+            }
+          ],
+          "claims": [],
+          "notes": "Official Neuromodulation 2025 conference abstract on page S194 reports 16 patients, preoperative EEG, and a three-month two-of-three composite responder; the Methods sentence is truncated after morphine milligram reduction. The publisher article route presents abstract only and the linked full-text/PDF route returned 403. No complete methods, model-specific denominator, patient-disjoint split or full responder rule were verified; this is an abstract-level report, not ECAP-based clinical validation."
+        }
+      ]
+    },
+    {
+      "batch_id": "r5-correction-s039-s082-publisher-access-2026-09-27",
+      "applied_at": "2026-09-27",
+      "source_ids": [
+        "S039",
+        "S082"
+      ],
+      "decisions": [
+        {
+          "source_id": "S039",
+          "decision": "partially_verified",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "Crossref DOI metadata route",
+              "query": "Resolve exact title and bibliographic identity for DOI 10.1016/j.bspc.2026.111261",
+              "url": "https://api.crossref.org/works/10.1016%2Fj.bspc.2026.111261",
+              "accessed_at": "2026-09-27"
+            },
+            {
+              "service": "Elsevier publisher abstract API",
+              "query": "Check PII identity, openaccess flag and available metadata for DOI 10.1016/j.bspc.2026.111261",
+              "url": "https://api.elsevier.com/content/abstract/doi/10.1016/j.bspc.2026.111261?httpAccept=application%2Fjson",
+              "accessed_at": "2026-09-27"
+            },
+            {
+              "service": "ScienceDirect publisher article route",
+              "query": "Attempt article and first-page full-text access for PII S174680942601815X",
+              "url": "https://www.sciencedirect.com/science/article/pii/S174680942601815X",
+              "accessed_at": "2026-09-27"
+            },
+            {
+              "service": "ScienceDirect official indexed publisher Abstract and section excerpts",
+              "query": "10.1016/j.bspc.2026.111261 exact publisher-indexed Abstract performance/modalities/split; separate Dataset source and details excerpt and dataset-versus-analysis N boundary",
+              "url": "https://www.sciencedirect.com/science/article/abs/pii/S174680942601815X",
+              "accessed_at": "2026-09-27"
+            }
+          ],
+          "claims": [],
+          "notes": "Official ScienceDirect search-index excerpt for the publisher Abstract reports six-class pain-intensity recognition, five physiological modalities (EDA, BVP, ECG, EMG and respiration), subject-wise four-fold evaluation and 87.68% ± 0.41% participant-level accuracy. A separate indexed body excerpt under Dataset source and details names PMED and 52 healthy participants; this is dataset N, not a verified model-analysis denominator. Elsevier publisher abstract API returns coredata only with openaccess=0; direct article/first-page retrieval was Cloudflare-blocked, so no complete article body was obtained. These values remain publisher-indexed claims, not independently re-derived full-text results. No chronic-pain, clinical, ECAP or treatment-response validity follows."
+        },
+        {
+          "source_id": "S082",
+          "decision": "partially_verified",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "Elsevier publisher first-page PDF",
+              "query": "Check exact article identity and complete Abstract content for S082",
+              "url": "https://www.sciencedirect.com/sdfe/pdf/download/eid/1-s2.0-S1746809426003691/first-page-pdf",
+              "accessed_at": "2026-09-27"
+            },
+            {
+              "service": "Elsevier publisher abstract API",
+              "query": "Check article open-access flag for DOI 10.1016/j.bspc.2026.109815",
+              "url": "https://api.elsevier.com/content/abstract/doi/10.1016/j.bspc.2026.109815?httpAccept=application%2Fjson",
+              "accessed_at": "2026-09-27"
+            },
+            {
+              "service": "ScienceDirect full article route",
+              "query": "Check full-text access boundary; no conclusion-level value accepted without primary text",
+              "url": "https://www.sciencedirect.com/science/article/pii/S1746809426003691",
+              "accessed_at": "2026-09-27"
+            },
+            {
+              "service": "ScienceDirect official search-index Conclusions excerpt",
+              "query": "Locate separately indexed 91.79% four-level accuracy and preserve discrepancy with Abstract 93.98%",
+              "url": "https://www.sciencedirect.com/science/article/pii/S1746809426003691",
+              "accessed_at": "2026-09-27"
+            }
+          ],
+          "claims": [],
+          "notes": "The official ScienceDirect first-page PDF was independently retrieved and checked on 2026-09-27. Its complete Abstract reports EEG cold-pressor classification, subject-independent LOSOCV, class accuracies 88.64% (no pain), 95.80% (mild), 99.75% (moderate), and 82.96% (severe) in the undivided group; overall accuracy 93.98% after sensitivity-group stratification; and R²=0.45, p<0.01 for intersubject pain-score differences versus prediction loss. A separate official ScienceDirect search-index excerpt under Conclusions reports 91.79% accuracy in four-level pain classification. These are separately located author-reported values; their relation, denominator and protocol are unresolved and must not be collapsed into one result. Elsevier metadata reports openaccess=0. Full article body and exact analyzed N were not obtained. LOSOCV supports participant-held-out evaluation only, not external or clinical validation."
+        }
+      ]
+    },
+    {
+      "batch_id": "r4-correction-s074-ieee-abstract-2026-09-27",
+      "applied_at": "2026-09-27",
+      "source_ids": [
+        "S074"
+      ],
+      "decisions": [
+        {
+          "source_id": "S074",
+          "decision": "partially_verified",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "IEEE Xplore publisher REST abstract",
+              "query": "document 11232711 abstract and full-text/PDF access status",
+              "url": "https://ieeexplore.ieee.org/rest/document/11232711/abstract",
+              "accessed_at": "2026-09-27"
+            },
+            {
+              "service": "IEEE Xplore publisher PDF routes",
+              "query": "document 11232711 full-text/PDF access",
+              "url": "https://ieeexplore.ieee.org/iel8/11232535/11232558/11232711.pdf",
+              "accessed_at": "2026-09-27"
+            }
+          ],
+          "claims": [],
+          "notes": "Official IEEE Xplore abstract checked 2026-09-27. It reports HRV, oxygen saturation, skin temperature, psychosocial stress, sleep quality and emotional well-being; PCA/autoencoders, Mahalanobis anomaly detection, attention-enhanced BiLSTM and ensemble residual-error correction; accuracy 95.4%, precision 94.7%, recall 94.0%, lowest RMSE 0.19 and R-squared 0.96. The abstract refers to unnamed SCD datasets. The prior proceedings-contents locator cited page 362; Crossref/IEEE metadata list article pages 1-7, and the mapping between those pagination schemes remains unresolved. Cohort size, participant characteristics, operational label source, split unit, cross-subject/external validation, calibration and uncertainty are not reported. Publisher abstract is accessible; full-text/PDF routes remain entitlement-gated (isOpenAccess=false, isFreeDocument=false). Results are abstract-level author reports, not independently validated."
+        }
+      ]
+    },
+    {
+      "batch_id": "r5-correction-s212-v3-title-version-2026-09-27",
+      "applied_at": "2026-09-27",
+      "source_ids": [
+        "S212"
+      ],
+      "decisions": [
+        {
+          "source_id": "S212",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "bioRxiv v3 Version of Record page",
+              "query": "Confirm current version number, posted date, and exact v3 title for DOI 10.1101/2025.09.25.678485",
+              "url": "https://www.biorxiv.org/content/10.1101/2025.09.25.678485v3.article-info",
+              "accessed_at": "2026-09-27"
+            },
+            {
+              "service": "bioRxiv v3 full text",
+              "query": "Compare version-specific stimulus framing, neural assay, and separate behavioral assay against the existing S212 extraction",
+              "url": "https://www.biorxiv.org/content/10.1101/2025.09.25.678485v3.full",
+              "accessed_at": "2026-09-27"
+            },
+            {
+              "service": "Europe PMC primary JATS",
+              "query": "Confirm the version number and title currently served for existing mechanistic-field locators",
+              "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PPR1092389/fullTextXML",
+              "accessed_at": "2026-09-27"
+            },
+            {
+              "service": "bioRxiv version details API",
+              "query": "Cross-check version-specific titles and dates for the same preprint DOI",
+              "url": "https://api.biorxiv.org/details/biorxiv/10.1101/2025.09.25.678485",
+              "accessed_at": "2026-09-27"
+            }
+          ],
+          "claims": [],
+          "notes": "Version-specific review dated 2026-09-27. The current bioRxiv version is v3, posted 2026-08-03, with title “Combining brain-wide activity imaging with electron microscopy reveals a distributed brain network for processing threatening somatosensory stimuli”; version 2 (2026-03-19) is titled “Combining brain-wide activity imaging with electron microscopy reveals a distributed nociceptive network in the brain,” matching the title in the Europe PMC JATS. bioRxiv v3 reframes the context as threatening somatosensory input involving nociceptive and mechanosensory pathways. The whole-brain neural assay nevertheless uses optogenetic activation of Basin interneurons in an extracted first-instar nervous system, followed by eFIB-SEM of that same specimen; the Basin manipulation does not isolate physical noxious versus mechanical input. v3 retains 119 responsive neurons and 25 lineages, and specifies that 26/50 selected neurons were traceable at intermediate branches. Its separate early-third-instar behavioral assay combines optogenetic Basin activation with Kenyon-cell inactivation and reports reduced rolling plus increased turning (366 experimental and 351 control larvae); these behaviors are distinct endpoints, not direct pain measures. This title/version proposal intentionally leaves the existing method, dataset, performance, limitations, and their field-resolution entries unchanged because those mechanistic extractions are explicitly sourced to the Europe PMC v2 JATS. The v3 article-info/full-text responses were captured as HTTP 200 in the same-day owner-source pass; a fresh request during this review returned HTTP 429, so the archived same-day official response was used. Europe PMC continues to serve JATS article-version 2; its v2 text is retained as the locator for existing extracted fields."
+        }
+      ]
+    },
+    {
+      "batch_id": "src04-s833-screening-context-2026-09-27",
+      "applied_at": "2026-09-27",
+      "source_ids": [
+        "S833"
+      ],
+      "decisions": [
+        {
+          "source_id": "S833",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "PubMed Central full text JATS",
+              "query": "Primary Methods > Behavior assay; Results > Figure 6A-E; distinguish behavior, dendrite morphology, and neural response",
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7308081/",
+              "accessed_at": "2026-09-27"
+            }
+          ],
+          "claims": [],
+          "notes": "Primary eLife full text checked. Heat-probe-evoked complete rolling behavior (Methods > Behavior assay; Results > Figure 6A-E) and C4da dendrite morphology are separate endpoints. Neural response was not measured; no subjective pain measure. Curated as included_core under the automated verified_primary rule; evidence role remains method_baseline and does not establish neural response. DOI 10.7554/eLife.53351; seed S282 v1 JATS c62."
+        }
+      ]
+    },
+    {
+      "batch_id": "r4-correction-s834-figure-n-2026-09-27",
+      "applied_at": "2026-09-27",
+      "source_ids": [
+        "S834"
+      ],
+      "decisions": [
+        {
+          "source_id": "S834",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "PubMed Central primary full text",
+              "query": "S834 PMID 15681611 Results Fig 3C and Fig 4H group sample sizes and high-temperature withdrawal",
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC548941/",
+              "accessed_at": "2026-09-27"
+            }
+          ],
+          "claims": [],
+          "notes": "Primary PMC full text and figure legends checked 2026-09-27. Figure 3C explicitly reports uninjected n=41, dTrpA1 RNAi region 1 n=24, md-Gal4 n=23, UAS-TeTxLC n=30, and md-Gal4:UAS-TeTxLC n=23 larvae for hot-probe curling latency. Figure 4H reports dTrpA1-Gal4:UAS-TeTxLC n=19 and dTrpA1-Gal4:UAS-Hid n=20 in another probe comparison. These are panel/group counts, not a study-wide N. Figure 3B-C finds an assay-specific negative dTrpA1 RNAi comparison. No evoked neural recording, subjective pain, human ECAP or SCS outcome. The S282 c66 citation is reagent provenance. Classified included_core by the verified_primary review workflow with evidence_role method_baseline."
+        }
+      ]
+    },
+    {
+      "batch_id": "r5-correction-s072-abstract-percent-unit-2026-09-27",
+      "applied_at": "2026-09-27",
+      "source_ids": [
+        "S072"
+      ],
+      "decisions": [
+        {
+          "source_id": "S072",
+          "decision": "partially_verified",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "PubMed/NLM official record and XML",
+              "query": "PMID 41192117 abstract exact reported accuracy improvements",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/41192117/",
+              "accessed_at": "2026-09-27"
+            },
+            {
+              "service": "Elsevier ScienceDirect publisher full-text route",
+              "query": "PII S0010482525016142 full-text access",
+              "url": "https://www.sciencedirect.com/science/article/pii/S0010482525016142",
+              "accessed_at": "2026-09-27"
+            }
+          ],
+          "claims": [],
+          "notes": "Only the official PubMed abstract was accessible for the reported results; it states an average accuracy improvement of 3.88% across 11 X-ITE sub-datasets and a 7.12% gain on R-ETD, without specifying percentage-point changes. Participant count, split unit, exact class definitions, absolute performance, confidence intervals, calibration and external validation remain unestablished. X-ITE is an experimental-pain database; the word 'clinical' in the title does not establish clinical-outcome validation. Official publisher full text was not retrieved (ScienceDirect returned HTTP 403; full-text API required authentication)."
+        }
+      ]
+    },
+    {
+      "batch_id": "r5-correction-s040-giaformer-fulltext-2026-09-27",
+      "applied_at": "2026-09-27",
+      "source_ids": [
+        "S040"
+      ],
+      "decisions": [
+        {
+          "source_id": "S040",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "ScienceDirect publisher PDF",
+              "query": "S040 DOI 10.1016/j.inffus.2026.104173 primary full text Sections 3.1/3.4/4.1 Table 3",
+              "url": "https://www.sciencedirect.com/sdfe/pdf/download/eid/1-s2.0-S1566253526000527/first-page-pdf",
+              "accessed_at": "2026-09-27"
+            }
+          ],
+          "claims": [],
+          "notes": "Publisher-served PDF checked 2026-09-27, 7,464,349 bytes, SHA-256 8474bc90b239dcfcf970338cde2ff62629699e9aa0782e04c89ba661eb16a7dd. Its active tree exposes only first page, but all 16 published pages were recovered from embedded page content objects and checked against the owner title/abstract. Section 3.1 reports 65 healthy participants, three QST-defined classes and 2,340 repeated segments; Section 3.4 reports participant-held-out LOSOV; Table 3 reports 90.51% +/- 9.33 accuracy and fold SD. No external cohort or calibration is reported; data are request-only. No chronic-pain, ECAP or SCS outcome conclusion."
+        }
+      ]
+    },
+    {
+      "batch_id": "r5-correction-s040-table3-dispersion-locator-2026-09-27",
+      "applied_at": "2026-09-27",
+      "source_ids": [
+        "S040"
+      ],
+      "decisions": [
+        {
+          "source_id": "S040",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "ScienceDirect publisher PDF",
+              "query": "S040 Table 3 and Figure 6 caption dispersion statistic and LOSOV calculation unit",
+              "url": "https://www.sciencedirect.com/sdfe/pdf/download/eid/1-s2.0-S1566253526000527/first-page-pdf",
+              "accessed_at": "2026-09-27"
+            }
+          ],
+          "claims": [],
+          "notes": "Publisher-served PDF checked 2026-09-27, 7,464,349 bytes, SHA-256 8474bc90b239dcfcf970338cde2ff62629699e9aa0782e04c89ba661eb16a7dd. Its active tree exposes only the first page; the recovered embedded page objects contain the 16-page article. Section 3.4 reports participant-held-out LOSOV and says iteration metrics were averaged. Table 3 (p. 9) lists author-reported metric/dispersion pairs, including accuracy 90.51% +/- 9.33, F1 90.38% +/- 9.65, and specificity 95.26% +/- 4.66; it does not define the dispersion statistic or calculation unit. Figure 6 caption (p. 8) labels plotted metric dispersion as standard deviations, without specifying that Table 3 values are SD across LOSOV folds. No predictive uncertainty or confidence intervals are established. No external cohort or calibration is reported; data are request-only. No chronic-pain, ECAP or SCS outcome conclusion."
+        }
+      ]
+    },
+    {
+      "batch_id": "r5-correction-s834-trpa1-identity-and-study-fields-2026-09-28",
+      "applied_at": "2026-09-28",
+      "source_ids": [
+        "S834"
+      ],
+      "decisions": [
+        {
+          "source_id": "S834",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "PubMed Central primary full text",
+              "query": "PMC548941 identity plus Results Figures 3B-C/4H and Methods behavioral assays",
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC548941/",
+              "accessed_at": "2026-09-28"
+            },
+            {
+              "service": "PubMed/NLM citation and abstract",
+              "query": "PMID 15681611 title authors year journal DOI",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/15681611/",
+              "accessed_at": "2026-09-28"
+            },
+            {
+              "service": "Crossref registered DOI metadata",
+              "query": "10.1101/gad.1278205 title journal year volume issue pages",
+              "url": "https://api.crossref.org/works/10.1101/gad.1278205",
+              "accessed_at": "2026-09-28"
+            }
+          ],
+          "claims": [],
+          "notes": "The current source card contained S833 content. Identity verified against the primary PMC/PubMed record and Crossref: Rosenzweig et al., The Drosophila ortholog of vertebrate TRPA1 regulates thermotaxis, Genes & Development 19(4):419-424 (2005), DOI 10.1101/gad.1278205, PMID 15681611. Primary Results > Drosophila larvae exhibit robust thermotactic behavior and dTrpA1 is required for thermotaxis; Results > dTrpA1(RNAi) larvae are selectively defective for thermotactic behavior; Figures 3B-C and 4H; Materials and Methods > Molecular genetics and RNAi and Behavioral assays. Figure 3C and Figure 4H group counts already in this card remain unchanged. The approximately 55 degrees C probe result is assay- and manipulation-specific; no subjective pain, human ECAP/SCS outcome, or predictive-model performance is claimed."
+        }
+      ]
+    },
+    {
+      "batch_id": "r5-correction-s782-author-and-preprint-route-2026-09-28",
+      "applied_at": "2026-09-28",
+      "source_ids": [
+        "S782"
+      ],
+      "decisions": [
+        {
+          "source_id": "S782",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "Nature Communications owner full text",
+              "query": "S782 DOI author byline and article metadata",
+              "url": "https://www.nature.com/articles/s41467-026-72152-x",
+              "accessed_at": "2026-09-28"
+            },
+            {
+              "service": "Europe PMC full-text JATS mirror",
+              "query": "PMC13314972 front matter authors",
+              "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13314972/fullTextXML",
+              "accessed_at": "2026-09-28"
+            },
+            {
+              "service": "bioRxiv owner publications API",
+              "query": "candidate preprint DOI 10.1101/2024.12.17.628844 published version",
+              "url": "https://api.biorxiv.org/pubs/biorxiv/10.1101/2024.12.17.628844",
+              "accessed_at": "2026-09-28"
+            }
+          ],
+          "claims": [],
+          "notes": "Primary Nature full text checked; PubMed 42026054. Model/behavior comparison is restricted to adult flies. A held-out test set, where reported, is not a human or independent-site validation. Methods > Connectome analysis identifies FAFB FlyWire snapshot 783 for the brain network and MANC v1.2.1 only for supplementary VNC figures; Methods > Fly stocks identifies female adult experimental flies. Publisher page confirms Version of Record dated 2026-06-29 and CrossMark states \"Document is current. Any future updates will be listed below.\" No update listed; no article-level correction/retraction marker surfaced. Candidate bioRxiv DOI 10.1101/2024.12.17.628844 resolves (HTTP 200), but its owner pubs API reports no published version, the checked Nature article does not state this DOI as a preprint, and checked Crossref relations are empty; leave linkage unconfirmed. Rechecked 2026-09-28."
+        }
+      ]
+    },
+    {
+      "batch_id": "r5-correction-s763-owner-v2-self-correction-2026-09-28",
+      "applied_at": "2026-09-28",
+      "source_ids": [
+        "S763"
+      ],
+      "decisions": [
+        {
+          "source_id": "S763",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "bioRxiv owner v2 full text",
+              "query": "S763 footnote summary-of-updates and v2 byline",
+              "url": "https://www.biorxiv.org/content/10.64898/2026.04.29.721658v2.full",
+              "accessed_at": "2026-09-28"
+            },
+            {
+              "service": "bioRxiv owner details API",
+              "query": "10.64898/2026.04.29.721658 version dates and author list",
+              "url": "https://api.biorxiv.org/details/biorxiv/10.64898/2026.04.29.721658",
+              "accessed_at": "2026-09-28"
+            }
+          ],
+          "claims": [],
+          "notes": "Primary bioRxiv v2 full text checked. MANC v1.2.3, MaleCNS v0.9 and BANC v626 are the versions used for this paper's motif search, not proven source releases for Pugliese S740 simulation matrices. Biological assays support walking circuitry, not a pain or human SCS endpoint. BioRxiv v2 owner footnote reports corrected co-first order for NS/DSK, SSB as last author, restored omitted middle author JP (Jason Pitchford), and a minor Figure 5 title wording change; it states no other manuscript content changed. Owner API shows v1 2026-05-03 and v2 2026-05-05, with v2 latest; Crossref posted date 2026-05-03 is kept as registration lag, not a separate scientific version. Checked 2026-09-28."
+        }
+      ]
+    },
+    {
+      "batch_id": "r5-correction-s357-fulltext-effect-inconsistency-2026-09-28",
+      "applied_at": "2026-09-28",
+      "source_ids": [
+        "S357"
+      ],
+      "decisions": [
+        {
+          "source_id": "S357",
+          "decision": "partially_verified",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "JPHV publisher full PDF",
+              "query": "DOI 10.21776/ub.jphv.2026.007.01.07 full text pp.37–44",
+              "url": "https://jphv.ub.ac.id/index.php/jphv/article/download/306/93",
+              "accessed_at": "2026-09-28"
+            },
+            {
+              "service": "Primary EVOKE 36-month report in PMC",
+              "query": "36-month >=50 and >=80 response proportions and one randomized cohort",
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11103285/",
+              "accessed_at": "2026-09-28"
+            }
+          ],
+          "claims": [],
+          "notes": "Publisher full PDF pp.37–44 checked 2026-09-28 from the first-party download URL with Googlebot user-agent (normal client Cloudflare 403); local SHA-256 0BA078C5470ADCBD652DCC3742BF21DC09D75E79F8241EA12B2A066C4185261E. JPHV Abstract p.37 vs Results > Pain Reduction p.41 disagree RR/RD for 0.18. JPHV Study Characteristics p.40 reports 36-month ≥50% 78%/31%, while primary EVOKE 36-month PMC text reports 77.6%/49.3%; the open-loop 31.3% pertains to ≥80%. The three cited EVOKE time reports are one trial program, so its pooled estimates are not independent replication. Preserve Crossref and normal-browser access limits."
+        }
+      ]
+    },
+    {
+      "batch_id": "r5-correction-s243-registry-2026-09-28",
+      "applied_at": "2026-09-28",
+      "source_ids": [
+        "S243"
+      ],
+      "decisions": [
+        {
+          "source_id": "S243",
+          "decision": "partially_verified",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "ClinicalTrials.gov official API v2",
+              "query": "NCT04662905 current status, completion estimate, registered outcomes and posted results",
+              "url": "https://clinicaltrials.gov/api/v2/studies/NCT04662905",
+              "accessed_at": "2026-09-28"
+            },
+            {
+              "service": "Europe PMC primary full-text XML for linked APM paper",
+              "query": "PMC13009299 Limitations baseline pain and therapy efficacy outcomes",
+              "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13009299/fullTextXML",
+              "accessed_at": "2026-09-28"
+            }
+          ],
+          "claims": [],
+          "notes": "Primary ClinicalTrials.gov v2 metadata rechecked 2026-09-28: NCT04662905 RECRUITING, last posted 2026-09-24, estimated completion 2029-01-01, estimated enrollment 200, sole planned primary ECAP-change measure, no listed secondary outcomes, hasResults=false. Linked primary APM article PMC13009299 Limitations says neither Freshwater nor Rosella collected baseline pain characteristics or therapy-efficacy outcomes. This registry record remains metadata-only; no observed ECAP or pain efficacy result is established."
+        }
+      ]
+    },
+    {
+      "batch_id": "r5-correction-s786-s788-primary-boundaries-2026-09-28",
+      "applied_at": "2026-09-28",
+      "source_ids": [
+        "S786",
+        "S788"
+      ],
+      "decisions": [
+        {
+          "source_id": "S786",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "University of Waikato Research Commons accepted manuscript",
+              "query": "PMID 30273153 DOI 10.1109/TNSRE.2018.2870169 full text",
+              "url": "https://researchcommons.waikato.ac.nz/bitstreams/a7586cec-1b63-4d68-99db-bf0c698a6194/download",
+              "accessed_at": "2026-09-28"
+            }
+          ],
+          "claims": [],
+          "notes": "Primary University of Waikato accepted manuscript checked 2026-09-28, with DOI 10.1109/TNSRE.2018.2870169 and matching publisher VOR identity. Sections II-IV and Figures 1-13 describe split platinum-cuff electrode slices and 0.1× PBS bench comparison using an Evoke implant. Figure 9 gives qualitative model/measurement agreement without a fitted error metric. No human ECAP artefact removal or analgesic endpoint is tested."
+        },
+        {
+          "source_id": "S788",
+          "decision": "partially_verified",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "NLM PubMed author abstract",
+              "query": "PMID 28922517 interim Avalon response proportions",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/28922517/",
+              "accessed_at": "2026-09-28"
+            }
+          ],
+          "claims": [],
+          "notes": "Official PubMed PMID 28922517 author abstract checked 2026-09-28: exact 3/6-month back/leg ≥50% and ≥80% relief proportions copied with interim 51-trialed/36-implanted context. The article is abstract-only in this pass. Registered AVALON endpoint includes feedback-mode programmability, distinct from patient pain scores; no randomized comparison, visit-specific responder denominator or patient ECAP-to-pain linkage is established."
+        }
+      ]
+    },
+    {
+      "batch_id": "r5-correction-s001-briefing-species-2026-09-28",
+      "applied_at": "2026-09-28",
+      "source_ids": [
+        "S001"
+      ],
+      "decisions": [
+        {
+          "source_id": "S001",
+          "decision": "partially_verified",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "Nature Electronics publisher",
+              "query": "S001 Research Briefing DOI 10.1038/s41928-025-01377-3 visible summary species",
+              "url": "https://www.nature.com/articles/s41928-025-01377-3",
+              "accessed_at": "2026-09-28"
+            }
+          ],
+          "claims": [],
+          "notes": "Accessible publisher preview confirms the system concept and pain-severity classification but does not disclose species, neural-recording modality, label definition, sample, split, metric or efficacy. The Research Briefing full text is subscription-only; the linked original experiment is S747 and must be cited separately for those details. The 2026-09-28 recheck removed an unsupported animal-species attribution from this briefing card task field; the linked original study S747 is separately reviewed as a rat experiment."
+        }
+      ]
+    },
+    {
+      "batch_id": "r4-correction-s192-generative-target-2026-09-28",
+      "applied_at": "2026-09-28",
+      "source_ids": [
+        "S192"
+      ],
+      "decisions": [
+        {
+          "source_id": "S192",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "Author arXiv v3 full text",
+              "query": "PainDiffusion BioVid Part C generated expression target participant split clinician avatar realism evaluation",
+              "url": "https://arxiv.org/html/2409.11635v3",
+              "accessed_at": "2026-09-28"
+            }
+          ],
+          "claims": [],
+          "notes": "Author arXiv v3 Sections III, IV-A and IV-C: the model generates facial-expression parameters from stimulus and expression/emotion conditions. BioVid Part C has 87 participants split 61/26 by subject. The separate 18-clinician exercise used a virtual avatar and elbow robot; 31.2% +/- 4.8% is a perceived-realism video preference against ground truth. No pain classifier, real-patient training effectiveness or treatment benefit is tested."
+        }
+      ]
+    },
+    {
+      "batch_id": "r5-correction-s006-metadata-boundary-2026-09-28",
+      "applied_at": "2026-09-28",
+      "source_ids": [
+        "S006"
+      ],
+      "decisions": [
+        {
+          "source_id": "S006",
+          "decision": "verified_metadata",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "Crossref registered DOI metadata",
+              "query": "10.1016/j.neurom.2024.06.321 title issue page date",
+              "url": "https://api.crossref.org/works/10.1016%2Fj.neurom.2024.06.321",
+              "accessed_at": "2026-09-28"
+            },
+            {
+              "service": "NANS official program PDF",
+              "query": "nans2024_program_web.pdf p. 9 S006 presentation listing",
+              "url": "https://www.neuromodulation.org/uploads/1/4/5/5/145560650/nans2024_program_web.pdf",
+              "accessed_at": "2026-09-28"
+            }
+          ],
+          "claims": [],
+          "notes": "Crossref DOI metadata checked 2026-09-28: exact title, Neuromodulation 27(7), supplement page S176, publication month October 2024. The earlier NANS program PDF route returned 404 in this pass; its listing was not reproduced. No abstract method or performance was recovered. Do not infer a relation to S289, a patent published in 2022."
+        }
+      ]
+    },
+    {
+      "batch_id": "r4-correction-s095-year-fulltext-2026-09-28",
+      "applied_at": "2026-09-28",
+      "source_ids": [
+        "S095"
+      ],
+      "decisions": [
+        {
+          "source_id": "S095",
+          "decision": "partially_verified",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "IPI Publishing publisher full text",
+              "query": "DOI 10.59973/ipil.361 publication date article type and narrative scope",
+              "url": "https://www.ipipublishing.org/index.php/ipil/article/download/361/187/1214",
+              "accessed_at": "2026-09-28"
+            },
+            {
+              "service": "Crossref registered DOI record",
+              "query": "10.59973/ipil.361 published date and pagination",
+              "url": "https://api.crossref.org/works/10.59973/ipil.361",
+              "accessed_at": "2026-09-28"
+            }
+          ],
+          "claims": [],
+          "notes": "The publisher's four-page PDF identifies this as News and Views in IPI Letters 2026, 4(2):N1-N4, published 2026-05-02; the Crossref DOI record agrees. The abstract presents a digital-organism narrative, while body text and references identify the Shiu model and Eon demonstrations. This commentary is not independent empirical validation of brain emulation, cognition, or embodied behavior."
+        }
+      ]
+    },
+    {
+      "batch_id": "r4-correction-s252-access-depth-2026-09-28",
+      "applied_at": "2026-09-28",
+      "source_ids": [
+        "S252"
+      ],
+      "decisions": [
+        {
+          "source_id": "S252",
+          "decision": "partially_verified",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "Nature Methods publisher editorial page",
+              "query": "10.1038/s41592-025-02988-6 editorial identity date and access depth",
+              "url": "https://www.nature.com/articles/s41592-025-02988-6",
+              "accessed_at": "2026-09-28"
+            }
+          ],
+          "claims": [],
+          "notes": "Nature Methods publisher page identifies this unsigned editorial, its 2025-12-08 publication date, volume 22 and pp. 2463-2464, and exposes only a brief preview before a subscription notice. The checked page supports the Method of the Year identity; the full text was not inspected. This editorial is not empirical validation of FlyWire, pain, behavior or cross-species transfer."
+        }
+      ]
+    },
+    {
+      "batch_id": "r4-correction-s212-v3-figure6-2026-09-28",
+      "applied_at": "2026-09-28",
+      "source_ids": [
+        "S212"
+      ],
+      "decisions": [
+        {
+          "source_id": "S212",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "bioRxiv owner v3 PDF",
+              "query": "S212 Figure 6 model, comparison and reported denominators; compare with existing version 2 extraction",
+              "url": "https://www.biorxiv.org/content/10.1101/2025.09.25.678485v3.full.pdf",
+              "accessed_at": "2026-09-28"
+            }
+          ],
+          "claims": [],
+          "notes": "v3 Figure 6 is a partial biological-model analogue only; exact evaluation N and train/test split are not reported in checked primary text; no human ECAP or SCS transfer."
+        }
+      ]
+    },
+    {
+      "batch_id": "r5-correction-s775-flywire-v630-2026-09-28",
+      "applied_at": "2026-09-28",
+      "source_ids": [
+        "S775"
+      ],
+      "decisions": [
+        {
+          "source_id": "S775",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "Europe PMC full Nature JATS",
+              "query": "S775 Methods Computational model FlyWire materialization v.630 127400 neurons",
+              "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11446845/fullTextXML",
+              "accessed_at": "2026-09-28"
+            }
+          ],
+          "claims": [],
+          "notes": "Primary Nature/PMC full JATS checked again on 2026-09-28. Methods > Computational model explicitly pins this study's model graph to FlyWire materialization v.630 and 127,400 proofread neurons. Optogenetic and behavioral tests validate scoped feeding/grooming predictions in flies, not a held-out human cohort. This S775 release does not identify upstream releases of the separate S740 VNC simulation matrices."
+        }
+      ]
+    },
+    {
+      "batch_id": "r5-correction-s774-elife-v1-locators-2026-09-28",
+      "applied_at": "2026-09-28",
+      "source_ids": [
+        "S774"
+      ],
+      "decisions": [
+        {
+          "source_id": "S774",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "Official eLife reviewed-preprint API",
+              "query": "S774 v1 indexContent headings, MANC data route and 2.1 sample preparation",
+              "url": "https://api.elifesciences.org/reviewed-preprints/97769",
+              "accessed_at": "2026-09-28"
+            }
+          ],
+          "claims": [],
+          "notes": "Full official eLife Reviewed Preprint v1 API indexContent checked 2026-09-28. Introduction and Motivation names public neuPrint dataset MANC and links exported datasets via Janelia; Methods > 2.1 identifies a five-day-old male VNC specimen. The v1 indexContent has no Abstract, Results, Discussion or Data availability heading and does not pin an immutable export/release for S740 processed matrices. DOI 10.7554/eLife.97769.1 identifies this reviewed-preprint version."
+        }
+      ]
+    },
+    {
+      "batch_id": "r5-correction-s778-mechanical-result-locator-2026-09-28",
+      "applied_at": "2026-09-28",
+      "source_ids": [
+        "S778"
+      ],
+      "decisions": [
+        {
+          "source_id": "S778",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "Archived Cell publisher full text",
+              "query": "S778 Results 45 mN von Frey 92% 13% and Figure 2E heat probe",
+              "url": "https://web.archive.org/web/20230522064658/https://www.cell.com/cell/fulltext/S0092-8674(03)00272-1",
+              "accessed_at": "2026-09-28"
+            }
+          ],
+          "claims": [],
+          "notes": "Corrects panel locator only; the 92%/13% group values and separate nerve-firing result are unchanged. Larval defensive behavior and peripheral neural firing remain distinct from subjective pain and human ECAP/SCS."
+        }
+      ]
+    },
+    {
+      "batch_id": "r5-correction-s016-nociception-study-fields-2026-09-28",
+      "applied_at": "2026-09-28",
+      "source_ids": [
+        "S016"
+      ],
+      "decisions": [
+        {
+          "source_id": "S016",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "Europe PMC full JATS",
+              "query": "PMC11859842 S016 cohort, modality, NOA, PMID",
+              "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11859842/fullTextXML",
+              "accessed_at": "2026-09-28"
+            }
+          ],
+          "claims": [],
+          "notes": "Primary full JATS rechecked 2026-09-28: 90 NTUH and 10 ECKH surgery patients, EEG/ECG/PPG and chart-derived NOA under general anesthesia. This is not conscious-pain self-report. ECKH is a 10-patient event check, not proof of clinical deployment. Exact NTUH partition procedure, calibration and model uncertainty remain unreported."
+        }
+      ]
+    },
+    {
+      "batch_id": "r5-correction-s164-review-modality-target-2026-09-28",
+      "applied_at": "2026-09-28",
+      "source_ids": [
+        "S164"
+      ],
+      "decisions": [
+        {
+          "source_id": "S164",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "Aalborg University final published VoR",
+              "query": "S164 full PDF modality taxonomy target classes pages",
+              "url": "https://vbn.aau.dk/ws/files/846863920/Transformer_and_Attention-Based_Models_for_Automated_Pain_Assessment_A_Systematic_Review.pdf",
+              "accessed_at": "2026-09-28"
+            }
+          ],
+          "claims": [],
+          "notes": "VBN-hosted final published IEEE Access version checked in full (2026, vol. 14, pp. 108508-108538; DOI 10.1109/ACCESS.2026.3713429). It reports a PRISMA-informed narrative synthesis of 35 studies, no quantitative meta-analysis, and a generalization gap between experimental benchmarks and clinically realistic settings. Single-reviewer extraction and the unregistered protocol remain limitations."
+        }
+      ]
+    },
+    {
+      "batch_id": "r5-correction-s072-abstract-population-boundary-2026-09-28",
+      "applied_at": "2026-09-28",
+      "source_ids": [
+        "S072"
+      ],
+      "decisions": [
+        {
+          "source_id": "S072",
+          "decision": "partially_verified",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "NLM PubMed E-utilities abstract",
+              "query": "PMID 41192117 abstract X-ITE 11 sub-datasets health status denominator",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=41192117&retmode=xml",
+              "accessed_at": "2026-09-28"
+            }
+          ],
+          "claims": [],
+          "notes": "Only the official PubMed abstract was accessible for the reported results; it states an average accuracy improvement of 3.88% across 11 X-ITE sub-datasets and a 7.12% gain on R-ETD, without specifying percentage-point changes. Participant count, split unit, exact class definitions, absolute performance, confidence intervals, calibration and external validation remain unestablished. X-ITE is an experimental-pain database; the word 'clinical' in the title does not establish clinical-outcome validation. Official publisher full text was not retrieved (ScienceDirect returned HTTP 403; full-text API required authentication). A 2026-09-28 recheck of NLM E-utilities abstract confirms 11 sub-datasets, not a participant denominator; healthy participant status is not established by this source."
+        }
+      ]
+    },
+    {
+      "batch_id": "r5-correction-s015-cohort-and-validation-2026-09-28",
+      "applied_at": "2026-09-28",
+      "source_ids": [
+        "S015"
+      ],
+      "decisions": [
+        {
+          "source_id": "S015",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "Europe PMC full JATS",
+              "query": "S015 cohort split GUI unseen same protocol Tables 7 9 10",
+              "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13211154/fullTextXML",
+              "accessed_at": "2026-09-28"
+            }
+          ],
+          "claims": [],
+          "notes": "Controlled TENS-evoked experimental pain in healthy participants; EDA reflects autonomic response and does not establish chronic-pain, ECAP, or SCS-outcome validity. Rechecked 2026-09-28: GUI group is unseen but uses the same laboratory protocol and sensors, so it is a participant holdout rather than external site/dataset validation. Results: 0.47 ms Table 7, 79.23% Table 9, 73.14% Table 10/Results 3.4. Article Methods 2.1 prose says 65 no-pain instances while Table 1 reports 715 no-pain observations; this internal discrepancy is not resolved."
+        }
+      ]
+    },
+    {
+      "batch_id": "r5-correction-s037-denominator-and-dispersion-2026-09-28",
+      "applied_at": "2026-09-28",
+      "source_ids": [
+        "S037"
+      ],
+      "decisions": [
+        {
+          "source_id": "S037",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "Nature Scientific Reports publisher full text",
+              "query": "S037 BioVid AI4PAIN denominators Fig4 uncertainty Optuna tuning",
+              "url": "https://www.nature.com/articles/s41598-025-14238-y",
+              "accessed_at": "2026-09-28"
+            }
+          ],
+          "claims": [],
+          "notes": "BioVid uses extreme heat-pain classes and AI4Pain uses a different cardiac modality and hold-out scheme. Cross-dataset use is not evidence for chronic pain, ECAP, or SCS outcomes. Full publisher text rechecked 2026-09-28: BioVid and AI4PAIN denominators are 87 and 65, not a pooled sample. F1 distributions across folds/subjects are shown in Fig. 4 and the article describes confidence intervals and SD; this is performance dispersion, not predictive uncertainty or calibration. Optuna tuning used 10-fold BioVid CV before both reported evaluation schemes; a nested subject-disjoint tuning procedure is not established, so performance may be optimistic."
+        }
+      ]
+    },
+    {
+      "batch_id": "r5-correction-s014-chronic-pain-case-status-2026-09-28",
+      "applied_at": "2026-09-28",
+      "source_ids": [
+        "S014"
+      ],
+      "decisions": [
+        {
+          "source_id": "S014",
+          "decision": "partially_verified",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "NLM PubMed E-utilities structured abstract",
+              "query": "PMID 39222459 case control target 26 of 59 AUROC",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=39222459&retmode=xml",
+              "accessed_at": "2026-09-28"
+            }
+          ],
+          "claims": [],
+          "notes": "The primary abstract does not establish the participant split, confidence intervals, calibration, external validation or whether feature selection was nested within resampling. The target is patient-versus-control status, not continuous pain severity or treatment response. Primary NLM abstract rechecked 2026-09-28: the reported endpoint is chronic-pain patient versus normal-control case status, not clinical functioning, pain-intensity regression or treatment response. Full Methods remain unavailable; participant-disjoint split, calibration and external validation cannot be determined."
+        }
+      ]
+    },
+    {
+      "batch_id": "r5-correction-s214-publication-status-2026-09-28",
+      "applied_at": "2026-09-28",
+      "source_ids": [
+        "S214"
+      ],
+      "decisions": [
+        {
+          "source_id": "S214",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "Frontiers in Neuroscience publisher article",
+              "query": "S214 DOI 10.3389/fnins.2024.1384336 publication type reviewed original research",
+              "url": "https://www.frontiersin.org/journals/neuroscience/articles/10.3389/fnins.2024.1384336/full",
+              "accessed_at": "2026-09-28"
+            }
+          ],
+          "claims": [],
+          "notes": "The model targets olfaction and associative learning and runs on FPGA hardware. It does not model nociception, whole-brain dynamics, pain or human transfer."
+        }
+      ]
+    },
+    {
+      "batch_id": "r5-correction-s739-exemplar-fly-split-2026-09-28",
+      "applied_at": "2026-09-28",
+      "source_ids": [
+        "S739"
+      ],
+      "decisions": [
+        {
+          "source_id": "S739",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "bioRxiv versioned primary full text",
+              "query": "S739 example fly n=5 trained models held-out half Figure 2",
+              "url": "https://www.biorxiv.org/content/10.64898/2026.08.21.745055v1.full",
+              "accessed_at": "2026-09-28"
+            }
+          ],
+          "claims": [],
+          "notes": "Preprint v1. FlyWire v783 constrains a resting-state rate model. Empirical analyses use one example head-fixed adult fly recording; n=5 independently trained models per condition are model replicates, not five animals. The first half of that recording was used for fitting and the second half held out; no independent-animal validation, nociceptive, ECAP or clinical comparator."
+        }
+      ]
+    },
+    {
+      "batch_id": "r5-correction-s744-model-sample-external-comparison-2026-09-28",
+      "applied_at": "2026-09-28",
+      "source_ids": [
+        "S744"
+      ],
+      "decisions": [
+        {
+          "source_id": "S744",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "Europe PMC publisher-deposited Nature full JATS",
+              "query": "S744 64 cell types 45669 neurons 50 DMN 26 studies confidence intervals",
+              "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11525180/fullTextXML",
+              "accessed_at": "2026-09-28"
+            }
+          ],
+          "claims": [],
+          "notes": "The 64-cell-type visual network predicts measured single-neuron visual responses. The official flyvis implementation names the compiled scaffold fib25-fib19_v2.2.json; this is a constructed file, not a single FlyWire/BANC release. The endpoint is visual function, not VNC, nociception, ECAP or SCS. A prior relation to bioRxiv 10.1101/2023.05.02.539144 was removed: that preprint is Shiu et al., a distinct adult-brain model. BioRxiv 10.1101/2023.03.11.532232 matches Lappalainen et al. by title and authors, but a formal publisher-declared version link was not verified. Rechecked 2026-09-28: model predictions were compared with published neural recordings from 26 studies without fitting to those recordings; this is external within-species functional comparison, not human transfer. The paper reports 95% confidence intervals for some cross-model correlations, not predictive uncertainty or calibration. Model size and ensemble count are not biological animal sample sizes."
+        }
+      ]
+    },
+    {
+      "batch_id": "r5-correction-s747-classifier-domain-accuracy-2026-09-28",
+      "applied_at": "2026-09-28",
+      "source_ids": [
+        "S747"
+      ],
+      "decisions": [
+        {
+          "source_id": "S747",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "PMC Nature Electronics author manuscript",
+              "query": "S747 25 50 75 g normal rats versus 3 7 14 g SNI, 94.8 97.66 accuracy",
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13095316/",
+              "accessed_at": "2026-09-28"
+            }
+          ],
+          "claims": [],
+          "notes": "Classifier entries came from normal rats exposed to 25/50/75 g Von Frey stimuli; the separate SNI experiment describes 3/7/14 g stimulus classes in six rats. The checked main text does not establish whether the classifier was reused unchanged, retrained or recalibrated across these conditions. The entry-level random split is not shown animal-disjoint, so same-animal leakage cannot be excluded (reviewer inference). Abstract/Methods report 94.8% accuracy, while Results also report 97.66% without explaining the relation in the checked main text; Supplementary Table 5 was not accessible in this pass. Labels are stimulus-linked nociceptive-response classes, not human subjective pain. No ECAP or human SCS outcome validation."
+        }
+      ]
+    },
+    {
+      "batch_id": "r4-correction-s249-review-validation-2026-09-28",
+      "applied_at": "2026-09-28",
+      "source_ids": [
+        "S249"
+      ],
+      "decisions": [
+        {
+          "source_id": "S249",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "Frontiers full publisher article",
+              "query": "S249 critical narrative review Section 2.1 no cohort cross subject validation",
+              "url": "https://www.frontiersin.org/journals/bioengineering-and-biotechnology/articles/10.3389/fbioe.2026.1948186/full",
+              "accessed_at": "2026-09-28"
+            }
+          ],
+          "claims": [],
+          "notes": "Publisher identifies this as a critical narrative review. It organizes multimodal monitoring, interpretation, feedback, adaptation and outcome questions but conducts no participant-level model training or cross-subject test. Federated learning and digital twins are discussed as cited methods. No Drosophila, ECAP, SCS or clinical-effect validation follows from this source."
+        }
+      ]
+    },
+    {
+      "batch_id": "r4-correction-s048-simulation-cv-2026-09-28",
+      "applied_at": "2026-09-28",
+      "source_ids": [
+        "S048"
+      ],
+      "decisions": [
+        {
+          "source_id": "S048",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "Europe PMC publisher-deposited JATS",
+              "query": "PMC10704747 fullTextXML; Methods Performance evaluation",
+              "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10704747/fullTextXML",
+              "accessed_at": "2026-09-28"
+            }
+          ],
+          "claims": [],
+          "notes": "Cadaver-derived human median-nerve geometry is used only to generate simulated nCAPs. Reported accuracy and mean +/- SD concern simulated fascicle-source classification, not recorded human ECAP, pain or SCS response; no in-vivo human participants or external human validation."
+        }
+      ]
+    },
+    {
+      "batch_id": "r4-correction-s042-spine-surgery-review-2026-09-28",
+      "applied_at": "2026-09-28",
+      "source_ids": [
+        "S042"
+      ],
+      "decisions": [
+        {
+          "source_id": "S042",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "UC Davis eScholarship accepted author manuscript",
+              "query": "DOI 10.1007/s00586-024-08172-2 full text",
+              "url": "https://escholarship.org/content/qt5pq6n147/qt5pq6n147.pdf",
+              "accessed_at": "2026-09-28"
+            },
+            {
+              "service": "Springer publisher abstract",
+              "query": "DOI 10.1007/s00586-024-08172-2 VOR",
+              "url": "https://link.springer.com/article/10.1007/s00586-024-08172-2",
+              "accessed_at": "2026-09-28"
+            }
+          ],
+          "claims": [],
+          "notes": "Review of federated learning opportunities in spine surgery. The author accepted manuscript is openly available, but the publisher version of record is subscription-only. No new clinical dataset, participant-level model, cross-subject validation, SCS, ECAP or pain endpoint is reported."
+        }
+      ]
+    },
+    {
+      "batch_id": "r5-correction-s356-figure5-outcomes-2026-09-28",
+      "applied_at": "2026-09-28",
+      "source_ids": [
+        "S356"
+      ],
+      "decisions": [
+        {
+          "source_id": "S356",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "Cureus publisher PDF",
+              "query": "DOI 10.7759/cureus.102799 Figure 5 standing walking",
+              "url": "https://assets.cureus.com/uploads/case_report/pdf/460390/20260202-302464-fuovtq.pdf",
+              "accessed_at": "2026-09-28"
+            },
+            {
+              "service": "PubMed esummary",
+              "query": "41788118 DOI 10.7759/cureus.102799",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/41788118/",
+              "accessed_at": "2026-09-28"
+            }
+          ],
+          "claims": [],
+          "notes": "Single uncontrolled five-day case with self-reported outcomes, possible placebo and contextual effects, and no generalizability. The Abstract swaps standing and walking follow-up durations relative to the mutually consistent Case Presentation/Results and Fig. 5; preserve this source-internal discrepancy. ECAP represents neural recruitment, not pain intensity."
+        }
+      ]
+    },
+    {
+      "batch_id": "r4-correction-s292-pinned-repo-provenance-2026-09-28",
+      "applied_at": "2026-09-28",
+      "source_ids": [
+        "S292"
+      ],
+      "decisions": [
+        {
+          "source_id": "S292",
+          "decision": "partially_verified",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "Pinned GitHub README and commit API",
+              "query": "3a035275148e97539711728422548bffe2a77566",
+              "url": "https://github.com/legacyindiesubmissions-ai/claude-fly/blob/3a035275148e97539711728422548bffe2a77566/README.md",
+              "accessed_at": "2026-09-28"
+            },
+            {
+              "service": "Zenodo owner record",
+              "query": "10.5281/zenodo.19152238",
+              "url": "https://zenodo.org/records/19152238",
+              "accessed_at": "2026-09-28"
+            }
+          ],
+          "claims": [],
+          "notes": "Pinned README and linked Zenodo paper are accessible and describe a two-simulated-fly system. The pinned HEAD commit adds a third-party LLM-driven variant; scientific outputs were not independently reproduced. DOI resolves, but the repository snapshot and paper must not be treated as two replications. No human pain, ECAP or SCS outcome."
+        }
+      ]
+    },
+    {
+      "batch_id": "r5-correction-s357-secondary-review-role-2026-09-28",
+      "applied_at": "2026-09-28",
+      "source_ids": [
+        "S357"
+      ],
+      "decisions": [
+        {
+          "source_id": "S357",
+          "decision": "partially_verified",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "JPHV publisher PDF",
+              "query": "DOI 10.21776/ub.jphv.2026.007.01.07 Methods Study Characteristics",
+              "url": "https://jphv.ub.ac.id/index.php/jphv/article/view/306",
+              "accessed_at": "2026-09-28"
+            }
+          ],
+          "claims": [],
+          "notes": "The publisher PDF is a secondary synthesis of repeated follow-up reports from one EVOKE randomized trial program (134 randomized participants), not a new participant-level model or cross-subject validation. Its RR/RD 0.18 label and 36-month open-loop responder rate conflict with the source trial report; use only as bounded review context, not an independent effect estimate. The publisher PDF was accessed through a browser-agent route while ordinary requests met Cloudflare 403."
+        }
+      ]
+    },
+    {
+      "batch_id": "r3-correction-s026-jstage-abstract-scope-2026-09-28",
+      "applied_at": "2026-09-28",
+      "source_ids": [
+        "S026"
+      ],
+      "decisions": [
+        {
+          "source_id": "S026",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "J-STAGE society abstracts PDF",
+              "query": "Novel behavioral assay of noxious heat responses in Drosophila using decapitated flies p.160",
+              "url": "https://www.jstage.jst.go.jp/article/hikakuseiriseika/31/4/31_151/_pdf/-char/ja",
+              "accessed_at": "2026-09-28"
+            }
+          ],
+          "claims": [],
+          "notes": "Short meeting abstract rather than a full methods paper. Tested fly stage and specific pain allele are not stated; no sample size, effect size, test statistic or reproducible protocol is reported. Intact-fly jumping >45 C and decapitated-fly tumbling at 44 C are different conditions. Tumbling is observed motor/nociceptive behavior, not subjective pain; no SCS or ECAP task is present."
+        }
+      ]
+    },
+    {
+      "batch_id": "r5-correction-s044-abstract-samples-validation-2026-09-28",
+      "applied_at": "2026-09-28",
+      "source_ids": [
+        "S044"
+      ],
+      "decisions": [
+        {
+          "source_id": "S044",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "NLM PubMed E-utilities primary XML",
+              "query": "PMID 42600964 abstract sample external validation",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=42600964&retmode=xml",
+              "accessed_at": "2026-09-28"
+            }
+          ],
+          "claims": [],
+          "notes": "NLM abstract identifies 91 distinct participants and three analysis samples (40 development, 51 cross-subject external, 25 repeat sessions from sample 1). Regression did not beat the mean-rating dummy despite beating random prediction. External refers to author-reported held-out samples in experimental pressure pain, not independent clinical-site validation, ECAP or SCS. Earlier Liverpool VOR version relation remains author-declared, not registered in Crossref."
+        }
+      ]
+    },
+    {
+      "batch_id": "r5-correction-s159-escore-definition-2026-09-28",
+      "applied_at": "2026-09-28",
+      "source_ids": [
+        "S159"
+      ],
+      "decisions": [
+        {
+          "source_id": "S159",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "IEEE VOR stamp PDF",
+              "query": "11367103 Eq 11 Appendix C E-score",
+              "url": "https://ieeexplore.ieee.org/stampPDF/getPDF.jsp?tp=&arnumber=11367103&ref=",
+              "accessed_at": "2026-09-28"
+            }
+          ],
+          "claims": [],
+          "notes": "Two SCS participants and no independent cohort or participant-disjoint validation. Eq. 11 and results captions define a harmonic-mean E-score, while Appendix C refers to a geometric mean; the metric actually used for reported values cannot be resolved from text alone. Artifact extraction quality is not pain intensity, analgesic response or cross-patient performance."
+        }
+      ]
+    },
+    {
+      "batch_id": "r4-correction-s025-lasso-pcr-target-2026-09-28",
+      "applied_at": "2026-09-28",
+      "source_ids": [
+        "S025"
+      ],
+      "decisions": [
+        {
+          "source_id": "S025",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "Europe PMC publisher-deposited JATS",
+              "query": "PMC13400141 LASSO-PCR TENS Fig 4",
+              "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13400141/fullTextXML",
+              "accessed_at": "2026-09-28"
+            }
+          ],
+          "claims": [],
+          "notes": "The study applies CsPIP to independent experimental and one IBS chronic-pain cohort, but TENS sensitivity is assessed in a subset of the discovery study whose baseline data contributed to model development. The treated-side TENS association is r=0.36, p=0.049, not an independent TENS validation. No ECAP, SCS response or clinical treatment-efficacy inference follows."
+        }
+      ]
+    },
+    {
+      "batch_id": "r4-correction-s165-neurodegeneration-review-scope-2026-09-28",
+      "applied_at": "2026-09-28",
+      "source_ids": [
+        "S165"
+      ],
+      "decisions": [
+        {
+          "source_id": "S165",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "Europe PMC publisher-deposited JATS",
+              "query": "PMC12467075 review-article Sections 4-6",
+              "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12467075/fullTextXML",
+              "accessed_at": "2026-09-28"
+            }
+          ],
+          "claims": [],
+          "notes": "Publisher-deposited JATS identifies a review article without an enrolled cohort, trained model or subject split. Sections 4-6 discuss adaptive neuromodulation in neurodegenerative rehabilitation and translational constraints. No SCS, ECAP, Drosophila or pain-outcome experiment is reported."
+        }
+      ]
+    },
+    {
+      "batch_id": "r4-correction-s099-uspto-claim1-scope-2026-09-28",
+      "applied_at": "2026-09-28",
+      "source_ids": [
+        "S099"
+      ],
+      "decisions": [
+        {
+          "source_id": "S099",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "USPTO Official Gazette",
+              "query": "US12642969B2 claim 1",
+              "url": "https://patentsgazette.uspto.gov/week22/OG/html/1547-1/US12642969-20260602.html",
+              "accessed_at": "2026-09-28"
+            }
+          ],
+          "claims": [],
+          "notes": "USPTO Official Gazette claim 1 only: ECAP characteristic informs a second therapy-parameter value for an unspecified SCI-associated symptom. No named functional or pain endpoint, patient cohort, performance, movement sensor or clinical outcome is reported in the checked primary claim. Full dependent claims were not rechecked on this route."
+        }
+      ]
+    },
+    {
+      "batch_id": "r4-correction-s060-review-access-limits-2026-09-28",
+      "applied_at": "2026-09-28",
+      "source_ids": [
+        "S060"
+      ],
+      "decisions": [
+        {
+          "source_id": "S060",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "JCDR publisher full text",
+              "query": "10.7860/JCDR/2026/86004.24236",
+              "url": "https://www.jcdr.net/article_fulltext.asp?id=24236&issn=0973-709x&issue=9&page=UE01&volume=20&year=2026",
+              "accessed_at": "2026-09-28"
+            }
+          ],
+          "claims": [],
+          "notes": "Publisher full text checked on 2026-09-28. Narrative review of selection, programming and closed-loop SCS with no newly enrolled cohort, model training, train/test split or article-level clinical outcome. Authors note small heterogeneous studies and missing external validation. ECAP is neural feedback, not a direct pain measure."
+        }
+      ]
+    },
+    {
+      "batch_id": "r5-correction-s739-model-uncertainty-2026-09-28",
+      "applied_at": "2026-09-28",
+      "source_ids": [
+        "S739"
+      ],
+      "decisions": [
+        {
+          "source_id": "S739",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "bioRxiv publisher full text v1",
+              "query": "10.64898/2026.08.21.745055 v1 Methods Statistical analysis",
+              "url": "https://www.biorxiv.org/content/10.64898/2026.08.21.745055v1.full",
+              "accessed_at": "2026-09-28"
+            }
+          ],
+          "claims": [],
+          "notes": "Preprint v1. FlyWire v783 constrains a resting-state rate model. Empirical analyses use one example head-fixed adult fly recording; n=5 independently trained models per condition are model replicates, not five animals. The first half of that recording was used for fitting and the second half held out; no independent-animal validation, nociceptive, ECAP or clinical comparator. Methods Statistical analysis reports mean +/- s.d. for model/noise replicates; there is no uncertainty estimate over independently held-out flies. Methods states no separate validation segment was held out."
+        }
+      ]
+    },
+    {
+      "batch_id": "r5-correction-s193-pain-score-rater-boundary-2026-09-28",
+      "applied_at": "2026-09-28",
+      "source_ids": [
+        "S193"
+      ],
+      "decisions": [
+        {
+          "source_id": "S193",
+          "decision": "partially_verified",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "Author publication abstract",
+              "query": "A Multi-Modal Multi-Expert Framework for Pain Assessment in Postoperative Children",
+              "url": "https://hzo-py.github.io/publication/pain",
+              "accessed_at": "2026-09-28"
+            },
+            {
+              "service": "IEEE abstract record",
+              "query": "10.1109/TAFFC.2025.3567307",
+              "url": "https://ieeexplore.ieee.org/abstract/document/11002650",
+              "accessed_at": "2026-09-28"
+            }
+          ],
+          "claims": [],
+          "notes": "Author abstract reports a multi-modal multi-expert model on postoperative children and MAE 1.03/PCC 0.88, but does not identify the pain-score instrument, rater, cohort size, participant split, or external validation. Self-report cannot be inferred from the abstract; IEEE full methods were not accessible."
+        }
+      ]
+    },
+    {
+      "batch_id": "r5-correction-s739-temporal-split-unit-2026-09-28",
+      "applied_at": "2026-09-28",
+      "source_ids": [
+        "S739"
+      ],
+      "decisions": [
+        {
+          "source_id": "S739",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "Primary publisher text",
+              "query": "Connectome-constrained modeling identifies neurons and synapses that sustain spontaneous activity in Drosophila",
+              "url": "https://www.biorxiv.org/content/10.64898/2026.08.21.745055v1.full",
+              "accessed_at": "2026-09-28"
+            }
+          ],
+          "claims": [],
+          "notes": "Preprint v1. FlyWire v783 constrains a resting-state rate model. Empirical analyses use one example head-fixed adult fly recording; n=5 independently trained models per condition are model replicates, not five animals. The first half of that recording was used for fitting and the second half held out; no independent-animal validation, nociceptive, ECAP or clinical comparator. Methods Statistical analysis reports mean +/- s.d. for model/noise replicates; there is no uncertainty estimate over independently held-out flies. Methods states no separate validation segment was held out."
+        }
+      ]
+    },
+    {
+      "batch_id": "r4-correction-s029-behavior-modality-2026-09-28",
+      "applied_at": "2026-09-28",
+      "source_ids": [
+        "S029"
+      ],
+      "decisions": [
+        {
+          "source_id": "S029",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "Primary publisher text",
+              "query": "Ascending nociceptive pathways drive rapid escape and sustained avoidance in adult Drosophila",
+              "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12636578/fullTextXML",
+              "accessed_at": "2026-09-28"
+            }
+          ],
+          "claims": [],
+          "notes": "Publisher-deposited preprint text reports adult fly optogenetic avoidance and escape behavior alongside connectome and neural analyses (Results and Figs. 1, 2 and 6). These observations are protective behavior, not subjective pain or human SCS response."
+        }
+      ]
+    },
+    {
+      "batch_id": "r5-correction-s004-pain-class-origin-2026-09-28",
+      "applied_at": "2026-09-28",
+      "source_ids": [
+        "S004"
+      ],
+      "decisions": [
+        {
+          "source_id": "S004",
+          "decision": "verified_primary",
+          "canonical_id": null,
+          "searches": [
+            {
+              "service": "Primary publisher text",
+              "query": "RE-HPBS-IPIC: A Resting EEG- and High-Activation Pain Brain Source-Driven Framework for Inter-Subject Pain Intensity Classification",
+              "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=41564065&retmode=xml",
+              "accessed_at": "2026-09-28"
+            }
+          ],
+          "claims": [],
+          "notes": "Only the owner abstract was checked. It reports inter-subject pain-intensity classification on EEG datasets, but gives no dataset identity, stimulus paradigm or exact pain-label origin; experimental pain cannot be inferred. The abstract does not establish the exact held-out participant partition, N, calibration or external validation."
+        }
+      ]
     }
   ],
   "resource_reviews": [
@@ -11054,7 +12792,11 @@
         "https://arxiv.org/html/2507.19673",
         "https://arxiv.org/html/2509.16727"
       ],
-      "source_ids": ["S149", "S758", "S759"],
+      "source_ids": [
+        "S149",
+        "S758",
+        "S759"
+      ],
       "decision": "Syn Pain v3 and 3DPain v5 added as distinct visual synthetic-data analogues; both differ from S149 synthetic-source multimodal unlabeled-target adaptation. Syn Pain uses labeled real training folds; 3DPain real-label use is textually ambiguous and remains open."
     },
     {
@@ -11068,7 +12810,10 @@
         "https://arxiv.org/html/2509.16727",
         "https://pubmed.ncbi.nlm.nih.gov/42268755/"
       ],
-      "source_ids": ["S149", "S759"],
+      "source_ids": [
+        "S149",
+        "S759"
+      ],
       "decision": "OpenAlex showed zero indexed citing works on 2026-09-24; this is an index-bound observation, not a claim of no citations. Same-author infant-pain fusion paper is distinct from synthetic-source adaptation. 3DPain v5 reports both subject-independent UNBC CV and wording that UNBC was reserved for evaluation; real training-label role stays unresolved."
     }
   ],

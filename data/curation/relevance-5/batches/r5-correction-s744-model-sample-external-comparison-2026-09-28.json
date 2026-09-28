@@ -1,0 +1,114 @@
+{
+  "meta": {
+    "batch_id": "r5-correction-s744-model-sample-external-comparison-2026-09-28",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-28",
+    "scope": "Separate S744 modeled units from animals and record external within-species functional comparison",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-28"
+  },
+  "source_ids": [
+    "S744"
+  ],
+  "records": [
+    {
+      "id": "S744",
+      "title": "Connectome-constrained networks predict neural activity across the fly visual system",
+      "year": 2024,
+      "source_type": "метод"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S744",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-28",
+      "full_text_status": "checked",
+      "notes": "The 64-cell-type visual network predicts measured single-neuron visual responses. The official flyvis implementation names the compiled scaffold fib25-fib19_v2.2.json; this is a constructed file, not a single FlyWire/BANC release. The endpoint is visual function, not VNC, nociception, ECAP or SCS. A prior relation to bioRxiv 10.1101/2023.05.02.539144 was removed: that preprint is Shiu et al., a distinct adult-brain model. BioRxiv 10.1101/2023.03.11.532232 matches Lappalainen et al. by title and authors, but a formal publisher-declared version link was not verified. Rechecked 2026-09-28: model predictions were compared with published neural recordings from 26 studies without fitting to those recordings; this is external within-species functional comparison, not human transfer. The paper reports 95% confidence intervals for some cross-model correlations, not predictive uncertainty or calibration. Model size and ensemble count are not biological animal sample sizes.",
+      "searches": [
+        {
+          "service": "Europe PMC publisher-deposited Nature full JATS",
+          "query": "S744 64 cell types 45669 neurons 50 DMN 26 studies confidence intervals",
+          "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11525180/fullTextXML",
+          "accessed_at": "2026-09-28"
+        }
+      ],
+      "updates": {
+        "identifiers": {
+          "doi": "10.1038/s41586-024-07939-3"
+        },
+        "evidence": {
+          "sample_size": "64 modeled optic-lobe cell types; 45,669 model neurons; 1,513,231 model connections across 721 columns; 50 independently trained DMNs; comparisons to published neural recordings from 26 studies (not 26 animals)."
+        },
+        "validation": {
+          "external_validation": "yes",
+          "uncertainty": "yes",
+          "checked_at": "2026-09-28",
+          "notes": "The 64-cell-type visual network predicts measured single-neuron visual responses. The official flyvis implementation names the compiled scaffold fib25-fib19_v2.2.json; this is a constructed file, not a single FlyWire/BANC release. The endpoint is visual function, not VNC, nociception, ECAP or SCS. A prior relation to bioRxiv 10.1101/2023.05.02.539144 was removed: that preprint is Shiu et al., a distinct adult-brain model. BioRxiv 10.1101/2023.03.11.532232 matches Lappalainen et al. by title and authors, but a formal publisher-declared version link was not verified. Rechecked 2026-09-28: model predictions were compared with published neural recordings from 26 studies without fitting to those recordings; this is external within-species functional comparison, not human transfer. The paper reports 95% confidence intervals for some cross-model correlations, not predictive uncertainty or calibration. Model size and ensemble count are not biological animal sample sizes."
+        },
+        "field_resolution": {
+          "evidence.sample_size": {
+            "state": "reported",
+            "value": "64 modeled optic-lobe cell types; 45,669 model neurons; 1,513,231 model connections across 721 columns; 50 independently trained DMNs; comparisons to published neural recordings from 26 studies (not 26 animals).",
+            "reason": "Separate model size, trained-model ensemble and prior-study count; the paper does not report these as a single animal sample.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11525180/fullTextXML",
+                "locator": "Main > Connectome-constrained model for motion vision; Main > DMN ensemble predicts known activity"
+              }
+            ]
+          },
+          "validation.external_validation": {
+            "state": "reported",
+            "value": "yes",
+            "reason": "Neural response predictions are compared with published recordings from 26 prior studies that were not used to fit the DMN; validation is within Drosophila visual circuits, not external species or clinical cohort.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11525180/fullTextXML",
+                "locator": "Abstract; Main > DMN ensemble predicts known activity; Supplementary Note 3 and Supplementary Data files 5-6"
+              }
+            ]
+          },
+          "validation.uncertainty": {
+            "state": "reported",
+            "value": "yes",
+            "reason": "The paper reports 95% confidence intervals for some model-ensemble correlation analyses; this is statistical dispersion, not calibrated predictive uncertainty.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11525180/fullTextXML",
+                "locator": "Extended Data Figure 5 caption: model-ensemble correlation and 95% CI"
+              }
+            ]
+          },
+          "validation.notes": {
+            "state": "reported",
+            "value": "The 64-cell-type visual network predicts measured single-neuron visual responses. The official flyvis implementation names the compiled scaffold fib25-fib19_v2.2.json; this is a constructed file, not a single FlyWire/BANC release. The endpoint is visual function, not VNC, nociception, ECAP or SCS. A prior relation to bioRxiv 10.1101/2023.05.02.539144 was removed: that preprint is Shiu et al., a distinct adult-brain model. BioRxiv 10.1101/2023.03.11.532232 matches Lappalainen et al. by title and authors, but a formal publisher-declared version link was not verified. Rechecked 2026-09-28: model predictions were compared with published neural recordings from 26 studies without fitting to those recordings; this is external within-species functional comparison, not human transfer. The paper reports 95% confidence intervals for some cross-model correlations, not predictive uncertainty or calibration. Model size and ensemble count are not biological animal sample sizes.",
+            "reason": "Clarify external within-species comparator and limits of reported confidence intervals.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11525180/fullTextXML",
+                "locator": "Abstract; Main > DMN ensemble predicts known activity; Extended Data Figure 5"
+              }
+            ]
+          },
+          "validation.checked_at": {
+            "state": "reported",
+            "value": "2026-09-28",
+            "reason": "Dated full-text recheck.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11525180/fullTextXML",
+                "locator": "Abstract; Main; Methods; Extended Data Figure 5"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

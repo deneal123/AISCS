@@ -1,0 +1,609 @@
+{
+  "meta": {
+    "batch_id": "r5-correction-s039-s082-publisher-access-2026-09-27",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-27",
+    "scope": "Reconcile S039/S082 source cards with publisher-indexed abstract evidence and current access boundary",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-27"
+  },
+  "source_ids": [
+    "S039",
+    "S082"
+  ],
+  "records": [
+    {
+      "id": "S039",
+      "title": "Deep Multi-Head Attention Network with Subject-Incremental Learning for Cross-Subject Generalization in Objective Pain Monitoring Using Multimodal Physiological Signals",
+      "year": 2026,
+      "source_type": "article"
+    },
+    {
+      "id": "S082",
+      "title": "Pain intensity classification and evaluation of individual differences in subjects based on hybrid CNN-BiLSTM approach",
+      "year": 2026,
+      "source_type": "article"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S039",
+      "decision": "partially_verified",
+      "checked_at": "2026-09-27",
+      "full_text_status": "metadata_only",
+      "searches": [
+        {
+          "service": "Crossref DOI metadata route",
+          "query": "Resolve exact title and bibliographic identity for DOI 10.1016/j.bspc.2026.111261",
+          "url": "https://api.crossref.org/works/10.1016%2Fj.bspc.2026.111261",
+          "accessed_at": "2026-09-27"
+        },
+        {
+          "service": "Elsevier publisher abstract API",
+          "query": "Check PII identity, openaccess flag and available metadata for DOI 10.1016/j.bspc.2026.111261",
+          "url": "https://api.elsevier.com/content/abstract/doi/10.1016/j.bspc.2026.111261?httpAccept=application%2Fjson",
+          "accessed_at": "2026-09-27"
+        },
+        {
+          "service": "ScienceDirect publisher article route",
+          "query": "Attempt article and first-page full-text access for PII S174680942601815X",
+          "url": "https://www.sciencedirect.com/science/article/pii/S174680942601815X",
+          "accessed_at": "2026-09-27"
+        },
+        {
+          "service": "ScienceDirect official indexed publisher Abstract and section excerpts",
+          "query": "10.1016/j.bspc.2026.111261 exact publisher-indexed Abstract performance/modalities/split; separate Dataset source and details excerpt and dataset-versus-analysis N boundary",
+          "url": "https://www.sciencedirect.com/science/article/abs/pii/S174680942601815X",
+          "accessed_at": "2026-09-27"
+        }
+      ],
+      "updates": {
+        "identifiers": {
+          "doi": "10.1016/j.bspc.2026.111261",
+          "exact_url": "https://www.sciencedirect.com/science/article/abs/pii/S174680942601815X"
+        },
+        "evidence": {
+          "species": "Homo sapiens",
+          "population": "The publisher-indexed Dataset source and details excerpt describes PMED as 52 healthy participants; the exact S039 model-analysis denominator is not established.",
+          "sample_size": null,
+          "target_construct": "experimental_pain_class",
+          "target_label": "Six-class pain-intensity recognition; exact analyzed class semantics are not independently confirmed beyond the indexed Abstract.",
+          "access_status": "restricted",
+          "evidence_role": "method_baseline",
+          "subject_domain": "human_healthy",
+          "modalities": [
+            "bvp_ppg",
+            "ecg",
+            "eda",
+            "emg",
+            "other"
+          ]
+        },
+        "validation": {
+          "status": "partially_verified",
+          "screening_status": "pending",
+          "full_text_status": "metadata_only",
+          "checked_at": "2026-09-27",
+          "notes": "Official ScienceDirect search-index excerpt for the publisher Abstract reports six-class pain-intensity recognition, five physiological modalities (EDA, BVP, ECG, EMG and respiration), subject-wise four-fold evaluation and 87.68% ± 0.41% participant-level accuracy. A separate indexed body excerpt under Dataset source and details names PMED and 52 healthy participants; this is dataset N, not a verified model-analysis denominator. Elsevier publisher abstract API returns coredata only with openaccess=0; direct article/first-page retrieval was Cloudflare-blocked, so no complete article body was obtained. These values remain publisher-indexed claims, not independently re-derived full-text results. No chronic-pain, clinical, ECAP or treatment-response validity follows.",
+          "split_unit": "participant",
+          "cross_subject": "yes",
+          "external_validation": "not_reported"
+        },
+        "модальность": "EDA; BVP; ECG; EMG; respiration (publisher-indexed Abstract)",
+        "задача": "Six-class experimental pain-intensity recognition from graded heat stimuli (publisher-indexed Abstract)",
+        "метод": "Subject-incremental attention-enhanced deep fusion; author-reported SHAP interpretation (publisher-indexed Abstract)",
+        "датасет": "PainMonit Experimental Dataset (PMED), 52 healthy participants per separate indexed Dataset source and details excerpt; not confirmed as the analyzed model N",
+        "производительность": "87.68% ± 0.41% mean participant-level accuracy across four subject-independent outer folds (publisher-indexed Abstract)",
+        "кросс_субъект": "Yes; subject-wise four-fold evaluation is reported in the publisher-indexed Abstract. External validation is not established.",
+        "ограничения": "Publisher-indexed Abstract and a separate indexed dataset-description excerpt were available, but direct full-text retrieval was Cloudflare-blocked. 52 refers to PMED dataset membership; exact model-analysis N and full methods are not confirmed. No chronic-pain/clinical validation or ECAP/SCS outcome is established.",
+        "field_resolution": {
+          "evidence.species": {
+            "state": "reported",
+            "value": "Homo sapiens",
+            "reason": "The indexed dataset-description excerpt identifies the PMED experimental cohort as healthy human participants.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S174680942601815X",
+                "locator": "Dataset source and details indexed excerpt: PMED, 52 healthy participants"
+              }
+            ]
+          },
+          "evidence.population": {
+            "state": "reported",
+            "value": "The publisher-indexed Dataset source and details excerpt describes PMED as 52 healthy participants; the exact S039 model-analysis denominator is not established.",
+            "reason": "52 is described as PMED dataset membership, not verified S039 analysis N.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S174680942601815X",
+                "locator": "Dataset source and details indexed excerpt"
+              }
+            ]
+          },
+          "evidence.sample_size": {
+            "state": "unavailable_after_search",
+            "value": null,
+            "reason": "The indexed body excerpt gives the PMED dataset size (52) but does not establish the exact denominator analyzed by S039; the Abstract itself does not state N.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S174680942601815X",
+                "locator": "Publisher-indexed Abstract (N absent); separate Dataset source and details excerpt"
+              }
+            ]
+          },
+          "evidence.target_construct": {
+            "state": "reported",
+            "value": "experimental_pain_class",
+            "reason": "The Abstract identifies graded heat-induced pain and six-class pain-intensity recognition.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S174680942601815X",
+                "locator": "Publisher-indexed Abstract, task and evaluation sentences"
+              }
+            ]
+          },
+          "evidence.target_label": {
+            "state": "reported",
+            "value": "Six-class pain-intensity recognition; exact analyzed class semantics are not independently confirmed beyond the indexed Abstract.",
+            "reason": "The Abstract reports six classes but exact class semantics are not confirmed from retrieved primary text.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S174680942601815X",
+                "locator": "Publisher-indexed Abstract, six-class pain-intensity recognition"
+              }
+            ]
+          },
+          "evidence.modalities": {
+            "state": "reported",
+            "value": [
+              "bvp_ppg",
+              "ecg",
+              "eda",
+              "emg",
+              "other"
+            ],
+            "reason": "The publisher-indexed Abstract lists EDA, BVP, ECG, EMG and respiration. Controlled modality vocabulary lacks respiration, so 'other' represents it.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S174680942601815X",
+                "locator": "Publisher-indexed Abstract, synchronized signal modalities"
+              }
+            ]
+          },
+          "evidence.access_status": {
+            "state": "reported",
+            "value": "restricted",
+            "reason": "Elsevier publisher API returns openaccess=0/openaccessFlag=false; direct full-text route was challenge-blocked.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://api.elsevier.com/content/abstract/doi/10.1016/j.bspc.2026.111261?httpAccept=application%2Fjson",
+                "locator": "Elsevier abstract API coredata: openaccess=0, openaccessFlag=false"
+              }
+            ]
+          },
+          "evidence.subject_domain": {
+            "state": "reported",
+            "value": "human_healthy",
+            "reason": "Publisher-indexed dataset excerpt describes 52 healthy participants; exact S039 analysis N remains unresolved.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S174680942601815X",
+                "locator": "Dataset source and details indexed excerpt"
+              }
+            ]
+          },
+          "validation.split_unit": {
+            "state": "reported",
+            "value": "participant",
+            "reason": "Publisher-indexed Abstract explicitly says subject-wise four-fold evaluation and subject-independent outer folds.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S174680942601815X",
+                "locator": "Publisher-indexed Abstract, evaluation sentence"
+              }
+            ]
+          },
+          "validation.cross_subject": {
+            "state": "reported",
+            "value": "yes",
+            "reason": "Publisher-indexed Abstract explicitly reports four subject-independent outer folds.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S174680942601815X",
+                "locator": "Publisher-indexed Abstract, evaluation sentence"
+              }
+            ]
+          },
+          "validation.external_validation": {
+            "state": "not_reported",
+            "value": null,
+            "reason": "The Abstract reports within-dataset subject-independent folds, not an external cohort.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S174680942601815X",
+                "locator": "Publisher-indexed Abstract; external cohort not described"
+              }
+            ]
+          },
+          "validation.notes": {
+            "state": "reported",
+            "value": "Official ScienceDirect search-index excerpt for the publisher Abstract reports six-class pain-intensity recognition, five physiological modalities (EDA, BVP, ECG, EMG and respiration), subject-wise four-fold evaluation and 87.68% ± 0.41% participant-level accuracy. A separate indexed body excerpt under Dataset source and details names PMED and 52 healthy participants; this is dataset N, not a verified model-analysis denominator. Elsevier publisher abstract API returns coredata only with openaccess=0; direct article/first-page retrieval was Cloudflare-blocked, so no complete article body was obtained. These values remain publisher-indexed claims, not independently re-derived full-text results. No chronic-pain, clinical, ECAP or treatment-response validity follows.",
+            "reason": "Only publisher-indexed excerpts were checked; direct full-text retrieval failed.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S174680942601815X",
+                "locator": "Publisher-indexed Abstract and Dataset source and details excerpt; full body unavailable"
+              }
+            ]
+          },
+          "модальность": {
+            "state": "reported",
+            "value": "EDA; BVP; ECG; EMG; respiration (publisher-indexed Abstract)",
+            "reason": "Transcribed from the corresponding publisher-indexed excerpt; not independently re-derived from full text.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S174680942601815X",
+                "locator": "Publisher-indexed Abstract or Dataset source and details excerpt"
+              }
+            ]
+          },
+          "задача": {
+            "state": "reported",
+            "value": "Six-class experimental pain-intensity recognition from graded heat stimuli (publisher-indexed Abstract)",
+            "reason": "Transcribed from the corresponding publisher-indexed excerpt; not independently re-derived from full text.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S174680942601815X",
+                "locator": "Publisher-indexed Abstract or Dataset source and details excerpt"
+              }
+            ]
+          },
+          "метод": {
+            "state": "reported",
+            "value": "Subject-incremental attention-enhanced deep fusion; author-reported SHAP interpretation (publisher-indexed Abstract)",
+            "reason": "Transcribed from the corresponding publisher-indexed excerpt; not independently re-derived from full text.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S174680942601815X",
+                "locator": "Publisher-indexed Abstract or Dataset source and details excerpt"
+              }
+            ]
+          },
+          "датасет": {
+            "state": "reported",
+            "value": "PainMonit Experimental Dataset (PMED), 52 healthy participants per separate indexed Dataset source and details excerpt; not confirmed as the analyzed model N",
+            "reason": "Transcribed from the corresponding publisher-indexed excerpt; not independently re-derived from full text.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S174680942601815X",
+                "locator": "Publisher-indexed Abstract or Dataset source and details excerpt"
+              }
+            ]
+          },
+          "производительность": {
+            "state": "reported",
+            "value": "87.68% ± 0.41% mean participant-level accuracy across four subject-independent outer folds (publisher-indexed Abstract)",
+            "reason": "Transcribed from the corresponding publisher-indexed excerpt; not independently re-derived from full text.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S174680942601815X",
+                "locator": "Publisher-indexed Abstract or Dataset source and details excerpt"
+              }
+            ]
+          },
+          "кросс_субъект": {
+            "state": "reported",
+            "value": "Yes; subject-wise four-fold evaluation is reported in the publisher-indexed Abstract. External validation is not established.",
+            "reason": "Transcribed from the corresponding publisher-indexed excerpt; not independently re-derived from full text.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S174680942601815X",
+                "locator": "Publisher-indexed Abstract or Dataset source and details excerpt"
+              }
+            ]
+          },
+          "ограничения": {
+            "state": "reported",
+            "value": "Publisher-indexed Abstract and a separate indexed dataset-description excerpt were available, but direct full-text retrieval was Cloudflare-blocked. 52 refers to PMED dataset membership; exact model-analysis N and full methods are not confirmed. No chronic-pain/clinical validation or ECAP/SCS outcome is established.",
+            "reason": "Direct publisher full-text access was unavailable; dataset N is not treated as model-analysis N.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S174680942601815X",
+                "locator": "Publisher-indexed excerpts and access route"
+              }
+            ]
+          },
+          "validation.checked_at": {
+            "state": "reported",
+            "value": "2026-09-27",
+            "reason": "Date of the bounded publisher-source review and card correction.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S174680942601815X",
+                "locator": "Publisher article identity and indexed abstract route checked on this date"
+              }
+            ]
+          },
+          "identifiers.exact_url": {
+            "state": "reported",
+            "value": "https://www.sciencedirect.com/science/article/abs/pii/S174680942601815X",
+            "reason": "Use the exact publisher abstract route that exposed the indexed content; direct full-text retrieval remains blocked.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S174680942601815X",
+                "locator": "Publisher DOI/PII identity and indexed Abstract route"
+              }
+            ]
+          }
+        }
+      },
+      "claims": [],
+      "notes": "Official ScienceDirect search-index excerpt for the publisher Abstract reports six-class pain-intensity recognition, five physiological modalities (EDA, BVP, ECG, EMG and respiration), subject-wise four-fold evaluation and 87.68% ± 0.41% participant-level accuracy. A separate indexed body excerpt under Dataset source and details names PMED and 52 healthy participants; this is dataset N, not a verified model-analysis denominator. Elsevier publisher abstract API returns coredata only with openaccess=0; direct article/first-page retrieval was Cloudflare-blocked, so no complete article body was obtained. These values remain publisher-indexed claims, not independently re-derived full-text results. No chronic-pain, clinical, ECAP or treatment-response validity follows."
+    },
+    {
+      "source_id": "S082",
+      "decision": "partially_verified",
+      "checked_at": "2026-09-27",
+      "full_text_status": "metadata_only",
+      "searches": [
+        {
+          "service": "Elsevier publisher first-page PDF",
+          "query": "Check exact article identity and complete Abstract content for S082",
+          "url": "https://www.sciencedirect.com/sdfe/pdf/download/eid/1-s2.0-S1746809426003691/first-page-pdf",
+          "accessed_at": "2026-09-27"
+        },
+        {
+          "service": "Elsevier publisher abstract API",
+          "query": "Check article open-access flag for DOI 10.1016/j.bspc.2026.109815",
+          "url": "https://api.elsevier.com/content/abstract/doi/10.1016/j.bspc.2026.109815?httpAccept=application%2Fjson",
+          "accessed_at": "2026-09-27"
+        },
+        {
+          "service": "ScienceDirect full article route",
+          "query": "Check full-text access boundary; no conclusion-level value accepted without primary text",
+          "url": "https://www.sciencedirect.com/science/article/pii/S1746809426003691",
+          "accessed_at": "2026-09-27"
+        },
+        {
+          "service": "ScienceDirect official search-index Conclusions excerpt",
+          "query": "Locate separately indexed 91.79% four-level accuracy and preserve discrepancy with Abstract 93.98%",
+          "url": "https://www.sciencedirect.com/science/article/pii/S1746809426003691",
+          "accessed_at": "2026-09-27"
+        }
+      ],
+      "updates": {
+        "identifiers": {
+          "doi": "10.1016/j.bspc.2026.109815"
+        },
+        "evidence": {
+          "species": "Homo sapiens",
+          "population": "Human participants undergoing cold-pressor testing; sample size not reported in the accessible publisher abstract",
+          "modalities": [
+            "eeg"
+          ],
+          "target_construct": "experimental_pain_class",
+          "target_label": "No pain, mild pain, moderate pain and severe pain; quantitative pain-sensitivity grouping is also reported",
+          "access_status": "restricted"
+        },
+        "validation": {
+          "status": "partially_verified",
+          "full_text_status": "metadata_only",
+          "checked_at": "2026-09-27",
+          "split_unit": "participant",
+          "cross_subject": "yes",
+          "notes": "The official ScienceDirect first-page PDF was independently retrieved and checked on 2026-09-27. Its complete Abstract reports EEG cold-pressor classification, subject-independent LOSOCV, class accuracies 88.64% (no pain), 95.80% (mild), 99.75% (moderate), and 82.96% (severe) in the undivided group; overall accuracy 93.98% after sensitivity-group stratification; and R²=0.45, p<0.01 for intersubject pain-score differences versus prediction loss. A separate official ScienceDirect search-index excerpt under Conclusions reports 91.79% accuracy in four-level pain classification. These are separately located author-reported values; their relation, denominator and protocol are unresolved and must not be collapsed into one result. Elsevier metadata reports openaccess=0. Full article body and exact analyzed N were not obtained. LOSOCV supports participant-held-out evaluation only, not external or clinical validation."
+        },
+        "модальность": "EEG",
+        "задача": "Four-class cold-pressor experimental pain-intensity classification from EEG, with sensitivity-group analysis",
+        "производительность": "Abstract (publisher first-page PDF): class accuracies 88.64% (no pain), 95.80% (mild), 99.75% (moderate), 82.96% (severe) in undivided group; 93.98% overall after sensitivity-group stratification; R²=0.45, p<0.01. Separate publisher-indexed Conclusions excerpt: 91.79% accuracy in four-level pain classification. Denominator/protocol relationship unresolved; keep distinct.",
+        "ограничения": "Abstract-level verification only. Publisher abstract reports LOSOCV and the listed metrics, but does not expose analyzed sample size, fold construction details, external clinical validation or treatment outcomes. Direct publisher-page retrieval returned HTTP 403 and no full text was obtained. Cold-pressor experimental pain is not evidence of chronic-pain clinical validity, ECAP, SCS response or treatment effect.",
+        "field_resolution": {
+          "evidence.species": {
+            "state": "reported",
+            "value": "Homo sapiens",
+            "reason": "The publisher abstract describes participants and sensitivity groups in a human cold-pressor experiment.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S1746809426003691",
+                "locator": "Publisher-indexed Abstract, cold-pressor testing and participant sensitivity-group description"
+              }
+            ]
+          },
+          "evidence.population": {
+            "state": "reported",
+            "value": "Human participants undergoing cold-pressor testing; sample size not reported in the accessible publisher abstract",
+            "reason": "The abstract identifies cold-pressor participants but does not report their number.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S1746809426003691",
+                "locator": "Publisher-indexed Abstract; no sample-size value stated"
+              }
+            ]
+          },
+          "evidence.modalities": {
+            "state": "reported",
+            "value": [
+              "eeg"
+            ],
+            "reason": "The abstract explicitly identifies EEG signals as model input.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S1746809426003691",
+                "locator": "Publisher-indexed Abstract, first and third sentences"
+              }
+            ]
+          },
+          "evidence.target_construct": {
+            "state": "reported",
+            "value": "experimental_pain_class",
+            "reason": "Pain intensity is classified from EEG during a cold-pressor test; this is an experimental pain-class task, not a clinical outcome.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S1746809426003691",
+                "locator": "Publisher-indexed Abstract, task description"
+              }
+            ]
+          },
+          "evidence.target_label": {
+            "state": "reported",
+            "value": "No pain, mild pain, moderate pain and severe pain; quantitative pain-sensitivity grouping is also reported",
+            "reason": "The abstract names no pain, mild, moderate and severe classes and additional sensitivity-based grouping.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S1746809426003691",
+                "locator": "Publisher-indexed Abstract, class-specific results and sensitivity-group analysis"
+              }
+            ]
+          },
+          "evidence.access_status": {
+            "state": "reported",
+            "value": "restricted",
+            "reason": "Elsevier publisher abstract metadata returns openaccess=0/openaccessFlag=false. Abstract/first-page content is available, but the full article body was not obtained; a first-page PDF does not imply open access to the full article.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S1746809426003691",
+                "locator": "ScienceDirect article route / Abstract; Get rights and content; direct retrieval returned HTTP 403"
+              },
+              {
+                "url": "https://api.elsevier.com/content/abstract/doi/10.1016/j.bspc.2026.109815?httpAccept=application%2Fjson",
+                "locator": "Publisher abstract API coredata: openaccess=0, openaccessFlag=false"
+              }
+            ]
+          },
+          "validation.split_unit": {
+            "state": "reported",
+            "value": "participant",
+            "reason": "Leave-One-Subject-Out cross-validation holds out one subject per fold; the abstract calls this subject-independent evaluation.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S1746809426003691",
+                "locator": "Publisher-indexed Abstract, LOSOCV sentence"
+              }
+            ]
+          },
+          "validation.cross_subject": {
+            "state": "reported",
+            "value": "yes",
+            "reason": "The abstract explicitly describes subject-independent LOSOCV.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S1746809426003691",
+                "locator": "Publisher-indexed Abstract, evaluation strategy"
+              }
+            ]
+          },
+          "validation.notes": {
+            "state": "reported",
+            "value": "The official ScienceDirect first-page PDF was independently retrieved and checked on 2026-09-27. Its complete Abstract reports EEG cold-pressor classification, subject-independent LOSOCV, class accuracies 88.64% (no pain), 95.80% (mild), 99.75% (moderate), and 82.96% (severe) in the undivided group; overall accuracy 93.98% after sensitivity-group stratification; and R²=0.45, p<0.01 for intersubject pain-score differences versus prediction loss. A separate official ScienceDirect search-index excerpt under Conclusions reports 91.79% accuracy in four-level pain classification. These are separately located author-reported values; their relation, denominator and protocol are unresolved and must not be collapsed into one result. Elsevier metadata reports openaccess=0. Full article body and exact analyzed N were not obtained. LOSOCV supports participant-held-out evaluation only, not external or clinical validation.",
+            "reason": "The first-page PDF Abstract and a distinct official indexed Conclusions excerpt state separate accuracy values; the full article body was not retrieved, so the relationship remains unresolved.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://www.sciencedirect.com/sdfe/pdf/download/eid/1-s2.0-S1746809426003691/first-page-pdf",
+                "locator": "Publisher first-page PDF, complete Abstract: sensitivity-stratified 93.98% overall accuracy"
+              },
+              {
+                "url": "https://www.sciencedirect.com/science/article/pii/S1746809426003691",
+                "locator": "Official ScienceDirect search-index excerpt, Conclusions: 91.79% in four-level classification; full body not retrieved"
+              }
+            ]
+          },
+          "модальность": {
+            "state": "reported",
+            "value": "EEG",
+            "reason": "Publisher abstract identifies EEG as the signal modality.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S1746809426003691",
+                "locator": "Publisher-indexed Abstract"
+              }
+            ]
+          },
+          "задача": {
+            "state": "reported",
+            "value": "Four-class cold-pressor experimental pain-intensity classification from EEG, with sensitivity-group analysis",
+            "reason": "Publisher abstract describes EEG cold-pressor experimental pain-intensity classification.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S1746809426003691",
+                "locator": "Publisher-indexed Abstract"
+              }
+            ]
+          },
+          "производительность": {
+            "state": "reported",
+            "value": "Abstract (publisher first-page PDF): class accuracies 88.64% (no pain), 95.80% (mild), 99.75% (moderate), 82.96% (severe) in undivided group; 93.98% overall after sensitivity-group stratification; R²=0.45, p<0.01. Separate publisher-indexed Conclusions excerpt: 91.79% accuracy in four-level pain classification. Denominator/protocol relationship unresolved; keep distinct.",
+            "reason": "93.98% is in the Abstract; 91.79% is in a separate indexed Conclusions excerpt. Their relation is not resolved by the accessible primary artifacts.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://www.sciencedirect.com/sdfe/pdf/download/eid/1-s2.0-S1746809426003691/first-page-pdf",
+                "locator": "Publisher first-page PDF, Abstract"
+              },
+              {
+                "url": "https://www.sciencedirect.com/science/article/pii/S1746809426003691",
+                "locator": "Official ScienceDirect search-index excerpt, Conclusions"
+              }
+            ]
+          },
+          "ограничения": {
+            "state": "reported",
+            "value": "Abstract-level verification only. Publisher abstract reports LOSOCV and the listed metrics, but does not expose analyzed sample size, fold construction details, external clinical validation or treatment outcomes. Direct publisher-page retrieval returned HTTP 403 and no full text was obtained. Cold-pressor experimental pain is not evidence of chronic-pain clinical validity, ECAP, SCS response or treatment effect.",
+            "reason": "The source was checked at publisher-abstract level; sample size and full-text methods remain inaccessible in this review.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S1746809426003691",
+                "locator": "Publisher-indexed Abstract; ScienceDirect page access route"
+              }
+            ]
+          },
+          "validation.checked_at": {
+            "state": "reported",
+            "value": "2026-09-27",
+            "reason": "Date of the bounded publisher-source review and card correction.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S1746809426003691",
+                "locator": "Publisher article identity and indexed abstract route checked on this date"
+              }
+            ]
+          }
+        }
+      },
+      "claims": [],
+      "notes": "The official ScienceDirect first-page PDF was independently retrieved and checked on 2026-09-27. Its complete Abstract reports EEG cold-pressor classification, subject-independent LOSOCV, class accuracies 88.64% (no pain), 95.80% (mild), 99.75% (moderate), and 82.96% (severe) in the undivided group; overall accuracy 93.98% after sensitivity-group stratification; and R²=0.45, p<0.01 for intersubject pain-score differences versus prediction loss. A separate official ScienceDirect search-index excerpt under Conclusions reports 91.79% accuracy in four-level pain classification. These are separately located author-reported values; their relation, denominator and protocol are unresolved and must not be collapsed into one result. Elsevier metadata reports openaccess=0. Full article body and exact analyzed N were not obtained. LOSOCV supports participant-held-out evaluation only, not external or clinical validation."
+    }
+  ]
+}

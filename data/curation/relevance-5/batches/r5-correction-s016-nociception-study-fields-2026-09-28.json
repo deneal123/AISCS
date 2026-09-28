@@ -1,0 +1,186 @@
+{
+  "meta": {
+    "batch_id": "r5-correction-s016-nociception-study-fields-2026-09-28",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-28",
+    "scope": "Correct S016 card from complete primary JATS",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-28"
+  },
+  "source_ids": [
+    "S016"
+  ],
+  "records": [
+    {
+      "id": "S016",
+      "title": "A Multimodal Deep Learning Approach to Intraoperative Nociception Monitoring: Integrating Electroencephalogram, Photoplethysmography, and Electrocardiogram",
+      "year": 2025,
+      "source_type": "метод"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S016",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-28",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "service": "Europe PMC full JATS",
+          "query": "PMC11859842 S016 cohort, modality, NOA, PMID",
+          "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11859842/fullTextXML",
+          "accessed_at": "2026-09-28"
+        }
+      ],
+      "updates": {
+        "identifiers": {
+          "pmid": "40006379"
+        },
+        "evidence": {
+          "species": "Homo sapiens",
+          "population": "Surgery patients under general anesthesia: 90 analyzed at NTUH after missing-signal exclusions and 10 at ECKH.",
+          "subject_domain": "human_clinical",
+          "modalities": [
+            "eeg",
+            "ecg",
+            "bvp_ppg"
+          ],
+          "sample_size": 100,
+          "target_construct": "nociceptive_response",
+          "target_label": "Retrospective anesthesiologist Nociception Assessment (NOA) score from anesthetic records; separate ECKH event analysis."
+        },
+        "validation": {
+          "checked_at": "2026-09-28",
+          "notes": "Primary full JATS rechecked 2026-09-28: 90 NTUH and 10 ECKH surgery patients, EEG/ECG/PPG and chart-derived NOA under general anesthesia. This is not conscious-pain self-report. ECKH is a 10-patient event check, not proof of clinical deployment. Exact NTUH partition procedure, calibration and model uncertainty remain unreported."
+        },
+        "field_resolution": {
+          "identifiers.pmid": {
+            "state": "reported",
+            "value": "40006379",
+            "reason": "Primary full text explicitly reports this field; earlier placeholder was false.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11859842/fullTextXML",
+                "locator": "Front matter > article-id pub-id-type=pmid"
+              }
+            ]
+          },
+          "evidence.species": {
+            "state": "reported",
+            "value": "Homo sapiens",
+            "reason": "Primary full text explicitly reports this field; earlier placeholder was false.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11859842/fullTextXML",
+                "locator": "Methods 2.1: human surgery patients"
+              }
+            ]
+          },
+          "evidence.population": {
+            "state": "reported",
+            "value": "Surgery patients under general anesthesia: 90 analyzed at NTUH after missing-signal exclusions and 10 at ECKH.",
+            "reason": "Primary full text explicitly reports this field; earlier placeholder was false.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11859842/fullTextXML",
+                "locator": "Methods 2.1 and Table 1: 90 NTUH + 10 ECKH"
+              }
+            ]
+          },
+          "evidence.subject_domain": {
+            "state": "reported",
+            "value": "human_clinical",
+            "reason": "Primary full text explicitly reports this field; earlier placeholder was false.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11859842/fullTextXML",
+                "locator": "Methods 2.1: surgery patients under general anesthesia"
+              }
+            ]
+          },
+          "evidence.modalities": {
+            "state": "reported",
+            "value": [
+              "eeg",
+              "ecg",
+              "bvp_ppg"
+            ],
+            "reason": "Primary full text explicitly reports this field; earlier placeholder was false.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11859842/fullTextXML",
+                "locator": "Methods 2.1-2.2: EEG, ECG, PPG"
+              }
+            ]
+          },
+          "evidence.sample_size": {
+            "state": "reported",
+            "value": 100,
+            "reason": "Primary full text explicitly reports this field; earlier placeholder was false.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11859842/fullTextXML",
+                "locator": "Methods 2.1: 90 NTUH + 10 ECKH"
+              }
+            ]
+          },
+          "evidence.target_construct": {
+            "state": "reported",
+            "value": "nociceptive_response",
+            "reason": "Primary full text explicitly reports this field; earlier placeholder was false.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11859842/fullTextXML",
+                "locator": "Introduction and Methods 2.3: nociception under general anesthesia"
+              }
+            ]
+          },
+          "evidence.target_label": {
+            "state": "reported",
+            "value": "Retrospective anesthesiologist Nociception Assessment (NOA) score from anesthetic records; separate ECKH event analysis.",
+            "reason": "Primary full text explicitly reports this field; earlier placeholder was false.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11859842/fullTextXML",
+                "locator": "Methods 2.3: NOA; Results 3.4: ECKH events"
+              }
+            ]
+          },
+          "validation.checked_at": {
+            "state": "reported",
+            "value": "2026-09-28",
+            "reason": "Dated primary full-text recheck.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11859842/fullTextXML",
+                "locator": "Front matter; Methods 2.1-2.3; Results 3.4"
+              }
+            ]
+          },
+          "validation.notes": {
+            "state": "reported",
+            "value": "Primary full JATS rechecked 2026-09-28: 90 NTUH and 10 ECKH surgery patients, EEG/ECG/PPG and chart-derived NOA under general anesthesia. This is not conscious-pain self-report. ECKH is a 10-patient event check, not proof of clinical deployment. Exact NTUH partition procedure, calibration and model uncertainty remain unreported.",
+            "reason": "Dated primary full-text recheck.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11859842/fullTextXML",
+                "locator": "Front matter; Methods 2.1-2.3; Results 3.4"
+              }
+            ]
+          }
+        }
+      },
+      "notes": "Primary full JATS rechecked 2026-09-28: 90 NTUH and 10 ECKH surgery patients, EEG/ECG/PPG and chart-derived NOA under general anesthesia. This is not conscious-pain self-report. ECKH is a 10-patient event check, not proof of clinical deployment. Exact NTUH partition procedure, calibration and model uncertainty remain unreported."
+    }
+  ]
+}

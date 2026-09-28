@@ -1,0 +1,130 @@
+{
+  "meta": {
+    "batch_id": "r5-correction-s357-fulltext-effect-inconsistency-2026-09-28",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-28",
+    "scope": "Replace abstract-only S357 effect interpretation with publisher full-text RR/RD and EVOKE 36-month discrepancy audit",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-28"
+  },
+  "source_ids": [
+    "S357"
+  ],
+  "records": [
+    {
+      "id": "S357",
+      "title": "Closing the loop on chronic pain with ECAP-controlled closed-loop vs open-loop spinal cord stimulation: systematic and longitudinal pooled analysis of the EVOKE study",
+      "year": 2026,
+      "source_type": "обзор"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S357",
+      "decision": "partially_verified",
+      "checked_at": "2026-09-28",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "service": "JPHV publisher full PDF",
+          "query": "DOI 10.21776/ub.jphv.2026.007.01.07 full text pp.37–44",
+          "url": "https://jphv.ub.ac.id/index.php/jphv/article/download/306/93",
+          "accessed_at": "2026-09-28"
+        },
+        {
+          "service": "Primary EVOKE 36-month report in PMC",
+          "query": "36-month >=50 and >=80 response proportions and one randomized cohort",
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11103285/",
+          "accessed_at": "2026-09-28"
+        }
+      ],
+      "updates": {
+        "производительность": "The JPHV Abstract reports ≥50% relief RR 1.47 (95% CI 1.27–1.70) and labels the ≥80% effect “RR 0.18” (95% CI 0.08–0.27). Its Results > Pain Reduction instead calls 0.18 an absolute risk difference (RD) favoring closed-loop SCS; the statistic label is internally inconsistent and must not be used as an effect estimate without clarification. The same Results section reports a VAS pooled mean difference −3.01 (95% CI −6.12 to 0.10), whose interval includes zero. These are repeated EVOKE follow-up reports, not independent trials.",
+        "ограничения": "The publisher PDF was checked via a Googlebot user-agent while normal requests met a Cloudflare 403 challenge. JPHV Abstract p.37 labels the ≥80% effect RR 0.18 but Results p.41 labels it RD 0.18, so direction/measure cannot be reconciled from this paper. JPHV p.40 gives 36-month ≥50% response as 78% closed-loop versus 31% open-loop, whereas the primary EVOKE 36-month report gives 77.6% versus 49.3%; 31.3% is its open-loop ≥80% response. JPHV Results p.41 describes three randomized trials although the eligible 12/24/36-month reports are one EVOKE cohort (134 randomized), creating nonindependent follow-up pooling. Do not use this synthesis as an independent effect estimate, new cohort, proof that ECAP measures pain, or Indonesia-specific cost-effectiveness. The 36-month analysis has missing-data/selective-reporting concerns and non-Indonesian economic inputs.",
+        "identifiers": {
+          "doi": "10.21776/ub.jphv.2026.007.01.07"
+        },
+        "evidence": {
+          "access_status": "restricted"
+        },
+        "validation": {
+          "checked_at": "2026-09-28",
+          "full_text_status": "checked",
+          "notes": "Publisher full PDF pp.37–44 checked 2026-09-28 from the first-party download URL with Googlebot user-agent (normal client Cloudflare 403); local SHA-256 0BA078C5470ADCBD652DCC3742BF21DC09D75E79F8241EA12B2A066C4185261E. JPHV Abstract p.37 vs Results > Pain Reduction p.41 disagree RR/RD for 0.18. JPHV Study Characteristics p.40 reports 36-month ≥50% 78%/31%, while primary EVOKE 36-month PMC text reports 77.6%/49.3%; the open-loop 31.3% pertains to ≥80%. The three cited EVOKE time reports are one trial program, so its pooled estimates are not independent replication. Preserve Crossref and normal-browser access limits."
+        },
+        "field_resolution": {
+          "производительность": {
+            "state": "reported",
+            "value": "The JPHV Abstract reports ≥50% relief RR 1.47 (95% CI 1.27–1.70) and labels the ≥80% effect “RR 0.18” (95% CI 0.08–0.27). Its Results > Pain Reduction instead calls 0.18 an absolute risk difference (RD) favoring closed-loop SCS; the statistic label is internally inconsistent and must not be used as an effect estimate without clarification. The same Results section reports a VAS pooled mean difference −3.01 (95% CI −6.12 to 0.10), whose interval includes zero. These are repeated EVOKE follow-up reports, not independent trials.",
+            "reason": "Direct publisher full text confirms internally conflicting RR/RD labels; values are reported as unresolved claims, not usable pooled effects.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://jphv.ub.ac.id/index.php/jphv/article/download/306/93",
+                "locator": "Printed p.37 Abstract; p.41 Results > Pain Reduction, Figures 3–5"
+              }
+            ]
+          },
+          "ограничения": {
+            "state": "reported",
+            "value": "The publisher PDF was checked via a Googlebot user-agent while normal requests met a Cloudflare 403 challenge. JPHV Abstract p.37 labels the ≥80% effect RR 0.18 but Results p.41 labels it RD 0.18, so direction/measure cannot be reconciled from this paper. JPHV p.40 gives 36-month ≥50% response as 78% closed-loop versus 31% open-loop, whereas the primary EVOKE 36-month report gives 77.6% versus 49.3%; 31.3% is its open-loop ≥80% response. JPHV Results p.41 describes three randomized trials although the eligible 12/24/36-month reports are one EVOKE cohort (134 randomized), creating nonindependent follow-up pooling. Do not use this synthesis as an independent effect estimate, new cohort, proof that ECAP measures pain, or Indonesia-specific cost-effectiveness. The 36-month analysis has missing-data/selective-reporting concerns and non-Indonesian economic inputs.",
+            "reason": "Publisher full text was compared with the primary EVOKE 36-month report; numerical and independence conflicts are explicit.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://jphv.ub.ac.id/index.php/jphv/article/download/306/93",
+                "locator": "Printed pp.37, 40–41, 43; Abstract, Study Characteristics, Results > Pain Reduction and References 10–12"
+              },
+              {
+                "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11103285/",
+                "locator": "Abstract/Results: 36-month ≥50% 77.6% vs 49.3%; ≥80% 49.3% vs 31.3%"
+              }
+            ]
+          },
+          "evidence.access_status": {
+            "state": "reported",
+            "value": "restricted",
+            "reason": "Publisher PDF is publicly addressable but normal clients receive Cloudflare 403; a Googlebot user-agent retrieved the complete 8-page PDF on the checked date.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://jphv.ub.ac.id/index.php/jphv/article/download/306/93",
+                "locator": "First-party publisher PDF; Googlebot user-agent HTTP 200 versus ordinary client HTTP 403 on 2026-09-28"
+              }
+            ]
+          },
+          "validation.checked_at": {
+            "state": "reported",
+            "value": "2026-09-28",
+            "reason": "Date of full publisher PDF and EVOKE primary comparison.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://jphv.ub.ac.id/index.php/jphv/article/download/306/93",
+                "locator": "Full text pp.37–44 checked 2026-09-28"
+              }
+            ]
+          },
+          "validation.notes": {
+            "state": "reported",
+            "value": "Publisher full PDF pp.37–44 checked 2026-09-28 from the first-party download URL with Googlebot user-agent (normal client Cloudflare 403); local SHA-256 0BA078C5470ADCBD652DCC3742BF21DC09D75E79F8241EA12B2A066C4185261E. JPHV Abstract p.37 vs Results > Pain Reduction p.41 disagree RR/RD for 0.18. JPHV Study Characteristics p.40 reports 36-month ≥50% 78%/31%, while primary EVOKE 36-month PMC text reports 77.6%/49.3%; the open-loop 31.3% pertains to ≥80%. The three cited EVOKE time reports are one trial program, so its pooled estimates are not independent replication. Preserve Crossref and normal-browser access limits.",
+            "reason": "Records the primary-text and primary-trial discrepancies without upgrading the pooled efficacy claim.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://jphv.ub.ac.id/index.php/jphv/article/download/306/93",
+                "locator": "Printed pp.37, 40–41, 43, Abstract/Results/References"
+              },
+              {
+                "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11103285/",
+                "locator": "36-month EVOKE primary Abstract/Results response percentages"
+              }
+            ]
+          }
+        }
+      },
+      "claims": [],
+      "notes": "Publisher full PDF pp.37–44 checked 2026-09-28 from the first-party download URL with Googlebot user-agent (normal client Cloudflare 403); local SHA-256 0BA078C5470ADCBD652DCC3742BF21DC09D75E79F8241EA12B2A066C4185261E. JPHV Abstract p.37 vs Results > Pain Reduction p.41 disagree RR/RD for 0.18. JPHV Study Characteristics p.40 reports 36-month ≥50% 78%/31%, while primary EVOKE 36-month PMC text reports 77.6%/49.3%; the open-loop 31.3% pertains to ≥80%. The three cited EVOKE time reports are one trial program, so its pooled estimates are not independent replication. Preserve Crossref and normal-browser access limits."
+    }
+  ]
+}

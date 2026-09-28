@@ -1,6 +1,6 @@
-# EXP-03 baseline and ablation protocol (draft)
+# EXP-03 baseline and ablation conditional protocol
 
-**Status: draft; execution blocked by EXP-01, EXP-02, RES-05 and EXP-04 gates.** This document specifies comparisons; it reports no experiment, ECAP validation, transfer gain, pain result, or clinical benefit. The label remains **ECAP-like** until the physical observation model is validated against authorized independent human recordings.
+**Status (2026-09-26):** `STOP-EXP03-COMPARISON` for execution on the current snapshot. `EXP-01` has no versioned compatible graph/target input, `EXP-02` has no authorized independent human ECAP comparator or locked tolerances, and the participant-level target/split cannot be frozen from the current access audit. The arm construction and crosswalk below are a conditional protocol, not an experiment or a negative transfer result. Reopen only after the graph/target and human observation gates are satisfied and one primary score, participant unit, baseline budgets and calibration rule are fixed before test access. Do not claim ECAP validation, transfer gain, pain prediction or clinical benefit. The label remains **ECAP-like** until independent human measurement validation.
 
 **Identifier collision:** TODO and scientific-contract IDs are separate numbering systems. `research/service/integrity.py` validates that the machine contract has four ordered IDs and `research/tests/test_scientific_contract.py` asserts that contract EXP-03 is `physical_ecap_observation_validation`; neither check reconciles the TODO list. Use the explicit crosswalk below. The mismatch affects implementation tracking, so resolve it in the project registers before executing this protocol; no machine contract or evidence record is changed here.
 

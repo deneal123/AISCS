@@ -1,10 +1,10 @@
 {
   "meta": {
     "schema_version": "1.0.0",
-    "generated_at": "2026-09-24",
-    "records_count": 9,
+    "generated_at": "2026-09-27",
+    "records_count": 13,
     "gate": "G0_REVISE",
-    "scope": "Empirical synthetic pain and domain-adaptation sources; S224 is code for S149, not independent empirical evidence"
+    "scope": "Empirical synthetic pain and domain-adaptation sources; S224 is code for S149, not independent empirical evidence; S817 is real-to-real duration adaptation, retained as an explicit partial comparator; S820 is another real-to-real X-ITE predecessor with publisher abstract only"
   },
   "construct_boundary": "Generated images or expressions, stimulus-conditioned video, and pain estimation are different endpoints. Unlabeled target data used in adaptation are still real data.",
   "entries": [
@@ -512,6 +512,218 @@
             {
               "url": "https://arxiv.org/html/2509.16727",
               "locator": "v5, Section 5 Experiments and Performance Comparison"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S817",
+      "extraction": {
+        "real_data_provenance": {
+          "state": "reported",
+          "value": "X-ITE healthy-participant experimental electrical/thermal ECG, EDA and EMG. Labeled phasic recordings are the real source; unlabeled tonic segments are the real target. No synthetic data generation.",
+          "reason": "Checked in the primary publisher text.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://www.frontiersin.org/journals/pain-research/articles/10.3389/fpain.2025.1562099/full",
+              "locator": "Publisher section 3.1 and sections 4-5"
+            }
+          ]
+        },
+        "leakage_control": {
+          "state": "reported",
+          "value": "Participant LOSO: training participants provide phasic events and pseudo-labeled tonic windows, held-out participant provides tonic test events. Per-participant phasic baseline/tolerance data also enter normalization; no independent external cohort.",
+          "reason": "Checked in the primary publisher text.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://www.frontiersin.org/journals/pain-research/articles/10.3389/fpain.2025.1562099/full",
+              "locator": "Publisher section 5, normalization paragraphs and Figure 1"
+            }
+          ]
+        },
+        "split_unit": {
+          "state": "reported",
+          "value": "Participant LOSO-CV, with 14 correlated windows per tonic event aggregated into one event decision.",
+          "reason": "Checked in the primary publisher text.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://www.frontiersin.org/journals/pain-research/articles/10.3389/fpain.2025.1562099/full",
+              "locator": "Publisher sections 3.2 and 5; Figure 1"
+            }
+          ]
+        },
+        "external_test": {
+          "state": "not_reported",
+          "value": null,
+          "reason": "No independent test cohort was reported in the checked full text.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://www.frontiersin.org/journals/pain-research/articles/10.3389/fpain.2025.1562099/full",
+              "locator": "Publisher sections 5-7"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S818",
+      "extraction": {
+        "real_data_provenance": {
+          "state": "reported",
+          "value": "Real X-ITE phasic events train Random Forest; real tonic events are evaluated as 14 chunks, according to publisher abstract. No synthetic source is described.",
+          "reason": "Checked in primary publisher abstract; full method unavailable.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://link.springer.com/chapter/10.1007/978-3-031-37660-3_28",
+              "locator": "Publisher Abstract"
+            }
+          ]
+        },
+        "leakage_control": {
+          "state": "reported",
+          "value": "Leave-one-subject-out cross-validation is stated; exact preprocessing and leakage controls cannot be verified without the full chapter.",
+          "reason": "Checked in primary publisher abstract only.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://link.springer.com/chapter/10.1007/978-3-031-37660-3_28",
+              "locator": "Publisher Abstract"
+            }
+          ]
+        },
+        "split_unit": {
+          "state": "reported",
+          "value": "Participant LOSO-CV stated in publisher abstract.",
+          "reason": "Checked in primary publisher abstract only.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://link.springer.com/chapter/10.1007/978-3-031-37660-3_28",
+              "locator": "Publisher Abstract"
+            }
+          ]
+        },
+        "external_test": {
+          "state": "not_reported",
+          "value": null,
+          "reason": "Publisher abstract has no independent cohort; full chapter inaccessible.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://link.springer.com/chapter/10.1007/978-3-031-37660-3_28",
+              "locator": "Publisher Abstract and access notice"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S819",
+      "extraction": {
+        "real_data_provenance": {
+          "state": "reported",
+          "value": "Real X-ITE phasic and tonic experimental pain recordings; 125/134 healthy participants analyzed, nine excluded for data errors; no synthetic source.",
+          "reason": "Checked in official publisher PDF.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://mdpi-res.com/d_attachment/computers/computers-12-00071/article_deploy/computers-12-00071.pdf",
+              "locator": "PDF sections 3.1-3.2, pp. 4-5"
+            }
+          ]
+        },
+        "leakage_control": {
+          "state": "reported",
+          "value": "LOSO-CV holds out one subject and trains on remaining subjects; 14 tonic windows are within-event representations, not independent participants.",
+          "reason": "Checked in official publisher PDF.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://mdpi-res.com/d_attachment/computers/computers-12-00071/article_deploy/computers-12-00071.pdf",
+              "locator": "PDF sections 3.2 and 4.9, pp. 5, 8"
+            }
+          ]
+        },
+        "split_unit": {
+          "state": "reported",
+          "value": "Participant LOSO-CV; n=125 analyzed.",
+          "reason": "Checked in official publisher PDF.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://mdpi-res.com/d_attachment/computers/computers-12-00071/article_deploy/computers-12-00071.pdf",
+              "locator": "PDF section 4.9, p. 8"
+            }
+          ]
+        },
+        "external_test": {
+          "state": "not_reported",
+          "value": null,
+          "reason": "No independent external cohort reported in checked publisher full text.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://mdpi-res.com/d_attachment/computers/computers-12-00071/article_deploy/computers-12-00071.pdf",
+              "locator": "PDF sections 4.9-6 and Discussion"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S820",
+      "extraction": {
+        "real_data_provenance": {
+          "state": "reported",
+          "value": "Real X-ITE phasic electrical training and real tonic electrical test recordings; no synthetic source is described in the publisher abstract.",
+          "reason": "Publisher abstract only; full chapter restricted.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://link.springer.com/chapter/10.1007/978-3-030-68780-9_59",
+              "locator": "Publisher Abstract and access notice"
+            }
+          ]
+        },
+        "leakage_control": {
+          "state": "unavailable_after_search",
+          "value": null,
+          "reason": "Publisher abstract mentions labeled training subjects and other validation subjects, but exact personalized folds, preprocessing and leakage controls require the restricted chapter.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://link.springer.com/chapter/10.1007/978-3-030-68780-9_59",
+              "locator": "Publisher Abstract and access notice"
+            }
+          ]
+        },
+        "split_unit": {
+          "state": "reported",
+          "value": "Other subjects are used for validation according to publisher abstract; exact personalized k-fold protocol is unavailable.",
+          "reason": "Publisher abstract only; no full protocol verified.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://link.springer.com/chapter/10.1007/978-3-030-68780-9_59",
+              "locator": "Publisher Abstract and access notice"
+            }
+          ]
+        },
+        "external_test": {
+          "state": "not_reported",
+          "value": null,
+          "reason": "No independent clinical cohort is reported in the accessible publisher abstract; full chapter restricted.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://link.springer.com/chapter/10.1007/978-3-030-68780-9_59",
+              "locator": "Publisher Abstract and access notice"
             }
           ]
         }

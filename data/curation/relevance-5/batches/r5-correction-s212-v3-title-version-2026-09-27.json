@@ -1,0 +1,100 @@
+{
+  "meta": {
+    "batch_id": "r5-correction-s212-v3-title-version-2026-09-27",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-27",
+    "scope": "Update S212 title to current bioRxiv v3 and record version-specific reconciliation; preserve existing mechanistic fields extracted from Europe PMC JATS v2.",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-27"
+  },
+  "source_ids": [
+    "S212"
+  ],
+  "records": [
+    {
+      "id": "S212",
+      "title": "Combining brain-wide activity imaging with electron microscopy reveals a distributed brain network for processing threatening somatosensory stimuli",
+      "year": 2026,
+      "source_type": "препринт"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S212",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-27",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "service": "bioRxiv v3 Version of Record page",
+          "query": "Confirm current version number, posted date, and exact v3 title for DOI 10.1101/2025.09.25.678485",
+          "url": "https://www.biorxiv.org/content/10.1101/2025.09.25.678485v3.article-info",
+          "accessed_at": "2026-09-27"
+        },
+        {
+          "service": "bioRxiv v3 full text",
+          "query": "Compare version-specific stimulus framing, neural assay, and separate behavioral assay against the existing S212 extraction",
+          "url": "https://www.biorxiv.org/content/10.1101/2025.09.25.678485v3.full",
+          "accessed_at": "2026-09-27"
+        },
+        {
+          "service": "Europe PMC primary JATS",
+          "query": "Confirm the version number and title currently served for existing mechanistic-field locators",
+          "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PPR1092389/fullTextXML",
+          "accessed_at": "2026-09-27"
+        },
+        {
+          "service": "bioRxiv version details API",
+          "query": "Cross-check version-specific titles and dates for the same preprint DOI",
+          "url": "https://api.biorxiv.org/details/biorxiv/10.1101/2025.09.25.678485",
+          "accessed_at": "2026-09-27"
+        }
+      ],
+      "updates": {
+        "название": "Combining brain-wide activity imaging with electron microscopy reveals a distributed brain network for processing threatening somatosensory stimuli",
+        "validation": {
+          "checked_at": "2026-09-27"
+        },
+        "field_resolution": {
+          "validation.checked_at": {
+            "state": "reported",
+            "value": "2026-09-27",
+            "reason": "Dated owner-version reconciliation. The current bioRxiv v3 article-info and full-text artifact were reviewed; a fresh v3 request during this review returned HTTP 429, so the same-day saved official response was used.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/10.1101/2025.09.25.678485v3.article-info",
+                "locator": "Current Version 3 and posted date 2026-08-03; same-day saved HTTP 200 owner response"
+              },
+              {
+                "url": "https://www.biorxiv.org/content/10.1101/2025.09.25.678485v3.full",
+                "locator": "Full-text body, stimulus/neural methods and behavioral Results/Figure 5; same-day saved HTTP 200 owner response"
+              }
+            ]
+          },
+          "validation.notes": {
+            "state": "reported",
+            "value": "Version-specific review dated 2026-09-27. The current bioRxiv version is v3, posted 2026-08-03, with title “Combining brain-wide activity imaging with electron microscopy reveals a distributed brain network for processing threatening somatosensory stimuli”; version 2 (2026-03-19) is titled “Combining brain-wide activity imaging with electron microscopy reveals a distributed nociceptive network in the brain,” matching the title in the Europe PMC JATS. bioRxiv v3 reframes the context as threatening somatosensory input involving nociceptive and mechanosensory pathways. The whole-brain neural assay nevertheless uses optogenetic activation of Basin interneurons in an extracted first-instar nervous system, followed by eFIB-SEM of that same specimen; the Basin manipulation does not isolate physical noxious versus mechanical input. v3 retains 119 responsive neurons and 25 lineages, and specifies that 26/50 selected neurons were traceable at intermediate branches. Its separate early-third-instar behavioral assay combines optogenetic Basin activation with Kenyon-cell inactivation and reports reduced rolling plus increased turning (366 experimental and 351 control larvae); these behaviors are distinct endpoints, not direct pain measures. This title/version proposal intentionally leaves the existing method, dataset, performance, limitations, and their field-resolution entries unchanged because those mechanistic extractions are explicitly sourced to the Europe PMC v2 JATS. The v3 article-info/full-text responses were captured as HTTP 200 in the same-day owner-source pass; a fresh request during this review returned HTTP 429, so the archived same-day official response was used. Europe PMC continues to serve JATS article-version 2; its v2 text is retained as the locator for existing extracted fields.",
+            "reason": "Version metadata and the claim-relevant v3 stimulus/neural/behavior boundaries were compared against the v2 Europe PMC JATS. Existing method/dataset/performance/limitations and their field-resolution locators remain unchanged.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/10.1101/2025.09.25.678485v3.full",
+                "locator": "bioRxiv v3 Abstract; Introduction; Methods, whole-brain LSM stimulation; Results/Figure 5 behavioral assay"
+              },
+              {
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PPR1092389/fullTextXML",
+                "locator": "Europe PMC JATS declares article-version 2 and retains the v2 title; existing mechanism locators §§S4, S19, S20, S23, S25–30"
+              }
+            ]
+          }
+        },
+        "identifiers": {
+          "doi": "10.1101/2025.09.25.678485"
+        }
+      },
+      "claims": [],
+      "notes": "Version-specific review dated 2026-09-27. The current bioRxiv version is v3, posted 2026-08-03, with title “Combining brain-wide activity imaging with electron microscopy reveals a distributed brain network for processing threatening somatosensory stimuli”; version 2 (2026-03-19) is titled “Combining brain-wide activity imaging with electron microscopy reveals a distributed nociceptive network in the brain,” matching the title in the Europe PMC JATS. bioRxiv v3 reframes the context as threatening somatosensory input involving nociceptive and mechanosensory pathways. The whole-brain neural assay nevertheless uses optogenetic activation of Basin interneurons in an extracted first-instar nervous system, followed by eFIB-SEM of that same specimen; the Basin manipulation does not isolate physical noxious versus mechanical input. v3 retains 119 responsive neurons and 25 lineages, and specifies that 26/50 selected neurons were traceable at intermediate branches. Its separate early-third-instar behavioral assay combines optogenetic Basin activation with Kenyon-cell inactivation and reports reduced rolling plus increased turning (366 experimental and 351 control larvae); these behaviors are distinct endpoints, not direct pain measures. This title/version proposal intentionally leaves the existing method, dataset, performance, limitations, and their field-resolution entries unchanged because those mechanistic extractions are explicitly sourced to the Europe PMC v2 JATS. The v3 article-info/full-text responses were captured as HTTP 200 in the same-day owner-source pass; a fresh request during this review returned HTTP 429, so the archived same-day official response was used. Europe PMC continues to serve JATS article-version 2; its v2 text is retained as the locator for existing extracted fields."
+    }
+  ]
+}

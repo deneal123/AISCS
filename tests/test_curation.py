@@ -4,6 +4,7 @@ from pathlib import Path
 
 import pytest
 
+from service.completeness import completeness_summary
 from service.core import load_json, sha256
 from service.curation import build_queue, cluster_apply, review_apply
 from service.integrity import validate_source_record
@@ -76,6 +77,7 @@ def test_applied_batch_is_idempotent() -> None:
             "validation-log.json",
             "audit-report.json",
             "evidence-matrix.json",
+            "completeness-report.json",
         )
     ]
     before = {path.name: sha256(path) for path in tracked}
@@ -85,6 +87,17 @@ def test_applied_batch_is_idempotent() -> None:
     assert result["already_applied"] is True
     assert result["applied"] is False
     assert after == before
+
+
+def test_reviewed_correction_keeps_completeness_report_current() -> None:
+    records = load_json(DATA / "records.json")["sources"]
+    source = next(record for record in records if record["id"] == "S075")
+    report = load_json(DATA / "completeness-report.json")
+
+    assert source["evidence"]["target_construct"] == "not_applicable"
+    assert source["field_resolution"]["evidence.target_construct"]["state"] == "not_applicable"
+    assert report["states"] == completeness_summary(records)["states"]
+    assert report["unresolved_count"] == 0
 
 
 def test_batch_008_changed_no_source_outside_manifest() -> None:

@@ -7,19 +7,19 @@ read-only HTTP API, CLI, тесты и Docker-образ. Для работы е
 
 ## Текущий статус корпуса
 
-- 214 канонических карточек и 271 алиас с сохранённой трассируемостью;
+- 242 канонические карточки и 271 алиас с сохранённой трассируемостью на срез 27.09.2026; актуальный счётчик выдаёт `uv run --frozen researchctl stats`;
 - 43 активных и 11 выведенных из обращения кластеров;
 - 109 программных, инфраструктурных и dataset-ресурсов в `data/ST.json`;
 - все 109 ресурсов `ST.json` имеют стабильные `STNNN` ID и решения после партий
   `st-batch-001`–`st-batch-007` и последующих проверок: 72 `verified_primary`, 19 `partially_verified`,
   18 `rejected`, незавершённых ресурсов нет;
 - 46 полных избыточных копий удалено при миграции исходных 410 записей;
-- relevance‑5 закрыт на уровне решений: 45 `verified_primary`, 3 `verified_metadata`,
-  10 `partially_verified`, 3 `rejected`, ноль `unverified/pending`;
-- relevance‑4 закрыт: 46 `verified_primary`, 3 `verified_metadata`,
-  9 `partially_verified`, 15 `rejected`;
-- relevance‑3 закрыт: 17 `verified_primary`, 0 `verified_metadata`,
-  3 `partially_verified`, 2 `rejected`;
+- relevance‑5 закрыт на уровне решений: 75 `verified_primary`, 5 `verified_metadata`,
+  19 `partially_verified`, 3 `rejected`, ноль `unverified/pending`;
+- relevance‑4 закрыт: 76 `verified_primary`, 3 `verified_metadata`,
+  11 `partially_verified`, 13 `rejected`;
+- relevance‑3 закрыт: 23 `verified_primary`, 0 `verified_metadata`,
+  4 `partially_verified`, 2 `rejected`;
 - во всём реестре нет `unverified/pending`; научный шлюз остаётся `G0_REVISE`
   до авторского просмотра матрицы доказательств и отдельного решения руководителя.
 - шесть GitHub-кандидатов симуляции Drosophila обработаны 23.09.2026: четыре
@@ -51,6 +51,11 @@ read-only HTTP API, CLI, тесты и Docker-образ. Для работы е
 - `S768` фиксирует опубликованную в 2021 году модель ECAP через проводящую
   среду, модели волокон и сумму потенциалов одиночных волокон; результаты
   относятся к симуляции без независимой клинической проверки.
+- `S807` фиксирует первичный аналог сенсорной динамики на FlyWire v783:
+  стохастические каскады в коннектоме взрослой дрозофилы. Это не LIF-модель
+  `S775` и не проверка ноцицепции, ECAP или клинических исходов.
+- `S808` фиксирует анализ вкусовых цепей FlyWire v630 с предсказанной
+  активностью по LIF-модели; это методический контекст без вывода о боли.
 
 Точная оценка на любой момент:
 
@@ -85,7 +90,7 @@ uv run --frozen researchctl novelty-check
 | `data/ST.json` | Инструменты, модели, репозитории и dataset-ресурсы |
 | `data/source-record.schema.json` | Структурный контракт карточки |
 | `data/vocabularies.json` | Контролируемые статусы, конструкты, роли и риск-флаги |
-| `data/archive/` | Два последних снимка отката с SHA-256; базовые срезы миграции сохранены отдельно |
+| `data/archive/` | Базовые срезы миграции, явно запрошенные постоянные снимки и два прежних `pre-publish` снимка, удаление которых заблокировано |
 | `data/audit-report.json` | Результат конкретного аудиторского прохода |
 | `data/validation-log.json` | Проверенные утверждения и ограничения первичных источников |
 | `data/evidence-matrix.json` | Трассировка тезисов, доказательств, ограничений и допустимых выводов |

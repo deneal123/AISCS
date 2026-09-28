@@ -1,0 +1,76 @@
+{
+  "meta": {
+    "batch_id": "r5-correction-s823-calibration",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-27",
+    "scope": "Correct S823 validation.calibration after distinguishing model calibration from stimulus dosimetry",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-27"
+  },
+  "source_ids": [
+    "S823"
+  ],
+  "records": [
+    {
+      "id": "S823",
+      "title": "ROS-mediated activation of Drosophila larval nociceptor neurons by UVC irradiation",
+      "year": 2014,
+      "source_type": "method"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S823",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-27",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "service": "PMC primary full text",
+          "query": "PMC3898224 validation.calibration applicability and UVC exposure details",
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3898224/",
+          "accessed_at": "2026-09-27"
+        }
+      ],
+      "updates": {
+        "identifiers": {
+          "doi": "10.1186/1471-2202-15-14",
+          "pmid": "24433322",
+          "exact_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3898224/"
+        },
+        "validation": {
+          "calibration": "not_applicable",
+          "notes": "Full open-access PMC primary text and exact PubMed identity reviewed. UVC stimulus is 0.17, 1.2, or 8 mW/cm2 for 5 s in Fig. 1; UVA/UVB and a separate 45-46 C heat assay are distinct. Fig. 4 reports direct extracellular v'ada mdIV electrophysiology after UVC. Writhing is visually scored larval behavior; mdIV inactivation suppresses it (Fig. 1), and antioxidant manipulations support ROS involvement (Figs. 2 and 5). Fig. 1 sample n counts trials of five larvae, not individual animals. No subjective-pain or human transfer inference. Stimulus intensity and duration describe exposure dosimetry, not predictive-model calibration; this mechanistic study has no model-calibration analysis."
+        },
+        "field_resolution": {
+          "validation.calibration": {
+            "state": "not_applicable",
+            "value": null,
+            "reason": "Calibration is a predictive-model or forecast property; this mechanistic experiment has no predictive model. UVC intensity and duration are reported separately as stimulus dosimetry, not calibration.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3898224/",
+                "locator": "Methods > UV exposure; Results > UVC induces mdIV-mediated writhing behavior; Fig. 1A legend"
+              }
+            ]
+          },
+          "validation.notes": {
+            "state": "reported",
+            "value": "Full open-access PMC primary text and exact PubMed identity reviewed. UVC stimulus is 0.17, 1.2, or 8 mW/cm2 for 5 s in Fig. 1; UVA/UVB and a separate 45-46 C heat assay are distinct. Fig. 4 reports direct extracellular v'ada mdIV electrophysiology after UVC. Writhing is visually scored larval behavior; mdIV inactivation suppresses it (Fig. 1), and antioxidant manipulations support ROS involvement (Figs. 2 and 5). Fig. 1 sample n counts trials of five larvae, not individual animals. No subjective-pain or human transfer inference. Stimulus intensity and duration describe exposure dosimetry, not predictive-model calibration; this mechanistic study has no model-calibration analysis.",
+            "reason": "Primary full-text check; the calibration schema field applies to predictive-model calibration, while UVC intensity and duration are retained as stimulus dosimetry.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3898224/",
+                "locator": "Methods > UV exposure; Results > UVC induces mdIV-mediated writhing behavior; Fig. 1A legend"
+              }
+            ]
+          }
+        }
+      },
+      "claims": [],
+      "notes": "Full open-access PMC primary text and exact PubMed identity reviewed. UVC stimulus is 0.17, 1.2, or 8 mW/cm2 for 5 s in Fig. 1; UVA/UVB and a separate 45-46 C heat assay are distinct. Fig. 4 reports direct extracellular v'ada mdIV electrophysiology after UVC. Writhing is visually scored larval behavior; mdIV inactivation suppresses it (Fig. 1), and antioxidant manipulations support ROS involvement (Figs. 2 and 5). Fig. 1 sample n counts trials of five larvae, not individual animals. No subjective-pain or human transfer inference. Stimulus intensity and duration describe exposure dosimetry, not predictive-model calibration; this mechanistic study has no model-calibration analysis."
+    }
+  ]
+}

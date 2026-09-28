@@ -39,6 +39,7 @@
     "self_reported_pain",
     "experimental_pain_class",
     "facial_pain_expression",
+    "chronic_pain_case_status",
     "clinical_function",
     "scs_response",
     "ecap_neural_recruitment",

@@ -1,8 +1,8 @@
 {
   "meta": {
     "schema_version": "1.0.0",
-    "generated_at": "2026-09-26",
-    "records_count": 17,
+    "generated_at": "2026-09-27",
+    "records_count": 18,
     "gate": "G0_REVISE",
     "scope": "Primary whole-brain/cord connectome resources and connectome-constrained Drosophila model records",
     "selection_boundary": "Nociceptive circuit papers are reviewed under SRC-04; secondary commentary and code-only resources do not establish biological dynamics or comparators."
@@ -543,6 +543,18 @@
           "dataset": "MANC",
           "matrix": "data/manc t1 connectome data/W_20250813_DNtoMN_unsorted.csv",
           "config_url": "https://github.com/smpuglie/Pugliese_2026/blob/10e7661bf414ba7b4c2edf795cd36d0f878c17c0/configs/experiment/DNg100_Stim.yaml",
+          "archived_run_to_matrix": {
+            "state": "reported",
+            "run_id": "28123286",
+            "figure_panels": [
+              "2a",
+              "2e"
+            ],
+            "archive_url": "https://zenodo.org/api/records/22260924/files/DNg100_Stim__figs.zip/content",
+            "archive_member": "simulations/DNg100_Stim/hyak/run_id=28123286/logs/run_config.yaml",
+            "config_sha256": "329F021B9531EDE36B46D1ED77159BC945A5DDA44EA7DA0CE447E5E0B9F7D6E7",
+            "locator": "experiment.wPath names the processed MANC matrix; the Zenodo simulation catalog assigns this run to Fig. 2a/e. This is a run-to-derived-input link, not upstream release provenance."
+          },
           "repository_file_last_change": {
             "commit": "556d150488f3744d388148ca3b9aaefff18dd2a3",
             "author_date_utc": "2025-08-14T16:21:52Z",
@@ -570,6 +582,18 @@
           "dataset": "FANC",
           "matrix": "data/fanc t1l connectome data/W_BDN2toMN_20250107_corrected.npy",
           "config_url": "https://github.com/smpuglie/Pugliese_2026/blob/10e7661bf414ba7b4c2edf795cd36d0f878c17c0/configs/experiment/DNg100_Stim_FANC.yaml",
+          "archived_run_to_matrix": {
+            "state": "reported",
+            "run_id": "rerun_20260324_01",
+            "figure_panels": [
+              "2b",
+              "2e"
+            ],
+            "archive_url": "https://zenodo.org/api/records/22260924/files/DNg100_Stim_FANC.zip/content",
+            "archive_member": "simulations/DNg100_Stim_FANC/walle-smpuglie/run_id=rerun_20260324_01/logs/run_config.yaml",
+            "config_sha256": "167B501906E9C9AC36FFB7D42819222702CBAF28CC46F149D554F6C4E702FD4B",
+            "locator": "experiment.wPath names the corrected processed FANC matrix; the Zenodo simulation catalog assigns this rerun to Fig. 2b/e. The FANC hyak run 28989998 belongs to Fig. 3j. Neither run identifies an upstream materialization."
+          },
           "repository_file_last_change": {
             "commit": "ce975365eb2eda599e049b581dd868ad36b59ac0",
             "author_date_utc": "2025-09-02T21:33:03Z",
@@ -598,6 +622,18 @@
           "matrix": "data/imac t1 connectome data/W_20260210_vncRoisOnly.csv",
           "neuron_table": "data/imac t1 connectome data/wTable_20260210_vncRoisOnly.csv",
           "config_url": "https://zenodo.org/api/records/22260924/files/DNg100_Stim_IMAC_vncOnly.zip/content",
+          "archived_run_to_matrix": {
+            "state": "reported",
+            "run_id": "33241780",
+            "figure_panels": [
+              "2c",
+              "2e"
+            ],
+            "archive_url": "https://zenodo.org/api/records/22260924/files/DNg100_Stim_IMAC_vncOnly.zip/content",
+            "archive_member": "simulations/DNg100_Stim_IMAC_vncOnly/hyak/run_id=33241780/.hydra/config.yaml",
+            "config_sha256": "AF3262E38E9BFEDC1C96718AF10158CB1CC03E04E613D2DDFE94B6E50C466779",
+            "locator": "experiment.wPath names the processed mCNS matrix; the Zenodo simulation catalog assigns this run to Fig. 2c/e. The configuration does not identify an upstream neuPrint release."
+          },
           "locator": "simulations/DNg100_Stim_IMAC_vncOnly/hyak/run_id=33241780/logs/run_config.yaml, experiment.wPath and experiment.dfPath; Figure 2 notebook maps panel c/e to this run",
           "repository_file_last_change": {
             "commit": "0452ec8359c1ffa4833fc578482e21525c669a0d",
@@ -627,6 +663,18 @@
           "matrix": "data/banc t1 premotor/W_20260217.npz",
           "neuron_table": "data/banc t1 premotor/wTable_20260217_fullData.csv",
           "config_url": "https://zenodo.org/api/records/22260924/files/DNg100_Stim_BANC_vncOnly.zip/content",
+          "archived_run_to_matrix": {
+            "state": "reported",
+            "run_id": "33241778",
+            "figure_panels": [
+              "2d",
+              "2e"
+            ],
+            "archive_url": "https://zenodo.org/api/records/22260924/files/DNg100_Stim_BANC_vncOnly.zip/content",
+            "archive_member": "simulations/DNg100_Stim_BANC_vncOnly/hyak/run_id=33241778/logs/run_config.yaml",
+            "config_sha256": "FF7BE3E77A2FD432A417A843820A75EC1D75C17B8727EB90B1D34AD0F74BFD72",
+            "locator": "experiment.wPath names the processed BANC matrix; the Zenodo simulation catalog assigns this run to Fig. 2d/e. The configuration does not identify an upstream CAVE materialization."
+          },
           "locator": "simulations/DNg100_Stim_BANC_vncOnly/hyak/run_id=33241778/logs/run_config.yaml, experiment.wPath and experiment.dfPath; Figure 2 notebook maps panel d/e to this run",
           "repository_file_last_change": {
             "commit": "0452ec8359c1ffa4833fc578482e21525c669a0d",
@@ -652,7 +700,7 @@
           }
         }
       ],
-      "input_matrix_note": "Author configs pin MANC/FANC matrix files, and run_config.yaml inside the author's Zenodo simulation archives pins mCNS/BANC matrices for the Figure 2 runs. These four processed matrix artifacts are identifiable; their file dates do not establish the upstream connectome release or CAVE/neuPrint snapshot used to construct them. The BANC Figure 2 notebook has a fallback older neuron table, but the archived run configuration identifies the actual 20260217 table. File-level Git commits have now been recorded separately for each matrix; the mCNS/BANC file changes dated 2026-08-28 postdate the 2026-04-30 preprint version and therefore cannot be treated as publication-time release identifiers.",
+      "input_matrix_note": "Archived Zenodo run configurations now link all four Figure 2 runs to exact processed input matrix filenames: MANC 28123286, FANC rerun_20260324_01, mCNS 33241780 and BANC 33241778. The BANC Figure 2 notebook has a fallback older neuron table, but the archived run configuration identifies the actual 20260217 table. These links do not establish the upstream connectome release or CAVE/neuPrint snapshot used to construct each matrix. File-level Git commits date derived files only; the mCNS/BANC file changes dated 2026-08-28 postdate the 2026-04-30 preprint version and cannot be treated as publication-time release identifiers.",
       "simulation_archive": {
         "url": "https://zenodo.org/records/22260924",
         "locator": "Simulation catalog: DNg100_Stim_IMAC_vncOnly.zip and DNg100_Stim_BANC_vncOnly.zip; archived run configurations"
@@ -713,8 +761,8 @@
             "boundary": "Other dated matrix files and cross-reference annotation columns cannot be assigned to the archived Figure 2 runs or treated as upstream release identifiers."
           }
         },
-      "additional_primary_checks": {
-        "checked_at": "2026-09-26",
+        "additional_primary_checks": {
+          "checked_at": "2026-09-26",
           "search_seeds": [
             "\"DNg100\" \"MANC\" \"FANC\" \"mCNS\" \"BANC\" connectome version Pugliese",
             "\"W_BDN2toMN_20250107_corrected.npy\"",
@@ -732,23 +780,23 @@
             "locator": "Zenodo API record metadata.related_identifiers, metadata.custom, metadata.version, and files[] (local response diagnostic: .work/zen22260924.json)",
             "finding": "The simulation deposit has no metadata.version and no metadata.related_identifiers; metadata.relations.version only links this record to concept record 22260923. The checked revision 4 manifest contains 27 derived simulation files and identifies no upstream MANC/FANC/mCNS/BANC release or source connectome snapshot."
           },
-        "author_repository_tree": {
+          "author_repository_tree": {
             "url": "https://github.com/smpuglie/Pugliese_2026/tree/10e7661bf414ba7b4c2edf795cd36d0f878c17c0",
             "api_url": "https://api.github.com/repos/smpuglie/Pugliese_2026/git/trees/10e7661bf414ba7b4c2edf795cd36d0f878c17c0?recursive=1",
             "locator": "Commit tree for 10e7661, 579 entries, truncated=false; README; configs/**; src/data/data_classes.py (local tree diagnostic: .work/tree_10e7661.json)",
-          "finding": "A path scan found no upstream export/lineage manifest or export script. Configurations contain local compute paths, not upstream dataset versions. Date-stamped derived matrices are present; their names do not encode source release IDs."
-        },
-        "author_lineage_recheck_2026_09_26": {
-          "url": "https://api.github.com/repos/smpuglie/Pugliese_2026/git/trees/main?recursive=1",
-          "locator": "Current author repository recursive tree (579 paths, truncated=false); search of paths for export, manifest, query, neuPrint and CAVE terms plus the four named Figure 2 matrices",
-          "finding": "The current tree contains the four processed input matrices and alternate dated matrices, but the inspected paths expose no upstream export manifest or query script that maps any Figure 2 matrix to a source release. Exact file names and dates identify derived artifacts, not source snapshots.",
-          "scope": "Read-only path inspection; absence of a matching path does not prove that no private or unindexed author-side export record exists."
-        },
-        "zenodo_record_recheck_2026_09_26": {
-          "url": "https://zenodo.org/api/records/22260924",
-          "locator": "Live Zenodo API record fields metadata.version, metadata.related_identifiers and files[]",
-          "finding": "The simulation deposit still has no metadata.version or related_identifiers and contains 27 derived simulation files; its record revision does not resolve the upstream connectome materialization for any matrix."
-        },
+            "finding": "A path scan found no upstream export/lineage manifest or export script. Configurations contain local compute paths, not upstream dataset versions. Date-stamped derived matrices are present; their names do not encode source release IDs."
+          },
+          "author_lineage_recheck_2026_09_26": {
+            "url": "https://api.github.com/repos/smpuglie/Pugliese_2026/git/trees/main?recursive=1",
+            "locator": "Current author repository recursive tree (579 paths, truncated=false); search of paths for export, manifest, query, neuPrint and CAVE terms plus the four named Figure 2 matrices",
+            "finding": "The current tree contains the four processed input matrices and alternate dated matrices, but the inspected paths expose no upstream export manifest or query script that maps any Figure 2 matrix to a source release. Exact file names and dates identify derived artifacts, not source snapshots.",
+            "scope": "Read-only path inspection; absence of a matching path does not prove that no private or unindexed author-side export record exists."
+          },
+          "zenodo_record_recheck_2026_09_26": {
+            "url": "https://zenodo.org/api/records/22260924",
+            "locator": "Live Zenodo API record fields metadata.version, metadata.related_identifiers and files[]",
+            "finding": "The simulation deposit still has no metadata.version or related_identifiers and contains 27 derived simulation files; its record revision does not resolve the upstream connectome materialization for any matrix."
+          },
           "supplementary_material": {
             "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13142387/",
             "locator": "Supplementary Material, Supplement 3 (Tables 1-10; NIHPP2025.09.12.675944v2-supplement-3.pdf)",
@@ -786,10 +834,143 @@
               "additional_locator_detail": "Official BANC frozen-data deposit v3.0 has production date 2026-04-17 and provides checksummed v888 exports. S740's archived run configuration names only its local processed matrix path; no BANC release or CAVE materialization ID."
             }
           },
-        "next_action": "Ask the corresponding author for one lineage record per Figure 2 matrix (MANC, FANC, mCNS, BANC): exact source dataset release/materialization ID, export/query timestamp and query/filter definition, export script or manifest and commit, and SHA-256 of the exported or processed matrix with neuron-ID ordering. Require confirmation that each record maps to the archived Figure 2 run. Until supplied and matched, retain upstream_release as not_reported.",
+          "additional_owner_export_route": {
+            "checked_at": "2026-09-26",
+            "owner_page": {
+              "url": "https://www.janelia.org/node/68782",
+              "locator": "MANC connectome > Getting started: owner page links the complete MANC flat-file export to the public Google Cloud bucket flyem-manc-exports."
+            },
+            "export_provenance": {
+              "url": "https://storage.googleapis.com/flyem-manc-exports/v1.0/manc-traced-adjacencies-v1.0/README",
+              "locator": "Provenance section names neuprint-python 0.4.25, dataset manc:v1.0, and fetch_traced_adjacencies('manc-traced-adjacencies-v1.0'); the file describes traced-connections.csv as neuron-neuron synapse counts.",
+              "object_metadata_url": "https://storage.googleapis.com/storage/v1/b/flyem-manc-exports/o/v1.0%2Fmanc-traced-adjacencies-v1.0%2Ftraced-connections.csv",
+              "object_metadata": "Generation 1685678227570342; created 2023-06-02T03:57:07.625Z; size 75262163 bytes; CRC32C HtjDiw==; MD5 xUPcmgw2fZ98iJAdiS14oA==."
+            },
+            "candidate_boundary": "This is a newly checked owner-published MANC v1.0 export route, not an owner declaration that S740 used it. The README does not name S740, its 20250813 matrix, or Figure 2 run. The public object therefore adds a reproducible candidate source but does not establish exact upstream lineage; retain MANC upstream_release as not_reported."
+          },
+          "additional_mcns_owner_export_route": {
+            "checked_at": "2026-09-26",
+            "owner_repository": {
+              "url": "https://github.com/flyconnectome/2025malecns/tree/67767d2233657983993ff6c2be48e836a935863c",
+              "locator": "Repository README identifies derived data products for Berg et al. (2025), directs primary connectome artifacts to Male CNS, and describes the notebook as counts from published exports (README lines 162-171).",
+              "commit_url": "https://github.com/flyconnectome/2025malecns/commit/67767d2233657983993ff6c2be48e836a935863c",
+              "commit_date_utc": "2026-08-07T10:59:08Z"
+            },
+            "versioned_export_notebook": {
+              "url": "https://raw.githubusercontent.com/flyconnectome/2025malecns/67767d2233657983993ff6c2be48e836a935863c/supplemental_data/quantify-neuron-connections.ipynb",
+              "locator": "Code cell sets VERSION='v0.9' and loads body-annotations-male-cns-v0.9-minconf-0.5.feather plus connectome-weights-male-cns-v0.9-minconf-0.5.feather from the flyem-male-cns v0.9 flat-connectome bucket; this is a Berg et al. supplementary quantification notebook, not an S740 extraction record.",
+              "release_bucket_readme_url": "https://raw.githubusercontent.com/flyconnectome/2025malecns/67767d2233657983993ff6c2be48e836a935863c/README_RELEASE_BUCKET.md",
+              "release_bucket_locator": "Lines 0-4 identify the Male CNS release bucket and v0.9; lines 98-102 and 116 identify the full connection graph export."
+            },
+            "release_object_metadata": {
+              "url": "https://storage.googleapis.com/storage/v1/b/flyem-male-cns/o/v0.9%2Fconnectome-data%2Fflat-connectome%2Fconnectome-weights-male-cns-v0.9-minconf-0.5.feather",
+              "locator": "Object metadata: generation 1759286829125072, created 2025-10-01T02:47:09.185Z, size 1102276498 bytes, MD5 BBkGs3ssP1EmdUenxtXMpw==, CRC32C 04Afbg==."
+            },
+            "candidate_boundary": "The official mCNS v0.9 release and its owner-published count notebook are newly checked candidate provenance routes. They describe another study's bulk export and do not name S740 W_20260210_vncRoisOnly.csv or run 33241780, nor provide an S740 query/materialization manifest. Retain mCNS upstream_release as not_reported."
+          },
+          "additional_fanc_owner_release_route": {
+            "checked_at": "2026-09-26",
+            "owner_project_wiki": {
+              "url": "https://github.com/htem/FANC_auto_recon/wiki",
+              "locator": "Home, edited by Jasper Phelps 2026-05-18: identifies the FANC reconstruction community; states that most automated-reconstruction publication data is in gs://lee-lab_female-adult-nerve-cord; lists Pugliese et al. 2025 S740 among FANC-related publications (home lines 133-185).",
+              "finding": "The owner wiki confirms an owner-controlled public data-distribution route and lists S740, but the home page does not assign a FANC materialization/export ID to the S740 matrix."
+            },
+            "separate_release_example": {
+              "url": "https://github.com/htem/FANC_auto_recon/wiki/Connectomic-reconstruction-of-a-female-Drosophila-ventral-nerve-cord-(Azevedo,-Lesser,-Phelps,-Mark-et-al.-2024-Nature)",
+              "locator": "Publication page, section on analysis code (page lines 140-149): explicitly assigns CAVE materialization v840, timestamp 1705479001.179472 to the Azevedo et al. 2024 analysis.",
+              "boundary": "This is a separate paper's FANC snapshot and is not identified as the source for S740's corrected matrix."
+            },
+            "candidate_boundary": "The FANC owner wiki adds a directly checked publication index and distribution route, but no owner page reviewed here maps W_BDN2toMN_20250107_corrected.npy or S740 Figure 2 to an immutable segmentation/synapse materialization or query. Do not transfer Azevedo et al.'s v840 identifier to S740; retain FANC upstream_release as not_reported."
+          },
+          "additional_banc_owner_product_route": {
+            "checked_at": "2026-09-26",
+            "owner_repository_commit": "https://github.com/htem/BANC-project/commit/e31a2e26b9937dca72e5ca1c1960df6454d76114",
+            "annotation_table": {
+              "url": "https://raw.githubusercontent.com/htem/BANC-project/e31a2e26b9937dca72e5ca1c1960df6454d76114/manuscript/print/dataverse/documentation/codex_annotations.md",
+              "locator": "Lines 10-20 identify the master CAVE annotation table at v888; lines 59-74 describe curation across v626→v888 and state this is a snapshot at materialization v888."
+            },
+            "connectivity_table": {
+              "url": "https://raw.githubusercontent.com/htem/BANC-project/e31a2e26b9937dca72e5ca1c1960df6454d76114/manuscript/print/dataverse/documentation/banc_888_edgelist_simple_v2.md",
+              "locator": "Lines 10-23 and 35-57 identify the owner connectivity product at materialization v888, derived from the v2 synapse set with size >=5 voxels, and describe its pipeline."
+            },
+            "candidate_boundary": "These newly checked BANC owner documents describe v888 annotation and connectivity products for the BANC paper; neither names S740's W_20260217.npz or run 33241778, nor gives its export/query manifest. They define a candidate public data product but do not establish S740 source lineage; retain BANC upstream_release as not_reported."
+          },
+          "additional_banc_v626_frozen_archive_route": {
+            "checked_at": "2026-09-28",
+            "primary_article_url": "https://www.nature.com/articles/s41586-026-10735-w",
+            "primary_article_locator": "Data availability: BANC paper used CAVE materialization v626 for its preprint and v888 for its final version; this is provenance for the BANC paper, not S740.",
+            "dataverse_api_url": "https://dataverse.harvard.edu/api/datasets/:persistentId/versions/1.0?persistentId=doi%3A10.7910%2FDVN%2F8TFGGB",
+            "deposit_doi": "10.7910/DVN/8TFGGB",
+            "deposit_version": "1.0",
+            "public_candidate_files": [
+              {
+                "name": "connections_princeton.csv.gz",
+                "file_id": 11842997,
+                "size_bytes": 26868883
+              },
+              {
+                "name": "synapses_250226_backbone_proofread_counts.parquet",
+                "file_id": 11842996,
+                "size_bytes": 33117072
+              },
+              {
+                "name": "codex_annotations.parquet",
+                "file_id": 11835160,
+                "size_bytes": 17643511
+              },
+              {
+                "name": "banc_626_data.sqlite",
+                "file_id": 11842995,
+                "size_bytes": 683712512
+              },
+              {
+                "name": "synapses_250226_human_readable.csv.gz",
+                "file_id": 11838595,
+                "size_bytes": 12256534437
+              }
+            ],
+            "author_matrix_mapping": "The S740 archived Figure 2 run 33241778 pins processed W_20260217.npz and its 20260217 neuron table, but the checked author notebook reads rather than constructs W. Neither it nor the BANC v626 deposit supplies the S740 export/materialization declaration, VNC bounding-box coordinates, exact membership/filter choices, annotation snapshot choice, and matrix checksum mapping needed to establish upstream lineage.",
+            "candidate_boundary": "These public v626 products permit a candidate reconstruction under declared choices. They do not show that S740 used v626 or that any reconstruction matches its processed Figure 2 matrix. Keep BANC upstream_release as not_reported and STOP-SRC03-UPSTREAM-LINEAGE open."
+          },
+          "next_action": "Ask the corresponding author for one lineage record per Figure 2 matrix (MANC, FANC, mCNS, BANC): exact source dataset release/materialization ID, export/query timestamp and query/filter definition, export script or manifest and commit, and SHA-256 of the exported or processed matrix with neuron-ID ordering. Require confirmation that each record maps to the archived Figure 2 run. Until supplied and matched, retain upstream_release as not_reported.",
           "interpretation": "The manuscript, Zenodo deposit, author repository, and checked official release catalogs do not establish immutable source-export lineage. Official release records identify candidate upstream families, not the release used for each S740 matrix. Retain not_reported for all four upstream releases."
         },
-        "decision": "Retain not_reported for all four upstream releases until an author manifest, export query or matching dataset snapshot supplies exact lineage."
+        "decision": "STOP-SRC03-UPSTREAM-LINEAGE: the checked primary paper, supplement, author repository, Zenodo deposit and official release catalogs do not map the four processed S740 matrices to exact source releases; all four upstream releases remain not_reported. Do not infer a release from nearby dataset snapshots, annotation-table versions, or processed-file commits.",
+        "next_action": "STOP-SRC03-UPSTREAM-LINEAGE: no author response or new source manifest is expected in this autonomous pass. Keep all four S740 upstream_release values not_reported; reopen only if a source release/materialization identifier is supplied with an export/query manifest and a mapping to the archived Figure 2 matrix.",
+        "terminal_disposition": {
+          "status": "STOP-SRC03-UPSTREAM-LINEAGE",
+          "checked_at": "2026-09-26",
+          "affected_datasets": [
+            "MANC",
+            "FANC",
+            "mCNS",
+            "BANC"
+          ],
+          "finding": "The immutable source release/materialization and export/query definition for each S740 Figure 2 input matrix are not reported in the checked primary and author-controlled artifacts.",
+          "prohibited_inference": "Do not substitute public candidate release IDs, FANC annotation table v6/v7, or Git commit dates of processed matrices for source graph lineage.",
+          "reopen_when": "A new primary artifact supplies exact release/materialization ID, export/query provenance and a matrix-level mapping to the archived Figure 2 run."
+        }
+      },
+      "scope_reconciliation_2026_09_27": {
+        "checked_at": "2026-09-27",
+        "primary_locator_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13142387/fullTextXML",
+        "abstract_and_results_claim": "The Abstract states that the three-neuron circuit is necessary and sufficient for rhythms across all six legs and four datasets; a Results paragraph says the minimal circuit is repeated across six leg neuropils and all four connectomes.",
+        "dataset_specific_methods_and_figures": [
+          {
+            "locator": "Methods > Connectome simulation models",
+            "finding": "Unless otherwise noted, simulations activate the DNg100 targeting the left leg neuropils. FANC is explicitly restricted to left front-leg neuropil. Four-dataset motor-output comparison is presented as front-leg motor-neuron activity (Fig. 2)."
+          },
+          {
+            "locator": "Fig. 4 caption; Methods > Connectome simulation models",
+            "finding": "The full-connectome six-leg DNg100 simulation is explicitly the full MANC dataset. Extended Data Fig. 9 describes bilateral DNg100 phase offsets across six legs in full MANC."
+          },
+          {
+            "locator": "Results > A core CPG circuit of three interneurons; Extended Data Fig. 8 caption",
+            "finding": "Pruning yields a three-neuron E-E-I circuit in MANC, a common four-interneuron circuit in FANC, and variants containing either I1 or I2 in the full CNS datasets. Extended Data Fig. 8 shows MANC cell types across all six leg neuropils and the corresponding FANC type only in front-left neuropil."
+          }
+        ],
+        "scope_assessment": "The manuscript narrative generalizes a shared E1/E2-plus-inhibitory motif across legs and datasets. The reported figure-level functional six-leg rhythmic output is MANC-specific; the four-dataset motor-output comparison is front-leg-specific. The exact three-neuron circuit should not be described as functionally demonstrated in all six legs of all four datasets.",
+        "permitted_summary": "Four-dataset front-leg simulations support related rhythm-generating circuits with a shared motif; full six-leg output and phase analysis are shown for MANC. Preserve the authors? broader motif hypothesis as an author claim, distinct from dataset-specific coverage shown in Methods and figure captions."
       }
     },
     {
@@ -1282,14 +1463,14 @@
       "source_id": "S775",
       "extraction": {
         "connectome_version": {
-          "state": "not_reported",
-          "value": null,
-          "reason": "The checked Nature JATS identifies the adult FlyWire graph but does not state an immutable graph release; versions from other FlyWire analyses cannot be imputed.",
-          "checked_at": "2026-09-25",
+          "state": "reported",
+          "value": "FlyWire public materialization v.630; 127,400 proofread neurons in the S775 leaky integrate-and-fire model",
+          "reason": "Nature/PMC primary Methods > Computational model explicitly identifies v.630 and included neuron count. This does not establish the separate S740 VNC simulation matrix upstream releases.",
+          "checked_at": "2026-09-28",
           "locators": [
             {
               "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11446845/fullTextXML",
-              "locator": "Abstract; Methods > Computational model; Data availability"
+              "locator": "Methods > Computational model: all 127,400 proofread neurons from FlyWire materialization v.630 are included in this model."
             }
           ]
         },
@@ -1468,6 +1649,71 @@
             {
               "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11446846/fullTextXML",
               "locator": "Abstract; Results > Figure 5; Discussion"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S816",
+      "extraction": {
+        "connectome_version": {
+          "state": "not_reported",
+          "value": null,
+          "reason": "The full preprint identifies OpticLobe, Hemibrain and FlyWire dataset families but no immutable graph release/export ID or NGB model-code release. A family name alone cannot reproduce the modeled input.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://www.biorxiv.org/content/10.64898/2026.08.22.746456v1.full",
+              "locator": "Methods 2.1-2.2; Fig. 2; Appendix A"
+            }
+          ]
+        },
+        "organism_sex_stage": {
+          "state": "reported",
+          "value": "Drosophila melanogaster adult brain connectome source datasets; exact specimen sex and immutable version are not stated for each model input in this preprint. No new live-fly cohort.",
+          "reason": "Cited connectome source specimens and modeled circuits are distinct from a newly sampled experimental cohort.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://www.biorxiv.org/content/10.64898/2026.08.22.746456v1.full",
+              "locator": "Abstract; Introduction; Methods 2.1-2.2; Fig. 1"
+            }
+          ]
+        },
+        "dynamic_model": {
+          "state": "reported",
+          "value": "Executable LPLC2 to Giant Fiber visual-looming model: retinotopic input, differential GF dendritic readout, divisive-normalization peak detector and ideal integrate-and-fire spike threshold.",
+          "reason": "The output evolves with modeled trajectory time; it is a circuit model, not a whole-brain resting-state simulation.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://www.biorxiv.org/content/10.64898/2026.08.22.746456v1.full",
+              "locator": "Results 3.1-3.2; Figs. 4-6; Appendices B-C"
+            }
+          ]
+        },
+        "experimental_comparator": {
+          "state": "not_reported",
+          "value": null,
+          "reason": "No new in-vivo GF response or fly escape experiment is presented. Authors explicitly say elevation and non-colliding trajectory dependence remains untested; literature comparisons are not matched validation.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://www.biorxiv.org/content/10.64898/2026.08.22.746456v1.full",
+              "locator": "Discussion, paragraph on untested GF elevation and non-colliding-trajectory response; Fig. 6 literature comparison"
+            }
+          ]
+        },
+        "scope_boundary": {
+          "state": "reported",
+          "value": "Simulated escape spike is a prediction, not observed neural response or behavior; no nociception, subjective pain, human ECAP, SCS outcome, or cross-species transfer.",
+          "reason": "Computational visual escape prior art cannot validate nociceptive or clinical hypotheses.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://www.biorxiv.org/content/10.64898/2026.08.22.746456v1.full",
+              "locator": "Abstract; Results 3.2; Discussion"
             }
           ]
         }

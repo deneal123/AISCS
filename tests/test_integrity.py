@@ -1,5 +1,6 @@
 import shutil
 from copy import deepcopy
+from datetime import date
 from pathlib import Path
 
 from service.core import load_json
@@ -137,7 +138,7 @@ def test_ecap_scs_audit_resolves_the_five_measurement_dimensions() -> None:
                 "not_applicable",
                 "unavailable_after_search",
             }
-            assert item["checked_at"] in {"2026-09-24", "2026-09-25"}
+            assert date(2026, 9, 24) <= date.fromisoformat(item["checked_at"]) <= date.fromisoformat(audit["meta"]["generated_at"])
             assert item["reason"]
             assert item["locators"]
             assert all(locator["url"] and locator["locator"] for locator in item["locators"])
@@ -168,7 +169,7 @@ def test_connectome_audit_separates_anatomy_dynamics_and_comparators() -> None:
 
     assert set(entries) == {
         "S068", "S106", "S219", "S286", "S320", "S738", "S739", "S740",
-        "S741", "S743", "S744", "S763", "S773", "S774", "S775", "S782", "S783",
+        "S741", "S743", "S744", "S763", "S773", "S774", "S775", "S782", "S783", "S816",
     }
     assert audit["meta"]["records_count"] == len(entries)
     assert all(len(extraction) == 5 for extraction in entries.values())
@@ -197,6 +198,8 @@ def test_connectome_audit_separates_anatomy_dynamics_and_comparators() -> None:
     assert "snapshot 783" in entries["S782"]["connectome_version"]["value"]
     assert entries["S782"]["experimental_comparator"]["state"] == "reported"
     assert entries["S783"]["dynamic_model"]["state"] == "reported"
+    assert entries["S816"]["experimental_comparator"]["state"] == "not_reported"
+    assert records["S816"]["evidence"]["target_construct"] == "not_applicable"
     assert "BANC v626" in entries["S763"]["connectome_version"]["value"]
     assert entries["S763"]["dynamic_model"]["state"] == "not_applicable"
     assert entries["S763"]["experimental_comparator"]["state"] == "reported"
@@ -247,7 +250,10 @@ def test_human_ecap_access_audit_requires_owner_confirmation(tmp_path: Path) -> 
     entries = {item["trial_id"]: item for item in audit["candidates"]}
     assert len(entries) == len(audit["candidates"])
     assert {"NCT02924129", "NCT04319887", "NCT04938245", "NL7889"} <= set(entries)
-    assert audit["meta"]["decision"] == "no_owner_confirmed_usable_dataset"
+    assert audit["meta"]["decision"] == "dated_operational_STOP_H3_A_no_qualifying_open_dataset_located"
+    screen = audit["meta"]["open_only_screen_2026_09_26"]
+    assert screen["status"] == "bounded_open_only_screen_complete_for_listed_routes"
+    assert "not a global absence claim" in " ".join(screen["boundaries"])
     assert entries["NCT02924129"]["checks"]["access_procedure"]["state"] == "conflicting"
     assert entries["NCT04319887"]["checks"]["access_procedure"]["state"] == "conflicting"
     assert entries["NCT04938245"]["checks"]["access_procedure"]["state"] == "partial"
@@ -255,7 +261,7 @@ def test_human_ecap_access_audit_requires_owner_confirmation(tmp_path: Path) -> 
         item["checks"]["ethics_secondary_use"]["state"] == "unconfirmed"
         for item in entries.values()
     )
-    assert entries["NCT04938245"]["decision"] == "request_route_documented_release_not_located"
+    assert entries["NCT04938245"]["decision"] == "dated_open_only_STOP_H3_A_promised_deposit_not_located"
     assert entries["NL7889"]["source_refs"] == ["S793"]
     assert entries["NL7889"]["checks"]["patient_linkage"]["state"] == "unconfirmed"
     assert entries["NCT02924129"]["source_refs"] == ["S779", "S780", "S781"]
@@ -305,7 +311,7 @@ def test_synthetic_domain_audit_tracks_real_data_and_external_test() -> None:
     records = {source["id"]: source for source in load_json(DATA / "records.json")["sources"]}
 
     assert set(entries) == {
-        "S035", "S083", "S084", "S088", "S149", "S192", "S748", "S758", "S759"
+        "S035", "S083", "S084", "S088", "S149", "S192", "S748", "S758", "S759", "S817", "S818", "S819", "S820"
     }
     assert all(len(extraction) == 4 for extraction in entries.values())
     assert "LOSO" in entries["S083"]["leakage_control"]["value"]
@@ -325,20 +331,32 @@ def test_synthetic_domain_audit_tracks_real_data_and_external_test() -> None:
     assert any("github.com/TaatiTeam/Pain-in-3D/blob/" in item["url"]
                for item in entries["S759"]["leakage_control"]["locators"])
     assert records["S759"]["validation"]["split_unit"] == "participant"
+    assert entries["S817"]["split_unit"]["value"].startswith("Participant LOSO-CV")
+    assert entries["S817"]["external_test"]["state"] == "not_reported"
+    assert records["S817"]["evidence"]["target_construct"] == "experimental_pain_class"
+    assert records["S818"]["validation"]["full_text_status"] == "metadata_only"
+    assert entries["S818"]["external_test"]["state"] == "not_reported"
+    assert records["S819"]["evidence"]["sample_size"] == 125
+    assert "nine excluded" in entries["S819"]["real_data_provenance"]["value"]
 
 
 def test_ns06_prior_art_audit_keeps_mechanisms_and_search_limits_explicit() -> None:
     audit = load_json(DATA / "ns06-prior-art-audit.json")
     entries = {item["source_id"]: item for item in audit["analogue_decisions"]}
 
-    assert audit["meta"]["status"] == "open"
+    assert audit["meta"]["status"] == "terminal_stop_at_cutoff"
+    stop = audit["operational_disposition"]
+    assert stop["saturation"] is False
+    assert stop["unresolved_scope"] and stop["prohibited_inferences"] and stop["primary_routes"]
+    assert any("S088" in item for item in stop["unresolved_scope"])
+    assert any(item["title"].startswith("Data-Efficient AU-Graph") for item in audit["unindexed_primary_leads"])
     assert audit["s149_baseline"]["source_id"] == "S149"
     assert set(entries) == {
-        "S035", "S083", "S084", "S088", "S192", "S748", "S758", "S759", "S791", "S792"
+        "S035", "S083", "S084", "S088", "S192", "S748", "S758", "S759", "S791", "S792", "S817", "S818", "S819", "S820", "S836", "S837"
     }
-    assert entries["S088"]["certainty"] == (
-        "publisher_metadata_secondary_abstract_primary_methods_unavailable"
-    )
+    assert entries["S088"]["certainty"] == "publisher_abstract_primary_full_methods_unavailable"
+    assert entries["S088"]["publisher_abstract_review_2026_09_27"]["url"].endswith("11606012")
+    assert "Full PDF/methods" in entries["S088"]["publisher_abstract_review_2026_09_27"]["unavailable"]
     s088_access = entries["S088"]["primary_access_review"]
     assert s088_access["crossref"]["url"].endswith("11606012")
     assert "HTTP 418" in s088_access["publisher_pdf"]["result"]
@@ -358,6 +376,11 @@ def test_ns06_prior_art_audit_keeps_mechanisms_and_search_limits_explicit() -> N
     ]
     assert "labeled UNBC" in entries["S758"]["relation_to_s149"]
     assert "supervised real UNBC" in entries["S759"]["relation_to_s149"]
+    assert "real experimental phasic" in entries["S817"]["relation_to_s149"]
+    refresh = next(item for item in audit["ns06_refreshes"] if item.get("id") == "NS-RUN-2026-09-27-01")
+    assert refresh["saturation_clock"]["clean_later_dated_refreshes"] == 0
+    assert entries["S818"]["certainty"] == "publisher_metadata_and_abstract_only"
+    assert "not an independent replication" in entries["S819"]["relation_to_s149"]
     assert audit["s759_author_code_check"]["state"] == "executable_protocol_resolved_reported_runs_unverified"
     assert audit["citation_search"]["s149_forward"]["indexed_cited_by_count"] == 0
     assert audit["citation_search"]["s149_forward"]["limit"]
@@ -401,22 +424,34 @@ def test_ns11_prediction_audit_retains_unresolved_primary_fields() -> None:
     entries = {entry["source_id"]: entry["extraction"] for entry in audit["entries"]}
 
     assert set(entries) == set(stream["source_ids"])
-    assert audit["meta"]["records_count"] == len(entries) == 14
-    assert audit["meta"]["status"] == "in_progress"
+    assert audit["meta"]["records_count"] == len(entries) == len(stream["source_ids"])
+    assert audit["meta"]["status"] == "bounded_primary_screen_complete_with_terminal_stop"
+    stop = audit["meta"]["operational_disposition"]
+    assert stop["saturation"] is False
+    assert stop["unresolved_fields"] and stop["prohibited_inferences"]
     assert set(audit["meta"]["remaining_source_ids"]) == {"S034", "S046", "S755", "S762", "S804"}
     assert entries["S034"]["target"]["state"] == "not_reported"
     assert entries["S046"]["follow_up"]["state"] == "reported"
     assert entries["S046"]["patient_linkage"]["state"] == "not_reported"
     assert entries["S762"]["follow_up"]["state"] == "reported"
-    assert entries["S762"]["target"]["state"] == "not_reported"
+    assert entries["S762"]["target"]["state"] == "reported"
+    assert "33%" in entries["S762"]["target"]["value"]
+    assert entries["S755"]["target"]["state"] == "reported"
+    assert "50%" in entries["S755"]["target"]["value"]
     assert entries["S804"]["target"]["state"] == "reported"
     assert entries["S804"]["follow_up"]["state"] == "reported"
     assert entries["S804"]["patient_linkage"]["state"] == "not_reported"
+    assert entries["S832"]["target"]["state"] == "reported"
+    assert "More than 50%" in entries["S832"]["target"]["value"]
+    assert "15 days" in entries["S832"]["follow_up"]["value"]
+    assert records["S832"]["validation"]["split_unit"] == "not_applicable"
+    assert "ecap" not in records["S832"]["evidence"]["modalities"]
     assert audit["meta"]["unindexed_primary_leads"] == []
     lead = audit["meta"]["indexed_primary_leads"][0]
     assert lead["pmid"] == "32910099"
     assert lead["source_id"] == "S762"
-    assert "thresholds" in lead["unresolved"]
+    assert "Prediction-specific N" in lead["unresolved"]
+    assert "patient-disjointness" in lead["unresolved"]
     calodney = next(
         item for item in audit["meta"]["indexed_primary_leads"] if item["source_id"] == "S804"
     )
@@ -453,16 +488,28 @@ def test_nociception_audit_separates_stimulus_neural_response_and_behavior() -> 
     entries = {entry["source_id"]: entry["extraction"] for entry in audit["entries"]}
     records = {source["id"]: source for source in load_json(DATA / "records.json")["sources"]}
 
-    assert audit["meta"]["status"] == "requires_primary_reconciliation"
+    assert audit["meta"]["status"] == "expanded_primary_screen_with_additional_named_leads"
     assert audit["meta"]["records_count"] == len(entries)
     assert len(entries) >= 24
     assert audit["meta"]["remaining_source_ids"] == []
     assert audit["meta"]["remaining_primary_access"] == []
     reconciliation = audit["meta"]["candidate_reconciliation"]
-    assert reconciliation["status"] == "requires_primary_reconciliation"
+    assert reconciliation["status"] == "historical_aggregate_terminal_stop"
+    assert "historical aggregate 27 remains unreconstructable" in reconciliation["next_action"]
     assert reconciliation["bounded_candidate_count"] == 27
     assert "not 27 verified" in reconciliation["count_basis"]
-    assert audit["meta"]["unindexed_primary_leads"] == []
+    assert not any(
+        lead.get("doi") == "10.1101/2025.05.30.656957"
+        for lead in audit["meta"]["unindexed_primary_leads"]
+    )
+    yoshino = next(
+        lead for lead in audit["meta"]["indexed_primary_leads"]
+        if lead.get("doi") == "10.1101/2025.05.30.656957"
+    )
+    assert yoshino["source_id"] == "S835"
+    assert "PMC12157477" in yoshino["url"]
+    assert entries["S835"]["neural_response"]["state"] == "not_reported"
+    assert "epidermal" in entries["S835"]["neural_response"]["reason"].lower()
     assert set(entries) | set(audit["meta"]["remaining_source_ids"]) == set(
         audit["meta"]["candidate_source_ids"]
     )
@@ -503,10 +550,10 @@ def test_nociception_audit_separates_stimulus_neural_response_and_behavior() -> 
     assert "N=8" in entries["S282"]["neural_response"]["value"]
     assert "behavioral group totals" in entries["S282"]["behavior"]["value"]
     assert "9F8BAAE" in next(item for item in audit["entries"] if item["source_id"] == "S282")["primary_fulltext_sha256"]
-    assert audit["meta"]["unindexed_primary_leads"] == []
-    assert {lead["source_id"] for lead in audit["meta"]["indexed_primary_leads"]} == {
-            "S760", "S761", "S769", "S776", "S777", "S778", "S794", "S795", "S797", "S801", "S802", "S803"
-    }
+    assert {
+        "S760", "S761", "S769", "S776", "S777", "S778", "S794",
+        "S795", "S797", "S801", "S802", "S803", "S835",
+    } <= {lead["source_id"] for lead in audit["meta"]["indexed_primary_leads"]}
     assert records["S012"]["evidence"]["subject_domain"] == "mixed"
     assert records["S027"]["evidence"]["subject_domain"] == "mixed"
     assert records["S065"]["evidence"]["subject_domain"] == "drosophila_adult"

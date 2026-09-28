@@ -1,0 +1,116 @@
+{
+  "meta": {
+    "batch_id": "r4-correction-s292-pinned-repo-provenance-2026-09-28",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-28",
+    "scope": "Correct S292 stale DOI claim and distinguish pinned third-party variant from same-author paper content",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-28"
+  },
+  "source_ids": [
+    "S292"
+  ],
+  "records": [
+    {
+      "id": "S292",
+      "title": "Emergent Individuality in Whole-Brain Connectome Simulations of Drosophila melanogaster (claude-fly)",
+      "year": 2026,
+      "source_type": "фундаментальные_модели"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S292",
+      "decision": "partially_verified",
+      "checked_at": "2026-09-28",
+      "full_text_status": "checked",
+      "notes": "Pinned README and linked Zenodo paper are accessible and describe a two-simulated-fly system. The pinned HEAD commit adds a third-party LLM-driven variant; scientific outputs were not independently reproduced. DOI resolves, but the repository snapshot and paper must not be treated as two replications. No human pain, ECAP or SCS outcome.",
+      "searches": [
+        {
+          "service": "Pinned GitHub README and commit API",
+          "query": "3a035275148e97539711728422548bffe2a77566",
+          "url": "https://github.com/legacyindiesubmissions-ai/claude-fly/blob/3a035275148e97539711728422548bffe2a77566/README.md",
+          "accessed_at": "2026-09-28"
+        },
+        {
+          "service": "Zenodo owner record",
+          "query": "10.5281/zenodo.19152238",
+          "url": "https://zenodo.org/records/19152238",
+          "accessed_at": "2026-09-28"
+        }
+      ],
+      "updates": {
+        "ограничения": "The pinned README describes the same-author Rojas Aliaga FlyWire/NeuroMechFly simulation and cites a resolving Zenodo DOI 10.5281/zenodo.19152238; reported outputs were not independently reproduced. The pinned repository commit is by Zackery Sayers and adds a separate LLM-driven variant, so its whole tree cannot be attributed to the paper author or treated as independent replication. README and paper also disagree on simulated-versus-wall-clock time and divergent-synapse count.",
+        "identifiers": {
+          "exact_url": "https://github.com/legacyindiesubmissions-ai/claude-fly"
+        },
+        "validation": {
+          "checked_at": "2026-09-28",
+          "notes": "Pinned README and linked Zenodo paper are accessible and describe a two-simulated-fly system. The pinned HEAD commit adds a third-party LLM-driven variant; scientific outputs were not independently reproduced. DOI resolves, but the repository snapshot and paper must not be treated as two replications. No human pain, ECAP or SCS outcome."
+        },
+        "field_resolution": {
+          "ограничения": {
+            "state": "reported",
+            "value": "The pinned README describes the same-author Rojas Aliaga FlyWire/NeuroMechFly simulation and cites a resolving Zenodo DOI 10.5281/zenodo.19152238; reported outputs were not independently reproduced. The pinned repository commit is by Zackery Sayers and adds a separate LLM-driven variant, so its whole tree cannot be attributed to the paper author or treated as independent replication. README and paper also disagree on simulated-versus-wall-clock time and divergent-synapse count.",
+            "reason": "The DOI resolves; primary commit metadata identifies a distinct author and added variant code. The README and paper report inconsistent time and count quantities.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://github.com/legacyindiesubmissions-ai/claude-fly/blob/3a035275148e97539711728422548bffe2a77566/README.md",
+                "locator": "Pinned README, Abstract; Paper; Architecture; Key Results"
+              },
+              {
+                "url": "https://api.github.com/repos/legacyindiesubmissions-ai/claude-fly/commits/3a035275148e97539711728422548bffe2a77566",
+                "locator": "Pinned commit author and changed-file list (eleven added files)"
+              },
+              {
+                "url": "https://zenodo.org/records/19152238",
+                "locator": "Zenodo record DOI 10.5281/zenodo.19152238; creator and file metadata"
+              }
+            ]
+          },
+          "validation.notes": {
+            "state": "reported",
+            "value": "Pinned README and linked Zenodo paper are accessible and describe a two-simulated-fly system. The pinned HEAD commit adds a third-party LLM-driven variant; scientific outputs were not independently reproduced. DOI resolves, but the repository snapshot and paper must not be treated as two replications. No human pain, ECAP or SCS outcome.",
+            "reason": "Read the pinned README, author Zenodo record and pinned commit separately; no independent rerun.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://github.com/legacyindiesubmissions-ai/claude-fly/blob/3a035275148e97539711728422548bffe2a77566/README.md",
+                "locator": "Pinned README, Abstract; Paper; Architecture; Key Results"
+              },
+              {
+                "url": "https://api.github.com/repos/legacyindiesubmissions-ai/claude-fly/commits/3a035275148e97539711728422548bffe2a77566",
+                "locator": "Pinned commit author and changed-file list (eleven added files)"
+              },
+              {
+                "url": "https://zenodo.org/records/19152238",
+                "locator": "Zenodo record DOI 10.5281/zenodo.19152238; creator and file metadata"
+              }
+            ]
+          },
+          "validation.checked_at": {
+            "state": "reported",
+            "value": "2026-09-28",
+            "reason": "Dated primary repository/Zenodo identity and scope recheck.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://github.com/legacyindiesubmissions-ai/claude-fly/blob/3a035275148e97539711728422548bffe2a77566/README.md",
+                "locator": "Pinned README, Abstract; Paper; Architecture; Key Results"
+              },
+              {
+                "url": "https://api.github.com/repos/legacyindiesubmissions-ai/claude-fly/commits/3a035275148e97539711728422548bffe2a77566",
+                "locator": "Pinned commit author and changed-file list (eleven added files)"
+              },
+              {
+                "url": "https://zenodo.org/records/19152238",
+                "locator": "Zenodo record DOI 10.5281/zenodo.19152238; creator and file metadata"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

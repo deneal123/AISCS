@@ -1,0 +1,38 @@
+{
+  "meta": {
+    "batch_id": "r5-correction-s822-title",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-27",
+    "scope": "Correct S822 article title that was accidentally populated with its author list",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-27"
+  },
+  "source_ids": ["S822"],
+  "records": [{
+    "id": "S822",
+    "title": "Neuronal processing of noxious thermal stimuli mediated by dendritic Ca2+ influx in Drosophila somatosensory neurons",
+    "year": 2016,
+    "source_type": "method"
+  }],
+  "decisions": [{
+    "source_id": "S822",
+    "decision": "verified_primary",
+    "checked_at": "2026-09-27",
+    "full_text_status": "checked",
+    "searches": [{
+      "service": "eLife Version of Record",
+      "query": "10.7554/eLife.12959 exact article title and author identity",
+      "url": "https://elifesciences.org/articles/12959",
+      "accessed_at": "2026-09-27"
+    }],
+    "updates": {
+      "название": "Neuronal processing of noxious thermal stimuli mediated by dendritic Ca2+ influx in Drosophila somatosensory neurons",
+      "identifiers": {
+        "doi": "10.7554/eLife.12959",
+        "pmid": "26880554"
+      }
+    },
+    "claims": [],
+    "notes": "Primary eLife full text and figure descriptions checked; PubMed PMID 26880554 confirms identity. Local noxious heating uses an infrared laser; Figs. 1-2 report Class IV extracellular firing and dendritic calcium responses, and Fig. 5 links heat-evoked activity-pattern manipulation to larval rolling/avoidance. Figure-specific animal/cell counts must not be pooled. Calcium fluorescence is not electrophysiology, and larval escape does not establish subjective pain or human transfer."
+  }]
+}

@@ -1,0 +1,101 @@
+{
+  "meta": {
+    "batch_id": "r5-correction-s072-abstract-population-boundary-2026-09-28",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-28",
+    "scope": "Correct S072 unsupported healthy-subject and participant-denominator claims",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-28"
+  },
+  "source_ids": [
+    "S072"
+  ],
+  "records": [
+    {
+      "id": "S072",
+      "title": "AI-based bi-modal fusion system for automated clinical pain monitoring",
+      "year": 2025,
+      "source_type": "метод"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S072",
+      "decision": "partially_verified",
+      "checked_at": "2026-09-28",
+      "full_text_status": "metadata_only",
+      "notes": "Only the official PubMed abstract was accessible for the reported results; it states an average accuracy improvement of 3.88% across 11 X-ITE sub-datasets and a 7.12% gain on R-ETD, without specifying percentage-point changes. Participant count, split unit, exact class definitions, absolute performance, confidence intervals, calibration and external validation remain unestablished. X-ITE is an experimental-pain database; the word 'clinical' in the title does not establish clinical-outcome validation. Official publisher full text was not retrieved (ScienceDirect returned HTTP 403; full-text API required authentication). A 2026-09-28 recheck of NLM E-utilities abstract confirms 11 sub-datasets, not a participant denominator; healthy participant status is not established by this source.",
+      "searches": [
+        {
+          "service": "NLM PubMed E-utilities abstract",
+          "query": "PMID 41192117 abstract X-ITE 11 sub-datasets health status denominator",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=41192117&retmode=xml",
+          "accessed_at": "2026-09-28"
+        }
+      ],
+      "updates": {
+        "identifiers": {
+          "doi": "10.1016/j.compbiomed.2025.111260"
+        },
+        "evidence": {
+          "population": "Eleven X-ITE sub-datasets of experimental pain; participant count and health status are not given in the checked abstract.",
+          "subject_domain": "unavailable_after_search"
+        },
+        "validation": {
+          "checked_at": "2026-09-28",
+          "notes": "Only the official PubMed abstract was accessible for the reported results; it states an average accuracy improvement of 3.88% across 11 X-ITE sub-datasets and a 7.12% gain on R-ETD, without specifying percentage-point changes. Participant count, split unit, exact class definitions, absolute performance, confidence intervals, calibration and external validation remain unestablished. X-ITE is an experimental-pain database; the word 'clinical' in the title does not establish clinical-outcome validation. Official publisher full text was not retrieved (ScienceDirect returned HTTP 403; full-text API required authentication). A 2026-09-28 recheck of NLM E-utilities abstract confirms 11 sub-datasets, not a participant denominator; healthy participant status is not established by this source."
+        },
+        "field_resolution": {
+          "evidence.population": {
+            "state": "reported",
+            "value": "Eleven X-ITE sub-datasets of experimental pain; participant count and health status are not given in the checked abstract.",
+            "reason": "The abstract identifies eleven X-ITE sub-datasets, not participant groups or N.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=41192117&retmode=xml",
+                "locator": "NLM PMID 41192117, Abstract, final two sentences"
+              }
+            ]
+          },
+          "evidence.subject_domain": {
+            "state": "unavailable_after_search",
+            "value": null,
+            "reason": "The checked abstract does not report participants health status; full methods remain inaccessible.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=41192117&retmode=xml",
+                "locator": "NLM PMID 41192117, Abstract; no health-status field"
+              }
+            ]
+          },
+          "validation.checked_at": {
+            "state": "reported",
+            "value": "2026-09-28",
+            "reason": "Dated NLM abstract recheck.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=41192117&retmode=xml",
+                "locator": "NLM PMID 41192117, Abstract"
+              }
+            ]
+          },
+          "validation.notes": {
+            "state": "reported",
+            "value": "Only the official PubMed abstract was accessible for the reported results; it states an average accuracy improvement of 3.88% across 11 X-ITE sub-datasets and a 7.12% gain on R-ETD, without specifying percentage-point changes. Participant count, split unit, exact class definitions, absolute performance, confidence intervals, calibration and external validation remain unestablished. X-ITE is an experimental-pain database; the word 'clinical' in the title does not establish clinical-outcome validation. Official publisher full text was not retrieved (ScienceDirect returned HTTP 403; full-text API required authentication). A 2026-09-28 recheck of NLM E-utilities abstract confirms 11 sub-datasets, not a participant denominator; healthy participant status is not established by this source.",
+            "reason": "Preserve abstract-only boundary and separate sub-datasets from participants.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=41192117&retmode=xml",
+                "locator": "NLM PMID 41192117, Abstract"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

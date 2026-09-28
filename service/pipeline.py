@@ -47,18 +47,15 @@ CANONICAL_FILES = (
 ARCHIVE_RETENTION = 2
 
 
-def prune_archive_snapshots(root: Path | str, keep_latest: int = ARCHIVE_RETENTION) -> list[Path]:
-    """Retain recent rollback snapshots and any explicitly pinned historical baseline."""
+def _prune_snapshot_directory(snapshot_root: Path, keep_latest: int) -> list[Path]:
     if keep_latest < 1:
         raise ValueError("keep_latest must be positive")
-    root = Path(root).resolve()
-    archive_root = (root / "archive").resolve()
-    if not archive_root.is_relative_to(root) or not archive_root.is_dir():
+    if not snapshot_root.is_dir():
         return []
     dated = sorted(
         [
             path
-            for path in archive_root.iterdir()
+            for path in snapshot_root.iterdir()
             if path.is_dir()
             and not path.is_symlink()
             and re.fullmatch(r"\d{4}-\d{2}-\d{2}T\d{6}Z(?:-.+)?", path.name)
@@ -69,11 +66,20 @@ def prune_archive_snapshots(root: Path | str, keep_latest: int = ARCHIVE_RETENTI
     )
     removed: list[Path] = []
     for path in dated[:-keep_latest]:
-        if path.resolve().parent != archive_root:
-            raise DataError(f"unsafe archive path: {path}")
+        if path.resolve().parent != snapshot_root:
+            raise DataError(f"unsafe snapshot path: {path}")
         shutil.rmtree(path)
         removed.append(path)
     return removed
+
+
+def prune_archive_snapshots(root: Path | str, keep_latest: int = ARCHIVE_RETENTION) -> list[Path]:
+    """Retain recent explicit snapshots and any pinned historical baseline."""
+    root = Path(root).resolve()
+    archive_root = (root / "archive").resolve()
+    if not archive_root.is_relative_to(root):
+        raise DataError(f"unsafe archive path: {archive_root}")
+    return _prune_snapshot_directory(archive_root, keep_latest)
 
 
 def utc_now() -> datetime:
@@ -104,12 +110,19 @@ def atomic_write_json(path: Path, payload: Any) -> None:
         raise
 
 
-def snapshot_repository(root: Path | str, label: str | None = None) -> Path:
+def snapshot_repository(
+    root: Path | str, label: str | None = None, *, persistent: bool = False
+) -> Path:
     root = Path(root).resolve()
     timestamp = utc_now().strftime("%Y-%m-%dT%H%M%SZ")
     safe_label = "".join(char for char in (label or "") if char.isalnum() or char in "-_")
     directory_name = timestamp + (f"-{safe_label}" if safe_label else "")
-    destination = root / "archive" / directory_name
+    snapshot_root = root / "archive" if persistent else root.parent / ".work" / "research-snapshots"
+    resolved_snapshot_root = snapshot_root.resolve()
+    allowed_root = root if persistent else root.parent
+    if not resolved_snapshot_root.is_relative_to(allowed_root):
+        raise DataError(f"unsafe snapshot directory: {snapshot_root}")
+    destination = resolved_snapshot_root / directory_name
     if destination.exists():
         raise DataError(f"snapshot already exists: {destination}")
     destination.mkdir(parents=True)
@@ -141,7 +154,10 @@ def snapshot_repository(root: Path | str, label: str | None = None) -> Path:
         "mutation_policy": "Do not edit; publish changes only to the working research JSON files.",
     }
     atomic_write_json(destination / "manifest.json", manifest)
-    prune_archive_snapshots(root)
+    if persistent:
+        prune_archive_snapshots(root)
+    else:
+        _prune_snapshot_directory(resolved_snapshot_root, ARCHIVE_RETENTION)
     return destination
 
 

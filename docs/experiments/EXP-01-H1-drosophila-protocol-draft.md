@@ -1,6 +1,6 @@
-# EXP-01 — Drosophila H1 protocol (draft)
+# EXP-01 — Drosophila H1 conditional protocol and input STOP
 
-**Status:** design draft; not executable and not evidence of a result. H1 is a working label for the question below, not a registered hypothesis in the project contract. This draft uses the larval Class-IV fallback domain in `SIM-DOM-01`; it does not implement that contract's primary adult domain. The author must select the explicitly separate larval fallback or require a new adult-domain protocol before EXP-01 can close. `NOV-05` remains an explicit dependency. Do not close EXP-01 until the novelty decisions are final, the biological/model inputs are versioned, and this protocol is reviewed against the selected inputs. No simulation has been run for this draft.
+**Status (2026-09-26):** `STOP-EXP01-INPUT` for execution against the current inputs. The four processed `S740` VNC matrices have no verified upstream graph-release lineage ([connectome audit](../../data/drosophila-connectome-audit.json), `S740` `STOP-SRC03-UPSTREAM-LINEAGE`). The alternative larval Class-IV material belongs to a separate fallback domain under `SIM-DOM-01`; no author selection or compatible frozen graph/target pair is recorded. Therefore no H1 run, model fit, biological validation, or transfer result is authorized by this protocol. This is an input/protocol STOP, not a negative test of H1. Reopen only with a pinned graph export and compatible primary target, or an explicitly selected and independently versioned larval fallback, plus a frozen scoring table and novelty disposition. The conditional procedure below remains the execution specification if those gates are later met.
 
 ## Question and claim boundary
 

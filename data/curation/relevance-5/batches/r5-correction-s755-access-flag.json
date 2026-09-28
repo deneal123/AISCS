@@ -1,0 +1,25 @@
+{
+  "meta": {
+    "batch_id": "r5-correction-s755-access-flag",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-27",
+    "scope": "Remove the obsolete metadata_only risk flag after verified full-text retrieval",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-27"
+  },
+  "source_ids": ["S755"],
+  "records": [{"id": "S755", "title": "Choice of spinal cord stimulation versus targeted drug delivery in the management of chronic pain: a predictive formula for outcomes", "year": 2020, "source_type": "article"}],
+  "decisions": [{
+    "source_id": "S755",
+    "decision": "partially_verified",
+    "checked_at": "2026-09-27",
+    "full_text_status": "checked",
+    "searches": [{"service": "BMJ publisher JATS full text", "query": "10.1136/rapm-2019-100859 full-text access and missing model fields", "url": "https://rapm.bmj.com/content/rapm/45/2/131.source.xml", "accessed_at": "2026-09-27"}],
+    "updates": {
+      "identifiers": {"doi": "10.1136/rapm-2019-100859"},
+      "risk_flags": ["claim_not_supported"]
+    },
+    "claims": [],
+    "notes": "Publisher BMJ full-text JATS XML checked 2026-09-27. Methods defines at least 50% pain relief from SCS trial and subsequent implant; Results and Table 1 report 945 included, 826 SCS successes and 119 failures subsequently treated with TDD. The model-specific complete-case N, fixed outcome horizon and unit of the stated cross-validation are not reported; no patient-disjoint or external validation is inferred. Data availability is by reasonable request; no ECAP predictor is described."
+  }]
+}

@@ -229,7 +229,7 @@ class ResearchMcpService:
 
     def snapshot(self, label: str) -> dict[str, Any]:
         safe_label = _safe_name(label)
-        path = snapshot_repository(self.data_dir, label=safe_label)
+        path = snapshot_repository(self.data_dir, label=safe_label, persistent=True)
         return {"ok": True, "snapshot": str(path), "manifest": str(path / "manifest.json")}
 
     def read_text(self, relative_path: str) -> str:

@@ -1,0 +1,101 @@
+{
+  "meta": {
+    "batch_id": "r5-correction-s015-cohort-and-validation-2026-09-28",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-28",
+    "scope": "Separate S015 AI4Pain development from same-protocol GUI holdout",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-28"
+  },
+  "source_ids": [
+    "S015"
+  ],
+  "records": [
+    {
+      "id": "S015",
+      "title": "Real-Time Pain Assessment from Electrodermal Activity Using Deep Learning",
+      "year": 2026,
+      "source_type": "носимые_реальное_время"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S015",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-28",
+      "full_text_status": "checked",
+      "notes": "Controlled TENS-evoked experimental pain in healthy participants; EDA reflects autonomic response and does not establish chronic-pain, ECAP, or SCS-outcome validity. Rechecked 2026-09-28: GUI group is unseen but uses the same laboratory protocol and sensors, so it is a participant holdout rather than external site/dataset validation. Results: 0.47 ms Table 7, 79.23% Table 9, 73.14% Table 10/Results 3.4. Article Methods 2.1 prose says 65 no-pain instances while Table 1 reports 715 no-pain observations; this internal discrepancy is not resolved.",
+      "searches": [
+        {
+          "service": "Europe PMC full JATS",
+          "query": "S015 cohort split GUI unseen same protocol Tables 7 9 10",
+          "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13211154/fullTextXML",
+          "accessed_at": "2026-09-28"
+        }
+      ],
+      "updates": {
+        "identifiers": {
+          "doi": "10.3390/s26103020"
+        },
+        "evidence": {
+          "sample_size": "65 AI4Pain participants in subject-wise five-fold evaluation; separate 15 previously unseen participants in same-protocol GUI evaluation (not one pooled evaluation cohort)."
+        },
+        "validation": {
+          "external_validation": "no",
+          "checked_at": "2026-09-28",
+          "notes": "Controlled TENS-evoked experimental pain in healthy participants; EDA reflects autonomic response and does not establish chronic-pain, ECAP, or SCS-outcome validity. Rechecked 2026-09-28: GUI group is unseen but uses the same laboratory protocol and sensors, so it is a participant holdout rather than external site/dataset validation. Results: 0.47 ms Table 7, 79.23% Table 9, 73.14% Table 10/Results 3.4. Article Methods 2.1 prose says 65 no-pain instances while Table 1 reports 715 no-pain observations; this internal discrepancy is not resolved."
+        },
+        "field_resolution": {
+          "evidence.sample_size": {
+            "state": "reported",
+            "value": "65 AI4Pain participants in subject-wise five-fold evaluation; separate 15 previously unseen participants in same-protocol GUI evaluation (not one pooled evaluation cohort).",
+            "reason": "Development and GUI groups have different evaluation roles; do not combine as one sample.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13211154/fullTextXML",
+                "locator": "Methods 2.1 and 2.3.3-2.3.4"
+              }
+            ]
+          },
+          "validation.external_validation": {
+            "state": "reported",
+            "value": "no",
+            "reason": "Unseen GUI participants followed exactly the same recording protocol and sensor configuration; this is not an external site or dataset.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13211154/fullTextXML",
+                "locator": "Methods 2.3.4, Real-Time Pain Estimation"
+              }
+            ]
+          },
+          "validation.checked_at": {
+            "state": "reported",
+            "value": "2026-09-28",
+            "reason": "Dated primary full-text recheck.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13211154/fullTextXML",
+                "locator": "Methods 2.3.3-2.3.4; Tables 7, 9, 10"
+              }
+            ]
+          },
+          "validation.notes": {
+            "state": "reported",
+            "value": "Controlled TENS-evoked experimental pain in healthy participants; EDA reflects autonomic response and does not establish chronic-pain, ECAP, or SCS-outcome validity. Rechecked 2026-09-28: GUI group is unseen but uses the same laboratory protocol and sensors, so it is a participant holdout rather than external site/dataset validation. Results: 0.47 ms Table 7, 79.23% Table 9, 73.14% Table 10/Results 3.4. Article Methods 2.1 prose says 65 no-pain instances while Table 1 reports 715 no-pain observations; this internal discrepancy is not resolved.",
+            "reason": "Clarify cohort roles, exact table locators and author-internal denominator conflict.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13211154/fullTextXML",
+                "locator": "Methods 2.1, 2.3.3-2.3.4; Results 3.4; Tables 1, 7, 9, 10"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

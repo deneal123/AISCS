@@ -2,11 +2,39 @@
   "meta": {
     "schema_version": "1.0.0",
     "created_at": "2026-09-23",
-    "cutoff": "2026-09-24",
+    "cutoff": "2026-09-26",
     "gate": "G0_REVISE",
     "ranking_policy": "prohibited",
-    "status": "unranked_catalogue_first_cycle",
-    "generated_at": "2026-09-24"
+    "status": "unranked_catalogue_with_terminal_unsaturated_stops",
+    "generated_at": "2026-09-26",
+    "operational_disposition": {
+      "status": "STOP-UNSATURATED",
+      "as_of": "2026-09-26",
+      "operational_only": true,
+      "saturation": false,
+      "prior_art_outcome_preserved": "partial_analogues_only",
+      "forbidden_inferences": [
+        "No direct analogue exists or was found globally",
+        "Any variant is novel, has priority, or is patentable"
+      ],
+      "reopen_when": "Complete all declared search streams and backward/forward citation checks, then obtain two consecutive eligible dated refreshes with no new direct analogue or mechanism class; any new analogue resets the refresh count.",
+      "cutoff_artifacts": [
+        "data/search-protocol.json#NS-16",
+        "data/search-protocol.json#NS-RUN-2026-09-26-03",
+        "data/ns06-prior-art-audit.json#unindexed_primary_leads"
+      ]
+    },
+    "component_analogue_addendum_2026_09_28": {
+      "source_id": "S212",
+      "affected_variants": [
+        "NV-001",
+        "NV-002"
+      ],
+      "status": "partial_biological_component_analogue",
+      "primary_url": "https://www.biorxiv.org/content/10.1101/2025.09.25.678485v3.full.pdf",
+      "locator": "Results > Comparing neural activations with connectome predictions; Figure 6A-C; Methods > Connectome-constrained firing rate model",
+      "boundary": "Author-reported larval neural-valence AUC 0.74 and strict accuracy 72.4% with 1,000 out-degree-preserving shuffles. No human ECAP or SCS transfer, no reported evaluated-neuron denominator or held-out split. This does not resolve direct-analogue search or saturation."
+    }
   },
   "morphological_matrix": {
     "axes": {
@@ -106,6 +134,7 @@
       },
       "closest_analogue_refs": [
         "S149",
+        "S212",
         "S738",
         "S739",
         "S105",
@@ -131,7 +160,7 @@
         "S245",
         "S748"
       ],
-      "difference_from_analogues": "Patent WO2025224687A1 already discloses simulated ECAP training data, growth-curve labeling and encoder-decoder artifact-removal pretraining. The remaining proposed distinction is the explicitly tested contribution of connectome-constrained Drosophila dynamics plus a separate physical ECAP operator; none of the cited analogues establishes that complete chain. S747 additionally couples rat neural-response classification to adaptive SCS, but has no Drosophila connectome, physical ECAP operator, held-out-animal test or human validation. S007 and S070 provide human experimental-pain cross-subject baselines, while S088 is unresolved cross-dataset prior art; none implements a Drosophila-connectome-to-physical-ECAP-to-SCS chain. S026 supports only a brain-independent fly protective-behavior observable, while S005 and S164 document heterogeneous human pain baselines and generalization gaps; none supplies an ECAP formation operator or SCS validation bridge. S148 independently requires non-interchangeable subjective, behavioral, functional and mechanistic layers, reinforcing that a fly observable or ECAP recruitment signal cannot be relabeled as subjective pain. Patent review adds ML SCS-parameter search (S098), ECAP-guided functional control (S099), federated adaptive neural interfaces (S144), population-relative multimodal control (S240), explicit body-channel/ECAP separation (S241), and a wearable multimodal stimulation loop (S245); none combines Drosophila connectome dynamics with a validated human ECAP/SCS transfer experiment. The open 2026 ModMix extension (S748) strengthens prior art for physiological-modality augmentation under limited data, but it does not provide Drosophila-derived representations, a physical ECAP operator, or an SCS task.",
+      "difference_from_analogues": "Patent WO2025224687A1 already discloses simulated ECAP training data, growth-curve labeling and encoder-decoder artifact-removal pretraining. The remaining proposed distinction is the explicitly tested contribution of connectome-constrained Drosophila dynamics plus a separate physical ECAP operator; none of the cited analogues establishes that complete chain. S747 additionally couples rat neural-response classification to adaptive SCS, but has no Drosophila connectome, physical ECAP operator, held-out-animal test or human validation. S007 and S070 provide human experimental-pain cross-subject baselines, while S088 is unresolved cross-dataset prior art; none implements a Drosophila-connectome-to-physical-ECAP-to-SCS chain. S026 supports only a brain-independent fly protective-behavior observable, while S005 and S164 document heterogeneous human pain baselines and generalization gaps; none supplies an ECAP formation operator or SCS validation bridge. S148 independently requires non-interchangeable subjective, behavioral, functional and mechanistic layers, reinforcing that a fly observable or ECAP recruitment signal cannot be relabeled as subjective pain. Patent review adds ML SCS-parameter search (S098), ECAP-guided functional control (S099), federated adaptive neural interfaces (S144), population-relative multimodal control (S240), explicit body-channel/ECAP separation (S241), and a wearable multimodal stimulation loop (S245); none combines Drosophila connectome dynamics with a validated human ECAP/SCS transfer experiment. The open 2026 ModMix extension (S748) strengthens prior art for physiological-modality augmentation under limited data, but it does not provide Drosophila-derived representations, a physical ECAP operator, or an SCS task. S212 bioRxiv v3 Figure 6 already tests a larval connectome-constrained firing-rate model against observed neural-response valence and 1,000 out-degree-preserving null graphs; its fly-only task has no representation transfer, physical human ECAP operator, held-out human participant test, or SCS outcome. The Figure 6 evaluated-neuron N and train/test split remain unreported in the checked text.",
       "required_data": [
         "Drosophila connectome and activity/behavior comparator",
         "human ECAP recordings with stimulation geometry"
@@ -139,7 +168,7 @@
       "falsification_experiment": "On predefined subject-level splits, compare the complete model with human-only, degree-preserving rewired-connectome ensemble with shared initialization, shuffled-dynamics, and no-physical-operator controls; reject the candidate if it gives no prespecified gain or worsens calibration.",
       "permitted_conclusion": "Methodological transfer for the tested ECAP/SCS task only; no claim that Drosophila experiences human pain or directly models the human spinal cord.",
       "prior_art_outcome": "partial_analogues_only",
-      "prior_art_cutoff": "2026-09-24",
+      "prior_art_cutoff": "2026-09-28",
       "search_trace_ids": [
         "NS-01",
         "NS-02",
@@ -154,7 +183,17 @@
         "NS-17",
         "NS-10"
       ],
-      "open_condition": "A final no-direct-analogue statement remains blocked until all open search streams and citation snowballing are complete."
+      "open_condition": "Scientific prior-art outcome remains partial_analogues_only. Operational STOP-UNSATURATED applies at 2026-09-26; no global no-analogue or novelty inference is permitted. Reopen under meta.operational_disposition.reopen_when.",
+      "operational_disposition": {
+        "status": "STOP-UNSATURATED",
+        "as_of": "2026-09-26",
+        "saturation": false,
+        "basis_fields": [
+          "closest_analogue_refs",
+          "search_trace_ids"
+        ],
+        "shared_limits": "meta.operational_disposition"
+      }
     },
     {
       "id": "NV-002",
@@ -191,6 +230,7 @@
       },
       "closest_analogue_refs": [
         "S149",
+        "S212",
         "S738",
         "S739",
         "S105",
@@ -216,7 +256,7 @@
         "S245",
         "S748"
       ],
-      "difference_from_analogues": "Patent WO2025224687A1 already discloses simulated ECAP training data, growth-curve labeling and encoder-decoder artifact-removal pretraining. The remaining proposed distinction is the explicitly tested contribution of connectome-constrained Drosophila dynamics plus a separate physical ECAP operator; none of the cited analogues establishes that complete chain. S747 additionally couples rat neural-response classification to adaptive SCS, but has no Drosophila connectome, physical ECAP operator, held-out-animal test or human validation. S007 and S070 provide human experimental-pain cross-subject baselines, while S088 is unresolved cross-dataset prior art; none implements a Drosophila-connectome-to-physical-ECAP-to-SCS chain. S026 supports only a brain-independent fly protective-behavior observable, while S005 and S164 document heterogeneous human pain baselines and generalization gaps; none supplies an ECAP formation operator or SCS validation bridge. S148 independently requires non-interchangeable subjective, behavioral, functional and mechanistic layers, reinforcing that a fly observable or ECAP recruitment signal cannot be relabeled as subjective pain. Patent review adds ML SCS-parameter search (S098), ECAP-guided functional control (S099), federated adaptive neural interfaces (S144), population-relative multimodal control (S240), explicit body-channel/ECAP separation (S241), and a wearable multimodal stimulation loop (S245); none combines Drosophila connectome dynamics with a validated human ECAP/SCS transfer experiment. The open 2026 ModMix extension (S748) strengthens prior art for physiological-modality augmentation under limited data, but it does not provide Drosophila-derived representations, a physical ECAP operator, or an SCS task.",
+      "difference_from_analogues": "Patent WO2025224687A1 already discloses simulated ECAP training data, growth-curve labeling and encoder-decoder artifact-removal pretraining. The remaining proposed distinction is the explicitly tested contribution of connectome-constrained Drosophila dynamics plus a separate physical ECAP operator; none of the cited analogues establishes that complete chain. S747 additionally couples rat neural-response classification to adaptive SCS, but has no Drosophila connectome, physical ECAP operator, held-out-animal test or human validation. S007 and S070 provide human experimental-pain cross-subject baselines, while S088 is unresolved cross-dataset prior art; none implements a Drosophila-connectome-to-physical-ECAP-to-SCS chain. S026 supports only a brain-independent fly protective-behavior observable, while S005 and S164 document heterogeneous human pain baselines and generalization gaps; none supplies an ECAP formation operator or SCS validation bridge. S148 independently requires non-interchangeable subjective, behavioral, functional and mechanistic layers, reinforcing that a fly observable or ECAP recruitment signal cannot be relabeled as subjective pain. Patent review adds ML SCS-parameter search (S098), ECAP-guided functional control (S099), federated adaptive neural interfaces (S144), population-relative multimodal control (S240), explicit body-channel/ECAP separation (S241), and a wearable multimodal stimulation loop (S245); none combines Drosophila connectome dynamics with a validated human ECAP/SCS transfer experiment. The open 2026 ModMix extension (S748) strengthens prior art for physiological-modality augmentation under limited data, but it does not provide Drosophila-derived representations, a physical ECAP operator, or an SCS task. S212 bioRxiv v3 Figure 6 already tests a larval connectome-constrained firing-rate model against observed neural-response valence and 1,000 out-degree-preserving null graphs; its fly-only task has no representation transfer, physical human ECAP operator, held-out human participant test, or SCS outcome. The Figure 6 evaluated-neuron N and train/test split remain unreported in the checked text.",
       "required_data": [
         "Drosophila connectome and activity/behavior comparator",
         "human ECAP recordings with stimulation geometry"
@@ -224,7 +264,7 @@
       "falsification_experiment": "On predefined subject-level splits, compare the complete model with human-only, degree-preserving rewired-connectome ensemble with shared initialization, shuffled-dynamics, and no-physical-operator controls; reject the candidate if it gives no prespecified gain or worsens calibration.",
       "permitted_conclusion": "Methodological transfer for the tested ECAP/SCS task only; no claim that Drosophila experiences human pain or directly models the human spinal cord.",
       "prior_art_outcome": "partial_analogues_only",
-      "prior_art_cutoff": "2026-09-24",
+      "prior_art_cutoff": "2026-09-28",
       "search_trace_ids": [
         "NS-01",
         "NS-02",
@@ -239,7 +279,17 @@
         "NS-17",
         "NS-10"
       ],
-      "open_condition": "A final no-direct-analogue statement remains blocked until all open search streams and citation snowballing are complete."
+      "open_condition": "Scientific prior-art outcome remains partial_analogues_only. Operational STOP-UNSATURATED applies at 2026-09-26; no global no-analogue or novelty inference is permitted. Reopen under meta.operational_disposition.reopen_when.",
+      "operational_disposition": {
+        "status": "STOP-UNSATURATED",
+        "as_of": "2026-09-26",
+        "saturation": false,
+        "basis_fields": [
+          "closest_analogue_refs",
+          "search_trace_ids"
+        ],
+        "shared_limits": "meta.operational_disposition"
+      }
     },
     {
       "id": "NV-003",
@@ -324,7 +374,17 @@
         "NS-17",
         "NS-10"
       ],
-      "open_condition": "A final no-direct-analogue statement remains blocked until all open search streams and citation snowballing are complete."
+      "open_condition": "Scientific prior-art outcome remains partial_analogues_only. Operational STOP-UNSATURATED applies at 2026-09-26; no global no-analogue or novelty inference is permitted. Reopen under meta.operational_disposition.reopen_when.",
+      "operational_disposition": {
+        "status": "STOP-UNSATURATED",
+        "as_of": "2026-09-26",
+        "saturation": false,
+        "basis_fields": [
+          "closest_analogue_refs",
+          "search_trace_ids"
+        ],
+        "shared_limits": "meta.operational_disposition"
+      }
     },
     {
       "id": "NV-004",
@@ -409,7 +469,17 @@
         "NS-17",
         "NS-10"
       ],
-      "open_condition": "A final no-direct-analogue statement remains blocked until all open search streams and citation snowballing are complete."
+      "open_condition": "Scientific prior-art outcome remains partial_analogues_only. Operational STOP-UNSATURATED applies at 2026-09-26; no global no-analogue or novelty inference is permitted. Reopen under meta.operational_disposition.reopen_when.",
+      "operational_disposition": {
+        "status": "STOP-UNSATURATED",
+        "as_of": "2026-09-26",
+        "saturation": false,
+        "basis_fields": [
+          "closest_analogue_refs",
+          "search_trace_ids"
+        ],
+        "shared_limits": "meta.operational_disposition"
+      }
     },
     {
       "id": "NV-005",
@@ -494,7 +564,17 @@
         "NS-17",
         "NS-10"
       ],
-      "open_condition": "A final no-direct-analogue statement remains blocked until all open search streams and citation snowballing are complete."
+      "open_condition": "Scientific prior-art outcome remains partial_analogues_only. Operational STOP-UNSATURATED applies at 2026-09-26; no global no-analogue or novelty inference is permitted. Reopen under meta.operational_disposition.reopen_when.",
+      "operational_disposition": {
+        "status": "STOP-UNSATURATED",
+        "as_of": "2026-09-26",
+        "saturation": false,
+        "basis_fields": [
+          "closest_analogue_refs",
+          "search_trace_ids"
+        ],
+        "shared_limits": "meta.operational_disposition"
+      }
     },
     {
       "id": "NV-006",
@@ -579,7 +659,17 @@
         "NS-17",
         "NS-10"
       ],
-      "open_condition": "A final no-direct-analogue statement remains blocked until all open search streams and citation snowballing are complete."
+      "open_condition": "Scientific prior-art outcome remains partial_analogues_only. Operational STOP-UNSATURATED applies at 2026-09-26; no global no-analogue or novelty inference is permitted. Reopen under meta.operational_disposition.reopen_when.",
+      "operational_disposition": {
+        "status": "STOP-UNSATURATED",
+        "as_of": "2026-09-26",
+        "saturation": false,
+        "basis_fields": [
+          "closest_analogue_refs",
+          "search_trace_ids"
+        ],
+        "shared_limits": "meta.operational_disposition"
+      }
     },
     {
       "id": "NV-007",
@@ -664,7 +754,17 @@
         "NS-17",
         "NS-10"
       ],
-      "open_condition": "A final no-direct-analogue statement remains blocked until all open search streams and citation snowballing are complete."
+      "open_condition": "Scientific prior-art outcome remains partial_analogues_only. Operational STOP-UNSATURATED applies at 2026-09-26; no global no-analogue or novelty inference is permitted. Reopen under meta.operational_disposition.reopen_when.",
+      "operational_disposition": {
+        "status": "STOP-UNSATURATED",
+        "as_of": "2026-09-26",
+        "saturation": false,
+        "basis_fields": [
+          "closest_analogue_refs",
+          "search_trace_ids"
+        ],
+        "shared_limits": "meta.operational_disposition"
+      }
     },
     {
       "id": "NV-008",
@@ -749,7 +849,17 @@
         "NS-17",
         "NS-10"
       ],
-      "open_condition": "A final no-direct-analogue statement remains blocked until all open search streams and citation snowballing are complete."
+      "open_condition": "Scientific prior-art outcome remains partial_analogues_only. Operational STOP-UNSATURATED applies at 2026-09-26; no global no-analogue or novelty inference is permitted. Reopen under meta.operational_disposition.reopen_when.",
+      "operational_disposition": {
+        "status": "STOP-UNSATURATED",
+        "as_of": "2026-09-26",
+        "saturation": false,
+        "basis_fields": [
+          "closest_analogue_refs",
+          "search_trace_ids"
+        ],
+        "shared_limits": "meta.operational_disposition"
+      }
     },
     {
       "id": "NV-009",
@@ -834,7 +944,17 @@
         "NS-17",
         "NS-10"
       ],
-      "open_condition": "A final no-direct-analogue statement remains blocked until all open search streams and citation snowballing are complete."
+      "open_condition": "Scientific prior-art outcome remains partial_analogues_only. Operational STOP-UNSATURATED applies at 2026-09-26; no global no-analogue or novelty inference is permitted. Reopen under meta.operational_disposition.reopen_when.",
+      "operational_disposition": {
+        "status": "STOP-UNSATURATED",
+        "as_of": "2026-09-26",
+        "saturation": false,
+        "basis_fields": [
+          "closest_analogue_refs",
+          "search_trace_ids"
+        ],
+        "shared_limits": "meta.operational_disposition"
+      }
     },
     {
       "id": "NV-010",
@@ -919,7 +1039,17 @@
         "NS-17",
         "NS-10"
       ],
-      "open_condition": "A final no-direct-analogue statement remains blocked until all open search streams and citation snowballing are complete."
+      "open_condition": "Scientific prior-art outcome remains partial_analogues_only. Operational STOP-UNSATURATED applies at 2026-09-26; no global no-analogue or novelty inference is permitted. Reopen under meta.operational_disposition.reopen_when.",
+      "operational_disposition": {
+        "status": "STOP-UNSATURATED",
+        "as_of": "2026-09-26",
+        "saturation": false,
+        "basis_fields": [
+          "closest_analogue_refs",
+          "search_trace_ids"
+        ],
+        "shared_limits": "meta.operational_disposition"
+      }
     },
     {
       "id": "NV-011",
@@ -1004,7 +1134,17 @@
         "NS-17",
         "NS-10"
       ],
-      "open_condition": "A final no-direct-analogue statement remains blocked until all open search streams and citation snowballing are complete."
+      "open_condition": "Scientific prior-art outcome remains partial_analogues_only. Operational STOP-UNSATURATED applies at 2026-09-26; no global no-analogue or novelty inference is permitted. Reopen under meta.operational_disposition.reopen_when.",
+      "operational_disposition": {
+        "status": "STOP-UNSATURATED",
+        "as_of": "2026-09-26",
+        "saturation": false,
+        "basis_fields": [
+          "closest_analogue_refs",
+          "search_trace_ids"
+        ],
+        "shared_limits": "meta.operational_disposition"
+      }
     },
     {
       "id": "NV-012",
@@ -1089,7 +1229,17 @@
         "NS-17",
         "NS-10"
       ],
-      "open_condition": "A final no-direct-analogue statement remains blocked until all open search streams and citation snowballing are complete."
+      "open_condition": "Scientific prior-art outcome remains partial_analogues_only. Operational STOP-UNSATURATED applies at 2026-09-26; no global no-analogue or novelty inference is permitted. Reopen under meta.operational_disposition.reopen_when.",
+      "operational_disposition": {
+        "status": "STOP-UNSATURATED",
+        "as_of": "2026-09-26",
+        "saturation": false,
+        "basis_fields": [
+          "closest_analogue_refs",
+          "search_trace_ids"
+        ],
+        "shared_limits": "meta.operational_disposition"
+      }
     },
     {
       "id": "NV-013",
@@ -1174,7 +1324,17 @@
         "NS-17",
         "NS-10"
       ],
-      "open_condition": "A final no-direct-analogue statement remains blocked until all open search streams and citation snowballing are complete."
+      "open_condition": "Scientific prior-art outcome remains partial_analogues_only. Operational STOP-UNSATURATED applies at 2026-09-26; no global no-analogue or novelty inference is permitted. Reopen under meta.operational_disposition.reopen_when.",
+      "operational_disposition": {
+        "status": "STOP-UNSATURATED",
+        "as_of": "2026-09-26",
+        "saturation": false,
+        "basis_fields": [
+          "closest_analogue_refs",
+          "search_trace_ids"
+        ],
+        "shared_limits": "meta.operational_disposition"
+      }
     },
     {
       "id": "NV-014",
@@ -1261,7 +1421,17 @@
         "NS-17",
         "NS-10"
       ],
-      "open_condition": "A final no-direct-analogue statement remains blocked until all open search streams and citation snowballing are complete."
+      "open_condition": "Scientific prior-art outcome remains partial_analogues_only. Operational STOP-UNSATURATED applies at 2026-09-26; no global no-analogue or novelty inference is permitted. Reopen under meta.operational_disposition.reopen_when.",
+      "operational_disposition": {
+        "status": "STOP-UNSATURATED",
+        "as_of": "2026-09-26",
+        "saturation": false,
+        "basis_fields": [
+          "closest_analogue_refs",
+          "search_trace_ids"
+        ],
+        "shared_limits": "meta.operational_disposition"
+      }
     },
     {
       "id": "NV-015",
@@ -1348,7 +1518,17 @@
         "NS-17",
         "NS-10"
       ],
-      "open_condition": "A final no-direct-analogue statement remains blocked until all open search streams and citation snowballing are complete."
+      "open_condition": "Scientific prior-art outcome remains partial_analogues_only. Operational STOP-UNSATURATED applies at 2026-09-26; no global no-analogue or novelty inference is permitted. Reopen under meta.operational_disposition.reopen_when.",
+      "operational_disposition": {
+        "status": "STOP-UNSATURATED",
+        "as_of": "2026-09-26",
+        "saturation": false,
+        "basis_fields": [
+          "closest_analogue_refs",
+          "search_trace_ids"
+        ],
+        "shared_limits": "meta.operational_disposition"
+      }
     }
   ]
 }

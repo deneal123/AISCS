@@ -1,8 +1,8 @@
 {
   "meta": {
     "schema_version": "1.0.0",
-    "generated_at": "2026-09-25",
-    "records_count": 24,
+    "generated_at": "2026-09-28",
+    "records_count": 26,
     "scope": "Core empirical and framework records used to define the ECAP measurement/operator and closed-loop SCS evidence boundary",
     "gate": "G0_REVISE"
   },
@@ -935,9 +935,9 @@
         },
         "electrode_geometry": {
           "state": "reported",
-          "value": "T10-centered 3-D conductor, 26 superficial white-matter regions, eight-contact 1.3-mm lead; differential E8-E7 ECAP recording relative to E2 reference",
-          "reason": "Checked in the primary Chinese journal text and English abstract; model output is not clinical validation.",
-          "checked_at": "2026-09-24",
+          "value": "T10-centered 3-D conductor, 26 superficial white-matter regions; lead diameter 1.3 mm, electrode length 3 mm and insulating gaps 4 mm; differential E8-E7 ECAP recording relative to E2 reference. Exact physical contact count is not stated in the checked text.",
+          "reason": "Primary Chinese full text, Methods 1.1 and 1.3, reports dimensions and E2/E7/E8 labels but does not explicitly state an eight-contact lead; model output is not clinical validation.",
+          "checked_at": "2026-09-28",
           "locators": [
             {
               "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9927682/",
@@ -1567,10 +1567,115 @@
           ]
         }
       }
+    },
+    {
+      "source_id": "S821",
+      "extraction": {
+        "sample": {
+          "state": "reported",
+          "value": "Five healthy adult male Göttingen minipigs",
+          "reason": "Publisher methods state n=5 healthy adult male Göttingen minipigs.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1013452",
+              "locator": "§5.3 Experimental data acquisition"
+            }
+          ]
+        },
+        "electrode_geometry": {
+          "state": "reported",
+          "value": "Intrafascicular VRAI stimulation electrode with eight contacts on each side; four-ring cuff recording electrode placed 6 cm from stimulus electrode",
+          "reason": "Publisher methods report stimulation/recording geometry; the model uses a histology-derived nerve cross-section and simplified electrode geometry.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1013452",
+              "locator": "§5.3; Fig. 1; §5.4.1"
+            }
+          ]
+        },
+        "stimulation": {
+          "state": "reported",
+          "value": "In vivo: 100–500 μA, active contacts and 50 Hz; simulation does not model pulse repetition",
+          "reason": "Publisher methods give experimental stimulus settings and explicitly note pulse repetition is not simulated.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1013452",
+              "locator": "§5.3 Experimental data acquisition"
+            }
+          ]
+        },
+        "split_unit": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "This is a physical signal-model comparison, not a subject-level predictive evaluation; no held-out-animal split is reported.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1013452",
+              "locator": "§§2.4, 5.3"
+            }
+          ]
+        },
+        "metrics": {
+          "state": "reported",
+          "value": "Qualitative morphology and comparable magnitude; second negative deflection at 5 ms not reproduced; discrepancy remains between 100 μA and larger-current amplitude; no formal predictive metric",
+          "reason": "Publisher results describe the modeled/recorded waveform differences and non-monotonic, geometry-dependent eCAP contributions; they do not report a generalization score.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1013452",
+              "locator": "§2.4; Fig. 6; §§2.5–2.6; Figs. 8–10"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S830",
+      "extraction": {
+        "sample": {
+          "state": "reported",
+          "value": "One human chronic-pain SCS-trial participant; six pigs in separate acute experiments; rat sample sizes vary by assay",
+          "reason": "The human observation and animal experiments are distinct; animal observations do not expand the human sample.",
+          "checked_at": "2026-09-27",
+          "locators": [{"url": "https://prescottlab.ca/images/pdf/2023Sagalajev.pdf", "locator": "Results > Dependence of paresthesia on SCS frequency; STAR Methods > Experimental Model and Subject Details"}]
+        },
+        "electrode_geometry": {
+          "state": "reported",
+          "value": "Human epidural SCS trial used bipolar contacts spaced 8 mm apart",
+          "reason": "Geometry is printed in the human ECAP STAR Methods, separate from animal setups.",
+          "checked_at": "2026-09-27",
+          "locators": [{"url": "https://prescottlab.ca/images/pdf/2023Sagalajev.pdf", "locator": "STAR Methods > Human ECAP recordings; printed PDF page with bipolar 8 mm spacing"}]
+        },
+        "stimulation": {
+          "state": "reported",
+          "value": "Human within-person comparison: 150 Hz versus 1 kHz at 9.6 mA, symmetric biphasic 50 μs/phase; each condition at least 10 minutes",
+          "reason": "The pulse-width micro sign was verified visually in the author-hosted journal PDF because text extraction rendered it as m.",
+          "checked_at": "2026-09-27",
+          "locators": [{"url": "https://prescottlab.ca/images/pdf/2023Sagalajev.pdf", "locator": "Results > Fig. 1A; STAR Methods > Human ECAP recordings, visual PDF unit check"}]
+        },
+        "split_unit": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "One-person acute mechanistic comparison, with no participant-level prediction model or held-out cohort.",
+          "checked_at": "2026-09-27",
+          "locators": [{"url": "https://prescottlab.ca/images/pdf/2023Sagalajev.pdf", "locator": "STAR Methods > Human ECAP recordings; Results > Fig. 1A"}]
+        },
+        "metrics": {
+          "state": "reported",
+          "value": "Detectable epidural ECAP and participant-reported paresthesia at 150 Hz; neither detected at 1 kHz in the single human observation. No longitudinal pain-relief outcome or ECAP-to-pain prediction metric.",
+          "reason": "The measured human endpoints are neural recruitment and stimulation-induced sensation, not analgesic response.",
+          "checked_at": "2026-09-27",
+          "locators": [{"url": "https://prescottlab.ca/images/pdf/2023Sagalajev.pdf", "locator": "Results > Dependence of paresthesia on SCS frequency and its correlation with ECAP amplitude; Fig. 1A; STAR Methods > Data and code availability"}]
+        }
+      }
     }
   ],
   "ns07_forward_model_review": {
-    "checked_at": "2026-09-24",
+    "checked_at": "2026-09-27",
     "status": "first_pass_recorded",
     "direct_model_sources": [
       "S363",
@@ -1587,8 +1692,18 @@
       "locator": "Methods > FEM of SCS; Multicompartment cable model; Calculation of ECAP recordings; Results Figure 2C; Study limitations",
       "status": "full_author_manuscript_checked"
     },
-    "decision": "S766 and S768 directly establish FEM/multicompartment/reciprocity ECAP forward modeling as prior art; S363 and S764 add adjacent models. S768's activation fractions are simulation outputs, not measured human recruitment or analgesic response. S105 remains empirical signal analysis.",
-    "remaining": "Finish backward/forward primary citation screening for historical models and patent families, then perform a later dated refresh; NS-07 and PA-04 remain open."
+    "decision": "S766 and S768 directly establish FEM/multicompartment/reciprocity ECAP forward modeling as prior art; S363 and S764 add adjacent models. S768's activation fractions are simulation outputs, not measured human recruitment or analgesic response. S105 remains empirical signal analysis. S821 adds a physically detailed peripheral vagus eCAP observation-operator comparator validated against porcine recordings; it does not extend the SCS spinal forward-model evidence or support pain/clinical-transfer claims.",
+    "remaining": "Finish backward/forward primary citation screening for historical models and patent families, then perform a later dated refresh; NS-07 and PA-04 remain open.",
+    "adjacent_peripheral_ecap_operator": {
+      "source_id": "S821",
+      "doi": "10.1371/journal.pcbi.1013452",
+      "pmid": "40938942",
+      "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1013452",
+      "locator": "§§2.2, 2.4, 2.6, 3.1, 5.2.1–5.2.6, 5.3–5.4; Figs. 1, 5–10",
+      "status": "full_publisher_text_checked",
+      "scope": "Extended reciprocity/FEM and semi-analytic peripheral vagus eCAP model compared with recordings from five healthy adult male Göttingen minipigs. Geometry and partial fascicular recruitment shape the compound waveform; amplitude is non-monotonic with recruitment.",
+      "boundary": "Peripheral nerve rather than spinal cord/CNS connectome; no pain or analgesia outcome; no Drosophila-to-human transfer or held-out-animal prediction. PLOS correction DOI 10.1371/journal.pcbi.1013902 changes XML/PubMed first-author indexing only."
+    }
   },
   "ns08_artifact_review": {
     "checked_at": "2026-09-24",

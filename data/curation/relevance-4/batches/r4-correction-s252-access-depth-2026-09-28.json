@@ -1,0 +1,72 @@
+{
+  "meta": {
+    "batch_id": "r4-correction-s252-access-depth-2026-09-28",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-28",
+    "scope": "Reconcile S252 full-text and access flags with the inspected publisher editorial preview",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-28"
+  },
+  "source_ids": ["S252"],
+  "records": [{
+    "id": "S252",
+    "title": "Method of the Year 2025: electron microscopy-based connectomics",
+    "year": 2025,
+    "source_type": "обзор"
+  }],
+  "decisions": [{
+    "source_id": "S252",
+    "decision": "partially_verified",
+    "checked_at": "2026-09-28",
+    "full_text_status": "metadata_only",
+    "searches": [{
+      "service": "Nature Methods publisher editorial page",
+      "query": "10.1038/s41592-025-02988-6 editorial identity date and access depth",
+      "url": "https://www.nature.com/articles/s41592-025-02988-6",
+      "accessed_at": "2026-09-28"
+    }],
+    "updates": {
+      "identifiers": {"doi": "10.1038/s41592-025-02988-6"},
+      "evidence": {"access_status": "restricted"},
+      "validation": {
+        "full_text_status": "metadata_only",
+        "checked_at": "2026-09-28",
+        "notes": "Nature Methods publisher page identifies this unsigned editorial, its 2025-12-08 publication date, volume 22 and pp. 2463-2464, and exposes only a brief preview before a subscription notice. The checked page supports the Method of the Year identity; the full text was not inspected. This editorial is not empirical validation of FlyWire, pain, behavior or cross-species transfer."
+      },
+      "field_resolution": {
+        "evidence.access_status": {
+          "state": "reported",
+          "value": "restricted",
+          "reason": "The publisher page explicitly labels the body as subscription content after the preview.",
+          "checked_at": "2026-09-28",
+          "locators": [{
+            "url": "https://www.nature.com/articles/s41592-025-02988-6",
+            "locator": "Publisher page, preview and Access options subscription notice"
+          }]
+        },
+        "validation.checked_at": {
+          "state": "reported",
+          "value": "2026-09-28",
+          "reason": "Publisher editorial metadata and access depth rechecked on this date.",
+          "checked_at": "2026-09-28",
+          "locators": [{
+            "url": "https://www.nature.com/articles/s41592-025-02988-6",
+            "locator": "Publisher editorial title, date, volume/pages and preview"
+          }]
+        },
+        "validation.notes": {
+          "state": "reported",
+          "value": "Nature Methods publisher page identifies this unsigned editorial, its 2025-12-08 publication date, volume 22 and pp. 2463-2464, and exposes only a brief preview before a subscription notice. The checked page supports the Method of the Year identity; the full text was not inspected. This editorial is not empirical validation of FlyWire, pain, behavior or cross-species transfer.",
+          "reason": "Corrects the stale full-text-checked flag without expanding the scientific claim.",
+          "checked_at": "2026-09-28",
+          "locators": [{
+            "url": "https://www.nature.com/articles/s41592-025-02988-6",
+            "locator": "Publisher editorial title/metadata, preview and Access options"
+          }]
+        }
+      }
+    },
+    "claims": [],
+    "notes": "Nature Methods publisher page identifies this unsigned editorial, its 2025-12-08 publication date, volume 22 and pp. 2463-2464, and exposes only a brief preview before a subscription notice. The checked page supports the Method of the Year identity; the full text was not inspected. This editorial is not empirical validation of FlyWire, pain, behavior or cross-species transfer."
+  }]
+}

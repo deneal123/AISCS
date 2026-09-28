@@ -1,0 +1,80 @@
+{
+  "meta": {
+    "batch_id": "r5-correction-s763-owner-v2-self-correction-2026-09-28",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-28",
+    "scope": "Record the bioRxiv v2 owner disclosed author-order and Figure 5 wording correction without changing scientific claims",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-28"
+  },
+  "source_ids": [
+    "S763"
+  ],
+  "records": [
+    {
+      "id": "S763",
+      "title": "Central versus peripheral neural control of a coordinated walking pattern in Drosophila",
+      "year": 2026,
+      "source_type": "препринт"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S763",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-28",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "service": "bioRxiv owner v2 full text",
+          "query": "S763 footnote summary-of-updates and v2 byline",
+          "url": "https://www.biorxiv.org/content/10.64898/2026.04.29.721658v2.full",
+          "accessed_at": "2026-09-28"
+        },
+        {
+          "service": "bioRxiv owner details API",
+          "query": "10.64898/2026.04.29.721658 version dates and author list",
+          "url": "https://api.biorxiv.org/details/biorxiv/10.64898/2026.04.29.721658",
+          "accessed_at": "2026-09-28"
+        }
+      ],
+      "updates": {
+        "identifiers": {
+          "doi": "10.64898/2026.04.29.721658"
+        },
+        "validation": {
+          "checked_at": "2026-09-28",
+          "notes": "Primary bioRxiv v2 full text checked. MANC v1.2.3, MaleCNS v0.9 and BANC v626 are the versions used for this paper's motif search, not proven source releases for Pugliese S740 simulation matrices. Biological assays support walking circuitry, not a pain or human SCS endpoint. BioRxiv v2 owner footnote reports corrected co-first order for NS/DSK, SSB as last author, restored omitted middle author JP (Jason Pitchford), and a minor Figure 5 title wording change; it states no other manuscript content changed. Owner API shows v1 2026-05-03 and v2 2026-05-05, with v2 latest; Crossref posted date 2026-05-03 is kept as registration lag, not a separate scientific version. Checked 2026-09-28."
+        },
+        "field_resolution": {
+          "validation.checked_at": {
+            "state": "reported",
+            "value": "2026-09-28",
+            "reason": "Owner v2 full text and version API checked on this date.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/10.64898/2026.04.29.721658v2.full",
+                "locator": "Article v2 front matter and footnote summary-of-updates"
+              }
+            ]
+          },
+          "validation.notes": {
+            "state": "reported",
+            "value": "Primary bioRxiv v2 full text checked. MANC v1.2.3, MaleCNS v0.9 and BANC v626 are the versions used for this paper's motif search, not proven source releases for Pugliese S740 simulation matrices. Biological assays support walking circuitry, not a pain or human SCS endpoint. BioRxiv v2 owner footnote reports corrected co-first order for NS/DSK, SSB as last author, restored omitted middle author JP (Jason Pitchford), and a minor Figure 5 title wording change; it states no other manuscript content changed. Owner API shows v1 2026-05-03 and v2 2026-05-05, with v2 latest; Crossref posted date 2026-05-03 is kept as registration lag, not a separate scientific version. Checked 2026-09-28.",
+            "reason": "Appended the owner disclosed v1-to-v2 self-correction without inferring additional content changes.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/10.64898/2026.04.29.721658v2.full",
+                "locator": "Footnote summary-of-updates: NS/DSK co-first, SSB last, restored JP, Fig 5 title wording; no other content change"
+              }
+            ]
+          }
+        }
+      },
+      "claims": [],
+      "notes": "Primary bioRxiv v2 full text checked. MANC v1.2.3, MaleCNS v0.9 and BANC v626 are the versions used for this paper's motif search, not proven source releases for Pugliese S740 simulation matrices. Biological assays support walking circuitry, not a pain or human SCS endpoint. BioRxiv v2 owner footnote reports corrected co-first order for NS/DSK, SSB as last author, restored omitted middle author JP (Jason Pitchford), and a minor Figure 5 title wording change; it states no other manuscript content changed. Owner API shows v1 2026-05-03 and v2 2026-05-05, with v2 latest; Crossref posted date 2026-05-03 is kept as registration lag, not a separate scientific version. Checked 2026-09-28."
+    }
+  ]
+}

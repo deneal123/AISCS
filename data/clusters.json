@@ -1,18 +1,18 @@
 {
   "meta": {
-    "schema_version": "2.0.0",
+    "schema_version": "1.2.0",
     "version": "drosophila_scs_scope_review",
     "language": "ru",
     "source_snapshot": "archive/2026-09-21/clusters.json",
-    "records_count": 214,
+    "records_count": 248,
     "clusters_count": 43,
     "retired_clusters_count": 11,
     "cluster_references_count": 210,
     "unique_clustered_records_count": 155,
-    "unclustered_records_count": 59,
+    "unclustered_records_count": 93,
     "multiple_membership_records_count": 46,
     "validation_status": "content reviewed for Drosophila x SCS scope",
-    "updated_at": "2026-09-25"
+    "updated_at": "2026-09-28"
   },
   "clusters": [
     {
@@ -29,11 +29,11 @@
         "модальность": "Epidural SCS ECAP waveforms recorded through two externalized percutaneous leads",
         "задача": "Classify individual pulses as ECAP, non-ECAP or artifact and model waveform features across stimulation settings",
         "метод": "Artifact cleaning, PCA clustering, K-nearest-neighbor classification and generalized linear mixed-effects models",
-        "датасет": "Eight chronic-pain participants undergoing an externalized SCS trial; two caudal contacts stimulated and remaining contacts recorded",
+        "датасет": "Fifteen chronic-pain participants recruited; 30 sessions from eight participants with externalized two-lead SCS selected, followed by exclusion of two sessions from one participant for uncertain electrode alignment",
         "производительность": "AUC separated ECAP from non-ECAP better than peak-to-peak amplitude (d'=2.44 versus 2.27); preferred polarities reduced current by about 1.25 mA",
         "кросс_субъект": "no: participant variability was modeled, but no held-out-participant validation is reported",
         "релевантность": 5,
-        "ограничения": "Small eight-participant observational trial. Pulse-level classification and mixed-effects modeling do not establish participant-independent prediction. ECAP is a neural-response/control signal, not a direct measurement of pain or clinical response.",
+        "ограничения": "Eight selected participants out of 15 recruited and 28 retained sessions after two exclusions. Nested k-fold classification selected every 11th waveform per outer loop; no participant-held-out evaluation or external cohort. Underlying data are available only on author request subject to ethics/IRB restrictions. ECAP classes and features are neural-response measures, not pain or treatment outcomes.",
         "тип_источника": "метод",
         "identifiers": {
           "doi": "10.1088/1741-2552/adbfbe",
@@ -52,7 +52,7 @@
         },
         "evidence": {
           "species": "Homo sapiens",
-          "population": "Eight participants with chronic pain during an externalized SCS trial",
+          "population": "Fifteen recruited adults with chronic pain; eight contributed 30 selected recording sessions, of which two were excluded for uncertain electrode alignment.",
           "subject_domain": "human_clinical",
           "modalities": [
             "ecap"
@@ -67,8 +67,8 @@
           "status": "verified_primary",
           "screening_status": "included_core",
           "full_text_status": "checked",
-          "checked_at": "2026-09-24",
-          "notes": "Small eight-participant observational trial. Pulse-level classification and mixed-effects modeling do not establish participant-independent prediction. ECAP is a neural-response/control signal, not a direct measurement of pain or clinical response.",
+          "checked_at": "2026-09-27",
+          "notes": "IOP Version of Record checked through text rendering of the official publisher PDF URL after direct IOP GET returned a Radware CAPTCHA. Methods 2.2 p. 3: 15 recruited, 30 sessions from eight selected, two sessions excluded. Methods 2.7 p. 5: outer cross-validation selects every 11th waveform, not a held-out participant. Table 1 p. 8: AUC median d-prime 2.44 for ECAP versus non-ECAP. Data availability p. 15: author request subject to ethics/IRB restrictions. No patient-level clinical pain outcome or independent validation.",
           "split_unit": "recording",
           "cross_subject": "no",
           "external_validation": "no",
@@ -156,13 +156,13 @@
           },
           "датасет": {
             "state": "reported",
-            "value": "Eight chronic-pain participants undergoing an externalized SCS trial; two caudal contacts stimulated and remaining contacts recorded",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-24",
+            "value": "Fifteen chronic-pain participants recruited; 30 sessions from eight participants with externalized two-lead SCS selected, followed by exclusion of two sessions from one participant for uncertain electrode alignment",
+            "reason": "Primary publisher Methods distinguishes recruitment, selected sessions and exclusions.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
-                "locator": "canonical field датасет"
+                "url": "https://iopscience.iop.org/article/10.1088/1741-2552/adbfbe/pdf",
+                "locator": "Version of Record, Methods 2.2 Participants, p. 3"
               }
             ]
           },
@@ -192,13 +192,13 @@
           },
           "ограничения": {
             "state": "reported",
-            "value": "Small eight-participant observational trial. Pulse-level classification and mixed-effects modeling do not establish participant-independent prediction. ECAP is a neural-response/control signal, not a direct measurement of pain or clinical response.",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-24",
+            "value": "Eight selected participants out of 15 recruited and 28 retained sessions after two exclusions. Nested k-fold classification selected every 11th waveform per outer loop; no participant-held-out evaluation or external cohort. Underlying data are available only on author request subject to ethics/IRB restrictions. ECAP classes and features are neural-response measures, not pain or treatment outcomes.",
+            "reason": "Primary Methods and data statement constrain validation and reuse claims.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
-                "locator": "canonical field ограничения"
+                "url": "https://iopscience.iop.org/article/10.1088/1741-2552/adbfbe/pdf",
+                "locator": "Version of Record, Methods 2.2 p. 3, 2.7 p. 5; Data availability p. 15"
               }
             ]
           },
@@ -336,13 +336,13 @@
           },
           "evidence.population": {
             "state": "reported",
-            "value": "Eight participants with chronic pain during an externalized SCS trial",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-24",
+            "value": "Fifteen recruited adults with chronic pain; eight contributed 30 selected recording sessions, of which two were excluded for uncertain electrode alignment.",
+            "reason": "Population and session flow reported in primary Methods.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
-                "locator": "canonical field evidence.population"
+                "url": "https://iopscience.iop.org/article/10.1088/1741-2552/adbfbe/pdf",
+                "locator": "Version of Record, Methods 2.2 Participants, p. 3"
               }
             ]
           },
@@ -422,13 +422,13 @@
           },
           "validation.checked_at": {
             "state": "reported",
-            "value": "2026-09-24",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-24",
+            "value": "2026-09-27",
+            "reason": "Dated direct review of the publisher Version of Record via its text rendering.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
-                "locator": "canonical field validation.checked_at"
+                "url": "https://iopscience.iop.org/article/10.1088/1741-2552/adbfbe/pdf",
+                "locator": "Publisher Version of Record"
               }
             ]
           },
@@ -506,13 +506,13 @@
           },
           "validation.notes": {
             "state": "reported",
-            "value": "Small eight-participant observational trial. Pulse-level classification and mixed-effects modeling do not establish participant-independent prediction. ECAP is a neural-response/control signal, not a direct measurement of pain or clinical response.",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-24",
+            "value": "IOP Version of Record checked through text rendering of the official publisher PDF URL after direct IOP GET returned a Radware CAPTCHA. Methods 2.2 p. 3: 15 recruited, 30 sessions from eight selected, two sessions excluded. Methods 2.7 p. 5: outer cross-validation selects every 11th waveform, not a held-out participant. Table 1 p. 8: AUC median d-prime 2.44 for ECAP versus non-ECAP. Data availability p. 15: author request subject to ethics/IRB restrictions. No patient-level clinical pain outcome or independent validation.",
+            "reason": "Replaces abstract-level source-card scope after primary Version of Record review.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
-                "locator": "canonical field validation.notes"
+                "url": "https://iopscience.iop.org/article/10.1088/1741-2552/adbfbe/pdf",
+                "locator": "Version of Record, Methods 2.2/2.7, Table 1, Data availability"
               }
             ]
           }
@@ -596,17 +596,17 @@
             "eeg"
           ],
           "sample_size": null,
-          "target_construct": "experimental_pain_class",
+          "target_construct": "unavailable_after_search",
           "target_label": "Pain-intensity classes inferred from resting and pain-evoked EEG",
           "access_status": "restricted",
           "evidence_role": "method_baseline"
         },
         "validation": {
-          "status": "partially_verified",
+          "status": "verified_primary",
           "screening_status": "included_core",
           "full_text_status": "metadata_only",
-          "checked_at": "2026-09-24",
-          "notes": "Only the primary PubMed abstract was accessible. Dataset identity, cohort, exact split, numerical results, calibration, uncertainty and independent external validation were not established. The abstract's phrase 'clinically viable' is not evidence of clinical validation.",
+          "checked_at": "2026-09-28",
+          "notes": "Only the owner abstract was checked. It reports inter-subject pain-intensity classification on EEG datasets, but gives no dataset identity, stimulus paradigm or exact pain-label origin; experimental pain cannot be inferred. The abstract does not establish the exact held-out participant partition, N, calibration or external validation.",
           "split_unit": "participant",
           "cross_subject": "yes",
           "external_validation": "unavailable_after_search",
@@ -743,12 +743,12 @@
           "identifiers.doi": {
             "state": "reported",
             "value": "10.1109/JBHI.2026.3650972",
-            "reason": "Value extracted from the checked primary page or full text.",
-            "checked_at": "2026-09-24",
+            "reason": "S004 abstract does not identify the stimulus paradigm or label origin, so experimental-pain construct is unsupported.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://pubmed.ncbi.nlm.nih.gov/41564065/",
-                "locator": "PubMed PMID 41564065, Abstract: Methods, Results and Conclusion; field identifiers.doi"
+                "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=41564065&retmode=xml",
+                "locator": "NLM PubMed AbstractText, Objective/Methods/Results, PMID 41564065"
               }
             ]
           },
@@ -923,14 +923,14 @@
             ]
           },
           "evidence.target_construct": {
-            "state": "reported",
-            "value": "experimental_pain_class",
-            "reason": "Value extracted from the checked primary page or full text.",
-            "checked_at": "2026-09-24",
+            "state": "unavailable_after_search",
+            "value": null,
+            "reason": "S004 abstract does not identify the stimulus paradigm or label origin, so experimental-pain construct is unsupported.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://pubmed.ncbi.nlm.nih.gov/41564065/",
-                "locator": "PubMed PMID 41564065, Abstract: Methods, Results and Conclusion; field evidence.target_construct"
+                "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=41564065&retmode=xml",
+                "locator": "NLM PubMed AbstractText, Objective/Methods/Results, PMID 41564065"
               }
             ]
           },
@@ -960,13 +960,13 @@
           },
           "validation.checked_at": {
             "state": "reported",
-            "value": "2026-09-24",
-            "reason": "Value extracted from the checked primary page or full text.",
-            "checked_at": "2026-09-24",
+            "value": "2026-09-28",
+            "reason": "S004 abstract does not identify the stimulus paradigm or label origin, so experimental-pain construct is unsupported.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://pubmed.ncbi.nlm.nih.gov/41564065/",
-                "locator": "PubMed PMID 41564065, Abstract: Methods, Results and Conclusion; field validation.checked_at"
+                "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=41564065&retmode=xml",
+                "locator": "NLM PubMed AbstractText, Objective/Methods/Results, PMID 41564065"
               }
             ]
           },
@@ -1044,13 +1044,13 @@
           },
           "validation.notes": {
             "state": "reported",
-            "value": "Only the primary PubMed abstract was accessible. Dataset identity, cohort, exact split, numerical results, calibration, uncertainty and independent external validation were not established. The abstract's phrase 'clinically viable' is not evidence of clinical validation.",
-            "reason": "Value extracted from the checked primary page or full text.",
-            "checked_at": "2026-09-24",
+            "value": "Only the owner abstract was checked. It reports inter-subject pain-intensity classification on EEG datasets, but gives no dataset identity, stimulus paradigm or exact pain-label origin; experimental pain cannot be inferred. The abstract does not establish the exact held-out participant partition, N, calibration or external validation.",
+            "reason": "S004 abstract does not identify the stimulus paradigm or label origin, so experimental-pain construct is unsupported.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://pubmed.ncbi.nlm.nih.gov/41564065/",
-                "locator": "PubMed PMID 41564065, Abstract: Methods, Results and Conclusion; field validation.notes"
+                "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=41564065&retmode=xml",
+                "locator": "NLM PubMed AbstractText, Objective/Methods/Results, PMID 41564065"
               }
             ]
           }
@@ -1103,7 +1103,7 @@
         "тип_источника": "метод",
         "identifiers": {
           "doi": "10.3390/s25041150",
-          "pmid": null,
+          "pmid": "40006379",
           "arxiv_id": null,
           "patent_id": null,
           "dataset_id": null,
@@ -1117,22 +1117,26 @@
           "iteration": 1
         },
         "evidence": {
-          "species": null,
-          "population": null,
-          "sample_size": null,
-          "target_construct": "unavailable_after_search",
-          "target_label": null,
+          "species": "Homo sapiens",
+          "population": "Surgery patients under general anesthesia: 90 analyzed at NTUH after missing-signal exclusions and 10 at ECKH.",
+          "sample_size": 100,
+          "target_construct": "nociceptive_response",
+          "target_label": "Retrospective anesthesiologist Nociception Assessment (NOA) score from anesthetic records; separate ECKH event analysis.",
           "access_status": "open",
           "evidence_role": "method_baseline",
-          "subject_domain": "unavailable_after_search",
-          "modalities": []
+          "subject_domain": "human_clinical",
+          "modalities": [
+            "eeg",
+            "ecg",
+            "bvp_ppg"
+          ]
         },
         "validation": {
           "status": "verified_primary",
           "screening_status": "included_core",
           "full_text_status": "checked",
-          "checked_at": "2026-09-22",
-          "notes": "Open full article checked; target is intraoperative nociception under anesthesia, not conscious pain.",
+          "checked_at": "2026-09-28",
+          "notes": "Primary full JATS rechecked 2026-09-28: 90 NTUH and 10 ECKH surgery patients, EEG/ECG/PPG and chart-derived NOA under general anesthesia. This is not conscious-pain self-report. ECKH is a 10-patient event check, not proof of clinical deployment. Exact NTUH partition procedure, calibration and model uncertainty remain unreported.",
           "split_unit": "not_reported",
           "cross_subject": "not_reported",
           "external_validation": "not_reported",
@@ -1276,14 +1280,14 @@
             ]
           },
           "identifiers.pmid": {
-            "state": "not_applicable",
-            "value": null,
-            "reason": "Поле неприменимо к типу и роли данного источника.",
-            "checked_at": "2026-09-23",
+            "state": "reported",
+            "value": "40006379",
+            "reason": "Primary full text explicitly reports this field; earlier placeholder was false.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11859842/",
-                "locator": "canonical field identifiers.pmid"
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11859842/fullTextXML",
+                "locator": "Front matter > article-id pub-id-type=pmid"
               }
             ]
           },
@@ -1384,86 +1388,90 @@
             ]
           },
           "evidence.species": {
-            "state": "not_reported",
-            "value": null,
-            "reason": "Свойство не сообщено в проверенном первичном тексте.",
-            "checked_at": "2026-09-23",
+            "state": "reported",
+            "value": "Homo sapiens",
+            "reason": "Primary full text explicitly reports this field; earlier placeholder was false.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11859842/",
-                "locator": "canonical field evidence.species"
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11859842/fullTextXML",
+                "locator": "Methods 2.1: human surgery patients"
               }
             ]
           },
           "evidence.population": {
-            "state": "not_reported",
-            "value": null,
-            "reason": "Свойство не сообщено в проверенном первичном тексте.",
-            "checked_at": "2026-09-23",
+            "state": "reported",
+            "value": "Surgery patients under general anesthesia: 90 analyzed at NTUH after missing-signal exclusions and 10 at ECKH.",
+            "reason": "Primary full text explicitly reports this field; earlier placeholder was false.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11859842/",
-                "locator": "canonical field evidence.population"
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11859842/fullTextXML",
+                "locator": "Methods 2.1 and Table 1: 90 NTUH + 10 ECKH"
               }
             ]
           },
           "evidence.subject_domain": {
-            "state": "unavailable_after_search",
-            "value": null,
-            "reason": "Значение не удалось установить по доступному первичному или библиографическому источнику; отсутствие зафиксировано без догадки.",
-            "checked_at": "2026-09-23",
+            "state": "reported",
+            "value": "human_clinical",
+            "reason": "Primary full text explicitly reports this field; earlier placeholder was false.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11859842/",
-                "locator": "canonical field evidence.subject_domain"
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11859842/fullTextXML",
+                "locator": "Methods 2.1: surgery patients under general anesthesia"
               }
             ]
           },
           "evidence.modalities": {
-            "state": "not_applicable",
-            "value": null,
-            "reason": "Поле неприменимо к типу и роли данного источника.",
-            "checked_at": "2026-09-23",
+            "state": "reported",
+            "value": [
+              "eeg",
+              "ecg",
+              "bvp_ppg"
+            ],
+            "reason": "Primary full text explicitly reports this field; earlier placeholder was false.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11859842/",
-                "locator": "canonical field evidence.modalities"
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11859842/fullTextXML",
+                "locator": "Methods 2.1-2.2: EEG, ECG, PPG"
               }
             ]
           },
           "evidence.sample_size": {
-            "state": "not_reported",
-            "value": null,
-            "reason": "Свойство не сообщено в проверенном первичном тексте.",
-            "checked_at": "2026-09-23",
+            "state": "reported",
+            "value": 100,
+            "reason": "Primary full text explicitly reports this field; earlier placeholder was false.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11859842/",
-                "locator": "canonical field evidence.sample_size"
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11859842/fullTextXML",
+                "locator": "Methods 2.1: 90 NTUH + 10 ECKH"
               }
             ]
           },
           "evidence.target_construct": {
-            "state": "unavailable_after_search",
-            "value": null,
-            "reason": "Значение не удалось установить по доступному первичному или библиографическому источнику; отсутствие зафиксировано без догадки.",
-            "checked_at": "2026-09-23",
+            "state": "reported",
+            "value": "nociceptive_response",
+            "reason": "Primary full text explicitly reports this field; earlier placeholder was false.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11859842/",
-                "locator": "canonical field evidence.target_construct"
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11859842/fullTextXML",
+                "locator": "Introduction and Methods 2.3: nociception under general anesthesia"
               }
             ]
           },
           "evidence.target_label": {
-            "state": "not_reported",
-            "value": null,
-            "reason": "Свойство не сообщено в проверенном первичном тексте.",
-            "checked_at": "2026-09-23",
+            "state": "reported",
+            "value": "Retrospective anesthesiologist Nociception Assessment (NOA) score from anesthetic records; separate ECKH event analysis.",
+            "reason": "Primary full text explicitly reports this field; earlier placeholder was false.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11859842/",
-                "locator": "canonical field evidence.target_label"
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11859842/fullTextXML",
+                "locator": "Methods 2.3: NOA; Results 3.4: ECKH events"
               }
             ]
           },
@@ -1481,13 +1489,13 @@
           },
           "validation.checked_at": {
             "state": "reported",
-            "value": "2026-09-22",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "value": "2026-09-28",
+            "reason": "Dated primary full-text recheck.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11859842/",
-                "locator": "canonical field validation.checked_at"
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11859842/fullTextXML",
+                "locator": "Front matter; Methods 2.1-2.3; Results 3.4"
               }
             ]
           },
@@ -1565,13 +1573,13 @@
           },
           "validation.notes": {
             "state": "reported",
-            "value": "Open full article checked; target is intraoperative nociception under anesthesia, not conscious pain.",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "value": "Primary full JATS rechecked 2026-09-28: 90 NTUH and 10 ECKH surgery patients, EEG/ECG/PPG and chart-derived NOA under general anesthesia. This is not conscious-pain self-report. ECKH is a 10-patient event check, not proof of clinical deployment. Exact NTUH partition procedure, calibration and model uncertainty remain unreported.",
+            "reason": "Dated primary full-text recheck.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11859842/",
-                "locator": "canonical field validation.notes"
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11859842/fullTextXML",
+                "locator": "Front matter; Methods 2.1-2.3; Results 3.4"
               }
             ]
           }
@@ -3190,15 +3198,15 @@
         "авторы": "Hania Shahzad; Cole Veliky; Hai Le; Sheeraz Qureshi; Frank M Phillips; Yashar Javidan; Safdar N Khan",
         "год": 2024,
         "издание": "European Spine Journal",
-        "модальность": "Клинические данные",
+        "модальность": "Literature review; no primary clinical dataset",
         "задача": "Приватность в спинальной хирургии",
         "метод": "Federated Learning",
         "датасет": null,
         "производительность": null,
-        "кросс_субъект": "Да",
+        "кросс_субъект": "not_applicable",
         "релевантность": 4,
-        "ограничения": null,
-        "тип_источника": "федеративное_SCS",
+        "ограничения": "Non-systematic narrative review with no strict inclusion or exclusion criteria, no new cohort or deployed federated model, and no SCS, ECAP or pain-outcome validation. The publisher version of record is subscription-only; an open accepted author manuscript was checked.",
+        "тип_источника": "обзор",
         "identifiers": {
           "doi": "10.1007/s00586-024-08172-2",
           "pmid": "38403832",
@@ -3220,29 +3228,25 @@
           "sample_size": null,
           "target_construct": "not_applicable",
           "target_label": null,
-          "access_status": "unavailable_after_search",
+          "access_status": "open",
           "evidence_role": "context_only",
-          "subject_domain": "unavailable_after_search",
-          "modalities": [
-            "clinical_outcome"
-          ]
+          "subject_domain": "not_applicable",
+          "modalities": []
         },
         "validation": {
           "status": "verified_primary",
           "screening_status": "included_core",
           "full_text_status": "checked",
-          "checked_at": "2026-09-22",
-          "notes": "Narrative review of federated learning opportunities in spine surgery; it is not a deployed federated SCS model or outcome-validation study.",
-          "split_unit": "not_reported",
-          "cross_subject": "yes",
+          "checked_at": "2026-09-28",
+          "notes": "Review of federated learning opportunities in spine surgery. The author accepted manuscript is openly available, but the publisher version of record is subscription-only. No new clinical dataset, participant-level model, cross-subject validation, SCS, ECAP or pain endpoint is reported.",
+          "split_unit": "not_applicable",
+          "cross_subject": "not_applicable",
           "external_validation": "not_reported",
           "calibration": "not_reported",
           "uncertainty": "not_reported",
           "exclusion_reason": null
         },
-        "risk_flags": [
-          "missing_cross_subject_validation"
-        ],
+        "risk_flags": [],
         "relations": [],
         "field_resolution": {
           "авторы": {
@@ -3283,13 +3287,13 @@
           },
           "модальность": {
             "state": "reported",
-            "value": "Клинические данные",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "value": "Literature review; no primary clinical dataset",
+            "reason": "The article is a review of literature, not an analysis of enrolled clinical data.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://doi.org/10.1007/s00586-024-08172-2",
-                "locator": "canonical field модальность"
+                "url": "https://escholarship.org/content/qt5pq6n147/qt5pq6n147.pdf",
+                "locator": "PDF pp. 2-4; Abstract/Methods; Table 1"
               }
             ]
           },
@@ -3342,26 +3346,26 @@
             ]
           },
           "кросс_субъект": {
-            "state": "reported",
-            "value": "Да",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "state": "not_applicable",
+            "value": null,
+            "reason": "No trained model or subjects evaluated in this narrative review.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://doi.org/10.1007/s00586-024-08172-2",
-                "locator": "canonical field кросс_субъект"
+                "url": "https://escholarship.org/content/qt5pq6n147/qt5pq6n147.pdf",
+                "locator": "PDF p. 2 Abstract/Methods; p. 6 Future directions"
               }
             ]
           },
           "ограничения": {
-            "state": "not_reported",
-            "value": null,
-            "reason": "Свойство не сообщено в проверенном первичном тексте.",
-            "checked_at": "2026-09-23",
+            "state": "reported",
+            "value": "Non-systematic narrative review with no strict inclusion or exclusion criteria, no new cohort or deployed federated model, and no SCS, ECAP or pain-outcome validation. The publisher version of record is subscription-only; an open accepted author manuscript was checked.",
+            "reason": "The authors state that the search did not follow a strict methodology; no SCS or ECAP experiment is described.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://doi.org/10.1007/s00586-024-08172-2",
-                "locator": "canonical field ограничения"
+                "url": "https://escholarship.org/content/qt5pq6n147/qt5pq6n147.pdf",
+                "locator": "PDF pp. 2-6; Abstract/Methods; Future directions"
               }
             ]
           },
@@ -3510,28 +3514,26 @@
             ]
           },
           "evidence.subject_domain": {
-            "state": "unavailable_after_search",
+            "state": "not_applicable",
             "value": null,
-            "reason": "Значение не удалось установить по доступному первичному или библиографическому источнику; отсутствие зафиксировано без догадки.",
-            "checked_at": "2026-09-23",
+            "reason": "Narrative review with no newly enrolled human or animal study cohort.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://doi.org/10.1007/s00586-024-08172-2",
-                "locator": "canonical field evidence.subject_domain"
+                "url": "https://escholarship.org/content/qt5pq6n147/qt5pq6n147.pdf",
+                "locator": "PDF p. 2 Abstract/Methods"
               }
             ]
           },
           "evidence.modalities": {
-            "state": "reported",
-            "value": [
-              "clinical_outcome"
-            ],
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "state": "not_applicable",
+            "value": null,
+            "reason": "No primary clinical signal or outcome dataset was collected or evaluated.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://doi.org/10.1007/s00586-024-08172-2",
-                "locator": "canonical field evidence.modalities"
+                "url": "https://escholarship.org/content/qt5pq6n147/qt5pq6n147.pdf",
+                "locator": "PDF p. 2 Abstract/Methods; p. 4 Table 1"
               }
             ]
           },
@@ -3572,50 +3574,50 @@
             ]
           },
           "evidence.access_status": {
-            "state": "unavailable_after_search",
-            "value": null,
-            "reason": "Значение не удалось установить по доступному первичному или библиографическому источнику; отсутствие зафиксировано без догадки.",
-            "checked_at": "2026-09-23",
+            "state": "reported",
+            "value": "open",
+            "reason": "The open author accepted manuscript was checked; this does not imply open publisher VOR.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://doi.org/10.1007/s00586-024-08172-2",
-                "locator": "canonical field evidence.access_status"
+                "url": "https://escholarship.org/content/qt5pq6n147/qt5pq6n147.pdf",
+                "locator": "PDF p. 2 title/REVIEW ARTICLE; pp. 2-7 body"
               }
             ]
           },
           "validation.checked_at": {
             "state": "reported",
-            "value": "2026-09-22",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "value": "2026-09-28",
+            "reason": "Dated accepted-manuscript full-text check.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://doi.org/10.1007/s00586-024-08172-2",
-                "locator": "canonical field validation.checked_at"
+                "url": "https://escholarship.org/content/qt5pq6n147/qt5pq6n147.pdf",
+                "locator": "PDF p. 2 title and DOI; pp. 2-6 article body"
               }
             ]
           },
           "validation.split_unit": {
-            "state": "not_reported",
+            "state": "not_applicable",
             "value": null,
-            "reason": "Свойство не сообщено в проверенном первичном тексте.",
-            "checked_at": "2026-09-23",
+            "reason": "No model training or train/test split in a narrative review.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://doi.org/10.1007/s00586-024-08172-2",
-                "locator": "canonical field validation.split_unit"
+                "url": "https://escholarship.org/content/qt5pq6n147/qt5pq6n147.pdf",
+                "locator": "PDF p. 2 Abstract/Methods"
               }
             ]
           },
           "validation.cross_subject": {
-            "state": "reported",
-            "value": "yes",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "state": "not_applicable",
+            "value": null,
+            "reason": "No participants or cross-subject evaluation; federated learning is discussed prospectively.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://doi.org/10.1007/s00586-024-08172-2",
-                "locator": "canonical field validation.cross_subject"
+                "url": "https://escholarship.org/content/qt5pq6n147/qt5pq6n147.pdf",
+                "locator": "PDF p. 2 Abstract/Methods; p. 6 Future directions"
               }
             ]
           },
@@ -3669,13 +3671,13 @@
           },
           "validation.notes": {
             "state": "reported",
-            "value": "Narrative review of federated learning opportunities in spine surgery; it is not a deployed federated SCS model or outcome-validation study.",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "value": "Review of federated learning opportunities in spine surgery. The author accepted manuscript is openly available, but the publisher version of record is subscription-only. No new clinical dataset, participant-level model, cross-subject validation, SCS, ECAP or pain endpoint is reported.",
+            "reason": "Separate contextual spine-surgery review from empirical SCS or ECAP validation.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://doi.org/10.1007/s00586-024-08172-2",
-                "locator": "canonical field validation.notes"
+                "url": "https://escholarship.org/content/qt5pq6n147/qt5pq6n147.pdf",
+                "locator": "PDF pp. 2-6; Abstract, Methods and Future directions"
               }
             ]
           }
@@ -4763,17 +4765,17 @@
       "представитель": {
         "id": "S025",
         "название": "A predictive corticospinal model for pain perception",
-        "авторы": null,
+        "авторы": "Xiao-Min Lin; Xiao-Shuo Zhang; Hang Zhou; Xiu-Yi Han; Zhao-Xing Wei; Tor D. Wager; Irene Tracey; Ji-Xin Liu; Cun-Zhi Liu; Ya-Zhuo Kong",
         "год": 2026,
         "издание": "Cell Reports Medicine 7(7):102793",
         "модальность": "Кортикоспинальная",
-        "задача": "Предиктивная модель восприятия боли",
-        "метод": "Predictive coding",
+        "задача": "Predict human self-reported experimental pain intensity from corticospinal fMRI; assess specificity and bounded application to one chronic-pain IBS cohort.",
+        "метод": "Corticospinal Pain Intensity Pattern (CsPIP): simultaneous brain/cervical-cord fMRI with multivariate LASSO-PCR; predictive coding is a Discussion interpretation, not the fitting algorithm.",
         "датасет": null,
         "производительность": null,
         "кросс_субъект": null,
         "релевантность": 4,
-        "ограничения": null,
+        "ограничения": "The study applies CsPIP to independent experimental and one IBS chronic-pain cohort, but TENS sensitivity is assessed in a subset of the discovery study whose baseline data contributed to model development. The treated-side TENS association is r=0.36, p=0.049, not an independent TENS validation. No ECAP, SCS response or clinical treatment-efficacy inference follows.",
         "тип_источника": "фундаментальные_модели",
         "identifiers": {
           "doi": "10.1016/j.xcrm.2026.102793",
@@ -4805,8 +4807,8 @@
           "status": "verified_primary",
           "screening_status": "included_core",
           "full_text_status": "checked",
-          "checked_at": "2026-09-22",
-          "notes": "The primary article reports independent-dataset tests across experimental pain, TENS and chronic pain. It is an fMRI biomarker study, not ECAP evidence or an SCS-response model; full authorship metadata remains to be completed.",
+          "checked_at": "2026-09-28",
+          "notes": "The study applies CsPIP to independent experimental and one IBS chronic-pain cohort, but TENS sensitivity is assessed in a subset of the discovery study whose baseline data contributed to model development. The treated-side TENS association is r=0.36, p=0.049, not an independent TENS validation. No ECAP, SCS response or clinical treatment-efficacy inference follows.",
           "split_unit": "not_reported",
           "cross_subject": "not_reported",
           "external_validation": "not_reported",
@@ -4814,20 +4816,18 @@
           "uncertainty": "not_reported",
           "exclusion_reason": null
         },
-        "risk_flags": [
-          "missing_authors"
-        ],
+        "risk_flags": [],
         "relations": [],
         "field_resolution": {
           "авторы": {
-            "state": "not_reported",
-            "value": null,
-            "reason": "Свойство не сообщено в проверенном первичном тексте.",
-            "checked_at": "2026-09-23",
+            "state": "reported",
+            "value": "Xiao-Min Lin; Xiao-Shuo Zhang; Hang Zhou; Xiu-Yi Han; Zhao-Xing Wei; Tor D. Wager; Irene Tracey; Ji-Xin Liu; Cun-Zhi Liu; Ya-Zhuo Kong",
+            "reason": "Все десять авторов сверены с издательской регистрацией DOI в Crossref.",
+            "checked_at": "2026-09-26",
             "locators": [
               {
-                "url": "https://doi.org/10.1016/j.xcrm.2026.102793",
-                "locator": "canonical field авторы"
+                "url": "https://api.crossref.org/works/10.1016%2Fj.xcrm.2026.102793",
+                "locator": "message.author[0..9], given and family names"
               }
             ]
           },
@@ -4869,25 +4869,25 @@
           },
           "задача": {
             "state": "reported",
-            "value": "Предиктивная модель восприятия боли",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "value": "Predict human self-reported experimental pain intensity from corticospinal fMRI; assess specificity and bounded application to one chronic-pain IBS cohort.",
+            "reason": "The primary target is self-reported pain intensity; chronic-pain application is a separate IBS cohort.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://doi.org/10.1016/j.xcrm.2026.102793",
-                "locator": "canonical field задача"
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13400141/fullTextXML",
+                "locator": "Results opening; Development of the corticospinal pain intensity pattern; Sensitivity of the CsPIP to neuromodulation-induced pain changes, Fig. 4; Discussion predictive-coding paragraph"
               }
             ]
           },
           "метод": {
             "state": "reported",
-            "value": "Predictive coding",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "value": "Corticospinal Pain Intensity Pattern (CsPIP): simultaneous brain/cervical-cord fMRI with multivariate LASSO-PCR; predictive coding is a Discussion interpretation, not the fitting algorithm.",
+            "reason": "Results explicitly name LASSO-PCR; predictive coding appears only as conceptual interpretation in Discussion.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://doi.org/10.1016/j.xcrm.2026.102793",
-                "locator": "canonical field метод"
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13400141/fullTextXML",
+                "locator": "Results opening; Development of the corticospinal pain intensity pattern; Sensitivity of the CsPIP to neuromodulation-induced pain changes, Fig. 4; Discussion predictive-coding paragraph"
               }
             ]
           },
@@ -4928,14 +4928,14 @@
             ]
           },
           "ограничения": {
-            "state": "not_reported",
-            "value": null,
-            "reason": "Свойство не сообщено в проверенном первичном тексте.",
-            "checked_at": "2026-09-23",
+            "state": "reported",
+            "value": "The study applies CsPIP to independent experimental and one IBS chronic-pain cohort, but TENS sensitivity is assessed in a subset of the discovery study whose baseline data contributed to model development. The treated-side TENS association is r=0.36, p=0.049, not an independent TENS validation. No ECAP, SCS response or clinical treatment-efficacy inference follows.",
+            "reason": "TENS subset overlaps discovery data; do not treat its association as independent validation.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://doi.org/10.1016/j.xcrm.2026.102793",
-                "locator": "canonical field ограничения"
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13400141/fullTextXML",
+                "locator": "Results opening; Development of the corticospinal pain intensity pattern; Sensitivity of the CsPIP to neuromodulation-induced pain changes, Fig. 4; Discussion predictive-coding paragraph"
               }
             ]
           },
@@ -5157,13 +5157,13 @@
           },
           "validation.checked_at": {
             "state": "reported",
-            "value": "2026-09-22",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "value": "2026-09-28",
+            "reason": "Dated full-text JATS review.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://doi.org/10.1016/j.xcrm.2026.102793",
-                "locator": "canonical field validation.checked_at"
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13400141/fullTextXML",
+                "locator": "Results opening; Development of the corticospinal pain intensity pattern; Sensitivity of the CsPIP to neuromodulation-induced pain changes, Fig. 4; Discussion predictive-coding paragraph"
               }
             ]
           },
@@ -5241,13 +5241,13 @@
           },
           "validation.notes": {
             "state": "reported",
-            "value": "The primary article reports independent-dataset tests across experimental pain, TENS and chronic pain. It is an fMRI biomarker study, not ECAP evidence or an SCS-response model; full authorship metadata remains to be completed.",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "value": "The study applies CsPIP to independent experimental and one IBS chronic-pain cohort, but TENS sensitivity is assessed in a subset of the discovery study whose baseline data contributed to model development. The treated-side TENS association is r=0.36, p=0.049, not an independent TENS validation. No ECAP, SCS response or clinical treatment-efficacy inference follows.",
+            "reason": "Distinguishes model fitting from interpretation and TENS discovery-cohort overlap.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://doi.org/10.1016/j.xcrm.2026.102793",
-                "locator": "canonical field validation.notes"
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13400141/fullTextXML",
+                "locator": "Results opening; Development of the corticospinal pain intensity pattern; Sensitivity of the CsPIP to neuromodulation-induced pain changes, Fig. 4; Discussion predictive-coding paragraph"
               }
             ]
           }
@@ -5813,7 +5813,7 @@
         "год": 2026,
         "издание": "Journal of Medical Systems 50(1):14",
         "модальность": "Мультимодальная (носимые)",
-        "задача": "Раннее обнаружение боли",
+        "задача": "Scoping review of early detection of physiological dysregulation: pain, stress and hemodynamic deterioration",
         "метод": "DL + wearable sensors",
         "датасет": null,
         "производительность": null,
@@ -5840,7 +5840,7 @@
           "species": null,
           "population": null,
           "sample_size": null,
-          "target_construct": "technical_signal_quality",
+          "target_construct": "not_applicable",
           "target_label": null,
           "access_status": "open",
           "evidence_role": "context_only",
@@ -5851,8 +5851,8 @@
           "status": "verified_primary",
           "screening_status": "included_core",
           "full_text_status": "checked",
-          "checked_at": "2026-09-22",
-          "notes": "Scoping review of 27 heterogeneous studies spanning pain, stress and hemodynamic deterioration; it explicitly calls for real-world and clinical-impact validation and is not effectiveness evidence.",
+          "checked_at": "2026-09-26",
+          "notes": "Corrected an inherited single-target technical-signal-quality assignment. This heterogeneous scoping review is context only; no pooled pain, ECAP or SCS performance estimate is inferred.",
           "split_unit": "not_reported",
           "cross_subject": "not_reported",
           "external_validation": "not_reported",
@@ -5915,13 +5915,17 @@
           },
           "задача": {
             "state": "reported",
-            "value": "Раннее обнаружение боли",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "value": "Scoping review of early detection of physiological dysregulation: pain, stress and hemodynamic deterioration",
+            "reason": "Primary abstract explicitly names all three clinical states and the scoping-review aim.",
+            "checked_at": "2026-09-26",
             "locators": [
               {
                 "url": "https://pubmed.ncbi.nlm.nih.gov/41615529/",
-                "locator": "canonical field задача"
+                "locator": "Abstract: Objective, Methods, Results and Conclusions; PMID 41615529; DOI 10.1007/s10916-025-02332-7"
+              },
+              {
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12858468/fullTextXML",
+                "locator": "Full text: Methodology, Inclusion and Exclusion Criteria, Data Analysis and Synthesis, Results; 27 studies across pain, stress and hemodynamic deterioration"
               }
             ]
           },
@@ -6166,26 +6170,34 @@
             ]
           },
           "evidence.target_construct": {
-            "state": "reported",
-            "value": "technical_signal_quality",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "state": "not_applicable",
+            "value": null,
+            "reason": "The primary abstract describes a scoping review of 27 studies across pain, stress and hemodynamic deterioration in patients older than 13 years. It does not define one pooled target or a technical signal-quality endpoint.",
+            "checked_at": "2026-09-26",
             "locators": [
               {
                 "url": "https://pubmed.ncbi.nlm.nih.gov/41615529/",
-                "locator": "canonical field evidence.target_construct"
+                "locator": "Abstract: Objective, Methods, Results and Conclusions; PMID 41615529; DOI 10.1007/s10916-025-02332-7"
+              },
+              {
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12858468/fullTextXML",
+                "locator": "Full text: Methodology, Inclusion and Exclusion Criteria, Data Analysis and Synthesis, Results; 27 studies across pain, stress and hemodynamic deterioration"
               }
             ]
           },
           "evidence.target_label": {
-            "state": "not_reported",
+            "state": "not_applicable",
             "value": null,
-            "reason": "Свойство не сообщено в проверенном первичном тексте.",
-            "checked_at": "2026-09-23",
+            "reason": "The primary abstract describes a scoping review of 27 studies across pain, stress and hemodynamic deterioration in patients older than 13 years. It does not define one pooled target or a technical signal-quality endpoint.",
+            "checked_at": "2026-09-26",
             "locators": [
               {
                 "url": "https://pubmed.ncbi.nlm.nih.gov/41615529/",
-                "locator": "canonical field evidence.target_label"
+                "locator": "Abstract: Objective, Methods, Results and Conclusions; PMID 41615529; DOI 10.1007/s10916-025-02332-7"
+              },
+              {
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12858468/fullTextXML",
+                "locator": "Full text: Methodology, Inclusion and Exclusion Criteria, Data Analysis and Synthesis, Results; 27 studies across pain, stress and hemodynamic deterioration"
               }
             ]
           },
@@ -6203,13 +6215,13 @@
           },
           "validation.checked_at": {
             "state": "reported",
-            "value": "2026-09-22",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "value": "2026-09-26",
+            "reason": "Updated by this reviewed correction, matching the canonical validation field.",
+            "checked_at": "2026-09-26",
             "locators": [
               {
-                "url": "https://pubmed.ncbi.nlm.nih.gov/41615529/",
-                "locator": "canonical field validation.checked_at"
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12858468/fullTextXML",
+                "locator": "Full text: Methodology, Results and Conclusions"
               }
             ]
           },
@@ -6287,13 +6299,13 @@
           },
           "validation.notes": {
             "state": "reported",
-            "value": "Scoping review of 27 heterogeneous studies spanning pain, stress and hemodynamic deterioration; it explicitly calls for real-world and clinical-impact validation and is not effectiveness evidence.",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "value": "Corrected an inherited single-target technical-signal-quality assignment. This heterogeneous scoping review is context only; no pooled pain, ECAP or SCS performance estimate is inferred.",
+            "reason": "Updated by this reviewed correction, matching the canonical validation field.",
+            "checked_at": "2026-09-26",
             "locators": [
               {
-                "url": "https://pubmed.ncbi.nlm.nih.gov/41615529/",
-                "locator": "canonical field validation.notes"
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12858468/fullTextXML",
+                "locator": "Full text: Methodology, Results and Conclusions"
               }
             ]
           }
@@ -7422,15 +7434,16 @@
           "subject_domain": "drosophila_adult",
           "modalities": [
             "connectome",
-            "neural_activity"
+            "neural_activity",
+            "behavior"
           ]
         },
         "validation": {
           "status": "verified_primary",
           "screening_status": "included_core",
           "full_text_status": "checked",
-          "checked_at": "2026-09-21",
-          "notes": "Препринт, не прошедший журнальное рецензирование на дату проверки. Поддерживает модель ноцицепции, но не человеческой боли.",
+          "checked_at": "2026-09-28",
+          "notes": "Publisher-deposited preprint text reports adult fly optogenetic avoidance and escape behavior alongside connectome and neural analyses (Results and Figs. 1, 2 and 6). These observations are protective behavior, not subjective pain or human SCS response.",
           "split_unit": "not_reported",
           "cross_subject": "not_reported",
           "external_validation": "not_reported",
@@ -7568,12 +7581,12 @@
           "identifiers.doi": {
             "state": "reported",
             "value": "10.1101/2025.10.28.684868",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "reason": "S029 card omitted the directly measured avoidance/escape behavior modality.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://pubmed.ncbi.nlm.nih.gov/41280033/",
-                "locator": "canonical field identifiers.doi"
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12636578/fullTextXML",
+                "locator": "Results > A screen for somatosensory neurons that produce avoidance behavior (Fig. 1); Spatially targeted activation (Fig. 2); Different components of escape and sustained avoidance (Fig. 6); Methods > Optogenetics experiments in freely walking flies"
               }
             ]
           },
@@ -7725,14 +7738,15 @@
             "state": "reported",
             "value": [
               "connectome",
-              "neural_activity"
+              "neural_activity",
+              "behavior"
             ],
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "reason": "S029 card omitted the directly measured avoidance/escape behavior modality.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://pubmed.ncbi.nlm.nih.gov/41280033/",
-                "locator": "canonical field evidence.modalities"
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12636578/fullTextXML",
+                "locator": "Results > A screen for somatosensory neurons that produce avoidance behavior (Fig. 1); Spatially targeted activation (Fig. 2); Different components of escape and sustained avoidance (Fig. 6); Methods > Optogenetics experiments in freely walking flies"
               }
             ]
           },
@@ -7786,13 +7800,13 @@
           },
           "validation.checked_at": {
             "state": "reported",
-            "value": "2026-09-21",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "value": "2026-09-28",
+            "reason": "S029 card omitted the directly measured avoidance/escape behavior modality.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://pubmed.ncbi.nlm.nih.gov/41280033/",
-                "locator": "canonical field validation.checked_at"
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12636578/fullTextXML",
+                "locator": "Results > A screen for somatosensory neurons that produce avoidance behavior (Fig. 1); Spatially targeted activation (Fig. 2); Different components of escape and sustained avoidance (Fig. 6); Methods > Optogenetics experiments in freely walking flies"
               }
             ]
           },
@@ -7870,13 +7884,13 @@
           },
           "validation.notes": {
             "state": "reported",
-            "value": "Препринт, не прошедший журнальное рецензирование на дату проверки. Поддерживает модель ноцицепции, но не человеческой боли.",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "value": "Publisher-deposited preprint text reports adult fly optogenetic avoidance and escape behavior alongside connectome and neural analyses (Results and Figs. 1, 2 and 6). These observations are protective behavior, not subjective pain or human SCS response.",
+            "reason": "S029 card omitted the directly measured avoidance/escape behavior modality.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://pubmed.ncbi.nlm.nih.gov/41280033/",
-                "locator": "canonical field validation.notes"
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12636578/fullTextXML",
+                "locator": "Results > A screen for somatosensory neurons that produce avoidance behavior (Fig. 1); Spatially targeted activation (Fig. 2); Different components of escape and sustained avoidance (Fig. 6); Methods > Optogenetics experiments in freely walking flies"
               }
             ]
           }
@@ -10024,14 +10038,14 @@
         "авторы": "Prateek Dullur; Meenakshi Singhal; Brian Hong; Mehreen Ali; Yuan Yang; Ravishankar Iyer; Suguna Pappu",
         "год": 2026,
         "издание": "Neuromodulation 29(6):913-920",
-        "модальность": null,
-        "задача": null,
-        "метод": null,
-        "датасет": null,
+        "модальность": "Scoping review of ECAP, position/movement and subjective-state control signals; no original participant-level measurements.",
+        "задача": "Evaluate the control signals and algorithms used by closed-loop SCS systems for chronic pain.",
+        "метод": "PRISMA-ScR search of PubMed, Scopus and Web of Science on 2024-12-14; 688 unique articles screened, 28 publications representing 19 studies included.",
+        "датасет": "Review corpus of 28 publications representing 19 unique studies; no participant-level ECAP/pain outcome dataset in the author abstract.",
         "производительность": null,
         "кросс_субъект": null,
         "релевантность": 5,
-        "ограничения": "Open publisher review checked; ECAP is a control signal, not a direct measure of pain.",
+        "ограничения": "Review-level categories are not independent patient counts or linked participant data. ECAP is a neural control signal, not a direct measure of pain. Only the author abstract was directly checked; official publisher full-text route is indexed open access but returned HTTP 403 locally on 2026-09-27.",
         "тип_источника": "обзор",
         "identifiers": {
           "doi": "10.1016/j.neurom.2025.11.011",
@@ -10050,24 +10064,26 @@
         },
         "evidence": {
           "species": null,
-          "population": null,
-          "sample_size": null,
-          "target_construct": "unavailable_after_search",
+          "population": "Human chronic-pain SCS studies represented by a scoping review; no new recruited cohort.",
+          "sample_size": "28 included publications representing 19 unique studies; pooled participant N is not reported in the checked abstract.",
+          "target_construct": "not_applicable",
           "target_label": null,
-          "access_status": "unavailable_after_search",
+          "access_status": "open",
           "evidence_role": "method_baseline",
-          "subject_domain": "unavailable_after_search",
-          "modalities": []
+          "subject_domain": "human_clinical",
+          "modalities": [
+            "metadata"
+          ]
         },
         "validation": {
           "status": "verified_primary",
           "screening_status": "included_core",
           "full_text_status": "metadata_only",
-          "checked_at": "2026-09-25",
-          "notes": "The PubMed owner abstract reports a 28-article/19-study scoping review of closed-loop SCS control signals. ECAP is discussed as a control biomarker rather than a subjective pain measure. The publisher full body and Crossmark update status were not accessible in this review.",
-          "split_unit": "not_reported",
-          "cross_subject": "not_reported",
-          "external_validation": "not_reported",
+          "checked_at": "2026-09-27",
+          "notes": "PubMed PMID 41504676 author abstract checked directly for PRISMA-ScR date, screening counts and distinct signal categories. Publisher officially indexes the article as open access CC BY 4.0, but direct full HTML fetch returned HTTP 403 here. Full-text status remains metadata_only; no per-study methods, linked participant data or predictor validation inferred.",
+          "split_unit": "not_applicable",
+          "cross_subject": "not_applicable",
+          "external_validation": "not_applicable",
           "calibration": "not_reported",
           "uncertainty": "not_reported",
           "exclusion_reason": null
@@ -10112,50 +10128,50 @@
             ]
           },
           "модальность": {
-            "state": "not_reported",
-            "value": null,
-            "reason": "Свойство не сообщено в проверенном первичном тексте.",
-            "checked_at": "2026-09-23",
+            "state": "reported",
+            "value": "Scoping review of ECAP, position/movement and subjective-state control signals; no original participant-level measurements.",
+            "reason": "Explicit in the PubMed author abstract or the bounded inference about review-level limitations.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1094715925011705",
-                "locator": "canonical field модальность"
+                "url": "https://pubmed.ncbi.nlm.nih.gov/41504676/",
+                "locator": "PubMed PMID 41504676, author Abstract > Objectives, Materials and methods, Results, Conclusions"
               }
             ]
           },
           "задача": {
-            "state": "not_reported",
-            "value": null,
-            "reason": "Свойство не сообщено в проверенном первичном тексте.",
-            "checked_at": "2026-09-23",
+            "state": "reported",
+            "value": "Evaluate the control signals and algorithms used by closed-loop SCS systems for chronic pain.",
+            "reason": "Explicit in the PubMed author abstract or the bounded inference about review-level limitations.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1094715925011705",
-                "locator": "canonical field задача"
+                "url": "https://pubmed.ncbi.nlm.nih.gov/41504676/",
+                "locator": "PubMed PMID 41504676, author Abstract > Objectives, Materials and methods, Results, Conclusions"
               }
             ]
           },
           "метод": {
-            "state": "not_reported",
-            "value": null,
-            "reason": "Свойство не сообщено в проверенном первичном тексте.",
-            "checked_at": "2026-09-23",
+            "state": "reported",
+            "value": "PRISMA-ScR search of PubMed, Scopus and Web of Science on 2024-12-14; 688 unique articles screened, 28 publications representing 19 studies included.",
+            "reason": "Explicit in the PubMed author abstract or the bounded inference about review-level limitations.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1094715925011705",
-                "locator": "canonical field метод"
+                "url": "https://pubmed.ncbi.nlm.nih.gov/41504676/",
+                "locator": "PubMed PMID 41504676, author Abstract > Objectives, Materials and methods, Results, Conclusions"
               }
             ]
           },
           "датасет": {
-            "state": "not_reported",
-            "value": null,
-            "reason": "Свойство не сообщено в проверенном первичном тексте.",
-            "checked_at": "2026-09-23",
+            "state": "reported",
+            "value": "Review corpus of 28 publications representing 19 unique studies; no participant-level ECAP/pain outcome dataset in the author abstract.",
+            "reason": "Explicit in the PubMed author abstract or the bounded inference about review-level limitations.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1094715925011705",
-                "locator": "canonical field датасет"
+                "url": "https://pubmed.ncbi.nlm.nih.gov/41504676/",
+                "locator": "PubMed PMID 41504676, author Abstract > Objectives, Materials and methods, Results, Conclusions"
               }
             ]
           },
@@ -10185,13 +10201,13 @@
           },
           "ограничения": {
             "state": "reported",
-            "value": "Open publisher review checked; ECAP is a control signal, not a direct measure of pain.",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "value": "Review-level categories are not independent patient counts or linked participant data. ECAP is a neural control signal, not a direct measure of pain. Only the author abstract was directly checked; official publisher full-text route is indexed open access but returned HTTP 403 locally on 2026-09-27.",
+            "reason": "Explicit in the PubMed author abstract or the bounded inference about review-level limitations.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1094715925011705",
-                "locator": "canonical field ограничения"
+                "url": "https://pubmed.ncbi.nlm.nih.gov/41504676/",
+                "locator": "PubMed PMID 41504676, author Abstract > Objectives, Materials and methods, Results, Conclusions"
               }
             ]
           },
@@ -10328,134 +10344,136 @@
             ]
           },
           "evidence.population": {
-            "state": "not_reported",
-            "value": null,
-            "reason": "Свойство не сообщено в проверенном первичном тексте.",
-            "checked_at": "2026-09-23",
+            "state": "reported",
+            "value": "Human chronic-pain SCS studies represented by a scoping review; no new recruited cohort.",
+            "reason": "The author abstract identifies a review of human chronic-pain SCS studies and reports article/study counts; metadata modality records review evidence rather than a new signal measurement.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1094715925011705",
-                "locator": "canonical field evidence.population"
+                "url": "https://pubmed.ncbi.nlm.nih.gov/41504676/",
+                "locator": "PubMed PMID 41504676, author Abstract > Objectives, Materials and methods, Results, Conclusions"
               }
             ]
           },
           "evidence.subject_domain": {
-            "state": "unavailable_after_search",
-            "value": null,
-            "reason": "Значение не удалось установить по доступному первичному или библиографическому источнику; отсутствие зафиксировано без догадки.",
-            "checked_at": "2026-09-23",
+            "state": "reported",
+            "value": "human_clinical",
+            "reason": "The author abstract identifies a review of human chronic-pain SCS studies and reports article/study counts; metadata modality records review evidence rather than a new signal measurement.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1094715925011705",
-                "locator": "canonical field evidence.subject_domain"
+                "url": "https://pubmed.ncbi.nlm.nih.gov/41504676/",
+                "locator": "PubMed PMID 41504676, author Abstract > Objectives, Materials and methods, Results, Conclusions"
               }
             ]
           },
           "evidence.modalities": {
-            "state": "not_applicable",
-            "value": null,
-            "reason": "Поле неприменимо к типу и роли данного источника.",
-            "checked_at": "2026-09-23",
+            "state": "reported",
+            "value": [
+              "metadata"
+            ],
+            "reason": "The author abstract identifies a review of human chronic-pain SCS studies and reports article/study counts; metadata modality records review evidence rather than a new signal measurement.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1094715925011705",
-                "locator": "canonical field evidence.modalities"
+                "url": "https://pubmed.ncbi.nlm.nih.gov/41504676/",
+                "locator": "PubMed PMID 41504676, author Abstract > Objectives, Materials and methods, Results, Conclusions"
               }
             ]
           },
           "evidence.sample_size": {
-            "state": "not_reported",
-            "value": null,
-            "reason": "Свойство не сообщено в проверенном первичном тексте.",
-            "checked_at": "2026-09-23",
+            "state": "reported",
+            "value": "28 included publications representing 19 unique studies; pooled participant N is not reported in the checked abstract.",
+            "reason": "The author abstract identifies a review of human chronic-pain SCS studies and reports article/study counts; metadata modality records review evidence rather than a new signal measurement.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1094715925011705",
-                "locator": "canonical field evidence.sample_size"
+                "url": "https://pubmed.ncbi.nlm.nih.gov/41504676/",
+                "locator": "PubMed PMID 41504676, author Abstract > Objectives, Materials and methods, Results, Conclusions"
               }
             ]
           },
           "evidence.target_construct": {
-            "state": "unavailable_after_search",
+            "state": "not_applicable",
             "value": null,
-            "reason": "Значение не удалось установить по доступному первичному или библиографическому источнику; отсутствие зафиксировано без догадки.",
-            "checked_at": "2026-09-23",
+            "reason": "Subjective reports, position/movement and ECAP are distinct review categories; no single measured target construct.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1094715925011705",
-                "locator": "canonical field evidence.target_construct"
+                "url": "https://pubmed.ncbi.nlm.nih.gov/41504676/",
+                "locator": "PubMed PMID 41504676, author Abstract > Objectives, Materials and methods, Results, Conclusions"
               }
             ]
           },
           "evidence.target_label": {
-            "state": "not_reported",
+            "state": "not_applicable",
             "value": null,
-            "reason": "Свойство не сообщено в проверенном первичном тексте.",
-            "checked_at": "2026-09-23",
+            "reason": "The heterogeneous scoping review defines no single patient-level target label.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1094715925011705",
-                "locator": "canonical field evidence.target_label"
+                "url": "https://pubmed.ncbi.nlm.nih.gov/41504676/",
+                "locator": "PubMed PMID 41504676, author Abstract > Objectives, Materials and methods, Results, Conclusions"
               }
             ]
           },
           "evidence.access_status": {
-            "state": "unavailable_after_search",
-            "value": null,
-            "reason": "Значение не удалось установить по доступному первичному или библиографическому источнику; отсутствие зафиксировано без догадки.",
-            "checked_at": "2026-09-23",
+            "state": "reported",
+            "value": "open",
+            "reason": "The owner indexes the journal article as open access CC BY 4.0, while direct HTML retrieval returned HTTP 403 locally; this access status does not mean full text was checked.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1094715925011705",
-                "locator": "canonical field evidence.access_status"
+                "url": "https://www.neuromodulationjournal.org/article/S1094-7159%2825%2901170-5/fulltext",
+                "locator": "Official journal record open-access/CC BY 4.0 label; direct retrieval blocked HTTP 403 on 2026-09-27"
               }
             ]
           },
           "validation.checked_at": {
             "state": "reported",
-            "value": "2026-09-25",
-            "reason": "PubMed abstract and publisher access rechecked.",
-            "checked_at": "2026-09-25",
+            "value": "2026-09-27",
+            "reason": "Current abstract check or applicability assessment for a scoping review.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=41504676&retmode=xml",
-                "locator": "PubmedArticle and abstract"
+                "url": "https://pubmed.ncbi.nlm.nih.gov/41504676/",
+                "locator": "PubMed PMID 41504676, author Abstract > Objectives, Materials and methods, Results, Conclusions"
               }
             ]
           },
           "validation.split_unit": {
-            "state": "not_reported",
+            "state": "not_applicable",
             "value": null,
-            "reason": "Свойство не сообщено в проверенном первичном тексте.",
-            "checked_at": "2026-09-23",
+            "reason": "No participant-level predictive model or new clinical validation is performed in this scoping review.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1094715925011705",
-                "locator": "canonical field validation.split_unit"
+                "url": "https://pubmed.ncbi.nlm.nih.gov/41504676/",
+                "locator": "PubMed PMID 41504676, author Abstract > Objectives, Materials and methods, Results, Conclusions"
               }
             ]
           },
           "validation.cross_subject": {
-            "state": "not_reported",
+            "state": "not_applicable",
             "value": null,
-            "reason": "Свойство не сообщено в проверенном первичном тексте.",
-            "checked_at": "2026-09-23",
+            "reason": "No participant-level predictive model or new clinical validation is performed in this scoping review.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1094715925011705",
-                "locator": "canonical field validation.cross_subject"
+                "url": "https://pubmed.ncbi.nlm.nih.gov/41504676/",
+                "locator": "PubMed PMID 41504676, author Abstract > Objectives, Materials and methods, Results, Conclusions"
               }
             ]
           },
           "validation.external_validation": {
-            "state": "not_reported",
+            "state": "not_applicable",
             "value": null,
-            "reason": "Свойство не сообщено в проверенном первичном тексте.",
-            "checked_at": "2026-09-23",
+            "reason": "No participant-level predictive model or new clinical validation is performed in this scoping review.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1094715925011705",
-                "locator": "canonical field validation.external_validation"
+                "url": "https://pubmed.ncbi.nlm.nih.gov/41504676/",
+                "locator": "PubMed PMID 41504676, author Abstract > Objectives, Materials and methods, Results, Conclusions"
               }
             ]
           },
@@ -10497,13 +10515,13 @@
           },
           "validation.notes": {
             "state": "reported",
-            "value": "The PubMed owner abstract reports a 28-article/19-study scoping review of closed-loop SCS control signals. ECAP is discussed as a control biomarker rather than a subjective pain measure. The publisher full body and Crossmark update status were not accessible in this review.",
-            "reason": "Full-text claim narrowed to owner abstract; publisher full body inaccessible.",
-            "checked_at": "2026-09-25",
+            "value": "PubMed PMID 41504676 author abstract checked directly for PRISMA-ScR date, screening counts and distinct signal categories. Publisher officially indexes the article as open access CC BY 4.0, but direct full HTML fetch returned HTTP 403 here. Full-text status remains metadata_only; no per-study methods, linked participant data or predictor validation inferred.",
+            "reason": "Current abstract check or applicability assessment for a scoping review.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=41504676&retmode=xml",
-                "locator": "Abstract Background/Objectives/Methods; 28 articles, 19 studies"
+                "url": "https://pubmed.ncbi.nlm.nih.gov/41504676/",
+                "locator": "PubMed PMID 41504676, author Abstract > Objectives, Materials and methods, Results, Conclusions"
               }
             ]
           }
@@ -12098,14 +12116,14 @@
         "авторы": "Mingxuan Sun; Yang Liu; Daoshuang Geng; Xiaobang Wu; Daoguo Yang",
         "год": 2026,
         "издание": "Biomedical Signal Processing and Control 119:109815",
-        "модальность": null,
-        "задача": null,
+        "модальность": "EEG",
+        "задача": "Four-class cold-pressor experimental pain-intensity classification from EEG, with sensitivity-group analysis",
         "метод": null,
         "датасет": null,
-        "производительность": null,
+        "производительность": "Abstract (publisher first-page PDF): class accuracies 88.64% (no pain), 95.80% (mild), 99.75% (moderate), 82.96% (severe) in undivided group; 93.98% overall after sensitivity-group stratification; R²=0.45, p<0.01. Separate publisher-indexed Conclusions excerpt: 91.79% accuracy in four-level pain classification. Denominator/protocol relationship unresolved; keep distinct.",
         "кросс_субъект": null,
         "релевантность": 5,
-        "ограничения": "Publisher abstract checked; LOSO evaluation is reported, but this does not establish clinical validity.",
+        "ограничения": "Abstract-level verification only. Publisher abstract reports LOSOCV and the listed metrics, but does not expose analyzed sample size, fold construction details, external clinical validation or treatment outcomes. Direct publisher-page retrieval returned HTTP 403 and no full text was obtained. Cold-pressor experimental pain is not evidence of chronic-pain clinical validity, ECAP, SCS response or treatment effect.",
         "тип_источника": "метод",
         "identifiers": {
           "doi": "10.1016/j.bspc.2026.109815",
@@ -12123,24 +12141,26 @@
           "iteration": 1
         },
         "evidence": {
-          "species": null,
-          "population": null,
+          "species": "Homo sapiens",
+          "population": "Human participants undergoing cold-pressor testing; sample size not reported in the accessible publisher abstract",
           "sample_size": null,
-          "target_construct": "unavailable_after_search",
-          "target_label": null,
-          "access_status": "unavailable_after_search",
+          "target_construct": "experimental_pain_class",
+          "target_label": "No pain, mild pain, moderate pain and severe pain; quantitative pain-sensitivity grouping is also reported",
+          "access_status": "restricted",
           "evidence_role": "method_baseline",
           "subject_domain": "unavailable_after_search",
-          "modalities": []
+          "modalities": [
+            "eeg"
+          ]
         },
         "validation": {
-          "status": "verified_primary",
+          "status": "partially_verified",
           "screening_status": "included_core",
-          "full_text_status": "checked",
-          "checked_at": "2026-09-22",
-          "notes": "Publisher abstract checked; LOSO evaluation is reported, but this does not establish clinical validity.",
-          "split_unit": "not_reported",
-          "cross_subject": "not_reported",
+          "full_text_status": "metadata_only",
+          "checked_at": "2026-09-27",
+          "notes": "The official ScienceDirect first-page PDF was independently retrieved and checked on 2026-09-27. Its complete Abstract reports EEG cold-pressor classification, subject-independent LOSOCV, class accuracies 88.64% (no pain), 95.80% (mild), 99.75% (moderate), and 82.96% (severe) in the undivided group; overall accuracy 93.98% after sensitivity-group stratification; and R²=0.45, p<0.01 for intersubject pain-score differences versus prediction loss. A separate official ScienceDirect search-index excerpt under Conclusions reports 91.79% accuracy in four-level pain classification. These are separately located author-reported values; their relation, denominator and protocol are unresolved and must not be collapsed into one result. Elsevier metadata reports openaccess=0. Full article body and exact analyzed N were not obtained. LOSOCV supports participant-held-out evaluation only, not external or clinical validation.",
+          "split_unit": "participant",
+          "cross_subject": "yes",
           "external_validation": "not_reported",
           "calibration": "not_reported",
           "uncertainty": "not_reported",
@@ -12186,26 +12206,26 @@
             ]
           },
           "модальность": {
-            "state": "not_reported",
-            "value": null,
-            "reason": "Свойство не сообщено в проверенном первичном тексте.",
-            "checked_at": "2026-09-23",
+            "state": "reported",
+            "value": "EEG",
+            "reason": "Publisher abstract identifies EEG as the signal modality.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1746809426003691",
-                "locator": "canonical field модальность"
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S1746809426003691",
+                "locator": "Publisher-indexed Abstract"
               }
             ]
           },
           "задача": {
-            "state": "not_reported",
-            "value": null,
-            "reason": "Свойство не сообщено в проверенном первичном тексте.",
-            "checked_at": "2026-09-23",
+            "state": "reported",
+            "value": "Four-class cold-pressor experimental pain-intensity classification from EEG, with sensitivity-group analysis",
+            "reason": "Publisher abstract describes EEG cold-pressor experimental pain-intensity classification.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1746809426003691",
-                "locator": "canonical field задача"
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S1746809426003691",
+                "locator": "Publisher-indexed Abstract"
               }
             ]
           },
@@ -12234,14 +12254,18 @@
             ]
           },
           "производительность": {
-            "state": "not_reported",
-            "value": null,
-            "reason": "Свойство не сообщено в проверенном первичном тексте.",
-            "checked_at": "2026-09-23",
+            "state": "reported",
+            "value": "Abstract (publisher first-page PDF): class accuracies 88.64% (no pain), 95.80% (mild), 99.75% (moderate), 82.96% (severe) in undivided group; 93.98% overall after sensitivity-group stratification; R²=0.45, p<0.01. Separate publisher-indexed Conclusions excerpt: 91.79% accuracy in four-level pain classification. Denominator/protocol relationship unresolved; keep distinct.",
+            "reason": "93.98% is in the Abstract; 91.79% is in a separate indexed Conclusions excerpt. Their relation is not resolved by the accessible primary artifacts.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
+                "url": "https://www.sciencedirect.com/sdfe/pdf/download/eid/1-s2.0-S1746809426003691/first-page-pdf",
+                "locator": "Publisher first-page PDF, Abstract"
+              },
+              {
                 "url": "https://www.sciencedirect.com/science/article/pii/S1746809426003691",
-                "locator": "canonical field производительность"
+                "locator": "Official ScienceDirect search-index excerpt, Conclusions"
               }
             ]
           },
@@ -12259,13 +12283,13 @@
           },
           "ограничения": {
             "state": "reported",
-            "value": "Publisher abstract checked; LOSO evaluation is reported, but this does not establish clinical validity.",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "value": "Abstract-level verification only. Publisher abstract reports LOSOCV and the listed metrics, but does not expose analyzed sample size, fold construction details, external clinical validation or treatment outcomes. Direct publisher-page retrieval returned HTTP 403 and no full text was obtained. Cold-pressor experimental pain is not evidence of chronic-pain clinical validity, ECAP, SCS response or treatment effect.",
+            "reason": "The source was checked at publisher-abstract level; sample size and full-text methods remain inaccessible in this review.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1746809426003691",
-                "locator": "canonical field ограничения"
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S1746809426003691",
+                "locator": "Publisher-indexed Abstract; ScienceDirect page access route"
               }
             ]
           },
@@ -12390,26 +12414,26 @@
             ]
           },
           "evidence.species": {
-            "state": "not_reported",
-            "value": null,
-            "reason": "Свойство не сообщено в проверенном первичном тексте.",
-            "checked_at": "2026-09-23",
+            "state": "reported",
+            "value": "Homo sapiens",
+            "reason": "The publisher abstract describes participants and sensitivity groups in a human cold-pressor experiment.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1746809426003691",
-                "locator": "canonical field evidence.species"
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S1746809426003691",
+                "locator": "Publisher-indexed Abstract, cold-pressor testing and participant sensitivity-group description"
               }
             ]
           },
           "evidence.population": {
-            "state": "not_reported",
-            "value": null,
-            "reason": "Свойство не сообщено в проверенном первичном тексте.",
-            "checked_at": "2026-09-23",
+            "state": "reported",
+            "value": "Human participants undergoing cold-pressor testing; sample size not reported in the accessible publisher abstract",
+            "reason": "The abstract identifies cold-pressor participants but does not report their number.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1746809426003691",
-                "locator": "canonical field evidence.population"
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S1746809426003691",
+                "locator": "Publisher-indexed Abstract; no sample-size value stated"
               }
             ]
           },
@@ -12426,14 +12450,16 @@
             ]
           },
           "evidence.modalities": {
-            "state": "not_applicable",
-            "value": null,
-            "reason": "Поле неприменимо к типу и роли данного источника.",
-            "checked_at": "2026-09-23",
+            "state": "reported",
+            "value": [
+              "eeg"
+            ],
+            "reason": "The abstract explicitly identifies EEG signals as model input.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1746809426003691",
-                "locator": "canonical field evidence.modalities"
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S1746809426003691",
+                "locator": "Publisher-indexed Abstract, first and third sentences"
               }
             ]
           },
@@ -12450,74 +12476,78 @@
             ]
           },
           "evidence.target_construct": {
-            "state": "unavailable_after_search",
-            "value": null,
-            "reason": "Значение не удалось установить по доступному первичному или библиографическому источнику; отсутствие зафиксировано без догадки.",
-            "checked_at": "2026-09-23",
+            "state": "reported",
+            "value": "experimental_pain_class",
+            "reason": "Pain intensity is classified from EEG during a cold-pressor test; this is an experimental pain-class task, not a clinical outcome.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1746809426003691",
-                "locator": "canonical field evidence.target_construct"
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S1746809426003691",
+                "locator": "Publisher-indexed Abstract, task description"
               }
             ]
           },
           "evidence.target_label": {
-            "state": "not_reported",
-            "value": null,
-            "reason": "Свойство не сообщено в проверенном первичном тексте.",
-            "checked_at": "2026-09-23",
+            "state": "reported",
+            "value": "No pain, mild pain, moderate pain and severe pain; quantitative pain-sensitivity grouping is also reported",
+            "reason": "The abstract names no pain, mild, moderate and severe classes and additional sensitivity-based grouping.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1746809426003691",
-                "locator": "canonical field evidence.target_label"
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S1746809426003691",
+                "locator": "Publisher-indexed Abstract, class-specific results and sensitivity-group analysis"
               }
             ]
           },
           "evidence.access_status": {
-            "state": "unavailable_after_search",
-            "value": null,
-            "reason": "Значение не удалось установить по доступному первичному или библиографическому источнику; отсутствие зафиксировано без догадки.",
-            "checked_at": "2026-09-23",
+            "state": "reported",
+            "value": "restricted",
+            "reason": "Elsevier publisher abstract metadata returns openaccess=0/openaccessFlag=false. Abstract/first-page content is available, but the full article body was not obtained; a first-page PDF does not imply open access to the full article.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1746809426003691",
-                "locator": "canonical field evidence.access_status"
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S1746809426003691",
+                "locator": "ScienceDirect article route / Abstract; Get rights and content; direct retrieval returned HTTP 403"
+              },
+              {
+                "url": "https://api.elsevier.com/content/abstract/doi/10.1016/j.bspc.2026.109815?httpAccept=application%2Fjson",
+                "locator": "Publisher abstract API coredata: openaccess=0, openaccessFlag=false"
               }
             ]
           },
           "validation.checked_at": {
             "state": "reported",
-            "value": "2026-09-22",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "value": "2026-09-27",
+            "reason": "Date of the bounded publisher-source review and card correction.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1746809426003691",
-                "locator": "canonical field validation.checked_at"
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S1746809426003691",
+                "locator": "Publisher article identity and indexed abstract route checked on this date"
               }
             ]
           },
           "validation.split_unit": {
-            "state": "not_reported",
-            "value": null,
-            "reason": "Свойство не сообщено в проверенном первичном тексте.",
-            "checked_at": "2026-09-23",
+            "state": "reported",
+            "value": "participant",
+            "reason": "Leave-One-Subject-Out cross-validation holds out one subject per fold; the abstract calls this subject-independent evaluation.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1746809426003691",
-                "locator": "canonical field validation.split_unit"
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S1746809426003691",
+                "locator": "Publisher-indexed Abstract, LOSOCV sentence"
               }
             ]
           },
           "validation.cross_subject": {
-            "state": "not_reported",
-            "value": null,
-            "reason": "Свойство не сообщено в проверенном первичном тексте.",
-            "checked_at": "2026-09-23",
+            "state": "reported",
+            "value": "yes",
+            "reason": "The abstract explicitly describes subject-independent LOSOCV.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1746809426003691",
-                "locator": "canonical field validation.cross_subject"
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S1746809426003691",
+                "locator": "Publisher-indexed Abstract, evaluation strategy"
               }
             ]
           },
@@ -12571,13 +12601,17 @@
           },
           "validation.notes": {
             "state": "reported",
-            "value": "Publisher abstract checked; LOSO evaluation is reported, but this does not establish clinical validity.",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "value": "The official ScienceDirect first-page PDF was independently retrieved and checked on 2026-09-27. Its complete Abstract reports EEG cold-pressor classification, subject-independent LOSOCV, class accuracies 88.64% (no pain), 95.80% (mild), 99.75% (moderate), and 82.96% (severe) in the undivided group; overall accuracy 93.98% after sensitivity-group stratification; and R²=0.45, p<0.01 for intersubject pain-score differences versus prediction loss. A separate official ScienceDirect search-index excerpt under Conclusions reports 91.79% accuracy in four-level pain classification. These are separately located author-reported values; their relation, denominator and protocol are unresolved and must not be collapsed into one result. Elsevier metadata reports openaccess=0. Full article body and exact analyzed N were not obtained. LOSOCV supports participant-held-out evaluation only, not external or clinical validation.",
+            "reason": "The first-page PDF Abstract and a distinct official indexed Conclusions excerpt state separate accuracy values; the full article body was not retrieved, so the relationship remains unresolved.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
+                "url": "https://www.sciencedirect.com/sdfe/pdf/download/eid/1-s2.0-S1746809426003691/first-page-pdf",
+                "locator": "Publisher first-page PDF, complete Abstract: sensitivity-stratified 93.98% overall accuracy"
+              },
+              {
                 "url": "https://www.sciencedirect.com/science/article/pii/S1746809426003691",
-                "locator": "canonical field validation.notes"
+                "locator": "Official ScienceDirect search-index excerpt, Conclusions: 91.79% in four-level classification; full body not retrieved"
               }
             ]
           }
@@ -13121,13 +13155,13 @@
         "год": 2026,
         "издание": "Information Fusion 131:104173",
         "модальность": null,
-        "задача": null,
-        "метод": null,
-        "датасет": null,
-        "производительность": null,
-        "кросс_субъект": null,
+        "задача": "Three-class acute experimental pain-intensity classification (No Pain, Low Pain, High Pain) from EDA and fNIRS in healthy AI4Pain participants.",
+        "метод": "GIAFormer fuses EDA and fNIRS using gradient-infused attention and a Transformer. Performance evaluation uses leave-one-subject-out validation: one participant is held out per fold and fold metrics are averaged.",
+        "датасет": "AI4Pain: 65 healthy participants (42 male, 23 female), aged 17-52; 2,340 non-overlapping 10-second EDA/fNIRS observations, 36 segments per person and 780 per class. These segments are repeated observations, not independent participants.",
+        "производительность": "Author-reported Table 3 metric/dispersion pairs: accuracy 90.51% +/- 9.33, F1 90.38% +/- 9.65, specificity 95.26% +/- 4.66; class TPRs 94.36% +/- 8.35 (No Pain), 88.97% +/- 15.46 (Low Pain), 88.21% +/- 13.49 (High Pain). Figure 6 caption labels plotted metric dispersion as standard deviations, but Table 3 does not define the statistic or calculation unit for its listed dispersion; do not interpret these values as SD across LOSOV folds.",
+        "кросс_субъект": "Yes: leave-one-subject-out across the 65 AI4Pain participants; each participant is the test set once. No independent external cohort was tested.",
         "релевантность": 5,
-        "ограничения": "Open publisher abstract checked; 65 AI4Pain subjects and LOSO accuracy 90.51% are publisher-reported.",
+        "ограничения": "Full publisher PDF body recovered from embedded page objects in a publisher-served artifact (SHA-256 8474bc90b239dcfcf970338cde2ff62629699e9aa0782e04c89ba661eb16a7dd); the active PDF page tree exposes only page 1. Results concern controlled acute experimental stimuli in 65 healthy people and 2,340 repeated segments. Table 3 reports metric/dispersion pairs; Figure 6 labels plotted metric dispersion as standard deviations, but Table 3 does not define the statistic or calculation unit for its values. LOSOV performance is participant-held-out within this cohort. No independent external cohort or probability calibration is reported. Dataset access is on reasonable request; the cited code repository did not expose the trained code/models in this check. This study does not validate chronic pain, ECAP, SCS treatment response or clinical deployment.",
         "тип_источника": "метод",
         "identifiers": {
           "doi": "10.1016/j.inffus.2026.104173",
@@ -13145,14 +13179,14 @@
           "iteration": 1
         },
         "evidence": {
-          "species": null,
-          "population": null,
+          "species": "Homo sapiens",
+          "population": "65 healthy human volunteers (42 male, 23 female), age 17-52, mean age 29.06 +/- 8.28 years; AI4Pain acute controlled stimulation.",
           "sample_size": 65,
           "target_construct": "experimental_pain_class",
-          "target_label": "multilevel pain classification on AI4Pain",
+          "target_label": "No Pain (L0), Low Pain (L1, individual QST threshold) and High Pain (L2, individual QST tolerance), based on controlled electrical stimulation; not a common clinical NRS endpoint.",
           "access_status": "open",
           "evidence_role": "method_baseline",
-          "subject_domain": "unavailable_after_search",
+          "subject_domain": "human_healthy",
           "modalities": [
             "eda",
             "fnirs"
@@ -13161,14 +13195,14 @@
         "validation": {
           "status": "verified_primary",
           "screening_status": "included_core",
-          "full_text_status": "metadata_only",
-          "checked_at": "2026-09-25",
-          "notes": "Elsevier ScienceDirect owner abstract checked: EDA+fNIRS, AI4Pain n=65, leave-one-subject-out protocol, 90.51% accuracy for multilevel pain classification. Article is marked open access, but article full text/methods were not reviewed in this check.",
-          "split_unit": "not_reported",
-          "cross_subject": "not_reported",
+          "full_text_status": "checked",
+          "checked_at": "2026-09-27",
+          "notes": "Publisher-served PDF checked 2026-09-27, 7,464,349 bytes, SHA-256 8474bc90b239dcfcf970338cde2ff62629699e9aa0782e04c89ba661eb16a7dd. Its active tree exposes only the first page; the recovered embedded page objects contain the 16-page article. Section 3.4 reports participant-held-out LOSOV and says iteration metrics were averaged. Table 3 (p. 9) lists author-reported metric/dispersion pairs, including accuracy 90.51% +/- 9.33, F1 90.38% +/- 9.65, and specificity 95.26% +/- 4.66; it does not define the dispersion statistic or calculation unit. Figure 6 caption (p. 8) labels plotted metric dispersion as standard deviations, without specifying that Table 3 values are SD across LOSOV folds. No predictive uncertainty or confidence intervals are established. No external cohort or calibration is reported; data are request-only. No chronic-pain, ECAP or SCS outcome conclusion.",
+          "split_unit": "participant",
+          "cross_subject": "yes",
           "external_validation": "not_reported",
           "calibration": "not_reported",
-          "uncertainty": "not_reported",
+          "uncertainty": "yes",
           "exclusion_reason": null
         },
         "risk_flags": [],
@@ -13223,86 +13257,98 @@
             ]
           },
           "задача": {
-            "state": "not_reported",
-            "value": null,
-            "reason": "Свойство не сообщено в проверенном первичном тексте.",
-            "checked_at": "2026-09-23",
+            "state": "reported",
+            "value": "Three-class acute experimental pain-intensity classification (No Pain, Low Pain, High Pain) from EDA and fNIRS in healthy AI4Pain participants.",
+            "reason": "Directly reported in checked publisher full-text PDF; scope limited to this study.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1566253526000527",
-                "locator": "canonical field задача"
+                "url": "https://www.sciencedirect.com/sdfe/pdf/download/eid/1-s2.0-S1566253526000527/first-page-pdf",
+                "locator": "Section 3.1 Dataset Organisation, published p. 6"
               }
             ]
           },
           "метод": {
-            "state": "not_reported",
-            "value": null,
-            "reason": "Свойство не сообщено в проверенном первичном тексте.",
-            "checked_at": "2026-09-23",
+            "state": "reported",
+            "value": "GIAFormer fuses EDA and fNIRS using gradient-infused attention and a Transformer. Performance evaluation uses leave-one-subject-out validation: one participant is held out per fold and fold metrics are averaged.",
+            "reason": "Directly reported in checked publisher full-text PDF; scope limited to this study.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1566253526000527",
-                "locator": "canonical field метод"
+                "url": "https://www.sciencedirect.com/sdfe/pdf/download/eid/1-s2.0-S1566253526000527/first-page-pdf",
+                "locator": "Sections 2-3.4, especially Section 3.4 Performance Evaluation, published p. 8"
               }
             ]
           },
           "датасет": {
-            "state": "not_reported",
-            "value": null,
-            "reason": "Свойство не сообщено в проверенном первичном тексте.",
-            "checked_at": "2026-09-23",
+            "state": "reported",
+            "value": "AI4Pain: 65 healthy participants (42 male, 23 female), aged 17-52; 2,340 non-overlapping 10-second EDA/fNIRS observations, 36 segments per person and 780 per class. These segments are repeated observations, not independent participants.",
+            "reason": "Directly reported in checked publisher full-text PDF; scope limited to this study.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1566253526000527",
-                "locator": "canonical field датасет"
+                "url": "https://www.sciencedirect.com/sdfe/pdf/download/eid/1-s2.0-S1566253526000527/first-page-pdf",
+                "locator": "Section 3.1 Dataset Organisation, published p. 6"
               }
             ]
           },
           "производительность": {
-            "state": "not_reported",
-            "value": null,
-            "reason": "Свойство не сообщено в проверенном первичном тексте.",
-            "checked_at": "2026-09-23",
+            "state": "reported",
+            "value": "Author-reported Table 3 metric/dispersion pairs: accuracy 90.51% +/- 9.33, F1 90.38% +/- 9.65, specificity 95.26% +/- 4.66; class TPRs 94.36% +/- 8.35 (No Pain), 88.97% +/- 15.46 (Low Pain), 88.21% +/- 13.49 (High Pain). Figure 6 caption labels plotted metric dispersion as standard deviations, but Table 3 does not define the statistic or calculation unit for its listed dispersion; do not interpret these values as SD across LOSOV folds.",
+            "reason": "The publisher article reports these paired values in Table 3. Its caption does not define the listed dispersion statistic or unit; Figure 6 separately labels plotted dispersion as standard deviations.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1566253526000527",
-                "locator": "canonical field производительность"
+                "url": "https://www.sciencedirect.com/sdfe/pdf/download/eid/1-s2.0-S1566253526000527/first-page-pdf",
+                "locator": "Table 3, published p. 9, rows GIAFormer and columns Acc/F1/Spec/TPR; the caption says ?Performance indicators of GIAFormer in comparison with baseline models? and does not define dispersion statistic or unit."
+              },
+              {
+                "url": "https://www.sciencedirect.com/sdfe/pdf/download/eid/1-s2.0-S1566253526000527/first-page-pdf",
+                "locator": "Figure 6 caption, published p. 8: ?Classification performance across multiple evaluation metrics with standard deviations.?"
               }
             ]
           },
           "кросс_субъект": {
-            "state": "not_reported",
-            "value": null,
-            "reason": "Свойство не сообщено в проверенном первичном тексте.",
-            "checked_at": "2026-09-23",
+            "state": "reported",
+            "value": "Yes: leave-one-subject-out across the 65 AI4Pain participants; each participant is the test set once. No independent external cohort was tested.",
+            "reason": "Directly reported in checked publisher full-text PDF; scope limited to this study.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1566253526000527",
-                "locator": "canonical field кросс_субъект"
+                "url": "https://www.sciencedirect.com/sdfe/pdf/download/eid/1-s2.0-S1566253526000527/first-page-pdf",
+                "locator": "Section 3.4 Performance Evaluation, published p. 8"
               }
             ]
           },
           "ограничения": {
             "state": "reported",
-            "value": "Open publisher abstract checked; 65 AI4Pain subjects and LOSO accuracy 90.51% are publisher-reported.",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "value": "Full publisher PDF body recovered from embedded page objects in a publisher-served artifact (SHA-256 8474bc90b239dcfcf970338cde2ff62629699e9aa0782e04c89ba661eb16a7dd); the active PDF page tree exposes only page 1. Results concern controlled acute experimental stimuli in 65 healthy people and 2,340 repeated segments. Table 3 reports metric/dispersion pairs; Figure 6 labels plotted metric dispersion as standard deviations, but Table 3 does not define the statistic or calculation unit for its values. LOSOV performance is participant-held-out within this cohort. No independent external cohort or probability calibration is reported. Dataset access is on reasonable request; the cited code repository did not expose the trained code/models in this check. This study does not validate chronic pain, ECAP, SCS treatment response or clinical deployment.",
+            "reason": "This wording records the full-text access route, study boundaries, and the explicit distinction between Figure 6 SD wording and Table 3?s undefined dispersion unit.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1566253526000527",
-                "locator": "canonical field ограничения"
+                "url": "https://www.sciencedirect.com/sdfe/pdf/download/eid/1-s2.0-S1566253526000527/first-page-pdf",
+                "locator": "Table 3, published p. 9, rows GIAFormer and columns Acc/F1/Spec/TPR; the caption says ?Performance indicators of GIAFormer in comparison with baseline models? and does not define dispersion statistic or unit."
+              },
+              {
+                "url": "https://www.sciencedirect.com/sdfe/pdf/download/eid/1-s2.0-S1566253526000527/first-page-pdf",
+                "locator": "Figure 6 caption, published p. 8: ?Classification performance across multiple evaluation metrics with standard deviations.?"
+              },
+              {
+                "url": "https://www.sciencedirect.com/sdfe/pdf/download/eid/1-s2.0-S1566253526000527/first-page-pdf",
+                "locator": "Section 3.4 Performance Evaluation, published p. 8: LOSOV leaves one subject out; each subject is used as test once; metrics from each iteration are averaged."
               }
             ]
           },
           "identifiers.doi": {
             "state": "reported",
             "value": "10.1016/j.inffus.2026.104173",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "reason": "The publisher article DOI identifies the reviewed source.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1566253526000527",
-                "locator": "canonical field identifiers.doi"
+                "url": "https://www.sciencedirect.com/sdfe/pdf/download/eid/1-s2.0-S1566253526000527/first-page-pdf",
+                "locator": "Section 1/article first page; publisher-served PDF route"
               }
             ]
           },
@@ -13415,38 +13461,38 @@
             ]
           },
           "evidence.species": {
-            "state": "not_reported",
-            "value": null,
-            "reason": "Свойство не сообщено в проверенном первичном тексте.",
-            "checked_at": "2026-09-23",
+            "state": "reported",
+            "value": "Homo sapiens",
+            "reason": "Directly reported in checked publisher full-text PDF; scope limited to this study.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1566253526000527",
-                "locator": "canonical field evidence.species"
+                "url": "https://www.sciencedirect.com/sdfe/pdf/download/eid/1-s2.0-S1566253526000527/first-page-pdf",
+                "locator": "Section 3.1 Dataset Organisation, p. 6"
               }
             ]
           },
           "evidence.population": {
-            "state": "not_reported",
-            "value": null,
-            "reason": "Свойство не сообщено в проверенном первичном тексте.",
-            "checked_at": "2026-09-23",
+            "state": "reported",
+            "value": "65 healthy human volunteers (42 male, 23 female), age 17-52, mean age 29.06 +/- 8.28 years; AI4Pain acute controlled stimulation.",
+            "reason": "Directly reported in checked publisher full-text PDF; scope limited to this study.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1566253526000527",
-                "locator": "canonical field evidence.population"
+                "url": "https://www.sciencedirect.com/sdfe/pdf/download/eid/1-s2.0-S1566253526000527/first-page-pdf",
+                "locator": "Section 3.1 Dataset Organisation, p. 6"
               }
             ]
           },
           "evidence.subject_domain": {
-            "state": "unavailable_after_search",
-            "value": null,
-            "reason": "The publisher abstract did not establish whether participants were healthy or clinical; no domain is inferred.",
-            "checked_at": "2026-09-25",
+            "state": "reported",
+            "value": "human_healthy",
+            "reason": "Directly reported in checked publisher full-text PDF; scope limited to this study.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1566253526000527",
-                "locator": "Publisher abstract does not identify healthy versus clinical participant domain"
+                "url": "https://www.sciencedirect.com/sdfe/pdf/download/eid/1-s2.0-S1566253526000527/first-page-pdf",
+                "locator": "Section 3.1 Dataset Organisation, p. 6"
               }
             ]
           },
@@ -13468,12 +13514,12 @@
           "evidence.sample_size": {
             "state": "reported",
             "value": 65,
-            "reason": "Confirmed from the Elsevier publisher page; article-level methods beyond the abstract were not inferred.",
-            "checked_at": "2026-09-25",
+            "reason": "The participant denominator is 65; segments are not independent people.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1566253526000527",
-                "locator": "Publisher abstract: AI4Pain dataset comprising 65 subjects"
+                "url": "https://www.sciencedirect.com/sdfe/pdf/download/eid/1-s2.0-S1566253526000527/first-page-pdf",
+                "locator": "Section 3.1 Dataset Organisation, p. 6; 65 participants and 2,340 repeated segments"
               }
             ]
           },
@@ -13491,97 +13537,101 @@
           },
           "evidence.target_label": {
             "state": "reported",
-            "value": "multilevel pain classification on AI4Pain",
-            "reason": "Confirmed from the Elsevier publisher page; article-level methods beyond the abstract were not inferred.",
-            "checked_at": "2026-09-25",
+            "value": "No Pain (L0), Low Pain (L1, individual QST threshold) and High Pain (L2, individual QST tolerance), based on controlled electrical stimulation; not a common clinical NRS endpoint.",
+            "reason": "Directly reported in checked publisher full-text PDF; scope limited to this study.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1566253526000527",
-                "locator": "Publisher abstract: multilevel pain classification evaluated on AI4Pain"
+                "url": "https://www.sciencedirect.com/sdfe/pdf/download/eid/1-s2.0-S1566253526000527/first-page-pdf",
+                "locator": "Section 3.1 Dataset Organisation, p. 6"
               }
             ]
           },
           "evidence.access_status": {
             "state": "reported",
             "value": "open",
-            "reason": "Confirmed from the Elsevier publisher page; article-level methods beyond the abstract were not inferred.",
-            "checked_at": "2026-09-25",
+            "reason": "Article full text is accessible via publisher-served PDF; dataset reuse still requires a request.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1566253526000527",
-                "locator": "ScienceDirect marks article Open Access and provides PDF link"
+                "url": "https://www.sciencedirect.com/sdfe/pdf/download/eid/1-s2.0-S1566253526000527/first-page-pdf",
+                "locator": "Publisher PDF route, full article body in embedded page content; Data availability p. 15"
               }
             ]
           },
           "validation.checked_at": {
             "state": "reported",
-            "value": "2026-09-25",
-            "reason": "Confirmed from the Elsevier publisher page; article-level methods beyond the abstract were not inferred.",
-            "checked_at": "2026-09-25",
+            "value": "2026-09-27",
+            "reason": "Directly reported in checked publisher full-text PDF; scope limited to this study.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1566253526000527",
-                "locator": "Date of this publisher abstract recheck"
+                "url": "https://www.sciencedirect.com/sdfe/pdf/download/eid/1-s2.0-S1566253526000527/first-page-pdf",
+                "locator": "Publisher PDF body, Sections 3.1/3.4/4.1 and Table 3"
               }
             ]
           },
           "validation.split_unit": {
-            "state": "not_reported",
-            "value": null,
-            "reason": "Свойство не сообщено в проверенном первичном тексте.",
-            "checked_at": "2026-09-23",
+            "state": "reported",
+            "value": "participant",
+            "reason": "One person is held out as test per fold; segment-level samples remain inside the same participant fold.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1566253526000527",
-                "locator": "canonical field validation.split_unit"
+                "url": "https://www.sciencedirect.com/sdfe/pdf/download/eid/1-s2.0-S1566253526000527/first-page-pdf",
+                "locator": "Section 3.4 Performance Evaluation, p. 8"
               }
             ]
           },
           "validation.cross_subject": {
-            "state": "not_reported",
-            "value": null,
-            "reason": "Свойство не сообщено в проверенном первичном тексте.",
-            "checked_at": "2026-09-23",
+            "state": "reported",
+            "value": "yes",
+            "reason": "LOSO is participant-disjoint within the AI4Pain cohort, not independent external validation.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1566253526000527",
-                "locator": "canonical field validation.cross_subject"
+                "url": "https://www.sciencedirect.com/sdfe/pdf/download/eid/1-s2.0-S1566253526000527/first-page-pdf",
+                "locator": "Section 3.4 Performance Evaluation, p. 8"
               }
             ]
           },
           "validation.external_validation": {
             "state": "not_reported",
             "value": null,
-            "reason": "Свойство не сообщено в проверенном первичном тексте.",
-            "checked_at": "2026-09-23",
+            "reason": "No independent external cohort or external generalization test is reported in the checked full article.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1566253526000527",
-                "locator": "canonical field validation.external_validation"
+                "url": "https://www.sciencedirect.com/sdfe/pdf/download/eid/1-s2.0-S1566253526000527/first-page-pdf",
+                "locator": "Sections 3.4-5, pp. 8-14"
               }
             ]
           },
           "validation.calibration": {
             "state": "not_reported",
             "value": null,
-            "reason": "Свойство не сообщено в проверенном первичном тексте.",
-            "checked_at": "2026-09-23",
+            "reason": "No probability calibration analysis is reported in the checked full article.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1566253526000527",
-                "locator": "canonical field validation.calibration"
+                "url": "https://www.sciencedirect.com/sdfe/pdf/download/eid/1-s2.0-S1566253526000527/first-page-pdf",
+                "locator": "Sections 3.4-5, pp. 8-14"
               }
             ]
           },
           "validation.uncertainty": {
-            "state": "not_reported",
-            "value": null,
-            "reason": "Свойство не сообщено в проверенном первичном тексте.",
-            "checked_at": "2026-09-23",
+            "state": "reported",
+            "value": "yes",
+            "reason": "Figure 6 explicitly says plotted metrics include standard deviations, while Table 3 does not define its dispersion statistic or calculation unit; no predictive or CI uncertainty is established.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1566253526000527",
-                "locator": "canonical field validation.uncertainty"
+                "url": "https://www.sciencedirect.com/sdfe/pdf/download/eid/1-s2.0-S1566253526000527/first-page-pdf",
+                "locator": "Figure 6 caption, published p. 8: ?Classification performance across multiple evaluation metrics with standard deviations.?"
+              },
+              {
+                "url": "https://www.sciencedirect.com/sdfe/pdf/download/eid/1-s2.0-S1566253526000527/first-page-pdf",
+                "locator": "Table 3, published p. 9, rows GIAFormer and columns Acc/F1/Spec/TPR; the caption says ?Performance indicators of GIAFormer in comparison with baseline models? and does not define dispersion statistic or unit."
               }
             ]
           },
@@ -13599,13 +13649,21 @@
           },
           "validation.notes": {
             "state": "reported",
-            "value": "Elsevier ScienceDirect owner abstract checked: EDA+fNIRS, AI4Pain n=65, leave-one-subject-out protocol, 90.51% accuracy for multilevel pain classification. Article is marked open access, but article full text/methods were not reviewed in this check.",
-            "reason": "Confirmed from the Elsevier publisher page; article-level methods beyond the abstract were not inferred.",
-            "checked_at": "2026-09-25",
+            "value": "Publisher-served PDF checked 2026-09-27, 7,464,349 bytes, SHA-256 8474bc90b239dcfcf970338cde2ff62629699e9aa0782e04c89ba661eb16a7dd. Its active tree exposes only the first page; the recovered embedded page objects contain the 16-page article. Section 3.4 reports participant-held-out LOSOV and says iteration metrics were averaged. Table 3 (p. 9) lists author-reported metric/dispersion pairs, including accuracy 90.51% +/- 9.33, F1 90.38% +/- 9.65, and specificity 95.26% +/- 4.66; it does not define the dispersion statistic or calculation unit. Figure 6 caption (p. 8) labels plotted metric dispersion as standard deviations, without specifying that Table 3 values are SD across LOSOV folds. No predictive uncertainty or confidence intervals are established. No external cohort or calibration is reported; data are request-only. No chronic-pain, ECAP or SCS outcome conclusion.",
+            "reason": "The note preserves the exact primary-reported results and does not infer that Table 3 dispersion is SD across LOSOV iterations.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1566253526000527",
-                "locator": "Elsevier publisher abstract and review-scope note"
+                "url": "https://www.sciencedirect.com/sdfe/pdf/download/eid/1-s2.0-S1566253526000527/first-page-pdf",
+                "locator": "Section 3.4 Performance Evaluation, published p. 8: LOSOV leaves one subject out; each subject is used as test once; metrics from each iteration are averaged."
+              },
+              {
+                "url": "https://www.sciencedirect.com/sdfe/pdf/download/eid/1-s2.0-S1566253526000527/first-page-pdf",
+                "locator": "Table 3, published p. 9, rows GIAFormer and columns Acc/F1/Spec/TPR; the caption says ?Performance indicators of GIAFormer in comparison with baseline models? and does not define dispersion statistic or unit."
+              },
+              {
+                "url": "https://www.sciencedirect.com/sdfe/pdf/download/eid/1-s2.0-S1566253526000527/first-page-pdf",
+                "locator": "Figure 6 caption, published p. 8: ?Classification performance across multiple evaluation metrics with standard deviations.?"
               }
             ]
           }
@@ -13637,14 +13695,14 @@
         "авторы": "Samia Bouchfar; Yassmine Bouchfar; Hamid El Malali; Azeddine Mouhsen; Lhoucine Ben Taleb; Mohammed Harmouchi",
         "год": 2026,
         "издание": "2026 International Conference on Intelligent Systems and Digital Applications (ISDA):1-8",
-        "модальность": "Multimodal physiological signals; exact channels unavailable from the primary metadata",
+        "модальность": "Skin temperature (thermocouple), EDA, ECG and EMG; publisher abstract only",
         "задача": "Cross-domain multimodal pain detection",
-        "метод": "DANN-Transformer with supervised contrastive warmup and test-time augmentation, as stated in the title",
-        "датасет": null,
+        "метод": "Publisher abstract: DANN with cross-attention Transformer fusion; supervised-contrastive warmup for the first 20 epochs, then Focal Loss, ordinal pain loss, weighted random sampling and post-hoc test-time augmentation with per-class threshold calibration. Implementation and validation protocol remain unverified without the full text.",
+        "датасет": "PainMonit labeled source to BioVid unlabeled target, as reported in IEEE abstract",
         "производительность": null,
         "кросс_субъект": null,
         "релевантность": 5,
-        "ограничения": "Crossref confirms the paper identity, authors, venue and DOI, but the IEEE full text and a publisher-deposited abstract were unavailable. Dataset, cohort, modalities, split, metrics and claimed state of the art therefore remain unverified and must not be inferred from third-party indexes.",
+        "ограничения": "IEEE publisher abstract confirms four input channels, PainMonit labeled source, BioVid unlabeled target and named DANN/Transformer/SupCon/TTA components. It gives no cohort size, participant-disjoint split, numeric F1 or Cohen statistic, label thresholds, calibration-fit protocol or independent test. Full IEEE methods/PDF remain inaccessible; the state-of-the-art phrase is an unverified author claim.",
         "тип_источника": "кросс_субъект",
         "identifiers": {
           "doi": "10.1109/ISDA70544.2026.11606012",
@@ -13665,19 +13723,24 @@
           "species": "Homo sapiens",
           "population": null,
           "subject_domain": "unavailable_after_search",
-          "modalities": [],
+          "modalities": [
+            "eda",
+            "ecg",
+            "emg",
+            "other"
+          ],
           "sample_size": null,
           "target_construct": "experimental_pain_class",
-          "target_label": "Cross-domain pain-detection class; exact label definition unavailable",
+          "target_label": "Three-class experimental pain detection; exact class thresholds unavailable from abstract",
           "access_status": "restricted",
           "evidence_role": "context_only"
         },
         "validation": {
-          "status": "verified_metadata",
+          "status": "verified_primary",
           "screening_status": "included_core",
-          "full_text_status": "unavailable",
-          "checked_at": "2026-09-24",
-          "notes": "Crossref confirms title, authors, venue and DOI and lists an IEEE version-of-record PDF link for similarity checking, but supplies no abstract. IEEE document endpoint returned HTTP 202 with no body, and publisher PDF endpoints returned HTTP 418 on 2026-09-24. Dataset, cohort, modalities, split, metrics and claimed state of the art remain unverified.",
+          "full_text_status": "metadata_only",
+          "checked_at": "2026-09-27",
+          "notes": "IEEE publisher abstract page was read on 2026-09-27 and independently rechecked through a read-only rendering of that owner page. The abstract names PainMonit-to-BioVid transfer, four modalities and method components but omits sample size, split, numeric metrics and exact class definitions. Direct document/PDF routes still return empty/challenge responses; no full method or empirical superiority claim is verified.",
           "split_unit": "unavailable_after_search",
           "cross_subject": "unavailable_after_search",
           "external_validation": "unavailable_after_search",
@@ -13686,7 +13749,6 @@
           "exclusion_reason": null
         },
         "risk_flags": [
-          "claim_not_supported",
           "metadata_only"
         ],
         "relations": [],
@@ -13729,13 +13791,13 @@
           },
           "модальность": {
             "state": "reported",
-            "value": "Multimodal physiological signals; exact channels unavailable from the primary metadata",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-24",
+            "value": "Skin temperature (thermocouple), EDA, ECG and EMG; publisher abstract only",
+            "reason": "Four physiological channels are named in the IEEE publisher abstract.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://doi.org/10.1109/ISDA70544.2026.11606012",
-                "locator": "canonical field модальность"
+                "url": "https://ieeexplore.ieee.org/abstract/document/11606012",
+                "locator": "IEEE publisher Abstract; accessed 2026-09-27 via read-only page rendering"
               }
             ]
           },
@@ -13753,25 +13815,25 @@
           },
           "метод": {
             "state": "reported",
-            "value": "DANN-Transformer with supervised contrastive warmup and test-time augmentation, as stated in the title",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-24",
+            "value": "Publisher abstract: DANN with cross-attention Transformer fusion; supervised-contrastive warmup for the first 20 epochs, then Focal Loss, ordinal pain loss, weighted random sampling and post-hoc test-time augmentation with per-class threshold calibration. Implementation and validation protocol remain unverified without the full text.",
+            "reason": "Method components are author-reported in the IEEE abstract only.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://doi.org/10.1109/ISDA70544.2026.11606012",
-                "locator": "canonical field метод"
+                "url": "https://ieeexplore.ieee.org/abstract/document/11606012",
+                "locator": "IEEE publisher Abstract; accessed 2026-09-27 via read-only page rendering"
               }
             ]
           },
           "датасет": {
-            "state": "unavailable_after_search",
-            "value": null,
-            "reason": "Значение не удалось установить по доступному первичному или библиографическому источнику; отсутствие зафиксировано без догадки.",
-            "checked_at": "2026-09-24",
+            "state": "reported",
+            "value": "PainMonit labeled source to BioVid unlabeled target, as reported in IEEE abstract",
+            "reason": "Named source and target datasets are explicit in the IEEE abstract.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://doi.org/10.1109/ISDA70544.2026.11606012",
-                "locator": "canonical field датасет"
+                "url": "https://ieeexplore.ieee.org/abstract/document/11606012",
+                "locator": "IEEE publisher Abstract; accessed 2026-09-27 via read-only page rendering"
               }
             ]
           },
@@ -13801,13 +13863,13 @@
           },
           "ограничения": {
             "state": "reported",
-            "value": "Crossref confirms the paper identity, authors, venue and DOI, but the IEEE full text and a publisher-deposited abstract were unavailable. Dataset, cohort, modalities, split, metrics and claimed state of the art therefore remain unverified and must not be inferred from third-party indexes.",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-24",
+            "value": "IEEE publisher abstract confirms four input channels, PainMonit labeled source, BioVid unlabeled target and named DANN/Transformer/SupCon/TTA components. It gives no cohort size, participant-disjoint split, numeric F1 or Cohen statistic, label thresholds, calibration-fit protocol or independent test. Full IEEE methods/PDF remain inaccessible; the state-of-the-art phrase is an unverified author claim.",
+            "reason": "Scope is limited to what the primary IEEE abstract actually reports.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://doi.org/10.1109/ISDA70544.2026.11606012",
-                "locator": "canonical field ограничения"
+                "url": "https://ieeexplore.ieee.org/abstract/document/11606012",
+                "locator": "IEEE publisher Abstract; accessed 2026-09-27 via read-only page rendering"
               }
             ]
           },
@@ -13968,14 +14030,19 @@
             ]
           },
           "evidence.modalities": {
-            "state": "not_applicable",
-            "value": null,
-            "reason": "Поле неприменимо к типу и роли данного источника.",
-            "checked_at": "2026-09-24",
+            "state": "reported",
+            "value": [
+              "eda",
+              "ecg",
+              "emg",
+              "other"
+            ],
+            "reason": "EDA, ECG, EMG and thermocouple skin temperature are named in the IEEE abstract; temperature uses the other vocabulary value.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://doi.org/10.1109/ISDA70544.2026.11606012",
-                "locator": "canonical field evidence.modalities"
+                "url": "https://ieeexplore.ieee.org/abstract/document/11606012",
+                "locator": "IEEE publisher Abstract; accessed 2026-09-27 via read-only page rendering"
               }
             ]
           },
@@ -14005,13 +14072,13 @@
           },
           "evidence.target_label": {
             "state": "reported",
-            "value": "Cross-domain pain-detection class; exact label definition unavailable",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-24",
+            "value": "Three-class experimental pain detection; exact class thresholds unavailable from abstract",
+            "reason": "The IEEE abstract calls the task three-class and mentions Low Pain/High Pain ambiguity, without defining all thresholds.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://doi.org/10.1109/ISDA70544.2026.11606012",
-                "locator": "canonical field evidence.target_label"
+                "url": "https://ieeexplore.ieee.org/abstract/document/11606012",
+                "locator": "IEEE publisher Abstract; accessed 2026-09-27 via read-only page rendering"
               }
             ]
           },
@@ -14029,13 +14096,13 @@
           },
           "validation.checked_at": {
             "state": "reported",
-            "value": "2026-09-24",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-24",
+            "value": "2026-09-27",
+            "reason": "Date of direct IEEE publisher abstract review.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://doi.org/10.1109/ISDA70544.2026.11606012",
-                "locator": "canonical field validation.checked_at"
+                "url": "https://ieeexplore.ieee.org/abstract/document/11606012",
+                "locator": "IEEE publisher Abstract; accessed 2026-09-27 via read-only page rendering"
               }
             ]
           },
@@ -14113,21 +14180,13 @@
           },
           "validation.notes": {
             "state": "reported",
-            "value": "Crossref confirms title, authors, venue and DOI and lists an IEEE version-of-record PDF link for similarity checking, but supplies no abstract. IEEE document endpoint returned HTTP 202 with no body, and publisher PDF endpoints returned HTTP 418 on 2026-09-24. Dataset, cohort, modalities, split, metrics and claimed state of the art remain unverified.",
-            "reason": "Primary metadata and publisher access responses checked; no method inferred.",
-            "checked_at": "2026-09-24",
+            "value": "IEEE publisher abstract page was read on 2026-09-27 and independently rechecked through a read-only rendering of that owner page. The abstract names PainMonit-to-BioVid transfer, four modalities and method components but omits sample size, split, numeric metrics and exact class definitions. Direct document/PDF routes still return empty/challenge responses; no full method or empirical superiority claim is verified.",
+            "reason": "Owner abstract and access boundary were independently checked.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://api.crossref.org/works/10.1109/ISDA70544.2026.11606012",
-                "locator": "message.resource.primary, message.link[0], and missing abstract"
-              },
-              {
-                "url": "https://ieeexplore.ieee.org/document/11606012",
-                "locator": "document 11606012 access attempt: HTTP 202, empty body"
-              },
-              {
-                "url": "https://ieeexplore.ieee.org/ielx8/11605974/11605976/11606012.pdf?arnumber=11606012",
-                "locator": "publisher PDF access attempt: HTTP 418"
+                "url": "https://ieeexplore.ieee.org/abstract/document/11606012",
+                "locator": "IEEE publisher Abstract; accessed 2026-09-27 via read-only page rendering"
               }
             ]
           }
@@ -14159,14 +14218,14 @@
         "авторы": "Rakesh Chandra Joshi; Suman Kumar; Sujeet Kumar Singh Gautam; Malay Kishore Dutta",
         "год": 2026,
         "издание": "Biomedical Signal Processing and Control 128:111261",
-        "модальность": "EDA; BVP; ECG; EMG; respiration",
-        "задача": "Six-class participant-independent experimental pain recognition",
-        "метод": "Subject-incremental multi-head attention and deep fusion with SHAP",
-        "датасет": "PainMonit PMED",
-        "производительность": "87.68% ± 0.41% mean participant-level accuracy across four subject-independent outer folds",
-        "кросс_субъект": "Да, subject-wise four-fold outer cross-validation",
+        "модальность": "EDA; BVP; ECG; EMG; respiration (publisher-indexed Abstract)",
+        "задача": "Six-class experimental pain-intensity recognition from graded heat stimuli (publisher-indexed Abstract)",
+        "метод": "Subject-incremental attention-enhanced deep fusion; author-reported SHAP interpretation (publisher-indexed Abstract)",
+        "датасет": "PainMonit Experimental Dataset (PMED), 52 healthy participants per separate indexed Dataset source and details excerpt; not confirmed as the analyzed model N",
+        "производительность": "87.68% ± 0.41% mean participant-level accuracy across four subject-independent outer folds (publisher-indexed Abstract)",
+        "кросс_субъект": "Yes; subject-wise four-fold evaluation is reported in the publisher-indexed Abstract. External validation is not established.",
         "релевантность": 5,
-        "ограничения": "52 healthy participants under controlled thermal stimulation; no chronic-pain clinical validation.",
+        "ограничения": "Publisher-indexed Abstract and a separate indexed dataset-description excerpt were available, but direct full-text retrieval was Cloudflare-blocked. 52 refers to PMED dataset membership; exact model-analysis N and full methods are not confirmed. No chronic-pain/clinical validation or ECAP/SCS outcome is established.",
         "тип_источника": "кросс_субъект",
         "identifiers": {
           "doi": "10.1016/j.bspc.2026.111261",
@@ -14174,7 +14233,7 @@
           "arxiv_id": null,
           "patent_id": null,
           "dataset_id": null,
-          "exact_url": "https://www.sciencedirect.com/science/article/pii/S174680942601815X"
+          "exact_url": "https://www.sciencedirect.com/science/article/abs/pii/S174680942601815X"
         },
         "provenance": {
           "import_source": "archive/2026-09-21/records.json",
@@ -14185,29 +14244,30 @@
         },
         "evidence": {
           "species": "Homo sapiens",
-          "population": "52 healthy PMED participants exposed to graded thermal stimulation",
-          "sample_size": 52,
+          "population": "The publisher-indexed Dataset source and details excerpt describes PMED as 52 healthy participants; the exact S039 model-analysis denominator is not established.",
+          "sample_size": null,
           "target_construct": "experimental_pain_class",
-          "target_label": "baseline, non-painful stimulation, and four graded pain levels",
-          "access_status": "open",
+          "target_label": "Six-class pain-intensity recognition; exact analyzed class semantics are not independently confirmed beyond the indexed Abstract.",
+          "access_status": "restricted",
           "evidence_role": "method_baseline",
           "subject_domain": "human_healthy",
           "modalities": [
             "bvp_ppg",
             "ecg",
             "eda",
-            "emg"
+            "emg",
+            "other"
           ]
         },
         "validation": {
-          "status": "verified_primary",
+          "status": "partially_verified",
           "screening_status": "included_core",
-          "full_text_status": "checked",
-          "checked_at": "2026-09-22",
-          "notes": "Primary publisher record and article text checked.",
+          "full_text_status": "metadata_only",
+          "checked_at": "2026-09-27",
+          "notes": "Official ScienceDirect search-index excerpt for the publisher Abstract reports six-class pain-intensity recognition, five physiological modalities (EDA, BVP, ECG, EMG and respiration), subject-wise four-fold evaluation and 87.68% ± 0.41% participant-level accuracy. A separate indexed body excerpt under Dataset source and details names PMED and 52 healthy participants; this is dataset N, not a verified model-analysis denominator. Elsevier publisher abstract API returns coredata only with openaccess=0; direct article/first-page retrieval was Cloudflare-blocked, so no complete article body was obtained. These values remain publisher-indexed claims, not independently re-derived full-text results. No chronic-pain, clinical, ECAP or treatment-response validity follows.",
           "split_unit": "participant",
           "cross_subject": "yes",
-          "external_validation": "no",
+          "external_validation": "not_reported",
           "calibration": "not_reported",
           "uncertainty": "not_reported",
           "exclusion_reason": null
@@ -14255,85 +14315,85 @@
           },
           "модальность": {
             "state": "reported",
-            "value": "EDA; BVP; ECG; EMG; respiration",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "value": "EDA; BVP; ECG; EMG; respiration (publisher-indexed Abstract)",
+            "reason": "Transcribed from the corresponding publisher-indexed excerpt; not independently re-derived from full text.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S174680942601815X",
-                "locator": "canonical field модальность"
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S174680942601815X",
+                "locator": "Publisher-indexed Abstract or Dataset source and details excerpt"
               }
             ]
           },
           "задача": {
             "state": "reported",
-            "value": "Six-class participant-independent experimental pain recognition",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "value": "Six-class experimental pain-intensity recognition from graded heat stimuli (publisher-indexed Abstract)",
+            "reason": "Transcribed from the corresponding publisher-indexed excerpt; not independently re-derived from full text.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S174680942601815X",
-                "locator": "canonical field задача"
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S174680942601815X",
+                "locator": "Publisher-indexed Abstract or Dataset source and details excerpt"
               }
             ]
           },
           "метод": {
             "state": "reported",
-            "value": "Subject-incremental multi-head attention and deep fusion with SHAP",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "value": "Subject-incremental attention-enhanced deep fusion; author-reported SHAP interpretation (publisher-indexed Abstract)",
+            "reason": "Transcribed from the corresponding publisher-indexed excerpt; not independently re-derived from full text.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S174680942601815X",
-                "locator": "canonical field метод"
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S174680942601815X",
+                "locator": "Publisher-indexed Abstract or Dataset source and details excerpt"
               }
             ]
           },
           "датасет": {
             "state": "reported",
-            "value": "PainMonit PMED",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "value": "PainMonit Experimental Dataset (PMED), 52 healthy participants per separate indexed Dataset source and details excerpt; not confirmed as the analyzed model N",
+            "reason": "Transcribed from the corresponding publisher-indexed excerpt; not independently re-derived from full text.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S174680942601815X",
-                "locator": "canonical field датасет"
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S174680942601815X",
+                "locator": "Publisher-indexed Abstract or Dataset source and details excerpt"
               }
             ]
           },
           "производительность": {
             "state": "reported",
-            "value": "87.68% ± 0.41% mean participant-level accuracy across four subject-independent outer folds",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "value": "87.68% ± 0.41% mean participant-level accuracy across four subject-independent outer folds (publisher-indexed Abstract)",
+            "reason": "Transcribed from the corresponding publisher-indexed excerpt; not independently re-derived from full text.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S174680942601815X",
-                "locator": "canonical field производительность"
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S174680942601815X",
+                "locator": "Publisher-indexed Abstract or Dataset source and details excerpt"
               }
             ]
           },
           "кросс_субъект": {
             "state": "reported",
-            "value": "Да, subject-wise four-fold outer cross-validation",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "value": "Yes; subject-wise four-fold evaluation is reported in the publisher-indexed Abstract. External validation is not established.",
+            "reason": "Transcribed from the corresponding publisher-indexed excerpt; not independently re-derived from full text.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S174680942601815X",
-                "locator": "canonical field кросс_субъект"
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S174680942601815X",
+                "locator": "Publisher-indexed Abstract or Dataset source and details excerpt"
               }
             ]
           },
           "ограничения": {
             "state": "reported",
-            "value": "52 healthy participants under controlled thermal stimulation; no chronic-pain clinical validation.",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "value": "Publisher-indexed Abstract and a separate indexed dataset-description excerpt were available, but direct full-text retrieval was Cloudflare-blocked. 52 refers to PMED dataset membership; exact model-analysis N and full methods are not confirmed. No chronic-pain/clinical validation or ECAP/SCS outcome is established.",
+            "reason": "Direct publisher full-text access was unavailable; dataset N is not treated as model-analysis N.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S174680942601815X",
-                "locator": "canonical field ограничения"
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S174680942601815X",
+                "locator": "Publisher-indexed excerpts and access route"
               }
             ]
           },
@@ -14399,13 +14459,13 @@
           },
           "identifiers.exact_url": {
             "state": "reported",
-            "value": "https://www.sciencedirect.com/science/article/pii/S174680942601815X",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "value": "https://www.sciencedirect.com/science/article/abs/pii/S174680942601815X",
+            "reason": "Use the exact publisher abstract route that exposed the indexed content; direct full-text retrieval remains blocked.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S174680942601815X",
-                "locator": "canonical field identifiers.exact_url"
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S174680942601815X",
+                "locator": "Publisher DOI/PII identity and indexed Abstract route"
               }
             ]
           },
@@ -14460,36 +14520,36 @@
           "evidence.species": {
             "state": "reported",
             "value": "Homo sapiens",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "reason": "The indexed dataset-description excerpt identifies the PMED experimental cohort as healthy human participants.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S174680942601815X",
-                "locator": "canonical field evidence.species"
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S174680942601815X",
+                "locator": "Dataset source and details indexed excerpt: PMED, 52 healthy participants"
               }
             ]
           },
           "evidence.population": {
             "state": "reported",
-            "value": "52 healthy PMED participants exposed to graded thermal stimulation",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "value": "The publisher-indexed Dataset source and details excerpt describes PMED as 52 healthy participants; the exact S039 model-analysis denominator is not established.",
+            "reason": "52 is described as PMED dataset membership, not verified S039 analysis N.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S174680942601815X",
-                "locator": "canonical field evidence.population"
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S174680942601815X",
+                "locator": "Dataset source and details indexed excerpt"
               }
             ]
           },
           "evidence.subject_domain": {
             "state": "reported",
             "value": "human_healthy",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "reason": "Publisher-indexed dataset excerpt describes 52 healthy participants; exact S039 analysis N remains unresolved.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S174680942601815X",
-                "locator": "canonical field evidence.subject_domain"
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S174680942601815X",
+                "locator": "Dataset source and details indexed excerpt"
               }
             ]
           },
@@ -14499,110 +14559,111 @@
               "bvp_ppg",
               "ecg",
               "eda",
-              "emg"
+              "emg",
+              "other"
             ],
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "reason": "The publisher-indexed Abstract lists EDA, BVP, ECG, EMG and respiration. Controlled modality vocabulary lacks respiration, so 'other' represents it.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S174680942601815X",
-                "locator": "canonical field evidence.modalities"
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S174680942601815X",
+                "locator": "Publisher-indexed Abstract, synchronized signal modalities"
               }
             ]
           },
           "evidence.sample_size": {
-            "state": "reported",
-            "value": 52,
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "state": "unavailable_after_search",
+            "value": null,
+            "reason": "The indexed body excerpt gives the PMED dataset size (52) but does not establish the exact denominator analyzed by S039; the Abstract itself does not state N.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S174680942601815X",
-                "locator": "canonical field evidence.sample_size"
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S174680942601815X",
+                "locator": "Publisher-indexed Abstract (N absent); separate Dataset source and details excerpt"
               }
             ]
           },
           "evidence.target_construct": {
             "state": "reported",
             "value": "experimental_pain_class",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "reason": "The Abstract identifies graded heat-induced pain and six-class pain-intensity recognition.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S174680942601815X",
-                "locator": "canonical field evidence.target_construct"
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S174680942601815X",
+                "locator": "Publisher-indexed Abstract, task and evaluation sentences"
               }
             ]
           },
           "evidence.target_label": {
             "state": "reported",
-            "value": "baseline, non-painful stimulation, and four graded pain levels",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "value": "Six-class pain-intensity recognition; exact analyzed class semantics are not independently confirmed beyond the indexed Abstract.",
+            "reason": "The Abstract reports six classes but exact class semantics are not confirmed from retrieved primary text.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S174680942601815X",
-                "locator": "canonical field evidence.target_label"
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S174680942601815X",
+                "locator": "Publisher-indexed Abstract, six-class pain-intensity recognition"
               }
             ]
           },
           "evidence.access_status": {
             "state": "reported",
-            "value": "open",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "value": "restricted",
+            "reason": "Elsevier publisher API returns openaccess=0/openaccessFlag=false; direct full-text route was challenge-blocked.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S174680942601815X",
-                "locator": "canonical field evidence.access_status"
+                "url": "https://api.elsevier.com/content/abstract/doi/10.1016/j.bspc.2026.111261?httpAccept=application%2Fjson",
+                "locator": "Elsevier abstract API coredata: openaccess=0, openaccessFlag=false"
               }
             ]
           },
           "validation.checked_at": {
             "state": "reported",
-            "value": "2026-09-22",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "value": "2026-09-27",
+            "reason": "Date of the bounded publisher-source review and card correction.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S174680942601815X",
-                "locator": "canonical field validation.checked_at"
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S174680942601815X",
+                "locator": "Publisher article identity and indexed abstract route checked on this date"
               }
             ]
           },
           "validation.split_unit": {
             "state": "reported",
             "value": "participant",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "reason": "Publisher-indexed Abstract explicitly says subject-wise four-fold evaluation and subject-independent outer folds.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S174680942601815X",
-                "locator": "canonical field validation.split_unit"
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S174680942601815X",
+                "locator": "Publisher-indexed Abstract, evaluation sentence"
               }
             ]
           },
           "validation.cross_subject": {
             "state": "reported",
             "value": "yes",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "reason": "Publisher-indexed Abstract explicitly reports four subject-independent outer folds.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S174680942601815X",
-                "locator": "canonical field validation.cross_subject"
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S174680942601815X",
+                "locator": "Publisher-indexed Abstract, evaluation sentence"
               }
             ]
           },
           "validation.external_validation": {
-            "state": "reported",
-            "value": "no",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "state": "not_reported",
+            "value": null,
+            "reason": "The Abstract reports within-dataset subject-independent folds, not an external cohort.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S174680942601815X",
-                "locator": "canonical field validation.external_validation"
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S174680942601815X",
+                "locator": "Publisher-indexed Abstract; external cohort not described"
               }
             ]
           },
@@ -14644,13 +14705,13 @@
           },
           "validation.notes": {
             "state": "reported",
-            "value": "Primary publisher record and article text checked.",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "value": "Official ScienceDirect search-index excerpt for the publisher Abstract reports six-class pain-intensity recognition, five physiological modalities (EDA, BVP, ECG, EMG and respiration), subject-wise four-fold evaluation and 87.68% ± 0.41% participant-level accuracy. A separate indexed body excerpt under Dataset source and details names PMED and 52 healthy participants; this is dataset N, not a verified model-analysis denominator. Elsevier publisher abstract API returns coredata only with openaccess=0; direct article/first-page retrieval was Cloudflare-blocked, so no complete article body was obtained. These values remain publisher-indexed claims, not independently re-derived full-text results. No chronic-pain, clinical, ECAP or treatment-response validity follows.",
+            "reason": "Only publisher-indexed excerpts were checked; direct full-text retrieval failed.",
+            "checked_at": "2026-09-27",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S174680942601815X",
-                "locator": "canonical field validation.notes"
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S174680942601815X",
+                "locator": "Publisher-indexed Abstract and Dataset source and details excerpt; full body unavailable"
               }
             ]
           }
@@ -16806,15 +16867,16 @@
           "subject_domain": "drosophila_adult",
           "modalities": [
             "connectome",
-            "neural_activity"
+            "neural_activity",
+            "behavior"
           ]
         },
         "validation": {
           "status": "verified_primary",
           "screening_status": "included_core",
           "full_text_status": "checked",
-          "checked_at": "2026-09-21",
-          "notes": "Препринт, не прошедший журнальное рецензирование на дату проверки. Поддерживает модель ноцицепции, но не человеческой боли.",
+          "checked_at": "2026-09-28",
+          "notes": "Publisher-deposited preprint text reports adult fly optogenetic avoidance and escape behavior alongside connectome and neural analyses (Results and Figs. 1, 2 and 6). These observations are protective behavior, not subjective pain or human SCS response.",
           "split_unit": "not_reported",
           "cross_subject": "not_reported",
           "external_validation": "not_reported",
@@ -16952,12 +17014,12 @@
           "identifiers.doi": {
             "state": "reported",
             "value": "10.1101/2025.10.28.684868",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "reason": "S029 card omitted the directly measured avoidance/escape behavior modality.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://pubmed.ncbi.nlm.nih.gov/41280033/",
-                "locator": "canonical field identifiers.doi"
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12636578/fullTextXML",
+                "locator": "Results > A screen for somatosensory neurons that produce avoidance behavior (Fig. 1); Spatially targeted activation (Fig. 2); Different components of escape and sustained avoidance (Fig. 6); Methods > Optogenetics experiments in freely walking flies"
               }
             ]
           },
@@ -17109,14 +17171,15 @@
             "state": "reported",
             "value": [
               "connectome",
-              "neural_activity"
+              "neural_activity",
+              "behavior"
             ],
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "reason": "S029 card omitted the directly measured avoidance/escape behavior modality.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://pubmed.ncbi.nlm.nih.gov/41280033/",
-                "locator": "canonical field evidence.modalities"
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12636578/fullTextXML",
+                "locator": "Results > A screen for somatosensory neurons that produce avoidance behavior (Fig. 1); Spatially targeted activation (Fig. 2); Different components of escape and sustained avoidance (Fig. 6); Methods > Optogenetics experiments in freely walking flies"
               }
             ]
           },
@@ -17170,13 +17233,13 @@
           },
           "validation.checked_at": {
             "state": "reported",
-            "value": "2026-09-21",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "value": "2026-09-28",
+            "reason": "S029 card omitted the directly measured avoidance/escape behavior modality.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://pubmed.ncbi.nlm.nih.gov/41280033/",
-                "locator": "canonical field validation.checked_at"
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12636578/fullTextXML",
+                "locator": "Results > A screen for somatosensory neurons that produce avoidance behavior (Fig. 1); Spatially targeted activation (Fig. 2); Different components of escape and sustained avoidance (Fig. 6); Methods > Optogenetics experiments in freely walking flies"
               }
             ]
           },
@@ -17254,13 +17317,13 @@
           },
           "validation.notes": {
             "state": "reported",
-            "value": "Препринт, не прошедший журнальное рецензирование на дату проверки. Поддерживает модель ноцицепции, но не человеческой боли.",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "value": "Publisher-deposited preprint text reports adult fly optogenetic avoidance and escape behavior alongside connectome and neural analyses (Results and Figs. 1, 2 and 6). These observations are protective behavior, not subjective pain or human SCS response.",
+            "reason": "S029 card omitted the directly measured avoidance/escape behavior modality.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://pubmed.ncbi.nlm.nih.gov/41280033/",
-                "locator": "canonical field validation.notes"
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12636578/fullTextXML",
+                "locator": "Results > A screen for somatosensory neurons that produce avoidance behavior (Fig. 1); Spatially targeted activation (Fig. 2); Different components of escape and sustained avoidance (Fig. 6); Methods > Optogenetics experiments in freely walking flies"
               }
             ]
           }
@@ -17854,7 +17917,7 @@
           "screening_status": "included_core",
           "full_text_status": "checked",
           "checked_at": "2026-09-25",
-          "notes": "Perspective article proposing an audit framework; it explicitly concludes present affective indeterminacy rather than evidence of suffering or harmlessness. Publisher page and PDF inspected 2026-09-25: published online 10 September 2026 and pages 103-109; Crossref reports pages 103-107 and a different online date. Prefer publisher pagination for this card; metadata discrepancy remains noted, with no correction/version event established.",
+          "notes": "Perspective article proposing an audit framework. The publisher final PDF, Abstract p. 103 and Conclusion p. 108, argues that current Drosophila emulations are intrinsically affectively indeterminate rather than merely awaiting missing implementation details; this is not empirical evidence of suffering or harmlessness. Publisher PDF inspected again 2026-09-27: published online 10 September 2026 and pages 103-109. Publisher HTML/Crossref retain an earlier, weaker abstract and different title/pagination/date metadata; no formal correction/version event was located.",
           "split_unit": "not_reported",
           "cross_subject": "not_reported",
           "external_validation": "not_reported",
@@ -18299,9 +18362,9 @@
           },
           "validation.notes": {
             "state": "reported",
-            "value": "Perspective article proposing an audit framework; it explicitly concludes present affective indeterminacy rather than evidence of suffering or harmlessness. Publisher page and PDF inspected 2026-09-25: published online 10 September 2026 and pages 103-109; Crossref reports pages 103-107 and a different online date. Prefer publisher pagination for this card; metadata discrepancy remains noted, with no correction/version event established.",
+            "value": "Perspective article proposing an audit framework. The publisher final PDF, Abstract p. 103 and Conclusion p. 108, argues that current Drosophila emulations are intrinsically affectively indeterminate rather than merely awaiting missing implementation details; this is not empirical evidence of suffering or harmlessness. Publisher PDF inspected again 2026-09-27: published online 10 September 2026 and pages 103-109. Publisher HTML/Crossref retain an earlier, weaker abstract and different title/pagination/date metadata; no formal correction/version event was located.",
             "reason": "Updated from dated publisher page and PDF; registrar discrepancy retained explicitly.",
-            "checked_at": "2026-09-25",
+            "checked_at": "2026-09-27",
             "locators": [
               {
                 "url": "https://www.neuralpress.org/articles/jmn/5/3/dobes-drosophila",
@@ -18309,7 +18372,7 @@
               },
               {
                 "url": "https://www.neuralpress.org/_files/ugd/1dd990_79738e2f2a0048ac8a27a389e2bd1a30.pdf",
-                "locator": "Publisher PDF masthead, issue and pages 103-109; checked 2026-09-25"
+                "locator": "Publisher PDF Abstract p. 103, Conclusion p. 108 and masthead pp. 103-109; checked 2026-09-27"
               }
             ]
           }
@@ -18957,12 +19020,12 @@
           "издание": {
             "state": "reported",
             "value": "Journal of Pain Research 19:617733",
-            "reason": "Deposited primary JATS specifies volume 19 and elocation 617733; PubMed displays 19:617733. Crossref separately reports page 1-18; its meaning is unresolved.",
+            "reason": "Primary JATS specifies volume 19, fpage 617733 and page-range 617733, with no elocation-id element; PubMed displays 19:617733. Crossref separately reports page 1-18; its meaning is unresolved.",
             "checked_at": "2026-09-25",
             "locators": [
               {
                 "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13367641/fullTextXML",
-                "locator": "front/article-meta/volume=19 and elocation-id=617733"
+                "locator": "front/article-meta: volume=19; fpage=617733; page-range=617733; no elocation-id element"
               },
               {
                 "url": "https://pubmed.ncbi.nlm.nih.gov/42454002/",
@@ -19454,7 +19517,7 @@
           "screening_status": "included_core",
           "full_text_status": "checked",
           "checked_at": "2026-09-25",
-          "notes": "Perspective article proposing an audit framework; it explicitly concludes present affective indeterminacy rather than evidence of suffering or harmlessness. Publisher page and PDF inspected 2026-09-25: published online 10 September 2026 and pages 103-109; Crossref reports pages 103-107 and a different online date. Prefer publisher pagination for this card; metadata discrepancy remains noted, with no correction/version event established.",
+          "notes": "Perspective article proposing an audit framework. The publisher final PDF, Abstract p. 103 and Conclusion p. 108, argues that current Drosophila emulations are intrinsically affectively indeterminate rather than merely awaiting missing implementation details; this is not empirical evidence of suffering or harmlessness. Publisher PDF inspected again 2026-09-27: published online 10 September 2026 and pages 103-109. Publisher HTML/Crossref retain an earlier, weaker abstract and different title/pagination/date metadata; no formal correction/version event was located.",
           "split_unit": "not_reported",
           "cross_subject": "not_reported",
           "external_validation": "not_reported",
@@ -19899,9 +19962,9 @@
           },
           "validation.notes": {
             "state": "reported",
-            "value": "Perspective article proposing an audit framework; it explicitly concludes present affective indeterminacy rather than evidence of suffering or harmlessness. Publisher page and PDF inspected 2026-09-25: published online 10 September 2026 and pages 103-109; Crossref reports pages 103-107 and a different online date. Prefer publisher pagination for this card; metadata discrepancy remains noted, with no correction/version event established.",
+            "value": "Perspective article proposing an audit framework. The publisher final PDF, Abstract p. 103 and Conclusion p. 108, argues that current Drosophila emulations are intrinsically affectively indeterminate rather than merely awaiting missing implementation details; this is not empirical evidence of suffering or harmlessness. Publisher PDF inspected again 2026-09-27: published online 10 September 2026 and pages 103-109. Publisher HTML/Crossref retain an earlier, weaker abstract and different title/pagination/date metadata; no formal correction/version event was located.",
             "reason": "Updated from dated publisher page and PDF; registrar discrepancy retained explicitly.",
-            "checked_at": "2026-09-25",
+            "checked_at": "2026-09-27",
             "locators": [
               {
                 "url": "https://www.neuralpress.org/articles/jmn/5/3/dobes-drosophila",
@@ -19909,7 +19972,7 @@
               },
               {
                 "url": "https://www.neuralpress.org/_files/ugd/1dd990_79738e2f2a0048ac8a27a389e2bd1a30.pdf",
-                "locator": "Publisher PDF masthead, issue and pages 103-109; checked 2026-09-25"
+                "locator": "Publisher PDF Abstract p. 103, Conclusion p. 108 and masthead pp. 103-109; checked 2026-09-27"
               }
             ]
           }
@@ -22747,7 +22810,41 @@
     "S803",
     "S804",
     "S805",
-    "S806"
+    "S806",
+    "S807",
+    "S808",
+    "S809",
+    "S810",
+    "S811",
+    "S812",
+    "S813",
+    "S814",
+    "S815",
+    "S816",
+    "S817",
+    "S818",
+    "S819",
+    "S820",
+    "S821",
+    "S822",
+    "S823",
+    "S824",
+    "S825",
+    "S826",
+    "S827",
+    "S828",
+    "S829",
+    "S830",
+    "S831",
+    "S832",
+    "S833",
+    "S834",
+    "S835",
+    "S836",
+    "S837",
+    "S838",
+    "S839",
+    "S840"
   ],
   "multiple_membership": {
     "S005": 2,
@@ -23060,7 +23157,7 @@
     },
     "S148": {
       "checked_at": "2026-09-25",
-      "reason": "The review concerns subjective scales and biomarker integration, making C42 a review index and C03 a multimodal-context projection. The claimed full-text check was not independently reviewable here; neither membership establishes a new empirical detector, clinical validation or independent evidence.",
+      "reason": "The Europe PMC JATS full text (PMC13367641; Abstract; Literature Search and Inclusion Principles; A Clinical Layered Framework for Pain Assessment, Fig. 1 and Table 1; Discussion; Conclusion) confirms this is a narrative review of subjective scales and biomarker integration, not an empirical detector study. C42 is the review index and C03 a multimodal-context projection. Both memberships describe one review and establish no new detector, clinical validation or independent evidence.",
       "cluster_ids": [
         "C03",
         "C42"
@@ -23145,7 +23242,7 @@
         "C45"
       ],
       "reason": "The arXiv v1 primary text (Abstract; Methods 4.1; Task and Results 5.1 and 6) uses a Drosophila-derived flyvis connectivity mask to test graph-topology controls for MovingEdge direction decoding, supporting C18 as a connectome-analysis/method critique. It is not a GNN: the text describes a graph-constrained recurrent network and linear decoder. C45 is boundary/context navigation only pending the cluster-scope decision; the reported controls show the apparent topology advantage vanishes under stricter controls. Count the arXiv work once.",
-      "checked_at": "2026-09-25"
+      "checked_at": "2026-09-26"
     },
     "S742": {
       "cluster_ids": [

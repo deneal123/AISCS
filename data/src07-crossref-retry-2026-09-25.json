@@ -687,11 +687,11 @@
     {
       "source_id": "S148",
       "status": "resolved_primary_article_identifier",
-      "boundary": "JATS and PubMed identify 19:617733; Crossref separately reports page 1-18, whose meaning remains unresolved. Do not substitute it for the article identifier.",
+      "boundary": "JATS records volume 19, fpage 617733 and page-range 617733, and PubMed displays 19:617733; no JATS elocation-id element is present. Crossref separately reports page 1-18, whose meaning remains unresolved.",
       "locators": [
         {
           "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13367641/fullTextXML",
-          "locator": "front/article-meta/volume=19 and elocation-id=617733"
+          "locator": "front/article-meta: volume=19; fpage=617733; page-range=617733; no elocation-id element"
         },
         {
           "url": "https://pubmed.ncbi.nlm.nih.gov/42454002/",

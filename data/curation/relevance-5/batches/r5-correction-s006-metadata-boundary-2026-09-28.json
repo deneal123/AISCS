@@ -1,0 +1,84 @@
+{
+  "meta": {
+    "batch_id": "r5-correction-s006-metadata-boundary-2026-09-28",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-28",
+    "scope": "Remove unsupported later-patent inference and date the inaccessible NANS program route for S006",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-28"
+  },
+  "source_ids": ["S006"],
+  "records": [{
+    "id": "S006",
+    "title": "ID: 318164 Using Neural Networks to Detect Evoked Compound Action Potentials Elicited with Epidural Spinal Cord Stimulation",
+    "year": 2024,
+    "source_type": "метод"
+  }],
+  "decisions": [{
+    "source_id": "S006",
+    "decision": "verified_metadata",
+    "checked_at": "2026-09-28",
+    "full_text_status": "unavailable",
+    "searches": [{
+      "service": "Crossref registered DOI metadata",
+      "query": "10.1016/j.neurom.2024.06.321 title issue page date",
+      "url": "https://api.crossref.org/works/10.1016%2Fj.neurom.2024.06.321",
+      "accessed_at": "2026-09-28"
+    }, {
+      "service": "NANS official program PDF",
+      "query": "nans2024_program_web.pdf p. 9 S006 presentation listing",
+      "url": "https://www.neuromodulation.org/uploads/1/4/5/5/145560650/nans2024_program_web.pdf",
+      "accessed_at": "2026-09-28"
+    }],
+    "updates": {
+      "identifiers": {
+        "doi": "10.1016/j.neurom.2024.06.321"
+      },
+      "ограничения": "Only registered DOI bibliographic metadata is currently reproducible. The previously cited NANS 2024 program PDF route returned 404 on 2026-09-28, so its presentation listing was not rechecked; the ScienceDirect full text remains restricted. Methods, cohort, split and performance are unavailable from checked primary text. A connection to patent S289 is unverified; S289 was published in 2022, before this 2024 abstract.",
+      "validation": {
+        "checked_at": "2026-09-28",
+        "notes": "Crossref DOI metadata checked 2026-09-28: exact title, Neuromodulation 27(7), supplement page S176, publication month October 2024. The earlier NANS program PDF route returned 404 in this pass; its listing was not reproduced. No abstract method or performance was recovered. Do not infer a relation to S289, a patent published in 2022."
+      },
+      "field_resolution": {
+        "ограничения": {
+          "state": "reported",
+          "value": "Only registered DOI bibliographic metadata is currently reproducible. The previously cited NANS 2024 program PDF route returned 404 on 2026-09-28, so its presentation listing was not rechecked; the ScienceDirect full text remains restricted. Methods, cohort, split and performance are unavailable from checked primary text. A connection to patent S289 is unverified; S289 was published in 2022, before this 2024 abstract.",
+          "reason": "Current primary access no longer reproduces the program listing; the prior later-patent wording reverses publication chronology.",
+          "checked_at": "2026-09-28",
+          "locators": [{
+            "url": "https://api.crossref.org/works/10.1016%2Fj.neurom.2024.06.321",
+            "locator": "message.title, container-title, volume, issue, page, published"
+          }, {
+            "url": "https://www.neuromodulation.org/uploads/1/4/5/5/145560650/nans2024_program_web.pdf",
+            "locator": "Previously cited official program route; HTTP 404 on 2026-09-28, not evidence for a current positive listing"
+          }]
+        },
+        "validation.checked_at": {
+          "state": "reported",
+          "value": "2026-09-28",
+          "reason": "Current registered metadata and program access rechecked.",
+          "checked_at": "2026-09-28",
+          "locators": [{
+            "url": "https://api.crossref.org/works/10.1016%2Fj.neurom.2024.06.321",
+            "locator": "Current DOI record"
+          }]
+        },
+        "validation.notes": {
+          "state": "reported",
+          "value": "Crossref DOI metadata checked 2026-09-28: exact title, Neuromodulation 27(7), supplement page S176, publication month October 2024. The earlier NANS program PDF route returned 404 in this pass; its listing was not reproduced. No abstract method or performance was recovered. Do not infer a relation to S289, a patent published in 2022.",
+          "reason": "Corrects overstated current program access and unsupported patent relation.",
+          "checked_at": "2026-09-28",
+          "locators": [{
+            "url": "https://api.crossref.org/works/10.1016%2Fj.neurom.2024.06.321",
+            "locator": "Current DOI record identity and publication date"
+          }, {
+            "url": "https://www.neuromodulation.org/uploads/1/4/5/5/145560650/nans2024_program_web.pdf",
+            "locator": "Official program route HTTP 404 on 2026-09-28"
+          }]
+        }
+      }
+    },
+    "claims": [],
+    "notes": "Crossref DOI metadata checked 2026-09-28: exact title, Neuromodulation 27(7), supplement page S176, publication month October 2024. The earlier NANS program PDF route returned 404 in this pass; its listing was not reproduced. No abstract method or performance was recovered. Do not infer a relation to S289, a patent published in 2022."
+  }]
+}

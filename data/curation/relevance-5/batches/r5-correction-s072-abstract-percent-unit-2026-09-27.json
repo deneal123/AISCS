@@ -1,0 +1,144 @@
+{
+  "meta": {
+    "batch_id": "r5-correction-s072-abstract-percent-unit-2026-09-27",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-27",
+    "scope": "Correct S072 source-card metric wording to match the official PubMed abstract and record access/evidence limits",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-27"
+  },
+  "source_ids": [
+    "S072"
+  ],
+  "records": [
+    {
+      "id": "S072",
+      "title": "AI-based bi-modal fusion system for automated clinical pain monitoring",
+      "year": 2025,
+      "source_type": "метод"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S072",
+      "decision": "partially_verified",
+      "checked_at": "2026-09-27",
+      "full_text_status": "metadata_only",
+      "searches": [
+        {
+          "service": "PubMed/NLM official record and XML",
+          "query": "PMID 41192117 abstract exact reported accuracy improvements",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/41192117/",
+          "accessed_at": "2026-09-27"
+        },
+        {
+          "service": "Elsevier ScienceDirect publisher full-text route",
+          "query": "PII S0010482525016142 full-text access",
+          "url": "https://www.sciencedirect.com/science/article/pii/S0010482525016142",
+          "accessed_at": "2026-09-27"
+        }
+      ],
+      "updates": {
+        "производительность": "The primary abstract reports an average accuracy improvement of 3.88% across 11 X-ITE sub-datasets and a 7.12% gain on the R-ETD sub-dataset; it does not specify percentage-point changes.",
+        "ограничения": "Only the primary abstract was accessible. Participant count, split unit, exact class definitions, absolute performance, confidence intervals, calibration and external validation were not established. X-ITE is an experimental-pain database; the word 'clinical' in the title does not establish clinical-outcome validation. The abstract gives the reported differences as 3.88% and a 7.12% gain, without specifying percentage-point changes.",
+        "validation": {
+          "checked_at": "2026-09-27",
+          "notes": "Only the official PubMed abstract was accessible for the reported results; it states an average accuracy improvement of 3.88% across 11 X-ITE sub-datasets and a 7.12% gain on R-ETD, without specifying percentage-point changes. Participant count, split unit, exact class definitions, absolute performance, confidence intervals, calibration and external validation remain unestablished. X-ITE is an experimental-pain database; the word 'clinical' in the title does not establish clinical-outcome validation. Official publisher full text was not retrieved (ScienceDirect returned HTTP 403; full-text API required authentication)."
+        },
+        "field_resolution": {
+          "производительность": {
+            "state": "reported",
+            "value": "The primary abstract reports an average accuracy improvement of 3.88% across 11 X-ITE sub-datasets and a 7.12% gain on the R-ETD sub-dataset; it does not specify percentage-point changes.",
+            "reason": "The official PubMed abstract reports 3.88% average accuracy improvement and a 7.12% gain; it does not call them percentage-point changes.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://pubmed.ncbi.nlm.nih.gov/41192117/",
+                "locator": "PubMed PMID 41192117, Abstract, final results sentence: ?achieving an average accuracy improvement of 3.88% and a 7.12% gain on the R-ETD sub-dataset.?"
+              }
+            ]
+          },
+          "ограничения": {
+            "state": "reported",
+            "value": "Only the primary abstract was accessible. Participant count, split unit, exact class definitions, absolute performance, confidence intervals, calibration and external validation were not established. X-ITE is an experimental-pain database; the word 'clinical' in the title does not establish clinical-outcome validation. The abstract gives the reported differences as 3.88% and a 7.12% gain, without specifying percentage-point changes.",
+            "reason": "The abstract metric wording is preserved without an unstated percentage-point interpretation; full-text and evaluation details remain unresolved.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://pubmed.ncbi.nlm.nih.gov/41192117/",
+                "locator": "PubMed PMID 41192117, Abstract, final results sentence: ?achieving an average accuracy improvement of 3.88% and a 7.12% gain on the R-ETD sub-dataset.?"
+              }
+            ]
+          },
+          "validation.checked_at": {
+            "state": "reported",
+            "value": "2026-09-27",
+            "reason": "The official PubMed abstract and publisher full-text access status were checked on this date.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://pubmed.ncbi.nlm.nih.gov/41192117/",
+                "locator": "PubMed PMID 41192117, Abstract, final results sentence: ?achieving an average accuracy improvement of 3.88% and a 7.12% gain on the R-ETD sub-dataset.?"
+              }
+            ]
+          },
+          "validation.notes": {
+            "state": "reported",
+            "value": "Only the official PubMed abstract was accessible for the reported results; it states an average accuracy improvement of 3.88% across 11 X-ITE sub-datasets and a 7.12% gain on R-ETD, without specifying percentage-point changes. Participant count, split unit, exact class definitions, absolute performance, confidence intervals, calibration and external validation remain unestablished. X-ITE is an experimental-pain database; the word 'clinical' in the title does not establish clinical-outcome validation. Official publisher full text was not retrieved (ScienceDirect returned HTTP 403; full-text API required authentication).",
+            "reason": "The official abstract supports the exact reported values and access note; it does not establish participant count, split, absolute metrics or clinical-outcome validation.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://pubmed.ncbi.nlm.nih.gov/41192117/",
+                "locator": "PubMed PMID 41192117, Abstract, final results sentence: ?achieving an average accuracy improvement of 3.88% and a 7.12% gain on the R-ETD sub-dataset.?"
+              }
+            ]
+          },
+          "identifiers.doi": {
+            "state": "reported",
+            "value": "10.1016/j.compbiomed.2025.111260",
+            "reason": "Verified in the official PubMed record for PMID 41192117.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://pubmed.ncbi.nlm.nih.gov/41192117/",
+                "locator": "PubMed PMID 41192117, record identifiers and Abstract."
+              }
+            ]
+          },
+          "identifiers.pmid": {
+            "state": "reported",
+            "value": "41192117",
+            "reason": "Verified in the official PubMed record for PMID 41192117.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://pubmed.ncbi.nlm.nih.gov/41192117/",
+                "locator": "PubMed PMID 41192117, record identifiers and Abstract."
+              }
+            ]
+          },
+          "identifiers.exact_url": {
+            "state": "reported",
+            "value": "https://pubmed.ncbi.nlm.nih.gov/41192117/",
+            "reason": "Verified in the official PubMed record for PMID 41192117.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://pubmed.ncbi.nlm.nih.gov/41192117/",
+                "locator": "PubMed PMID 41192117, record identifiers and Abstract."
+              }
+            ]
+          }
+        },
+        "identifiers": {
+          "doi": "10.1016/j.compbiomed.2025.111260",
+          "pmid": "41192117",
+          "exact_url": "https://pubmed.ncbi.nlm.nih.gov/41192117/"
+        }
+      },
+      "claims": [],
+      "notes": "Only the official PubMed abstract was accessible for the reported results; it states an average accuracy improvement of 3.88% across 11 X-ITE sub-datasets and a 7.12% gain on R-ETD, without specifying percentage-point changes. Participant count, split unit, exact class definitions, absolute performance, confidence intervals, calibration and external validation remain unestablished. X-ITE is an experimental-pain database; the word 'clinical' in the title does not establish clinical-outcome validation. Official publisher full text was not retrieved (ScienceDirect returned HTTP 403; full-text API required authentication)."
+    }
+  ]
+}

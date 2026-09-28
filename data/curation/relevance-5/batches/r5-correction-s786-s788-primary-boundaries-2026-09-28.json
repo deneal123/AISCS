@@ -1,0 +1,188 @@
+{
+  "meta": {
+    "batch_id": "r5-correction-s786-s788-primary-boundaries-2026-09-28",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-28",
+    "scope": "Correct S786 full-text bench validation and S788 interim AVALON abstract response metrics without crossing clinical boundaries",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-28"
+  },
+  "source_ids": [
+    "S786",
+    "S788"
+  ],
+  "records": [
+    {
+      "id": "S786",
+      "title": "Cause of Pulse Artefacts Inherent to the Electrodes of Neuromodulation Implants",
+      "year": 2018,
+      "source_type": "SCS_специфика"
+    },
+    {
+      "id": "S788",
+      "title": "Effective Relief of Pain and Associated Symptoms With Closed-Loop Spinal Cord Stimulation System: Preliminary Results of the Avalon Study",
+      "year": 2018,
+      "source_type": "SCS_специфика"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S786",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-28",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "service": "University of Waikato Research Commons accepted manuscript",
+          "query": "PMID 30273153 DOI 10.1109/TNSRE.2018.2870169 full text",
+          "url": "https://researchcommons.waikato.ac.nz/bitstreams/a7586cec-1b63-4d68-99db-bf0c698a6194/download",
+          "accessed_at": "2026-09-28"
+        }
+      ],
+      "updates": {
+        "identifiers": {
+          "doi": "10.1109/TNSRE.2018.2870169",
+          "pmid": "30273153"
+        },
+        "производительность": "The accepted author manuscript Sections II-IV and Figures 1-13 describe a split-electrode concentration-gradient model and compare predicted pulse artefact tails with bench measurements in 0.1× PBS using an Evoke implant. Figure 9 describes qualitative agreement; no fitted error metric is reported.",
+        "ограничения": "Accepted manuscript and linked IEEE VOR were checked at body level. Validation is saline bench testing, not human epidural ECAP artifact removal, analgesia or patient outcome prediction. Do not turn visual agreement into a quantitative accuracy claim; the extracted conductivity unit is ambiguous and is not used.",
+        "validation": {
+          "checked_at": "2026-09-28",
+          "full_text_status": "checked",
+          "notes": "Primary University of Waikato accepted manuscript checked 2026-09-28, with DOI 10.1109/TNSRE.2018.2870169 and matching publisher VOR identity. Sections II-IV and Figures 1-13 describe split platinum-cuff electrode slices and 0.1× PBS bench comparison using an Evoke implant. Figure 9 gives qualitative model/measurement agreement without a fitted error metric. No human ECAP artefact removal or analgesic endpoint is tested."
+        },
+        "field_resolution": {
+          "производительность": {
+            "state": "reported",
+            "value": "The accepted author manuscript Sections II-IV and Figures 1-13 describe a split-electrode concentration-gradient model and compare predicted pulse artefact tails with bench measurements in 0.1× PBS using an Evoke implant. Figure 9 describes qualitative agreement; no fitted error metric is reported.",
+            "reason": "Full accepted manuscript supports only qualitative bench comparison.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://researchcommons.waikato.ac.nz/bitstreams/a7586cec-1b63-4d68-99db-bf0c698a6194/download",
+                "locator": "Abstract; Sections II-IV; Figure 9 and surrounding text"
+              }
+            ]
+          },
+          "ограничения": {
+            "state": "reported",
+            "value": "Accepted manuscript and linked IEEE VOR were checked at body level. Validation is saline bench testing, not human epidural ECAP artifact removal, analgesia or patient outcome prediction. Do not turn visual agreement into a quantitative accuracy claim; the extracted conductivity unit is ambiguous and is not used.",
+            "reason": "Separate bench pulse-tail behavior from human ECAP/pain outcomes.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://researchcommons.waikato.ac.nz/bitstreams/a7586cec-1b63-4d68-99db-bf0c698a6194/download",
+                "locator": "Sections II-IV; Figures 1-13; no human experiment"
+              }
+            ]
+          },
+          "validation.checked_at": {
+            "state": "reported",
+            "value": "2026-09-28",
+            "reason": "Full accepted manuscript checked on this date.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://researchcommons.waikato.ac.nz/bitstreams/a7586cec-1b63-4d68-99db-bf0c698a6194/download",
+                "locator": "Owner repository accepted manuscript, title and body"
+              }
+            ]
+          },
+          "validation.notes": {
+            "state": "reported",
+            "value": "Primary University of Waikato accepted manuscript checked 2026-09-28, with DOI 10.1109/TNSRE.2018.2870169 and matching publisher VOR identity. Sections II-IV and Figures 1-13 describe split platinum-cuff electrode slices and 0.1× PBS bench comparison using an Evoke implant. Figure 9 gives qualitative model/measurement agreement without a fitted error metric. No human ECAP artefact removal or analgesic endpoint is tested.",
+            "reason": "Version and bench-only claim boundary updated after full-text review.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://researchcommons.waikato.ac.nz/bitstreams/a7586cec-1b63-4d68-99db-bf0c698a6194/download",
+                "locator": "Abstract; Sections II-IV; Figures 1-13"
+              }
+            ]
+          }
+        }
+      },
+      "claims": [],
+      "notes": "Primary University of Waikato accepted manuscript checked 2026-09-28, with DOI 10.1109/TNSRE.2018.2870169 and matching publisher VOR identity. Sections II-IV and Figures 1-13 describe split platinum-cuff electrode slices and 0.1× PBS bench comparison using an Evoke implant. Figure 9 gives qualitative model/measurement agreement without a fitted error metric. No human ECAP artefact removal or analgesic endpoint is tested."
+    },
+    {
+      "source_id": "S788",
+      "decision": "partially_verified",
+      "checked_at": "2026-09-28",
+      "full_text_status": "metadata_only",
+      "searches": [
+        {
+          "service": "NLM PubMed author abstract",
+          "query": "PMID 28922517 interim Avalon response proportions",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/28922517/",
+          "accessed_at": "2026-09-28"
+        }
+      ],
+      "updates": {
+        "identifiers": {
+          "doi": "10.1111/ner.12684",
+          "pmid": "28922517"
+        },
+        "производительность": "Interim AVALON author abstract: 51 trialed, 36 implanted. ≥50% back/leg pain relief: 92.6%/91.3% at 3 months and 85.7%/82.6% at 6 months; ≥80% relief: 70.4%/56.5% at 3 months and 64.3%/60.9% at 6 months. These are selected-cohort author-reported proportions, not an ECAP-to-pain predictor.",
+        "ограничения": "Abstract-only interim AVALON report (51 trialed/36 implanted), separate from the later 70/50 same-cohort analysis. Exact responder denominator at each visit, uncertainty and full methods are unavailable. AVALON is single-arm/open-label ACTRN12615000713594, not NCT02161627 Panorama; concurrent improvement cannot isolate ECAP feedback benefit or establish individual prognosis.",
+        "validation": {
+          "checked_at": "2026-09-28",
+          "full_text_status": "metadata_only",
+          "notes": "Official PubMed PMID 28922517 author abstract checked 2026-09-28: exact 3/6-month back/leg ≥50% and ≥80% relief proportions copied with interim 51-trialed/36-implanted context. The article is abstract-only in this pass. Registered AVALON endpoint includes feedback-mode programmability, distinct from patient pain scores; no randomized comparison, visit-specific responder denominator or patient ECAP-to-pain linkage is established."
+        },
+        "field_resolution": {
+          "производительность": {
+            "state": "reported",
+            "value": "Interim AVALON author abstract: 51 trialed, 36 implanted. ≥50% back/leg pain relief: 92.6%/91.3% at 3 months and 85.7%/82.6% at 6 months; ≥80% relief: 70.4%/56.5% at 3 months and 64.3%/60.9% at 6 months. These are selected-cohort author-reported proportions, not an ECAP-to-pain predictor.",
+            "reason": "Exact proportions transcribed from the official author abstract without inferred visit denominators.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://pubmed.ncbi.nlm.nih.gov/28922517/",
+                "locator": "Abstract > Results: 51 trialed, 36 implanted and back/leg response percentages at 3/6 months"
+              }
+            ]
+          },
+          "ограничения": {
+            "state": "reported",
+            "value": "Abstract-only interim AVALON report (51 trialed/36 implanted), separate from the later 70/50 same-cohort analysis. Exact responder denominator at each visit, uncertainty and full methods are unavailable. AVALON is single-arm/open-label ACTRN12615000713594, not NCT02161627 Panorama; concurrent improvement cannot isolate ECAP feedback benefit or establish individual prognosis.",
+            "reason": "Interim single-arm design and abstract-only denominator boundary retained.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://pubmed.ncbi.nlm.nih.gov/28922517/",
+                "locator": "Abstract > Methods, Results and Conclusions"
+              }
+            ]
+          },
+          "validation.checked_at": {
+            "state": "reported",
+            "value": "2026-09-28",
+            "reason": "Official PubMed abstract rechecked on this date.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://pubmed.ncbi.nlm.nih.gov/28922517/",
+                "locator": "PMID 28922517 Abstract"
+              }
+            ]
+          },
+          "validation.notes": {
+            "state": "reported",
+            "value": "Official PubMed PMID 28922517 author abstract checked 2026-09-28: exact 3/6-month back/leg ≥50% and ≥80% relief proportions copied with interim 51-trialed/36-implanted context. The article is abstract-only in this pass. Registered AVALON endpoint includes feedback-mode programmability, distinct from patient pain scores; no randomized comparison, visit-specific responder denominator or patient ECAP-to-pain linkage is established.",
+            "reason": "Recorded exact abstract metrics and noncomparative clinical boundary.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://pubmed.ncbi.nlm.nih.gov/28922517/",
+                "locator": "PMID 28922517 Abstract > Results"
+              }
+            ]
+          }
+        }
+      },
+      "claims": [],
+      "notes": "Official PubMed PMID 28922517 author abstract checked 2026-09-28: exact 3/6-month back/leg ≥50% and ≥80% relief proportions copied with interim 51-trialed/36-implanted context. The article is abstract-only in this pass. Registered AVALON endpoint includes feedback-mode programmability, distinct from patient pain scores; no randomized comparison, visit-specific responder denominator or patient ECAP-to-pain linkage is established."
+    }
+  ]
+}

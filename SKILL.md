@@ -38,6 +38,39 @@ origin. Prefer primary publications, official dataset pages, and official code
 repositories. Search snippets, news, vendor copy, and homepage-only URLs cannot
 validate a technical claim.
 
+Pi workers are read-only reviewers of primary routes. If a query needs a raw
+response for local inspection, put it under ignored `.work/pi-scratch/`, then
+record only checked query parameters, dated dispositions and primary locators in
+the living audit. Do not create raw query directories in `data/`.
+For every Codex subagent and Pi worker task, state that the project directory is
+`R:\Aspa\research` even if the bridge starts in `R:\Aspa`. Require the worker to
+change to that directory before running commands and to write every temporary
+download, probe, script, log, and intermediate file under `R:\Aspa\research\.work`.
+Do not create scratch files in the superproject root.
+Avoid bare `>nul`, `>NUL`, and similar discard redirections in worker shell
+commands: under the bridge's Windows working directory they can create a real
+`nul` file in the superproject. Redirect diagnostic output to `logs/` inside
+the worker's assigned artifact directory instead.
+For Picodex tasks, assign a unique folder
+`.work/pi-workers/<bridge-id>/<task-id>/` before submission. The worker writes
+`result.md` there with task ID, check date and the sections `Status`, `Primary
+locators`, `Verified findings`, `Unresolved`, and `Saved files`; optional raw
+responses go in `raw/` and logs in
+`logs/`. Resume the same Pi thread in that folder. The Codex coordinator keeps
+`.work/pi-workers/<bridge-id>/jobs.json` with `run_id`, `project`, and entries
+containing `task_id`, `job_id`, `thread_id`, `status`, and `result_path`; it
+writes each receipt immediately after submit, then independently checks the
+result before updating canonical files. Missing receipts stay explicit with
+null IDs; a saved result alone does not prove `agent_settled`.
+Write the run registry and worker results as UTF-8 without a byte-order mark.
+For failed, cancelled, or interrupted jobs without a worker result, the
+coordinator writes a `result.md` status stub in that task folder and does not
+integrate unfinished claims.
+Prune unused raw downloads from failed/cancelled jobs after recording their
+status; retain the stub, run registry and a small diagnostic log. Verify the
+resolved task path before removing anything. If automatic approval review
+rejects cleanup, retain the files and report the exact path and reason.
+
 Verify at least:
 
 - exact title, authors, year, venue, DOI/PMID/dataset ID, and exact URL;
@@ -73,10 +106,11 @@ Publish only after that review:
 uv run --frozen researchctl publish data/staging/inbox/source.json --apply
 ```
 
-Publishing creates a hashed pre-change snapshot and adds new records to the
-unclustered queue. Only the two newest rollback snapshots and explicitly pinned
-migration baselines are retained under `data/archive/`. Do not assign a cluster automatically merely because terms
-overlap.
+Publishing creates a hashed pre-change snapshot under ignored
+`.work/research-snapshots/` and adds new records to the unclustered queue.
+Only the two newest automatic rollback snapshots are retained there; explicit
+snapshots and migration baselines remain under `data/archive/`. Do not assign a
+cluster automatically merely because terms overlap.
 
 ## Deduplication
 

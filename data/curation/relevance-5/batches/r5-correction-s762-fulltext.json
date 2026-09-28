@@ -1,0 +1,38 @@
+{
+  "meta": {
+    "batch_id": "r5-correction-s762-fulltext",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-27",
+    "scope": "Reconcile S762 with the archived publisher-authored full text and its access limitation",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-27"
+  },
+  "source_ids": ["S762"],
+  "records": [{"id": "S762", "title": "High-dose spinal cord stimulation for patients with failed back surgery syndrome: a multicenter effectiveness and prediction study", "year": 2021, "source_type": "article"}],
+  "decisions": [{
+    "source_id": "S762",
+    "decision": "partially_verified",
+    "checked_at": "2026-09-27",
+    "full_text_status": "checked",
+    "searches": [{
+      "service": "Internet Archive capture of LWW publisher full text",
+      "query": "10.1097/j.pain.0000000000002035 exact holistic-responder thresholds and model split",
+      "url": "https://web.archive.org/web/20210930010639id_/https://journals.lww.com/pain/fulltext/2021/02000/high_dose_spinal_cord_stimulation_for_patients.23.aspx",
+      "accessed_at": "2026-09-27"
+    }],
+    "updates": {
+      "identifiers": {"doi": "10.1097/j.pain.0000000000002035", "pmid": "32910099"},
+      "ограничения": "Publisher full text defines a 12-month holistic responder requiring all four changes: 33% improvement in both low-back and leg NRS, 30% ODI improvement, EQ-5D increase of at least 0.03, and medication decrease. A distinct four-week trial-success rule uses 50% pain and medication reduction and must not be substituted. The primary article reports 80/20 train-validation and five random validation sets, but no prediction-specific N, per-split denominators, split unit or patient-disjointness. No external validation or ECAP; related Discover-registry cohorts may overlap. Live LWW access is restricted; review used a 2021 capture of the publisher page.",
+      "evidence": {"target_label": "Twelve-month holistic responder: 33% better low-back and leg NRS, 30% better ODI, EQ-5D gain at least 0.03, and medication decrease; missing outcome components imply unknown status"},
+      "risk_flags": [],
+      "field_resolution": {
+        "ограничения": {"state": "reported", "value": "Publisher full text defines a 12-month holistic responder requiring all four changes: 33% improvement in both low-back and leg NRS, 30% ODI improvement, EQ-5D increase of at least 0.03, and medication decrease. A distinct four-week trial-success rule uses 50% pain and medication reduction and must not be substituted. The primary article reports 80/20 train-validation and five random validation sets, but no prediction-specific N, per-split denominators, split unit or patient-disjointness. No external validation or ECAP; related Discover-registry cohorts may overlap. Live LWW access is restricted; review used a 2021 capture of the publisher page.", "reason": "Methods, Results and Figure 3 caption reviewed in the archived publisher-authored full text; missing model denominators and split unit remain explicit.", "checked_at": "2026-09-27", "locators": [{"url": "https://web.archive.org/web/20210930010639id_/https://journals.lww.com/pain/fulltext/2021/02000/high_dose_spinal_cord_stimulation_for_patients.23.aspx", "locator": "Methods §§2.5-2.6; Results §3.5; Figure 3 caption; Discussion"}]},
+        "evidence.target_label": {"state": "reported", "value": "Twelve-month holistic responder: 33% better low-back and leg NRS, 30% better ODI, EQ-5D gain at least 0.03, and medication decrease; missing outcome components imply unknown status", "reason": "Figure 3 caption and Methods §2.5 define the four-part 12-month composite and unknown state.", "checked_at": "2026-09-27", "locators": [{"url": "https://web.archive.org/web/20210930010639id_/https://journals.lww.com/pain/fulltext/2021/02000/high_dose_spinal_cord_stimulation_for_patients.23.aspx", "locator": "Methods §2.5; Figure 3 caption"}]},
+        "validation.checked_at": {"state": "reported", "value": "2026-09-27", "reason": "Archived original LWW article page retrieved directly and checked on 2026-09-27; live page returned 403.", "checked_at": "2026-09-27", "locators": [{"url": "https://web.archive.org/web/20210930010639id_/https://journals.lww.com/pain/fulltext/2021/02000/high_dose_spinal_cord_stimulation_for_patients.23.aspx", "locator": "Archived publisher page, original capture 2021-09-30"}]},
+        "validation.notes": {"state": "reported", "value": "The 2021 Internet Archive capture of the original LWW publisher full text was reviewed directly on 2026-09-27; live LWW access returned 403. Methods §2.5 and Figure 3 define the four-part 12-month holistic response; separate four-week trial-success thresholds are not interchangeable. Logistic/CART methods report 80/20 train-validation with five random validation sets. Cohort flow is 194 recruited, 185 baseline and 92 remaining on HD-SCS at 12 months, but prediction-specific N, absolute split Ns, patient-disjointness and row linkage are not printed. No ECAP predictor or external cohort is established.", "reason": "Replaces outdated abstract-only note while retaining the archived-source access caveat and unreported model details.", "checked_at": "2026-09-27", "locators": [{"url": "https://web.archive.org/web/20210930010639id_/https://journals.lww.com/pain/fulltext/2021/02000/high_dose_spinal_cord_stimulation_for_patients.23.aspx", "locator": "Methods §§2.5-2.6; Results §3.5; Figure 3; Discussion"}]}
+      }
+    },
+    "claims": [],
+    "notes": "The 2021 Internet Archive capture of the original LWW publisher full text was reviewed directly on 2026-09-27; live LWW access returned 403. Methods §2.5 and Figure 3 define the four-part 12-month holistic response; separate four-week trial-success thresholds are not interchangeable. Logistic/CART methods report 80/20 train-validation with five random validation sets. Cohort flow is 194 recruited, 185 baseline and 92 remaining on HD-SCS at 12 months, but prediction-specific N, absolute split Ns, patient-disjointness and row linkage are not printed. No ECAP predictor or external cohort is established."
+  }]
+}

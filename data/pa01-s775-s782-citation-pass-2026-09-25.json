@@ -70,8 +70,479 @@
         "new_direct_model_analogue": false
       }
     },
+    "additional_page_screens": [
+      {
+        "source_id": "S775",
+        "database": "OpenAlex Works API",
+        "query": "https://api.openalex.org/works?filter=cites:W4403062868&select=id,doi,display_name,publication_year,publication_date,primary_location,authorships,abstract_inverted_index&sort=publication_date:desc&per-page=20&page=2",
+        "retrieved_at": "2026-09-26",
+        "indexed_total_at_query": 86,
+        "page": 2,
+        "record_range": "21-40 of 86",
+        "reviewed_count": 20,
+        "date_range": "2025-11-12..2026-03-18",
+        "record_dispositions": [
+          {
+            "openalex_id": "W7138845168",
+            "doi": "10.1016/j.cub.2026.02.037",
+            "disposition": "Drosophila search behavior; no connectome-constrained dynamics"
+          },
+          {
+            "openalex_id": "W7136107735",
+            "doi": "10.7554/elife.110165.1",
+            "disposition": "Ant active-sampling circuit model; not Drosophila connectome"
+          },
+          {
+            "openalex_id": "W7136171063",
+            "doi": "10.7554/elife.110165",
+            "disposition": "Version duplicate of preceding eLife record"
+          },
+          {
+            "openalex_id": "W7134175476",
+            "doi": "10.64898/2026.03.04.709724",
+            "disposition": "Large-mammal brain preservation methods; out of scope"
+          },
+          {
+            "openalex_id": "W7133896348",
+            "doi": "10.1371/journal.pcsy.0000091",
+            "disposition": "Drosophila connectome spreading-dynamics model; primary text reviewed; canonical source S807"
+          },
+          {
+            "openalex_id": "W7133201395",
+            "doi": "10.64898/2026.02.27.708590",
+            "disposition": "Drosophila leg sensory circuit/grooming; anatomy and behavior, no fitted dynamics established in this pass"
+          },
+          {
+            "openalex_id": "W7131349300",
+            "doi": "10.1016/j.brainresbull.2026.111788",
+            "disposition": "Generic attractor model; no Drosophila connectome established"
+          },
+          {
+            "openalex_id": "W7128787975",
+            "doi": "10.1038/s41467-026-69443-8",
+            "disposition": "Drosophila feeding circuit; peripheral biological relevance"
+          },
+          {
+            "openalex_id": "W7126082772",
+            "doi": "10.1016/j.cub.2025.12.058",
+            "disposition": "Drosophila sweet-sensation interneurons; peripheral biological relevance"
+          },
+          {
+            "openalex_id": "W7125775836",
+            "doi": "10.1109/TMI.2026.3658169",
+            "disposition": "Neural segmentation methods; metadata/abstract only"
+          },
+          {
+            "openalex_id": "W7124893731",
+            "doi": "10.3389/flang.2025.1710323",
+            "disposition": "Language theory; out of scope"
+          },
+          {
+            "openalex_id": "W7124827317",
+            "doi": "10.1038/s41467-026-68453-w",
+            "disposition": "Potential whole-brain FlyWire-constrained spiking-model analogue; primary methods not independently verified in this pass"
+          },
+          {
+            "openalex_id": "W7116633649",
+            "doi": "10.1016/j.celrep.2025.116761",
+            "disposition": "Zebrafish spinal sensorimotor connectome/dynamics comparator; non-Drosophila"
+          },
+          {
+            "openalex_id": "W4417415251",
+            "doi": "10.64898/2025.12.14.694216",
+            "disposition": "Drosophila pharyngeal/gut sensory connectome anatomy; no dynamics model established in this pass"
+          },
+          {
+            "openalex_id": "W4417098329",
+            "doi": "10.1038/s41583-025-00998-z",
+            "disposition": "Closed review, metadata only"
+          },
+          {
+            "openalex_id": "W4416985654",
+            "doi": "10.1038/s41467-025-65900-y",
+            "disposition": "Drosophila developmental signaling; out of scope"
+          },
+          {
+            "openalex_id": "W4417186996",
+            "doi": "10.1098/rsif.2025.0433",
+            "disposition": "Locust visual neuro-robotics review; out of scope"
+          },
+          {
+            "openalex_id": "W4416716987",
+            "doi": "10.1038/s41586-025-09766-6",
+            "disposition": "Taste evolution, peripheral relevance; no connectome dynamics"
+          },
+          {
+            "openalex_id": "W4416205202",
+            "doi": "10.7554/eLife.108044",
+            "disposition": "Known Drosophila mechanosensory connectome/grooming lead; anatomy, not fitted dynamics"
+          },
+          {
+            "openalex_id": "W4416205341",
+            "doi": "10.7554/eLife.108044.1",
+            "disposition": "Version duplicate of preceding eLife record"
+          }
+        ],
+        "primary_text_checks": [
+          {
+            "title": "Cascades and convergence: Dynamic signal flow in a synapse-level brain network",
+            "doi": "10.1371/journal.pcsy.0000091",
+            "canonical_source_id": "S807",
+            "url": "https://journals.plos.org/complexsystems/article?id=10.1371/journal.pcsy.0000091",
+            "locator": "Abstract and Author summary (lines 131-136): adult Drosophila connectome and network-based spreading model; Introduction lines 151-157 describes spreading dynamics and three model scenarios; Results lines 163-164 identifies FlyWire v783; Methods lines 194-197 describe stochastic activation/refractory cascade assumptions.",
+            "finding": "A direct connectome-constrained sensory signal propagation model and a relevant S775-method comparator. It is an abstract stochastic spreading model, not the fitted conductance-based LIF model in S775. Sensory modalities listed do not establish nociception, clinical pain, ECAP, SCS, or cross-domain transfer.",
+            "access": "Open-access peer-reviewed primary article; data availability lines 142-143 points to FlyWire and Zenodo 10.5281/zenodo.18555170."
+          }
+        ],
+        "limitations": [
+          "All 20 page records received a citation-level disposition; only the PLOS candidate's primary full text was independently checked for methods in this integrated batch.",
+          "Nature Communications, bioRxiv, and remaining candidate full-text methods from this page require separate primary review before adding scientific claims or corpus records.",
+          "This page is a bounded slice, not complete citation snowballing, database coverage, or PA-01 saturation."
+        ]
+      },
+      {
+        "source_id": "S775",
+        "database": "OpenAlex Works API",
+        "query": "https://api.openalex.org/works?filter=cites%3AW4403062868&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cprimary_location&sort=publication_date%3Adesc&per-page=20&page=3",
+        "retrieved_at": "2026-09-26",
+        "indexed_total_at_query": 86,
+        "page": 3,
+        "record_range": "41-60 of 86",
+        "reviewed_count": 20,
+        "date_range": "2025-05-01..2025-11-02",
+        "record_dispositions": [
+          {
+            "openalex_id": "W4415772300",
+            "doi": "10.1101/2025.10.31.685871",
+            "disposition": "Drosophila taste/valence circuit; supporting biology, not connectome dynamics"
+          },
+          {
+            "openalex_id": "W4415648663",
+            "doi": "10.1038/s41593-025-02080-4",
+            "canonical_source_id": "S743",
+            "disposition": "Connectome-constrained recurrent-network theory with empirical connectome examples; citation relationship only, source already canonical"
+          },
+          {
+            "openalex_id": "W4415320804",
+            "doi": "10.1016/j.isci.2025.113799",
+            "disposition": "NeuroAI perspective; no connectome dynamics evidence"
+          },
+          {
+            "openalex_id": "W4415163467",
+            "doi": "10.1101/2025.10.13.682010",
+            "disposition": "Ant active-sampling circuit model; not connectome-constrained"
+          },
+          {
+            "openalex_id": "W4414280280",
+            "doi": "10.1038/s41586-025-09554-2",
+            "disposition": "Drosophila VNC proprioceptive circuit/physiology; supporting biology, not dynamics-model result"
+          },
+          {
+            "openalex_id": "W4414598781",
+            "doi": "10.1101/2025.09.12.675944",
+            "canonical_source_id": "S740",
+            "disposition": "Drosophila VNC connectome dynamic simulation and CPG pruning; citation relationship only, source already canonical"
+          },
+          {
+            "openalex_id": "W4413842755",
+            "doi": "10.1016/j.ijrmms.2025.106245",
+            "disposition": "Rock mechanics; out of scope"
+          },
+          {
+            "openalex_id": "W4413516177",
+            "doi": "10.1101/2025.08.25.671814",
+            "disposition": "Drosophila taste-feeding connectome anatomy; supporting substrate, not dynamics"
+          },
+          {
+            "openalex_id": "W4413425554",
+            "doi": "10.1093/genetics/iyaf174",
+            "disposition": "Optogenetic functional-connectivity control; methods caveat"
+          },
+          {
+            "openalex_id": "W4413140930",
+            "doi": "10.1126/science.adp5831",
+            "disposition": "Cross-species courtship behavior via gene manipulation; no connectome dynamics"
+          },
+          {
+            "openalex_id": "W4413003027",
+            "doi": "10.1007/978-3-032-00800-8_32",
+            "disposition": "Larval connectome used as fixed recurrent AI architecture; paywalled abstract scope"
+          },
+          {
+            "openalex_id": "W4412803987",
+            "doi": "10.1101/2025.07.28.667142",
+            "disposition": "Partial-recurrence theory; not connectome-derived"
+          },
+          {
+            "openalex_id": "W4412177644",
+            "doi": "10.1038/s12276-025-01491-4",
+            "disposition": "Proximity-labeling methods; peripheral"
+          },
+          {
+            "openalex_id": "W4411722134",
+            "doi": "10.1007/s00422-025-01013-5",
+            "disposition": "NeuroAI review; peripheral"
+          },
+          {
+            "openalex_id": "W4411599495",
+            "doi": "10.1371/journal.pone.0326920",
+            "disposition": "Memory survey; peripheral"
+          },
+          {
+            "openalex_id": "W4411085647",
+            "doi": "10.1146/annurev-cellbio-101323-025423",
+            "disposition": "Behavioral individuality review; relevant variability caveat"
+          },
+          {
+            "openalex_id": "W4412933934",
+            "doi": "10.1109/ethics65148.2025.11098316",
+            "disposition": "Ethics overview; out of scope"
+          },
+          {
+            "openalex_id": "W4410956285",
+            "doi": "10.1016/j.cell.2025.05.007",
+            "disposition": "Drosophila medulla connectome-function constraint study; open preprint is recorded in existing audit"
+          },
+          {
+            "openalex_id": "W4410353381",
+            "doi": "10.1101/2025.05.09.652503",
+            "disposition": "Brain tissue ultrastructural preservation; peripheral feasibility"
+          },
+          {
+            "openalex_id": "W4410120613",
+            "doi": "10.1016/j.cub.2025.04.035",
+            "disposition": "Drosophila taste connectome and functional imaging; supporting biology"
+          }
+        ],
+        "primary_text_checks": [
+          {
+            "title": "Prediction of neural activity in connectome-constrained recurrent networks",
+            "doi": "10.1038/s41593-025-02080-4",
+            "canonical_source_id": "S743",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12648571/",
+            "locator": "Abstract lines 83-86 and empirical-connectome Results lines 216-221: teacher-student firing-rate RNN theory; empirical examples include larval Drosophila VNC, adult Drosophila central complex, and larval zebrafish. The manuscript says connectome constraints alone can leave neural dynamics degenerate; subset activity recordings improve prediction.",
+            "access": "Full author manuscript on PMC; version-of-record DOI and publication metadata are stated at lines 35-37.",
+            "finding": "High-relevance methods/theory comparator for connectome-constrained neural dynamics. It does not establish nociception, human pain, ECAP, SCS, or animal-to-human transfer."
+          },
+          {
+            "title": "Connectome simulations identify a central pattern generator circuit for fly walking",
+            "doi": "10.1101/2025.09.12.675944",
+            "canonical_source_id": "S740",
+            "url": "https://www.biorxiv.org/content/10.1101/2025.09.12.675944v1.full",
+            "version_update_locator": {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/42094485/",
+              "locator": "PubMed PMID 42094485 identifies DOI 10.1101/2025.09.12.675944 and publication date 2026-04-30; this documents a later version of the same preprint DOI, not an additional publication."
+            },
+            "locator": "Abstract; Figure 3 caption and accompanying Results: dynamic simulations of Drosophila VNC connectomes, pruning-screen design, minimal interneuron circuit and necessity tests; Abstract reports optogenetic confirmation of a separate DNb08 pathway.",
+            "access": "Primary bioRxiv full-text route; OpenAlex page result and primary page identify the preprint DOI. This review does not assess data reuse rights.",
+            "finding": "S740 is already canonical for this DOI. Its v1 author manuscript reports Drosophila connectome-to-locomotor-dynamics/behavior modeling, distinct from S775's whole-brain LIF model. PubMed lists a bioRxiv version update dated 2026-04-30 for the same DOI; this is a version update, not a new source. The endpoint is walking motor rhythm, not nociception, pain, ECAP, SCS, or cross-species clinical transfer."
+          }
+        ],
+        "limitations": [
+          "Twenty indexed citing works received a bounded citation-level disposition; two highest-impact connectome-dynamics candidates received primary full-text checks in this batch.",
+          "This page is not a complete review of every full text or all indexed citing records. OpenAlex pages 4-5 (records 61-86), other databases, and saturation requirements remain open."
+        ]
+      },
+      {
+        "source_id": "S775",
+        "database": "OpenAlex Works API",
+        "query": "https://api.openalex.org/works?filter=cites%3AW4403062868&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cprimary_location&sort=publication_date%3Adesc&per-page=20&page=4",
+        "retrieved_at": "2026-09-26",
+        "indexed_total_at_query": 86,
+        "page": 4,
+        "record_range": "61-80 of 86",
+        "reviewed_count": 20,
+        "date_range": "2024-10-02..2025-03-28",
+        "record_dispositions": [
+          {
+            "openalex_id": "W4408915239",
+            "doi": "10.1016/j.neuroscience.2025.03.042",
+            "disposition": "Cross-species neurodegeneration review; no connectome dynamics"
+          },
+          {
+            "openalex_id": "W4408865362",
+            "doi": "10.1038/s41467-025-58030-y",
+            "disposition": "Bioengineering perspective; out of scope"
+          },
+          {
+            "openalex_id": "W4408676210",
+            "doi": "10.3389/fnins.2025.1557624",
+            "disposition": "Drosophila larval neuromotor calcium/graph analysis; not connectome-constrained dynamics"
+          },
+          {
+            "openalex_id": "W4408495245",
+            "doi": "10.1101/2025.03.14.643363",
+            "disposition": "Zebrafish connectome/EM-constrained evidence-accumulation model; cross-species comparator"
+          },
+          {
+            "openalex_id": "W4408228994",
+            "doi": "10.1101/2025.03.05.641432",
+            "disposition": "Vertebrate spinal sensorimotor connectome/astroglia model; non-Drosophila comparator"
+          },
+          {
+            "openalex_id": "W4407392536",
+            "doi": "10.1038/s41598-025-89088-9",
+            "disposition": "Drosophila taste connectome analysis with simulated activity; primary publisher text checked; simulation section reports a Shiu-style LIF model"
+          },
+          {
+            "openalex_id": "W4407087365",
+            "doi": "10.1101/2025.02.02.636137",
+            "disposition": "Drosophila visual connectome neuron biophysics comparator; no pain/transfer claim"
+          },
+          {
+            "openalex_id": "W4410222783",
+            "doi": "10.53053/bwtn6816",
+            "disposition": "Connectomics news article; secondary"
+          },
+          {
+            "openalex_id": "W4414379640",
+            "doi": "10.1093/chemse/bjaf035",
+            "disposition": "Drosophila amino-acid chemosensory physiology; not pain/transfer or connectome dynamics"
+          },
+          {
+            "openalex_id": "W4405943587",
+            "doi": "10.1080/19336934.2024.2440950",
+            "disposition": "Connectomics commentary; secondary"
+          },
+          {
+            "openalex_id": "W4405948399",
+            "doi": "10.21203/rs.3.rs-5684747/v1",
+            "disposition": "Drosophila motoneuron developmental biology; out of scope"
+          },
+          {
+            "openalex_id": "W4405564832",
+            "doi": "10.1038/s43588-024-00743-z",
+            "disposition": "Brain-scale simulation news/commentary; secondary"
+          },
+          {
+            "openalex_id": "W4405999671",
+            "doi": "10.1101/2024.12.17.628844",
+            "canonical_source_id": "S782",
+            "disposition": "Grooming-network preprint/version associated with canonical S782; not a new work/source record"
+          },
+          {
+            "openalex_id": "W4405202822",
+            "doi": "10.1101/2024.12.04.624189",
+            "deduplicated_with": "W7133896348 / 10.1371/journal.pcsy.0000091",
+            "disposition": "Preprint version of previously reviewed Cascades and convergence; one underlying work"
+          },
+          {
+            "openalex_id": "W4404121172",
+            "doi": "10.3389/fsysb.2024.1487298",
+            "disposition": "Integrative systems neuroscience review; secondary"
+          },
+          {
+            "openalex_id": "W4403376274",
+            "doi": "10.1101/2024.10.11.617601",
+            "disposition": "Drosophila taste-evolution preprint; biology comparator, not modeled pain"
+          },
+          {
+            "openalex_id": "W4403139756",
+            "doi": "10.1101/2024.10.03.616539",
+            "disposition": "Mouse cortical connectome and balanced-activity study; cross-species comparator"
+          },
+          {
+            "openalex_id": "W4403062863",
+            "doi": "10.1038/s41586-024-07854-7",
+            "canonical_source_id": "S783",
+            "disposition": "Neural circuit mechanisms underlying context-specific halting; already canonical S783 source"
+          },
+          {
+            "openalex_id": "W4403062911",
+            "doi": "10.1038/s41586-024-07558-y",
+            "canonical_source_id": "S219",
+            "disposition": "Adult Drosophila wiring diagram; already canonical S219 source"
+          },
+          {
+            "openalex_id": "W4403062913",
+            "doi": "10.1038/s41586-024-07686-5",
+            "disposition": "Whole-brain annotation and multi-connectome cell typing resource; companion resource, not itself a dynamics study"
+          }
+        ],
+        "primary_text_checks": [
+          {
+            "title": "Connectomic analysis of taste circuits in Drosophila",
+            "doi": "10.1038/s41598-025-89088-9",
+            "url": "https://www.nature.com/articles/s41598-025-89088-9",
+            "locator": "Publisher abstract lines 40-43 confirms whole-brain connectome, four gustatory modalities, and simulations relating connectivity to predicted activity. Introduction lines 73-78 identifies the FlyWire whole-brain data and prior connectome model work. The primary simulation section 'Relating connectivity to simulated neuronal activity' was checked in the bounded Pi review; it applies the Shiu et al. LIF model.",
+            "finding": "Connectome-to-predicted-activity taste-circuit study and S775 method derivative. The endpoint is gustatory circuit response, not nociception, pain, ECAP, SCS, or clinical transfer.",
+            "canonical_source_id": "S808",
+            "full_text_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11821855/fullTextXML",
+            "full_text_locator": "Methods > Whole-brain simulations: Shiu-based LIF, 1 s stimulation, 30 trials, mean firing rates; Methods > Classifying neurons: FlyWire v630 annotations. Activity is predicted, not recorded."
+          },
+          {
+            "title": "Correlative light and electron microscopy reveals the fine circuit structure underlying evidence accumulation in larval zebrafish",
+            "doi": "10.1101/2025.03.14.643363",
+            "url": "https://www.biorxiv.org/content/10.1101/2025.03.14.643363v1.full",
+            "locator": "Primary preprint abstract/methods identify larval zebrafish, correlative LM/EM circuit data, and evidence-accumulation model constrained by circuit; cross-species comparator only.",
+            "finding": "No Drosophila or pain/clinical-transfer evidence."
+          }
+        ],
+        "limitations": [
+          "All 20 indexed page-4 records received dispositions; selected relevant claims have primary locators.",
+          "Secondary, review, and version-duplicate entries are citation-graph records, not independent primary analogues."
+        ]
+      },
+      {
+        "source_id": "S775",
+        "database": "OpenAlex Works API",
+        "query": "https://api.openalex.org/works?filter=cites%3AW4403062868&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cprimary_location&sort=publication_date%3Adesc&per-page=20&page=5",
+        "retrieved_at": "2026-09-26",
+        "indexed_total_at_query": 86,
+        "page": 5,
+        "record_range": "81-86 of 86",
+        "reviewed_count": 6,
+        "date_range": "2024-07-20..2024-10-02",
+        "record_dispositions": [
+          {
+            "openalex_id": "W4403062948",
+            "doi": "10.1038/d41586-024-03190-y",
+            "disposition": "Nature news on FlyWire release; secondary, no methods/results"
+          },
+          {
+            "openalex_id": "W4403065938",
+            "doi": "10.1038/d41586-024-03029-6",
+            "disposition": "Nature news feature on fruit-fly wiring diagram; secondary"
+          },
+          {
+            "openalex_id": "W4403066080",
+            "doi": "10.1038/d41586-024-03182-y",
+            "disposition": "Citizen-science commentary; secondary"
+          },
+          {
+            "openalex_id": "W4402809611",
+            "doi": "10.1101/2024.09.24.614728",
+            "disposition": "BrainScale online-learning SNN systems preprint; method relevance only, no Drosophila connectome/behavior experiment verified"
+          },
+          {
+            "openalex_id": "W4400892780",
+            "doi": "10.1101/2024.07.18.604056",
+            "disposition": "Cross-species synaptic-density study using fly connectome-derived morphometry; primary full text checked; static structural analysis, not dynamics"
+          },
+          {
+            "openalex_id": "W4404742302",
+            "doi": "10.53053/qrku8647",
+            "disposition": "Systems-neuroscience essay/interview; secondary"
+          }
+        ],
+        "primary_text_checks": [
+          {
+            "title": "Invariant synaptic density across species",
+            "doi": "10.1101/2024.07.18.604056",
+            "url": "https://www.biorxiv.org/content/10.1101/2024.07.18.604056v1.full",
+            "locator": "Results 'Synaptic density convergence across species' and Figure 1A-C; Figure 2A; Figure 3A-B and Supplementary Figure S4. Methods 'Electron microscopy data and morphologies', 'Axon-dendrite split in the adult Drosophila', and 'Dendritic synaptic density invariance and rate code homeostasis'.",
+            "finding": "Cross-species EM/synaptic-density study including Drosophila/connectome-derived material; not dynamics simulation, sensory/behavior experiment, pain/transfer study, or ECAP/SCS evidence.",
+            "access": "Primary bioRxiv v1 full text reviewed; preprint status."
+          }
+        ],
+        "limitations": [
+          "Page 5 has six records; none is a direct connectome-to-pain or clinical-transfer analogue.",
+          "This page-level observation does not establish absence of analogues in other databases or the broader literature."
+        ]
+      }
+    ],
     "limits": [
-      "OpenAlex is an index, not a complete citation graph; the S775 screen covered only its 20 newest indexed citing works, not all 86.",
+      "OpenAlex is an index, not a complete citation graph; this audit screened the newest 20 and OpenAlex pages 2-5 (records 21-86), for 86/86 indexed S775 citing works in the captured index snapshot. This closes only the bounded OpenAlex citation-list triage; it does not establish global citation coverage, literature saturation, or absence of analogues.",
       "The S782 citation count/page is an early index snapshot; zero additional citing works in that page is not evidence of no citations.",
       "This pass did not satisfy exact/synonym/author query coverage, complete backward/forward snowballing, or PA-01 saturation.",
       "A targeted primary-text search recovered arXiv:2609.01330v1 citing S775 as reference 46 although absent from the earlier OpenAlex newest-20 slice; the exact/synonym/author probes were bounded discovery queries, not comprehensive database searches or a saturation test."
@@ -103,7 +574,7 @@
       "locator": "Primary eLife full-text JATS for Calle-Schuler et al., eLife 14:RP108044 (DOI 10.7554/eLife.108044.3); Abstract/Results describe connectome anatomy and stimulus-aimed grooming. It is a circuit/behavior lead, not a dynamics-model analogue."
     }
   ],
-  "conclusion": "A new method-level connectome-constrained dynamics analogue was identified in the primary reference list of arXiv:2609.01330v1 (citing S775); its optic-lobe visual task lacks in-vivo validation and is not a nociception, grooming/escape, pain, ECAP, or SCS analogue. The separate Calle-Schuler eLife lead remains related circuit/behavior prior art without fitted dynamics. PA-01 remains open: the sampled citation/index and targeted query coverage do not complete NS-01-NS-04 exact/synonym/author searches, full backward/forward snowballing, or saturation.",
+  "conclusion": "The bounded OpenAlex citation review surfaced method-level connectome dynamics comparators including: Liew et al. arXiv:2609.01330v1, an optic-lobe visual conductance-LIF model without in-vivo validation; Betzel et al. DOI 10.1371/journal.pcsy.0000091, an adult Drosophila FlyWire v783 stochastic sensory-cascade model; Beirán and Litwin-Kumar DOI 10.1038/s41593-025-02080-4, a teacher-student recurrent-network theory tested against empirical connectome examples; and Pugliese et al. DOI 10.1101/2025.09.12.675944 (canonical S740), dynamic Drosophila VNC simulations for walking CPG hypotheses; plus Walker et al. DOI 10.1038/s41598-025-89088-9, taste-circuit activity simulations. Beirán et al. is canonical S743. S740 and S743 were already canonical; Walker is newly catalogued as S808 and is a distinct publication. Pugliese versions share one DOI and are not two publications. Their model classes and endpoints differ; none establishes nociception, pain, ECAP, SCS, or cross-domain clinical transfer. The separate Calle-Schuler eLife lead remains circuit/behavior prior art without fitted dynamics. PA-01 remains open: the sampled citation/index and targeted query coverage do not complete NS-01-NS-04 exact/synonym/author searches, full backward/forward snowballing, or saturation; all 86/86 indexed S775 citing records in the captured OpenAlex snapshot now have bounded dispositions; global citation coverage and PA-01 saturation remain open. On 2026-09-27 the exact-title/synonym pass also located a new bioRxiv v1 NeuroGraphBench connectome-grounded looming escape circuit model (DOI 10.64898/2026.08.22.746456). It is in-silico NS-04 prior art, not an in-vivo validation or whole-brain nociception model; PA-01 saturation remains unearned and any two-refresh sequence restarts after this new class. Direct full-text recheck with browser UA succeeded and the preprint was published as S816; its simulated GF escape output is not an observed fly response.",
   "targeted_queries": [
     {
       "query": "\"Connectome-Based Modelling Reveals Orientation Maps in the Drosophila Optic Lobe\"",
@@ -119,6 +590,18 @@
       "query": "Liew Lin Chen Zhang Drosophila connectome orientation maps",
       "purpose": "Author/title variant check for the newly located lead.",
       "result": "Confirmed same arXiv v1 primary source; no separate version/independent study established."
+    },
+    {
+      "query": "\"NeuroGraphBench: Interacting with Drosophila Connectomes at Scale for Exploring the Functional Logic of Neural Circuits\"; \"10.64898/2026.08.22.746456\"; site:biorxiv.org/content/10.64898/2026.08.22.746456v1.full",
+      "checked_at": "2026-09-27",
+      "purpose": "NS-04 exact-title, DOI and synonym pass after deduplicating S739",
+      "result": "One bioRxiv v1 primary preprint identified. S739 is already canonical; no separate journal version for NeuroGraphBench established by this bounded exact-version search. Direct publisher fetch returned HTTP 429, but the official bioRxiv full-text search index exposed Methods/Results and figure text; recheck direct access before claiming full direct retrieval."
+    },
+    {
+      "query": "10.64898/2026.08.22.746456 exact DOI; bioRxiv v1 direct full HTML with browser UA",
+      "checked_at": "2026-09-27",
+      "purpose": "Primary full-text and version/access recheck for canonical card S816",
+      "result": "Official bioRxiv v1 full HTML fetched HTTP 200 and Methods/Results/Discussion inspected; direct default UA had earlier returned 429. Crossref identifies posted content; no NGB model code/data repository link in manuscript. S816 published."
     }
   ],
   "additional_primary_leads": [
@@ -139,6 +622,23 @@
       "publication_status": "arXiv v1 submitted 2026-09-01; arXiv page comments state \"NeurIPS 2025\", which was not independently verified against proceedings in this pass.",
       "catalogued": false,
       "triage": "Add as a candidate for later canonical-card review; this bounded audit itself does not publish or validate a corpus card."
+    },
+    {
+      "title": "NeuroGraphBench: Interacting with Drosophila Connectomes at Scale for Exploring the Functional Logic of Neural Circuits",
+      "authors": "Aurel A. Lazar; Shashwat Shukla; Yiyin Zhou",
+      "doi": "10.64898/2026.08.22.746456",
+      "url": "https://www.biorxiv.org/content/10.64898/2026.08.22.746456v1.full",
+      "retrieved_at": "2026-09-27",
+      "publication_status": "bioRxiv v1 posted 2026-08-26; no journal version established in this bounded search",
+      "primary_locators": [
+        "Official bioRxiv v1 full HTML, Methods 2.1-2.2/Figs. 1-3: OpticLobe, Hemibrain and FlyWire morphology/retinotopy analysis and LPLC2 to Giant Fiber pathway abstraction.",
+        "Official bioRxiv v1 full HTML, Results 3.1-3.2/Figs. 4-6 and Appendices B-C: executable model separates modeled direct-hit and near-miss looming trajectories; Giant Fiber output uses divisive-normalization peak detection and ideal integrate-and-fire."
+      ],
+      "classification": "New NS-04 connectome-grounded functional escape-circuit model, distinct from S739 whole-brain dynamics. Model output is in silico; no independent in-vivo neural or fly-escape validation, nociception, human pain, ECAP or SCS outcome.",
+      "access_boundary": "Direct bioRxiv v1 full HTML was retrieved HTTP 200 on 2026-09-27 with browser UA and independently checked; earlier default requests returned 429. No NGB model-code/data repository link was found in the primary text; neu3D GitHub is a rendering dependency.",
+      "catalogued": true,
+      "triage": "Published as S816 after exact DOI/title duplicate check and stage/publish. This new in-silico model class prevents PA-01 saturation credit on this pass.",
+      "source_id": "S816"
     }
   ]
 }

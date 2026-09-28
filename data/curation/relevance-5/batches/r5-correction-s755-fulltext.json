@@ -1,0 +1,71 @@
+{
+  "meta": {
+    "batch_id": "r5-correction-s755-fulltext",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-27",
+    "scope": "Reconcile S755 canonical card with the verified BMJ publisher JATS full text",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-27"
+  },
+  "source_ids": ["S755"],
+  "records": [{
+    "id": "S755",
+    "title": "Choice of spinal cord stimulation versus targeted drug delivery in the management of chronic pain: a predictive formula for outcomes",
+    "year": 2020,
+    "source_type": "article"
+  }],
+  "decisions": [{
+    "source_id": "S755",
+    "decision": "partially_verified",
+    "checked_at": "2026-09-27",
+    "full_text_status": "checked",
+    "searches": [{
+      "service": "BMJ publisher JATS full text",
+      "query": "10.1136/rapm-2019-100859 exact success definition analysis denominator and validation split",
+      "url": "https://rapm.bmj.com/content/rapm/45/2/131.source.xml",
+      "accessed_at": "2026-09-27"
+    }],
+    "updates": {
+      "identifiers": {
+        "doi": "10.1136/rapm-2019-100859",
+        "pmid": "31932490"
+      },
+      "ограничения": "Publisher Methods defines SCS success as at least 50% pain relief from the trial and subsequent implant. Results reports 945 included in analysis and Table 1 partitions 826 SCS successes and 119 failures later treated with TDD, but no model-specific complete-case denominator or fixed follow-up horizon is stated. The article mentions cross-validation without a split unit or proof of patient-disjointness. This is single-center derivation, not external validation; no ECAP.",
+      "evidence": {
+        "target_label": "At least 50% pain relief from SCS trial and subsequent implant for SCS success; fixed follow-up horizon not reported"
+      },
+      "field_resolution": {
+        "ограничения": {
+          "state": "reported",
+          "value": "Publisher Methods defines SCS success as at least 50% pain relief from the trial and subsequent implant. Results reports 945 included in analysis and Table 1 partitions 826 SCS successes and 119 failures later treated with TDD, but no model-specific complete-case denominator or fixed follow-up horizon is stated. The article mentions cross-validation without a split unit or proof of patient-disjointness. This is single-center derivation, not external validation; no ECAP.",
+          "reason": "Publisher full-text Methods, Results, Table 1 and Limitations checked; reported cohort flow is not assumed to equal a model-specific complete-case denominator.",
+          "checked_at": "2026-09-27",
+          "locators": [{"url": "https://rapm.bmj.com/content/rapm/45/2/131.source.xml", "locator": "Methods > Study design and Statistical analysis; Results and Table 1; Limitations"}]
+        },
+        "evidence.target_label": {
+          "state": "reported",
+          "value": "At least 50% pain relief from SCS trial and subsequent implant for SCS success; fixed follow-up horizon not reported",
+          "reason": "The success threshold is explicit in primary Methods; the follow-up horizon is not fixed there.",
+          "checked_at": "2026-09-27",
+          "locators": [{"url": "https://rapm.bmj.com/content/rapm/45/2/131.source.xml", "locator": "Methods > Study design, SCS success definition"}]
+        },
+        "validation.checked_at": {
+          "state": "reported",
+          "value": "2026-09-27",
+          "reason": "Publisher JATS XML retrieved and checked directly on 2026-09-27.",
+          "checked_at": "2026-09-27",
+          "locators": [{"url": "https://rapm.bmj.com/content/rapm/45/2/131.source.xml", "locator": "Publisher full-text JATS XML"}]
+        },
+        "validation.notes": {
+          "state": "reported",
+          "value": "Publisher BMJ full-text JATS XML checked 2026-09-27. Methods defines at least 50% pain relief from SCS trial and subsequent implant; Results and Table 1 report 945 included, 826 SCS successes and 119 failures subsequently treated with TDD. The model-specific complete-case N, fixed outcome horizon and unit of the stated cross-validation are not reported; no patient-disjoint or external validation is inferred. Data availability is by reasonable request; no ECAP predictor is described.",
+          "reason": "Replaces the outdated abstract-only access note after direct publisher full-text review.",
+          "checked_at": "2026-09-27",
+          "locators": [{"url": "https://rapm.bmj.com/content/rapm/45/2/131.source.xml", "locator": "Methods > Study design and Statistical analysis; Results > Predictive formula and Table 1; Limitations"}]
+        }
+      }
+    },
+    "claims": [],
+    "notes": "Publisher BMJ full-text JATS XML checked 2026-09-27. Methods defines at least 50% pain relief from SCS trial and subsequent implant; Results and Table 1 report 945 included, 826 SCS successes and 119 failures subsequently treated with TDD. The model-specific complete-case N, fixed outcome horizon and unit of the stated cross-validation are not reported; no patient-disjoint or external validation is inferred. Data availability is by reasonable request; no ECAP predictor is described."
+  }]
+}

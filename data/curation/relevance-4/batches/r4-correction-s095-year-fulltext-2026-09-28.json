@@ -1,0 +1,91 @@
+{
+  "meta": {
+    "batch_id": "r4-correction-s095-year-fulltext-2026-09-28",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-28",
+    "scope": "Correct S095 publication year from the publisher PDF and DOI record while retaining commentary-only evidence role",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-28"
+  },
+  "source_ids": ["S095"],
+  "records": [{
+    "id": "S095",
+    "title": "From Connectome to Cognition: Building the First Digital Organism",
+    "year": 2026,
+    "source_type": "обзор"
+  }],
+  "decisions": [{
+    "source_id": "S095",
+    "decision": "partially_verified",
+    "checked_at": "2026-09-28",
+    "full_text_status": "checked",
+    "searches": [{
+      "service": "IPI Publishing publisher full text",
+      "query": "DOI 10.59973/ipil.361 publication date article type and narrative scope",
+      "url": "https://www.ipipublishing.org/index.php/ipil/article/download/361/187/1214",
+      "accessed_at": "2026-09-28"
+    }, {
+      "service": "Crossref registered DOI record",
+      "query": "10.59973/ipil.361 published date and pagination",
+      "url": "https://api.crossref.org/works/10.59973/ipil.361",
+      "accessed_at": "2026-09-28"
+    }],
+    "updates": {
+      "identifiers": {"doi": "10.59973/ipil.361"},
+      "год": 2026,
+      "тип_источника": "обзор",
+      "evidence": {"access_status": "open"},
+      "validation": {
+        "checked_at": "2026-09-28",
+        "notes": "The publisher's four-page PDF identifies this as News and Views in IPI Letters 2026, 4(2):N1-N4, published 2026-05-02; the Crossref DOI record agrees. The abstract presents a digital-organism narrative, while body text and references identify the Shiu model and Eon demonstrations. This commentary is not independent empirical validation of brain emulation, cognition, or embodied behavior."
+      },
+      "field_resolution": {
+        "год": {
+          "state": "reported",
+          "value": 2026,
+          "reason": "Publisher PDF header and Crossref published date both give 2026-05-02; replaces stale 2025 year.",
+          "checked_at": "2026-09-28",
+          "locators": [{
+            "url": "https://www.ipipublishing.org/index.php/ipil/article/download/361/187/1214",
+            "locator": "PDF p. N1 header: IPI Letters 2026 4(2):N1-N4; Published 2026-05-02"
+          }, {
+            "url": "https://api.crossref.org/works/10.59973/ipil.361",
+            "locator": "message.published.date-parts=[2026,5,2]"
+          }]
+        },
+        "evidence.access_status": {
+          "state": "reported",
+          "value": "open",
+          "reason": "Publisher full-text PDF retrieved and checked.",
+          "checked_at": "2026-09-28",
+          "locators": [{
+            "url": "https://www.ipipublishing.org/index.php/ipil/article/download/361/187/1214",
+            "locator": "Open publisher PDF, four printed pages N1-N4"
+          }]
+        },
+        "validation.checked_at": {
+          "state": "reported",
+          "value": "2026-09-28",
+          "reason": "Publisher PDF and Crossref record checked on this date.",
+          "checked_at": "2026-09-28",
+          "locators": [{
+            "url": "https://www.ipipublishing.org/index.php/ipil/article/download/361/187/1214",
+            "locator": "PDF p. N1 publication metadata and article type"
+          }]
+        },
+        "validation.notes": {
+          "state": "reported",
+          "value": "The publisher's four-page PDF identifies this as News and Views in IPI Letters 2026, 4(2):N1-N4, published 2026-05-02; the Crossref DOI record agrees. The abstract presents a digital-organism narrative, while body text and references identify the Shiu model and Eon demonstrations. This commentary is not independent empirical validation of brain emulation, cognition, or embodied behavior.",
+          "reason": "Corrects date and distinguishes abstract, body and cited sources without promoting commentary to empirical evidence.",
+          "checked_at": "2026-09-28",
+          "locators": [{
+            "url": "https://www.ipipublishing.org/index.php/ipil/article/download/361/187/1214",
+            "locator": "PDF p. N1 Abstract; body pp. N1-N3; References [1]-[8] p. N3"
+          }]
+        }
+      }
+    },
+    "claims": [],
+    "notes": "The publisher's four-page PDF identifies this as News and Views in IPI Letters 2026, 4(2):N1-N4, published 2026-05-02; the Crossref DOI record agrees. The abstract presents a digital-organism narrative, while body text and references identify the Shiu model and Eon demonstrations. This commentary is not independent empirical validation of brain emulation, cognition, or embodied behavior."
+  }]
+}

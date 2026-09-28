@@ -470,8 +470,19 @@ def _validate_ns06_prior_art_audit(
     errors: list[str] = []
     if audit.get("meta", {}).get("schema_version") != "1.0.0":
         errors.append(f"{label}: unsupported schema version")
-    if audit.get("meta", {}).get("status") != "open":
-        errors.append(f"{label}: status must remain open while remaining checks exist")
+    status = audit.get("meta", {}).get("status")
+    if status not in {"open", "terminal_stop_at_cutoff"}:
+        errors.append(f"{label}: unsupported status")
+    if status == "terminal_stop_at_cutoff":
+        disposition = audit.get("operational_disposition", {})
+        if (disposition.get("decision") != "STOP at the documented 2026-09-26 cutoff"
+                or disposition.get("saturation") is not False
+                or not disposition.get("unresolved_scope")
+                or not disposition.get("prohibited_inferences")
+                or not disposition.get("primary_routes")):
+            errors.append(
+                f"{label}: terminal STOP lacks cutoff, routes, unresolved scope, or claim boundary"
+            )
     baseline = audit.get("s149_baseline", {})
     if baseline.get("source_id") != "S149" or not baseline.get("mechanism"):
         errors.append(f"{label}: missing S149 mechanism baseline")

@@ -1,0 +1,133 @@
+{
+  "meta": {
+    "batch_id": "r5-correction-s193-pain-score-rater-boundary-2026-09-28",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-28",
+    "scope": "Remove unsupported self-reported-pain and modality detail from abstract-only pediatric postoperative study",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-28"
+  },
+  "source_ids": [
+    "S193"
+  ],
+  "records": [
+    {
+      "id": "S193",
+      "title": "A Multi-Modal Multi-Expert Framework for Pain Assessment in Postoperative Children",
+      "year": 2025,
+      "source_type": "метод"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S193",
+      "decision": "partially_verified",
+      "checked_at": "2026-09-28",
+      "full_text_status": "metadata_only",
+      "notes": "Author abstract reports a multi-modal multi-expert model on postoperative children and MAE 1.03/PCC 0.88, but does not identify the pain-score instrument, rater, cohort size, participant split, or external validation. Self-report cannot be inferred from the abstract; IEEE full methods were not accessible.",
+      "searches": [
+        {
+          "service": "Author publication abstract",
+          "query": "A Multi-Modal Multi-Expert Framework for Pain Assessment in Postoperative Children",
+          "url": "https://hzo-py.github.io/publication/pain",
+          "accessed_at": "2026-09-28"
+        },
+        {
+          "service": "IEEE abstract record",
+          "query": "10.1109/TAFFC.2025.3567307",
+          "url": "https://ieeexplore.ieee.org/abstract/document/11002650",
+          "accessed_at": "2026-09-28"
+        }
+      ],
+      "updates": {
+        "модальность": "Multi-modal expression features; the accessible abstract does not enumerate sensors or clinical observation channels",
+        "evidence": {
+          "target_construct": "unavailable_after_search",
+          "target_label": "Postoperative pain score; instrument and rater unavailable in accessible abstract",
+          "evidence_role": "method_baseline"
+        },
+        "validation": {
+          "checked_at": "2026-09-28",
+          "notes": "Author abstract reports a multi-modal multi-expert model on postoperative children and MAE 1.03/PCC 0.88, but does not identify the pain-score instrument, rater, cohort size, participant split, or external validation. Self-report cannot be inferred from the abstract; IEEE full methods were not accessible."
+        },
+        "field_resolution": {
+          "модальность": {
+            "state": "reported",
+            "value": "Multi-modal expression features; the accessible abstract does not enumerate sensors or clinical observation channels",
+            "reason": "Author abstract mentions expression features but no exact sensors.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://hzo-py.github.io/publication/pain",
+                "locator": "Author-hosted Abstract, sentences on expression features, pain-score regression and MAE/PCC; no instrument or rater named"
+              }
+            ]
+          },
+          "evidence.target_construct": {
+            "state": "unavailable_after_search",
+            "value": null,
+            "reason": "Abstract identifies pain-score regression but not the scoring instrument or rater; no self-report attribution is justified.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://hzo-py.github.io/publication/pain",
+                "locator": "Author-hosted Abstract, sentences on expression features, pain-score regression and MAE/PCC; no instrument or rater named"
+              }
+            ]
+          },
+          "evidence.target_label": {
+            "state": "reported",
+            "value": "Postoperative pain score; instrument and rater unavailable in accessible abstract",
+            "reason": "Abstract identifies pain-score regression but not the scoring instrument or rater; no self-report attribution is justified.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://hzo-py.github.io/publication/pain",
+                "locator": "Author-hosted Abstract, sentences on expression features, pain-score regression and MAE/PCC; no instrument or rater named"
+              }
+            ]
+          },
+          "validation.checked_at": {
+            "state": "reported",
+            "value": "2026-09-28",
+            "reason": "Direct author abstract recheck.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://hzo-py.github.io/publication/pain",
+                "locator": "Author-hosted Abstract, sentences on expression features, pain-score regression and MAE/PCC; no instrument or rater named"
+              }
+            ]
+          },
+          "validation.notes": {
+            "state": "reported",
+            "value": "Author abstract reports a multi-modal multi-expert model on postoperative children and MAE 1.03/PCC 0.88, but does not identify the pain-score instrument, rater, cohort size, participant split, or external validation. Self-report cannot be inferred from the abstract; IEEE full methods were not accessible.",
+            "reason": "Direct author abstract recheck.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://hzo-py.github.io/publication/pain",
+                "locator": "Author-hosted Abstract, sentences on expression features, pain-score regression and MAE/PCC; no instrument or rater named"
+              }
+            ]
+          },
+          "identifiers.doi": {
+            "state": "reported",
+            "value": "10.1109/TAFFC.2025.3567307",
+            "reason": "IEEE abstract record identifies the DOI.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://ieeexplore.ieee.org/abstract/document/11002650",
+                "locator": "IEEE article metadata, DOI"
+              }
+            ]
+          }
+        },
+        "identifiers": {
+          "doi": "10.1109/TAFFC.2025.3567307"
+        }
+      }
+    }
+  ]
+}

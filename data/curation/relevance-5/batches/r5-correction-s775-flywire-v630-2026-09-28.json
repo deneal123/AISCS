@@ -1,0 +1,87 @@
+{
+  "meta": {
+    "batch_id": "r5-correction-s775-flywire-v630-2026-09-28",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-28",
+    "scope": "Correct S775 source-card graph version after repeat primary Methods check; keep S740 lineage separate",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-28"
+  },
+  "source_ids": [
+    "S775"
+  ],
+  "records": [
+    {
+      "id": "S775",
+      "title": "A Drosophila computational brain model reveals sensorimotor processing",
+      "year": 2024,
+      "source_type": "метод"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S775",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-28",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "service": "Europe PMC full Nature JATS",
+          "query": "S775 Methods Computational model FlyWire materialization v.630 127400 neurons",
+          "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11446845/fullTextXML",
+          "accessed_at": "2026-09-28"
+        }
+      ],
+      "updates": {
+        "identifiers": {
+          "doi": "10.1038/s41586-024-07763-9"
+        },
+        "датасет": "Adult FlyWire central-brain connectome, public materialization v.630, with 127,400 proofread neurons included in the leaky integrate-and-fire model; the article describes over 125,000 neurons and 50 million synaptic connections in the broader connectome.",
+        "validation": {
+          "checked_at": "2026-09-28",
+          "notes": "Primary Nature/PMC full JATS checked again on 2026-09-28. Methods > Computational model explicitly pins this study's model graph to FlyWire materialization v.630 and 127,400 proofread neurons. Optogenetic and behavioral tests validate scoped feeding/grooming predictions in flies, not a held-out human cohort. This S775 release does not identify upstream releases of the separate S740 VNC simulation matrices."
+        },
+        "field_resolution": {
+          "датасет": {
+            "state": "reported",
+            "value": "Adult FlyWire central-brain connectome, public materialization v.630, with 127,400 proofread neurons included in the leaky integrate-and-fire model; the article describes over 125,000 neurons and 50 million synaptic connections in the broader connectome.",
+            "reason": "The primary Methods explicitly report materialization v.630 and the included neuron count.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11446845/fullTextXML",
+                "locator": "Methods > Computational model: all 127,400 proofread neurons from FlyWire public materialization v.630 are included in this S775 model."
+              }
+            ]
+          },
+          "validation.checked_at": {
+            "state": "reported",
+            "value": "2026-09-28",
+            "reason": "Repeat primary full-text check.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11446845/fullTextXML",
+                "locator": "Methods > Computational model: all 127,400 proofread neurons from FlyWire public materialization v.630 are included in this S775 model."
+              }
+            ]
+          },
+          "validation.notes": {
+            "state": "reported",
+            "value": "Primary Nature/PMC full JATS checked again on 2026-09-28. Methods > Computational model explicitly pins this study's model graph to FlyWire materialization v.630 and 127,400 proofread neurons. Optogenetic and behavioral tests validate scoped feeding/grooming predictions in flies, not a held-out human cohort. This S775 release does not identify upstream releases of the separate S740 VNC simulation matrices.",
+            "reason": "Replace the false statement that the checked JATS omitted the graph release.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11446845/fullTextXML",
+                "locator": "Methods > Computational model: all 127,400 proofread neurons from FlyWire public materialization v.630 are included in this S775 model."
+              }
+            ]
+          }
+        }
+      },
+      "claims": [],
+      "notes": "Primary Nature/PMC full JATS checked again on 2026-09-28. Methods > Computational model explicitly pins this study's model graph to FlyWire materialization v.630 and 127,400 proofread neurons. Optogenetic and behavioral tests validate scoped feeding/grooming predictions in flies, not a held-out human cohort. This S775 release does not identify upstream releases of the separate S740 VNC simulation matrices."
+    }
+  ]
+}

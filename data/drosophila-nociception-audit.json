@@ -1,10 +1,87 @@
 {
   "meta": {
     "schema_version": "1.0.0",
-    "generated_at": "2026-09-26",
-    "status": "requires_primary_reconciliation",
-    "records_count": 27,
+    "generated_at": "2026-09-28",
+    "status": "expanded_primary_screen_with_additional_named_leads",
+    "records_count": 45,
     "scope": "Primary measurement extraction for NS-03 Drosophila nociception candidates",
+    "s282_v1_bibliography_recheck_2026_09_27": {
+      "source": "https://www.biorxiv.org/content/10.1101/2025.09.30.679458v1.full.pdf",
+      "locator": "S282 v1 cached PDF References pp. 32-41; the official bioRxiv v1 JATS ref-list contains 95 structured references with IDs c1-c95, independently counted on 2026-09-27. The earlier claim of 123 numbered PDF entries was incorrect.",
+      "official_jats_source": "https://www.biorxiv.org/content/early/2025/09/30/2025.09.30.679458.source.xml",
+      "official_jats_sha256": "8a46cac0269f39c4a64af58c4c3d9daaafc4c05a3221e9339b1e071220b8a6ae3",
+      "official_version_api": "https://api.biorxiv.org/details/biorxiv/10.1101/2025.09.30.679458/na/json",
+      "version_api_disposition": "On 2026-09-27 the exact-DOI bioRxiv API returned one record, v1 dated 2025-09-30 with published=NA. This is the current owner-indexed version state, not a claim that an unlinked journal article cannot exist.",
+      "local_cached_pdf_sha256": "1cf01ae13046f55174078c5d19b737e065f4ffb4fb45557bffb6d15997f52fd3",
+      "result": "No Hwang 2007/S794 or Zhong 2010/S795 author, DOI or parasitoid marker occurs in the 95 official v1 JATS references. The same absence was reported from the independently checked cached v1 PDF. A later direct PDF GET returned HTTP 429; the live owner JATS supplied the reproducible count. The worker's separately reported PDF hash was not reproduced on the earlier independently checked cached file and is not used as a source identifier.",
+      "boundary": "This resolves only S282 v1-to-S794/S795 citation absence and the current owner-indexed v1 status. S212 v2 was checked separately; the historical 27-lead aggregate remains unresolved and the independent 28-work screen is not equivalent to that historical count."
+    },
+    "s282_v1_structured_reference_screen_2026_09_27": {
+      "primary_url": "https://www.biorxiv.org/content/early/2025/09/30/2025.09.30.679458.source.xml",
+      "scope": "Identity-level screen of all 95 official v1 JATS references c1-c95 for Drosophila larval nociception, noxious stimulus, protective escape or closely adjacent mechanosensory circuitry. The article titles and citation identities were inspected; substantive methods are taken only from separately verified source cards or bounded lead screens.",
+      "direct_candidate_refs": [
+        {
+          "ref_id": "c11",
+          "identity": "Burgos et al. 2018, eLife 26016",
+          "source_id": "S761",
+          "reason": "Larval nociceptive interneuron and escape circuit; primary card already separates neural and behavior assays."
+        },
+        {
+          "ref_id": "c56",
+          "identity": "Ohyama et al. 2013, PLOS ONE e71706",
+          "source_id": "S776",
+          "reason": "Larval stimulus-evoked escape behaviors across modalities; direct behavior comparator."
+        },
+        {
+          "ref_id": "c57",
+          "identity": "Ohyama et al. 2015, Nature 14297",
+          "source_id": "S797",
+          "reason": "Class-IV and chordotonal inputs, circuit responses and probabilistic escape; distinct preparations."
+        },
+        {
+          "ref_id": "c62",
+          "identity": "Poe et al. 2020, eLife 53351",
+          "source_id": "S833",
+          "reason": "Heat-probe rolling behavior and separate dendrite morphology; no stimulus-evoked neural activity recording."
+        },
+        {
+          "ref_id": "c66",
+          "identity": "Rosenzweig et al. 2005, Genes & Development 1278205",
+          "source_id": "S834",
+          "reason": "Assay-specific negative ~55 C probe withdrawal comparator for dTrpA1 RNAi; S282 cites the paper for reagent provenance, not as a direct nociceptive result."
+        },
+        {
+          "ref_id": "c82",
+          "identity": "Tracey et al. 2003, Cell 00272-1",
+          "source_id": "S778",
+          "reason": "Painless gene and larval nocifensive behavior; no subjective-pain inference."
+        }
+      ],
+      "context_or_tool_refs": [
+        "c2 Ainsley 2003: ppk/locomotion reagent provenance, screened separately",
+        "c12 Cande 2018: adult descending behavioral control, not a larval nociception assay",
+        "c15 Clark 2018 and c92 Zarin 2019: general larval locomotor circuitry",
+        "c18 Croteau-Chonka 2022: conditioning methods",
+        "c35 Jovanic 2016 and c50 Masson 2020: behavioral choice or mechanosensory sequence context",
+        "c63 Pulver 2009: optogenetic/thermogenetic activation methods, screened separately",
+        "c79 Takagi 2017: larval segment-specific touch circuitry",
+        "c86 Vogelstein 2014: brainwide neural-behavioral map, not a direct noxious-stimulus assay"
+      ],
+      "remaining_identity_scope": "The other 79 citation identities in c1-c95 are generic tools, learning/memory, motor/escape comparators, anatomy/connectomics, or non-Drosophila work on the checked title/citation screen; their absence from a direct nociception subset is a relevance disposition, not a full-text negative finding. c60 and c61 are duplicate references to one Pfeiffer 2010 work (DOI 10.1534/genetics.110.119917), not two independent studies.",
+      "boundary": "This completes a structured v1 citation-identity screen, not forward citation saturation, later-version coverage, the unreconstructable historical 27-lead aggregate, or the S740 lineage dependency."
+    },
+    "s212_v2_bibliography_recheck_2026_09_27": {
+      "source": "https://www.ebi.ac.uk/europepmc/webservices/rest/PPR1092389/fullTextXML",
+      "locator": "Europe PMC full-text JATS, preprint version 2, ref-list R1-R78; R51 Polizos et al. 2024 is a positive extraction control",
+      "result": "All 78 numbered references have unique IDs. No Hwang 2007/S794 or Zhong 2010/S795 author, title or DOI/PMID identity occurs in the full extracted reference list.",
+      "boundary": "Absence applies to the accessible S212 v2 JATS bibliography only; it does not establish the content of bioRxiv v3 or reconstruct the historical 27-lead aggregate."
+    },
+    "s212_v3_owner_version_drift_2026_09_27": {
+      "owner_url": "https://api.biorxiv.org/details/biorxiv/10.1101/2025.09.25.678485",
+      "locator": "bioRxiv details API collection version 3 dated 2026-08-03; v3 content page citation_title says 'distributed brain network for processing threatening somatosensory stimuli'. Europe PMC PPR1092389/fullTextXML declares article-version number 2 and retains the v2 'distributed nociceptive network' title, though its core metadata now gives the v3 title.",
+      "status": "v3_title_and_claim_boundary_reconciled_2026_09_27",
+      "boundary": "The S212 card title and dated version note now reflect the owner v3 full text through reviewed batch r5-correction-s212-v3-title-version-2026-09-27. Its detailed method, dataset and performance fields retain explicitly identified Europe PMC v2 JATS locators. The v3 Basin manipulation activates multisensory interneurons optogenetically; it does not isolate physical noxious from mechanical input. The v2 reference-list negative is not transferred to v3. A full all-record version refresh remains pending for SRC-08."
+    },
     "candidate_source_ids": [
       "S012",
       "S013",
@@ -32,16 +109,34 @@
       "S797",
       "S801",
       "S802",
-      "S803"
+      "S803",
+      "S809",
+      "S810",
+      "S811",
+      "S812",
+      "S813",
+      "S814",
+      "S815",
+      "S822",
+      "S823",
+      "S824",
+      "S825",
+      "S827",
+      "S828",
+      "S833",
+      "S834",
+      "S835",
+      "S839",
+      "S840"
     ],
     "remaining_source_ids": [],
     "unindexed_primary_leads": [],
     "candidate_reconciliation": {
-      "status": "requires_primary_reconciliation",
+      "status": "historical_aggregate_terminal_stop",
       "bounded_candidate_count": 27,
       "count_basis": "Pi-worker backward-reference-mining report across S212, S282, S769, and S776-S778; candidate count only, not 27 verified or accepted sources",
       "checked_at": "2026-09-26",
-      "next_action": "Historical aggregate 27 remains unreconciled because its original itemization is unavailable. Separately, the independent 28-work bibliography has 11 exact DOI matches and 17 DOI-unmatched works screened from primary text; S801, S802 and S803 are now canonical cards from that list. Do not equate the counts.",
+      "next_action": "The original 28-work list now has 19 exact DOI matches and nine bounded, DOI-unmatched screens. S825 adds direct optogenetically evoked interneuron calcium with separate behavior, but not natural noxious-stimulus recording; historical aggregate 27 remains unreconstructable; no global saturation claim.",
       "itemized_bibliography_screen": [
         {
           "seed_id": "S282",
@@ -59,9 +154,9 @@
           "seed_locator": "v1 PDF, References, p. 38, Pulver et al. (2009)",
           "doi": "10.1152/jn.00071.2009",
           "primary_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2694103/",
-          "primary_locator": "PubMed PMID 19339465 abstract and Figs. 1-10 legends; Fig. 1 whole-cell patch; Figs. 2-4 NMJ EJPs/adaptation; Figs. 5-6 locomotor speed; Figs. 7-10 dTRPA1 heat activation/crawling. PubMed links PMCID PMC2694103 author manuscript; direct PMC HTML fetch showed reCAPTCHA during this check.",
-          "status": "primary_abstract_figure_legend_screened_methods_confirmation_pending",
-          "reason": "The PubMed record and full set of indexed figure legends support neuronal firing/EJPs and locomotor effects from ChR2/H134R blue light and dTRPA1 heat activation in motor/sensory neurons. Direct noxious-stimulus nociception or pain outcome is not identified in the abstract/legends. The linked PMC author manuscript is free full text, but direct body retrieval was blocked by reCAPTCHA in this pass; methods-level screen remains pending. S282 v1 bibliography p. 38 cites this tool-methods paper."
+          "primary_locator": "PMC2694103 author-manuscript HTML, Methods > Transgenic lines, Whole cell patch electrophysiology, dTRPA1 stimulation and crawling behavior; Results and Figs. 1-10. Motor-neuron whole-cell patch in Figs. 1/7-8; NMJ EJPs in Figs. 2-4/9; crawling speed in Figs. 5-6/10. The dated 2026-09-27 PMC HTML retrieval succeeded; publisher VoR PDF remained access-limited.",
+          "status": "primary_full_text_screened_tool_activation_comparator_no_natural_noxious_stimulus",
+          "reason": "Full primary author manuscript separates artificial ChR2/H134R blue-light or dTRPA1 22-28 C warming from natural noxious stimulation. Neural readouts are motor-neuron firing and NMJ EJPs; behavior is crawling speed after tool activation, with no class-IV nociceptor recording or rolling assay. It remains a method/tool comparator, not direct nociception evidence. S282 v1 bibliography p. 38 cites it for tool activation."
         },
         {
           "seed_id": "S282",
@@ -101,7 +196,7 @@
         "checked_at": "2026-09-26",
         "finding": "The current audit preserves only the aggregate count and five subsequently itemized partial-screen records; it contains no original Pi job/thread receipt, prompt, final response, DOI list, or seed-by-seed count table. The newly run seed bibliography screens are independent outputs and cannot be substituted for that missing original itemization.",
         "seed_coverage_boundary": "S282 is partial: four of the previously screened named leads were located in its pinned v1 PDF at pp. 32, 37-38; the fifth earlier lead (Polizos et al.) came from S212 JATS ref R51. The new deep-review Pi task was cancelled after its tool log showed write usage. The worker reported all writes occurred in C:\\Users\\denea\\AppData\\Local\\Temp\\s282, and no R:\\Aspa files were written. Do not claim S282 reference-list saturation.",
-        "no_equivalence_rule": "The independent 28-work bibliography and its 19 DOI-unmatched primary screens are a separate reconstruction; do not equate them to or use them to reconcile historical aggregate 27."
+        "no_equivalence_rule": "The independent 28-work bibliography has 17 exact-DOI-unmatched works with primary screens; two additional primary screens in the list are for DOI-matched works. This reconstruction is separate; do not equate it to or use it to reconcile historical aggregate 27."
       },
       "independent_bounded_reference_list_2026_09_25": {
         "status": "bounded_28_work_primary_screen_complete; 3 canonical cards published from this list",
@@ -315,8 +410,8 @@
             "known_existing_audit_source_id": "not_reconciled_against_records_json",
             "canonical_record_match_2026_09_26": {
               "method": "exact_normalized_doi",
-              "status": "not_found_by_doi",
-              "source_id": null
+              "status": "matched",
+              "source_id": "S810"
             },
             "primary_screen_2026_09_26": {
               "checked_at": "2026-09-26",
@@ -346,8 +441,8 @@
             "known_existing_audit_source_id": "not_reconciled_against_records_json",
             "canonical_record_match_2026_09_26": {
               "method": "exact_normalized_doi",
-              "status": "not_found_by_doi",
-              "source_id": null
+              "status": "matched",
+              "source_id": "S811"
             },
             "primary_screen_2026_09_26": {
               "checked_at": "2026-09-26",
@@ -646,6 +741,12 @@
               "priority": "high",
               "rationale": "Directly on-scope nociceptive circuit with distinct modalities, neural physiology and behavior; no subjective-pain measurement.",
               "construct_boundary": "These larval behavioral/neural results do not establish subjective pain."
+            },
+            "canonical_record_match_2026_09_27": {
+              "method": "case-insensitive exact DOI plus title and PubMed PMID 34798050",
+              "status": "matched",
+              "source_id": "S814",
+              "checked_at": "2026-09-27"
             }
           },
           {
@@ -775,6 +876,11 @@
               "priority": "high",
               "rationale": "Primary thermal/mechanical nociception and TRPA1 isoform study with modality controls; no subjective-pain measure.",
               "construct_boundary": "These larval behavioral/neural results do not establish subjective pain."
+            },
+            "canonical_record_match_2026_09_27": {
+              "method": "exact_normalized_doi",
+              "status": "canonical_card_published",
+              "source_id": "S815"
             }
           },
           {
@@ -792,8 +898,8 @@
             "known_existing_audit_source_id": "not_reconciled_against_records_json",
             "canonical_record_match_2026_09_26": {
               "method": "exact_normalized_doi",
-              "status": "not_found_by_doi",
-              "source_id": null
+              "status": "matched",
+              "source_id": "S809"
             },
             "primary_screen_2026_09_26": {
               "checked_at": "2026-09-26",
@@ -823,8 +929,8 @@
             "known_existing_audit_source_id": "not_reconciled_against_records_json",
             "canonical_record_match_2026_09_26": {
               "method": "exact_normalized_doi",
-              "status": "not_found_by_doi",
-              "source_id": null
+              "status": "matched",
+              "source_id": "S812"
             },
             "primary_screen_2026_09_26": {
               "checked_at": "2026-09-26",
@@ -896,19 +1002,19 @@
             "known_existing_audit_source_id": "not_reconciled_against_records_json",
             "canonical_record_match_2026_09_26": {
               "method": "exact_normalized_doi",
-              "status": "not_found_by_doi",
-              "source_id": null
+              "status": "matched",
+              "source_id": "S813"
             },
             "primary_screen_2026_09_26": {
               "checked_at": "2026-09-26",
               "status": "primary_fulltext_screened",
               "primary_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6454897/",
-              "primary_locator": "Figs. 1-4; Fig. 1 thermal assay at 42 C; Fig. 2B-D thermal/mechanical nociception (30 mN); Fig. 4 class-IV SK localization/rescue.",
+              "primary_locator": "PMC author manuscript, Results > SK Negatively Regulates Nociceptor Excitability and Fig. 3A-B (mechanically evoked Class IV ddaC GCaMP3); Figs. 1-2 thermal/mechanical behavior; Fig. 4 localization; STAR Methods > Calcium Imaging and Nociception Assays.",
               "stimulus": "Thermal probe (42 C) and calibrated 30 mN von Frey mechanical stimulus.",
-              "neural_response": "No stimulus-evoked neural activity recording verified; expression/localization and cell-specific genetic rescue are molecular/anatomical evidence.",
+              "neural_response": "Mechanical 50 mN stimulation evoked GCaMP3 calcium signals in Class IV ddaC somata in filleted larval preparations (Results/Fig. 3A-B); this is optical neural activity, not electrophysiology. Protein localization/genetic rescue are separate measures.",
               "behavior": "Nocifensive escape latency/rolling following thermal or mechanical stimulation.",
               "priority": "high",
-              "rationale": "Primary nociception behavior and nociceptor-specific channel function; do not overstate localization as evoked neural activity. No subjective-pain measure.",
+              "rationale": "Primary nociception behavior and directly measured Class IV mechanosensory calcium response; keep optical neural activity, protein localization and behavior separate. No subjective-pain measure.",
               "construct_boundary": "These larval behavioral/neural results do not establish subjective pain."
             }
           },
@@ -972,6 +1078,19 @@
               "priority": "high",
               "rationale": "Primary nociceptive escape-circuit paper; archived publisher copy is access route. Escape behavior does not demonstrate subjective pain.",
               "construct_boundary": "These larval behavioral/neural results do not establish subjective pain."
+            },
+            "canonical_record_match_2026_09_27": {
+              "method": "exact_normalized_doi_and_archived_publisher_full_text",
+              "status": "matched_published",
+              "source_id": "S825",
+              "checked_at": "2026-09-27"
+            },
+            "primary_recheck_2026_09_27": {
+              "primary_url": "https://web.archive.org/web/20250312154123id_/https://www.cell.com/current-biology/fulltext/S0960-9822(17)30805-9",
+              "locator": "Original publisher Results and STAR Methods; Figs. 2B-D, 3A-D and 4B-C",
+              "neural_response": "Direct optogenetically evoked GCaMP6m calcium in mCSI and SNa is present; no electrical spikes or naturally noxious stimulus-evoked recording.",
+              "behavior": "Whole-larva rolling necessity/sufficiency assayed separately from neural imaging.",
+              "status": "canonical_S825_published_with_optogenetic_boundary"
             }
           },
           {
@@ -1010,14 +1129,58 @@
           "checked_at": "2026-09-26",
           "registry": "data/records.json",
           "method": "case-insensitive exact DOI match; no title-only identities inferred",
-          "matched_count": 11,
-          "not_found_by_doi_count": 17,
-          "next_action": "All 17 exact-DOI-unmatched works have compact primary screens; the next candidates still need inclusion review. Historical aggregate 27 remains unreconciled and separate.",
-          "note": "The independent 28-work bibliography remains separate from the unreconciled historical aggregate 27. S801, S802 and S803 are canonical cards for three DOI-matched works in this list; exact registry reconciliation is 11 DOI matches and 17 DOI-unmatched screened leads.",
+          "matched_count": 16,
+          "not_found_by_doi_count": 12,
+          "next_action": "Twelve exact-DOI-unmatched works retain compact primary screens and need individual inclusion review. Historical aggregate 27 remains separate.",
+          "note": "The independent 28-work bibliography remains separate from the unreconciled historical aggregate 27. S801-S803 and S809-S813 are canonical cards from this list; 16 exact DOI matches and 12 DOI-unmatched screened leads remain.",
           "screened_unmatched_count": 17,
-          "cards_created_from_this_screen": 3
+          "cards_created_from_this_screen": 8
         },
-        "next_action": "All 28 named works retain compact primary-source screens where applicable. S801, S802 and S803 are canonical cards; 17 works remain DOI-unmatched. Historical aggregate 27 remains independently unreconciled."
+        "next_action": "The originally bounded 28-work list remains a defined screen, not a globally saturated bibliography. S092 extraction is expanded; S822 and S823 are separately indexed from post-screen primary leads. A distinct Yoshino bioRxiv heat-off preprint is listed for follow-up and is not a duplicate of S092.",
+        "canonical_doi_reconciliation_2026_09_27": {
+          "checked_at": "2026-09-27",
+          "registry": "data/records.json after S825 publication",
+          "method": "case-insensitive exact DOI match; no title-only identities inferred",
+          "matched_count": 19,
+          "not_found_by_doi_count": 9,
+          "cards_created_from_this_screen": 11,
+          "next_action": "Nine DOI-unmatched works retain bounded primary screens; context-only and access-limited routes do not become direct nociceptive evidence. Historical aggregate 27 remains unitemized and separate."
+        },
+        "subsequent_named_leads_2026_09_27": {
+          "status": "post-screen additions reviewed; three new canonical primary sources published; distinct preprint remains pending",
+          "source_ids": [
+            "S092",
+            "S822",
+            "S823",
+            "S824"
+          ],
+          "new_source_ids": [
+            "S822",
+            "S823",
+            "S824"
+          ],
+          "source_identities": [
+            "S092: Yoshino et al. 2025, DOI 10.7554/eLife.95379",
+            "S822: Terada et al. 2016, DOI 10.7554/eLife.12959",
+            "S823: Kim & Johnson 2014, DOI 10.1186/1471-2202-15-14",
+            "S824: Onodera et al. 2017, DOI 10.7554/eLife.29754"
+          ],
+          "reason": "S092 was already a canonical record but its prior audit extraction was abstract-level. S822 is reachable from canonical S030 reference BFnn4580_CR44. S823 is a direct UVC/mdIV primary analogue of S814 modality and was absent from the previous named work list. S824 is a separate forward primary follow-up to Terada 2016, with direct Class IV firing and a distinct heat-behavior assay.",
+          "primary_locators": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC12068870/",
+            "https://elifesciences.org/articles/12959",
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC3898224/",
+            "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC5653240/fullTextXML"
+          ],
+          "checked_at": "2026-09-27"
+        }
+      },
+      "terminal_disposition": {
+        "status": "SRC04_OPEN_DISTINCT_NEW_LEAD_AND_HISTORICAL_COUNT",
+        "checked_at": "2026-09-27",
+        "bounded_list_status": "The original 28 named works were screened, with 19 current exact DOI matches after S825. Later separate primary leads S092 and S822-S824 remain distinct. The Yoshino heat-off preprint remains uncarded; no global saturation claim is made.",
+        "historical_aggregate_status": "unreconciled_original_itemization_unavailable",
+        "prohibited_inference": "The 28-work reconstruction is not a reconciliation of historical aggregate 27; absence of further leads from the bounded list does not prove global bibliography saturation."
       }
     },
     "remaining_primary_access": [],
@@ -1074,16 +1237,16 @@
         "doi": "10.1016/j.cub.2007.11.029",
         "title": "Nociceptive neurons protect Drosophila larvae from parasitoid wasps",
         "url": "https://courses.cit.cornell.edu/bionb491/labresources/week7%2C%20Mar%202-4/Hwangetal2007.pdf",
-        "locator": "Primary author manuscript verified; Summary, Results Figures 1-5 and Experimental Procedures inspected. Perturbation is not direct neural recording. S212/S282 citation relationship unverified.",
-        "status": "primary_full_text_verified_card_and_audit_recorded; S212/S282 citation relationship unverified",
+        "locator": "Primary author manuscript verified; Summary, Results Figures 1-5 and Experimental Procedures inspected. Perturbation is not direct neural recording. S282 v1 PDF References pp. 32-41 and S212 v2 Europe PMC JATS References R1-R78 contain no Hwang title, author, DOI or PMID; later versions are not resolved.",
+        "status": "primary_full_text_verified_card_and_audit_recorded; S282_v1_not_cited; S212_v2_not_cited",
         "source_id": "S794"
       },
       {
         "doi": "10.1016/j.cub.2009.12.057",
         "title": "Pickpocket is a DEG/ENaC protein required for mechanical nociception in Drosophila larvae",
         "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2995491/",
-        "locator": "Primary PMC author manuscript verified; Summary, Results Figure 3 legend and Behavioral Assays inspected. Modality-specific phenotype; no direct neural recording. S212/S282 citation relationship unverified.",
-        "status": "primary_full_text_verified_card_and_audit_recorded; S212/S282 citation relationship unverified",
+        "locator": "Primary PMC author manuscript verified; Summary, Results Figure 3 legend and Behavioral Assays inspected. Modality-specific phenotype; no direct neural recording. S282 v1 PDF References pp. 32-41 and S212 v2 Europe PMC JATS References R1-R78 contain no Zhong title, author, DOI or PMID; later versions are not resolved.",
+        "status": "primary_full_text_verified_card_and_audit_recorded; S282_v1_not_cited; S212_v2_not_cited",
         "source_id": "S795"
       },
       {
@@ -1121,8 +1284,166 @@
         "status": "primary_full_text_canonical_card_and_audit_recorded",
         "source_id": "S803",
         "boundary": "GCaMP6m terminal fluorescence is optical calcium physiology, not electrophysiology; pMad is a pathway reporter. Larval behavior and neural measures do not establish subjective pain or human SCS relevance."
+      },
+      {
+        "title": "Heat-off responses of epidermal cells sensitize Drosophila larvae to noxious inputs",
+        "doi": "10.1101/2025.05.30.656957",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12157477/",
+        "source_id": "S835",
+        "locator": "Full bioRxiv v1/PMC preprint, Figures 1–5 and Methods P22–P28; Figure 1 caption and Methods conflict on 30 s versus 10 s recovery",
+        "status": "primary_full_text_canonical_card_and_four_field_audit_recorded",
+        "boundary": "Epidermal heat-off GCaMP6s is not neural recording; rolling and calcium are separate assays; no subjective-pain or human ECAP/SCS evidence."
+      },
+      {
+        "title": "The TRP Channels Pkd2, NompC, and Trpm Act in Cold-Sensing Neurons to Mediate Unique Aversive Behaviors to Noxious Cold in Drosophila",
+        "doi": "10.1016/j.cub.2016.09.038",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5140760/",
+        "source_id": "S839",
+        "locator": "S835 Europe PMC JATS ref R6; Turner et al. Current Biology 2016, Results and Figures 1–6; Figure 1 cold-plate/probe, Figure 2 class III GCaMP6, Figure 4 silencing and contraction",
+        "status": "primary_full_text_canonical_card_and_four_field_audit_recorded",
+        "boundary": "Cold stimulus, class III optical calcium response and larval contraction are separate assays; no subjective-pain or human ECAP/SCS conclusion."
       }
-    ]
+    ],
+    "operational_resolution": {
+      "status": "expanded_primary_screen_with_open_citation_coverage",
+      "checked_at": "2026-09-28",
+      "candidate_count": 44,
+      "remaining_source_ids": [],
+      "unindexed_primary_leads": [],
+      "external_dependency": "The historical 27-lead aggregate cannot be itemized from its lost source list; forward-citation coverage remains bounded and SRC-03 upstream lineage remains open.",
+      "resolved_lead": "The former unindexed heat-off preprint DOI 10.1101/2025.05.30.656957 is canonical S835; its JATS reference R6 identified Turner et al. 2016, now canonical S839 with a four-field NS-03 extraction. Neither addition reconstructs the historical 27-lead aggregate or establishes citation saturation."
+    },
+    "forward_citation_primary_leads_2026_09_27": {
+      "seed_source_id": "S797",
+      "seed_doi": "10.1038/nature14297",
+      "search_scope": "Semantic Scholar bounded forward-citation window (first 300 indexed citing works); discovered items independently checked against official full text; this is not saturation.",
+      "checked_at": "2026-09-27",
+      "uncarded_primary_leads": [
+        {
+          "doi": "10.7554/eLife.76574",
+          "title": "Drosophila mechanical nociceptors preferentially sense localized poking",
+          "primary_url": "https://cdn.elifesciences.org/articles/76574/elife-76574-v3.xml",
+          "primary_locator": "Results, Figs. 1-6; Methods, mechanical stimulus calibration, calcium imaging, and behavioral assay",
+          "measured_scope": "Localized calibrated mechanical poking/compression; c4da GCaMP6s calcium response; separate protective rolling; no subjective pain measure.",
+          "status": "primary_fulltext_verified_canonical_card_published",
+          "checked_at": "2026-09-27",
+          "source_id": "S827",
+          "field_resolution": "Canonical source card and four-field extraction use primary full-text locators; stimulus, neural calcium response, separate behavior, and pain boundary remain distinct.",
+          "extraction": {
+            "stimulus": {
+              "state": "reported",
+              "value": "Localized calibrated mechanical poking/compression of larval c4da dendrites; imaging and intact-larva behavior use distinct preparations.",
+              "reason": "Reported in the primary full text; assay type and measured construct are kept distinct.",
+              "checked_at": "2026-09-27",
+              "locators": [
+                {
+                  "url": "https://cdn.elifesciences.org/articles/76574/elife-76574-v3.xml",
+                  "locator": "Results, Figs. 1-6; Methods, mechanical stimulus calibration, calcium imaging, and behavioral assay"
+                }
+              ]
+            },
+            "neural_response": {
+              "state": "reported",
+              "value": "Direct c4da GCaMP6s calcium responses to localized mechanical force; calcium activity is not an electrophysiological spike recording.",
+              "reason": "Reported in the primary full text; assay type and measured construct are kept distinct.",
+              "checked_at": "2026-09-27",
+              "locators": [
+                {
+                  "url": "https://cdn.elifesciences.org/articles/76574/elife-76574-v3.xml",
+                  "locator": "Results, Figs. 1-6; Methods, mechanical stimulus calibration, calcium imaging, and behavioral assay"
+                }
+              ]
+            },
+            "behavior": {
+              "state": "reported",
+              "value": "Separate intact-larva assays measure protective rolling after mechanical stimulation; behavior is not pooled with c4da imaging.",
+              "reason": "Reported in the primary full text; assay type and measured construct are kept distinct.",
+              "checked_at": "2026-09-27",
+              "locators": [
+                {
+                  "url": "https://cdn.elifesciences.org/articles/76574/elife-76574-v3.xml",
+                  "locator": "Results, Figs. 1-6; Methods, mechanical stimulus calibration, calcium imaging, and behavioral assay"
+                }
+              ]
+            },
+            "pain_boundary": {
+              "state": "reported",
+              "value": "Fly larval neural calcium responses and protective nocifensive behavior are experimental nociception-related measures, not subjective pain; no human ECAP, SCS, or clinical outcome is measured.",
+              "reason": "Reported in the primary full text; assay type and measured construct are kept distinct.",
+              "checked_at": "2026-09-27",
+              "locators": [
+                {
+                  "url": "https://cdn.elifesciences.org/articles/76574/elife-76574-v3.xml",
+                  "locator": "Abstract; Results and Discussion; Results, Figs. 1-6; Methods, mechanical stimulus calibration, calcium imaging, and behavioral assay"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "doi": "10.7554/eLife.85760",
+          "title": "A descending inhibitory mechanism of nociception mediated by an evolutionarily conserved neuropeptide system in Drosophila",
+          "primary_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10328526/fullTextXML",
+          "primary_locator": "Results, Figure 5A-F and associated text; Methods, calcium imaging; Results, Figure 1A-B and thermal nociceptive assay",
+          "measured_scope": "Thermal ramp to 50 °C; Goro GCaMP6m calcium response; separate thermal-probe behavior; no electrophysiology or subjective pain measure.",
+          "status": "primary_fulltext_verified_canonical_card_published",
+          "checked_at": "2026-09-27",
+          "source_id": "S828",
+          "field_resolution": "Canonical source card and four-field extraction use primary full-text locators; stimulus, neural calcium response, separate behavior, and pain boundary remain distinct.",
+          "extraction": {
+            "stimulus": {
+              "state": "reported",
+              "value": "Local thermal ramp of larval body wall through 40-50 °C for neural imaging; thermal-probe behavior uses a separate assay.",
+              "reason": "Reported in the primary full text; assay type and measured construct are kept distinct.",
+              "checked_at": "2026-09-27",
+              "locators": [
+                {
+                  "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10328526/fullTextXML",
+                  "locator": "Results, Figure 5A-F and associated text; Methods, calcium imaging; Results, Figure 1A-B and thermal nociceptive assay"
+                }
+              ]
+            },
+            "neural_response": {
+              "state": "reported",
+              "value": "Direct GCaMP6m calcium response in Goro interneurons during local heat ramps; mutant/RNAi responses are sensitized in the noxious range, not electrophysiological spikes.",
+              "reason": "Reported in the primary full text; assay type and measured construct are kept distinct.",
+              "checked_at": "2026-09-27",
+              "locators": [
+                {
+                  "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10328526/fullTextXML",
+                  "locator": "Results, Figure 5A-F and associated text; Methods, calcium imaging; Results, Figure 1A-B and thermal nociceptive assay"
+                }
+              ]
+            },
+            "behavior": {
+              "state": "reported",
+              "value": "Separate thermal-probe larval assays measure nocifensive response/rolling latency, including response to a 42 °C probe; these animals are distinct from calcium imaging.",
+              "reason": "Reported in the primary full text; assay type and measured construct are kept distinct.",
+              "checked_at": "2026-09-27",
+              "locators": [
+                {
+                  "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10328526/fullTextXML",
+                  "locator": "Results, Figure 5A-F and associated text; Methods, calcium imaging; Results, Figure 1A-B and thermal nociceptive assay"
+                }
+              ]
+            },
+            "pain_boundary": {
+              "state": "reported",
+              "value": "Fly larval neural calcium responses and protective nocifensive behavior are experimental nociception-related measures, not subjective pain; no human ECAP, SCS, or clinical outcome is measured.",
+              "reason": "Reported in the primary full text; assay type and measured construct are kept distinct.",
+              "checked_at": "2026-09-27",
+              "locators": [
+                {
+                  "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10328526/fullTextXML",
+                  "locator": "Abstract; Results and Discussion; Results, Figure 5A-F and associated text; Methods, calcium imaging; Results, Figure 1A-B and thermal nociceptive assay"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "boundary": "Neither source has a canonical record or four-field extraction yet. They expand the SRC-04 work queue; no GO or clinical inference follows."
+    }
   },
   "construct_boundary": "Stimulus, neural activity or molecular response, and protective behavior are separate observations; none directly measures subjective pain or establishes human transfer.",
   "entries": [
@@ -1674,52 +1995,77 @@
     },
     {
       "source_id": "S092",
+      "source_role": "primary_experiment",
       "extraction": {
         "stimulus": {
           "state": "reported",
-          "value": "Mechanical radial stretch and experimental epidermal-cell stimulation in Drosophila larvae",
-          "reason": "Directly described by the primary source.",
-          "checked_at": "2026-09-24",
+          "value": "Separate protocols: optogenetic CsChrimson activation of larval epidermal cells; 25 um glass-probe membrane displacement in semi-intact body-wall preparation for epidermal calcium imaging; paired calibrated 40 mN von Frey stimuli 10 s apart for mechanical nocifensive behavior/sensitization. The optical, ex-vivo mechanical imaging, and behavioral protocols are distinct.",
+          "reason": "The stimulus and preparation differ across neural imaging, epidermal imaging, and behavioral endpoints; they are not a single same-stimulus chain.",
+          "checked_at": "2026-09-27",
           "locators": [
             {
-              "url": "https://elifesciences.org/articles/95379",
-              "locator": "Abstract; Results, Epidermal cells are intrinsically mechanosensitive"
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12068870/",
+              "locator": "Results > SSNs are activated by epidermal stimulation; Fig. 3A-E; Materials and methods > Optogenetics and calcium imaging"
+            },
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12068870/",
+              "locator": "Results > Epidermal cells are intrinsically mechanosensitive; Fig. 5E-G; Materials and methods > Calcium imaging: ventral nerve cords"
+            },
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12068870/",
+              "locator": "Fig. 6B legend; Results > Mechanically evoked epidermal responses rely on SOC entry; Materials and methods > Behavioral assays"
             }
           ]
         },
         "neural_response": {
           "state": "reported",
-          "value": "Epidermal GCaMP6s calcium responses to stretch and activation of somatosensory neurons including nociceptors",
-          "reason": "Directly described by the primary source.",
-          "checked_at": "2026-09-24",
+          "value": "In semi-intact larval preparations, optogenetic stimulation of CsChrimson-expressing epidermal cells evoked rapid GCaMP6s calcium transients in axon terminals of C4da nociceptive neurons and C3da, Cho, and C1da sensory neurons (Fig. 3B-E; n=15 larval fillet preparations). Tetanus-toxin silencing of C4da/C3da attenuated some behavioral responses (Fig. 3F). This is optical calcium activity, not direct spike electrophysiology. The neural-imaging stimulus was optogenetic epidermal activation, not the separate von Frey assay.",
+          "reason": "The primary article directly images stimulus-associated sensory-neuron calcium signals and distinguishes them from epidermal calcium and mechanical behavioral assays.",
+          "checked_at": "2026-09-27",
           "locators": [
             {
-              "url": "https://elifesciences.org/articles/95379",
-              "locator": "Abstract; Results, stretch-evoked calcium responses"
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12068870/",
+              "locator": "Results > SSNs are activated by epidermal stimulation; Fig. 3A-F"
+            },
+            {
+              "url": "https://doi.org/10.7554/eLife.95379.3",
+              "locator": "Version of Record, Results > SSNs are activated by epidermal stimulation; Fig. 3"
             }
           ]
         },
         "behavior": {
           "state": "reported",
-          "value": "Larval avoidance and escape plus increased sensitivity to subsequent mechanical stimulation",
-          "reason": "Directly described by the primary source.",
-          "checked_at": "2026-09-24",
+          "value": "Optogenetic epidermal stimulation elicited nocifensive c-bending and/or rolling in 73% of larvae (Fig. 1A). In a separate low-intensity optogenetic assay, combined epidermal plus C4da activation produced rolling in 100% of larvae versus 63% for C4da-only and 18% for epidermis-only stimulation (Fig. 4E-F; n=33, 30, and 31). Separate paired 40 mN von Frey assays assessed mechanical nocifensive potentiation (Fig. 6B). These are larval protective behaviors, not subjective pain.",
+          "reason": "The article reports behavior under optogenetic and mechanical protocols separately; combined percentages belong only to the low-intensity optogenetic comparison.",
+          "checked_at": "2026-09-27",
           "locators": [
             {
-              "url": "https://elifesciences.org/articles/95379",
-              "locator": "Abstract, final three sentences"
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12068870/",
+              "locator": "Results > Stimulation of epidermal cells evokes nocifensive behavior; Fig. 1A"
+            },
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12068870/",
+              "locator": "Results > Epidermal stimulation potentiates nociceptive neurons and behaviors; Fig. 4E-F"
+            },
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12068870/",
+              "locator": "Fig. 6B legend; Materials and methods > Behavioral assays"
             }
           ]
         },
         "pain_boundary": {
           "state": "reported",
-          "value": "Epidermal and sensory calcium signals plus protective behavior establish nociceptive sensitivity, not subjective pain.",
-          "reason": "Conservative inference from the primary measurements; the source does not directly measure subjective experience.",
-          "checked_at": "2026-09-24",
+          "value": "The study concerns epidermis-to-sensory-neuron signaling and protective behavior in Drosophila larvae. GCaMP fluorescence is an optical neural activity measure, not direct electrophysiology. Larval nocifensive behavior does not establish subjective pain or human ECAP, SCS, or clinical outcome.",
+          "reason": "Boundary follows the species, preparations, measurements, and endpoints in the primary source.",
+          "checked_at": "2026-09-27",
           "locators": [
             {
-              "url": "https://elifesciences.org/articles/95379",
-              "locator": "Abstract and Results"
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12068870/",
+              "locator": "Abstract; Results/Figs. 1-6; Discussion"
+            },
+            {
+              "url": "https://doi.org/10.7554/eLife.95379.3",
+              "locator": "Version of Record, Abstract and Discussion"
             }
           ]
         }
@@ -2276,12 +2622,12 @@
         "behavior": {
           "state": "reported",
           "value": "Larvae rolled after noxious stimulation; a 45 mN filament elicited rolling in 92% of wild type (n=36) and 13% of painless1 mutants (n=31).",
-          "reason": "Directly checked in the primary article.",
-          "checked_at": "2026-09-25",
+          "reason": "The original Cell publisher full text reports the 45 mN percentages in Results prose; Figure 2E depicts heat-probe responses.",
+          "checked_at": "2026-09-28",
           "locators": [
             {
               "url": "https://web.archive.org/web/20230522064658/https://www.cell.com/cell/fulltext/S0092-8674(03)00272-1",
-              "locator": "Results, Figure 2E: mechanical rolling; Figure 1: thermal rolling"
+              "locator": "Results > Forward Genetic Analysis of Nociception: 45 mN von Frey rolling (92%, n=36 versus 13%, n=31) in prose; Figure 2E is heat-probe behavior; Figure 3C-E is peripheral nerve firing."
             }
           ]
         },
@@ -2618,6 +2964,1002 @@
             {
               "url": "https://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1007464",
               "locator": "Abstract; Results/Figs. 1-7; Materials and Methods; Data Availability"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S809",
+      "source_role": "primary_experiment",
+      "extraction": {
+        "stimulus": {
+          "state": "reported",
+          "value": "A 50 mN von Frey fiber was used for the RNAi screen; Fig. 1D used a 30 mN von Frey fiber for the Balboa-RNAi behavioral comparison. Fig. 1E used ChR2 blue-light activation as a separate control.",
+          "reason": "The force levels and optogenetic intervention belong to distinct assays.",
+          "checked_at": "2026-09-26",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4438766/",
+              "locator": "Results, first two paragraphs; Fig. 1D-E legend"
+            }
+          ]
+        },
+        "neural_response": {
+          "state": "not_reported",
+          "value": null,
+          "reason": "No stimulus-evoked neural recording in Drosophila is presented in the checked manuscript. Class IV expression and GFP protein interaction are anatomical/molecular readouts. Balboa/PPK coexpression in heterologous cells produced no mechanically evoked current above background.",
+          "checked_at": "2026-09-26",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4438766/",
+              "locator": "Results, GFP localization and split-GFP paragraphs; Results, heterologous-cell current paragraph"
+            }
+          ]
+        },
+        "behavior": {
+          "state": "reported",
+          "value": "Fig. 1D mechanical nocifensive responses: 67% (n=67) and 59% (n=64) controls versus 21% (n=62) Class IV Balboa-RNAi at 30 mN. Fig. 1E ChR2-evoked responses: 84% (n=111) control versus 78% (n=113) knockdown, p=0.31. Cohorts are separate.",
+          "reason": "The endpoints are larval rolling/escape response proportions, not neuronal firing or subjective pain.",
+          "checked_at": "2026-09-26",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4438766/",
+              "locator": "Fig. 1D-E legends; Results, Balboa knockdown paragraph"
+            }
+          ]
+        },
+        "pain_boundary": {
+          "state": "reported",
+          "value": "The paper tests mechanical nocifensive behavior and channel/protein interactions in Drosophila larvae. It does not measure subjective pain, human ECAP or clinical SCS outcomes.",
+          "reason": "Construct boundary based on the studied species and endpoints.",
+          "checked_at": "2026-09-26",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4438766/",
+              "locator": "Abstract; Results and Discussion; Fig. 1D-E"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S810",
+      "source_role": "primary_experiment",
+      "extraction": {
+        "stimulus": {
+          "state": "reported",
+          "value": "Larval mechanical force via von Frey filaments (2-60 mN; 45 mN in key genotype comparisons); separate 45 C thermal probe and gentle-touch controls. Isolated-cell electrophysiology used negative pipette pressure from 0 to -60 mmHg.",
+          "reason": "Larval body-wall stimulation and cell-attached pipette suction are separate interventions.",
+          "checked_at": "2026-09-26",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3297676/",
+              "locator": "Results; Figs. 1b/e/f/g and 3a-b; Methods > Behavior assays and Electrophysiology"
+            }
+          ]
+        },
+        "neural_response": {
+          "state": "reported",
+          "value": "Cell-attached recordings from dissociated ppk-positive larval neurons show mechanically activated currents in WT (n=12 cells), absent in dpiezo KO (n=13 cells). These are isolated-cell currents, not in-vivo stimulus-evoked neural traces.",
+          "reason": "Neural electrophysiology is directly measured ex vivo; cell counts are not animal counts.",
+          "checked_at": "2026-09-26",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3297676/",
+              "locator": "Results > electrophysiological recordings; Fig. 3a-b"
+            }
+          ]
+        },
+        "behavior": {
+          "state": "reported",
+          "value": "Dpiezo knockout and ppk-cell knockdown impair larval rolling/escape after noxious von Frey stimulation; ppk-cell rescue restores response. Thermal and gentle-touch control behaviors are separate. Fig. 1b force response n=40 larvae in four experiments; Fig. 1e >85 at 45 mN.",
+          "reason": "The measured output is larval nocifensive behavior, not subjective pain.",
+          "checked_at": "2026-09-26",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3297676/",
+              "locator": "Results; Figs. 1b/e/f/g, 2b-c and 4"
+            }
+          ]
+        },
+        "pain_boundary": {
+          "state": "reported",
+          "value": "The source links dPiezo to Drosophila larval mechanotransduction and nocifensive behavior but does not measure subjective pain, human ECAP, SCS or clinical outcome. The isolated-cell suction response should not be relabeled as in-vivo noxious-stimulus coding.",
+          "reason": "Species, experimental preparation and readout boundaries from the article.",
+          "checked_at": "2026-09-26",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3297676/",
+              "locator": "Abstract; Results/Figs. 1-4; Methods > Electrophysiology"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S811",
+      "source_role": "primary_experiment",
+      "extraction": {
+        "stimulus": {
+          "state": "reported",
+          "value": "30 microliter water droplet heated on a 70 C hotplate, while droplet temperature was separately measured by thermocouple; separate fixed-temperature direct-immersion test. The observed wild-type response began around 29 C water temperature.",
+          "reason": "The hotplate setting is not the animal exposure temperature; hot-needle comparison near 42 C is a different assay.",
+          "checked_at": "2026-09-26",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3266071/",
+              "locator": "Fig. 1A-D legend and main text"
+            }
+          ]
+        },
+        "neural_response": {
+          "state": "not_reported",
+          "value": null,
+          "reason": "No stimulus-evoked neural recording; painless mutant and Class IV TeTxLC are perturbations, not neural recordings.",
+          "checked_at": "2026-09-26",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3266071/",
+              "locator": "Abstract and Fig. 1A-D"
+            }
+          ]
+        },
+        "behavior": {
+          "state": "reported",
+          "value": "Third-instar larvae show lateral head thrashing then corkscrew rolling at about 29 C; painless and Class IV-blocked groups respond later around 33-34 C. Direct-immersion Fig. 1D used fresh larvae, n=100 per temperature.",
+          "reason": "The measured endpoint is escape behavior; Fig. 1C genotype bar denominators are separate from Fig. 1D.",
+          "checked_at": "2026-09-26",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3266071/",
+              "locator": "Abstract; Fig. 1A-D legend; main text"
+            }
+          ]
+        },
+        "pain_boundary": {
+          "state": "reported",
+          "value": "The source documents warm-water-triggered protective escape. It does not directly measure tissue damage, subjective pain, neural spikes or human clinical effects. Its 29 C assay cannot be treated as the focal 42 C hot-needle paradigm.",
+          "reason": "Scope follows measured stimuli and outcomes, while preserving the authors nociception interpretation as an interpretation.",
+          "checked_at": "2026-09-26",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3266071/",
+              "locator": "Main text paragraph comparing hot-needle and immersion assays"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S812",
+      "source_role": "primary_experiment",
+      "extraction": {
+        "stimulus": {
+          "state": "reported",
+          "value": "Separate thermal-probe assays at 46 C for longer-latency insensitivity and 42 C for shorter-latency hypersensitivity after Class IV-specific RNAi.",
+          "reason": "The temperatures and phenotype directions are distinct screens.",
+          "checked_at": "2026-09-26",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5333372/",
+              "locator": "Results > Nociceptor-specific RNAi screens; Methods > Thermal nociception assays; Fig. 1"
+            }
+          ]
+        },
+        "neural_response": {
+          "state": "not_reported",
+          "value": null,
+          "reason": "Class IV/Class I microarray expression and dendrite morphology were measured, but no stimulus-evoked neural activity was recorded in the checked article.",
+          "checked_at": "2026-09-26",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5333372/",
+              "locator": "Results > Microarray analyses and dendrite morphology; Figs. 3-4"
+            }
+          ]
+        },
+        "behavior": {
+          "state": "reported",
+          "value": "Larval nocifensive response latency was tested after RNAi. Of 419 lines targeting 229 genes, retests found 16 lines/14 genes with reduced sensitivity at 46 C and 24 lines/22 genes with hypersensitivity at 42 C. Gene and line counts are not animal counts.",
+          "reason": "Behavioral latency is the response variable; denominator of screened lines differs from animal sample sizes.",
+          "checked_at": "2026-09-26",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5333372/",
+              "locator": "Results > Nociceptor-specific RNAi screens; Table 1 and Figs. 1-2"
+            }
+          ]
+        },
+        "pain_boundary": {
+          "state": "reported",
+          "value": "Drosophila larval thermal nocifensive behavior does not measure subjective pain or human treatment outcome. The authors explicitly caution about incomplete RNAi knockdown and off-target effects, limiting causal interpretation of individual screen hits.",
+          "reason": "Species and assay scope plus author-stated screen limitations.",
+          "checked_at": "2026-09-26",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5333372/",
+              "locator": "Results > RNAi caveats; Discussion; Methods > Thermal nociception screen"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S813",
+      "source_role": "primary_experiment",
+      "extraction": {
+        "stimulus": {
+          "state": "reported",
+          "value": "Separate 42 C thermal probe for behavioral latency, 30 mN von Frey for behavioral rolling, and 50 mN mechanical probe for GCaMP3 imaging in filleted larvae.",
+          "reason": "The thermal, behavioral force and imaging force protocols have different preparations/endpoints.",
+          "checked_at": "2026-09-26",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6454897/",
+              "locator": "Results > SK Negatively Regulates Thermal/Mechanical Nociception Behavior and Nociceptor Excitability; Figs. 2-3"
+            }
+          ]
+        },
+        "neural_response": {
+          "state": "reported",
+          "value": "In a filleted larval preparation, 50 mN force evoked GCaMP3 fluorescence at Class IV ddaC nociceptor somata. SK mutants showed larger and longer-lasting calcium signals; SK-M rescue reduced peak but not all persistence. This is optical activity, not direct spike electrophysiology.",
+          "reason": "The evoked response is directly measured in a prepared larva; protein localization is a separate readout.",
+          "checked_at": "2026-09-26",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6454897/",
+              "locator": "Results > SK Negatively Regulates Nociceptor Excitability; Fig. 3A-B; STAR Methods > Calcium Imaging"
+            }
+          ]
+        },
+        "behavior": {
+          "state": "reported",
+          "value": "At 42 C, SK-null larvae averaged 3.2 s response latency versus 6.2 s control. At 30 mN, 58% of SK-null versus 31% of control trials produced rolling; BAC rescue was 38%. Group Ns are referred to supplemental Table S2 and were not extracted in this pass.",
+          "reason": "Response latency/proportion describe larval nocifensive behavior, not subjective pain or calcium signal.",
+          "checked_at": "2026-09-26",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6454897/",
+              "locator": "Results > SK Negatively Regulates Thermal/Mechanical Nociception Behavior; Fig. 2B/D"
+            }
+          ]
+        },
+        "pain_boundary": {
+          "state": "reported",
+          "value": "The paper combines larval nocifensive behavior, force-evoked Class IV optical calcium in filleted preparations, and SK localization. It does not measure subjective pain, human ECAP, SCS or clinical treatment outcome. Optical fluorescence is not direct electrophysiology.",
+          "reason": "Scope follows measured species, preparation and endpoints.",
+          "checked_at": "2026-09-26",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6454897/",
+              "locator": "Abstract; Results/Figs. 2-4; STAR Methods > Calcium Imaging"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S814",
+      "source_role": "primary_experiment",
+      "extraction": {
+        "stimulus": {
+          "state": "reported",
+          "value": "Separate 365 nm UV and blue/white-light assays, calibrated 50 mN von Frey touch twice in 2 s, and separate optogenetic activation.",
+          "reason": "Noxious light, mechanical force and artificial activation are distinct inputs.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://nms.unl.pt/Portals/0/adam/NMS%20Generic%20Content/cmXys54yHUWJBiTqEQLxqA/HighlightedPublications/Imambocus%20et%20al%20-%20Curr%20Biol%202021.pdf",
+              "locator": "Author PDF, Results/Figs. 1-3 and 6; STAR Methods > Light avoidance assays and Mechanonociception assays"
+            }
+          ]
+        },
+        "neural_response": {
+          "state": "reported",
+          "value": "Live-larva UV-evoked Dp7 GCaMP7s (Fig. 1E n=4) and vtd2 GCaMP6s (Fig. 2D n=8; Fig. 2E n=5); semi-intact larval ABLK calcium response to UV versus noxious touch (Fig. 6B n=8). EM synapses are anatomy, not activity.",
+          "reason": "Optical calcium reports neural activity in specified preparations; EM and peptide localization are different measurements.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://nms.unl.pt/Portals/0/adam/NMS%20Generic%20Content/cmXys54yHUWJBiTqEQLxqA/HighlightedPublications/Imambocus%20et%20al%20-%20Curr%20Biol%202021.pdf",
+              "locator": "Author PDF, Figs. 1E, 2D-E, 6B; STAR Methods > Calcium imaging in intact and semi-intact larvae"
+            }
+          ]
+        },
+        "behavior": {
+          "state": "reported",
+          "value": "Larval dark preference and short-wavelength light avoidance are distinct from bending/rolling scored after the second calibrated 50 mN touch. Optogenetic behaviors are separate artificial-input tests.",
+          "reason": "Light avoidance and touch-evoked nocifensive categories are different assays and cohorts.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://nms.unl.pt/Portals/0/adam/NMS%20Generic%20Content/cmXys54yHUWJBiTqEQLxqA/HighlightedPublications/Imambocus%20et%20al%20-%20Curr%20Biol%202021.pdf",
+              "locator": "Author PDF, Figs. 1D/F-G, 2C/G, 6A; STAR Methods > Mechanonociception assays"
+            }
+          ]
+        },
+        "pain_boundary": {
+          "state": "reported",
+          "value": "Nociceptive circuit activity and protective larval behavior do not establish subjective pain, human spinal ECAP or SCS treatment response. Underlying data are available on author request; reconstructed neurons are separately available on Virtual Fly Brain.",
+          "reason": "The source measures larval neural and behavioral responses only.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://nms.unl.pt/Portals/0/adam/NMS%20Generic%20Content/cmXys54yHUWJBiTqEQLxqA/HighlightedPublications/Imambocus%20et%20al%20-%20Curr%20Biol%202021.pdf",
+              "locator": "Author PDF, Summary/Discussion; STAR Methods > Data and code availability"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S815",
+      "source_role": "primary_experiment",
+      "extraction": {
+        "stimulus": {
+          "state": "reported",
+          "value": "46 C thermal probe, 30 mN von Frey mechanical stimulus, separate gentle-touch control, and 30 C threshold perturbation assay.",
+          "reason": "Heat, force, gentle touch, and transgenic threshold assays are distinct inputs.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3278078/?report=reader",
+              "locator": "Figs. 1B-H, 2A-F, 3; Experimental Procedures > Nociception assays"
+            }
+          ]
+        },
+        "neural_response": {
+          "state": "not_reported",
+          "value": null,
+          "reason": "The source maps dTRPA1-C/D reporter expression to mdIV neurons and measures calcium/current only in transfected S2R+ cells; it does not report an in-vivo stimulus-evoked mdIV neural recording.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3278078/?report=reader",
+              "locator": "Figs. 4, 6-7; Results > dTRPA1-C/D expression and heterologous assays"
+            }
+          ]
+        },
+        "behavior": {
+          "state": "reported",
+          "value": "Nocifensive escape locomotion latency after 46 C probe and response proportion after 30 mN von Frey; Fig. 1B WT n=115 versus mutant n=149, Fig. 1G WT n=120 versus mutant n=97. Gentle touch is a separate control; cohorts are not pooled.",
+          "reason": "Genetic loss, RNAi and rescue support a role for dTRPA1 in larval behavior, not a direct mechanical channel-transduction result.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3278078/?report=reader",
+              "locator": "Figs. 1B-H, 2A-F, 3 and 5; Experimental Procedures > Nociception assays"
+            }
+          ]
+        },
+        "pain_boundary": {
+          "state": "reported",
+          "value": "Larval nocifensive behavior and S2R+ cellular biophysics do not establish subjective pain, in-vivo nociceptor activity, human ECAP or SCS response.",
+          "reason": "Species, preparation and construct differ from human pain or clinical response.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3278078/?report=reader",
+              "locator": "Summary; Results/Figs. 1-7; Discussion"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S822",
+      "source_role": "primary_experiment",
+      "extraction": {
+        "stimulus": {
+          "state": "reported",
+          "value": "Local noxious thermal input delivered by a 1462 nm infrared laser to larval Class IV dendrites; the Results estimate that 30 mW infrared irradiation raises local temperature from 25 C by about 0.6 C per mW, to approximately 43 C in the Fig. 1 activation condition; avoid treating this single estimated condition as a universal threshold. Separate optogenetic blue-light activation experiments used continuous or 100 ms on/off intermittent ChIEF protocols; these artificial stimuli are not the infrared heat assay.",
+          "reason": "The primary article uses distinct infrared-thermal, blue-light photostimulation, electrophysiology, calcium-imaging, and behavioral protocols.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://elifesciences.org/articles/12959",
+              "locator": "Results > Firing pattern of Class IV upon noxious thermal stimulation; Figs. 1A-E; Materials and methods > Infrared laser irradiation"
+            },
+            {
+              "url": "https://elifesciences.org/articles/12959",
+              "locator": "Results > Optogenetic experiments; Fig. 5A; Materials and methods > Optogenetics"
+            }
+          ]
+        },
+        "neural_response": {
+          "state": "reported",
+          "value": "Infrared thermal stimulation evokes Class IV extracellular single-unit high-frequency bursts followed by pauses (Fig. 1), accompanied by dendritic TN-XXL/GCaMP calcium transients (Figs. 2-3). The optical calcium signal and extracellular spikes are separate neural measures. Channel perturbations alter these responses.",
+          "reason": "Direct extracellular single-unit recordings and dendritic calcium imaging are reported in separate figure-specific assays.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://elifesciences.org/articles/12959",
+              "locator": "Results > Firing pattern of Class IV upon noxious thermal stimulation; Fig. 1A-E"
+            },
+            {
+              "url": "https://elifesciences.org/articles/12959",
+              "locator": "Results > Calcium transient and burst-pause firing; Figs. 2-4"
+            }
+          ]
+        },
+        "behavior": {
+          "state": "reported",
+          "value": "Larvae show heat-evoked avoidance/rolling. In a separate Class-IV-specific ChIEF experiment, intermittent 100 ms on/off optical activation produced rolling in 86.3% (n=95) versus 65.3% (n=75) with continuous activation; the authors note this induced firing pattern is not identical to the wild-type heat-evoked pattern. Another separate lower-frequency activation assay increased crawling speed. These are protective larval behaviors, not subjective pain.",
+          "reason": "Heat behavior and optogenetic reproduction assays differ; figure-specific cohorts and the authors stated pattern limitation are preserved.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://elifesciences.org/articles/12959",
+              "locator": "Results > Optogenetic experiments strongly suggest that multiple fluctuations in firing rate ... rolling behavior; Fig. 5A-C"
+            },
+            {
+              "url": "https://elifesciences.org/articles/12959",
+              "locator": "Abstract; Results/Fig. 1; Discussion > burst number-coding hypothesis"
+            }
+          ]
+        },
+        "pain_boundary": {
+          "state": "reported",
+          "value": "This is a Drosophila larval thermal nociception and escape study. The neural firing and calcium findings do not measure subjective pain; rolling/avoidance are protective behaviors. It provides no human ECAP, SCS, or clinical outcome evidence.",
+          "reason": "The boundary follows the species and experimental endpoints in the primary article.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://elifesciences.org/articles/12959",
+              "locator": "Abstract; Results/Figs. 1-6; Discussion"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S823",
+      "source_role": "primary_experiment",
+      "extraction": {
+        "stimulus": {
+          "state": "reported",
+          "value": "Separate short-wavelength UVC exposures at 0.17, 1.2, or 8 mW/cm2 for 5 s (Fig. 1); distinct UVA/UVB comparisons and 45-46 C heat control assays are not pooled with UVC.",
+          "reason": "The wavelength, irradiance, and duration define a UVC photochemical stimulus; other UV wavelengths and noxious heat are separate conditions.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3898224/",
+              "locator": "Results > UVC induces mdIV-mediated writhing behavior; Fig. 1A; Methods > UV exposure"
+            },
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/24433322/",
+              "locator": "PMID 24433322, primary citation and figure captions"
+            }
+          ]
+        },
+        "neural_response": {
+          "state": "reported",
+          "value": "Direct extracellular single-unit recordings from v'ada mdIV neurons show increased neural activity after UVC irradiation (Fig. 4). A separate 45-46 C heat assay shows heat-evoked neural firing (Fig. 5C-E); these stimuli are distinct.",
+          "reason": "The paper reports stimulus-associated electrophysiological measurements in identified larval nociceptor neurons, with heat as a separate assay.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3898224/",
+              "locator": "Results > UVC-induced ROS activates mdIV neurons; Fig. 4"
+            },
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3898224/",
+              "locator": "Fig. 5C-E legend, noxious-heat control and mdIV spike frequency"
+            }
+          ]
+        },
+        "behavior": {
+          "state": "reported",
+          "value": "Third-instar larvae show visual-system-independent writhing/twisting after UVC, with dose-dependent response; mdIV inactivation suppresses the behavior and antioxidant manipulations support a role for ROS (Figs. 1-2). Fig. 1 n values count trials, with five larvae exposed per trial, not individual-animal Ns.",
+          "reason": "Behavioral rolling/writhing is a protective response; trial-level denominators and mechanistic interventions are preserved.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3898224/",
+              "locator": "Results > UVC induces mdIV-mediated writhing behavior; Fig. 1A-E"
+            },
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3898224/",
+              "locator": "Results > ROS and antioxidant perturbations; Fig. 2; Fig. 5A-B heat comparison"
+            }
+          ]
+        },
+        "pain_boundary": {
+          "state": "reported",
+          "value": "The paper links experimental UVC/ROS, mdIV firing, and larval writhing. Larval writhing is an operational nociceptive/protective behavior and does not establish subjective pain or human clinical transfer. UVC is an artificial short-wavelength stimulus, not ordinary terrestrial sunlight exposure.",
+          "reason": "The boundary follows species, stimulus, and measured endpoints and avoids anthropomorphic interpretation.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3898224/",
+              "locator": "Abstract; Results/Figs. 1-5; Discussion"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S824",
+      "source_role": "primary_experiment",
+      "extraction": {
+        "stimulus": {
+          "state": "reported",
+          "value": "Local IR laser irradiation of third-instar larval Class IV proximal dendrites (typically 1 s in the neural assay); a separate heated contact probe at 42-46 C tests larval avoidance. IR and contact-probe exposures are different assay preparations.",
+          "reason": "The full primary Methods separates IR-laser neural preparation from the whole-larva thermal-probe behavior assay.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC5653240/fullTextXML",
+              "locator": "Methods > Electrophysiology and IR-laser irradiation; Thermal behavioral assay; Results > SK channels generate pause periods"
+            }
+          ]
+        },
+        "neural_response": {
+          "state": "reported",
+          "value": "Extracellular Class IV neuronal spike trains show heat-evoked burst-and-pause firing. SK knockdown reduces the pause period (Fig. 3A-E); dendritic calcium and downstream Goro calcium are separate optical neural measures, not direct behavioral recordings.",
+          "reason": "Direct somal electrophysiology and distinct calcium-imaging measures are specified in Results and Methods.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC5653240/fullTextXML",
+              "locator": "Results > Dendritic Ca2+ transients precede unconventional spikes; SK channels generate pause periods; Figs. 1-3; Methods > Electrophysiology and IR-laser irradiation"
+            }
+          ]
+        },
+        "behavior": {
+          "state": "reported",
+          "value": "Separate whole-larva heat-probe assay measures latency to first 360-degree roll and response rate; SK knockdown larvae respond sooner and more often at moderate heat (Fig. 3F-G). The authors do not isolate pause duration from other changed firing properties as the unique cause of behavior.",
+          "reason": "The figure-level behavioral result and stated alternative neural mechanisms are retained without pooling neuron and larva cohorts.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC5653240/fullTextXML",
+              "locator": "Results > SK channels generate pause periods, Fig. 3F-G; Methods > Thermal behavioral assay"
+            }
+          ]
+        },
+        "pain_boundary": {
+          "state": "reported",
+          "value": "Larval Class IV neural responses and protective rolling are measurable nociception-related endpoints, not subjective pain. This experiment has no human ECAP, SCS, or clinical outcome result.",
+          "reason": "Species, preparations and endpoints are established by the primary article.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC5653240/fullTextXML",
+              "locator": "Abstract; Results/Figs. 1-3; Methods > Thermal behavioral assay"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S825",
+      "source_role": "primary_experiment",
+      "extraction": {
+        "stimulus": {
+          "state": "reported",
+          "value": "Artificial blue-light ChR2 activation of larval C4da neurons and separate ReaChR activation of mCSI interneurons. Noxious heat or harsh mechanical stimulation is cited as earlier context, not delivered in the new circuit assays.",
+          "reason": "The primary Results and STAR Methods distinguish experimental optogenetic input from natural nociceptive background.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://web.archive.org/web/20250312154123id_/https://www.cell.com/current-biology/fulltext/S0960-9822(17)30805-9",
+              "locator": "Results > C4da activation and mCSI calcium; Figs. 2-3; STAR Methods > Calcium Imaging / Behavioral Assay"
+            }
+          ]
+        },
+        "neural_response": {
+          "state": "reported",
+          "value": "Direct GCaMP6m calcium increase in mCSI interneurons after ChR2 activation of C4da (Fig. 2B-D); separate SNa motor-neuron calcium response after mCSI activation (Fig. 4B-C). GRASP and apposition show candidate synaptic anatomy, not spikes. No electrophysiology or natural noxious-stimulus-evoked neural recording is reported.",
+          "reason": "The archived original Results and figure legends identify directly imaged calcium separately from anatomical and behavioral endpoints.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://web.archive.org/web/20250312154123id_/https://www.cell.com/current-biology/fulltext/S0960-9822(17)30805-9",
+              "locator": "Results/Fig. 2B-D (mCSI GCaMP6m after C4da ChR2); Fig. 4B-C (SNa calcium after mCSI activation); Fig. 1 (GRASP)"
+            }
+          ]
+        },
+        "behavior": {
+          "state": "reported",
+          "value": "In separate whole-larva assays, mCSI optogenetic activation elicits rolling and mCSI silencing reduces C4da-evoked rolling. These are protective escape behaviors, not neuronal response measurements.",
+          "reason": "Whole-larva necessity and sufficiency assays have different experimental units from the calcium-imaging preparations.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://web.archive.org/web/20250312154123id_/https://www.cell.com/current-biology/fulltext/S0960-9822(17)30805-9",
+              "locator": "Results/Fig. 3A-D; STAR Methods > Behavioral Assay"
+            }
+          ]
+        },
+        "pain_boundary": {
+          "state": "reported",
+          "value": "This is an optogenetic larval nociceptive-circuit study. It does not demonstrate subjective fly pain, natural-stimulus firing, human ECAP, SCS response or clinical analgesia.",
+          "reason": "Experimental stimulus, species and endpoints bound the claim.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://web.archive.org/web/20250312154123id_/https://www.cell.com/current-biology/fulltext/S0960-9822(17)30805-9",
+              "locator": "Abstract, Results/Figs. 1-4, Discussion"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S827",
+      "source_role": "primary_experiment",
+      "extraction": {
+        "stimulus": {
+          "state": "reported",
+          "value": "Localized calibrated mechanical poking/compression of larval c4da dendrites; imaging and intact-larva behavior use distinct preparations.",
+          "reason": "Reported in the primary full text; assay type and measured construct are kept distinct.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://cdn.elifesciences.org/articles/76574/elife-76574-v3.xml",
+              "locator": "Results, Figs. 1-6; Methods, mechanical stimulus calibration, calcium imaging, and behavioral assay"
+            }
+          ]
+        },
+        "neural_response": {
+          "state": "reported",
+          "value": "Direct c4da GCaMP6s calcium responses to localized mechanical force; calcium activity is not an electrophysiological spike recording.",
+          "reason": "Reported in the primary full text; assay type and measured construct are kept distinct.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://cdn.elifesciences.org/articles/76574/elife-76574-v3.xml",
+              "locator": "Results, Figs. 1-6; Methods, mechanical stimulus calibration, calcium imaging, and behavioral assay"
+            }
+          ]
+        },
+        "behavior": {
+          "state": "reported",
+          "value": "Separate intact-larva assays measure protective rolling after mechanical stimulation; behavior is not pooled with c4da imaging.",
+          "reason": "Reported in the primary full text; assay type and measured construct are kept distinct.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://cdn.elifesciences.org/articles/76574/elife-76574-v3.xml",
+              "locator": "Results, Figs. 1-6; Methods, mechanical stimulus calibration, calcium imaging, and behavioral assay"
+            }
+          ]
+        },
+        "pain_boundary": {
+          "state": "reported",
+          "value": "Fly larval neural calcium responses and protective nocifensive behavior are experimental nociception-related measures, not subjective pain; no human ECAP, SCS, or clinical outcome is measured.",
+          "reason": "Reported in the primary full text; assay type and measured construct are kept distinct.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://cdn.elifesciences.org/articles/76574/elife-76574-v3.xml",
+              "locator": "Abstract; Results and Discussion; Results, Figs. 1-6; Methods, mechanical stimulus calibration, calcium imaging, and behavioral assay"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S828",
+      "source_role": "primary_experiment",
+      "extraction": {
+        "stimulus": {
+          "state": "reported",
+          "value": "Local thermal ramp of larval body wall through 40-50 °C for neural imaging; thermal-probe behavior uses a separate assay.",
+          "reason": "Reported in the primary full text; assay type and measured construct are kept distinct.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10328526/fullTextXML",
+              "locator": "Results, Figure 5A-F and associated text; Methods, calcium imaging; Results, Figure 1A-B and thermal nociceptive assay"
+            }
+          ]
+        },
+        "neural_response": {
+          "state": "reported",
+          "value": "Direct GCaMP6m calcium response in Goro interneurons during local heat ramps; mutant/RNAi responses are sensitized in the noxious range, not electrophysiological spikes.",
+          "reason": "Reported in the primary full text; assay type and measured construct are kept distinct.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10328526/fullTextXML",
+              "locator": "Results, Figure 5A-F and associated text; Methods, calcium imaging; Results, Figure 1A-B and thermal nociceptive assay"
+            }
+          ]
+        },
+        "behavior": {
+          "state": "reported",
+          "value": "Separate thermal-probe larval assays measure nocifensive response/rolling latency, including response to a 42 °C probe; these animals are distinct from calcium imaging.",
+          "reason": "Reported in the primary full text; assay type and measured construct are kept distinct.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10328526/fullTextXML",
+              "locator": "Results, Figure 5A-F and associated text; Methods, calcium imaging; Results, Figure 1A-B and thermal nociceptive assay"
+            }
+          ]
+        },
+        "pain_boundary": {
+          "state": "reported",
+          "value": "Fly larval neural calcium responses and protective nocifensive behavior are experimental nociception-related measures, not subjective pain; no human ECAP, SCS, or clinical outcome is measured.",
+          "reason": "Reported in the primary full text; assay type and measured construct are kept distinct.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10328526/fullTextXML",
+              "locator": "Abstract; Results and Discussion; Results, Figure 5A-F and associated text; Methods, calcium imaging; Results, Figure 1A-B and thermal nociceptive assay"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S833",
+      "source_role": "primary_experiment",
+      "extraction": {
+        "stimulus": {
+          "state": "reported",
+          "value": "Temperature-controlled heat probe touched lateral body segment A4 of wandering third-instar larvae; each animal was tested once.",
+          "reason": "The primary Methods specify the thermal behavior assay.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://elifesciences.org/articles/53351",
+              "locator": "Methods > Behavior assay; Results > Figure 6A-E"
+            }
+          ]
+        },
+        "neural_response": {
+          "state": "not_reported",
+          "value": null,
+          "reason": "The checked study quantifies C4da dendrite morphology, not stimulus-evoked neural activity or electrophysiology.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://elifesciences.org/articles/53351",
+              "locator": "Methods > Behavior assay; Results > Figures 1-6"
+            }
+          ]
+        },
+        "behavior": {
+          "state": "reported",
+          "value": "Latency from A4 heat-probe contact to a complete 360-degree roll; Figure 6 reports responder and fast-responder proportions in separate high- and low-yeast groups.",
+          "reason": "Whole-larva behavior is a distinct endpoint from dendrite morphology.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://elifesciences.org/articles/53351",
+              "locator": "Methods > Behavior assay; Results > Figure 6A-E and source data 1"
+            }
+          ]
+        },
+        "pain_boundary": {
+          "state": "reported",
+          "value": "Larval heat-probe rolling is an observable nocifensive behavior. Dendrite morphology is separate; neither measures subjective pain, human ECAP or SCS outcome.",
+          "reason": "Conservative construct boundary based on the checked primary assays.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://elifesciences.org/articles/53351",
+              "locator": "Methods > Behavior assay; Results > Figure 6A-E; Discussion"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S834",
+      "source_role": "primary_experiment",
+      "extraction": {
+        "stimulus": {
+          "state": "reported",
+          "value": "A ~55 C probe touched crawling third-instar larvae in a high-temperature assay separate from thermal-gradient thermotaxis.",
+          "reason": "The primary Results state the hot-probe condition and separation from thermotaxis.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC548941/",
+              "locator": "Results > Thermotaxis and high-temperature nociception involve distinct mechanisms; Figure 3B-C"
+            }
+          ]
+        },
+        "neural_response": {
+          "state": "not_reported",
+          "value": null,
+          "reason": "The checked primary study reports genetic manipulations and behavior but no stimulus-evoked neural activity recording.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC548941/",
+              "locator": "Results > Figures 3B-C, 4H; Materials and Methods"
+            }
+          ]
+        },
+        "behavior": {
+          "state": "reported",
+          "value": "In the specified probe assay, dTrpA1 RNAi larvae rapidly curled on contact with ~55 C and responded indistinguishably from wild-type controls; this negative comparator is genotype- and assay-specific.",
+          "reason": "The primary Results/Figure 3B-C report the comparison; a normal withdrawal comparison for another manipulation appears in Figure 4H.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC548941/",
+              "locator": "Results > Thermotaxis and high-temperature nociception involve distinct mechanisms; Figures 3B-C and 4H"
+            }
+          ]
+        },
+        "pain_boundary": {
+          "state": "reported",
+          "value": "The probe result does not establish a general absence of dTRPA1 involvement in nociception. Thermotaxis and withdrawal are separate behavior constructs; subjective pain and human ECAP/SCS outcomes were not measured.",
+          "reason": "Keep the negative finding limited to tested genotype and assay.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC548941/",
+              "locator": "Results > Figures 3B-C and 4H; Discussion"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S835",
+      "source_role": "preprint_primary_experiment",
+      "extraction": {
+        "stimulus": {
+          "state": "reported",
+          "value": "Separate 41.5 °C heat-probe, 25–45 °C Peltier pretreatment, 50 mN von Frey, and ~20–45 °C saline-ramp assays. Figure 1 caption says 30 s recovery after Peltier heat, while Methods paragraphs P26–P27 say 10 s; exact interval is unresolved.",
+          "reason": "The primary preprint separates the behavioral stimuli and epidermal imaging preparation; the two recovery timings conflict within the source.",
+          "checked_at": "2026-09-28",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12157477/",
+              "locator": "Figure 1 caption; Results P6–P10; Methods P26–P27"
+            }
+          ]
+        },
+        "neural_response": {
+          "state": "not_reported",
+          "value": null,
+          "reason": "The measured GCaMP6s heat-off response is from epidermal cells, not a direct stimulus-evoked nociceptor or other neural recording. C4da is used in a separate optogenetic behavioral control.",
+          "checked_at": "2026-09-28",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12157477/",
+              "locator": "Figure 2D; Methods > Epidermal calcium imaging; Figure 5"
+            }
+          ]
+        },
+        "behavior": {
+          "state": "reported",
+          "value": "Protective larval rolling is measured in separate intact-animal heat/force experiments. Figure 1E gives first versus second 41.5 °C probe latency 8.79 ± 3.36 s versus 3.40 ± 2.12 s for n=38 larvae; this is distinct from Figure 2D epidermal calcium (n=20 specimens per condition).",
+          "reason": "Figure-specific denominators are preserved; behavior and epidermal calcium are different preparations.",
+          "checked_at": "2026-09-28",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12157477/",
+              "locator": "Figure 1E; Figure 2D; Results P7 and P10"
+            }
+          ]
+        },
+        "pain_boundary": {
+          "state": "reported",
+          "value": "Epidermal heat-off calcium and larval protective rolling support assay-specific nociception/sensitization claims only. They do not measure subjective pain, human ECAP, SCS response, or clinical outcome. The document is bioRxiv v1 without a confirmed journal Version of Record on checked owner routes.",
+          "reason": "No cross-species or clinical inference follows from these fly assays.",
+          "checked_at": "2026-09-28",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12157477/",
+              "locator": "Abstract; Figures 1–5; Discussion; article metadata"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S839",
+      "source_role": "primary_experiment",
+      "extraction": {
+        "stimulus": {
+          "state": "reported",
+          "value": "Mid-third-instar Drosophila larvae were exposed to global cold-plate temperatures of 4–16 °C or a focal cold probe reaching 3 °C in separate assays.",
+          "reason": "The cold plate and focal probe are distinct stimulus preparations; temperature is the physical stimulus, not a pain label.",
+          "checked_at": "2026-09-28",
+          "locators": [
+            {
+              "url": "https://himmellab.org/docs/Turner_Armengol_et_al_2016.pdf",
+              "locator": "Results > Drosophila Larvae Contract in Response to Noxious Cold; Figure 1; Experimental Procedures > Cold Plate Assay and Cold Probe Assay"
+            }
+          ]
+        },
+        "neural_response": {
+          "state": "reported",
+          "value": "Class III multidendritic neurons showed cold-evoked GCaMP6 calcium fluorescence; Figure 2E/F reports n=20 per neuron. This is optical calcium activity, not an electrophysiological spike recording.",
+          "reason": "Figure-specific imaging denominator is separate from larval behavioral denominators.",
+          "checked_at": "2026-09-28",
+          "locators": [
+            {
+              "url": "https://himmellab.org/docs/Turner_Armengol_et_al_2016.pdf",
+              "locator": "Results > Cold Stimulation Results in Specific Ca2+ Responses within Class III md Neurons; Figure 2E–F and legend, pp. 3118–3120"
+            }
+          ]
+        },
+        "behavior": {
+          "state": "reported",
+          "value": "Cold exposure elicited larval contraction and related escape postures; silencing class III neurons attenuated cold-evoked contraction in separate behavior assays. Figure 1 uses cold-plate n=96–119 and cold-probe n=120, not the Figure 2 imaging denominator.",
+          "reason": "The intervention and behavior readout support a bounded class III circuit role for the tested cold assays without equating calcium and behavior cohorts.",
+          "checked_at": "2026-09-28",
+          "locators": [
+            {
+              "url": "https://himmellab.org/docs/Turner_Armengol_et_al_2016.pdf",
+              "locator": "Figures 1B/D and 4A–D with legends; Results > CIII Sensory Neurons Mediate Cold-Evoked CT Behavior"
+            }
+          ]
+        },
+        "pain_boundary": {
+          "state": "reported",
+          "value": "Noxious cold, class III calcium activity and protective larval behavior are distinct observables. The study does not measure subjective pain, human ECAP, SCS response or clinical outcome.",
+          "reason": "The primary experiments concern Drosophila larval nociception-related physiology and behavior only.",
+          "checked_at": "2026-09-28",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5140760/",
+              "locator": "Abstract; Results and Figures 1–6; Experimental Procedures"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S840",
+      "source_role": "primary_experiment_preprint",
+      "extraction": {
+        "stimulus": {
+          "state": "reported",
+          "value": "Mid-third-instar Drosophila larvae received non-contact local cooling of the head, midsection or tail during forward locomotion. The head assay compares ambient, cool 18 °C and cold 13 °C; midsection responses at 9 °C are a separate condition.",
+          "reason": "Probe temperature and stimulated body region define distinct physical exposures; neither is a subjective pain label.",
+          "checked_at": "2026-09-28",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12632497/",
+              "locator": "Results: A new approach to studying acute, cold-responsive behaviors; Figure 1A/C and legend; Results: The head of Drosophila larvae responds robustly to low temperatures"
+            }
+          ]
+        },
+        "neural_response": {
+          "state": "reported",
+          "value": "Dissected larval-head aC3da neurons showed cold-evoked GCaMP6m calcium activity; Figure 2 reports 32 neuronal clusters per tested temperature. Clumsy mutant/RNAi perturbations reduced the cold response in separate Figure 4 assays. This is optical calcium activity, not an electrical spike recording.",
+          "reason": "Neuron-cluster imaging denominators and mutant preparations are separate from larval behavioral cohorts.",
+          "checked_at": "2026-09-28",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12632497/",
+              "locator": "Results: aC3da neurons are cold-sensitive; Figure 2D and legend; Results: Clumsy is required for the cold sensitivity of aC3da; Figure 4"
+            }
+          ]
+        },
+        "behavior": {
+          "state": "reported",
+          "value": "The main behavioral endpoint is larval head withdrawal and turning away from the non-contact cold probe. Figure 1C wild-type cohorts are ambient n=100, 18 °C n=109 and 13 °C n=71. Body-wall midsection avoidance was weak under this non-contact assay, and tail response was not notable. This is not the S839 body-wall contraction endpoint.",
+          "reason": "Behavioral cohorts and assay geometry are kept separate from S839 cold-plate/probe contraction experiments.",
+          "checked_at": "2026-09-28",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12632497/",
+              "locator": "Results: The head of Drosophila larvae responds robustly to low temperatures; Figure 1B/C and legend; Figure S2 descriptions"
+            }
+          ]
+        },
+        "pain_boundary": {
+          "state": "reported",
+          "value": "The bioRxiv v1 preprint reports larval cold exposure, neural calcium responses and protective head avoidance as distinct observables. It does not measure subjective human pain, human ECAP, SCS response or clinical outcome; head avoidance does not refute S839 body-wall contraction under a different cold assay.",
+          "reason": "Primary preprint and its cited S839 paper use distinct stimulus geometries and behavioral endpoints; PMC identifies this as a preprint without peer review.",
+          "checked_at": "2026-09-28",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12632497/",
+              "locator": "Preprint notice; Abstract; Results and Figures 1-5; References item 15 cites S839 DOI 10.1016/j.cub.2016.09.038"
             }
           ]
         }

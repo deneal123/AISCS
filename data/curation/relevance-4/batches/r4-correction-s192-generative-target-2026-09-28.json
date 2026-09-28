@@ -1,0 +1,82 @@
+{
+  "meta": {
+    "batch_id": "r4-correction-s192-generative-target-2026-09-28",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-28",
+    "scope": "Correct S192 generative facial-expression target and separately identify BioVid participants and clinician realism review",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-28"
+  },
+  "source_ids": ["S192"],
+  "records": [{
+    "id": "S192",
+    "title": "PainDiffusion: Learning to Express Pain",
+    "year": 2025,
+    "source_type": "генеративные_модели"
+  }],
+  "decisions": [{
+    "source_id": "S192",
+    "decision": "verified_primary",
+    "checked_at": "2026-09-28",
+    "full_text_status": "checked",
+    "searches": [{
+      "service": "Author arXiv v3 full text",
+      "query": "PainDiffusion BioVid Part C generated expression target participant split clinician avatar realism evaluation",
+      "url": "https://arxiv.org/html/2409.11635v3",
+      "accessed_at": "2026-09-28"
+    }],
+    "updates": {
+      "identifiers": {"doi": "10.1109/IROS60139.2025.11247588"},
+      "ограничения": "PainDiffusion synthesizes facial-expression trajectories conditioned on stimulus and configuration; it does not classify pain. BioVid Part C has 87 participants (61 training, 26 validation). A separate evaluation with 18 Japanese rehabilitation clinicians rated a virtual avatar driven by an elbow device; the 31.2% +/- 4.8% win rate measures perceived video realism against ground truth, not pain-recognition accuracy, real-patient training effectiveness or treatment benefit.",
+      "evidence": {
+        "species": "human",
+        "population": "87 BioVid HeatPain Part C participants under experimental heat stimulation; 18 Japanese rehabilitation clinicians in a separate virtual-avatar evaluation",
+        "sample_size": "87 BioVid participants (61 training, 26 validation); 18 clinicians in qualitative evaluation",
+        "target_construct": "facial_pain_expression",
+        "target_label": "Generated facial-expression parameter trajectory (FLAME/PSPI); heat-stimulus level is an input condition"
+      },
+      "validation": {
+        "checked_at": "2026-09-28",
+        "notes": "Author arXiv v3 Sections III, IV-A and IV-C: the model generates facial-expression parameters from stimulus and expression/emotion conditions. BioVid Part C has 87 participants split 61/26 by subject. The separate 18-clinician exercise used a virtual avatar and elbow robot; 31.2% +/- 4.8% is a perceived-realism video preference against ground truth. No pain classifier, real-patient training effectiveness or treatment benefit is tested."
+      },
+      "field_resolution": {
+        "ограничения": {
+          "state": "reported", "value": "PainDiffusion synthesizes facial-expression trajectories conditioned on stimulus and configuration; it does not classify pain. BioVid Part C has 87 participants (61 training, 26 validation). A separate evaluation with 18 Japanese rehabilitation clinicians rated a virtual avatar driven by an elbow device; the 31.2% +/- 4.8% win rate measures perceived video realism against ground truth, not pain-recognition accuracy, real-patient training effectiveness or treatment benefit.",
+          "reason": "The primary paper reports a generative and realism evaluation, not pain classification or clinical effectiveness.", "checked_at": "2026-09-28",
+          "locators": [{"url": "https://arxiv.org/html/2409.11635v3", "locator": "Abstract; Sections III-F, IV-A, IV-C; Figure 4"}]
+        },
+        "evidence.species": {
+          "state": "reported", "value": "human", "reason": "BioVid Part C source participants and clinician evaluators are human.", "checked_at": "2026-09-28",
+          "locators": [{"url": "https://arxiv.org/html/2409.11635v3", "locator": "Section IV-A, Dataset; Section IV-C, Qualitative results"}]
+        },
+        "evidence.population": {
+          "state": "reported", "value": "87 BioVid HeatPain Part C participants under experimental heat stimulation; 18 Japanese rehabilitation clinicians in a separate virtual-avatar evaluation", "reason": "The two groups perform different roles and must not be pooled as one clinical cohort.", "checked_at": "2026-09-28",
+          "locators": [{"url": "https://arxiv.org/html/2409.11635v3", "locator": "Sections III-F, IV-A and IV-C"}]
+        },
+        "evidence.sample_size": {
+          "state": "reported", "value": "87 BioVid participants (61 training, 26 validation); 18 clinicians in qualitative evaluation", "reason": "The primary dataset split and separate clinician assessment are explicitly reported.", "checked_at": "2026-09-28",
+          "locators": [{"url": "https://arxiv.org/html/2409.11635v3", "locator": "Sections IV-A and IV-B, Dataset and Qualitative experiment setup"}]
+        },
+        "evidence.target_construct": {
+          "state": "reported", "value": "facial_pain_expression", "reason": "The predicted output is a generated facial-expression trajectory, while heat-stimulus level is a conditioning input.", "checked_at": "2026-09-28",
+          "locators": [{"url": "https://arxiv.org/html/2409.11635v3", "locator": "Figure 1; Sections III and IV-A, final paragraph"}]
+        },
+        "evidence.target_label": {
+          "state": "reported", "value": "Generated facial-expression parameter trajectory (FLAME/PSPI); heat-stimulus level is an input condition", "reason": "The model generates facial parameters and the evaluation scores expression realism, not a pain class.", "checked_at": "2026-09-28",
+          "locators": [{"url": "https://arxiv.org/html/2409.11635v3", "locator": "Figure 1; Sections IV-A and IV-C"}]
+        },
+        "validation.checked_at": {
+          "state": "reported", "value": "2026-09-28", "reason": "Author version 3 full text was checked on this date.", "checked_at": "2026-09-28",
+          "locators": [{"url": "https://arxiv.org/html/2409.11635v3", "locator": "Author full text v3"}]
+        },
+        "validation.notes": {
+          "state": "reported", "value": "Author arXiv v3 Sections III, IV-A and IV-C: the model generates facial-expression parameters from stimulus and expression/emotion conditions. BioVid Part C has 87 participants split 61/26 by subject. The separate 18-clinician exercise used a virtual avatar and elbow robot; 31.2% +/- 4.8% is a perceived-realism video preference against ground truth. No pain classifier, real-patient training effectiveness or treatment benefit is tested.",
+          "reason": "The source-card summary now matches the generative target and distinct evaluation populations.", "checked_at": "2026-09-28",
+          "locators": [{"url": "https://arxiv.org/html/2409.11635v3", "locator": "Abstract; Sections III-F, IV-A and IV-C"}]
+        }
+      }
+    },
+    "claims": [],
+    "notes": "Author arXiv v3 Sections III, IV-A and IV-C: the model generates facial-expression parameters from stimulus and expression/emotion conditions. BioVid Part C has 87 participants split 61/26 by subject. The separate 18-clinician exercise used a virtual avatar and elbow robot; 31.2% +/- 4.8% is a perceived-realism video preference against ground truth. No pain classifier, real-patient training effectiveness or treatment benefit is tested."
+  }]
+}

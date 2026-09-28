@@ -1,11 +1,78 @@
 {
   "meta": {
     "schema_version": "1.0.0",
-    "checked_at": "2026-09-26",
+    "checked_at": "2026-09-27",
     "status": "in_progress",
     "trial_count": 24,
     "scope": "NS-14 official registrations that mention ECAP telemetry and clinical outcomes",
     "decision": "registry_outcomes_identified_patient_linkage_and_data_access_unconfirmed"
+  },
+  "bounded_registry_refresh_2026_09_28": {
+    "checked_at": "2026-09-28",
+    "scope": "All 24 trial IDs in trials[] were fetched individually from the official ClinicalTrials.gov API v2 and compared with the current audit for overall status, last-update-posted date and posted-results flag. Four settled Picodex groups checked subsets and one group failed before start; the root-level check independently covered all 24 IDs.",
+    "primary_locator_pattern": "https://clinicaltrials.gov/api/v2/studies/{NCT_ID}: protocolSection.statusModule.overallStatus, lastUpdatePostDateStruct.date and top-level hasResults",
+    "checked_trial_count": 24,
+    "status_date_results_mismatches": 0,
+    "exception": "NCT06533917 has no protocolSection.ipdSharingStatementModule; the existing audit value not_registered represents absence of the field, not a registry change.",
+    "boundary": "This is a bounded registry-field refresh. It does not establish individual patient linkage, reuse rights, an available ECAP/outcome dataset, or citation-search saturation; PA-06 and RES-04/05 remain open."
+  },
+  "cohort_network_review_2026_09_27": {
+    "checked_at": "2026-09-27",
+    "basis": "Official ClinicalTrials.gov API v2 protocolSection.contactsLocationsModule.locations and sponsorCollaboratorsModule; site and investigator relationships are leads for owner confirmation, not participant identity evidence.",
+    "edges": [
+      {
+        "trial_ids": [
+          "NCT04627974",
+          "NCT06359561",
+          "NCT07304401",
+          "NCT07211308"
+        ],
+        "finding": "Rijnstate appears as Velp in NCT04627974 and as Arnhem/Rijnstate Hospital or Rijnstate ziekenhuis in the other three. The registrations involve different sponsors, indications or protocols; no common participant identifiers or re-enrollment statement were found in these records.",
+        "locators": [
+          {
+            "url": "https://clinicaltrials.gov/api/v2/studies/NCT04627974",
+            "locator": "protocolSection.contactsLocationsModule.locations: Rijnstate, Velp; sponsorCollaboratorsModule.leadSponsor; ipdSharingStatementModule.ipdSharing=NO"
+          },
+          {
+            "url": "https://clinicaltrials.gov/api/v2/studies/NCT06359561",
+            "locator": "protocolSection.contactsLocationsModule.locations: Rijnstate Hospital, Arnhem; identificationModule.orgStudyIdInfo.id=2023-2201 - Cervical lead"
+          },
+          {
+            "url": "https://clinicaltrials.gov/api/v2/studies/NCT07304401",
+            "locator": "protocolSection.contactsLocationsModule.locations: Rijnstate Hospital, Arnhem; identificationModule.orgStudyIdInfo.id=2025-2667"
+          },
+          {
+            "url": "https://clinicaltrials.gov/api/v2/studies/NCT07211308",
+            "locator": "protocolSection.contactsLocationsModule.locations: Rijnstate ziekenhuis, Arnhem; identificationModule.orgStudyIdInfo.id=ENDLESS; ipdSharingStatementModule.ipdSharing=UNDECIDED"
+          }
+        ],
+        "status": "shared_site_only_participant_overlap_unresolved"
+      },
+      {
+        "trial_ids": [
+          "NCT06229470",
+          "NCT07209514",
+          "NCT07704931"
+        ],
+        "finding": "The first record lists Tricity Research Center, LLC in Grand Island; the latter two list Grand Island Pain Relief Center and TriCity Research Center as sponsor. The indications and organization study IDs differ; site network similarity does not establish shared patients. NCT07704931 does not itself establish recorded ECAP data.",
+        "locators": [
+          {
+            "url": "https://clinicaltrials.gov/api/v2/studies/NCT06229470",
+            "locator": "protocolSection.contactsLocationsModule.locations: Tricity Research Center, LLC, Grand Island; identificationModule.orgStudyIdInfo.id=D103977"
+          },
+          {
+            "url": "https://clinicaltrials.gov/api/v2/studies/NCT07209514",
+            "locator": "protocolSection.contactsLocationsModule.locations: Grand Island Pain Relief Center; leadSponsor=TriCity Research Center; orgStudyIdInfo.id=IIS-25-MTR-001"
+          },
+          {
+            "url": "https://clinicaltrials.gov/api/v2/studies/NCT07704931",
+            "locator": "protocolSection.contactsLocationsModule.locations: Grand Island Pain Relief Center; leadSponsor=TriCity Research Center; orgStudyIdInfo.id=SAL 002"
+          }
+        ],
+        "status": "shared_site_network_only_participant_overlap_unresolved"
+      }
+    ],
+    "decision": "Do not count registrations as independent cohorts based on registry ID alone; do not merge participants based on shared sites. Owner confirmation and participant linkage remain required."
   },
   "trials": [
     {
@@ -60,7 +127,7 @@
       "registered_other_outcomes": "Change in pain, PROMIS-29, PROMIS-10 Global, POMS, PGIC and therapy satisfaction at end of trial and 1/3/6/12/18/24 months post-implant",
       "patient_linkage": "not_established_from_registry",
       "data_availability": "registry_record_with_aggregate_results_IPD_NO",
-      "boundary": "ECAP and pain outcomes are registered in one trial and aggregate results are posted, but no released participant key or linked waveforms are identified; IPD=NO.",
+      "boundary": "ECAP and pain outcomes are registered in one trial and aggregate results are posted, but no released participant key or linked waveforms are identified; IPD=NO. The registered primary ECAP dose-ratio result is median 1.3 (IQR 1.1–1.5), n=208 completers at 12 months; this ratio is neural dosing relative to ECAP threshold, not a pain score or participant-level ECAP–outcome linkage.",
       "locators": [
         {
           "url": "https://clinicaltrials.gov/api/v2/studies/NCT04319887",
@@ -77,6 +144,10 @@
         {
           "url": "https://clinicaltrials.gov/api/v2/studies/NCT04319887",
           "locator": "protocolSection.ipdSharingStatementModule.ipdSharing"
+        },
+        {
+          "url": "https://clinicaltrials.gov/api/v2/studies/NCT04319887",
+          "locator": "resultsSection.outcomeMeasuresModule.outcomeMeasures[0]: description, timeFrame, denoms, classes/categories/measurements"
         }
       ]
     },
@@ -413,6 +484,7 @@
       "patient_linkage": "not_established_from_registry",
       "data_availability": "registry_metadata_only_no_results",
       "boundary": "Registered ECAP and pain measures do not provide a downloadable participant-linked waveform/outcome table. Cohort independence from other registrations has not been demonstrated.",
+      "cohort_overlap": "NCT07502612 is a same-site Brai²n/ZAS Augustinus pilot with the same principal investigator and contact, a different organization study ID, and overlapping PSPS-T2/Evoke medication-tapering eligibility. NCT07413731's detailedDescription explicitly describes a prior prospective pilot at ZAS St. Augustinus after medication reduction, but does not give its NCT ID or participant identifiers. Whether NCT07502612 is that pilot and whether any participant was re-enrolled remain unresolved; do not count the two registrations as independent cohorts.",
       "locators": [
         {
           "url": "https://clinicaltrials.gov/api/v2/studies/NCT07413731",
@@ -425,6 +497,14 @@
         {
           "url": "https://clinicaltrials.gov/api/v2/studies/NCT07413731",
           "locator": "protocolSection.ipdSharingStatementModule.ipdSharing; hasResults=false"
+        },
+        {
+          "url": "https://clinicaltrials.gov/api/v2/studies/NCT07413731",
+          "locator": "protocolSection.identificationModule.orgStudyIdInfo.id, designModule.studyType/enrollmentInfo, statusModule.startDateStruct, sponsorCollaboratorsModule.responsibleParty, contactsLocationsModule.locations[0], eligibilityModule.eligibilityCriteria; compared with NCT07502612"
+        },
+        {
+          "url": "https://clinicaltrials.gov/api/v2/studies/NCT07413731",
+          "locator": "protocolSection.descriptionModule.detailedDescription, paragraph beginning 'Recent pilot data and case reports': prospective pilot performed at ZAS St. Augustinus Hospital; no pilot NCT ID or participant identifiers"
         }
       ]
     },
@@ -442,6 +522,7 @@
       "patient_linkage": "not_established_from_registry",
       "data_availability": "registry_metadata_only_no_results",
       "boundary": "Registered ECAP and pain measures do not provide a downloadable participant-linked waveform/outcome table. Cohort independence from other registrations has not been demonstrated.",
+      "cohort_overlap": "NCT07413731 is a same-site Brai²n/ZAS Augustinus study with the same principal investigator and contact, a different organization study ID, and overlapping PSPS-T2/Evoke medication-tapering eligibility. Its detailedDescription explicitly mentions a prior ZAS St. Augustinus prospective pilot without naming NCT07502612. This 20-person observational pilot began earlier by registry dates; shared or distinct participants remain unverified.",
       "locators": [
         {
           "url": "https://clinicaltrials.gov/api/v2/studies/NCT07502612",
@@ -454,6 +535,10 @@
         {
           "url": "https://clinicaltrials.gov/api/v2/studies/NCT07502612",
           "locator": "protocolSection.ipdSharingStatementModule.ipdSharing; hasResults=false"
+        },
+        {
+          "url": "https://clinicaltrials.gov/api/v2/studies/NCT07502612",
+          "locator": "protocolSection.identificationModule.orgStudyIdInfo.id, designModule.studyType/enrollmentInfo, statusModule.startDateStruct, sponsorCollaboratorsModule.responsibleParty, contactsLocationsModule.locations[0], eligibilityModule.eligibilityCriteria; compared with NCT07413731"
         }
       ]
     },
@@ -490,7 +575,9 @@
     },
     {
       "trial_id": "NCT04765735",
-      "source_ids": [],
+      "source_ids": [
+        "S239"
+      ],
       "registry_status": "COMPLETED",
       "last_update_posted": "2024-02-26",
       "lead_sponsor": "MedtronicNeuro",
@@ -502,7 +589,7 @@
       "ecap_role": "ECAP is in the official study title and eligibility requires clear, measurable ECAPs; the registered endpoint compares stimulation sensation, not pain intensity.",
       "patient_linkage": "not_established_from_registry",
       "data_availability": "registry_record_with_aggregate_results_IPD_not_reported",
-      "boundary": "Aggregate results are posted. The API record provides no affirmative IPD sharing statement or linked participant-level ECAP/outcome table. This is an acute stimulation-tolerance comparator, not a longitudinal pain outcome study.",
+      "boundary": "Aggregate results are posted. The API record provides no affirmative IPD sharing statement or linked participant-level ECAP/outcome table. This is an acute stimulation-tolerance comparator, not a longitudinal pain outcome study. Registry protocol enrollment is 52 actual; participantFlowModule.preAssignmentDetails states that 10 exited before randomization, leaving 42 randomized in the posted participant-flow groups (22+20) and publication intent-to-treat cohort. Reasons for the exits are not reported in that field.",
       "cohort_overlap": "not_assessed; no cross-record participant linkage is reported.",
       "locators": [
         {
@@ -515,13 +602,19 @@
         },
         {
           "url": "https://clinicaltrials.gov/api/v2/studies/NCT04765735",
+          "locator": "protocolSection.designModule.enrollmentInfo.count=52; resultsSection.participantFlowModule.preAssignmentDetails states 10 exited before randomization; periods[0].milestones STARTED and COMPLETED each total 22+20=42"
+        },
+        {
+          "url": "https://clinicaltrials.gov/api/v2/studies/NCT04765735",
           "locator": "resultsSection; protocolSection.ipdSharingStatementModule.ipdSharing absent; hasResults=true"
         }
       ]
     },
     {
       "trial_id": "NCT05177354",
-      "source_ids": [],
+      "source_ids": [
+        "S826"
+      ],
       "registry_status": "COMPLETED",
       "last_update_posted": "2025-11-05",
       "lead_sponsor": "MedtronicNeuro",
@@ -535,6 +628,20 @@
       "data_availability": "registry_record_with_aggregate_results_IPD_NO",
       "boundary": "Aggregate results are posted and IPD=NO. No participant-level ECAP and pain linkage or export is available from this registration. Do not infer the Neuro Sense algorithm's exact ECAP data structure from its product name.",
       "cohort_overlap": "not_assessed; this record does not establish a distinct cohort from other SCS registrations.",
+      "primary_publication_review_2026_09_27": {
+        "source_id": "S826",
+        "doi": "10.1093/pm/pnaf058",
+        "full_text_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12585107/fullTextXML",
+        "primary_locators": "Methods, Study design and Statistics/Secondary objectives; Results, Subject disposition; Table 2; ClinicalTrials.gov resultsSection.outcomeMeasuresModule for NCT05177354",
+        "verified_disposition": "94 enrolled, 75 trialed, 60 implanted and 54 completed the three-month visit. The randomized, blinded crossover compared CL versus OL only for in-clinic overstimulation, 25/28 improved at one month. Three-month pain response was a separate single-arm secondary endpoint: 44/51 overall low-back/leg, 38/43 low-back and 30/41 leg achieved at least 50% VAS reduction. Registry aggregate counts and article percentages agree.",
+        "boundary": "This publication and NCT05177354 describe the same cohort. No long-term randomized pain comparison, individual ECAP-to-pain dataset, ECAP-based pain predictor or external predictive validation is established; registry IPD=NO."
+      },
+      "same_cohort_12_month_poster_2026_09_27": {
+        "url": "https://www.medtronic.com/content/dam/medtronic-wide/public/united-states/education-training-research/clinical-evidence/scs-closed-loop-12-mo-study-outcomes-nans-poster.pdf",
+        "locator": "Author NANS poster, p. 1, Subject Disposition to 12M follow-up; Detectable ECAPs during in-clinic testing; Pain Reduction and Composite Outcome",
+        "verified_counts": "Same NCT05177354 cohort: 94 enrolled, 75 trialed, 60 implanted, 54 completed 3 months and 46 completed 12 months. At 12 months 43/46 had clear measurable ECAPs during in-clinic testing; the poster reports patient pain/function outcomes in separate aggregate panels.",
+        "boundary": "A one-page author/company poster, not independent cohort or patient-level paired ECAP-pain file. Its descriptive 12-month outcomes are not a randomized long-term comparison or ECAP-based predictor."
+      },
       "locators": [
         {
           "url": "https://clinicaltrials.gov/api/v2/studies/NCT05177354",
@@ -657,7 +764,7 @@
       "ecap_role": "ECAPs are explicitly included in registered technical IPG outcomes for a DTM SCS study; no claim that the stimulation algorithm is ECAP-controlled.",
       "patient_linkage": "not_established_from_registry",
       "data_availability": "registry_metadata_only_no_results",
-      "boundary": "Registry status is RECRUITING, hasResults=false and IPD=UNDECIDED. No released participant-linked ECAP/pain dataset is identified; cohort overlap with other DTM SCS registrations is unknown.",
+      "boundary": "Registry status is RECRUITING, hasResults=false and IPD=UNDECIDED. ClinicalTrials.gov lists Goudman et al. 2026, PMID 42688391, DOI 10.3389/fpain.2026.1922595 as a DERIVED reference, and the article identifies ENDLESS as its protocol; no canonical S source card is assigned yet. No released participant-linked ECAP/pain dataset is identified; cohort overlap with other DTM SCS registrations is unknown.",
       "cohort_overlap": "not_assessed; shared technology or indication does not prove independent participants.",
       "locators": [
         {
@@ -671,6 +778,14 @@
         {
           "url": "https://clinicaltrials.gov/api/v2/studies/NCT07211308",
           "locator": "protocolSection.ipdSharingStatementModule.ipdSharing; hasResults"
+        },
+        {
+          "url": "https://clinicaltrials.gov/api/v2/studies/NCT07211308",
+          "locator": "protocolSection.referencesModule.references: DERIVED PMID 42688391, Front Pain Res 2026 article 1922595, DOI 10.3389/fpain.2026.1922595; bibliographic trial-protocol link, not results or a data release"
+        },
+        {
+          "url": "https://www.frontiersin.org/journals/pain-research/articles/10.3389/fpain.2026.1922595/full",
+          "locator": "ENDLESS protocol, Methods 3.4.3 and 3.6-3.7 (ECAP/device records and longitudinal outcomes planned), Dissemination plan 6 (post-completion controlled data access only may be considered subject to approvals and agreement)"
         }
       ]
     },
@@ -875,6 +990,304 @@
         "reason": "Panorama registration compares automatic with manual SCS control and includes patient pain outcomes, but the accessible protocol does not explicitly name ECAP measurement or telemetry; retain as clinical closed-loop context without treating it as linked ECAP/pain data.",
         "url": "https://clinicaltrials.gov/api/v2/studies/NCT02161627",
         "locator": "protocolSection.descriptionModule; armsInterventionsModule.interventions; outcomesModule.primaryOutcomes and secondaryOutcomes"
+      },
+      {
+        "trial_id": "NCT06421350",
+        "reason": "Closed-loop SCS for CRPS with clinical pain/function outcomes, but the exact registration does not name ECAP sensing or telemetry. Target activation amplitude is not equivalent evidence of ECAP. No ECAP/pain patient linkage can be established from this record.",
+        "url": "https://clinicaltrials.gov/api/v2/studies/NCT06421350",
+        "locator": "protocolSection.identificationModule.briefTitle; statusModule.overallStatus; sponsorCollaboratorsModule.leadSponsor; armsInterventionsModule.interventions; descriptionModule.briefSummary; outcomesModule.primaryOutcomes,secondaryOutcomes,otherOutcomes; ipdSharingStatementModule.ipdSharing",
+        "screened_at": "2026-09-26",
+        "checked_intervention_domain": "SCS; closed-loop device",
+        "registered_outcome_boundary": "CRPS severity and target activation amplitude are primary; pain VAS and patient-reported measures are secondary."
+      },
+      {
+        "trial_id": "NCT03014583",
+        "reason": "Conventional, burst, and high-frequency open-loop SCS waveform comparison for failed-back-surgery syndrome. No ECAP-guided feedback/telemetry is registered; pain outcomes do not establish ECAP linkage.",
+        "url": "https://clinicaltrials.gov/api/v2/studies/NCT03014583",
+        "locator": "protocolSection.identificationModule.briefTitle; statusModule.overallStatus; sponsorCollaboratorsModule.leadSponsor; armsInterventionsModule.interventions; descriptionModule.briefSummary; outcomesModule.primaryOutcomes,secondaryOutcomes,otherOutcomes; ipdSharingStatementModule.ipdSharing",
+        "screened_at": "2026-09-26",
+        "checked_intervention_domain": "SCS; waveform comparison",
+        "registered_outcome_boundary": "Pain VAS primary; leg/back pain, disability and quality-of-life outcomes secondary."
+      },
+      {
+        "trial_id": "NCT05183152",
+        "reason": "Non-invasive EEG/BCI rehabilitation with transcutaneous electrical spinal stimulation and NMES feedback. This is not implanted analgesic SCS and does not register ECAP telemetry; pain outcome is not a linked ECAP endpoint.",
+        "url": "https://clinicaltrials.gov/api/v2/studies/NCT05183152",
+        "locator": "protocolSection.identificationModule.briefTitle; statusModule.overallStatus; sponsorCollaboratorsModule.leadSponsor; armsInterventionsModule.interventions; descriptionModule.briefSummary; outcomesModule.primaryOutcomes,secondaryOutcomes,otherOutcomes; ipdSharingStatementModule.ipdSharing",
+        "screened_at": "2026-09-26",
+        "checked_intervention_domain": "BCI; TESS; NMES",
+        "registered_outcome_boundary": "Motor/BCI outcomes; no clinical pain endpoint."
+      },
+      {
+        "trial_id": "NCT02936453",
+        "reason": "Closed-loop epidural electrical stimulation plus robot-assisted gait rehabilitation after spinal cord injury. This is a motor-rehabilitation cohort, not ECAP-controlled analgesic SCS; pain is ancillary and ECAP is not registered.",
+        "url": "https://clinicaltrials.gov/api/v2/studies/NCT02936453",
+        "locator": "protocolSection.identificationModule.briefTitle; statusModule.overallStatus; sponsorCollaboratorsModule.leadSponsor; armsInterventionsModule.interventions; descriptionModule.briefSummary; outcomesModule.primaryOutcomes,secondaryOutcomes,otherOutcomes; ipdSharingStatementModule.ipdSharing",
+        "screened_at": "2026-09-26",
+        "checked_intervention_domain": "Epidural electrical stimulation; rehabilitation",
+        "registered_outcome_boundary": "Walking/function primary; short pain assessment and quality-of-life measures are ancillary."
+      },
+      {
+        "trial_id": "NCT07689227",
+        "reason": "Closed-loop vagus nerve stimulation paired with gait rehabilitation after spinal cord injury. Device/site is VNS, not spinal-cord stimulation; no ECAP telemetry is registered.",
+        "url": "https://clinicaltrials.gov/api/v2/studies/NCT07689227",
+        "locator": "protocolSection.identificationModule.briefTitle; statusModule.overallStatus; sponsorCollaboratorsModule.leadSponsor; armsInterventionsModule.interventions; descriptionModule.briefSummary; outcomesModule.primaryOutcomes,secondaryOutcomes,otherOutcomes; ipdSharingStatementModule.ipdSharing",
+        "screened_at": "2026-09-26",
+        "checked_intervention_domain": "Vagus nerve stimulation; gait rehabilitation",
+        "registered_outcome_boundary": "Safety/feasibility primary; gait and SCI pain measures secondary; no ECAP linkage."
+      },
+      {
+        "trial_id": "NCT04144972",
+        "reason": "Closed-loop deep-brain stimulation for refractory chronic pain. Biomarkers are brain/DBS signals, not spinal ECAP telemetry; no ECAP/SCS-linked patient table is described.",
+        "url": "https://clinicaltrials.gov/api/v2/studies/NCT04144972",
+        "locator": "protocolSection.identificationModule.briefTitle; statusModule.overallStatus; sponsorCollaboratorsModule.leadSponsor; armsInterventionsModule.interventions; descriptionModule.briefSummary; outcomesModule.primaryOutcomes,secondaryOutcomes,otherOutcomes; ipdSharingStatementModule.ipdSharing",
+        "screened_at": "2026-09-26",
+        "checked_intervention_domain": "Deep brain stimulation",
+        "registered_outcome_boundary": "Feasibility primary; pain measures exploratory; no ECAP endpoint."
+      },
+      {
+        "trial_id": "NCT03029884",
+        "reason": "Closed-loop deep-brain stimulation for neuropathic pain. This is a DBS cohort; pain outcomes are registered but ECAP/SCS telemetry is not. Aggregate registry results do not establish an ECAP-linked dataset.",
+        "url": "https://clinicaltrials.gov/api/v2/studies/NCT03029884",
+        "locator": "protocolSection.identificationModule.briefTitle; statusModule.overallStatus; sponsorCollaboratorsModule.leadSponsor; armsInterventionsModule.interventions; descriptionModule.briefSummary; outcomesModule.primaryOutcomes,secondaryOutcomes,otherOutcomes; ipdSharingStatementModule.ipdSharing",
+        "screened_at": "2026-09-26",
+        "checked_intervention_domain": "Deep brain stimulation",
+        "registered_outcome_boundary": "VAS pain primary; neuropathic pain questionnaire secondary; no ECAP endpoint."
+      },
+      {
+        "trial_id": "NCT06996574",
+        "reason": "Randomized comparison of all-in-one SCS implantation versus a separate screening trial for chronic neuropathic pain. Registry describes procedure pathway and pain outcome, not ECAP sensing/telemetry or linked ECAP/pain observations.",
+        "url": "https://clinicaltrials.gov/api/v2/studies/NCT06996574",
+        "locator": "protocolSection.identificationModule.briefTitle; statusModule.overallStatus; sponsorCollaboratorsModule.leadSponsor; armsInterventionsModule.interventions; descriptionModule.briefSummary; outcomesModule.primaryOutcomes,secondaryOutcomes,otherOutcomes; ipdSharingStatementModule.ipdSharing",
+        "screened_at": "2026-09-26",
+        "checked_intervention_domain": "SCS procedure pathway comparison",
+        "registered_outcome_boundary": "NRS pain primary; no ECAP endpoint."
+      },
+      {
+        "trial_id": "NCT05994846",
+        "reason": "Mixed non-invasive electrical/magnetic neuromodulation for chronic spinal-cord-injury mobility. The registry does not identify ECAP-guided implanted SCS; pain is secondary/contextual.",
+        "url": "https://clinicaltrials.gov/api/v2/studies/NCT05994846",
+        "locator": "protocolSection.identificationModule.briefTitle; statusModule.overallStatus; sponsorCollaboratorsModule.leadSponsor; armsInterventionsModule.interventions; descriptionModule.briefSummary; outcomesModule.primaryOutcomes,secondaryOutcomes,otherOutcomes; ipdSharingStatementModule.ipdSharing",
+        "screened_at": "2026-09-26",
+        "checked_intervention_domain": "RISES-T electrical/magnetic neuromodulation",
+        "registered_outcome_boundary": "Mobility primary; pain interference/NRS secondary; no ECAP endpoint."
+      },
+      {
+        "trial_id": "NCT07457645",
+        "reason": "Implanted BCI and epidural stimulation for motor recovery in tetraplegia; VAS is secondary. This is a motor neuroprosthesis/recovery protocol, not analgesic ECAP-controlled SCS; no ECAP telemetry is registered.",
+        "url": "https://clinicaltrials.gov/api/v2/studies/NCT07457645",
+        "locator": "protocolSection.identificationModule.briefTitle; statusModule.overallStatus; sponsorCollaboratorsModule.leadSponsor; armsInterventionsModule.interventions; descriptionModule.briefSummary; outcomesModule.primaryOutcomes,secondaryOutcomes,otherOutcomes; ipdSharingStatementModule.ipdSharing",
+        "screened_at": "2026-09-26",
+        "checked_intervention_domain": "Intracranial BCI; epidural stimulation for motor recovery",
+        "registered_outcome_boundary": "Grasping/motor outcomes primary; VAS secondary; no ECAP endpoint."
+      },
+      {
+        "trial_id": "NCT02684201",
+        "reason": "Epidural SCS for phantom-limb pain/sensory restoration. Exact record has evoked percepts, stimulation thresholds and pain ratings, but contains no ECAP or electrically evoked compound-action-potential measurement. Registry IPD=YES and aggregate results exist; neither establishes ECAP-linked data.",
+        "url": "https://clinicaltrials.gov/api/v2/studies/NCT02684201",
+        "locator": "protocolSection.identificationModule.briefTitle; statusModule.overallStatus; sponsorCollaboratorsModule.leadSponsor; armsInterventionsModule.interventions; descriptionModule.briefSummary; outcomesModule.primaryOutcomes,secondaryOutcomes,otherOutcomes; ipdSharingStatementModule.ipdSharing; hasResults",
+        "screened_at": "2026-09-26",
+        "registry_status": "COMPLETED",
+        "registry_ipd_sharing": "YES",
+        "registry_has_results": true,
+        "checked_intervention_domain": "SCS; sensory restoration/prosthetic control",
+        "registered_outcome_boundary": "Pain ratings secondary; ECAP not registered.",
+        "prefilter_result": "high-recall lexical candidate; exact-record review complete"
+      },
+      {
+        "trial_id": "NCT03027947",
+        "reason": "Spinal-root/SCS for lower-limb amputation function; evoked sensory/neurophysiological thresholds and pain ratings are listed, but no ECAP measurement or ECAP-guided control is registered. IPD=YES is a registry sharing field, not an accessible linked dataset.",
+        "url": "https://clinicaltrials.gov/api/v2/studies/NCT03027947",
+        "locator": "protocolSection.identificationModule.briefTitle; statusModule.overallStatus; sponsorCollaboratorsModule.leadSponsor; armsInterventionsModule.interventions; descriptionModule.briefSummary; outcomesModule.primaryOutcomes,secondaryOutcomes,otherOutcomes; ipdSharingStatementModule.ipdSharing; hasResults",
+        "screened_at": "2026-09-26",
+        "registry_status": "COMPLETED",
+        "registry_ipd_sharing": "YES",
+        "registry_has_results": false,
+        "checked_intervention_domain": "SCS; function restoration",
+        "registered_outcome_boundary": "Pain ratings secondary; ECAP not registered.",
+        "prefilter_result": "high-recall lexical candidate; exact-record review complete"
+      },
+      {
+        "trial_id": "NCT04547582",
+        "reason": "90-day SCS safety/function study for lower-limb amputees. Evoked sensory percepts/neurophysiological responses and phantom-limb pain are recorded, but no ECAP measurement is named. IPD=YES does not create ECAP/pain linkage.",
+        "url": "https://clinicaltrials.gov/api/v2/studies/NCT04547582",
+        "locator": "protocolSection.identificationModule.briefTitle; statusModule.overallStatus; sponsorCollaboratorsModule.leadSponsor; armsInterventionsModule.interventions; descriptionModule.briefSummary; outcomesModule.primaryOutcomes,secondaryOutcomes,otherOutcomes; ipdSharingStatementModule.ipdSharing; hasResults",
+        "screened_at": "2026-09-26",
+        "registry_status": "TERMINATED",
+        "registry_ipd_sharing": "YES",
+        "registry_has_results": true,
+        "checked_intervention_domain": "SCS; sensory/prosthetic function",
+        "registered_outcome_boundary": "Phantom-limb pain secondary; ECAP not registered.",
+        "prefilter_result": "high-recall lexical candidate; exact-record review complete"
+      },
+      {
+        "trial_id": "NCT04725006",
+        "reason": "Dorsal-root stimulation study with evoked percept thresholds; no clinical pain outcome and no ECAP endpoint are registered.",
+        "url": "https://clinicaltrials.gov/api/v2/studies/NCT04725006",
+        "locator": "protocolSection.identificationModule.briefTitle; statusModule.overallStatus; sponsorCollaboratorsModule.leadSponsor; armsInterventionsModule.interventions; descriptionModule.briefSummary; outcomesModule.primaryOutcomes,secondaryOutcomes,otherOutcomes; ipdSharingStatementModule.ipdSharing; hasResults",
+        "screened_at": "2026-09-26",
+        "registry_status": "WITHDRAWN",
+        "registry_ipd_sharing": "NO",
+        "registry_has_results": false,
+        "checked_intervention_domain": "Spinal-root stimulation",
+        "registered_outcome_boundary": "No registered pain endpoint or ECAP.",
+        "prefilter_result": "high-recall lexical candidate; exact-record review complete"
+      },
+      {
+        "trial_id": "NCT04894734",
+        "reason": "Epidural electrical stimulation for spinal-cord-injury rehabilitation with MPI/VAS/PROMIS outcomes. Exact registration does not report ECAP telemetry or ECAP-guided control; IPD=NO.",
+        "url": "https://clinicaltrials.gov/api/v2/studies/NCT04894734",
+        "locator": "protocolSection.identificationModule.briefTitle; statusModule.overallStatus; sponsorCollaboratorsModule.leadSponsor; armsInterventionsModule.interventions; descriptionModule.briefSummary; outcomesModule.primaryOutcomes,secondaryOutcomes,otherOutcomes; ipdSharingStatementModule.ipdSharing; hasResults",
+        "screened_at": "2026-09-26",
+        "registry_status": "ACTIVE_NOT_RECRUITING",
+        "registry_ipd_sharing": "NO",
+        "registry_has_results": false,
+        "checked_intervention_domain": "Epidural electrical stimulation; SCI rehabilitation",
+        "registered_outcome_boundary": "Pain outcomes registered, ECAP not registered.",
+        "prefilter_result": "high-recall lexical candidate; exact-record review complete"
+      },
+      {
+        "trial_id": "NCT05267951",
+        "reason": "Closed-loop spinal stimulation for upper-limb motor recovery after SCI. Registered outcomes are motor/function/neurophysiology; exact record does not name ECAP or a clinical pain endpoint.",
+        "url": "https://clinicaltrials.gov/api/v2/studies/NCT05267951",
+        "locator": "protocolSection.identificationModule.briefTitle; statusModule.overallStatus; sponsorCollaboratorsModule.leadSponsor; armsInterventionsModule.interventions; descriptionModule.briefSummary; outcomesModule.primaryOutcomes,secondaryOutcomes,otherOutcomes; ipdSharingStatementModule.ipdSharing; hasResults",
+        "screened_at": "2026-09-26",
+        "registry_status": "RECRUITING",
+        "registry_ipd_sharing": "NO",
+        "registry_has_results": false,
+        "checked_intervention_domain": "Closed-loop spinal stimulation; motor rehabilitation",
+        "registered_outcome_boundary": "No clinical pain endpoint or ECAP registered.",
+        "prefilter_result": "high-recall lexical candidate; exact-record review complete"
+      },
+      {
+        "trial_id": "NCT05556902",
+        "reason": "Brief summary explicitly proposes studying stimulus-evoked compound action potentials during epidural SCS and whether baseline blood pressure predicts post-SCS pain reduction. However, both registered outcomes are arterial blood-pressure changes at baseline and 4?6 weeks; no pain or ECAP endpoint/time-series is registered. Treat as a mechanistic lead, not a registered linked ECAP/pain outcome dataset.",
+        "url": "https://clinicaltrials.gov/api/v2/studies/NCT05556902",
+        "locator": "protocolSection.identificationModule.briefTitle; statusModule.overallStatus; sponsorCollaboratorsModule.leadSponsor; armsInterventionsModule.interventions; descriptionModule.briefSummary; outcomesModule.primaryOutcomes,secondaryOutcomes,otherOutcomes; ipdSharingStatementModule.ipdSharing; hasResults",
+        "screened_at": "2026-09-26",
+        "registry_status": "RECRUITING",
+        "registry_ipd_sharing": "NO",
+        "registry_has_results": false,
+        "checked_intervention_domain": "Permanent epidural SCS",
+        "registered_outcome_boundary": "Summary contains ECAP/pain hypotheses; registered outcomes are BP only.",
+        "prefilter_result": "high-recall lexical candidate; exact-record review complete"
+      },
+      {
+        "trial_id": "NCT05591196",
+        "reason": "Non-invasive transcutaneous spinal stimulation plus activity-based rehabilitation after stroke. It is not implanted ECAP-guided SCS; primary outcomes are motor function and no ECAP or pain endpoint is registered.",
+        "url": "https://clinicaltrials.gov/api/v2/studies/NCT05591196",
+        "locator": "protocolSection.identificationModule.briefTitle; statusModule.overallStatus; sponsorCollaboratorsModule.leadSponsor; armsInterventionsModule.interventions; descriptionModule.briefSummary; outcomesModule.primaryOutcomes,secondaryOutcomes,otherOutcomes; ipdSharingStatementModule.ipdSharing; hasResults",
+        "screened_at": "2026-09-26",
+        "registry_status": "RECRUITING",
+        "registry_ipd_sharing": "NO",
+        "registry_has_results": false,
+        "checked_intervention_domain": "Transcutaneous spinal stimulation; stroke rehabilitation",
+        "registered_outcome_boundary": "No pain endpoint or ECAP registered.",
+        "prefilter_result": "high-recall lexical candidate; exact-record review complete"
+      },
+      {
+        "trial_id": "NCT05926843",
+        "reason": "SCS plus motor rehabilitation after SCI; outcomes include chronic-pain change as secondary, but no ECAP measurement or feedback is registered. IPD sharing remains undecided.",
+        "url": "https://clinicaltrials.gov/api/v2/studies/NCT05926843",
+        "locator": "protocolSection.identificationModule.briefTitle; statusModule.overallStatus; sponsorCollaboratorsModule.leadSponsor; armsInterventionsModule.interventions; descriptionModule.briefSummary; outcomesModule.primaryOutcomes,secondaryOutcomes,otherOutcomes; ipdSharingStatementModule.ipdSharing; hasResults",
+        "screened_at": "2026-09-26",
+        "registry_status": "COMPLETED",
+        "registry_ipd_sharing": "UNDECIDED",
+        "registry_has_results": false,
+        "checked_intervention_domain": "SCS; motor rehabilitation",
+        "registered_outcome_boundary": "Pain measures secondary; ECAP not registered.",
+        "prefilter_result": "high-recall lexical candidate; exact-record review complete"
+      },
+      {
+        "trial_id": "NCT05940636",
+        "reason": "Combined activity-based rehabilitation/electrical stimulation for balance and neuroplasticity. Registry does not specify spinal ECAP-guided analgesic SCS or a pain outcome.",
+        "url": "https://clinicaltrials.gov/api/v2/studies/NCT05940636",
+        "locator": "protocolSection.identificationModule.briefTitle; statusModule.overallStatus; sponsorCollaboratorsModule.leadSponsor; armsInterventionsModule.interventions; descriptionModule.briefSummary; outcomesModule.primaryOutcomes,secondaryOutcomes,otherOutcomes; ipdSharingStatementModule.ipdSharing; hasResults",
+        "screened_at": "2026-09-26",
+        "registry_status": "COMPLETED",
+        "registry_ipd_sharing": "NO",
+        "registry_has_results": false,
+        "checked_intervention_domain": "Activity rehabilitation; electrical stimulation",
+        "registered_outcome_boundary": "Balance/motor outcomes; no ECAP or pain endpoint.",
+        "prefilter_result": "high-recall lexical candidate; exact-record review complete"
+      },
+      {
+        "trial_id": "NCT06295614",
+        "reason": "ARC-IM implant for locomotor deficits in Parkinson disease. Parkinson disease pain scale is secondary, but this is a different indication/device protocol and no ECAP telemetry is registered.",
+        "url": "https://clinicaltrials.gov/api/v2/studies/NCT06295614",
+        "locator": "protocolSection.identificationModule.briefTitle; statusModule.overallStatus; sponsorCollaboratorsModule.leadSponsor; armsInterventionsModule.interventions; descriptionModule.briefSummary; outcomesModule.primaryOutcomes,secondaryOutcomes,otherOutcomes; ipdSharingStatementModule.ipdSharing; hasResults",
+        "screened_at": "2026-09-26",
+        "registry_status": "RECRUITING",
+        "registry_ipd_sharing": "NO",
+        "registry_has_results": false,
+        "checked_intervention_domain": "ARC-IM system; locomotor rehabilitation",
+        "registered_outcome_boundary": "Parkinson pain scale secondary; ECAP not registered.",
+        "prefilter_result": "high-recall lexical candidate; exact-record review complete"
+      },
+      {
+        "trial_id": "NCT06533969",
+        "reason": "Epidural SCS combined with ECoG/EEG to control assistive devices for motor recovery. Pain levels are secondary; no ECAP sensing/control or linked ECAP/pain endpoint is specified.",
+        "url": "https://clinicaltrials.gov/api/v2/studies/NCT06533969",
+        "locator": "protocolSection.identificationModule.briefTitle; statusModule.overallStatus; sponsorCollaboratorsModule.leadSponsor; armsInterventionsModule.interventions; descriptionModule.briefSummary; outcomesModule.primaryOutcomes,secondaryOutcomes,otherOutcomes; ipdSharingStatementModule.ipdSharing; hasResults",
+        "screened_at": "2026-09-26",
+        "registry_status": "RECRUITING",
+        "registry_ipd_sharing": "NO",
+        "registry_has_results": false,
+        "checked_intervention_domain": "Epidural SCS; ECoG/EEG assistive-device control",
+        "registered_outcome_boundary": "Motor outcomes primary; pain secondary; ECAP not registered.",
+        "prefilter_result": "high-recall lexical candidate; exact-record review complete"
+      },
+      {
+        "trial_id": "NCT07090473",
+        "reason": "Transcutaneous spinal stimulation for acute SCI recovery, with neuropathic-pain follow-up. Non-invasive rehabilitation protocol; no ECAP telemetry or ECAP/pain linkage registered.",
+        "url": "https://clinicaltrials.gov/api/v2/studies/NCT07090473",
+        "locator": "protocolSection.identificationModule.briefTitle; statusModule.overallStatus; sponsorCollaboratorsModule.leadSponsor; armsInterventionsModule.interventions; descriptionModule.briefSummary; outcomesModule.primaryOutcomes,secondaryOutcomes,otherOutcomes; ipdSharingStatementModule.ipdSharing; hasResults",
+        "screened_at": "2026-09-26",
+        "registry_status": "RECRUITING",
+        "registry_ipd_sharing": "NO",
+        "registry_has_results": false,
+        "checked_intervention_domain": "Transcutaneous spinal stimulation; acute SCI rehabilitation",
+        "registered_outcome_boundary": "Pain is a secondary outcome; ECAP not registered.",
+        "prefilter_result": "high-recall lexical candidate; exact-record review complete"
+      },
+      {
+        "trial_id": "NCT07306052",
+        "reason": "Epidural SCS for walking recovery after SCI; VAS pain is secondary. This is a rehabilitation cohort and the registry does not report ECAP sensing/control. IPD-sharing field is not supplied.",
+        "url": "https://clinicaltrials.gov/api/v2/studies/NCT07306052",
+        "locator": "protocolSection.identificationModule.briefTitle; statusModule.overallStatus; sponsorCollaboratorsModule.leadSponsor; armsInterventionsModule.interventions; descriptionModule.briefSummary; outcomesModule.primaryOutcomes,secondaryOutcomes,otherOutcomes; ipdSharingStatementModule.ipdSharing; hasResults",
+        "screened_at": "2026-09-26",
+        "registry_status": "RECRUITING",
+        "registry_ipd_sharing": null,
+        "registry_has_results": false,
+        "checked_intervention_domain": "Epidural SCS; walking rehabilitation",
+        "registered_outcome_boundary": "VAS pain secondary; ECAP not registered.",
+        "prefilter_result": "high-recall lexical candidate; exact-record review complete"
+      },
+      {
+        "trial_id": "NCT07361627",
+        "reason": "Non-invasive transcutaneous spinal stimulation for upper-limb rehabilitation. No clinical pain outcome or ECAP telemetry is registered.",
+        "url": "https://clinicaltrials.gov/api/v2/studies/NCT07361627",
+        "locator": "protocolSection.identificationModule.briefTitle; statusModule.overallStatus; sponsorCollaboratorsModule.leadSponsor; armsInterventionsModule.interventions; descriptionModule.briefSummary; outcomesModule.primaryOutcomes,secondaryOutcomes,otherOutcomes; ipdSharingStatementModule.ipdSharing; hasResults",
+        "screened_at": "2026-09-26",
+        "registry_status": "NOT_YET_RECRUITING",
+        "registry_ipd_sharing": "NO",
+        "registry_has_results": false,
+        "checked_intervention_domain": "Transcutaneous spinal stimulation; rehabilitation",
+        "registered_outcome_boundary": "No pain endpoint or ECAP registered.",
+        "prefilter_result": "high-recall lexical candidate; exact-record review complete"
+      },
+      {
+        "trial_id": "NCT07586644",
+        "reason": "rTMS plus transcutaneous spinal stimulation for cervical SCI upper-limb recovery. This is not implanted ECAP-guided analgesic SCS; pain and ECAP outcomes are not registered.",
+        "url": "https://clinicaltrials.gov/api/v2/studies/NCT07586644",
+        "locator": "protocolSection.identificationModule.briefTitle; statusModule.overallStatus; sponsorCollaboratorsModule.leadSponsor; armsInterventionsModule.interventions; descriptionModule.briefSummary; outcomesModule.primaryOutcomes,secondaryOutcomes,otherOutcomes; ipdSharingStatementModule.ipdSharing; hasResults",
+        "screened_at": "2026-09-26",
+        "registry_status": "NOT_YET_RECRUITING",
+        "registry_ipd_sharing": "NO",
+        "registry_has_results": false,
+        "checked_intervention_domain": "rTMS; transcutaneous spinal stimulation; rehabilitation",
+        "registered_outcome_boundary": "No pain endpoint or ECAP registered.",
+        "prefilter_result": "high-recall lexical candidate; exact-record review complete"
       }
     ],
     "existing_record_correction": {
@@ -888,6 +1301,103 @@
       "checked_at_utc": "2026-09-25T13:34:19Z",
       "records_checked": 14,
       "finding": "All 14 status and lastUpdatePostDateStruct values matched the audit. NCT02924129 and NCT04319887 had hasResults=true; their data availability values were corrected to distinguish aggregate results from IPD=NO and unestablished patient linkage."
+    },
+    "bounded_screening_batch_2026_09_26": {
+      "source": "ClinicalTrials.gov API v2 exact study records; candidate IDs independently confirmed as members of the saved query.term=\"spinal cord stimulation AND pain AND outcome\" route within the 458-ID union",
+      "query": "https://clinicaltrials.gov/api/v2/studies?query.term=spinal%20cord%20stimulation%20AND%20pain%20AND%20outcome&pageSize=100&countTotal=true",
+      "screened_trial_ids": [
+        "NCT06421350",
+        "NCT03014583",
+        "NCT05183152",
+        "NCT02936453",
+        "NCT07689227",
+        "NCT04144972",
+        "NCT03029884",
+        "NCT06996574",
+        "NCT05994846",
+        "NCT07457645"
+      ],
+      "screened_count": 10,
+      "already_resolved_before_batch": false,
+      "boundary": "All ten exact registry records were checked for intervention, registered outcomes, status and IPD-sharing field. These are adjacent-device or procedure-pathway records, not evidence for participant-linked ECAP plus clinical outcomes. No ECAP/SCS access claim or cohort-independence claim is inferred. The screening batch does not complete the 458-ID manual screen or establish search saturation."
+    },
+    "bounded_screening_batch_2026_09_26_b": {
+      "source": "ClinicalTrials.gov API v2, full pagination of all six saved query.term routes followed by exact per-record API checks",
+      "query_routes": [
+        {
+          "query_term": "evoked compound action potential",
+          "url": "https://clinicaltrials.gov/api/v2/studies?query.term=evoked%20compound%20action%20potential&pageSize=100&countTotal=true",
+          "total_hits": 91,
+          "returned_hits": 91,
+          "pages_fetched": 1
+        },
+        {
+          "query_term": "ECAP",
+          "url": "https://clinicaltrials.gov/api/v2/studies?query.term=ECAP&pageSize=100&countTotal=true",
+          "total_hits": 77,
+          "returned_hits": 77,
+          "pages_fetched": 1
+        },
+        {
+          "query_term": "closed loop spinal cord stimulation",
+          "url": "https://clinicaltrials.gov/api/v2/studies?query.term=closed%20loop%20spinal%20cord%20stimulation&pageSize=100&countTotal=true",
+          "total_hits": 55,
+          "returned_hits": 55,
+          "pages_fetched": 1
+        },
+        {
+          "query_term": "Evoke spinal cord stimulation",
+          "url": "https://clinicaltrials.gov/api/v2/studies?query.term=Evoke%20spinal%20cord%20stimulation&pageSize=100&countTotal=true",
+          "total_hits": 44,
+          "returned_hits": 44,
+          "pages_fetched": 1
+        },
+        {
+          "query_term": "Saluda",
+          "url": "https://clinicaltrials.gov/api/v2/studies?query.term=Saluda&pageSize=100&countTotal=true",
+          "total_hits": 19,
+          "returned_hits": 19,
+          "pages_fetched": 1
+        },
+        {
+          "query_term": "spinal cord stimulation AND pain AND outcome",
+          "url": "https://clinicaltrials.gov/api/v2/studies?query.term=spinal%20cord%20stimulation%20AND%20pain%20AND%20outcome&pageSize=100&countTotal=true",
+          "total_hits": 274,
+          "returned_hits": 274,
+          "pages_fetched": 3
+        }
+      ],
+      "union_unique_trial_ids": 458,
+      "previously_resolved_ids_excluded": 41,
+      "prefilter": {
+        "required_all": [
+          "text contains ECAP or evoked compound action potential or evoke",
+          "text contains spinal cord stimulation or SCS or spinal stimulator",
+          "text contains pain or VAS or NRS or PROMIS"
+        ],
+        "candidate_count": 16,
+        "note": "High-recall string filter can match generic evoked sensory percepts; exact trial API record review is required."
+      },
+      "screened_trial_ids": [
+        "NCT02684201",
+        "NCT03027947",
+        "NCT04547582",
+        "NCT04725006",
+        "NCT04894734",
+        "NCT05267951",
+        "NCT05556902",
+        "NCT05591196",
+        "NCT05926843",
+        "NCT05940636",
+        "NCT06295614",
+        "NCT06533969",
+        "NCT07090473",
+        "NCT07306052",
+        "NCT07361627",
+        "NCT07586644"
+      ],
+      "screened_count": 16,
+      "boundary": "All 16 exact records reviewed. Fifteen fail the ECAP-measurement criterion; NCT05556902 mentions ECAP and a pain hypothesis in the brief summary but registers only arterial-blood-pressure outcomes. No new trial was added to the 24-record catalogue because no exact record in this batch registers linked ECAP and clinical-pain outcomes. These 16 are a deterministic prefiltered subset, not the full 458-ID manual screen; this is not a saturation or data-access finding."
     }
   },
   "search_update_history": [
@@ -990,6 +1500,67 @@
         }
       ],
       "boundary": "The identical closed-loop query now returns 55 rather than the previously recorded 15; the pain/outcome query returns 274 and is truncated at 100. This is not a saturated pass. Four records were checked individually as bounded examples; they were not added to the trial catalogue. Continue exact/synonym screening and avoid interpreting registry counts as unique cohorts."
+    },
+    {
+      "checked_at": "2026-09-27",
+      "source": "ClinicalTrials.gov API v2, complete pagination of the six saved query.term routes and protocolSection of every returned study; ten disjoint last-digit Pi screens independently reviewed the 401 IDs outside the existing 24-trial catalogue and 33 recorded exclusions",
+      "query_hit_counts": [
+        91,
+        77,
+        55,
+        44,
+        19,
+        274
+      ],
+      "union_unique_trial_ids": 458,
+      "sorted_union_id_sha256_utf8_lf": "74775ab22b0807bc7b690f64c3877208fdc349de002b282b72a4cf2d50f27d1d",
+      "partition_rule": "Last numeric digit of NCT ID, 0 through 9; all ten read-only Pi jobs reached agent_settled with exit code 0 and zero extension errors",
+      "primary_recheck": "Independent root retrieval of all eight API pages reproduced the 458-ID union and checked complete protocolSection text. A deliberately broad ECAP/pain/SCS string screen selected 31 IDs: 30 are already in the trial catalogue or prior exclusions; the only other hit, NCT04687215, contains ECAP only as a substring of recapture and its exact registered outcomes have pain/vascular measures but no ECAP measurement.",
+      "new_trial_ids": [],
+      "boundary": "This completes screening of the six dated ClinicalTrials.gov query routes, not all registries or synonym/citation routes. Registry metadata and aggregate results do not release participant-level ECAP-to-pain records, establish cohort independence, or satisfy the later distinct dated refresh. PA-06 and RES-04/05 remain open."
     }
-  ]
+  ],
+  "cohort_network_review_2026_09_28": {
+    "checked_at": "2026-09-28",
+    "basis": "Official ClinicalTrials.gov API v2 records. A shared site, investigator, intervention or indication is a lead for owner confirmation; it does not establish participant overlap or cohort independence.",
+    "edges": [
+      {
+        "trial_ids": [
+          "NCT06775535",
+          "NCT07211308"
+        ],
+        "finding": "Both records list AZ Delta, Roeselare, Belgium at the same registry coordinates (50.94653, 3.12269). NCT06775535 lists Karel Hanssens as contact; ENDLESS NCT07211308 lists Bart Billet. The registrations differ in title, sponsor, protocol and outcome structure. No common participant identifier, re-enrollment statement or owner confirmation appears in these checked registry fields.",
+        "locators": [
+          {
+            "url": "https://clinicaltrials.gov/api/v2/studies/NCT06775535",
+            "locator": "protocolSection.contactsLocationsModule.locations: AZ Delta, Roeselare, coordinates and contacts; outcomesModule; ipdSharingStatementModule"
+          },
+          {
+            "url": "https://clinicaltrials.gov/api/v2/studies/NCT07211308",
+            "locator": "protocolSection.contactsLocationsModule.locations: AZ Delta, Roeselare, coordinates and Bart Billet contact; outcomesModule; ipdSharingStatementModule"
+          }
+        ],
+        "status": "shared_site_only_participant_overlap_unresolved"
+      }
+    ],
+    "decision": "Do not merge participants or count registrations as independent cohorts from site coordinates/contact alone. Owner/participant linkage is required."
+  },
+  "s237_ecap_study_identity_2026_09_28": {
+    "checked_at": "2026-09-28 Europe/Moscow",
+    "source_id": "S237",
+    "trial_id": "NCT04319887",
+    "primary_locators": [
+      {
+        "url": "http://web.archive.org/web/20251205040940/https://rapm.bmj.com/content/early/2025/12/01/rapm-2025-107051",
+        "locator": "Archived capture of original BMJ publisher article, Methods > Study design and population names NCT04319887; Results opening paragraph gives 231 IPG recipients and 11 exclusions"
+      },
+      {
+        "url": "https://clinicaltrials.gov/api/v2/studies/NCT04319887",
+        "locator": "protocolSection.identificationModule.nctId, designModule.enrollmentInfo ACTUAL count 300, ipdSharingStatementModule.ipdSharing NO"
+      }
+    ],
+    "verified": "The primary article explicitly identifies NCT04319887. It reports 231 implanted participants and 11 exclusions from the implant-phase analysis, leaving 220 in that article analysis; the official registry reports 300 actual enrolled in the overall registered study. These are different denominators and are not interchangeable.",
+    "cross_study_boundary": "NCT04319887 is a separate registered protocol from EVOKE NCT02924129. The checked public article/registries provide no shared participant identifiers or cross-enrollment statement, so individual-level zero overlap is unproven. Both registrations have aggregate results and IPD sharing NO; no open participant-keyed ECAP x pain table is established.",
+    "independent_check": "Root parsed the archived publisher article text for the exact NCT ID and 231/11 counts and fetched the current official ClinicalTrials.gov API record; the live BMJ route returned 403 on this check."
+  }
 }

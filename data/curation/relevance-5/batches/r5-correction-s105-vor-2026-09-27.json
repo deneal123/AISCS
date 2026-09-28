@@ -1,0 +1,82 @@
+{
+  "meta": {
+    "batch_id": "r5-correction-s105-vor-2026-09-27",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-27",
+    "scope": "Reconcile S105 recruited and analyzed populations and waveform-level evaluation with the IOP Version of Record",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-27"
+  },
+  "source_ids": ["S105"],
+  "records": [{
+    "id": "S105",
+    "title": "Feature extraction and prediction of spinal cord stimulation evoked compound action potentials in humans",
+    "year": 2025,
+    "source_type": "method"
+  }],
+  "decisions": [{
+    "source_id": "S105",
+    "decision": "verified_primary",
+    "checked_at": "2026-09-27",
+    "full_text_status": "checked",
+    "searches": [{
+      "service": "IOP publisher Version of Record",
+      "query": "10.1088/1741-2552/adbfbe recruited versus selected participants sessions and waveform cross-validation",
+      "url": "https://iopscience.iop.org/article/10.1088/1741-2552/adbfbe/pdf",
+      "accessed_at": "2026-09-27"
+    }],
+    "updates": {
+      "identifiers": {
+        "doi": "10.1088/1741-2552/adbfbe",
+        "pmid": "40073452"
+      },
+      "датасет": "Fifteen chronic-pain participants recruited; 30 sessions from eight participants with externalized two-lead SCS selected, followed by exclusion of two sessions from one participant for uncertain electrode alignment",
+      "ограничения": "Eight selected participants out of 15 recruited and 28 retained sessions after two exclusions. Nested k-fold classification selected every 11th waveform per outer loop; no participant-held-out evaluation or external cohort. Underlying data are available only on author request subject to ethics/IRB restrictions. ECAP classes and features are neural-response measures, not pain or treatment outcomes.",
+      "evidence": {
+        "population": "Fifteen recruited adults with chronic pain; eight contributed 30 selected recording sessions, of which two were excluded for uncertain electrode alignment."
+      },
+      "validation": {
+        "notes": "IOP Version of Record checked through text rendering of the official publisher PDF URL after direct IOP GET returned a Radware CAPTCHA. Methods 2.2 p. 3: 15 recruited, 30 sessions from eight selected, two sessions excluded. Methods 2.7 p. 5: outer cross-validation selects every 11th waveform, not a held-out participant. Table 1 p. 8: AUC median d-prime 2.44 for ECAP versus non-ECAP. Data availability p. 15: author request subject to ethics/IRB restrictions. No patient-level clinical pain outcome or independent validation."
+      },
+      "field_resolution": {
+        "датасет": {
+          "state": "reported",
+          "value": "Fifteen chronic-pain participants recruited; 30 sessions from eight participants with externalized two-lead SCS selected, followed by exclusion of two sessions from one participant for uncertain electrode alignment",
+          "reason": "Primary publisher Methods distinguishes recruitment, selected sessions and exclusions.",
+          "checked_at": "2026-09-27",
+          "locators": [{"url": "https://iopscience.iop.org/article/10.1088/1741-2552/adbfbe/pdf", "locator": "Version of Record, Methods 2.2 Participants, p. 3"}]
+        },
+        "ограничения": {
+          "state": "reported",
+          "value": "Eight selected participants out of 15 recruited and 28 retained sessions after two exclusions. Nested k-fold classification selected every 11th waveform per outer loop; no participant-held-out evaluation or external cohort. Underlying data are available only on author request subject to ethics/IRB restrictions. ECAP classes and features are neural-response measures, not pain or treatment outcomes.",
+          "reason": "Primary Methods and data statement constrain validation and reuse claims.",
+          "checked_at": "2026-09-27",
+          "locators": [{"url": "https://iopscience.iop.org/article/10.1088/1741-2552/adbfbe/pdf", "locator": "Version of Record, Methods 2.2 p. 3, 2.7 p. 5; Data availability p. 15"}]
+        },
+        "evidence.population": {
+          "state": "reported",
+          "value": "Fifteen recruited adults with chronic pain; eight contributed 30 selected recording sessions, of which two were excluded for uncertain electrode alignment.",
+          "reason": "Population and session flow reported in primary Methods.",
+          "checked_at": "2026-09-27",
+          "locators": [{"url": "https://iopscience.iop.org/article/10.1088/1741-2552/adbfbe/pdf", "locator": "Version of Record, Methods 2.2 Participants, p. 3"}]
+        },
+        "validation.notes": {
+          "state": "reported",
+          "value": "IOP Version of Record checked through text rendering of the official publisher PDF URL after direct IOP GET returned a Radware CAPTCHA. Methods 2.2 p. 3: 15 recruited, 30 sessions from eight selected, two sessions excluded. Methods 2.7 p. 5: outer cross-validation selects every 11th waveform, not a held-out participant. Table 1 p. 8: AUC median d-prime 2.44 for ECAP versus non-ECAP. Data availability p. 15: author request subject to ethics/IRB restrictions. No patient-level clinical pain outcome or independent validation.",
+          "reason": "Replaces abstract-level source-card scope after primary Version of Record review.",
+          "checked_at": "2026-09-27",
+          "locators": [{"url": "https://iopscience.iop.org/article/10.1088/1741-2552/adbfbe/pdf", "locator": "Version of Record, Methods 2.2/2.7, Table 1, Data availability"}]
+        },
+        "validation.checked_at": {
+          "state": "reported",
+          "value": "2026-09-27",
+          "reason": "Dated direct review of the publisher Version of Record via its text rendering.",
+          "checked_at": "2026-09-27",
+          "locators": [{"url": "https://iopscience.iop.org/article/10.1088/1741-2552/adbfbe/pdf", "locator": "Publisher Version of Record"}]
+        }
+      }
+    },
+    "claims": [],
+    "notes": "IOP Version of Record checked through text rendering of the official publisher PDF URL after direct IOP GET returned a Radware CAPTCHA. Methods 2.2 p. 3: 15 recruited, 30 sessions from eight selected, two sessions excluded. Methods 2.7 p. 5: outer cross-validation selects every 11th waveform, not a held-out participant. Table 1 p. 8: AUC median d-prime 2.44 for ECAP versus non-ECAP. Data availability p. 15: author request subject to ethics/IRB restrictions. No patient-level clinical pain outcome or independent validation."
+  }]
+}

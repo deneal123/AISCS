@@ -13,15 +13,25 @@ def test_snapshot_retention_preserves_pinned_baseline(tmp_path: Path) -> None:
     data = tmp_path / "data"
     data.mkdir()
     (data / "records.json").write_text('{"sources": []}', encoding="utf-8")
-    pinned = snapshot_repository(data, label="baseline")
+    pinned = snapshot_repository(data, label="baseline", persistent=True)
     (pinned / ".keep").write_text("historical migration fixture", encoding="utf-8")
-    first = snapshot_repository(data, label="first")
-    second = snapshot_repository(data, label="second")
-    third = snapshot_repository(data, label="third")
+    first = snapshot_repository(data, label="first", persistent=True)
+    second = snapshot_repository(data, label="second", persistent=True)
+    third = snapshot_repository(data, label="third", persistent=True)
     assert pinned.is_dir()
     assert not first.exists()
     assert second.is_dir() and third.is_dir()
     assert len(list((data / "archive").glob("*/manifest.json"))) == 3
+
+
+def test_automatic_snapshots_stay_outside_current_data(tmp_path: Path) -> None:
+    data = tmp_path / "data"
+    data.mkdir()
+    (data / "records.json").write_text('{"sources": []}', encoding="utf-8")
+    snapshot = snapshot_repository(data, label="pre-publish")
+    assert snapshot.parent == tmp_path / ".work" / "research-snapshots"
+    assert (snapshot / "manifest.json").is_file()
+    assert not (data / "archive").exists()
 
 
 def test_new_candidate_uses_next_free_id() -> None:

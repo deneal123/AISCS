@@ -1,0 +1,115 @@
+{
+  "meta": {
+    "batch_id": "r5-correction-s782-author-and-preprint-route-2026-09-28",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-28",
+    "scope": "Correct S782 full author byline and replace obsolete preprint API timeout note with checked owner pubs API status",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-28"
+  },
+  "source_ids": [
+    "S782"
+  ],
+  "records": [
+    {
+      "id": "S782",
+      "title": "Centralized brain networks controlling antennal grooming coordination",
+      "year": 2026,
+      "source_type": "метод"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S782",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-28",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "service": "Nature Communications owner full text",
+          "query": "S782 DOI author byline and article metadata",
+          "url": "https://www.nature.com/articles/s41467-026-72152-x",
+          "accessed_at": "2026-09-28"
+        },
+        {
+          "service": "Europe PMC full-text JATS mirror",
+          "query": "PMC13314972 front matter authors",
+          "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13314972/fullTextXML",
+          "accessed_at": "2026-09-28"
+        },
+        {
+          "service": "bioRxiv owner publications API",
+          "query": "candidate preprint DOI 10.1101/2024.12.17.628844 published version",
+          "url": "https://api.biorxiv.org/pubs/biorxiv/10.1101/2024.12.17.628844",
+          "accessed_at": "2026-09-28"
+        }
+      ],
+      "updates": {
+        "авторы": "Pembe Gizem Özdil; Jonathan Arreguit; Clara Scherrer; Femke Hurtak; Auke Ijspeert; Pavan Ramdya",
+        "identifiers": {
+          "doi": "10.1038/s41467-026-72152-x"
+        },
+        "validation": {
+          "checked_at": "2026-09-28",
+          "notes": "Primary Nature full text checked; PubMed 42026054. Model/behavior comparison is restricted to adult flies. A held-out test set, where reported, is not a human or independent-site validation. Methods > Connectome analysis identifies FAFB FlyWire snapshot 783 for the brain network and MANC v1.2.1 only for supplementary VNC figures; Methods > Fly stocks identifies female adult experimental flies. Publisher page confirms Version of Record dated 2026-06-29 and CrossMark states \"Document is current. Any future updates will be listed below.\" No update listed; no article-level correction/retraction marker surfaced. Candidate bioRxiv DOI 10.1101/2024.12.17.628844 resolves (HTTP 200), but its owner pubs API reports no published version, the checked Nature article does not state this DOI as a preprint, and checked Crossref relations are empty; leave linkage unconfirmed. Rechecked 2026-09-28."
+        },
+        "field_resolution": {
+          "validation.checked_at": {
+            "state": "reported",
+            "value": "2026-09-28",
+            "reason": "Nature owner byline and bioRxiv owner publications route rechecked on this date.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.nature.com/articles/s41467-026-72152-x",
+                "locator": "Article front matter > Authors"
+              },
+              {
+                "url": "https://api.biorxiv.org/pubs/biorxiv/10.1101/2024.12.17.628844",
+                "locator": "messages[0].status: no articles found for published version; collection empty"
+              }
+            ]
+          },
+          "validation.notes": {
+            "state": "reported",
+            "value": "Primary Nature full text checked; PubMed 42026054. Model/behavior comparison is restricted to adult flies. A held-out test set, where reported, is not a human or independent-site validation. Methods > Connectome analysis identifies FAFB FlyWire snapshot 783 for the brain network and MANC v1.2.1 only for supplementary VNC figures; Methods > Fly stocks identifies female adult experimental flies. Publisher page confirms Version of Record dated 2026-06-29 and CrossMark states \"Document is current. Any future updates will be listed below.\" No update listed; no article-level correction/retraction marker surfaced. Candidate bioRxiv DOI 10.1101/2024.12.17.628844 resolves (HTTP 200), but its owner pubs API reports no published version, the checked Nature article does not state this DOI as a preprint, and checked Crossref relations are empty; leave linkage unconfirmed. Rechecked 2026-09-28.",
+            "reason": "Preserves prior primary-text scope while replacing obsolete owner API timeout after a dated HTTP 200 response.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.nature.com/articles/s41467-026-72152-x",
+                "locator": "Article front matter/byline and checked preprint-link context"
+              },
+              {
+                "url": "https://api.biorxiv.org/pubs/biorxiv/10.1101/2024.12.17.628844",
+                "locator": "messages[0].status and empty collection on 2026-09-28"
+              },
+              {
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13314972/fullTextXML",
+                "locator": "Methods > connectome analysis, model comparison and experimental scope"
+              }
+            ]
+          },
+          "авторы": {
+            "state": "reported",
+            "value": "Pembe Gizem Özdil; Jonathan Arreguit; Clara Scherrer; Femke Hurtak; Auke Ijspeert; Pavan Ramdya",
+            "reason": "Full names and order transcribed from the Nature owner article byline; Europe PMC JATS corroborates the group.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.nature.com/articles/s41467-026-72152-x",
+                "locator": "Article front matter > Authors: six full names in order"
+              },
+              {
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13314972/fullTextXML",
+                "locator": "JATS front > contrib-group, author given-names and surnames"
+              }
+            ]
+          }
+        }
+      },
+      "claims": [],
+      "notes": "Primary Nature full text checked; PubMed 42026054. Model/behavior comparison is restricted to adult flies. A held-out test set, where reported, is not a human or independent-site validation. Methods > Connectome analysis identifies FAFB FlyWire snapshot 783 for the brain network and MANC v1.2.1 only for supplementary VNC figures; Methods > Fly stocks identifies female adult experimental flies. Publisher page confirms Version of Record dated 2026-06-29 and CrossMark states \"Document is current. Any future updates will be listed below.\" No update listed; no article-level correction/retraction marker surfaced. Candidate bioRxiv DOI 10.1101/2024.12.17.628844 resolves (HTTP 200), but its owner pubs API reports no published version, the checked Nature article does not state this DOI as a preprint, and checked Crossref relations are empty; leave linkage unconfirmed. Rechecked 2026-09-28."
+    }
+  ]
+}

@@ -1,8 +1,8 @@
 {
   "meta": {
-    "version": "2.0.0",
-    "generated_at": "2026-09-24",
-    "scope": "schema-2 completeness and Drosophila x ECAP x SCS novelty baseline",
+    "version": "1.2.0",
+    "generated_at": "2026-09-28",
+    "scope": "source validation across relevance levels",
     "gate": "G0_REVISE"
   },
   "baseline_snapshot": {
@@ -365,5 +365,145 @@
     ],
     "remaining_count": 15,
     "boundary": "This consistency screen is not a claim that every remaining card is erroneous; inspect each full-text provenance and live versus archived access before changing status."
-  }
+  },
+  "current_curation": {
+    "canonical_records": 248,
+    "aliases": 271,
+    "validation_status_counts": {
+      "partially_verified": 38,
+      "rejected": 18,
+      "verified_metadata": 6,
+      "verified_primary": 186
+    },
+    "unresolved_count": 0,
+    "by_relevance": {
+      "3": {
+        "canonical_count": 30,
+        "status_counts": {
+          "partially_verified": 5,
+          "rejected": 2,
+          "verified_primary": 23
+        }
+      },
+      "4": {
+        "canonical_count": 112,
+        "status_counts": {
+          "partially_verified": 13,
+          "rejected": 13,
+          "verified_metadata": 2,
+          "verified_primary": 84
+        }
+      },
+      "5": {
+        "canonical_count": 106,
+        "status_counts": {
+          "partially_verified": 20,
+          "rejected": 3,
+          "verified_metadata": 4,
+          "verified_primary": 79
+        }
+      }
+    },
+    "relevance_5": {
+      "canonical_count": 106,
+      "status_counts": {
+        "partially_verified": 20,
+        "rejected": 3,
+        "verified_metadata": 4,
+        "verified_primary": 79
+      }
+    },
+    "applied_batches": [
+      "batch-001",
+      "batch-002",
+      "batch-003",
+      "batch-004",
+      "batch-005",
+      "batch-006",
+      "batch-007",
+      "batch-008",
+      "r4-batch-001",
+      "r4-batch-002",
+      "r4-correction-001",
+      "r4-batch-003",
+      "r4-batch-004",
+      "r4-batch-005",
+      "r4-batch-006",
+      "r4-batch-007",
+      "r3-batch-001",
+      "r3-batch-002",
+      "r4-github-refresh-001",
+      "github-new-resources-001",
+      "r4-correction-002",
+      "r5-correction-001",
+      "r5-correction-s823-calibration",
+      "r5-correction-s755-fulltext",
+      "r5-correction-s822-title",
+      "r5-correction-s755-access-flag",
+      "r5-correction-s762-fulltext",
+      "r5-correction-s105-vor-2026-09-27",
+      "r5-correction-s755-formula-consistency-2026-09-27",
+      "r5-correction-s036-rua-fulltext-2026-09-27",
+      "r5-correction-s046-abstract-status-2026-09-27",
+      "r5-correction-s039-s082-publisher-access-2026-09-27",
+      "r4-correction-s074-ieee-abstract-2026-09-27",
+      "r5-correction-s212-v3-title-version-2026-09-27",
+      "src04-s833-screening-context-2026-09-27",
+      "r4-correction-s834-figure-n-2026-09-27",
+      "r5-correction-s072-abstract-percent-unit-2026-09-27",
+      "r5-correction-s040-giaformer-fulltext-2026-09-27",
+      "r5-correction-s040-table3-dispersion-locator-2026-09-27",
+      "r5-correction-s834-trpa1-identity-and-study-fields-2026-09-28",
+      "r5-correction-s782-author-and-preprint-route-2026-09-28",
+      "r5-correction-s763-owner-v2-self-correction-2026-09-28",
+      "r5-correction-s357-fulltext-effect-inconsistency-2026-09-28",
+      "r5-correction-s243-registry-2026-09-28",
+      "r5-correction-s786-s788-primary-boundaries-2026-09-28",
+      "r5-correction-s001-briefing-species-2026-09-28",
+      "r4-correction-s192-generative-target-2026-09-28",
+      "r5-correction-s006-metadata-boundary-2026-09-28",
+      "r4-correction-s095-year-fulltext-2026-09-28",
+      "r4-correction-s252-access-depth-2026-09-28",
+      "r4-correction-s212-v3-figure6-2026-09-28",
+      "r5-correction-s775-flywire-v630-2026-09-28",
+      "r5-correction-s774-elife-v1-locators-2026-09-28",
+      "r5-correction-s778-mechanical-result-locator-2026-09-28",
+      "r5-correction-s016-nociception-study-fields-2026-09-28",
+      "r5-correction-s164-review-modality-target-2026-09-28",
+      "r5-correction-s072-abstract-population-boundary-2026-09-28",
+      "r5-correction-s015-cohort-and-validation-2026-09-28",
+      "r5-correction-s037-denominator-and-dispersion-2026-09-28",
+      "r5-correction-s014-chronic-pain-case-status-2026-09-28",
+      "r5-correction-s214-publication-status-2026-09-28",
+      "r5-correction-s739-exemplar-fly-split-2026-09-28",
+      "r5-correction-s744-model-sample-external-comparison-2026-09-28",
+      "r5-correction-s747-classifier-domain-accuracy-2026-09-28",
+      "r4-correction-s249-review-validation-2026-09-28",
+      "r4-correction-s048-simulation-cv-2026-09-28",
+      "r4-correction-s042-spine-surgery-review-2026-09-28",
+      "r5-correction-s356-figure5-outcomes-2026-09-28",
+      "r4-correction-s292-pinned-repo-provenance-2026-09-28",
+      "r5-correction-s357-secondary-review-role-2026-09-28",
+      "r3-correction-s026-jstage-abstract-scope-2026-09-28",
+      "r5-correction-s044-abstract-samples-validation-2026-09-28",
+      "r5-correction-s159-escore-definition-2026-09-28",
+      "r4-correction-s025-lasso-pcr-target-2026-09-28",
+      "r4-correction-s165-neurodegeneration-review-scope-2026-09-28",
+      "r4-correction-s099-uspto-claim1-scope-2026-09-28",
+      "r4-correction-s060-review-access-limits-2026-09-28",
+      "r5-correction-s739-model-uncertainty-2026-09-28",
+      "r5-correction-s193-pain-score-rater-boundary-2026-09-28",
+      "r5-correction-s739-temporal-split-unit-2026-09-28",
+      "r4-correction-s029-behavior-modality-2026-09-28",
+      "r5-correction-s004-pain-class-origin-2026-09-28"
+    ],
+    "author_review_required": true,
+    "supervisor_decision_required": true
+  },
+  "remaining_blockers": [
+    "Thematic cluster membership still requires domain-expert review.",
+    "No open human dataset linking SCS/ECAP to a prespecified clinical pain outcome was confirmed.",
+    "No evidence currently validates transfer from a Drosophila simulator to human pain or SCS outcomes.",
+    "G0 remains G0_REVISE pending author review of the evidence matrix and a separate supervisor decision."
+  ]
 }

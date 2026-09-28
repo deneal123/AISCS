@@ -243,7 +243,7 @@ def main(argv: list[str] | None = None) -> int:
                 }
             )
         elif args.command == "snapshot":
-            destination = snapshot_repository(root, args.label)
+            destination = snapshot_repository(root, args.label, persistent=True)
             emit({"ok": True, "snapshot": str(destination)})
         elif args.command == "stage":
             review = review_candidates(root, args.input)

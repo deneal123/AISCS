@@ -1,10 +1,10 @@
 {
   "meta": {
     "schema_version": "1.0.0",
-    "checked_at": "2026-09-26",
+    "checked_at": "2026-09-27",
     "status": "in_progress",
     "scope": "NS-15 Russian-language dissertations and primary catalogue records",
-    "decision": "one Bogacheva author abstract method-verified from official institute copy; bounded RSL and official university screen added; no combined Russian direct analogue established; broader NS-15 search remains incomplete"
+    "decision": "Bogacheva official author abstract and Kurmukov official full dissertation method-checked; bounded RSL and university screen added; no combined direct analogue in these inspected texts; broader NS-15 search remains incomplete"
   },
   "queries": [
     "\"спинномозговая стимуляция\"",
@@ -29,10 +29,23 @@
       "year": 2006,
       "scope": "Clinical spinal/brain stimulation for neurogenic pain; catalogue title only",
       "url": "https://search.rsl.ru/ru/record/01004299840",
-      "access_level": "primary_catalogue_record_only",
-      "locator": "RSL record HTML title and MARC bibliographic fields",
-      "full_method_status": "not_checked",
-      "direct_analogue_status": "not_established_from_catalogue"
+      "access_level": "official_catalogue_and_viewer_metadata_only_full_text_restricted",
+      "locator": "RSL record HTTP 200: title/author/year/degree/page count and MARC 856 41 link to official dlib PDF. RSL record displays copyright restriction. Following official route reaches https://viewer.rsl.ru/rsl01004299840; official viewer API /api/v1/document/rsl01004299840/info returns isAvailable=false, accessLevel=restricted, pageCount=278, downloadAccess.isDownloadable=false and directs full-text access to RSL/virtual reading rooms. Content page/text/PDF endpoints return HTTP 403. No page text or methods inspected.",
+      "full_method_status": "not_checked_restricted_reading_room_access_only",
+      "direct_analogue_status": "not_established_from_catalogue_or_restricted_full_text",
+      "reader_route_checked_at": "2026-09-27",
+      "official_full_dissertation_pdf_url": "http://dlib.rsl.ru/rsl01004000000/rsl01004299000/rsl01004299840/rsl01004299840.pdf",
+      "official_viewer_api_url": "https://viewer.rsl.ru/api/v1/document/rsl01004299840/info",
+      "viewer_access_metadata": {
+        "isAvailable": false,
+        "accessLevel": "restricted",
+        "pageCount": 278,
+        "isSearchable": true,
+        "hasTextLayer": true,
+        "isDownloadable": false,
+        "full_text_route": "RSL or virtual reading rooms"
+      },
+      "reader_access_boundary": "RSL exposes the dissertation record and reader link, but its viewer explicitly restricts page and download access. Viewer metadata/page count is not method evidence."
     },
     {
       "catalogue_id": "01003027412",
@@ -51,15 +64,18 @@
       "author": "Курмуков Анвар Илдарович",
       "title": "Иерархическая структура коннектомов головного мозга",
       "year": 2021,
-      "scope": "Official HSE defense summary verifies multimodal noninvasive human neuroimaging and graph/connectome prediction. No Drosophila model, spinal stimulation, ECAP or cross-species transfer is stated in the summary.",
+      "scope": "Full official HSE dissertation method review: human structural and functional brain connectome graph classification, disease-progression modeling from multimodal neuroimaging, connectivity-driven parcellation, and anatomical graph communities. Drosophila is mentioned as contextual connectomics background in the introduction, not as the dissertation experimental organism. No spinal stimulation, ECAP, nociception experiment, or cross-species transfer method is described in the inspected methods and defended results.",
       "url": "https://search.rsl.ru/ru/record/01010888313",
-      "access_level": "primary_catalogue_and_official_institutional_summary",
+      "access_level": "primary_catalogue_and_official_full_dissertation_pdf",
       "locator": "RSL record HTML title and MARC bibliographic fields",
-      "full_method_status": "not_checked",
-      "direct_analogue_status": "not_established_from_official_summary",
+      "full_method_status": "method_checked_official_pdf",
+      "direct_analogue_status": "no_direct_combined_analogue_in_inspected_full_text",
       "official_institutional_dissertation_url": "https://www.hse.ru/sci/diss/497745031",
       "institutional_record_checked_at": "2026-09-26",
-      "institutional_record_locator": "Official HSE dissertation page, title and dissertation summary: multimodal noninvasive neuroimaging; anatomy/functional brain networks; predictive models for neurodegenerative and psychiatric diseases; human brain network/connectome analysis. The listed full PDF was not method-inspected in this screen."
+      "institutional_record_locator": "Official HSE dissertation page, title and dissertation summary: multimodal noninvasive neuroimaging; anatomy/functional brain networks; predictive models for neurodegenerative and psychiatric diseases; human brain network/connectome analysis. The listed full PDF was not method-inspected in this screen.",
+      "official_full_dissertation_pdf_url": "https://www.hse.ru/data/xf/413/283/1413/%D0%9A%D1%83%D1%80%D0%BC%D1%83%D0%BA%D0%BE%D0%B2_%D0%B4%D0%B8%D1%81%D1%81%D0%B5%D1%80%D1%82%D0%B0%D1%86%D0%B8%D1%8F.pdf",
+      "full_method_checked_at": "2026-09-26",
+      "full_method_locator": "Official 178-page HSE dissertation PDF, pp. 12-13 defended results 1-4; chapters 3-6 on human brain graphs, disease progression, network organization and atlas construction. Introductory Drosophila background pp. 4-5; text search for ECAP, epidural, spinal, nociception and neurostimulation returned no hits. This is a bounded document disposition, not evidence that no other Russian analogue exists."
     },
     {
       "catalogue_id": "01009687642",
@@ -80,10 +96,13 @@
       "year": 1998,
       "scope": "RSL bibliographic record verifies a dissertation abstract on spinal-cord electrostimulation for spondylogenic myeloradiculoischemia; catalogue title alone does not establish ECAP control, closed-loop methods, or a Drosophila/connectome relation.",
       "url": "https://search.rsl.ru/ru/record/01000275094",
-      "access_level": "primary_catalogue_record_only_in_this_screen",
-      "locator": "RSL record heading and MARC fields 001/100/245/260/300/852; author, exact title, St Petersburg, 1998, 21-page dissertation abstract; catalogue advertises its reader as open, but full text was not retrieved in this screen.",
-      "full_method_status": "not_checked_reader_content_not_retrieved",
-      "direct_analogue_status": "not_established_from_catalogue"
+      "access_level": "official_catalogue_labels_full_text_open_but_checked_reader_route_unavailable",
+      "locator": "RSL record HTTP 200: MARC 001, 100, 245, 260, 300, 852 and 979 verify author, title, 1998 and a 21-page dissertation abstract. The catalogue displays an open-access badge but has no MARC 856 and its online-reading anchor has href=\"#\". The 2026-09-27 official viewer API document/rsl01000275094/info returned HTTP 404; the same API route returned HTTP 200/free for a different RSL abstract, 01003282807. No abstract page or method text was retrieved.",
+      "full_method_status": "not_checked_open_badge_reader_route_404",
+      "direct_analogue_status": "not_established_from_catalogue_or_unavailable_reader",
+      "reader_route_checked_at": "2026-09-27",
+      "official_viewer_api_url": "https://viewer.rsl.ru/api/v1/document/rsl01000275094/info",
+      "reader_access_boundary": "The open-access badge conflicts with a document-specific viewer API 404; a free neighbouring item resolves on that route. No methods were checked. This access limit is not evidence that the dissertation lacks an analogue."
     }
   ],
   "access_boundaries": [
@@ -96,11 +115,11 @@
     }
   ],
   "remaining": [
-    "Check lawful RSL reader access to two identified author abstracts and extract methods only if text opens",
+    "Obtain readable full text through a lawful RSL reader/fragment-order or official institutional route for Blagorazumova 01000275094 and Isagulyan author abstract 01003269330; method-review only if the text opens.",
+    "For Isagulyan dissertation 01004299840, methods review requires authorized RSL or virtual-reading-room access because the official viewer marks the full text restricted.",
     "Authorized eLIBRARY search and independent official university repositories",
     "Exact/synonym/author searches, backward/forward snowballing and later dated update",
-    "Full methods of remaining relevant dissertations; only Bogacheva author abstract has been method-checked from an official repository copy",
-    "Method-inspect newly identified RSL candidate 01000275094 only if its official reader or an official institutional copy yields the text.",
+    "Full methods of remaining relevant dissertations; Bogacheva official author abstract and Kurmukov full official dissertation have been method-checked",
     "Inspect candidate 01000302220 only if methods become relevant to neural-circuit/nociception scope; catalogue title currently does not support such an inference.",
     "Continue systematic RSL and official university dissertation searches and deduplicated citation snowballing; document exact query coverage before any absence claim."
   ],
@@ -111,9 +130,14 @@
       "author": "Исагулян Эмиль Давидович",
       "title": "Хроническая электростимуляция спинного и головного мозга в лечении нейрогенных болевых синдромов",
       "url": "https://search.rsl.ru/ru/record/01003269330",
-      "locator": "RSL record HTML title: author abstract for the dissertation",
-      "full_method_status": "not_checked",
-      "viewer_access": "not_verified_in_current_environment"
+      "locator": "RSL record HTTP 200 verifies the author abstract title and 26-page description; it has no MARC 856 or direct PDF path, and its online-reading anchor has href=\"#\". The official viewer API document/rsl01003269330/info returned HTTP 404. The catalogue links this abstract to dissertation 01004299840. No abstract pages or methods were retrieved.",
+      "full_method_status": "not_checked_open_badge_reader_route_404",
+      "viewer_access": "not_verified_in_current_environment",
+      "access_level": "official_catalogue_open_access_badge_but_checked_reader_route_unavailable",
+      "direct_analogue_status": "not_established_from_catalogue_or_unavailable_reader",
+      "reader_route_checked_at": "2026-09-26",
+      "official_viewer_api_url": "https://viewer.rsl.ru/api/v1/document/rsl01003269330/info",
+      "reader_access_boundary": "Open-access badge and failed current viewer resolution conflict; checked routes did not yield document content. This is an access limitation, not evidence about dissertation methods or absence of an analogue."
     },
     {
       "catalogue_id": "01003282807",
@@ -166,6 +190,54 @@
       ],
       "deduplication": "Kurmukov 01010888313 is an existing candidate, enriched by official HSE dissertation page; Bogacheva 01003282807 and Isagulyan 01003269330/01004299840 remain existing paired author-abstract/dissertation entries; additional records are keyed by distinct RSL catalogue IDs. No extra count is assigned to a record plus its paired dissertation/abstract entry.",
       "coverage_limit": "This bounded indexed search is not an exhaustive RSL, university-repository, eLIBRARY, dissertation, or forward/backward citation search; no negative-absence claim is made."
+    },
+    {
+      "checked_at": "2026-09-26",
+      "scope": "Full-method follow-up for existing Kurmukov official HSE dissertation lead, RSL 01010888313.",
+      "methods": [
+        "Fetched official HSE defense page and its linked 178-page dissertation PDF; extracted text with pdftotext; inspected defended results, method/chapter structure, and context of Drosophila mentions.",
+        "Searched full extracted text for ECAP, epidural, spinal, nociception and neurostimulation terms; no hit is a bounded term screen of this PDF."
+      ],
+      "incremental_findings": [
+        "Defended methods concern human brain connectome graph classification, multimodal disease progression, graph communities and structural connectivity atlas. Drosophila occurs as introductory background, not study material. This candidate is method-disposed as no direct combined analogue."
+      ],
+      "coverage_limit": "Only this identified dissertation was inspected in full; no exhaustive Russian dissertation or eLIBRARY coverage is claimed."
+    },
+    {
+      "checked_at": "2026-09-26",
+      "scope": "Bounded official reader-route follow-up for existing RSL records 01000275094 (Blagorazumova), 01004299840 (Isagulyan dissertation), and 01003269330 (paired author abstract).",
+      "methods": [
+        "Fetched the three exact official Search RSL record pages and inspected displayed bibliographic description, access badge, reader link, and MARC 856 where present.",
+        "Followed official RSL /ru/view and dlib/viewer routes. Queried official viewer document-info API for each rsl-prefixed record ID; for Isagulyan dissertation also checked the stated access level and page/content download boundary.",
+        "Submitted one bounded read-only Picodex task covering these three IDs and official routes only. Its claims were cross-checked against RSL pages, dlib wrappers, and viewer API responses before recording."
+      ],
+      "incremental_findings": [
+        "Blagorazumova RSL record states full open access, but has no MARC 856 or functional reader URL in the checked HTML; /ru/view returned HTTP 400 and viewer API returned HTTP 404. No text or methods were obtained.",
+        "Isagulyan dissertation 01004299840 has an official PDF/reader route, but viewer API reports accessLevel restricted, isAvailable=false, download disabled and full text only in RSL/virtual reading rooms; page-content endpoints returned HTTP 403. No methods inspected.",
+        "Isagulyan author abstract 01003269330 is also labeled open-access in the RSL catalogue, but has no MARC 856/reader URL; /ru/view returned HTTP 400 and viewer API returned HTTP 404. No text or methods were obtained.",
+        "The RSL catalogue links author abstract 01003269330 to dissertation 01004299840; this is one dissertation with its paired abstract, not two independent candidate works."
+      ],
+      "coverage_limit": "This pass establishes reader-route/access metadata only. The mismatch between open-access badges and unavailable viewer IDs does not establish that copies do not exist. No method-level or absence-of-analogue conclusion is made; further authorized access or a surfaced official full-text route is required."
+    },
+    {
+      "checked_at": "2026-09-27",
+      "scope": "Second-stage official viewer and national e-library route checks for Blagorazumova 01000275094 and Isagulyan 01003269330/01004299840.",
+      "methods": [
+        "Compared official viewer API responses for target item and a free neighbouring abstract on the same endpoint; independently refetched Isagulyan restricted metadata and Blagorazumova 404 response.",
+        "Checked worker-saved official RSL and NEB catalogue, dlib and viewer responses for the named items only; no paywall or reading-room access was used."
+      ],
+      "incremental_findings": [
+        "Blagorazumova viewer handle rsl01000275094 still returns HTTP 404, whereas the neighbouring Bogacheva rsl01003282807 returns HTTP 200, accessLevel free and a 26-page text layer. The Blagorazumova open badge therefore does not provide a readable route in this environment.",
+        "Isagulyan dissertation viewer handle rsl01004299840 returns HTTP 200 metadata, accessLevel restricted, isAvailable false, 278 pages and downloadAccess.isDownloadable false; full text requires an authorized reading room. The paired author abstract viewer handle remains unresolved."
+      ],
+      "primary_urls": [
+        "https://viewer.rsl.ru/api/v1/document/rsl01000275094/info",
+        "https://viewer.rsl.ru/api/v1/document/rsl01003282807/info",
+        "https://viewer.rsl.ru/api/v1/document/rsl01004299840/info",
+        "https://search.rsl.ru/ru/record/01000275094",
+        "https://search.rsl.ru/ru/record/01004299840"
+      ],
+      "coverage_limit": "No method page from either target work was obtained. This is a route-specific access disposition, not a conclusion about their scientific methods or exhaustive NS-15 saturation."
     }
   ]
 }

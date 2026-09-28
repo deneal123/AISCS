@@ -1,11 +1,11 @@
 {
   "source_id": "S148",
-  "checked_at": "2026-09-25",
-  "decision": "Use primary JATS/PubMed volume 19, article identifier 617733; retain Crossref page 1-18 as unresolved conflicting metadata.",
+  "checked_at": "2026-09-26",
+  "decision": "Use primary JATS/PubMed volume 19 and fpage/page-range 617733; the JATS has no elocation-id. Retain Crossref page 1-18 as unresolved conflicting metadata.",
   "locators": [
     {
       "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13367641/fullTextXML",
-      "locator": "front/article-meta/volume=19 and elocation-id=617733"
+      "locator": "front/article-meta: volume=19; fpage=617733; page-range=617733; no elocation-id element"
     },
     {
       "url": "https://pubmed.ncbi.nlm.nih.gov/42454002/",

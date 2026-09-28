@@ -1,0 +1,85 @@
+{
+  "meta": {
+    "batch_id": "r5-correction-s243-registry-2026-09-28",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-28",
+    "scope": "Correct stale NCT04662905 completion estimate and distinguish planned ECAP measure from posted results or pain efficacy",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-28"
+  },
+  "source_ids": ["S243"],
+  "records": [{
+    "id": "S243",
+    "title": "Novel Treatment Delivery of ECAP-controlled Closed-loop SCS for Chronic Pain",
+    "year": null,
+    "source_type": "применение"
+  }],
+  "decisions": [{
+    "source_id": "S243",
+    "decision": "partially_verified",
+    "checked_at": "2026-09-28",
+    "full_text_status": "metadata_only",
+    "searches": [{
+      "service": "ClinicalTrials.gov official API v2",
+      "query": "NCT04662905 current status, completion estimate, registered outcomes and posted results",
+      "url": "https://clinicaltrials.gov/api/v2/studies/NCT04662905",
+      "accessed_at": "2026-09-28"
+    }, {
+      "service": "Europe PMC primary full-text XML for linked APM paper",
+      "query": "PMC13009299 Limitations baseline pain and therapy efficacy outcomes",
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13009299/fullTextXML",
+      "accessed_at": "2026-09-28"
+    }],
+    "updates": {
+      "identifiers": {
+        "dataset_id": "NCT04662905",
+        "exact_url": "https://clinicaltrials.gov/study/NCT04662905"
+      },
+      "ограничения": "Official ClinicalTrials.gov API v2 record last posted 2026-09-24: NCT04662905 remains RECRUITING, single-group, with estimated primary and overall completion 2029-01-01 and 200 planned participants. Change in ECAP is the sole registered primary measure; there are no listed secondary outcomes or posted results. The linked Freshwater/Rosella programming paper states that neither study collected baseline pain characteristics or therapy-efficacy outcomes such as pain relief or functional improvement. A planned ECAP measure is not an observed result or an analgesic endpoint.",
+      "validation": {
+        "checked_at": "2026-09-28",
+        "notes": "Primary ClinicalTrials.gov v2 metadata rechecked 2026-09-28: NCT04662905 RECRUITING, last posted 2026-09-24, estimated completion 2029-01-01, estimated enrollment 200, sole planned primary ECAP-change measure, no listed secondary outcomes, hasResults=false. Linked primary APM article PMC13009299 Limitations says neither Freshwater nor Rosella collected baseline pain characteristics or therapy-efficacy outcomes. This registry record remains metadata-only; no observed ECAP or pain efficacy result is established."
+      },
+      "field_resolution": {
+        "ограничения": {
+          "state": "reported",
+          "value": "Official ClinicalTrials.gov API v2 record last posted 2026-09-24: NCT04662905 remains RECRUITING, single-group, with estimated primary and overall completion 2029-01-01 and 200 planned participants. Change in ECAP is the sole registered primary measure; there are no listed secondary outcomes or posted results. The linked Freshwater/Rosella programming paper states that neither study collected baseline pain characteristics or therapy-efficacy outcomes such as pain relief or functional improvement. A planned ECAP measure is not an observed result or an analgesic endpoint.",
+          "reason": "Current official registry estimate replaces stale 2027 text; linked primary paper limits clinical outcome interpretation.",
+          "checked_at": "2026-09-28",
+          "locators": [{
+            "url": "https://clinicaltrials.gov/api/v2/studies/NCT04662905",
+            "locator": "protocolSection.statusModule, designModule, outcomesModule.primaryOutcomes; top-level hasResults=false"
+          }, {
+            "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13009299/fullTextXML",
+            "locator": "Limitations: no baseline pain characteristics or therapy-efficacy outcomes collected"
+          }]
+        },
+        "validation.checked_at": {
+          "state": "reported",
+          "value": "2026-09-28",
+          "reason": "Official registry and linked paper rechecked on this date.",
+          "checked_at": "2026-09-28",
+          "locators": [{
+            "url": "https://clinicaltrials.gov/api/v2/studies/NCT04662905",
+            "locator": "Current official record, status and outcome modules"
+          }]
+        },
+        "validation.notes": {
+          "state": "reported",
+          "value": "Primary ClinicalTrials.gov v2 metadata rechecked 2026-09-28: NCT04662905 RECRUITING, last posted 2026-09-24, estimated completion 2029-01-01, estimated enrollment 200, sole planned primary ECAP-change measure, no listed secondary outcomes, hasResults=false. Linked primary APM article PMC13009299 Limitations says neither Freshwater nor Rosella collected baseline pain characteristics or therapy-efficacy outcomes. This registry record remains metadata-only; no observed ECAP or pain efficacy result is established.",
+          "reason": "Corrected stale registry fields and kept planned measures separate from observed outcomes.",
+          "checked_at": "2026-09-28",
+          "locators": [{
+            "url": "https://clinicaltrials.gov/api/v2/studies/NCT04662905",
+            "locator": "statusModule, designModule, outcomesModule.primaryOutcomes, hasResults"
+          }, {
+            "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13009299/fullTextXML",
+            "locator": "Limitations paragraph on absent efficacy outcomes"
+          }]
+        }
+      }
+    },
+    "claims": [],
+    "notes": "Primary ClinicalTrials.gov v2 metadata rechecked 2026-09-28: NCT04662905 RECRUITING, last posted 2026-09-24, estimated completion 2029-01-01, estimated enrollment 200, sole planned primary ECAP-change measure, no listed secondary outcomes, hasResults=false. Linked primary APM article PMC13009299 Limitations says neither Freshwater nor Rosella collected baseline pain characteristics or therapy-efficacy outcomes. This registry record remains metadata-only; no observed ECAP or pain efficacy result is established."
+  }]
+}

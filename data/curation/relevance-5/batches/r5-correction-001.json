@@ -1,0 +1,281 @@
+{
+  "meta": {
+    "batch_id": "r5-correction-001",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-27",
+    "scope": "S079 abstract-level scoping-review card correction after matrix row 6 reconciliation",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-27"
+  },
+  "source_ids": [
+    "S079"
+  ],
+  "records": [
+    {
+      "id": "S079",
+      "title": "Control Signals in Closed-Loop Spinal Cord Stimulation in Patients with Chronic Pain: A Scoping Review",
+      "year": 2026,
+      "source_type": "review"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S079",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-27",
+      "full_text_status": "metadata_only",
+      "searches": [
+        {
+          "service": "PubMed/NCBI",
+          "query": "41504676 exact PMID",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/41504676/",
+          "accessed_at": "2026-09-27"
+        },
+        {
+          "service": "Neuromodulation owner journal",
+          "query": "10.1016/j.neurom.2025.11.011 exact DOI and full-text access",
+          "url": "https://www.neuromodulationjournal.org/article/S1094-7159%2825%2901170-5/fulltext",
+          "accessed_at": "2026-09-27"
+        }
+      ],
+      "updates": {
+        "модальность": "Scoping review of ECAP, position/movement and subjective-state control signals; no original participant-level measurements.",
+        "задача": "Evaluate the control signals and algorithms used by closed-loop SCS systems for chronic pain.",
+        "метод": "PRISMA-ScR search of PubMed, Scopus and Web of Science on 2024-12-14; 688 unique articles screened, 28 publications representing 19 studies included.",
+        "датасет": "Review corpus of 28 publications representing 19 unique studies; no participant-level ECAP/pain outcome dataset in the author abstract.",
+        "ограничения": "Review-level categories are not independent patient counts or linked participant data. ECAP is a neural control signal, not a direct measure of pain. Only the author abstract was directly checked; official publisher full-text route is indexed open access but returned HTTP 403 locally on 2026-09-27.",
+        "identifiers": {
+          "doi": "10.1016/j.neurom.2025.11.011"
+        },
+        "evidence": {
+          "population": "Human chronic-pain SCS studies represented by a scoping review; no new recruited cohort.",
+          "subject_domain": "human_clinical",
+          "modalities": [
+            "metadata"
+          ],
+          "sample_size": "28 included publications representing 19 unique studies; pooled participant N is not reported in the checked abstract.",
+          "target_construct": "not_applicable",
+          "target_label": null,
+          "access_status": "open"
+        },
+        "validation": {
+          "checked_at": "2026-09-27",
+          "split_unit": "not_applicable",
+          "cross_subject": "not_applicable",
+          "external_validation": "not_applicable",
+          "notes": "PubMed PMID 41504676 author abstract checked directly for PRISMA-ScR date, screening counts and distinct signal categories. Publisher officially indexes the article as open access CC BY 4.0, but direct full HTML fetch returned HTTP 403 here. Full-text status remains metadata_only; no per-study methods, linked participant data or predictor validation inferred."
+        },
+        "field_resolution": {
+          "модальность": {
+            "state": "reported",
+            "value": "Scoping review of ECAP, position/movement and subjective-state control signals; no original participant-level measurements.",
+            "reason": "Explicit in the PubMed author abstract or the bounded inference about review-level limitations.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://pubmed.ncbi.nlm.nih.gov/41504676/",
+                "locator": "PubMed PMID 41504676, author Abstract > Objectives, Materials and methods, Results, Conclusions"
+              }
+            ]
+          },
+          "задача": {
+            "state": "reported",
+            "value": "Evaluate the control signals and algorithms used by closed-loop SCS systems for chronic pain.",
+            "reason": "Explicit in the PubMed author abstract or the bounded inference about review-level limitations.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://pubmed.ncbi.nlm.nih.gov/41504676/",
+                "locator": "PubMed PMID 41504676, author Abstract > Objectives, Materials and methods, Results, Conclusions"
+              }
+            ]
+          },
+          "метод": {
+            "state": "reported",
+            "value": "PRISMA-ScR search of PubMed, Scopus and Web of Science on 2024-12-14; 688 unique articles screened, 28 publications representing 19 studies included.",
+            "reason": "Explicit in the PubMed author abstract or the bounded inference about review-level limitations.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://pubmed.ncbi.nlm.nih.gov/41504676/",
+                "locator": "PubMed PMID 41504676, author Abstract > Objectives, Materials and methods, Results, Conclusions"
+              }
+            ]
+          },
+          "датасет": {
+            "state": "reported",
+            "value": "Review corpus of 28 publications representing 19 unique studies; no participant-level ECAP/pain outcome dataset in the author abstract.",
+            "reason": "Explicit in the PubMed author abstract or the bounded inference about review-level limitations.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://pubmed.ncbi.nlm.nih.gov/41504676/",
+                "locator": "PubMed PMID 41504676, author Abstract > Objectives, Materials and methods, Results, Conclusions"
+              }
+            ]
+          },
+          "ограничения": {
+            "state": "reported",
+            "value": "Review-level categories are not independent patient counts or linked participant data. ECAP is a neural control signal, not a direct measure of pain. Only the author abstract was directly checked; official publisher full-text route is indexed open access but returned HTTP 403 locally on 2026-09-27.",
+            "reason": "Explicit in the PubMed author abstract or the bounded inference about review-level limitations.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://pubmed.ncbi.nlm.nih.gov/41504676/",
+                "locator": "PubMed PMID 41504676, author Abstract > Objectives, Materials and methods, Results, Conclusions"
+              }
+            ]
+          },
+          "evidence.population": {
+            "state": "reported",
+            "value": "Human chronic-pain SCS studies represented by a scoping review; no new recruited cohort.",
+            "reason": "The author abstract identifies a review of human chronic-pain SCS studies and reports article/study counts; metadata modality records review evidence rather than a new signal measurement.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://pubmed.ncbi.nlm.nih.gov/41504676/",
+                "locator": "PubMed PMID 41504676, author Abstract > Objectives, Materials and methods, Results, Conclusions"
+              }
+            ]
+          },
+          "evidence.subject_domain": {
+            "state": "reported",
+            "value": "human_clinical",
+            "reason": "The author abstract identifies a review of human chronic-pain SCS studies and reports article/study counts; metadata modality records review evidence rather than a new signal measurement.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://pubmed.ncbi.nlm.nih.gov/41504676/",
+                "locator": "PubMed PMID 41504676, author Abstract > Objectives, Materials and methods, Results, Conclusions"
+              }
+            ]
+          },
+          "evidence.modalities": {
+            "state": "reported",
+            "value": [
+              "metadata"
+            ],
+            "reason": "The author abstract identifies a review of human chronic-pain SCS studies and reports article/study counts; metadata modality records review evidence rather than a new signal measurement.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://pubmed.ncbi.nlm.nih.gov/41504676/",
+                "locator": "PubMed PMID 41504676, author Abstract > Objectives, Materials and methods, Results, Conclusions"
+              }
+            ]
+          },
+          "evidence.sample_size": {
+            "state": "reported",
+            "value": "28 included publications representing 19 unique studies; pooled participant N is not reported in the checked abstract.",
+            "reason": "The author abstract identifies a review of human chronic-pain SCS studies and reports article/study counts; metadata modality records review evidence rather than a new signal measurement.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://pubmed.ncbi.nlm.nih.gov/41504676/",
+                "locator": "PubMed PMID 41504676, author Abstract > Objectives, Materials and methods, Results, Conclusions"
+              }
+            ]
+          },
+          "evidence.target_construct": {
+            "state": "not_applicable",
+            "value": null,
+            "reason": "Subjective reports, position/movement and ECAP are distinct review categories; no single measured target construct.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://pubmed.ncbi.nlm.nih.gov/41504676/",
+                "locator": "PubMed PMID 41504676, author Abstract > Objectives, Materials and methods, Results, Conclusions"
+              }
+            ]
+          },
+          "evidence.target_label": {
+            "state": "not_applicable",
+            "value": null,
+            "reason": "The heterogeneous scoping review defines no single patient-level target label.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://pubmed.ncbi.nlm.nih.gov/41504676/",
+                "locator": "PubMed PMID 41504676, author Abstract > Objectives, Materials and methods, Results, Conclusions"
+              }
+            ]
+          },
+          "evidence.access_status": {
+            "state": "reported",
+            "value": "open",
+            "reason": "The owner indexes the journal article as open access CC BY 4.0, while direct HTML retrieval returned HTTP 403 locally; this access status does not mean full text was checked.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://www.neuromodulationjournal.org/article/S1094-7159%2825%2901170-5/fulltext",
+                "locator": "Official journal record open-access/CC BY 4.0 label; direct retrieval blocked HTTP 403 on 2026-09-27"
+              }
+            ]
+          },
+          "validation.checked_at": {
+            "state": "reported",
+            "value": "2026-09-27",
+            "reason": "Current abstract check or applicability assessment for a scoping review.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://pubmed.ncbi.nlm.nih.gov/41504676/",
+                "locator": "PubMed PMID 41504676, author Abstract > Objectives, Materials and methods, Results, Conclusions"
+              }
+            ]
+          },
+          "validation.split_unit": {
+            "state": "not_applicable",
+            "value": null,
+            "reason": "No participant-level predictive model or new clinical validation is performed in this scoping review.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://pubmed.ncbi.nlm.nih.gov/41504676/",
+                "locator": "PubMed PMID 41504676, author Abstract > Objectives, Materials and methods, Results, Conclusions"
+              }
+            ]
+          },
+          "validation.cross_subject": {
+            "state": "not_applicable",
+            "value": null,
+            "reason": "No participant-level predictive model or new clinical validation is performed in this scoping review.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://pubmed.ncbi.nlm.nih.gov/41504676/",
+                "locator": "PubMed PMID 41504676, author Abstract > Objectives, Materials and methods, Results, Conclusions"
+              }
+            ]
+          },
+          "validation.external_validation": {
+            "state": "not_applicable",
+            "value": null,
+            "reason": "No participant-level predictive model or new clinical validation is performed in this scoping review.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://pubmed.ncbi.nlm.nih.gov/41504676/",
+                "locator": "PubMed PMID 41504676, author Abstract > Objectives, Materials and methods, Results, Conclusions"
+              }
+            ]
+          },
+          "validation.notes": {
+            "state": "reported",
+            "value": "PubMed PMID 41504676 author abstract checked directly for PRISMA-ScR date, screening counts and distinct signal categories. Publisher officially indexes the article as open access CC BY 4.0, but direct full HTML fetch returned HTTP 403 here. Full-text status remains metadata_only; no per-study methods, linked participant data or predictor validation inferred.",
+            "reason": "Current abstract check or applicability assessment for a scoping review.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://pubmed.ncbi.nlm.nih.gov/41504676/",
+                "locator": "PubMed PMID 41504676, author Abstract > Objectives, Materials and methods, Results, Conclusions"
+              }
+            ]
+          }
+        }
+      },
+      "claims": [],
+      "notes": "PubMed PMID 41504676 author abstract checked directly for PRISMA-ScR date, screening counts and distinct signal categories. Publisher officially indexes the article as open access CC BY 4.0, but direct full HTML fetch returned HTTP 403 here. Full-text status remains metadata_only; no per-study methods, linked participant data or predictor validation inferred."
+    }
+  ]
+}

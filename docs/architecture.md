@@ -43,7 +43,8 @@ researchctl publish -- pre-change snapshot + atomic JSON writes + integrity gate
 - `data/clusters.json` — тематические представления, не отдельные источники;
 - `data/ST.json` — реестр программ, наборов и инфраструктурных ресурсов;
 - `data/source-record.schema.json` + `data/vocabularies.json` — контракт карточки;
-- `data/archive/*/manifest.json` — два последних снимка отката и помеченные базовые срезы с SHA-256;
+- `.work/research-snapshots/*/manifest.json` — два последних автоматических снимка отката с SHA-256;
+- `data/archive/*/manifest.json` — базовые срезы миграции и явно запрошенные постоянные снимки;
 - `data/audit-report.json`, `data/validation-log.json` — отчёты конкретного прохода,
   а не замена данным.
 - `data/scientific-contract.json`, `data/human-dataset-matrix.json` — проверяемые

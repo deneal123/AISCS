@@ -66,8 +66,10 @@ def test_human_generalization_review_preserves_target_boundaries() -> None:
     assert s070["validation"]["status"] == "verified_primary"
     assert s070["evidence"]["target_construct"] == "noxious_stimulus"
     assert s070["evidence"]["target_label"].startswith("Thermal painful versus")
-    assert s088["validation"]["status"] == "verified_metadata"
-    assert s088["validation"]["full_text_status"] == "unavailable"
+    assert s088["validation"]["status"] == "verified_primary"
+    assert s088["validation"]["full_text_status"] == "metadata_only"
+    assert s088["evidence"]["target_construct"] == "experimental_pain_class"
+    assert "participant-disjoint" in s088["ограничения"]
 
 
 def test_pain_baseline_review_keeps_constructs_separate() -> None:
@@ -78,8 +80,9 @@ def test_pain_baseline_review_keeps_constructs_separate() -> None:
 
     assert review["validation"]["split_unit"] == "study"
     assert fly["evidence"]["target_construct"] == "protective_behavior"
-    assert fly["evidence"]["subject_domain"] == "drosophila_adult"
-    assert chronic["evidence"]["target_construct"] == "clinical_function"
+    assert fly["evidence"]["subject_domain"] == "unavailable_after_search"
+    assert "fly stage" in fly["validation"]["notes"]
+    assert chronic["evidence"]["target_construct"] == "chronic_pain_case_status"
     assert chronic["validation"]["status"] == "partially_verified"
 
 

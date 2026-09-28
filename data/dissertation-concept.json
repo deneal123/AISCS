@@ -17,7 +17,7 @@
       "SCS programming or evaluation task"
     ]
   },
-  "scientific_problem": "There is no validated method for testing whether constraints learned from a compact, experimentally tractable connectome improve human ECAP/SCS modelling beyond human-only and randomized synthetic controls.",
+  "scientific_problem": "This project asks whether constraints learned from a Drosophila connectome add measurable value to human ECAP/SCS modelling beyond human-only and randomized synthetic controls; the reviewed prior art and current data access do not establish that contribution.",
   "object": "Neural dynamics and evoked electrophysiological responses under external stimulation.",
   "subject": "Methods for connectome-constrained simulation, representation transfer, and physical ECAP observation in adaptive SCS tasks.",
   "goal": "Develop and falsifiably evaluate a two-model method in which Drosophila connectome dynamics constrain a transferable representation and a separate physical operator maps human neural recruitment to ECAP for an SCS task.",
@@ -149,7 +149,9 @@
   "defense_propositions": [
     {
       "id": "DEF-01",
-      "text": "The Drosophila simulator reproduces predefined neural and behavioral nociceptive-response observables.",
+      "text": "Candidate proposition: a versioned Drosophila simulator would reproduce prespecified neural and defensive-behavior observables under compatible primary stimuli; this has not been tested in this project.",
+      "status": "proposal_unverified_STOP_EXP01_INPUT",
+      "falsification_experiment": "TODO EXP-01: frozen graph, stimulus/target compatibility, locked synthetic-family split and graph-null controls; no execution until input STOP reopens.",
       "source_refs": [
         "S066",
         "S738",
@@ -163,7 +165,9 @@
     },
     {
       "id": "DEF-02",
-      "text": "The physical ECAP operator reproduces predefined waveform and recruitment characteristics independently of the fly model.",
+      "text": "Candidate proposition: a separately calibrated physical ECAP operator would reproduce prespecified waveform, latency and recruitment characteristics on independent human recordings; this has not been tested in this project.",
+      "status": "proposal_unverified_STOP_EXP02_VALIDATION",
+      "falsification_experiment": "TODO EXP-02: source-matched montage and artifact chain, held-out participants/configurations, registered waveform and calibration tolerances.",
       "source_refs": [
         "S105",
         "S159",
@@ -177,7 +181,9 @@
     },
     {
       "id": "DEF-03",
-      "text": "The complete transfer method is assessed only by prospective baselines and subject-level held-out data.",
+      "text": "Candidate proposition: any incremental contribution of connectome-derived pretraining would have to survive registered human-only, naive-synthetic and graph-null comparisons on held-out participants without worse calibration; no gain has been demonstrated.",
+      "status": "proposal_unverified_STOP_EXP03_COMPARISON",
+      "falsification_experiment": "TODO EXP-03 and EXP-04: matched comparison arms, one frozen primary score, participant-level inference and calibration with leakage controls; no execution until data and input STOPs reopen.",
       "source_refs": [
         "S149",
         "S105"
@@ -202,7 +208,10 @@
   ],
   "specialty_alignment": {
     "specialty": "2.2.12 Приборы, системы и изделия медицинского назначения",
-    "status": "passport_text_review_required",
-    "boundary": "The defensible contribution must be a medical-instrumentation modelling, measurement, or control method, not merely software implementation."
+    "status": "official_passport_checked_candidate_mapping_pending_results_and_human_review",
+    "official_passport_url": "https://pstu.ru/training-of-highly-qualified-personnel/doctorate/2.2.12.%20%D0%9F%D1%80%D0%B8%D0%B1%D0%BE%D1%80%D1%8B,%20%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B%20%D0%B8%20%D0%B8%D0%B7%D0%B4%D0%B5%D0%BB%D0%B8%D1%8F%20%D0%BC%D0%B5%D0%B4%D0%B8%D1%86%D0%B8%D0%BD%D1%81%D0%BA%D0%BE%D0%B3%D0%BE%20%D0%BD%D0%B0%D0%B7%D0%BD%D0%B0%D1%87%D0%B5%D0%BD%D0%B8%D1%8F.pdf",
+    "checked_at": "2026-09-26",
+    "candidate_directions": [1, 3, 14, 15, 21, 22],
+    "boundary": "These directions are candidate alignments for a medical signal measurement, physical ECAP model, and SCS control method. Software implementation or a proposed protocol alone is not an obtained scientific result; directions involving clinical prediction or treatment benefit require separately authorized patient-level evidence. The mapping is a proposal and has no author or supervisor acceptance."
   }
 }

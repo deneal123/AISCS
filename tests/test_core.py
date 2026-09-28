@@ -18,7 +18,8 @@ def test_search_and_evidence_filters_compose() -> None:
         query="PainMonit", validation_status="verified_primary"
     )
     assert result["total"] == 2
-    assert {item["id"] for item in result["items"]} == {"S039", "S730"}
+    assert {item["id"] for item in result["items"]} == {"S088", "S730"}
+    assert ResearchRepository(DATA).get_source("S039")["validation"]["status"] == "partially_verified"
 
 
 def test_jsonl_export_has_one_line_per_source() -> None:

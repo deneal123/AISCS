@@ -1,9 +1,9 @@
 {
   "meta": {
     "schema_version": "1.0.0",
-    "checked_at": "2026-09-26",
+    "checked_at": "2026-09-28",
     "stream": "NS-06",
-    "status": "open",
+    "status": "terminal_stop_at_cutoff",
     "selection": "Synthetic pain data, synthetic-to-real transfer, and pain domain adaptation with empirical or primary methodological claims"
   },
   "construct_boundary": "Facial pain-expression labels, PSPI scores, experimental-pain classes and clinical pain reports are not interchangeable. An ECAP recruitment signal is a different measurement target.",
@@ -49,12 +49,12 @@
     },
     {
       "source_id": "S088",
-      "mechanism": "Cross-Domain Multimodal Pain Detection Using a DANN–Transformer Architecture with Supervised Contrastive Warmup and Test-Time Augmentation (Bouchfar et al., 2026, ISDA proceedings; Crossref/publisher metadata verified). The current method-level description (skin temperature, EDA, ECG, EMG; DANN/cross-attention Transformer; 20-epoch supervised-contrastive warmup; PainMonit labeled source to BioVid unlabeled target) comes only from Semantic Scholar abstract, not the inaccessible IEEE full text.",
-      "relation_to_s149": "If the secondary abstract is accurate, this is a close multimodal real-source unlabeled-target pain-adaptation analogue. It differs from S149 in source generation (PainMonit real labeled recordings versus S149 synthetic multimodal scenarios), and the reported adaptation method differs (DANN/cross-attention Transformer and supervised-contrastive warmup versus S149 contrastive/adversarial/consistency stages). The method and target label construct remain unverified from primary full text, so do not use this row to claim exact mechanism separation.",
-      "certainty": "publisher_metadata_secondary_abstract_primary_methods_unavailable",
+      "mechanism": "Bouchfar et al. 2026 ISDA IEEE publisher abstract reports skin temperature, EDA, ECG and EMG; DANN/cross-attention Transformer; 20-epoch supervised-contrastive warmup; and PainMonit labeled source to BioVid unlabeled target, with Focal/ordinal losses, weighted sampling and post-hoc TTA/per-class threshold calibration. This is author-reported abstract-level method description; full implementation and results remain inaccessible.",
+      "relation_to_s149": "A primary-abstract-confirmed multimodal real-source to unlabeled-target pain-adaptation analogue. Its PainMonit source is real labeled recording rather than S149's generated synthetic source. Exact target label construction, split, leakage controls, calibration fit and numerical comparisons are unavailable without full methods; do not claim exact mechanism separation or novelty from the abstract alone.",
+      "certainty": "publisher_abstract_primary_full_methods_unavailable",
       "locator": {
-        "url": "https://doi.org/10.1109/ISDA70544.2026.11606012",
-        "section": "publisher DOI metadata/title; full method text unavailable"
+        "url": "https://ieeexplore.ieee.org/abstract/document/11606012",
+        "section": "IEEE publisher Abstract, checked 2026-09-27; full method text unavailable"
       },
       "primary_access_review": {
         "checked_at": "2026-09-24",
@@ -161,7 +161,15 @@
             "metrics"
           ]
         },
-        "decision": "Publisher metadata is verified; no primary method text found. Preserve title and author metadata as verified, retain secondary method claims as unverified, and do not state PSPI/NRS/clinical equivalence or exact relation to S149 as established."
+        "decision": "Historical 2026-09-25 status: publisher metadata was verified but no primary abstract or full method text was obtained. The later publisher abstract review below supersedes the abstract-level access state; full methods remain unavailable."
+      },
+      "publisher_abstract_review_2026_09_27": {
+        "checked_at": "2026-09-27",
+        "url": "https://ieeexplore.ieee.org/abstract/document/11606012",
+        "locator": "IEEE publisher Abstract and bibliographic header; root independently read the owner page through a read-only rendering route after direct IEEE requests hit access challenges.",
+        "confirmed": "Four signals: thermocouple skin temperature, EDA, ECG and EMG. Labeled PainMonit source to unlabeled BioVid target; DANN with cross-attention Transformer and 20-epoch supervised-contrastive warmup; focal/ordinal loss, weighted sampling and post-hoc TTA/per-class threshold calibration are named. Three-class pain detection is stated.",
+        "unavailable": "Full PDF/methods, cohort N, exact three-class thresholds, participant-disjoint split, numeric F1/Cohen statistic, calibration-fit data, leakage controls and independent test.",
+        "decision": "Upgrade from secondary-only method description to publisher-abstract-supported partial analogue; retain full-method and comparative-novelty uncertainty."
       }
     },
     {
@@ -294,6 +302,106 @@
         "UNBC_quantization_discrepancy": "The method text calls the mapping five ordinal levels, but the listed mapping 0(0), 1(1), 2(2), 3(3), 4-5(4), 6-15(5) has six output groups 0-5. Do not silently resolve the author inconsistency."
       },
       "scope_limits": "Keep BioVid experiment separate from UNBC main evaluation and the non-pain private fatigue cohort. No synthetic pain source, SCS response or ECAP."
+    },
+    {
+      "source_id": "S817",
+      "family": "Ricken et al. 2025 X-ITE real phasic-to-tonic pseudo-label transfer",
+      "mechanism": "Random Forest on hand-crafted ECG, EDA and EMG features; labeled real phasic events plus pseudo-labeled unlabeled real tonic segments; participant LOSO with 14 tonic windows aggregated per test event.",
+      "relation_to_s149": "New primary-confirmed partial pain-domain-adaptation mechanism class. S817 adapts real experimental phasic to real tonic recordings, whereas S149 proposes generated synthetic multimodal source to unlabeled real target. S817 does not establish S149 synthetic-source novelty, clinical pain prediction, ECAP or SCS transfer.",
+      "certainty": "primary_publisher_full_text",
+      "locator": {
+        "url": "https://www.frontiersin.org/journals/pain-research/articles/10.3389/fpain.2025.1562099/full",
+        "section": "Abstract; §§3.1-3.2, 4-7; Figure 1; Data availability statement"
+      },
+      "label_constructs": "No-pain baseline versus highest calibrated experimental pain-tolerance stimulus class; neither continuous pain rating nor clinical outcome.",
+      "scope_limits": [
+        "X-ITE source corpus has 134 participants; Figure 1 analysis pipeline says 125, with unexplained difference in inspected text.",
+        "LOSO-CV is internal participant-level validation; no independent external cohort.",
+        "Subject-specific phasic data contribute to normalization; tonic segments are not independent people.",
+        "Raw X-ITE data are available for research on request; no unconditional open dataset."
+      ]
+    },
+    {
+      "source_id": "S818",
+      "family": "Ricken/Bellmann/Walter/Schwenker X-ITE phasic-to-tonic lineage (S818, S819, S817)",
+      "mechanism": "Publisher abstract: train Random Forest on real X-ITE phasic events and evaluate 14 chunk-based tonic representations with participant LOSO-CV.",
+      "relation_to_s149": "Earlier real-to-real experimental pain-duration transfer, without evidence of a synthetic source. Same X-ITE lineage as S819 and S817; not an independent replication or equivalent to S149.",
+      "certainty": "publisher_metadata_and_abstract_only",
+      "locator": {
+        "url": "https://link.springer.com/chapter/10.1007/978-3-031-37660-3_28",
+        "section": "Publisher title, metadata and Abstract; full chapter restricted"
+      },
+      "label_constructs": "Exact binary label threshold and analyzed participant N unavailable from publisher abstract; no clinical outcome established.",
+      "scope_limits": [
+        "Full methods paywalled; do not impute 125 participants or detailed sensors from S819.",
+        "Internal LOSO is not an external patient cohort."
+      ]
+    },
+    {
+      "source_id": "S819",
+      "family": "Ricken/Bellmann/Walter/Schwenker X-ITE phasic-to-tonic lineage (S818, S819, S817)",
+      "mechanism": "Official MDPI full PDF: phasic-trained Random Forest; class prototypes and distance metrics select one of 14 real tonic windows. Participant LOSO, 125 analyzed healthy people of 134 available; nine excluded for data errors.",
+      "relation_to_s149": "Earlier real-to-real experimental pain-duration transfer; no synthetic source. A method extension of the S818 chunk baseline and predecessor to S817 pseudo-labeling on the same X-ITE family, not an independent replication.",
+      "certainty": "primary_publisher_full_pdf",
+      "locator": {
+        "url": "https://mdpi-res.com/d_attachment/computers/computers-12-00071/article_deploy/computers-12-00071.pdf",
+        "section": "PDF pp. 1, 4-5, 8, 10-13, 17; Abstract, sections 3.1-3.2, 4.9, 5-6, Data Availability"
+      },
+      "label_constructs": "No-pain baseline versus highest experimentally calibrated pain-tolerance stimulus class; not patient clinical pain or treatment response.",
+      "scope_limits": [
+        "Publisher PDF SHA-256 a046ad5cc95217d26e6f713552684fec5ce2d0b2b4ba0460247efb8743b0d197.",
+        "Electric TRA accuracy 68.0% versus naive 66.0%; thermal EDA 59.6% versus naive 53.2%, both internal LOSO.",
+        "Publisher says data availability not applicable; no raw-data reuse grant.",
+        "Nine exclusions attributed only to data errors; exact participant identities unavailable."
+      ]
+    },
+    {
+      "source_id": "S820",
+      "family": "Wally et al. 2021 X-ITE phasic-to-tonic electrical transfer; shares dataset and task family with S818-S819-S817, exact cohort overlap unverified",
+      "mechanism": "Springer publisher abstract: personalized k-fold, Random Forest and DNN, binary experimental pain classification trained on real phasic electrical X-ITE and tested on real tonic electrical X-ITE.",
+      "relation_to_s149": "Real-to-real duration transfer only; no generated synthetic source or unlabeled-target alignment described. Shared X-ITE dataset does not make this an independent clinical cohort or a direct S149 mechanism test.",
+      "certainty": "publisher_metadata_and_abstract_only",
+      "locator": {
+        "url": "https://link.springer.com/chapter/10.1007/978-3-030-68780-9_59",
+        "section": "Publisher title, authors, metadata, Abstract and access notice"
+      },
+      "label_constructs": "Binary experimental pain class per abstract; exact threshold and analyzed N unavailable. No patient treatment response.",
+      "scope_limits": [
+        "Full chapter restricted; no exact modalities, folds, numeric metrics or participant overlap with later X-ITE studies verified.",
+        "No independent clinical cohort, ECAP, SCS endpoint or synthetic-source adaptation established."
+      ]
+    },
+    {
+      "source_id": "S836",
+      "family": "Choi et al. 2026 trust-gated synthetic EEG augmentation",
+      "mechanism": "Conditional latent diffusion trained on real EEG training subjects; real-training teacher filters synthetic EEG before participant-disjoint chronic-pain case/control evaluation.",
+      "relation_to_s149": "Partial synthetic-pain analogue with labeled real source training and synthetic augmentation, not synthetic-only source or unlabeled real-target alignment.",
+      "certainty": "primary_publisher_full_text",
+      "locator": {
+        "url": "https://www.nature.com/articles/s41746-026-02778-0",
+        "section": "Abstract; Results; Methods > datasets and participant-disjoint splitting; Figure 1"
+      },
+      "label_constructs": "PainMunich chronic-pain case versus control, n=189, plus separate motor-imagery benchmark; not pain intensity or SCS outcome.",
+      "scope_limits": [
+        "The harm rate means paired model AUROC decline >0.01, not patient harm.",
+        "No independent clinical outcome or ECAP validation."
+      ]
+    },
+    {
+      "source_id": "S837",
+      "family": "Rathee et al. 2022 MAML facial-pain subject adaptation",
+      "mechanism": "Springer abstract: MAML pretraining on labeled facial-expression images across five pain levels, then 1-shot or 5-shot adaptation using labeled new-subject images.",
+      "relation_to_s149": "Partial pain-domain subject adaptation analogue, but real labeled source and labeled target; no synthetic source or unlabeled target.",
+      "certainty": "publisher_metadata_and_abstract_only",
+      "locator": {
+        "url": "https://link.springer.com/article/10.1007/s10044-021-01025-4",
+        "section": "Publisher front matter, Abstract and access notice"
+      },
+      "label_constructs": "UNBC-McMaster facial-expression pain levels; the abstract does not establish subjective pain ratings or clinical treatment outcome.",
+      "scope_limits": [
+        "Full methods subscription-restricted; participant partitions, sample size and accuracy denominator cannot be checked.",
+        "Author-reported 96%/98% accuracy does not establish external clinical validity or ECAP/SCS transfer."
+      ]
     }
   ],
   "citation_search": {
@@ -337,6 +445,12 @@
           "section": "2026-09-25 Europe PMC cites query hitCount=0"
         }
       ],
+      "latest_recheck": {
+        "checked_at": "2026-09-27",
+        "openalex_exact_filter_count": 0,
+        "locator": "https://api.openalex.org/works?filter=cites:W7196979222&per-page=100&select=id,doi,title,publication_year",
+        "limit": "Direct exact OpenAlex filter returned meta.count=0 on this date. This is an index-scoped observation, not a claim that no citing papers exist. The S817 analogue discovered today resets the saturation clock; this same-day query is not a later clean refresh."
+      },
       "dated_refreshes": [
         {
           "date": "2026-09-24",
@@ -382,6 +496,346 @@
           ],
           "coverage_limit": "OpenAlex cites API and IEEE Xplore routes were inaccessible through the web reader; the S792 publisher citing list was not exhaustively screened. The eight supplementary Pi jobs were cancelled without results and are excluded as evidence."
         }
+      ]
+    },
+    "s792_forward": {
+      "state": "partially_screened_citation_queue",
+      "checked_at": "2026-09-26",
+      "openalex_work_id": "W3155418628",
+      "doi": "10.1016/j.imavis.2021.104167",
+      "indexed_cited_by_count": 23,
+      "screened_citing_records": 23,
+      "query_url": "https://api.openalex.org/works?filter=cites:W3155418628&per-page=100&select=id,doi,title,publication_year",
+      "query_result_count": 23,
+      "limit": "All 23 currently indexed OpenAlex citing records have bounded source-specific dispositions. Several are abstract-only or identity-only; one ACM method remains inaccessible. OpenAlex is an incomplete citation index, so this does not establish exhaustive citation coverage, saturation, or absence of further analogues.",
+      "next_action": "Resolve inaccessible/abstract-only methods; repeat publisher and backward/forward searches on a distinct later date; distinguish subject, experimental-to-clinical and bovine proxy transfer from synthetic-source to real-target pain adaptation.",
+      "primary_route_for_seed": "https://www.sciencedirect.com/science/article/pii/S026288562100072X",
+      "screened_records": [
+        {
+          "disposition": "primary_verified_adjacent_pain_assessment_not_domain_adaptation",
+          "publication_year": 2024,
+          "title": "Facial expression analysis using Decomposed Multiscale Spatiotemporal Networks",
+          "relation_to_s792": "The S792 publisher citation listing identifies this work among 23 citing records; its own primary article compares DMSN with Rajasekhar et al. (2021) on BioVid. The method is a facial-video pain-estimation architecture, not a domain-adaptation or synthetic-to-real transfer study.",
+          "primary_locators": [
+            {
+              "section": "S792 publisher page, cited-by listing and DMSN citation excerpt",
+              "url": "https://www.sciencedirect.com/science/article/pii/S026288562100072X"
+            },
+            {
+              "section": "Abstract, contribution summary, datasets and BioVid comparison",
+              "url": "https://www.sciencedirect.com/science/article/pii/S0957417423017785"
+            }
+          ],
+          "doi": "10.1016/j.eswa.2023.121276",
+          "openalex_work_id": "W4386374821",
+          "checked_at": "2026-09-26"
+        },
+        {
+          "openalex_work_id": "W3214133158",
+          "doi": "10.1109/acii52823.2021.9597455",
+          "title": "Deep Explanatory Polytomous Item-Response Model for Predicting Idiosyncratic Affective Ratings",
+          "publication_year": 2021,
+          "disposition": "adjacent",
+          "primary_locator": "https://www.kecl.ntt.co.jp/people/kumano.shiro/papers/ZhouIK_ACII2021.pdf",
+          "verification_level": "author_full_text",
+          "scope_and_limit": "Ordinal facial-emotion ratings, no pain transfer",
+          "citation_relation": "OpenAlex indexed; primary reference confirmed only where recorded in source-specific audit",
+          "checked_at": "2026-09-26"
+        },
+        {
+          "openalex_work_id": "W4296773473",
+          "doi": "10.1049/cit2.12140",
+          "title": "Apple grading method based on neural network with ordered partitions and evidential ensemble learning",
+          "publication_year": 2022,
+          "disposition": "adjacent",
+          "primary_locator": "https://bth.diva-portal.org/smash/get/diva2%3A1701591/FULLTEXT01.pdf",
+          "verification_level": "author_manuscript",
+          "scope_and_limit": "Ordinal apple grading, no pain",
+          "citation_relation": "OpenAlex indexed; primary reference confirmed only where recorded in source-specific audit",
+          "checked_at": "2026-09-26"
+        },
+        {
+          "openalex_work_id": "W4304891621",
+          "doi": "10.1016/j.siny.2022.101393",
+          "title": "Pivotal challenges in artificial intelligence and machine learning applications for neonatal care",
+          "publication_year": 2022,
+          "disposition": "adjacent",
+          "primary_locator": "https://www.sciencedirect.com/science/article/pii/S1744165X22000725",
+          "verification_level": "publisher_abstract",
+          "scope_and_limit": "Neonatal AI review, no pain transfer experiment",
+          "citation_relation": "OpenAlex indexed; primary reference confirmed only where recorded in source-specific audit",
+          "checked_at": "2026-09-26"
+        },
+        {
+          "openalex_work_id": "W4312204690",
+          "doi": "10.1016/j.engappai.2022.105698",
+          "title": "Video surveillance using deep transfer learning and deep domain adaptation: Towards better generalization",
+          "publication_year": 2022,
+          "disposition": "adjacent_transfer_method",
+          "primary_locator": "https://qspace.qu.edu.qa/bitstream/handle/10576/40341/1-s2.0-S0952197622006881-main.pdf?isAllowed=y&sequence=1",
+          "verification_level": "author_repository_full_text",
+          "scope_and_limit": "Video-surveillance domain-adaptation review, no pain evaluation",
+          "citation_relation": "OpenAlex indexed; primary reference confirmed only where recorded in source-specific audit",
+          "checked_at": "2026-09-26"
+        },
+        {
+          "openalex_work_id": "W4313591463",
+          "doi": "10.1109/tbiom.2022.3233083",
+          "title": "Audio–Visual Fusion for Emotion Recognition in the Valence–Arousal Space Using Joint Cross-Attention",
+          "publication_year": 2023,
+          "disposition": "adjacent",
+          "primary_locator": "https://arxiv.org/abs/2209.09068",
+          "verification_level": "author_manuscript",
+          "scope_and_limit": "Audio-visual emotion, no pain transfer",
+          "citation_relation": "OpenAlex indexed; primary reference confirmed only where recorded in source-specific audit",
+          "checked_at": "2026-09-26"
+        },
+        {
+          "openalex_work_id": "W4353069873",
+          "doi": "10.3390/app13064019",
+          "title": "Fuzzy Windows with Gaussian Processed Labels for Ordinal Image Scoring Tasks",
+          "publication_year": 2023,
+          "disposition": "adjacent",
+          "primary_locator": "https://www.mdpi.com/2076-3417/13/6/4019",
+          "verification_level": "publisher_full_text",
+          "scope_and_limit": "Ordinal age/mammography scoring, no pain",
+          "citation_relation": "OpenAlex indexed; primary reference confirmed only where recorded in source-specific audit",
+          "checked_at": "2026-09-26"
+        },
+        {
+          "openalex_work_id": "W4379743175",
+          "doi": "10.1145/3555776.3577721",
+          "title": "Automatic Pain Assessment with Ultra-short Electrodermal Activity Signal",
+          "publication_year": 2023,
+          "disposition": "access_limited_unresolved",
+          "primary_locator": "https://www.sigapp.org/sac/sac2023/file2023/TOC.pdf",
+          "verification_level": "official_program_identity_only",
+          "scope_and_limit": "Ultra-short EDA pain-assessment title; ACM method inaccessible, transfer unresolved",
+          "citation_relation": "OpenAlex indexed; primary reference confirmed only where recorded in source-specific audit",
+          "checked_at": "2026-09-26"
+        },
+        {
+          "openalex_work_id": "W4393146358",
+          "doi": "10.1609/aaai.v38i20.30221",
+          "title": "Unraveling Pain Levels: A Data-Uncertainty Guided Approach for Effective Pain Assessment",
+          "publication_year": 2024,
+          "disposition": "pain_assessment_no_transfer",
+          "primary_locator": "https://ojs.aaai.org/index.php/AAAI/article/view/30221",
+          "verification_level": "publisher_full_text",
+          "scope_and_limit": "Separate BioVid and Apon LOSO evaluations; no cross-dataset training transfer",
+          "citation_relation": "OpenAlex indexed; primary reference confirmed only where recorded in source-specific audit",
+          "checked_at": "2026-09-26"
+        },
+        {
+          "openalex_work_id": "W4400276083",
+          "doi": "10.1109/jstsp.2024.3422823",
+          "title": "Incongruity-Aware Cross-Modal Attention for Audio-Visual Fusion in Dimensional Emotion Recognition",
+          "publication_year": 2024,
+          "disposition": "adjacent",
+          "primary_locator": "https://ieeexplore.ieee.org/document/10584250/",
+          "verification_level": "publisher_abstract",
+          "scope_and_limit": "Audio-visual emotion on RECOLA/Aff-Wild2",
+          "citation_relation": "OpenAlex indexed; primary reference confirmed only where recorded in source-specific audit",
+          "checked_at": "2026-09-26"
+        },
+        {
+          "openalex_work_id": "W4400527786",
+          "doi": "10.1109/fg59268.2024.10581958",
+          "title": "Subject-Based Domain Adaptation for Facial Expression Recognition",
+          "publication_year": 2024,
+          "disposition": "pain_domain_transfer_partial_analogue",
+          "primary_locator": "https://arxiv.org/html/2312.05632v3",
+          "verification_level": "author_full_text",
+          "scope_and_limit": "Methods IV-A: 77 BioVid source subjects to 10 unlabeled target subjects and 20 UNBC source subjects to 5 targets; subject-based multi-source adaptation, not synthetic-source transfer or external clinical validation.",
+          "citation_relation": "OpenAlex indexed; primary reference confirmed only where recorded in source-specific audit",
+          "checked_at": "2026-09-26"
+        },
+        {
+          "openalex_work_id": "W4400653593",
+          "doi": "10.1007/s10044-024-01302-y",
+          "title": "Hierarchical global and local transformer for pain estimation with facial expression videos",
+          "publication_year": 2024,
+          "disposition": "pain_assessment_no_transfer_at_abstract_scope",
+          "primary_locator": "https://link.springer.com/article/10.1007/s10044-024-01302-y",
+          "verification_level": "publisher_abstract",
+          "scope_and_limit": "Pain estimation on UNBC/BioVid/DAiSEE; transfer not established by abstract",
+          "citation_relation": "OpenAlex indexed; primary reference confirmed only where recorded in source-specific audit",
+          "checked_at": "2026-09-26"
+        },
+        {
+          "openalex_work_id": "W4402581218",
+          "doi": "10.1109/tnsre.2024.3461589",
+          "title": "Continuous Short-Term Pain Assessment in Temporomandibular Joint Therapy Using LSTM Models Supported by Heat-Induced Pain Data Patterns",
+          "publication_year": 2024,
+          "disposition": "pain_domain_transfer_partial_analogue",
+          "primary_locator": "https://omega.polsl.pl/info/article/PSL67948a9889d34ef3a68e34c9a505be0f/",
+          "verification_level": "author_institution_abstract",
+          "scope_and_limit": "Experimental heat-pain patterns pseudo-label clinical TMJ data; full split unverified",
+          "citation_relation": "OpenAlex indexed; primary reference confirmed only where recorded in source-specific audit",
+          "checked_at": "2026-09-26"
+        },
+        {
+          "openalex_work_id": "W4402916681",
+          "doi": "10.1109/cvprw63382.2024.00483",
+          "title": "Recursive Joint Cross-Modal Attention for Multimodal Fusion in Dimensional Emotion Recognition",
+          "publication_year": 2024,
+          "disposition": "adjacent",
+          "primary_locator": "https://openaccess.thecvf.com/content/CVPR2024W/ABAW/papers/Praveen_Recursive_Joint_Cross-Modal_Attention_for_Multimodal_Fusion_in_Dimensional_Emotion_CVPRW_2024_paper.pdf",
+          "verification_level": "publisher_full_text",
+          "scope_and_limit": "Multimodal emotion, no pain transfer",
+          "citation_relation": "OpenAlex indexed; primary reference confirmed only where recorded in source-specific audit",
+          "checked_at": "2026-09-26"
+        },
+        {
+          "openalex_work_id": "W4406657586",
+          "doi": "10.1109/tce.2025.3532322",
+          "title": "Joint Multi-Scale Multimodal Transformer for Emotion Using Consumer Devices",
+          "publication_year": 2025,
+          "disposition": "adjacent",
+          "primary_locator": "https://jamilahmadicp.github.io/publications/",
+          "verification_level": "author_bibliography_and_abstract",
+          "scope_and_limit": "Audio-visual emotion on IEMOCAP/MELD",
+          "citation_relation": "OpenAlex indexed; primary reference confirmed only where recorded in source-specific audit",
+          "checked_at": "2026-09-26"
+        },
+        {
+          "openalex_work_id": "W4408894186",
+          "doi": "10.3390/math13071100",
+          "title": "Hybrid Multi-Attention Network for Audio–Visual Emotion Recognition Through Multimodal Feature Fusion",
+          "publication_year": 2025,
+          "disposition": "adjacent",
+          "primary_locator": "https://www.mdpi.com/2227-7390/13/7/1100",
+          "verification_level": "publisher_full_text",
+          "scope_and_limit": "Audio-visual emotion, no pain transfer",
+          "citation_relation": "OpenAlex indexed; primary reference confirmed only where recorded in source-specific audit",
+          "checked_at": "2026-09-26"
+        },
+        {
+          "openalex_work_id": "W4413018384",
+          "doi": "10.1109/fg61629.2025.11099263",
+          "title": "Trajectory-guided Motion Perception for Facial Expression Quality Assessment in Neurological Disorders",
+          "publication_year": 2025,
+          "disposition": "adjacent",
+          "primary_locator": "https://arxiv.org/abs/2504.09530",
+          "verification_level": "author_preprint",
+          "scope_and_limit": "Facial-expression quality in neurological disorders",
+          "citation_relation": "OpenAlex indexed; primary reference confirmed only where recorded in source-specific audit",
+          "checked_at": "2026-09-26"
+        },
+        {
+          "openalex_work_id": "W4413018418",
+          "doi": "10.1109/fg61629.2025.11099202",
+          "title": "Disentangled Source-Free Personalization for Facial Expression Recognition with Neutral Target Data",
+          "publication_year": 2025,
+          "disposition": "pain_domain_transfer_partial_analogue",
+          "primary_locator": "https://arxiv.org/html/2503.20771",
+          "verification_level": "author_full_text",
+          "scope_and_limit": "Source-free BioVid/UNBC facial pain-expression adaptation using neutral real target videos plus generated target pain-expression images; it does not train on a synthetic source domain.",
+          "citation_relation": "Primary full-text reference list explicitly cites S792; also OpenAlex indexed.",
+          "primary_method_review": {
+            "checked_at": "2026-09-26",
+            "version_reviewed": "arXiv:2503.20771v4 (2025-05-30); FG 2025 DOI metadata is recorded above, but IEEE version text was not independently accessed in this review.",
+            "locators": [
+              {
+                "url": "https://arxiv.org/html/2503.20771",
+                "locator": "Abstract and Introduction lines 42-46, 50-63: source-free subject personalization from neutral target control data; generator synthesizes missing target expressions."
+              },
+              {
+                "url": "https://arxiv.org/html/2503.20771",
+                "locator": "Methods lines 134-143: BioVid Part A 87 subjects, 77 source/10 target, PA4 versus neutral frontal video; within-dataset UNBC 19 source/5 target; cross-dataset protocol line 143 states UNBC 20 source to BioVid 10 target. Table IV caption line 176 instead states all 19 UNBC sources for BioVid transfer; retain this unresolved 20-versus-19 within-paper discrepancy and do not choose/infer a source count."
+              },
+              {
+                "url": "https://arxiv.org/html/2503.20771",
+                "locator": "Appendix A lines 238-242: generator is trained on labeled source-domain data and creates missing pain expressions for target subjects; adaptation combines real target neutral data and generated target pain data."
+              },
+              {
+                "url": "https://arxiv.org/html/2503.20771",
+                "locator": "Ethical impact lines 219-226: BioVid access requires dataset-author request; UNBC requires author request and access agreement; code linked publicly, pretrained weights by trusted-party request."
+              },
+              {
+                "url": "https://github.com/MasoumehSharafi/DSFDA",
+                "locator": "Public author repository, file listing includes source training, target adaptation and test scripts; landing page states dataset availability. No explicit repository license was visible in the inspected page."
+              }
+            ],
+            "construct_and_transfer": "Video facial expression only. BioVid PA4 versus neutral is an experimental-pain class; UNBC PSPI intensity labels are quantized to expression classes (paper lines 138-139). These are facial expression/pain-proxy targets, not subjective pain report or clinical treatment outcome. Cross-dataset transfer is UNBC source to BioVid target, with neutral and generated target pain images used in target adaptation.",
+            "result_scope": "The v4 author manuscript reports subject-level source/target protocols and accuracy tables (lines 140-156, 161-181); for cross-dataset UNBC→BioVid, Methods line 143 reports 20 UNBC source subjects but Table IV caption line 176 reports 19, so the exact source count remains unresolved. It is a partial pain-domain and generated-target augmentation analogue. It is not synthetic-source-to-real-target learning, and gives no ECAP or SCS validation.",
+            "reuse_access": "BioVid and UNBC raw data are not freely downloadable under the paper's described routes; requests and, for UNBC, an access agreement are required. The code repository is public, but no explicit code license was found; pretrained model weights are request-only according to the manuscript."
+          },
+          "checked_at": "2026-09-26"
+        },
+        {
+          "openalex_work_id": "W4414197664",
+          "doi": "10.1109/cvprw67362.2025.00573",
+          "title": "United We Stand, Divided We Fall: Handling Weak Complementarity for Audio-Visual Emotion Recognition in Valence-Arousal Space",
+          "publication_year": 2025,
+          "disposition": "adjacent",
+          "primary_locator": "https://openaccess.thecvf.com/content/CVPR2025W/ABAW/papers/Rajasekhar_United_we_stand_Divided_we_fall_Handling_Weak_Complementarity_for_CVPRW_2025_paper.pdf",
+          "verification_level": "publisher_full_text",
+          "scope_and_limit": "Valence-arousal emotion; cites S792 but no pain transfer",
+          "citation_relation": "Primary full-text reference list explicitly cites S792; also OpenAlex indexed.",
+          "checked_at": "2026-09-26"
+        },
+        {
+          "openalex_work_id": "W4416286404",
+          "doi": "10.1109/tbme.2025.3633663",
+          "title": "A Dynamic Local–Global Spatiotemporal Transformer Network for Pain Intensity Estimation in Patients With Disorders of Consciousness",
+          "publication_year": 2025,
+          "disposition": "pain_assessment_no_transfer_at_abstract_scope",
+          "primary_locator": "https://doi.org/10.1109/TBME.2025.3633663",
+          "verification_level": "publisher_identity_and_indexed_abstract",
+          "scope_and_limit": "Facial pain estimator in disorders of consciousness; full method inaccessible",
+          "citation_relation": "OpenAlex indexed; primary reference confirmed only where recorded in source-specific audit",
+          "checked_at": "2026-09-26"
+        },
+        {
+          "openalex_work_id": "W7140188957",
+          "doi": "10.1109/taffc.2026.3677128",
+          "title": "Weakly Supervised Learning for Facial Affective Behavior Analysis: A Review",
+          "publication_year": 2026,
+          "disposition": "adjacent_review",
+          "primary_locator": "https://pure.etsmtl.ca/en/publications/weakly-supervised-learning-for-facial-affective-behavior-analysis/",
+          "verification_level": "author_institution_abstract",
+          "scope_and_limit": "Weakly supervised facial-affect review, no new pain experiment",
+          "citation_relation": "OpenAlex indexed; primary reference confirmed only where recorded in source-specific audit",
+          "checked_at": "2026-09-26"
+        },
+        {
+          "openalex_work_id": "W7165621344",
+          "doi": "10.64898/2026.06.18.733162",
+          "title": "Protocol-Guided Cross-Domain Transfer Learning for Bovine Facial Pain Recognition under Weak Dairy-Farm Labels",
+          "publication_year": 2026,
+          "disposition": "pain_domain_transfer_partial_analogue",
+          "primary_locator": "https://www.biorxiv.org/content/10.64898/2026.06.18.733162v1.full.pdf",
+          "verification_level": "publisher_full_preprint",
+          "scope_and_limit": "Beef-cattle postoperative pain representation to dairy-cow health-status proxies; eight-cow test, target-only comparable Official bioRxiv v1 PDF SHA-256 7f653cda9e91d0e993e9967ae61d2e7e45bbc0b5741c9093c0cbe914e5311c55; target-only model comparable and cow-level uncertainty wide.",
+          "citation_relation": "Primary full-text reference list explicitly cites S792; also OpenAlex indexed.",
+          "checked_at": "2026-09-26"
+        },
+        {
+          "openalex_work_id": "W7167617232",
+          "doi": "10.1109/tmi.2026.3710844",
+          "title": "DiffGeo-AOR: Diffusion-Optimized Medical Grading via Geometric Priors Enhanced Autoregressive Ordinal Regression",
+          "publication_year": 2026,
+          "disposition": "adjacent_at_abstract_scope",
+          "primary_locator": "https://ieeexplore.ieee.org/document/11598822/",
+          "verification_level": "publisher_abstract",
+          "scope_and_limit": "General medical ordinal grading; no pain transfer in abstract",
+          "citation_relation": "OpenAlex indexed; primary reference confirmed only where recorded in source-specific audit",
+          "checked_at": "2026-09-26"
+        }
+      ],
+      "remaining_indexed_records": 0,
+      "unresolved_method_records": [
+        "W4379743175",
+        "W4400653593",
+        "W4416286404",
+        "W7167617232"
+      ],
+      "direct_pain_domain_transfer_partial_analogues": [
+        "W4400527786",
+        "W4402581218",
+        "W4413018418",
+        "W7165621344"
       ]
     },
     "verified_family_link": {
@@ -442,10 +896,100 @@
         "limit": "S088 reference list is unavailable in primary full text, and index metadata is incomplete; do not treat this as exhaustive reference-content verification."
       },
       "coverage_limit": "S088 is a 2026 proceedings item with short indexing history. Zero reachable index counts do not establish zero actual citations. IEEE primary cited-by route was inaccessible on independent direct check; Google Scholar linked by IEEE was HTTP 403 in worker pass."
+    },
+    "s791_forward_2026_09_27": {
+      "seed_doi": "10.1109/FG47880.2020.00139",
+      "checked_at": "2026-09-27",
+      "openalex_citing_count": 26,
+      "s792_openalex_overlap_count": 9,
+      "discovery_locator": "https://api.openalex.org/works?filter=cites:W3128692355&per-page=100",
+      "decision": "The 17-item S791-only index difference contains three S792/version-family records and 14 third-party index records. All 14 third-party records now have bounded primary-source dispositions; the two overlong Pi jobs were cancelled and independently resolved by root through an official thesis repository and an author project page. This closes only this OpenAlex set, not broader citation coverage or saturation.",
+      "s791_only_indexed_count": 17,
+      "known_version_relation": "The 17 include S792 journal citing S791 and two version-family preprints; do not count these as new third-party works.",
+      "third_party_candidate_count_before_duplicate_review": 14,
+      "screened_third_party_count": 14,
+      "unscreened_openalex_ids": [],
+      "version_family_ids": [
+        "W3155418628",
+        "W3049637001",
+        "W3094893032"
+      ],
+      "screened_third_party": [
+        {
+          "openalex_id": "W4221139382",
+          "primary_locator": "https://openaccess.thecvf.com/content/CVPR2022W/ABAW/html/Praveen_A_Joint_Cross-Attention_Model_for_Audio-Visual_Fusion_in_Dimensional_Emotion_CVPRW_2022_paper.html",
+          "disposition": "ABAW dimensional emotion fusion, not a pain experiment or synthetic pain transfer."
+        },
+        {
+          "openalex_id": "W4361285006",
+          "primary_locator": "https://arxiv.org/html/2211.09317",
+          "disposition": "Author manuscript is a narrative review of explainable, domain-adaptive and federated medical AI; the S791 citation is background, not a new pain-transfer experiment."
+        },
+        {
+          "openalex_id": "W4400928938",
+          "primary_locator": "https://ai.jmir.org/2025/1/e53026",
+          "disposition": "Published narrative review of automated pain recognition; no independent synthetic-to-real pain-transfer experiment. Its JMIR preprint is W4388073194."
+        },
+        {
+          "openalex_id": "W3104441923",
+          "primary_locator": "https://www.mdpi.com/2076-3417/11/24/11738",
+          "disposition": "SEWA-DB valence/arousal emotion recognition, not a pain-target experiment."
+        },
+        {
+          "openalex_id": "W4387211810",
+          "primary_locator": "https://link.springer.com/chapter/10.1007/978-3-031-43904-9_16",
+          "disposition": "Digital-pathology domain-shift method; no pain or ECAP target."
+        },
+        {
+          "openalex_id": "W4387125759",
+          "primary_locator": "https://liu.diva-portal.org/smash/get/diva2%3A1800798/FULLTEXT02.pdf",
+          "disposition": "Official Linkoping University dissertation on digital-pathology generalization, uncertainty and anomaly detection; no pain or ECAP target. Root verified its institutional abstract after the Pi job was cancelled."
+        },
+        {
+          "openalex_id": "W4410980529",
+          "primary_locator": "https://www.nature.com/articles/s41598-025-04552-w",
+          "disposition": "Partial pain-transfer analogue: real UNBC facial-pain training and BioVid cross-dataset test without fine-tuning; no synthetic source, ECAP or clinical SCS outcome."
+        },
+        {
+          "openalex_id": "W4414143634",
+          "primary_locator": "https://link.springer.com/article/10.1007/s00371-025-04167-2",
+          "disposition": "Publisher abstract describes depth-guided synthetic UNBC facial-image augmentation; full methods restricted, so unlabeled-target alignment cannot be established."
+        },
+        {
+          "openalex_id": "W3195565183",
+          "primary_locator": "https://www.mva-org.jp/Proceedings/2021/papers/P3-5.pdf",
+          "disposition": "Official conference paper uses synthetic GTA5 to real Cityscapes semantic segmentation with target super-pixel labels; no pain construct."
+        },
+        {
+          "openalex_id": "W3127488626",
+          "primary_locator": "https://pr.ai.vn/publication/emopain_fg20/",
+          "disposition": "Author project page and abstract describe EmoPain facial and movement pain/behavior recognition with attention; no synthetic-source domain transfer stated. Full IEEE method remains unavailable; root verified the author page after the Pi job was cancelled."
+        },
+        {
+          "openalex_id": "W3125241393",
+          "primary_locator": "https://arxiv.org/abs/2101.09858",
+          "disposition": "Author review of weakly supervised facial behavior analysis, including pain literature; no independent synthetic-pain experiment."
+        },
+        {
+          "openalex_id": "W4388073194",
+          "primary_locator": "https://preprints.jmir.org/preprint/53026",
+          "disposition": "Preprint of JMIR review W4400928938; publisher preprint page links to the final DOI 10.2196/53026, not an independent work."
+        },
+        {
+          "openalex_id": "W4413345139",
+          "primary_locator": "https://link.springer.com/chapter/10.1007/978-3-031-88486-3_8",
+          "disposition": "Publisher abstract: UNBC facial-pain class imbalance, under-sampling and sequence/participant split comparisons; full chapter restricted. No synthetic-source transfer in the abstract."
+        },
+        {
+          "openalex_id": "W4415481484",
+          "primary_locator": "https://www.icivc.org/JulyChengdu-prog.pdf",
+          "disposition": "Official ICIVC program abstract describes UNBC facial-pain spatiotemporal regression; IEEE full method inaccessible, no synthetic-source transfer established from the abstract."
+        }
+      ]
     }
   },
   "next_refresh_plan": {
-    "earliest_date": "2026-09-27",
+    "earliest_date": "2026-09-29",
     "stream": "NS-06",
     "queries": [
       "OpenAlex forward citations of DOI 10.3389/frai.2026.1827727 / W7196979222 and exact DOI/title/author search for S149",
@@ -454,7 +998,7 @@
       "Search new primary works on synthetic pain generation and synthetic-to-real pain domain adaptation; distinguish them from S149 and S791/S792",
       "Backward and forward citation verification for any newly discovered candidate, retaining label-construct, version, and source-access boundaries"
     ],
-    "decision_rule": "Record a new dated search run with exact queries and primary locators. The 2026-09-26 run is the first later-dated refresh with no newly primary-confirmed direct analogue or mechanism class; a second consecutive clean dated refresh is not eligible before 2026-09-27. Keep saturation false until the two-refresh rule, full stream/citation checks, and full primary S088 method are resolved."
+    "decision_rule": "S836 and S837 are new primary-confirmed partial pain/synthetic-data analogues on 2026-09-28, resetting the clean count to zero. Search on two distinct subsequent dates, earliest 2026-09-29; resolve S088 full methods and citation gaps before saturation or global absence claims."
   },
   "s759_revision_check": {
     "state": "protocol_changed_between_versions",
@@ -488,10 +1032,13 @@
     }
   ],
   "remaining": [
-    "S088 version-of-record full methods remain inaccessible; verified publisher metadata and secondary-index method claims are separated. Exact PSPI/NRS/clinical label construct, source-target protocol and split remain unverified from the primary paper.",
+    "S088 IEEE publisher abstract is now primary-verified for named modalities, PainMonit-to-BioVid direction and listed model components. Version-of-record full methods remain inaccessible; exact label construction, participant split, calibration fit, numeric metrics and clinical-outcome relevance remain unverified.",
     "Seven Pi worker handles from 2026-09-25 lost status observability after the submitting bridge returned a pi-wait error. Last bridge snapshot was running with agent_settled=false; the current bridge reports unknown jobId. See pi_worker_run_2026_09_25.pending_unverified.",
-    "One bounded later-dated NS-06 refresh on 2026-09-26 found no new direct analogue or mechanism class in manual primary-source search. One clean refresh is counted; next eligible refresh is 2026-09-27. Citation coverage remains bounded and saturation is false.",
-    "Link S759 reported-result runs to a code commit or manifest if exact provenance is required; executable protocol is resolved but the manuscript conflict remains documented."
+    "The earlier bounded 2026-09-26 clean-refresh interpretation is superseded by same-day C1 and S792 citation discoveries. Consecutive clean refresh count is zero; next eligible distinct date is 2026-09-27. Citation index and inaccessible-method limits keep saturation false.",
+    "Link S759 reported-result runs to a code commit or manifest if exact provenance is required; executable protocol is resolved but the manuscript conflict remains documented.",
+    "C1 repository full text and C2 official bioRxiv v1 full text are partial analogues with distinct transfer targets. The 23 indexed S792 citations are dispositioned, but inaccessible methods and broader citation coverage remain unresolved.",
+    "S817 broad real phasic-to-tonic adaptation resets saturation on 2026-09-27; S149 narrower synthetic-source mechanism remains unconfirmed as unique, with S088 methods inaccessible.",
+    "S818 full Springer method text is inaccessible; S819/S817 share X-ITE lineage. S819 explains nine exclusions in its own 125/134 analysis but does not prove the identical subset was used by S817."
   ],
   "s759_author_code_check": {
     "state": "executable_protocol_resolved_reported_runs_unverified",
@@ -622,9 +1169,9 @@
       "saturation": false,
       "saturation_clock": {
         "previous_new_analogue_discovery_date": "2026-09-25",
-        "clean_later_dated_refreshes": 1,
+        "clean_later_dated_refreshes": 0,
         "next_eligible_refresh_date": "2026-09-27",
-        "completed_rule": "second of two required consecutive later-dated clean refreshes not yet performed"
+        "completed_rule": "Same-day C1 and S792 citation discoveries reset the consecutive clean refresh count to zero."
       },
       "s088": "Full primary method not obtained; IEEE document and PDF routes inaccessible through web reader; method remains title_only.",
       "pi_worker_execution": {
@@ -641,7 +1188,247 @@
         ],
         "global_capacity_view": "overview tool unavailable; counts are local observations only",
         "evidence_use": "cancelled worker outputs are not used as search evidence"
-      }
+      },
+      "status": "historical_bounded_clean_pass_superseded_by_same_day_discoveries"
+    },
+    {
+      "date": "2026-09-26",
+      "status": "same-day follow-up after earlier refresh; new primary lead found",
+      "new_direct_analogue": true,
+      "new_mechanism_class": false,
+      "primary_locators": [
+        "https://www.repository.cam.ac.uk/items/50723564-f7c0-4ca6-817b-fb46ca07d93e",
+        "https://www.biorxiv.org/content/10.64898/2026.06.18.733162v1"
+      ],
+      "saturation": false,
+      "note": "C1 and later S792 citation screening supersede the earlier same-day clean-refresh characterization. C2 full official bioRxiv v1 methods were subsequently recovered. No distinct later-date refresh; saturation count remains zero."
+    },
+    {
+      "id": "NS-RUN-2026-09-27-01",
+      "date": "2026-09-27",
+      "status": "new_primary_partial_analogue_found",
+      "query_or_seed": "\"Pseudo-labeling based adaptations of pain domain classifiers\" OR \"10.3389/fpain.2025.1562099\"; S149/S792 related-work follow-up",
+      "primary_locators": [
+        "https://www.frontiersin.org/journals/pain-research/articles/10.3389/fpain.2025.1562099/full",
+        "https://pubmed.ncbi.nlm.nih.gov/40337527/"
+      ],
+      "new_direct_analogue": true,
+      "new_mechanism_class": true,
+      "saturation": false,
+      "saturation_clock": {
+        "previous_new_analogue_discovery_date": "2026-09-27",
+        "clean_later_dated_refreshes": 0,
+        "next_eligible_refresh_date": "2026-09-28"
+      },
+      "decision": "Real phasic-to-tonic X-ITE pseudo-label adaptation is a partial analogue; distinct from S149 synthetic source. Full S088 primary methods and exhaustive citation coverage remain unresolved."
+    },
+    {
+      "id": "NS-RUN-2026-09-27-02",
+      "date": "2026-09-27",
+      "status": "same_day_backward_citation_followup_new_family_members",
+      "query_or_seed": "S817 reference 22 and its predecessor lineage; exact Springer and MDPI DOI/title search",
+      "primary_locators": [
+        "https://link.springer.com/chapter/10.1007/978-3-031-37660-3_28",
+        "https://www.mdpi.com/2073-431X/12/4/71",
+        "https://mdpi-res.com/d_attachment/computers/computers-12-00071/article_deploy/computers-12-00071.pdf"
+      ],
+      "new_direct_analogue": true,
+      "new_mechanism_class": false,
+      "saturation": false,
+      "decision": "S818 abstract-only and S819 full-text predecessors are distinct method stages in one X-ITE lineage; no additional independent replication or synthetic-source test. Same-day follow-up is not a clean later-dated refresh."
+    },
+    {
+      "id": "NS-RUN-2026-09-27-03",
+      "date": "2026-09-27",
+      "status": "same_day_backward_citation_abstract_only_predecessor",
+      "query_or_seed": "Backward citation from S818; exact DOI/title and author-full-text access search for 10.1007/978-3-030-68780-9_59",
+      "primary_locators": [
+        "https://link.springer.com/chapter/10.1007/978-3-030-68780-9_59"
+      ],
+      "new_direct_analogue": true,
+      "new_mechanism_class": false,
+      "saturation": false,
+      "decision": "S820 is a real-to-real X-ITE experimental pain duration-transfer predecessor known from publisher abstract. Full chapter unavailable, same-day finding, no synthetic-source or external clinical validation. Clean later-dated refresh count remains zero."
+    },
+    {
+      "id": "NS-RUN-2026-09-28-01",
+      "date": "2026-09-28",
+      "status": "new_primary_partial_analogues_found",
+      "query_or_seed": "Dated synthetic EEG pain and pain-domain subject-adaptation synonym/backward search; DOI 10.1038/s41746-026-02778-0 and 10.1007/s10044-021-01025-4; S088 owner abstract recheck.",
+      "primary_locators": [
+        "https://www.nature.com/articles/s41746-026-02778-0",
+        "https://link.springer.com/article/10.1007/s10044-021-01025-4",
+        "https://ieeexplore.ieee.org/abstract/document/11606012"
+      ],
+      "new_direct_analogue": true,
+      "new_mechanism_class": true,
+      "saturation": false,
+      "saturation_clock": {
+        "previous_new_analogue_discovery_date": "2026-09-28",
+        "clean_later_dated_refreshes": 0,
+        "next_eligible_refresh_date": "2026-09-29"
+      },
+      "decision": "S836 full-text synthetic EEG augmentation and S837 abstract-level MAML facial pain adaptation are partial analogues with distinct label/data routes. S088 full methods and complete citation coverage remain unresolved. No clean saturation refresh is counted on this discovery date."
     }
-  ]
+  ],
+  "operational_disposition": {
+    "decision": "STOP at the documented 2026-09-26 cutoff",
+    "operational_only": true,
+    "as_of": "2026-09-26",
+    "saturation": false,
+    "prior_art_conclusion": "partial_analogues_only; no global absence claim",
+    "unresolved_scope": [
+      "S088 primary methods and label/split details unavailable",
+      "C1 is a supervised synthetic-pretraining to labeled real-pain transfer analogue, not the S149 unlabeled-target adaptation pipeline",
+      "C2 official bioRxiv v1 full methods reviewed, but weak target proxies and eight-cow uncertainty limit the transfer conclusion",
+      "All 23 OpenAlex-indexed S792 citing records have bounded dispositions; inaccessible methods, index incompleteness and a second distinct clean dated refresh remain open"
+    ],
+    "prohibited_inferences": [
+      "No-direct-analogue or saturation claim",
+      "Treating C1 as method-equivalent to S149",
+      "Claiming C2 establishes source-pretraining benefit, human pain transfer, or clinical validation"
+    ],
+    "primary_routes": [
+      "https://www.repository.cam.ac.uk/items/50723564-f7c0-4ca6-817b-fb46ca07d93e",
+      "https://www.biorxiv.org/content/10.64898/2026.06.18.733162v1",
+      "https://ieeexplore.ieee.org/document/11606012"
+    ]
+  },
+  "unindexed_primary_leads": [
+    {
+      "title": "Data-Efficient AU-Graph Transfer Learning for Consumer-Camera Pain-Aware Sensing",
+      "primary_locator": "https://www.repository.cam.ac.uk/items/50723564-f7c0-4ca6-817b-fb46ca07d93e",
+      "persistent_identifier": "https://doi.org/10.17863/cam.133580",
+      "publisher_doi": "10.1109/mce.2026.3723599",
+      "publisher_doi_review": {
+        "checked_at": "2026-09-27",
+        "repository_metadata_url": "https://www.repository.cam.ac.uk/items/50723564-f7c0-4ca6-817b-fb46ca07d93e",
+        "repository_field": "Publisher DOI",
+        "crossref_url": "https://api.crossref.org/works/10.1109/mce.2026.3723599",
+        "crossref_result": "Title metadata matches the repository item title; message.resource.primary.URL identifies IEEE document 11655613. IEEE document 11606012 belongs to the separate S088 DOI 10.1109/ISDA70544.2026.11606012.",
+        "ieee_primary_url": "https://ieeexplore.ieee.org/document/11655613/",
+        "repository_bitstream_metadata_url": "https://api.repository.cam.ac.uk/server/api/core/bitstreams/fed34050-ff3a-4977-a18e-c1062c8fd2d8",
+        "repository_version": "Accepted version, as labeled by the repository bitstream metadata; this is not the IEEE version of record.",
+        "ieee_primary_full_text": "Not retrieved; IEEE route remained inaccessible in this environment. DOI and title identity do not verify the IEEE version's methods or equivalence to the accepted manuscript."
+      },
+      "checked_at": "2026-09-26",
+      "evidence_level": "repository full-text PDF reviewed",
+      "relation": "partial analogue: synthetic pretraining and supervised transfer to real PSPI-labeled pain data; not unlabeled-target S149 adaptation",
+      "limitations": [
+        "The repository item metadata lists the IEEE publisher DOI, and Crossref title metadata matches; IEEE full text/version methods were not independently accessible",
+        "single UNBC fold reported; no repeated/LOSO validation established",
+        "no ECAP or SCS outcome"
+      ]
+    }
+  ],
+  "indexed_primary_leads": [
+    {
+      "title": "Protocol-Guided Cross-Domain Transfer Learning for Bovine Facial Pain Recognition under Weak Dairy-Farm Labels",
+      "primary_locator": "https://www.biorxiv.org/content/10.64898/2026.06.18.733162v1",
+      "persistent_identifier": "https://doi.org/10.64898/2026.06.18.733162",
+      "checked_at": "2026-09-26",
+      "evidence_level": "official bioRxiv v1 full PDF reviewed",
+      "relation": "partial analogue: beef-cattle postoperative facial-pain representation to dairy-cow health-status proxies with animal-level external test; source-pretraining benefit not established",
+      "limitations": [
+        "Preprint v1; target labels are weak health-status proxies, not time-aligned pain ratings",
+        "Eight-cow held-out test and wide uncertainty; target-only model comparable to transfer",
+        "Not a synthetic-source to real-target pain experiment; no human clinical pain, ECAP or SCS",
+        "Official PDF SHA-256 7f653cda9e91d0e993e9967ae61d2e7e45bbc0b5741c9093c0cbe914e5311c55"
+      ],
+      "indexed_relation": "OpenAlex W7165621344 cites S792; checked against official bioRxiv v1 PDF"
+    },
+    {
+      "title": "Enhancing pain intensity evaluation via an attention-driven channel–spatial fusion network",
+      "persistent_identifier": "https://doi.org/10.1007/s00371-025-04167-2",
+      "primary_locator": "https://link.springer.com/article/10.1007/s00371-025-04167-2",
+      "checked_at": "2026-09-27",
+      "evidence_level": "Springer publisher abstract, Data Availability statement, references and code link checked; full methods subscription-restricted",
+      "relation": "Candidate partial analogue: UNBC facial-pain regression with depth-guided synthetic image augmentation; the abstract does not establish an unlabeled real target or S149-equivalent synthetic-source alignment.",
+      "limitations": [
+        "Publisher abstract describes ADCSFNet/GSFF and depth-guided image generation, but split, synthetic data provenance and leakage controls require full methods.",
+        "UNBC facial pain-expression regression is not NRS, clinical SCS outcome or ECAP.",
+        "Citation-edge and index scope are discovery evidence only; this lead does not count as a clean saturation refresh or a proven new mechanism class.",
+        "Publisher abstract reports ADCSFNet MAE 0.34, MSE 0.53 and Pearson r 0.85 on UNBC-McMaster; these abstract-level metrics do not establish participant-disjoint validation or clinical outcome prediction.",
+        "Publisher Data Availability states that experimental data came from the public UNBC dataset and no additional data are available for publication; generated-image provenance and any supplementary study data remain unverified.",
+        "Springer links model code at https://github.com/alex84829/AACSFNet; code-to-reported-result provenance was not verified."
+      ],
+      "indexed_relation": "OpenAlex W4414143634 is among S791 forward citations in 2026-09-27 bounded pass; root independently checked Springer publisher abstract."
+    },
+    {
+      "title": "Learning Pain from Emotion: Transferred HoT Data Representation for Pain Intensity Estimation",
+      "persistent_identifier": "https://doi.org/10.1007/978-3-319-16199-0_54",
+      "primary_locator": "https://link.springer.com/chapter/10.1007/978-3-319-16199-0_54",
+      "checked_at": "2026-09-27",
+      "evidence_level": "Official Springer chapter page and full publisher PDF; Sections 4, 6.1-6.2 and 7, pp. 782-788 checked",
+      "relation": "Earlier partial pain-transfer analogue: representation transfer from real Cohn-Kanade emotion faces to real UNBC facial-pain estimation; not a synthetic-to-real pain source, patient-reported outcome, or ECAP/SCS outcome.",
+      "limitations": [
+        "The 25-person UNBC target is evaluated with leave-one-person-out folds; no independent second pain cohort is reported.",
+        "The target label is the database-provided Prkachin-Solomon facial-action score, not patient self-report or a clinical outcome. Cohn-Kanade supplies unlabeled emotion-face representation data.",
+        "This 2015 ECCV 2014 Workshops chapter is a backward-discovered prior-art lead, not a new 2026 publication or a qualifying clean saturation refresh."
+      ],
+      "indexed_relation": "Discovered in the bibliography of S791-forward lead W4413345139; root checked the Springer primary chapter page and full publisher PDF, including the method, split and results."
+    }
+  ],
+  "s817_forward_citation_followup_2026_09_28": {
+    "checked_at": "2026-09-28",
+    "seed": "S817, DOI 10.3389/fpain.2025.1562099; bounded forward-citation query and exact publisher-deposited reference checks",
+    "index_query": "https://api.openalex.org/works?filter=cites:W4409710411&per-page=100&select=id,doi,title,publication_year",
+    "verified_primary_edges": [
+      {
+        "citing_doi": "10.1016/j.bspc.2026.111261",
+        "canonical_source_id": "S039",
+        "publisher_metadata": "https://api.crossref.org/works/10.1016/j.bspc.2026.111261",
+        "reference_locator": "Crossref publisher-deposited reference list: exact DOI 10.3389/fpain.2025.1562099, Ricken 2025",
+        "disposition": "Existing S039 is a partial subject-incremental experimental-pain generalization analogue. Its accessible publisher abstract does not establish synthetic-source training or unlabeled-target adaptation; full methods remain access-limited. This citation edge does not create a new source record."
+      },
+      {
+        "citing_doi": "10.1145/3776734.3794464",
+        "publisher_metadata": "https://api.crossref.org/works/10.1145/3776734.3794464",
+        "reference_locator": "Crossref publisher-deposited reference list: exact DOI 10.3389/fpain.2025.1562099",
+        "disposition": "Atas et al. 2026 HRI Companion paper is an identity-and-citation lead only. ACM full text was inaccessible; modalities, target labels, split and adaptation mechanism were not verified from the publisher and no method analogy is assigned."
+      }
+    ],
+    "boundary": "The two positive citation edges were independently rechecked against Crossref on 2026-09-28. OpenAlex and Crossref coverage is not a complete cited-by census; the ACM route and S088 full methods remain inaccessible. Same-day follow-up after the S836/S837 discovery is not a later-dated clean saturation refresh, and no global absence or novelty claim follows."
+  },
+  "access_recheck_2026_09_28": {
+    "checked_at": "2026-09-28",
+    "scope": "Exact primary-method access recheck for S088 and the S817-forward ACM pain-aware HRI lead; this is a same-date access check after S836/S837 discovery, not a clean saturation refresh.",
+    "routes": [
+      {
+        "doi": "10.1109/ISDA70544.2026.11606012",
+        "primary_url": "https://ieeexplore.ieee.org/document/11606012/",
+        "result": "Live document request returned HTTP 202 with zero response bytes. OpenAlex W7169883718 identifies a closed publisher version and no indexed repository full text; this secondary index does not prove global absence of an author copy.",
+        "disposition": "Preserve publisher-abstract-only S088 method status. Cohort, split, label operationalization and numerical comparisons remain unverified."
+      },
+      {
+        "doi": "10.1145/3776734.3794464",
+        "primary_url": "https://dl.acm.org/doi/10.1145/3776734.3794464",
+        "metadata_url": "https://api.crossref.org/works/10.1145/3776734.3794464",
+        "result": "Live ACM route returned HTTP 403. Publisher-deposited Crossref metadata confirms the exact title and one author, but provides neither an abstract nor full-text link. Exact-title and author-copy searches did not yield a primary method text.",
+        "disposition": "Identity and S817 citation edge only; do not adopt third-party descriptions of BioVid, modalities, model architecture, metrics or evaluation split."
+      }
+    ],
+    "boundary": "No method equivalence, clinical inference or saturation update follows from inaccessible primary text. Both leads remain open to a newly supplied author/publisher artifact."
+  },
+  "access_recheck_2026_09_27": {
+    "checked_at": "2026-09-27",
+    "lead_doi": "10.1145/3555776.3577721",
+    "query_or_seed": "Exact title Automatic Pain Assessment with Ultra-short Electrodermal Activity Signal plus author manuscript; University of Sydney repository route; official ACM DOI and SAC 2023 TOC.",
+    "primary_routes": [
+      {
+        "url": "https://dl.acm.org/doi/10.1145/3555776.3577721",
+        "result": "HTTP 403; full text and methods unavailable"
+      },
+      {
+        "url": "https://www.sigapp.org/sac/sac2023/file2023/TOC.pdf",
+        "result": "Official TOC p. 12 names title, four authors and starting article page 618; no experimental method"
+      },
+      {
+        "url": "https://link.springer.com/chapter/10.1007/978-3-032-14430-0_13",
+        "result": "Separate author-team thermography chapter; preview-only and not an identity or method bridge to the ACM paper"
+      }
+    ],
+    "decision": "The ACM paper remains a title-level EDA pain-assessment analogue candidate. Its stimulus, EDA window, sample, label, split and transfer mechanism cannot be inferred from the TOC or a separate chapter. No new direct analogue class is established by this access recheck; citation and broader search coverage remain incomplete, so it is not a qualifying clean saturation refresh.",
+    "worker_boundary": "Two bounded Pi jobs were cancelled before agent_settled; no partial Pi result was used."
+  }
 }
