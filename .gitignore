@@ -23,6 +23,8 @@
 !.env.example
 .coverage
 .agents
+.scratch
+.audit_tmp
 
 # --- Python: скрипты суперпроекта запускаются локально ------------------------
 __pycache__/
