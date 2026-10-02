@@ -25,6 +25,7 @@
 .agents
 .scratch
 .audit_tmp
+.mcp.json
 
 # --- Python: скрипты суперпроекта запускаются локально ------------------------
 __pycache__/
