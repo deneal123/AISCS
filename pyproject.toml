@@ -1,6 +1,6 @@
 [project]
 name = "gpthub-agents"
-version = "0.1.0"
+version = "0.2.0"
 description = "Сайдкар агентного движка GPTHub: мультипровайдерный LLM-слой, роутинг, инструменты, стриминг"
 requires-python = ">=3.13,<3.14"
 

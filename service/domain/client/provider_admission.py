@@ -172,8 +172,15 @@ class RunProviderAdmission:
         tool_choice: Any = None,
         expected_embedding_dimension: int | None = None,
         pick_model: ModelPicker,
+        require_preferred: bool = False,
     ) -> ProviderCallAdmission:
-        """Bind model, client generation and protocol compilation in one melt-free result."""
+        """Bind model, client generation and protocol compilation in one melt-free result.
+
+        ``require_preferred`` делает пин СТРОГИМ: если явно запрошенная модель не
+        прошла квалификацию, вызов отклоняется (``NO_COMPATIBLE_MODEL``), а не
+        подменяется первой подходящей. Нужно embeddings-шлюзу: тихая смена модели
+        означала бы другую размерность вектора и порчу коллекции.
+        """
 
         normalized = str(provider).strip().lower()
         digest = toolset_digest(tools, tool_choice)
@@ -183,6 +190,7 @@ class RunProviderAdmission:
             prefer,
             expected_embedding_dimension,
             digest,
+            require_preferred,
         )
         cached = self._call_cache.get(key)
         if cached is not None:
@@ -199,7 +207,10 @@ class RunProviderAdmission:
             )
         )
         candidate_ids = [record.model_id for record in records]
-        model = prefer if prefer in candidate_ids else pick_model(candidate_ids, prefer)
+        if require_preferred and prefer is not None and prefer not in candidate_ids:
+            model = None
+        else:
+            model = prefer if prefer in candidate_ids else pick_model(candidate_ids, prefer)
         if catalog is None:
             status = ProviderAdmissionStatus.CATALOG_UNAVAILABLE
         elif (

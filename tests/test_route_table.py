@@ -66,6 +66,7 @@ GATEWAY_ROUTES = {
     ("POST", "/v1/chat/completions"),
     ("GET", "/v1/models"),
     ("POST", "/v1/embeddings"),
+    ("POST", "/v1/tokens/count"),
 }
 
 

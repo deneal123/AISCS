@@ -378,7 +378,8 @@ async def test_gateway_embedding_uses_admitted_generation_and_checks_dimension()
         async def create(self, **kwargs):
             seen.update(kwargs)
             return SimpleNamespace(
-                data=[SimpleNamespace(embedding=[0.1] * 3)],
+                model="embedding",
+                data=[SimpleNamespace(index=0, embedding=[0.1] * 3)],
             )
 
     client = SimpleNamespace(embeddings=_Embeddings())

@@ -52,6 +52,27 @@ class ProviderSpec:
     fallback_model_capabilities: tuple[tuple[str, tuple[str, ...]], ...] = ()
     known_model_capabilities: tuple[tuple[str, tuple[str, ...]], ...] = ()
     embedding_dimensions: tuple[tuple[str, int], ...] = ()
+    embedding_context_windows: tuple[tuple[str, int], ...] = ()
+    """Максимальная длина входа эмбеддинг-модели в токенах (контекстное окно).
+
+    Объявляется отдельно от размерности: у GigaChat ``EmbeddingsGigaR`` это 2560 и
+    4096 соответственно. Нужна потребителю, который режет вход перед индексацией.
+    """
+
+    supports_embedding_dimensions: bool = True
+    """Пробрасывать ли OpenAI-поле ``dimensions`` в запрос эмбеддингов.
+
+    ⚠️ GigaChat ``dimensions`` НЕ понимает и отклоняет запрос: размерность задана
+    самой моделью. ``False`` означает «вырезать поле из запроса», а не «молча
+    подменить размерность» — проверка результата остаётся строгой.
+    """
+
+    token_count_path: str | None = None
+    """Путь token-count эндпоинта провайдера, вызываемый ТЕМ ЖЕ клиентом.
+
+    ``None`` — провайдер не объявляет token-count, шлюз отвечает 502.
+    """
+
     require_declared_model_capabilities: bool = False
     """Require an exact local capability profile even for live inventory entries.
 
@@ -151,6 +172,12 @@ class ProviderSpec:
         for model, dimension in self.embedding_dimensions:
             if int(dimension) <= 0 or "embeddings" not in self.capabilities_for_model(model):
                 raise ValueError("embedding dimension requires an embeddings profile")
+        windows = [model for model, _ in self.embedding_context_windows]
+        if len(windows) != len(set(windows)):
+            raise ValueError("duplicate embedding context window profile")
+        for model, window in self.embedding_context_windows:
+            if int(window) <= 0 or "embeddings" not in self.capabilities_for_model(model):
+                raise ValueError("embedding context window requires an embeddings profile")
 
     def fallback_capabilities(self, model: str) -> frozenset[str]:
         """Return explicitly declared capabilities for a cold-start fallback."""
@@ -174,6 +201,12 @@ class ProviderSpec:
         for model_id, dimension in self.embedding_dimensions:
             if model_id == model:
                 return int(dimension)
+        return None
+
+    def embedding_context_window_for(self, model: str) -> int | None:
+        for model_id, window in self.embedding_context_windows:
+            if model_id == model:
+                return int(window)
         return None
 
 

@@ -76,7 +76,17 @@ SPEC = ProviderSpec(
         ("EmbeddingsGigaR", ("embeddings",)),
         ("GigaEmbeddings-3B-2025-09", ("embeddings",)),
     ),
-    embedding_dimensions=(("Embeddings", 1024),),
+    embedding_dimensions=(
+        ("Embeddings", 1024),
+        ("EmbeddingsGigaR", 2560),
+    ),
+    # Контекстное окно EmbeddingsGigaR — 4096 токенов; вход длиннее нужно резать ДО
+    # индексации (потребитель читает окно и падает заранее, а не ловит 4xx от API).
+    embedding_context_windows=(("EmbeddingsGigaR", 4096),),
+    # GigaChat не понимает OpenAI-поле `dimensions` — вырезаем его из запроса.
+    supports_embedding_dimensions=False,
+    # token-count идёт тем же OAuth/TLS-клиентом, поэтому путь объявлен здесь.
+    token_count_path="/tokens/count",
     require_declared_model_capabilities=True,
     tool_capabilities=GIGACHAT_TOOL_CAPABILITIES,
     # GigaChat присылает usage финальным чанком без request-side `stream_options`.

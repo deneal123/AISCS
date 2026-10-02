@@ -16,8 +16,10 @@ failover и корректной аутентификацией (GigaChat OAuth/
 from __future__ import annotations
 
 import json
+import math
 import time
 from contextlib import asynccontextmanager
+from typing import Any
 
 from fastapi import APIRouter, Header, HTTPException
 from fastapi.responses import JSONResponse, StreamingResponse
@@ -28,7 +30,7 @@ from service.domain.client import (
     list_available_models,
 )
 from service.domain.client.provider_operations import ProviderOperation
-from service.domain.client.registry import PROVIDER_MODULES
+from service.domain.client.registry import PROVIDER_MODULES, get_spec
 from service.domain.run_context import PrivateRunResources, use_run_execution
 from service.settings import config
 
@@ -151,12 +153,129 @@ async def models(authorization: str | None = Header(None)):
     }
 
 
+def _fallback_pick(models: list[str], prefer: str | None) -> str | None:
+    """Прежний запасной выбор: названная модель, иначе первая подходящая.
+
+    Используется ТОЛЬКО без явного пина и не отменяет строгость ``provider:model``
+    (см. ``require_preferred`` в admission).
+    """
+
+    return prefer if prefer in models else models[0] if models else None
+
+
+def _field(value: Any, name: str) -> Any:
+    if isinstance(value, dict):
+        return value.get(name)
+    return getattr(value, name, None)
+
+
+def _embedding_inputs(value: Any) -> list[Any]:
+    if value is None:
+        return []
+    if isinstance(value, str):
+        return [value]
+    if isinstance(value, (list, tuple)):
+        return list(value)
+    return [value]
+
+
+def _validate_embedding_response(
+    response: Any,
+    *,
+    model: str,
+    input_count: int,
+    dimension: int | None,
+) -> None:
+    """Отклонить ответ, который не совпадает с квалифицированным вызовом.
+
+    Проверяем модель, число векторов, полноту и уникальность ``index``, точную
+    размерность и конечность компонент. Иначе повреждённый/чужой ответ молча
+    записался бы в векторную коллекцию.
+    """
+
+    response_model = _field(response, "model")
+    if response_model is None or str(response_model) != str(model):
+        raise RuntimeError("embedding model mismatch")
+    data = list(_field(response, "data") or ())
+    if len(data) != input_count:
+        raise RuntimeError("embedding count mismatch")
+    indices = [_field(item, "index") for item in data]
+    if any(type(index) is not int for index in indices):
+        raise RuntimeError("embedding indices must be integers")
+    indices = sorted(indices)
+    if indices != list(range(len(data))):
+        raise RuntimeError("embedding indices are inconsistent")
+    for item in data:
+        vector = list(_field(item, "embedding") or ())
+        if dimension is not None and len(vector) != dimension:
+            raise RuntimeError("embedding dimension mismatch")
+        if any(
+            isinstance(component, bool)
+            or not isinstance(component, (int, float))
+            or not math.isfinite(component)
+            for component in vector
+        ):
+            raise RuntimeError("embedding contains non-finite values")
+
+
+def _token_count_values(result: Any, *, count: int) -> list[int]:
+    """Нормализовать ответ token-count провайдера в список неотрицательных int."""
+
+    if isinstance(result, dict) and isinstance(result.get("data"), list):
+        entries: list[Any] = list(result["data"])
+    elif isinstance(result, list):
+        entries = list(result)
+    elif isinstance(result, dict):
+        raw = result.get("tokens", result.get("token_count"))
+        entries = list(raw) if isinstance(raw, (list, tuple)) else [raw]
+    else:
+        raise RuntimeError("token count response is invalid")
+    if len(entries) != count:
+        raise RuntimeError("token count response has incorrect length")
+    values: list[int] = []
+    for entry in entries:
+        value: Any = entry if isinstance(entry, int) and not isinstance(entry, bool) else None
+        if value is None:
+            value = _field(entry, "tokens")
+            if value is None:
+                value = _field(entry, "token_count")
+            if value is None and isinstance(entry, (list, tuple)):
+                value = next(iter(entry), None)
+        if isinstance(value, bool) or not isinstance(value, int) or value < 0:
+            raise RuntimeError("token count response is invalid")
+        values.append(value)
+    return values
+
+
+def _embedding_decision(admission, provider: str | None, real_model: str, **kwargs):
+    """Квалифицировать embeddings-вызов, строго уважая явный ``provider:model``."""
+
+    if provider:
+        return admission.admit(
+            provider,
+            operation=ProviderOperation.EMBEDDINGS,
+            prefer=real_model or None,
+            require_preferred=bool(real_model),
+            pick_model=_fallback_pick,
+            **kwargs,
+        )
+    return admission.admit_first(
+        operation=ProviderOperation.EMBEDDINGS,
+        prefer=real_model or None,
+        pick_model=_fallback_pick,
+        **kwargs,
+    )
+
+
 async def _embed(payload: dict, execution):
     """Эмбеддинги через наш мульти-провайдерный слой. Провайдер по префиксу модели,
     иначе активный; его настроенный OPENAI_CLIENT (base_url/ключ/TLS). БЕЗ failover:
     размерность вектора обязана быть стабильной (иначе порча коллекции Qdrant у
     MemOS) — при неверном пине лучше явная 502, чем тихая смена размерности.
+
+    Явный ``provider:model`` СТРОГИЙ: недоступная модель отклоняется ДО запроса в API.
     """
+
     provider, real_model = _split_model(payload.get("model") or "")
     admission = execution.provider_admission
     if admission is None:
@@ -164,38 +283,60 @@ async def _embed(payload: dict, execution):
     expected_dimension = payload.get("dimensions")
     if expected_dimension is not None:
         expected_dimension = int(expected_dimension)
-    if provider:
-        decision = admission.admit(
-            provider,
-            operation=ProviderOperation.EMBEDDINGS,
-            prefer=real_model,
-            expected_embedding_dimension=expected_dimension,
-            pick_model=lambda models, prefer: (
-                prefer if prefer in models else models[0] if models else None
-            ),
-        )
-    else:
-        decision = admission.admit_first(
-            operation=ProviderOperation.EMBEDDINGS,
-            prefer=real_model,
-            expected_embedding_dimension=expected_dimension,
-            pick_model=lambda models, prefer: (
-                prefer if prefer in models else models[0] if models else None
-            ),
-        )
+    decision = _embedding_decision(
+        admission,
+        provider,
+        real_model,
+        expected_embedding_dimension=expected_dimension,
+    )
     if decision is None or not decision.admitted or decision.client is None:
         raise RuntimeError("embedding operation unsupported")
-    # input может быть str или list[str] — SDK принимает оба; пробрасываем
-    # dimensions/encoding_format/user, если заданы.
+    # input может быть str или list[str] — SDK принимает оба; dimensions пробрасываем
+    # только если провайдер его объявил (GigaChat отклоняет OpenAI-specific dimensions).
     call = {k: v for k, v in payload.items() if k != "model"}
+    spec = get_spec(decision.provider)
+    if spec is not None and not spec.supports_embedding_dimensions:
+        call.pop("dimensions", None)
     call["model"] = decision.model
     response = await decision.client.embeddings.create(**call)
-    dimension = expected_dimension or decision.embedding_dimension
-    if dimension is not None:
-        vectors = [getattr(item, "embedding", ()) for item in getattr(response, "data", ())]
-        if not vectors or any(len(vector) != dimension for vector in vectors):
-            raise RuntimeError("embedding dimension mismatch")
+    _validate_embedding_response(
+        response,
+        model=decision.model,
+        input_count=len(_embedding_inputs(payload.get("input"))),
+        dimension=expected_dimension or decision.embedding_dimension,
+    )
     return response
+
+
+async def _count_tokens(payload: dict, execution):
+    """Посчитать токены тем же провайдерским клиентом (OAuth/TLS), что и эмбеддинги."""
+
+    admission = execution.provider_admission
+    if admission is None:
+        raise RuntimeError("provider admission unavailable")
+    provider, real_model = _split_model(payload.get("model") or "")
+    decision = _embedding_decision(admission, provider, real_model)
+    if decision is None or not decision.admitted or decision.client is None:
+        raise RuntimeError("embedding operation unsupported")
+    spec = get_spec(decision.provider)
+    path = spec.token_count_path if spec is not None else None
+    if not path:
+        raise RuntimeError("token count unsupported")
+    inputs = _embedding_inputs(payload.get("input"))
+    result = await decision.client.post(
+        path,
+        cast_to=object,
+        body={"model": decision.model, "input": inputs},
+    )
+    values = _token_count_values(result, count=len(inputs))
+    return {
+        "object": "list",
+        "model": decision.model,
+        "data": [
+            {"object": "token_count", "index": index, "tokens": value}
+            for index, value in enumerate(values)
+        ],
+    }
 
 
 @v1_router.post("/embeddings")
@@ -210,3 +351,16 @@ async def embeddings(payload: dict, authorization: str | None = Header(None)):
             content={"error": {"message": "upstream_error", "type": "upstream_error"}},
         )
     return resp.model_dump() if hasattr(resp, "model_dump") else resp
+
+
+@v1_router.post("/tokens/count")
+async def tokens_count(payload: dict, authorization: str | None = Header(None)):
+    _auth(authorization)
+    try:
+        async with _gateway_execution() as execution:
+            return await _count_tokens(payload, execution)
+    except Exception:  # OpenAI-подобная ошибка
+        return JSONResponse(
+            status_code=502,
+            content={"error": {"message": "upstream_error", "type": "upstream_error"}},
+        )

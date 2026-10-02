@@ -50,7 +50,7 @@ async def _lifespan(app: FastAPI):
         await drain_provider_generations()
 
 
-app = FastAPI(title="gpthub-agents-sidecar", version="0.1.0", lifespan=_lifespan)
+app = FastAPI(title="gpthub-agents-sidecar", version="0.2.0", lifespan=_lifespan)
 
 # ⚠️ Лимит тела ПЕРВЫМ: смысл в том, чтобы огромное тело не дошло ни до авторизации, ни
 # до pydantic. Его не было ни на одной ручке, а сайдкар долгоживущий и один на всю
