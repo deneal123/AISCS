@@ -6,6 +6,7 @@ import argparse
 import json
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -45,7 +46,7 @@ RECORDS = [
 
 
 def updated() -> tuple[dict, dict]:
-    protocol = json.loads((DATA / "search-protocol.json").read_text(encoding="utf-8"))
+    protocol = json.loads((data_path(DATA, "search-protocol.json")).read_text(encoding="utf-8"))
     stream = next(item for item in protocol["search_streams"] if item["id"] == "NS-15")
     if stream["source_ids"] or stream["status"] != "open" or any(item["id"] == "NS-RUN-2026-09-25-08" for item in protocol["search_runs"]):
         raise ValueError("NS-15 initial pass already recorded")
@@ -114,8 +115,8 @@ def main() -> None:
         print("Dry run: four RSL bibliographic leads; NS-15 remains open")
         return
     snapshot = snapshot_repository(DATA, label="pre-ns15-rsl-catalogue-pass")
-    atomic_write_json(DATA / "search-protocol.json", protocol)
-    atomic_write_json(DATA / "ns15-russian-prior-art-audit.json", audit)
+    atomic_write_json(data_path(DATA, "search-protocol.json"), protocol)
+    atomic_write_json(data_path(DATA, "ns15-russian-prior-art-audit.json"), audit)
     print(f"Recorded NS-15 RSL pass; snapshot: {snapshot}")
 
 

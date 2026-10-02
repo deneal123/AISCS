@@ -6,6 +6,7 @@ import argparse
 import json
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -15,7 +16,7 @@ ZENODO = "https://zenodo.org/api/records?q=NCT04938245"
 
 
 def updated() -> tuple[dict, str]:
-    path = DATA / "human-ecap-scs-access-audit.json"
+    path = data_path(DATA, "human-ecap-scs-access-audit.json")
     audit = json.loads(path.read_text(encoding="utf-8"))
     candidate = next(c for c in audit["candidates"] if c["id"] == "HES-UMN-NCT04938245")
     if "owner_route_review_2026_09_25" in candidate or candidate["owner_confirmation_received"]:
@@ -54,7 +55,7 @@ def main() -> None:
         print("Dry run: owner route documented; RES-04 remains open")
         return
     snapshot = snapshot_repository(DATA, label="pre-res04-owner-route-review")
-    atomic_write_json(DATA / "human-ecap-scs-access-audit.json", audit)
+    atomic_write_json(data_path(DATA, "human-ecap-scs-access-audit.json"), audit)
     (ROOT / "TODO.md").write_text(todo, encoding="utf-8", newline="\n")
     print(f"Recorded owner route; snapshot: {snapshot}")
 

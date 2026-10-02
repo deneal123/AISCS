@@ -2,6 +2,7 @@ from pathlib import Path
 
 from scripts.refresh_github_resources import repository_url
 from service.core import load_json
+from service.data_layout import data_path
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"
@@ -15,7 +16,7 @@ def test_repository_url_normalizes_deep_github_links() -> None:
 
 
 def test_runtime_audit_has_reproduced_baselines_and_terminal_decisions() -> None:
-    payload = load_json(DATA / "runtime-audit.json")
+    payload = load_json(data_path(DATA, "runtime-audit.json"))
     candidates = {item["resource_id"]: item for item in payload["candidates"]}
     assert candidates["ST106"]["result"] == "reproduced_minimal_runtime"
     assert candidates["ST106"]["decision"] == "retain_as_embodied_simulation_baseline"

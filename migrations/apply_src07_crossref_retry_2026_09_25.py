@@ -7,6 +7,7 @@ import html
 import json
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -31,7 +32,7 @@ def edition(row: dict) -> str:
 
 
 def updated() -> tuple[dict, dict]:
-    records = json.loads((DATA / "records.json").read_text(encoding="utf-8"))
+    records = json.loads((data_path(DATA, "records.json")).read_text(encoding="utf-8"))
     audit = json.loads((DATA / "src07-crossref-retry-2026-09-25.json").read_text(encoding="utf-8"))
     by_id = {source["id"]: source for source in records["sources"]}
     rows = {row["source_id"]: row for row in audit["rows"]}
@@ -100,7 +101,7 @@ def main() -> None:
         print(f"Dry run: {len(audit['reviewed_edition_updates'])} edition/version changes")
         return
     snapshot = snapshot_repository(DATA, label="pre-src07-crossref-retry-editions")
-    atomic_write_json(DATA / "records.json", records)
+    atomic_write_json(data_path(DATA, "records.json"), records)
     atomic_write_json(DATA / "src07-crossref-retry-2026-09-25.json", audit)
     print(f"Updated {len(audit['reviewed_edition_updates'])} editions; snapshot: {snapshot}")
 

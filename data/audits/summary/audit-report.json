@@ -1,0 +1,533 @@
+{
+  "meta": {
+    "version": "1.2.0",
+    "generated_at": "2026-10-01",
+    "scope": "source validation across relevance levels",
+    "gate": "G0_REVISE",
+    "current_summary_basis": "Canonical records, aliases, clusters and ST; bounded research acceptance in TODO.md. Editorial reconciliation is not a new source retrieval.",
+    "historical_sections_rule": "Dated refresh/screen sections preserve their original counts, open states and source coverage; current_corpus, current_curation, novelty and remaining_gates describe the current cut. Follow the linked living audit for later dispositions."
+  },
+  "baseline_snapshot": {
+    "path": "archive/2026-09-23T202748Z-pre-schema-2-novelty-revision",
+    "contains_original_todo": true,
+    "manifest_verified_by_integrity_gate": true
+  },
+  "summary_reconciliation": {
+    "editorial_date": "2026-10-02",
+    "reason": "Current summary headers were not updated after later canonical additions. Recounted from the current registry; no new primary-source verification or change to source cards.",
+    "previous_current_corpus_total": 306,
+    "previous_current_curation_total": 316,
+    "canonical_total": 318,
+    "boundary": "Dated historical screens retain their original sample sizes and limitations. Author acceptance of EVD-05 does not approve future protocols or replace the supervisor decision."
+  },
+  "current_corpus": {
+    "canonical_sources": 318,
+    "aliases": 271,
+    "active_clusters": 43,
+    "retired_clusters": 11,
+    "resources": 109,
+    "validation_statuses": {
+      "partially_verified": 42,
+      "rejected": 18,
+      "verified_metadata": 13,
+      "verified_primary": 245
+    },
+    "unverified": 0,
+    "pending_screening": 0,
+    "reported_spdx_licenses": 25
+  },
+  "schema_2_completeness": {
+    "policy": "every nullable scientific field has a terminal resolution",
+    "forbidden_placeholders": [
+      "unknown",
+      "empty string",
+      "TODO",
+      "TBD",
+      "Не указано",
+      "unexplained null"
+    ],
+    "report": "audits/summary/completeness-report.json",
+    "unresolved_fields": 0,
+    "important_boundary": "terminal absence documents missing evidence; it does not invent a fact"
+  },
+  "frontier_refresh": {
+    "added_source_ids": [
+      "S738",
+      "S739",
+      "S740"
+    ],
+    "updated_source_ids": [
+      "S066"
+    ],
+    "findings": [
+      "S738 provides a unified adult Drosophila brain-and-cord structural substrate.",
+      "S739 provides connectome-constrained whole-brain dynamics fitted to calcium recordings.",
+      "S740 provides a VNC dynamic-simulation precedent with experimental motor-pathway validation.",
+      "None of S738-S740 validates nociception-to-human transfer, an ECAP observation model, or SCS clinical response."
+    ]
+  },
+  "clusters": {
+    "content_reviews_present": 43,
+    "missing_references": 0,
+    "unclustered_decisions": "rejected sources retain no_cluster_applicable decisions",
+    "multiple_membership_policy": "explicit rationale; membership is navigation, not independent evidence"
+  },
+  "novelty": {
+    "morphological_raw_combinations": 22500,
+    "represented_unranked_equivalence_classes": 15,
+    "ranking_or_scoring": false,
+    "current_prior_art_outcome": "partial_analogues_only",
+    "negative_novelty_claim_closed": false,
+    "reason": "Author accepted a bounded PA-08 cut on 2026-10-01 for the IPR. Saturation remains false (STOP-UNSATURATED); worldwide absence, priority and patentability are not established."
+  },
+  "scientific_boundaries": [
+    "A Drosophila simulation label is not subjective human pain.",
+    "The fly nervous system is not a direct digital twin of the human spinal cord.",
+    "ECAP is neural recruitment and not a direct pain measure.",
+    "Clinical SCS-response prediction requires patient-linked longitudinal outcomes."
+  ],
+  "remaining_gates": [
+    "EXP-01 through EXP-05: future experimental protocols/execution outside the current literature-research stage",
+    "CON-05: separate supervisor decision not received",
+    "REL-01 and REL-02: scientific release remains dependent on the experiment and supervisor gates"
+  ],
+  "canonical_identifier_deduplication": {
+    "checked_at": "2026-09-24",
+    "merged_aliases": {
+      "S002": "S105",
+      "S062": "S029",
+      "S238": "S162"
+    },
+    "policy": "one canonical record per normalized DOI; historical IDs resolve through aliases"
+  },
+  "github_resource_refresh": {
+    "checked_at": "2026-09-24",
+    "repositories": 41,
+    "immutable_commits": 41,
+    "reported_spdx_licenses": 22,
+    "runtime_reproduction_not_implied": true
+  },
+  "connectome_prior_art_refresh": {
+    "checked_at": "2026-09-24",
+    "added_source_ids": [
+      "S741",
+      "S742",
+      "S743",
+      "S744",
+      "S745"
+    ],
+    "control_design_change": "replace naive random-connectome control with degree-preserving rewired ensembles trained from shared initialization",
+    "direct_drosophila_ecap_scs_analogue_found": false,
+    "search_saturated": false
+  },
+  "crossref_metadata_refresh": {
+    "checked_at": "2026-09-24",
+    "targets": 29,
+    "resolved": 29,
+    "failed_source_ids": [],
+    "boundary": "Crossref confirms bibliography only; it does not upgrade full-text validation."
+  },
+  "priority_full_text_refresh": {
+    "checked_at": "2026-09-24",
+    "upgraded_source_ids": [
+      "S003",
+      "S015",
+      "S037",
+      "S069",
+      "S236",
+      "S237"
+    ],
+    "scope": "publisher full-text extraction for priority human validation records"
+  },
+  "runtime_audit": {
+    "checked_at": "2026-09-24",
+    "candidate_resource_ids": [
+      "ST106",
+      "ST007",
+      "ST008",
+      "ST105",
+      "ST084",
+      "ST107"
+    ],
+    "reproduced_resource_ids": [
+      "ST106"
+    ],
+    "terminal_decision_resource_ids": [
+      "ST007",
+      "ST008",
+      "ST084",
+      "ST105",
+      "ST107"
+    ]
+  },
+  "ecap_scs_review": {
+    "checked_at": "2026-09-24",
+    "reviewed_source_ids": [
+      "S006",
+      "S034",
+      "S046",
+      "S078",
+      "S356",
+      "S357"
+    ],
+    "added_source_ids": [
+      "S746"
+    ],
+    "finding": "synthetic ECAP classification and artifact-removal pretraining are disclosed in patent prior art; no Drosophila-to-ECAP/SCS direct analogue was found in this pass"
+  },
+  "closed_loop_model_review": {
+    "checked_at": "2026-09-24",
+    "reviewed_source_ids": [
+      "S001",
+      "S284",
+      "S285"
+    ],
+    "added_source_ids": [
+      "S747"
+    ],
+    "finding": "rat neural-classifier-to-SCS closed-loop prior art exists, but it does not implement Drosophila connectome transfer, ECAP formation or human validation"
+  },
+  "human_generalization_review": {
+    "checked_at": "2026-09-24",
+    "reviewed_source_ids": [
+      "S004",
+      "S007",
+      "S008",
+      "S070",
+      "S072",
+      "S088"
+    ],
+    "finding": "human cross-subject baselines exist, but their targets and access levels differ; none validates Drosophila-to-ECAP-to-SCS transfer"
+  },
+  "pain_baseline_review": {
+    "checked_at": "2026-09-24",
+    "reviewed_source_ids": [
+      "S005",
+      "S014",
+      "S017",
+      "S026",
+      "S164"
+    ],
+    "finding": "controlled pain, chronic-pain status and fly protective behavior remain distinct target constructs"
+  },
+  "pain_framework_review": {
+    "checked_at": "2026-09-24",
+    "reviewed_source_ids": [
+      "S148"
+    ],
+    "finding": "pain constructs and measurement layers must not be treated as interchangeable"
+  },
+  "neuromodulation_patent_review": {
+    "checked_at": "2026-09-24",
+    "reviewed_source_ids": [
+      "S098",
+      "S099",
+      "S144",
+      "S240",
+      "S241",
+      "S245",
+      "S272"
+    ],
+    "finding": "several component-level analogues narrow novelty, but patents provide no empirical Drosophila-to-ECAP-to-SCS transfer validation"
+  },
+  "remaining_metadata_review": {
+    "checked_at": "2026-09-24",
+    "reviewed_source_ids": [
+      "S035",
+      "S071",
+      "S074",
+      "S193",
+      "S228",
+      "S229"
+    ],
+    "added_source_ids": [
+      "S748"
+    ],
+    "finding": "all remaining metadata-only records now have either source-specific terminal access boundaries or an upgraded evidence status"
+  },
+  "ecap_scs_measurement_audit": {
+    "checked_at": "2026-09-24",
+    "source_ids": [
+      "S105",
+      "S159",
+      "S162",
+      "S236",
+      "S237",
+      "S239",
+      "S279",
+      "S356",
+      "S360",
+      "S363"
+    ],
+    "dimensions": [
+      "sample",
+      "electrode_geometry",
+      "stimulation",
+      "split_unit",
+      "metrics"
+    ],
+    "artifact": "audits/ecap-scs/ecap-scs-audit.json",
+    "finding": "ECAP waveform and dose are kept separate from pain and clinical response; all dimensions are terminally resolved with primary locators."
+  },
+  "drosophila_connectome_audit": {
+    "checked_at": "2026-09-24",
+    "source_ids": [
+      "S068",
+      "S106",
+      "S219",
+      "S286",
+      "S738",
+      "S739",
+      "S740",
+      "S743",
+      "S744"
+    ],
+    "artifact": "audits/drosophila/drosophila-connectome-audit.json",
+    "finding": "Anatomy, dynamics and biological comparators explicitly separated."
+  },
+  "synthetic_domain_audit": {
+    "checked_at": "2026-09-24",
+    "source_ids": [
+      "S035",
+      "S083",
+      "S084",
+      "S088",
+      "S149",
+      "S192",
+      "S748",
+      "S758",
+      "S759"
+    ],
+    "artifact": "audits/transfer/synthetic-domain-audit.json",
+    "finding": "Unlabeled adaptation, fold leakage, split unit and independent external test separated."
+  },
+  "ns06_prior_art_audit": {
+    "checked_at": "2026-09-24",
+    "artifact": "audits/transfer/ns06-prior-art-audit.json",
+    "status": "open",
+    "finding": "Eight analogue mechanisms compared with S149; no indexed forward citation found at this cutoff, with explicit index-coverage limit. S088 full methods and S759 real-label protocol remain unresolved."
+  },
+  "scs_outcome_audit": {
+    "checked_at": "2026-09-24",
+    "source_ids": [
+      "S003",
+      "S033",
+      "S034",
+      "S046",
+      "S105",
+      "S159",
+      "S236",
+      "S239",
+      "S360",
+      "S749"
+    ],
+    "artifact": "audits/ecap-scs/scs-outcome-audit.json",
+    "finding": "No study's ECAP, EEG/MEG/radiomics and clinical outcome roles are conflated."
+  },
+  "source_access_consistency": {
+    "checked_at": "2026-09-25",
+    "rule": "Flag, but do not automatically rewrite, a source with full_text_status=checked and access_status unavailable/unavailable_after_search. An archived full text can have a blocked live owner route.",
+    "source_cards_scanned": 204,
+    "resolved_primary_route_ids": [
+      "S083",
+      "S084",
+      "S016",
+      "S190",
+      "S191",
+      "S192",
+      "S227",
+      "S247",
+      "S044",
+      "S027",
+      "S048",
+      "S049",
+      "S214",
+      "S075",
+      "S045",
+      "S097",
+      "S030",
+      "S249"
+    ],
+    "resolved_metadata_only_ids": [
+      "S086",
+      "S079",
+      "S022"
+    ],
+    "remaining_requires_route_review": [
+      "S021",
+      "S042",
+      "S060",
+      "S061",
+      "S065",
+      "S082",
+      "S090",
+      "S138",
+      "S161",
+      "S189",
+      "S195",
+      "S201",
+      "S252",
+      "S273",
+      "S330"
+    ],
+    "remaining_count": 15,
+    "boundary": "This consistency screen is not a claim that every remaining card is erroneous; inspect each full-text provenance and live versus archived access before changing status."
+  },
+  "current_curation": {
+    "canonical_records": 318,
+    "aliases": 271,
+    "validation_status_counts": {
+      "partially_verified": 42,
+      "rejected": 18,
+      "verified_metadata": 13,
+      "verified_primary": 245
+    },
+    "unresolved_count": 0,
+    "by_relevance": {
+      "3": {
+        "canonical_count": 86,
+        "status_counts": {
+          "partially_verified": 9,
+          "rejected": 2,
+          "verified_metadata": 7,
+          "verified_primary": 68
+        }
+      },
+      "4": {
+        "canonical_count": 123,
+        "status_counts": {
+          "partially_verified": 13,
+          "rejected": 13,
+          "verified_metadata": 2,
+          "verified_primary": 95
+        }
+      },
+      "5": {
+        "canonical_count": 109,
+        "status_counts": {
+          "partially_verified": 20,
+          "rejected": 3,
+          "verified_metadata": 4,
+          "verified_primary": 82
+        }
+      }
+    },
+    "relevance_5": {
+      "canonical_count": 109,
+      "status_counts": {
+        "partially_verified": 20,
+        "rejected": 3,
+        "verified_metadata": 4,
+        "verified_primary": 82
+      }
+    },
+    "applied_batches": [
+      "batch-001",
+      "batch-002",
+      "batch-003",
+      "batch-004",
+      "batch-005",
+      "batch-006",
+      "batch-007",
+      "batch-008",
+      "r4-batch-001",
+      "r4-batch-002",
+      "r4-correction-001",
+      "r4-batch-003",
+      "r4-batch-004",
+      "r4-batch-005",
+      "r4-batch-006",
+      "r4-batch-007",
+      "r3-batch-001",
+      "r3-batch-002",
+      "r4-github-refresh-001",
+      "github-new-resources-001",
+      "r4-correction-002",
+      "r5-correction-001",
+      "r5-correction-s823-calibration",
+      "r5-correction-s755-fulltext",
+      "r5-correction-s822-title",
+      "r5-correction-s755-access-flag",
+      "r5-correction-s762-fulltext",
+      "r5-correction-s105-vor-2026-09-27",
+      "r5-correction-s755-formula-consistency-2026-09-27",
+      "r5-correction-s036-rua-fulltext-2026-09-27",
+      "r5-correction-s046-abstract-status-2026-09-27",
+      "r5-correction-s039-s082-publisher-access-2026-09-27",
+      "r4-correction-s074-ieee-abstract-2026-09-27",
+      "r5-correction-s212-v3-title-version-2026-09-27",
+      "src04-s833-screening-context-2026-09-27",
+      "r4-correction-s834-figure-n-2026-09-27",
+      "r5-correction-s072-abstract-percent-unit-2026-09-27",
+      "r5-correction-s040-giaformer-fulltext-2026-09-27",
+      "r5-correction-s040-table3-dispersion-locator-2026-09-27",
+      "r5-correction-s834-trpa1-identity-and-study-fields-2026-09-28",
+      "r5-correction-s782-author-and-preprint-route-2026-09-28",
+      "r5-correction-s763-owner-v2-self-correction-2026-09-28",
+      "r5-correction-s357-fulltext-effect-inconsistency-2026-09-28",
+      "r5-correction-s243-registry-2026-09-28",
+      "r5-correction-s786-s788-primary-boundaries-2026-09-28",
+      "r5-correction-s001-briefing-species-2026-09-28",
+      "r4-correction-s192-generative-target-2026-09-28",
+      "r5-correction-s006-metadata-boundary-2026-09-28",
+      "r4-correction-s095-year-fulltext-2026-09-28",
+      "r4-correction-s252-access-depth-2026-09-28",
+      "r4-correction-s212-v3-figure6-2026-09-28",
+      "r5-correction-s775-flywire-v630-2026-09-28",
+      "r5-correction-s774-elife-v1-locators-2026-09-28",
+      "r5-correction-s778-mechanical-result-locator-2026-09-28",
+      "r5-correction-s016-nociception-study-fields-2026-09-28",
+      "r5-correction-s164-review-modality-target-2026-09-28",
+      "r5-correction-s072-abstract-population-boundary-2026-09-28",
+      "r5-correction-s015-cohort-and-validation-2026-09-28",
+      "r5-correction-s037-denominator-and-dispersion-2026-09-28",
+      "r5-correction-s014-chronic-pain-case-status-2026-09-28",
+      "r5-correction-s214-publication-status-2026-09-28",
+      "r5-correction-s739-exemplar-fly-split-2026-09-28",
+      "r5-correction-s744-model-sample-external-comparison-2026-09-28",
+      "r5-correction-s747-classifier-domain-accuracy-2026-09-28",
+      "r4-correction-s249-review-validation-2026-09-28",
+      "r4-correction-s048-simulation-cv-2026-09-28",
+      "r4-correction-s042-spine-surgery-review-2026-09-28",
+      "r5-correction-s356-figure5-outcomes-2026-09-28",
+      "r4-correction-s292-pinned-repo-provenance-2026-09-28",
+      "r5-correction-s357-secondary-review-role-2026-09-28",
+      "r3-correction-s026-jstage-abstract-scope-2026-09-28",
+      "r5-correction-s044-abstract-samples-validation-2026-09-28",
+      "r5-correction-s159-escore-definition-2026-09-28",
+      "r4-correction-s025-lasso-pcr-target-2026-09-28",
+      "r4-correction-s165-neurodegeneration-review-scope-2026-09-28",
+      "r4-correction-s099-uspto-claim1-scope-2026-09-28",
+      "r4-correction-s060-review-access-limits-2026-09-28",
+      "r5-correction-s739-model-uncertainty-2026-09-28",
+      "r5-correction-s193-pain-score-rater-boundary-2026-09-28",
+      "r5-correction-s739-temporal-split-unit-2026-09-28",
+      "r4-correction-s029-behavior-modality-2026-09-28",
+      "r5-correction-s004-pain-class-origin-2026-09-28",
+      "r5-correction-s034-ovid-fulltext-2026-09-28",
+      "r4-correction-s833-s834-behavior-construct-2026-09-28",
+      "r5-correction-s044-liverpool-vor-2026-09-28",
+      "r5-correction-s082-preview-cohort-2026-09-28",
+      "r5-correction-s788-author-identity-2026-09-28",
+      "r4-correction-s844-table1-edge-denominator-2026-09-28",
+      "r4-correction-s193-vor-fulltext-2026-09-28",
+      "r4-correction-s193-vor-modality-2026-09-28",
+      "r4-correction-s193-observer-rated-pain-2026-09-28",
+      "r3-correction-s898-author-manuscript-2026-10-01",
+      "r3-correction-s899-field-resolutions-2026-10-01",
+      "r3-correction-s899-notes-2026-10-01",
+      "r3-correction-s900-fly-imaging-2026-10-01",
+      "r3-correction-s031-vor-calcium-contraction-2026-10-01"
+    ],
+    "author_review_required": true,
+    "supervisor_decision_required": true,
+    "author_review_scope": "Delegated EVD-05 acceptance of bounded evidence conclusions on 2026-09-30; future substantive evidence changes and experiment proposals still require review. This does not approve the topic or establish GO."
+  },
+  "remaining_blockers": [
+    "No open human dataset linking SCS/ECAP to a prespecified clinical pain outcome with confirmed reuse permission was located in the checked routes (STOP-H3-A).",
+    "Exact upstream release lineage of the four processed S740 VNC matrices remains unconfirmed.",
+    "No evidence validates transfer from a Drosophila simulator to human pain or SCS outcomes.",
+    "Bounded PA-08 search is accepted for the IPR, but saturation, worldwide absence, priority and patentability are not established (STOP-UNSATURATED).",
+    "G0 remains G0_REVISE; delegated EVD-05 acceptance does not replace a separate supervisor decision or future protocol review."
+  ]
+}

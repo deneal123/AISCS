@@ -1,6 +1,8 @@
 from pathlib import Path
 
 from service.core import load_json, sha256
+from service.curation_bundle import read_batch
+from service.data_layout import data_path
 from service.st_curation import iter_resources, st_review_apply
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -12,7 +14,7 @@ def resource_map(payload: dict) -> dict[str, dict]:
 
 
 def test_st_schema_2_has_stable_unique_ids_and_matching_counters() -> None:
-    payload = load_json(DATA / "ST.json")
+    payload = load_json(data_path(DATA, "ST.json"))
     resources = resource_map(payload)
     assert payload["meta"]["resource_schema_version"] == "2.0.0"
     assert len(resources) == 109
@@ -26,7 +28,7 @@ def test_st_schema_2_has_stable_unique_ids_and_matching_counters() -> None:
 
 
 def test_applied_st_batches_are_idempotent() -> None:
-    tracked = [DATA / "ST.json", DATA / "validation-log.json", DATA / "audit-report.json"]
+    tracked = [data_path(DATA, "ST.json"), data_path(DATA, "validation-log.json"), data_path(DATA, "audit-report.json")]
     for batch_id in tuple(f"st-batch-{index:03d}" for index in range(1, 8)):
         before = {path.name: sha256(path) for path in tracked}
         result = st_review_apply(DATA, batch_id, apply=True)
@@ -41,51 +43,109 @@ def test_applied_st_batches_changed_no_resource_outside_manifest() -> None:
     transitions = (
         (
             "st-batch-001",
-            ROOT / "tests" / "fixtures" / "history" / "archive" / "2026-09-22T111833Z-pre-st-batch-001" / "ST.json",
-            ROOT / "tests" / "fixtures" / "history" / "archive" / "2026-09-22T113215Z-pre-st-batch-002" / "ST.json",
+            data_path(ROOT
+            / "tests"
+            / "fixtures"
+            / "history"
+            / "archive"
+            / "2026-09-22T111833Z-pre-st-batch-001", "ST.json", legacy=True),
+            data_path(ROOT
+            / "tests"
+            / "fixtures"
+            / "history"
+            / "archive"
+            / "2026-09-22T113215Z-pre-st-batch-002", "ST.json", legacy=True),
         ),
         (
             "st-batch-002",
-            ROOT / "tests" / "fixtures" / "history" / "archive" / "2026-09-22T113215Z-pre-st-batch-002" / "ST.json",
-            ROOT / "tests" / "fixtures" / "history" / "archive" / "2026-09-22T113545Z-pre-st-batch-003" / "ST.json",
+            data_path(ROOT
+            / "tests"
+            / "fixtures"
+            / "history"
+            / "archive"
+            / "2026-09-22T113215Z-pre-st-batch-002", "ST.json", legacy=True),
+            data_path(ROOT
+            / "tests"
+            / "fixtures"
+            / "history"
+            / "archive"
+            / "2026-09-22T113545Z-pre-st-batch-003", "ST.json", legacy=True),
         ),
         (
             "st-batch-003",
-            ROOT / "tests" / "fixtures" / "history" / "archive" / "2026-09-22T113545Z-pre-st-batch-003" / "ST.json",
-            ROOT / "tests" / "fixtures" / "history" / "archive" / "2026-09-22T114144Z-pre-st-batch-004" / "ST.json",
+            data_path(ROOT
+            / "tests"
+            / "fixtures"
+            / "history"
+            / "archive"
+            / "2026-09-22T113545Z-pre-st-batch-003", "ST.json", legacy=True),
+            data_path(ROOT
+            / "tests"
+            / "fixtures"
+            / "history"
+            / "archive"
+            / "2026-09-22T114144Z-pre-st-batch-004", "ST.json", legacy=True),
         ),
         (
             "st-batch-004",
-            ROOT / "tests" / "fixtures" / "history" / "archive" / "2026-09-22T114144Z-pre-st-batch-004" / "ST.json",
-            ROOT / "tests" / "fixtures" / "history" / "archive" / "2026-09-22T114825Z-pre-st-batch-005" / "ST.json",
+            data_path(ROOT
+            / "tests"
+            / "fixtures"
+            / "history"
+            / "archive"
+            / "2026-09-22T114144Z-pre-st-batch-004", "ST.json", legacy=True),
+            data_path(ROOT
+            / "tests"
+            / "fixtures"
+            / "history"
+            / "archive"
+            / "2026-09-22T114825Z-pre-st-batch-005", "ST.json", legacy=True),
         ),
         (
             "st-batch-005",
-            ROOT / "tests" / "fixtures" / "history" / "archive" / "2026-09-22T114825Z-pre-st-batch-005" / "ST.json",
-            ROOT / "tests" / "fixtures" / "history" / "archive" / "2026-09-22T115248Z-pre-st-batch-006" / "ST.json",
+            data_path(ROOT
+            / "tests"
+            / "fixtures"
+            / "history"
+            / "archive"
+            / "2026-09-22T114825Z-pre-st-batch-005", "ST.json", legacy=True),
+            data_path(ROOT
+            / "tests"
+            / "fixtures"
+            / "history"
+            / "archive"
+            / "2026-09-22T115248Z-pre-st-batch-006", "ST.json", legacy=True),
         ),
         (
             "st-batch-006",
-            ROOT / "tests" / "fixtures" / "history" / "archive" / "2026-09-22T115248Z-pre-st-batch-006" / "ST.json",
-            ROOT / "tests" / "fixtures" / "history" / "archive" / "2026-09-22T115248Z-pre-st-batch-007" / "ST.json",
+            data_path(ROOT
+            / "tests"
+            / "fixtures"
+            / "history"
+            / "archive"
+            / "2026-09-22T115248Z-pre-st-batch-006", "ST.json", legacy=True),
+            data_path(ROOT
+            / "tests"
+            / "fixtures"
+            / "history"
+            / "archive"
+            / "2026-09-22T115248Z-pre-st-batch-007", "ST.json", legacy=True),
         ),
         (
             "st-batch-007",
-            ROOT / "tests" / "fixtures" / "history" / "archive" / "2026-09-22T115248Z-pre-st-batch-007" / "ST.json",
-            DATA
+            data_path(ROOT
+            / "tests"
+            / "fixtures"
+            / "history"
             / "archive"
-            / "2026-09-23T202748Z-pre-schema-2-novelty-revision"
-            / "ST.json",
+            / "2026-09-22T115248Z-pre-st-batch-007", "ST.json", legacy=True),
+            data_path(DATA / "archive" / "2026-09-23T202748Z-pre-schema-2-novelty-revision", "ST.json", legacy=True),
         ),
     )
     for batch_id, before_path, after_path in transitions:
         before = resource_map(load_json(before_path))
         after = resource_map(load_json(after_path))
-        manifest_ids = set(
-            load_json(DATA / "curation" / "st-resources" / "batches" / f"{batch_id}.json")[
-                "resource_ids"
-            ]
-        )
+        manifest_ids = set(read_batch(DATA, "st-resources", batch_id)[0]["resource_ids"])
         changed = {
             resource_id for resource_id in before if before[resource_id] != after[resource_id]
         }
@@ -102,9 +162,7 @@ def test_st_queue_is_complete_after_all_batches() -> None:
     applied_ids = {
         resource_id
         for batch_id in tuple(f"st-batch-{index:03d}" for index in range(1, 8))
-        for resource_id in load_json(
-            DATA / "curation" / "st-resources" / "batches" / f"{batch_id}.json"
-        )["resource_ids"]
+        for resource_id in read_batch(DATA, "st-resources", batch_id)[0]["resource_ids"]
     }
     assert not set(ids) & applied_ids
     # Nine resources were already verified before the batch workflow was introduced.

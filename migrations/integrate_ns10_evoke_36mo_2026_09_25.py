@@ -6,6 +6,7 @@ import argparse
 import json
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -34,14 +35,14 @@ ENTRY = {
 
 
 def updated() -> tuple[dict, dict, dict, dict, str]:
-    records = json.loads((DATA / "records.json").read_text(encoding="utf-8"))
+    records = json.loads((data_path(DATA, "records.json")).read_text(encoding="utf-8"))
     source = next(r for r in records["sources"] if r["id"] == "S781")
     if source["identifiers"]["doi"] != "10.1136/rapm-2023-104751":
         raise ValueError("S781 identity changed")
-    protocol = json.loads((DATA / "search-protocol.json").read_text(encoding="utf-8"))
-    audit = json.loads((DATA / "scs-outcome-audit.json").read_text(encoding="utf-8"))
-    matrix = json.loads((DATA / "evidence-matrix.json").read_text(encoding="utf-8"))
-    access = json.loads((DATA / "human-ecap-scs-access-audit.json").read_text(encoding="utf-8"))
+    protocol = json.loads((data_path(DATA, "search-protocol.json")).read_text(encoding="utf-8"))
+    audit = json.loads((data_path(DATA, "scs-outcome-audit.json")).read_text(encoding="utf-8"))
+    matrix = json.loads((data_path(DATA, "evidence-matrix.json")).read_text(encoding="utf-8"))
+    access = json.loads((data_path(DATA, "human-ecap-scs-access-audit.json")).read_text(encoding="utf-8"))
     stream = next(s for s in protocol["search_streams"] if s["id"] == "NS-10")
     if "S781" in stream["source_ids"] or any(e["source_id"] == "S781" for e in audit["entries"]):
         raise ValueError("S781 already integrated")
@@ -95,10 +96,10 @@ def main() -> None:
         print(f"Dry run: {audit['meta']['records_count']} outcome-audit entries")
         return
     snapshot = snapshot_repository(DATA, label="pre-ns10-evoke-36mo-integration")
-    atomic_write_json(DATA / "search-protocol.json", protocol)
-    atomic_write_json(DATA / "scs-outcome-audit.json", audit)
-    atomic_write_json(DATA / "evidence-matrix.json", matrix)
-    atomic_write_json(DATA / "human-ecap-scs-access-audit.json", access)
+    atomic_write_json(data_path(DATA, "search-protocol.json"), protocol)
+    atomic_write_json(data_path(DATA, "scs-outcome-audit.json"), audit)
+    atomic_write_json(data_path(DATA, "evidence-matrix.json"), matrix)
+    atomic_write_json(data_path(DATA, "human-ecap-scs-access-audit.json"), access)
     (ROOT / "TODO.md").write_text(todo, encoding="utf-8", newline="\n")
     print(f"Integrated S781 in EVOKE cohort; snapshot: {snapshot}")
 

@@ -8,6 +8,7 @@ import argparse
 import json
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 DATA = Path(__file__).resolve().parents[1] / "data"
@@ -18,8 +19,8 @@ PDF = "https://ieeexplore.ieee.org/ielx8/11605974/11605976/11606012.pdf?arnumber
 
 
 def update() -> tuple[dict, dict]:
-    records = json.loads((DATA / "records.json").read_text(encoding="utf-8"))
-    audit = json.loads((DATA / "ns06-prior-art-audit.json").read_text(encoding="utf-8"))
+    records = json.loads((data_path(DATA, "records.json")).read_text(encoding="utf-8"))
+    audit = json.loads((data_path(DATA, "ns06-prior-art-audit.json")).read_text(encoding="utf-8"))
     source = next(item for item in records["sources"] if item["id"] == "S088")
     decision = next(item for item in audit["analogue_decisions"] if item["source_id"] == "S088")
     if "primary_access_review" in decision:
@@ -70,8 +71,8 @@ def main() -> None:
     records, audit = update()
     if args.apply:
         snapshot = snapshot_repository(DATA, label="pre-s088-ieee-access-review")
-        atomic_write_json(DATA / "records.json", records)
-        atomic_write_json(DATA / "ns06-prior-art-audit.json", audit)
+        atomic_write_json(data_path(DATA, "records.json"), records)
+        atomic_write_json(data_path(DATA, "ns06-prior-art-audit.json"), audit)
         print(f"Applied S088 access review; snapshot: {snapshot}")
     else:
         print("Dry run: IEEE metadata and PDF endpoints checked; S088 remains title-only")

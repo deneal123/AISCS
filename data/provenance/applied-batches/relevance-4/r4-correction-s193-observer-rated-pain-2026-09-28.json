@@ -1,0 +1,56 @@
+{
+  "meta": {
+    "batch_id": "r4-correction-s193-observer-rated-pain-2026-09-28",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-28",
+    "scope": "Classify the verified clinician-rated FLACC target using a controlled observer-rated pain construct",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-28"
+  },
+  "source_ids": [
+    "S193"
+  ],
+  "records": [],
+  "decisions": [
+    {
+      "source_id": "S193",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-28",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "service": "corresponding-author lab VOR PDF",
+          "query": "10.1109/TAFFC.2025.3567307 Section V-A FLACC rater and target construct",
+          "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+          "accessed_at": "2026-09-28"
+        }
+      ],
+      "updates": {
+        "evidence": {
+          "target_construct": "observer_rated_pain"
+        },
+        "field_resolution": {
+          "evidence.target_construct": {
+            "state": "reported",
+            "value": "observer_rated_pain",
+            "reason": "The VOR defines the target as average FLACC score assigned by 1-4 medical doctors per sample. This is an observer-rated clinical pain assessment, not self-report or facial expression; a dedicated controlled category now represents it.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+                "locator": "Section V-A, p. 2833: average FLACC ratings by 1-4 medical doctors per sample; FLACC is an observer-rated behavioral pain scale."
+              }
+            ]
+          }
+        },
+        "identifiers": {
+          "doi": "10.1109/TAFFC.2025.3567307",
+          "exact_url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf"
+        }
+      },
+      "claims": [],
+      "notes": "Full IEEE Version of Record checked; PDF SHA-256 7ee9edfd4974a9577bcc5769679f44df1dfa45932ae43f56b1997d8c89a92922. MPP contains 701 valid video samples with audio, not 701 identified participants. Target is average FLACC rated by 1-4 medical doctors/sample. Five-fold CV is reported; fold unit and participant-disjoint assignment are not. No external validation or uncertainty calibration reported. Data are available from corresponding author on request.",
+      "rationale": "The already reviewed VOR explicitly identifies clinician-rated average FLACC labels. The former vocabulary-gap sentinel is no longer appropriate after adding the precise observer-rated clinical pain class. This correction changes only evidence.target_construct and its field resolution."
+    }
+  ]
+}

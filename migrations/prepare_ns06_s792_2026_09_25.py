@@ -68,7 +68,7 @@ values = {
             "expression scores do not establish clinical pain, SCS, or ECAP validity."
         ),
     13: json.loads((ROOT / (
-                               "data/vocabularies.json"
+                               "data/schema/vocabularies.json"
                            )).read_text(encoding=(
                                                                             "utf-8"
                                                                         )))[(

@@ -8,6 +8,7 @@ import argparse
 import json
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 DATA = Path(__file__).resolve().parents[1] / "data"
@@ -17,7 +18,7 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--apply", action="store_true")
     args = parser.parse_args()
-    path = DATA / "search-protocol.json"
+    path = data_path(DATA, "search-protocol.json")
     protocol = json.loads(path.read_text(encoding="utf-8"))
     stream = next(x for x in protocol["search_streams"] if x["id"] == "NS-03")
     run_id = "NS-RUN-2026-09-25-03"

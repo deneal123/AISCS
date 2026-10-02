@@ -13,7 +13,7 @@ from mcp.types import ToolAnnotations
 
 from .contracts import SERVICE_VERSION
 from .core import DataError, ResearchRepository, default_data_dir
-from .curation import cluster_apply, cluster_check, resolve_batch, review_apply, review_check
+from .curation import cluster_apply, cluster_check, review_apply, review_check
 from .integrity import validate_repository
 from .novelty import search_novelty as search_novelty_catalogue
 from .pipeline import atomic_write_json, publish_candidates, review_candidates, snapshot_repository
@@ -67,6 +67,9 @@ class ResearchMcpService:
         self.data_dir = Path(data_dir).resolve() if data_dir else default_data_dir()
         self.project_dir = self.data_dir.parent
         self.repository = ResearchRepository(self.data_dir)
+        from .knowledge.engine import KnowledgeEngine
+
+        self.knowledge = KnowledgeEngine(self.repository)
 
     def status(self) -> dict[str, Any]:
         integrity = validate_repository(self.data_dir)
@@ -108,9 +111,7 @@ class ResearchMcpService:
         )
 
     def get_cluster(self, cluster_id: str, expand_sources: bool = False) -> dict[str, Any]:
-        result = self.repository.get_cluster_context(
-            cluster_id, expand_sources=expand_sources
-        )
+        result = self.repository.get_cluster_context(cluster_id, expand_sources=expand_sources)
         if result is None:
             raise DataError(f"cluster not found: {cluster_id}")
         return result
@@ -194,14 +195,12 @@ class ResearchMcpService:
         return path
 
     def publish_candidate(self, filename: str, *, apply: bool = False) -> dict[str, Any]:
-        return publish_candidates(
-            self.data_dir, self._candidate_path(filename), apply=apply
-        )
+        return publish_candidates(self.data_dir, self._candidate_path(filename), apply=apply)
 
-    def _review_batch_path(self, batch: str) -> Path:
+    def _review_batch_path(self, batch: str) -> str:
         if Path(batch).name != batch or not SAFE_NAME.fullmatch(batch):
             raise DataError("review batch must be a batch name, not a path")
-        return _within(resolve_batch(self.data_dir, batch), self.data_dir / "curation")
+        return batch
 
     def review_batch(self, batch: str, *, apply: bool = False) -> dict[str, Any]:
         path = self._review_batch_path(batch)
@@ -234,19 +233,27 @@ class ResearchMcpService:
 
     def read_text(self, relative_path: str) -> str:
         allowed = {
+            "knowledge/README.md",
+            "knowledge/corpus-manifest.json",
             "README.md",
             "TODO.md",
-            "data/audit-report.json",
-            "data/evidence-matrix.json",
+            "data/audits/summary/audit-report.json",
+            "data/evidence/evidence-matrix.json",
             "docs/scientific-contract.md",
-            "data/human-dataset-matrix.json",
-            "data/source-record.schema.json",
-            "data/vocabularies.json",
-            "data/completeness-report.json",
-            "data/search-protocol.json",
-            "data/novelty-landscape.json",
-            "data/dissertation-concept.json",
-            "data/runtime-audit.json",
+            "docs/README.md",
+            "docs/final-validation-report.md",
+            "docs/audits/README.md",
+            "docs/audits/todo-decision-ledger.md",
+            "docs/reference/operations.md",
+            "docs/audits/evd03-evidence-matrix-audit-2026-09-25.md",
+            "data/evidence/human-dataset-matrix.json",
+            "data/schema/source-record.schema.json",
+            "data/schema/vocabularies.json",
+            "data/audits/summary/completeness-report.json",
+            "data/audits/search/search-protocol.json",
+            "data/research/novelty-landscape.json",
+            "data/research/dissertation-concept.json",
+            "data/audits/drosophila/runtime-audit.json",
             "docs/novelty-landscape.md",
             "docs/dissertation-concept.md",
         }
@@ -278,6 +285,41 @@ def create_server(data_dir: Path | str | None = None) -> MCPServer:
     def status() -> dict[str, Any]:
         """Return corpus fingerprint, counters, evidence summary, and integrity gate."""
         return service.status()
+
+    @server.tool(annotations=READ_ONLY)
+    def knowledge_status() -> dict[str, Any]:
+        """Return active graph/vector generation, coverage and review gaps."""
+        return service.knowledge.status()
+
+    @server.tool(annotations=READ_ONLY)
+    def search_knowledge(
+        query: str,
+        filters: dict | None = None,
+        mode: str = "hybrid",
+        limit: int = 10,
+        include_unreviewed: bool = False,
+    ) -> dict[str, Any]:
+        """Retrieve sourced evidence with limitations; similarity is not scientific proof."""
+        return service.knowledge.search(
+            query, filters=filters, mode=mode, limit=limit, include_unreviewed=include_unreviewed
+        )
+
+    @server.tool(annotations=READ_ONLY)
+    def graph_context(
+        node_id: str,
+        depth: int = 1,
+        edge_types: list[str] | None = None,
+        include_unreviewed: bool = False,
+    ) -> dict[str, Any]:
+        """Expand typed, provenance-carrying links up to two hops."""
+        return service.knowledge.graph(
+            node_id, depth=depth, edge_types=edge_types, include_unreviewed=include_unreviewed
+        )
+
+    @server.tool(annotations=READ_ONLY)
+    def get_evidence(node_id: str, include_unreviewed: bool = False) -> dict[str, Any]:
+        """Get exact evidence text, primary locators and scientific restrictions."""
+        return service.knowledge.evidence(node_id, include_unreviewed=include_unreviewed)
 
     @server.tool(annotations=READ_ONLY)
     def search_sources(
@@ -372,6 +414,14 @@ def create_server(data_dir: Path | str | None = None) -> MCPServer:
         """Create a named immutable snapshot of the canonical research artifacts."""
         return service.snapshot(label)
 
+    @server.resource("research://knowledge-guide", mime_type="text/markdown")
+    def knowledge_guide() -> str:
+        return service.read_text("knowledge/README.md")
+
+    @server.resource("research://knowledge-registry", mime_type="application/json")
+    def knowledge_registry() -> str:
+        return service.read_text("knowledge/corpus-manifest.json")
+
     @server.resource("research://guide", mime_type="text/markdown")
     def guide() -> str:
         return service.read_text("README.md")
@@ -380,13 +430,33 @@ def create_server(data_dir: Path | str | None = None) -> MCPServer:
     def todo() -> str:
         return service.read_text("TODO.md")
 
+    @server.resource("research://todo-decisions", mime_type="text/markdown")
+    def todo_decisions() -> str:
+        return service.read_text("docs/audits/todo-decision-ledger.md")
+
+    @server.resource("research://operations", mime_type="text/markdown")
+    def operations() -> str:
+        return service.read_text("docs/reference/operations.md")
+
+    @server.resource("research://docs-index", mime_type="text/markdown")
+    def docs_index() -> str:
+        return service.read_text("docs/README.md")
+
+    @server.resource("research://research-status", mime_type="text/markdown")
+    def research_status() -> str:
+        return service.read_text("docs/final-validation-report.md")
+
+    @server.resource("research://evidence-audit", mime_type="text/markdown")
+    def evidence_audit() -> str:
+        return service.read_text("docs/audits/evd03-evidence-matrix-audit-2026-09-25.md")
+
     @server.resource("research://audit", mime_type="application/json")
     def audit() -> str:
-        return service.read_text("data/audit-report.json")
+        return service.read_text("data/audits/summary/audit-report.json")
 
     @server.resource("research://evidence-matrix", mime_type="application/json")
     def evidence_matrix() -> str:
-        return service.read_text("data/evidence-matrix.json")
+        return service.read_text("data/evidence/evidence-matrix.json")
 
     @server.resource("research://scientific-contract", mime_type="text/markdown")
     def scientific_contract() -> str:
@@ -394,35 +464,35 @@ def create_server(data_dir: Path | str | None = None) -> MCPServer:
 
     @server.resource("research://human-dataset-matrix", mime_type="application/json")
     def human_dataset_matrix() -> str:
-        return service.read_text("data/human-dataset-matrix.json")
+        return service.read_text("data/evidence/human-dataset-matrix.json")
 
     @server.resource("research://completeness", mime_type="application/json")
     def completeness() -> str:
-        return service.read_text("data/completeness-report.json")
+        return service.read_text("data/audits/summary/completeness-report.json")
 
     @server.resource("research://search-protocol", mime_type="application/json")
     def search_protocol() -> str:
-        return service.read_text("data/search-protocol.json")
+        return service.read_text("data/audits/search/search-protocol.json")
 
     @server.resource("research://novelty-landscape", mime_type="application/json")
     def novelty_landscape() -> str:
-        return service.read_text("data/novelty-landscape.json")
+        return service.read_text("data/research/novelty-landscape.json")
 
     @server.resource("research://dissertation-concept", mime_type="application/json")
     def dissertation_concept() -> str:
-        return service.read_text("data/dissertation-concept.json")
+        return service.read_text("data/research/dissertation-concept.json")
 
     @server.resource("research://runtime-audit", mime_type="application/json")
     def runtime_audit() -> str:
-        return service.read_text("data/runtime-audit.json")
+        return service.read_text("data/audits/drosophila/runtime-audit.json")
 
     @server.resource("research://schema/source-record", mime_type="application/schema+json")
     def source_schema() -> str:
-        return service.read_text("data/source-record.schema.json")
+        return service.read_text("data/schema/source-record.schema.json")
 
     @server.resource("research://vocabularies", mime_type="application/json")
     def vocabularies() -> str:
-        return service.read_text("data/vocabularies.json")
+        return service.read_text("data/schema/vocabularies.json")
 
     @server.resource("research://source/{source_id}", mime_type="application/json")
     def source(source_id: str) -> str:

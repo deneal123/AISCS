@@ -7,11 +7,27 @@ import pytest
 from service.completeness import completeness_summary
 from service.core import load_json, sha256
 from service.curation import build_queue, cluster_apply, review_apply
+from service.curation_bundle import read_batch
+from service.data_layout import data_path
 from service.integrity import validate_source_record
 from service.pipeline import atomic_write_json
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"
+
+
+@pytest.mark.parametrize("scope", ["relevance-3", "relevance-4", "relevance-5", "st-resources"])
+def test_applied_bundle_replays_without_original_batch_files(tmp_path: Path, scope: str) -> None:
+    source = DATA / "curation" / scope / "applied-batches.json"
+    target = tmp_path / "curation" / scope / "applied-batches.json"
+    target.parent.mkdir(parents=True)
+    shutil.copyfile(source, target)
+    bundle = load_json(target)
+    for batch_id in bundle["id_index"]:
+        payload, locator = read_batch(tmp_path, scope, batch_id)
+        assert payload["meta"]["batch_id"] == batch_id
+        assert payload["decisions"]
+        assert locator.startswith(f"curation/{scope}/applied-batches.json#")
 
 
 @pytest.mark.parametrize(
@@ -46,8 +62,8 @@ def test_schema_1_2_accepts_review_outcomes(status: str, exclusion_reason: str |
     ]
     errors = validate_source_record(
         record,
-        load_json(DATA / "source-record.schema.json"),
-        load_json(DATA / "vocabularies.json"),
+        load_json(data_path(DATA, "source-record.schema.json")),
+        load_json(data_path(DATA, "vocabularies.json")),
     )
     assert not errors
 
@@ -55,8 +71,10 @@ def test_schema_1_2_accepts_review_outcomes(status: str, exclusion_reason: str |
 def test_batches_cover_all_review_decision_types() -> None:
     decisions = {
         decision["decision"]
-        for path in (DATA / "curation" / "relevance-5" / "batches").glob("*.json")
-        for decision in load_json(path)["decisions"]
+        for batch_id in load_json(DATA / "curation" / "relevance-5" / "applied-batches.json")[
+            "id_index"
+        ]
+        for decision in read_batch(DATA, "relevance-5", batch_id)[0]["decisions"]
     }
     assert decisions == {
         "alias",
@@ -69,7 +87,7 @@ def test_batches_cover_all_review_decision_types() -> None:
 
 def test_applied_batch_is_idempotent() -> None:
     tracked = [
-        DATA / name
+        data_path(DATA, name)
         for name in (
             "records.json",
             "aliases.json",
@@ -90,9 +108,9 @@ def test_applied_batch_is_idempotent() -> None:
 
 
 def test_reviewed_correction_keeps_completeness_report_current() -> None:
-    records = load_json(DATA / "records.json")["sources"]
+    records = load_json(data_path(DATA, "records.json"))["sources"]
     source = next(record for record in records if record["id"] == "S075")
-    report = load_json(DATA / "completeness-report.json")
+    report = load_json(data_path(DATA, "completeness-report.json"))
 
     assert source["evidence"]["target_construct"] == "not_applicable"
     assert source["field_resolution"]["evidence.target_construct"]["state"] == "not_applicable"
@@ -101,15 +119,23 @@ def test_reviewed_correction_keeps_completeness_report_current() -> None:
 
 
 def test_batch_008_changed_no_source_outside_manifest() -> None:
-    before = load_json(ROOT / "tests" / "fixtures" / "history" / "archive" / "2026-09-22T104041Z-pre-batch-008" / "records.json")[
-        "sources"
-    ]
-    after = load_json(
-        ROOT / "tests" / "fixtures" / "history" / "archive" / "2026-09-22T105635Z-pre-relevance5-finalization" / "records.json"
+    before = load_json(
+        data_path(ROOT
+        / "tests"
+        / "fixtures"
+        / "history"
+        / "archive"
+        / "2026-09-22T104041Z-pre-batch-008", "records.json", legacy=True)
     )["sources"]
-    manifest = load_json(DATA / "curation" / "relevance-5" / "batches" / "batch-008.json")[
-        "source_ids"
-    ]
+    after = load_json(
+        data_path(ROOT
+        / "tests"
+        / "fixtures"
+        / "history"
+        / "archive"
+        / "2026-09-22T105635Z-pre-relevance5-finalization", "records.json", legacy=True)
+    )["sources"]
+    manifest = read_batch(DATA, "relevance-5", "batch-008")[0]["source_ids"]
     before_by_id = {item["id"]: item for item in before}
     after_by_id = {item["id"]: item for item in after}
     changed = {
@@ -121,7 +147,7 @@ def test_batch_008_changed_no_source_outside_manifest() -> None:
 
 
 def test_all_relevance_5_records_have_terminal_decisions() -> None:
-    records = load_json(DATA / "records.json")["sources"]
+    records = load_json(data_path(DATA, "records.json"))["sources"]
     relevance5 = [item for item in records if item["релевантность"] == 5]
     assert len(relevance5) >= 82
     assert {"S784", "S785", "S786", "S787", "S788"} <= {item["id"] for item in relevance5}
@@ -146,7 +172,7 @@ def test_all_relevance_5_records_have_terminal_decisions() -> None:
 
 def test_completed_queue_matches_all_applied_batches() -> None:
     queue = load_json(DATA / "curation" / "relevance-5" / "queue.json")
-    log = load_json(DATA / "validation-log.json")
+    log = load_json(data_path(DATA, "validation-log.json"))
     batch_ids = [item["batch_id"] for item in queue["batches"]]
     source_ids = [source_id for item in queue["batches"] for source_id in item["source_ids"]]
     assert queue["meta"]["status"] == "complete"
@@ -161,7 +187,7 @@ def test_completed_queue_matches_all_applied_batches() -> None:
 def test_lower_relevance_queues_use_distinct_directories_and_ids(tmp_path: Path) -> None:
     data = tmp_path / "data"
     shutil.copytree(DATA, data)
-    records_path = data / "records.json"
+    records_path = data_path(data, "records.json")
     records = load_json(records_path)
     selected = {}
     for relevance in (3, 4):
@@ -191,7 +217,7 @@ def test_lower_relevance_queues_use_distinct_directories_and_ids(tmp_path: Path)
 
 
 def test_all_source_records_have_terminal_decisions_and_identifiers() -> None:
-    records = load_json(DATA / "records.json")["sources"]
+    records = load_json(data_path(DATA, "records.json"))["sources"]
     assert not {
         item["id"] for item in records if item["validation"]["status"] in {"unverified", "pending"}
     }
@@ -228,15 +254,15 @@ def test_cluster_assignment_is_dry_run_then_atomic_apply(tmp_path: Path) -> None
             },
         },
     )
-    before = sha256(data / "clusters.json")
+    before = sha256(data_path(data, "clusters.json"))
     dry_run = cluster_apply(data, manifest, apply=False)
     assert dry_run["ok"] is True
     assert dry_run["applied"] is False
-    assert sha256(data / "clusters.json") == before
+    assert sha256(data_path(data, "clusters.json")) == before
 
     applied = cluster_apply(data, manifest, apply=True)
     assert applied["ok"] is True
     assert applied["applied"] is True
-    clusters = load_json(data / "clusters.json")
+    clusters = load_json(data_path(data, "clusters.json"))
     added = next(item for item in clusters["clusters"] if item["id"] == "C999")
     assert added["состав_кластера"] == ["S105", "S003"]

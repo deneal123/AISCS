@@ -6,6 +6,7 @@ import argparse
 import json
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 DATA = Path(__file__).resolve().parents[1] / "data"
@@ -13,7 +14,7 @@ WRONG = "doi:10.1101/2023.05.02.539144"
 
 
 def corrected_records() -> dict:
-    records = json.loads((DATA / "records.json").read_text(encoding="utf-8"))
+    records = json.loads((data_path(DATA, "records.json")).read_text(encoding="utf-8"))
     source = next(item for item in records["sources"] if item["id"] == "S744")
     if len(source["relations"]) != 1 or source["relations"][0]["external_id"] != WRONG:
         raise ValueError("S744 relation differs from the expected erroneous baseline")
@@ -50,7 +51,7 @@ def main() -> None:
     records = corrected_records()
     if args.apply:
         snapshot = snapshot_repository(DATA, label="pre-s744-preprint-relation-correction")
-        atomic_write_json(DATA / "records.json", records)
+        atomic_write_json(data_path(DATA, "records.json"), records)
         print(f"Removed incorrect S744 relation; snapshot: {snapshot}")
     else:
         print("Dry run: S744 preprint relation correction ready")

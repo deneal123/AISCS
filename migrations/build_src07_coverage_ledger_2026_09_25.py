@@ -7,16 +7,17 @@ import json
 from collections import Counter
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"
 DATE = "2026-09-25"
-OUTPUT = DATA / "src07-coverage-ledger-2026-09-25.json"
+OUTPUT = data_path(DATA, "src07-coverage-ledger-2026-09-25.json")
 
 
 def read(name: str) -> dict:
-    return json.loads((DATA / name).read_text(encoding="utf-8"))
+    return json.loads((data_path(DATA, name)).read_text(encoding="utf-8"))
 
 
 def main() -> None:
@@ -92,7 +93,7 @@ def main() -> None:
     todo = (ROOT / "TODO.md").read_text(encoding="utf-8")
     needle = "- [ ] **SRC-08.**"
     assert todo.count(needle) == 1
-    note = "  Реестр `data/src07-coverage-ledger-2026-09-25.json` свёл все 81 карточку 2026 года: 50 Crossref-метаданных проверены, 15 отдельных первичных маршрутов просмотрены, 9 карточек отклонены без установленной идентичности; 7 маршрутов (`S099`, `S144`, `S245`, `S253`, `S272`, `S296`, `S368`) остаются непроверенными в этом датированном проходе. Эта классификация не удостоверяет отсутствие позднейших исправлений или новых версий; `SRC-07` открыт.\n"
+    note = "  Реестр `data/audits/search/src07-coverage-ledger-2026-09-25.json` свёл все 81 карточку 2026 года: 50 Crossref-метаданных проверены, 15 отдельных первичных маршрутов просмотрены, 9 карточек отклонены без установленной идентичности; 7 маршрутов (`S099`, `S144`, `S245`, `S253`, `S272`, `S296`, `S368`) остаются непроверенными в этом датированном проходе. Эта классификация не удостоверяет отсутствие позднейших исправлений или новых версий; `SRC-07` открыт.\n"
     todo = todo.replace(needle, note + needle)
     readme = (DATA / "README.md").read_text(encoding="utf-8")
     readme = readme.replace("- `archive/`", "- `src07-coverage-ledger-2026-09-25.json` — complete 2026-source route coverage and seven-item pending primary queue;\n- `archive/`")

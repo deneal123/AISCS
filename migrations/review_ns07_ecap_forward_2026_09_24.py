@@ -8,6 +8,7 @@ import argparse
 import json
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 DATA = Path(__file__).resolve().parents[1] / "data"
@@ -26,9 +27,9 @@ def field(value: str | None, locator: str, *, state: str = "reported") -> dict:
 
 
 def update() -> tuple[dict, dict]:
-    records = json.loads((DATA / "records.json").read_text(encoding="utf-8"))
-    audit = json.loads((DATA / "ecap-scs-audit.json").read_text(encoding="utf-8"))
-    protocol = json.loads((DATA / "search-protocol.json").read_text(encoding="utf-8"))
+    records = json.loads((data_path(DATA, "records.json")).read_text(encoding="utf-8"))
+    audit = json.loads((data_path(DATA, "ecap-scs-audit.json")).read_text(encoding="utf-8"))
+    protocol = json.loads((data_path(DATA, "search-protocol.json")).read_text(encoding="utf-8"))
     if not any(item["id"] == "S764" for item in records["sources"]):
         raise ValueError("S764 must be published before NS-07 review")
     if any(item["source_id"] == "S764" for item in audit["entries"]):
@@ -102,8 +103,8 @@ def main() -> None:
     audit, protocol = update()
     if args.apply:
         snapshot = snapshot_repository(DATA, label="pre-ns07-forward-model-review")
-        atomic_write_json(DATA / "ecap-scs-audit.json", audit)
-        atomic_write_json(DATA / "search-protocol.json", protocol)
+        atomic_write_json(data_path(DATA, "ecap-scs-audit.json"), audit)
+        atomic_write_json(data_path(DATA, "search-protocol.json"), protocol)
         print(f"Applied NS-07 first pass; snapshot: {snapshot}")
     else:
         print("Dry run: S363 and S764 are physical ECAP model analogues; NS-07 remains open")

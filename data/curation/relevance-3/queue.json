@@ -34,7 +34,7 @@
         "S097",
         "S246"
       ],
-      "path": "R:\\Aspa\\research\\data\\curation\\relevance-3\\batches\\r3-batch-001.json"
+      "path": "curation/relevance-3/applied-batches.json#r3-batch-001.json"
     },
     {
       "batch_id": "r3-batch-002",
@@ -54,7 +54,7 @@
         "S307",
         "S157"
       ],
-      "path": "R:\\Aspa\\research\\data\\curation\\relevance-3\\batches\\r3-batch-002.json"
+      "path": "curation/relevance-3/applied-batches.json#r3-batch-002.json"
     }
   ]
 }

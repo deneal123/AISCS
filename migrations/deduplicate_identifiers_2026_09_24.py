@@ -15,6 +15,7 @@ from typing import Any
 
 from service.completeness import completeness_summary
 from service.core import load_json
+from service.data_layout import current_data_files, data_path
 from service.integrity import validate_repository
 from service.pipeline import atomic_write_json
 
@@ -77,17 +78,17 @@ def _completeness(records: list[dict[str, Any]]) -> dict[str, Any]:
 
 
 def build_outputs(data_dir: Path = DATA) -> dict[str, dict[str, Any]]:
-    records = load_json(data_dir / "records.json")
-    aliases = load_json(data_dir / "aliases.json")
-    clusters = load_json(data_dir / "clusters.json")
-    evidence = load_json(data_dir / "evidence-matrix.json")
-    contract = load_json(data_dir / "scientific-contract.json")
-    novelty = load_json(data_dir / "novelty-landscape.json")
-    concept = load_json(data_dir / "dissertation-concept.json")
-    search = load_json(data_dir / "search-protocol.json")
-    resources = load_json(data_dir / "ST.json")
-    audit = load_json(data_dir / "audit-report.json")
-    validation_log = load_json(data_dir / "validation-log.json")
+    records = load_json(data_path(data_dir, "records.json"))
+    aliases = load_json(data_path(data_dir, "aliases.json"))
+    clusters = load_json(data_path(data_dir, "clusters.json"))
+    evidence = load_json(data_path(data_dir, "evidence-matrix.json"))
+    contract = load_json(data_path(data_dir, "scientific-contract.json"))
+    novelty = load_json(data_path(data_dir, "novelty-landscape.json"))
+    concept = load_json(data_path(data_dir, "dissertation-concept.json"))
+    search = load_json(data_path(data_dir, "search-protocol.json"))
+    resources = load_json(data_path(data_dir, "ST.json"))
+    audit = load_json(data_path(data_dir, "audit-report.json"))
+    validation_log = load_json(data_path(data_dir, "validation-log.json"))
 
     source_by_id = {source["id"]: source for source in records["sources"]}
     missing = (set(MERGES) | set(MERGES.values())) - set(source_by_id)
@@ -206,10 +207,12 @@ def build_outputs(data_dir: Path = DATA) -> dict[str, dict[str, Any]]:
 def validate_outputs(outputs: dict[str, dict[str, Any]], data_dir: Path = DATA) -> None:
     with tempfile.TemporaryDirectory(prefix="research-dedup-") as temporary:
         target = Path(temporary)
-        for path in data_dir.glob("*.json"):
-            shutil.copy2(path, target / path.name)
+        for path in current_data_files(data_dir):
+            destination = target / path.relative_to(data_dir)
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(path, destination)
         for name, payload in outputs.items():
-            atomic_write_json(target / name, payload)
+            atomic_write_json(data_path(target, name), payload)
         result = validate_repository(target)
         if not result["ok"]:
             raise ValueError("; ".join(result["errors"]))
@@ -223,7 +226,7 @@ def main() -> int:
     validate_outputs(outputs)
     if args.apply:
         for name, payload in outputs.items():
-            atomic_write_json(DATA / name, payload)
+            atomic_write_json(data_path(DATA, name), payload)
     result = {
         "ok": True,
         "applied": args.apply,

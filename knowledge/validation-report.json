@@ -1,0 +1,158 @@
+{
+  "ok": true,
+  "errors": [],
+  "generation": "g-56b4c46e48ad7a8b5db92c99",
+  "sources": 318,
+  "documents": 106,
+  "json_pointers_checked": 2907,
+  "backend_ids_checked": true,
+  "index": {
+    "generation": "g-56b4c46e48ad7a8b5db92c99",
+    "projection_sha256": "0403b8d5e90858f41594fa79f7873f5b3b7589d829f6314f2bd1d414aa13713c",
+    "model": "gigachat:EmbeddingsGigaR",
+    "dimension": 2560,
+    "documents_sha256": "c02989a27af769f97b29b3193fa83ea6fb4a8fec8b17a8b539a5283205d075ff",
+    "corpus_sha256": "9d87fcbf1e85d3834fbd89c036d377c6729cd2daa76eb492aa6fa3b68720aa9e",
+    "merge_proposals": 37,
+    "collection": "aspa_research_g_56b4c46e48ad7a8b5db92c99",
+    "offline": false,
+    "ready": true,
+    "ok": true,
+    "errors": [],
+    "nodes": 5219,
+    "edges": 6767,
+    "vectors_expected": 2855,
+    "graph_counts": {
+      "nodes": 5219,
+      "edges": 6767
+    },
+    "vectors": 2855
+  },
+  "merge_proposals": 37,
+  "benchmark": {
+    "cases": 40,
+    "hits": 40,
+    "recall_at_10": 1.0,
+    "quality_ok": true,
+    "requested_mode": "hybrid",
+    "all_backends_used": true,
+    "generations": [
+      "g-56b4c46e48ad7a8b5db92c99"
+    ]
+  },
+  "latency_seconds": {
+    "mean": 1.1653,
+    "median": 1.1517,
+    "p95": 2.313
+  },
+  "http_mcp": {
+    "http": {
+      "version": "1.5.0",
+      "mode": "hybrid",
+      "generation": "g-56b4c46e48ad7a8b5db92c99",
+      "chunk_context": true
+    },
+    "mcp": {
+      "tools": 4,
+      "generation": "g-56b4c46e48ad7a8b5db92c99"
+    }
+  },
+  "lifecycle": {
+    "rollback_and_restore": true,
+    "repeat_build_seconds": 13.921,
+    "cold_start": "all four containers recreated and healthy"
+  },
+  "provider_outage": {
+    "mode": "neo4j_lexical",
+    "errors": [
+      "dense_unavailable"
+    ],
+    "results": 3
+  },
+  "observed_memory_mib": {
+    "neo4j": 1280.0,
+    "qdrant": 173.9,
+    "research": 254.1,
+    "embedding-gateway": 97.4
+  },
+  "counted_embedding_inputs": [
+    {
+      "kind": "documents",
+      "input_tokens": 2547463,
+      "inputs": 2855
+    },
+    {
+      "kind": "queries",
+      "input_tokens": 2105,
+      "inputs": 74
+    }
+  ],
+  "quality_gates": {
+    "research_tests": 164,
+    "gateway_tests": 2128,
+    "ruff": true,
+    "validate": true,
+    "novelty_check": true,
+    "check_script": true,
+    "uv_no_sync_reason": "Running Windows MCP locks installed entrypoint; locked dependencies already installed.",
+    "gateway_skipped": 4
+  },
+  "publication_checks": [
+    "pinned_model_dimension",
+    "projection_and_documents_sha256",
+    "raw_and_normalized_text_sha256",
+    "neo4j_node_and_edge_ids",
+    "qdrant_payload_ids_and_dimension",
+    "atomic_shared_generation_pointer",
+    "git_index_bytes_equal_release_sha256"
+  ],
+  "release_date": "2026-10-03",
+  "versions": {
+    "research": "1.5.0",
+    "agents": "0.2.0"
+  },
+  "published_corpus": {
+    "sources": 318,
+    "statuses": {
+      "available": 106,
+      "rejected": 86,
+      "needs_ocr": 1,
+      "missing": 125
+    }
+  },
+  "prepared_corpus": {
+    "sources": 318,
+    "statuses": {
+      "available": 106,
+      "rejected": 86,
+      "needs_ocr": 1,
+      "missing": 125
+    }
+  },
+  "unreviewed_edges": {
+    "canonical": 380,
+    "pi": 2
+  },
+  "returned_evidence_nodes_checked": 380,
+  "benchmark_latency_seconds": {
+    "mean": 1.1653,
+    "median": 1.1517,
+    "p95": 2.313
+  },
+  "release_benchmark": {
+    "cases": 20,
+    "hits": 18,
+    "recall_at_10": 0.9,
+    "quality_ok": true,
+    "requested_mode": "hybrid",
+    "all_backends_used": true,
+    "generations": [
+      "g-56b4c46e48ad7a8b5db92c99"
+    ]
+  },
+  "release_benchmark_latency_seconds": {
+    "mean": 1.4717,
+    "median": 1.4718,
+    "p95": 1.9982
+  }
+}

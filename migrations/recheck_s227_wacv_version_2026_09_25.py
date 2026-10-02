@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 
 from service.completeness import completeness_summary
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -18,7 +19,7 @@ CONFERENCE = "https://wacv.thecvf.com/Conferences/2026/AcceptedPapers"
 
 
 def updated() -> tuple[dict, dict, dict]:
-    records = json.loads((DATA / "records.json").read_text(encoding="utf-8"))
+    records = json.loads((data_path(DATA, "records.json")).read_text(encoding="utf-8"))
     source = next(item for item in records["sources"] if item["id"] == "S227")
     if source["identifiers"]["doi"] is not None or source["identifiers"]["arxiv_id"] != "2508.12522":
         raise ValueError("S227 identifiers differ from the reviewed starting state")
@@ -43,7 +44,7 @@ def updated() -> tuple[dict, dict, dict]:
             {"url": CONFERENCE, "locator": "Accepted Papers: MuSACo title and author list"},
         ],
     })
-    completeness = json.loads((DATA / "completeness-report.json").read_text(encoding="utf-8"))
+    completeness = json.loads((data_path(DATA, "completeness-report.json")).read_text(encoding="utf-8"))
     completeness.update(completeness_summary(records["sources"]))
     audit = {
         "meta": {"schema_version": "1.0.0", "checked_at": DATE, "source_id": "S227", "status": "proceedings_version_verified"},
@@ -74,8 +75,8 @@ def main() -> None:
         print("Dry run: S227 WACV 2026 DOI and arXiv version linked")
         return
     snapshot = snapshot_repository(DATA, label="pre-s227-wacv-version")
-    atomic_write_json(DATA / "records.json", records)
-    atomic_write_json(DATA / "completeness-report.json", completeness)
+    atomic_write_json(data_path(DATA, "records.json"), records)
+    atomic_write_json(data_path(DATA, "completeness-report.json"), completeness)
     atomic_write_json(DATA / "src07-s227-wacv-recheck-2026-09-25.json", audit)
     print(f"Updated S227; snapshot: {snapshot}")
 

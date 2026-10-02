@@ -1,0 +1,209 @@
+{
+  "meta": {
+    "batch_id": "r5-correction-s034-ovid-fulltext-2026-09-28",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-28",
+    "scope": "Reconcile S034 with owner-hosted Ovid/LWW full article and Supplemental Table 2",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-28"
+  },
+  "source_ids": [
+    "S034"
+  ],
+  "records": [
+    {
+      "id": "S034",
+      "title": "Prediction of Response to Spinal Cord Stimulation Using Machine Learning Based on Radiomics and Patient-Reported Outcomes",
+      "year": 2026,
+      "source_type": "article"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S034",
+      "decision": "partially_verified",
+      "checked_at": "2026-09-28",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "service": "Ovid/LWW official full article and supplement",
+          "query": "10.1227/neu.0000000000003715 model cohort outcome horizon split and supplemental denominators",
+          "url": "https://www.ovid.com/api/permalinks?wkmrid=JOURNAL%2Fneusg%2F04.03%2F00006123-202604000-00019%2Froot%2Fv%2F2026-03-05T141649Z%2Fr%2Fapplication-pdf",
+          "accessed_at": "2026-09-28"
+        },
+        {
+          "service": "LWW Supplemental Digital Content",
+          "query": "S034 Supplementary Table 2 cohort and responder counts",
+          "url": "https://links.lww.com/NEU/E976",
+          "accessed_at": "2026-09-28"
+        }
+      ],
+      "updates": {
+        "identifiers": {
+          "doi": "10.1227/neu.0000000000003715",
+          "pmid": "40879389"
+        },
+        "метод": "Single-clinic prospective SCS cohort; preoperative clinical, patient-reported and MRI radiomic variables linked to one-year NRS response. Models use KNN imputation and MinMax scaling, an 80/20 train_test_split, five stratified GridSearchCV folds and RFE feature selection. The article does not provide code, split seed or fold-scoped preprocessing details.",
+        "датасет": "150 subjects with successful thoracic SCS trials enrolled November 2012-March 2019 and preoperative/one-year assessments; Supplemental Table 2 reports 89 nonresponders and 61 >50% responders, of whom 30 were >70% responders. Deidentified patient data are not public.",
+        "ограничения": "The publisher full text reports 150 subjects, one-year patient-linked outcomes, an 80/20 train/test split and five stratified GridSearchCV folds. It does not provide split seed, participant IDs, fold membership, code, independent external validation, calibration or public patient data. Methods prose describes MinMax scaling and KNN imputation before the split, but does not establish whether transforms were fitted within training folds; potential leakage is a concern, not a demonstrated execution error. RFE containment is also not specified. The 90% accuracies are author-reported internal results, not external clinical validation. No ECAP predictor is described.",
+        "evidence": {
+          "population": "150 patients at one clinic with successful thoracic SCS trials and preoperative/one-year assessments; FBSS, CRPS, neuropathic or unspecified chronic pain are reported.",
+          "sample_size": 150,
+          "target_label": "Separate binary one-year NRS reduction >50% responder and >70% high-responder targets; 61/150 and 30/150, respectively.",
+          "access_status": "open"
+        },
+        "validation": {
+          "notes": "Official Ovid/LWW publisher PDF and Supplemental Table 2 reviewed on 2026-09-28. Methods pp. 896-897 define the single-clinic 150-subject cohort, preoperative measures paired with one-year NRS outcomes, 80/20 train_test_split, five stratified GridSearchCV folds and RFE. Table E976 gives 89/61 for >50% response and 120/30 for >70% response. Reported preprocessing order raises possible leakage; actual training-only fitting cannot be checked without code. Split seed/membership and external validation are unavailable; patient data are not public and code is on request.",
+          "external_validation": "no"
+        },
+        "risk_flags": [
+          "claim_not_supported"
+        ],
+        "field_resolution": {
+          "метод": {
+            "state": "reported",
+            "value": "Single-clinic prospective SCS cohort; preoperative clinical, patient-reported and MRI radiomic variables linked to one-year NRS response. Models use KNN imputation and MinMax scaling, an 80/20 train_test_split, five stratified GridSearchCV folds and RFE feature selection. The article does not provide code, split seed or fold-scoped preprocessing details.",
+            "reason": "Method steps and their unresolved containment are stated in the publisher Methods.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.ovid.com/api/permalinks?wkmrid=JOURNAL%2Fneusg%2F04.03%2F00006123-202604000-00019%2Froot%2Fv%2F2026-03-05T141649Z%2Fr%2Fapplication-pdf",
+                "locator": "Publisher PDF pp. 895-899, Methods > Participants and Variable Definitions; Data Management and Preprocessing; Optimized Model Development; Code and Data availability; Results > Participants; Limitations"
+              }
+            ]
+          },
+          "датасет": {
+            "state": "reported",
+            "value": "150 subjects with successful thoracic SCS trials enrolled November 2012-March 2019 and preoperative/one-year assessments; Supplemental Table 2 reports 89 nonresponders and 61 >50% responders, of whom 30 were >70% responders. Deidentified patient data are not public.",
+            "reason": "Publisher Methods/Results and owner-hosted Supplemental Table 2 give cohort and outcome counts.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.ovid.com/api/permalinks?wkmrid=JOURNAL%2Fneusg%2F04.03%2F00006123-202604000-00019%2Froot%2Fv%2F2026-03-05T141649Z%2Fr%2Fapplication-pdf",
+                "locator": "Publisher PDF pp. 895-899, Methods > Participants and Variable Definitions; Data Management and Preprocessing; Optimized Model Development; Code and Data availability; Results > Participants; Limitations"
+              },
+              {
+                "url": "https://links.lww.com/NEU/E976",
+                "locator": "Supplementary Table 2, patient characteristics, total N and responder/high-responder counts"
+              }
+            ]
+          },
+          "ограничения": {
+            "state": "reported",
+            "value": "The publisher full text reports 150 subjects, one-year patient-linked outcomes, an 80/20 train/test split and five stratified GridSearchCV folds. It does not provide split seed, participant IDs, fold membership, code, independent external validation, calibration or public patient data. Methods prose describes MinMax scaling and KNN imputation before the split, but does not establish whether transforms were fitted within training folds; potential leakage is a concern, not a demonstrated execution error. RFE containment is also not specified. The 90% accuracies are author-reported internal results, not external clinical validation. No ECAP predictor is described.",
+            "reason": "Publisher Methods, Code and Data availability and Limitations checked; execution-level split/fold behavior cannot be inferred from prose.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.ovid.com/api/permalinks?wkmrid=JOURNAL%2Fneusg%2F04.03%2F00006123-202604000-00019%2Froot%2Fv%2F2026-03-05T141649Z%2Fr%2Fapplication-pdf",
+                "locator": "Publisher PDF pp. 895-899, Methods > Participants and Variable Definitions; Data Management and Preprocessing; Optimized Model Development; Code and Data availability; Results > Participants; Limitations"
+              }
+            ]
+          },
+          "evidence.population": {
+            "state": "reported",
+            "value": "150 patients at one clinic with successful thoracic SCS trials and preoperative/one-year assessments; FBSS, CRPS, neuropathic or unspecified chronic pain are reported.",
+            "reason": "Publisher Participants and Results identify the analyzed single-clinic cohort.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.ovid.com/api/permalinks?wkmrid=JOURNAL%2Fneusg%2F04.03%2F00006123-202604000-00019%2Froot%2Fv%2F2026-03-05T141649Z%2Fr%2Fapplication-pdf",
+                "locator": "Publisher PDF pp. 895-899, Methods > Participants and Variable Definitions; Data Management and Preprocessing; Optimized Model Development; Code and Data availability; Results > Participants; Limitations"
+              }
+            ]
+          },
+          "evidence.sample_size": {
+            "state": "reported",
+            "value": 150,
+            "reason": "Publisher Data Management states 150 subjects; Supplemental Table 2 agrees.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.ovid.com/api/permalinks?wkmrid=JOURNAL%2Fneusg%2F04.03%2F00006123-202604000-00019%2Froot%2Fv%2F2026-03-05T141649Z%2Fr%2Fapplication-pdf",
+                "locator": "Publisher PDF pp. 895-899, Methods > Participants and Variable Definitions; Data Management and Preprocessing; Optimized Model Development; Code and Data availability; Results > Participants; Limitations"
+              },
+              {
+                "url": "https://links.lww.com/NEU/E976",
+                "locator": "Supplementary Table 2, patient characteristics, total N and responder/high-responder counts"
+              }
+            ]
+          },
+          "evidence.target_label": {
+            "state": "reported",
+            "value": "Separate binary one-year NRS reduction >50% responder and >70% high-responder targets; 61/150 and 30/150, respectively.",
+            "reason": "Publisher Results and Supplemental Table 2 define one-year NRS response and subgroup counts.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.ovid.com/api/permalinks?wkmrid=JOURNAL%2Fneusg%2F04.03%2F00006123-202604000-00019%2Froot%2Fv%2F2026-03-05T141649Z%2Fr%2Fapplication-pdf",
+                "locator": "Publisher PDF pp. 895-899, Methods > Participants and Variable Definitions; Data Management and Preprocessing; Optimized Model Development; Code and Data availability; Results > Participants; Limitations"
+              },
+              {
+                "url": "https://links.lww.com/NEU/E976",
+                "locator": "Supplementary Table 2, patient characteristics, total N and responder/high-responder counts"
+              }
+            ]
+          },
+          "evidence.access_status": {
+            "state": "reported",
+            "value": "open",
+            "reason": "The full article and five supplements were retrieved through official Ovid/LWW asset routes; this access status concerns text, not patient-data reuse rights.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.ovid.com/api/permalinks?wkmrid=JOURNAL%2Fneusg%2F04.03%2F00006123-202604000-00019%2Froot%2Fv%2F2026-03-05T141649Z%2Fr%2Fapplication-pdf",
+                "locator": "Publisher PDF pp. 895-899, Methods > Participants and Variable Definitions; Data Management and Preprocessing; Optimized Model Development; Code and Data availability; Results > Participants; Limitations"
+              },
+              {
+                "url": "https://links.lww.com/NEU/E976",
+                "locator": "Supplementary Table 2, patient characteristics, total N and responder/high-responder counts"
+              }
+            ]
+          },
+          "validation.checked_at": {
+            "state": "reported",
+            "value": "2026-09-28",
+            "reason": "Official publisher article and supplement read directly on this date.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.ovid.com/api/permalinks?wkmrid=JOURNAL%2Fneusg%2F04.03%2F00006123-202604000-00019%2Froot%2Fv%2F2026-03-05T141649Z%2Fr%2Fapplication-pdf",
+                "locator": "Publisher PDF pp. 895-899, Methods > Participants and Variable Definitions; Data Management and Preprocessing; Optimized Model Development; Code and Data availability; Results > Participants; Limitations"
+              }
+            ]
+          },
+          "validation.notes": {
+            "state": "reported",
+            "value": "Official Ovid/LWW publisher PDF and Supplemental Table 2 reviewed on 2026-09-28. Methods pp. 896-897 define the single-clinic 150-subject cohort, preoperative measures paired with one-year NRS outcomes, 80/20 train_test_split, five stratified GridSearchCV folds and RFE. Table E976 gives 89/61 for >50% response and 120/30 for >70% response. Reported preprocessing order raises possible leakage; actual training-only fitting cannot be checked without code. Split seed/membership and external validation are unavailable; patient data are not public and code is on request.",
+            "reason": "Supersedes the former abstract-only access note with bounded full-text findings.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.ovid.com/api/permalinks?wkmrid=JOURNAL%2Fneusg%2F04.03%2F00006123-202604000-00019%2Froot%2Fv%2F2026-03-05T141649Z%2Fr%2Fapplication-pdf",
+                "locator": "Publisher PDF pp. 895-899, Methods > Participants and Variable Definitions; Data Management and Preprocessing; Optimized Model Development; Code and Data availability; Results > Participants; Limitations"
+              },
+              {
+                "url": "https://links.lww.com/NEU/E976",
+                "locator": "Supplementary Table 2, patient characteristics, total N and responder/high-responder counts"
+              }
+            ]
+          },
+          "validation.external_validation": {
+            "state": "reported",
+            "value": "no",
+            "reason": "Authors' Limitations call for future external validation; none is reported in the checked Methods/Results.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.ovid.com/api/permalinks?wkmrid=JOURNAL%2Fneusg%2F04.03%2F00006123-202604000-00019%2Froot%2Fv%2F2026-03-05T141649Z%2Fr%2Fapplication-pdf",
+                "locator": "Publisher PDF pp. 895-899, Methods > Participants and Variable Definitions; Data Management and Preprocessing; Optimized Model Development; Code and Data availability; Results > Participants; Limitations"
+              }
+            ]
+          }
+        }
+      },
+      "claims": [],
+      "notes": "Official Ovid/LWW publisher PDF and Supplemental Table 2 reviewed on 2026-09-28. Methods pp. 896-897 define the single-clinic 150-subject cohort, preoperative measures paired with one-year NRS outcomes, 80/20 train_test_split, five stratified GridSearchCV folds and RFE. Table E976 gives 89/61 for >50% response and 120/30 for >70% response. Reported preprocessing order raises possible leakage; actual training-only fitting cannot be checked without code. Split seed/membership and external validation are unavailable; patient data are not public and code is on request."
+    }
+  ]
+}

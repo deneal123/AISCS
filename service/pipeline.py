@@ -14,6 +14,7 @@ from typing import Any
 
 from .completeness import completeness_summary, migrate_record
 from .core import DataError, load_json, sha256
+from .data_layout import data_path
 from .integrity import LEGACY_FIELDS, validate_repository, validate_source_record
 
 CANONICAL_FILES = (
@@ -86,7 +87,7 @@ def utc_now() -> datetime:
     return datetime.now(UTC)
 
 
-def atomic_write_json(path: Path, payload: Any) -> None:
+def atomic_write_json(path: Path, payload: Any, *, compact: bool = False) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     handle = tempfile.NamedTemporaryFile(
         mode="w",
@@ -100,7 +101,13 @@ def atomic_write_json(path: Path, payload: Any) -> None:
     temporary = Path(handle.name)
     try:
         with handle:
-            json.dump(payload, handle, ensure_ascii=False, indent=2)
+            json.dump(
+                payload,
+                handle,
+                ensure_ascii=False,
+                indent=None if compact else 2,
+                separators=(",", ":") if compact else None,
+            )
             handle.write("\n")
             handle.flush()
             os.fsync(handle.fileno())
@@ -128,12 +135,19 @@ def snapshot_repository(
     destination.mkdir(parents=True)
     entries: list[dict[str, Any]] = []
     for name in CANONICAL_FILES:
-        source = root / name
+        source = data_path(root, name)
         if not source.is_file():
             continue
-        target = destination / name
+        target = data_path(destination, name)
+        target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(source, target)
-        entries.append({"name": name, "bytes": target.stat().st_size, "sha256": sha256(target)})
+        entries.append(
+            {
+                "name": target.relative_to(destination).as_posix(),
+                "bytes": target.stat().st_size,
+                "sha256": sha256(target),
+            }
+        )
     todo_source = root.parent / "TODO.md"
     if todo_source.is_file():
         todo_target = destination / "TODO.md"
@@ -186,8 +200,8 @@ def new_candidate(root: Path | str, title: str) -> dict[str, Any]:
     if not title.strip():
         raise DataError("candidate title cannot be empty")
     template = load_json(root / "staging" / "source-record.template.json")
-    records = load_json(root / "records.json").get("sources", [])
-    aliases = load_json(root / "aliases.json").get("aliases", {})
+    records = load_json(data_path(root, "records.json")).get("sources", [])
+    aliases = load_json(data_path(root, "aliases.json")).get("aliases", {})
     numeric_ids = [
         int(source_id[1:])
         for source_id in [*(record.get("id") for record in records), *aliases]
@@ -219,10 +233,10 @@ def _normalized_identifier(field: str, value: Any) -> str | None:
 
 def review_candidates(root: Path | str, candidate_path: Path | str) -> dict[str, Any]:
     root = Path(root).resolve()
-    schema = load_json(root / "source-record.schema.json")
-    vocab = load_json(root / "vocabularies.json")
-    records = load_json(root / "records.json").get("sources", [])
-    aliases = load_json(root / "aliases.json").get("aliases", {})
+    schema = load_json(data_path(root, "source-record.schema.json"))
+    vocab = load_json(data_path(root, "vocabularies.json"))
+    records = load_json(data_path(root, "records.json")).get("sources", [])
+    aliases = load_json(data_path(root, "aliases.json")).get("aliases", {})
     candidates = read_candidate_records(candidate_path)
     existing_ids = {record.get("id") for record in records} | set(aliases)
     existing_keys = {_duplicate_key(record): record.get("id") for record in records}
@@ -298,9 +312,9 @@ def publish_candidates(
         return result
 
     snapshot = snapshot_repository(root, label="pre-publish")
-    records_payload = load_json(root / "records.json")
-    clusters_payload = load_json(root / "clusters.json")
-    completeness_payload = load_json(root / "completeness-report.json")
+    records_payload = load_json(data_path(root, "records.json"))
+    clusters_payload = load_json(data_path(root, "clusters.json"))
+    completeness_payload = load_json(data_path(root, "completeness-report.json"))
     records_payload = deepcopy(records_payload)
     clusters_payload = deepcopy(clusters_payload)
     records_payload["sources"].extend(deepcopy(review["candidates"]))
@@ -331,9 +345,9 @@ def publish_candidates(
     completeness_payload.update(summary)
     completeness_payload.setdefault("meta", {})["generated_at"] = utc_now().date().isoformat()
 
-    atomic_write_json(root / "records.json", records_payload)
-    atomic_write_json(root / "clusters.json", clusters_payload)
-    atomic_write_json(root / "completeness-report.json", completeness_payload)
+    atomic_write_json(data_path(root, "records.json"), records_payload)
+    atomic_write_json(data_path(root, "clusters.json"), clusters_payload)
+    atomic_write_json(data_path(root, "completeness-report.json"), completeness_payload)
     final_report = validate_repository(root)
     if not final_report["ok"]:
         raise DataError(

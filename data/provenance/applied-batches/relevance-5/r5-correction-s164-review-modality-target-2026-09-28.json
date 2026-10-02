@@ -1,0 +1,130 @@
+{
+  "meta": {
+    "batch_id": "r5-correction-s164-review-modality-target-2026-09-28",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-28",
+    "scope": "Remove unsupported audio and single experimental target from S164 review card",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-28"
+  },
+  "source_ids": [
+    "S164"
+  ],
+  "records": [
+    {
+      "id": "S164",
+      "title": "Transformer and Attention-Based Models for Automated Pain Assessment: A Systematic Review",
+      "year": 2026,
+      "source_type": "обзор"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S164",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-28",
+      "full_text_status": "checked",
+      "notes": "VBN-hosted final published IEEE Access version checked in full (2026, vol. 14, pp. 108508-108538; DOI 10.1109/ACCESS.2026.3713429). It reports a PRISMA-informed narrative synthesis of 35 studies, no quantitative meta-analysis, and a generalization gap between experimental benchmarks and clinically realistic settings. Single-reviewer extraction and the unregistered protocol remain limitations.",
+      "searches": [
+        {
+          "service": "Aalborg University final published VoR",
+          "query": "S164 full PDF modality taxonomy target classes pages",
+          "url": "https://vbn.aau.dk/ws/files/846863920/Transformer_and_Attention-Based_Models_for_Automated_Pain_Assessment_A_Systematic_Review.pdf",
+          "accessed_at": "2026-09-28"
+        }
+      ],
+      "updates": {
+        "модальность": "Visual, physiological (EEG, ECG, EDA, EMG, PPG) and multimodal pain-assessment inputs; no audio modality is documented.",
+        "evidence": {
+          "modalities": [
+            "eeg",
+            "ecg",
+            "eda",
+            "emg",
+            "bvp_ppg",
+            "video_face",
+            "other"
+          ],
+          "target_construct": "not_applicable"
+        },
+        "validation": {
+          "checked_at": "2026-09-28",
+          "notes": "VBN-hosted final published IEEE Access version checked in full (2026, vol. 14, pp. 108508-108538; DOI 10.1109/ACCESS.2026.3713429). It reports a PRISMA-informed narrative synthesis of 35 studies, no quantitative meta-analysis, and a generalization gap between experimental benchmarks and clinically realistic settings. Single-reviewer extraction and the unregistered protocol remain limitations."
+        },
+        "field_resolution": {
+          "модальность": {
+            "state": "reported",
+            "value": "Visual, physiological (EEG, ECG, EDA, EMG, PPG) and multimodal pain-assessment inputs; no audio modality is documented.",
+            "reason": "The review covers visual and physiological modalities; no audio/speech/acoustic modality appears in the full VoR.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://vbn.aau.dk/ws/files/846863920/Transformer_and_Attention-Based_Models_for_Automated_Pain_Assessment_A_Systematic_Review.pdf",
+                "locator": "Abstract; Sections III-IV, modality taxonomy and study tables"
+              }
+            ]
+          },
+          "evidence.modalities": {
+            "state": "reported",
+            "value": [
+              "eeg",
+              "ecg",
+              "eda",
+              "emg",
+              "bvp_ppg",
+              "video_face",
+              "other"
+            ],
+            "reason": "Remove unsupported audio from the heterogeneous review modality list.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://vbn.aau.dk/ws/files/846863920/Transformer_and_Attention-Based_Models_for_Automated_Pain_Assessment_A_Systematic_Review.pdf",
+                "locator": "Abstract; Sections III-IV, modality taxonomy and study tables"
+              }
+            ]
+          },
+          "evidence.target_construct": {
+            "state": "not_applicable",
+            "value": null,
+            "reason": "This narrative review synthesizes heterogeneous detection and estimation targets; it has no single empirical target construct.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://vbn.aau.dk/ws/files/846863920/Transformer_and_Attention-Based_Models_for_Automated_Pain_Assessment_A_Systematic_Review.pdf",
+                "locator": "Abstract; Section V-E, Task complexity; Section VI-C"
+              }
+            ]
+          },
+          "validation.checked_at": {
+            "state": "reported",
+            "value": "2026-09-28",
+            "reason": "Dated full-text primary recheck.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://vbn.aau.dk/ws/files/846863920/Transformer_and_Attention-Based_Models_for_Automated_Pain_Assessment_A_Systematic_Review.pdf",
+                "locator": "Full VoR sections III-IV, V-E, VI-C"
+              }
+            ]
+          },
+          "validation.notes": {
+            "state": "reported",
+            "value": "VBN-hosted final published IEEE Access version checked in full (2026, vol. 14, pp. 108508-108538; DOI 10.1109/ACCESS.2026.3713429). It reports a PRISMA-informed narrative synthesis of 35 studies, no quantitative meta-analysis, and a generalization gap between experimental benchmarks and clinically realistic settings. Single-reviewer extraction and the unregistered protocol remain limitations.",
+            "reason": "Repair bibliographic page-range corruption and name exact full-text sections.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://vbn.aau.dk/en/publications/transformer-and-attention-based-models-for-automated-pain-assessm/",
+                "locator": "Portal bibliographic pages 108508-108538; VoR Sections III-A, VI-C, VI-K"
+              }
+            ]
+          }
+        },
+        "identifiers": {
+          "doi": "10.1109/ACCESS.2026.3713429"
+        }
+      }
+    }
+  ]
+}

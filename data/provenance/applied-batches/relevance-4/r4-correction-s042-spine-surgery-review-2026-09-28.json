@@ -1,0 +1,187 @@
+{
+  "meta": {
+    "batch_id": "r4-correction-s042-spine-surgery-review-2026-09-28",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-28",
+    "scope": "Correct S042 spine-surgery review type, open accepted manuscript and false cross-subject/SCS descriptors",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-28"
+  },
+  "source_ids": [
+    "S042"
+  ],
+  "records": [
+    {
+      "id": "S042",
+      "title": "Preserving privacy in big data research: the role of federated learning in spine surgery",
+      "year": 2024,
+      "source_type": "федеративное_SCS"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S042",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-28",
+      "full_text_status": "checked",
+      "notes": "Review of federated learning opportunities in spine surgery. The author accepted manuscript is openly available, but the publisher version of record is subscription-only. No new clinical dataset, participant-level model, cross-subject validation, SCS, ECAP or pain endpoint is reported.",
+      "searches": [
+        {
+          "service": "UC Davis eScholarship accepted author manuscript",
+          "query": "DOI 10.1007/s00586-024-08172-2 full text",
+          "url": "https://escholarship.org/content/qt5pq6n147/qt5pq6n147.pdf",
+          "accessed_at": "2026-09-28"
+        },
+        {
+          "service": "Springer publisher abstract",
+          "query": "DOI 10.1007/s00586-024-08172-2 VOR",
+          "url": "https://link.springer.com/article/10.1007/s00586-024-08172-2",
+          "accessed_at": "2026-09-28"
+        }
+      ],
+      "updates": {
+        "модальность": "Literature review; no primary clinical dataset",
+        "кросс_субъект": "not_applicable",
+        "ограничения": "Non-systematic narrative review with no strict inclusion or exclusion criteria, no new cohort or deployed federated model, and no SCS, ECAP or pain-outcome validation. The publisher version of record is subscription-only; an open accepted author manuscript was checked.",
+        "тип_источника": "обзор",
+        "identifiers": {
+          "doi": "10.1007/s00586-024-08172-2"
+        },
+        "evidence": {
+          "access_status": "open",
+          "subject_domain": "not_applicable",
+          "modalities": []
+        },
+        "validation": {
+          "split_unit": "not_applicable",
+          "cross_subject": "not_applicable",
+          "notes": "Review of federated learning opportunities in spine surgery. The author accepted manuscript is openly available, but the publisher version of record is subscription-only. No new clinical dataset, participant-level model, cross-subject validation, SCS, ECAP or pain endpoint is reported.",
+          "checked_at": "2026-09-28"
+        },
+        "risk_flags": [],
+        "field_resolution": {
+          "модальность": {
+            "state": "reported",
+            "value": "Literature review; no primary clinical dataset",
+            "reason": "The article is a review of literature, not an analysis of enrolled clinical data.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://escholarship.org/content/qt5pq6n147/qt5pq6n147.pdf",
+                "locator": "PDF pp. 2-4; Abstract/Methods; Table 1"
+              }
+            ]
+          },
+          "кросс_субъект": {
+            "state": "not_applicable",
+            "value": null,
+            "reason": "No trained model or subjects evaluated in this narrative review.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://escholarship.org/content/qt5pq6n147/qt5pq6n147.pdf",
+                "locator": "PDF p. 2 Abstract/Methods; p. 6 Future directions"
+              }
+            ]
+          },
+          "ограничения": {
+            "state": "reported",
+            "value": "Non-systematic narrative review with no strict inclusion or exclusion criteria, no new cohort or deployed federated model, and no SCS, ECAP or pain-outcome validation. The publisher version of record is subscription-only; an open accepted author manuscript was checked.",
+            "reason": "The authors state that the search did not follow a strict methodology; no SCS or ECAP experiment is described.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://escholarship.org/content/qt5pq6n147/qt5pq6n147.pdf",
+                "locator": "PDF pp. 2-6; Abstract/Methods; Future directions"
+              }
+            ]
+          },
+          "evidence.access_status": {
+            "state": "reported",
+            "value": "open",
+            "reason": "The open author accepted manuscript was checked; this does not imply open publisher VOR.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://escholarship.org/content/qt5pq6n147/qt5pq6n147.pdf",
+                "locator": "PDF p. 2 title/REVIEW ARTICLE; pp. 2-7 body"
+              }
+            ]
+          },
+          "evidence.subject_domain": {
+            "state": "not_applicable",
+            "value": null,
+            "reason": "Narrative review with no newly enrolled human or animal study cohort.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://escholarship.org/content/qt5pq6n147/qt5pq6n147.pdf",
+                "locator": "PDF p. 2 Abstract/Methods"
+              }
+            ]
+          },
+          "evidence.modalities": {
+            "state": "not_applicable",
+            "value": null,
+            "reason": "No primary clinical signal or outcome dataset was collected or evaluated.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://escholarship.org/content/qt5pq6n147/qt5pq6n147.pdf",
+                "locator": "PDF p. 2 Abstract/Methods; p. 4 Table 1"
+              }
+            ]
+          },
+          "validation.split_unit": {
+            "state": "not_applicable",
+            "value": null,
+            "reason": "No model training or train/test split in a narrative review.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://escholarship.org/content/qt5pq6n147/qt5pq6n147.pdf",
+                "locator": "PDF p. 2 Abstract/Methods"
+              }
+            ]
+          },
+          "validation.cross_subject": {
+            "state": "not_applicable",
+            "value": null,
+            "reason": "No participants or cross-subject evaluation; federated learning is discussed prospectively.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://escholarship.org/content/qt5pq6n147/qt5pq6n147.pdf",
+                "locator": "PDF p. 2 Abstract/Methods; p. 6 Future directions"
+              }
+            ]
+          },
+          "validation.notes": {
+            "state": "reported",
+            "value": "Review of federated learning opportunities in spine surgery. The author accepted manuscript is openly available, but the publisher version of record is subscription-only. No new clinical dataset, participant-level model, cross-subject validation, SCS, ECAP or pain endpoint is reported.",
+            "reason": "Separate contextual spine-surgery review from empirical SCS or ECAP validation.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://escholarship.org/content/qt5pq6n147/qt5pq6n147.pdf",
+                "locator": "PDF pp. 2-6; Abstract, Methods and Future directions"
+              }
+            ]
+          },
+          "validation.checked_at": {
+            "state": "reported",
+            "value": "2026-09-28",
+            "reason": "Dated accepted-manuscript full-text check.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://escholarship.org/content/qt5pq6n147/qt5pq6n147.pdf",
+                "locator": "PDF p. 2 title and DOI; pp. 2-6 article body"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

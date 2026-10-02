@@ -12,6 +12,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from .data_layout import data_path
+
 
 class DataError(RuntimeError):
     """The on-disk knowledge base is missing or internally inconsistent."""
@@ -94,7 +96,7 @@ class ResearchRepository:
         try:
             return tuple(
                 (path.stat().st_mtime_ns, path.stat().st_size)
-                for path in (self.data_dir / name for name in self.FILES)
+                for path in (data_path(self.data_dir, name) for name in self.FILES)
             )
         except OSError as exc:
             raise DataError(f"research data is incomplete in {self.data_dir}: {exc}") from exc
@@ -104,9 +106,9 @@ class ResearchRepository:
             stamp = self._file_stamp()
             if self._bundle is not None and stamp == self._stamp:
                 return self._bundle
-            payloads = {name: load_json(self.data_dir / name) for name in self.FILES}
+            payloads = {name: load_json(data_path(self.data_dir, name)) for name in self.FILES}
             fingerprint_source = "|".join(
-                sha256(self.data_dir / name) for name in self.FILES
+                sha256(data_path(self.data_dir, name)) for name in self.FILES
             ).encode("ascii")
             fingerprint = hashlib.sha256(fingerprint_source).hexdigest().upper()[:16]
             self._bundle = Bundle(
@@ -279,7 +281,7 @@ class ResearchRepository:
         limit: int = 50,
         offset: int = 0,
     ) -> dict[str, Any]:
-        payload = load_json(self.data_dir / "evidence-matrix.json")
+        payload = load_json(data_path(self.data_dir, "evidence-matrix.json"))
         needle = query.casefold().strip() if query else ""
         wanted_id = source_id.upper() if source_id else None
         rows: list[dict[str, Any]] = []
@@ -300,10 +302,10 @@ class ResearchRepository:
         }
 
     def completeness_report(self) -> dict[str, Any]:
-        return deepcopy(load_json(self.data_dir / "completeness-report.json"))
+        return deepcopy(load_json(data_path(self.data_dir, "completeness-report.json")))
 
     def dissertation_concept(self) -> dict[str, Any]:
-        return deepcopy(load_json(self.data_dir / "dissertation-concept.json"))
+        return deepcopy(load_json(data_path(self.data_dir, "dissertation-concept.json")))
 
     def get_source_context(self, source_id: str) -> dict[str, Any] | None:
         source = self.get_source(source_id)

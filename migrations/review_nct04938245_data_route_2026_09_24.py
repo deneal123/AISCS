@@ -6,6 +6,7 @@ import argparse
 import json
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 DATA = Path(__file__).resolve().parents[1] / "data"
@@ -13,7 +14,9 @@ PDF = "https://iopscience.iop.org/article/10.1088/1741-2552/adbfbe/pdf"
 
 
 def revised_audit() -> dict:
-    audit = json.loads((DATA / "human-ecap-scs-access-audit.json").read_text(encoding="utf-8"))
+    audit = json.loads(
+        data_path(DATA, "human-ecap-scs-access-audit.json").read_text(encoding="utf-8")
+    )
     entry = next(item for item in audit["candidates"] if item["trial_id"] == "NCT04938245")
     if entry["decision"] != "planned_release_not_yet_located":
         raise ValueError("NCT04938245 decision differs from expected baseline")
@@ -45,7 +48,7 @@ def main() -> None:
     audit = revised_audit()
     if args.apply:
         snapshot = snapshot_repository(DATA, label="pre-nct04938245-data-route-review")
-        atomic_write_json(DATA / "human-ecap-scs-access-audit.json", audit)
+        atomic_write_json(data_path(DATA, "human-ecap-scs-access-audit.json"), audit)
         print(f"Updated NCT04938245 access route; snapshot: {snapshot}")
     else:
         print("Dry run: NCT04938245 request route ready; no usable dataset established")

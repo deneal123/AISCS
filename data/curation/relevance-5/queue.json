@@ -35,7 +35,7 @@
         "S085",
         "S128"
       ],
-      "path": "R:\\Aspa\\research\\data\\curation\\relevance-5\\batches\\batch-001.json"
+      "path": "curation/relevance-5/applied-batches.json#batch-001.json"
     },
     {
       "batch_id": "batch-002",
@@ -60,7 +60,7 @@
         "S324",
         "S339"
       ],
-      "path": "R:\\Aspa\\research\\data\\curation\\relevance-5\\batches\\batch-002.json"
+      "path": "curation/relevance-5/applied-batches.json#batch-002.json"
     },
     {
       "batch_id": "batch-003",
@@ -85,7 +85,7 @@
         "S264",
         "S374"
       ],
-      "path": "R:\\Aspa\\research\\data\\curation\\relevance-5\\batches\\batch-003.json"
+      "path": "curation/relevance-5/applied-batches.json#batch-003.json"
     },
     {
       "batch_id": "batch-004",
@@ -111,7 +111,7 @@
         "S322",
         "S337"
       ],
-      "path": "R:\\Aspa\\research\\data\\curation\\relevance-5\\batches\\batch-004.json"
+      "path": "curation/relevance-5/applied-batches.json#batch-004.json"
     },
     {
       "batch_id": "batch-005",
@@ -137,7 +137,7 @@
         "S033",
         "S047"
       ],
-      "path": "R:\\Aspa\\research\\data\\curation\\relevance-5\\batches\\batch-005.json"
+      "path": "curation/relevance-5/applied-batches.json#batch-005.json"
     },
     {
       "batch_id": "batch-006",
@@ -160,7 +160,7 @@
         "S014",
         "S016"
       ],
-      "path": "R:\\Aspa\\research\\data\\curation\\relevance-5\\batches\\batch-006.json"
+      "path": "curation/relevance-5/applied-batches.json#batch-006.json"
     },
     {
       "batch_id": "batch-007",
@@ -183,7 +183,7 @@
         "S005",
         "S101"
       ],
-      "path": "R:\\Aspa\\research\\data\\curation\\relevance-5\\batches\\batch-007.json"
+      "path": "curation/relevance-5/applied-batches.json#batch-007.json"
     },
     {
       "batch_id": "batch-008",
@@ -198,7 +198,7 @@
         "S321",
         "S336"
       ],
-      "path": "R:\\Aspa\\research\\data\\curation\\relevance-5\\batches\\batch-008.json"
+      "path": "curation/relevance-5/applied-batches.json#batch-008.json"
     }
   ]
 }

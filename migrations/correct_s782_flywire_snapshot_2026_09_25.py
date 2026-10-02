@@ -6,6 +6,7 @@ import argparse
 import json
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -16,7 +17,7 @@ DATASET = "Female adult fly brain (FAFB) FlyWire materialization snapshot 783 fo
 
 
 def updated() -> tuple[dict, dict, dict]:
-    records = json.loads((DATA / "records.json").read_text(encoding="utf-8"))
+    records = json.loads((data_path(DATA, "records.json")).read_text(encoding="utf-8"))
     source = next(item for item in records["sources"] if item["id"] == "S782")
     if "grooming-circuit connectome" not in source["датасет"]:
         raise ValueError("S782 source changed")
@@ -31,7 +32,7 @@ def updated() -> tuple[dict, dict, dict]:
             "checked_at": DATE,
             "locators": [{"url": URL, "locator": "Methods > Connectome analysis: FlyWire materialization snapshot 783 and MANC v1.2.1; Methods > Fly stocks"}],
         })
-    audit = json.loads((DATA / "drosophila-connectome-audit.json").read_text(encoding="utf-8"))
+    audit = json.loads((data_path(DATA, "drosophila-connectome-audit.json")).read_text(encoding="utf-8"))
     extraction = next(item["extraction"] for item in audit["entries"] if item["source_id"] == "S782")
     extraction["connectome_version"].update({
         "state": "reported",
@@ -45,7 +46,7 @@ def updated() -> tuple[dict, dict, dict]:
         "reason": "Primary Methods identify female adult graph and female adult experimental flies.",
         "locators": [{"url": URL, "locator": "Methods > Connectome analysis; Methods > Fly stocks"}],
     })
-    matrix = json.loads((DATA / "evidence-matrix.json").read_text(encoding="utf-8"))
+    matrix = json.loads((data_path(DATA, "evidence-matrix.json")).read_text(encoding="utf-8"))
     row = next(item for item in matrix["rows"] if item["batch_id"] == "ns04-model-perturbation-primary-2026-09-25")
     row["verified_evidence"] += " S782 Methods > Connectome analysis pins FAFB FlyWire materialization snapshot 783 and distinguishes supplementary MANC v1.2.1."
     row["limitations"] = row["limitations"].replace("Exact graph releases remain unresolved in checked texts.", "S782 pins its FAFB snapshot; S783's immutable FlyWire model-graph release is unresolved in the checked text. These versions do not determine the S740 matrix releases.")
@@ -62,7 +63,7 @@ def main() -> None:
         return
     snapshot = snapshot_repository(DATA, label="pre-s782-fafb-snapshot-correction")
     for name, payload in zip(("records.json", "drosophila-connectome-audit.json", "evidence-matrix.json"), outputs, strict=True):
-        atomic_write_json(DATA / name, payload)
+        atomic_write_json(data_path(DATA, name), payload)
     print(f"Corrected S782; snapshot: {snapshot}")
 
 

@@ -7,7 +7,7 @@ importing FastAPI or loading the corpus.
 from __future__ import annotations
 
 SERVICE_NAME = "research"
-SERVICE_VERSION = "1.3.0"
+SERVICE_VERSION = "1.5.0"
 DATA_SCHEMA_VERSION = "2.0.0"
 
 ERROR_CODES = frozenset(
@@ -20,6 +20,10 @@ ERROR_CODES = frozenset(
 )
 
 READ_ENDPOINTS = (
+    "GET /v1/knowledge/status",
+    "GET /v1/knowledge/search",
+    "GET /v1/knowledge/evidence/{node_id}",
+    "GET /v1/knowledge/graph/{node_id}",
     "GET /health",
     "GET /ready",
     "GET /v1/meta",

@@ -39,7 +39,7 @@
         "S327",
         "S342"
       ],
-      "path": "R:\\Aspa\\research\\data\\curation\\relevance-4\\batches\\r4-batch-001.json"
+      "path": "curation/relevance-4/applied-batches.json#r4-batch-001.json"
     },
     {
       "batch_id": "r4-batch-002",
@@ -70,7 +70,7 @@
         "S162",
         "S184"
       ],
-      "path": "R:\\Aspa\\research\\data\\curation\\relevance-4\\batches\\r4-batch-002.json"
+      "path": "curation/relevance-4/applied-batches.json#r4-batch-002.json"
     },
     {
       "batch_id": "r4-batch-003",
@@ -99,7 +99,7 @@
         "S073",
         "S115"
       ],
-      "path": "R:\\Aspa\\research\\data\\curation\\relevance-4\\batches\\r4-batch-003.json"
+      "path": "curation/relevance-4/applied-batches.json#r4-batch-003.json"
     },
     {
       "batch_id": "r4-batch-004",
@@ -130,7 +130,7 @@
         "S084",
         "S096"
       ],
-      "path": "R:\\Aspa\\research\\data\\curation\\relevance-4\\batches\\r4-batch-004.json"
+      "path": "curation/relevance-4/applied-batches.json#r4-batch-004.json"
     },
     {
       "batch_id": "r4-batch-005",
@@ -160,7 +160,7 @@
         "S083",
         "S155"
       ],
-      "path": "R:\\Aspa\\research\\data\\curation\\relevance-4\\batches\\r4-batch-005.json"
+      "path": "curation/relevance-4/applied-batches.json#r4-batch-005.json"
     },
     {
       "batch_id": "r4-batch-006",
@@ -191,7 +191,7 @@
         "S310",
         "S311"
       ],
-      "path": "R:\\Aspa\\research\\data\\curation\\relevance-4\\batches\\r4-batch-006.json"
+      "path": "curation/relevance-4/applied-batches.json#r4-batch-006.json"
     },
     {
       "batch_id": "r4-batch-007",
@@ -214,7 +214,7 @@
         "S267",
         "S306"
       ],
-      "path": "R:\\Aspa\\research\\data\\curation\\relevance-4\\batches\\r4-batch-007.json"
+      "path": "curation/relevance-4/applied-batches.json#r4-batch-007.json"
     }
   ]
 }

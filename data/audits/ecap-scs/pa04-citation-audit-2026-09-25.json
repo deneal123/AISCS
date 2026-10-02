@@ -1,0 +1,1154 @@
+{
+  "date": "2026-09-25",
+  "task": "Bounded primary citation screen of one physical ECAP forward-operator seed (S764) and the clinical EVOKE randomized family (S779-S781); not a saturation claim.",
+  "search_scope": {
+    "seeds": [
+      "S764 / DOI 10.1371/journal.pone.0345287",
+      "EVOKE / NCT02924129 / S779-S781"
+    ],
+    "queries": [
+      "\"Directional leads applied to spinal cord stimulation\" citations ECAP",
+      "\"10.1371/journal.pone.0345287\" references citations",
+      "\"Directional leads applied to spinal cord stimulation: A computational modelling study\" -journals.plos.org",
+      "\"35551869\" cited by ECAP SCS",
+      "\"36855060\" spinal cord stimulation cited by",
+      "\"EVOKE\" NCT02924129 ECAP sleep subanalysis 36437161",
+      "\"NCT02924129\" EVOKE study PubMed outcomes ECAP",
+      "S764 full primary text: Methods Multi-compartment cable model of sensory fibers / Calculation of simulated ECAP signals; references 30-33; verify selected cited methods at primary PLOS records",
+      "PubMed exact trial-family searches for NCT02924129 protocol PMID 30828946 and ECAP-dose neurophysiology PMID 38490687",
+      "Forward indexes checked by read-only Pi: Crossref is-referenced-by-count, OpenAlex cites, PubMed pubmed_pubmed_citedin, Europe PMC CITES, Semantic Scholar citationCount for S764 DOI/title"
+    ],
+    "retrieval": "2026-09-25; publisher pages and PubMed records opened directly; citation-search results are discovery only, not primary evidence. Supplementary bounded review performed 2026-09-26 using primary PLOS and PubMed records plus Picodex route discovery; no raw worker outputs retained.",
+    "limits": "Search-engine citation indexing is incomplete. Backward screening was bounded to the S764 reference list and EVOKE reports/subanalyses retrieved by exact trial identifier. Forward search was bounded to the exact title/DOI, PMID/DOI, and NCT queries above. No claim of exhaustive global citation coverage."
+  },
+  "S764_seed": {
+    "primary_url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0345287",
+    "primary_locator": "Full text > Methods / Results / Discussion; References 13-21 and 26",
+    "classification": "Computational human spinal-cord FEM + multicompartment sensory axons; reciprocity-based simulated ECAP waveforms under directional-lead geometries. No human cohort or measured analgesia endpoint; the paper does not establish clinical efficacy.",
+    "backward_citation_screen": [
+      {
+        "work": "Anaya et al. 2020, PMID 31215720; local S766",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/31215720/",
+        "decision": "Canonical prior physical ECAP forward model: FEM + axon models + reciprocity; direct method predecessor, not a clinical outcome study."
+      },
+      {
+        "work": "Laird & Parker 2013, PMID 24111244; local S785",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/24111244/",
+        "decision": "Canonical hybrid electrical/neural simulation predicting recruitment and recorded spinal compound action-potential waveforms; direct physical-method predecessor."
+      },
+      {
+        "work": "Calvert et al. 2023, PMID 35551869",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/35551869/",
+        "primary_full_text_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9643656/",
+        "primary_locator": "Abstract, Materials and Methods; Methods 2.1-2.7; Results 3.1-3.3, Figs. 1-8; Discussion",
+        "checked_at": "2026-09-25",
+        "decision": "Canonical S799 added after independent check of the full primary author manuscript. Four sheep with dual 24-contact lumbosacral arrays; empirical spatial epidural ECAP and synchronized six-muscle EMG recordings. Physiological comparator only: no patient analgesia endpoint or FEM/axon physical ECAP forward operator. Discussion says the sheep-to-sensation relation is difficult to evaluate and calls for future human work; model/theory-driven experiments are also future work. Publisher PDF itself was not checked. No independent external validation."
+      },
+      {
+        "work": "Verma et al. 2023, PMID 36855060",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/36855060/",
+        "primary_full_text_url": "https://link.springer.com/article/10.1186/s42234-023-00106-5",
+        "primary_locator": "Methods, Subjects and Stimulation and recording; Figs. 1-3 and 6-8; Discussion, Local back muscle activation and General limitations; Availability of data and materials",
+        "checked_at": "2026-09-25",
+        "decision": "Canonical S800 added after independent check of the complete publisher text. Ten acute swine; analysis-specific Ns vary (n=5 referencing comparisons, n=4 lead-migration analyses). Epidural recordings contain ECAP, EMG and stimulation artifact; reference and lead position alter signals. No human pain endpoint or physical ECAP forward operator. Data statement says Abbott proprietary/confidential, with no third-party release obligation. Same consortium with substantial author overlap as S798, so this is related technical evidence, not external validation."
+      },
+      {
+        "work": "Dura et al. 2019, PMID 30586207",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/30586207/",
+        "decision": "Adjacent computational SCS recruitment/paresthesia coverage model (FEM plus neural simulation), not recorded ECAP waveform operator or patient analgesia validation; no local canonical PMID match at screening."
+      },
+      {
+        "work": "Parker et al. 2012, PMID 22188868; local S784",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/22188868/",
+        "decision": "Human recorded ECAP and paresthesia coverage association; useful physiological comparator, but not a predictive analgesia endpoint."
+      },
+      {
+        "work": "Koenig et al. 2025, PMID 40073452; local S105",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+        "decision": "Human empirical signal processing/prediction of ECAP features, not a volume-conductor physical forward model; distinct task/evidence type."
+      },
+      {
+        "work": "EVOKE primary 12-month report, PMID 31870766; local S779",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/31870766/",
+        "decision": "Cited clinical closed-loop RCT; clinical pain response is distinct from the physical operator modeled in S764."
+      },
+      {
+        "work": "Tharayil et al. 2025, BlueRecording: A pipeline for the efficient calculation of extracellular recordings in large-scale neural circuit models; DOI 10.1371/journal.pcbi.1013023; PMID 40408328",
+        "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1013023",
+        "relation": "S764 reference 31; S764 Methods, Calculation of simulated ECAP signals, cites reciprocity theorem",
+        "checked_at": "2026-09-26",
+        "primary_locator": "S764 Methods, Calculation of simulated ECAP signals (reference 31); BlueRecording Abstract and section 2.1.1 Generalized reciprocity approach",
+        "decision": "Primary PLOS texts confirm this is a full-text computational extracellular-recording method using generalized reciprocity. It is a neural-circuit signal simulation method, not spinal-cord ECAP, SCS therapy or patient pain validation. Its presence supports method lineage only.",
+        "access_limit": "Full PLOS primary text checked; not independently reproduced for spinal-cord tissue or SCS."
+      },
+      {
+        "work": "Howell, Lad & Grill 2014, Evaluation of Intradural Stimulation Efficiency and Selectivity in a Computational Model of Spinal Cord Stimulation; DOI 10.1371/journal.pone.0114938; PMID 25536035",
+        "url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0114938",
+        "relation": "S764 reference 33; cited in its Discussion as a prior intradural SCS modeling result",
+        "checked_at": "2026-09-26",
+        "primary_locator": "S764 References 33 and Discussion sentence keyed to reference 33; primary PLOS page for Howell et al. title/DOI/abstract",
+        "decision": "Primary S764 and Howell PLOS records confirm an earlier computational intradural SCS model. This is adjacent model prior art, not an ECAP waveform forward operator or clinical efficacy study.",
+        "access_limit": "The 2026-09-26 check reached only the PLOS landing text/metadata. The 2026-09-28 check below independently reached the complete publisher article; no ECAP waveform or patient analgesia result is reported there.",
+        "full_text_recheck_2026_09_28": {
+          "status": "checked_primary_full_text",
+          "url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0114938",
+          "locator": "Methods > Volume conductor model, Clinical protocol and Model evaluation; Results > The therapeutic targets predicted by the model; Discussion > Limitations and Conclusions.",
+          "verified_findings": "COMSOL finite-element volume conductor and NEURON cable models were compared with acute intraoperative sensory and discomfort stimulation thresholds in five patient-specific geometries. The Results report no clear A-beta fiber diameter or activated proportion matching the two clinical thresholds across the five models. The publisher article does not report ECAP calculation or recording.",
+          "boundary": "Adjacent SCS electric-field/axon-recruitment modeling with limited acute threshold comparison; not an ECAP waveform forward operator, long-term clinical outcome study or independent analgesia validation."
+        }
+      }
+    ],
+    "forward_screen": "Exact title and DOI searches surfaced the PLOS/PMC primary text and index pages but no specific citing primary paper verifiable in returned bounded results. Forward-citation set remains incomplete; do not infer absence of citing literature.",
+    "deduplication": "PMID lookup confirmed S766, S785, S784, S105, S779 already canonical. No local PMID match for 35551869, 36855060, 30586207 at screening time.",
+    "forward_search_update_2026_09_26": {
+      "routes": [
+        {
+          "index": "Crossref",
+          "query": "is-referenced-by-count for DOI 10.1371/journal.pone.0345287",
+          "result": "0 indexed citing works at retrieval",
+          "evidence_level": "index metadata"
+        },
+        {
+          "index": "OpenAlex",
+          "query": "cites:W7148526888",
+          "result": "0 indexed citing works at retrieval",
+          "evidence_level": "index metadata"
+        },
+        {
+          "index": "PubMed",
+          "query": "pubmed_pubmed_citedin linkset for PMID 41926484",
+          "result": "empty linkset",
+          "evidence_level": "index metadata"
+        },
+        {
+          "index": "Europe PMC",
+          "query": "CITES:41926484_MED",
+          "result": "hitCount 0",
+          "evidence_level": "index metadata"
+        },
+        {
+          "index": "Semantic Scholar",
+          "query": "citationCount for S764 DOI",
+          "result": "0 indexed citing works at retrieval",
+          "evidence_level": "index metadata"
+        },
+        {
+          "index": "Google Scholar",
+          "query": "exact S764 DOI/title cited by",
+          "result": "HTTP 200 but no parseable citing list; bot mitigation",
+          "evidence_level": "unresolved route"
+        }
+      ],
+      "as_of": "2026-09-26",
+      "scope_limit": "Bounded index check for a 2026 article; citation lag, index incompleteness and unindexed citing work remain possible. Zero indexed counts do not establish no citing work exists.",
+      "worker_job": "6ab5c666-ea89-4848-9af3-025e918b0e07",
+      "completion": "agent_settled; exit 0; no extension errors; worker output independently checked against primary S764 full text; index counts remain index metadata only."
+    }
+  },
+  "additional_empirical_artifact_prior_art": [
+    {
+      "work": "Deshmukh et al., Journal of Neural Engineering 22(1):016050 (2025), PMID 39321832",
+      "doi": "10.1088/1741-2552/ad7f8b",
+      "primary_url": "https://iopscience.iop.org/article/10.1088/1741-2552/ad7f8b",
+      "access_route": "Full publisher text checked through a text reader because direct IOP access showed CAPTCHA; PubMed confirms the 2025 journal issue. A 2024 bioRxiv preprint is a version of this study, not an independent replication.",
+      "primary_locator": "Methods 2.1-2.4; Results 3.1-3.7, Figs. 1-13 and Tables 1-2; Discussion 4.1 and 4.7; data statement after Discussion",
+      "checked_at": "2026-09-25",
+      "decision": "Canonical source S798 published after full publisher text review: seven swine enrolled and six analyzed, with smaller analysis-specific denominators. Vecuronium and concurrent muscle EMG, post-mortem recordings, and movement/physiology analyses show capacitive decay, EMG bleed-through and motion can resemble or contaminate neural ECAP components. No human pain outcomes or physical ECAP forward operator. Same consortium as Verma et al. 2023 (PMID 36855060), not external validation. The 2024 bioRxiv preprint is a version of this study, not independent replication. Supporting data are in article and supplements; no linked patient-level dataset identified. Canonical card: S798."
+    }
+  ],
+  "EVOKE_seed": {
+    "primary_family": [
+      "S779",
+      "S780",
+      "S781"
+    ],
+    "trial_id": "NCT02924129",
+    "family_boundary": "S779 12-month primary randomized report, S780 24-month secondary follow-up, S781 36-month report are repeated reports of one randomized cohort, not independent samples. ECAP is neural recruitment/therapy feedback; patient-reported pain is a separate outcome.",
+    "additional_forward_or_family_reports": [
+      {
+        "work": "Costandi et al. 2023 sleep subanalysis, PMID 36437161",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/36437161/",
+        "locator": "PubMed abstract > objective, methods, results, conclusion, trial registration",
+        "decision": "Same NCT02924129 family; PSQI sleep outcome, baseline ECAP-CL n=62 and 12-month n=55. Secondary endpoint, not independent cohort and not ECAP-as-pain. No canonical card added in this pass."
+      },
+      {
+        "work": "Mekhail et al. 2023 holistic response, PMID 37491149",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/37491149/",
+        "locator": "PubMed abstract > methods and NCT02924129 trial registration",
+        "decision": "Additional 24-month IPD analysis of the same EVOKE RCT. Distinct multidomain analysis, not independent cohort or same article as S780 (distinct title/DOI/PMID). No canonical record added in this pass."
+      },
+      {
+        "work": "Falowski et al. intraoperative neuromonitoring case series, PMID 35088735",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/35088735/",
+        "locator": "Publisher abstract > Methods",
+        "decision": "Seven-patient lead-placement case series says registered as part of a larger study under NCT02924129. Perioperative technical endpoint; patient-level linkage to randomized efficacy sample is not established by abstract. Do not count as independent EVOKE efficacy evidence."
+      },
+      {
+        "work": "Levy et al. 2019 EVOKE randomized study protocol, PMID 30828946, DOI 10.1111/ner.12932",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/30828946/",
+        "locator": "PubMed abstract > Background, Methods and Discussion; title/DOI/year and Clinical Trial Protocol publication type",
+        "decision": "Protocol for NCT02924129; describes planned 134 participants, 1:1 ECAP-controlled closed-loop versus open-loop SCS, pain and neurophysiological outcomes. Same EVOKE program, not an outcome report or an independent cohort. It explicitly separates ECAP feedback from patient pain outcomes.",
+        "checked_at": "2026-09-26",
+        "access_limit": "PubMed primary record and abstract checked; Wiley full text not accessible in this pass. No protocol methods beyond abstract asserted."
+      },
+      {
+        "work": "Mekhail et al. 2025, Neurophysiological outcomes that sustained clinically significant improvements over 3 years of physiologic ECAP-controlled closed-loop spinal cord stimulation for the treatment of chronic pain, PMID 38490687, DOI 10.1136/rapm-2024-105370, PMCID PMC12322467",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/38490687/",
+        "locator": "PubMed abstract and Europe PMC full-text XML: Abstract, Results participant flow and Data availability statement.",
+        "decision": "Additional 36-month neurophysiological analysis of 41 EVOKE participants assigned to closed-loop SCS; evaluates ECAP dose/accuracy and separately reports patient pain response. Same NCT02924129 randomized cohort as S779-S781, not an independent replication or cohort.",
+        "checked_at": "2026-09-26",
+        "access_limit": "Full article independently checked through Europe PMC JATS XML on 2026-09-26; no public patient-linked download identified. BMJ PDF and PMC HTML remained blocked.",
+        "full_text_recheck_2026_09_26": {
+          "status": "checked_primary_full_text",
+          "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12322467/fullTextXML",
+          "locator": "Abstract Methods/Results; main Results participant flow; Data availability statement. 67 randomized to CL-SCS, 59 implanted after successful screening, 41 retained in CL-SCS and followed to 36 months. ECAP dose/accuracy and patient-reported back/leg pain are separate measures; data available upon request.",
+          "cohort_boundary": "Same EVOKE/NCT02924129 randomized program; 41-person follow-up subset does not add an independent cohort or establish an open patient-level ECAP/outcome dataset.",
+          "access": "Europe PMC JATS full text HTTP 200; NCBI BioC XML also accessible. Live BMJ PDF 403 and PMC HTML reCAPTCHA do not negate the accessible XML."
+        }
+      }
+    ],
+    "screened_duplicate_logic": "S779-S781 explicitly share NCT02924129. PMID 36437161 and 37491149 explicitly name the same RCT and are repeated analyses, not independent replications. PMID 35088735 has a registration link but insufficient linkage to assert overlap with randomized efficacy analysis. PMID 30828946 is the antecedent protocol for the same NCT02924129 program; PMID 38490687 is a 36-month ECAP-dose analysis from the same randomized cohort and does not add independent participants.",
+    "new_direct_clinical_lead": "S793 Nijhuis et al. 2024 RWE, DOI 10.1007/s40122-024-00628-z; separate European routine-care cohort (148 newly implanted patients), not EVOKE/AVALON randomized cohort. Full publisher text reviewed and canonical card published via workflow. Pain VNRS and ECAP/device dose metrics are separate; no held-out-patient prediction or external validation.",
+    "Nijhuis_primary_url": "https://link.springer.com/article/10.1007/s40122-024-00628-z",
+    "Nijhuis_locators": "Methods > Study Design, Patients, Data/Outcomes, Ethical Approval; Results > Pain Relief Outcomes / Neural Metrics; Data Availability. Written informed consent reported. Registrations: Trial NL7889, NCT05272137, ISRCTN27710516. Generated/analyzed data are stated to be included in article; no separate participant-level download identified. VNRS: n=148 overall baseline and 103/91/85 at 3/6/12 months; the stimulation-naive baseline is n=135. Neural Metrics section reports n=236, n=230, n=254 for its three metrics and calls these patient counts, although each exceeds the 148 newly implanted patients; the article context checked here does not reconcile the denominators. Treat the discrepancy as unresolved; do not reinterpret these as independent participants or observations.",
+    "remaining": "PA-04 stays open: complete forward citation chains from multiple seeds, full backward citation screening across NS-07-NS-10, the protocol full-text route for PMID 30828946, other unresolved leads, and later dated refresh remain outstanding. PMID 38490687 was checked in full primary JATS; its 41-person EVOKE follow-up is not an independent cohort or open patient-level dataset. Five S764 forward indexes returned zero citing records; index lag remains possible."
+  },
+  "canonical_additions": [
+    "S798 Deshmukh et al. 2025, PMID 39321832 (existing PA-04 addition)",
+    "S799 Calvert et al. 2023, PMID 35551869, NS-09 ovine spatial ECAP/EMG comparator",
+    "S800 Verma et al. 2023, PMID 36855060, NS-09 swine ESR/ECAP/EMG/stimulation-artifact comparator",
+    "S826 Mohabbati et al. 2025, PMID 40378232, NS-10 early clinical report from NCT05177354"
+  ],
+  "consortium_relationships": {
+    "S800_to_S798": {
+      "basis": "Same consortium and substantial overlapping authors (including Verma, Romanauski, Lam, Blanz, Ludwig, Lempka, Shoffstall, Knudson, Park, Ross, Lavrov and Zhang).",
+      "interpretation": "Related publications and experimental scopes; S800 is not independent external validation of S798 or any clinical pain model."
+    }
+  },
+  "ns10_followup_2026_09_27": {
+    "seed": "NCT05177354 and ECAP-controlled closed-loop SCS outcome literature",
+    "primary_article": "S826, DOI 10.1093/pm/pnaf058; https://academic.oup.com/painmedicine/article/26/11/773/8133952 and Europe PMC full-text XML PMC12585107, Methods Study design/Statistics, Results Subject disposition, Table 2",
+    "registry_url": "https://clinicaltrials.gov/api/v2/studies/NCT05177354",
+    "checked_result": "Seven-site single-arm trial: 94 enrolled, 75 trialed, 60 implanted. The randomized blinded crossover concerns only in-clinic CL versus OL overstimulation at one month (25/28 improved). Three-month pain response is an exploratory single-arm secondary endpoint: 44/51 overall low-back/leg VAS responders, 38/43 back and 30/41 leg at at least 50% reduction. Registry aggregate result counts agree with the paper's Table 2 percentages.",
+    "same_cohort_12_month_poster": "https://www.medtronic.com/content/dam/medtronic-wide/public/united-states/education-training-research/clinical-evidence/scs-closed-loop-12-mo-study-outcomes-nans-poster.pdf ; p. 1 Subject Disposition shows 94 enrolled, 60 implanted and 46 at 12 months, with 43/46 clear measurable ECAPs in the in-clinic test. Same NCT05177354 cohort, not independent replication.",
+    "later_conference_abstract": "DOI 10.1016/j.neurom.2025.10.049; distinct 12-month abstract in the same trial family. Full publisher method text was inaccessible; do not merge its counts with the full paper or the author poster without exact reconciliation.",
+    "limits": "Neither aggregate source supplies a participant-level ECAP-to-pain dataset or validates an ECAP-based pain-response predictor. The long-term pain outcomes have no randomized control arm. Forward/backward citation coverage and later-dated saturation remain open."
+  },
+  "supplemental_citation_pass_2026_09_26": {
+    "scope": "Small bounded batch: two unreported S764 backward citations and two EVOKE-family publications; not a saturated snowball screen.",
+    "primary_verification": "S764 claims/relationships checked on the PLOS full text; BlueRecording and Howell identity/content checked on primary PLOS pages; both EVOKE identities and abstracts checked on PubMed primary records. EVOKE family linkage is explicit for PMID 38490687; protocol identity is NCT02924129 by exact title/abstract. Follow-up: PMID 38490687 full text independently checked via https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12322467/fullTextXML; PMID 30828946 remains PubMed-abstract only.",
+    "counts": {
+      "S764_backward_relations_reviewed_new": 2,
+      "S764_forward_indexes_checked": 5,
+      "S764_forward_indexed_citing_works_returned": 0,
+      "EVOKE_family_publications_reviewed_new": 2
+    },
+    "not_counted_as_independent_cohorts": [
+      "PMID 30828946 (protocol only)",
+      "PMID 38490687 (same NCT02924129 randomized cohort as S779-S781)"
+    ],
+    "not_assessed_or_unresolved": [
+      "other indexed citing works for EVOKE seeds",
+      "complete reference lists for all NS-07-NS-10 sources",
+      "Google Scholar parseable citing records for S764",
+      "full text for EVOKE protocol PMID 30828946; PMID 38490687 primary XML was checked"
+    ],
+    "worker_job_ids": [
+      "6ab5c666-ea89-4848-9af3-025e918b0e07",
+      "f32fb075-7371-43e0-a39c-2ad26badfe20"
+    ],
+    "worker_completion": "Both Picodex jobs reported agent_settled, exit 0, zero extension errors; outputs treated as discovery. Only the four specific dispositions above were independently checked against primary PLOS/PubMed pages before integration.",
+    "saturation": false,
+    "full_text_follow_up_2026_09_26": {
+      "pmid": "38490687",
+      "primary_full_text_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12322467/fullTextXML",
+      "cohort": "EVOKE/NCT02924129: 67 allocated CL-SCS, 59 implanted after trial, 41 followed through 36 months",
+      "endpoint_boundary": "ECAP dose and accuracy are neurophysiological metrics; back/leg pain response is separately reported. No linked patient-level data were downloaded.",
+      "data_availability": "Data available upon request.",
+      "protocol_limit": "PMID 30828946 Wiley full text returned 403; PubMed abstract only."
+    }
+  },
+  "bounded_ns07_ns10_citation_edges_2026_09_27": {
+    "scope": "Ten exact-seed Picodex checks across NS-07 through NS-10, limited to named references/cited-by routes. Six jobs settled within the screening wave; four that remained live past the 90-second job bound were cancelled and their partial outputs excluded. This is a bounded lead screen, not citation saturation.",
+    "primary_verified_edges": [
+      {
+        "seed": {
+          "source_id": "S765",
+          "doi": "10.3389/fpain.2023.1072786",
+          "primary_url": "https://www.frontiersin.org/journals/pain-research/articles/10.3389/fpain.2023.1072786/full",
+          "locator": "References, item 15"
+        },
+        "lead": {
+          "title": "A Clinical Feasibility Study of Spinal Evoked Compound Action Potential Estimation Methods",
+          "doi": "10.1111/ner.13510",
+          "pmid": "35041590",
+          "primary_url": "https://pubmed.ncbi.nlm.nih.gov/35041590/",
+          "primary_locator": "Abstract, Objectives, Materials and methods, Results, Conclusions"
+        },
+        "disposition": "New NS-08 primary-method lead. The PubMed abstract reports 112 ECAP and stimulation-artifact recordings from 14 human participants and compares high-pass filtering, artifact-model subtraction, template correlation and P2-N1 estimation. It evaluates neural-response preservation against artifact misclassification; it does not measure analgesia. It shares author Andrew Will with S787, so possible cohort overlap must be checked before counting independent participants. No canonical source card was created in this bounded pass.",
+        "verification": "The seed's full publisher text directly lists the lead as reference 15; the candidate's official PubMed primary record independently confirms its identity and method summary.",
+        "worker_job": "5780e031-2c31-4c8a-a305-441dd5585d3e"
+      },
+      {
+        "seed": {
+          "source_id": "S779",
+          "doi": "10.1016/S1474-4422(19)30414-4",
+          "pmid": "31870766"
+        },
+        "lead": {
+          "source_id": "S239",
+          "title": "Improvements in Therapy Experience With Evoked Compound Action Potential Controlled, Closed-Loop Spinal Cord Stimulation-Primary Outcome of the ECHO-MAC Randomized Clinical Trial",
+          "doi": "10.1016/j.jpain.2024.104646",
+          "pmid": "39094810",
+          "primary_url": "https://pubmed.ncbi.nlm.nih.gov/39094810/",
+          "primary_locator": "Abstract and trial registration NCT04765735"
+        },
+        "citation_relation": "Europe PMC exact cited-by route from the EVOKE PMID to S239; retained as an index-discovered edge. The primary S239 record confirms a distinct NCT04765735 randomized crossover trial.",
+        "disposition": "Already canonical as S239; do not create a duplicate. Its primary endpoint is overstimulation sensation/therapy experience, with ECAP variability reported separately. It does not provide a pain-relief prediction endpoint or an independent citation to be counted as a new canonical source.",
+        "worker_job": "ec66c63a-902b-4720-ab5b-57dab69763a0"
+      }
+    ],
+    "screened_but_not_promoted": [
+      {
+        "seed": "S785, DOI 10.1109/EMBC.2013.6611057",
+        "candidate_leads": [
+          "Wijesinghe et al. 1991, DOI 10.1007/BF02368460, PMID 2035910: primary abstract verifies a volume-conduction forward model for peripheral nerve bundle CAPs, not spinal ECAP.",
+          "Plonsey 1974, DOI 10.1109/TBME.1974.324406, PMID 4461667: foundational volume-conductor theory; no spinal ECAP validation."
+        ],
+        "reason": "The worker found these in deposited citation metadata. Their primary content is adjacent peripheral/foundational prior art, and the actual seed reference locator was not independently checked in the primary S785 text in this pass; they are not promoted as verified direct leads.",
+        "worker_job": "18693c4b-5c84-4dc7-a5be-2c5af723465c"
+      },
+      {
+        "seed": "S786, DOI 10.1109/TNSRE.2018.2870169",
+        "candidate_leads": [
+          "PMID 23893748, DOI 10.1109/TBCAS.2013.2270179, a compact nonlinear SCS electrode-array model; adjacent electrode-interface model, not demonstrated artifact-removal validation.",
+          "PMID 28692981, DOI 10.1109/TNSRE.2017.2723952, cochlear-implant artifact-removal method; not SCS implant validation."
+        ],
+        "reason": "The second candidate is excluded by population/device scope. The first remains an adjacent method lead; the citation relation and full primary methods were not independently verified in this pass.",
+        "worker_job": "60d4f490-ef72-41e8-8e94-6d7c1c03c42d"
+      },
+      {
+        "seed": "S784, DOI 10.1016/j.pain.2011.11.023",
+        "result": "Two cited human epidural spinal-potential recordings (PMIDs 6283032 and 7175560) were found, but neither is an SCS ECAP recruitment/perception study; excluded from NS-09 direct candidates.",
+        "worker_job": "0c4510ad-3be5-43e8-aea3-cc4fafa81271"
+      },
+      {
+        "seed": "S787, DOI 10.3389/fnins.2021.673998",
+        "candidate": "PMID 37804279, postural changes in SCS thresholds, reported by the worker as an exact forward citation. Its reported endpoint is perception/usage/discomfort thresholds rather than analgesia.",
+        "reason": "PubMed primary page was not accessible for independent verification in this pass; do not integrate as a verified lead yet.",
+        "worker_job": "6e46b450-9be0-4ad1-8763-36335861823a"
+      }
+    ],
+    "cancelled_jobs": [
+      "b0c8fe1a-5e5c-43b1-a53c-29fd5efc58b2",
+      "fdb68e61-a16b-4867-b0fc-d13156ea3d80",
+      "49d5680f-2943-43eb-bfc2-0b17b975d6d3",
+      "5e9a7a21-ae97-4d93-a19f-85b3c8956afd"
+    ],
+    "saturation": false,
+    "remaining_scope": "Full backward/forward citation chains across NS-07-NS-10, direct-primary verification for adjacent candidates, access-limited methods, and a later dated refresh remain open. ECAP sensing/recruitment, perceived stimulation, and patient pain outcomes remain distinct constructs."
+  },
+  "pa04_bounded_citation_wave_2026_09_27": {
+    "scope": "Ten bounded Pi checks of exact-seed citation and follow-up routes across NS-07 through NS-10; discovery only, not saturation. Primary-source locator and construct boundaries retained; no source cards created.",
+    "bridge_run_id": "53be901b-fa1f-46ba-8108-c9255d800875",
+    "worker_manifest": ".work/pi-workers/53be901b-fa1f-46ba-8108-c9255d800875/jobs.json",
+    "worker_job_ids": [
+      "e4387abe-6125-4b88-b0a5-4124ff2b6635",
+      "fa8aeb3b-3ba0-4a89-b40d-52b7dc156cb7",
+      "c3d04804-cfcb-4564-afb0-0408e899bd64",
+      "04de4fc4-a8ca-4172-8607-4105a43d14b3",
+      "556d8733-cfcb-4564-afb0-0408e899bd64",
+      "2b48ac62-6e1f-4fa4-ae73-7800a5d90785",
+      "634969d2-eea5-4c5c-97de-06f0dbf37f91",
+      "da76b7ec-b602-4ab5-a504-d8a6e6627423",
+      "f3e46679-cba8-423b-a47b-85d5acf5e373",
+      "820b35d0-149d-4328-b0e4-49adf5e45ac7"
+    ],
+    "worker_completion": "Nine jobs completed normally. S779 bridge status failed on oversized JSON stream although agent_settled=true, exitCode=0 and its complete result.md exists and was reviewed. All result files and worker raw/log artifacts remain under research/.work/pi-workers/<bridge-run-id>/<task-id>/.",
+    "primary_verified_dispositions": [
+      {
+        "seed": "S784 / PMID 22188868",
+        "result": "24-reference list cross-checked in Crossref and Europe PMC; no newly verified in-scope backward lead. Three forward leads surfaced: PMID 31215718 (ECAP anatomy), PMID 38188030 (reuses S789 dataset/setup), PMID 32023344 (AVALON 12-month report). The latter two are not independent cohorts; the first edge was metadata-level. Seed full text was inaccessible; citation chain not saturated."
+      },
+      {
+        "seed": "S785 / DOI 10.1109/EMBC.2013.6611057",
+        "result": "Metadata lists Wijesinghe 1991 (DOI 10.1007/BF02368460) and Plonsey 1974 (DOI 10.1109/TBME.1974.324406). Primary abstracts classify them as peripheral CAP volume-conduction and general volume-conductor theory; neither validates spinal ECAP or analgesia. Seed in-text context remains inaccessible; not promoted as verified direct evidence."
+      },
+      {
+        "seed": "S786 / PMID 30273153",
+        "result": "Primary accepted manuscript verifies reference [7] to Scott & Single 2014 (PMID 23893748; DOI 10.1109/TBCAS.2013.2270179), p.2083. The cited work models electrode/electrolyte behavior and current-overpotential; it does not test ECAP artifact removal. The 2014 paper has a correction; IEEE version of record was inaccessible. Do not infer improved ECAP measurement accuracy."
+      },
+      {
+        "seed": "S787 / PMID 34335157",
+        "result": "Forward candidate PMID 37804279 is concordant across citation indexes, but publisher full text was blocked and the citation context is not directly verified. PubMed abstract describes psychophysical perception/usage/discomfort thresholds, not ECAP or analgesia. Retain as index-discovered lead only."
+      },
+      {
+        "seed": "S788 / AVALON preliminary report",
+        "result": "Primary 12- and 24-month reports identify the same single-arm AVALON registration ACTRN12615000713594; not EVOKE/NCT02924129. ECAP therapeutic-window/dose metrics and pain outcomes are separate aggregate results; no linked patient-level ECAP-to-pain data established. Pooled analyses reuse cohorts; do not count as independent validation."
+      },
+      {
+        "seed": "S789 / PMID 33551738",
+        "result": "Forward leads: PMID 26857220 (perception/sensation thresholds), PMID 38744531 (human paresthesia threshold plus neural recruitment model; modeled dorsal-horn effect is not patient analgesia), PMID 40478549 (preclinical ECAP morphology). No analgesia endpoint was established by these leads. Citation coverage remains bounded."
+      },
+      {
+        "seed": "S779-S781 / EVOKE, NCT02924129",
+        "result": "Three new direct citing analyses were found in primary full-text/JATS citation lists: PMID 37481774, 37497371, and 42688391. They are linked to the EVOKE/Saluda program or a protocol, not independent cohorts; ECAP feedback, stimulation experience, and patient pain endpoints remain distinct. Citation indexes disagree materially on counts; not saturated. S781 additionally yielded PMID 41066061, 38508591, 39403449 as pooled/real-world analyses with EVOKE reuse; no independent cohort or public linked patient-level dataset established."
+      },
+      {
+        "seed": "S826 / PMID 40378232",
+        "result": "Five index routes returned 7-13 citing records; 11 of 13 edges were checked in primary citing metadata/JATS and two remained index-only. Screened works were reviews, editorials, case reports or models; no participant-level ECAP-to-pain predictor/dataset identified. AVALON outcomes remain distinct from EVOKE; not saturated."
+      },
+      {
+        "seed": "S790 / PMID 38195618",
+        "result": "Five citation indexes yielded 60 records, 43 deduplicated entries and about 20 unique works. Three leads were checked in primary full text: PMID 42055600 (rat SNI dose-response, ECAP-controlled SCS, von Frey/acetone; reused pilot controls, no randomization, tester not blinded), PMID 40661848 (rat DTMP-SCS longitudinal ECAP study; von Frey only validates SNI induction, not an analgesia endpoint), PMID 41661120 (rat/macaque signal characterization, no behavioral endpoint). All are animal/withdrawal or electrophysiology studies; none supplies human pain/perception data. PMID 42055600 resolves an existing pending lead in the rat-citation audit; cohort limitations remain."
+      }
+    ],
+    "saturation": false,
+    "remaining_scope": "PA-04 remains open. Complete backward/forward chains and later dated refresh are outstanding; inaccessible full texts/citation contexts remain explicitly unresolved. No conclusion about clinical pain prediction, independent replication, novelty, or GO follows from this screen. Keep ECAP, sensation/perception, animal withdrawal, and patient pain outcomes separate."
+  },
+  "additional_primary_verified_edges_2026_09_27": {
+    "scope": "Bounded S765/S767/S771/S786/S798 citation edges from Picodex and Codex reviews; only claims independently checked against primary articles, registries, citation metadata or patent reference tables are retained. Other worker leads remain discovery material in ignored .work, not canonical evidence.",
+    "worker_registry": ".work/pi-workers/515d0962-0cbf-466b-9643-eec682e464d7/jobs.json",
+    "edges": [
+      {
+        "seed": "S765",
+        "candidate": "Parker et al. 2013, PMID 23844589, DOI 10.1111/ner.12053",
+        "primary_locator": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10020336/fullTextXML, References #19; https://pubmed.ncbi.nlm.nih.gov/23844589/, Abstract, Materials and methods",
+        "disposition": "The S765 primary reference list cites a study recording SCS-evoked ECAP in ten anesthetized sheep. The cited abstract verifies animal epidural recording and no human pain-outcome cohort; its full methods were not checked in this pass. This is a physiological/measurement comparator, not clinical analgesia evidence."
+      },
+      {
+        "seed": "S765, S767 and S798",
+        "candidate": "Falowski et al. 2025, PMID 39866867, DOI 10.1016/j.cnp.2024.12.005",
+        "primary_locator": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11760812/fullTextXML, Abstract, Methods, references b0015/b0065/b0150",
+        "disposition": "The citing primary JATS references all three seeds. In two people undergoing SCS implantation, the study compares a late epidural spinal-recording component with intramuscular EMG timing; part of that late component synchronizes with abdominal muscle activity. It is a signal-source caution and reports no patient-level ECAP-to-pain outcome or analgesia prediction."
+      },
+      {
+        "seed": "S786",
+        "candidate": "Cedeno et al. 2025, PMID 40661848, DOI 10.3389/fnins.2025.1577059",
+        "primary_locator": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12256503/fullTextXML, Results impedance trends citing B39; reference B39 identifies Single and Scott 2018, DOI 10.1109/TNSRE.2018.2870169",
+        "disposition": "The rat SNI/SCS experiment cites S786 in its electrode-impedance discussion. This is a direct artifact/measurement prior-art edge in an animal study, not human analgesia evidence or independent validation of an ECAP-to-pain mechanism."
+      },
+      {
+        "seed": "S771 / US7835804B2",
+        "candidate": "Saluda patent family US9872990B2 and WO2015168735A1",
+        "primary_locator": "https://patents.google.com/patent/US9872990B2/en, cited patent references table; https://patents.google.com/patent/WO2015168735A1/en, examiner-cited references table",
+        "disposition": "Both patent-family records list US7835804B2 as earlier artifact-removal prior art. Count as one patent-family disclosure route, not two independent empirical studies or verified clinical efficacy."
+      },
+      {
+        "seed": "S767",
+        "candidate": "Correlating Evoked Electromyography and Anatomic Factors During Spinal Cord Stimulation Implantation With Short-Term Outcomes, PMID 39320285, DOI 10.1016/j.neurom.2024.08.004",
+        "primary_locator": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11624988/, reference 31 and Methods/Results; https://api.crossref.org/works/10.1016/j.neurom.2024.08.004, deposited reference bib31; https://clinicaltrials.gov/api/v2/studies/NCT05459324, enrollment and results fields",
+        "disposition": "Reference 31 cites S767 exactly. The article reports a small human intraoperative evoked-EMG and three-month pain/disability association in 18 participants, with 9/18 meeting a >=50% NRS reduction. ECAP appears as background, not a participant-level predictor. The linked registry reports actual enrollment 10 versus paper n=18 and provides no posted results or IPD-sharing module; cohort and data-access discrepancy remains unresolved. This is an EMG comparator, not an ECAP-to-pain dataset or ECAP predictive validation."
+      }
+    ],
+    "boundary": "These exact edges expand a bounded prior-art route. They do not complete backward/forward coverage or either later dated saturation update; PA-04 remains open."
+  },
+  "new_ns09_physiology_lead_2026_09_27": {
+    "candidate": "S830, Sagalajev et al. 2024, Neuron, DOI 10.1016/j.neuron.2023.10.021, PMID 37972595",
+    "primary_locator": "https://prescottlab.ca/images/pdf/2023Sagalajev.pdf, author-hosted complete journal PDF, Results > Dependence of paresthesia on SCS frequency and its correlation with ECAP amplitude, first paragraph/Fig. 1A; STAR Methods > Experimental Model and Subject Details, Human ECAP recordings, Data and code availability; https://ars.els-cdn.com/content/image/1-s2.0-S0896627323008024-mmc1.pdf, official supplement",
+    "checked_result": "One chronic-pain SCS-trial participant had paresthesia and a detectable ECAP at 150 Hz, but neither at 1 kHz under the same 9.6 mA pulse setting in the checked Results paragraph. This is human ECAP/perception physiology, not a longitudinal analgesia outcome or ECAP-to-pain prediction.",
+    "access_and_next_step": "Direct publisher fetch returned an access challenge, but the complete journal PDF was found on the corresponding author's laboratory site and independently reviewed on 2026-09-27. STAR Methods establish one human participant; full text offers electrophysiology data on reasonable request and public modeling code, but no linked clinical pain-outcome dataset. The canonical S830 card was published 2026-09-27. Rogers et al. 2024 (https://pmc.ncbi.nlm.nih.gov/articles/PMC11211721/, Introduction and Discussion > Biophysics of SCS-induced paresthesia) cites this paper and discusses pulse-width differences. Complete backward/forward citation coverage remains pending. This same-day review does not count as a later saturation refresh."
+  },
+  "bounded_s830_backward_2026_09_27": {
+    "seed": "S830 / 10.1016/j.neuron.2023.10.021",
+    "primary_url": "https://prescottlab.ca/images/pdf/2023Sagalajev.pdf",
+    "primary_locator": "Version-of-record PDF, printed p. 13, References 5 and 6; both DOI strings and titles were checked directly in the reference list.",
+    "edges": [
+      {
+        "cited_source_id": "S787",
+        "reference_number": 5,
+        "doi": "10.3389/fnins.2021.673998",
+        "disposition": "Earlier human ECAP-to-perception threshold and automatic-programming method. Perception/discomfort is not longitudinal analgesia or an ECAP-to-pain predictor."
+      },
+      {
+        "cited_source_id": "S789",
+        "reference_number": 6,
+        "doi": "10.3389/fnins.2021.625835",
+        "disposition": "Earlier human frequency-versus-neural-response and perceived-sensation study. It is physiological prior art, not a pain-relief endpoint."
+      }
+    ],
+    "boundary": "Two exact backward citation edges from one paper were verified. This does not complete S830's reference list, its forward citation coverage, or NS-09 saturation."
+  },
+  "bounded_s830_forward_2026_09_27": {
+    "seed": "S830 / 10.1016/j.neuron.2023.10.021",
+    "citing_work": "Ladner et al., Neuromodulation 2026, DOI 10.1016/j.neurom.2026.01.001, PMID 41661120; its bioRxiv version DOI 10.1101/2025.09.03.674002 is the same study, not another citation.",
+    "primary_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13519873/fullTextXML",
+    "primary_locator": "Journal-version JATS: Introduction citation range [1-5] and References R3. R3 exactly identifies Sagalajev et al., DOI 10.1016/j.neuron.2023.10.021; Methods/Results describe epidural electrophysiology in rats and macaques.",
+    "disposition": "Background citation only. The study records preclinical epidural ECAP, secondary responses and synaptic potentials in 18 male rats and two male macaques; it provides no human participants, patient-reported pain relief, Drosophila model, or cross-species learned transfer. Data are on reasonable request. It does not validate S830's one-person paresthesia observation or establish a clinical ECAP-to-pain outcome link.",
+    "boundary": "One exact forward edge was verified from a journal version of record. This is not a complete forward-citation inventory or a later dated clean saturation refresh."
+  },
+  "bounded_s830_forward_mouse_2026_09_27": {
+    "seed": "S830 / 10.1016/j.neuron.2023.10.021",
+    "citing_work": "Response of dorsal horn neurons in mice to high-frequency (kHz) biphasic stimulation is not sensitive to local temperature rise, Physiological Reports 2025, DOI 10.14814/phy2.70205, PMID 39916294",
+    "primary_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11802663/fullTextXML",
+    "primary_locator": "JATS ref phy270205-bib-0039 identifies S830 by DOI and PMID; two Introduction xrefs cite it for mechanistic context. Methods and Results: acute mouse dorsal-horn slice patch recordings and local temperature measurements.",
+    "disposition": "The citing paper tests a thermal mechanism in mouse spinal-cord slices. It records neither ECAP nor behavioral pain relief or clinical outcomes; S830's ECAP/synchrony result appears as background, not as a reproduced endpoint.",
+    "boundary": "This verifies one further forward edge from one paper only. It does not complete S830 forward coverage or count as a later dated clean saturation refresh."
+  },
+  "bounded_s830_forward_nk1_2026_09_27": {
+    "seed": "S830 / 10.1016/j.neuron.2023.10.021",
+    "citing_work": "Xu et al., Visualizing the modulation of neurokinin 1 receptor-positive neurons in the superficial dorsal horn by spinal cord stimulation in vivo, Pain 2025, DOI 10.1097/j.pain.0000000000003361, PMCID PMC11723817",
+    "primary_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11723817/fullTextXML",
+    "primary_locator": "Official JATS ref R37 identifies S830 by exact DOI 10.1016/j.neuron.2023.10.021 and PMID 37972595. Two Discussion xrefs to R37 appear in the paragraph on different SCS paradigms; Methods and Results report mouse NK1R-positive dorsal-horn calcium imaging under epidural SCS.",
+    "disposition": "Mechanistic background citation. The citing mouse study measures NK1R-positive neural calcium responses and does not record ECAP or directly measure behavioral pain relief; it explicitly calls for future behavioral pain-sensitivity assessment. Its discussion cites S830 for the human ECAP/paresthesia frequency observation and an asynchronous-spiking hypothesis, not for a patient-level ECAP-to-pain predictor.",
+    "boundary": "One exact forward edge checked in official full text. This neither completes forward citation coverage nor counts as a later clean saturation update."
+  },
+  "s764_forward_recheck_2026_09_27": {
+    "seed": "S764 / DOI 10.1371/journal.pone.0345287 / PMID 41926484",
+    "checked_routes": [
+      {
+        "url": "https://api.crossref.org/works/10.1371/journal.pone.0345287",
+        "locator": "message.is-referenced-by-count",
+        "result": "0 indexed citing works on this dated check"
+      },
+      {
+        "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=CITES%3A41926484_MED&format=json",
+        "locator": "hitCount and resultList.result",
+        "result": "hitCount 0 and no returned citing records"
+      }
+    ],
+    "result": "No new primary citing paper was found in these exact checked routes. The worker also checked other index routes, but access-limited Google Scholar and OpenAlex citing-list responses are not treated as zero evidence.",
+    "boundary": "A zero indexed count in two bounded routes for a 2026 article does not establish global absence, complete forward coverage or PA-04 saturation; a later dated refresh remains required."
+  },
+  "s765_forward_recheck_2026_09_27": {
+    "seed": "S765 / DOI 10.3389/fpain.2023.1072786 / PMID 36937564",
+    "verified_primary_edges": [
+      {
+        "citing_doi": "10.3389/fmedt.2024.1470970",
+        "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11496111/fullTextXML",
+        "locator": "References B12 exact S765 DOI; Section 2.1 minimally invasive techniques cites B12 for epidural ECAP recording feasibility.",
+        "construct": "Spinal magnetic-field imaging and ECAP-recording background; no patient-linked ECAP-to-pain outcome."
+      },
+      {
+        "citing_doi": "10.3390/jcm13051344",
+        "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10932170/fullTextXML",
+        "locator": "References B8-jcm-13-01344 exact S765 DOI; Introduction cites B8 among prior spinal epidural stimulation work.",
+        "construct": "Motor recovery and standing after spinal cord injury, not analgesia or ECAP-to-pain prediction."
+      },
+      {
+        "citing_doi": "10.1063/5.0152669",
+        "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10511262/fullTextXML",
+        "locator": "References c130 exact S765 DOI; body cites c130 in a discussion of implantable stimulation plus recording electrodes.",
+        "construct": "Regenerative-therapy review; not a primary human ECAP/pain analysis."
+      }
+    ],
+    "metadata_only_edge": {
+      "citing_doi": "10.1007/s10527-025-10434-2",
+      "url": "https://api.crossref.org/works/10.1007/s10527-025-10434-2",
+      "locator": "message.reference key 10434_CR26 deposits the exact S765 DOI; citing full text/context not inspected.",
+      "boundary": "Citation identity only, not a verified scientific construct comparison."
+    },
+    "index_boundary": "Europe PMC returned five indexed citing records and Crossref/Semantic Scholar seven; OpenAlex source count was eight but its citing list returned HTTP 429. The unenumerated difference prevents saturation. Already canonical S159/S363 and an already recorded Falowski edge were deduplicated."
+  },
+  "s768_forward_recheck_2026_09_27": {
+    "seed": "S768 / DOI 10.7507/1001-5515.202007016 / PMID 33913282",
+    "verified_edge": {
+      "citing_doi": "10.1016/j.bioelechem.2024.108752",
+      "citing_pmid": "38852384",
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/MED/38852384/references?format=json&pageSize=100",
+      "locator": "referenceList.reference citedOrder 17, MED id 33913282, match Y; the citing article is a numerical simulation of neural excitation during brain-tumor ablation by microsecond pulses.",
+      "construct": "General excitable-nerve/action-potential modelling background; not a spinal ECAP experiment, SCS trial or pain-outcome study."
+    },
+    "boundary": "Europe PMC citation routes yielded this one exact indexed edge in the bounded pass. Other indexes gave zero or access errors; no exhaustive forward inventory or PA-04 saturation follows. The citing publisher full methods were not inspected."
+  },
+  "s787_s789_forward_recheck_2026_09_27": {
+    "seeds": [
+      "S787 / DOI 10.3389/fnins.2021.673998 / PMID 34335157",
+      "S789 / DOI 10.3389/fnins.2021.625835 / PMID 33551738"
+    ],
+    "verified_primary_edges": [
+      {
+        "seed": "S787",
+        "citing_doi": "10.1523/ENEURO.0429-22.2023",
+        "citing_pmid": "37130780",
+        "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10198607/fullTextXML",
+        "locator": "JATS Introduction xref B27; reference B27 identifies Pilitsis et al. 2021 by exact DOI. The citing authors state that dorsal-column ECAP is not itself directly indicative of pain or analgesia.",
+        "construct": "Human ECAP physiology and perception-threshold background; the citation explicitly limits any pain or analgesia inference."
+      },
+      {
+        "seed": "S789",
+        "citing_doi": "10.7759/cureus.102799",
+        "citing_pmid": "41788118",
+        "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12957661/fullTextXML",
+        "locator": "JATS Discussion xref REF18; reference REF18 identifies Gmel et al. 2021 by exact DOI. The paragraph cites ECAP amplitude as recruitment feedback and discusses pain relief in a single case.",
+        "construct": "Single-case pain outcome and ECAP-guided device rationale are reported together; no measured within-patient ECAP-to-pain association or predictive validation is presented."
+      }
+    ],
+    "boundary": "These are two checked forward edges in official full text, not complete S787/S789 citing inventories or a later-dated saturation refresh. The previous S789 seed PMID 39776539 was incorrect and identifies an unrelated article; the canonical DOI and source card identify PMID 33551738."
+  },
+  "s781_activity_odi_forward_2026_09_27": {
+    "seed": "S781 / DOI 10.1136/rapm-2023-104751 / PMID 37640452",
+    "citing_work": "Hamm-Faber et al., Neuromodulation 2025, DOI 10.1016/j.neurom.2025.01.007, PMID 39955666",
+    "primary_urls": [
+      "https://api.crossref.org/works/10.1016/j.neurom.2025.01.007",
+      "https://pubmed.ncbi.nlm.nih.gov/39955666/"
+    ],
+    "locators": "Crossref message.reference key 10.1016/j.neurom.2025.01.007_bib38 names the S781 36-month EVOKE report with journal, year, volume 49 and first page 346, but deposits no DOI. PubMed abstract Methods/Results: 20 enrolled, 17 at three months; activity-tracker steps and distance and neurostimulator body-position measures were correlated with ODI.",
+    "disposition": "A separate small feasibility cohort links activity and posture measures with ODI disability, not ECAP amplitude with an individual pain outcome. S781 is a bibliographic antecedent, not shared-patient evidence. The publisher body was not read; the exact in-text citation context remains unresolved.",
+    "boundary": "One bounded citation lead; this neither proves nor rules out a patient-linked ECAP-to-pain dataset elsewhere and does not complete PA-04 forward coverage."
+  },
+  "s764_forward_recheck_2026_09_28": {
+    "seed": "S764 / DOI 10.1371/journal.pone.0345287 / PMID 41926484",
+    "checked_at": "2026-09-28 Europe/Moscow",
+    "checked_routes": [
+      {
+        "url": "https://api.crossref.org/works/10.1371/journal.pone.0345287",
+        "locator": "message.is-referenced-by-count",
+        "result": "0; root independently fetched official API HTTP 200 on this local-date check"
+      },
+      {
+        "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=CITES%3A10.1371%2Fjournal.pone.0345287&format=json",
+        "locator": "hitCount",
+        "result": "0; root independently fetched official API HTTP 200 on this local-date check"
+      },
+      {
+        "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/MED/41926484/citations?format=json&pageSize=100",
+        "locator": "hitCount",
+        "result": "0; root independently fetched official Europe PMC citation API on this date"
+      }
+    ],
+    "worker_scope": "Settled Pi task s764_forward checked additional routes and topical full texts; only the independently verified official index observations above are promoted here.",
+    "result": "No new indexed citing item in the two checked official routes; exact citing full text could not be assessed because none was returned.",
+    "boundary": "Crossref and Europe PMC exact DOI and PMID indexes returned zero on this dated check; this is index-scoped, not global absence, complete citation coverage or PA-04 saturation. OpenAlex direct-work retrieval and Google Scholar remained limited; retry only if new evidence or later refresh warrants it."
+  },
+  "s766_forward_primary_review_2026_09_28": {
+    "seed": "S766 / Anaya et al. 2020 / DOI 10.1111/ner.12965",
+    "checked_at": "2026-09-28 Europe/Moscow",
+    "reviewed_citation_edges": [
+      {
+        "citing_doi": "10.1088/1741-2552/acf522",
+        "citing_source_id": "S838",
+        "citing_title": "An optimization framework for targeted spinal cord stimulation",
+        "primary_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10535048/fullTextXML",
+        "exact_reference_locator": "JATS ref id jneacf522bib31; DOI 10.1111/ner.12965, PMID 31215720",
+        "in_text_locator": "Methods paragraph on lower-thoracic FEM volume-conductor model, xref jneacf522bib31",
+        "disposition": "Direct reuse of S766 modeling geometry for an SCS optimization model; no new patient-level ECAP-to-pain outcome.",
+        "independent_check": "Root fetched the official Europe PMC JATS HTTP 200 and parsed exact reference entry and in-text xref after Codex coordinator review of settled Pi output."
+      },
+      {
+        "citing_doi": "10.1088/1741-2552/add76e",
+        "citing_title": "Role of frequency-dependent and capacitive tissue properties in spinal cord stimulation models",
+        "primary_url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_xml/PMC13552472/unicode",
+        "exact_reference_locator": "Official NCBI BioC REF passage with DOI 10.1111/ner.12965, PMID 31215720; original JATS reference R2",
+        "in_text_locator": "BioC table passage id T1 embeds source XML with xref rid R2, Anaya et al 2020, as one compared conductivity parameter row",
+        "disposition": "Direct use of S766 as a tissue-conductivity parameter source in computational SCS model sensitivity analysis; no patient-level ECAP-to-pain outcome.",
+        "independent_check": "Root independently fetched the official NCBI BioC XML HTTP 200, parsed the REF DOI and Table 1 source XML xref. Europe PMC fullTextXML returned HTTP 500 on the same date."
+      },
+      {
+        "citing_doi": "10.1371/journal.pcbi.1011833",
+        "citing_title": "Computational models of compound nerve action potentials: Efficient filter-based methods to quantify effects of tissue conductivities, conduction distance, and nerve fiber parameters",
+        "primary_url": "https://journals.plos.org/ploscompbiol/article/file?id=10.1371/journal.pcbi.1011833&type=manuscript",
+        "exact_reference_locator": "Publisher JATS ref pcbi.1011833.ref056, Anaya et al. 2020 title/journal/volume/pages; DOI absent in the reference and matched separately to Crossref 10.1111/ner.12965",
+        "in_text_locator": "Section 4.3 Volume conductor model, single xref pcbi.1011833.ref056 in reciprocity-method citation cluster",
+        "disposition": "Cross-domain modeling citation for electromagnetic reciprocity in rat vagal peripheral compound nerve action potentials; not a human SCS ECAP or analgesia validation.",
+        "independent_check": "Root independently fetched PLOS publisher JATS HTTP 200, parsed exact reference and one in-text xref, and checked Abstract scope."
+      },
+      {
+        "citing_doi": "10.1016/j.jpain.2021.09.005",
+        "citing_title": "Neural recruitment during conventional, burst, and 10-kHz spinal cord stimulation for pain",
+        "primary_url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pmc&id=8925309&retmode=xml",
+        "exact_reference_locator": "Publisher-deposited PMC JATS ref R3, DOI 10.1111/ner.12965",
+        "in_text_locator": "Methods > Finite element analysis and Table 1, three xrefs to R3 for lower-thoracic FEM and regional conductivities",
+        "disposition": "Computational model of primary afferent/interneuron/projection-neuron recruitment under SCS modes; no newly measured patient ECAP or analgesic outcome.",
+        "independent_check": "Root independently fetched NCBI PMC JATS HTTP 200, parsed exact reference and three in-text xrefs, and checked Abstract scope."
+      },
+      {
+        "citing_doi": "10.1093/pm/pnag040",
+        "citing_title": "History of SCS and patient-focused innovations: a manufacturer's perspective on the role of technology",
+        "primary_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13250577/fullTextXML",
+        "exact_reference_locator": "Publisher-deposited JATS review-article ref pnag040-B97, Anaya et al. 2020",
+        "in_text_locator": "Neurophysiological sensing capabilities, one xref pnag040-B97 for computational ECAP origin/geometry claim",
+        "disposition": "Narrative manufacturer-perspective review citing S766 as modeling background, not a new patient cohort or direct ECAP-to-analgesia test.",
+        "independent_check": "Root independently fetched Europe PMC JATS HTTP 200, parsed exact reference, one in-text xref and article-type review-article."
+      },
+      {
+        "citing_doi": "10.3390/ijms27167373",
+        "citing_title": "Molecular and Cellular Mechanisms of Spinal Cord Stimulation: Linking Dorsal Horn Circuits, Glia, and ECAP-Guided Therapy",
+        "primary_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13512981/fullTextXML",
+        "exact_reference_locator": "Publisher-deposited JATS review-article ref B73-ijms-27-07373, DOI 10.1111/ner.12965; volume 27 issue 16 article 7373 confirmed by JATS and Crossref",
+        "in_text_locator": "Section 4.4 Closed-Loop Spinal Cord Stimulation, two body xrefs to B73; Table 7 supporting-article cell adds a third xref",
+        "disposition": "Narrative mechanistic review citing S766 for ECAP generation and recruited-fiber modeling background; no new patient ECAP-to-pain outcomes.",
+        "independent_check": "Root independently fetched official Europe PMC JATS HTTP 200, parsed exact reference, three xrefs and article-type review-article. Corrected the worker summary typo 37373 to article number 7373 using the primary JATS and Crossref."
+      },
+      {
+        "citing_doi": "10.3390/biomedicines13051091",
+        "citing_title": "Closed-Loop Spinal Cord Stimulation in Chronic Pain Management: Mechanisms, Clinical Evidence, and Emerging Perspectives",
+        "primary_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12108722/fullTextXML",
+        "exact_reference_locator": "Publisher-deposited JATS review-article ref B35-biomedicines-13-01091, DOI 10.1111/ner.12965",
+        "in_text_locator": "Section 4 Principles of Closed-Loop Spinal Cord Stimulation, single xref B35 for modeled 8.7-10 µm dorsal-column axon contribution to ECAP",
+        "disposition": "Narrative literature review; Anaya modeling cited only for axon/ECAP mechanism, not patient analgesia or an independently enrolled cohort.",
+        "independent_check": "Root independently fetched Europe PMC JATS HTTP 200, parsed exact reference, one in-text xref and article-type review-article; passage wording matches model attribution."
+      },
+      {
+        "citing_doi": "10.1186/s42234-024-00149-2",
+        "citing_title": "The role of spinal cord neuroanatomy in the variances of epidural spinal recordings",
+        "primary_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11253499/fullTextXML",
+        "exact_reference_locator": "Publisher-deposited JATS research-article ref CR1, Anaya et al. 2020 title; DOI 10.1111/ner.12965 verified against source identity",
+        "in_text_locator": "Introduction paragraph on SCS modeling factors and dorsal root activation, one xref CR1",
+        "disposition": "Primary swine ESR/ECAP and EMG experiment cites S766 as prior modeling background; no human patient cohort, analgesic outcome or prospective validation of S766.",
+        "independent_check": "Root independently fetched Europe PMC JATS HTTP 200, parsed exact reference/xref and Abstract/Methods identifying swine. Corrected the settled Pi report, which had miscalled this a human pilot and misstated the article title. The existing human-ECAP access audit already classifies the underlying experiment as swine."
+      },
+      {
+        "citing_doi": "10.1088/1741-2552/ab8344",
+        "citing_title": "Realistic anatomically detailed open-source spinal cord stimulation (RADO-SCS) model",
+        "primary_url": "https://iopscience.iop.org/article/10.1088/1741-2552/ab8344/meta",
+        "exact_reference_locator": "Publisher citation_reference metadata identifies Anaya et al., Neuromodulation 23:64-73, DOI 10.1111/ner.12965; author bioRxiv preprint DOI 10.1101/857946 JATS ref c15 gives matching title and bibliographic identity",
+        "in_text_locator": "Author bioRxiv preprint https://www.biorxiv.org/content/10.1101/857946v1.full, Introduction > Anatomical details of prior SCS models, one xref to ref c15 in paragraph on anatomical compartments and simplified thorax geometry",
+        "disposition": "Computational SCS anatomical-model lineage only; the IOP VOR prose was blocked, so the exact in-text context is verified in the owner-linked preprint version rather than asserted for the VOR. No patient ECAP-to-pain validation.",
+        "independent_check": "Root parsed the settled worker's saved bioRxiv owner JATS for exact Anaya reference and one c15 xref, and the independently fetched IOP publisher metadata for the S766 DOI. The coordinator independently checked the bioRxiv API relation to the journal DOI; root did not claim direct VOR body access."
+      },
+      {
+        "citing_doi": "10.1088/1741-2552/ab8fc4",
+        "citing_title": "Anatomical and technical factors affecting the neural response to epidural spinal cord stimulation",
+        "primary_url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pmc&id=PMC8351789&retmode=xml",
+        "exact_reference_locator": "Official PMC JATS ref R24 identifies Anaya et al. 2020, Neuromodulation 23:64-73, PMID 31215720, DOI 10.1111/ner.12965",
+        "in_text_locator": "Methods paragraph on base finite-element SCS model says the authors previously used a similar design to evaluate spinal ECAPs; three xrefs rid R24 across Methods, Results and Discussion",
+        "disposition": "Direct modeling and neural-response lineage; no patient-level ECAP-to-pain result or clinical prediction.",
+        "independent_check": "Root parsed the coordinator's independently fetched official NCBI E-utilities full JATS for S766 DOI, R24 bibliography and three in-text R24 xrefs."
+      },
+      {
+        "citing_doi": "10.1016/j.neurom.2025.01.015",
+        "citing_title": "Computational Optimization of Spinal Cord Stimulation for Dorsal Horn Interneuron Polarization",
+        "primary_url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pmc&id=PMC13539576&retmode=xml",
+        "exact_reference_locator": "Official PMC JATS ref R20 gives S766 full title and DOI 10.1111/ner.12965",
+        "in_text_locator": "Introduction paragraph P6 prints superscript reference range 19-21 for a reciprocity statement; JATS anchors the range endpoints as xref R19 and R21 but has no individual R20 anchor. The printed numeric range includes R20 by numbering, while a source-specific in-text claim is not isolated.",
+        "disposition": "Range-mediated bibliographic citation only; do not attribute the entire reciprocity statement specifically to S766, or infer patient ECAP-to-pain validation from this paper.",
+        "independent_check": "Root independently parsed the coordinator's official NCBI E-utilities JATS for ref R20 and the exact P6 xref markup. The coordinator's no-exact-R20-xref observation is preserved but does not erase the visible 19-21 range."
+      }
+    ],
+    "rejected_tail_leads_2026_09_28": [
+      {
+        "candidate": "bioRxiv 10.64898/2025.12.15.694369",
+        "primary_url": "https://www.biorxiv.org/content/10.64898/2025.12.15.694369v1.full",
+        "finding": "Settled worker checked all 86 references in owner JATS and found no S766 DOI, title or Anaya match; a Lempka reference was a distinct Rogers et al. 2022 work. No S766 citation edge was added."
+      }
+    ],
+    "pending_review": "Remaining indexed citing items beyond this bounded eleven-edge list need individual primary retrieval. Two separate Pi forward searches for S768/S830 were cancelled and their partial outputs excluded.",
+    "boundary": "These eleven S766 citation links include one range-mediated bibliographic citation and do not establish ECAP as pain intensity, clinical outcome validity, complete forward coverage, or NS-07/PA-04 saturation. The Lam et al. study is swine, not human; the Khadka VOR body was inaccessible and its cited context is from an owner-linked preprint."
+  },
+  "evoke_protocol_fulltext_review_2026_09_28": {
+    "seed": "Levy et al. 2019 / PMID 30828946 / DOI 10.1111/ner.12932",
+    "checked_at": "2026-09-28 Europe/Moscow",
+    "routes": [
+      {
+        "url": "https://wikianesthesia.s3.amazonaws.com/EVOKE_Study_Closed_Loop_SCS.pdf",
+        "locator": "Publisher-formatted Neuromodulation 22:317-326 PDF; Introduction and Methods pp. 319-322; third-party mirror, not verified Wiley-hosted access"
+      },
+      {
+        "url": "https://clinicaltrials.gov/api/v2/studies/NCT02924129",
+        "locator": "protocolSection.identificationModule acronym EVOKE and NCT ID; designModule.enrollmentInfo actual 134; ipdSharingStatementModule IPD sharing NO"
+      }
+    ],
+    "verified": "Root independently downloaded and extracted the ten-page article PDF. Introduction names NCT02924129; Methods states planned 134 candidates at up to 20 US sites, randomized closed-loop ECAP-controlled versus open-loop SCS. Primary 3-month responder endpoint combines at least 50% overall trunk/limb pain reduction with no increase in pain medication. ECAP controls stimulation; patient-reported pain is a separate endpoint. The current official registry gives actual enrollment 134 and IPD sharing NO.",
+    "correction": "The current registry API referencesModule does not list PMID 30828946. Direct study linkage is supported by the article text naming NCT02924129, not by a registry publication-list entry.",
+    "disposition": "Antecedent protocol of the EVOKE trial family, not an independent results cohort or available participant-level ECAP/outcome dataset. The exact protocol-full-text gap is resolved; broader PA-04 citation chains and later refresh remain open."
+  },
+  "s785_forward_primary_review_2026_09_28": {
+    "seed": "S785 / Laird and Parker 2013 / DOI 10.1109/EMBC.2013.6611057 / PMID 24111244",
+    "checked_at": "2026-09-28 Europe/Moscow",
+    "verified_edge": {
+      "citing_doi": "10.1186/s42234-019-0023-1",
+      "primary_url": "https://link.springer.com/article/10.1186/s42234-019-0023-1",
+      "exact_reference_locator": "References: Laird JH, Parker JL, A model of evoked potentials in spinal cord stimulation, IEEE EMBC 2013, pp. 6555-6558",
+      "in_text_locator": "Closed-loop evoked compound action potentials, paragraph citing Laird and Parker 2013 for membrane action-potential recording and non-stimulating epidural lead electrodes",
+      "disposition": "Narrative review citation about ECAP measurement, not new S785 clinical validation or an individual ECAP-to-pain outcome model."
+    },
+    "unpromoted_worker_leads": "The two earlier worker leads are now independently verified above. Two backward candidates remain unconfirmed because S785 proceedings full text/reference list is inaccessible.",
+    "boundary": "Three independently checked forward contexts: one grouped model-background citation, one explicit model-lineage discussion, and one narrative ECAP-measurement review. No complete forward/backward coverage or PA-04 saturation; no clinical prediction follows.",
+    "additional_verified_edges": [
+      {
+        "citing_doi": "10.1111/ner.12965",
+        "citing_source_id": "S766",
+        "primary_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6920600/",
+        "exact_reference_locator": "Author manuscript References item 14, Laird JH and Parker JL 2013, IEEE EMBC pp. 6555-6558, DOI 10.1109/EMBC.2013.6611057",
+        "in_text_locator": "Introduction paragraph P9, citation 14 within references 12-18 for prior computational study of direct SCS neural response",
+        "disposition": "Grouped background citation for computational SCS/ECAP models. No isolated claim about S785 performance, patient cohort or ECAP-to-pain prediction.",
+        "independent_check": "Root downloaded the NIH PMC author manuscript HTML, matched DOI in reference 14 and P9 href #R14, then checked the article abstract/method scope."
+      },
+      {
+        "citing_doi": "10.1088/1741-2552/ab8344",
+        "primary_url": "https://static1.squarespace.com/static/5cd3231cd7819e6ae55fedb4/t/5ea1bd21fedb1110ad43bcbc/1587658025059/RADO-SCS-2.pdf",
+        "exact_reference_locator": "Publisher-formatted Journal of Neural Engineering PDF, References item 61, p. 11, full S785 title and IEEE EMBC pp. 6555-6558; DOI of cited work absent in reference",
+        "in_text_locator": "Discussion section 4.2, p. 9, paragraph beginning In 2013, Laird and colleagues, citing reference 61 for a limited-precision SCS model with multicompartment dorsal-column fiber simulation",
+        "disposition": "Explicit model lineage for a distinct anatomical SCS model; no patient analgesia endpoint or S785 clinical validation.",
+        "independent_check": "Root downloaded the publisher-formatted full PDF from the cited mirror, verified article DOI 10.1088/1741-2552/ab8344 in the page header, and extracted reference 61 and the in-text passage; publisher-site access itself was not established."
+      }
+    ]
+  },
+  "s105_forward_primary_review_2026_09_28": {
+    "seed": "S105 / Koenig et al. 2025 / DOI 10.1088/1741-2552/adbfbe / PMID 40073452",
+    "checked_at": "2026-09-28 Europe/Moscow",
+    "exact_routes": [
+      {
+        "url": "https://api.crossref.org/works/10.1088/1741-2552/adbfbe",
+        "locator": "message.is-referenced-by-count",
+        "result": "1 indexed citing work; count alone does not identify or exhaust citing sources"
+      },
+      {
+        "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/MED/40073452/citations?format=json&pageSize=100",
+        "locator": "hitCount 1 and citationList.citation[0] PMID 41926484",
+        "result": "One indexed citing work, S764"
+      },
+      {
+        "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?dbfrom=pubmed&id=40073452&linkname=pubmed_pubmed_citedin&retmode=json",
+        "locator": "linksets[0].linksetdbs[0].links",
+        "result": "PMID 41926484 only in the returned PubMed cited-in linkset"
+      },
+      {
+        "url": "https://api.openalex.org/works/https://doi.org/10.1088/1741-2552/adbfbe",
+        "locator": "direct-work fields",
+        "result": "No usable fields in this retrieval; not used to claim zero citations"
+      }
+    ],
+    "verified_edge": {
+      "citing_source_id": "S764",
+      "citing_doi": "10.1371/journal.pone.0345287",
+      "citing_pmid": "41926484",
+      "primary_url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0345287",
+      "exact_reference_locator": "PLOS One publisher full text, References item 18 names Koenig et al. 2025, exact title, DOI 10.1088/1741-2552/adbfbe and PMID 40073452",
+      "in_text_locator": "Introduction paragraph beginning Previous research has used computational models; the following sentence cites references 18-21 together for animal/human in-vivo ECAP recordings",
+      "disposition": "S764 uses S105 as grouped human ECAP-recording context. S764 itself simulates directional lead fields, fiber activation and ECAP through reciprocity; it does not reproduce S105 subject-level analyses or test ECAP as an individual pain-outcome predictor."
+    },
+    "boundary": "One primary-verified edge from bounded index routes. Search indexes can omit or lag citations; this is neither complete S105 forward coverage nor PA-04 saturation. Neither S105 nor S764 supplies open linked ECAP x clinical-outcome data."
+  },
+  "s764_owner_data_inventory_2026_09_28": {
+    "article_url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0345287",
+    "article_locator": "Data Availability statement links Figshare DOI 10.6084/m9.figshare.29558654; Methods > Simulation model of SCS-induced electric field and Calculation of simulated ECAP signals describe COMSOL and NEURON computation.",
+    "owner_api_url": "https://api.figshare.com/v2/articles/29558654",
+    "owner_api_locator": "article id, doi, version, license, published_date, modified_date, files[].id/name/size/is_link_only",
+    "checked_at": "2026-09-28",
+    "versioned_doi": "10.6084/m9.figshare.29558654.v2",
+    "license": "CC BY 4.0",
+    "files": [
+      {
+        "id": 56242706,
+        "name": "Neuron_data.zip",
+        "size_bytes": 1475836351
+      },
+      {
+        "id": 56242709,
+        "name": "COMSOL_data.zip",
+        "size_bytes": 366040641
+      },
+      {
+        "id": 60339125,
+        "name": "Neuron_Data_revise.zip",
+        "size_bytes": 1350367055
+      },
+      {
+        "id": 60339128,
+        "name": "COMSOL_Data_revise.zip",
+        "size_bytes": 305550441
+      }
+    ],
+    "decision": "The owner catalog exposes four downloadable model-data ZIP archives. This supports a reproducibility route for the S764 computational ECAP example, not an enrolled-human dataset or patient-linked ECAP-to-pain outcome.",
+    "boundary": "Only owner metadata and file inventory were checked; ZIP interiors, runnable model versions and numerical replication were not inspected. No claim of executable reproducibility or exhaustive file-content absence follows from this metadata pass. PA-04 and RES-04/05 remain open."
+  },
+  "s764_backward_model_input_slice_2026_09_28": {
+    "seed": "S764 / DOI 10.1371/journal.pone.0345287 / PMID 41926484",
+    "checked_at": "2026-09-28 Europe/Moscow",
+    "scope": "Nine previously unrecorded backward edges in S764 references 21-25 and 27-30. Reference 26 (Parker et al. 2012 / S784) and already checked references 15-20, 31 and 33 were excluded. Pi task ae78ea97-286a-4137-9823-8d997a322c0a was cancelled before agent_settled; no worker findings were integrated.",
+    "seed_primary_url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0345287",
+    "seed_primary_locators": "Introduction paragraph beginning 'The evoked compound action potential (ECAP) generated by SCS' and grouped citations [11-14], [15-17], [18-21]; Methods > Simulation model of SCS-induced electric field, sentence citing [22-25] for layer dimensions and [15] for CSF/dura values; Methods > Multi-compartment cable model of sensory fibers, paragraphs citing [28-30]; lead-model sentence citing [27] for scar tissue.",
+    "reviewed_edges": [
+      {
+        "reference": 21,
+        "work": "Brucker-Hahn et al. 2023, Evoked compound action potentials during spinal cord stimulation: effects of posture and pulse width on signal features and neural activation within the spinal cord",
+        "doi": "10.1088/1741-2552/aceca4",
+        "pmid": "37531954",
+        "primary_url": "https://pubmed.ncbi.nlm.nih.gov/37531954/",
+        "primary_locator": "Abstract: Approach and Main results; 56 patients with ECAP recordings across postures/stimulation parameters compared with a computational model of electrode-to-cord distance.",
+        "seed_relation_locator": "S764 Introduction, sentence grouping references 18-21 as animal and human in-vivo ECAP recording studies; References item 21.",
+        "disposition": "Human ECAP recording plus a separate computational sensitivity model; the abstract reports ECAP features and neural activation, not a patient pain-relief endpoint. Physiological and modeling context, not validation of S764's directional-lead model or an ECAP-to-analgesia predictor."
+      },
+      {
+        "reference": 22,
+        "work": "Kameyama et al. 1996, Morphologic features of the normal human cadaveric spinal cord",
+        "doi": "10.1097/00007632-199606010-00001",
+        "pmid": "8725917",
+        "primary_url": "https://pubmed.ncbi.nlm.nih.gov/8725917/",
+        "primary_locator": "Abstract: Study design and Methods; spinal cord cross-sectional area and diameter measured from C2 to S3 in 12 cadaveric specimens.",
+        "seed_relation_locator": "S764 Methods > Simulation model of SCS-induced electric field, grouped references 22-25 for geometric dimensions; References item 22.",
+        "disposition": "Primary human anatomical morphometry that supports spinal-cord geometry context. It is not an SCS/ECAP experiment, clinical cohort or pain-outcome study."
+      },
+      {
+        "reference": 23,
+        "work": "Fradet et al. 2014, Morphometrics of the entire human spinal cord and spinal canal measured from in vivo high-resolution anatomical magnetic resonance imaging",
+        "doi": "10.1097/BRS.0000000000000125",
+        "pmid": "24253776",
+        "primary_url": "https://pubmed.ncbi.nlm.nih.gov/24253776/",
+        "primary_locator": "Abstract: Study design, Objective and Methods; in-vivo 3 T MRI measurements of cord geometry at spinal levels in 15 young and 8 older healthy volunteers.",
+        "seed_relation_locator": "S764 Methods > Simulation model of SCS-induced electric field, grouped references 22-25 for geometric dimensions; References item 23.",
+        "disposition": "Primary normal-human MRI morphometry supports spinal cord geometry context. It does not test SCS, ECAP recording or pain outcomes."
+      },
+      {
+        "reference": 24,
+        "work": "Tschirhart et al. 2007, Biomechanics of vertebral level, geometry, and transcortical tumors in the metastatic spine",
+        "doi": "10.1016/j.jbiomech.2005.11.014",
+        "pmid": "16427058",
+        "primary_url": "https://pubmed.ncbi.nlm.nih.gov/16427058/",
+        "primary_locator": "Abstract: objective and methods; parametric finite-element analysis of thoracic vertebral geometry and metastatic cortical-shell compromise for burst-fracture risk.",
+        "seed_relation_locator": "S764 Methods > Simulation model of SCS-induced electric field, grouped references 22-25 for geometric dimensions; References item 24.",
+        "disposition": "Finite-element vertebral biomechanics can inform vertebral geometry only. Its abstract does not support spinal-cord, CSF, dura or epidural dimensions and reports no SCS, ECAP or pain endpoint."
+      },
+      {
+        "reference": 25,
+        "work": "Kunkel et al. 2011, Morphometric analysis of the relationships between intervertebral disc and vertebral body heights: an anatomical and radiographic study of the human thoracic spine",
+        "doi": "10.1111/j.1469-7580.2011.01397.x",
+        "pmid": "21615399",
+        "pmcid": "PMC3171774",
+        "primary_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3171774/",
+        "primary_locator": "Abstract and Materials and methods > Study sample and parameters; direct and radiographic thoracic disc/vertebral height measurements in 72 segments from 30 donors.",
+        "seed_relation_locator": "S764 Methods > Simulation model of SCS-induced electric field, grouped references 22-25 for geometric dimensions; References item 25.",
+        "disposition": "Primary thoracic disc/vertebral morphometry can inform disc and vertebral geometry. It is not a spinal-cord, ECAP or clinical pain study."
+      },
+      {
+        "reference": 27,
+        "work": "Grill and Mortimer 1994, Electrical properties of implant encapsulation tissue",
+        "doi": "10.1007/BF02368219",
+        "primary_url": "https://link.springer.com/article/10.1007/BF02368219",
+        "primary_locator": "Abstract; six adult cats with chronically implanted four-electrode arrays, in-vivo and in-vitro resistivity measurements, and effect of encapsulation tissue on electric fields.",
+        "seed_relation_locator": "S764 Methods > Simulation model of SCS-induced electric field, lead model sentence citing [27] for a 300 μm scar-tissue layer; References item 27.",
+        "disposition": "Primary animal implant-encapsulation evidence supports that encapsulation can alter electric fields. The publisher abstract does not verify S764's exact 300 μm layer thickness; full article text was not available in this check. No spinal ECAP or pain outcome."
+      },
+      {
+        "reference": 28,
+        "work": "McIntyre et al. 2002, Modeling the excitability of mammalian nerve fibers: influence of afterpotentials on the recovery cycle",
+        "doi": "10.1152/jn.00353.2001",
+        "pmid": "11826063",
+        "primary_url": "https://pubmed.ncbi.nlm.nih.gov/11826063/",
+        "primary_locator": "Abstract: model development; double-cable motor nerve fiber model with nodes, paranodes, internodes and finite-impedance myelin, compared with mammalian fiber experimental data.",
+        "seed_relation_locator": "S764 Methods > Multi-compartment cable model of sensory fibers, sentence identifying McIntyre's double-cable mammalian motor-fiber model as the basis; References item 28.",
+        "disposition": "Primary biophysical model source supports the cable-model lineage. Its abstract concerns motor-nerve excitability and recovery cycles, not spinal ECAP or patient pain prediction."
+      },
+      {
+        "reference": 29,
+        "work": "Feirabend et al. 2002, Morphometry of human superficial dorsal and dorsolateral column fibres: significance to spinal cord stimulation",
+        "doi": "10.1093/brain/awf111",
+        "pmid": "11960902",
+        "primary_url": "https://pubmed.ncbi.nlm.nih.gov/11960902/",
+        "primary_locator": "Abstract: whole myelinated fiber population in superficial 300 μm dorsal/dorsolateral columns at T10-T11 morphometrically analyzed in two human subjects, with some data from a third.",
+        "seed_relation_locator": "S764 Methods > Multi-compartment cable model of sensory fibers, sentence sourcing human myelinated dorsal-column fiber-diameter distribution; References item 29.",
+        "disposition": "Primary human postmortem fiber morphometry supports a model input for fiber-size distribution, with a very small donor sample. It does not validate simulated ECAPs or measure clinical outcomes."
+      },
+      {
+        "reference": 30,
+        "work": "Gaines et al. 2018, A model of motor and sensory axon activation in the median nerve using surface electrical stimulation",
+        "doi": "10.1007/s10827-018-0689-5",
+        "pmid": "29946922",
+        "primary_url": "https://pubmed.ncbi.nlm.nih.gov/29946922/",
+        "primary_locator": "Abstract: anatomically based arm finite-element model and motor/sensory axon models for median-nerve surface stimulation, compared with experimental conduction velocity, strength-duration and activation-threshold data.",
+        "seed_relation_locator": "S764 Methods > Multi-compartment cable model of sensory fibers, sentence identifying Gaines as a sensory-fiber model refinement; References item 30.",
+        "disposition": "Primary peripheral-nerve modeling source supports sensory axon-model lineage only. It is not an SCS spinal-cord model, spinal ECAP recording or pain-outcome study."
+      }
+    ],
+    "boundary": "This is a bounded backward bibliography slice, not citation saturation or validation of the S764 model. Most method checks use publisher/PubMed abstracts; Kunkel full text was checked in PMC, while Grill's full text is access limited and its exact 300 μm parameter remains unverified. These works do not supply patient-linked ECAP x analgesia data. PA-04 remains open."
+  },
+  "evoke_forward_citation_recheck_2026_09_28": {
+    "seed_family": "EVOKE / NCT02924129 / S779-S781",
+    "scope": "Bounded pass over direct citing works discovered through Europe PMC and PubMed citedin; six new leads checked by a read-only Pi worker. Three direct primary full texts independently rechecked here. This is not exhaustive citation coverage.",
+    "worker_receipt": {
+      "bridge_id": "d65191d9-43e0-4733-9747-5959ece6739f",
+      "task_id": "pa04_evoke_citing_routes_20260928",
+      "job_id": "7cff2138-ccc7-45cf-954f-8478eafb5921",
+      "status": "completed",
+      "agent_settled": true,
+      "exit_code": 0,
+      "result_path": ".work/pi-workers/d65191d9-43e0-4733-9747-5959ece6739f/pa04_evoke_citing_routes_20260928/result.md"
+    },
+    "independently_checked_direct_citers": [
+      {
+        "work": "Soin et al. 2026, A case series of two patients using closed-loop spinal cord stimulation: demonstration of the impact of real-time adjustments",
+        "doi": "10.1093/jscr/rjag304",
+        "pmid": "42058530",
+        "pmc": "PMC13123655",
+        "primary_url": "https://europepmc.org/articles/PMC13123655",
+        "citation_edge": "Full text References 15-16 cite S781 (PMID 37640452) and S793 (PMID 38954217).",
+        "primary_locator": "Abstract; case narratives for patients 1 and 2; ECAP target/measured values and dose accuracy; References 15-16.",
+        "disposition": "Two case patients not identified as EVOKE/NCT02924129 participants received ECAP-controlled closed-loop SCS; primary text co-reports ECAP feedback and individual pain/function changes. Participant overlap with other registries was not assessed. This is case-level co-occurrence, not an estimated ECAP-to-analgesia association, a validated pain predictor, or a participant-level dataset released for reuse. It is a direct clinical-control analogue only."
+      },
+      {
+        "work": "Elberson et al. 2025, Significant pain reduction in refractory post-mastectomy pain syndrome with closed-loop spinal cord stimulation: illustrative cases",
+        "doi": "10.3171/CASE25218",
+        "pmid": "40921098",
+        "pmc": "PMC12416327",
+        "primary_url": "https://pubmed.ncbi.nlm.nih.gov/40921098/",
+        "citation_edge": "Full text References 11 and 18 cite S779 (PMID 31870766) and S781 (PMID 37640452); reference 19 cites S793.",
+        "primary_locator": "PubMed abstract; full text case narratives and activation-curve figures; References 11, 18-19.",
+        "disposition": "Two post-mastectomy pain cases, outside the EVOKE report family, report at least 80% relief under ECAP-controlled closed-loop SCS. Participant overlap with other registries was not assessed. The report does not test ECAP dose as a patient-level predictor or expose a reusable linked dataset; the pain improvement is an uncontrolled case outcome."
+      },
+      {
+        "work": "Romero-Serrano et al. 2025, A closed-loop spinal cord stimulation system in a patient with an implantable cardioverter defibrillator",
+        "doi": "10.1097/PR9.0000000000001302",
+        "pmid": "40491722",
+        "pmc": "PMC12148000",
+        "primary_url": "https://europepmc.org/articles/PMC12148000",
+        "citation_edge": "Full text Reference 6 cites S779 (PMID 31870766).",
+        "primary_locator": "Full text case narrative and Discussion: 50-year-old patient; three-month follow-up reports 80% pain relief and no ICD interference; Reference 6.",
+        "disposition": "One case outside the EVOKE report family documents use of an ECAP-feedback closed-loop SCS system and pain relief, but its focus is ICD co-implant safety. Participant overlap with other registries was not assessed. It does not estimate the relationship between ECAP values and pain outcome or provide linked patient data for reanalysis."
+      }
+    ],
+    "not_integrated_leads": [
+      {
+        "pmid": "42518116",
+        "doi": "10.1007/s40122-026-00863-6",
+        "disposition": "Ahead-of-print 12-month report registered as NCT05177354, the same Closed-Loop Australia cohort already represented by S826. PubMed/registry metadata checked by the worker; full article text was not independently available in this pass. Not counted as a new cohort."
+      },
+      {
+        "pmid": "40139688",
+        "doi": "10.1093/pm/pnaf033",
+        "disposition": "Worker found a Crossref reference to S781, but PubMed/Europe PMC had no abstract or PMC text and publisher HTML was blocked. Title/metadata are insufficient to classify the clinical construct; not integrated as evidence."
+      },
+      {
+        "pmid": "41704662",
+        "doi": "10.3389/fpain.2026.1737302",
+        "disposition": "Worker reports a 70-person mixed-modality observational cohort and a citation to S779, but it does not study ECAP feedback; not integrated as a closed-loop SCS analogue."
+      }
+    ],
+    "search_limits": "OpenAlex forward-citation queries returned rate-limit error bodies; PubMed citedin was capped at 150 and disagreed with Europe PMC counts. Exact query routes and worker logs are retained under the ignored result_path. No saturation, absence-of-evidence, independent EVOKE replication, or ECAP-based pain-prediction claim follows from this bounded pass.",
+    "boundary": "The three independently checked reports add small clinical analogues with concurrent closed-loop ECAP use and pain outcomes. Their case-level co-reporting is not evidence of a generalizable ECAP-to-analgesia mapping; PA-04 remains open."
+  },
+  "s902_s787_cohort_overlap_2026_10_01": {
+    "s902": "DOI 10.1111/ner.13510; PMID 35041590; PubMed abstract reports 112 ECAP and stimulation-artifact recordings from 14 participants.",
+    "s787": "DOI 10.3389/fnins.2021.673998; PMID 34335157; published full text reports 112 evaluable growth curves from 14 participants (113 obtained).",
+    "primary_locators": [
+      "https://pubmed.ncbi.nlm.nih.gov/35041590/ (abstract, Methods and Results)",
+      "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC8320888/fullTextXML (Methods and Results)"
+    ],
+    "disposition": "The matching participant and recording counts and overlapping authors suggest a shared data stream. Individual identities and exact recording overlap are not established because S902 full text was unavailable in the checked route. Do not add the two 14-participant counts as independent cohorts. Both are ECAP measurement-method reports, not pain-outcome evidence.",
+    "boundary": "Probable overlap is not proof that the cohorts are identical; neither paper establishes an ECAP-to-analgesia relation or a reusable linked ECAP/outcome dataset. PA-04 remains open."
+  },
+  "s105_backward_method_route_2026_09_28": {
+    "seed": "S105 / König et al. 2025 / DOI 10.1088/1741-2552/adbfbe / PMID 40073452",
+    "scope": "One bounded backward route through the full 25-item S105 reference list. Crossref metadata provided the list; the S105 publisher Version-of-Record PDF was retrieved directly from IOP (HTTP 200) and checked for in-text use and reference identity. This is not citation saturation.",
+    "verified_candidate": {
+      "work": "Parker et al. 2020, Evoked Compound Action Potentials Reveal Spinal Cord Dorsal Column Neuroanatomy",
+      "doi": "10.1111/ner.12968",
+      "pmid": "31215718",
+      "primary_url": "https://pubmed.ncbi.nlm.nih.gov/31215718/",
+      "seed_reference": "S105 Crossref reference key jneadbfbebib18; publisher PDF reference list, p. 16.",
+      "seed_in_text_locator": "S105 Introduction, paragraph discussing ECAP amplitude and dispersion/width, cites Parker et al. 2020 as an ECAP morphology feature antecedent; Results also cite it in discussion of P2P as a commonly used feature.",
+      "candidate_locator": "Official PubMed abstract, Methods and Results: sequential epidural ECAP recordings in sheep plus similar clinical human data; measures amplitude, dispersion (width), and conduction velocity and uses a large-diameter sensory-axon model to interpret the recordings.",
+      "disposition": "Direct method/feature antecedent for S105's ECAP morphology and dispersion work, not a pain-outcome predictor or ECAP-to-analgesia validation. The same PMID appeared earlier as a metadata-only forward lead from S784; this check verifies the source content and a direct backward relation from S105. No canonical record was added."
+    },
+    "cross_checked_repeat": {
+      "work": "Chakravarthy et al. 2022, DOI 10.1111/ner.13510, PMID 35041590",
+      "disposition": "S105 also cites this ECAP artifact-estimation methods paper (reference key jneadbfbebib6); it is already independently recorded as a primary method lead from S765 in bounded_ns07_ns10_citation_edges_2026_09_27 and was not duplicated here."
+    },
+    "forward_edge_boundary": "The only indexed S105 citer remains S764; the existing publisher-text check shows S105 grouped as human/animal ECAP recording context in S764's Introduction, not as a reused feature/classifier method. The one indexed edge does not establish complete forward coverage.",
+    "worker_receipt": {
+      "bridge_id": "d65191d9-43e0-4733-9747-5959ece6739f",
+      "task_id": "pa04_s105_backward_method_route_20260928",
+      "job_id": "f1f751c8-6ee0-4415-9ddf-a89f0533f3c5",
+      "status": "completed",
+      "agent_settled": true,
+      "exit_code": 0,
+      "result_path": ".work/pi-workers/d65191d9-43e0-4733-9747-5959ece6739f/pa04_s105_backward_method_route_20260928/result.md"
+    },
+    "boundary": "This resolves one primary method antecedent and upgrades a previous metadata-only lead. It does not add a source card, establish a distinct cohort, cover every method reference at full text, or close PA-04."
+  },
+  "consolidated_checks": {
+    "pa04-five-primary-analogue-audit-2026-09-25.json": {
+      "source_sha256": "432db14d47a0f01d19a3450dfd1427ab857a71a85de2d9bc08a9d68daf6f9e19",
+      "payload": {
+        "date": "2026-09-25",
+        "batch_sha256": "D9D2D0F23251B9DADB4D13BFE5FEA78D7C1CDBFD713A3A56A3EC67A9407009E3",
+        "source_ids": [
+          "S784",
+          "S785",
+          "S786",
+          "S787",
+          "S788"
+        ],
+        "source_locators": [
+          {
+            "source_id": "S784",
+            "stream": "NS-09",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/22188868/",
+            "locator": "Abstract, Results: A-beta recruitment and painful-area coverage",
+            "boundary": "Human ECAP recruitment and painful-area coverage; pain-intensity response is not measured by ECAP."
+          },
+          {
+            "source_id": "S785",
+            "stream": "NS-07",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/24111244/",
+            "locator": "Abstract: hybrid three-dimensional electrical and neural forward model",
+            "boundary": "Simulated ECAP forward model; no independent patient validation established in the accessible abstract."
+          },
+          {
+            "source_id": "S786",
+            "stream": "NS-08",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/30273153/",
+            "locator": "Abstract: electrode double-layer mechanism and saline comparison",
+            "boundary": "Bench electrode pulse artifact model; not human SCS artifact-removal validation."
+          },
+          {
+            "source_id": "S787",
+            "stream": "NS-09",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8320888/",
+            "locator": "Methods, ECAP acquisition and growth curves; Results, ET-PT and ET-DT",
+            "boundary": "14 participants and 112 repeated curves; perception/discomfort thresholds, not pain relief."
+          },
+          {
+            "source_id": "S788",
+            "stream": "NS-10",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/28922517/",
+            "locator": "Abstract, Materials and Methods and Results: 51 trialed, 36 implanted, six-month outcomes",
+            "boundary": "AVALON preliminary single-arm outcomes; no randomized comparator or prognostic ECAP model."
+          }
+        ],
+        "registration_correction": {
+          "avalon": "ACTRN12615000713594",
+          "panorama": "NCT02161627",
+          "locators": [
+            "https://airr.anzca.edu.au/anzcacrisjspui/handle/11055/573?mode=full",
+            "https://www.accessdata.fda.gov/cdrh_docs/pdf19/P190002B.pdf",
+            "https://clinicaltrials.gov/api/v2/studies/NCT02161627"
+          ]
+        },
+        "remaining": "Complete citation snowballing and later dated refresh before PA-04 closure."
+      }
+    },
+    "pa04-frequency-rat-citation-audit-2026-09-25.json": {
+      "source_sha256": "af85458949112f1af895c0c77b56abb50a5ac8999156c4815612ec6bd492a4c7",
+      "payload": {
+        "date": "2026-09-25",
+        "gate": "G0_REVISE",
+        "source_ids": [
+          "S789",
+          "S790"
+        ],
+        "staging_sha256": {
+          "S789": "6853B50AFA6C32DE78168D4B6A0E95583F965B6DBF19F2666878D64D2336D1C1",
+          "S790": "DC43DB52760D4608B06D376BB9F5872B5FC81C9B29779C25A10BDD442965EA52"
+        },
+        "primary_locators": [
+          {
+            "source_id": "S789",
+            "url": "https://www.frontiersin.org/journals/neuroscience/articles/10.3389/fnins.2021.625835/full",
+            "locator": "Methods > Patient Recruitment and Frequency Sweeps; Results > Figs 3-4; Discussion",
+            "boundary": "Human ECAP amplitude and separately rated stimulation-induced paresthesia diverge with frequency; neither is a measured analgesia endpoint. Repeated sweeps are not independent patients."
+          },
+          {
+            "source_id": "S790",
+            "url": "https://link.springer.com/article/10.1186/s42234-023-00134-1",
+            "locator": "Methods > Animals, Experimental design and Pain hypersensitivity assessment; Results > Fig. 8",
+            "boundary": "ECAP-controlled SCS reduced rat SNI mechanical/cold hypersensitivity in paw-withdrawal assays; no patient pain or human clinical response was measured. SCS-ON/OFF assignment was not randomized and the tester was not blinded."
+          }
+        ],
+        "cohort_overlap": {
+          "source_id": "S789",
+          "related_doi": "10.3389/fnins.2023.1297814",
+          "status": "same recruited 20-patient study setup; distinct analysis, not an independent cohort",
+          "url": "https://www.frontiersin.org/journals/neuroscience/articles/10.3389/fnins.2023.1297814/full",
+          "locator": "Introduction, final paragraph; Methods 2.1; Results 3.1"
+        },
+        "pending_leads": [
+          "10.3389/fnins.2023.1297814",
+          "10.1136/rapm-2026-107607"
+        ],
+        "remaining": "Complete forward/backward citation screening and a later dated refresh before PA-04 closure."
+      }
+    }
+  }
+}

@@ -6,6 +6,7 @@ import argparse
 import json
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -91,7 +92,7 @@ NEW_TRIALS = [
 
 
 def updated() -> dict:
-    audit = json.loads((DATA / "ecap-trial-registry-audit.json").read_text(encoding="utf-8"))
+    audit = json.loads((data_path(DATA, "ecap-trial-registry-audit.json")).read_text(encoding="utf-8"))
     existing = {trial["trial_id"] for trial in audit["trials"]}
     for trial in NEW_TRIALS:
         if trial["trial_id"] in existing:
@@ -117,7 +118,7 @@ def main() -> None:
         print(f"Dry run: NS-14 trial count {audit['meta']['trial_count']}")
         return
     snapshot = snapshot_repository(DATA, label="pre-ns14-ecap-trial-extension")
-    atomic_write_json(DATA / "ecap-trial-registry-audit.json", audit)
+    atomic_write_json(data_path(DATA, "ecap-trial-registry-audit.json"), audit)
     print(f"NS-14 trial count {audit['meta']['trial_count']}; snapshot: {snapshot}")
 
 

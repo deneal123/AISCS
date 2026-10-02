@@ -14,6 +14,7 @@ from typing import Any
 
 from service.completeness import completeness_summary
 from service.core import load_json
+from service.data_layout import data_path
 from service.integrity import validate_repository
 from service.pipeline import atomic_write_json, snapshot_repository
 
@@ -66,9 +67,9 @@ def _set_reported(
 
 
 def refresh(*, apply: bool, data_dir: Path = DATA) -> dict[str, Any]:
-    records = load_json(data_dir / "records.json")
-    audit = load_json(data_dir / "audit-report.json")
-    validation_log = load_json(data_dir / "validation-log.json")
+    records = load_json(data_path(data_dir, "records.json"))
+    audit = load_json(data_path(data_dir, "audit-report.json"))
+    validation_log = load_json(data_path(data_dir, "validation-log.json"))
     targets = [
         source
         for source in records["sources"]
@@ -157,7 +158,7 @@ def refresh(*, apply: bool, data_dir: Path = DATA) -> dict[str, Any]:
         }
     )
     validation_log["meta"]["checked_at"] = DATE
-    completeness = load_json(data_dir / "completeness-report.json")
+    completeness = load_json(data_path(data_dir, "completeness-report.json"))
     completeness.update(completeness_summary(records["sources"]))
     completeness["meta"]["generated_at"] = DATE
 
@@ -171,10 +172,10 @@ def refresh(*, apply: bool, data_dir: Path = DATA) -> dict[str, Any]:
     if not apply:
         return result
     snapshot = snapshot_repository(data_dir, label="pre-crossref-metadata-refresh")
-    atomic_write_json(data_dir / "records.json", records)
-    atomic_write_json(data_dir / "audit-report.json", audit)
-    atomic_write_json(data_dir / "validation-log.json", validation_log)
-    atomic_write_json(data_dir / "completeness-report.json", completeness)
+    atomic_write_json(data_path(data_dir, "records.json"), records)
+    atomic_write_json(data_path(data_dir, "audit-report.json"), audit)
+    atomic_write_json(data_path(data_dir, "validation-log.json"), validation_log)
+    atomic_write_json(data_path(data_dir, "completeness-report.json"), completeness)
     report = validate_repository(data_dir)
     if not report["ok"]:
         raise RuntimeError(f"restore {snapshot}: {'; '.join(report['errors'])}")

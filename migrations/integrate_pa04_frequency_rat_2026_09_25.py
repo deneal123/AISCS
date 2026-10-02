@@ -6,6 +6,7 @@ import argparse
 import json
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -43,10 +44,10 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--apply", action="store_true")
     args = parser.parse_args()
-    records = json.loads((DATA / "records.json").read_text(encoding="utf-8"))
-    protocol = json.loads((DATA / "search-protocol.json").read_text(encoding="utf-8"))
-    ecap = json.loads((DATA / "ecap-scs-audit.json").read_text(encoding="utf-8"))
-    matrix = json.loads((DATA / "evidence-matrix.json").read_text(encoding="utf-8"))
+    records = json.loads((data_path(DATA, "records.json")).read_text(encoding="utf-8"))
+    protocol = json.loads((data_path(DATA, "search-protocol.json")).read_text(encoding="utf-8"))
+    ecap = json.loads((data_path(DATA, "ecap-scs-audit.json")).read_text(encoding="utf-8"))
+    matrix = json.loads((data_path(DATA, "evidence-matrix.json")).read_text(encoding="utf-8"))
     todo = (ROOT / "TODO.md").read_text(encoding="utf-8")
     readme = (DATA / "README.md").read_text(encoding="utf-8")
     cards = {source["id"]: source for source in records["sources"]}
@@ -117,7 +118,7 @@ def main() -> None:
         return
     snapshot = snapshot_repository(DATA, label="pre-pa04-frequency-rat-integration")
     for name, obj in (("search-protocol.json", protocol), ("ecap-scs-audit.json", ecap), ("evidence-matrix.json", matrix), ("pa04-frequency-rat-citation-audit-2026-09-25.json", audit)):
-        atomic_write_json(DATA / name, obj)
+        atomic_write_json(data_path(DATA, name), obj)
     (ROOT / "TODO.md").write_text(todo, encoding="utf-8", newline="\n")
     (DATA / "README.md").write_text(readme, encoding="utf-8", newline="\n")
     print(f"Integrated S789/S790; snapshot: {snapshot}")

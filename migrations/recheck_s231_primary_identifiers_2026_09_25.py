@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 
 from service.completeness import completeness_summary
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -17,7 +18,7 @@ CROSSREF = "https://api.crossref.org/works/10.3390%2Fs26103049"
 
 
 def updated() -> tuple[dict, dict]:
-    records = json.loads((DATA / "records.json").read_text(encoding="utf-8"))
+    records = json.loads((data_path(DATA, "records.json")).read_text(encoding="utf-8"))
     source = next(item for item in records["sources"] if item["id"] == "S231")
     if source["identifiers"]["doi"] is not None or source["identifiers"]["pmid"] is not None:
         raise ValueError("S231 identifiers already reviewed")
@@ -75,10 +76,10 @@ def main() -> None:
         print("Dry run: S231 DOI, PMID, authors, edition and primary access corrected")
         return
     snapshot = snapshot_repository(DATA, label="pre-s231-primary-identifiers")
-    atomic_write_json(DATA / "records.json", records)
-    completeness = json.loads((DATA / "completeness-report.json").read_text(encoding="utf-8"))
+    atomic_write_json(data_path(DATA, "records.json"), records)
+    completeness = json.loads((data_path(DATA, "completeness-report.json")).read_text(encoding="utf-8"))
     completeness.update(completeness_summary(records["sources"]))
-    atomic_write_json(DATA / "completeness-report.json", completeness)
+    atomic_write_json(data_path(DATA, "completeness-report.json"), completeness)
     atomic_write_json(DATA / "src07-s231-primary-recheck-2026-09-25.json", audit)
     print(f"Updated S231; snapshot: {snapshot}")
 

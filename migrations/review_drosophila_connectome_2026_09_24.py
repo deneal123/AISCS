@@ -15,6 +15,7 @@ from typing import Any
 
 from service.completeness import completeness_summary, migrate_record
 from service.core import load_json
+from service.data_layout import current_data_files, data_path
 from service.integrity import validate_repository
 from service.pipeline import atomic_write_json, snapshot_repository
 
@@ -213,7 +214,7 @@ def _audit() -> dict[str, Any]:
 
 
 def build_outputs(data_dir: Path = DATA) -> dict[str, dict[str, Any]]:
-    records = load_json(data_dir / "records.json")
+    records = load_json(data_path(data_dir, "records.json"))
     found = set()
     updated_sources = []
     for record in records["sources"]:
@@ -248,20 +249,20 @@ def build_outputs(data_dir: Path = DATA) -> dict[str, dict[str, Any]]:
     records["sources"] = updated_sources
     records["meta"]["updated_at"] = DATE
     by_id = {x["id"]: x for x in updated_sources}
-    clusters = load_json(data_dir / "clusters.json")
+    clusters = load_json(data_path(data_dir, "clusters.json"))
     for cluster in clusters["clusters"]:
         representative = cluster.get("представитель")
         if representative and representative.get("id") in SPECS:
             cluster["представитель"] = deepcopy(by_id[representative["id"]])
     clusters["meta"]["updated_at"] = DATE
-    log = load_json(data_dir / "validation-log.json")
+    log = load_json(data_path(data_dir, "validation-log.json"))
     log.setdefault("searches", []).append({"search_id": "CONNECTOME-CORE-2026-09-24-01", "date": DATE, "stream": "Drosophila connectome/VNC primary full-text re-extraction", "query": "exact title and version terms at publisher, PMC, bioRxiv and FlyWire", "urls_reviewed": [spec["url"] for spec in SPECS.values()], "source_ids": sorted(SPECS), "decision": "version, organism, dynamic model, experimental comparator and scope resolved in separate audit"})
     log["meta"]["checked_at"] = DATE
-    report = load_json(data_dir / "audit-report.json")
+    report = load_json(data_path(data_dir, "audit-report.json"))
     report["meta"]["generated_at"] = DATE
     report["current_corpus"]["validation_statuses"] = dict(sorted(Counter(x["validation"]["status"] for x in updated_sources).items()))
     report["drosophila_connectome_audit"] = {"checked_at": DATE, "source_ids": sorted(SPECS), "artifact": AUDIT, "finding": "Anatomy, dynamics and biological comparators explicitly separated."}
-    completeness = load_json(data_dir / "completeness-report.json")
+    completeness = load_json(data_path(data_dir, "completeness-report.json"))
     completeness.update(completeness_summary(updated_sources))
     completeness["meta"]["generated_at"] = DATE
     return {"records.json": records, "clusters.json": clusters, "validation-log.json": log, "audit-report.json": report, "completeness-report.json": completeness, AUDIT: _audit()}
@@ -270,10 +271,12 @@ def build_outputs(data_dir: Path = DATA) -> dict[str, dict[str, Any]]:
 def validate_outputs(outputs: dict[str, dict[str, Any]], data_dir: Path = DATA) -> None:
     with tempfile.TemporaryDirectory(prefix="research-connectome-") as temporary:
         target = Path(temporary)
-        for path in data_dir.glob("*.json"):
-            shutil.copy2(path, target / path.name)
+        for path in current_data_files(data_dir):
+            destination = target / path.relative_to(data_dir)
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(path, destination)
         for name, payload in outputs.items():
-            atomic_write_json(target / name, payload)
+            atomic_write_json(data_path(target, name), payload)
         result = validate_repository(target)
         if not result["ok"]:
             raise ValueError("; ".join(result["errors"]))
@@ -289,7 +292,7 @@ def main() -> int:
     if args.apply:
         snapshot = snapshot_repository(DATA, label="pre-drosophila-connectome-review")
         for name, payload in outputs.items():
-            atomic_write_json(DATA / name, payload)
+            atomic_write_json(data_path(DATA, name), payload)
         result = validate_repository(DATA)
         if not result["ok"]:
             raise RuntimeError(f"restore {snapshot}: {'; '.join(result['errors'])}")

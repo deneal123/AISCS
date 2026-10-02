@@ -6,6 +6,7 @@ from copy import deepcopy
 from typing import Any
 
 from .core import load_json
+from .data_layout import data_path
 
 PRIOR_ART_OUTCOMES = frozenset(
     {"direct_analogue_found", "partial_analogues_only", "no_direct_analogue_found_at_cutoff"}
@@ -114,7 +115,7 @@ def validate_novelty_artifacts(
 
 
 def novelty_summary(data_dir: Any) -> dict[str, Any]:
-    landscape = load_json(data_dir / "novelty-landscape.json")
+    landscape = load_json(data_path(data_dir, "novelty-landscape.json"))
     variants = landscape.get("variants", [])
     outcomes: dict[str, int] = {}
     for item in variants:
@@ -136,7 +137,7 @@ def search_novelty(
     limit: int = 50,
     offset: int = 0,
 ) -> dict[str, Any]:
-    landscape = load_json(data_dir / "novelty-landscape.json")
+    landscape = load_json(data_path(data_dir, "novelty-landscape.json"))
     needle = query.casefold().strip() if query else ""
     items: list[dict[str, Any]] = []
     for item in landscape.get("variants", []):

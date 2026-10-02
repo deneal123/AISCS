@@ -1,0 +1,60 @@
+{
+  "meta": {
+    "batch_id": "r3-correction-s899-notes-2026-10-01",
+    "schema_version": "1.2.0",
+    "created_at": "2026-10-01",
+    "scope": "S899 scientific validation notes restored after field-resolution correction",
+    "status": "reviewed",
+    "reviewed_at": "2026-10-01"
+  },
+  "source_ids": [
+    "S899"
+  ],
+  "records": [
+    {
+      "id": "S899",
+      "title": "From Synapses to Dynamics: Obtaining Function from Structure in a Connectome Constrained Model of the Head Direction Circuit",
+      "year": 2025,
+      "source_type": "метод"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S899",
+      "decision": "verified_primary",
+      "checked_at": "2026-10-01",
+      "full_text_status": "checked",
+      "notes": "Primary bioRxiv v1 JATS sections 2.2, 4.1-4.2 and 5.1-5.4: 439 adult head-direction neurons from the hemibrain connectome, 57 optimized cell-type parameters, self-supervised rate dynamics and in-silico cell-type ablations; Supplemental Methods sections A.1-A.8 checked. No new animal recordings, larval nociception, human ECAP, SCS, or clinical outcome. Multiple viable parameter solutions do not establish calibrated uncertainty outside this simulation. Field resolutions use terminal not_reported states and primary locators.",
+      "searches": [
+        {
+          "service": "bioRxiv",
+          "query": "10.1101/2025.05.26.655406 v1 JATS and Supplemental Methods",
+          "url": "https://www.biorxiv.org/content/early/2025/05/29/2025.05.26.655406.source.xml",
+          "accessed_at": "2026-10-01"
+        }
+      ],
+      "updates": {
+        "identifiers": {
+          "doi": "10.1101/2025.05.26.655406"
+        },
+        "validation": {
+          "notes": "Primary bioRxiv v1 JATS sections 2.2, 4.1-4.2 and 5.1-5.4: 439 adult head-direction neurons from the hemibrain connectome, 57 optimized cell-type parameters, self-supervised rate dynamics and in-silico cell-type ablations; Supplemental Methods sections A.1-A.8 checked. No new animal recordings, larval nociception, human ECAP, SCS, or clinical outcome. Multiple viable parameter solutions do not establish calibrated uncertainty outside this simulation. Field resolutions use terminal not_reported states and primary locators."
+        },
+        "field_resolution": {
+          "validation.notes": {
+            "state": "reported",
+            "value": "Primary bioRxiv v1 JATS sections 2.2, 4.1-4.2 and 5.1-5.4: 439 adult head-direction neurons from the hemibrain connectome, 57 optimized cell-type parameters, self-supervised rate dynamics and in-silico cell-type ablations; Supplemental Methods sections A.1-A.8 checked. No new animal recordings, larval nociception, human ECAP, SCS, or clinical outcome. Multiple viable parameter solutions do not establish calibrated uncertainty outside this simulation. Field resolutions use terminal not_reported states and primary locators.",
+            "reason": "Methods and limitations checked in the primary full text and supplement.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/early/2025/05/29/2025.05.26.655406.source.xml",
+                "locator": "bioRxiv v1 JATS, sections 2.2, 4.1-4.2, 5.1-5.4 and 6; Supplemental Methods A.1-A.8"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

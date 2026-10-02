@@ -6,6 +6,7 @@ import argparse
 import json
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -16,7 +17,7 @@ EDITION = "bioRxiv preprint v2 (30 April 2026; PMC13142387.2)"
 
 
 def updated() -> tuple[dict, dict]:
-    records = json.loads((DATA / "records.json").read_text(encoding="utf-8"))
+    records = json.loads((data_path(DATA, "records.json")).read_text(encoding="utf-8"))
     source = next(item for item in records["sources"] if item["id"] == "S740")
     if source["издание"] != "bioRxiv" or source["identifiers"]["doi"] != "10.1101/2025.09.12.675944":
         raise ValueError("S740 card changed")
@@ -34,7 +35,7 @@ def updated() -> tuple[dict, dict]:
         "checked_at": DATE,
         "locators": [{"url": URL, "locator": "article-meta article-version, article-id and epub date"}],
     })
-    audit = json.loads((DATA / "src07-version-recheck-audit.json").read_text(encoding="utf-8"))
+    audit = json.loads((data_path(DATA, "src07-version-recheck-audit.json")).read_text(encoding="utf-8"))
     audit["entries"].append({
         "source_id": "S740",
         "current_version": "author preprint v2, 30 April 2026",
@@ -56,8 +57,8 @@ def main() -> None:
         print("Dry run: S740 preprint v2 from PMC JATS")
         return
     snapshot = snapshot_repository(DATA, label="pre-s740-pmc-preprint-version")
-    atomic_write_json(DATA / "records.json", records)
-    atomic_write_json(DATA / "src07-version-recheck-audit.json", audit)
+    atomic_write_json(data_path(DATA, "records.json"), records)
+    atomic_write_json(data_path(DATA, "src07-version-recheck-audit.json"), audit)
     print(f"Recorded S740 v2; snapshot: {snapshot}")
 
 

@@ -10,6 +10,7 @@ from copy import deepcopy
 from pathlib import Path
 
 from service.completeness import migrate_record
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, publish_candidates
 
 DATA = Path(__file__).resolve().parents[1] / "data"
@@ -66,7 +67,7 @@ SPECS = (
 
 
 def candidates() -> list[dict]:
-    records = json.loads((DATA / "records.json").read_text(encoding="utf-8"))["sources"]
+    records = json.loads((data_path(DATA, "records.json")).read_text(encoding="utf-8"))["sources"]
     base = next(record for record in records if record["id"] == "S066")
     result = []
     for spec in SPECS:

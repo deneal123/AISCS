@@ -8,6 +8,8 @@ try {
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
     uv run --extra dev --frozen pytest -q
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+    uv run --frozen python scripts/check_release.py
+    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 }
 finally {
     Pop-Location

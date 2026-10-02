@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 
 from service.completeness import completeness_summary
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 DATA = Path(__file__).resolve().parents[1] / "data"
@@ -36,8 +37,8 @@ def main() -> int:
     parser.add_argument("--apply", action="store_true")
     args = parser.parse_args()
 
-    records_path = DATA / "records.json"
-    protocol_path = DATA / "search-protocol.json"
+    records_path = data_path(DATA, "records.json")
+    protocol_path = data_path(DATA, "search-protocol.json")
     records = json.loads(records_path.read_text(encoding="utf-8"))
     protocol = json.loads(protocol_path.read_text(encoding="utf-8"))
     sources = {source["id"]: source for source in records["sources"]}
@@ -99,7 +100,7 @@ def main() -> int:
     snapshot = snapshot_repository(DATA, label="pre-drosophila-nociception-stage-correction")
     atomic_write_json(records_path, records)
     atomic_write_json(protocol_path, protocol)
-    completeness_path = DATA / "completeness-report.json"
+    completeness_path = data_path(DATA, "completeness-report.json")
     completeness = json.loads(completeness_path.read_text(encoding="utf-8"))
     completeness.update(completeness_summary(records["sources"]))
     atomic_write_json(completeness_path, completeness)

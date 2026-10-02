@@ -6,6 +6,7 @@ import argparse
 import json
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -36,7 +37,7 @@ LOCATORS = {
 
 
 def updated() -> tuple[dict, dict, dict]:
-    records = json.loads((DATA / "records.json").read_text(encoding="utf-8"))
+    records = json.loads((data_path(DATA, "records.json")).read_text(encoding="utf-8"))
     source = next(item for item in records["sources"] if item["id"] == "S008")
     if source["validation"]["full_text_status"] != "metadata_only":
         raise ValueError("S008 has already been full-text reviewed")
@@ -85,7 +86,7 @@ def updated() -> tuple[dict, dict, dict]:
         "checked_at": DATE,
         "locators": [{"url": PDF, "locator": "Section 3.2 and Figure 5; no calibrated predictive-uncertainty output"}],
     })
-    matrix = json.loads((DATA / "evidence-matrix.json").read_text(encoding="utf-8"))
+    matrix = json.loads((data_path(DATA, "evidence-matrix.json")).read_text(encoding="utf-8"))
     row = next(item for item in matrix["rows"] if item["batch_id"] == "human-generalization-review-2026-09-24" and "S008" in item["source_ids"])
     row["verified_evidence"] = "Publisher full text Sections 2.1, 2.4-2.5 and 3.2-3.3 identifies the Tiemann 2018 motor EEG subset (50 healthy adults), participant LOSO, five classical baselines and author-reported 95.85% mean accuracy."
     row["limitations"] = "The complete-cohort label-informed permutation mask precedes LOSO, and the authors acknowledge optimistic bias. Reported 400 test-trial confusion counts yield 95.75%, while a 50 x 40 trial SHAP matrix is also described; the denominators are not reconciled. No external cohort, chronic pain, ECAP or SCS outcome; SHAP attribution is not causal."
@@ -116,8 +117,8 @@ def main() -> None:
         print("Dry run: S008 full-text, source-dataset and leakage correction")
         return
     snapshot = snapshot_repository(DATA, label="pre-s008-publisher-fulltext-review")
-    atomic_write_json(DATA / "records.json", records)
-    atomic_write_json(DATA / "evidence-matrix.json", matrix)
+    atomic_write_json(data_path(DATA, "records.json"), records)
+    atomic_write_json(data_path(DATA, "evidence-matrix.json"), matrix)
     atomic_write_json(DATA / "s008-primary-fulltext-audit.json", audit)
     print(f"Reviewed S008 primary PDF; snapshot: {snapshot}")
 

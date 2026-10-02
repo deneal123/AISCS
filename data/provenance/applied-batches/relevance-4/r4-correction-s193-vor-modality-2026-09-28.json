@@ -1,0 +1,98 @@
+{
+  "meta": {
+    "batch_id": "r4-correction-s193-vor-modality-2026-09-28",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-28",
+    "scope": "Correct S193 legacy modality field from the checked Version of Record",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-28"
+  },
+  "source_ids": [
+    "S193"
+  ],
+  "records": [],
+  "decisions": [
+    {
+      "source_id": "S193",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-28",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "service": "corresponding-author lab VOR PDF",
+          "query": "DOI 10.1109/TAFFC.2025.3567307 final full text; modalities, FLACC, dataset sample, CV and external validation",
+          "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+          "accessed_at": "2026-09-28"
+        },
+        {
+          "service": "corresponding-author publications page",
+          "query": "Confirm author-lab publication route and PDF identity",
+          "url": "https://so-link.github.io/publications/",
+          "accessed_at": "2026-09-28"
+        }
+      ],
+      "updates": {
+        "\u043c\u043e\u0434\u0430\u043b\u044c\u043d\u043e\u0441\u0442\u044c": "Facial video and vocal/audio features; audio represented as spectrograms/MFCC.",
+        "field_resolution": {
+          "\u043c\u043e\u0434\u0430\u043b\u044c\u043d\u043e\u0441\u0442\u044c": {
+            "state": "reported",
+            "value": "Facial video and vocal/audio features; audio represented as spectrograms/MFCC.",
+            "reason": "The VOR specifies facial video and vocal/audio input modalities.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+                "locator": "Section IV, pp. 2830-2833: facial video frames and vocal/audio features; audio uses spectrogram/MFCC; expert fusion/regression"
+              }
+            ]
+          },
+          "identifiers.doi": {
+            "state": "reported",
+            "value": "10.1109/TAFFC.2025.3567307",
+            "reason": "Stable article DOI identifies the reviewed Version of Record.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+                "locator": "Title page, DOI 10.1109/TAFFC.2025.3567307"
+              }
+            ]
+          },
+          "identifiers.exact_url": {
+            "state": "reported",
+            "value": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+            "reason": "Corresponding-author lab-hosted published Version of Record.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+                "locator": "Version of Record PDF title page; exact primary full-text URL"
+              }
+            ]
+          }
+        },
+        "identifiers": {
+          "doi": "10.1109/TAFFC.2025.3567307",
+          "exact_url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf"
+        }
+      },
+      "claims": [],
+      "notes": "Full IEEE Version of Record checked; PDF SHA-256 7ee9edfd4974a9577bcc5769679f44df1dfa45932ae43f56b1997d8c89a92922. MPP contains 701 valid video samples with audio, not 701 identified participants. Target is average FLACC rated by 1-4 medical doctors/sample. Five-fold CV is reported; fold unit and participant-disjoint assignment are not. No external validation or uncertainty calibration reported. Data are available from corresponding author on request.",
+      "rationale": "Apply only the confirmed legacy modality field and its field resolution. The FLACC observer-rated construct is known; the controlled vocabulary currently lacks a dedicated observer-rated composite category, so the card retains the explicit vocabulary-gap sentinel.",
+      "field_resolution": {
+        "\u043c\u043e\u0434\u0430\u043b\u044c\u043d\u043e\u0441\u0442\u044c": {
+          "state": "reported",
+          "value": "Facial video and vocal/audio features; audio represented as spectrograms/MFCC.",
+          "reason": "The VOR specifies facial video and vocal/audio input modalities.",
+          "checked_at": "2026-09-28",
+          "locators": [
+            {
+              "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+              "locator": "Section IV, pp. 2830-2833: facial video frames and vocal/audio features; audio uses spectrogram/MFCC; expert fusion/regression"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

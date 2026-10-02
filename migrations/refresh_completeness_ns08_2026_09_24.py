@@ -4,14 +4,15 @@ import json
 from pathlib import Path
 
 from service.completeness import completeness_summary
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 DATA = Path(__file__).resolve().parents[1] / "data"
 
 
 def main() -> None:
-    records = json.loads((DATA / "records.json").read_text(encoding="utf-8"))
-    path = DATA / "completeness-report.json"
+    records = json.loads((data_path(DATA, "records.json")).read_text(encoding="utf-8"))
+    path = data_path(DATA, "completeness-report.json")
     report = json.loads(path.read_text(encoding="utf-8"))
     summary = completeness_summary(records["sources"])
     if summary["records"] != 173 or summary["unresolved_count"]:

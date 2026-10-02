@@ -1,0 +1,189 @@
+{
+  "meta": {
+    "batch_id": "r3-correction-s898-author-manuscript-2026-10-01",
+    "schema_version": "1.2.0",
+    "created_at": "2026-10-01",
+    "scope": "S898 author manuscript full-text, Figure 2E denominator and recovered 40-reference bibliography",
+    "status": "reviewed",
+    "reviewed_at": "2026-10-01"
+  },
+  "source_ids": [
+    "S898"
+  ],
+  "records": [
+    {
+      "id": "S898",
+      "title": "Functional Characterization of Individual Pre- and Postsynaptic Partners In the Drosophila Larval Central Nervous System Using CaMPARI",
+      "year": 2026,
+      "source_type": "метод"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S898",
+      "decision": "verified_primary",
+      "checked_at": "2026-10-01",
+      "full_text_status": "checked",
+      "notes": "Official UMBC/MD-SOAR author manuscript of DOI 10.3791/71399 checked 2026-10-01. Figure 2E: 8 control larvae/23 cells and 9 experimental larvae/19 cells, per-larva averaged delta(R/G), author-reported significant increase without an exact p-value in the caption. References 1-40 available in the manuscript and bibliographic identities checked against PubMed. The full JoVE page remains robot-gated; institutional manuscript is the inspected full text.",
+      "searches": [
+        {
+          "service": "UMBC/MD-SOAR institutional repository",
+          "query": "10.3791/71399 Gualtieri Vonhoff author manuscript CaMPARI References",
+          "url": "https://mdsoar.org/items/7d2726d0-40e9-4902-8373-050b4379378e",
+          "accessed_at": "2026-10-01"
+        }
+      ],
+      "updates": {
+        "identifiers": {
+          "doi": "10.3791/71399"
+        },
+        "метод": "In intact third-instar Drosophila larvae, CsChrimson optogenetically activates cIVda nociceptors while CaMPARI photoconversion in Basin-4 interneurons reports postsynaptic calcium; fluorescence ROIs were defined in Fiji.",
+        "датасет": "Figure 2E plots per-larva mean delta red/green CaMPARI fluorescence for 8 controls and 9 stimulated larvae; the inspected manuscript/repository item does not supply the underlying per-larva numerical series.",
+        "ограничения": "The full author manuscript supports a functional cIVda-to-Basin-4 calcium-signaling assay in intact larvae, with Figure 2E reporting 8 control and 9 experimental larvae and a qualitative significant delta(R/G) increase. Exact plotted numerical values, p-value, raw per-larva series, independent replication and a fitted whole-connectome dynamical model are not established here. It does not measure subjective pain, human ECAP, SCS response, or cross-species transfer.",
+        "evidence": {
+          "population": "Figure 2E reports 17 third-instar larval observations: 8 no-ATR controls (23 analyzed cells) and 9 stimulated larvae (19 analyzed cells); the plotted unit is each larva averaged over 1-4 cells.",
+          "sample_size": 17,
+          "access_status": "open"
+        },
+        "validation": {
+          "full_text_status": "checked",
+          "checked_at": "2026-10-01",
+          "notes": "Official UMBC/MD-SOAR author manuscript of DOI 10.3791/71399 checked 2026-10-01. Figure 2E: 8 control larvae/23 cells and 9 experimental larvae/19 cells, per-larva averaged delta(R/G), author-reported significant increase without an exact p-value in the caption. References 1-40 available in the manuscript and bibliographic identities checked against PubMed. The full JoVE page remains robot-gated; institutional manuscript is the inspected full text."
+        },
+        "risk_flags": [
+          "animal_to_human_transfer_unvalidated"
+        ],
+        "field_resolution": {
+          "метод": {
+            "state": "reported",
+            "value": "In intact third-instar Drosophila larvae, CsChrimson optogenetically activates cIVda nociceptors while CaMPARI photoconversion in Basin-4 interneurons reports postsynaptic calcium; fluorescence ROIs were defined in Fiji.",
+            "reason": "Method read in the author-hosted full manuscript.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://api.mdsoar.org/server/api/core/bitstreams/c0f5e7d7-1196-4b60-95d8-377d44c0ad11/content",
+                "locator": "UMBC/MD-SOAR author manuscript PDF, p. 5, Figure 2E caption (8 control larvae/23 cells; 9 experimental larvae/19 cells; per-larva mean delta R/G); pp. 6-7, References 1-40; PDF SHA-256 51aa28b4c6927c1d9e28ebe5cbe07037c5f89f4815fd50cde510c2dc1bd23192"
+              },
+              {
+                "url": "https://mdsoar.org/items/7d2726d0-40e9-4902-8373-050b4379378e",
+                "locator": "Repository item identifies Gualtieri/Vonhoff, JoVE DOI 10.3791/71399 and links the full PDF"
+              }
+            ]
+          },
+          "датасет": {
+            "state": "reported",
+            "value": "Figure 2E plots per-larva mean delta red/green CaMPARI fluorescence for 8 controls and 9 stimulated larvae; the inspected manuscript/repository item does not supply the underlying per-larva numerical series.",
+            "reason": "Figure 2E caption inspected; this describes displayed observations, not a reusable raw dataset.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://api.mdsoar.org/server/api/core/bitstreams/c0f5e7d7-1196-4b60-95d8-377d44c0ad11/content",
+                "locator": "UMBC/MD-SOAR author manuscript PDF, p. 5, Figure 2E caption (8 control larvae/23 cells; 9 experimental larvae/19 cells; per-larva mean delta R/G); pp. 6-7, References 1-40; PDF SHA-256 51aa28b4c6927c1d9e28ebe5cbe07037c5f89f4815fd50cde510c2dc1bd23192"
+              },
+              {
+                "url": "https://mdsoar.org/items/7d2726d0-40e9-4902-8373-050b4379378e",
+                "locator": "Repository item identifies Gualtieri/Vonhoff, JoVE DOI 10.3791/71399 and links the full PDF"
+              }
+            ]
+          },
+          "ограничения": {
+            "state": "reported",
+            "value": "The full author manuscript supports a functional cIVda-to-Basin-4 calcium-signaling assay in intact larvae, with Figure 2E reporting 8 control and 9 experimental larvae and a qualitative significant delta(R/G) increase. Exact plotted numerical values, p-value, raw per-larva series, independent replication and a fitted whole-connectome dynamical model are not established here. It does not measure subjective pain, human ECAP, SCS response, or cross-species transfer.",
+            "reason": "Figure 2E and Discussion inspected; only bounded primary-text claims retained.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://api.mdsoar.org/server/api/core/bitstreams/c0f5e7d7-1196-4b60-95d8-377d44c0ad11/content",
+                "locator": "UMBC/MD-SOAR author manuscript PDF, p. 5, Figure 2E caption (8 control larvae/23 cells; 9 experimental larvae/19 cells; per-larva mean delta R/G); pp. 6-7, References 1-40; PDF SHA-256 51aa28b4c6927c1d9e28ebe5cbe07037c5f89f4815fd50cde510c2dc1bd23192"
+              },
+              {
+                "url": "https://mdsoar.org/items/7d2726d0-40e9-4902-8373-050b4379378e",
+                "locator": "Repository item identifies Gualtieri/Vonhoff, JoVE DOI 10.3791/71399 and links the full PDF"
+              }
+            ]
+          },
+          "evidence.population": {
+            "state": "reported",
+            "value": "Figure 2E reports 17 third-instar larval observations: 8 no-ATR controls (23 analyzed cells) and 9 stimulated larvae (19 analyzed cells); the plotted unit is each larva averaged over 1-4 cells.",
+            "reason": "Figure 2E identifies larva and cell denominators.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://api.mdsoar.org/server/api/core/bitstreams/c0f5e7d7-1196-4b60-95d8-377d44c0ad11/content",
+                "locator": "UMBC/MD-SOAR author manuscript PDF, p. 5, Figure 2E caption (8 control larvae/23 cells; 9 experimental larvae/19 cells; per-larva mean delta R/G); pp. 6-7, References 1-40; PDF SHA-256 51aa28b4c6927c1d9e28ebe5cbe07037c5f89f4815fd50cde510c2dc1bd23192"
+              },
+              {
+                "url": "https://mdsoar.org/items/7d2726d0-40e9-4902-8373-050b4379378e",
+                "locator": "Repository item identifies Gualtieri/Vonhoff, JoVE DOI 10.3791/71399 and links the full PDF"
+              }
+            ]
+          },
+          "evidence.sample_size": {
+            "state": "reported",
+            "value": 17,
+            "reason": "Figure 2E reports 8 control and 9 experimental larvae; larva is the plotted unit.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://api.mdsoar.org/server/api/core/bitstreams/c0f5e7d7-1196-4b60-95d8-377d44c0ad11/content",
+                "locator": "UMBC/MD-SOAR author manuscript PDF, p. 5, Figure 2E caption (8 control larvae/23 cells; 9 experimental larvae/19 cells; per-larva mean delta R/G); pp. 6-7, References 1-40; PDF SHA-256 51aa28b4c6927c1d9e28ebe5cbe07037c5f89f4815fd50cde510c2dc1bd23192"
+              },
+              {
+                "url": "https://mdsoar.org/items/7d2726d0-40e9-4902-8373-050b4379378e",
+                "locator": "Repository item identifies Gualtieri/Vonhoff, JoVE DOI 10.3791/71399 and links the full PDF"
+              }
+            ]
+          },
+          "evidence.access_status": {
+            "state": "reported",
+            "value": "open",
+            "reason": "Author manuscript PDF is openly accessible through the UMBC institutional repository.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://api.mdsoar.org/server/api/core/bitstreams/c0f5e7d7-1196-4b60-95d8-377d44c0ad11/content",
+                "locator": "UMBC/MD-SOAR author manuscript PDF, p. 5, Figure 2E caption (8 control larvae/23 cells; 9 experimental larvae/19 cells; per-larva mean delta R/G); pp. 6-7, References 1-40; PDF SHA-256 51aa28b4c6927c1d9e28ebe5cbe07037c5f89f4815fd50cde510c2dc1bd23192"
+              },
+              {
+                "url": "https://mdsoar.org/items/7d2726d0-40e9-4902-8373-050b4379378e",
+                "locator": "Repository item identifies Gualtieri/Vonhoff, JoVE DOI 10.3791/71399 and links the full PDF"
+              }
+            ]
+          },
+          "validation.checked_at": {
+            "state": "reported",
+            "value": "2026-10-01",
+            "reason": "Independent retrieval and PDF hash check on this date.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://api.mdsoar.org/server/api/core/bitstreams/c0f5e7d7-1196-4b60-95d8-377d44c0ad11/content",
+                "locator": "UMBC/MD-SOAR author manuscript PDF, p. 5, Figure 2E caption (8 control larvae/23 cells; 9 experimental larvae/19 cells; per-larva mean delta R/G); pp. 6-7, References 1-40; PDF SHA-256 51aa28b4c6927c1d9e28ebe5cbe07037c5f89f4815fd50cde510c2dc1bd23192"
+              },
+              {
+                "url": "https://mdsoar.org/items/7d2726d0-40e9-4902-8373-050b4379378e",
+                "locator": "Repository item identifies Gualtieri/Vonhoff, JoVE DOI 10.3791/71399 and links the full PDF"
+              }
+            ]
+          },
+          "validation.notes": {
+            "state": "reported",
+            "value": "Official UMBC/MD-SOAR author manuscript of DOI 10.3791/71399 checked 2026-10-01. Figure 2E: 8 control larvae/23 cells and 9 experimental larvae/19 cells, per-larva averaged delta(R/G), author-reported significant increase without an exact p-value in the caption. References 1-40 available in the manuscript and bibliographic identities checked against PubMed. The full JoVE page remains robot-gated; institutional manuscript is the inspected full text.",
+            "reason": "Full manuscript and bibliography inspected; no human/clinical inference.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://api.mdsoar.org/server/api/core/bitstreams/c0f5e7d7-1196-4b60-95d8-377d44c0ad11/content",
+                "locator": "UMBC/MD-SOAR author manuscript PDF, p. 5, Figure 2E caption (8 control larvae/23 cells; 9 experimental larvae/19 cells; per-larva mean delta R/G); pp. 6-7, References 1-40; PDF SHA-256 51aa28b4c6927c1d9e28ebe5cbe07037c5f89f4815fd50cde510c2dc1bd23192"
+              },
+              {
+                "url": "https://mdsoar.org/items/7d2726d0-40e9-4902-8373-050b4379378e",
+                "locator": "Repository item identifies Gualtieri/Vonhoff, JoVE DOI 10.3791/71399 and links the full PDF"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

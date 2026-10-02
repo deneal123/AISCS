@@ -8,6 +8,7 @@ from collections import Counter
 from pathlib import Path
 
 from service.completeness import completeness_summary
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -122,9 +123,9 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--apply", action="store_true")
     args = parser.parse_args()
-    records = json.loads((DATA / "records.json").read_text(encoding="utf-8"))
-    ledger = json.loads((DATA / "src07-coverage-ledger-2026-09-25.json").read_text(encoding="utf-8"))
-    completeness = json.loads((DATA / "completeness-report.json").read_text(encoding="utf-8"))
+    records = json.loads((data_path(DATA, "records.json")).read_text(encoding="utf-8"))
+    ledger = json.loads((data_path(DATA, "src07-coverage-ledger-2026-09-25.json")).read_text(encoding="utf-8"))
+    completeness = json.loads((data_path(DATA, "completeness-report.json")).read_text(encoding="utf-8"))
     cards = {s["id"]: s for s in records["sources"]}
     rows = {r["source_id"]: r for r in ledger["rows"]}
     assert all(rows[sid]["route"] == "primary_route_pending" for sid in SPECS)
@@ -156,7 +157,7 @@ def main() -> None:
     readme = readme.replace("- `archive/`", "- `src07-three-owner-pages-review-2026-09-25.json` — Eon demo identity and Google anatomy-versus-simulation corrections;\n- `archive/`")
     snapshot = snapshot_repository(DATA, label="pre-src07-three-owner-pages-review")
     for name, obj in (("records.json", records), ("src07-coverage-ledger-2026-09-25.json", ledger), ("completeness-report.json", completeness), ("src07-three-owner-pages-review-2026-09-25.json", audit)):
-        atomic_write_json(DATA / name, obj)
+        atomic_write_json(data_path(DATA, name), obj)
     (ROOT / "TODO.md").write_text(todo, encoding="utf-8", newline="\n")
     (DATA / "README.md").write_text(readme, encoding="utf-8", newline="\n")
     print(f"Corrected owner-page cards; snapshot: {snapshot}")

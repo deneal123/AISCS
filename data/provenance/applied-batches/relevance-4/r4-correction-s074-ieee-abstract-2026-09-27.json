@@ -1,0 +1,334 @@
+{
+  "meta": {
+    "batch_id": "r4-correction-s074-ieee-abstract-2026-09-27",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-27",
+    "scope": "Reconcile S074 source card with accessible official IEEE Xplore abstract while retaining unresolved full-text and cohort fields",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-27"
+  },
+  "source_ids": [
+    "S074"
+  ],
+  "records": [
+    {
+      "id": "S074",
+      "title": "Multimodal Fusion of Physiological and Psychosocial Parameters for Intelligent Pain Intensity Assessment in Sickle Cell Disease Using Ensemble Learning and LSTM Framework",
+      "year": 2025,
+      "source_type": "метод"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S074",
+      "decision": "partially_verified",
+      "checked_at": "2026-09-27",
+      "full_text_status": "metadata_only",
+      "searches": [
+        {
+          "service": "IEEE Xplore publisher REST abstract",
+          "query": "document 11232711 abstract and full-text/PDF access status",
+          "url": "https://ieeexplore.ieee.org/rest/document/11232711/abstract",
+          "accessed_at": "2026-09-27"
+        },
+        {
+          "service": "IEEE Xplore publisher PDF routes",
+          "query": "document 11232711 full-text/PDF access",
+          "url": "https://ieeexplore.ieee.org/iel8/11232535/11232558/11232711.pdf",
+          "accessed_at": "2026-09-27"
+        }
+      ],
+      "updates": {
+        "модальность": "HRV, oxygen saturation, skin temperature; psychosocial stress, sleep quality and emotional well-being (sensor acquisition channels are not specified)",
+        "задача": "Pain-intensity assessment in sickle-cell disease using SCD datasets; operational target and label source are not specified in the abstract",
+        "метод": "Abstract reports PCA and autoencoders for dimensionality reduction, Mahalanobis-distance anomaly detection, attention-enhanced BiLSTM, and ensemble residual-error correction",
+        "датасет": "SCD datasets (not named in the abstract)",
+        "производительность": "Author-reported abstract results: accuracy 95.4%, precision 94.7%, recall 94.0%, lowest RMSE 0.19, R-squared 0.96; evaluation protocol and denominators are unspecified",
+        "ограничения": "Official IEEE Xplore abstract checked 2026-09-27. It reports HRV, oxygen saturation, skin temperature, psychosocial stress, sleep quality and emotional well-being; PCA/autoencoders, Mahalanobis anomaly detection, attention-enhanced BiLSTM and ensemble residual-error correction; accuracy 95.4%, precision 94.7%, recall 94.0%, lowest RMSE 0.19 and R-squared 0.96. The abstract refers to unnamed SCD datasets. The prior proceedings-contents locator cited page 362; Crossref/IEEE metadata list article pages 1-7, and the mapping between those pagination schemes remains unresolved. Cohort size, participant characteristics, operational label source, split unit, cross-subject/external validation, calibration and uncertainty are not reported. Publisher abstract is accessible; full-text/PDF routes remain entitlement-gated (isOpenAccess=false, isFreeDocument=false). Results are abstract-level author reports, not independently validated.",
+        "evidence": {
+          "population": "People with sickle cell disease; cohort characteristics are not reported",
+          "modalities": [
+            "other"
+          ],
+          "sample_size": null,
+          "target_construct": "unavailable_after_search",
+          "target_label": null,
+          "access_status": "restricted"
+        },
+        "validation": {
+          "status": "partially_verified",
+          "full_text_status": "metadata_only",
+          "checked_at": "2026-09-27",
+          "notes": "Official IEEE Xplore abstract checked 2026-09-27. It reports HRV, oxygen saturation, skin temperature, psychosocial stress, sleep quality and emotional well-being; PCA/autoencoders, Mahalanobis anomaly detection, attention-enhanced BiLSTM and ensemble residual-error correction; accuracy 95.4%, precision 94.7%, recall 94.0%, lowest RMSE 0.19 and R-squared 0.96. The abstract refers to unnamed SCD datasets. The prior proceedings-contents locator cited page 362; Crossref/IEEE metadata list article pages 1-7, and the mapping between those pagination schemes remains unresolved. Cohort size, participant characteristics, operational label source, split unit, cross-subject/external validation, calibration and uncertainty are not reported. Publisher abstract is accessible; full-text/PDF routes remain entitlement-gated (isOpenAccess=false, isFreeDocument=false). Results are abstract-level author reports, not independently validated.",
+          "split_unit": "unavailable_after_search",
+          "cross_subject": "unavailable_after_search",
+          "external_validation": "unavailable_after_search",
+          "calibration": "unavailable_after_search",
+          "uncertainty": "unavailable_after_search"
+        },
+        "identifiers": {
+          "doi": "10.1109/ICICNCT66124.2025.11232711",
+          "exact_url": "https://doi.org/10.1109/ICICNCT66124.2025.11232711"
+        },
+        "field_resolution": {
+          "модальность": {
+            "state": "reported",
+            "value": "HRV, oxygen saturation, skin temperature; psychosocial stress, sleep quality and emotional well-being (sensor acquisition channels are not specified)",
+            "reason": "The publisher abstract names these physiological and psychosocial input features but does not specify acquisition channels.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://ieeexplore.ieee.org/rest/document/11232711/abstract",
+                "locator": "Official IEEE Xplore REST response for document 11232711, abstract field. It reports feature groups, methods and results; it omits cohort size, named datasets, target label source, split unit and external validation."
+              }
+            ]
+          },
+          "задача": {
+            "state": "reported",
+            "value": "Pain-intensity assessment in sickle-cell disease using SCD datasets; operational target and label source are not specified in the abstract",
+            "reason": "The title and publisher abstract identify the assessment task and SCD context; the abstract does not define the target labels.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://ieeexplore.ieee.org/rest/document/11232711/abstract",
+                "locator": "Official IEEE Xplore REST response for document 11232711, abstract field. It reports feature groups, methods and results; it omits cohort size, named datasets, target label source, split unit and external validation."
+              }
+            ]
+          },
+          "метод": {
+            "state": "reported",
+            "value": "Abstract reports PCA and autoencoders for dimensionality reduction, Mahalanobis-distance anomaly detection, attention-enhanced BiLSTM, and ensemble residual-error correction",
+            "reason": "Each listed method component is explicitly described in the official publisher abstract.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://ieeexplore.ieee.org/rest/document/11232711/abstract",
+                "locator": "Official IEEE Xplore REST response for document 11232711, abstract field. It reports feature groups, methods and results; it omits cohort size, named datasets, target label source, split unit and external validation."
+              }
+            ]
+          },
+          "датасет": {
+            "state": "reported",
+            "value": "SCD datasets (not named in the abstract)",
+            "reason": "The publisher abstract says evaluation used SCD datasets but does not name them.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://ieeexplore.ieee.org/rest/document/11232711/abstract",
+                "locator": "Official IEEE Xplore REST response for document 11232711, abstract field. It reports feature groups, methods and results; it omits cohort size, named datasets, target label source, split unit and external validation."
+              }
+            ]
+          },
+          "производительность": {
+            "state": "reported",
+            "value": "Author-reported abstract results: accuracy 95.4%, precision 94.7%, recall 94.0%, lowest RMSE 0.19, R-squared 0.96; evaluation protocol and denominators are unspecified",
+            "reason": "The official abstract prints these metrics; they are author-reported abstract results, not independently validated estimates.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://ieeexplore.ieee.org/rest/document/11232711/abstract",
+                "locator": "Official IEEE Xplore REST response for document 11232711, abstract field. It reports feature groups, methods and results; it omits cohort size, named datasets, target label source, split unit and external validation."
+              }
+            ]
+          },
+          "ограничения": {
+            "state": "reported",
+            "value": "Official IEEE Xplore abstract checked 2026-09-27. It reports HRV, oxygen saturation, skin temperature, psychosocial stress, sleep quality and emotional well-being; PCA/autoencoders, Mahalanobis anomaly detection, attention-enhanced BiLSTM and ensemble residual-error correction; accuracy 95.4%, precision 94.7%, recall 94.0%, lowest RMSE 0.19 and R-squared 0.96. The abstract refers to unnamed SCD datasets. The prior proceedings-contents locator cited page 362; Crossref/IEEE metadata list article pages 1-7, and the mapping between those pagination schemes remains unresolved. Cohort size, participant characteristics, operational label source, split unit, cross-subject/external validation, calibration and uncertainty are not reported. Publisher abstract is accessible; full-text/PDF routes remain entitlement-gated (isOpenAccess=false, isFreeDocument=false). Results are abstract-level author reports, not independently validated.",
+            "reason": "Direct review of the official publisher abstract and access routes; full text was not accessible.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://ieeexplore.ieee.org/rest/document/11232711/abstract",
+                "locator": "Official IEEE Xplore REST response for document 11232711, abstract field. It reports feature groups, methods and results; it omits cohort size, named datasets, target label source, split unit and external validation."
+              }
+            ]
+          },
+          "evidence.population": {
+            "state": "reported",
+            "value": "People with sickle cell disease; cohort characteristics are not reported",
+            "reason": "The abstract identifies the SCD context but gives no cohort description.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://ieeexplore.ieee.org/rest/document/11232711/abstract",
+                "locator": "Abstract: introduction and evaluation description"
+              }
+            ]
+          },
+          "evidence.modalities": {
+            "state": "reported",
+            "value": [
+              "other"
+            ],
+            "reason": "Abstract explicitly describes combined physiological and psychosocial input features; sensor acquisition channels are not specified.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://ieeexplore.ieee.org/rest/document/11232711/abstract",
+                "locator": "Abstract: input feature description"
+              }
+            ]
+          },
+          "evidence.sample_size": {
+            "state": "unavailable_after_search",
+            "value": null,
+            "reason": "No sample or cohort size is stated in the accessible publisher abstract.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://ieeexplore.ieee.org/rest/document/11232711/abstract",
+                "locator": "Abstract: entire abstract"
+              }
+            ]
+          },
+          "evidence.target_construct": {
+            "state": "unavailable_after_search",
+            "value": null,
+            "reason": "The abstract names pain-intensity assessment but does not establish whether labels are self-reported or define the operational target; do not infer subjective self-report.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://ieeexplore.ieee.org/rest/document/11232711/abstract",
+                "locator": "Abstract: entire abstract"
+              }
+            ]
+          },
+          "evidence.target_label": {
+            "state": "unavailable_after_search",
+            "value": null,
+            "reason": "The abstract does not state label values, scale, threshold, or label source.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://ieeexplore.ieee.org/rest/document/11232711/abstract",
+                "locator": "Abstract: entire abstract"
+              }
+            ]
+          },
+          "evidence.access_status": {
+            "state": "reported",
+            "value": "restricted",
+            "reason": "The publisher abstract is accessible, while the linked full text/PDF is entitlement-gated and metadata marks isOpenAccess=false and isFreeDocument=false.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://ieeexplore.ieee.org/rest/document/11232711/abstract",
+                "locator": "Publisher REST abstract and PDF routes"
+              }
+            ]
+          },
+          "validation.split_unit": {
+            "state": "unavailable_after_search",
+            "value": null,
+            "reason": "No split unit or validation protocol is reported in the accessible abstract.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://ieeexplore.ieee.org/rest/document/11232711/abstract",
+                "locator": "Abstract: entire abstract"
+              }
+            ]
+          },
+          "validation.cross_subject": {
+            "state": "unavailable_after_search",
+            "value": null,
+            "reason": "The accessible abstract does not report cross-subject evaluation.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://ieeexplore.ieee.org/rest/document/11232711/abstract",
+                "locator": "Abstract: entire abstract"
+              }
+            ]
+          },
+          "validation.external_validation": {
+            "state": "unavailable_after_search",
+            "value": null,
+            "reason": "The accessible abstract does not report external validation.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://ieeexplore.ieee.org/rest/document/11232711/abstract",
+                "locator": "Abstract: entire abstract"
+              }
+            ]
+          },
+          "validation.calibration": {
+            "state": "unavailable_after_search",
+            "value": null,
+            "reason": "The accessible abstract does not report calibration.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://ieeexplore.ieee.org/rest/document/11232711/abstract",
+                "locator": "Abstract: entire abstract"
+              }
+            ]
+          },
+          "validation.uncertainty": {
+            "state": "unavailable_after_search",
+            "value": null,
+            "reason": "The accessible abstract does not report uncertainty estimation.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://ieeexplore.ieee.org/rest/document/11232711/abstract",
+                "locator": "Abstract: entire abstract"
+              }
+            ]
+          },
+          "validation.checked_at": {
+            "state": "reported",
+            "value": "2026-09-27",
+            "reason": "Official IEEE abstract and access routes were checked on this date.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://ieeexplore.ieee.org/rest/document/11232711/abstract",
+                "locator": "Official IEEE Xplore REST response for document 11232711, abstract field. It reports feature groups, methods and results; it omits cohort size, named datasets, target label source, split unit and external validation."
+              }
+            ]
+          },
+          "validation.notes": {
+            "state": "reported",
+            "value": "Official IEEE Xplore abstract checked 2026-09-27. It reports HRV, oxygen saturation, skin temperature, psychosocial stress, sleep quality and emotional well-being; PCA/autoencoders, Mahalanobis anomaly detection, attention-enhanced BiLSTM and ensemble residual-error correction; accuracy 95.4%, precision 94.7%, recall 94.0%, lowest RMSE 0.19 and R-squared 0.96. The abstract refers to unnamed SCD datasets. The prior proceedings-contents locator cited page 362; Crossref/IEEE metadata list article pages 1-7, and the mapping between those pagination schemes remains unresolved. Cohort size, participant characteristics, operational label source, split unit, cross-subject/external validation, calibration and uncertainty are not reported. Publisher abstract is accessible; full-text/PDF routes remain entitlement-gated (isOpenAccess=false, isFreeDocument=false). Results are abstract-level author reports, not independently validated.",
+            "reason": "Publisher abstract results and the separate full-text access state are recorded without inferring omitted study details.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://ieeexplore.ieee.org/rest/document/11232711/abstract",
+                "locator": "Official IEEE Xplore REST response for document 11232711, abstract field. It reports feature groups, methods and results; it omits cohort size, named datasets, target label source, split unit and external validation."
+              }
+            ]
+          },
+          "identifiers.doi": {
+            "state": "reported",
+            "value": "10.1109/ICICNCT66124.2025.11232711",
+            "reason": "The DOI identifies the IEEE Xplore document checked for this review.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://ieeexplore.ieee.org/rest/document/11232711/abstract",
+                "locator": "Official IEEE Xplore REST response for document 11232711, abstract field. It reports feature groups, methods and results; it omits cohort size, named datasets, target label source, split unit and external validation."
+              }
+            ]
+          },
+          "identifiers.exact_url": {
+            "state": "reported",
+            "value": "https://doi.org/10.1109/ICICNCT66124.2025.11232711",
+            "reason": "The DOI identifies the IEEE Xplore document checked for this review.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://ieeexplore.ieee.org/rest/document/11232711/abstract",
+                "locator": "Official IEEE Xplore REST response for document 11232711, abstract field. It reports feature groups, methods and results; it omits cohort size, named datasets, target label source, split unit and external validation."
+              }
+            ]
+          }
+        }
+      },
+      "claims": [],
+      "notes": "Official IEEE Xplore abstract checked 2026-09-27. It reports HRV, oxygen saturation, skin temperature, psychosocial stress, sleep quality and emotional well-being; PCA/autoencoders, Mahalanobis anomaly detection, attention-enhanced BiLSTM and ensemble residual-error correction; accuracy 95.4%, precision 94.7%, recall 94.0%, lowest RMSE 0.19 and R-squared 0.96. The abstract refers to unnamed SCD datasets. The prior proceedings-contents locator cited page 362; Crossref/IEEE metadata list article pages 1-7, and the mapping between those pagination schemes remains unresolved. Cohort size, participant characteristics, operational label source, split unit, cross-subject/external validation, calibration and uncertainty are not reported. Publisher abstract is accessible; full-text/PDF routes remain entitlement-gated (isOpenAccess=false, isFreeDocument=false). Results are abstract-level author reports, not independently validated."
+    }
+  ]
+}

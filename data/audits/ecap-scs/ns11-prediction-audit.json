@@ -1,0 +1,1018 @@
+{
+  "meta": {
+    "schema_version": "1.0.0",
+    "generated_at": "2026-09-28",
+    "records_count": 15,
+    "status": "bounded_primary_screen_complete_with_terminal_stop",
+    "scope": "PA-05 NS-11 primary-locator extraction; S034 full article and supplement and S752 validation supplement reviewed 2026-09-28; other unresolved methods prevent closure",
+    "latest_access_recheck": {
+      "checked_at": "2026-09-28",
+      "S034": "Official Ovid/LWW PDF and E976 supplement retrieved and reviewed. Cohort N=150, one-year NRS >50%/>70% targets and internal 80/20 split reported; split implementation, code and data remain unavailable.",
+      "S046": "Official Neuromodulation supplement p. S194 exposes a publisher abstract with 16 patients, three-month composite responder, author-reported 80.63% accuracy and kappa 0.625. The PDF access page labels the item Abstract only and direct full-text retrieval returned HTTP 403; the complete responder rule, model-specific N and split remain unavailable. Card and evidence-matrix access/status were reconciled through r5-correction-s046-abstract-status-2026-09-27.",
+      "S755": "BMJ canonical JATS XML retrieved directly with HTTP 200 on 2026-09-27; S755 card corrected through r5-correction-s755-fulltext. The >=50% SCS success definition is explicit; model-specific N, fixed horizon and split unit remain unreported.",
+      "S762": "Archived 2021 capture of the original LWW publisher page retrieved directly with HTTP 200 on 2026-09-27; live LWW returns 403. S762 card corrected through r5-correction-s762-fulltext; prediction N and patient split remain unreported.",
+      "S752": "PubMed abstract and the official Elsevier mmc1 supplement were checked on 2026-09-28. Supplement confirms 619 SCS and 320 TDD outcome counts and adds aggregate validation metrics; publisher article body paths returned HTTP 403. Split protocol, calibration and individual data remain unresolved.",
+      "S755_primary_result_reconciliation": {
+        "url": "https://rapm.bmj.com/content/rapm/45/2/131.source.xml",
+        "checked_at": "2026-09-27",
+        "locator": "Methods > Study design; Results > Predictive formula; Table 3; Table 4; Figure 1; Discussion > Limitations",
+        "confirmed": "The article defines SCS success as >=50% relief during trial and subsequent implant; reports 945 included patients (826 success, 119 who failed and proceeded to TDD); and gives a logistic formula using baseline age, sex, depression, neuropathic pain, postlaminectomy syndrome and spine-related pain. Results report AUC 0.7414 and a data-derived threshold of 0.880. Discussion separately states 95% accuracy with cross-validation.",
+        "unresolved": "The 95% accuracy claim occurs once in Discussion and has no described fold/split protocol or denominator in the article text. The Results AUC and threshold are different performance quantities and do not independently reconcile that claim. Table 3 reports postlaminectomy versus CRPS OR 1.597 (95% CI 0.935–2.727; p=0.086), whose natural log rounds to +0.468 in the Results formula; Table 4 omits this term from its five listed predictor rows. No fixed assessment horizon, model-specific complete-case N, patient-disjointness, or external validation is reported. The article does not state how row-level predictor and outcome records were joined.",
+        "interpretation_limit": "Treat 95% as a discussion-level reported claim, not as independently reproducible or externally validated performance; do not substitute it for the reported AUC or infer patient-level leakage status."
+      },
+      "decision": "No access change resolves PA-05. Adjacent NeuroImage 2026 article about 16 Albany participants is not an identity bridge to S046; do not impute its cohort or methods.",
+      "second_stage_routes_2026_09_27": {
+        "S034": "The Ovid publisher abstract hydration advertises Supplemental Digital Content (SDC) for accession 00006123-202604000-00019 but gives a null SDC URL to an unentitled client; LWW article viewer returned 403. Existence of a flag does not establish the supplement's content or model N. Primary locator: https://www.ovid.com/jnls/neurosurgery/abstract/10.1227/neu.0000000000003715~prediction-of-response-to-spinal-cord-stimulation-using",
+        "S755": "Fresh BMJ publisher JATS check confirms Results narrative includes postlaminectomy coefficient +0.468, whereas Table 4 lists age, gender, depression, neuropathic pain and spine-related pain only. The Discussion's 95% cross-validation accuracy has no printed fold protocol, denominator or confusion matrix. Primary locator: https://rapm.bmj.com/content/rapm/45/2/131.source.xml, Results > Predictive formula, Table 4 and Discussion.",
+        "S762": "The primary DISCOVER protocol planned N=404 and did not prespecify the later published prediction split; official registry NCT02787265 reports actual enrollment 272, observational design and no posted results. These are study-level totals, not S762 model N or per-split denominators. Primary locators: https://brieflands.com/journals/aapm/articles/13640, Methods > Study Design and Sample size/Data Management; https://clinicaltrials.gov/api/v2/studies/NCT02787265?format=json, protocolSection.designModule and hasResults. Europe PMC hasSuppl=N means no indexed supplement; it does not prove no supplement exists."
+      },
+      "S034_fulltext_result_2026_09_28": {
+        "primary_urls": [
+          "https://www.ovid.com/api/permalinks?wkmrid=JOURNAL%2Fneusg%2F04.03%2F00006123-202604000-00019%2Froot%2Fv%2F2026-03-05T141649Z%2Fr%2Fapplication-pdf",
+          "https://links.lww.com/NEU/E976"
+        ],
+        "confirmed": "Single-clinic cohort of 150 with preoperative MRI/clinical/PROM predictors and one-year NRS outcomes; 61 >50% responders and 30 >70% high responders. Article reports an 80/20 split, five stratified GridSearchCV folds and RFE.",
+        "unresolved": "No patient-level data or code; seed, split membership, fold-scoped preprocessing/RFE and calibration not established. Methods prose orders scaling/imputation before the split, a possible leakage concern rather than proof of execution error. No external validation or ECAP predictor.",
+        "reviewed_batch": "r5-correction-s034-ovid-fulltext-2026-09-28"
+      },
+      "S762_result_text_reconciliation_2026_09_28": {
+        "checked_at": "2026-09-28",
+        "primary_url": "https://web.archive.org/web/20210930010639id_/https://journals.lww.com/pain/fulltext/2021/02000/high_dose_spinal_cord_stimulation_for_patients.23.aspx",
+        "source_version": "Archived copy of the LWW publisher full-text page captured 2021-09-30; live LWW route returned HTTP 403 during the current check.",
+        "locators": "Figure 3 caption; Results Section 3.5 / JCL-P-22; Methods Section 2.5 / JCL-P-16.",
+        "confirmed": "Figure 3 defines a 12-month holistic responder by all four conditions: at least 33% improvement on NRS for low-back and leg pain, at least 30% improvement on ODI, EQ-5D increase of at least 0.03, and decreased medication versus baseline; the article gives no numeric threshold for the medication decrease. Figure 3 says status is unknown when one or more 12-month outcome measures are unavailable. Results Section 3.5 instead says 5.43% could not be determined because at least one baseline measurement was missing. The article also reports 47.83% responders, 46.74% nonresponders and 5.43% indeterminate among the 92 participants still receiving HD-SCS at 12 months; the corresponding approximately 44/43/5 counts are arithmetic derivations, not printed counts.",
+        "unresolved": "The Figure 3 caption and Results Section 3.5 give different reasons/timepoints for indeterminate status; the source does not resolve the discrepancy. The reported 92-person 12-month denominator and derived approximately 44/43/5 categories do not establish the prediction model's fitted N. Methods Section 2.5 says only participants with complete baseline predictors entered analysis and describes an 80/20 train/validation split with five randomly created validation sets; absolute per-split N, split unit, patient-disjointness and row-level linkage are not reported. The ClinicalTrials.gov registry reports 272 actual enrollment, while the article reports 194 recruited; the checked primary sources do not reconcile these study-flow figures.",
+        "interpretation_limit": "Preserve the outcome-status discrepancy without inferring which missingness rule generated the five indeterminate cases. Do not report 87 as the fitted model N or infer a patient-disjoint split from the patient-level prediction task."
+      },
+      "S762_registry_history_route_2026_09_28": {
+        "checked_at": "2026-09-28",
+        "primary_urls": [
+          "https://clinicaltrials.gov/study/NCT02787265?tab=history",
+          "https://clinicaltrials.gov/api/int/studies/NCT02787265/history"
+        ],
+        "result": "Direct request to the official history API returned HTTP 403; browser retrieval of the official history page and API endpoint was inaccessible. The bounded Pi check was cancelled after 132.9 seconds without a completed answer or agent_settled event.",
+        "unresolved": "No history version detail or protocol/SAP/result attachment was retrieved in this check. This access failure does not establish that no relevant historical artifact exists and does not change the unresolved model-specific denominator, split unit/patient-disjointness, or row-level linkage.",
+        "scope_limit": "Do not infer patient-disjoint validation or fitted model N from study enrollment or article cohort-flow totals."
+      },
+      "S034_performance_denominator_reconstruction_2026_09_28": {
+        "checked_at": "2026-09-28",
+        "primary_urls": [
+          "https://www.ovid.com/api/permalinks?wkmrid=JOURNAL%2Fneusg%2F04.03%2F00006123-202604000-00019%2Froot%2Fv%2F2026-03-05T141649Z%2Fr%2Fapplication-pdf",
+          "https://links.lww.com/NEU/E976"
+        ],
+        "locators": "Publisher PDF pp. 896-897, Methods > Data Management and Preprocessing and Optimized Model Development; Statistical Analysis and Results; Supplementary Table 2.",
+        "reported": "N=150; separate one-year targets are NRS reduction >50% (61/150) and >70% (30/150). Publisher states an 80/20 train/test split and GridSearchCV with five stratified folds. It does not print test N, split seed, row memberships, or explicitly tie every reported metric to the held-out test set. The stratified folds are described as hyperparameter-tuning subsets, not as five independent external validations.",
+        "conditional_reconstruction": "If all 150 records entered one 80/20 partition, the test partition would contain 30 records under the conventional exact 20% allocation. Reported rounded metrics are numerically consistent with 27/30 correct in each target: for >50%, sensitivity 11/13 and specificity 16/17; for >70%, sensitivity 5/6 and specificity 22/24. These are derived candidate confusion counts, not printed denominators or a source-confirmed mapping of metrics to a particular split.",
+        "interpretation_limit": "Do not upgrade inferred N=30 or the reconstructed confusion counts to reported facts. The article does not identify the evaluation rows or establish that the printed metrics are computed on a single held-out partition. Imputation/scaling are described before the split; the prose order raises a leakage concern but does not establish its implementation or effect. RFE is described after GridSearchCV; whether selection was restricted within training folds is not reported. No independent external validation, reusable patient-level dataset, or ECAP predictor is reported."
+      },
+      "S755_model_denominator_recheck_2026_09_28": {
+        "checked_at": "2026-09-28",
+        "primary_url": "https://rapm.bmj.com/content/rapm/45/2/131.source.xml",
+        "locators": "Official BMJ JATS VOR, Methods ?s2-3 Statistical analysis; Results ?s3; Table 1 (T1); Back matter data availability.",
+        "confirmed": "The article reports 945 included patients (826 SCS successes and 119 who proceeded to TDD). Table 1 reports BMI categories summing to 891 and smoking status summing to 940. Methods ?s2-3 says extent of missing data informed variable selection but gives no missingness counts or resulting model N. The full JATS has no supplementary-material/media/dataset elements or supplementary-material section; Europe PMC reports hasSuppl=N. These checks do not establish that 945 is the fitted model denominator.",
+        "unresolved": "Exact complete-case/model denominator, fixed endpoint horizon, row-level predictor/outcome linkage, split unit/folds, and patient-disjointness remain unreported. BMJ HTML/PDF routes returned HTTP 403; this access failure is separate from the full JATS and Europe PMC not listing a supplement. The 95% cross-validation accuracy sentence remains without fold details, denominator, or confusion matrix.",
+        "reviewed_worker_result": ".work/pi-workers/6c45d294-5bbc-4921-b08b-5b1fa98ea73e/s755-primary/result.md; BMJ JATS independently spot-checked at Table 1 and Methods ?s2-3."
+      },
+      "S762_supplement_route_recheck_2026_09_28": {
+        "checked_at": "2026-09-28",
+        "primary_url": "https://web.archive.org/web/20210930010639id_/https://journals.lww.com/pain/fulltext/2021/02000/high_dose_spinal_cord_stimulation_for_patients.23.aspx",
+        "locators": "Archived publisher full-text HTML link inventory and full page; Europe PMC core record for PMID 32910099, hasSuppl field.",
+        "confirmed": "The complete accessible archived publisher page contains no Supplemental Digital Content anchor or links.lww.com SDC asset URL; Europe PMC reports hasSuppl=N. This bounded check found no attached supplement on the article/repository routes reviewed; it does not establish that no separate protocol or artifact exists elsewhere.",
+        "unresolved": "Exact prediction-analysis N, integer 80/20 counts, per-validation-set N, split unit, patient-disjointness and row-level linkage remain unreported in the article. These absence checks do not change the boundary between the 92-person 12-month flow and an unknown complete-case model N.",
+        "reviewed_worker_result": ".work/pi-workers/6c45d294-5bbc-4921-b08b-5b1fa98ea73e/s762-primary/result.md; archived publisher page independently checked for SDC link markers."
+      },
+      "S046_same_team_fulltext_identity_boundary_2026_09_28": {
+        "checked_at": "2026-09-28",
+        "S046_primary_abstract": "https://www.sciencedirect.com/science/article/abs/pii/S1094715925006439",
+        "related_primary_full_text": "https://www.nature.com/articles/s41598-025-92111-8",
+        "locators": "S046 publisher abstract, Methods/Results (Neuromodulation 28(7) Supplement, p. S194); related Scientific Reports VOR, Methods > Participants and Results model-performance paragraph.",
+        "confirmed": "S046 remains an abstract-only report of 16 participants, preoperative scalp EEG and a three-month two-of-three composite; the abstract cuts off within the morphine-milligram component. A same-team Scientific Reports article reports a different study setting: 20 patients enrolled, 17 included in ML experiments, intraoperative EEG, and a >=50% three-month NRS outcome. The accessible primary sources do not establish participant overlap or a version relationship.",
+        "unresolved": "S046 exact component thresholds, model-specific N and split unit/patient-disjointness remain unavailable in its abstract. Do not transfer the 17-person analysis denominator, 50% NRS label, or model performance from the separate Scientific Reports paper to S046.",
+        "reviewed_worker_result": ".work/pi-workers/6c45d294-5bbc-4921-b08b-5b1fa98ea73e/s046-primary/result.md; related full-text identity difference independently checked in the Nature VOR."
+      }
+    },
+    "remaining_source_ids": [
+      "S034",
+      "S046",
+      "S755",
+      "S762",
+      "S804"
+    ],
+    "remaining_search_leads": [
+      "S034 code/data or author protocol: exact participant-level train/test membership, fold-scoped preprocessing/RFE, calibration and independent validation",
+      "S046 complete methods or poster/manuscript: all composite criteria and thresholds, linkage, denominator and split",
+      "S755 model-specific complete-case denominator, explicit per-patient feature/outcome join, fixed endpoint horizon, validation split unit/patient-disjointness, and reconciliation of the Discussion claim of 95% accuracy with Results AUC 0.7414 and threshold 0.880",
+      "S762 prediction-specific denominator and per-split N, split unit/patient-disjointness, exact row-level linkage, and overlap with other DISCOVER registry publications",
+      "S804 final poster/abstract or methods: reconcile poster prose and table responder count; verify analysis denominator, predictor-to-outcome linkage, split unit and external validation"
+    ],
+    "unindexed_primary_leads": [],
+    "indexed_primary_leads": [
+      {
+        "doi": "10.1097/j.pain.0000000000002035",
+        "pmid": "32910099",
+        "title": "High-dose spinal cord stimulation for patients with failed back surgery syndrome: a multicenter effectiveness and prediction study",
+        "status": "publisher_full_text_reviewed_cached_copy; model denominator and split unit unresolved",
+        "url": "https://journals.lww.com/pain/fulltext/2021/02000/high_dose_spinal_cord_stimulation_for_patients.23.aspx",
+        "locator": "Publisher full text: Methods Section 2.5 (JCL-P-16), Results Section 3.5 (JCL-P-22), Figure 3 caption",
+        "confirmed": "Publisher full text confirms the 12-month holistic responder composite: 33% improvement in both low-back/leg NRS, 30% ODI improvement, EQ-5D increase of at least 0.03, and medication decrease. Methods reports 80/20 train-validation and five randomly created validation sets. Registry flow: 194 recruited, 185 baseline, 92 at the 12-month visit. Results Section 3.5 reports 47.83% responders, 46.74% nonresponders and 5.43% indeterminate due to missing at least one baseline measurement; against the printed 92-person 12-month flow, these percentages correspond arithmetically to 44, 43 and 5 people, respectively.",
+        "unresolved": "Prediction-specific N and per-split denominators are not printed. Excluding the five indeterminate 12-month cases yields an inferred upper bound of 87 evaluable people before any further complete-case exclusions, not a reported model N. The 80/20 split unit and patient-disjointness are not stated; explicit row-level predictor/outcome linkage and participant overlap with other DISCOVER papers are not documented. Live LWW route returned 403; inspected publisher-canonical cached HTML.",
+        "source_id": "S762"
+      },
+      {
+        "title": "Spinal Cord Stimulation and Patient Selection: Predictive Modeling in a Global Device Registry",
+        "doi": "10.1016/j.neurom.2025.08.396",
+        "status": "canonical_primary_abstract_card_published; poster_internal_count_conflict_retained",
+        "primary_urls": [
+          "https://www.medtronic.com/content/dam/medtronic-wide/public/united-states/education-training-research/clinical-evidence/scs-patient-selection-poster-nans.pdf",
+          "https://www.sciencedirect.com/science/article/pii/S1094715925006725"
+        ],
+        "locators": [
+          "NANS 2025 author poster, Methods, Results and Discussion; PDF page 1",
+          "Neuromodulation 28(7) Supplement (2025), S209, abstract Methods and Results"
+        ],
+        "confirmed": "Verified primary publisher abstract and author poster: prospective Product Surveillance Registry; 721 back/leg-pain patients; responder is at least a 2-point reduction on a 0-10 pain score at six months; training/test partition 80/20 with repeated five-fold cross-validation in training; predictor types include baseline pain, pain location/type, quality of life and demographics. The poster prose/table discrepancy is retained explicitly. Conference abstract/poster only, not a full methods paper. No ECAP predictor is stated.",
+        "version_discrepancy": "The poster prose states 274/363 combined back-and-leg-pain responders. The same poster Table 1 instead reports 267 responders and 96 nonresponders (total 363); the ScienceDirect publisher abstract also reports 267/363 (74%). Preserve this internal poster prose/table discrepancy; 267/363 is the value supported by both the table arithmetic and publisher abstract, but no author correction is asserted.",
+        "reported_poster_table_2_metrics": "Elastic Net/random forest/XGBoost test accuracy 0.680/0.691/0.685, sensitivity 0.862/0.940/0.819, specificity 0.354/0.246/0.446 and F1 0.775/0.796/0.769, respectively; author poster p. 1, Table 2. These are poster-reported values, not an independently reproduced or externally validated model.",
+        "unresolved": "Prediction-analysis denominators after train/test allocation, patient-level linkage and split implementation, and individual-level dataset access remain unreported/unestablished. The 274 prose count conflicts with both Table 1 (267 responders, 96 nonresponders) and the publisher abstract (267 responders); do not silently harmonize the poster.",
+        "source_id": "S804"
+      },
+      {
+        "title": "Subcallosal Cingulate structural connectivity as biomarker for chronic low back pain",
+        "doi": "10.1101/2024.09.17.24313765",
+        "status": "primary_medrxiv_v1_full_text_reviewed; no_independent_validation; journal_relation_unestablished",
+        "url": "https://www.medrxiv.org/content/10.1101/2024.09.17.24313765v1",
+        "locator": "Author preprint v1 source XML: Methods Sections 2.1 and 2.4; Results Sections 3.1–3.3; Table 1; Data Availability",
+        "checked_at": "2026-09-27",
+        "confirmed": "The author preprint reports baseline diffusion MRI in eight chronic-low-back-pain patients before a percutaneous SCS trial (six UCLA, two UTSW). Methods Section 2.1 defines response as >50% reduction in VAS, measured before the trial and after 15 days. Section 2.4 relates baseline SCC connectivity to binary trial response and continuous VAS change using GLM/correlation and a multiple regression with baseline HAMD. All eight are analysed as one small cohort; no train/test split or independent validation is described. This is an imaging-to-SCS-trial-response association, not an ECAP predictor or a longitudinal post-implant pain model. Data are available on reasonable request; the preprint is not peer reviewed.",
+        "unresolved": "Patient-level MRI values and analysis code were not released for independent reuse; a public reuse licence for the underlying data was not established. No independent predictive validation or later clinical outcome is reported. The checked medRxiv/Crossref version routes do not establish a journal version. The eight-person cohort must not be merged with other SCS imaging cohorts without an explicit identity bridge.",
+        "next_action": "Create a canonical preprint source card with the bounded 15-day trial target and no validation claim; retain PA-05 open for independently validated patient-level prediction evidence.",
+        "source_xml_url": "https://www.medrxiv.org/content/medrxiv/early/2024/09/18/2024.09.17.24313765.source.xml",
+        "version_check": {
+          "checked_at": "2026-09-27",
+          "medrxiv_api": "https://api.biorxiv.org/details/medrxiv/10.1101/2024.09.17.24313765/na/json",
+          "result": "Official API lists v1 dated 2024-09-18 with published=NA; Crossref posted-content record has empty relation. These checked routes do not establish a journal version and do not prove none exists elsewhere.",
+          "crossref_api": "https://api.crossref.org/works/10.1101/2024.09.17.24313765"
+        },
+        "search_query": "\"Subcallosal Cingulate structural connectivity as biomarker for chronic low back pain\" journal; exact DOI 10.1101/2024.09.17.24313765; PA-05 SCS trial response imaging candidate",
+        "source_id": "S832"
+      }
+    ],
+    "operational_disposition": {
+      "decision": "STOP at the documented 2026-09-26 cutoff",
+      "operational_only": true,
+      "as_of": "2026-09-26",
+      "remaining_source_ids": [
+        "S034",
+        "S046",
+        "S755",
+        "S762",
+        "S804"
+      ],
+      "saturation": false,
+      "unresolved_fields": [
+        "operational outcome thresholds",
+        "analysis denominators",
+        "predictor/outcome patient linkage",
+        "validation split unit",
+        "S804 poster versus abstract count discrepancy"
+      ],
+      "prohibited_inferences": [
+        "Imputing criteria or denominators from cohort-flow totals",
+        "claiming patient-disjoint validation when unreported",
+        "treating ECAP as pain outcome absent explicit measurement"
+      ]
+    },
+    "fulltext_card_reconciliation_2026_09_27": {
+      "checked_at": "2026-09-27",
+      "source_ids": [
+        "S755",
+        "S762"
+      ],
+      "batches": [
+        "r5-correction-s755-fulltext",
+        "r5-correction-s755-access-flag",
+        "r5-correction-s762-fulltext"
+      ],
+      "primary_urls": [
+        "https://rapm.bmj.com/content/rapm/45/2/131.source.xml",
+        "https://web.archive.org/web/20210930010639id_/https://journals.lww.com/pain/fulltext/2021/02000/high_dose_spinal_cord_stimulation_for_patients.23.aspx"
+      ],
+      "status": "canonical_card_access_and_target_corrected; prediction denominators and patient-disjoint validation unresolved",
+      "boundary": "Archived publisher HTML is primary article text as captured in 2021, not a current live LWW entitlement or an open data license. Neither paper reports an ECAP predictor or independently validated patient-level ECAP/outcome dataset."
+    }
+  },
+  "primary_access_review": {
+    "checked_at": "2026-09-26",
+    "decision": "Repeat primary-source review on 2026-09-26. S755 full publisher JATS XML is accessible at the BMJ source.xml route and supersedes the 2026-09-25 abstract-only/access conclusion. S762 full publisher HTML was reviewed from a cached publisher copy; live LWW returns 403. S034 remains abstract-only; Ovid fulltext redirects to abstract and SDC is referenced without a retrievable file. S046 is a truncated conference abstract, with no full methods/poster/supplement obtained. Reported values, silent fields, and access failures remain separate; no denominator or split unit is inferred. Historical access state for 2026-09-26; S034 superseded by 2026-09-28 full-text review in latest_access_recheck and entries.",
+    "sources": [
+      {
+        "source_id": "S034",
+        "primary_abstract": "https://pubmed.ncbi.nlm.nih.gov/40879389/",
+        "publisher_route": "https://doi.org/10.1227/neu.0000000000003715",
+        "result": "Historical 2026-09-26 access attempt was abstract-only. On 2026-09-28 the official Ovid asset PDF and LWW E976 supplement were retrieved; current extracted findings are in entries/S034.",
+        "checked_routes": [
+          {
+            "result": "Primary abstract page opened; no full text or supplemental method material exposed.",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/40879389/"
+          },
+          {
+            "result": "DOI publisher route points to Wolters Kluwer/Ovid; publisher full-text route not accessible through this check.",
+            "url": "https://doi.org/10.1227/neu.0000000000003715"
+          },
+          {
+            "result": "Ovid canonical fulltext route redirects to the abstract page; page metadata says not entitled. No Methods/body obtained.",
+            "url": "https://www.ovid.com/jnls/neurosurgery/fulltext/10.1227/neu.0000000000003715~prediction-of-response-to-spinal-cord-stimulation-using"
+          },
+          {
+            "result": "Official University of Arizona record contains the same abstract and DOI link only; no manuscript or attached file.",
+            "url": "https://experts.arizona.edu/en/publications/prediction-of-response-to-spinal-cord-stimulation-using-machine-l/"
+          },
+          {
+            "result": "Publisher abstract page mentions supplemental digital content, but the SDC object has no URL/file. PubMed reports no indexed supplement.",
+            "url": "https://www.ovid.com/jnls/neurosurgery/abstract/10.1227/neu.0000000000003715~prediction-of-response-to-spinal-cord-stimulation-using"
+          },
+          {
+            "url": "https://www.ovid.com/api/permalinks?wkmrid=JOURNAL%2Fneusg%2F04.03%2F00006123-202604000-00019%2Froot%2Fv%2F2026-03-05T141649Z%2Fr%2Fapplication-pdf",
+            "result": "HTTP 200 official publisher PDF retrieved 2026-09-28; article Methods/Results and limitations reviewed."
+          },
+          {
+            "url": "https://links.lww.com/NEU/E976",
+            "result": "HTTP 200 official LWW E976 supplement retrieved 2026-09-28; Table 2 confirms N and outcome-class counts."
+          }
+        ]
+      },
+      {
+        "source_id": "S046",
+        "primary_abstract": "https://www.sciencedirect.com/science/article/abs/pii/S1094715925006439",
+        "publisher_route": "https://doi.org/10.1016/j.neurom.2025.08.367",
+        "result": "ScienceDirect publisher conference abstract only (Neuromodulation 28(7) Supplement, p. S194). It reports a 16-participant preoperative EEG study and a three-month rule requiring at least 2 of 3 responder characteristics, but the Methods sentence terminates at reduction in morphine milligram; remaining components and thresholds are not available. No full paper, poster, or supplement was found in the routes checked. No analysis denominator, explicit predictor/outcome patient linkage, or split unit is reported.",
+        "checked_routes": [
+          {
+            "result": "Publisher abstract page opened; abstract-level text includes truncated composite definition.",
+            "url": "https://www.sciencedirect.com/science/article/abs/pii/S1094715925006439"
+          },
+          {
+            "result": "403 Forbidden.",
+            "url": "https://www.neuromodulationjournal.org/article/S1094-7159%2825%2900643-9/pdf"
+          },
+          {
+            "result": "403 Forbidden.",
+            "url": "https://www.neuromodulationjournal.org/article/S1094-7159%2825%2900643-9/fulltext"
+          }
+        ],
+        "cohort_relationship": "A 2026 NeuroImage full-text article reports 16 participants, 11 female, with preoperative EEG and PROs at Albany Medical Center (IRB 4973), matching S046 abstract demographics and study theme. It describes unsupervised analysis as complementary to prior supervised SCS prediction, but does not explicitly identify the conference abstract or state that these are the same participants; cross-publication participant overlap remains unconfirmed. Source: https://pmc.ncbi.nlm.nih.gov/articles/PMC13276974/, Methods paragraph P6 and Results P17."
+      },
+      {
+        "source_id": "S755",
+        "primary_abstract": "https://pubmed.ncbi.nlm.nih.gov/31932490/",
+        "publisher_route": "https://rapm.bmj.com/lookup/doi/10.1136/rapm-2019-100859",
+        "result": "Publisher full-text JATS XML was retrieved on 2026-09-26 from BMJ canonical route https://rapm.bmj.com/content/rapm/45/2/131.source.xml (HTTP 200). Methods defines success as at least 50% pain relief from SCS trial and subsequent implant; no fixed follow-up horizon is specified. Results says 945 met inclusion/exclusion and were included in analysis; Table 1 partitions 826 SCS-success and 119 inadequate SCS pain relief later proceeding to TDD. Model-specific complete-case N is not stated. Article reports a logistic formula and cross-validation wording, but no split unit or patient-disjointness. This supersedes the prior abstract-only conclusion.",
+        "checked_routes": [
+          {
+            "result": "Primary abstract opened; no full text exposed.",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/31932490/"
+          },
+          {
+            "result": "Publisher full-text route inaccessible through this check.",
+            "url": "https://rapm.bmj.com/lookup/doi/10.1136/rapm-2019-100859"
+          },
+          {
+            "result": "Third-party page hosts BMJ publisher preview 1; visible abstract and partial Introduction only, not Methods.",
+            "url": "https://www.researchgate.net/publication/338549708_Choice_of_spinal_cord_stimulation_versus_targeted_drug_delivery_in_the_management_of_chronic_pain_a_predictive_formula_for_outcomes"
+          },
+          {
+            "result": "PDF route not accessible through web retrieval.",
+            "url": "https://rapm.bmj.com/content/45/2/131.full.pdf"
+          },
+          {
+            "result": "Canonical publisher full-text JATS XML, HTTP 200. Methods Study design (sec id s2-1: success definition); Results (945) and Table 1 (T1: 826/119); Statistical analysis; Results predictive-formula paragraphs and Table 4; Discussion (cross-validation claim and external validation limitation).",
+            "url": "https://rapm.bmj.com/content/rapm/45/2/131.source.xml"
+          }
+        ]
+      },
+      {
+        "source_id": "S762",
+        "primary_abstract": "https://pubmed.ncbi.nlm.nih.gov/32910099/",
+        "publisher_route": "https://journals.lww.com/10.1097/j.pain.0000000000002035",
+        "institutional_listing": "https://researchportal.vub.be/en/publications/high-dose-spinal-cord-stimulation-for-patients-with-failed-back-s/",
+        "result": "The publisher full-text HTML was examined in a cached copy whose canonical page is the LWW article route; live retrieval returned 403. Full text reports the four-part 12-month holistic responder thresholds and an 80/20 train-validation scheme evaluated on five random validation sets. It does not print the model-specific denominator, split unit, patient-disjointness, or explicit row-level linkage. No supplement was found.",
+        "checked_routes": [
+          {
+            "result": "Primary abstract opened; no full text exposed.",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/32910099/"
+          },
+          {
+            "result": "Publisher route redirected to LWW and was not accessible through retrieval.",
+            "url": "https://journals.lww.com/10.1097/j.pain.0000000000002035"
+          },
+          {
+            "result": "Institutional bibliographic listing and abstract only; missing methods fields not supplied.",
+            "url": "https://researchportal.vub.be/en/publications/high-dose-spinal-cord-stimulation-for-patients-with-failed-back-s/"
+          },
+          {
+            "result": "Publisher-canonical article HTML; live route returned HTTP 403 during this check. Reviewed cached copy preserving publisher canonical URL; Methods Section 2.5, Results Section 3.5, Figure 3 caption, Figures 1/4.",
+            "url": "https://journals.lww.com/pain/fulltext/2021/02000/high_dose_spinal_cord_stimulation_for_patients.23.aspx"
+          },
+          {
+            "result": "Publisher full-text route could not be fetched live (403); no standalone supplement link/file was identified in the inspected copy.",
+            "url": "https://journals.lww.com/pain/Fulltext/2021/02000/High_Dose_Spinal_Cord_Stimulation_for_Patients.23.aspx"
+          }
+        ]
+      }
+    ]
+  },
+  "entries": [
+    {
+      "source_id": "S033",
+      "extraction": {
+        "target": {
+          "state": "reported",
+          "value": "At least 50% reduction of averaged NRS-now/NRS-average score after SCS implant",
+          "reason": "Primary Methods defines the responder calculation.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41598-025-92111-8",
+              "locator": "Methods, Patient reported outcome measures"
+            }
+          ]
+        },
+        "follow_up": {
+          "state": "reported",
+          "value": "Postoperative patient-reported measures collected approximately three months after surgery",
+          "reason": "Within-patient follow-up is specified.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41598-025-92111-8",
+              "locator": "Methods, Patient reported outcome measures"
+            }
+          ]
+        },
+        "patient_linkage": {
+          "state": "reported",
+          "value": "Preoperative PROMs and intraoperative EEG linked to postoperative NRS for 17 analyzed patients; leave-one-patient-out internal evaluation",
+          "reason": "Patient records connect predictors with later outcomes; no independent cohort.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41598-025-92111-8",
+              "locator": "Methods, Participants, Patient reported outcome measures and Machine learning; Results, Patient cohort"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S034",
+      "extraction": {
+        "target": {
+          "state": "reported",
+          "value": "Separate >50% and >70% reductions in one-year NRS; 61/150 and 30/150 subjects respectively.",
+          "reason": "Publisher Methods/Results and Supplemental Table 2 define the targets and counts.",
+          "checked_at": "2026-09-28",
+          "locators": [
+            {
+              "url": "https://www.ovid.com/api/permalinks?wkmrid=JOURNAL%2Fneusg%2F04.03%2F00006123-202604000-00019%2Froot%2Fv%2F2026-03-05T141649Z%2Fr%2Fapplication-pdf",
+              "locator": "Publisher PDF pp. 896-897, Methods > Participants and Variable Definitions; Data Management and Preprocessing; Optimized Model Development; Results > Participants; Limitations"
+            },
+            {
+              "url": "https://links.lww.com/NEU/E976",
+              "locator": "Supplementary Table 2, total 150; 89/61 for >50% response and 120/30 for >70% response"
+            }
+          ]
+        },
+        "follow_up": {
+          "state": "reported",
+          "value": "One year after SCS implantation",
+          "reason": "Publisher Participants and Variable Definitions gives the one-year assessment.",
+          "checked_at": "2026-09-28",
+          "locators": [
+            {
+              "url": "https://www.ovid.com/api/permalinks?wkmrid=JOURNAL%2Fneusg%2F04.03%2F00006123-202604000-00019%2Froot%2Fv%2F2026-03-05T141649Z%2Fr%2Fapplication-pdf",
+              "locator": "Publisher PDF pp. 896-897, Methods > Participants and Variable Definitions; Data Management and Preprocessing; Optimized Model Development; Results > Participants; Limitations"
+            }
+          ]
+        },
+        "patient_linkage": {
+          "state": "reported",
+          "value": "The same 150 patients' preoperative clinical, PROM and MRI radiomic features are linked to one-year NRS outcome in a single-clinic cohort.",
+          "reason": "Publisher Methods describes preoperative variables and follow-up in the same enrolled subjects; exact split membership is not supplied.",
+          "checked_at": "2026-09-28",
+          "locators": [
+            {
+              "url": "https://www.ovid.com/api/permalinks?wkmrid=JOURNAL%2Fneusg%2F04.03%2F00006123-202604000-00019%2Froot%2Fv%2F2026-03-05T141649Z%2Fr%2Fapplication-pdf",
+              "locator": "Publisher PDF pp. 896-897, Methods > Participants and Variable Definitions; Data Management and Preprocessing; Optimized Model Development; Results > Participants; Limitations"
+            },
+            {
+              "url": "https://links.lww.com/NEU/E976",
+              "locator": "Supplementary Table 2, total 150; 89/61 for >50% response and 120/30 for >70% response"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S046",
+      "extraction": {
+        "target": {
+          "state": "not_reported",
+          "value": null,
+          "reason": "Primary publisher abstract truncates its two-of-three composite definition after morphine milligram; components and thresholds cannot be reconstructed.",
+          "checked_at": "2026-09-26",
+          "locators": [
+            {
+              "url": "https://www.sciencedirect.com/science/article/abs/pii/S1094715925006439",
+              "locator": "Methods, final sentence"
+            }
+          ]
+        },
+        "follow_up": {
+          "state": "reported",
+          "value": "Within three months after permanent SCS implantation",
+          "reason": "The reported composite endpoint has a three-month window, even though its components are truncated.",
+          "checked_at": "2026-09-26",
+          "locators": [
+            {
+              "url": "https://www.sciencedirect.com/science/article/abs/pii/S1094715925006439",
+              "locator": "Methods, responder definition"
+            }
+          ]
+        },
+        "patient_linkage": {
+          "state": "not_reported",
+          "value": null,
+          "reason": "Publisher abstract reports 16 patients with preoperative EEG and responder evaluation, but does not establish row-level linkage, analysis denominator, or patient-disjoint split.",
+          "checked_at": "2026-09-26",
+          "locators": [
+            {
+              "url": "https://www.sciencedirect.com/science/article/abs/pii/S1094715925006439",
+              "locator": "Methods and Results"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S749",
+      "extraction": {
+        "target": {
+          "state": "reported",
+          "value": "Global Health Improvement Score at least zero, computed from baseline-to-12-month VAS, ODI, MADRS and EQ-5D changes",
+          "reason": "The primary composite is distinct from pain intensity alone.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8538165/",
+              "locator": "Methods 2.2.1 Primary Outcome and Table 2"
+            }
+          ]
+        },
+        "follow_up": {
+          "state": "reported",
+          "value": "Twelve-month SCS follow-up for ESTIMET and independent AIVOC cohorts",
+          "reason": "Both model development and external testing use the same horizon.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8538165/",
+              "locator": "Methods 2.1.1–2.1.2 and 2.2.1"
+            }
+          ]
+        },
+        "patient_linkage": {
+          "state": "reported",
+          "value": "Baseline variables and 12-month outcomes linked for 91 ESTIMET patients and 12 independent AIVOC patients",
+          "reason": "Patients in the independent cohort were not used to train the model.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8538165/",
+              "locator": "Methods 2.1.1–2.1.2, 2.3 and 2.5 External Validation"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S750",
+      "extraction": {
+        "target": {
+          "state": "reported",
+          "value": "At least 50% or 30% reduction in predominant-location pain from baseline to last visit; separate medication-use reduction of at least 41.2%",
+          "reason": "Three prespecified responder definitions in primary Methods.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7767526/",
+              "locator": "Methods 2.3, Data Processing"
+            }
+          ]
+        },
+        "follow_up": {
+          "state": "reported",
+          "value": "Last available visit, median 591.5 days after SCS trial (IQR 312.5–815.8); variable visit timing",
+          "reason": "The outcome is not at a fixed 12-month visit.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7767526/",
+              "locator": "Results 3.1, Patient Characteristics; Discussion, follow-up limitation"
+            }
+          ]
+        },
+        "patient_linkage": {
+          "state": "reported",
+          "value": "Baseline and last-visit outcomes linked within 119 patients; one random 95-patient train / 24-patient validation partition",
+          "reason": "Methods describe patient records and participant-level outcome calculation; no independent external cohort.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7767526/",
+              "locator": "Methods 2.2–2.4 and Results 3.1, patient records and 80/20 split"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S751",
+      "extraction": {
+        "target": {
+          "state": "reported",
+          "value": "More than 50% NRS reduction from preimplant baseline to 1 year; high responder more than 70% reduction",
+          "reason": "Primary Methods defines both patient-level labels.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://telkeslab.com/wp-content/uploads/2023/05/Hadanny-Telkes_2022_Development-of-Machine-Learning%E2%80%93Based-Models-to-Predict-Treatment-Response-to-Spinal-Cord-Stimulation.pdf",
+              "locator": "PDF p. 2, Methods/Patients"
+            }
+          ]
+        },
+        "follow_up": {
+          "state": "reported",
+          "value": "One-year postoperative visit restricted to 10–14 months; 100 of 261 baseline patients excluded for outcomes outside this window",
+          "reason": "Primary patient flow and eligibility describe the follow-up window and exclusions.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://telkeslab.com/wp-content/uploads/2023/05/Hadanny-Telkes_2022_Development-of-Machine-Learning%E2%80%93Based-Models-to-Predict-Treatment-Response-to-Spinal-Cord-Stimulation.pdf",
+              "locator": "PDF p. 2, Methods/Patients and Fig. 1"
+            }
+          ]
+        },
+        "patient_linkage": {
+          "state": "reported",
+          "value": "Preoperative features and one-year NRS outcomes linked for 151 included implant recipients; nested 10-fold internal CV, no external validation",
+          "reason": "Methods explicitly specify longitudinal within-patient data and nested outer/inner folds.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://telkeslab.com/wp-content/uploads/2023/05/Hadanny-Telkes_2022_Development-of-Machine-Learning%E2%80%93Based-Models-to-Predict-Treatment-Response-to-Spinal-Cord-Stimulation.pdf",
+              "locator": "PDF p. 2, Methods/Patients and Models; p. 8 Limitations"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S752",
+      "extraction": {
+        "target": {
+          "state": "reported",
+          "value": "At least 50% reduction of baseline visual analog pain score in the SCS subgroup",
+          "reason": "The SCS denominator and target are explicit in the primary abstract.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/37061895/",
+              "locator": "Author abstract, Results"
+            }
+          ]
+        },
+        "follow_up": {
+          "state": "reported",
+          "value": "Six months after permanent device implantation",
+          "reason": "Baseline and six-month measures are specified.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/37061895/",
+              "locator": "Author abstract, Materials and methods"
+            }
+          ]
+        },
+        "patient_linkage": {
+          "state": "reported",
+          "value": "Preimplant clinical predictors and baseline/six-month outcomes linked within 619 SCS recipients; previously developed single-center formula tested in independent multicenter registry",
+          "reason": "This is external validation across practices; 320 TDD recipients are a separate group.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/37061895/",
+              "locator": "Author abstract, Objective, Materials and methods, Results"
+            }
+          ]
+        }
+      },
+      "primary_supplement_recheck_2026_09_28": {
+        "checked_at": "2026-09-28",
+        "prior_formula_source": "S755; DOI 10.1136/rapm-2019-100859",
+        "validation_source": "S752; DOI 10.1016/j.neurom.2023.02.083; PMID 37061895",
+        "access": {
+          "abstract": "PubMed author abstract opened (PMID 37061895)",
+          "publisher_full_text": "ScienceDirect and Neuromodulation Journal article/PDF paths returned HTTP 403; body text not read",
+          "official_supplement": "Elsevier CDN mmc1 DOCX returned HTTP 200, 159741 bytes, application/word, NONAUTHATTACH; SHA-256 87fa611d359e17408c77ea675f617a7bb0c4b8d065e5b8504ae415206b988791",
+          "other_supplements": "No mmc2-mmc4 or alternate DOCX/XLSX/PDF/ZIP assets found at bounded tested routes; Europe PMC hasSuppl=N and supplementaryFiles endpoint returned 404"
+        },
+        "cohort_and_endpoint": {
+          "value": "The author abstract reports 939 patients in the Medtronic Product Surveillance Registry (2018-2020), enrolled after successful SCS or TDD trials before implantation; 619 SCS and 320 TDD recipients. Baseline predictors were linked to six-month outcomes. Success was at least 50% reduction of baseline VAS at six months.",
+          "locator": "PubMed author abstract, Materials and Methods and Results; official Elsevier Supplementary Table 2 lists SCS failed/success counts 481/138 and TDD 173/147, summing to 619 and 320."
+        },
+        "validation_metrics": {
+          "author_abstract_auc": "SCS 0.80; TDD 0.78",
+          "supplement_table_1": "SCS sensitivity 67% (58-74), specificity 93% (91-95), PPV 74% (66-80), NPV 91% (88-93), accuracy 87% (84-90); TDD sensitivity 88% (82-93), specificity 67% (59-74), PPV 69% (64-74), NPV 87% (81-92), accuracy 77% (72-81); subgroup summaries are also reported.",
+          "supplement_table_2": "Per-class precision/recall/F1 and counts: SCS failed 481, succeeded 138; TDD failed 173, succeeded 147.",
+          "supplement_figure_3": "Text reports combined, SCS and TDD accuracy 83.7%, 87.3% and 76.8%, and AUC 82%, 80% and 78%, respectively. These are classification accuracy and discrimination measures, not interchangeable."
+        },
+        "external_validation_and_limits": {
+          "confirmed": "The abstract describes a prospective multicenter registry validation of a formula developed retrospectively at one center and calls the registry data an independent external validation. This is clinically relevant validation evidence for the original S755 formula.",
+          "not_reported_or_unresolved": [
+            "The PubMed abstract defines responders as >=50% VAS reduction, while the official supplement defines an event as >50%; the exact handling of equality at 50% cannot be resolved without the full analysis code or participant rows.",
+            "No train/test split, fold assignment, calibration, AUC confidence interval, model refitting procedure, or participant-level split membership is reported in the abstract or supplement.",
+            "Supplementary Figure 2 is an image; exact TP/FP/TN/FN cells were not machine-readable from the DOCX text, though class counts and aggregate metrics are reported.",
+            "No individual patient rows or analysis code are in the supplement. Data-availability statement and additional body-text details remain unverified because publisher article body returned HTTP 403.",
+            "Registry-site multicenter description is reported, but participant-level overlap cannot be independently tested without row-level data. No ECAP predictor is reported in the accessible abstract or supplement."
+          ]
+        },
+        "primary_locators": [
+          {
+            "url": "https://pubmed.ncbi.nlm.nih.gov/37061895/",
+            "locator": "Author abstract, Objective, Materials and Methods, Results, Conclusion"
+          },
+          {
+            "url": "https://doi.org/10.1016/j.neurom.2023.02.083",
+            "locator": "DOI resolver to publisher PII S1094715923001368"
+          },
+          {
+            "url": "https://ars.els-cdn.com/content/image/1-s2.0-S1094715923001368-mmc1.docx",
+            "locator": "Official Elsevier supplementary DOCX; Supplementary Tables 1-2 and Supplementary Figures 1-3"
+          },
+          {
+            "url": "https://www.sciencedirect.com/science/article/pii/S1094715923001368",
+            "locator": "Publisher article body route; HTTP 403 on 2026-09-28"
+          }
+        ],
+        "interpretation_boundary": "This updates the source-level evidence for S752/S755 only. It does not resolve other PA-05 records or establish a reusable patient dataset, ECAP-based prediction, or a patient-level split protocol."
+      }
+    },
+    {
+      "source_id": "S753",
+      "extraction": {
+        "target": {
+          "state": "reported",
+          "value": "End-of-trial responder: at least 50% patient-reported pain relief, reported functional improvement, and willingness to receive permanent implant",
+          "reason": "The classification is based on patient reports and willingness; ECAP confirms/control activation.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://link.springer.com/article/10.1007/s40122-024-00631-4",
+              "locator": "Methods, success criteria and Statistical Analysis; Results, Table 2"
+            }
+          ]
+        },
+        "follow_up": {
+          "state": "reported",
+          "value": "End of temporary trial, mean 6.4 ± 1.5 days after Day-0 programming, range 3–12 days",
+          "reason": "This is a short trial horizon, not 12-month analgesia.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://link.springer.com/article/10.1007/s40122-024-00631-4",
+              "locator": "Results, first paragraph and Table 2"
+            }
+          ]
+        },
+        "patient_linkage": {
+          "state": "reported",
+          "value": "Paired Day-0 and end-of-trial assessments for the same 132 analyzed participants; no independent validation cohort",
+          "reason": "The 2x2 table links each participant's Day-0 and later trial status.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://link.springer.com/article/10.1007/s40122-024-00631-4",
+              "locator": "Methods, Statistical Analysis; Results, 144 screened, 132 analyzed"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S754",
+      "extraction": {
+        "target": {
+          "state": "reported",
+          "value": "One-year change in NRS, PGIC, ODI, BDI, MPQ and PCS; at least 50% NRS improvement or PROM-specific MCID for binary response",
+          "reason": "The author abstract defines the score families and response thresholds.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/42524811/",
+              "locator": "Author abstract, Materials and methods"
+            }
+          ]
+        },
+        "follow_up": {
+          "state": "reported",
+          "value": "One year after SCS compared with preoperative baseline",
+          "reason": "The stated horizon is one year.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/42524811/",
+              "locator": "Author abstract, Materials and methods"
+            }
+          ]
+        },
+        "patient_linkage": {
+          "state": "reported",
+          "value": "Preoperative clinical notes and PROMs paired with one-year outcomes for 20 SCS patients; train/test split and leakage controls unavailable in author abstract",
+          "reason": "Within-patient temporal pairing is explicit, while generalization remains unverified.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/42524811/",
+              "locator": "Author abstract, Materials and methods and Conclusions"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S755",
+      "extraction": {
+        "target": {
+          "state": "reported",
+          "value": "SCS success: at least 50% pain relief from SCS trial and subsequent implant. Failure: failed trial or lack of durable analgesia after implant; the analysis cohort labels 826 successes and 119 failures who proceeded to TDD.",
+          "reason": "Explicit in publisher Methods. No fixed assessment interval is given.",
+          "checked_at": "2026-09-26",
+          "locators": [
+            {
+              "url": "https://rapm.bmj.com/content/rapm/45/2/131.source.xml",
+              "locator": "Methods, Study design (sec id s2-1); Results/Table 1 (T1)"
+            }
+          ]
+        },
+        "follow_up": {
+          "state": "not_reported",
+          "value": null,
+          "reason": "Full publisher Methods define relief across the SCS trial and subsequent implant but specify no fixed assessment horizon or window.",
+          "checked_at": "2026-09-26",
+          "locators": [
+            {
+              "url": "https://rapm.bmj.com/content/rapm/45/2/131.source.xml",
+              "locator": "Methods, Study design (sec id s2-1); Results and Discussion"
+            }
+          ]
+        },
+        "patient_linkage": {
+          "state": "reported",
+          "value": "Baseline electronic medical record factors are modeled against SCS-success status within the same Cleveland Clinic cohort of 945 patients treated from 1994 to 2013; Table 1 partitions 826 successes and 119 failures proceeding to TDD. Model-specific complete-case N and an explicit row-level feature/outcome join are not stated. The Discussion reports cross-validation and 95% accuracy, but does not state the split unit or patient-disjointness; external validation is still required.",
+          "reason": "Publisher full text reports cohort, predictor classes, outcome categories, and validation wording. It does not provide a train/test allocation or patient-grouped folds.",
+          "checked_at": "2026-09-26",
+          "locators": [
+            {
+              "url": "https://rapm.bmj.com/content/rapm/45/2/131.source.xml",
+              "locator": "Methods, Study design and Statistical analysis (sec ids s2-1 and s2-3); Results first paragraph; Table 1 (T1); Discussion validation limitation"
+            },
+            {
+              "url": "https://rapm.bmj.com/content/rapm/45/2/131.source.xml",
+              "locator": "Results, Predictive formula; Table 4 (T4); Figure 1 (F1): AUC 0.7414, threshold 0.880; Discussion: cross-validation and 95% accuracy claim"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S756",
+      "extraction": {
+        "target": {
+          "state": "reported",
+          "value": "At least 2/10 decrease in NRS for low back or leg pain after conversion from standard to high-dose SCS",
+          "reason": "Responder definition is explicit in the primary abstract.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/32166849/",
+              "locator": "Author abstract, Materials and methods"
+            }
+          ]
+        },
+        "follow_up": {
+          "state": "reported",
+          "value": "One, three and twelve months after high-dose SCS conversion; prediction target at twelve months",
+          "reason": "The prediction endpoint is the twelve-month visit.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/32166849/",
+              "locator": "Author abstract, Materials and methods"
+            }
+          ]
+        },
+        "patient_linkage": {
+          "state": "reported",
+          "value": "Preconversion clinical variables and repeated outcomes belong to the 78 enrolled FBSS patients; exact twelve-month retention and validation split are not given in abstract",
+          "reason": "Longitudinal cohort design supports within-patient linkage but not an independent test claim.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/32166849/",
+              "locator": "Author abstract, Materials and methods and Results"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S757",
+      "extraction": {
+        "target": {
+          "state": "reported",
+          "value": "Continuous reduction in 100-mm VAS pain and improvement in ODI disability from baseline; hierarchical regression, no binary responder classifier",
+          "reason": "The paper analyzes continuous within-person outcomes.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.painphysicianjournal.com/current/pdf?article=MjMyOQ%3D%3D&journal=88",
+              "locator": "Publisher PDF pp. E371–E374, Measures and Tables 3–4"
+            }
+          ]
+        },
+        "follow_up": {
+          "state": "reported",
+          "value": "Baseline before SCS trial, then six and twelve months after implantation; predictor analyses target twelve months",
+          "reason": "The analysis horizon is specified in the primary full text.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.painphysicianjournal.com/current/pdf?article=MjMyOQ%3D%3D&journal=88",
+              "locator": "Publisher PDF pp. E371–E374, Methods and Tables 3–4"
+            }
+          ]
+        },
+        "patient_linkage": {
+          "state": "reported",
+          "value": "Same 56 implant recipients measured at baseline, six and twelve months; 75 recruited, seven failed trial and twelve lost to follow-up; no held-out test",
+          "reason": "Paired outcomes are analyzed in one selected cohort, without external prognostic validation.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.painphysicianjournal.com/current/pdf?article=MjMyOQ%3D%3D&journal=88",
+              "locator": "Publisher PDF pp. E371–E374, participant flow, Table 1 and regression Methods"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_id": "S762",
+      "extraction": {
+        "target": {
+          "state": "reported",
+          "value": "12-month holistic responder requires all stated components versus baseline: 33% improvement in NRS low-back and leg pain, 30% improvement in ODI, EQ-5D increase of at least 0.03, and medication decrease after 12 months of HD-SCS. If outcome measures at 12 months are incomplete, status is unknown.",
+          "reason": "Publisher full-text Figure 3 caption and Section 2.5 define the composite; the primary abstract omitted thresholds.",
+          "checked_at": "2026-09-26",
+          "locators": [
+            {
+              "url": "https://journals.lww.com/pain/fulltext/2021/02000/high_dose_spinal_cord_stimulation_for_patients.23.aspx",
+              "locator": "Methods Section 2.5 (publisher paragraph JCL-P-16) and Figure 3 caption"
+            }
+          ]
+        },
+        "follow_up": {
+          "state": "reported",
+          "value": "One, three and twelve months after HD-SCS implantation; prediction target is the twelve-month holistic responder",
+          "reason": "Publisher full text confirms assessments at 1, 3 and 12 months and identifies the 12-month holistic responder as prediction target.",
+          "checked_at": "2026-09-26",
+          "locators": [
+            {
+              "url": "https://journals.lww.com/pain/fulltext/2021/02000/high_dose_spinal_cord_stimulation_for_patients.23.aspx",
+              "locator": "Methods §2.5 (JCL-P-16) and Results §3 (JCL-P-17)"
+            }
+          ]
+        },
+        "patient_linkage": {
+          "state": "reported",
+          "value": "Prediction is described as using baseline variables for 12-month responder status in the DISCOVER registry. The article reports an 80% train / 20% validation split and five randomly created validation sets, but does not state split unit, patient-disjointness, per-split N, or exact prediction-analysis denominator. Registry flow is 194 recruited, 185 baseline, 92 reaching the 12-month visit; percentages in the model section are not an explicit denominator.",
+          "reason": "Publisher Methods Section 2.5 and Results Section 3.5 report prediction design and split proportion. They do not establish patient-grouped splitting or printed model N.",
+          "checked_at": "2026-09-26",
+          "locators": [
+            {
+              "url": "https://journals.lww.com/pain/fulltext/2021/02000/high_dose_spinal_cord_stimulation_for_patients.23.aspx",
+              "locator": "Methods Section 2.5 (JCL-P-16): baseline predictors; 80/20 train-validation and five random validation sets"
+            },
+            {
+              "url": "https://journals.lww.com/pain/fulltext/2021/02000/high_dose_spinal_cord_stimulation_for_patients.23.aspx",
+              "locator": "Results Section 3 (JCL-P-17): 194 recruited, 185 baseline, 92 at final visit; Results Section 3.5 (JCL-P-22): responder proportions without printed prediction denominator"
+            }
+          ]
+        }
+      },
+      "overlap_note": "Discover-registry participants may overlap other high-dose SCS papers by this group; this source is not counted as independent external validation of S756 or related models."
+    },
+    {
+      "source_id": "S804",
+      "extraction": {
+        "target": {
+          "state": "reported",
+          "value": "Responder: reduction of at least 2 points on the 0-10 pain scale from baseline to six months after SCS",
+          "reason": "The primary poster and publisher conference abstract give the same endpoint definition. Their subgroup responder counts conflict in poster prose versus its table and the abstract; the target definition does not depend on resolving that count.",
+          "checked_at": "2026-09-26",
+          "locators": [
+            {
+              "url": "https://www.medtronic.com/content/dam/medtronic-wide/public/united-states/education-training-research/clinical-evidence/scs-patient-selection-poster-nans.pdf",
+              "locator": "Author poster page 1, Methods; Results prose and Table 1 for discrepant subgroup count"
+            },
+            {
+              "url": "https://www.sciencedirect.com/science/article/pii/S1094715925006725",
+              "locator": "Publisher conference abstract, Methods and Results"
+            }
+          ]
+        },
+        "follow_up": {
+          "state": "reported",
+          "value": "Six months after SCS implantation",
+          "reason": "The poster and publisher abstract explicitly define the six-month responder comparison with baseline.",
+          "checked_at": "2026-09-26",
+          "locators": [
+            {
+              "url": "https://www.medtronic.com/content/dam/medtronic-wide/public/united-states/education-training-research/clinical-evidence/scs-patient-selection-poster-nans.pdf",
+              "locator": "Author poster page 1, Methods"
+            }
+          ]
+        },
+        "patient_linkage": {
+          "state": "not_reported",
+          "value": null,
+          "reason": "The abstract/poster reports 721 analyzed patients and an 80/20 train/test split with repeated five-fold cross-validation in training, but not the exact participant-disjoint split implementation, per-analysis denominator, row-level predictor-to-outcome linkage, or available patient data. Poster prose gives 274/363 combined back-and-leg-pain responders, while its Table 1 and the publisher abstract give 267/363; no silent correction is made.",
+          "checked_at": "2026-09-26",
+          "locators": [
+            {
+              "url": "https://www.medtronic.com/content/dam/medtronic-wide/public/united-states/education-training-research/clinical-evidence/scs-patient-selection-poster-nans.pdf",
+              "locator": "Author poster page 1, Methods (split) and Results/Table 1 (count mismatch)"
+            },
+            {
+              "url": "https://www.sciencedirect.com/science/article/pii/S1094715925006725",
+              "locator": "Publisher conference abstract, Methods and Results"
+            }
+          ]
+        }
+      },
+      "overlap_note": "Product Surveillance Registry analysis; overlap with other registry reports has not been resolved. This conference abstract is one dataset and provides no independent external validation."
+    },
+    {
+      "source_id": "S832",
+      "extraction": {
+        "target": {
+          "state": "reported",
+          "value": "More than 50% reduction in VAS after a percutaneous SCS trial",
+          "reason": "The author preprint defines binary response from before-trial and after-trial VAS in the same eight-person cohort.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://www.medrxiv.org/content/medrxiv/early/2024/09/18/2024.09.17.24313765.source.xml",
+              "locator": "Methods Section 2.1, Participants and Clinical Evaluations"
+            }
+          ]
+        },
+        "follow_up": {
+          "state": "reported",
+          "value": "VAS assessed before the trial and 15 days after the SCS trial",
+          "reason": "The interval is explicit in the preprint Methods; no later post-implant outcome is reported.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://www.medrxiv.org/content/medrxiv/early/2024/09/18/2024.09.17.24313765.source.xml",
+              "locator": "Methods Section 2.1, VAS assessment"
+            }
+          ]
+        },
+        "patient_linkage": {
+          "state": "reported",
+          "value": "Baseline SCC diffusion-MRI connectivity and trial-response/VAS change were compared within the same eight-person cohort using GLM and correlation; no predictive train/test split, independent cohort, public row-level imaging matrix, or ECAP measure is documented.",
+          "reason": "Methods Sections 2.1 and 2.4 identify the cohort and association analyses. This is within-cohort linkage, not independently validated prediction or reusable patient-level data.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://www.medrxiv.org/content/medrxiv/early/2024/09/18/2024.09.17.24313765.source.xml",
+              "locator": "Methods Sections 2.1 and 2.4; Results Sections 3.2–3.3; Data Availability"
+            }
+          ]
+        }
+      },
+      "overlap_note": "Eight-person UCLA/UTSW preprint cohort; no identity bridge to other SCS imaging cohorts and no independently validated predictor."
+    }
+  ]
+}

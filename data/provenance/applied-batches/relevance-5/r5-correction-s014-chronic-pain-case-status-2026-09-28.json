@@ -1,0 +1,88 @@
+{
+  "meta": {
+    "batch_id": "r5-correction-s014-chronic-pain-case-status-2026-09-28",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-28",
+    "scope": "Correct S014 case-control target construct without inventing pain/function outcomes",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-28"
+  },
+  "source_ids": [
+    "S014"
+  ],
+  "records": [
+    {
+      "id": "S014",
+      "title": "Toward Objectification of Subjective Chronic Pain Based on Implicit Response in Biosignals",
+      "year": 2025,
+      "source_type": "метод"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S014",
+      "decision": "partially_verified",
+      "checked_at": "2026-09-28",
+      "full_text_status": "metadata_only",
+      "notes": "The primary abstract does not establish the participant split, confidence intervals, calibration, external validation or whether feature selection was nested within resampling. The target is patient-versus-control status, not continuous pain severity or treatment response. Primary NLM abstract rechecked 2026-09-28: the reported endpoint is chronic-pain patient versus normal-control case status, not clinical functioning, pain-intensity regression or treatment response. Full Methods remain unavailable; participant-disjoint split, calibration and external validation cannot be determined.",
+      "searches": [
+        {
+          "service": "NLM PubMed E-utilities structured abstract",
+          "query": "PMID 39222459 case control target 26 of 59 AUROC",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=39222459&retmode=xml",
+          "accessed_at": "2026-09-28"
+        }
+      ],
+      "updates": {
+        "identifiers": {
+          "doi": "10.1109/TBME.2024.3452708"
+        },
+        "evidence": {
+          "target_construct": "chronic_pain_case_status"
+        },
+        "validation": {
+          "checked_at": "2026-09-28",
+          "notes": "The primary abstract does not establish the participant split, confidence intervals, calibration, external validation or whether feature selection was nested within resampling. The target is patient-versus-control status, not continuous pain severity or treatment response. Primary NLM abstract rechecked 2026-09-28: the reported endpoint is chronic-pain patient versus normal-control case status, not clinical functioning, pain-intensity regression or treatment response. Full Methods remain unavailable; participant-disjoint split, calibration and external validation cannot be determined."
+        },
+        "field_resolution": {
+          "evidence.target_construct": {
+            "state": "reported",
+            "value": "chronic_pain_case_status",
+            "reason": "Primary abstract describes chronic-pain patient versus normal-control classification; no functional score is measured.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=39222459&retmode=xml",
+                "locator": "PMID 39222459 structured Abstract > Methods and Results: 59 subjects, 26 chronic-pain patients, group-classification AUROC 0.802-0.864."
+              }
+            ]
+          },
+          "validation.checked_at": {
+            "state": "reported",
+            "value": "2026-09-28",
+            "reason": "Dated primary abstract recheck.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=39222459&retmode=xml",
+                "locator": "PMID 39222459 structured Abstract > Methods and Results."
+              }
+            ]
+          },
+          "validation.notes": {
+            "state": "reported",
+            "value": "The primary abstract does not establish the participant split, confidence intervals, calibration, external validation or whether feature selection was nested within resampling. The target is patient-versus-control status, not continuous pain severity or treatment response. Primary NLM abstract rechecked 2026-09-28: the reported endpoint is chronic-pain patient versus normal-control case status, not clinical functioning, pain-intensity regression or treatment response. Full Methods remain unavailable; participant-disjoint split, calibration and external validation cannot be determined.",
+            "reason": "Separate disease-group status from functional outcome and pain severity.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=39222459&retmode=xml",
+                "locator": "PMID 39222459 structured Abstract > Methods and Results."
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

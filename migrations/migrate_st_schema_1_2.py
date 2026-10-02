@@ -8,10 +8,11 @@ from datetime import date
 from pathlib import Path
 
 from service.core import load_json
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json
 
 ROOT = Path(__file__).resolve().parents[1]
-PATH = ROOT / "data" / "ST.json"
+PATH = data_path(ROOT / "data", "ST.json")
 
 
 def iter_resources(payload: dict):

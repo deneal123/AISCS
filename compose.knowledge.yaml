@@ -1,0 +1,88 @@
+name: aspa-research-knowledge
+services:
+  neo4j:
+    image: neo4j:5.26.6
+    profiles: [knowledge]
+    environment:
+      NEO4J_AUTH: neo4j/${RESEARCH_NEO4J_PASSWORD:?set research graph password}
+      NEO4J_server_memory_heap_initial__size: 512m
+      NEO4J_server_memory_heap_max__size: 1G
+      NEO4J_server_memory_pagecache_size: 256m
+    ports: ["127.0.0.1:7476:7474", "127.0.0.1:7689:7687"]
+    volumes: ["knowledge_graph:/data"]
+    mem_limit: 2g
+    healthcheck:
+      test: ["CMD-SHELL", "cypher-shell -u neo4j -p \"$${NEO4J_AUTH#*/}\" 'RETURN 1' >/dev/null"]
+      interval: 30s
+      timeout: 15s
+      retries: 5
+      start_period: 60s
+    networks: [knowledge]
+  qdrant:
+    image: qdrant/qdrant:v1.15.3
+    profiles: [knowledge]
+    ports: ["127.0.0.1:6335:6333"]
+    volumes: ["knowledge_vectors:/qdrant/storage"]
+    mem_limit: 1g
+    healthcheck:
+      test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/6333; printf 'GET /readyz HTTP/1.0\\r\\n\\r\\n' >&3; read -r status <&3; [[ $$status == *' 200 '* ]]"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    networks: [knowledge]
+  embedding-gateway:
+    profiles: [knowledge]
+    build:
+      context: ../agents
+      dockerfile: docker/Dockerfile
+    env_file: [.knowledge/runtime.env]
+    environment:
+      PORT: "8090"
+      AGENTS__LLM_GATEWAY_ENABLED: "true"
+      AGENTS__LLM_GATEWAY_API_KEY: ${RESEARCH_EMBEDDING_KEY:?set knowledge gateway key}
+    volumes: ["../infra/certs/gigachat-ca.pem:/run/certs/gigachat-ca.pem:ro"]
+    ports: ["127.0.0.1:8092:8090"]
+    mem_limit: 512m
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8090/health', timeout=5)"]
+      interval: 20s
+      timeout: 8s
+      retries: 5
+      start_period: 30s
+    networks: [knowledge]
+  research:
+    profiles: [knowledge]
+    depends_on:
+      neo4j: {condition: service_healthy}
+      qdrant: {condition: service_healthy}
+      embedding-gateway: {condition: service_healthy}
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    environment:
+      RESEARCH_DATA_DIR: /data
+      RESEARCH_KNOWLEDGE_DIR: /state
+      RESEARCH_KNOWLEDGE_PROJECT: /opt/research-sidecar
+      RESEARCH_QDRANT_URL: http://qdrant:6333
+      RESEARCH_NEO4J_URL: bolt://neo4j:7687
+      RESEARCH_NEO4J_PASSWORD: ${RESEARCH_NEO4J_PASSWORD:?set research graph password}
+      RESEARCH_EMBEDDING_URL: http://embedding-gateway:8090
+      RESEARCH_EMBEDDING_KEY: ${RESEARCH_EMBEDDING_KEY:?set knowledge gateway key}
+    volumes: ["./.knowledge:/state", "./data:/data:ro"]
+    ports: ["127.0.0.1:8093:8080"]
+    read_only: true
+    tmpfs: ["/tmp:size=32m"]
+    mem_limit: 512m
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/ready', timeout=5)"]
+      interval: 20s
+      timeout: 8s
+      retries: 5
+      start_period: 30s
+    networks: [knowledge]
+networks:
+  knowledge: {}
+volumes:
+  knowledge_graph: {}
+  knowledge_vectors: {}

@@ -3,6 +3,7 @@
 import json
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 DATA = Path(__file__).resolve().parents[1] / "data"
@@ -20,8 +21,8 @@ NEW_NOTE = (
 
 
 def main() -> None:
-    matrix = json.loads((DATA / "evidence-matrix.json").read_text(encoding="utf-8"))
-    records = json.loads((DATA / "records.json").read_text(encoding="utf-8"))
+    matrix = json.loads((data_path(DATA, "evidence-matrix.json")).read_text(encoding="utf-8"))
+    records = json.loads((data_path(DATA, "records.json")).read_text(encoding="utf-8"))
     rows = [row for row in matrix["rows"] if set(row["source_ids"]) & REJECTED]
     if len(rows) != 3 or {row["source_ids"][0] for row in rows} != REJECTED:
         raise ValueError("Unexpected rejected identity evidence rows")
@@ -56,8 +57,8 @@ def main() -> None:
         ),
     }
     snapshot = snapshot_repository(DATA, label="pre-unverified-evidence-row-removal")
-    atomic_write_json(DATA / "evidence-matrix.json", matrix)
-    atomic_write_json(DATA / "records.json", records)
+    atomic_write_json(data_path(DATA, "evidence-matrix.json"), matrix)
+    atomic_write_json(data_path(DATA, "records.json"), records)
     atomic_write_json(DATA / "three-unverified-row-removal-2026-09-25.json", audit)
     print(f"Removed three rejected identity rows; snapshot: {snapshot}")
 

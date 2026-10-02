@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 
 from service.completeness import completeness_summary
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 DATA = Path(__file__).resolve().parents[1] / "data"
@@ -98,8 +99,8 @@ OPEN_TEXT = {
 
 
 def main() -> None:
-    matrix = json.loads((DATA / "evidence-matrix.json").read_text(encoding="utf-8"))
-    records = json.loads((DATA / "records.json").read_text(encoding="utf-8"))
+    matrix = json.loads((data_path(DATA, "evidence-matrix.json")).read_text(encoding="utf-8"))
+    records = json.loads((data_path(DATA, "records.json")).read_text(encoding="utf-8"))
     sources = {source["id"]: source for source in records["sources"]}
     for source_id, (url, locator) in LOCATORS.items():
         rows = [
@@ -202,13 +203,13 @@ def main() -> None:
         ),
     }
     completeness = json.loads(
-        (DATA / "completeness-report.json").read_text(encoding="utf-8")
+        (data_path(DATA, "completeness-report.json")).read_text(encoding="utf-8")
     )
     completeness.update(completeness_summary(records["sources"]))
     snapshot = snapshot_repository(DATA, label="pre-sixteen-primary-claim-locators")
-    atomic_write_json(DATA / "evidence-matrix.json", matrix)
-    atomic_write_json(DATA / "records.json", records)
-    atomic_write_json(DATA / "completeness-report.json", completeness)
+    atomic_write_json(data_path(DATA, "evidence-matrix.json"), matrix)
+    atomic_write_json(data_path(DATA, "records.json"), records)
+    atomic_write_json(data_path(DATA, "completeness-report.json"), completeness)
     atomic_write_json(DATA / "sixteen-primary-claim-locator-review-2026-09-25.json", audit)
     print(f"Updated sixteen evidence locators and access metadata; snapshot: {snapshot}")
 

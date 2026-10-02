@@ -8,6 +8,7 @@ import argparse
 import json
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 DATA = Path(__file__).resolve().parents[1] / "data"
@@ -17,7 +18,7 @@ TREE = "https://api.github.com/repos/smpuglie/Pugliese_2026/git/trees/10e7661bf4
 
 
 def update() -> dict:
-    audit = json.loads((DATA / "drosophila-connectome-audit.json").read_text(encoding="utf-8"))
+    audit = json.loads((data_path(DATA, "drosophila-connectome-audit.json")).read_text(encoding="utf-8"))
     walking = next(item for item in audit["entries"] if item["source_id"] == "S740")
     if "upstream_provenance_review" in walking:
         raise ValueError("S740 provenance review already applied")
@@ -75,7 +76,7 @@ def main() -> None:
     audit = update()
     if args.apply:
         snapshot = snapshot_repository(DATA, label="pre-s740-input-provenance-review")
-        atomic_write_json(DATA / "drosophila-connectome-audit.json", audit)
+        atomic_write_json(data_path(DATA, "drosophila-connectome-audit.json"), audit)
         print(f"Applied S740 input provenance review; snapshot: {snapshot}")
     else:
         print("Dry run: S740 methods and author tree screened; four upstream releases remain not_reported")

@@ -8,11 +8,12 @@ import subprocess
 import time
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"
-OUTPUT = DATA / "src07-code-repository-recheck-2026-09-25.json"
+OUTPUT = ROOT / ".work" / "source-checks" / "src07-code-repository-recheck-2026-09-25.json"
 SOURCE_IDS = ("S200", "S201", "S224", "S292", "S732", "S733", "S737")
 
 
@@ -29,8 +30,25 @@ def resources(node: object):
 
 def github_json(url: str) -> dict:
     result = subprocess.run(
-        ["curl.exe", "-L", "-sS", "--max-time", "20", "-A", "AspaResearch/1.0 (source version review)", "-H", "Accept: application/vnd.github+json", "-w", "\n%{http_code}", url],
-        capture_output=True, text=True, encoding="utf-8", errors="replace", check=False,
+        [
+            "curl.exe",
+            "-L",
+            "-sS",
+            "--max-time",
+            "20",
+            "-A",
+            "AspaResearch/1.0 (source version review)",
+            "-H",
+            "Accept: application/vnd.github+json",
+            "-w",
+            "\n%{http_code}",
+            url,
+        ],
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        check=False,
     )
     body, _, code = result.stdout.rpartition("\n")
     if result.returncode or code != "200":
@@ -39,8 +57,8 @@ def github_json(url: str) -> dict:
 
 
 def updated() -> dict:
-    records = json.loads((DATA / "records.json").read_text(encoding="utf-8"))
-    st = json.loads((DATA / "ST.json").read_text(encoding="utf-8"))
+    records = json.loads((data_path(DATA, "records.json")).read_text(encoding="utf-8"))
+    st = json.loads((data_path(DATA, "ST.json")).read_text(encoding="utf-8"))
     by_id = {source["id"]: source for source in records["sources"]}
     by_url = {
         item["ссылка"].rstrip("/").lower(): item
@@ -61,25 +79,35 @@ def updated() -> dict:
         commit_api = f"{repo_api}/commits/{repo['default_branch']}"
         head = github_json(commit_api)
         resource = by_url.get(url.lower())
-        pin = resource["technical_resolution"]["version_or_commit"].get("value") if resource else None
-        rows.append({
-            "source_id": sid, "repo": slug, "source_url": url,
-            "resource_id": resource["resource_id"] if resource else None,
-            "pinned_commit": pin,
-            "head_commit": head["sha"],
-            "head_date": head["commit"]["committer"]["date"],
-            "head_message_first_line": head["commit"]["message"].splitlines()[0],
-            "default_branch": repo["default_branch"],
-            "archived": repo["archived"], "disabled": repo["disabled"],
-            "pin_relation": "no_active_ST_resource" if resource is None else ("matches_current_head" if pin == head["sha"] else "historical_immutable_pin"),
-            "locators": [
-                {"url": repo_api, "locator": "default_branch, archived, disabled"},
-                {"url": commit_api, "locator": "sha, commit.committer.date, commit.message"},
-            ],
-        })
+        pin = (
+            resource["technical_resolution"]["version_or_commit"].get("value") if resource else None
+        )
+        rows.append(
+            {
+                "source_id": sid,
+                "repo": slug,
+                "source_url": url,
+                "resource_id": resource["resource_id"] if resource else None,
+                "pinned_commit": pin,
+                "head_commit": head["sha"],
+                "head_date": head["commit"]["committer"]["date"],
+                "head_message_first_line": head["commit"]["message"].splitlines()[0],
+                "default_branch": repo["default_branch"],
+                "archived": repo["archived"],
+                "disabled": repo["disabled"],
+                "pin_relation": "no_active_ST_resource"
+                if resource is None
+                else ("matches_current_head" if pin == head["sha"] else "historical_immutable_pin"),
+                "locators": [
+                    {"url": repo_api, "locator": "default_branch, archived, disabled"},
+                    {"url": commit_api, "locator": "sha, commit.committer.date, commit.message"},
+                ],
+            }
+        )
     return {
         "meta": {
-            "schema_version": "1.0.0", "checked_at": "2026-09-25",
+            "schema_version": "1.0.0",
+            "checked_at": "2026-09-25",
             "scope": "Current repository HEADs for seven 2026 code-only cards",
             "status": "code_head_rechecked",
             "boundary": "A current default-branch HEAD is not the commit used in a manuscript, runtime study or published simulation. Historical ST pins stay immutable.",

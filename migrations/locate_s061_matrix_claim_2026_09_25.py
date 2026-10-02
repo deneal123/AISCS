@@ -3,13 +3,14 @@
 import json
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 DATA = Path(__file__).resolve().parents[1] / "data"
 
 
 def main() -> None:
-    matrix = json.loads((DATA / "evidence-matrix.json").read_text(encoding="utf-8"))
+    matrix = json.loads((data_path(DATA, "evidence-matrix.json")).read_text(encoding="utf-8"))
     rows = [
         row for row in matrix["rows"]
         if row["source_ids"] == ["S061"]
@@ -37,7 +38,7 @@ def main() -> None:
         ),
     }
     snapshot = snapshot_repository(DATA, label="pre-s061-claim-locator")
-    atomic_write_json(DATA / "evidence-matrix.json", matrix)
+    atomic_write_json(data_path(DATA, "evidence-matrix.json"), matrix)
     atomic_write_json(DATA / "s061-claim-locator-review-2026-09-25.json", audit)
     print(f"Updated S061 claim locator; snapshot: {snapshot}")
 

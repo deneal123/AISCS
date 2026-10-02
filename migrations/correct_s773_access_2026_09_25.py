@@ -5,6 +5,7 @@
 import json
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 DATA = Path(__file__).resolve().parents[1] / "data"
@@ -12,7 +13,7 @@ URL = "https://www.nature.com/articles/s41586-024-07389-x"
 
 
 def main() -> None:
-    path = DATA / "records.json"
+    path = data_path(DATA, "records.json")
     records = json.loads(path.read_text(encoding="utf-8"))
     source = next(x for x in records["sources"] if x["id"] == "S773")
     if source["evidence"]["access_status"] != "open":

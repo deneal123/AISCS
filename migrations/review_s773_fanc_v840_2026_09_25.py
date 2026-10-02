@@ -8,6 +8,7 @@ import argparse
 import json
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 DATA = Path(__file__).resolve().parents[1] / "data"
@@ -19,9 +20,9 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--apply", action="store_true")
     args = parser.parse_args()
-    records = json.loads((DATA / "records.json").read_text(encoding="utf-8"))
-    audit = json.loads((DATA / "drosophila-connectome-audit.json").read_text(encoding="utf-8"))
-    matrix = json.loads((DATA / "evidence-matrix.json").read_text(encoding="utf-8"))
+    records = json.loads((data_path(DATA, "records.json")).read_text(encoding="utf-8"))
+    audit = json.loads((data_path(DATA, "drosophila-connectome-audit.json")).read_text(encoding="utf-8"))
+    matrix = json.loads((data_path(DATA, "evidence-matrix.json")).read_text(encoding="utf-8"))
     source = next(x for x in records["sources"] if x["id"] == "S773")
     entry = next(x for x in audit["entries"] if x["source_id"] == "S773")
     row = next(x for x in matrix["rows"] if x["source_ids"] == ["S773", "S774"])
@@ -63,9 +64,9 @@ def main() -> None:
     row["locators"].append({"source_id": "S773", "url": WIKI, "locator": "Nature study analysis release: CAVE materialization v840, timestamp 1705479001.179472"})
     if args.apply:
         snapshot = snapshot_repository(DATA, label="pre-s773-fanc-v840-review")
-        atomic_write_json(DATA / "records.json", records)
-        atomic_write_json(DATA / "drosophila-connectome-audit.json", audit)
-        atomic_write_json(DATA / "evidence-matrix.json", matrix)
+        atomic_write_json(data_path(DATA, "records.json"), records)
+        atomic_write_json(data_path(DATA, "drosophila-connectome-audit.json"), audit)
+        atomic_write_json(data_path(DATA, "evidence-matrix.json"), matrix)
         print(f"Applied FANC v840 review; snapshot: {snapshot}")
     else:
         print("Dry run: S773 study release pinned; S740 input remains open")

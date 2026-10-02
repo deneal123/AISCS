@@ -1,0 +1,483 @@
+{
+  "meta": {
+    "batch_id": "r3-correction-s899-field-resolutions-2026-10-01",
+    "schema_version": "1.2.0",
+    "created_at": "2026-10-01",
+    "scope": "S899 terminal field resolution semantics and primary locators after first publication",
+    "status": "reviewed",
+    "reviewed_at": "2026-10-01"
+  },
+  "source_ids": [
+    "S899"
+  ],
+  "records": [
+    {
+      "id": "S899",
+      "title": "From Synapses to Dynamics: Obtaining Function from Structure in a Connectome Constrained Model of the Head Direction Circuit",
+      "year": 2025,
+      "source_type": "метод"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S899",
+      "decision": "verified_primary",
+      "checked_at": "2026-10-01",
+      "full_text_status": "checked",
+      "notes": "Corrected first-publication field resolutions: unavailable validation categories are terminal not_reported values, not reported measurements; ASCII locators replace damaged section symbols. Main JATS and official supplemental Methods were checked. No human ECAP/SCS or clinical transfer.",
+      "searches": [
+        {
+          "service": "bioRxiv",
+          "query": "10.1101/2025.05.26.655406 v1 full text and Supplemental Methods",
+          "url": "https://www.biorxiv.org/content/early/2025/05/29/2025.05.26.655406.source.xml",
+          "accessed_at": "2026-10-01"
+        }
+      ],
+      "updates": {
+        "identifiers": {
+          "doi": "10.1101/2025.05.26.655406"
+        },
+        "validation": {
+          "notes": "Corrected first-publication field resolutions: unavailable validation categories are terminal not_reported values, not reported measurements; ASCII locators replace damaged section symbols. Main JATS and official supplemental Methods were checked. No human ECAP/SCS or clinical transfer."
+        },
+        "field_resolution": {
+          "авторы": {
+            "state": "reported",
+            "value": "Sunny Duan; Ling Liang Dong; Ila Fiete",
+            "reason": "Checked in the primary bioRxiv v1 full text and supplemental Methods.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/early/2025/05/29/2025.05.26.655406.source.xml",
+                "locator": "bioRxiv v1 JATS, sections 2.2, 4.1-4.2, 5.1-5.4, 6; field авторы"
+              }
+            ]
+          },
+          "год": {
+            "state": "reported",
+            "value": 2025,
+            "reason": "Checked in the primary bioRxiv v1 full text and supplemental Methods.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/early/2025/05/29/2025.05.26.655406.source.xml",
+                "locator": "bioRxiv v1 JATS, sections 2.2, 4.1-4.2, 5.1-5.4, 6; field год"
+              }
+            ]
+          },
+          "издание": {
+            "state": "reported",
+            "value": "bioRxiv preprint v1",
+            "reason": "Checked in the primary bioRxiv v1 full text and supplemental Methods.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/early/2025/05/29/2025.05.26.655406.source.xml",
+                "locator": "bioRxiv v1 JATS, sections 2.2, 4.1-4.2, 5.1-5.4, 6; field издание"
+              }
+            ]
+          },
+          "модальность": {
+            "state": "reported",
+            "value": "connectome, simulation_state",
+            "reason": "Checked in the primary bioRxiv v1 full text and supplemental Methods.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/early/2025/05/29/2025.05.26.655406.source.xml",
+                "locator": "bioRxiv v1 JATS, sections 2.2, 4.1-4.2, 5.1-5.4, 6; field модальность"
+              }
+            ]
+          },
+          "задача": {
+            "state": "reported",
+            "value": "Recover head-direction circuit dynamics from a Drosophila hemibrain connectome",
+            "reason": "Checked in the primary bioRxiv v1 full text and supplemental Methods.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/early/2025/05/29/2025.05.26.655406.source.xml",
+                "locator": "bioRxiv v1 JATS, sections 2.2, 4.1-4.2, 5.1-5.4, 6; field задача"
+              }
+            ]
+          },
+          "метод": {
+            "state": "reported",
+            "value": "Self-supervised cell-type-level optimization of connectome-constrained rate dynamics, followed by in-silico ablations",
+            "reason": "Checked in the primary bioRxiv v1 full text and supplemental Methods.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/early/2025/05/29/2025.05.26.655406.source.xml",
+                "locator": "bioRxiv v1 JATS, sections 2.2, 4.1-4.2, 5.1-5.4, 6; field метод"
+              }
+            ]
+          },
+          "датасет": {
+            "state": "reported",
+            "value": "FlyEM hemibrain head-direction circuit, 439 modeled neurons",
+            "reason": "Checked in the primary bioRxiv v1 full text and supplemental Methods.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/early/2025/05/29/2025.05.26.655406.source.xml",
+                "locator": "bioRxiv v1 JATS, sections 2.2, 4.1-4.2, 5.1-5.4, 6; field датасет"
+              }
+            ]
+          },
+          "производительность": {
+            "state": "not_reported",
+            "value": null,
+            "reason": "Not reported or not applicable at the scope of this simulation-only study; no participant or human-transfer result inferred.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/early/2025/05/29/2025.05.26.655406.source.xml",
+                "locator": "bioRxiv v1 JATS, sections 2.2, 4.1-4.2, 5.1-5.4, 6; field производительность"
+              }
+            ]
+          },
+          "кросс_субъект": {
+            "state": "not_reported",
+            "value": null,
+            "reason": "Not reported or not applicable at the scope of this simulation-only study; no participant or human-transfer result inferred.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/early/2025/05/29/2025.05.26.655406.source.xml",
+                "locator": "bioRxiv v1 JATS, sections 2.2, 4.1-4.2, 5.1-5.4, 6; field кросс_субъект"
+              }
+            ]
+          },
+          "ограничения": {
+            "state": "reported",
+            "value": "Adult head-direction circuit and simulation only; no larval nociception, human ECAP, SCS or clinical outcomes. No new animal recordings. Data/code availability outside the checked paper is unresolved.",
+            "reason": "Checked in the primary bioRxiv v1 full text and supplemental Methods.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/early/2025/05/29/2025.05.26.655406.source.xml",
+                "locator": "bioRxiv v1 JATS, sections 2.2, 4.1-4.2, 5.1-5.4, 6; field ограничения"
+              }
+            ]
+          },
+          "identifiers.doi": {
+            "state": "reported",
+            "value": "10.1101/2025.05.26.655406",
+            "reason": "Checked in the primary bioRxiv v1 full text and supplemental Methods.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/early/2025/05/29/2025.05.26.655406.source.xml",
+                "locator": "bioRxiv v1 JATS, sections 2.2, 4.1-4.2, 5.1-5.4, 6; field identifiers.doi"
+              }
+            ]
+          },
+          "identifiers.pmid": {
+            "state": "not_reported",
+            "value": null,
+            "reason": "Not reported or not applicable at the scope of this simulation-only study; no participant or human-transfer result inferred.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/early/2025/05/29/2025.05.26.655406.source.xml",
+                "locator": "bioRxiv v1 JATS, sections 2.2, 4.1-4.2, 5.1-5.4, 6; field identifiers.pmid"
+              }
+            ]
+          },
+          "identifiers.arxiv_id": {
+            "state": "not_reported",
+            "value": null,
+            "reason": "Not reported or not applicable at the scope of this simulation-only study; no participant or human-transfer result inferred.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/early/2025/05/29/2025.05.26.655406.source.xml",
+                "locator": "bioRxiv v1 JATS, sections 2.2, 4.1-4.2, 5.1-5.4, 6; field identifiers.arxiv_id"
+              }
+            ]
+          },
+          "identifiers.patent_id": {
+            "state": "not_reported",
+            "value": null,
+            "reason": "Not reported or not applicable at the scope of this simulation-only study; no participant or human-transfer result inferred.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/early/2025/05/29/2025.05.26.655406.source.xml",
+                "locator": "bioRxiv v1 JATS, sections 2.2, 4.1-4.2, 5.1-5.4, 6; field identifiers.patent_id"
+              }
+            ]
+          },
+          "identifiers.dataset_id": {
+            "state": "not_reported",
+            "value": null,
+            "reason": "Not reported or not applicable at the scope of this simulation-only study; no participant or human-transfer result inferred.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/early/2025/05/29/2025.05.26.655406.source.xml",
+                "locator": "bioRxiv v1 JATS, sections 2.2, 4.1-4.2, 5.1-5.4, 6; field identifiers.dataset_id"
+              }
+            ]
+          },
+          "identifiers.exact_url": {
+            "state": "reported",
+            "value": "https://www.biorxiv.org/content/10.1101/2025.05.26.655406v1.full",
+            "reason": "Checked in the primary bioRxiv v1 full text and supplemental Methods.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/early/2025/05/29/2025.05.26.655406.source.xml",
+                "locator": "bioRxiv v1 JATS, sections 2.2, 4.1-4.2, 5.1-5.4, 6; field identifiers.exact_url"
+              }
+            ]
+          },
+          "provenance.retrieved_at": {
+            "state": "reported",
+            "value": "2026-10-01",
+            "reason": "Checked in the primary bioRxiv v1 full text and supplemental Methods.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/early/2025/05/29/2025.05.26.655406.source.xml",
+                "locator": "bioRxiv v1 JATS, sections 2.2, 4.1-4.2, 5.1-5.4, 6; field provenance.retrieved_at"
+              }
+            ]
+          },
+          "provenance.search_stream": {
+            "state": "reported",
+            "value": "NS-16",
+            "reason": "Checked in the primary bioRxiv v1 full text and supplemental Methods.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/early/2025/05/29/2025.05.26.655406.source.xml",
+                "locator": "bioRxiv v1 JATS, sections 2.2, 4.1-4.2, 5.1-5.4, 6; field provenance.search_stream"
+              }
+            ]
+          },
+          "provenance.query_or_seed": {
+            "state": "reported",
+            "value": "S896 reference 13; 10.1101/2025.05.26.655406",
+            "reason": "Checked in the primary bioRxiv v1 full text and supplemental Methods.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/early/2025/05/29/2025.05.26.655406.source.xml",
+                "locator": "bioRxiv v1 JATS, sections 2.2, 4.1-4.2, 5.1-5.4, 6; field provenance.query_or_seed"
+              }
+            ]
+          },
+          "provenance.iteration": {
+            "state": "reported",
+            "value": 4,
+            "reason": "Checked in the primary bioRxiv v1 full text and supplemental Methods.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/early/2025/05/29/2025.05.26.655406.source.xml",
+                "locator": "bioRxiv v1 JATS, sections 2.2, 4.1-4.2, 5.1-5.4, 6; field provenance.iteration"
+              }
+            ]
+          },
+          "evidence.species": {
+            "state": "reported",
+            "value": "Drosophila melanogaster",
+            "reason": "Checked in the primary bioRxiv v1 full text and supplemental Methods.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/early/2025/05/29/2025.05.26.655406.source.xml",
+                "locator": "bioRxiv v1 JATS, sections 2.2, 4.1-4.2, 5.1-5.4, 6; field evidence.species"
+              }
+            ]
+          },
+          "evidence.population": {
+            "state": "reported",
+            "value": "In-silico adult head-direction hemibrain circuit; 439 modeled neurons",
+            "reason": "Checked in the primary bioRxiv v1 full text and supplemental Methods.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/early/2025/05/29/2025.05.26.655406.source.xml",
+                "locator": "bioRxiv v1 JATS, sections 2.2, 4.1-4.2, 5.1-5.4, 6; field evidence.population"
+              }
+            ]
+          },
+          "evidence.subject_domain": {
+            "state": "reported",
+            "value": "drosophila_adult",
+            "reason": "Checked in the primary bioRxiv v1 full text and supplemental Methods.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/early/2025/05/29/2025.05.26.655406.source.xml",
+                "locator": "bioRxiv v1 JATS, sections 2.2, 4.1-4.2, 5.1-5.4, 6; field evidence.subject_domain"
+              }
+            ]
+          },
+          "evidence.modalities": {
+            "state": "reported",
+            "value": [
+              "connectome",
+              "simulation_state"
+            ],
+            "reason": "Checked in the primary bioRxiv v1 full text and supplemental Methods.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/early/2025/05/29/2025.05.26.655406.source.xml",
+                "locator": "bioRxiv v1 JATS, sections 2.2, 4.1-4.2, 5.1-5.4, 6; field evidence.modalities"
+              }
+            ]
+          },
+          "evidence.sample_size": {
+            "state": "not_reported",
+            "value": null,
+            "reason": "Not reported or not applicable at the scope of this simulation-only study; no participant or human-transfer result inferred.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/early/2025/05/29/2025.05.26.655406.source.xml",
+                "locator": "bioRxiv v1 JATS, sections 2.2, 4.1-4.2, 5.1-5.4, 6; field evidence.sample_size"
+              }
+            ]
+          },
+          "evidence.target_construct": {
+            "state": "reported",
+            "value": "technical_signal_quality",
+            "reason": "Checked in the primary bioRxiv v1 full text and supplemental Methods.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/early/2025/05/29/2025.05.26.655406.source.xml",
+                "locator": "bioRxiv v1 JATS, sections 2.2, 4.1-4.2, 5.1-5.4, 6; field evidence.target_construct"
+              }
+            ]
+          },
+          "evidence.target_label": {
+            "state": "reported",
+            "value": "Stable ring-attractor dynamics and angular-velocity integration in simulation",
+            "reason": "Checked in the primary bioRxiv v1 full text and supplemental Methods.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/early/2025/05/29/2025.05.26.655406.source.xml",
+                "locator": "bioRxiv v1 JATS, sections 2.2, 4.1-4.2, 5.1-5.4, 6; field evidence.target_label"
+              }
+            ]
+          },
+          "evidence.access_status": {
+            "state": "reported",
+            "value": "open",
+            "reason": "Checked in the primary bioRxiv v1 full text and supplemental Methods.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/early/2025/05/29/2025.05.26.655406.source.xml",
+                "locator": "bioRxiv v1 JATS, sections 2.2, 4.1-4.2, 5.1-5.4, 6; field evidence.access_status"
+              }
+            ]
+          },
+          "validation.checked_at": {
+            "state": "reported",
+            "value": "2026-10-01",
+            "reason": "Checked in the primary bioRxiv v1 full text and supplemental Methods.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/early/2025/05/29/2025.05.26.655406.source.xml",
+                "locator": "bioRxiv v1 JATS, sections 2.2, 4.1-4.2, 5.1-5.4, 6; field validation.checked_at"
+              }
+            ]
+          },
+          "validation.split_unit": {
+            "state": "not_reported",
+            "value": null,
+            "reason": "Not reported or not applicable at the scope of this simulation-only study; no participant or human-transfer result inferred.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/early/2025/05/29/2025.05.26.655406.source.xml",
+                "locator": "bioRxiv v1 JATS, sections 2.2, 4.1-4.2, 5.1-5.4, 6; field validation.split_unit"
+              }
+            ]
+          },
+          "validation.cross_subject": {
+            "state": "not_reported",
+            "value": null,
+            "reason": "Not reported or not applicable at the scope of this simulation-only study; no participant or human-transfer result inferred.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/early/2025/05/29/2025.05.26.655406.source.xml",
+                "locator": "bioRxiv v1 JATS, sections 2.2, 4.1-4.2, 5.1-5.4, 6; field validation.cross_subject"
+              }
+            ]
+          },
+          "validation.external_validation": {
+            "state": "not_reported",
+            "value": null,
+            "reason": "Not reported or not applicable at the scope of this simulation-only study; no participant or human-transfer result inferred.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/early/2025/05/29/2025.05.26.655406.source.xml",
+                "locator": "bioRxiv v1 JATS, sections 2.2, 4.1-4.2, 5.1-5.4, 6; field validation.external_validation"
+              }
+            ]
+          },
+          "validation.calibration": {
+            "state": "not_reported",
+            "value": null,
+            "reason": "Not reported or not applicable at the scope of this simulation-only study; no participant or human-transfer result inferred.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/early/2025/05/29/2025.05.26.655406.source.xml",
+                "locator": "bioRxiv v1 JATS, sections 2.2, 4.1-4.2, 5.1-5.4, 6; field validation.calibration"
+              }
+            ]
+          },
+          "validation.uncertainty": {
+            "state": "not_reported",
+            "value": null,
+            "reason": "The paper discusses multiple viable parameter fits but does not report a calibrated predictive uncertainty interval for another animal, human ECAP, SCS, or clinical outcome.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/early/2025/05/29/2025.05.26.655406.source.xml",
+                "locator": "bioRxiv v1 JATS, sections 2.2, 4.1-4.2, 5.1-5.4, 6; field validation.uncertainty"
+              }
+            ]
+          },
+          "validation.exclusion_reason": {
+            "state": "not_reported",
+            "value": null,
+            "reason": "Not reported or not applicable at the scope of this simulation-only study; no participant or human-transfer result inferred.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/early/2025/05/29/2025.05.26.655406.source.xml",
+                "locator": "bioRxiv v1 JATS, sections 2.2, 4.1-4.2, 5.1-5.4, 6; field validation.exclusion_reason"
+              }
+            ]
+          },
+          "validation.notes": {
+            "state": "reported",
+            "value": "Corrected first-publication field resolutions: unavailable validation categories are terminal not_reported values, not reported measurements; ASCII locators replace damaged section symbols. Main JATS and official supplemental Methods were checked. No human ECAP/SCS or clinical transfer.",
+            "reason": "Curation correction checked against the primary full text and the original S899 card.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/early/2025/05/29/2025.05.26.655406.source.xml",
+                "locator": "bioRxiv v1 JATS, sections 2.2, 4.1-4.2, 5.1-5.4, 6; field validation.notes"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

@@ -6,6 +6,7 @@ import argparse
 import json
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -51,13 +52,13 @@ ENTRIES = [
 
 
 def updated() -> tuple[dict, dict, dict, str]:
-    records = json.loads((DATA / "records.json").read_text(encoding="utf-8"))
+    records = json.loads((data_path(DATA, "records.json")).read_text(encoding="utf-8"))
     canonical = {r["id"]: r for r in records["sources"]}
     if any(canonical[source_id]["identifiers"]["doi"].lower() != doi.lower() for doi, source_id in DOIS.items()):
         raise ValueError("Publish EVOKE cards before audit integration")
-    protocol = json.loads((DATA / "search-protocol.json").read_text(encoding="utf-8"))
-    audit = json.loads((DATA / "scs-outcome-audit.json").read_text(encoding="utf-8"))
-    matrix = json.loads((DATA / "evidence-matrix.json").read_text(encoding="utf-8"))
+    protocol = json.loads((data_path(DATA, "search-protocol.json")).read_text(encoding="utf-8"))
+    audit = json.loads((data_path(DATA, "scs-outcome-audit.json")).read_text(encoding="utf-8"))
+    matrix = json.loads((data_path(DATA, "evidence-matrix.json")).read_text(encoding="utf-8"))
     stream = next(s for s in protocol["search_streams"] if s["id"] == "NS-10")
     if {lead["doi"].lower() for lead in stream["unindexed_primary_leads"]} != {doi.lower() for doi in DOIS}:
         raise ValueError("Expected two pending EVOKE leads")
@@ -115,9 +116,9 @@ def main() -> None:
         print(f"Dry run: {audit['meta']['records_count']} outcome-audit entries")
         return
     snapshot = snapshot_repository(DATA, label="pre-ns10-evoke-integration")
-    atomic_write_json(DATA / "search-protocol.json", protocol)
-    atomic_write_json(DATA / "scs-outcome-audit.json", audit)
-    atomic_write_json(DATA / "evidence-matrix.json", matrix)
+    atomic_write_json(data_path(DATA, "search-protocol.json"), protocol)
+    atomic_write_json(data_path(DATA, "scs-outcome-audit.json"), audit)
+    atomic_write_json(data_path(DATA, "evidence-matrix.json"), matrix)
     (ROOT / "TODO.md").write_text(todo, encoding="utf-8", newline="\n")
     print(f"Integrated one EVOKE cohort; snapshot: {snapshot}")
 

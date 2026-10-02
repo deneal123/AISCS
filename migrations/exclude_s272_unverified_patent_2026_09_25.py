@@ -8,6 +8,7 @@ from collections import Counter
 from pathlib import Path
 
 from service.completeness import completeness_summary
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -21,13 +22,13 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--apply", action="store_true")
     args = parser.parse_args()
-    records = json.loads((DATA / "records.json").read_text(encoding="utf-8"))
-    ledger = json.loads((DATA / "src07-coverage-ledger-2026-09-25.json").read_text(encoding="utf-8"))
-    completeness = json.loads((DATA / "completeness-report.json").read_text(encoding="utf-8"))
+    records = json.loads((data_path(DATA, "records.json")).read_text(encoding="utf-8"))
+    ledger = json.loads((data_path(DATA, "src07-coverage-ledger-2026-09-25.json")).read_text(encoding="utf-8"))
+    completeness = json.loads((data_path(DATA, "completeness-report.json")).read_text(encoding="utf-8"))
     source = next(s for s in records["sources"] if s["id"] == "S272")
     assert source["identifiers"]["patent_id"] == "CN122075919A"
     assert source["validation"]["status"] == "verified_metadata"
-    assert not any("S272" in r["source_ids"] for r in json.loads((DATA / "evidence-matrix.json").read_text(encoding="utf-8"))["rows"])
+    assert not any("S272" in r["source_ids"] for r in json.loads((data_path(DATA, "evidence-matrix.json")).read_text(encoding="utf-8"))["rows"])
     note = "A third-party topical index mentions candidate number CN122075919A, but the direct document route and official publication text were not recovered on 2026-09-25. Title, inventors, assignee, abstract and claims remain unidentified. Excluded from evidence pending an attributable primary patent record; this is not proof that the publication does not exist."
     source["validation"].update({
         "status": "rejected", "screening_status": "excluded_unverifiable",
@@ -79,7 +80,7 @@ def main() -> None:
     readme = readme.replace("- `archive/`", "- `s272-identity-exclusion-2026-09-25.json` — candidate patent identifier excluded from evidence until official attribution;\n- `archive/`")
     snapshot = snapshot_repository(DATA, label="pre-s272-identity-exclusion")
     for name, obj in (("records.json", records), ("src07-coverage-ledger-2026-09-25.json", ledger), ("completeness-report.json", completeness), ("s272-identity-exclusion-2026-09-25.json", audit)):
-        atomic_write_json(DATA / name, obj)
+        atomic_write_json(data_path(DATA, name), obj)
     (ROOT / "TODO.md").write_text(todo, encoding="utf-8", newline="\n")
     (DATA / "README.md").write_text(readme, encoding="utf-8", newline="\n")
     print(f"Excluded S272 as unverifiable; snapshot: {snapshot}")

@@ -8,10 +8,11 @@ import argparse
 import json
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 DATA = Path(__file__).resolve().parents[1] / "data"
-AUDIT = DATA / "ns11-prediction-audit.json"
+AUDIT = data_path(DATA, "ns11-prediction-audit.json")
 DATE = "2026-09-24"
 MEKHAIL = "https://pubmed.ncbi.nlm.nih.gov/31932490/"
 DE_JAEGER = "https://pubmed.ncbi.nlm.nih.gov/32166849/"

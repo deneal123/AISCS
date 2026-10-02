@@ -1,0 +1,118 @@
+{
+  "meta": {
+    "batch_id": "r5-correction-s356-figure5-outcomes-2026-09-28",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-28",
+    "scope": "Resolve S356 function assignment with Figure 5 while retaining Abstract inconsistency and single-case limits",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-28"
+  },
+  "source_ids": [
+    "S356"
+  ],
+  "records": [
+    {
+      "id": "S356",
+      "title": "Impact of Evoked Compound Action Potential (ECAP)-Controlled Closed-Loop Spinal Cord Stimulation in Refractory Lumbar Radiculopathy: A Case Report",
+      "year": 2026,
+      "source_type": "применение"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S356",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-28",
+      "full_text_status": "checked",
+      "notes": "Single uncontrolled five-day case with self-reported outcomes, possible placebo and contextual effects, and no generalizability. The Abstract swaps standing and walking follow-up durations relative to the mutually consistent Case Presentation/Results and Fig. 5; preserve this source-internal discrepancy. ECAP represents neural recruitment, not pain intensity.",
+      "searches": [
+        {
+          "service": "Cureus publisher PDF",
+          "query": "DOI 10.7759/cureus.102799 Figure 5 standing walking",
+          "url": "https://assets.cureus.com/uploads/case_report/pdf/460390/20260202-302464-fuovtq.pdf",
+          "accessed_at": "2026-09-28"
+        },
+        {
+          "service": "PubMed esummary",
+          "query": "41788118 DOI 10.7759/cureus.102799",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/41788118/",
+          "accessed_at": "2026-09-28"
+        }
+      ],
+      "updates": {
+        "производительность": "Five-day single case: approximately 24.2 million device adjustments, 100% utilization, self-reported NRS 7/10 to 1/10 and sleep 4 to 6 h. Case Presentation/Results and Fig. 5 agree on standing 10 min to approximately 1 h and walking 5 min to approximately 4 h; the Abstract swaps the two follow-up values.",
+        "ограничения": "Single uncontrolled five-day case with self-reported outcomes, possible placebo and contextual effects, and no generalizability. The Abstract swaps standing and walking follow-up durations relative to the mutually consistent Case Presentation/Results and Fig. 5; preserve this source-internal discrepancy. ECAP represents neural recruitment, not pain intensity.",
+        "identifiers": {
+          "doi": "10.7759/cureus.102799",
+          "pmid": "41788118"
+        },
+        "validation": {
+          "checked_at": "2026-09-28",
+          "notes": "Single uncontrolled five-day case with self-reported outcomes, possible placebo and contextual effects, and no generalizability. The Abstract swaps standing and walking follow-up durations relative to the mutually consistent Case Presentation/Results and Fig. 5; preserve this source-internal discrepancy. ECAP represents neural recruitment, not pain intensity."
+        },
+        "field_resolution": {
+          "производительность": {
+            "state": "reported",
+            "value": "Five-day single case: approximately 24.2 million device adjustments, 100% utilization, self-reported NRS 7/10 to 1/10 and sleep 4 to 6 h. Case Presentation/Results and Fig. 5 agree on standing 10 min to approximately 1 h and walking 5 min to approximately 4 h; the Abstract swaps the two follow-up values.",
+            "reason": "Figure 5 independently displays post-trial stand 1 h and walk 4 h, agreeing with body and differing from Abstract.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://assets.cureus.com/uploads/case_report/pdf/460390/20260202-302464-fuovtq.pdf",
+                "locator": "PDF pp. 1, 5-6; Abstract; Case Presentation/Results; Fig. 5"
+              }
+            ]
+          },
+          "ограничения": {
+            "state": "reported",
+            "value": "Single uncontrolled five-day case with self-reported outcomes, possible placebo and contextual effects, and no generalizability. The Abstract swaps standing and walking follow-up durations relative to the mutually consistent Case Presentation/Results and Fig. 5; preserve this source-internal discrepancy. ECAP represents neural recruitment, not pain intensity.",
+            "reason": "The source remains internally inconsistent at the Abstract, while body and figure agree; single-case causal limits remain.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://assets.cureus.com/uploads/case_report/pdf/460390/20260202-302464-fuovtq.pdf",
+                "locator": "PDF pp. 1, 5-7; Abstract; Case Presentation/Results; Fig. 5; Discussion"
+              }
+            ]
+          },
+          "identifiers.pmid": {
+            "state": "reported",
+            "value": "41788118",
+            "reason": "PubMed indexed the matching DOI, title, authors and Cureus citation.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://pubmed.ncbi.nlm.nih.gov/41788118/",
+                "locator": "PubMed PMID 41788118; article identifiers DOI 10.7759/cureus.102799"
+              }
+            ]
+          },
+          "validation.notes": {
+            "state": "reported",
+            "value": "Single uncontrolled five-day case with self-reported outcomes, possible placebo and contextual effects, and no generalizability. The Abstract swaps standing and walking follow-up durations relative to the mutually consistent Case Presentation/Results and Fig. 5; preserve this source-internal discrepancy. ECAP represents neural recruitment, not pain intensity.",
+            "reason": "Dated primary full-text/figure recheck; body and figure agree, Abstract differs.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://assets.cureus.com/uploads/case_report/pdf/460390/20260202-302464-fuovtq.pdf",
+                "locator": "PDF pp. 1, 5-7; Abstract; Results; Fig. 5; Discussion"
+              }
+            ]
+          },
+          "validation.checked_at": {
+            "state": "reported",
+            "value": "2026-09-28",
+            "reason": "Dated full-text and figure recheck.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://assets.cureus.com/uploads/case_report/pdf/460390/20260202-302464-fuovtq.pdf",
+                "locator": "PDF article header; Fig. 5"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

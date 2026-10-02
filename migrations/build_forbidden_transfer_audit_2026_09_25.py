@@ -7,12 +7,13 @@ import json
 import re
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"
 DATE = "2026-09-25"
-OUTPUT = DATA / "forbidden-transfer-audit-2026-09-25.json"
+OUTPUT = data_path(DATA, "forbidden-transfer-audit-2026-09-25.json")
 FIELDS = ("claim", "target_variable", "verified_evidence", "limitations", "permitted_conclusion")
 CONTEXT_PATTERNS = {
     "ecap_and_pain": re.compile(r"ecap.{0,80}pain|pain.{0,80}ecap", re.I),
@@ -92,9 +93,9 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--apply", action="store_true")
     args = parser.parse_args()
-    contract = json.loads((DATA / "scientific-contract.json").read_text(encoding="utf-8"))
-    matrix = json.loads((DATA / "evidence-matrix.json").read_text(encoding="utf-8"))
-    records = {s["id"] for s in json.loads((DATA / "records.json").read_text(encoding="utf-8"))["sources"]}
+    contract = json.loads((data_path(DATA, "scientific-contract.json")).read_text(encoding="utf-8"))
+    matrix = json.loads((data_path(DATA, "evidence-matrix.json")).read_text(encoding="utf-8"))
+    records = {s["id"] for s in json.loads((data_path(DATA, "records.json")).read_text(encoding="utf-8"))["sources"]}
     entities = {e["id"] for e in contract["entities"]}
     assert len(matrix["rows"]) == 150
     assert all(set(r["source_refs"]) <= records and set(r["contract_entities"]) <= entities for r in RULES)
@@ -148,7 +149,7 @@ def main() -> None:
         print(f"Dry run: {len(RULES)} rules, {len(contextual)} contextual rows reviewed, {len(direct_hits)} negated direct-equivalence regex hit")
         return
     todo = (ROOT / "TODO.md").read_text(encoding="utf-8")
-    new_note = "  Черновой реестр `data/forbidden-transfer-audit-2026-09-25.json` задаёт 10 явных запретов переноса и условия допустимого сопоставления. Все 150 строк матрицы просмотрены по пяти текстовым полям; 58 содержат пересечение терминов ECAP/боль, ноцицепция/боль или acute/chronic pain. Исправлены пять смешений целевых конструктов в матрице (`S149`, `S023`, `S154`, `S253`, `S273`) и четыре карточки (`S023`, `S149`, `S154`, `S273`); после исправлений прямого приравнивания в этих полях не обнаружено. Остальные выводы карточек и первичные тексты требуют дальнейшего просмотра; зависимость `EVD-03` и авторское принятие открыты. `EVD-04` не закрыт."
+    new_note = "  Черновой реестр `data/audits/transfer/forbidden-transfer-audit-2026-09-25.json` задаёт 10 явных запретов переноса и условия допустимого сопоставления. Все 150 строк матрицы просмотрены по пяти текстовым полям; 58 содержат пересечение терминов ECAP/боль, ноцицепция/боль или acute/chronic pain. Исправлены пять смешений целевых конструктов в матрице (`S149`, `S023`, `S154`, `S253`, `S273`) и четыре карточки (`S023`, `S149`, `S154`, `S273`); после исправлений прямого приравнивания в этих полях не обнаружено. Остальные выводы карточек и первичные тексты требуют дальнейшего просмотра; зависимость `EVD-03` и авторское принятие открыты. `EVD-04` не закрыт."
     todo, updated = re.subn(r"^  Черновой реестр `data/forbidden-transfer-audit-2026-09-25\.json`.*$", new_note, todo, flags=re.M)
     assert updated == 1
     readme = (DATA / "README.md").read_text(encoding="utf-8")

@@ -10,6 +10,7 @@ from mcp import Client, StdioServerParameters
 
 from service.completeness import migrate_record
 from service.core import DataError, load_json, sha256
+from service.data_layout import data_path
 from service.mcp_server import ResearchMcpService, create_server
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -46,10 +47,19 @@ def test_mcp_protocol_initialization_discovery_resource_and_read_tool() -> None:
                 "review_batch",
                 "cluster_manifest",
                 "snapshot",
+                "search_knowledge",
+                "graph_context",
+                "get_evidence",
+                "knowledge_status",
             } == {tool.name for tool in tools.tools}
             resources = await client.list_resources()
             resource_uris = {str(resource.uri) for resource in resources.resources}
             assert "research://guide" in resource_uris
+            assert "research://docs-index" in resource_uris
+            assert "research://todo-decisions" in resource_uris
+            assert "research://operations" in resource_uris
+            assert "research://research-status" in resource_uris
+            assert "research://evidence-audit" in resource_uris
             assert "research://scientific-contract" in resource_uris
             assert "research://human-dataset-matrix" in resource_uris
             assert "research://completeness" in resource_uris
@@ -63,6 +73,14 @@ def test_mcp_protocol_initialization_discovery_resource_and_read_tool() -> None:
             } == {template.uri_template for template in templates.resource_templates}
             guide = await client.read_resource("research://guide")
             assert guide.contents
+            decisions = await client.read_resource("research://todo-decisions")
+            assert "## SRC-01" in decisions.contents[0].text
+            assert "## REL-02" in decisions.contents[0].text
+            operations = await client.read_resource("research://operations")
+            assert "researchctl stage" in operations.contents[0].text
+            assert "GET /ready" in operations.contents[0].text
+            status = await client.read_resource("research://research-status")
+            assert "G0_REVISE" in status.contents[0].text
             contract = await client.read_resource("research://scientific-contract")
             assert "STOP-H3-A" in contract.contents[0].text
             result = await client.call_tool("status", {})
@@ -74,6 +92,11 @@ def test_mcp_protocol_initialization_discovery_resource_and_read_tool() -> None:
             concept_result = await client.call_tool("get_dissertation_concept", {})
             assert concept_result.is_error is not True
             assert concept_result.structured_content["meta"]["gate"] == "G0_REVISE"
+            knowledge = await client.call_tool("search_knowledge", {"query": "S740", "limit": 2})
+            assert knowledge.is_error is not True
+            assert knowledge.structured_content["items"][0]["id"] == "S740"
+            evidence = await client.call_tool("get_evidence", {"node_id": "S740"})
+            assert evidence.is_error is not True
 
     asyncio.run(exercise())
 
@@ -117,7 +140,7 @@ def test_mcp_write_flow_is_dry_run_then_snapshot_and_atomic_publish(tmp_path: Pa
 
     saved = service.save_candidate("fixture", candidate)
     assert saved["saved"] is True
-    records_path = data / "records.json"
+    records_path = data_path(data, "records.json")
     before = sha256(records_path)
     archives_before = len(list((data / "archive").glob("*/manifest.json")))
 
@@ -137,18 +160,20 @@ def test_mcp_write_flow_is_dry_run_then_snapshot_and_atomic_publish(tmp_path: Pa
 def test_mcp_blocks_duplicates_traversal_overwrite_and_bad_manifests(tmp_path: Path) -> None:
     data = _temporary_data(tmp_path)
     service = ResearchMcpService(data)
-    sources = load_json(data / "records.json")["sources"]
-    existing_url = next(item["identifiers"]["exact_url"] for item in sources if item["identifiers"].get("exact_url"))
-    existing_doi = next(item["identifiers"]["doi"] for item in sources if item["identifiers"].get("doi"))
+    sources = load_json(data_path(data, "records.json"))["sources"]
+    existing_url = next(
+        item["identifiers"]["exact_url"] for item in sources if item["identifiers"].get("exact_url")
+    )
+    existing_doi = next(
+        item["identifiers"]["doi"] for item in sources if item["identifiers"].get("doi")
+    )
 
     duplicate_url = _candidate(data, source_id="S999992", url=existing_url)
     rejected_url = service.save_candidate("duplicate-url", duplicate_url)
     assert rejected_url["saved"] is False
     assert not (data / "staging" / "inbox" / "duplicate-url.json").exists()
 
-    duplicate_doi = _candidate(
-        data, source_id="S999994", url="https://example.org/duplicate-doi"
-    )
+    duplicate_doi = _candidate(data, source_id="S999994", url="https://example.org/duplicate-doi")
     duplicate_doi["identifiers"]["doi"] = existing_doi
     rejected_doi = service.save_candidate("duplicate-doi", duplicate_doi)
     assert rejected_doi["saved"] is False
@@ -166,10 +191,11 @@ def test_mcp_blocks_duplicates_traversal_overwrite_and_bad_manifests(tmp_path: P
         service.cluster_manifest("../escape", apply=True)
 
     broken = data / "curation" / "relevance-5" / "batches" / "broken.json"
+    broken.parent.mkdir(parents=True, exist_ok=True)
     broken.write_text(json.dumps({"source_ids": ["S031"], "decisions": []}), encoding="utf-8")
     result = service.review_batch("broken", apply=False)
     assert result["ok"] is False
-    records_before = sha256(data / "records.json")
+    records_before = sha256(data_path(data, "records.json"))
     apply_result = service.review_batch("broken", apply=True)
     assert apply_result["applied"] is False
-    assert sha256(data / "records.json") == records_before
+    assert sha256(data_path(data, "records.json")) == records_before

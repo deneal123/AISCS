@@ -9,6 +9,7 @@ import json
 from pathlib import Path
 
 from service.completeness import completeness_summary
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 DATA = Path(__file__).resolve().parents[1] / "data"
@@ -45,10 +46,10 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--apply", action="store_true")
     args = parser.parse_args()
-    records = json.loads((DATA / "records.json").read_text(encoding="utf-8"))
-    completeness = json.loads((DATA / "completeness-report.json").read_text(encoding="utf-8"))
-    audit = json.loads((DATA / "synthetic-domain-audit.json").read_text(encoding="utf-8"))
-    matrix = json.loads((DATA / "evidence-matrix.json").read_text(encoding="utf-8"))
+    records = json.loads((data_path(DATA, "records.json")).read_text(encoding="utf-8"))
+    completeness = json.loads((data_path(DATA, "completeness-report.json")).read_text(encoding="utf-8"))
+    audit = json.loads((data_path(DATA, "synthetic-domain-audit.json")).read_text(encoding="utf-8"))
+    matrix = json.loads((data_path(DATA, "evidence-matrix.json")).read_text(encoding="utf-8"))
     source = next(x for x in records["sources"] if x["id"] == "S748")
     entry = next(x for x in audit["entries"] if x["source_id"] == "S748")
     row = next(x for x in matrix["rows"] if "S748" in x["source_ids"])
@@ -103,10 +104,10 @@ def main() -> None:
     completeness.update(completeness_summary(records["sources"]))
     if args.apply:
         snapshot = snapshot_repository(DATA, label="pre-s748-modmix-fulltext-review")
-        atomic_write_json(DATA / "records.json", records)
-        atomic_write_json(DATA / "synthetic-domain-audit.json", audit)
-        atomic_write_json(DATA / "evidence-matrix.json", matrix)
-        atomic_write_json(DATA / "completeness-report.json", completeness)
+        atomic_write_json(data_path(DATA, "records.json"), records)
+        atomic_write_json(data_path(DATA, "synthetic-domain-audit.json"), audit)
+        atomic_write_json(data_path(DATA, "evidence-matrix.json"), matrix)
+        atomic_write_json(data_path(DATA, "completeness-report.json"), completeness)
         print(f"Applied S748 full-text review; snapshot: {snapshot}")
     else:
         print("Dry run: S748 publisher PDF reviewed")

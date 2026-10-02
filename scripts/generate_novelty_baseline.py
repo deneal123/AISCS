@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 from typing import Any
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -321,7 +322,7 @@ def main() -> int:
         "dissertation-concept.json": build_concept(),
     }
     for name, payload in outputs.items():
-        atomic_write_json(DATA / name, payload)
+        atomic_write_json(data_path(DATA, name), payload)
     print(json.dumps({"ok": True, "files": sorted(outputs)}, ensure_ascii=False, indent=2))
     return 0
 

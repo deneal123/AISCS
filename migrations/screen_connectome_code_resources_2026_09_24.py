@@ -8,6 +8,7 @@ import argparse
 import json
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 DATA = Path(__file__).resolve().parents[1] / "data"
@@ -32,8 +33,8 @@ CODE = {
 
 
 def update() -> tuple[dict, dict]:
-    records_path = DATA / "records.json"
-    audit_path = DATA / "drosophila-connectome-audit.json"
+    records_path = data_path(DATA, "records.json")
+    audit_path = data_path(DATA, "drosophila-connectome-audit.json")
     records = json.loads(records_path.read_text(encoding="utf-8"))
     audit = json.loads(audit_path.read_text(encoding="utf-8"))
     if audit.get("screened_code_resources"):
@@ -67,8 +68,8 @@ def main() -> None:
     records, audit = update()
     if args.apply:
         snapshot = snapshot_repository(DATA, label="pre-connectome-code-resource-screen")
-        atomic_write_json(DATA / "records.json", records)
-        atomic_write_json(DATA / "drosophila-connectome-audit.json", audit)
+        atomic_write_json(data_path(DATA, "records.json"), records)
+        atomic_write_json(data_path(DATA, "drosophila-connectome-audit.json"), audit)
         print(f"Applied code-resource screen; snapshot: {snapshot}")
     else:
         print("Dry run: S200, S292 and S737 screened; S292 linked to S320")

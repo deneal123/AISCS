@@ -6,6 +6,7 @@ import argparse
 import json
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -18,8 +19,8 @@ VERSIONS = {
 
 
 def updated() -> tuple[dict, dict]:
-    records = json.loads((DATA / "records.json").read_text(encoding="utf-8"))
-    audit = json.loads((DATA / "src07-version-recheck-audit.json").read_text(encoding="utf-8"))
+    records = json.loads((data_path(DATA, "records.json")).read_text(encoding="utf-8"))
+    audit = json.loads((data_path(DATA, "src07-version-recheck-audit.json")).read_text(encoding="utf-8"))
     for sid, (arxiv_id, version, date) in VERSIONS.items():
         source = next(item for item in records["sources"] if item["id"] == sid)
         url = f"https://arxiv.org/abs/{arxiv_id}"
@@ -62,8 +63,8 @@ def main() -> None:
         print("Dry run: S286 arXiv v3 and S741 arXiv v1")
         return
     snapshot = snapshot_repository(DATA, label="pre-src07-arxiv-pair-recheck")
-    atomic_write_json(DATA / "records.json", records)
-    atomic_write_json(DATA / "src07-version-recheck-audit.json", audit)
+    atomic_write_json(data_path(DATA, "records.json"), records)
+    atomic_write_json(data_path(DATA, "src07-version-recheck-audit.json"), audit)
     print(f"Rechecked arXiv pair; snapshot: {snapshot}")
 
 

@@ -23,6 +23,8 @@ from copy import deepcopy
 from pathlib import Path
 from typing import Any
 
+from service.data_layout import data_path
+
 ROOT = Path(__file__).resolve().parents[1] / "data"
 SNAPSHOT = ROOT / "archive" / "2026-09-21"
 CHECKED_AT = "2026-09-21"
@@ -1001,9 +1003,9 @@ def build_validation_log() -> dict[str, Any]:
 
 
 def build_payloads() -> dict[str, Any]:
-    raw_records = load_json(SNAPSHOT / "records.json")
-    raw_clusters = load_json(SNAPSHOT / "clusters.json")
-    raw_st = load_json(SNAPSHOT / "ST.json")
+    raw_records = load_json(data_path(SNAPSHOT, "records.json", legacy=True))
+    raw_clusters = load_json(data_path(SNAPSHOT, "clusters.json", legacy=True))
+    raw_st = load_json(data_path(SNAPSHOT, "ST.json", legacy=True))
 
     records, aliases, record_stats = rebuild_records(raw_records)
     clusters, cluster_stats = rebuild_clusters(raw_clusters, records, aliases)
@@ -1096,7 +1098,7 @@ def main() -> None:
     output_dir = ROOT if args.apply else args.output_dir.resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
     for name, payload in payloads.items():
-        write_json(output_dir / name, payload)
+        write_json(data_path(output_dir, name), payload)
 
 
 if __name__ == "__main__":

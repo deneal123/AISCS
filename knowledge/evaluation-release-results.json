@@ -1,0 +1,403 @@
+{
+  "cases": 20,
+  "hits": 18,
+  "recall_at_10": 0.9,
+  "quality_ok": true,
+  "requested_mode": "hybrid",
+  "all_backends_used": true,
+  "generations": [
+    "g-56b4c46e48ad7a8b5db92c99"
+  ],
+  "results": [
+    {
+      "id": "release-en-01",
+      "hit": true,
+      "mode": "hybrid",
+      "generation": "g-56b4c46e48ad7a8b5db92c99",
+      "errors": [],
+      "seconds": 1.9982,
+      "returned_sources": [
+        "S012",
+        "S027",
+        "S029",
+        "S065",
+        "S066",
+        "S090",
+        "S152",
+        "S201",
+        "S803",
+        "S816"
+      ]
+    },
+    {
+      "id": "release-en-02",
+      "hit": true,
+      "mode": "hybrid",
+      "generation": "g-56b4c46e48ad7a8b5db92c99",
+      "errors": [],
+      "seconds": 1.1462,
+      "returned_sources": [
+        "S012",
+        "S027",
+        "S029",
+        "S065",
+        "S090",
+        "S152",
+        "S810",
+        "S827",
+        "S828",
+        "S901"
+      ]
+    },
+    {
+      "id": "release-en-03",
+      "hit": true,
+      "mode": "hybrid",
+      "generation": "g-56b4c46e48ad7a8b5db92c99",
+      "errors": [],
+      "seconds": 1.4554,
+      "returned_sources": [
+        "S016",
+        "S025",
+        "S033",
+        "S040",
+        "S045",
+        "S069",
+        "S075",
+        "S082",
+        "S189",
+        "S190"
+      ]
+    },
+    {
+      "id": "release-en-04",
+      "hit": true,
+      "mode": "hybrid",
+      "generation": "g-56b4c46e48ad7a8b5db92c99",
+      "errors": [],
+      "seconds": 1.0098,
+      "returned_sources": [
+        "S212",
+        "S286",
+        "S739",
+        "S741",
+        "S742",
+        "S743",
+        "S744",
+        "S745",
+        "S892",
+        "S897"
+      ]
+    },
+    {
+      "id": "release-en-05",
+      "hit": true,
+      "mode": "hybrid",
+      "generation": "g-56b4c46e48ad7a8b5db92c99",
+      "errors": [],
+      "seconds": 1.1408,
+      "returned_sources": [
+        "S095",
+        "S214",
+        "S286",
+        "S738",
+        "S740",
+        "S763",
+        "S775",
+        "S783",
+        "S896",
+        "S909"
+      ]
+    },
+    {
+      "id": "release-en-06",
+      "hit": true,
+      "mode": "hybrid",
+      "generation": "g-56b4c46e48ad7a8b5db92c99",
+      "errors": [],
+      "seconds": 1.0938,
+      "returned_sources": [
+        "S016",
+        "S036",
+        "S083",
+        "S149",
+        "S190",
+        "S224",
+        "S758",
+        "S759",
+        "S837",
+        "S851"
+      ]
+    },
+    {
+      "id": "release-en-07",
+      "hit": false,
+      "mode": "hybrid",
+      "generation": "g-56b4c46e48ad7a8b5db92c99",
+      "errors": [],
+      "seconds": 1.1781,
+      "returned_sources": [
+        "S034",
+        "S079",
+        "S105",
+        "S161",
+        "S239",
+        "S360",
+        "S756",
+        "S757",
+        "S784",
+        "S793"
+      ]
+    },
+    {
+      "id": "release-en-08",
+      "hit": true,
+      "mode": "hybrid",
+      "generation": "g-56b4c46e48ad7a8b5db92c99",
+      "errors": [],
+      "seconds": 1.3058,
+      "returned_sources": [
+        "S033",
+        "S034",
+        "S046",
+        "S105",
+        "S161",
+        "S165",
+        "S749",
+        "S751",
+        "S753",
+        "S754"
+      ]
+    },
+    {
+      "id": "release-en-09",
+      "hit": true,
+      "mode": "hybrid",
+      "generation": "g-56b4c46e48ad7a8b5db92c99",
+      "errors": [],
+      "seconds": 1.0203,
+      "returned_sources": [
+        "S016",
+        "S025",
+        "S036",
+        "S082",
+        "S083",
+        "S357",
+        "S738",
+        "S739",
+        "S748",
+        "S755"
+      ]
+    },
+    {
+      "id": "release-en-10",
+      "hit": true,
+      "mode": "hybrid",
+      "generation": "g-56b4c46e48ad7a8b5db92c99",
+      "errors": [],
+      "seconds": 1.4881,
+      "returned_sources": [
+        "S004",
+        "S033",
+        "S039",
+        "S045",
+        "S070",
+        "S071",
+        "S105",
+        "S189",
+        "S796",
+        "S836"
+      ]
+    },
+    {
+      "id": "release-ru-01",
+      "hit": true,
+      "mode": "hybrid",
+      "generation": "g-56b4c46e48ad7a8b5db92c99",
+      "errors": [],
+      "seconds": 1.2699,
+      "returned_sources": [
+        "S012",
+        "S013",
+        "S027",
+        "S065",
+        "S068",
+        "S090",
+        "S152",
+        "S214",
+        "S812"
+      ]
+    },
+    {
+      "id": "release-ru-02",
+      "hit": true,
+      "mode": "hybrid",
+      "generation": "g-56b4c46e48ad7a8b5db92c99",
+      "errors": [],
+      "seconds": 0.8344,
+      "returned_sources": [
+        "S012",
+        "S013",
+        "S031",
+        "S065",
+        "S152",
+        "S794",
+        "S795",
+        "S812"
+      ]
+    },
+    {
+      "id": "release-ru-03",
+      "hit": true,
+      "mode": "hybrid",
+      "generation": "g-56b4c46e48ad7a8b5db92c99",
+      "errors": [],
+      "seconds": 1.644,
+      "returned_sources": [
+        "S016",
+        "S021",
+        "S040",
+        "S075",
+        "S280"
+      ]
+    },
+    {
+      "id": "release-ru-04",
+      "hit": true,
+      "mode": "hybrid",
+      "generation": "g-56b4c46e48ad7a8b5db92c99",
+      "errors": [],
+      "seconds": 1.7703,
+      "returned_sources": [
+        "S061",
+        "S738",
+        "S739",
+        "S741",
+        "S742",
+        "S743",
+        "S744",
+        "S745",
+        "S892",
+        "S897"
+      ]
+    },
+    {
+      "id": "release-ru-05",
+      "hit": true,
+      "mode": "hybrid",
+      "generation": "g-56b4c46e48ad7a8b5db92c99",
+      "errors": [],
+      "seconds": 1.6667,
+      "returned_sources": [
+        "S095",
+        "S214",
+        "S286",
+        "S738",
+        "S740",
+        "S743",
+        "S744",
+        "S763",
+        "S896",
+        "S909"
+      ]
+    },
+    {
+      "id": "release-ru-06",
+      "hit": true,
+      "mode": "hybrid",
+      "generation": "g-56b4c46e48ad7a8b5db92c99",
+      "errors": [],
+      "seconds": 2.6276,
+      "returned_sources": [
+        "S088",
+        "S149",
+        "S191",
+        "S222",
+        "S224",
+        "S291",
+        "S791",
+        "S792",
+        "S837",
+        "S851"
+      ]
+    },
+    {
+      "id": "release-ru-07",
+      "hit": false,
+      "mode": "hybrid",
+      "generation": "g-56b4c46e48ad7a8b5db92c99",
+      "errors": [],
+      "seconds": 1.6061,
+      "returned_sources": [
+        "S034",
+        "S099",
+        "S105",
+        "S161",
+        "S764",
+        "S767",
+        "S784",
+        "S790",
+        "S826"
+      ]
+    },
+    {
+      "id": "release-ru-08",
+      "hit": true,
+      "mode": "hybrid",
+      "generation": "g-56b4c46e48ad7a8b5db92c99",
+      "errors": [],
+      "seconds": 1.6105,
+      "returned_sources": [
+        "S033",
+        "S042",
+        "S044",
+        "S045",
+        "S060",
+        "S161",
+        "S165",
+        "S227",
+        "S749",
+        "S754"
+      ]
+    },
+    {
+      "id": "release-ru-09",
+      "hit": true,
+      "mode": "hybrid",
+      "generation": "g-56b4c46e48ad7a8b5db92c99",
+      "errors": [],
+      "seconds": 1.9106,
+      "returned_sources": [
+        "S034",
+        "S161",
+        "S356",
+        "S750",
+        "S756",
+        "S757",
+        "S762",
+        "S781",
+        "S790",
+        "S793"
+      ]
+    },
+    {
+      "id": "release-ru-10",
+      "hit": true,
+      "mode": "hybrid",
+      "generation": "g-56b4c46e48ad7a8b5db92c99",
+      "errors": [],
+      "seconds": 1.6576,
+      "returned_sources": [
+        "S029",
+        "S286",
+        "S738",
+        "S739",
+        "S763",
+        "S775",
+        "S782",
+        "S797",
+        "S816"
+      ]
+    }
+  ]
+}

@@ -7,18 +7,29 @@ description: Safely collect, validate, deduplicate, and publish dissertation evi
 
 ## Purpose
 
+For evidence retrieval use `search_knowledge`, `graph_context`, `get_evidence`, and
+`knowledge_status`; see [knowledge guide](knowledge/README.md). Inspect the returned
+primary locator, verification status and scientific restrictions before using a hit.
+Keep `include_unreviewed` disabled for scientific answers. Similarity and graph navigation
+do not establish novelty, causal transfer, pain measurement or clinical validity.
+
 Use this workflow when adding or reviewing sources in this directory. The canonical
-contract is defined by `data/source-record.schema.json` and `data/vocabularies.json`; never
+contract is defined by `data/schema/source-record.schema.json` and `data/schema/vocabularies.json`; never
 reconstruct a competing ad-hoc schema in chat.
 
 ## Required reading
 
 Before changing data, read:
 
-1. `README.md` for commands and current corpus status;
-2. `docs/data-contract.md` for evidence boundaries;
-3. `docs/curation-workflow.md` for screening and publication rules;
-4. `data/source-record.schema.json` and `data/vocabularies.json` for exact machine values.
+1. [README](README.md) for commands and current corpus status;
+2. [Data contract](docs/reference/data-contract.md) for evidence boundaries;
+3. [Curation workflow](docs/reference/curation-workflow.md) for screening and publication rules;
+4. [Source schema](data/schema/source-record.schema.json) and [vocabularies](data/schema/vocabularies.json) for exact machine values.
+
+Use [TODO](TODO.md) for current criteria and statuses. Read only the relevant task
+section of the [decision ledger](docs/audits/todo-decision-ledger.md) when earlier
+checks or superseded requirements are needed; historical open states do not
+override the current TODO.
 
 ## Scientific boundaries
 

@@ -1,0 +1,100 @@
+{
+  "meta": {
+    "batch_id": "r5-correction-s004-pain-class-origin-2026-09-28",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-28",
+    "scope": "S004 abstract does not identify the stimulus paradigm or label origin, so experimental-pain construct is unsupported.",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-28"
+  },
+  "source_ids": [
+    "S004"
+  ],
+  "records": [
+    {
+      "id": "S004",
+      "title": "RE-HPBS-IPIC: A Resting EEG- and High-Activation Pain Brain Source-Driven Framework for Inter-Subject Pain Intensity Classification",
+      "year": 2026,
+      "source_type": "кросс_субъект"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S004",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-28",
+      "full_text_status": "metadata_only",
+      "notes": "Only the owner abstract was checked. It reports inter-subject pain-intensity classification on EEG datasets, but gives no dataset identity, stimulus paradigm or exact pain-label origin; experimental pain cannot be inferred. The abstract does not establish the exact held-out participant partition, N, calibration or external validation.",
+      "searches": [
+        {
+          "service": "Primary publisher text",
+          "query": "RE-HPBS-IPIC: A Resting EEG- and High-Activation Pain Brain Source-Driven Framework for Inter-Subject Pain Intensity Classification",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=41564065&retmode=xml",
+          "accessed_at": "2026-09-28"
+        }
+      ],
+      "updates": {
+        "identifiers": {
+          "doi": "10.1109/JBHI.2026.3650972"
+        },
+        "evidence": {
+          "target_construct": "unavailable_after_search"
+        },
+        "validation": {
+          "checked_at": "2026-09-28",
+          "notes": "Only the owner abstract was checked. It reports inter-subject pain-intensity classification on EEG datasets, but gives no dataset identity, stimulus paradigm or exact pain-label origin; experimental pain cannot be inferred. The abstract does not establish the exact held-out participant partition, N, calibration or external validation."
+        },
+        "field_resolution": {
+          "identifiers.doi": {
+            "state": "reported",
+            "value": "10.1109/JBHI.2026.3650972",
+            "reason": "S004 abstract does not identify the stimulus paradigm or label origin, so experimental-pain construct is unsupported.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=41564065&retmode=xml",
+                "locator": "NLM PubMed AbstractText, Objective/Methods/Results, PMID 41564065"
+              }
+            ]
+          },
+          "evidence.target_construct": {
+            "state": "unavailable_after_search",
+            "value": null,
+            "reason": "S004 abstract does not identify the stimulus paradigm or label origin, so experimental-pain construct is unsupported.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=41564065&retmode=xml",
+                "locator": "NLM PubMed AbstractText, Objective/Methods/Results, PMID 41564065"
+              }
+            ]
+          },
+          "validation.checked_at": {
+            "state": "reported",
+            "value": "2026-09-28",
+            "reason": "S004 abstract does not identify the stimulus paradigm or label origin, so experimental-pain construct is unsupported.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=41564065&retmode=xml",
+                "locator": "NLM PubMed AbstractText, Objective/Methods/Results, PMID 41564065"
+              }
+            ]
+          },
+          "validation.notes": {
+            "state": "reported",
+            "value": "Only the owner abstract was checked. It reports inter-subject pain-intensity classification on EEG datasets, but gives no dataset identity, stimulus paradigm or exact pain-label origin; experimental pain cannot be inferred. The abstract does not establish the exact held-out participant partition, N, calibration or external validation.",
+            "reason": "S004 abstract does not identify the stimulus paradigm or label origin, so experimental-pain construct is unsupported.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=41564065&retmode=xml",
+                "locator": "NLM PubMed AbstractText, Objective/Methods/Results, PMID 41564065"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

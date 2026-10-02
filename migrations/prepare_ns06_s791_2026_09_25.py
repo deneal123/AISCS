@@ -62,7 +62,7 @@ values = {
             "validate SCS/ECAP."
         ),
     13: json.loads((ROOT / (
-                               "data/vocabularies.json"
+                               "data/schema/vocabularies.json"
                            )).read_text(encoding=(
                                                                             "utf-8"
                                                                         )))[(

@@ -10,6 +10,7 @@ from typing import Any
 
 from .core import DataError, ResearchRepository, default_data_dir
 from .curation import build_queue, cluster_apply, cluster_check, review_apply, review_check
+from .data_layout import data_path
 from .integrity import validate_repository
 from .novelty import novelty_summary, search_novelty
 from .pipeline import (
@@ -43,8 +44,14 @@ def build_parser() -> argparse.ArgumentParser:
         help="directory with canonical JSON files",
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
+    from .knowledge.cli import parser as knowledge_parser
+    knowledge_parser(subparsers)
 
-    subparsers.add_parser("validate", help="run all repository integrity gates")
+    validate = subparsers.add_parser("validate", help="run all repository integrity gates")
+    validate.add_argument(
+        "--legacy-layout", action="store_true",
+        help="read an immutable historical snapshot with the former flat layout",
+    )
     subparsers.add_parser("stats", help="show corpus and evidence counters")
     subparsers.add_parser("completeness", help="show schema-2 terminal-resolution report")
     subparsers.add_parser("novelty-check", help="validate and summarize the novelty catalogue")
@@ -145,10 +152,15 @@ def main(argv: list[str] | None = None) -> int:
     root = args.data_dir.resolve()
     try:
         if args.command == "validate":
-            report = validate_repository(root)
+            report = validate_repository(root, legacy=args.legacy_layout)
             emit(report)
             return 0 if report["ok"] else 1
         repository = ResearchRepository(root)
+        if args.command == "knowledge":
+            from .knowledge.cli import run
+            report = run(args, repository)
+            emit(report)
+            return 0 if report.get("ok", report.get("quality_ok", True)) else 1
         if args.command == "stats":
             emit({"meta": repository.metadata(), "evidence": repository.evidence_summary()})
         elif args.command == "completeness":
@@ -158,7 +170,7 @@ def main(argv: list[str] | None = None) -> int:
             emit({"ok": report["ok"], "errors": report["errors"], **novelty_summary(root)})
             return 0 if report["ok"] else 1
         elif args.command == "migrate-v2":
-            records = json.loads((root / "records.json").read_text(encoding="utf-8"))
+            records = json.loads((data_path(root, "records.json")).read_text(encoding="utf-8"))
             current = records.get("meta", {}).get("schema_version")
             if current == "2.0.0":
                 emit({"ok": True, "applied": False, "status": "already_schema_2"})
@@ -172,7 +184,7 @@ def main(argv: list[str] | None = None) -> int:
                 outputs = migrate()
                 if args.apply:
                     for name, payload in outputs.items():
-                        atomic_write_json(root / name, payload)
+                        atomic_write_json(data_path(root, name), payload)
                 emit(
                     {
                         "ok": True,
@@ -182,7 +194,9 @@ def main(argv: list[str] | None = None) -> int:
                     }
                 )
         elif args.command == "novelty-queue":
-            protocol = json.loads((root / "search-protocol.json").read_text(encoding="utf-8"))
+            protocol = json.loads(
+                data_path(root, "search-protocol.json").read_text(encoding="utf-8")
+            )
             items = [
                 item
                 for item in protocol.get("search_streams", [])

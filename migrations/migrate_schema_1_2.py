@@ -15,6 +15,7 @@ if str(RESEARCH_ROOT) not in sys.path:
     sys.path.insert(0, str(RESEARCH_ROOT))
 
 from service.core import load_json  # noqa: E402
+from service.data_layout import data_path  # noqa: E402
 from service.pipeline import atomic_write_json  # noqa: E402
 
 DATA = RESEARCH_ROOT / "data"
@@ -105,7 +106,7 @@ def parse_args() -> argparse.Namespace:
 
 
 def main(*, apply: bool) -> None:
-    records = load_json(DATA / "records.json")
+    records = load_json(data_path(DATA, "records.json"))
     migrated = [migrate_record(record) for record in records.get("sources", [])]
     records["sources"] = migrated
     meta = records.setdefault("meta", {})
@@ -120,10 +121,10 @@ def main(*, apply: bool) -> None:
     )
     meta["updated_at"] = date.today().isoformat()
 
-    clusters = load_json(DATA / "clusters.json")
+    clusters = load_json(data_path(DATA, "clusters.json"))
     clusters.setdefault("meta", {})["schema_version"] = "1.2.0"
     clusters["meta"]["updated_at"] = date.today().isoformat()
-    aliases = load_json(DATA / "aliases.json")
+    aliases = load_json(data_path(DATA, "aliases.json"))
     aliases.setdefault("meta", {})["schema_version"] = "1.2.0"
     aliases["meta"]["updated_at"] = date.today().isoformat()
 
@@ -161,10 +162,10 @@ def main(*, apply: bool) -> None:
             }
         )
         return
-    atomic_write_json(DATA / "records.json", records)
-    atomic_write_json(DATA / "clusters.json", clusters)
-    atomic_write_json(DATA / "aliases.json", aliases)
-    atomic_write_json(DATA / "evidence-matrix.json", evidence_matrix)
+    atomic_write_json(data_path(DATA, "records.json"), records)
+    atomic_write_json(data_path(DATA, "clusters.json"), clusters)
+    atomic_write_json(data_path(DATA, "aliases.json"), aliases)
+    atomic_write_json(data_path(DATA, "evidence-matrix.json"), evidence_matrix)
 
 
 if __name__ == "__main__":

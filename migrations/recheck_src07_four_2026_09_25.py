@@ -6,6 +6,7 @@ import argparse
 import json
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -40,7 +41,7 @@ UPDATES = {
 
 
 def updated() -> tuple[dict, dict]:
-    records = json.loads((DATA / "records.json").read_text(encoding="utf-8"))
+    records = json.loads((data_path(DATA, "records.json")).read_text(encoding="utf-8"))
     by_id = {item["id"]: item for item in records["sources"]}
     for sid, spec in UPDATES.items():
         source = by_id[sid]
@@ -97,8 +98,8 @@ def main() -> None:
         print("Dry run: S034/S754/S320/S357 version metadata; SRC-07 remains open")
         return
     snapshot = snapshot_repository(DATA, label="pre-src07-four-version-recheck")
-    atomic_write_json(DATA / "records.json", records)
-    atomic_write_json(DATA / "src07-version-recheck-audit.json", audit)
+    atomic_write_json(data_path(DATA, "records.json"), records)
+    atomic_write_json(data_path(DATA, "src07-version-recheck-audit.json"), audit)
     print(f"Rechecked four 2026 records; snapshot: {snapshot}")
 
 

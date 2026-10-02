@@ -1,0 +1,188 @@
+{
+  "meta": {
+    "batch_id": "r3-correction-s031-vor-calcium-contraction-2026-10-01",
+    "schema_version": "1.2.0",
+    "created_at": "2026-10-01",
+    "scope": "S031 eLife Version of Record correction: functional methods, behavior modality, and figure-specific sample-size boundary",
+    "status": "reviewed",
+    "reviewed_at": "2026-10-01"
+  },
+  "source_ids": [
+    "S031"
+  ],
+  "records": [
+    {
+      "id": "S031",
+      "title": "Neural substrates of cold nociception in Drosophila larva",
+      "year": 2025,
+      "source_type": "метод"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S031",
+      "decision": "verified_primary",
+      "checked_at": "2026-10-01",
+      "full_text_status": "checked",
+      "notes": "Rechecked against the eLife Version of Record (DOI 10.7554/eLife.91582.3). Figures 1-4 and Methods > CaMPARI imaging verify connectome anatomy; 6 deg C cold-evoked CaMPARI2 sensory/Basin responses; CIII md optogenetic activation and postsynaptic GCaMP6m responses; cell-type silencing/coactivation; and contraction behavior. Figure-specific Ns and units are retained separately; no overall sample size is inferred. No subjective-pain, human ECAP/SCS, or cross-species-transfer outcome is measured. The existing evidence_role simulation_foundation is retained, matching S761 and describing intended mechanistic use rather than an article simulation. Card-level sample_size remains null; per-figure Ns are kept separate.",
+      "searches": [
+        {
+          "service": "eLife Version of Record",
+          "query": "DOI 10.7554/eLife.91582.3 full text and figure captions",
+          "url": "https://doi.org/10.7554/eLife.91582.3",
+          "accessed_at": "2026-10-01"
+        }
+      ],
+      "updates": {
+        "модальность": "Larval connectome/EM, neural activity (CaMPARI2 and GCaMP6m), and contraction behavior.",
+        "метод": "Larval connectome/EM; cold-evoked CaMPARI2 photoconversion and GCaMP6m imaging; CIII md optogenetic activation/coactivation and cell-type-specific silencing; larval contraction behavior.",
+        "датасет": "Larval CNS connectome plus figure-specific cold-evoked calcium and contraction measurements; sample sizes vary by assay and figure.",
+        "ограничения": "The Version of Record reports EM connectivity, CaMPARI2 and GCaMP6m activity assays, optogenetic activation/coactivation, cell-type silencing, and larval contraction. These are distinct anatomical, neural, and behavioral measures. Figure-specific sample sizes and units are not combined into one card-level denominator. The work does not measure subjective pain, human ECAP, SCS response, or cross-species transfer.",
+        "evidence": {
+          "population": "Drosophila melanogaster larvae. CaMPARI2 cold-imaging assays use third-instar larvae; behavioral assays include third-instar larvae and a separate first-to-third-instar developmental comparison.",
+          "sample_size": null,
+          "evidence_role": "simulation_foundation",
+          "modalities": [
+            "connectome",
+            "neural_activity",
+            "behavior"
+          ]
+        },
+        "identifiers": {
+          "doi": "10.7554/eLife.91582"
+        },
+        "validation": {
+          "checked_at": "2026-10-01",
+          "notes": "Rechecked against the eLife Version of Record (DOI 10.7554/eLife.91582.3). Figures 1-4 and Methods > CaMPARI imaging verify connectome anatomy; 6 deg C cold-evoked CaMPARI2 sensory/Basin responses; CIII md optogenetic activation and postsynaptic GCaMP6m responses; cell-type silencing/coactivation; and contraction behavior. Figure-specific Ns and units are retained separately; no overall sample size is inferred. No subjective-pain, human ECAP/SCS, or cross-species-transfer outcome is measured. The existing evidence_role simulation_foundation is retained, matching S761 and describing intended mechanistic use rather than an article simulation."
+        },
+        "field_resolution": {
+          "модальность": {
+            "state": "reported",
+            "value": "Larval connectome/EM, neural activity (CaMPARI2 and GCaMP6m), and contraction behavior.",
+            "reason": "Primary Version of Record reports neural activity, connectome, and contraction behavior.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://doi.org/10.7554/eLife.91582.3",
+                "locator": "Abstract; Figures 1-4"
+              }
+            ]
+          },
+          "метод": {
+            "state": "reported",
+            "value": "Larval connectome/EM; cold-evoked CaMPARI2 photoconversion and GCaMP6m imaging; CIII md optogenetic activation/coactivation and cell-type-specific silencing; larval contraction behavior.",
+            "reason": "Methods and figure legends report separate anatomy, activity, perturbation, and behavior assays.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://doi.org/10.7554/eLife.91582.3",
+                "locator": "Methods > CaMPARI imaging; Results; Figures 1-4"
+              }
+            ]
+          },
+          "датасет": {
+            "state": "reported",
+            "value": "Larval CNS connectome plus figure-specific cold-evoked calcium and contraction measurements; sample sizes vary by assay and figure.",
+            "reason": "The paper combines larval connectome with figure-specific physiology and behavior observations.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://doi.org/10.7554/eLife.91582.3",
+                "locator": "Figures 1-4; Methods > CaMPARI imaging"
+              }
+            ]
+          },
+          "ограничения": {
+            "state": "reported",
+            "value": "The Version of Record reports EM connectivity, CaMPARI2 and GCaMP6m activity assays, optogenetic activation/coactivation, cell-type silencing, and larval contraction. These are distinct anatomical, neural, and behavioral measures. Figure-specific sample sizes and units are not combined into one card-level denominator. The work does not measure subjective pain, human ECAP, SCS response, or cross-species transfer.",
+            "reason": "Bounded to measured larval neural activity, connectivity, and contraction endpoints.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://doi.org/10.7554/eLife.91582.3",
+                "locator": "Abstract; Results; Discussion; Figures 1-4"
+              }
+            ]
+          },
+          "evidence.population": {
+            "state": "reported",
+            "value": "Drosophila melanogaster larvae. CaMPARI2 cold-imaging assays use third-instar larvae; behavioral assays include third-instar larvae and a separate first-to-third-instar developmental comparison.",
+            "reason": "Assay populations and stages are specified in the figure captions and Methods.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://doi.org/10.7554/eLife.91582.3",
+                "locator": "Figure 1B-G; Methods > CaMPARI imaging; Methods > CT behavior across life stages"
+              }
+            ]
+          },
+          "evidence.sample_size": {
+            "state": "not_reported",
+            "value": null,
+            "reason": "No single cross-assay sample size is reported. Figure captions provide assay-specific counts and units: Fig. 1B-C CaMPARI2 n=32 per sensory cell type and condition; Fig. 1D cold-behavior average n=72; Fig. 2 Basin silencing average n=68 and CIII/Basin coactivation control n=143 with experimental average n=49; Fig. 3 Basin CaMPARI2 average n=197/27/119/46 and CIII-to-Basin GCaMP6m average n=13 per genotype; Fig. 4 cold-behavior average n=64 and coactivation control n=143 with experimental average n=33. Keep these figure-specific denominators separate; leave the global sample_size null.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://doi.org/10.7554/eLife.91582.3",
+                "locator": "Figures 1-4 captions; each reports assay-specific Ns and units"
+              }
+            ]
+          },
+          "evidence.modalities": {
+            "state": "reported",
+            "value": [
+              "connectome",
+              "neural_activity",
+              "behavior"
+            ],
+            "reason": "Version of Record includes connectivity, neural activity measures, and contraction behavior.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://doi.org/10.7554/eLife.91582.3",
+                "locator": "Figures 1-4"
+              }
+            ]
+          },
+          "identifiers.doi": {
+            "state": "reported",
+            "value": "10.7554/eLife.91582",
+            "reason": "Version of Record DOI verified for the canonical article.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://doi.org/10.7554/eLife.91582.3",
+                "locator": "Version of Record DOI 10.7554/eLife.91582.3"
+              }
+            ]
+          },
+          "validation.checked_at": {
+            "state": "reported",
+            "value": "2026-10-01",
+            "reason": "Version of Record checked on this date.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://doi.org/10.7554/eLife.91582.3",
+                "locator": "Version of Record DOI 10.7554/eLife.91582.3"
+              }
+            ]
+          },
+          "validation.notes": {
+            "state": "reported",
+            "value": "Rechecked against the eLife Version of Record (DOI 10.7554/eLife.91582.3). Figures 1-4 and Methods > CaMPARI imaging verify connectome anatomy; 6 deg C cold-evoked CaMPARI2 sensory/Basin responses; CIII md optogenetic activation and postsynaptic GCaMP6m responses; cell-type silencing/coactivation; and contraction behavior. Figure-specific Ns and units are retained separately; no overall sample size is inferred. No subjective-pain, human ECAP/SCS, or cross-species-transfer outcome is measured. The existing evidence_role simulation_foundation is retained, matching S761 and describing intended mechanistic use rather than an article simulation. Card-level sample_size remains null; per-figure Ns are kept separate.",
+            "reason": "Version of Record and figure-specific methods/legends checked.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://doi.org/10.7554/eLife.91582.3",
+                "locator": "Figures 1-4; Methods > CaMPARI imaging"
+              }
+            ]
+          }
+        }
+      },
+      "claims": []
+    }
+  ]
+}

@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import Any
 
 from service.core import load_json
+from service.data_layout import current_data_files, data_path
 from service.integrity import validate_repository
 from service.pipeline import atomic_write_json, snapshot_repository
 from service.st_curation import iter_resources
@@ -130,7 +131,7 @@ def runtime_payload() -> dict[str, Any]:
 
 
 def build_outputs(data_dir: Path = DATA) -> dict[str, dict[str, Any]]:
-    st = load_json(data_dir / "ST.json")
+    st = load_json(data_path(data_dir, "ST.json"))
     resources = {resource["resource_id"]: resource for _, _, resource in iter_resources(st)}
     for resource_id, (spdx, digest) in LICENSES.items():
         resource = resources[resource_id]
@@ -177,7 +178,7 @@ def build_outputs(data_dir: Path = DATA) -> dict[str, dict[str, Any]]:
     )
     st["meta"].update({"проверено": DATE, "reported_software_licenses": reported_licenses})
 
-    audit = load_json(data_dir / "audit-report.json")
+    audit = load_json(data_path(data_dir, "audit-report.json"))
     audit["meta"]["generated_at"] = DATE
     audit["runtime_audit"] = {
         "checked_at": DATE,
@@ -187,7 +188,7 @@ def build_outputs(data_dir: Path = DATA) -> dict[str, dict[str, Any]]:
     }
     audit["current_corpus"]["reported_spdx_licenses"] = reported_licenses
 
-    validation_log = load_json(data_dir / "validation-log.json")
+    validation_log = load_json(data_path(data_dir, "validation-log.json"))
     validation_log.setdefault("searches", []).append(
         {
             "search_id": "RUNTIME-2026-09-24-01",
@@ -211,10 +212,12 @@ def build_outputs(data_dir: Path = DATA) -> dict[str, dict[str, Any]]:
 def validate_outputs(outputs: dict[str, dict[str, Any]], data_dir: Path = DATA) -> None:
     with tempfile.TemporaryDirectory(prefix="research-runtime-") as temporary:
         target = Path(temporary)
-        for path in data_dir.glob("*.json"):
-            shutil.copy2(path, target / path.name)
+        for path in current_data_files(data_dir):
+            destination = target / path.relative_to(data_dir)
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(path, destination)
         for name, payload in outputs.items():
-            atomic_write_json(target / name, payload)
+            atomic_write_json(data_path(target, name), payload)
         report = validate_repository(target)
         if not report["ok"]:
             raise ValueError("; ".join(report["errors"]))
@@ -230,7 +233,7 @@ def main() -> int:
     if args.apply:
         snapshot = snapshot_repository(DATA, label="pre-runtime-audit")
         for name, payload in outputs.items():
-            atomic_write_json(DATA / name, payload)
+            atomic_write_json(data_path(DATA, name), payload)
     print(json.dumps({"ok": True, "applied": args.apply, "snapshot": str(snapshot) if snapshot else None}, indent=2))
     return 0
 

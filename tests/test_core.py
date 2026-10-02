@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from service.core import ResearchRepository, load_json
+from service.data_layout import data_path
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"
@@ -24,4 +25,4 @@ def test_search_and_evidence_filters_compose() -> None:
 
 def test_jsonl_export_has_one_line_per_source() -> None:
     repository = ResearchRepository(DATA)
-    assert len(repository.export_jsonl().splitlines()) == len(load_json(DATA / "records.json")["sources"])
+    assert len(repository.export_jsonl().splitlines()) == len(load_json(data_path(DATA, "records.json"))["sources"])

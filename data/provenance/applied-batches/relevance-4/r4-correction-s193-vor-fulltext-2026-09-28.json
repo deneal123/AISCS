@@ -1,0 +1,589 @@
+{
+  "meta": {
+    "batch_id": "r4-correction-s193-vor-fulltext-2026-09-28",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-28",
+    "scope": "Correct S193 card against author-lab-hosted IEEE Version of Record; preserve validation limits",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-28"
+  },
+  "source_ids": [
+    "S193"
+  ],
+  "records": [],
+  "decisions": [
+    {
+      "source_id": "S193",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-28",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "service": "corresponding-author lab VOR PDF",
+          "query": "DOI 10.1109/TAFFC.2025.3567307 final full text; modalities, FLACC, dataset sample, CV and external validation",
+          "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+          "accessed_at": "2026-09-28"
+        },
+        {
+          "service": "corresponding-author publications page",
+          "query": "Confirm author-lab publication route and PDF identity",
+          "url": "https://so-link.github.io/publications/",
+          "accessed_at": "2026-09-28"
+        }
+      ],
+      "updates": {
+        "identifiers": {
+          "exact_url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf"
+        },
+        "provenance": {
+          "retrieved_at": "2026-09-28",
+          "query_or_seed": "DOI 10.1109/TAFFC.2025.3567307; corresponding-author lab VOR PDF"
+        },
+        "evidence": {
+          "population": "Postoperative children in the MPP dataset; 701 valid video samples with audio from various patients; distinct participant count not reported.",
+          "modalities": [
+            "video_face",
+            "audio"
+          ],
+          "sample_size": 701,
+          "target_label": "Average clinician-rated FLACC score per sample; 1-4 medical doctors scored each sample; not self-report.",
+          "access_status": "request_required"
+        },
+        "validation": {
+          "split_unit": "not_reported",
+          "cross_subject": "not_reported",
+          "external_validation": "not_reported",
+          "calibration": "not_reported",
+          "uncertainty": "not_reported",
+          "checked_at": "2026-09-28",
+          "notes": "Full IEEE Version of Record checked; PDF SHA-256 7ee9edfd4974a9577bcc5769679f44df1dfa45932ae43f56b1997d8c89a92922. MPP contains 701 valid video samples with audio, not 701 identified participants. Target is average FLACC rated by 1-4 medical doctors/sample. Five-fold CV is reported; fold unit and participant-disjoint assignment are not. No external validation or uncertainty calibration reported. Data are available from corresponding author on request."
+        },
+        "field_resolution": {
+          "identifiers.exact_url": {
+            "state": "reported",
+            "value": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+            "reason": "Corresponding-author lab-hosted published Version of Record, verified against DOI/title/volume/pages.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+                "locator": "VOR PDF, IEEE TAFFC 16(4), 2828-2841, DOI 10.1109/TAFFC.2025.3567307; SHA-256 7ee9edfd4974a9577bcc5769679f44df1dfa45932ae43f56b1997d8c89a92922"
+              }
+            ]
+          },
+          "provenance.retrieved_at": {
+            "state": "reported",
+            "value": "2026-09-28",
+            "reason": "Date the final VOR PDF was checked and hashed.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+                "locator": "VOR PDF, IEEE TAFFC 16(4), 2828-2841, DOI 10.1109/TAFFC.2025.3567307; SHA-256 7ee9edfd4974a9577bcc5769679f44df1dfa45932ae43f56b1997d8c89a92922"
+              }
+            ]
+          },
+          "provenance.query_or_seed": {
+            "state": "reported",
+            "value": "DOI 10.1109/TAFFC.2025.3567307; corresponding-author lab VOR PDF",
+            "reason": "Exact DOI and corresponding-author lab VOR route used.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+                "locator": "VOR PDF, IEEE TAFFC 16(4), 2828-2841, DOI 10.1109/TAFFC.2025.3567307; SHA-256 7ee9edfd4974a9577bcc5769679f44df1dfa45932ae43f56b1997d8c89a92922"
+              }
+            ]
+          },
+          "evidence.population": {
+            "state": "reported",
+            "value": "Postoperative children in the MPP dataset; 701 valid video samples with audio from various patients; distinct participant count not reported.",
+            "reason": "Reported video sample count does not identify participant count.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+                "locator": "Section V-A, p. 2833: 701 valid video samples with audio from various patients; not a distinct-patient count"
+              }
+            ]
+          },
+          "evidence.modalities": {
+            "state": "reported",
+            "value": [
+              "video_face",
+              "audio"
+            ],
+            "reason": "VOR identifies facial video and vocal/audio modalities.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+                "locator": "Section IV, pp. 2830-2833: facial video frames and vocal/audio features; audio uses spectrogram/MFCC; expert fusion and regression"
+              }
+            ]
+          },
+          "evidence.sample_size": {
+            "state": "reported",
+            "value": 701,
+            "reason": "Valid video samples, not unique participants.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+                "locator": "Section V-A, p. 2833: 701 valid video samples with audio from various patients; not a distinct-patient count"
+              }
+            ]
+          },
+          "evidence.target_label": {
+            "state": "reported",
+            "value": "Average clinician-rated FLACC score per sample; 1-4 medical doctors scored each sample; not self-report.",
+            "reason": "VOR reports average FLACC labels from 1-4 medical doctors per sample.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+                "locator": "Section V-A, p. 2833: average FLACC ratings by 1-4 medical doctors per sample"
+              }
+            ]
+          },
+          "evidence.access_status": {
+            "state": "reported",
+            "value": "request_required",
+            "reason": "Data availability says available from corresponding author on request.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+                "locator": "Acknowledgment p. 2841: data available from corresponding author on request; IRB 044A01; ChiCTR2200058967"
+              }
+            ]
+          },
+          "evidence.target_construct": {
+            "state": "unavailable_after_search",
+            "value": null,
+            "reason": "VOR identifies clinician-rated composite FLACC labels, but controlled vocabulary lacks a matching clinician-observed composite FLACC class; do not classify as self-report or facial expression.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+                "locator": "Section V-A, p. 2833: average FLACC ratings by 1-4 medical doctors per sample; checked controlled target_construct vocabulary"
+              }
+            ]
+          },
+          "validation.split_unit": {
+            "state": "reported",
+            "value": "not_reported",
+            "reason": "Five-fold CV is reported, but split unit is not stated.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+                "locator": "Sections V-B/V-C, pp. 2834-2835: five-fold cross-validation; split unit and subject-disjoint status not stated"
+              }
+            ]
+          },
+          "validation.cross_subject": {
+            "state": "reported",
+            "value": "not_reported",
+            "reason": "Participant-disjoint fold assignment is not reported.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+                "locator": "Sections V-B/V-C, pp. 2834-2835: five-fold cross-validation; split unit and subject-disjoint status not stated"
+              }
+            ]
+          },
+          "validation.external_validation": {
+            "state": "reported",
+            "value": "not_reported",
+            "reason": "No external dataset evaluation reported.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+                "locator": "Sections V-B/V-C/V-F, pp. 2834-2838: no external dataset validation or uncertainty calibration reported"
+              }
+            ]
+          },
+          "validation.calibration": {
+            "state": "reported",
+            "value": "not_reported",
+            "reason": "No calibration analysis reported; confidence weighting is not calibration.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+                "locator": "Sections V-B/V-C/V-F, pp. 2834-2838: no external dataset validation or uncertainty calibration reported"
+              }
+            ]
+          },
+          "validation.uncertainty": {
+            "state": "reported",
+            "value": "not_reported",
+            "reason": "No uncertainty evaluation reported; confidence weighting alone is not uncertainty validation.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+                "locator": "Sections V-B/V-C/V-F, pp. 2834-2838: no external dataset validation or uncertainty calibration reported"
+              }
+            ]
+          },
+          "validation.checked_at": {
+            "state": "reported",
+            "value": "2026-09-28",
+            "reason": "Date of full VOR check.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+                "locator": "VOR PDF, IEEE TAFFC 16(4), 2828-2841, DOI 10.1109/TAFFC.2025.3567307; SHA-256 7ee9edfd4974a9577bcc5769679f44df1dfa45932ae43f56b1997d8c89a92922"
+              }
+            ]
+          },
+          "validation.notes": {
+            "state": "reported",
+            "value": "Full IEEE Version of Record checked; PDF SHA-256 7ee9edfd4974a9577bcc5769679f44df1dfa45932ae43f56b1997d8c89a92922. MPP contains 701 valid video samples with audio, not 701 identified participants. Target is average FLACC rated by 1-4 medical doctors/sample. Five-fold CV is reported; fold unit and participant-disjoint assignment are not. No external validation or uncertainty calibration reported. Data are available from corresponding author on request.",
+            "reason": "Concise full-text verification summary with sample/participant and validation boundaries.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+                "locator": "VOR PDF, IEEE TAFFC 16(4), 2828-2841, DOI 10.1109/TAFFC.2025.3567307; SHA-256 7ee9edfd4974a9577bcc5769679f44df1dfa45932ae43f56b1997d8c89a92922; Section V-A, p. 2833: 701 valid video samples with audio from various patients; not a distinct-patient count; Section V-A, p. 2833: average FLACC ratings by 1-4 medical doctors per sample; Sections V-B/V-C, pp. 2834-2835: five-fold cross-validation; split unit and subject-disjoint status not stated; Acknowledgment p. 2841: data available from corresponding author on request; IRB 044A01; ChiCTR2200058967"
+              }
+            ]
+          },
+          "\u043e\u0433\u0440\u0430\u043d\u0438\u0447\u0435\u043d\u0438\u044f": {
+            "state": "reported",
+            "value": "Distinct participant count and participant-disjoint split are not reported; no external dataset validation or uncertainty calibration reported. Labels are clinician-rated FLACC behavioral scores and may reflect observer bias. Data require request. No ECAP/SCS transfer established.",
+            "reason": "Limitations bounded to VOR reporting and omissions.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+                "locator": "Sections V-B/V-C, pp. 2834-2835: five-fold cross-validation; split unit and subject-disjoint status not stated; Sections V-B/V-C/V-F, pp. 2834-2838: no external dataset validation or uncertainty calibration reported; Acknowledgment p. 2841: data available from corresponding author on request; IRB 044A01; ChiCTR2200058967"
+              }
+            ]
+          },
+          "\u043c\u0435\u0442\u043e\u0434": {
+            "state": "reported",
+            "value": "Per-modality sample clustering, multiple expert regressors and prototype-based confidence-weighted multimodal fusion for regression.",
+            "reason": "VOR methods describe clustering, experts and confidence-based fusion.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+                "locator": "Section IV, pp. 2830-2833: facial video frames and vocal/audio features; audio uses spectrogram/MFCC; expert fusion and regression"
+              }
+            ]
+          },
+          "\u0434\u0430\u0442\u0430\u0441\u0435\u0442": {
+            "state": "reported",
+            "value": "Postoperative children in the MPP dataset; 701 valid video samples with audio from various patients; distinct participant count not reported. Data available from corresponding author on request.",
+            "reason": "Dataset sample count is not participant count; access statement requires request.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+                "locator": "Section V-A, p. 2833: 701 valid video samples with audio from various patients; not a distinct-patient count; Acknowledgment p. 2841: data available from corresponding author on request; IRB 044A01; ChiCTR2200058967"
+              }
+            ]
+          },
+          "\u043f\u0440\u043e\u0438\u0437\u0432\u043e\u0434\u0438\u0442\u0435\u043b\u044c\u043d\u043e\u0441\u0442\u044c": {
+            "state": "reported",
+            "value": "Abstract: MAE 1.03 and PCC 0.88. Separate Fig. 7 sensitivity result (5 facial + 3 vocal experts): MAE 1.040 and PCC 0.888.",
+            "reason": "Keep abstract headline and sensitivity analysis separate.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+                "locator": "Abstract p. 2828: MAE 1.03/PCC .88; Fig. 7, pp. 2837-2838: 5 facial+3 vocal expert sensitivity combo MAE 1.040/PCC .888"
+              }
+            ]
+          },
+          "\u043a\u0440\u043e\u0441\u0441_\u0441\u0443\u0431\u044a\u0435\u043a\u0442": {
+            "state": "reported",
+            "value": "Five-fold cross-validation; participant-disjoint fold assignment not reported.",
+            "reason": "Five-fold CV is reported, but split unit and participant grouping are not.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+                "locator": "Sections V-B/V-C, pp. 2834-2835: five-fold cross-validation; split unit and subject-disjoint status not stated"
+              }
+            ]
+          }
+        },
+        "risk_flags": [
+          "missing_cross_subject_validation"
+        ],
+        "\u043e\u0433\u0440\u0430\u043d\u0438\u0447\u0435\u043d\u0438\u044f": "Distinct participant count and participant-disjoint split are not reported; no external dataset validation or uncertainty calibration reported. Labels are clinician-rated FLACC behavioral scores and may reflect observer bias. Data require request. No ECAP/SCS transfer established.",
+        "\u043c\u0435\u0442\u043e\u0434": "Per-modality sample clustering, multiple expert regressors and prototype-based confidence-weighted multimodal fusion for regression.",
+        "\u0434\u0430\u0442\u0430\u0441\u0435\u0442": "Postoperative children in the MPP dataset; 701 valid video samples with audio from various patients; distinct participant count not reported. Data available from corresponding author on request.",
+        "\u043f\u0440\u043e\u0438\u0437\u0432\u043e\u0434\u0438\u0442\u0435\u043b\u044c\u043d\u043e\u0441\u0442\u044c": "Abstract: MAE 1.03 and PCC 0.88. Separate Fig. 7 sensitivity result (5 facial + 3 vocal experts): MAE 1.040 and PCC 0.888.",
+        "\u043a\u0440\u043e\u0441\u0441_\u0441\u0443\u0431\u044a\u0435\u043a\u0442": "Five-fold cross-validation; participant-disjoint fold assignment not reported."
+      },
+      "claims": [],
+      "notes": "Full IEEE Version of Record checked; PDF SHA-256 7ee9edfd4974a9577bcc5769679f44df1dfa45932ae43f56b1997d8c89a92922. MPP contains 701 valid video samples with audio, not 701 identified participants. Target is average FLACC rated by 1-4 medical doctors/sample. Five-fold CV is reported; fold unit and participant-disjoint assignment are not. No external validation or uncertainty calibration reported. Data are available from corresponding author on request.",
+      "rationale": "Published IEEE Version of Record matches DOI, title, volume, issue and pages. Direct PDF checked and SHA-256 is 7ee9edfd4974a9577bcc5769679f44df1dfa45932ae43f56b1997d8c89a92922. Do not infer participant-disjoint or external validation.",
+      "field_resolution": {
+        "identifiers.exact_url": {
+          "state": "reported",
+          "value": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+          "reason": "Corresponding-author lab-hosted published Version of Record, verified against DOI/title/volume/pages.",
+          "checked_at": "2026-09-28",
+          "locators": [
+            {
+              "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+              "locator": "VOR PDF, IEEE TAFFC 16(4), 2828-2841, DOI 10.1109/TAFFC.2025.3567307; SHA-256 7ee9edfd4974a9577bcc5769679f44df1dfa45932ae43f56b1997d8c89a92922"
+            }
+          ]
+        },
+        "provenance.retrieved_at": {
+          "state": "reported",
+          "value": "2026-09-28",
+          "reason": "Date the final VOR PDF was checked and hashed.",
+          "checked_at": "2026-09-28",
+          "locators": [
+            {
+              "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+              "locator": "VOR PDF, IEEE TAFFC 16(4), 2828-2841, DOI 10.1109/TAFFC.2025.3567307; SHA-256 7ee9edfd4974a9577bcc5769679f44df1dfa45932ae43f56b1997d8c89a92922"
+            }
+          ]
+        },
+        "provenance.query_or_seed": {
+          "state": "reported",
+          "value": "DOI 10.1109/TAFFC.2025.3567307; corresponding-author lab VOR PDF",
+          "reason": "Exact DOI and corresponding-author lab VOR route used.",
+          "checked_at": "2026-09-28",
+          "locators": [
+            {
+              "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+              "locator": "VOR PDF, IEEE TAFFC 16(4), 2828-2841, DOI 10.1109/TAFFC.2025.3567307; SHA-256 7ee9edfd4974a9577bcc5769679f44df1dfa45932ae43f56b1997d8c89a92922"
+            }
+          ]
+        },
+        ".???????????": {
+          "state": "reported",
+          "value": "Distinct participant count and participant-disjoint split are not reported; no external dataset validation or uncertainty calibration reported. Labels are clinician-rated FLACC behavioral scores and may reflect observer bias. Data require request. No ECAP/SCS transfer established.",
+          "reason": "Limitations bounded to VOR reporting and omissions.",
+          "checked_at": "2026-09-28",
+          "locators": [
+            {
+              "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+              "locator": "Sections V-B/V-C, pp. 2834-2835: five-fold cross-validation; split unit and subject-disjoint status not stated; Sections V-B/V-C/V-F, pp. 2834-2838: no external dataset validation or uncertainty calibration reported; Acknowledgment p. 2841: data available from corresponding author on request; IRB 044A01; ChiCTR2200058967"
+            }
+          ]
+        },
+        ".?????": {
+          "state": "reported",
+          "value": "Per-modality sample clustering, multiple expert regressors and prototype-based confidence-weighted multimodal fusion for regression.",
+          "reason": "VOR methods describe clustering, experts and confidence-based fusion.",
+          "checked_at": "2026-09-28",
+          "locators": [
+            {
+              "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+              "locator": "Section IV, pp. 2830-2833: facial video frames and vocal/audio features; audio uses spectrogram/MFCC; expert fusion and regression"
+            }
+          ]
+        },
+        ".???????": {
+          "state": "reported",
+          "value": "Postoperative children in the MPP dataset; 701 valid video samples with audio from various patients; distinct participant count not reported. Data available from corresponding author on request.",
+          "reason": "Dataset sample count is not participant count; access statement requires request.",
+          "checked_at": "2026-09-28",
+          "locators": [
+            {
+              "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+              "locator": "Section V-A, p. 2833: 701 valid video samples with audio from various patients; not a distinct-patient count; Acknowledgment p. 2841: data available from corresponding author on request; IRB 044A01; ChiCTR2200058967"
+            }
+          ]
+        },
+        ".??????????????????": {
+          "state": "reported",
+          "value": "Abstract: MAE 1.03 and PCC 0.88. Separate Fig. 7 sensitivity result (5 facial + 3 vocal experts): MAE 1.040 and PCC 0.888.",
+          "reason": "Keep abstract headline and sensitivity analysis separate.",
+          "checked_at": "2026-09-28",
+          "locators": [
+            {
+              "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+              "locator": "Abstract p. 2828: MAE 1.03/PCC .88; Fig. 7, pp. 2837-2838: 5 facial+3 vocal expert sensitivity combo MAE 1.040/PCC .888"
+            }
+          ]
+        },
+        ".?????_???????": {
+          "state": "reported",
+          "value": "Five-fold cross-validation; participant-disjoint fold assignment not reported.",
+          "reason": "Five-fold CV is reported, but split unit and participant grouping are not.",
+          "checked_at": "2026-09-28",
+          "locators": [
+            {
+              "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+              "locator": "Sections V-B/V-C, pp. 2834-2835: five-fold cross-validation; split unit and subject-disjoint status not stated"
+            }
+          ]
+        },
+        "evidence.population": {
+          "state": "reported",
+          "value": "Postoperative children in the MPP dataset; 701 valid video samples with audio from various patients; distinct participant count not reported.",
+          "reason": "Reported video sample count does not identify participant count.",
+          "checked_at": "2026-09-28",
+          "locators": [
+            {
+              "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+              "locator": "Section V-A, p. 2833: 701 valid video samples with audio from various patients; not a distinct-patient count"
+            }
+          ]
+        },
+        "evidence.modalities": {
+          "state": "reported",
+          "value": [
+            "video_face",
+            "audio"
+          ],
+          "reason": "VOR identifies facial video and vocal/audio modalities.",
+          "checked_at": "2026-09-28",
+          "locators": [
+            {
+              "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+              "locator": "Section IV, pp. 2830-2833: facial video frames and vocal/audio features; audio uses spectrogram/MFCC; expert fusion and regression"
+            }
+          ]
+        },
+        "evidence.sample_size": {
+          "state": "reported",
+          "value": 701,
+          "reason": "Valid video samples, not unique participants.",
+          "checked_at": "2026-09-28",
+          "locators": [
+            {
+              "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+              "locator": "Section V-A, p. 2833: 701 valid video samples with audio from various patients; not a distinct-patient count"
+            }
+          ]
+        },
+        "evidence.target_label": {
+          "state": "reported",
+          "value": "Average clinician-rated FLACC score per sample; 1-4 medical doctors scored each sample; not self-report.",
+          "reason": "VOR reports average FLACC labels from 1-4 medical doctors per sample.",
+          "checked_at": "2026-09-28",
+          "locators": [
+            {
+              "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+              "locator": "Section V-A, p. 2833: average FLACC ratings by 1-4 medical doctors per sample"
+            }
+          ]
+        },
+        "evidence.access_status": {
+          "state": "reported",
+          "value": "request_required",
+          "reason": "Data availability says available from corresponding author on request.",
+          "checked_at": "2026-09-28",
+          "locators": [
+            {
+              "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+              "locator": "Acknowledgment p. 2841: data available from corresponding author on request; IRB 044A01; ChiCTR2200058967"
+            }
+          ]
+        },
+        "evidence.target_construct": {
+          "state": "unavailable_after_search",
+          "value": null,
+          "reason": "VOR identifies clinician-rated composite FLACC labels, but controlled vocabulary lacks a matching clinician-observed composite FLACC class; do not classify as self-report or facial expression.",
+          "checked_at": "2026-09-28",
+          "locators": [
+            {
+              "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+              "locator": "Section V-A, p. 2833: average FLACC ratings by 1-4 medical doctors per sample; checked controlled target_construct vocabulary"
+            }
+          ]
+        },
+        "validation.split_unit": {
+          "state": "reported",
+          "value": "not_reported",
+          "reason": "Five-fold CV is reported, but split unit is not stated.",
+          "checked_at": "2026-09-28",
+          "locators": [
+            {
+              "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+              "locator": "Sections V-B/V-C, pp. 2834-2835: five-fold cross-validation; split unit and subject-disjoint status not stated"
+            }
+          ]
+        },
+        "validation.cross_subject": {
+          "state": "reported",
+          "value": "not_reported",
+          "reason": "Participant-disjoint fold assignment is not reported.",
+          "checked_at": "2026-09-28",
+          "locators": [
+            {
+              "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+              "locator": "Sections V-B/V-C, pp. 2834-2835: five-fold cross-validation; split unit and subject-disjoint status not stated"
+            }
+          ]
+        },
+        "validation.external_validation": {
+          "state": "reported",
+          "value": "not_reported",
+          "reason": "No external dataset evaluation reported.",
+          "checked_at": "2026-09-28",
+          "locators": [
+            {
+              "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+              "locator": "Sections V-B/V-C/V-F, pp. 2834-2838: no external dataset validation or uncertainty calibration reported"
+            }
+          ]
+        },
+        "validation.calibration": {
+          "state": "reported",
+          "value": "not_reported",
+          "reason": "No calibration analysis reported; confidence weighting is not calibration.",
+          "checked_at": "2026-09-28",
+          "locators": [
+            {
+              "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+              "locator": "Sections V-B/V-C/V-F, pp. 2834-2838: no external dataset validation or uncertainty calibration reported"
+            }
+          ]
+        },
+        "validation.uncertainty": {
+          "state": "reported",
+          "value": "not_reported",
+          "reason": "No uncertainty evaluation reported; confidence weighting alone is not uncertainty validation.",
+          "checked_at": "2026-09-28",
+          "locators": [
+            {
+              "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+              "locator": "Sections V-B/V-C/V-F, pp. 2834-2838: no external dataset validation or uncertainty calibration reported"
+            }
+          ]
+        },
+        "validation.checked_at": {
+          "state": "reported",
+          "value": "2026-09-28",
+          "reason": "Date of full VOR check.",
+          "checked_at": "2026-09-28",
+          "locators": [
+            {
+              "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+              "locator": "VOR PDF, IEEE TAFFC 16(4), 2828-2841, DOI 10.1109/TAFFC.2025.3567307; SHA-256 7ee9edfd4974a9577bcc5769679f44df1dfa45932ae43f56b1997d8c89a92922"
+            }
+          ]
+        },
+        "validation.notes": {
+          "state": "reported",
+          "value": "Full IEEE Version of Record checked; PDF SHA-256 7ee9edfd4974a9577bcc5769679f44df1dfa45932ae43f56b1997d8c89a92922. MPP contains 701 valid video samples with audio, not 701 identified participants. Target is average FLACC rated by 1-4 medical doctors/sample. Five-fold CV is reported; fold unit and participant-disjoint assignment are not. No external validation or uncertainty calibration reported. Data are available from corresponding author on request.",
+          "reason": "Concise full-text verification summary with sample/participant and validation boundaries.",
+          "checked_at": "2026-09-28",
+          "locators": [
+            {
+              "url": "https://so-link.github.io/assets/pdf/A_Multi-Modal_Multi-Expert_Framework_for_Pain_Assessment_in_Postoperative_Children.pdf",
+              "locator": "VOR PDF, IEEE TAFFC 16(4), 2828-2841, DOI 10.1109/TAFFC.2025.3567307; SHA-256 7ee9edfd4974a9577bcc5769679f44df1dfa45932ae43f56b1997d8c89a92922; Section V-A, p. 2833: 701 valid video samples with audio from various patients; not a distinct-patient count; Section V-A, p. 2833: average FLACC ratings by 1-4 medical doctors per sample; Sections V-B/V-C, pp. 2834-2835: five-fold cross-validation; split unit and subject-disjoint status not stated; Acknowledgment p. 2841: data available from corresponding author on request; IRB 044A01; ChiCTR2200058967"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

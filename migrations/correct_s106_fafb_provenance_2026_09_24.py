@@ -6,6 +6,7 @@ import argparse
 import json
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 DATA = Path(__file__).resolve().parents[1] / "data"
@@ -18,8 +19,10 @@ def locator(url: str, section: str) -> dict:
 
 
 def revised() -> tuple[dict, dict]:
-    records = json.loads((DATA / "records.json").read_text(encoding="utf-8"))
-    audit = json.loads((DATA / "drosophila-connectome-audit.json").read_text(encoding="utf-8"))
+    records = json.loads((data_path(DATA, "records.json")).read_text(encoding="utf-8"))
+    audit = json.loads(
+        data_path(DATA, "drosophila-connectome-audit.json").read_text(encoding="utf-8")
+    )
     source = next(item for item in records["sources"] if item["id"] == "S106")
     entry = next(item for item in audit["entries"] if item["source_id"] == "S106")
     version = entry["extraction"]["connectome_version"]
@@ -65,8 +68,8 @@ def main() -> None:
     records, audit = revised()
     if args.apply:
         snapshot = snapshot_repository(DATA, label="pre-s106-fafb-provenance-correction")
-        atomic_write_json(DATA / "records.json", records)
-        atomic_write_json(DATA / "drosophila-connectome-audit.json", audit)
+        atomic_write_json(data_path(DATA, "records.json"), records)
+        atomic_write_json(data_path(DATA, "drosophila-connectome-audit.json"), audit)
         print(f"Corrected S106 provenance; snapshot: {snapshot}")
     else:
         print("Dry run: S106 provenance correction ready")

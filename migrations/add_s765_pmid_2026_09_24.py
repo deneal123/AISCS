@@ -3,6 +3,7 @@
 import json
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 DATA = Path(__file__).resolve().parents[1] / "data"
@@ -10,7 +11,7 @@ URL = "https://pubmed.ncbi.nlm.nih.gov/36937564/"
 
 
 def main() -> None:
-    path = DATA / "records.json"
+    path = data_path(DATA, "records.json")
     data = json.loads(path.read_text(encoding="utf-8"))
     record = next(item for item in data["sources"] if item["id"] == "S765")
     if record["identifiers"]["pmid"] is not None:

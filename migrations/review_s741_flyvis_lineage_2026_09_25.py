@@ -8,6 +8,7 @@ import argparse
 import json
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 DATA = Path(__file__).resolve().parents[1] / "data"
@@ -19,8 +20,8 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--apply", action="store_true")
     args = parser.parse_args()
-    audit = json.loads((DATA / "drosophila-connectome-audit.json").read_text(encoding="utf-8"))
-    matrix = json.loads((DATA / "evidence-matrix.json").read_text(encoding="utf-8"))
+    audit = json.loads((data_path(DATA, "drosophila-connectome-audit.json")).read_text(encoding="utf-8"))
+    matrix = json.loads((data_path(DATA, "evidence-matrix.json")).read_text(encoding="utf-8"))
     entry = next(x for x in audit["entries"] if x["source_id"] == "S741")
     row = next(x for x in matrix["rows"] if "S741" in x["source_ids"])
     version = entry["extraction"]["connectome_version"]
@@ -50,8 +51,8 @@ def main() -> None:
     )
     if args.apply:
         snapshot = snapshot_repository(DATA, label="pre-s741-flyvis-lineage-review")
-        atomic_write_json(DATA / "drosophila-connectome-audit.json", audit)
-        atomic_write_json(DATA / "evidence-matrix.json", matrix)
+        atomic_write_json(data_path(DATA, "drosophila-connectome-audit.json"), audit)
+        atomic_write_json(data_path(DATA, "evidence-matrix.json"), matrix)
         print(f"Applied S741 lineage review; snapshot: {snapshot}")
     else:
         print("Dry run: S741 author repository does not pin the source release")

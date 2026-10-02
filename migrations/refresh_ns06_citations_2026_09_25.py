@@ -8,6 +8,7 @@ import argparse
 import json
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 DATA = Path(__file__).resolve().parents[1] / "data"
@@ -19,8 +20,8 @@ PUBLISHER = "https://www.frontiersin.org/journals/artificial-intelligence/articl
 
 
 def revised() -> tuple[dict, dict]:
-    audit = json.loads((DATA / "ns06-prior-art-audit.json").read_text(encoding="utf-8"))
-    protocol = json.loads((DATA / "search-protocol.json").read_text(encoding="utf-8"))
+    audit = json.loads((data_path(DATA, "ns06-prior-art-audit.json")).read_text(encoding="utf-8"))
+    protocol = json.loads((data_path(DATA, "search-protocol.json")).read_text(encoding="utf-8"))
     forward = audit["citation_search"]["s149_forward"]
     if forward["checked_at"] != "2026-09-24" or forward["indexed_cited_by_count"] != 0:
         raise ValueError("S149 citation baseline differs from expected 2026-09-24 audit")
@@ -100,8 +101,8 @@ def main() -> None:
     audit, protocol = revised()
     if args.apply:
         snapshot = snapshot_repository(DATA, label="pre-ns06-first-dated-citation-refresh")
-        atomic_write_json(DATA / "ns06-prior-art-audit.json", audit)
-        atomic_write_json(DATA / "search-protocol.json", protocol)
+        atomic_write_json(data_path(DATA, "ns06-prior-art-audit.json"), audit)
+        atomic_write_json(data_path(DATA, "search-protocol.json"), protocol)
         print(f"Recorded first later-dated S149 citation refresh; snapshot: {snapshot}")
     else:
         print("Dry run: first later-dated S149 refresh ready; PA-03 remains open")

@@ -6,6 +6,7 @@ import argparse
 import json
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -44,8 +45,8 @@ TRIALS = [
 
 
 def updated() -> tuple[dict, dict]:
-    audit = json.loads((DATA / "ecap-trial-registry-audit.json").read_text(encoding="utf-8"))
-    protocol = json.loads((DATA / "search-protocol.json").read_text(encoding="utf-8"))
+    audit = json.loads((data_path(DATA, "ecap-trial-registry-audit.json")).read_text(encoding="utf-8"))
+    protocol = json.loads((data_path(DATA, "search-protocol.json")).read_text(encoding="utf-8"))
     if audit["meta"]["trial_count"] != 3 or any(item["trial_id"] in {x["trial_id"] for x in TRIALS} for item in audit["trials"]):
         raise ValueError("NS-14 trial audit changed")
     if any(run["id"] == "NS-RUN-2026-09-25-09" for run in protocol["search_runs"]):
@@ -89,8 +90,8 @@ def main() -> None:
         print("Dry run: two further NS-14 official trial registrations")
         return
     snapshot = snapshot_repository(DATA, label="pre-ns14-two-trial-extension")
-    atomic_write_json(DATA / "search-protocol.json", protocol)
-    atomic_write_json(DATA / "ecap-trial-registry-audit.json", audit)
+    atomic_write_json(data_path(DATA, "search-protocol.json"), protocol)
+    atomic_write_json(data_path(DATA, "ecap-trial-registry-audit.json"), audit)
     print(f"Extended NS-14 trial audit; snapshot: {snapshot}")
 
 

@@ -6,6 +6,7 @@ import argparse
 import json
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -18,8 +19,8 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--apply", action="store_true")
     args = parser.parse_args()
-    matrix = json.loads((DATA / "evidence-matrix.json").read_text(encoding="utf-8"))
-    records = json.loads((DATA / "records.json").read_text(encoding="utf-8"))
+    matrix = json.loads((data_path(DATA, "evidence-matrix.json")).read_text(encoding="utf-8"))
+    records = json.loads((data_path(DATA, "records.json")).read_text(encoding="utf-8"))
     removed = [r for r in matrix["rows"] if set(r["source_ids"]) & IDS]
     assert len(removed) == 2 and {r["source_ids"][0] for r in removed} == IDS
     assert all(len(r["source_ids"]) == 1 for r in removed)
@@ -47,7 +48,7 @@ def main() -> None:
     readme = (DATA / "README.md").read_text(encoding="utf-8")
     readme = readme.replace("- `archive/`", "- `two-patent-index-row-removal-2026-09-25.json` — removal of two index-only patent leads from positive evidence;\n- `archive/`")
     snapshot = snapshot_repository(DATA, label="pre-two-patent-index-row-removal")
-    atomic_write_json(DATA / "evidence-matrix.json", matrix)
+    atomic_write_json(data_path(DATA, "evidence-matrix.json"), matrix)
     atomic_write_json(DATA / "two-patent-index-row-removal-2026-09-25.json", audit)
     (ROOT / "TODO.md").write_text(todo, encoding="utf-8", newline="\n")
     (DATA / "README.md").write_text(readme, encoding="utf-8", newline="\n")

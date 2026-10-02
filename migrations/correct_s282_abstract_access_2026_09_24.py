@@ -9,6 +9,7 @@ import json
 from pathlib import Path
 
 from service.completeness import completeness_summary
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 DATA = Path(__file__).resolve().parents[1] / "data"
@@ -29,8 +30,8 @@ def resolve(source: dict, path: str, value: object, locator: str) -> None:
 
 
 def update() -> tuple[dict, dict, dict]:
-    records = json.loads((DATA / "records.json").read_text(encoding="utf-8"))
-    audit = json.loads((DATA / "drosophila-nociception-audit.json").read_text(encoding="utf-8"))
+    records = json.loads((data_path(DATA, "records.json")).read_text(encoding="utf-8"))
+    audit = json.loads((data_path(DATA, "drosophila-nociception-audit.json")).read_text(encoding="utf-8"))
     source = next(item for item in records["sources"] if item["id"] == "S282")
     if source["validation"]["full_text_status"] != "checked":
         raise ValueError("S282 full-text status changed; review manually")
@@ -66,7 +67,7 @@ def update() -> tuple[dict, dict, dict]:
             {"url": JATS, "result": "fullTextXML HTTP 500 in current environment"},
         ],
     })
-    report = json.loads((DATA / "completeness-report.json").read_text(encoding="utf-8"))
+    report = json.loads((data_path(DATA, "completeness-report.json")).read_text(encoding="utf-8"))
     report.update(completeness_summary(records["sources"]))
     return records, audit, report
 
@@ -78,9 +79,9 @@ def main() -> None:
     records, audit, report = update()
     if args.apply:
         snapshot = snapshot_repository(DATA, label="pre-s282-abstract-access-correction")
-        atomic_write_json(DATA / "records.json", records)
-        atomic_write_json(DATA / "drosophila-nociception-audit.json", audit)
-        atomic_write_json(DATA / "completeness-report.json", report)
+        atomic_write_json(data_path(DATA, "records.json"), records)
+        atomic_write_json(data_path(DATA, "drosophila-nociception-audit.json"), audit)
+        atomic_write_json(data_path(DATA, "completeness-report.json"), report)
         print(f"Applied S282 access correction; snapshot: {snapshot}")
     else:
         print("Dry run: S282 abstract verified, exact methods remain inaccessible")

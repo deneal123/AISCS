@@ -8,6 +8,7 @@ import argparse
 import json
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 DATA = Path(__file__).resolve().parents[1] / "data"
@@ -31,10 +32,10 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--apply", action="store_true")
     args = parser.parse_args()
-    records = json.loads((DATA / "records.json").read_text(encoding="utf-8"))
-    audit = json.loads((DATA / "drosophila-connectome-audit.json").read_text(encoding="utf-8"))
-    search = json.loads((DATA / "search-protocol.json").read_text(encoding="utf-8"))
-    matrix = json.loads((DATA / "evidence-matrix.json").read_text(encoding="utf-8"))
+    records = json.loads((data_path(DATA, "records.json")).read_text(encoding="utf-8"))
+    audit = json.loads((data_path(DATA, "drosophila-connectome-audit.json")).read_text(encoding="utf-8"))
+    search = json.loads((data_path(DATA, "search-protocol.json")).read_text(encoding="utf-8"))
+    matrix = json.loads((data_path(DATA, "evidence-matrix.json")).read_text(encoding="utf-8"))
     if {"S773", "S774", "S775"} & {x["source_id"] for x in audit["entries"]}:
         raise ValueError("New connectome sources already audited")
     relation = next(x for x in records["sources"] if x["id"] == "S732")["relations"][0]
@@ -122,7 +123,7 @@ def main() -> None:
             ("search-protocol.json", search),
             ("evidence-matrix.json", matrix),
         ]:
-            atomic_write_json(DATA / name, payload)
+            atomic_write_json(data_path(DATA, name), payload)
         print(f"Applied NS-01/NS-02 primary review; snapshot: {snapshot}")
     else:
         print("Dry run: three primary cards linked; citation snowballing remains open")

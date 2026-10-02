@@ -6,6 +6,7 @@ import argparse
 import json
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -48,9 +49,9 @@ SPECS = {
 def locator(path: str, spec: dict) -> tuple[str, str]:
     pmc = f"https://www.ebi.ac.uk/europepmc/webservices/rest/{spec['pmcid']}/fullTextXML"
     if path.startswith("provenance."):
-        return "local:data/search-protocol.json", "NS-04 stream and NS-RUN-2026-09-25-07"
+        return "local:data/audits/search/search-protocol.json", "NS-04 stream and NS-RUN-2026-09-25-07"
     if path in {"validation.checked_at", "validation.exclusion_reason"}:
-        return "local:data/drosophila-connectome-audit.json", "S782/S783 extraction dated 2026-09-25"
+        return "local:data/audits/drosophila/drosophila-connectome-audit.json", "S782/S783 extraction dated 2026-09-25"
     if path == "identifiers.pmid":
         return f"https://pubmed.ncbi.nlm.nih.gov/{spec['pmid']}/", "PMID and DOI under article citation"
     if path in {"авторы", "год", "издание", "identifiers.doi", "identifiers.exact_url"}:
@@ -69,7 +70,7 @@ def locator(path: str, spec: dict) -> tuple[str, str]:
 
 
 def updated() -> dict:
-    records = json.loads((DATA / "records.json").read_text(encoding="utf-8"))
+    records = json.loads((data_path(DATA, "records.json")).read_text(encoding="utf-8"))
     for sid, spec in SPECS.items():
         source = next(item for item in records["sources"] if item["id"] == sid)
         for path, resolution in source["field_resolution"].items():
@@ -90,7 +91,7 @@ def main() -> None:
         print("Dry run: exact section locators for S782/S783")
         return
     snapshot = snapshot_repository(DATA, label="pre-ns04-card-locator-strengthening")
-    atomic_write_json(DATA / "records.json", records)
+    atomic_write_json(data_path(DATA, "records.json"), records)
     print(f"Strengthened S782/S783 locators; snapshot: {snapshot}")
 
 

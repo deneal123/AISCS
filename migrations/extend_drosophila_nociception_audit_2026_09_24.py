@@ -9,6 +9,7 @@ import json
 from pathlib import Path
 
 from service.completeness import completeness_summary
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 DATA = Path(__file__).resolve().parents[1] / "data"
@@ -120,8 +121,8 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--apply", action="store_true")
     args = parser.parse_args()
-    audit_path = DATA / "drosophila-nociception-audit.json"
-    records_path = DATA / "records.json"
+    audit_path = data_path(DATA, "drosophila-nociception-audit.json")
+    records_path = data_path(DATA, "records.json")
     audit = json.loads(audit_path.read_text(encoding="utf-8"))
     records = json.loads(records_path.read_text(encoding="utf-8"))
     existing = {item["source_id"] for item in audit["entries"]}
@@ -157,7 +158,7 @@ def main() -> int:
     snapshot = snapshot_repository(DATA, label="pre-drosophila-nociception-audit-extension")
     atomic_write_json(audit_path, audit)
     atomic_write_json(records_path, records)
-    completeness_path = DATA / "completeness-report.json"
+    completeness_path = data_path(DATA, "completeness-report.json")
     completeness = json.loads(completeness_path.read_text(encoding="utf-8"))
     completeness.update(completeness_summary(records["sources"]))
     atomic_write_json(completeness_path, completeness)

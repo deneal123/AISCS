@@ -3,7 +3,9 @@ from copy import deepcopy
 from datetime import date
 from pathlib import Path
 
+from service.cli import main
 from service.core import load_json
+from service.data_layout import current_data_files, data_path
 from service.integrity import validate_repository
 from service.pipeline import atomic_write_json
 
@@ -15,7 +17,7 @@ def test_current_repository_passes_integrity_gate() -> None:
     report = validate_repository(DATA)
     assert report["ok"], report["errors"]
     assert report["counts"] | {"archive_manifests": 0} == {
-        "sources": len(load_json(DATA / "records.json")["sources"]),
+        "sources": len(load_json(data_path(DATA, "records.json"))["sources"]),
         "aliases": 271,
         "active_clusters": 43,
         "retired_clusters": 11,
@@ -32,20 +34,31 @@ def test_current_repository_passes_integrity_gate() -> None:
 
 def test_schema_1_2_validated_the_pre_deduplication_350_record_snapshot() -> None:
     snapshot = ROOT / "tests" / "fixtures" / "history" / "archive" / "2026-09-22T102852Z-pre-batch-001"
-    report = validate_repository(snapshot)
+    report = validate_repository(snapshot, legacy=True)
     assert report["ok"], report["errors"]
     assert report["counts"]["sources"] == 350
     assert report["counts"]["novelty_variants"] == 0
+    assert not validate_repository(snapshot)["ok"]
+
+
+def test_cli_reads_historical_layout_only_explicitly(capsys) -> None:
+    snapshot = ROOT / "tests/fixtures/history/archive/2026-09-22T102852Z-pre-batch-001"
+    assert main(["--data-dir", str(snapshot), "validate", "--legacy-layout"]) == 0
+    capsys.readouterr()
+    assert main(["--data-dir", str(snapshot), "validate"]) == 1
+    capsys.readouterr()
 
 
 def test_evidence_review_ledger_rejects_missing_entry(tmp_path: Path) -> None:
     data = tmp_path / "data"
     data.mkdir()
-    for path in DATA.glob("*.json"):
-        shutil.copy2(path, data / path.name)
-    ledger = load_json(data / "evidence-review-ledger.json")
+    for path in current_data_files(DATA):
+        destination = data / path.relative_to(DATA)
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(path, destination)
+    ledger = load_json(data_path(data, "evidence-review-ledger.json"))
     ledger["entries"].pop(next(iter(ledger["entries"])))
-    atomic_write_json(data / "evidence-review-ledger.json", ledger)
+    atomic_write_json(data_path(data, "evidence-review-ledger.json"), ledger)
     report = validate_repository(data)
     assert "evidence review ledger: entry count mismatch" in report["errors"]
 
@@ -53,9 +66,11 @@ def test_evidence_review_ledger_rejects_missing_entry(tmp_path: Path) -> None:
 def test_integrity_rejects_duplicate_stable_identifier(tmp_path: Path) -> None:
     data = tmp_path / "data"
     data.mkdir()
-    for path in DATA.glob("*.json"):
-        shutil.copy2(path, data / path.name)
-    records = load_json(DATA / "records.json")
+    for path in current_data_files(DATA):
+        destination = data / path.relative_to(DATA)
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(path, destination)
+    records = load_json(data_path(DATA, "records.json"))
     duplicate = deepcopy(records["sources"][1])
     duplicate["id"] = "S999999"
     duplicate["identifiers"]["doi"] = records["sources"][0]["identifiers"]["doi"]
@@ -65,7 +80,7 @@ def test_integrity_rejects_duplicate_stable_identifier(tmp_path: Path) -> None:
 
     records["sources"].append(duplicate)
     records["meta"]["records_count"] += 1
-    atomic_write_json(data / "records.json", records)
+    atomic_write_json(data_path(data, "records.json"), records)
 
     report = validate_repository(data)
 
@@ -76,16 +91,18 @@ def test_integrity_rejects_duplicate_stable_identifier(tmp_path: Path) -> None:
 def test_integrity_rejects_unclustered_decision_for_clustered_source(tmp_path: Path) -> None:
     data = tmp_path / "data"
     data.mkdir()
-    for path in DATA.glob("*.json"):
-        shutil.copy2(path, data / path.name)
-    clusters = load_json(data / "clusters.json")
+    for path in current_data_files(DATA):
+        destination = data / path.relative_to(DATA)
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(path, destination)
+    clusters = load_json(data_path(data, "clusters.json"))
     source_id = clusters["clusters"][0]["состав_кластера"][0]
     clusters["unclustered_decisions"][source_id] = {
         "decision": "no_cluster_applicable",
         "checked_at": "2026-09-25",
         "reason": "Deliberate contradiction for the integrity test.",
     }
-    atomic_write_json(data / "clusters.json", clusters)
+    atomic_write_json(data_path(data, "clusters.json"), clusters)
 
     report = validate_repository(data)
 
@@ -100,12 +117,14 @@ def test_integrity_rejects_unclustered_decision_for_clustered_source(tmp_path: P
 def test_integrity_rejects_stale_cluster_representative(tmp_path: Path) -> None:
     data = tmp_path / "data"
     data.mkdir()
-    for path in DATA.glob("*.json"):
-        shutil.copy2(path, data / path.name)
-    clusters = load_json(data / "clusters.json")
+    for path in current_data_files(DATA):
+        destination = data / path.relative_to(DATA)
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(path, destination)
+    clusters = load_json(data_path(data, "clusters.json"))
     representative = clusters["clusters"][0]["представитель"]
     representative["validation"]["notes"] = "Stale embedded copy"
-    atomic_write_json(data / "clusters.json", clusters)
+    atomic_write_json(data_path(data, "clusters.json"), clusters)
 
     report = validate_repository(data)
 
@@ -113,9 +132,9 @@ def test_integrity_rejects_stale_cluster_representative(tmp_path: Path) -> None:
 
 
 def test_ecap_scs_audit_resolves_the_five_measurement_dimensions() -> None:
-    audit = load_json(DATA / "ecap-scs-audit.json")
+    audit = load_json(data_path(DATA, "ecap-scs-audit.json"))
     records = {
-        source["id"]: source for source in load_json(DATA / "records.json")["sources"]
+        source["id"]: source for source in load_json(data_path(DATA, "records.json"))["sources"]
     }
     expected_dimensions = {
         "sample",
@@ -145,10 +164,10 @@ def test_ecap_scs_audit_resolves_the_five_measurement_dimensions() -> None:
 
 
 def test_ecap_scs_audit_preserves_construct_and_validation_boundaries() -> None:
-    audit = load_json(DATA / "ecap-scs-audit.json")
+    audit = load_json(data_path(DATA, "ecap-scs-audit.json"))
     entries = {entry["source_id"]: entry for entry in audit["entries"]}
     records = {
-        source["id"]: source for source in load_json(DATA / "records.json")["sources"]
+        source["id"]: source for source in load_json(data_path(DATA, "records.json"))["sources"]
     }
 
     assert entries["S105"]["extraction"]["sample"]["value"] == "8 chronic-pain participants"
@@ -163,9 +182,9 @@ def test_ecap_scs_audit_preserves_construct_and_validation_boundaries() -> None:
 
 
 def test_connectome_audit_separates_anatomy_dynamics_and_comparators() -> None:
-    audit = load_json(DATA / "drosophila-connectome-audit.json")
+    audit = load_json(data_path(DATA, "drosophila-connectome-audit.json"))
     entries = {entry["source_id"]: entry["extraction"] for entry in audit["entries"]}
-    records = {source["id"]: source for source in load_json(DATA / "records.json")["sources"]}
+    records = {source["id"]: source for source in load_json(data_path(DATA, "records.json"))["sources"]}
 
     assert set(entries) == {
         "S068", "S106", "S219", "S286", "S320", "S738", "S739", "S740",
@@ -246,7 +265,7 @@ def test_connectome_audit_separates_anatomy_dynamics_and_comparators() -> None:
 
 
 def test_human_ecap_access_audit_requires_owner_confirmation(tmp_path: Path) -> None:
-    audit = load_json(DATA / "human-ecap-scs-access-audit.json")
+    audit = load_json(data_path(DATA, "human-ecap-scs-access-audit.json"))
     entries = {item["trial_id"]: item for item in audit["candidates"]}
     assert len(entries) == len(audit["candidates"])
     assert {"NCT02924129", "NCT04319887", "NCT04938245", "NL7889"} <= set(entries)
@@ -270,10 +289,12 @@ def test_human_ecap_access_audit_requires_owner_confirmation(tmp_path: Path) -> 
 
     data = tmp_path / "data"
     data.mkdir()
-    for path in DATA.glob("*.json"):
-        shutil.copy2(path, data / path.name)
+    for path in current_data_files(DATA):
+        destination = data / path.relative_to(DATA)
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(path, destination)
     audit["candidates"][0]["checks"].pop("ethics_secondary_use")
-    atomic_write_json(data / "human-ecap-scs-access-audit.json", audit)
+    atomic_write_json(data_path(data, "human-ecap-scs-access-audit.json"), audit)
     report = validate_repository(data)
     assert not report["ok"]
     assert any("requires exactly" in error for error in report["errors"])
@@ -285,12 +306,12 @@ def test_human_ecap_access_audit_requires_owner_confirmation(tmp_path: Path) -> 
     }
     audit["candidates"][0]["decision"] = "usable"
     audit["meta"]["decision"] = "owner_confirmed_usable_dataset"
-    atomic_write_json(data / "human-ecap-scs-access-audit.json", audit)
+    atomic_write_json(data_path(data, "human-ecap-scs-access-audit.json"), audit)
     report = validate_repository(data)
     assert not report["ok"]
     assert any("cannot be usable without owner confirmation" in error for error in report["errors"])
 
-    eligible = deepcopy(load_json(DATA / "human-ecap-scs-access-audit.json"))
+    eligible = deepcopy(load_json(data_path(DATA, "human-ecap-scs-access-audit.json")))
     candidate = eligible["candidates"][0]
     candidate["decision"] = "usable"
     candidate["owner_confirmation_received"] = True
@@ -300,15 +321,15 @@ def test_human_ecap_access_audit_requires_owner_confirmation(tmp_path: Path) -> 
             "confirmed_by_institution" if dimension == "ethics_secondary_use" else "confirmed_by_owner"
         )
     eligible["meta"]["decision"] = "owner_confirmed_usable_dataset"
-    atomic_write_json(data / "human-ecap-scs-access-audit.json", eligible)
+    atomic_write_json(data_path(data, "human-ecap-scs-access-audit.json"), eligible)
     report = validate_repository(data)
     assert report["ok"], report["errors"]
 
 
 def test_synthetic_domain_audit_tracks_real_data_and_external_test() -> None:
-    audit = load_json(DATA / "synthetic-domain-audit.json")
+    audit = load_json(data_path(DATA, "synthetic-domain-audit.json"))
     entries = {entry["source_id"]: entry["extraction"] for entry in audit["entries"]}
-    records = {source["id"]: source for source in load_json(DATA / "records.json")["sources"]}
+    records = {source["id"]: source for source in load_json(data_path(DATA, "records.json"))["sources"]}
 
     assert set(entries) == {
         "S035", "S083", "S084", "S088", "S149", "S192", "S748", "S758", "S759", "S817", "S818", "S819", "S820"
@@ -341,7 +362,7 @@ def test_synthetic_domain_audit_tracks_real_data_and_external_test() -> None:
 
 
 def test_ns06_prior_art_audit_keeps_mechanisms_and_search_limits_explicit() -> None:
-    audit = load_json(DATA / "ns06-prior-art-audit.json")
+    audit = load_json(data_path(DATA, "ns06-prior-art-audit.json"))
     entries = {item["source_id"]: item for item in audit["analogue_decisions"]}
 
     assert audit["meta"]["status"] == "terminal_stop_at_cutoff"
@@ -352,7 +373,7 @@ def test_ns06_prior_art_audit_keeps_mechanisms_and_search_limits_explicit() -> N
     assert any(item["title"].startswith("Data-Efficient AU-Graph") for item in audit["unindexed_primary_leads"])
     assert audit["s149_baseline"]["source_id"] == "S149"
     assert set(entries) == {
-        "S035", "S083", "S084", "S088", "S192", "S748", "S758", "S759", "S791", "S792", "S817", "S818", "S819", "S820", "S836", "S837"
+        "S035", "S083", "S084", "S088", "S192", "S748", "S758", "S759", "S791", "S792", "S817", "S818", "S819", "S820", "S836", "S837", "S851", "S852"
     }
     assert entries["S088"]["certainty"] == "publisher_abstract_primary_full_methods_unavailable"
     assert entries["S088"]["publisher_abstract_review_2026_09_27"]["url"].endswith("11606012")
@@ -391,13 +412,13 @@ def test_ns06_prior_art_audit_keeps_mechanisms_and_search_limits_explicit() -> N
 
 
 def test_scs_outcome_audit_separates_signals_and_clinical_endpoints() -> None:
-    audit = load_json(DATA / "scs-outcome-audit.json")
+    audit = load_json(data_path(DATA, "scs-outcome-audit.json"))
     entries = {entry["source_id"]: entry["extraction"] for entry in audit["entries"]}
-    records = {source["id"]: source for source in load_json(DATA / "records.json")["sources"]}
+    records = {source["id"]: source for source in load_json(data_path(DATA, "records.json"))["sources"]}
 
     assert set(entries) == {
         "S003", "S033", "S034", "S046", "S105",
-        "S159", "S236", "S239", "S360", "S749", "S779", "S780", "S781", "S788",
+        "S159", "S236", "S239", "S360", "S749", "S779", "S780", "S781", "S788", "S903",
     }
     assert all(len(extraction) == 4 for extraction in entries.values())
     assert records["S003"]["evidence"]["target_construct"] == "self_reported_pain"
@@ -413,13 +434,18 @@ def test_scs_outcome_audit_separates_signals_and_clinical_endpoints() -> None:
     assert entries["S779"]["prognostic_validation"]["state"] == "not_applicable"
     assert entries["S780"]["prognostic_validation"]["state"] == "not_applicable"
     assert entries["S781"]["prognostic_validation"]["state"] == "not_applicable"
+    assert entries["S903"]["prognostic_validation"]["state"] == "not_applicable"
+    assert {"S826", "S903"} == set(next(
+        family["source_ids"] for family in audit["study_families"]
+        if family["trial_id"] == "NCT05177354"
+    ))
     assert audit["study_families"][0]["source_ids"] == ["S779", "S780", "S781"]
 
 
 def test_ns11_prediction_audit_retains_unresolved_primary_fields() -> None:
-    audit = load_json(DATA / "ns11-prediction-audit.json")
-    protocol = load_json(DATA / "search-protocol.json")
-    records = {source["id"]: source for source in load_json(DATA / "records.json")["sources"]}
+    audit = load_json(data_path(DATA, "ns11-prediction-audit.json"))
+    protocol = load_json(data_path(DATA, "search-protocol.json"))
+    records = {source["id"]: source for source in load_json(data_path(DATA, "records.json"))["sources"]}
     stream = next(item for item in protocol["search_streams"] if item["id"] == "NS-11")
     entries = {entry["source_id"]: entry["extraction"] for entry in audit["entries"]}
 
@@ -430,7 +456,9 @@ def test_ns11_prediction_audit_retains_unresolved_primary_fields() -> None:
     assert stop["saturation"] is False
     assert stop["unresolved_fields"] and stop["prohibited_inferences"]
     assert set(audit["meta"]["remaining_source_ids"]) == {"S034", "S046", "S755", "S762", "S804"}
-    assert entries["S034"]["target"]["state"] == "not_reported"
+    assert entries["S034"]["target"]["state"] == "reported"
+    assert "61/150" in entries["S034"]["target"]["value"]
+    assert entries["S034"]["follow_up"]["state"] == "reported"
     assert entries["S046"]["follow_up"]["state"] == "reported"
     assert entries["S046"]["patient_linkage"]["state"] == "not_reported"
     assert entries["S762"]["follow_up"]["state"] == "reported"
@@ -464,8 +492,8 @@ def test_ns11_prediction_audit_retains_unresolved_primary_fields() -> None:
 
 
 def test_nociception_stream_and_larval_stage_use_primary_sources() -> None:
-    records = {source["id"]: source for source in load_json(DATA / "records.json")["sources"]}
-    protocol = load_json(DATA / "search-protocol.json")
+    records = {source["id"]: source for source in load_json(data_path(DATA, "records.json"))["sources"]}
+    protocol = load_json(data_path(DATA, "search-protocol.json"))
     stream = next(item for item in protocol["search_streams"] if item["id"] == "NS-03")
 
     assert len(stream["source_ids"]) >= 24
@@ -484,9 +512,9 @@ def test_nociception_stream_and_larval_stage_use_primary_sources() -> None:
 
 
 def test_nociception_audit_separates_stimulus_neural_response_and_behavior() -> None:
-    audit = load_json(DATA / "drosophila-nociception-audit.json")
+    audit = load_json(data_path(DATA, "drosophila-nociception-audit.json"))
     entries = {entry["source_id"]: entry["extraction"] for entry in audit["entries"]}
-    records = {source["id"]: source for source in load_json(DATA / "records.json")["sources"]}
+    records = {source["id"]: source for source in load_json(data_path(DATA, "records.json"))["sources"]}
 
     assert audit["meta"]["status"] == "expanded_primary_screen_with_additional_named_leads"
     assert audit["meta"]["records_count"] == len(entries)

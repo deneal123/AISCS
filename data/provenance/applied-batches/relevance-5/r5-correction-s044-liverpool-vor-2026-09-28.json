@@ -1,0 +1,73 @@
+{
+  "meta": {
+    "batch_id": "r5-correction-s044-liverpool-vor-2026-09-28",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-28",
+    "scope": "Reconcile S044 full-text access and evaluation boundaries against the author-deposited publisher Version of Record",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-28"
+  },
+  "source_ids": ["S044"],
+  "records": [
+    {
+      "id": "S044",
+      "title": "External validation of EEG-based machine learning models for continuous pain prediction",
+      "year": 2026,
+      "source_type": "метод"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S044",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-28",
+      "full_text_status": "checked",
+      "notes": "Author-deposited publisher Version of Record reviewed on 2026-09-28 (University of Liverpool PDF, printed pp. 2-3 Participants/ratings, p. 5 model evaluation, pp. 8-9 Results/Table 4). It distinguishes 91 people from 116 recordings, 40 development from 51 independent participants and 25 repeat sessions. Continuous regression did not significantly beat the mean-rating dummy; the low/high classifier is a separate task. Cross-subject external validation is within the authors' laboratory, not an independent clinical site, ECAP or SCS outcome.",
+      "searches": [
+        {
+          "service": "University of Liverpool author-deposited publisher Version of Record",
+          "query": "10.1016/j.jpain.2026.106416 full text sample units subjective rating and dummy comparison",
+          "url": "https://livrepository.liverpool.ac.uk/3204021/1/1-s2.0-S1526590026002348-main.pdf",
+          "accessed_at": "2026-09-28"
+        }
+      ],
+      "updates": {
+        "identifiers": {
+          "doi": "10.1016/j.jpain.2026.106416",
+          "pmid": "42600964"
+        },
+        "ограничения": "Publisher Version of Record checked through the University of Liverpool repository: 91 distinct people contributed 116 EEG recordings (40 development, 51 new-person cross-subject validation, and 25 repeat sessions from the development group). The 0-100 self-reported pain-rating regression did not significantly beat a mean-training-rating dummy despite reported RF MAE 19.59/21.29/18.90 across the three samples. External means held-out samples from the authors' laboratory, not an independent clinical site or chronic-pain cohort. The separate low/high classifier reached up to 64% internal and 58% external accuracy; neither task validates ECAP, SCS outcomes or clinical treatment response. Trial-level data are available only on author request.",
+        "validation": {
+          "notes": "Author-deposited publisher Version of Record reviewed on 2026-09-28 (University of Liverpool PDF, printed pp. 2-3 Participants/ratings, p. 5 model evaluation, pp. 8-9 Results/Table 4). It distinguishes 91 people from 116 recordings, 40 development from 51 independent participants and 25 repeat sessions. Continuous regression did not significantly beat the mean-rating dummy; the low/high classifier is a separate task. Cross-subject external validation is within the authors' laboratory, not an independent clinical site, ECAP or SCS outcome."
+        },
+        "field_resolution": {
+          "ограничения": {
+            "state": "reported",
+            "value": "Publisher Version of Record checked through the University of Liverpool repository: 91 distinct people contributed 116 EEG recordings (40 development, 51 new-person cross-subject validation, and 25 repeat sessions from the development group). The 0-100 self-reported pain-rating regression did not significantly beat a mean-training-rating dummy despite reported RF MAE 19.59/21.29/18.90 across the three samples. External means held-out samples from the authors' laboratory, not an independent clinical site or chronic-pain cohort. The separate low/high classifier reached up to 64% internal and 58% external accuracy; neither task validates ECAP, SCS outcomes or clinical treatment response. Trial-level data are available only on author request.",
+            "reason": "Published VOR Methods and Results distinguish sample units, targets and baseline comparison.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://livrepository.liverpool.ac.uk/3204021/1/1-s2.0-S1526590026002348-main.pdf",
+                "locator": "Publisher VOR, printed pp. 2-3 Participants and pain rating; p. 5 Machine learning evaluation; pp. 8-9 Results and Table 4; p. 11 Data availability"
+              }
+            ]
+          },
+          "validation.notes": {
+            "state": "reported",
+            "value": "Author-deposited publisher Version of Record reviewed on 2026-09-28 (University of Liverpool PDF, printed pp. 2-3 Participants/ratings, p. 5 model evaluation, pp. 8-9 Results/Table 4). It distinguishes 91 people from 116 recordings, 40 development from 51 independent participants and 25 repeat sessions. Continuous regression did not significantly beat the mean-rating dummy; the low/high classifier is a separate task. Cross-subject external validation is within the authors' laboratory, not an independent clinical site, ECAP or SCS outcome.",
+            "reason": "Published VOR independently checked; prior note referred only to the NLM abstract.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://livrepository.liverpool.ac.uk/3204021/1/1-s2.0-S1526590026002348-main.pdf",
+                "locator": "Publisher VOR, printed pp. 2-3, 5, 8-9 and 11"
+              }
+            ]
+          }
+        }
+      },
+      "rationale": "The currently checked full_text_status lacked a reproducible VOR locator and the card's limitations still described only the NLM abstract. The primary VOR supports a bounded substantive row without clinical or ECAP transfer."
+    }
+  ]
+}

@@ -1,0 +1,114 @@
+{
+  "meta": {
+    "batch_id": "r5-correction-s739-exemplar-fly-split-2026-09-28",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-28",
+    "scope": "Separate S739 one empirical example fly from five model replicates and correct held-out split evidence",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-28"
+  },
+  "source_ids": [
+    "S739"
+  ],
+  "records": [
+    {
+      "id": "S739",
+      "title": "Connectome-constrained modeling identifies neurons and synapses that sustain spontaneous activity in Drosophila",
+      "year": 2026,
+      "source_type": "препринт"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S739",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-28",
+      "full_text_status": "checked",
+      "notes": "Preprint v1. FlyWire v783 constrains a resting-state rate model. Empirical analyses use one example head-fixed adult fly recording; n=5 independently trained models per condition are model replicates, not five animals. The first half of that recording was used for fitting and the second half held out; no independent-animal validation, nociceptive, ECAP or clinical comparator.",
+      "searches": [
+        {
+          "service": "bioRxiv versioned primary full text",
+          "query": "S739 example fly n=5 trained models held-out half Figure 2",
+          "url": "https://www.biorxiv.org/content/10.64898/2026.08.21.745055v1.full",
+          "accessed_at": "2026-09-28"
+        }
+      ],
+      "updates": {
+        "evidence": {
+          "population": "Adult FlyWire v783 brain connectome; empirical analyses on calcium recording from one example head-fixed adult fly",
+          "sample_size": "One example adult fly recording for empirical analyses; n=5 independently trained model instances per condition"
+        },
+        "ограничения": "Preprint v1. FlyWire v783 constrains a resting-state rate model. Empirical analyses use one example head-fixed adult fly recording; n=5 independently trained models per condition are model replicates, not five animals. The first half of that recording was used for fitting and the second half held out; no independent-animal validation, nociceptive, ECAP or clinical comparator.",
+        "validation": {
+          "checked_at": "2026-09-28",
+          "notes": "Preprint v1. FlyWire v783 constrains a resting-state rate model. Empirical analyses use one example head-fixed adult fly recording; n=5 independently trained models per condition are model replicates, not five animals. The first half of that recording was used for fitting and the second half held out; no independent-animal validation, nociceptive, ECAP or clinical comparator."
+        },
+        "field_resolution": {
+          "evidence.population": {
+            "state": "reported",
+            "value": "Adult FlyWire v783 brain connectome; empirical analyses on calcium recording from one example head-fixed adult fly",
+            "reason": "Methods explicitly limits empirical analyses to an example fly; model replicates are not additional animals.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/10.64898/2026.08.21.745055v1.full",
+                "locator": "Methods > Experimental whole-brain calcium imaging data; Methods > Connectome data and neuron-synapse assignment"
+              }
+            ]
+          },
+          "evidence.sample_size": {
+            "state": "reported",
+            "value": "One example adult fly recording for empirical analyses; n=5 independently trained model instances per condition",
+            "reason": "Separate the empirical animal count from model replicate count.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/10.64898/2026.08.21.745055v1.full",
+                "locator": "Methods > Experimental whole-brain calcium imaging data; Results, opening paragraph"
+              }
+            ]
+          },
+          "ограничения": {
+            "state": "reported",
+            "value": "Preprint v1. FlyWire v783 constrains a resting-state rate model. Empirical analyses use one example head-fixed adult fly recording; n=5 independently trained models per condition are model replicates, not five animals. The first half of that recording was used for fitting and the second half held out; no independent-animal validation, nociceptive, ECAP or clinical comparator.",
+            "reason": "Bound the held-out segment to one example fly and retain preprint/no-transfer limits.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/10.64898/2026.08.21.745055v1.full",
+                "locator": "Methods > Experimental whole-brain calcium imaging data; Results > Connectome-constrained resting-state fitting; Figure 2 caption"
+              }
+            ]
+          },
+          "validation.notes": {
+            "state": "reported",
+            "value": "Preprint v1. FlyWire v783 constrains a resting-state rate model. Empirical analyses use one example head-fixed adult fly recording; n=5 independently trained models per condition are model replicates, not five animals. The first half of that recording was used for fitting and the second half held out; no independent-animal validation, nociceptive, ECAP or clinical comparator.",
+            "reason": "Clarify empirical versus model replicate denominator and split unit.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/10.64898/2026.08.21.745055v1.full",
+                "locator": "Methods > Experimental whole-brain calcium imaging data; Results opening; Figure 2 caption"
+              }
+            ]
+          },
+          "validation.checked_at": {
+            "state": "reported",
+            "value": "2026-09-28",
+            "reason": "Dated full-text recheck.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/10.64898/2026.08.21.745055v1.full",
+                "locator": "Methods > Experimental whole-brain calcium imaging data; Results opening; Figure 2 caption"
+              }
+            ]
+          }
+        },
+        "identifiers": {
+          "doi": "10.64898/2026.08.21.745055"
+        }
+      }
+    }
+  ]
+}

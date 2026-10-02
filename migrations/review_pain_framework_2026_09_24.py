@@ -25,6 +25,7 @@ from migrations.review_ecap_scs_batch_2026_09_24 import (
 )
 from service.completeness import completeness_summary
 from service.core import load_json
+from service.data_layout import current_data_files, data_path
 from service.integrity import validate_repository
 from service.pipeline import atomic_write_json, snapshot_repository
 
@@ -75,7 +76,7 @@ SPEC: dict[str, Any] = {
 
 
 def build_outputs(data_dir: Path = DATA) -> dict[str, dict[str, Any]]:
-    records = load_json(data_dir / "records.json")
+    records = load_json(data_path(data_dir, "records.json"))
     found = False
     sources = []
     for record in records["sources"]:
@@ -90,7 +91,7 @@ def build_outputs(data_dir: Path = DATA) -> dict[str, dict[str, Any]]:
     records["meta"].update({"verified_primary_count": statuses["verified_primary"], "updated_at": DATE})
     source = next(item for item in sources if item["id"] == SOURCE_ID)
 
-    evidence = load_json(data_dir / "evidence-matrix.json")
+    evidence = load_json(data_path(data_dir, "evidence-matrix.json"))
     row = next(item for item in evidence["rows"] if item.get("source_ids") == [SOURCE_ID])
     row.update(
         {
@@ -106,7 +107,7 @@ def build_outputs(data_dir: Path = DATA) -> dict[str, dict[str, Any]]:
     )
     evidence["meta"]["generated_at"] = DATE
 
-    clusters = load_json(data_dir / "clusters.json")
+    clusters = load_json(data_path(data_dir, "clusters.json"))
     for cluster in clusters["clusters"]:
         representative = cluster.get("представитель")
         if representative and representative.get("id") == SOURCE_ID:
@@ -116,7 +117,7 @@ def build_outputs(data_dir: Path = DATA) -> dict[str, dict[str, Any]]:
             cluster["content_review"]["checked_at"] = DATE
     clusters["meta"]["updated_at"] = DATE
 
-    search = load_json(data_dir / "search-protocol.json")
+    search = load_json(data_path(data_dir, "search-protocol.json"))
     ns17 = next(item for item in search["search_streams"] if item["id"] == "NS-17")
     if SOURCE_ID not in ns17["source_ids"]:
         ns17["source_ids"].append(SOURCE_ID)
@@ -133,7 +134,7 @@ def build_outputs(data_dir: Path = DATA) -> dict[str, dict[str, Any]]:
         }
     )
 
-    novelty = load_json(data_dir / "novelty-landscape.json")
+    novelty = load_json(data_path(data_dir, "novelty-landscape.json"))
     for variant in novelty["variants"]:
         if SOURCE_ID not in variant["closest_analogue_refs"]:
             variant["closest_analogue_refs"].append(SOURCE_ID)
@@ -144,7 +145,7 @@ def build_outputs(data_dir: Path = DATA) -> dict[str, dict[str, Any]]:
             variant["difference_from_analogues"] += suffix
     novelty["meta"]["generated_at"] = DATE
 
-    validation_log = load_json(data_dir / "validation-log.json")
+    validation_log = load_json(data_path(data_dir, "validation-log.json"))
     validation_log.setdefault("searches", []).append(
         {
             "search_id": "PAIN-FRAMEWORK-2026-09-24-01",
@@ -158,11 +159,11 @@ def build_outputs(data_dir: Path = DATA) -> dict[str, dict[str, Any]]:
     )
     validation_log["meta"]["checked_at"] = DATE
 
-    audit = load_json(data_dir / "audit-report.json")
+    audit = load_json(data_path(data_dir, "audit-report.json"))
     audit["current_corpus"]["validation_statuses"] = dict(sorted(statuses.items()))
     audit["meta"]["generated_at"] = DATE
     audit["pain_framework_review"] = {"checked_at": DATE, "reviewed_source_ids": [SOURCE_ID], "finding": "pain constructs and measurement layers must not be treated as interchangeable"}
-    completeness = load_json(data_dir / "completeness-report.json")
+    completeness = load_json(data_path(data_dir, "completeness-report.json"))
     completeness.update(completeness_summary(sources))
     completeness["meta"]["generated_at"] = DATE
     return {
@@ -180,10 +181,12 @@ def build_outputs(data_dir: Path = DATA) -> dict[str, dict[str, Any]]:
 def validate_outputs(outputs: dict[str, dict[str, Any]], data_dir: Path = DATA) -> None:
     with tempfile.TemporaryDirectory(prefix="research-pain-framework-") as temporary:
         target = Path(temporary)
-        for path in data_dir.glob("*.json"):
-            shutil.copy2(path, target / path.name)
+        for path in current_data_files(data_dir):
+            destination = target / path.relative_to(data_dir)
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(path, destination)
         for name, payload in outputs.items():
-            atomic_write_json(target / name, payload)
+            atomic_write_json(data_path(target, name), payload)
         report = validate_repository(target)
         if not report["ok"]:
             raise ValueError("; ".join(report["errors"]))
@@ -199,7 +202,7 @@ def main() -> int:
     if args.apply:
         snapshot = snapshot_repository(DATA, label="pre-pain-framework-review")
         for name, payload in outputs.items():
-            atomic_write_json(DATA / name, payload)
+            atomic_write_json(data_path(DATA, name), payload)
         report = validate_repository(DATA)
         if not report["ok"]:
             raise RuntimeError(f"restore {snapshot}: {'; '.join(report['errors'])}")

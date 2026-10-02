@@ -25,6 +25,7 @@ from migrations.review_ecap_scs_batch_2026_09_24 import (
 )
 from service.completeness import completeness_summary
 from service.core import load_json
+from service.data_layout import current_data_files, data_path
 from service.integrity import validate_repository
 from service.pipeline import atomic_write_json, snapshot_repository
 
@@ -347,7 +348,7 @@ def _audit() -> dict[str, Any]:
 
 
 def build_outputs(data_dir: Path = DATA) -> dict[str, dict[str, Any]]:
-    records = load_json(data_dir / "records.json")
+    records = load_json(data_path(data_dir, "records.json"))
     found: set[str] = set()
     sources: list[dict[str, Any]] = []
     for record in records["sources"]:
@@ -362,7 +363,7 @@ def build_outputs(data_dir: Path = DATA) -> dict[str, dict[str, Any]]:
     records["meta"].update({"verified_primary_count": statuses["verified_primary"], "updated_at": DATE})
     by_id = {source["id"]: source for source in sources}
 
-    evidence = load_json(data_dir / "evidence-matrix.json")
+    evidence = load_json(data_path(data_dir, "evidence-matrix.json"))
     for source_id, spec in UPDATES.items():
         source = by_id[source_id]
         payload = {
@@ -384,7 +385,7 @@ def build_outputs(data_dir: Path = DATA) -> dict[str, dict[str, Any]]:
             evidence["rows"].append(payload)
     evidence["meta"]["generated_at"] = DATE
 
-    clusters = load_json(data_dir / "clusters.json")
+    clusters = load_json(data_path(data_dir, "clusters.json"))
     for cluster in clusters["clusters"]:
         representative = cluster.get("представитель")
         if representative and representative.get("id") in UPDATES:
@@ -394,7 +395,7 @@ def build_outputs(data_dir: Path = DATA) -> dict[str, dict[str, Any]]:
             cluster["content_review"]["checked_at"] = DATE
     clusters["meta"]["updated_at"] = DATE
 
-    validation_log = load_json(data_dir / "validation-log.json")
+    validation_log = load_json(data_path(data_dir, "validation-log.json"))
     validation_log.setdefault("searches", []).append({
         "search_id": "ECAP-MEASUREMENT-CORE-2026-09-24-01",
         "date": DATE,
@@ -406,7 +407,7 @@ def build_outputs(data_dir: Path = DATA) -> dict[str, dict[str, Any]]:
     })
     validation_log["meta"]["checked_at"] = DATE
 
-    audit_report = load_json(data_dir / "audit-report.json")
+    audit_report = load_json(data_path(data_dir, "audit-report.json"))
     audit_report["current_corpus"]["validation_statuses"] = dict(sorted(statuses.items()))
     audit_report["meta"]["generated_at"] = DATE
     audit_report["ecap_scs_measurement_audit"] = {
@@ -417,7 +418,7 @@ def build_outputs(data_dir: Path = DATA) -> dict[str, dict[str, Any]]:
         "finding": "ECAP waveform and dose are kept separate from pain and clinical response; all dimensions are terminally resolved with primary locators.",
     }
 
-    completeness = load_json(data_dir / "completeness-report.json")
+    completeness = load_json(data_path(data_dir, "completeness-report.json"))
     completeness.update(completeness_summary(sources))
     completeness["meta"]["generated_at"] = DATE
     return {
@@ -434,10 +435,12 @@ def build_outputs(data_dir: Path = DATA) -> dict[str, dict[str, Any]]:
 def validate_outputs(outputs: dict[str, dict[str, Any]], data_dir: Path = DATA) -> None:
     with tempfile.TemporaryDirectory(prefix="research-ecap-measurement-") as temporary:
         target = Path(temporary)
-        for path in data_dir.glob("*.json"):
-            shutil.copy2(path, target / path.name)
+        for path in current_data_files(data_dir):
+            destination = target / path.relative_to(data_dir)
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(path, destination)
         for name, payload in outputs.items():
-            atomic_write_json(target / name, payload)
+            atomic_write_json(data_path(target, name), payload)
         report = validate_repository(target)
         if not report["ok"]:
             raise ValueError("; ".join(report["errors"]))
@@ -453,7 +456,7 @@ def main() -> int:
     if args.apply:
         snapshot = snapshot_repository(DATA, label="pre-ecap-measurement-core-review")
         for name, payload in outputs.items():
-            atomic_write_json(DATA / name, payload)
+            atomic_write_json(data_path(DATA, name), payload)
         report = validate_repository(DATA)
         if not report["ok"]:
             raise RuntimeError(f"restore {snapshot}: {'; '.join(report['errors'])}")

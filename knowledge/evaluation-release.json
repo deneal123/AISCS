@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "frozen_before_release_corrections": true,
+  "frozen_at": "2026-10-02",
+  "purpose": "Additional fixed release acceptance queries; not an independent population accuracy estimate.",
+  "cases": [
+    {"id":"release-en-01","language":"en","query":"Which review describes the fruit fly as an experimental nociception model?","expected_sources":["S012"],"permitted_conclusion":"Nociception model; no inference of subjective human pain."},
+    {"id":"release-en-02","language":"en","query":"Larval fruit fly nociception and behavioral responses","expected_sources":["S152"],"permitted_conclusion":"Larval behavioral nociception; no clinical efficacy claim."},
+    {"id":"release-en-03","language":"en","query":"Intraoperative nociception monitoring combining EEG PPG and ECG","expected_sources":["S016"],"permitted_conclusion":"Reported monitoring task, distinct from subjective pain and clinical outcomes."},
+    {"id":"release-en-04","language":"en","query":"Connectome constrained recurrent networks predicting neural activity","expected_sources":["S743"],"permitted_conclusion":"Neural activity prediction; no pain or SCS outcome validation."},
+    {"id":"release-en-05","language":"en","query":"Simulated central pattern generator circuit for fly walking","expected_sources":["S740"],"permitted_conclusion":"Fly locomotion model; upstream lineage gaps remain."},
+    {"id":"release-en-06","language":"en","query":"Synthetic pain simulation for zero shot multimodal estimation","expected_sources":["S149"],"permitted_conclusion":"Reported synthetic-domain result; no established clinical transfer."},
+    {"id":"release-en-07","language":"en","query":"Spinal cord stimulation response prediction compared with lead screening trial","expected_sources":["S749"],"permitted_conclusion":"Reported response prediction; no inferred open ECAP-outcome dataset."},
+    {"id":"release-en-08","language":"en","query":"Natural language processing predicts patient reported outcomes after SCS","expected_sources":["S754"],"permitted_conclusion":"Proof of concept; no ECAP biomarker inference."},
+    {"id":"release-en-09","language":"en","query":"10.1136/rapm-2019-100859","expected_sources":["S755"],"permitted_conclusion":"Reported predictive formula; unavailable details stay unresolved."},
+    {"id":"release-en-10","language":"en","query":"Trust gated synthetic EEG augmentation generalization to new patients","expected_sources":["S836"],"permitted_conclusion":"Reported EEG domain-generalization task; no automatic pain transfer."},
+    {"id":"release-ru-01","language":"ru","query":"Дрозофила как экспериментальная модель механизмов ноцицепции","expected_sources":["S012"],"permitted_conclusion":"Ноцицепция; субъективная боль человека не установлена."},
+    {"id":"release-ru-02","language":"ru","query":"Ноцицепция у личинок плодовой мушки","expected_sources":["S152"],"permitted_conclusion":"Поведение личинок; клинические исходы не исследованы."},
+    {"id":"release-ru-03","language":"ru","query":"Интраоперационный мониторинг ноцицепции по ЭЭГ фотоплетизмографии и ЭКГ","expected_sources":["S016"],"permitted_conclusion":"Мониторинг ноцицепции отдельно от субъективной боли."},
+    {"id":"release-ru-04","language":"ru","query":"Рекуррентная сеть с ограничениями коннектома предсказывает нейронную активность","expected_sources":["S743"],"permitted_conclusion":"Нейронная активность; перенос на боль не подтверждён."},
+    {"id":"release-ru-05","language":"ru","query":"Центральный генератор ритма ходьбы мухи в симуляции коннектома","expected_sources":["S740"],"permitted_conclusion":"Локомоция мухи; пробелы lineage сохраняются."},
+    {"id":"release-ru-06","language":"ru","query":"Синтетическое моделирование боли и мультимодальная оценка без обучения на целевом домене","expected_sources":["S149"],"permitted_conclusion":"Результат заданного домена; клиническая переносимость не доказана."},
+    {"id":"release-ru-07","language":"ru","query":"Прогноз ответа на стимуляцию спинного мозга сравнительно с пробной стимуляцией","expected_sources":["S749"],"permitted_conclusion":"Прогноз ответа; наличие открытых ECAP-данных не следует."},
+    {"id":"release-ru-08","language":"ru","query":"Обработка естественного языка для прогноза исходов сообщаемых пациентом после SCS","expected_sources":["S754"],"permitted_conclusion":"Предварительное исследование NLP, не ECAP-биомаркер."},
+    {"id":"release-ru-09","language":"ru","query":"Высокодозная стимуляция спинного мозга после неудачной операции на спине прогноз эффективности","expected_sources":["S762"],"permitted_conclusion":"Исходы конкретной клинической популяции; нет универсального прогноза."},
+    {"id":"release-ru-10","language":"ru","query":"Координация чистки антенн централизованными сетями мозга дрозофилы","expected_sources":["S782"],"permitted_conclusion":"Сенсомоторная координация; ноцицепция не показана."}
+  ]
+}

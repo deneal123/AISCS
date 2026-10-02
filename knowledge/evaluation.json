@@ -1,0 +1,288 @@
+{
+  "version": 1,
+  "frozen_before_index": true,
+  "cases": [
+    {
+      "id": "id-S740",
+      "query": "S740",
+      "expected_sources": [
+        "S740"
+      ]
+    },
+    {
+      "id": "id-S775",
+      "query": "S775",
+      "expected_sources": [
+        "S775"
+      ]
+    },
+    {
+      "id": "id-S782",
+      "query": "S782",
+      "expected_sources": [
+        "S782"
+      ]
+    },
+    {
+      "id": "id-S743",
+      "query": "S743",
+      "expected_sources": [
+        "S743"
+      ]
+    },
+    {
+      "id": "id-S747",
+      "query": "S747",
+      "expected_sources": [
+        "S747"
+      ]
+    },
+    {
+      "id": "id-S212",
+      "query": "S212",
+      "expected_sources": [
+        "S212"
+      ]
+    },
+    {
+      "id": "id-S149",
+      "query": "S149",
+      "expected_sources": [
+        "S149"
+      ]
+    },
+    {
+      "id": "id-S017",
+      "query": "S017",
+      "expected_sources": [
+        "S017"
+      ]
+    },
+    {
+      "id": "id-S755",
+      "query": "S755",
+      "expected_sources": [
+        "S755"
+      ]
+    },
+    {
+      "id": "id-S088",
+      "query": "S088",
+      "expected_sources": [
+        "S088"
+      ]
+    },
+    {
+      "id": "doi-S740",
+      "query": "10.1101/2025.09.12.675944",
+      "expected_sources": [
+        "S740"
+      ]
+    },
+    {
+      "id": "doi-S775",
+      "query": "10.1038/s41586-024-07763-9",
+      "expected_sources": [
+        "S775"
+      ]
+    },
+    {
+      "id": "doi-S782",
+      "query": "10.1038/s41467-026-72152-x",
+      "expected_sources": [
+        "S782"
+      ]
+    },
+    {
+      "id": "doi-S743",
+      "query": "10.1038/s41593-025-02080-4",
+      "expected_sources": [
+        "S743"
+      ]
+    },
+    {
+      "id": "doi-S747",
+      "query": "10.1038/s41928-025-01374-6",
+      "expected_sources": [
+        "S747"
+      ]
+    },
+    {
+      "id": "doi-S212",
+      "query": "10.1101/2025.09.25.678485",
+      "expected_sources": [
+        "S212"
+      ]
+    },
+    {
+      "id": "doi-S149",
+      "query": "10.3389/frai.2026.1827727",
+      "expected_sources": [
+        "S149"
+      ]
+    },
+    {
+      "id": "doi-S017",
+      "query": "10.1109/JIOT.2025.3590401",
+      "expected_sources": [
+        "S017"
+      ]
+    },
+    {
+      "id": "doi-S755",
+      "query": "10.1136/rapm-2019-100859",
+      "expected_sources": [
+        "S755"
+      ]
+    },
+    {
+      "id": "doi-S088",
+      "query": "10.1109/ISDA70544.2026.11606012",
+      "expected_sources": [
+        "S088"
+      ]
+    },
+    {
+      "id": "en-1",
+      "query": "connectome constrained recurrent network prediction of neural activity",
+      "expected_sources": [
+        "S743"
+      ]
+    },
+    {
+      "id": "en-2",
+      "query": "Drosophila computational brain model sensorimotor processing",
+      "expected_sources": [
+        "S775"
+      ]
+    },
+    {
+      "id": "en-3",
+      "query": "centralized brain networks antennal grooming",
+      "expected_sources": [
+        "S782"
+      ]
+    },
+    {
+      "id": "en-4",
+      "query": "connectome simulations central pattern generator fly walking",
+      "expected_sources": [
+        "S740"
+      ]
+    },
+    {
+      "id": "en-5",
+      "query": "zero shot multimodal pain synthesis domain invariant learning",
+      "expected_sources": [
+        "S149"
+      ]
+    },
+    {
+      "id": "en-6",
+      "query": "programmable adaptive ultrasound wireless implant pain management",
+      "expected_sources": [
+        "S747"
+      ]
+    },
+    {
+      "id": "en-7",
+      "query": "high dose spinal cord stimulation failed back surgery outcome prediction",
+      "expected_sources": [
+        "S762"
+      ]
+    },
+    {
+      "id": "en-8",
+      "query": "brain wide activity imaging electron microscopy threatening somatosensory stimuli",
+      "expected_sources": [
+        "S212"
+      ]
+    },
+    {
+      "id": "en-9",
+      "query": "ECG pain recognition temporal compression feature fusion",
+      "expected_sources": [
+        "S017"
+      ]
+    },
+    {
+      "id": "en-10",
+      "query": "closed loop spinal cord stimulation Australia twelve month crossover ECAP",
+      "expected_sources": [
+        "S903"
+      ]
+    },
+    {
+      "id": "ru-1",
+      "query": "предсказание нейронной активности рекуррентной сетью с ограничением коннектома",
+      "expected_sources": [
+        "S743"
+      ]
+    },
+    {
+      "id": "ru-2",
+      "query": "вычислительная модель мозга дрозофилы сенсомоторная обработка",
+      "expected_sources": [
+        "S775"
+      ]
+    },
+    {
+      "id": "ru-3",
+      "query": "централизованные сети мозга чистка антенн",
+      "expected_sources": [
+        "S782"
+      ]
+    },
+    {
+      "id": "ru-4",
+      "query": "симуляции коннектома центральный генератор ходьбы мухи",
+      "expected_sources": [
+        "S740"
+      ]
+    },
+    {
+      "id": "ru-5",
+      "query": "распознавание боли синтетические мультимодальные данные без обучения на целевом домене",
+      "expected_sources": [
+        "S149"
+      ]
+    },
+    {
+      "id": "ru-6",
+      "query": "ультразвуковой беспроводной имплант адаптивная стимуляция при боли",
+      "expected_sources": [
+        "S747"
+      ]
+    },
+    {
+      "id": "ru-7",
+      "query": "прогноз эффективности высокодозной стимуляции спинного мозга после неудачной операции на спине",
+      "expected_sources": [
+        "S762"
+      ]
+    },
+    {
+      "id": "ru-8",
+      "query": "регистрация активности всего мозга электронная микроскопия угрожающие соматосенсорные стимулы",
+      "expected_sources": [
+        "S212"
+      ]
+    },
+    {
+      "id": "ru-9",
+      "query": "распознавание боли по ЭКГ временное сжатие объединение признаков",
+      "expected_sources": [
+        "S017"
+      ]
+    },
+    {
+      "id": "ru-10",
+      "query": "замкнутый контур стимуляции ECAP Австралия перекрестное исследование 12 месяцев",
+      "expected_sources": [
+        "S903"
+      ]
+    }
+  ],
+  "label_review": "Canonical titles checked before live indexing; corrected mistaken connectome and ECG labels. Case IDs and corpus are fixed.",
+  "encoding_review": "Restored the intended UTF-8 Russian inputs after Windows stdin encoding replaced them with question marks. The 75% preliminary result used corrupted inputs and is invalid; source labels and English queries remain unchanged."
+}

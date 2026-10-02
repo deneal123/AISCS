@@ -3,6 +3,7 @@
 import json
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 DATA = Path(__file__).resolve().parents[1] / "data"
@@ -21,7 +22,7 @@ LOCATORS = {
 
 
 def main() -> None:
-    matrix = json.loads((DATA / "evidence-matrix.json").read_text(encoding="utf-8"))
+    matrix = json.loads((data_path(DATA, "evidence-matrix.json")).read_text(encoding="utf-8"))
     for source_id, (url, locator) in LOCATORS.items():
         rows = [
             row for row in matrix["rows"]
@@ -45,7 +46,7 @@ def main() -> None:
         "are distinct. Neither measures subjective pain.",
     }
     snapshot = snapshot_repository(DATA, label="pre-s065-s212-evidence-locators")
-    atomic_write_json(DATA / "evidence-matrix.json", matrix)
+    atomic_write_json(data_path(DATA, "evidence-matrix.json"), matrix)
     atomic_write_json(DATA / "s065-s212-evidence-locator-review-2026-09-25.json", audit)
     print(f"Updated two nociception locators; snapshot: {snapshot}")
 

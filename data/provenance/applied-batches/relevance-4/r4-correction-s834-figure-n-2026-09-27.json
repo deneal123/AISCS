@@ -1,0 +1,86 @@
+{
+  "meta": {
+    "batch_id": "r4-correction-s834-figure-n-2026-09-27",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-27",
+    "scope": "Reconcile S834 hot-probe group denominators and assay-specific negative finding",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-27"
+  },
+  "source_ids": [
+    "S834"
+  ],
+  "records": [
+    {
+      "id": "S834",
+      "title": "The Drosophila ortholog of vertebrate TRPA1 regulates thermotaxis",
+      "year": 2020,
+      "source_type": "метод"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S834",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-27",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "service": "PubMed Central primary full text",
+          "query": "S834 PMID 15681611 Results Fig 3C and Fig 4H group sample sizes and high-temperature withdrawal",
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC548941/",
+          "accessed_at": "2026-09-27"
+        }
+      ],
+      "updates": {
+        "evidence": {
+          "sample_size": "Figure 3C hot-probe curling latency: uninjected n=41, dTrpA1 RNAi region 1 n=24, md-Gal4 n=23, UAS-TeTxLC n=30, md-Gal4:UAS-TeTxLC n=23 larvae. Figure 4H: dTrpA1-Gal4:UAS-TeTxLC n=19 and dTrpA1-Gal4:UAS-Hid n=20. No pooled study N.",
+          "population": "Third-instar Drosophila larvae in the ~55 C probe assays; the thermal-gradient thermotaxis assay uses separate larval preparations/stages as specified in the Methods."
+        },
+        "identifiers": {
+          "doi": "10.1101/gad.1278205"
+        },
+        "field_resolution": {
+          "evidence.sample_size": {
+            "state": "reported",
+            "value": "Figure 3C hot-probe curling latency: uninjected n=41, dTrpA1 RNAi region 1 n=24, md-Gal4 n=23, UAS-TeTxLC n=30, md-Gal4:UAS-TeTxLC n=23 larvae. Figure 4H: dTrpA1-Gal4:UAS-TeTxLC n=19 and dTrpA1-Gal4:UAS-Hid n=20. No pooled study N.",
+            "reason": "The primary figure legends state group-specific larval denominators; no pooled N is derived.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC548941/",
+                "locator": "Figure 3C legend, group n; Figure 4H legend, group n"
+              }
+            ]
+          },
+          "evidence.population": {
+            "state": "reported",
+            "value": "Third-instar Drosophila larvae in the ~55 C probe assays; the thermal-gradient thermotaxis assay uses separate larval preparations/stages as specified in the Methods.",
+            "reason": "The Results and figure legends identify third-instar larvae in probe tests and separate thermotaxis assays.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC548941/",
+                "locator": "Results > Thermotaxis and high-temperature nociception involve distinct mechanisms; Figures 3B-C and 4H; Materials and Methods"
+              }
+            ]
+          },
+          "validation.notes": {
+            "state": "reported",
+            "value": "Primary PMC full text and figure legends checked 2026-09-27. Figure 3C explicitly reports uninjected n=41, dTrpA1 RNAi region 1 n=24, md-Gal4 n=23, UAS-TeTxLC n=30, and md-Gal4:UAS-TeTxLC n=23 larvae for hot-probe curling latency. Figure 4H reports dTrpA1-Gal4:UAS-TeTxLC n=19 and dTrpA1-Gal4:UAS-Hid n=20 in another probe comparison. These are panel/group counts, not a study-wide N. Figure 3B-C finds an assay-specific negative dTrpA1 RNAi comparison. No evoked neural recording, subjective pain, human ECAP or SCS outcome. The S282 c66 citation is reagent provenance. Classified included_core by the verified_primary review workflow with evidence_role method_baseline.",
+            "reason": "Dated primary figure-level review reconciles sample counts and scientific scope.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC548941/",
+                "locator": "Figure 3B-C and Figure 4H legends; Results and Methods"
+              }
+            ]
+          }
+        }
+      },
+      "claims": [],
+      "notes": "Primary PMC full text and figure legends checked 2026-09-27. Figure 3C explicitly reports uninjected n=41, dTrpA1 RNAi region 1 n=24, md-Gal4 n=23, UAS-TeTxLC n=30, and md-Gal4:UAS-TeTxLC n=23 larvae for hot-probe curling latency. Figure 4H reports dTrpA1-Gal4:UAS-TeTxLC n=19 and dTrpA1-Gal4:UAS-Hid n=20 in another probe comparison. These are panel/group counts, not a study-wide N. Figure 3B-C finds an assay-specific negative dTrpA1 RNAi comparison. No evoked neural recording, subjective pain, human ECAP or SCS outcome. The S282 c66 citation is reagent provenance. Classified included_core by the verified_primary review workflow with evidence_role method_baseline."
+    }
+  ]
+}

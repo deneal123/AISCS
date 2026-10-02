@@ -1,0 +1,79 @@
+{
+  "meta": {
+    "batch_id": "r5-correction-s788-author-identity-2026-09-28",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-28",
+    "scope": "Correct five inherited S788 author given names against NLM and publisher-deposited metadata",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-28"
+  },
+  "source_ids": [
+    "S788"
+  ],
+  "records": [
+    {
+      "id": "S788",
+      "title": "Effective Relief of Pain and Associated Symptoms With Closed-Loop Spinal Cord Stimulation System: Preliminary Results of the Avalon Study",
+      "year": 2018,
+      "source_type": "SCS_специфика"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S788",
+      "decision": "partially_verified",
+      "checked_at": "2026-09-28",
+      "full_text_status": "metadata_only",
+      "notes": "Official PubMed PMID 28922517 author abstract checked 2026-09-28: exact 3/6-month back/leg ≥50% and ≥80% relief proportions copied with interim 51-trialed/36-implanted context. The article is abstract-only in this pass. Registered AVALON endpoint includes feedback-mode programmability, distinct from patient pain scores; no randomized comparison, visit-specific responder denominator or patient ECAP-to-pain linkage is established. Author list corrected against the NLM EFetch primary record and publisher-deposited Crossref metadata on 2026-09-28; five inherited given names were erroneous. Interim AVALON sample remains 51 trialed/36 implanted, distinct from the mature 70/50 cohort.",
+      "searches": [
+        {
+          "service": "NLM PubMed EFetch and publisher Crossref",
+          "query": "PMID 28922517 author list DOI 10.1111/ner.12684",
+          "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=28922517&retmode=xml",
+          "accessed_at": "2026-09-28"
+        }
+      ],
+      "updates": {
+        "identifiers": {
+          "doi": "10.1111/ner.12684",
+          "pmid": "28922517"
+        },
+        "авторы": "Marc Russo; Michael J. Cousins; Charles Brooker; Nathan Taylor; Tillman Boesel; Richard Sullivan; Lawrence Poree; Nastaran Hesam Shariati; Erin Hanson; John Parker",
+        "field_resolution": {
+          "авторы": {
+            "state": "reported",
+            "value": "Marc Russo; Michael J. Cousins; Charles Brooker; Nathan Taylor; Tillman Boesel; Richard Sullivan; Lawrence Poree; Nastaran Hesam Shariati; Erin Hanson; John Parker",
+            "reason": "NLM and publisher-deposited author lists agree; five inherited given names were wrong.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=28922517&retmode=xml",
+                "locator": "NLM PubMed EFetch XML, PMID 28922517, MedlineCitation > Article > AuthorList, ten authors in publication order"
+              },
+              {
+                "url": "https://api.crossref.org/works/10.1111/ner.12684",
+                "locator": "Publisher-deposited Crossref author array; same ten names and order"
+              }
+            ]
+          },
+          "validation.notes": {
+            "state": "reported",
+            "value": "Official PubMed PMID 28922517 author abstract checked 2026-09-28: exact 3/6-month back/leg ≥50% and ≥80% relief proportions copied with interim 51-trialed/36-implanted context. The article is abstract-only in this pass. Registered AVALON endpoint includes feedback-mode programmability, distinct from patient pain scores; no randomized comparison, visit-specific responder denominator or patient ECAP-to-pain linkage is established. Author list corrected against the NLM EFetch primary record and publisher-deposited Crossref metadata on 2026-09-28; five inherited given names were erroneous. Interim AVALON sample remains 51 trialed/36 implanted, distinct from the mature 70/50 cohort.",
+            "reason": "Dated identity correction and interim-cohort boundary. Observed full text remains closed.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=28922517&retmode=xml",
+                "locator": "NLM PubMed EFetch XML, PMID 28922517, MedlineCitation > Article > AuthorList, ten authors in publication order"
+              },
+              {
+                "url": "https://api.crossref.org/works/10.1111/ner.12684",
+                "locator": "Publisher-deposited Crossref author array; same ten names and order"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,108 @@
+{
+  "meta": {
+    "batch_id": "r4-correction-s029-behavior-modality-2026-09-28",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-28",
+    "scope": "S029 card omitted the directly measured avoidance/escape behavior modality.",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-28"
+  },
+  "source_ids": [
+    "S029"
+  ],
+  "records": [
+    {
+      "id": "S029",
+      "title": "Ascending nociceptive pathways drive rapid escape and sustained avoidance in adult Drosophila",
+      "year": 2025,
+      "source_type": "препринт"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S029",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-28",
+      "full_text_status": "checked",
+      "notes": "Publisher-deposited preprint text reports adult fly optogenetic avoidance and escape behavior alongside connectome and neural analyses (Results and Figs. 1, 2 and 6). These observations are protective behavior, not subjective pain or human SCS response.",
+      "searches": [
+        {
+          "service": "Primary publisher text",
+          "query": "Ascending nociceptive pathways drive rapid escape and sustained avoidance in adult Drosophila",
+          "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12636578/fullTextXML",
+          "accessed_at": "2026-09-28"
+        }
+      ],
+      "updates": {
+        "identifiers": {
+          "doi": "10.1101/2025.10.28.684868"
+        },
+        "evidence": {
+          "modalities": [
+            "connectome",
+            "neural_activity",
+            "behavior"
+          ]
+        },
+        "validation": {
+          "checked_at": "2026-09-28",
+          "notes": "Publisher-deposited preprint text reports adult fly optogenetic avoidance and escape behavior alongside connectome and neural analyses (Results and Figs. 1, 2 and 6). These observations are protective behavior, not subjective pain or human SCS response."
+        },
+        "field_resolution": {
+          "identifiers.doi": {
+            "state": "reported",
+            "value": "10.1101/2025.10.28.684868",
+            "reason": "S029 card omitted the directly measured avoidance/escape behavior modality.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12636578/fullTextXML",
+                "locator": "Results > A screen for somatosensory neurons that produce avoidance behavior (Fig. 1); Spatially targeted activation (Fig. 2); Different components of escape and sustained avoidance (Fig. 6); Methods > Optogenetics experiments in freely walking flies"
+              }
+            ]
+          },
+          "evidence.modalities": {
+            "state": "reported",
+            "value": [
+              "connectome",
+              "neural_activity",
+              "behavior"
+            ],
+            "reason": "S029 card omitted the directly measured avoidance/escape behavior modality.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12636578/fullTextXML",
+                "locator": "Results > A screen for somatosensory neurons that produce avoidance behavior (Fig. 1); Spatially targeted activation (Fig. 2); Different components of escape and sustained avoidance (Fig. 6); Methods > Optogenetics experiments in freely walking flies"
+              }
+            ]
+          },
+          "validation.checked_at": {
+            "state": "reported",
+            "value": "2026-09-28",
+            "reason": "S029 card omitted the directly measured avoidance/escape behavior modality.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12636578/fullTextXML",
+                "locator": "Results > A screen for somatosensory neurons that produce avoidance behavior (Fig. 1); Spatially targeted activation (Fig. 2); Different components of escape and sustained avoidance (Fig. 6); Methods > Optogenetics experiments in freely walking flies"
+              }
+            ]
+          },
+          "validation.notes": {
+            "state": "reported",
+            "value": "Publisher-deposited preprint text reports adult fly optogenetic avoidance and escape behavior alongside connectome and neural analyses (Results and Figs. 1, 2 and 6). These observations are protective behavior, not subjective pain or human SCS response.",
+            "reason": "S029 card omitted the directly measured avoidance/escape behavior modality.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12636578/fullTextXML",
+                "locator": "Results > A screen for somatosensory neurons that produce avoidance behavior (Fig. 1); Spatially targeted activation (Fig. 2); Different components of escape and sustained avoidance (Fig. 6); Methods > Optogenetics experiments in freely walking flies"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

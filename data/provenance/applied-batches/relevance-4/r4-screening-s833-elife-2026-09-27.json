@@ -1,0 +1,65 @@
+{
+  "meta": {
+    "batch_id": "src04-s833-screening-context-2026-09-27",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-27",
+    "scope": "Classify S833 heat-probe behavior and morphology evidence separately from neural response",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-27"
+  },
+  "source_ids": [
+    "S833"
+  ],
+  "records": [
+    {
+      "id": "S833",
+      "title": "Low FoxO expression in Drosophila somatosensory neurons protects dendrite growth under nutrient restriction",
+      "year": 2020,
+      "source_type": "article"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S833",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-27",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "service": "PubMed Central full text JATS",
+          "query": "Primary Methods > Behavior assay; Results > Figure 6A-E; distinguish behavior, dendrite morphology, and neural response",
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7308081/",
+          "accessed_at": "2026-09-27"
+        }
+      ],
+      "updates": {
+        "identifiers": {
+          "doi": "10.7554/eLife.53351",
+          "pmid": "32427101"
+        },
+        "validation": {
+          "status": "verified_primary",
+          "screening_status": "pending",
+          "full_text_status": "checked",
+          "notes": "Primary eLife full text checked. Heat-probe-evoked complete rolling behavior (Methods > Behavior assay; Results > Figure 6A-E) and C4da dendrite morphology are separate endpoints. Neural response was not measured; no subjective pain measure. Curated as included_core under the automated verified_primary rule; evidence role remains method_baseline and does not establish neural response. DOI 10.7554/eLife.53351; seed S282 v1 JATS c62."
+        },
+        "field_resolution": {
+          "validation.notes": {
+            "state": "reported",
+            "value": "Primary eLife full text checked. Heat-probe-evoked complete rolling behavior (Methods > Behavior assay; Results > Figure 6A-E) and C4da dendrite morphology are separate endpoints. Neural response was not measured; no subjective pain measure. Curated as included_core under the automated verified_primary rule; evidence role remains method_baseline and does not establish neural response. DOI 10.7554/eLife.53351; seed S282 v1 JATS c62.",
+            "reason": "Primary eLife full text verifies behavior and separate morphology endpoints; curation workflow assigns screening category.",
+            "checked_at": "2026-09-27",
+            "locators": [
+              {
+                "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7308081/",
+                "locator": "Methods > Behavior assay; Results > Figure 6A-E and Figure 6 source data 1"
+              }
+            ]
+          }
+        }
+      },
+      "claims": [],
+      "notes": "Primary eLife full text checked. Heat-probe-evoked complete rolling behavior (Methods > Behavior assay; Results > Figure 6A-E) and C4da dendrite morphology are separate endpoints. Neural response was not measured; no subjective pain measure. Curated as included_core under the automated verified_primary rule; evidence role remains method_baseline and does not establish neural response. DOI 10.7554/eLife.53351; seed S282 v1 JATS c62."
+    }
+  ]
+}

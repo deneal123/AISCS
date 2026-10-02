@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Document-grounded Pi graph proposal",
+  "type": "object",
+  "required": ["source_id", "document_sha256", "quote", "start", "end", "relation", "entity", "review", "claim_type"],
+  "properties": {
+    "claim_type": {"enum": ["methodological", "reported", "observed", "limitation", "secondary_report"]},
+    "source_id": {"type": "string", "pattern": "^S[0-9]+$"},
+    "document_sha256": {"type": "string", "pattern": "^[a-fA-F0-9]{64}$"},
+    "quote": {"type": "string", "minLength": 1},
+    "start": {"type": "integer", "minimum": 0},
+    "end": {"type": "integer", "minimum": 1},
+    "relation": {"enum": ["uses_method", "uses_dataset", "measures", "reports_result", "qualified_by", "cites", "compares_with", "contradicts"]},
+    "entity": {
+      "type": "object",
+      "required": ["type", "name"],
+      "properties": {
+        "type": {"enum": ["Method", "Model", "Dataset", "Population", "Construct", "Result", "Limitation", "Source"]},
+        "name": {"type": "string", "minLength": 1},
+        "identifier": {"type": "string"}
+      }
+    },
+    "review": {
+      "type": "object",
+      "required": ["status"],
+      "properties": {
+        "status": {"enum": ["unreviewed", "accepted", "rejected"]},
+        "reviewer": {"type": "string"},
+        "date": {"type": "string"},
+        "rationale": {"type": "string"}
+      }
+    }
+  }
+}

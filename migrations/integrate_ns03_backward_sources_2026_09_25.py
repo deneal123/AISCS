@@ -6,6 +6,7 @@ import argparse
 import json
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -65,15 +66,15 @@ ENTRIES = [
 
 
 def updated() -> tuple[dict, dict, dict, str]:
-    records = json.loads((DATA / "records.json").read_text(encoding="utf-8"))
+    records = json.loads((data_path(DATA, "records.json")).read_text(encoding="utf-8"))
     canonical = {r["id"]: r for r in records["sources"]}
     if not IDS <= set(canonical):
         raise ValueError("Publish canonical cards first")
     if any(canonical[source_id]["identifiers"]["doi"].lower() != doi.lower() for doi, source_id in DOIS.items()):
         raise ValueError("Canonical DOI changed")
-    protocol = json.loads((DATA / "search-protocol.json").read_text(encoding="utf-8"))
-    audit = json.loads((DATA / "drosophila-nociception-audit.json").read_text(encoding="utf-8"))
-    matrix = json.loads((DATA / "evidence-matrix.json").read_text(encoding="utf-8"))
+    protocol = json.loads((data_path(DATA, "search-protocol.json")).read_text(encoding="utf-8"))
+    audit = json.loads((data_path(DATA, "drosophila-nociception-audit.json")).read_text(encoding="utf-8"))
+    matrix = json.loads((data_path(DATA, "evidence-matrix.json")).read_text(encoding="utf-8"))
     stream = next(s for s in protocol["search_streams"] if s["id"] == "NS-03")
     if {lead["doi"].lower() for lead in stream["unindexed_primary_leads"]} != {d.lower() for d in DOIS}:
         raise ValueError("Pending primary leads changed")
@@ -118,7 +119,7 @@ def updated() -> tuple[dict, dict, dict, str]:
         raise ValueError("SRC-04 TODO lead note changed")
     todo = todo.replace(old, "  Дополнение 25.09: `S776`–`S778` введены из обратных ссылок `S212`/`S282` и по первичным текстам раздельно занесены в NS-03. `S777` не содержит прямой записи вызванной нейронной активности; `S778` проверен по архиву издательской страницы. Поиск цитирований ещё открыт, как и зависимость `SRC-03`.")
     todo = todo.replace("NS-03 содержит 18 канонических кандидатов", "NS-03 содержит 21 канонического кандидата")
-    todo = todo.replace("для всех 18 `data/drosophila-nociception-audit.json`", "для всех 21 `data/drosophila-nociception-audit.json`")
+    todo = todo.replace("для всех 18 `data/audits/drosophila/drosophila-nociception-audit.json`", "для всех 21 `data/audits/drosophila/drosophila-nociception-audit.json`")
     return protocol, audit, matrix, todo
 
 
@@ -131,9 +132,9 @@ def main() -> None:
         print(f"Dry run: {audit['meta']['records_count']} NS-03 entries")
         return
     snapshot = snapshot_repository(DATA, label="pre-ns03-backward-primary-integration")
-    atomic_write_json(DATA / "search-protocol.json", protocol)
-    atomic_write_json(DATA / "drosophila-nociception-audit.json", audit)
-    atomic_write_json(DATA / "evidence-matrix.json", matrix)
+    atomic_write_json(data_path(DATA, "search-protocol.json"), protocol)
+    atomic_write_json(data_path(DATA, "drosophila-nociception-audit.json"), audit)
+    atomic_write_json(data_path(DATA, "evidence-matrix.json"), matrix)
     (ROOT / "TODO.md").write_text(todo, encoding="utf-8", newline="\n")
     print(f"Integrated NS-03 sources; snapshot: {snapshot}")
 

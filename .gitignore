@@ -7,3 +7,4 @@ build/
 data/staging/inbox/*.json
 !data/staging/inbox/.gitkeep
 .work
+.knowledge/

@@ -1,0 +1,227 @@
+{
+  "meta": {
+    "batch_id": "r3-correction-s900-fly-imaging-2026-10-01",
+    "schema_version": "1.2.0",
+    "created_at": "2026-10-01",
+    "scope": "Correct S900 to record in-study female-fly EPG calcium imaging and the unreported fly denominator",
+    "status": "reviewed",
+    "reviewed_at": "2026-10-01"
+  },
+  "source_ids": [
+    "S900"
+  ],
+  "records": [
+    {
+      "id": "S900",
+      "title": "From the fly connectome to exact ring attractor dynamics",
+      "year": 2026,
+      "source_type": "препринт"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S900",
+      "decision": "verified_primary",
+      "checked_at": "2026-10-01",
+      "full_text_status": "checked",
+      "notes": "Official bioRxiv version 2 full-text HTML rechecked 2026-10-01. Methods > Experimental procedure > Fly preparation reports imaging in 6-8-day-old female UAS-jGCaMP7f;SS00096-GAL4 flies and expression of jGCaMP7f in EPG neurons. Methods > Two-photon calcium imaging states that each fly was imaged during trials in darkness. Methods > Data analysis and model fitting describes measured EPG DeltaF/F0 profiles and nonlinear least-squares fitting of the three connectome-constrained model profiles to those data. Thus the study includes its own in-vivo EPG calcium imaging; do not describe the comparison as only using previously observed profiles. The total number of flies is not stated in the checked primary text and remains unspecified. This remains a Drosophila head-direction study and supports no nociception, pain, ECAP, SCS, human clinical, or end-to-end transfer claim. The source is bioRxiv version 2 posted 2026-03-08, not a peer-reviewed accepted article.",
+      "searches": [
+        {
+          "service": "bioRxiv",
+          "query": "10.1101/2024.11.01.621596v2 full-text Methods Fly preparation",
+          "url": "https://www.biorxiv.org/content/10.1101/2024.11.01.621596v2.full",
+          "accessed_at": "2026-10-01"
+        },
+        {
+          "service": "bioRxiv",
+          "query": "10.1101/2024.11.01.621596v2 Methods Two-photon calcium imaging",
+          "url": "https://www.biorxiv.org/content/10.1101/2024.11.01.621596v2.full",
+          "accessed_at": "2026-10-01"
+        },
+        {
+          "service": "bioRxiv",
+          "query": "10.1101/2024.11.01.621596v2 Methods Data analysis and model fitting",
+          "url": "https://www.biorxiv.org/content/10.1101/2024.11.01.621596v2.full",
+          "accessed_at": "2026-10-01"
+        }
+      ],
+      "updates": {
+        "модальность": "Two-photon calcium imaging of EPG neural activity in vivo, paired with computational ring-attractor modeling constrained by fly connectomes.",
+        "задача": "Test whether connectome-constrained head-direction ring-attractor models reproduce EPG activity profiles measured in this study in adult female Drosophila.",
+        "метод": "Threshold-linear recurrent network analysis of four EPG-Delta7 connectomes, combined with two-photon jGCaMP7f calcium imaging of EPG neurons in 6-8-day-old female flies and nonlinear least-squares fitting of modeled bump amplitude and position to measured DeltaF/F0 profiles.",
+        "датасет": "Four Drosophila central-complex connectomes (Male CNS, hemibrain, flywire-fafb, BANC) plus in-vivo EPG calcium-imaging data from 6-8-day-old female UAS-jGCaMP7f;SS00096-GAL4 flies. The number of imaged flies is not stated in the checked primary text.",
+        "производительность": "Not a supervised prediction benchmark. The paper reports three connectome-constrained model realizations and fits their EPG activity profiles to calcium-imaging profiles recorded in this study; the models use shape parameters r_a=0.548, 0.437, and 0.391 for A_Delta=8, 6, and 4. No total fly count or held-out-animal test result is reported.",
+        "кросс_субъект": "No participant-level or held-out-animal prediction evaluation is reported. The authors fit modeled profiles to EPG imaging data collected in the study; the number of imaged flies is not stated in the checked primary text.",
+        "ограничения": "The paper combines computational Drosophila head-direction modeling with two-photon calcium imaging of EPG neurons in 6-8-day-old female flies. The number of imaged flies is not reported in the checked primary text and is left unspecified. The experiments concern EPG neural activity and head direction; they do not measure nociception, protective behavior, subjective pain, ECAP, SCS response, human outcomes, or a clinical chain.",
+        "evidence": {
+          "population": "In-vivo two-photon calcium imaging of EPG neurons in 6-8-day-old female UAS-jGCaMP7f;SS00096-GAL4 Drosophila melanogaster; jGCaMP7f was expressed in EPG neurons. Imaging trials were conducted in darkness. Total number of flies is not reported in the checked primary text.",
+          "modalities": [
+            "connectome",
+            "simulation_state",
+            "neural_activity",
+            "metadata"
+          ],
+          "sample_size": null,
+          "target_label": "Connectome-constrained head-direction model profiles compared with EPG calcium activity measured in the study; no nociception, pain, ECAP, or SCS labels."
+        },
+        "validation": {
+          "notes": "Official bioRxiv version 2 full-text HTML rechecked 2026-10-01. Methods > Experimental procedure > Fly preparation reports imaging in 6-8-day-old female UAS-jGCaMP7f;SS00096-GAL4 flies and expression of jGCaMP7f in EPG neurons. Methods > Two-photon calcium imaging states that each fly was imaged during trials in darkness. Methods > Data analysis and model fitting describes measured EPG DeltaF/F0 profiles and nonlinear least-squares fitting of the three connectome-constrained model profiles to those data. Thus the study includes its own in-vivo EPG calcium imaging; do not describe the comparison as only using previously observed profiles. The total number of flies is not stated in the checked primary text and remains unspecified. This remains a Drosophila head-direction study and supports no nociception, pain, ECAP, SCS, human clinical, or end-to-end transfer claim. The source is bioRxiv version 2 posted 2026-03-08, not a peer-reviewed accepted article."
+        },
+        "field_resolution": {
+          "модальность": {
+            "state": "reported",
+            "value": "Two-photon calcium imaging of EPG neural activity in vivo, paired with computational ring-attractor modeling constrained by fly connectomes.",
+            "reason": "Checked in the official bioRxiv version 2 full-text HTML; see locator.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/10.1101/2024.11.01.621596v2.full",
+                "locator": "Methods > Experimental procedure > Fly preparation; Methods > Two-photon calcium imaging"
+              }
+            ]
+          },
+          "задача": {
+            "state": "reported",
+            "value": "Test whether connectome-constrained head-direction ring-attractor models reproduce EPG activity profiles measured in this study in adult female Drosophila.",
+            "reason": "Checked in the official bioRxiv version 2 full-text HTML; see locator.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/10.1101/2024.11.01.621596v2.full",
+                "locator": "Abstract; Methods > Data analysis and model fitting"
+              }
+            ]
+          },
+          "метод": {
+            "state": "reported",
+            "value": "Threshold-linear recurrent network analysis of four EPG-Delta7 connectomes, combined with two-photon jGCaMP7f calcium imaging of EPG neurons in 6-8-day-old female flies and nonlinear least-squares fitting of modeled bump amplitude and position to measured DeltaF/F0 profiles.",
+            "reason": "Checked in the official bioRxiv version 2 full-text HTML; see locator.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/10.1101/2024.11.01.621596v2.full",
+                "locator": "Methods > Theoretical Model; Methods > Two-photon calcium imaging; Methods > Data analysis and model fitting"
+              }
+            ]
+          },
+          "датасет": {
+            "state": "reported",
+            "value": "Four Drosophila central-complex connectomes (Male CNS, hemibrain, flywire-fafb, BANC) plus in-vivo EPG calcium-imaging data from 6-8-day-old female UAS-jGCaMP7f;SS00096-GAL4 flies. The number of imaged flies is not stated in the checked primary text.",
+            "reason": "Checked in the official bioRxiv version 2 full-text HTML; see locator.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/10.1101/2024.11.01.621596v2.full",
+                "locator": "Methods > Experimental procedure > Fly preparation; Methods > Two-photon calcium imaging; Results > Consistency with the EPG-Delta7 connectome"
+              }
+            ]
+          },
+          "производительность": {
+            "state": "reported",
+            "value": "Not a supervised prediction benchmark. The paper reports three connectome-constrained model realizations and fits their EPG activity profiles to calcium-imaging profiles recorded in this study; the models use shape parameters r_a=0.548, 0.437, and 0.391 for A_Delta=8, 6, and 4. No total fly count or held-out-animal test result is reported.",
+            "reason": "Checked in the official bioRxiv version 2 full-text HTML; see locator.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/10.1101/2024.11.01.621596v2.full",
+                "locator": "Results > Consistency with the EPG-Delta7 connectome; Methods > Data analysis and model fitting"
+              }
+            ]
+          },
+          "кросс_субъект": {
+            "state": "reported",
+            "value": "No participant-level or held-out-animal prediction evaluation is reported. The authors fit modeled profiles to EPG imaging data collected in the study; the number of imaged flies is not stated in the checked primary text.",
+            "reason": "Checked in the official bioRxiv version 2 full-text HTML; see locator.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/10.1101/2024.11.01.621596v2.full",
+                "locator": "Methods > Two-photon calcium imaging; Methods > Data analysis and model fitting; no held-out-animal test described"
+              }
+            ]
+          },
+          "ограничения": {
+            "state": "reported",
+            "value": "The paper combines computational Drosophila head-direction modeling with two-photon calcium imaging of EPG neurons in 6-8-day-old female flies. The number of imaged flies is not reported in the checked primary text and is left unspecified. The experiments concern EPG neural activity and head direction; they do not measure nociception, protective behavior, subjective pain, ECAP, SCS response, human outcomes, or a clinical chain.",
+            "reason": "Checked in the official bioRxiv version 2 full-text HTML; see locator.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/10.1101/2024.11.01.621596v2.full",
+                "locator": "Methods > Experimental procedure > Fly preparation; Methods > Two-photon calcium imaging; Discussion"
+              }
+            ]
+          },
+          "evidence.modalities": {
+            "state": "reported",
+            "value": [
+              "connectome",
+              "simulation_state",
+              "neural_activity",
+              "metadata"
+            ],
+            "reason": "Checked in the official bioRxiv version 2 full-text HTML; see locator.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/10.1101/2024.11.01.621596v2.full",
+                "locator": "Methods > Two-photon calcium imaging; Results > Consistency with the EPG-Delta7 connectome"
+              }
+            ]
+          },
+          "evidence.sample_size": {
+            "state": "not_reported",
+            "value": null,
+            "reason": "The Methods say imaging data were collected for each fly, but the total fly count is not stated in the checked JATS Methods, Results, or figure captions; no denominator is inferred.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/10.1101/2024.11.01.621596v2.full",
+                "locator": "Methods > Experimental procedure > Fly preparation; Methods > Two-photon calcium imaging; Results and figure captions checked for fly denominator"
+              }
+            ]
+          },
+          "evidence.target_label": {
+            "state": "reported",
+            "value": "Connectome-constrained head-direction model profiles compared with EPG calcium activity measured in the study; no nociception, pain, ECAP, or SCS labels.",
+            "reason": "Checked in the official bioRxiv version 2 full-text HTML; see locator.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/10.1101/2024.11.01.621596v2.full",
+                "locator": "Abstract; Methods > Two-photon calcium imaging; Methods > Data analysis and model fitting"
+              }
+            ]
+          },
+          "validation.notes": {
+            "state": "reported",
+            "value": "Official bioRxiv version 2 full-text HTML rechecked 2026-10-01. Methods > Experimental procedure > Fly preparation reports imaging in 6-8-day-old female UAS-jGCaMP7f;SS00096-GAL4 flies and expression of jGCaMP7f in EPG neurons. Methods > Two-photon calcium imaging states that each fly was imaged during trials in darkness. Methods > Data analysis and model fitting describes measured EPG DeltaF/F0 profiles and nonlinear least-squares fitting of the three connectome-constrained model profiles to those data. Thus the study includes its own in-vivo EPG calcium imaging; do not describe the comparison as only using previously observed profiles. The total number of flies is not stated in the checked primary text and remains unspecified. This remains a Drosophila head-direction study and supports no nociception, pain, ECAP, SCS, human clinical, or end-to-end transfer claim. The source is bioRxiv version 2 posted 2026-03-08, not a peer-reviewed accepted article.",
+            "reason": "Curation correction checked against official bioRxiv version 2 full-text HTML.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/10.1101/2024.11.01.621596v2.full",
+                "locator": "Methods > Experimental procedure > Fly preparation; Methods > Two-photon calcium imaging; Methods > Data analysis and model fitting"
+              }
+            ]
+          },
+          "evidence.population": {
+            "state": "reported",
+            "value": "In-vivo two-photon calcium imaging of EPG neurons in 6-8-day-old female UAS-jGCaMP7f;SS00096-GAL4 Drosophila melanogaster; jGCaMP7f was expressed in EPG neurons. Imaging trials were conducted in darkness. Total number of flies is not reported in the checked primary text.",
+            "reason": "Checked in the official bioRxiv version 2 full-text HTML; see locator.",
+            "checked_at": "2026-10-01",
+            "locators": [
+              {
+                "url": "https://www.biorxiv.org/content/10.1101/2024.11.01.621596v2.full",
+                "locator": "Methods > Experimental procedure > Fly preparation"
+              }
+            ]
+          }
+        },
+        "identifiers": {
+          "doi": "10.1101/2024.11.01.621596"
+        }
+      }
+    }
+  ]
+}

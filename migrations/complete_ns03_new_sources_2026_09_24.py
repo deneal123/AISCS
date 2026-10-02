@@ -8,6 +8,7 @@ import argparse
 import json
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 DATA = Path(__file__).resolve().parents[1] / "data"
@@ -78,8 +79,8 @@ NEW_ENTRIES = [
 
 
 def update() -> dict:
-    protocol_path = DATA / "search-protocol.json"
-    audit_path = DATA / "drosophila-nociception-audit.json"
+    protocol_path = data_path(DATA, "search-protocol.json")
+    audit_path = data_path(DATA, "drosophila-nociception-audit.json")
     protocol = json.loads(protocol_path.read_text(encoding="utf-8"))
     audit = json.loads(audit_path.read_text(encoding="utf-8"))
     stream = next(item for item in protocol["search_streams"] if item["id"] == "NS-03")
@@ -90,7 +91,7 @@ def update() -> dict:
     if set(audit["meta"]["remaining_source_ids"]) != {"S212", "S282"}:
         raise ValueError("Unexpected unresolved candidate set")
     lead_ids = {"S760", "S761"}
-    records = json.loads((DATA / "records.json").read_text(encoding="utf-8"))
+    records = json.loads((data_path(DATA, "records.json")).read_text(encoding="utf-8"))
     if not lead_ids <= {record["id"] for record in records["sources"]}:
         raise ValueError("Canonical source cards must be published first")
     resolved = [
@@ -121,8 +122,8 @@ def main() -> None:
     updated = update()
     if args.apply:
         snapshot = snapshot_repository(DATA, label="pre-ns03-new-source-audit")
-        atomic_write_json(DATA / "search-protocol.json", updated["protocol"])
-        atomic_write_json(DATA / "drosophila-nociception-audit.json", updated["audit"])
+        atomic_write_json(data_path(DATA, "search-protocol.json"), updated["protocol"])
+        atomic_write_json(data_path(DATA, "drosophila-nociception-audit.json"), updated["audit"])
         print(f"Applied NS-03 audit extension; snapshot: {snapshot}")
     else:
         print("Dry run: 17 candidates, 15 audited, 2 awaiting primary full text")

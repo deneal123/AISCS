@@ -1,0 +1,68 @@
+{
+  "meta": {
+    "batch_id": "r4-correction-s844-table1-edge-denominator-2026-09-28",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-28",
+    "scope": "Correct unsupported merged-pairwise interpretation of S844 Table 1 edge count",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-28"
+  },
+  "source_ids": ["S844"],
+  "records": [
+    {
+      "id": "S844",
+      "title": "Network structure governs Drosophila brain functionality",
+      "year": 2025,
+      "source_type": "метод"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S844",
+      "decision": "verified_primary",
+      "checked_at": "2026-09-28",
+      "full_text_status": "checked",
+      "searches": [
+        {
+          "service": "Europe PMC publisher-deposited JATS",
+          "query": "S844 Methods Table 1 edge denominator and before/after merging degrees",
+          "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13247498/fullTextXML",
+          "accessed_at": "2026-09-28"
+        }
+      ],
+      "updates": {
+        "identifiers": {
+          "doi": "10.1016/j.fmre.2025.01.017"
+        },
+        "датасет": "Published adult female Drosophila connectome; Methods Table 1 reports 131,459 nodes and 32,970,606 edges, alongside average degree 501.6 before and 37.01 after combining multiple edges. The table does not establish that the 32,970,606 figure is the unique pairwise-edge denominator; the distinct counts need provenance reconciliation. Exact immutable graph materialization was not established.",
+        "field_resolution": {
+          "датасет": {
+            "state": "reported",
+            "value": "Published adult female Drosophila connectome; Methods Table 1 reports 131,459 nodes and 32,970,606 edges, alongside average degree 501.6 before and 37.01 after combining multiple edges. The table does not establish that the 32,970,606 figure is the unique pairwise-edge denominator; the distinct counts need provenance reconciliation. Exact immutable graph materialization was not established.",
+            "reason": "The prior card incorrectly labelled the reported edge count as merged pairwise connections; Table 1 reports edges and separate average degrees before/after multi-edge combination without that mapping.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13247498/fullTextXML",
+                "locator": "Methods §2.1 Drosophila connectome data set, prose immediately before and Table 1: nodes, edges and average degree before/after combining multiple edges"
+              }
+            ]
+          },
+          "validation.notes": {
+            "state": "reported",
+            "value": "Corrected Table 1 count interpretation after a second primary check; no unique-edge denominator or upstream FlyWire materialization is inferred. Simulation scope is unchanged.",
+            "reason": "Reviewed correction receipt for the source dataset denominator.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13247498/fullTextXML",
+                "locator": "Methods §2.1, Table 1; source counts and degree definitions"
+              }
+            ]
+          }
+        }
+      },
+      "notes": "Corrected Table 1 count interpretation after a second primary check; no unique-edge denominator or upstream FlyWire materialization is inferred. Simulation scope is unchanged."
+    }
+  ]
+}

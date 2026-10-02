@@ -1,0 +1,110 @@
+{
+  "meta": {
+    "batch_id": "r5-correction-s082-preview-cohort-2026-09-28",
+    "schema_version": "1.2.0",
+    "created_at": "2026-09-28",
+    "scope": "Record S082 publisher-preview cohort while preserving unresolved model denominator and metric mapping",
+    "status": "reviewed",
+    "reviewed_at": "2026-09-28"
+  },
+  "source_ids": [
+    "S082"
+  ],
+  "records": [
+    {
+      "id": "S082",
+      "title": "Pain intensity classification and evaluation of individual differences in subjects based on hybrid CNN–BiLSTM approach",
+      "year": 2026,
+      "source_type": "метод"
+    }
+  ],
+  "decisions": [
+    {
+      "source_id": "S082",
+      "decision": "partially_verified",
+      "checked_at": "2026-09-28",
+      "full_text_status": "metadata_only",
+      "notes": "ScienceDirect indexed preview checked on 2026-09-28: §2.1 reports a cohort of 26 university students (16 male, 10 female, age 22-25). Published abstract reports four undivided-group class accuracies and 93.98% overall after sensitivity-group stratification under LOSOCV. Indexed Conclusions separately reports 91.79% four-level accuracy without an accessible setup label; the relation is unresolved. Complete result tables and model-analysis denominator remain unavailable. No external clinical validation.",
+      "searches": [
+        {
+          "service": "ScienceDirect official publisher preview",
+          "query": "10.1016/j.bspc.2026.109815 Participants cohort denominator and 91.79 versus 93.98 setup",
+          "url": "https://www.sciencedirect.com/science/article/abs/pii/S1746809426003691",
+          "accessed_at": "2026-09-28"
+        }
+      ],
+      "updates": {
+        "identifiers": {
+          "doi": "10.1016/j.bspc.2026.109815"
+        },
+        "ограничения": "The official ScienceDirect preview exposes §2.1 Participants (26 healthy university students) and the abstract, but not the Results tables or complete validation protocol. The model-analysis denominator, fold composition, class counts and exact relation of 91.79% in indexed Conclusions to 93.98% after sensitivity stratification remain unresolved. The arithmetic match of 91.79% to four undivided-group class accuracies is an inference only. Cold-pressor experimental pain does not establish chronic-pain clinical validity, ECAP, SCS response or treatment effect.",
+        "evidence": {
+          "population": "Twenty-six healthy university students aged 22-25 (16 male, 10 female) underwent cold-pressor EEG testing; the number included in each reported model comparison is not established from the accessible preview.",
+          "sample_size": 26
+        },
+        "field_resolution": {
+          "ограничения": {
+            "state": "reported",
+            "value": "The official ScienceDirect preview exposes §2.1 Participants (26 healthy university students) and the abstract, but not the Results tables or complete validation protocol. The model-analysis denominator, fold composition, class counts and exact relation of 91.79% in indexed Conclusions to 93.98% after sensitivity stratification remain unresolved. The arithmetic match of 91.79% to four undivided-group class accuracies is an inference only. Cold-pressor experimental pain does not establish chronic-pain clinical validity, ECAP, SCS response or treatment effect.",
+            "reason": "Publisher preview provides cohort count but not full outcome tables or analyzed model denominator.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S1746809426003691",
+                "locator": "Official ScienceDirect preview, §2.1 Participants (26 students, 16 male/10 female, age 22-25); Abstract and indexed Conclusions; complete Results tables unavailable"
+              }
+            ]
+          },
+          "evidence.population": {
+            "state": "reported",
+            "value": "Twenty-six healthy university students aged 22-25 (16 male, 10 female) underwent cold-pressor EEG testing; the number included in each reported model comparison is not established from the accessible preview.",
+            "reason": "Official §2.1 Participants states cohort composition.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S1746809426003691",
+                "locator": "Official ScienceDirect preview, §2.1 Participants (26 students, 16 male/10 female, age 22-25); Abstract and indexed Conclusions; complete Results tables unavailable"
+              }
+            ]
+          },
+          "evidence.sample_size": {
+            "state": "reported",
+            "value": 26,
+            "reason": "This is the enrolled study cohort, not a proven model-analysis denominator.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S1746809426003691",
+                "locator": "Official ScienceDirect preview, §2.1 Participants (26 students, 16 male/10 female, age 22-25); Abstract and indexed Conclusions; complete Results tables unavailable"
+              }
+            ]
+          },
+          "validation.checked_at": {
+            "state": "reported",
+            "value": "2026-09-28",
+            "reason": "Dated direct review of the publisher preview.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S1746809426003691",
+                "locator": "Official ScienceDirect preview, §2.1 Participants (26 students, 16 male/10 female, age 22-25); Abstract and indexed Conclusions; complete Results tables unavailable"
+              }
+            ]
+          },
+          "validation.notes": {
+            "state": "reported",
+            "value": "ScienceDirect indexed preview checked on 2026-09-28: §2.1 reports a cohort of 26 university students (16 male, 10 female, age 22-25). Published abstract reports four undivided-group class accuracies and 93.98% overall after sensitivity-group stratification under LOSOCV. Indexed Conclusions separately reports 91.79% four-level accuracy without an accessible setup label; the relation is unresolved. Complete result tables and model-analysis denominator remain unavailable. No external clinical validation.",
+            "reason": "Publisher preview and abstract checked, with unresolved metrics kept separate.",
+            "checked_at": "2026-09-28",
+            "locators": [
+              {
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S1746809426003691",
+                "locator": "Official ScienceDirect preview, §2.1 Participants (26 students, 16 male/10 female, age 22-25); Abstract and indexed Conclusions; complete Results tables unavailable"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

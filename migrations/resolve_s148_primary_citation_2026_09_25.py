@@ -6,6 +6,7 @@ import argparse
 import json
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -20,7 +21,7 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--apply", action="store_true")
     args = parser.parse_args()
-    records = json.loads((DATA / "records.json").read_text(encoding="utf-8"))
+    records = json.loads((data_path(DATA, "records.json")).read_text(encoding="utf-8"))
     retry = json.loads((DATA / "src07-crossref-retry-2026-09-25.json").read_text(encoding="utf-8"))
     todo = (ROOT / "TODO.md").read_text(encoding="utf-8")
     readme = (DATA / "README.md").read_text(encoding="utf-8")
@@ -62,7 +63,7 @@ def main() -> None:
         print("Dry run: S148 19:617733; Crossref page metadata retained separately")
         return
     snapshot = snapshot_repository(DATA, label="pre-s148-citation-resolution")
-    atomic_write_json(DATA / "records.json", records)
+    atomic_write_json(data_path(DATA, "records.json"), records)
     atomic_write_json(DATA / "src07-crossref-retry-2026-09-25.json", retry)
     atomic_write_json(DATA / "src07-s148-citation-resolution-2026-09-25.json", note)
     (ROOT / "TODO.md").write_text(todo, encoding="utf-8", newline="\n")

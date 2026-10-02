@@ -1,0 +1,15 @@
+{
+  "records": 318,
+  "resolved_fields": 11448,
+  "states": {
+    "not_applicable": 1826,
+    "not_reported": 1413,
+    "reported": 7542,
+    "unavailable_after_search": 667
+  },
+  "unresolved_count": 0,
+  "unresolved": [],
+  "meta": {
+    "generated_at": "2026-10-01"
+  }
+}

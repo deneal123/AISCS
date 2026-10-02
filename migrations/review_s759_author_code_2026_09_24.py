@@ -8,6 +8,7 @@ import argparse
 import json
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -35,9 +36,9 @@ def main() -> None:
     parser.add_argument("--apply", action="store_true")
     args = parser.parse_args()
 
-    records_path = DATA / "records.json"
-    synthetic_path = DATA / "synthetic-domain-audit.json"
-    ns06_path = DATA / "ns06-prior-art-audit.json"
+    records_path = data_path(DATA, "records.json")
+    synthetic_path = data_path(DATA, "synthetic-domain-audit.json")
+    ns06_path = data_path(DATA, "ns06-prior-art-audit.json")
     records = json.loads(records_path.read_text(encoding="utf-8"))
     synthetic = json.loads(synthetic_path.read_text(encoding="utf-8"))
     ns06 = json.loads(ns06_path.read_text(encoding="utf-8"))

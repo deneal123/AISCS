@@ -8,6 +8,7 @@ import argparse
 import json
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 DATA = Path(__file__).resolve().parents[1] / "data"
@@ -20,7 +21,7 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--apply", action="store_true")
     args = parser.parse_args()
-    path = DATA / "records.json"
+    path = data_path(DATA, "records.json")
     records = json.loads(path.read_text(encoding="utf-8"))
     source = next(x for x in records["sources"] if x["id"] == "S749")
     if source["relations"]:

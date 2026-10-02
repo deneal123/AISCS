@@ -9,6 +9,7 @@ import json
 from pathlib import Path
 
 from service.completeness import completeness_summary
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 DATA = Path(__file__).resolve().parents[1] / "data"
@@ -127,8 +128,8 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--apply", action="store_true")
     args = parser.parse_args()
-    records_path = DATA / "records.json"
-    audit_path = DATA / "drosophila-nociception-audit.json"
+    records_path = data_path(DATA, "records.json")
+    audit_path = data_path(DATA, "drosophila-nociception-audit.json")
     if audit_path.exists():
         raise ValueError("audit already exists")
     records = json.loads(records_path.read_text(encoding="utf-8"))
@@ -143,7 +144,7 @@ def main() -> int:
                 "reason": "Primary source identifies the reviewed or experimental Drosophila life stage.",
                 "checked_at": DATE, "locators": [{"url": url, "locator": locator}],
             }
-    protocol = json.loads((DATA / "search-protocol.json").read_text(encoding="utf-8"))
+    protocol = json.loads((data_path(DATA, "search-protocol.json")).read_text(encoding="utf-8"))
     candidate_ids = next(stream["source_ids"] for stream in protocol["search_streams"] if stream["id"] == "NS-03")
     remaining = [source_id for source_id in candidate_ids if source_id not in {entry["source_id"] for entry in ENTRIES}]
     audit = {
@@ -164,7 +165,7 @@ def main() -> int:
     snapshot = snapshot_repository(DATA, label="pre-drosophila-nociception-core-review")
     atomic_write_json(records_path, records)
     atomic_write_json(audit_path, audit)
-    completeness_path = DATA / "completeness-report.json"
+    completeness_path = data_path(DATA, "completeness-report.json")
     completeness = json.loads(completeness_path.read_text(encoding="utf-8"))
     completeness.update(completeness_summary(records["sources"]))
     atomic_write_json(completeness_path, completeness)

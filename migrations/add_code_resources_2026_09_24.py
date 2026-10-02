@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Any
 
 from service.core import load_json
+from service.data_layout import data_path
 from service.integrity import validate_repository
 from service.pipeline import atomic_write_json, snapshot_repository
 
@@ -67,7 +68,7 @@ def _resource(
 
 
 def build() -> dict[str, Any]:
-    payload = load_json(DATA / "ST.json")
+    payload = load_json(data_path(DATA, "ST.json"))
     existing = {
         resource["resource_id"]
         for category in payload["categories"]
@@ -148,7 +149,7 @@ def main() -> int:
     payload = build()
     if args.apply:
         snapshot = snapshot_repository(DATA, label="pre-code-resource-addition")
-        atomic_write_json(DATA / "ST.json", payload)
+        atomic_write_json(data_path(DATA, "ST.json"), payload)
         report = validate_repository(DATA)
         if not report["ok"]:
             raise RuntimeError(f"restore {snapshot}: {'; '.join(report['errors'])}")

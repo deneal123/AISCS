@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 
 from service.completeness import completeness_summary
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -164,8 +165,8 @@ def normalize_recovered_resolutions(source: dict) -> None:
 
 
 def updated() -> tuple[dict, dict, dict, dict]:
-    records = json.loads((DATA / "records.json").read_text(encoding="utf-8"))
-    nociception = json.loads((DATA / "drosophila-nociception-audit.json").read_text(encoding="utf-8"))
+    records = json.loads((data_path(DATA, "records.json")).read_text(encoding="utf-8"))
+    nociception = json.loads((data_path(DATA, "drosophila-nociception-audit.json")).read_text(encoding="utf-8"))
     by_id = {source["id"]: source for source in records["sources"]}
     recover_thesis(by_id["S013"], nociception)
     recover_acm(by_id["S018"])
@@ -176,7 +177,7 @@ def updated() -> tuple[dict, dict, dict, dict]:
         source["validation"]["status"] == "verified_primary"
         for source in records["sources"]
     )
-    completeness = json.loads((DATA / "completeness-report.json").read_text(encoding="utf-8"))
+    completeness = json.loads((data_path(DATA, "completeness-report.json")).read_text(encoding="utf-8"))
     completeness.update(completeness_summary(records["sources"]))
     audit = {
         "meta": {"schema_version": "1.0.0", "checked_at": DATE, "status": "three_rejected_sources_recovered"},
@@ -198,9 +199,9 @@ def main() -> None:
         print("Dry run: S013, S018 and S233 identity/status corrections")
         return
     snapshot = snapshot_repository(DATA, label="pre-src07-three-source-recovery")
-    atomic_write_json(DATA / "records.json", records)
-    atomic_write_json(DATA / "completeness-report.json", completeness)
-    atomic_write_json(DATA / "drosophila-nociception-audit.json", nociception)
+    atomic_write_json(data_path(DATA, "records.json"), records)
+    atomic_write_json(data_path(DATA, "completeness-report.json"), completeness)
+    atomic_write_json(data_path(DATA, "drosophila-nociception-audit.json"), nociception)
     atomic_write_json(DATA / "src07-three-source-recovery-2026-09-25.json", audit)
     print(f"Recovered S013, S018 and S233; snapshot: {snapshot}")
 

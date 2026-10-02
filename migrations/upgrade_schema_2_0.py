@@ -14,6 +14,7 @@ from pathlib import Path
 from typing import Any
 
 from service.completeness import RESOLVED_PATHS, completeness_summary, migrate_record
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -22,7 +23,7 @@ DATE = "2026-09-23"
 
 
 def load(name: str) -> dict[str, Any]:
-    return json.loads((DATA / name).read_text(encoding="utf-8"))
+    return json.loads((data_path(DATA, name)).read_text(encoding="utf-8"))
 
 
 def source(
@@ -566,7 +567,7 @@ def main() -> int:
     }
     if args.apply:
         for name, payload in outputs.items():
-            atomic_write_json(DATA / name, payload)
+            atomic_write_json(data_path(DATA, name), payload)
     print(json.dumps(summary, ensure_ascii=False, indent=2))
     return 0
 

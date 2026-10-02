@@ -10,6 +10,8 @@ from typing import Any
 from urllib.parse import urlsplit
 
 from .core import DataError, load_json
+from .curation_bundle import read_batch
+from .data_layout import data_path
 from .integrity import validate_repository
 from .pipeline import atomic_write_json, snapshot_repository
 
@@ -43,24 +45,11 @@ def _needs_review(resource: dict[str, Any]) -> bool:
     )
 
 
-def _batch_path(root: Path, batch: Path | str) -> Path:
-    candidate = Path(batch)
-    if candidate.is_file():
-        return candidate.resolve()
-    name = candidate.name
-    if not name.endswith(".json"):
-        name += ".json"
-    path = root / CURATION_RELATIVE / "batches" / name
-    if not path.is_file():
-        raise DataError(f"ST review batch not found: {batch}")
-    return path
-
-
 def build_st_queue(root: Path | str, *, batch_size: int = 15) -> dict[str, Any]:
     root = Path(root).resolve()
     if batch_size < 1:
         raise DataError("batch-size must be positive")
-    payload = load_json(root / "ST.json")
+    payload = load_json(data_path(root, "ST.json"))
     resources = [
         (category, subcategory, resource)
         for category, subcategory, resource in iter_resources(payload)
@@ -85,7 +74,7 @@ def build_st_queue(root: Path | str, *, batch_size: int = 15) -> dict[str, Any]:
     curation = root / CURATION_RELATIVE
     batches_dir = curation / "batches"
     batches_dir.mkdir(parents=True, exist_ok=True)
-    log = load_json(root / "validation-log.json")
+    log = load_json(data_path(root, "validation-log.json"))
     applied = log.get("meta", {}).get("applied_resource_batches", [])
     manifests: list[dict[str, Any]] = []
     for index, group in enumerate(groups, start=len(applied) + 1):
@@ -139,11 +128,10 @@ def build_st_queue(root: Path | str, *, batch_size: int = 15) -> dict[str, Any]:
 
 def st_review_check(root: Path | str, batch: Path | str) -> dict[str, Any]:
     root = Path(root).resolve()
-    path = _batch_path(root, batch)
-    manifest = load_json(path)
+    manifest, locator = read_batch(root, "st-resources", batch)
     resources = {
         resource["resource_id"]: resource
-        for _, _, resource in iter_resources(load_json(root / "ST.json"))
+        for _, _, resource in iter_resources(load_json(data_path(root, "ST.json")))
     }
     manifest_ids = manifest.get("resource_ids", [])
     decisions = manifest.get("decisions", [])
@@ -183,7 +171,7 @@ def st_review_check(root: Path | str, batch: Path | str) -> dict[str, Any]:
     return {
         "ok": not errors,
         "batch_id": manifest.get("meta", {}).get("batch_id"),
-        "path": str(path),
+        "path": locator,
         "resource_count": len(manifest_ids),
         "decision_count": len(decisions),
         "errors": sorted(set(errors)),
@@ -202,22 +190,24 @@ def st_review_apply(root: Path | str, batch: Path | str, *, apply: bool = False)
     result["applied"] = False
     if not check["ok"] or not apply:
         return result
-    path = Path(check["path"])
-    manifest = load_json(path)
+    manifest, _ = read_batch(root, "st-resources", batch)
     batch_id = manifest["meta"]["batch_id"]
-    log = load_json(root / "validation-log.json")
+    log = load_json(data_path(root, "validation-log.json"))
     applied = log.setdefault("meta", {}).setdefault("applied_resource_batches", [])
     if batch_id in applied:
         result.update({"ok": True, "already_applied": True})
         return result
+    path = Path(check["path"])
+    if not path.is_file():
+        raise DataError("new ST review requires a live batch file")
     current = validate_repository(root)
     if not current["ok"]:
         raise DataError("current repository is invalid; repair before ST review")
     snapshot = snapshot_repository(root, label=f"pre-{batch_id}")
     mutable_names = ("ST.json", "validation-log.json", "audit-report.json")
-    originals = {name: (root / name).read_bytes() for name in mutable_names}
-    st = load_json(root / "ST.json")
-    audit = load_json(root / "audit-report.json")
+    originals = {name: (data_path(root, name)).read_bytes() for name in mutable_names}
+    st = load_json(data_path(root, "ST.json"))
+    audit = load_json(data_path(root, "audit-report.json"))
     by_id = {resource["resource_id"]: resource for _, _, resource in iter_resources(st)}
     for decision in manifest["decisions"]:
         resource = by_id[decision["resource_id"]]
@@ -269,15 +259,15 @@ def st_review_apply(root: Path | str, batch: Path | str, *, apply: bool = False)
         "resource_count": sum(counts.values()),
     }
     try:
-        atomic_write_json(root / "ST.json", st)
-        atomic_write_json(root / "validation-log.json", log)
-        atomic_write_json(root / "audit-report.json", audit)
+        atomic_write_json(data_path(root, "ST.json"), st)
+        atomic_write_json(data_path(root, "validation-log.json"), log)
+        atomic_write_json(data_path(root, "audit-report.json"), audit)
         final = validate_repository(root)
         if not final["ok"]:
             raise DataError("post-ST-review integrity failed: " + "; ".join(final["errors"]))
     except Exception:
         for name, content in originals.items():
-            (root / name).write_bytes(content)
+            (data_path(root, name)).write_bytes(content)
         raise
     manifest["meta"].update({"status": "applied", "applied_at": date.today().isoformat()})
     atomic_write_json(path, manifest)

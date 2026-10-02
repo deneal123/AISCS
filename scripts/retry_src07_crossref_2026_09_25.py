@@ -13,20 +13,38 @@ from service.pipeline import atomic_write_json, snapshot_repository
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"
-INPUT = DATA / "src07-crossref-sweep-2026-09-25.json"
-OUTPUT = DATA / "src07-crossref-retry-2026-09-25.json"
+INPUT = DATA / "provenance" / "source-checks" / "src07-crossref-sweep-2026-09-25.json"
+OUTPUT = ROOT / ".work" / "source-checks" / "src07-crossref-retry-2026-09-25.json"
 
 
 def retry(row: dict) -> dict:
     url = row["query_url"]
     result = subprocess.run(
-        ["curl.exe", "-L", "-sS", "--max-time", "25", "-A", "AspaResearch/1.0 (scholarly metadata verification)", "-w", "\n%{http_code}", url],
-        capture_output=True, text=True, encoding="utf-8", errors="replace", check=False,
+        [
+            "curl.exe",
+            "-L",
+            "-sS",
+            "--max-time",
+            "25",
+            "-A",
+            "AspaResearch/1.0 (scholarly metadata verification)",
+            "-w",
+            "\n%{http_code}",
+            url,
+        ],
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        check=False,
     )
     body, _, code = result.stdout.rpartition("\n")
     item = {
-        "source_id": row["source_id"], "doi": row["doi"], "query_url": url,
-        "initial_http_status": row.get("http_status"), "retry_http_status": code,
+        "source_id": row["source_id"],
+        "doi": row["doi"],
+        "query_url": url,
+        "initial_http_status": row.get("http_status"),
+        "retry_http_status": code,
         "status": "unresolved",
     }
     if result.returncode or code != "200":
@@ -40,23 +58,28 @@ def retry(row: dict) -> dict:
     if work.get("DOI", "").lower() != row["doi"].lower():
         item["error"] = f"Crossref DOI mismatch: {work.get('DOI')}"
         return item
-    item.update({
-        "status": "crossref_resolved", "registry_doi": work.get("DOI"),
-        "title": (work.get("title") or [None])[0],
-        "container_title": (work.get("container-title") or [None])[0],
-        "type": work.get("type"),
-        "published_online": date_parts(work, "published-online"),
-        "published_print": date_parts(work, "published-print"),
-        "published": date_parts(work, "published"),
-        "volume": work.get("volume"), "issue": work.get("issue"),
-        "page": work.get("page"), "article_number": work.get("article-number"),
-        "relation": work.get("relation") or {},
-        "update_to": work.get("update-to") or [],
-        "updated_by": work.get("updated-by") or [],
-        "publisher": work.get("publisher"),
-        "resource_primary_url": (work.get("resource") or {}).get("primary", {}).get("URL"),
-        "boundary": "Empty registry relation fields do not prove no correction or journal version elsewhere.",
-    })
+    item.update(
+        {
+            "status": "crossref_resolved",
+            "registry_doi": work.get("DOI"),
+            "title": (work.get("title") or [None])[0],
+            "container_title": (work.get("container-title") or [None])[0],
+            "type": work.get("type"),
+            "published_online": date_parts(work, "published-online"),
+            "published_print": date_parts(work, "published-print"),
+            "published": date_parts(work, "published"),
+            "volume": work.get("volume"),
+            "issue": work.get("issue"),
+            "page": work.get("page"),
+            "article_number": work.get("article-number"),
+            "relation": work.get("relation") or {},
+            "update_to": work.get("update-to") or [],
+            "updated_by": work.get("updated-by") or [],
+            "publisher": work.get("publisher"),
+            "resource_primary_url": (work.get("resource") or {}).get("primary", {}).get("URL"),
+            "boundary": "Empty registry relation fields do not prove no correction or journal version elsewhere.",
+        }
+    )
     return item
 
 
@@ -78,7 +101,8 @@ def main() -> None:
         rows.append(retry(row))
     audit = {
         "meta": {
-            "schema_version": "1.0.0", "checked_at": "2026-09-25",
+            "schema_version": "1.0.0",
+            "checked_at": "2026-09-25",
             "scope": "Sequential retry of unresolved 2026 DOI records from first Crossref sweep",
             "candidates": len(unresolved),
             "resolved": sum(row["status"] == "crossref_resolved" for row in rows),

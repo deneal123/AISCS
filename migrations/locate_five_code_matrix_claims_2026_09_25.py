@@ -4,6 +4,7 @@
 import json
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 DATA = Path(__file__).resolve().parents[1] / "data"
@@ -37,7 +38,7 @@ LOCATORS = {
 
 
 def main() -> None:
-    matrix = json.loads((DATA / "evidence-matrix.json").read_text(encoding="utf-8"))
+    matrix = json.loads((data_path(DATA, "evidence-matrix.json")).read_text(encoding="utf-8"))
     for source_id, (url, locator) in LOCATORS.items():
         rows = [
             row for row in matrix["rows"]
@@ -56,7 +57,7 @@ def main() -> None:
         "human ECAP or SCS efficacy; S292 is companion code to S320.",
     }
     snapshot = snapshot_repository(DATA, label="pre-five-code-claim-locators")
-    atomic_write_json(DATA / "evidence-matrix.json", matrix)
+    atomic_write_json(data_path(DATA, "evidence-matrix.json"), matrix)
     atomic_write_json(DATA / "five-code-claim-locator-review-2026-09-25.json", audit)
     print(f"Updated five pinned code locators; snapshot: {snapshot}")
 

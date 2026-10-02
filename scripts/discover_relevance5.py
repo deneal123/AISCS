@@ -24,6 +24,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from service.core import load_json  # noqa: E402
+from service.data_layout import data_path  # noqa: E402
 from service.pipeline import atomic_write_json  # noqa: E402
 
 DATA = ROOT / "data"
@@ -141,7 +142,7 @@ def discover(record: dict[str, Any]) -> dict[str, Any]:
 
 
 def main() -> None:
-    records = load_json(DATA / "records.json").get("sources", [])
+    records = load_json(data_path(DATA, "records.json")).get("sources", [])
     targets = [
         record
         for record in records

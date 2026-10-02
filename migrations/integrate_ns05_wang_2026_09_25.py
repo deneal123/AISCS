@@ -8,6 +8,7 @@ import json
 from pathlib import Path
 
 from service.completeness import completeness_summary, migrate_record
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json
 
 ROOT = Path(__file__).resolve().parents[1] / "data"
@@ -16,7 +17,7 @@ PUBLISHER = "https://academic.oup.com/nsr/article/12/6/nwaf086/8052010"
 
 
 def main() -> None:
-    path = ROOT / "records.json"
+    path = data_path(ROOT, "records.json")
     payload = json.loads(path.read_text(encoding="utf-8"))
     existing = next((source for source in payload["sources"] if source["id"] == "S796"), None)
     record = {
@@ -121,7 +122,7 @@ def main() -> None:
     )
     atomic_write_json(path, payload)
 
-    cluster_path = ROOT / "clusters.json"
+    cluster_path = data_path(ROOT, "clusters.json")
     clusters = json.loads(cluster_path.read_text(encoding="utf-8"))
     if "S796" not in clusters["unclustered_record_ids"]:
         clusters["unclustered_record_ids"].append("S796")
@@ -134,13 +135,13 @@ def main() -> None:
     clusters["meta"]["unclustered_records_count"] = len(clusters["unclustered_record_ids"])
     atomic_write_json(cluster_path, clusters)
 
-    completeness_path = ROOT / "completeness-report.json"
+    completeness_path = data_path(ROOT, "completeness-report.json")
     completeness = json.loads(completeness_path.read_text(encoding="utf-8"))
     completeness.update(completeness_summary(payload["sources"]))
     completeness.setdefault("meta", {})["generated_at"] = DATE
     atomic_write_json(completeness_path, completeness)
 
-    search_path = ROOT / "search-protocol.json"
+    search_path = data_path(ROOT, "search-protocol.json")
     search = json.loads(search_path.read_text(encoding="utf-8"))
     stream = next(item for item in search["search_streams"] if item["id"] == "NS-05")
     if "S796" not in stream["source_ids"]:
@@ -152,7 +153,7 @@ def main() -> None:
     )
     atomic_write_json(search_path, search)
 
-    matrix_path = ROOT / "evidence-matrix.json"
+    matrix_path = data_path(ROOT, "evidence-matrix.json")
     matrix = json.loads(matrix_path.read_text(encoding="utf-8"))
     row = {
         "batch_id": "ns05-wang-cross-species-eeg-2026-09-25",

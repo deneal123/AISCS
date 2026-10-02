@@ -6,6 +6,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 DATA = Path(__file__).resolve().parents[1] / "data"
@@ -17,7 +18,7 @@ ASSET = "03358c075000af5379e405b244dd31f1a0fd1401"
 
 
 def read(name: str) -> dict:
-    return json.loads((DATA / name).read_text(encoding="utf-8"))
+    return json.loads((data_path(DATA, name)).read_text(encoding="utf-8"))
 
 
 def find_resource(node: object) -> dict | None:
@@ -129,7 +130,7 @@ def main() -> None:
         ("records.json", records), ("ST.json", st), ("runtime-audit.json", runtime),
         ("src07-code-repository-recheck-2026-09-25.json", code),
     ):
-        atomic_write_json(DATA / name, payload)
+        atomic_write_json(data_path(DATA, name), payload)
     print(f"Updated S737/ST107 browser runtime; snapshot: {snapshot}")
 
 

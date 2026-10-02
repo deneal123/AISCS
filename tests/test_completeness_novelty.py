@@ -2,6 +2,7 @@ from pathlib import Path
 
 from service.completeness import completeness_summary
 from service.core import ResearchRepository, load_json
+from service.data_layout import data_path
 from service.integrity import validate_repository
 from service.novelty import search_novelty
 
@@ -10,7 +11,7 @@ DATA = ROOT / "data"
 
 
 def test_schema_2_has_no_unresolved_source_fields() -> None:
-    records = load_json(DATA / "records.json")
+    records = load_json(data_path(DATA, "records.json"))
     assert records["meta"]["schema_version"] == "2.0.0"
     summary = completeness_summary(records["sources"])
     assert summary["records"] == len(records["sources"])
@@ -35,7 +36,7 @@ def test_ecap_patent_prior_art_narrows_but_does_not_close_novelty() -> None:
     assert patent["identifiers"]["patent_id"] == "WO2025224687A1"
     assert "patent_not_empirical_evidence" in patent["risk_flags"]
     assert patent["evidence"]["target_construct"] == "technical_signal_quality"
-    landscape = load_json(DATA / "novelty-landscape.json")
+    landscape = load_json(data_path(DATA, "novelty-landscape.json"))
     for variant in landscape["variants"]:
         assert "S746" in variant["closest_analogue_refs"]
         assert variant["prior_art_outcome"] == "partial_analogues_only"
@@ -132,7 +133,7 @@ def test_remaining_metadata_review_has_terminal_boundaries_and_version_link() ->
 def test_novelty_catalogue_is_unranked_and_searchable() -> None:
     result = search_novelty(DATA, query="closed-loop", limit=100)
     assert result["total"] >= 1
-    landscape = load_json(DATA / "novelty-landscape.json")
+    landscape = load_json(data_path(DATA, "novelty-landscape.json"))
     assert landscape["morphological_matrix"]["raw_combinations_count"] == 22500
     assert len(landscape["variants"]) == 15
     for item in landscape["variants"]:

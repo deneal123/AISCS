@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 
 from service.completeness import completeness_summary
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -35,9 +36,9 @@ def set_field(source: dict, path: str, old: object, new: object, reason: str, lo
 
 
 def main() -> None:
-    records_path = DATA / "records.json"
-    vocab_path = DATA / "vocabularies.json"
-    completeness_path = DATA / "completeness-report.json"
+    records_path = data_path(DATA, "records.json")
+    vocab_path = data_path(DATA, "vocabularies.json")
+    completeness_path = data_path(DATA, "completeness-report.json")
     todo_path = ROOT / "TODO.md"
     readme_path = DATA / "README.md"
     records = json.loads(records_path.read_text(encoding="utf-8"))
@@ -76,7 +77,7 @@ def main() -> None:
     change("S273", "evidence.subject_domain", "unavailable_after_search", "animal_other", "The measured proof-of-concept endpoint is from mice.", "Abstract: female-mouse hot-plate model")
 
     todo = todo_path.read_text(encoding="utf-8")
-    anchor = "  Черновой реестр `data/forbidden-transfer-audit-2026-09-25.json`"
+    anchor = "  Черновой реестр `data/audits/transfer/forbidden-transfer-audit-2026-09-25.json`"
     assert todo.count(anchor) == 1
     note = "  Дополнение 25.09: карточки `S023`, `S149`, `S154`, `S273` приведены к разным первичным целевым исходам; `S023` и `S154` получили подтверждённый доступ к полным текстам. У `S273` проверена только издательская аннотация и размер группы мышей не указан. См. `data/four-source-card-construct-corrections-2026-09-25.json`; `EVD-04` остаётся открытым до просмотра остальных карточек и зависимости `EVD-03`.\n"
     assert note not in todo

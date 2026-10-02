@@ -14,6 +14,7 @@ from pathlib import Path
 from typing import Any
 
 from service.core import load_json
+from service.data_layout import data_path
 from service.integrity import validate_repository
 from service.pipeline import atomic_write_json, snapshot_repository
 
@@ -95,9 +96,9 @@ def _resolution(
 
 
 def refresh(*, apply: bool, data_dir: Path = DATA) -> dict[str, Any]:
-    resources = load_json(data_dir / "ST.json")
-    audit = load_json(data_dir / "audit-report.json")
-    validation_log = load_json(data_dir / "validation-log.json")
+    resources = load_json(data_path(data_dir, "ST.json"))
+    audit = load_json(data_path(data_dir, "audit-report.json"))
+    validation_log = load_json(data_path(data_dir, "validation-log.json"))
     results: list[dict[str, Any]] = []
 
     items = [
@@ -225,9 +226,9 @@ def refresh(*, apply: bool, data_dir: Path = DATA) -> dict[str, Any]:
         return result
 
     snapshot = snapshot_repository(data_dir, label="pre-github-resource-refresh")
-    atomic_write_json(data_dir / "ST.json", resources)
-    atomic_write_json(data_dir / "audit-report.json", audit)
-    atomic_write_json(data_dir / "validation-log.json", validation_log)
+    atomic_write_json(data_path(data_dir, "ST.json"), resources)
+    atomic_write_json(data_path(data_dir, "audit-report.json"), audit)
+    atomic_write_json(data_path(data_dir, "validation-log.json"), validation_log)
     report = validate_repository(data_dir)
     if not report["ok"]:
         raise RuntimeError(

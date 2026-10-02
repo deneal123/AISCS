@@ -7,6 +7,8 @@ from datetime import date
 from pathlib import Path
 
 from service.core import DataError, load_json
+from service.curation_bundle import applied_batch_names, read_batch
+from service.data_layout import data_path
 from service.integrity import validate_repository
 from service.pipeline import atomic_write_json, snapshot_repository
 
@@ -19,12 +21,12 @@ def main() -> None:
     initial = validate_repository(DATA)
     if not initial["ok"]:
         raise DataError("repository is invalid before finalization")
-    records = load_json(DATA / "records.json")
-    aliases = load_json(DATA / "aliases.json")
-    resources = load_json(DATA / "ST.json")
-    log = load_json(DATA / "validation-log.json")
-    audit = load_json(DATA / "audit-report.json")
-    matrix = load_json(DATA / "evidence-matrix.json")
+    records = load_json(data_path(DATA, "records.json"))
+    aliases = load_json(data_path(DATA, "aliases.json"))
+    resources = load_json(data_path(DATA, "ST.json"))
+    log = load_json(data_path(DATA, "validation-log.json"))
+    audit = load_json(data_path(DATA, "audit-report.json"))
+    matrix = load_json(data_path(DATA, "evidence-matrix.json"))
     queue = load_json(CURATION / "queue.json")
 
     sources = records["sources"]
@@ -37,8 +39,11 @@ def main() -> None:
     if unresolved:
         raise DataError(f"relevance-5 still has unresolved records: {unresolved}")
 
-    batch_paths = sorted((CURATION / "batches").glob("batch-*.json"))
-    batches = [load_json(path) for path in batch_paths]
+    batch_names = [
+        name for name in applied_batch_names(DATA, "relevance-5") if name.startswith("batch-")
+    ]
+    batch_pairs = [read_batch(DATA, "relevance-5", name) for name in batch_names]
+    batches = [payload for payload, _ in batch_pairs]
     applied = log.get("meta", {}).get("applied_batches", [])
     batch_ids = [batch["meta"]["batch_id"] for batch in batches]
     if set(batch_ids) != set(applied):
@@ -78,9 +83,9 @@ def main() -> None:
         {
             "batch_id": batch["meta"]["batch_id"],
             "source_ids": batch["source_ids"],
-            "path": str(path.resolve()),
+            "path": locator,
         }
-        for path, batch in zip(batch_paths, batches, strict=True)
+        for (batch, locator) in batch_pairs
     ]
     matrix["meta"].update(
         {
@@ -135,14 +140,15 @@ def main() -> None:
         }
     )
 
-    for path, batch in zip(batch_paths, batches, strict=True):
-        batch["meta"].update({"status": "applied", "applied_at": today})
-        atomic_write_json(path, batch)
-    atomic_write_json(DATA / "records.json", records)
-    atomic_write_json(DATA / "validation-log.json", log)
-    atomic_write_json(DATA / "audit-report.json", audit)
-    atomic_write_json(DATA / "evidence-matrix.json", matrix)
-    atomic_write_json(DATA / "ST.json", resources)
+    if not (CURATION / "applied-batches.json").exists():
+        for name, batch in zip(batch_names, batches, strict=True):
+            batch["meta"].update({"status": "applied", "applied_at": today})
+            atomic_write_json(CURATION / "batches" / name, batch)
+    atomic_write_json(data_path(DATA, "records.json"), records)
+    atomic_write_json(data_path(DATA, "validation-log.json"), log)
+    atomic_write_json(data_path(DATA, "audit-report.json"), audit)
+    atomic_write_json(data_path(DATA, "evidence-matrix.json"), matrix)
+    atomic_write_json(data_path(DATA, "ST.json"), resources)
     atomic_write_json(CURATION / "queue.json", queue)
 
     report = validate_repository(DATA)

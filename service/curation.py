@@ -10,6 +10,8 @@ from typing import Any
 
 from .completeness import completeness_summary
 from .core import DataError, load_json
+from .curation_bundle import read_batch
+from .data_layout import data_path
 from .integrity import validate_repository
 from .pipeline import atomic_write_json, snapshot_repository
 
@@ -90,7 +92,7 @@ def _curation_relative(relevance: int) -> Path:
 
 
 def _families(root: Path, eligible: set[str]) -> list[list[str]]:
-    audit = load_json(root / "audit-report.json")
+    audit = load_json(data_path(root, "audit-report.json"))
     raw_groups = audit.get("records", {}).get("pending_semantic_duplicate_groups", [])
     parent = {source_id: source_id for source_id in eligible}
 
@@ -146,7 +148,7 @@ def build_queue(
     root = Path(root).resolve()
     if batch_size < 1:
         raise DataError("batch-size must be positive")
-    records = load_json(root / "records.json").get("sources", [])
+    records = load_json(data_path(root, "records.json")).get("sources", [])
     by_id = {record["id"]: record for record in records}
     eligible = {
         source_id
@@ -168,7 +170,7 @@ def build_queue(
     batch_dir = curation_dir / "batches"
     batch_dir.mkdir(parents=True, exist_ok=True)
     manifests: list[dict[str, Any]] = []
-    validation_log = load_json(root / "validation-log.json")
+    validation_log = load_json(data_path(root, "validation-log.json"))
     applied_batches = validation_log.get("meta", {}).get("applied_batches", [])
     if relevance == 5:
         applied_for_scope = [item for item in applied_batches if item.startswith("batch-")]
@@ -183,12 +185,10 @@ def build_queue(
     if not eligible and applied_for_scope:
         completed_manifests = []
         for batch_id in applied_for_scope:
-            path = batch_dir / f"{batch_id}.json"
-            if not path.is_file():
-                raise DataError(f"applied review batch is missing: {path}")
-            source_ids = load_json(path).get("source_ids", [])
+            payload, locator = read_batch(root, f"relevance-{relevance}", batch_id)
+            source_ids = payload.get("source_ids", [])
             completed_manifests.append(
-                {"batch_id": batch_id, "source_ids": source_ids, "path": str(path)}
+                {"batch_id": batch_id, "source_ids": source_ids, "path": locator}
             )
         queue = {
             "meta": {
@@ -250,28 +250,25 @@ def build_queue(
     return queue
 
 
-def resolve_batch(root: Path, batch: Path | str) -> Path:
-    candidate = Path(batch)
-    if candidate.is_file():
-        return candidate.resolve()
-    name = candidate.name
-    if not name.endswith(".json"):
-        name += ".json"
-    candidates = list((root / "curation").glob(f"relevance-*/batches/{name}"))
-    if len(candidates) > 1:
-        raise DataError(f"review batch is ambiguous; pass an explicit path: {batch}")
-    if not candidates:
-        raise DataError(f"review batch not found: {batch}")
-    return candidates[0].resolve()
+def load_review_batch(root: Path, batch: Path | str) -> tuple[dict[str, Any], str]:
+    matches = []
+    for scope in ("relevance-3", "relevance-4", "relevance-5"):
+        try:
+            matches.append(read_batch(root, scope, batch))
+        except DataError as exc:
+            if "not found" not in str(exc):
+                raise
+    if len(matches) != 1:
+        raise DataError(f"review batch not found or ambiguous: {batch}")
+    return matches[0]
 
 
 def review_check(root: Path | str, batch: Path | str) -> dict[str, Any]:
     root = Path(root).resolve()
-    path = resolve_batch(root, batch)
-    payload = load_json(path)
-    records = load_json(root / "records.json").get("sources", [])
+    payload, locator = load_review_batch(root, batch)
+    records = load_json(data_path(root, "records.json")).get("sources", [])
     canonical = {record["id"]: record for record in records}
-    aliases = load_json(root / "aliases.json").get("aliases", {})
+    aliases = load_json(data_path(root, "aliases.json")).get("aliases", {})
     manifest_ids = payload.get("source_ids", [])
     decisions = payload.get("decisions", [])
     errors: list[str] = []
@@ -316,7 +313,7 @@ def review_check(root: Path | str, batch: Path | str) -> dict[str, Any]:
     return {
         "ok": not errors,
         "batch_id": payload.get("meta", {}).get("batch_id"),
-        "path": str(path),
+        "path": locator,
         "source_count": len(manifest_ids),
         "decision_count": len(decisions),
         "errors": sorted(set(errors)),
@@ -402,10 +399,9 @@ def review_apply(root: Path | str, batch: Path | str, *, apply: bool = False) ->
     result["applied"] = False
     if not check["ok"] or not apply:
         return result
-    path = Path(check["path"])
-    payload = load_json(path)
+    payload, _ = load_review_batch(root, batch)
     batch_id = str(payload.get("meta", {}).get("batch_id"))
-    validation_log = load_json(root / "validation-log.json")
+    validation_log = load_json(data_path(root, "validation-log.json"))
     applied_batches = validation_log.get("meta", {}).get("applied_batches", [])
     if batch_id in applied_batches:
         result.update({"ok": True, "already_applied": True})
@@ -424,14 +420,14 @@ def review_apply(root: Path | str, batch: Path | str, *, apply: bool = False) ->
         "evidence-matrix.json",
         "completeness-report.json",
     ]
-    originals = {name: (root / name).read_bytes() for name in names}
+    originals = {name: (data_path(root, name)).read_bytes() for name in names}
     try:
-        records_payload = load_json(root / "records.json")
-        aliases_payload = load_json(root / "aliases.json")
-        clusters_payload = load_json(root / "clusters.json")
-        audit_payload = load_json(root / "audit-report.json")
-        matrix_payload = load_json(root / "evidence-matrix.json")
-        completeness_payload = load_json(root / "completeness-report.json")
+        records_payload = load_json(data_path(root, "records.json"))
+        aliases_payload = load_json(data_path(root, "aliases.json"))
+        clusters_payload = load_json(data_path(root, "clusters.json"))
+        audit_payload = load_json(data_path(root, "audit-report.json"))
+        matrix_payload = load_json(data_path(root, "evidence-matrix.json"))
+        completeness_payload = load_json(data_path(root, "completeness-report.json"))
         records = records_payload.get("sources", [])
         by_id = {record["id"]: record for record in records}
         aliases = aliases_payload.setdefault("aliases", {})
@@ -521,7 +517,8 @@ def review_apply(root: Path | str, batch: Path | str, *, apply: bool = False) ->
         ]
         unresolved_relevance5 = [item for item in unresolved if item.get("релевантность") == 5]
         meta["validation_status"] = (
-            "all source validation complete; author and supervisor review pending"
+            "all source validation complete; bounded source limitations retained; "
+            "scientific decisions tracked separately"
             if not unresolved
             else "source validation in progress"
         )
@@ -536,7 +533,7 @@ def review_apply(root: Path | str, batch: Path | str, *, apply: bool = False) ->
                     else (
                         "lower_relevance_validation_in_progress"
                         if unresolved
-                        else "all_source_validation_complete_author_review_pending"
+                        else "all_source_validation_complete"
                     )
                 ),
             }
@@ -617,29 +614,36 @@ def review_apply(root: Path | str, batch: Path | str, *, apply: bool = False) ->
             "applied_batches": log_meta["applied_batches"],
             "author_review_required": True,
             "supervisor_decision_required": True,
+            **({"author_review_scope": audit_payload["current_curation"]["author_review_scope"]}
+               if "author_review_scope" in audit_payload.get("current_curation", {}) else {}),
         }
+        resources = load_json(data_path(root, "ST.json"))
+        resource_count = sum(
+            len(subcategory["ресурсы"])
+            for category in resources["categories"]
+            for subcategory in category["подкатегории"]
+        )
+        audit_payload.setdefault("current_corpus", {}).update({
+            "canonical_sources": len(records), "aliases": len(aliases),
+            "active_clusters": len(clusters_payload["clusters"]),
+            "retired_clusters": len(clusters_payload.get("retired_clusters", [])),
+            "resources": resource_count, "validation_statuses": dict(sorted(status_counts.items())),
+            "unverified": status_counts.get("unverified", 0),
+            "pending_screening": sum(
+                item["validation"]["screening_status"] == "pending" for item in records
+            ),
+            "reported_spdx_licenses": resources["meta"].get("reported_software_licenses", 0),
+        })
         resource_curation = audit_payload.get("resource_curation", {})
         if resource_curation.get("status_counts"):
             audit_payload["ST"] = {
                 "resource_status_counts": resource_curation["status_counts"],
-                "resource_count": 104,
+                "resource_count": resource_count,
             }
-        audit_payload["remaining_blockers"] = [
-            *(["Source validation still contains unresolved records."] if unresolved else []),
-            "Thematic cluster membership still requires domain-expert review.",
-            (
-                "No open human dataset linking SCS/ECAP to a prespecified clinical "
-                "pain outcome was confirmed."
-            ),
-            (
-                "No evidence currently validates transfer from a Drosophila simulator "
-                "to human pain or SCS outcomes."
-            ),
-            (
-                "G0 remains G0_REVISE pending author review of the evidence matrix "
-                "and a separate supervisor decision."
-            ),
-        ]
+        # Bibliographic batches must not overwrite separately accepted scientific decisions.
+        audit_payload["source_validation_blockers"] = (
+            ["Source validation still contains unresolved records."] if unresolved else []
+        )
 
         completeness_payload.update(completeness_summary(records))
         completeness_payload.setdefault("meta", {})["generated_at"] = date.today().isoformat()
@@ -653,13 +657,13 @@ def review_apply(root: Path | str, batch: Path | str, *, apply: bool = False) ->
             ("evidence-matrix.json", matrix_payload),
             ("completeness-report.json", completeness_payload),
         ):
-            atomic_write_json(root / name, value)
+            atomic_write_json(data_path(root, name), value)
         final = validate_repository(root)
         if not final["ok"]:
             raise DataError("post-review integrity failed: " + "; ".join(final["errors"]))
     except Exception:
         for name, content in originals.items():
-            (root / name).write_bytes(content)
+            (data_path(root, name)).write_bytes(content)
         raise
     result.update(
         {
@@ -680,8 +684,8 @@ def cluster_check(root: Path | str, manifest: Path | str) -> dict[str, Any]:
     cluster_id = cluster.get("id")
     source_ids = cluster.get("source_ids", [])
     representative_id = cluster.get("representative_id")
-    records = load_json(root / "records.json").get("sources", [])
-    clusters = load_json(root / "clusters.json")
+    records = load_json(data_path(root, "records.json")).get("sources", [])
+    clusters = load_json(data_path(root, "clusters.json"))
     canonical_ids = {record["id"] for record in records}
     occupied_ids = {
         item.get("id")
@@ -724,8 +728,8 @@ def cluster_apply(root: Path | str, manifest: Path | str, *, apply: bool = False
         raise DataError("current repository is invalid; repair before assigning a cluster")
     payload = load_json(Path(manifest).resolve())
     requested = payload["cluster"]
-    records = load_json(root / "records.json").get("sources", [])
-    clusters = load_json(root / "clusters.json")
+    records = load_json(data_path(root, "records.json")).get("sources", [])
+    clusters = load_json(data_path(root, "clusters.json"))
     by_id = {record["id"]: record for record in records}
     snapshot = snapshot_repository(root, label=f"pre-{payload['meta']['batch_id']}")
     clusters.setdefault("clusters", []).append(
@@ -744,7 +748,7 @@ def cluster_apply(root: Path | str, manifest: Path | str, *, apply: bool = False
         }
     )
     _rebuild_cluster_indexes(clusters, records)
-    atomic_write_json(root / "clusters.json", clusters)
+    atomic_write_json(data_path(root, "clusters.json"), clusters)
     final = validate_repository(root)
     if not final["ok"]:
         raise DataError(

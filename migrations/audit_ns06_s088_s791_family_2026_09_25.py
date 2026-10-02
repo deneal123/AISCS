@@ -9,7 +9,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 PATH = ROOT / (
-                  "data/ns06-prior-art-audit.json"
+                  "data/audits/transfer/ns06-prior-art-audit.json"
               )
 DATA = json.loads(PATH.read_text(encoding=(
                                               "utf-8"

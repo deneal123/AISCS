@@ -5,6 +5,7 @@ from __future__ import annotations
 import logging
 import os
 from pathlib import Path
+from typing import Annotated
 
 import uvicorn
 from fastapi import FastAPI, Query, Request
@@ -32,6 +33,9 @@ def _error(code: str, detail: str, status: int) -> JSONResponse:
 
 def create_app(repository: ResearchRepository | None = None) -> FastAPI:
     repo = repository or ResearchRepository()
+    from .knowledge.engine import KnowledgeEngine
+
+    knowledge = KnowledgeEngine(repo)
     application = FastAPI(
         title="Aspa research knowledge-base sidecar",
         version=SERVICE_VERSION,
@@ -124,6 +128,50 @@ def create_app(repository: ResearchRepository | None = None) -> FastAPI:
             repo.export_jsonl(),
             media_type="application/x-ndjson; charset=utf-8",
             headers={"Content-Disposition": 'attachment; filename="research-sources.jsonl"'},
+        )
+
+    @application.get("/v1/knowledge/status")
+    def knowledge_status() -> dict:
+        return knowledge.status()
+
+    @application.get("/v1/knowledge/search")
+    def search_knowledge(
+        q: str = Query(max_length=2000),
+        mode: str = "hybrid",
+        limit: int = Query(default=10, ge=1, le=100),
+        source_id: str | None = None,
+        target_construct: str | None = None,
+        subject_domain: str | None = None,
+        node_type: str | None = None,
+        include_unreviewed: bool = False,
+    ) -> dict:
+        filters = {
+            k: v
+            for k, v in {
+                "source_id": source_id,
+                "target_construct": target_construct,
+                "subject_domain": subject_domain,
+                "type": node_type,
+            }.items()
+            if v
+        }
+        return knowledge.search(
+            q, filters=filters, mode=mode, limit=limit, include_unreviewed=include_unreviewed
+        )
+
+    @application.get("/v1/knowledge/evidence/{node_id}")
+    def get_evidence(node_id: str, include_unreviewed: bool = False) -> dict:
+        return knowledge.evidence(node_id, include_unreviewed=include_unreviewed)
+
+    @application.get("/v1/knowledge/graph/{node_id}")
+    def graph_context(
+        node_id: str,
+        depth: int = Query(default=1, ge=0, le=2),
+        edge_types: Annotated[list[str] | None, Query()] = None,
+        include_unreviewed: bool = False,
+    ) -> dict:
+        return knowledge.graph(
+            node_id, depth=depth, edge_types=edge_types, include_unreviewed=include_unreviewed
         )
 
     return application

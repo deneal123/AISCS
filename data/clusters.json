@@ -4,15 +4,15 @@
     "version": "drosophila_scs_scope_review",
     "language": "ru",
     "source_snapshot": "archive/2026-09-21/clusters.json",
-    "records_count": 248,
+    "records_count": 318,
     "clusters_count": 43,
     "retired_clusters_count": 11,
     "cluster_references_count": 210,
     "unique_clustered_records_count": 155,
-    "unclustered_records_count": 93,
+    "unclustered_records_count": 163,
     "multiple_membership_records_count": 46,
     "validation_status": "content reviewed for Drosophila x SCS scope",
-    "updated_at": "2026-09-28"
+    "updated_at": "2026-10-01"
   },
   "clusters": [
     {
@@ -5281,12 +5281,12 @@
         "издание": "Neurosurgery 98(4):895-903 (issue 1 April 2026; electronically published 29 August 2025)",
         "модальность": "Spinal imaging radiomics, clinical variables and patient-reported outcomes",
         "задача": "Prediction of 50% and 70% SCS responder targets",
-        "метод": "Machine-learning models with systematic feature selection integrating radiomics and clinical data",
-        "датасет": "The authors describe the largest US SCS database; sample size and site composition are not reported in the accessible abstract",
+        "метод": "Single-clinic prospective SCS cohort; preoperative clinical, patient-reported and MRI radiomic variables linked to one-year NRS response. Models use KNN imputation and MinMax scaling, an 80/20 train_test_split, five stratified GridSearchCV folds and RFE feature selection. The article does not provide code, split seed or fold-scoped preprocessing details.",
+        "датасет": "150 subjects with successful thoracic SCS trials enrolled November 2012-March 2019 and preoperative/one-year assessments; Supplemental Table 2 reports 89 nonresponders and 61 >50% responders, of whom 30 were >70% responders. Deidentified patient data are not public.",
         "производительность": "50% target: accuracy 90.00%, AUC 91.40%, sensitivity 84.62%, specificity 94.12%; 70% target: accuracy 90.00%, AUC 86.11%, sensitivity 83.33%, specificity 91.67%",
         "кросс_субъект": null,
         "релевантность": 5,
-        "ограничения": "The accessible PubMed abstract confirms author-reported metrics but not sample size, split construction, leakage controls, calibration or independent external validation. It cannot establish generalization or an ECAP mechanism.",
+        "ограничения": "The publisher full text reports 150 subjects, one-year patient-linked outcomes, an 80/20 train/test split and five stratified GridSearchCV folds. It does not provide split seed, participant IDs, fold membership, code, independent external validation, calibration or public patient data. Methods prose describes MinMax scaling and KNN imputation before the split, but does not establish whether transforms were fitted within training folds; potential leakage is a concern, not a demonstrated execution error. RFE containment is also not specified. The 90% accuracies are author-reported internal results, not external clinical validation. No ECAP predictor is described.",
         "тип_источника": "применение",
         "identifiers": {
           "doi": "10.1227/neu.0000000000003715",
@@ -5305,33 +5305,32 @@
         },
         "evidence": {
           "species": "Homo sapiens",
-          "population": "SCS patients in a US database; cohort size unavailable in the accessible abstract",
+          "population": "150 patients at one clinic with successful thoracic SCS trials and preoperative/one-year assessments; FBSS, CRPS, neuropathic or unspecified chronic pain are reported.",
           "subject_domain": "human_clinical",
           "modalities": [
             "other",
             "clinical_outcome"
           ],
-          "sample_size": null,
+          "sample_size": 150,
           "target_construct": "scs_response",
-          "target_label": "50% responder and 70% responder",
-          "access_status": "restricted",
+          "target_label": "Separate binary one-year NRS reduction >50% responder and >70% high-responder targets; 61/150 and 30/150, respectively.",
+          "access_status": "open",
           "evidence_role": "method_baseline"
         },
         "validation": {
           "status": "partially_verified",
           "screening_status": "included_core",
-          "full_text_status": "metadata_only",
-          "checked_at": "2026-09-25",
-          "notes": "PA-05/NS-11 primary-source recheck 2026-09-25: official PubMed author abstract (Methods/Results) is the only accessible primary text; it reports 50% and 70% responder labels and metrics, but no operational target definition, follow-up horizon, cohort/model denominator, patient-level linkage, or split. Ovid full-text route resolves to a paywalled abstract; LWW full-text endpoints return 403; no accessible supplement or repository copy was identified. These fields remain unavailable; do not infer a pain threshold from the labels.",
+          "full_text_status": "checked",
+          "checked_at": "2026-09-28",
+          "notes": "Official Ovid/LWW publisher PDF and Supplemental Table 2 reviewed on 2026-09-28. Methods pp. 896-897 define the single-clinic 150-subject cohort, preoperative measures paired with one-year NRS outcomes, 80/20 train_test_split, five stratified GridSearchCV folds and RFE. Table E976 gives 89/61 for >50% response and 120/30 for >70% response. Reported preprocessing order raises possible leakage; actual training-only fitting cannot be checked without code. Split seed/membership and external validation are unavailable; patient data are not public and code is on request.",
           "split_unit": "unavailable_after_search",
           "cross_subject": "unavailable_after_search",
-          "external_validation": "unavailable_after_search",
+          "external_validation": "no",
           "calibration": "unavailable_after_search",
           "uncertainty": "unavailable_after_search",
           "exclusion_reason": null
         },
         "risk_flags": [
-          "metadata_only",
           "claim_not_supported"
         ],
         "relations": [],
@@ -5398,25 +5397,29 @@
           },
           "метод": {
             "state": "reported",
-            "value": "Machine-learning models with systematic feature selection integrating radiomics and clinical data",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-24",
+            "value": "Single-clinic prospective SCS cohort; preoperative clinical, patient-reported and MRI radiomic variables linked to one-year NRS response. Models use KNN imputation and MinMax scaling, an 80/20 train_test_split, five stratified GridSearchCV folds and RFE feature selection. The article does not provide code, split seed or fold-scoped preprocessing details.",
+            "reason": "Method steps and their unresolved containment are stated in the publisher Methods.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://pubmed.ncbi.nlm.nih.gov/40879389/",
-                "locator": "canonical field метод"
+                "url": "https://www.ovid.com/api/permalinks?wkmrid=JOURNAL%2Fneusg%2F04.03%2F00006123-202604000-00019%2Froot%2Fv%2F2026-03-05T141649Z%2Fr%2Fapplication-pdf",
+                "locator": "Publisher PDF pp. 895-899, Methods > Participants and Variable Definitions; Data Management and Preprocessing; Optimized Model Development; Code and Data availability; Results > Participants; Limitations"
               }
             ]
           },
           "датасет": {
             "state": "reported",
-            "value": "The authors describe the largest US SCS database; sample size and site composition are not reported in the accessible abstract",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-24",
+            "value": "150 subjects with successful thoracic SCS trials enrolled November 2012-March 2019 and preoperative/one-year assessments; Supplemental Table 2 reports 89 nonresponders and 61 >50% responders, of whom 30 were >70% responders. Deidentified patient data are not public.",
+            "reason": "Publisher Methods/Results and owner-hosted Supplemental Table 2 give cohort and outcome counts.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://pubmed.ncbi.nlm.nih.gov/40879389/",
-                "locator": "canonical field датасет"
+                "url": "https://www.ovid.com/api/permalinks?wkmrid=JOURNAL%2Fneusg%2F04.03%2F00006123-202604000-00019%2Froot%2Fv%2F2026-03-05T141649Z%2Fr%2Fapplication-pdf",
+                "locator": "Publisher PDF pp. 895-899, Methods > Participants and Variable Definitions; Data Management and Preprocessing; Optimized Model Development; Code and Data availability; Results > Participants; Limitations"
+              },
+              {
+                "url": "https://links.lww.com/NEU/E976",
+                "locator": "Supplementary Table 2, patient characteristics, total N and responder/high-responder counts"
               }
             ]
           },
@@ -5446,13 +5449,13 @@
           },
           "ограничения": {
             "state": "reported",
-            "value": "The accessible PubMed abstract confirms author-reported metrics but not sample size, split construction, leakage controls, calibration or independent external validation. It cannot establish generalization or an ECAP mechanism.",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-24",
+            "value": "The publisher full text reports 150 subjects, one-year patient-linked outcomes, an 80/20 train/test split and five stratified GridSearchCV folds. It does not provide split seed, participant IDs, fold membership, code, independent external validation, calibration or public patient data. Methods prose describes MinMax scaling and KNN imputation before the split, but does not establish whether transforms were fitted within training folds; potential leakage is a concern, not a demonstrated execution error. RFE containment is also not specified. The 90% accuracies are author-reported internal results, not external clinical validation. No ECAP predictor is described.",
+            "reason": "Publisher Methods, Code and Data availability and Limitations checked; execution-level split/fold behavior cannot be inferred from prose.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://pubmed.ncbi.nlm.nih.gov/40879389/",
-                "locator": "canonical field ограничения"
+                "url": "https://www.ovid.com/api/permalinks?wkmrid=JOURNAL%2Fneusg%2F04.03%2F00006123-202604000-00019%2Froot%2Fv%2F2026-03-05T141649Z%2Fr%2Fapplication-pdf",
+                "locator": "Publisher PDF pp. 895-899, Methods > Participants and Variable Definitions; Data Management and Preprocessing; Optimized Model Development; Code and Data availability; Results > Participants; Limitations"
               }
             ]
           },
@@ -5590,13 +5593,13 @@
           },
           "evidence.population": {
             "state": "reported",
-            "value": "SCS patients in a US database; cohort size unavailable in the accessible abstract",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-24",
+            "value": "150 patients at one clinic with successful thoracic SCS trials and preoperative/one-year assessments; FBSS, CRPS, neuropathic or unspecified chronic pain are reported.",
+            "reason": "Publisher Participants and Results identify the analyzed single-clinic cohort.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://pubmed.ncbi.nlm.nih.gov/40879389/",
-                "locator": "canonical field evidence.population"
+                "url": "https://www.ovid.com/api/permalinks?wkmrid=JOURNAL%2Fneusg%2F04.03%2F00006123-202604000-00019%2Froot%2Fv%2F2026-03-05T141649Z%2Fr%2Fapplication-pdf",
+                "locator": "Publisher PDF pp. 895-899, Methods > Participants and Variable Definitions; Data Management and Preprocessing; Optimized Model Development; Code and Data availability; Results > Participants; Limitations"
               }
             ]
           },
@@ -5628,14 +5631,18 @@
             ]
           },
           "evidence.sample_size": {
-            "state": "unavailable_after_search",
-            "value": null,
-            "reason": "Значение не удалось установить по доступному первичному или библиографическому источнику; отсутствие зафиксировано без догадки.",
-            "checked_at": "2026-09-24",
+            "state": "reported",
+            "value": 150,
+            "reason": "Publisher Data Management states 150 subjects; Supplemental Table 2 agrees.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://pubmed.ncbi.nlm.nih.gov/40879389/",
-                "locator": "canonical field evidence.sample_size"
+                "url": "https://www.ovid.com/api/permalinks?wkmrid=JOURNAL%2Fneusg%2F04.03%2F00006123-202604000-00019%2Froot%2Fv%2F2026-03-05T141649Z%2Fr%2Fapplication-pdf",
+                "locator": "Publisher PDF pp. 895-899, Methods > Participants and Variable Definitions; Data Management and Preprocessing; Optimized Model Development; Code and Data availability; Results > Participants; Limitations"
+              },
+              {
+                "url": "https://links.lww.com/NEU/E976",
+                "locator": "Supplementary Table 2, patient characteristics, total N and responder/high-responder counts"
               }
             ]
           },
@@ -5653,37 +5660,45 @@
           },
           "evidence.target_label": {
             "state": "reported",
-            "value": "50% responder and 70% responder",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-24",
+            "value": "Separate binary one-year NRS reduction >50% responder and >70% high-responder targets; 61/150 and 30/150, respectively.",
+            "reason": "Publisher Results and Supplemental Table 2 define one-year NRS response and subgroup counts.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://pubmed.ncbi.nlm.nih.gov/40879389/",
-                "locator": "canonical field evidence.target_label"
+                "url": "https://www.ovid.com/api/permalinks?wkmrid=JOURNAL%2Fneusg%2F04.03%2F00006123-202604000-00019%2Froot%2Fv%2F2026-03-05T141649Z%2Fr%2Fapplication-pdf",
+                "locator": "Publisher PDF pp. 895-899, Methods > Participants and Variable Definitions; Data Management and Preprocessing; Optimized Model Development; Code and Data availability; Results > Participants; Limitations"
+              },
+              {
+                "url": "https://links.lww.com/NEU/E976",
+                "locator": "Supplementary Table 2, patient characteristics, total N and responder/high-responder counts"
               }
             ]
           },
           "evidence.access_status": {
             "state": "reported",
-            "value": "restricted",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-24",
+            "value": "open",
+            "reason": "The full article and five supplements were retrieved through official Ovid/LWW asset routes; this access status concerns text, not patient-data reuse rights.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://pubmed.ncbi.nlm.nih.gov/40879389/",
-                "locator": "canonical field evidence.access_status"
+                "url": "https://www.ovid.com/api/permalinks?wkmrid=JOURNAL%2Fneusg%2F04.03%2F00006123-202604000-00019%2Froot%2Fv%2F2026-03-05T141649Z%2Fr%2Fapplication-pdf",
+                "locator": "Publisher PDF pp. 895-899, Methods > Participants and Variable Definitions; Data Management and Preprocessing; Optimized Model Development; Code and Data availability; Results > Participants; Limitations"
+              },
+              {
+                "url": "https://links.lww.com/NEU/E976",
+                "locator": "Supplementary Table 2, patient characteristics, total N and responder/high-responder counts"
               }
             ]
           },
           "validation.checked_at": {
             "state": "reported",
-            "value": "2026-09-25",
-            "reason": "Primary-source/access recheck completed on 2026-09-25.",
-            "checked_at": "2026-09-25",
+            "value": "2026-09-28",
+            "reason": "Official publisher article and supplement read directly on this date.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://pubmed.ncbi.nlm.nih.gov/40879389/",
-                "locator": "canonical field validation.checked_at"
+                "url": "https://www.ovid.com/api/permalinks?wkmrid=JOURNAL%2Fneusg%2F04.03%2F00006123-202604000-00019%2Froot%2Fv%2F2026-03-05T141649Z%2Fr%2Fapplication-pdf",
+                "locator": "Publisher PDF pp. 895-899, Methods > Participants and Variable Definitions; Data Management and Preprocessing; Optimized Model Development; Code and Data availability; Results > Participants; Limitations"
               }
             ]
           },
@@ -5712,14 +5727,14 @@
             ]
           },
           "validation.external_validation": {
-            "state": "unavailable_after_search",
-            "value": null,
-            "reason": "Значение не удалось установить по доступному первичному или библиографическому источнику; отсутствие зафиксировано без догадки.",
-            "checked_at": "2026-09-24",
+            "state": "reported",
+            "value": "no",
+            "reason": "Authors' Limitations call for future external validation; none is reported in the checked Methods/Results.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://pubmed.ncbi.nlm.nih.gov/40879389/",
-                "locator": "canonical field validation.external_validation"
+                "url": "https://www.ovid.com/api/permalinks?wkmrid=JOURNAL%2Fneusg%2F04.03%2F00006123-202604000-00019%2Froot%2Fv%2F2026-03-05T141649Z%2Fr%2Fapplication-pdf",
+                "locator": "Publisher PDF pp. 895-899, Methods > Participants and Variable Definitions; Data Management and Preprocessing; Optimized Model Development; Code and Data availability; Results > Participants; Limitations"
               }
             ]
           },
@@ -5761,13 +5776,17 @@
           },
           "validation.notes": {
             "state": "reported",
-            "value": "PA-05/NS-11 primary-source recheck 2026-09-25: official PubMed author abstract (Methods/Results) is the only accessible primary text; it reports 50% and 70% responder labels and metrics, but no operational target definition, follow-up horizon, cohort/model denominator, patient-level linkage, or split. Ovid full-text route resolves to a paywalled abstract; LWW full-text endpoints return 403; no accessible supplement or repository copy was identified. These fields remain unavailable; do not infer a pain threshold from the labels.",
-            "reason": "Primary-source/access recheck completed on 2026-09-25; explicit absences and access limits are recorded without inference.",
-            "checked_at": "2026-09-25",
+            "value": "Official Ovid/LWW publisher PDF and Supplemental Table 2 reviewed on 2026-09-28. Methods pp. 896-897 define the single-clinic 150-subject cohort, preoperative measures paired with one-year NRS outcomes, 80/20 train_test_split, five stratified GridSearchCV folds and RFE. Table E976 gives 89/61 for >50% response and 120/30 for >70% response. Reported preprocessing order raises possible leakage; actual training-only fitting cannot be checked without code. Split seed/membership and external validation are unavailable; patient data are not public and code is on request.",
+            "reason": "Supersedes the former abstract-only access note with bounded full-text findings.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://pubmed.ncbi.nlm.nih.gov/40879389/",
-                "locator": "Author abstract; full-text access route and missing fields documented in PA-05/NS-11 recheck notes"
+                "url": "https://www.ovid.com/api/permalinks?wkmrid=JOURNAL%2Fneusg%2F04.03%2F00006123-202604000-00019%2Froot%2Fv%2F2026-03-05T141649Z%2Fr%2Fapplication-pdf",
+                "locator": "Publisher PDF pp. 895-899, Methods > Participants and Variable Definitions; Data Management and Preprocessing; Optimized Model Development; Code and Data availability; Results > Participants; Limitations"
+              },
+              {
+                "url": "https://links.lww.com/NEU/E976",
+                "locator": "Supplementary Table 2, patient characteristics, total N and responder/high-responder counts"
               }
             ]
           }
@@ -7922,14 +7941,14 @@
         "авторы": "Patel, A. A.; Cardona, A.; Cox, D. N.",
         "год": 2025,
         "издание": "eLife 12:RP91582",
-        "модальность": "Нейронная активность",
+        "модальность": "Larval connectome/EM, neural activity (CaMPARI2 and GCaMP6m), and contraction behavior.",
         "задача": "Холодовая ноцицепция",
-        "метод": "Connectome, EM",
-        "датасет": "Larval connectome",
+        "метод": "Larval connectome/EM; cold-evoked CaMPARI2 photoconversion and GCaMP6m imaging; CIII md optogenetic activation/coactivation and cell-type-specific silencing; larval contraction behavior.",
+        "датасет": "Larval CNS connectome plus figure-specific cold-evoked calcium and contraction measurements; sample sizes vary by assay and figure.",
         "производительность": null,
         "кросс_субъект": "Не применимо",
         "релевантность": 4,
-        "ограничения": null,
+        "ограничения": "The Version of Record reports EM connectivity, CaMPARI2 and GCaMP6m activity assays, optogenetic activation/coactivation, cell-type silencing, and larval contraction. These are distinct anatomical, neural, and behavioral measures. Figure-specific sample sizes and units are not combined into one card-level denominator. The work does not measure subjective pain, human ECAP, SCS response, or cross-species transfer.",
         "тип_источника": "метод",
         "identifiers": {
           "doi": "10.7554/eLife.91582",
@@ -7948,7 +7967,7 @@
         },
         "evidence": {
           "species": "Drosophila melanogaster",
-          "population": "larvae",
+          "population": "Drosophila melanogaster larvae. CaMPARI2 cold-imaging assays use third-instar larvae; behavioral assays include third-instar larvae and a separate first-to-third-instar developmental comparison.",
           "sample_size": null,
           "target_construct": "nociceptive_response",
           "target_label": "cold-evoked contraction and neural/calcium responses",
@@ -7957,15 +7976,16 @@
           "subject_domain": "drosophila_larva",
           "modalities": [
             "connectome",
-            "neural_activity"
+            "neural_activity",
+            "behavior"
           ]
         },
         "validation": {
           "status": "verified_primary",
           "screening_status": "included_core",
           "full_text_status": "checked",
-          "checked_at": "2026-09-21",
-          "notes": "Функционально исследует холодовую ноцицепцию личинки; не подтверждает субъективную боль человека или перенос на SCS.",
+          "checked_at": "2026-10-01",
+          "notes": "Rechecked against the eLife Version of Record (DOI 10.7554/eLife.91582.3). Figures 1-4 and Methods > CaMPARI imaging verify connectome anatomy; 6 deg C cold-evoked CaMPARI2 sensory/Basin responses; CIII md optogenetic activation and postsynaptic GCaMP6m responses; cell-type silencing/coactivation; and contraction behavior. Figure-specific Ns and units are retained separately; no overall sample size is inferred. No subjective-pain, human ECAP/SCS, or cross-species-transfer outcome is measured. The existing evidence_role simulation_foundation is retained, matching S761 and describing intended mechanistic use rather than an article simulation. Card-level sample_size remains null; per-figure Ns are kept separate.",
           "split_unit": "not_reported",
           "cross_subject": "not_reported",
           "external_validation": "not_reported",
@@ -8017,13 +8037,13 @@
           },
           "модальность": {
             "state": "reported",
-            "value": "Нейронная активность",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "value": "Larval connectome/EM, neural activity (CaMPARI2 and GCaMP6m), and contraction behavior.",
+            "reason": "Primary Version of Record reports neural activity, connectome, and contraction behavior.",
+            "checked_at": "2026-10-01",
             "locators": [
               {
-                "url": "https://pubmed.ncbi.nlm.nih.gov/40512662/",
-                "locator": "canonical field модальность"
+                "url": "https://doi.org/10.7554/eLife.91582.3",
+                "locator": "Abstract; Figures 1-4"
               }
             ]
           },
@@ -8041,25 +8061,25 @@
           },
           "метод": {
             "state": "reported",
-            "value": "Connectome, EM",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "value": "Larval connectome/EM; cold-evoked CaMPARI2 photoconversion and GCaMP6m imaging; CIII md optogenetic activation/coactivation and cell-type-specific silencing; larval contraction behavior.",
+            "reason": "Methods and figure legends report separate anatomy, activity, perturbation, and behavior assays.",
+            "checked_at": "2026-10-01",
             "locators": [
               {
-                "url": "https://pubmed.ncbi.nlm.nih.gov/40512662/",
-                "locator": "canonical field метод"
+                "url": "https://doi.org/10.7554/eLife.91582.3",
+                "locator": "Methods > CaMPARI imaging; Results; Figures 1-4"
               }
             ]
           },
           "датасет": {
             "state": "reported",
-            "value": "Larval connectome",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "value": "Larval CNS connectome plus figure-specific cold-evoked calcium and contraction measurements; sample sizes vary by assay and figure.",
+            "reason": "The paper combines larval connectome with figure-specific physiology and behavior observations.",
+            "checked_at": "2026-10-01",
             "locators": [
               {
-                "url": "https://pubmed.ncbi.nlm.nih.gov/40512662/",
-                "locator": "canonical field датасет"
+                "url": "https://doi.org/10.7554/eLife.91582.3",
+                "locator": "Figures 1-4; Methods > CaMPARI imaging"
               }
             ]
           },
@@ -8088,26 +8108,26 @@
             ]
           },
           "ограничения": {
-            "state": "not_reported",
-            "value": null,
-            "reason": "Свойство не сообщено в проверенном первичном тексте.",
-            "checked_at": "2026-09-23",
+            "state": "reported",
+            "value": "The Version of Record reports EM connectivity, CaMPARI2 and GCaMP6m activity assays, optogenetic activation/coactivation, cell-type silencing, and larval contraction. These are distinct anatomical, neural, and behavioral measures. Figure-specific sample sizes and units are not combined into one card-level denominator. The work does not measure subjective pain, human ECAP, SCS response, or cross-species transfer.",
+            "reason": "Bounded to measured larval neural activity, connectivity, and contraction endpoints.",
+            "checked_at": "2026-10-01",
             "locators": [
               {
-                "url": "https://pubmed.ncbi.nlm.nih.gov/40512662/",
-                "locator": "canonical field ограничения"
+                "url": "https://doi.org/10.7554/eLife.91582.3",
+                "locator": "Abstract; Results; Discussion; Figures 1-4"
               }
             ]
           },
           "identifiers.doi": {
             "state": "reported",
             "value": "10.7554/eLife.91582",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "reason": "Version of Record DOI verified for the canonical article.",
+            "checked_at": "2026-10-01",
             "locators": [
               {
-                "url": "https://pubmed.ncbi.nlm.nih.gov/40512662/",
-                "locator": "canonical field identifiers.doi"
+                "url": "https://doi.org/10.7554/eLife.91582.3",
+                "locator": "Version of Record DOI 10.7554/eLife.91582.3"
               }
             ]
           },
@@ -8233,13 +8253,13 @@
           },
           "evidence.population": {
             "state": "reported",
-            "value": "larvae",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "value": "Drosophila melanogaster larvae. CaMPARI2 cold-imaging assays use third-instar larvae; behavioral assays include third-instar larvae and a separate first-to-third-instar developmental comparison.",
+            "reason": "Assay populations and stages are specified in the figure captions and Methods.",
+            "checked_at": "2026-10-01",
             "locators": [
               {
-                "url": "https://pubmed.ncbi.nlm.nih.gov/40512662/",
-                "locator": "canonical field evidence.population"
+                "url": "https://doi.org/10.7554/eLife.91582.3",
+                "locator": "Figure 1B-G; Methods > CaMPARI imaging; Methods > CT behavior across life stages"
               }
             ]
           },
@@ -8259,26 +8279,27 @@
             "state": "reported",
             "value": [
               "connectome",
-              "neural_activity"
+              "neural_activity",
+              "behavior"
             ],
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "reason": "Version of Record includes connectivity, neural activity measures, and contraction behavior.",
+            "checked_at": "2026-10-01",
             "locators": [
               {
-                "url": "https://pubmed.ncbi.nlm.nih.gov/40512662/",
-                "locator": "canonical field evidence.modalities"
+                "url": "https://doi.org/10.7554/eLife.91582.3",
+                "locator": "Figures 1-4"
               }
             ]
           },
           "evidence.sample_size": {
             "state": "not_reported",
             "value": null,
-            "reason": "Свойство не сообщено в проверенном первичном тексте.",
-            "checked_at": "2026-09-23",
+            "reason": "No single cross-assay sample size is reported. Figure captions provide assay-specific counts and units: Fig. 1B-C CaMPARI2 n=32 per sensory cell type and condition; Fig. 1D cold-behavior average n=72; Fig. 2 Basin silencing average n=68 and CIII/Basin coactivation control n=143 with experimental average n=49; Fig. 3 Basin CaMPARI2 average n=197/27/119/46 and CIII-to-Basin GCaMP6m average n=13 per genotype; Fig. 4 cold-behavior average n=64 and coactivation control n=143 with experimental average n=33. Keep these figure-specific denominators separate; leave the global sample_size null.",
+            "checked_at": "2026-10-01",
             "locators": [
               {
-                "url": "https://pubmed.ncbi.nlm.nih.gov/40512662/",
-                "locator": "canonical field evidence.sample_size"
+                "url": "https://doi.org/10.7554/eLife.91582.3",
+                "locator": "Figures 1-4 captions; each reports assay-specific Ns and units"
               }
             ]
           },
@@ -8320,13 +8341,13 @@
           },
           "validation.checked_at": {
             "state": "reported",
-            "value": "2026-09-21",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "value": "2026-10-01",
+            "reason": "Version of Record checked on this date.",
+            "checked_at": "2026-10-01",
             "locators": [
               {
-                "url": "https://pubmed.ncbi.nlm.nih.gov/40512662/",
-                "locator": "canonical field validation.checked_at"
+                "url": "https://doi.org/10.7554/eLife.91582.3",
+                "locator": "Version of Record DOI 10.7554/eLife.91582.3"
               }
             ]
           },
@@ -8404,13 +8425,13 @@
           },
           "validation.notes": {
             "state": "reported",
-            "value": "Функционально исследует холодовую ноцицепцию личинки; не подтверждает субъективную боль человека или перенос на SCS.",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "value": "Rechecked against the eLife Version of Record (DOI 10.7554/eLife.91582.3). Figures 1-4 and Methods > CaMPARI imaging verify connectome anatomy; 6 deg C cold-evoked CaMPARI2 sensory/Basin responses; CIII md optogenetic activation and postsynaptic GCaMP6m responses; cell-type silencing/coactivation; and contraction behavior. Figure-specific Ns and units are retained separately; no overall sample size is inferred. No subjective-pain, human ECAP/SCS, or cross-species-transfer outcome is measured. The existing evidence_role simulation_foundation is retained, matching S761 and describing intended mechanistic use rather than an article simulation. Card-level sample_size remains null; per-figure Ns are kept separate.",
+            "reason": "Version of Record and figure-specific methods/legends checked.",
+            "checked_at": "2026-10-01",
             "locators": [
               {
-                "url": "https://pubmed.ncbi.nlm.nih.gov/40512662/",
-                "locator": "canonical field validation.notes"
+                "url": "https://doi.org/10.7554/eLife.91582.3",
+                "locator": "Figures 1-4; Methods > CaMPARI imaging"
               }
             ]
           }
@@ -12100,10 +12121,12 @@
       },
       "content_review": {
         "status": "reviewed_for_scope",
-        "checked_at": "2026-09-23",
+        "checked_at": "2026-09-30",
         "membership_rule": "Title, target construct, evidence role, and validated limitations.",
-        "limitations": "Cluster membership is not independent evidence and carries no ranking."
-      }
+        "limitations": "Delegated author scope decision: navigation/context only; rejected leads and metaphorical constructs are not positive scientific evidence. See docs/audits/cluster-content-review-log-2026-09-25.md."
+      },
+      "????": "??????????? ????????? lead: gait-phase detection",
+      "??????": "S150 ????? rejected/unverifiable ??????: ?????? ???????????? ????????? ? ?????????? ?????/????????? ?? ????????????. ???? ?????? ??????????? ?????? ??? ??????????? ???????????? lead; ?? ?? ???????? evidence cluster ? ?? ???????????? ????????????? ??????."
     },
     {
       "id": "C27",
@@ -12123,7 +12146,7 @@
         "производительность": "Abstract (publisher first-page PDF): class accuracies 88.64% (no pain), 95.80% (mild), 99.75% (moderate), 82.96% (severe) in undivided group; 93.98% overall after sensitivity-group stratification; R²=0.45, p<0.01. Separate publisher-indexed Conclusions excerpt: 91.79% accuracy in four-level pain classification. Denominator/protocol relationship unresolved; keep distinct.",
         "кросс_субъект": null,
         "релевантность": 5,
-        "ограничения": "Abstract-level verification only. Publisher abstract reports LOSOCV and the listed metrics, but does not expose analyzed sample size, fold construction details, external clinical validation or treatment outcomes. Direct publisher-page retrieval returned HTTP 403 and no full text was obtained. Cold-pressor experimental pain is not evidence of chronic-pain clinical validity, ECAP, SCS response or treatment effect.",
+        "ограничения": "The official ScienceDirect preview exposes §2.1 Participants (26 healthy university students) and the abstract, but not the Results tables or complete validation protocol. The model-analysis denominator, fold composition, class counts and exact relation of 91.79% in indexed Conclusions to 93.98% after sensitivity stratification remain unresolved. The arithmetic match of 91.79% to four undivided-group class accuracies is an inference only. Cold-pressor experimental pain does not establish chronic-pain clinical validity, ECAP, SCS response or treatment effect.",
         "тип_источника": "метод",
         "identifiers": {
           "doi": "10.1016/j.bspc.2026.109815",
@@ -12142,8 +12165,8 @@
         },
         "evidence": {
           "species": "Homo sapiens",
-          "population": "Human participants undergoing cold-pressor testing; sample size not reported in the accessible publisher abstract",
-          "sample_size": null,
+          "population": "Twenty-six healthy university students aged 22-25 (16 male, 10 female) underwent cold-pressor EEG testing; the number included in each reported model comparison is not established from the accessible preview.",
+          "sample_size": 26,
           "target_construct": "experimental_pain_class",
           "target_label": "No pain, mild pain, moderate pain and severe pain; quantitative pain-sensitivity grouping is also reported",
           "access_status": "restricted",
@@ -12157,8 +12180,8 @@
           "status": "partially_verified",
           "screening_status": "included_core",
           "full_text_status": "metadata_only",
-          "checked_at": "2026-09-27",
-          "notes": "The official ScienceDirect first-page PDF was independently retrieved and checked on 2026-09-27. Its complete Abstract reports EEG cold-pressor classification, subject-independent LOSOCV, class accuracies 88.64% (no pain), 95.80% (mild), 99.75% (moderate), and 82.96% (severe) in the undivided group; overall accuracy 93.98% after sensitivity-group stratification; and R²=0.45, p<0.01 for intersubject pain-score differences versus prediction loss. A separate official ScienceDirect search-index excerpt under Conclusions reports 91.79% accuracy in four-level pain classification. These are separately located author-reported values; their relation, denominator and protocol are unresolved and must not be collapsed into one result. Elsevier metadata reports openaccess=0. Full article body and exact analyzed N were not obtained. LOSOCV supports participant-held-out evaluation only, not external or clinical validation.",
+          "checked_at": "2026-09-28",
+          "notes": "ScienceDirect indexed preview checked on 2026-09-28: §2.1 reports a cohort of 26 university students (16 male, 10 female, age 22-25). Published abstract reports four undivided-group class accuracies and 93.98% overall after sensitivity-group stratification under LOSOCV. Indexed Conclusions separately reports 91.79% four-level accuracy without an accessible setup label; the relation is unresolved. Complete result tables and model-analysis denominator remain unavailable. No external clinical validation.",
           "split_unit": "participant",
           "cross_subject": "yes",
           "external_validation": "not_reported",
@@ -12283,13 +12306,13 @@
           },
           "ограничения": {
             "state": "reported",
-            "value": "Abstract-level verification only. Publisher abstract reports LOSOCV and the listed metrics, but does not expose analyzed sample size, fold construction details, external clinical validation or treatment outcomes. Direct publisher-page retrieval returned HTTP 403 and no full text was obtained. Cold-pressor experimental pain is not evidence of chronic-pain clinical validity, ECAP, SCS response or treatment effect.",
-            "reason": "The source was checked at publisher-abstract level; sample size and full-text methods remain inaccessible in this review.",
-            "checked_at": "2026-09-27",
+            "value": "The official ScienceDirect preview exposes §2.1 Participants (26 healthy university students) and the abstract, but not the Results tables or complete validation protocol. The model-analysis denominator, fold composition, class counts and exact relation of 91.79% in indexed Conclusions to 93.98% after sensitivity stratification remain unresolved. The arithmetic match of 91.79% to four undivided-group class accuracies is an inference only. Cold-pressor experimental pain does not establish chronic-pain clinical validity, ECAP, SCS response or treatment effect.",
+            "reason": "Publisher preview provides cohort count but not full outcome tables or analyzed model denominator.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
                 "url": "https://www.sciencedirect.com/science/article/abs/pii/S1746809426003691",
-                "locator": "Publisher-indexed Abstract; ScienceDirect page access route"
+                "locator": "Official ScienceDirect preview, §2.1 Participants (26 students, 16 male/10 female, age 22-25); Abstract and indexed Conclusions; complete Results tables unavailable"
               }
             ]
           },
@@ -12427,13 +12450,13 @@
           },
           "evidence.population": {
             "state": "reported",
-            "value": "Human participants undergoing cold-pressor testing; sample size not reported in the accessible publisher abstract",
-            "reason": "The abstract identifies cold-pressor participants but does not report their number.",
-            "checked_at": "2026-09-27",
+            "value": "Twenty-six healthy university students aged 22-25 (16 male, 10 female) underwent cold-pressor EEG testing; the number included in each reported model comparison is not established from the accessible preview.",
+            "reason": "Official §2.1 Participants states cohort composition.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
                 "url": "https://www.sciencedirect.com/science/article/abs/pii/S1746809426003691",
-                "locator": "Publisher-indexed Abstract; no sample-size value stated"
+                "locator": "Official ScienceDirect preview, §2.1 Participants (26 students, 16 male/10 female, age 22-25); Abstract and indexed Conclusions; complete Results tables unavailable"
               }
             ]
           },
@@ -12464,14 +12487,14 @@
             ]
           },
           "evidence.sample_size": {
-            "state": "not_reported",
-            "value": null,
-            "reason": "Свойство не сообщено в проверенном первичном тексте.",
-            "checked_at": "2026-09-23",
+            "state": "reported",
+            "value": 26,
+            "reason": "This is the enrolled study cohort, not a proven model-analysis denominator.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1746809426003691",
-                "locator": "canonical field evidence.sample_size"
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S1746809426003691",
+                "locator": "Official ScienceDirect preview, §2.1 Participants (26 students, 16 male/10 female, age 22-25); Abstract and indexed Conclusions; complete Results tables unavailable"
               }
             ]
           },
@@ -12517,13 +12540,13 @@
           },
           "validation.checked_at": {
             "state": "reported",
-            "value": "2026-09-27",
-            "reason": "Date of the bounded publisher-source review and card correction.",
-            "checked_at": "2026-09-27",
+            "value": "2026-09-28",
+            "reason": "Dated direct review of the publisher preview.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
                 "url": "https://www.sciencedirect.com/science/article/abs/pii/S1746809426003691",
-                "locator": "Publisher article identity and indexed abstract route checked on this date"
+                "locator": "Official ScienceDirect preview, §2.1 Participants (26 students, 16 male/10 female, age 22-25); Abstract and indexed Conclusions; complete Results tables unavailable"
               }
             ]
           },
@@ -12601,17 +12624,13 @@
           },
           "validation.notes": {
             "state": "reported",
-            "value": "The official ScienceDirect first-page PDF was independently retrieved and checked on 2026-09-27. Its complete Abstract reports EEG cold-pressor classification, subject-independent LOSOCV, class accuracies 88.64% (no pain), 95.80% (mild), 99.75% (moderate), and 82.96% (severe) in the undivided group; overall accuracy 93.98% after sensitivity-group stratification; and R²=0.45, p<0.01 for intersubject pain-score differences versus prediction loss. A separate official ScienceDirect search-index excerpt under Conclusions reports 91.79% accuracy in four-level pain classification. These are separately located author-reported values; their relation, denominator and protocol are unresolved and must not be collapsed into one result. Elsevier metadata reports openaccess=0. Full article body and exact analyzed N were not obtained. LOSOCV supports participant-held-out evaluation only, not external or clinical validation.",
-            "reason": "The first-page PDF Abstract and a distinct official indexed Conclusions excerpt state separate accuracy values; the full article body was not retrieved, so the relationship remains unresolved.",
-            "checked_at": "2026-09-27",
+            "value": "ScienceDirect indexed preview checked on 2026-09-28: §2.1 reports a cohort of 26 university students (16 male, 10 female, age 22-25). Published abstract reports four undivided-group class accuracies and 93.98% overall after sensitivity-group stratification under LOSOCV. Indexed Conclusions separately reports 91.79% four-level accuracy without an accessible setup label; the relation is unresolved. Complete result tables and model-analysis denominator remain unavailable. No external clinical validation.",
+            "reason": "Publisher preview and abstract checked, with unresolved metrics kept separate.",
+            "checked_at": "2026-09-28",
             "locators": [
               {
-                "url": "https://www.sciencedirect.com/sdfe/pdf/download/eid/1-s2.0-S1746809426003691/first-page-pdf",
-                "locator": "Publisher first-page PDF, complete Abstract: sensitivity-stratified 93.98% overall accuracy"
-              },
-              {
-                "url": "https://www.sciencedirect.com/science/article/pii/S1746809426003691",
-                "locator": "Official ScienceDirect search-index excerpt, Conclusions: 91.79% in four-level classification; full body not retrieved"
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S1746809426003691",
+                "locator": "Official ScienceDirect preview, §2.1 Participants (26 students, 16 male/10 female, age 22-25); Abstract and indexed Conclusions; complete Results tables unavailable"
               }
             ]
           }
@@ -17355,7 +17374,7 @@
         "авторы": "Ingo Fritz; Feiyu Wang; Ricardo Chirif; Nikos Malakasis; Julijana Gjorgjieva; Andre Ferreira Castro",
         "год": 2025,
         "издание": "eLife reviewed preprint",
-        "модальность": "Нейронная активность",
+        "модальность": "Коннектом и вычислительная модель",
         "задача": "Консервация коннектома",
         "метод": "EM, connectome",
         "датасет": "Larval",
@@ -17380,24 +17399,24 @@
           "iteration": null
         },
         "evidence": {
-          "species": null,
+          "species": "Drosophila melanogaster",
           "population": null,
           "sample_size": null,
-          "target_construct": "nociceptive_response",
+          "target_construct": "not_applicable",
           "target_label": null,
-          "access_status": "unavailable_after_search",
+          "access_status": "open",
           "evidence_role": "simulation_foundation",
           "subject_domain": "drosophila_larva",
           "modalities": [
             "connectome",
-            "neural_activity"
+            "simulation_state"
           ]
         },
         "validation": {
           "status": "verified_primary",
           "screening_status": "included_core",
           "full_text_status": "checked",
-          "checked_at": "2026-09-22",
+          "checked_at": "2026-09-30",
           "notes": "The study combines EM reconstructions and passive single-cell modeling of a larval nociceptive circuit across development. It does not model whole-brain dynamics, subjective pain or human transfer.",
           "split_unit": "not_reported",
           "cross_subject": "not_reported",
@@ -17450,13 +17469,13 @@
           },
           "модальность": {
             "state": "reported",
-            "value": "Нейронная активность",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "value": "Коннектом и вычислительная модель",
+            "reason": "Первичный текст описывает EM-коннектом и пассивное моделирование, не записи нейронной активности.",
+            "checked_at": "2026-09-30",
             "locators": [
               {
-                "url": "https://elifesciences.org/reviewed-preprints/108643",
-                "locator": "canonical field модальность"
+                "url": "https://api.elifesciences.org/reviewed-preprints/108643",
+                "locator": "Results, Fig. 7C-E; Methods, Biophysical steady-state models of local neurons from the nociceptive circuit"
               }
             ]
           },
@@ -17653,14 +17672,14 @@
             ]
           },
           "evidence.species": {
-            "state": "not_reported",
-            "value": null,
-            "reason": "Свойство не сообщено в проверенном первичном тексте.",
-            "checked_at": "2026-09-23",
+            "state": "reported",
+            "value": "Drosophila melanogaster",
+            "reason": "Первичный текст явно называет личинок Drosophila melanogaster в L1 и L3.",
+            "checked_at": "2026-09-30",
             "locators": [
               {
-                "url": "https://elifesciences.org/reviewed-preprints/108643",
-                "locator": "canonical field evidence.species"
+                "url": "https://api.elifesciences.org/reviewed-preprints/108643",
+                "locator": "Introduction and Results, larval L1/L3 mdIV-to-LN circuit"
               }
             ]
           },
@@ -17692,14 +17711,14 @@
             "state": "reported",
             "value": [
               "connectome",
-              "neural_activity"
+              "simulation_state"
             ],
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "reason": "ssTEM-анатомия наблюдалась; напряжения получены пассивной моделью, а не записью нейронной активности.",
+            "checked_at": "2026-09-30",
             "locators": [
               {
-                "url": "https://elifesciences.org/reviewed-preprints/108643",
-                "locator": "canonical field evidence.modalities"
+                "url": "https://api.elifesciences.org/reviewed-preprints/108643",
+                "locator": "Results, Fig. 4 and Fig. 7C-E; Methods, Biophysical steady-state models"
               }
             ]
           },
@@ -17716,14 +17735,14 @@
             ]
           },
           "evidence.target_construct": {
-            "state": "reported",
-            "value": "nociceptive_response",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "state": "not_applicable",
+            "value": null,
+            "reason": "Выходы являются расчётными стационарными напряжениями без доставленного ноцицептивного стимула или измеренной физиологической реакции.",
+            "checked_at": "2026-09-30",
             "locators": [
               {
-                "url": "https://elifesciences.org/reviewed-preprints/108643",
-                "locator": "canonical field evidence.target_construct"
+                "url": "https://api.elifesciences.org/reviewed-preprints/108643",
+                "locator": "Results, Fig. 7C-E and Fig. S5; Methods, Biophysical steady-state models"
               }
             ]
           },
@@ -17740,22 +17759,22 @@
             ]
           },
           "evidence.access_status": {
-            "state": "unavailable_after_search",
-            "value": null,
-            "reason": "Значение не удалось установить по доступному первичному или библиографическому источнику; отсутствие зафиксировано без догадки.",
-            "checked_at": "2026-09-23",
+            "state": "reported",
+            "value": "open",
+            "reason": "Полный текст reviewed preprint доступен через официальный eLife API.",
+            "checked_at": "2026-09-30",
             "locators": [
               {
-                "url": "https://elifesciences.org/reviewed-preprints/108643",
-                "locator": "canonical field evidence.access_status"
+                "url": "https://api.elifesciences.org/reviewed-preprints/108643",
+                "locator": "indexContent, full reviewed-preprint text"
               }
             ]
           },
           "validation.checked_at": {
             "state": "reported",
-            "value": "2026-09-22",
-            "reason": "Значение сохранено из проверенной канонической карточки.",
-            "checked_at": "2026-09-23",
+            "value": "2026-09-30",
+            "reason": "Dated primary-source recheck.",
+            "checked_at": "2026-09-30",
             "locators": [
               {
                 "url": "https://elifesciences.org/reviewed-preprints/108643",
@@ -18914,10 +18933,12 @@
       },
       "content_review": {
         "status": "reviewed_for_scope",
-        "checked_at": "2026-09-25",
+        "checked_at": "2026-09-30",
         "membership_rule": "Title, target construct, evidence role, and validated limitations.",
-        "limitations": "Cluster membership is not independent evidence and carries no ranking."
-      }
+        "limitations": "Delegated author scope decision: navigation/context only; rejected leads and metaphorical constructs are not positive scientific evidence. See docs/audits/cluster-content-review-log-2026-09-25.md."
+      },
+      "????": "DoomFly: ???????????? ????????? ? ????????????? ?????????? ?????????????",
+      "??????": "S200 ? ?????????? ????????? ?????????? ? ????????????? ?????????? ????????; ??????? learning/survival gates ?? ????????. ?????? ?????? ????????? ? ?? ???????????? ????????????? ??? ???????????? ????."
     },
     {
       "id": "C42",
@@ -20511,10 +20532,12 @@
       "синтез": "Тематическая проекция «Цифровые двойники для SCS» содержит 1 канонических источников. Кластер служит навигации; научные выводы разрешаются только через evidence matrix и первичные локаторы.",
       "content_review": {
         "status": "reviewed_for_scope",
-        "checked_at": "2026-09-25",
+        "checked_at": "2026-09-30",
         "membership_rule": "Title, target construct, evidence role, and validated limitations.",
-        "limitations": "Cluster membership is not independent evidence and carries no ranking."
-      }
+        "limitations": "Delegated author scope decision: navigation/context only; rejected leads and metaphorical constructs are not positive scientific evidence. See docs/audits/cluster-content-review-log-2026-09-25.md."
+      },
+      "????": "???????? ???????? ?????????????? ???????????: ???????? SCS",
+      "??????": "S285 ???????? ?? ???????????? ?????? ? ????????? surrogate/biophysical interface digital twins. ???????-??????????? SCS twin ? ??????????? ???????? ?? ???????????; ?????? ?????? ??????????? ?????????."
     },
     {
       "id": "C45",
@@ -21040,10 +21063,12 @@
       },
       "content_review": {
         "status": "reviewed_for_scope",
-        "checked_at": "2026-09-25",
+        "checked_at": "2026-09-30",
         "membership_rule": "Title, target construct, evidence role, and validated limitations.",
-        "limitations": "Cluster membership is not independent evidence and carries no ranking."
-      }
+        "limitations": "Delegated author scope decision: navigation/context only; rejected leads and metaphorical constructs are not positive scientific evidence. See docs/audits/cluster-content-review-log-2026-09-25.md."
+      },
+      "????": "?????????????? ?????? ?????????? Drosophila",
+      "??????": "?????? ?????????? ?????? ?????? ???????????? ?????????????? ??????? ? ????????????? ????????; S741?S744 ?? ?????????? ??? GNN. S292 code_for S320 ???????????? ???? ????????? ??????, ? ?? ??????????? ?????????????."
     },
     {
       "id": "C46",
@@ -21553,10 +21578,12 @@
       },
       "content_review": {
         "status": "reviewed_for_scope",
-        "checked_at": "2026-09-25",
+        "checked_at": "2026-09-30",
         "membership_rule": "Title, target construct, evidence role, and validated limitations.",
-        "limitations": "Cluster membership is not independent evidence and carries no ranking."
-      }
+        "limitations": "Delegated author scope decision: navigation/context only; rejected leads and metaphorical constructs are not positive scientific evidence. See docs/audits/cluster-content-review-log-2026-09-25.md."
+      },
+      "????": "??????????? ????????? lead: agentic AI ??? ??????????????",
+      "??????": "S313 ????? rejected/unverifiable ??????: ?????? ???????????? ? ?????????? ?????/????????? ?? ????????????. ???? ?????? ??????????? ?????? ??? ??????????? ???????????? title-level lead; ?? ?? ???????? evidence cluster."
     },
     {
       "id": "C47",
@@ -22067,10 +22094,12 @@
       },
       "content_review": {
         "status": "reviewed_for_scope",
-        "checked_at": "2026-09-25",
+        "checked_at": "2026-09-30",
         "membership_rule": "Title, target construct, evidence role, and validated limitations.",
-        "limitations": "Cluster membership is not independent evidence and carries no ranking."
-      }
+        "limitations": "Delegated author scope decision: navigation/context only; rejected leads and metaphorical constructs are not positive scientific evidence. See docs/audits/cluster-content-review-log-2026-09-25.md."
+      },
+      "????": "?????????????? robot-pain ????????? ??? ??????????",
+      "??????": "S222 ????????? prediction-error alerting ? learned-cue avoidance ? ?????????????? ?????????? ?????????? robot pain. ???????? ?? ???????? pain classifier ??? ?????????????????? endpoint ? ?? ???????? ??????????????? ????????????? ???? ??????????? ????."
     },
     {
       "id": "C54",
@@ -22844,7 +22873,77 @@
     "S837",
     "S838",
     "S839",
-    "S840"
+    "S840",
+    "S841",
+    "S842",
+    "S843",
+    "S844",
+    "S845",
+    "S846",
+    "S847",
+    "S848",
+    "S849",
+    "S850",
+    "S851",
+    "S852",
+    "S853",
+    "S854",
+    "S855",
+    "S856",
+    "S857",
+    "S858",
+    "S859",
+    "S860",
+    "S861",
+    "S862",
+    "S863",
+    "S864",
+    "S865",
+    "S866",
+    "S867",
+    "S868",
+    "S869",
+    "S870",
+    "S871",
+    "S872",
+    "S873",
+    "S874",
+    "S875",
+    "S876",
+    "S877",
+    "S878",
+    "S879",
+    "S880",
+    "S881",
+    "S882",
+    "S883",
+    "S884",
+    "S885",
+    "S886",
+    "S887",
+    "S888",
+    "S889",
+    "S890",
+    "S891",
+    "S892",
+    "S893",
+    "S894",
+    "S895",
+    "S896",
+    "S897",
+    "S898",
+    "S899",
+    "S900",
+    "S901",
+    "S902",
+    "S903",
+    "S904",
+    "S905",
+    "S906",
+    "S907",
+    "S908",
+    "S909",
+    "S910"
   ],
   "multiple_membership": {
     "S005": 2,

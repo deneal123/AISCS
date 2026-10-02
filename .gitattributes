@@ -1,0 +1,5 @@
+* text=auto eol=lf
+# Frozen artifacts must retain their exact original bytes and hashes.
+data/archive/** -text whitespace=cr-at-eol
+data/provenance/** -text whitespace=cr-at-eol
+data/curation/**/batches/** -text whitespace=cr-at-eol

@@ -3,6 +3,7 @@
 import json
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 DATA = Path(__file__).resolve().parents[1] / "data"
@@ -19,9 +20,9 @@ SOURCE_FIELDS = {
 
 
 def main() -> None:
-    matrix = json.loads((DATA / "evidence-matrix.json").read_text(encoding="utf-8"))
+    matrix = json.loads((data_path(DATA, "evidence-matrix.json")).read_text(encoding="utf-8"))
     source_audit = json.loads(
-        (DATA / "drosophila-nociception-audit.json").read_text(encoding="utf-8")
+        (data_path(DATA, "drosophila-nociception-audit.json")).read_text(encoding="utf-8")
     )
     entries = {entry["source_id"]: entry for entry in source_audit["entries"]}
     for source_id, fields in SOURCE_FIELDS.items():
@@ -44,7 +45,7 @@ def main() -> None:
         "meta": {"schema_version": "1.0.0", "checked_at": "2026-09-25"},
         "source_ids": list(SOURCE_FIELDS),
         "status": "primary_locators_reused_from_reviewed_nociception_audit",
-        "locator_source": "data/drosophila-nociception-audit.json",
+        "locator_source": "data/audits/drosophila/drosophila-nociception-audit.json",
         "boundary": (
             "The locators support the respective reported assays or review scope. "
             "Neural activity, defensive behavior, and subjective pain are distinct; "
@@ -52,7 +53,7 @@ def main() -> None:
         ),
     }
     snapshot = snapshot_repository(DATA, label="pre-eight-nociception-claim-locators")
-    atomic_write_json(DATA / "evidence-matrix.json", matrix)
+    atomic_write_json(data_path(DATA, "evidence-matrix.json"), matrix)
     atomic_write_json(DATA / "eight-nociception-claim-locator-review-2026-09-25.json", audit)
     print(f"Updated eight nociception locators; snapshot: {snapshot}")
 

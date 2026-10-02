@@ -3,6 +3,7 @@
 import json
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 DATA = Path(__file__).resolve().parents[1] / "data"
@@ -10,7 +11,7 @@ URL = "https://zenodo.org/api/records/19152238/files/paper_emergent_individualit
 
 
 def main() -> None:
-    matrix = json.loads((DATA / "evidence-matrix.json").read_text(encoding="utf-8"))
+    matrix = json.loads((data_path(DATA, "evidence-matrix.json")).read_text(encoding="utf-8"))
     rows = [
         row for row in matrix["rows"]
         if row["source_ids"] == ["S320"]
@@ -41,7 +42,7 @@ def main() -> None:
         "the results are author-reported and were not independently reproduced.",
     }
     snapshot = snapshot_repository(DATA, label="pre-s320-evidence-locator")
-    atomic_write_json(DATA / "evidence-matrix.json", matrix)
+    atomic_write_json(data_path(DATA, "evidence-matrix.json"), matrix)
     atomic_write_json(DATA / "s320-evidence-locator-review-2026-09-25.json", audit)
     print(f"Updated S320 locator; snapshot: {snapshot}")
 

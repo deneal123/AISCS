@@ -11,6 +11,7 @@ from urllib.parse import urlsplit
 
 from .completeness import RESOLUTION_STATES, completeness_summary, validate_resolutions
 from .core import DataError, load_json, sha256
+from .data_layout import data_path
 from .novelty import validate_novelty_artifacts
 
 LEGACY_FIELDS = (
@@ -165,9 +166,11 @@ def validate_source_record(
     return errors
 
 
-def _load_required(root: Path, name: str, errors: list[str]) -> dict[str, Any]:
+def _load_required(
+    root: Path, name: str, errors: list[str], *, legacy: bool = False,
+) -> dict[str, Any]:
     try:
-        return load_json(root / name)
+        return load_json(data_path(root, name, legacy=legacy))
     except DataError as exc:
         errors.append(str(exc))
         return {}
@@ -670,34 +673,34 @@ def _validate_scientific_artifacts(
     return errors
 
 
-def validate_repository(root: Path | str) -> dict[str, Any]:
+def validate_repository(root: Path | str, *, legacy: bool = False) -> dict[str, Any]:
     root = Path(root).resolve()
     errors: list[str] = []
     warnings: list[str] = []
-    records = _load_required(root, "records.json", errors)
-    clusters = _load_required(root, "clusters.json", errors)
-    resources = _load_required(root, "ST.json", errors)
-    aliases = _load_required(root, "aliases.json", errors)
-    schema = _load_required(root, "source-record.schema.json", errors)
-    vocab = _load_required(root, "vocabularies.json", errors)
-    contract_path = root / "scientific-contract.json"
-    matrix_path = root / "human-dataset-matrix.json"
-    novelty_path = root / "novelty-landscape.json"
-    concept_path = root / "dissertation-concept.json"
-    search_path = root / "search-protocol.json"
-    runtime_path = root / "runtime-audit.json"
-    ecap_scs_audit_path = root / "ecap-scs-audit.json"
-    connectome_audit_path = root / "drosophila-connectome-audit.json"
-    nociception_audit_path = root / "drosophila-nociception-audit.json"
-    synthetic_audit_path = root / "synthetic-domain-audit.json"
-    ns06_audit_path = root / "ns06-prior-art-audit.json"
-    scs_outcome_audit_path = root / "scs-outcome-audit.json"
-    ns11_audit_path = root / "ns11-prediction-audit.json"
-    human_ecap_access_path = root / "human-ecap-scs-access-audit.json"
+    records = _load_required(root, "records.json", errors, legacy=legacy)
+    clusters = _load_required(root, "clusters.json", errors, legacy=legacy)
+    resources = _load_required(root, "ST.json", errors, legacy=legacy)
+    aliases = _load_required(root, "aliases.json", errors, legacy=legacy)
+    schema = _load_required(root, "source-record.schema.json", errors, legacy=legacy)
+    vocab = _load_required(root, "vocabularies.json", errors, legacy=legacy)
+    contract_path = data_path(root, "scientific-contract.json", legacy=legacy)
+    matrix_path = data_path(root, "human-dataset-matrix.json", legacy=legacy)
+    novelty_path = data_path(root, "novelty-landscape.json", legacy=legacy)
+    concept_path = data_path(root, "dissertation-concept.json", legacy=legacy)
+    search_path = data_path(root, "search-protocol.json", legacy=legacy)
+    runtime_path = data_path(root, "runtime-audit.json", legacy=legacy)
+    ecap_scs_audit_path = data_path(root, "ecap-scs-audit.json", legacy=legacy)
+    connectome_audit_path = data_path(root, "drosophila-connectome-audit.json", legacy=legacy)
+    nociception_audit_path = data_path(root, "drosophila-nociception-audit.json", legacy=legacy)
+    synthetic_audit_path = data_path(root, "synthetic-domain-audit.json", legacy=legacy)
+    ns06_audit_path = data_path(root, "ns06-prior-art-audit.json", legacy=legacy)
+    scs_outcome_audit_path = data_path(root, "scs-outcome-audit.json", legacy=legacy)
+    ns11_audit_path = data_path(root, "ns11-prediction-audit.json", legacy=legacy)
+    human_ecap_access_path = data_path(root, "human-ecap-scs-access-audit.json", legacy=legacy)
     has_scientific_artifacts = contract_path.is_file() or matrix_path.is_file()
     if (root / "staging").is_dir() or has_scientific_artifacts:
-        contract = _load_required(root, "scientific-contract.json", errors)
-        human_datasets = _load_required(root, "human-dataset-matrix.json", errors)
+        contract = _load_required(root, "scientific-contract.json", errors, legacy=legacy)
+        human_datasets = _load_required(root, "human-dataset-matrix.json", errors, legacy=legacy)
     else:
         contract = {}
         human_datasets = {}
@@ -705,48 +708,48 @@ def validate_repository(root: Path | str) -> dict[str, Any]:
         novelty_path.is_file() or concept_path.is_file() or search_path.is_file()
     )
     if has_novelty_artifacts:
-        novelty = _load_required(root, "novelty-landscape.json", errors)
-        concept = _load_required(root, "dissertation-concept.json", errors)
-        search_protocol = _load_required(root, "search-protocol.json", errors)
-        completeness = _load_required(root, "completeness-report.json", errors)
-        runtime_audit = _load_required(root, runtime_path.name, errors)
+        novelty = _load_required(root, "novelty-landscape.json", errors, legacy=legacy)
+        concept = _load_required(root, "dissertation-concept.json", errors, legacy=legacy)
+        search_protocol = _load_required(root, "search-protocol.json", errors, legacy=legacy)
+        completeness = _load_required(root, "completeness-report.json", errors, legacy=legacy)
+        runtime_audit = _load_required(root, runtime_path.name, errors, legacy=legacy)
         ecap_scs_audit = (
-            _load_required(root, ecap_scs_audit_path.name, errors)
+            _load_required(root, ecap_scs_audit_path.name, errors, legacy=legacy)
             if ecap_scs_audit_path.is_file()
             else {}
         )
         connectome_audit = (
-            _load_required(root, connectome_audit_path.name, errors)
+            _load_required(root, connectome_audit_path.name, errors, legacy=legacy)
             if connectome_audit_path.is_file()
             else {}
         )
         nociception_audit = (
-            _load_required(root, nociception_audit_path.name, errors)
+            _load_required(root, nociception_audit_path.name, errors, legacy=legacy)
             if nociception_audit_path.is_file()
             else {}
         )
         synthetic_audit = (
-            _load_required(root, synthetic_audit_path.name, errors)
+            _load_required(root, synthetic_audit_path.name, errors, legacy=legacy)
             if synthetic_audit_path.is_file()
             else {}
         )
         ns06_audit = (
-            _load_required(root, ns06_audit_path.name, errors)
+            _load_required(root, ns06_audit_path.name, errors, legacy=legacy)
             if ns06_audit_path.is_file()
             else {}
         )
         scs_outcome_audit = (
-            _load_required(root, scs_outcome_audit_path.name, errors)
+            _load_required(root, scs_outcome_audit_path.name, errors, legacy=legacy)
             if scs_outcome_audit_path.is_file()
             else {}
         )
         ns11_audit = (
-            _load_required(root, ns11_audit_path.name, errors)
+            _load_required(root, ns11_audit_path.name, errors, legacy=legacy)
             if ns11_audit_path.is_file()
             else {}
         )
         human_ecap_access = (
-            _load_required(root, human_ecap_access_path.name, errors)
+            _load_required(root, human_ecap_access_path.name, errors, legacy=legacy)
             if human_ecap_access_path.is_file()
             else {}
         )
@@ -1091,7 +1094,7 @@ def validate_repository(root: Path | str) -> dict[str, Any]:
         if current_completeness["unresolved_count"]:
             errors.append("completeness report: unresolved source fields remain")
 
-    review_ledger_path = root / "evidence-review-ledger.json"
+    review_ledger_path = data_path(root, "evidence-review-ledger.json", legacy=legacy)
     if review_ledger_path.is_file():
         try:
             review_ledger = load_json(review_ledger_path)

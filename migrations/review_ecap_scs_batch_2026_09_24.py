@@ -14,6 +14,7 @@ from typing import Any
 
 from service.completeness import RESOLVED_PATHS, completeness_summary, migrate_record
 from service.core import load_json
+from service.data_layout import current_data_files, data_path
 from service.integrity import validate_repository
 from service.pipeline import atomic_write_json, snapshot_repository
 
@@ -422,7 +423,7 @@ def _update_evidence(evidence: dict[str, Any], records_by_id: dict[str, Any]) ->
 
 
 def build_outputs(data_dir: Path = DATA) -> dict[str, dict[str, Any]]:
-    records = load_json(data_dir / "records.json")
+    records = load_json(data_path(data_dir, "records.json"))
     existing = {record["id"] for record in records["sources"]}
     if "S746" in existing:
         raise ValueError("S746 already exists")
@@ -440,7 +441,7 @@ def build_outputs(data_dir: Path = DATA) -> dict[str, dict[str, Any]]:
     updated_sources.sort(key=lambda source: int(source["id"][1:]))
     records["sources"] = updated_sources
     statuses = Counter(record["validation"]["status"] for record in updated_sources)
-    aliases = load_json(data_dir / "aliases.json")
+    aliases = load_json(data_path(data_dir, "aliases.json"))
     records["meta"].update(
         {
             "records_count": len(updated_sources),
@@ -451,10 +452,10 @@ def build_outputs(data_dir: Path = DATA) -> dict[str, dict[str, Any]]:
     )
     records_by_id = {record["id"]: record for record in updated_sources}
 
-    evidence = load_json(data_dir / "evidence-matrix.json")
+    evidence = load_json(data_path(data_dir, "evidence-matrix.json"))
     _update_evidence(evidence, records_by_id)
 
-    clusters = load_json(data_dir / "clusters.json")
+    clusters = load_json(data_path(data_dir, "clusters.json"))
     cluster = next(item for item in clusters["clusters"] if item["id"] == "C01")
     if "S746" not in cluster["состав_кластера"]:
         cluster["состав_кластера"].append("S746")
@@ -484,7 +485,7 @@ def build_outputs(data_dir: Path = DATA) -> dict[str, dict[str, Any]]:
         }
     )
 
-    search = load_json(data_dir / "search-protocol.json")
+    search = load_json(data_path(data_dir, "search-protocol.json"))
     for stream_id in ("NS-08", "NS-09", "NS-10", "NS-13"):
         stream = next(item for item in search["search_streams"] if item["id"] == stream_id)
         if "S746" not in stream["source_ids"]:
@@ -519,7 +520,7 @@ def build_outputs(data_dir: Path = DATA) -> dict[str, dict[str, Any]]:
         }
     )
 
-    novelty = load_json(data_dir / "novelty-landscape.json")
+    novelty = load_json(data_path(data_dir, "novelty-landscape.json"))
     for variant in novelty["variants"]:
         if "S746" not in variant["closest_analogue_refs"]:
             variant["closest_analogue_refs"].append("S746")
@@ -534,7 +535,7 @@ def build_outputs(data_dir: Path = DATA) -> dict[str, dict[str, Any]]:
         )
     novelty["meta"]["generated_at"] = DATE
 
-    validation_log = load_json(data_dir / "validation-log.json")
+    validation_log = load_json(data_path(data_dir, "validation-log.json"))
     searches = validation_log.setdefault("searches", [])
     searches[:] = [
         item for item in searches if item.get("search_id") != "ECAP-SCS-2026-09-24-01"
@@ -555,7 +556,7 @@ def build_outputs(data_dir: Path = DATA) -> dict[str, dict[str, Any]]:
     )
     validation_log["meta"]["checked_at"] = DATE
 
-    audit = load_json(data_dir / "audit-report.json")
+    audit = load_json(data_path(data_dir, "audit-report.json"))
     audit["current_corpus"].update(
         {
             "canonical_sources": len(updated_sources),
@@ -570,7 +571,7 @@ def build_outputs(data_dir: Path = DATA) -> dict[str, dict[str, Any]]:
         "finding": "synthetic ECAP classification and artifact-removal pretraining are disclosed in patent prior art; no Drosophila-to-ECAP/SCS direct analogue was found in this pass",
     }
 
-    completeness = load_json(data_dir / "completeness-report.json")
+    completeness = load_json(data_path(data_dir, "completeness-report.json"))
     completeness.update(completeness_summary(updated_sources))
     completeness["meta"]["generated_at"] = DATE
     return {
@@ -588,10 +589,12 @@ def build_outputs(data_dir: Path = DATA) -> dict[str, dict[str, Any]]:
 def validate_outputs(outputs: dict[str, dict[str, Any]], data_dir: Path = DATA) -> None:
     with tempfile.TemporaryDirectory(prefix="research-ecap-scs-") as temporary:
         target = Path(temporary)
-        for path in data_dir.glob("*.json"):
-            shutil.copy2(path, target / path.name)
+        for path in current_data_files(data_dir):
+            destination = target / path.relative_to(data_dir)
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(path, destination)
         for name, payload in outputs.items():
-            atomic_write_json(target / name, payload)
+            atomic_write_json(data_path(target, name), payload)
         report = validate_repository(target)
         if not report["ok"]:
             raise ValueError("; ".join(report["errors"]))
@@ -607,7 +610,7 @@ def main() -> int:
     if args.apply:
         snapshot = snapshot_repository(DATA, label="pre-ecap-scs-review")
         for name, payload in outputs.items():
-            atomic_write_json(DATA / name, payload)
+            atomic_write_json(data_path(DATA, name), payload)
         report = validate_repository(DATA)
         if not report["ok"]:
             raise RuntimeError(f"restore {snapshot}: {'; '.join(report['errors'])}")

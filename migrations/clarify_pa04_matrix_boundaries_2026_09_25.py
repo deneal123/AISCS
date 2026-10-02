@@ -6,11 +6,12 @@ import argparse
 import json
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"
-MATRIX = DATA / "evidence-matrix.json"
+MATRIX = data_path(DATA, "evidence-matrix.json")
 
 REVISIONS = {
     "S784": {

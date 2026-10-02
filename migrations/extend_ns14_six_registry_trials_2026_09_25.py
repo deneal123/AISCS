@@ -3,6 +3,7 @@
 import json
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 DATA = Path(__file__).resolve().parents[1] / "data"
@@ -51,7 +52,7 @@ ROWS = [
 
 def main() -> None:
     audit = json.loads(
-        (DATA / "ecap-trial-registry-audit.json").read_text(encoding="utf-8")
+        (data_path(DATA, "ecap-trial-registry-audit.json")).read_text(encoding="utf-8")
     )
     existing = {row["trial_id"] for row in audit["trials"]}
     if any(row[0] in existing for row in ROWS):
@@ -114,7 +115,7 @@ def main() -> None:
         "boundary": audit["search_update"]["boundary"],
     }
     snapshot = snapshot_repository(DATA, label="pre-ns14-six-trial-extension")
-    atomic_write_json(DATA / "ecap-trial-registry-audit.json", audit)
+    atomic_write_json(data_path(DATA, "ecap-trial-registry-audit.json"), audit)
     atomic_write_json(DATA / "ns14-six-trial-extension-2026-09-25.json", review)
     print(f"Added six registry rows; snapshot: {snapshot}")
 

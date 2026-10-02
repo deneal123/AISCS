@@ -9,6 +9,7 @@ import json
 from pathlib import Path
 
 from service.completeness import completeness_summary
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 DATA = Path(__file__).resolve().parents[1] / "data"
@@ -41,8 +42,8 @@ def resolve(source: dict, path: str, value: object, locator: str) -> None:
 
 
 def update() -> tuple[dict, dict, dict]:
-    records = json.loads((DATA / "records.json").read_text(encoding="utf-8"))
-    audit = json.loads((DATA / "drosophila-nociception-audit.json").read_text(encoding="utf-8"))
+    records = json.loads((data_path(DATA, "records.json")).read_text(encoding="utf-8"))
+    audit = json.loads((data_path(DATA, "drosophila-nociception-audit.json")).read_text(encoding="utf-8"))
     source = next(item for item in records["sources"] if item["id"] == "S212")
     if any(item["source_id"] == "S212" for item in audit["entries"]):
         raise ValueError("S212 already audited")
@@ -108,7 +109,7 @@ def update() -> tuple[dict, dict, dict]:
     audit["meta"]["remaining_primary_access"] = [
         item for item in audit["meta"]["remaining_primary_access"] if item["source_id"] != "S212"
     ]
-    report = json.loads((DATA / "completeness-report.json").read_text(encoding="utf-8"))
+    report = json.loads((data_path(DATA, "completeness-report.json")).read_text(encoding="utf-8"))
     report.update(completeness_summary(records["sources"]))
     return records, audit, report
 
@@ -120,9 +121,9 @@ def main() -> None:
     records, audit, report = update()
     if args.apply:
         snapshot = snapshot_repository(DATA, label="pre-s212-primary-fulltext-review")
-        atomic_write_json(DATA / "records.json", records)
-        atomic_write_json(DATA / "drosophila-nociception-audit.json", audit)
-        atomic_write_json(DATA / "completeness-report.json", report)
+        atomic_write_json(data_path(DATA, "records.json"), records)
+        atomic_write_json(data_path(DATA, "drosophila-nociception-audit.json"), audit)
+        atomic_write_json(data_path(DATA, "completeness-report.json"), report)
         print(f"Applied S212 full-text review; snapshot: {snapshot}")
     else:
         print("Dry run: 16 of 17 NS-03 candidates audited; S282 remains")

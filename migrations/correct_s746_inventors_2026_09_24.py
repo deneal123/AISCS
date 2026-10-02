@@ -6,6 +6,7 @@ import argparse
 import json
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 DATA = Path(__file__).resolve().parents[1] / "data"
@@ -17,7 +18,7 @@ URL = "https://patents.google.com/patent/WO2025224687A1/en"
 
 
 def corrected_records() -> dict:
-    records = json.loads((DATA / "records.json").read_text(encoding="utf-8"))
+    records = json.loads((data_path(DATA, "records.json")).read_text(encoding="utf-8"))
     source = next(item for item in records["sources"] if item["id"] == "S746")
     author_key = next(key for key, value in source.items() if value == OLD)
     if source["field_resolution"][author_key]["value"] != OLD:
@@ -46,7 +47,7 @@ def main() -> None:
     records = corrected_records()
     if args.apply:
         snapshot = snapshot_repository(DATA, label="pre-s746-inventor-correction")
-        atomic_write_json(DATA / "records.json", records)
+        atomic_write_json(data_path(DATA, "records.json"), records)
         print(f"Corrected S746 inventor list; snapshot: {snapshot}")
     else:
         print("Dry run: S746 inventor correction ready")

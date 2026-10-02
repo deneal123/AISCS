@@ -6,6 +6,7 @@ import argparse
 import json
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -63,11 +64,11 @@ TRIALS = [
 
 
 def updated() -> tuple[dict, dict]:
-    protocol = json.loads((DATA / "search-protocol.json").read_text(encoding="utf-8"))
+    protocol = json.loads((data_path(DATA, "search-protocol.json")).read_text(encoding="utf-8"))
     stream = next(s for s in protocol["search_streams"] if s["id"] == "NS-14")
     if stream["source_ids"] or any(r["id"] == "NS-RUN-2026-09-25-06" for r in protocol["search_runs"]):
         raise ValueError("NS-14 pass already recorded")
-    records = {r["id"] for r in json.loads((DATA / "records.json").read_text(encoding="utf-8"))["sources"]}
+    records = {r["id"] for r in json.loads((data_path(DATA, "records.json")).read_text(encoding="utf-8"))["sources"]}
     source_ids = sorted({source_id for item in TRIALS for source_id in item["source_ids"]})
     if not set(source_ids) <= records:
         raise ValueError("Unpublished source ID in trial audit")
@@ -103,8 +104,8 @@ def main() -> None:
         print("Dry run: three official NS-14 trial records; search remains open")
         return
     snapshot = snapshot_repository(DATA, label="pre-ns14-first-registry-pass")
-    atomic_write_json(DATA / "search-protocol.json", protocol)
-    atomic_write_json(DATA / "ecap-trial-registry-audit.json", audit)
+    atomic_write_json(data_path(DATA, "search-protocol.json"), protocol)
+    atomic_write_json(data_path(DATA, "ecap-trial-registry-audit.json"), audit)
     print(f"Recorded NS-14 registry pass; snapshot: {snapshot}")
 
 

@@ -6,6 +6,7 @@ import argparse
 import json
 from pathlib import Path
 
+from service.data_layout import data_path
 from service.pipeline import atomic_write_json, snapshot_repository
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -14,7 +15,7 @@ URL = "https://www.frontiersin.org/journals/artificial-intelligence/articles/10.
 
 
 def updated() -> tuple[dict, dict]:
-    matrix = json.loads((DATA / "evidence-matrix.json").read_text(encoding="utf-8"))
+    matrix = json.loads((data_path(DATA, "evidence-matrix.json")).read_text(encoding="utf-8"))
     rows = [row for row in matrix["rows"] if row["batch_id"] == "batch-001" and row["source_ids"] == ["S149"]]
     if len(rows) != 2 or any(row["locators"][0]["locator"] != "validated evidence row" for row in rows):
         raise ValueError("Unexpected S149 evidence-matrix starting state")
@@ -49,7 +50,7 @@ def main() -> None:
         print("Dry run: two S149 evidence locators reviewed")
         return
     snapshot = snapshot_repository(DATA, label="pre-s149-evidence-locators")
-    atomic_write_json(DATA / "evidence-matrix.json", matrix)
+    atomic_write_json(data_path(DATA, "evidence-matrix.json"), matrix)
     atomic_write_json(DATA / "s149-evidence-locator-review-2026-09-25.json", audit)
     print(f"Updated two S149 locators; snapshot: {snapshot}")
 
