@@ -14,7 +14,9 @@ from domain.documents import DocumentArtifact, DocumentBuild, DocumentDiagnostic
 from domain.files import safe_path
 from infrastructure.document_compiler import CompilerFailure, DockerDocumentCompiler
 
-from .build_store import ACTIVE_STATES, BuildManifestStore
+from .admission import BuildAdmission
+from .build_preparation import prepare_build
+from .build_store import ACTIVE_STATES, MAX_COMPLETED_PER_WORKSPACE, BuildManifestStore
 from .projects import DocumentProjectError, DocumentProjectService
 
 Revision = Callable[[Any], Awaitable[str]]
@@ -52,10 +54,23 @@ class DocumentBuildManager:
         self._tasks: dict[str, asyncio.Task[None]] = {}
         self._cancel_requested: set[str] = set()
         self._recovered_workspaces: set[str] = set()
+        self._pending_recovery: set[str] = set()
+        self._recovery_locks: dict[str, asyncio.Lock] = {}
+        self._registry_recovery_lock = asyncio.Lock()
         self._lock = asyncio.Lock()
+        self._workspace_starts: dict[str, asyncio.Lock] = {}
+        self._admission = BuildAdmission(
+            max_jobs,
+            self._occupied_compiler_slots,
+            observed=self._observed_compiler_slots
+            if callable(getattr(compiler, "inventory_refs", None))
+            else None,
+        )
         self.recovered = 0
         self.interrupted = 0
         self.manifest_failures = 0
+        self.reconciliation_failures = 0
+        self._reconciliation_unavailable = False
 
     async def _persist(self, registry: Any, item: Any, build: DocumentBuild) -> None:
         try:
@@ -72,14 +87,28 @@ class DocumentBuildManager:
     async def recover(self, registry: Any, item: Any) -> None:
         """Load one workspace's private manifests exactly once per sidecar process."""
 
+        lock = self._recovery_locks.setdefault(str(item.workspace_id), asyncio.Lock())
+        async with lock:
+            # Build IDs are process-global: validate and register inventories
+            # atomically across workspaces, not just within one workspace.
+            async with self._registry_recovery_lock:
+                await self._recover_workspace(registry, item)
+
+    async def _recover_workspace(self, registry: Any, item: Any) -> None:
+
         workspace_id = str(item.workspace_id)
         async with self._lock:
             if workspace_id in self._recovered_workspaces:
                 return
-            self._recovered_workspaces.add(workspace_id)
+            self._pending_recovery.add(workspace_id)
         try:
             async with registry.operation(item):
                 records = await self.store.load(registry, item)
+            async with self._lock:
+                for build in records:
+                    existing = self._builds.get(build.build_id)
+                    if existing is not None and existing.workspace_id != workspace_id:
+                        raise DocumentProjectError("runtime_unavailable")
             recovered: list[DocumentBuild] = []
             for build in records:
                 if build.state == "visual_audit":
@@ -101,27 +130,39 @@ class DocumentBuildManager:
                         build.failure_code = "artifact_invalid"
                         build.completed_at = time.time()
                         await self._persist(registry, item, build)
+                await self._cleanup_interrupted_compiler(registry, item, build)
                 recovered.append(build)
             async with self._lock:
                 for build in recovered:
                     self._builds.setdefault(build.build_id, build)
-                self.recovered += len(recovered)
             await self._prune(registry, item)
+            async with self._lock:
+                self._recovered_workspaces.add(workspace_id)
+                self._pending_recovery.discard(workspace_id)
+                self.recovered += len(recovered)
         except Exception:
             async with self._lock:
                 self._recovered_workspaces.discard(workspace_id)
             self.manifest_failures += 1
             raise DocumentProjectError("runtime_unavailable") from None
 
-    async def _prune(self, registry: Any, item: Any) -> None:
+    async def _prune(self, registry: Any, item: Any, *, reserved: int = 0) -> None:
         values = tuple(
             build for build in self._builds.values() if build.workspace_id == item.workspace_id
         )
-        for build_id in self.store.prune_candidates(values):
-            await self.store.delete(registry, item, build_id)
-            async with self._lock:
-                self._builds.pop(build_id, None)
-                self._tasks.pop(build_id, None)
+        try:
+            async with registry.operation(item):
+                for build_id in self.store.prune_candidates(values, reserved=reserved):
+                    task = self._tasks.get(build_id)
+                    if task is not None and not task.done():
+                        continue
+                    await self.store.delete(registry, item, build_id)
+                    async with self._lock:
+                        self._builds.pop(build_id, None)
+                        self._tasks.pop(build_id, None)
+        except Exception:
+            self.manifest_failures += 1
+            raise DocumentProjectError("runtime_unavailable") from None
 
     async def start(
         self,
@@ -133,48 +174,96 @@ class DocumentBuildManager:
         final: bool,
     ) -> DocumentBuild:
         await self.recover(registry, item)
-        async with self._lock:
-            active = sum(not task.done() for task in self._tasks.values())
-            if active >= self.max_jobs:
-                raise DocumentProjectError("runtime_unavailable")
-        async with registry.operation(item):
-            current_revision = await self.revision(item)
-            if not expected_revision or current_revision != expected_revision:
-                raise DocumentProjectError("revision_conflict")
-            raw, profile = await self.projects.manifest(item, project_path)
-            authoring = getattr(self.projects, "authoring", None)
-            authoring_version, draft_digest = (
-                await authoring(item, project_path) if callable(authoring) else (0, "")
-            )
-            source_digest = await self.projects.digest(item, project_path)
-            target = safe_path(item.policy.root, project_path)
-            prepared = await self.compiler.prepare(
-                item.ref,
-                workspace_root=item.policy.root,
-                project_path=target,
-            )
-        build = DocumentBuild(
-            build_id=prepared.job_ref,
-            workspace_id=item.workspace_id,
-            project_path=target,
-            profile_id=profile.profile_id,
-            profile_version=profile.version,
-            source_revision=current_revision,
-            source_digest=source_digest,
-            authoring_version=authoring_version,
-            draft_digest=draft_digest,
-            mode=str(raw.get("mode") or "draft"),
-            final=final,
-            state="building",
-            compiler_ref=prepared.container_id,
+        if self._pending_recovery or self._reconciliation_unavailable:
+            raise DocumentProjectError("runtime_unavailable")
+        async with self._admission.reserve():
+            workspace_id = str(item.workspace_id)
+            lock = self._workspace_starts.setdefault(workspace_id, asyncio.Lock())
+            async with lock:
+                await self._reserve_manifest(registry, item)
+                return await self._start_reserved(
+                    registry,
+                    item,
+                    project_path=project_path,
+                    expected_revision=expected_revision,
+                    final=final,
+                )
+
+    async def _reserve_manifest(self, registry: Any, item: Any) -> None:
+        active = sum(
+            build.workspace_id == item.workspace_id and build.state in ACTIVE_STATES
+            for build in self._builds.values()
         )
-        async with self._lock:
-            self._builds[build.build_id] = build
-        await self._persist(registry, item, build)
-        async with self._lock:
-            self._tasks[build.build_id] = asyncio.create_task(
-                self._execute(registry, item, build, prepared, profile)
+        # Reserve a terminal manifest for every active build and the new one.
+        # If all remaining records are protected, refuse before allocating a
+        # compiler instead of erasing cleanup or publication intent.
+        await self._prune(registry, item, reserved=active + 1)
+        count = sum(build.workspace_id == item.workspace_id for build in self._builds.values())
+        if count >= MAX_COMPLETED_PER_WORKSPACE:
+            raise DocumentProjectError("runtime_unavailable")
+
+    def _occupied_compiler_slots(self) -> int:
+        references = {key for key, build in self._builds.items() if build.compiler_ref}
+        active = {key for key, task in self._tasks.items() if not task.done()}
+        return len(references | active) + getattr(self.compiler, "pending_preparation_cleanup", 0)
+
+    async def _observed_compiler_slots(self) -> int:
+        references = set(await self.compiler.inventory_refs())
+        references.update(
+            build.compiler_ref for build in self._builds.values() if build.compiler_ref
+        )
+        references.update(getattr(self.compiler, "preparation_cleanup_refs", ()))
+        # Retain a task's slot while its final manifest clears a reference, even
+        # if Docker has already confirmed that the physical container is gone.
+        unreferenced_tasks = sum(
+            not task.done() and not self._builds[key].compiler_ref
+            for key, task in self._tasks.items()
+            if key in self._builds
+        )
+        return len(references) + unreferenced_tasks
+
+    async def _start_reserved(
+        self,
+        registry: Any,
+        item: Any,
+        *,
+        project_path: str,
+        expected_revision: str,
+        final: bool,
+    ) -> DocumentBuild:
+        build, prepared, profile = await prepare_build(
+            self,
+            registry,
+            item,
+            project_path=project_path,
+            expected_revision=expected_revision,
+            final=final,
+        )
+        try:
+            await self._persist(registry, item, build)
+            async with self._lock:
+                self._tasks[build.build_id] = asyncio.create_task(
+                    self._execute(registry, item, build, prepared, profile)
+                )
+        except BaseException as error:
+            # Preparation has already allocated a container. No execution task
+            # owns it yet, so retain a terminal cleanup intent on every failed
+            # handoff, including cancellation. Never release capacity on an
+            # unconfirmed destroy or failed manifest update.
+            build.state = "cancelled" if isinstance(error, asyncio.CancelledError) else "failed"
+            build.failure_code = (
+                "cancelled" if build.state == "cancelled" else "runtime_unavailable"
             )
+            build.completed_at = time.time()
+            try:
+                await self._persist(registry, item, build)
+            except Exception:
+                pass
+            try:
+                await self._cleanup_interrupted_compiler(registry, item, build)
+            except Exception:
+                pass
+            raise
         return build
 
     async def _execute(self, registry, item, build, prepared, profile) -> None:
@@ -361,7 +450,11 @@ class DocumentBuildManager:
                 pass
         finally:
             self._cancel_requested.discard(build.build_id)
-            await self.compiler.destroy(prepared.container_id)
+            if await self.compiler.destroy(prepared.container_id):
+                try:
+                    await self._clear_compiler_reference(registry, item, build)
+                except DocumentProjectError:
+                    pass
 
     @staticmethod
     def _diagnostics(
@@ -614,13 +707,78 @@ class DocumentBuildManager:
             "recovered": self.recovered,
             "interrupted": self.interrupted,
             "manifest_failures": self.manifest_failures,
+            "recovery_pending": len(self._pending_recovery),
+            "reconciliation_failures": self.reconciliation_failures,
+            "reconciliation_unavailable": self._reconciliation_unavailable,
             **self.compiler.health(),
         }
 
+    async def _clear_compiler_reference(self, registry, item, build) -> None:
+        previous = build.compiler_ref
+        build.compiler_ref = ""
+        try:
+            await self._persist(registry, item, build)
+        except BaseException:
+            build.compiler_ref = previous
+            raise
+
+    async def _cleanup_interrupted_compiler(self, registry, item, build) -> None:
+        """Retry retained cleanup for every outcome after compilation has stopped."""
+        if (
+            build.state
+            not in {
+                "failed",
+                "cancelled",
+                "preview_ready",
+                "visual_pending",
+                "visual_audit",
+                "ready",
+            }
+            or not build.compiler_ref
+        ):
+            return
+        task = self._tasks.get(build.build_id)
+        if task is not None and not task.done():
+            return
+        if build.compiler_ref == f"gpthub-doc-{build.build_id}":
+            resolved = await self.compiler.resolve_owned_preparation(
+                build.compiler_ref, item.ref, build.build_id
+            )
+            if not resolved:
+                return
+            previous = build.compiler_ref
+            build.compiler_ref = resolved
+            try:
+                await self._persist(registry, item, build)
+            except BaseException:
+                build.compiler_ref = previous
+                raise
+        if await self.compiler.cleanup_recovered(build.compiler_ref, item.ref, build.build_id):
+            await self._clear_compiler_reference(registry, item, build)
+
     async def reconcile_registry(self, registry: Any) -> None:
-        for item in await registry.active_workspaces():
+        try:
+            await self._reconcile_registry(registry)
+        except Exception:
+            # Maintenance must survive transient Docker/registry failures. Keep
+            # admission closed until an entire subsequent cycle succeeds; never
+            # disclose exception bodies or interpret an outage as empty state.
+            self.reconciliation_failures += 1
+            self._reconciliation_unavailable = True
+        else:
+            self._reconciliation_unavailable = False
+
+    async def _reconcile_registry(self, registry: Any) -> None:
+        workspaces = await registry.active_workspaces()
+        active_ids = {str(item.workspace_id) for item in workspaces}
+        self._pending_recovery.intersection_update(active_ids)
+        self._pending_recovery.update(active_ids - self._recovered_workspaces)
+        for item in workspaces:
             try:
                 await self.recover(registry, item)
+                for build in tuple(self._builds.values()):
+                    if build.workspace_id == item.workspace_id:
+                        await self._cleanup_interrupted_compiler(registry, item, build)
             except DocumentProjectError:
                 continue
         await self.compiler.reconcile()

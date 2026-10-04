@@ -348,9 +348,26 @@ class DocumentProjectService:
             raise DocumentProjectError("authoring_invalid")
         return version, digest, draft, blocks
 
+    @staticmethod
+    def _source_only_manifest(raw: dict[str, object]) -> bool:
+        """Recognize only the metadata-only seed emitted by source publication.
+
+        It records a source transaction, not an accepted semantic draft. Do not
+        invent draft provenance, and never use this path for malformed drafts.
+        """
+        return (
+            set(raw) == {"schema_version", "draft_version", "draft_digest"}
+            and type(raw.get("schema_version")) is int
+            and raw.get("schema_version") == 1
+            and type(raw.get("draft_version")) is int
+            and 1 <= int(raw["draft_version"]) <= 1_000_000
+            and isinstance(raw.get("draft_digest"), str)
+            and re.fullmatch(r"[0-9a-f]{64}", str(raw["draft_digest"])) is not None
+        )
+
     async def authoring(self, item: Any, path: str) -> tuple[int, str]:
         raw = await self._authoring_manifest(item, path)
-        if raw is None:
+        if raw is None or self._source_only_manifest(raw):
             return 0, ""
         version, digest, _draft, _blocks = self._authoring_facts(raw)
         return version, digest
@@ -358,7 +375,7 @@ class DocumentProjectService:
     async def authoring_state(self, item: Any, path: str) -> dict[str, object]:
         await self.manifest(item, path)
         raw = await self._authoring_manifest(item, path)
-        if raw is None:
+        if raw is None or self._source_only_manifest(raw):
             raise DocumentProjectError("authoring_missing")
         version, digest, draft, blocks = self._authoring_facts(raw)
         intent = raw.get("intent")

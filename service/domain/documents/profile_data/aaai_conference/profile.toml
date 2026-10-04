@@ -1,5 +1,5 @@
 profile_id = "aaai_conference"
-version = 1
+version = 2
 label_ru = "Статья AAAI-style"
 kind = "article"
 engine = "pdflatex"

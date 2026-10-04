@@ -2,10 +2,14 @@ from __future__ import annotations
 
 import hashlib
 import importlib.util
+import io
 import json
+import tarfile
 import zipfile
 from pathlib import Path
 from types import ModuleType, SimpleNamespace
+
+from application.documents.sources import _archive
 
 
 def _runner() -> ModuleType:
@@ -15,6 +19,32 @@ def _runner() -> ModuleType:
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
+
+
+def test_compiler_accepts_published_source_only_manifest_without_semantic_claim(tmp_path):
+    payload, _ = _archive(
+        {"main.tex": "source-only text"}, authoring_version=1, draft_digest="a" * 64
+    )
+    with tarfile.open(fileobj=io.BytesIO(payload)) as archive:
+        stream = archive.extractfile(".gpthub-authoring.json")
+        assert stream is not None
+        manifest = json.load(stream)
+    path = tmp_path / ".gpthub-authoring.json"
+    path.write_text(json.dumps(manifest), encoding="utf-8")
+    runner = _runner()
+    assert runner.authoring_manifest_audit(tmp_path, "generic_document") == []
+    for changed in (
+        {"draft_version": True},
+        {"schema_version": True},
+        {"schema_version": 2},
+        {"draft_digest": "invalid"},
+        {"draft": None},
+        {"intent": {}},
+    ):
+        path.write_text(json.dumps({**manifest, **changed}), encoding="utf-8")
+        assert runner.authoring_manifest_audit(tmp_path, "generic_document") == [
+            {"severity": "error", "code": "authoring_invalid", "count": 1}
+        ]
 
 
 def _article(tmp_path: Path, *, source: str, bibliography: str) -> Path:

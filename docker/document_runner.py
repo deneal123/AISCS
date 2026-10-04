@@ -212,6 +212,19 @@ def authoring_manifest_audit(project: Path, profile_id: str) -> list[dict[str, o
         return []
     try:
         raw = json.loads(path.read_text("utf-8"))
+        if (
+            isinstance(raw, dict)
+            and set(raw) == {"schema_version", "draft_version", "draft_digest"}
+            and type(raw["schema_version"]) is int
+            and raw["schema_version"] == 1
+            and type(raw["draft_version"]) is int
+            and 1 <= raw["draft_version"] <= 1_000_000
+            and isinstance(raw["draft_digest"], str)
+            and re.fullmatch(r"[0-9a-f]{64}", raw["draft_digest"])
+        ):
+            # Atomic raw-source publication records identity, not a semantic draft.
+            # The source digest and ordinary profile/PDF audits still apply.
+            return []
         draft = raw.get("draft") if isinstance(raw, dict) else None
         blocks = draft.get("blocks") if isinstance(draft, dict) else None
         encoded = json.dumps(

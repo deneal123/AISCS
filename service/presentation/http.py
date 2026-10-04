@@ -92,6 +92,7 @@ async def health():
             "profile_digest": workspace_routes.document_catalog.digest[:16],
             "profiles": len(workspace_routes.document_catalog.profiles),
             **workspace_routes.document_builds.health(),
+            "source_publications": workspace_routes.document_source_recovery.health(),
         },
         "contract": {
             "create_response_fields": sorted(CREATE_RESPONSE_FIELDS),
@@ -105,8 +106,12 @@ async def health():
 async def startup() -> None:
     workspace_routes.registry = WorkspaceRegistry(build_driver(workspace_routes.DRIVER))
     await workspace_routes.registry.reconcile()
+    await workspace_routes.document_source_recovery.reconcile_registry(workspace_routes.registry)
     await workspace_routes.document_builds.reconcile_registry(workspace_routes.registry)
     asyncio.create_task(workspace_routes.registry.reap_forever())
+    asyncio.create_task(
+        workspace_routes.document_source_recovery.reconcile_forever(workspace_routes.registry)
+    )
     asyncio.create_task(
         workspace_routes.document_builds.reconcile_forever(workspace_routes.registry)
     )

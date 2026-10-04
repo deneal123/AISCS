@@ -15,7 +15,15 @@ from typing import Any, Protocol
 
 from domain.files import safe_path
 
+from application.documents.checkpoint_storage import LOCAL_CHECKPOINT, checkpoint_rebase_command
 from application.documents.projects import DocumentProjectError
+from application.documents.source_exchange import exchange_marker, project_exchange_command
+from application.documents.source_recovery import (
+    JOURNAL_SEED,
+    MAX_PENDING_PUBLICATIONS,
+    journal_command,
+    journal_path,
+)
 
 _CONTENT_PATH = re.compile(r"^content/[A-Za-z0-9_.-]{1,160}\.tex$")
 _DIGEST = re.compile(r"^[a-f0-9]{64}$")
@@ -42,7 +50,12 @@ def _safe_source_path(value: object) -> str | None:
 
 
 def _archive(
-    files: Mapping[str, str], *, authoring_version: int, draft_digest: str
+    files: Mapping[str, str],
+    *,
+    authoring_version: int,
+    draft_digest: str,
+    checkpoint_payload: bytes | None = None,
+    publication_seed: bytes | None = None,
 ) -> tuple[bytes, tuple[str, ...]]:
     if not 1 <= int(authoring_version) <= 1_000_000 or not _DIGEST.fullmatch(draft_digest):
         raise DocumentProjectError("authoring_invalid")
@@ -85,6 +98,14 @@ def _archive(
         raise DocumentProjectError("authoring_invalid")
     draft = raw_manifest.get("draft")
     if draft is not None:
+        if (
+            not isinstance(draft, dict)
+            or type(draft.get("version")) is not int
+            or draft.get("version") != authoring_version
+            or not isinstance(draft.get("title"), str)
+            or not draft["title"].strip()
+        ):
+            raise DocumentProjectError("authoring_invalid")
         computed = hashlib.sha256(
             json.dumps(
                 draft,
@@ -95,6 +116,11 @@ def _archive(
         ).hexdigest()
         if computed != draft_digest:
             raise DocumentProjectError("authoring_invalid")
+    names = tuple(sorted(normalized))
+    if checkpoint_payload is not None:
+        normalized[LOCAL_CHECKPOINT] = checkpoint_payload
+    if publication_seed is not None:
+        normalized[JOURNAL_SEED] = publication_seed
     output = io.BytesIO()
     with tarfile.open(fileobj=output, mode="w") as archive:
         for name, content in sorted(normalized.items()):
@@ -103,7 +129,7 @@ def _archive(
             info.mode = 0o644
             info.mtime = 1_704_067_200
             archive.addfile(info, io.BytesIO(content))
-    return output.getvalue(), tuple(sorted(normalized))
+    return output.getvalue(), names
 
 
 class DocumentSourceService:
@@ -115,11 +141,21 @@ class DocumentSourceService:
         snapshot: Snapshot,
         revision: Revision,
         projects: Any,
+        checkpoints: Any = None,
+        recovery: Any = None,
     ) -> None:
         self._run = run_command
         self._snapshot = snapshot
         self._revision = revision
         self._projects = projects
+        self._checkpoints = checkpoints
+        self._recovery = recovery
+
+    async def recover(self, item: Any) -> None:
+        if self._recovery is not None:
+            counts = await self._recovery.recover(item)
+            if counts["pending"] >= MAX_PENDING_PUBLICATIONS:
+                raise DocumentProjectError("authoring_publish_failed")
 
     async def _rollback(
         self,
@@ -128,12 +164,18 @@ class DocumentSourceService:
         project: str,
         stage: str,
         backup: str,
+        token: str,
     ) -> None:
         command = (
+            f"set -eu; if [ -d {shlex.quote(backup)} ]; then "
+            + project_exchange_command(project, backup)
+            + f"rm -rf {shlex.quote(backup)}; "
+            f"elif [ -f {shlex.quote(exchange_marker(stage, token))} ]; then "
+            + project_exchange_command(project, stage)
+            + "fi; "
             f"rm -rf {shlex.quote(stage)}; "
-            f"if [ -d {shlex.quote(backup)} ]; then "
-            f"rm -rf {shlex.quote(project)}; "
-            f"mv {shlex.quote(backup)} {shlex.quote(project)}; fi"
+            f"rm -f {shlex.quote(exchange_marker(project, token))} "
+            f"{shlex.quote(journal_path(item.policy.root, token))}"
         )
         try:
             await self._run(item, command)
@@ -152,12 +194,33 @@ class DocumentSourceService:
         await self._projects.manifest(item, path)
         project = safe_path(item.policy.root, path)
         relative = posixpath.relpath(project, item.policy.root)
+        _archive(files, authoring_version=authoring_version, draft_digest=draft_digest)
+        await self.recover(item)
+        checkpoint_payload = (
+            await self._checkpoints.prepare_publication(item, project, files)
+            if self._checkpoints is not None
+            else None
+        )
+        token = secrets.token_hex(8)
+        publication_seed = (
+            json.dumps(
+                {
+                    "schema_version": 1,
+                    "token": token,
+                    "project_path": relative,
+                },
+                separators=(",", ":"),
+            ).encode()
+            if self._recovery is not None
+            else None
+        )
         payload, names = _archive(
             files,
             authoring_version=authoring_version,
             draft_digest=draft_digest,
+            checkpoint_payload=checkpoint_payload,
+            publication_seed=publication_seed,
         )
-        token = secrets.token_hex(8)
         service_root = f"{item.policy.root}/.gpthub-document"
         stage = f"{service_root}/authoring-{token}"
         backup = f"{service_root}/authoring-backup-{token}"
@@ -172,29 +235,34 @@ class DocumentSourceService:
             f"rm -rf {shlex.quote(stage + '/content')}; "
             f"mkdir -p {shlex.quote(stage + '/content')} {shlex.quote(stage + '/bibliography')}; "
             f"tar -C {shlex.quote(stage)} -xf -; "
-            f"mv {shlex.quote(project)} {shlex.quote(backup)}; "
-            f"if mv {shlex.quote(stage)} {shlex.quote(project)}; then "
-            "echo __OK__; "
-            f"else mv {shlex.quote(backup)} {shlex.quote(project)}; "
-            f"rm -rf {shlex.quote(stage)}; echo __FAILED__; fi"
+            + (checkpoint_rebase_command(stage) if checkpoint_payload is not None else "")
+            + (
+                journal_command(item.policy.root, project, stage, token)
+                if self._recovery is not None
+                else ""
+            )
+            + f"mkdir -p {shlex.quote(project + '/.gpthub-document')}; "
+            f"touch {shlex.quote(exchange_marker(project, token))}; "
+            + project_exchange_command(project, stage)
+            + f"mv {shlex.quote(stage)} {shlex.quote(backup)}; echo __OK__"
         )
         try:
             result = await self._run(item, command, stdin_payload=payload)
         except Exception as exc:
-            await self._rollback(item, project=project, stage=stage, backup=backup)
+            await self._rollback(item, project=project, stage=stage, backup=backup, token=token)
             raise DocumentProjectError("authoring_publish_failed") from exc
         if "__OK__" not in str(result.stdout or ""):
-            await self._rollback(item, project=project, stage=stage, backup=backup)
+            await self._rollback(item, project=project, stage=stage, backup=backup, token=token)
             raise DocumentProjectError("authoring_publish_failed")
         try:
             snapshot = await self._snapshot(item, "document_authoring")
         except Exception as exc:
-            await self._rollback(item, project=project, stage=stage, backup=backup)
+            await self._rollback(item, project=project, stage=stage, backup=backup, token=token)
             raise DocumentProjectError("authoring_publish_failed") from exc
         if isinstance(snapshot, Mapping) and not snapshot.get("committed"):
             reason = str(snapshot.get("reason") or "")
             if reason != "no_changes":
-                await self._rollback(item, project=project, stage=stage, backup=backup)
+                await self._rollback(item, project=project, stage=stage, backup=backup, token=token)
                 raise DocumentProjectError("authoring_publish_failed")
         revision = str(snapshot.get("revision") or "") if isinstance(snapshot, Mapping) else ""
         if not revision:
@@ -205,7 +273,11 @@ class DocumentSourceService:
         if not revision:
             raise DocumentProjectError("authoring_publish_failed")
         try:
-            await self._run(item, f"rm -rf {shlex.quote(backup)}")
+            await self._run(
+                item,
+                f"rm -rf {shlex.quote(backup)} && "
+                f"rm -f {shlex.quote(journal_path(item.policy.root, token))}",
+            )
         except Exception:
             pass
         return {

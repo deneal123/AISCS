@@ -250,14 +250,19 @@ def create_documents_router(deps: DocumentRouteDependencies) -> APIRouter:
         item, failure = deps.common.owned(workspace_id, payload)
         if failure is not None:
             return failure
-        if deps.common.registry() is None:
+        registry = deps.common.registry()
+        if registry is None:
             return deps.common.error("workspace_unavailable", "workspace is unavailable", 503)
         try:
-            result = await deps.checkpoints.latest(
-                item,
-                request_digest=payload.request_digest,
-                evidence_digest=payload.evidence_digest,
-            )
+            async with registry.operation(item):
+                await deps.sources.recover(item)
+                result = await deps.checkpoints.latest(
+                    item,
+                    request_digest=payload.request_digest,
+                    evidence_digest=payload.evidence_digest,
+                )
+                if result is not None:
+                    result["revision"] = await deps.common.revision(item)
             return result or {"outcome": "absent"}
         except DocumentProjectError as exc:
             return deps.common.error(exc.code, "document checkpoint unavailable", _status(exc.code))

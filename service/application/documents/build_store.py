@@ -28,42 +28,94 @@ class BuildManifestStore:
             raise ValueError("invalid build id")
         return posixpath.join(self._root(item), f"{safe_id}.json")
 
+    def _directory_checks(self, item: Any, *, missing_is_empty: bool) -> str:
+        root = self._root(item)
+        base = shlex.quote(item.policy.root)
+        checks = (
+            f"test -d {base} && test ! -L {base} && test -r {base} && test -x {base} || exit 1; "
+        )
+        for directory in (posixpath.dirname(root), root):
+            path = shlex.quote(directory)
+            missing = "exit 0" if missing_is_empty else f"mkdir -p {path} || exit 1"
+            checks += (
+                f"test ! -L {path} || exit 1; "
+                f"if [ ! -e {path} ]; then {missing}; fi; "
+                f"test -d {path} && test -r {path} && test -x {path} || exit 1; "
+            )
+        return checks
+
     async def save(self, registry: Any, item: Any, build: DocumentBuild) -> None:
         payload = json.dumps(
             build.manifest_dict(), ensure_ascii=True, separators=(",", ":"), sort_keys=True
         )
         command, stdin = write_command(item.policy.root, self._path(item, build.build_id), payload)
+        target = shlex.quote(self._path(item, build.build_id))
+        command = (
+            self._directory_checks(item, missing_is_empty=False)
+            + f"test ! -L {target} || exit 1; "
+            + f"if [ -e {target} ]; then test -f {target} || exit 1; fi; "
+            + command
+        )
         result = await registry.exec_raw(item, command, stdin_payload=stdin, max_output_chars=1024)
-        if "__OK__" not in str(result.stdout or ""):
+        if (
+            int(getattr(result, "exit_code", 0) or 0) != 0
+            or getattr(result, "truncated", False)
+            or getattr(result, "timed_out", False)
+            or "__OK__" not in str(result.stdout or "")
+        ):
             raise RuntimeError("build manifest unavailable")
 
     async def load(self, registry: Any, item: Any) -> tuple[DocumentBuild, ...]:
         root = self._root(item)
         command = (
-            f"if [ ! -d {shlex.quote(root)} ]; then exit 0; fi; "
-            f"find {shlex.quote(root)} -maxdepth 1 -type f -name '*.json' -print | "
-            "sort | while IFS= read -r f; do "
-            "tr -d '\\n' < \"$f\"; printf '\\n'; done"
+            self._directory_checks(item, missing_is_empty=True)
+            + f"find {shlex.quote(root)} -maxdepth 1 -name '*.json' "
+            "-exec sh -c "
+            + shlex.quote(
+                'for f do test -f "$f" && test ! -L "$f" || exit 1; '
+                'tr -d "\\n" < "$f" || exit 1; printf "\\n"; done'
+            )
+            + " sh {} +"
         )
         result = await registry.exec_raw(item, command, max_output_chars=2 * 1024 * 1024)
+        lines = str(result.stdout or "").splitlines()
+        if (
+            int(getattr(result, "exit_code", 0) or 0) != 0
+            or getattr(result, "truncated", False)
+            or getattr(result, "timed_out", False)
+            or len(lines) > 256
+        ):
+            raise RuntimeError("build manifest inventory unavailable")
         builds: list[DocumentBuild] = []
-        for line in str(result.stdout or "").splitlines()[:256]:
+        seen_ids: set[str] = set()
+        for line in lines:
             try:
                 raw = json.loads(line)
+                if not isinstance(raw, dict):
+                    raise ValueError("invalid manifest object")
                 build = DocumentBuild.from_manifest(raw)
-            except (TypeError, ValueError, json.JSONDecodeError):
-                continue
-            if build.workspace_id == item.workspace_id:
-                builds.append(build)
-        return tuple(builds)
+            except (AttributeError, TypeError, ValueError, OverflowError):
+                raise RuntimeError("build manifest inventory invalid") from None
+            if build.workspace_id != item.workspace_id or build.build_id in seen_ids:
+                raise RuntimeError("build manifest inventory invalid")
+            seen_ids.add(build.build_id)
+            builds.append(build)
+        return tuple(sorted(builds, key=lambda build: build.build_id))
 
     async def delete(self, registry: Any, item: Any, build_id: str) -> None:
         path = self._path(item, build_id)
-        await registry.exec_raw(
+        result = await registry.exec_raw(
             item,
-            f"rm -f {shlex.quote(path)}",
+            f"rm -f {shlex.quote(path)} && echo __OK__",
             max_output_chars=128,
         )
+        if (
+            int(getattr(result, "exit_code", 0) or 0) != 0
+            or getattr(result, "truncated", False)
+            or getattr(result, "timed_out", False)
+            or "__OK__" not in str(result.stdout or "")
+        ):
+            raise RuntimeError("build manifest deletion unavailable")
 
     async def verify_artifacts(self, registry: Any, item: Any, build: DocumentBuild) -> bool:
         if not build.artifacts:
@@ -87,7 +139,7 @@ class BuildManifestStore:
 
     @staticmethod
     def prune_candidates(
-        builds: tuple[DocumentBuild, ...], now: float | None = None
+        builds: tuple[DocumentBuild, ...], now: float | None = None, *, reserved: int = 0
     ) -> tuple[str, ...]:
         current = time.time() if now is None else now
         completed = sorted(
@@ -98,11 +150,13 @@ class BuildManifestStore:
             item.build_id
             for item in completed
             if not item.final
+            and not item.compiler_ref
             and current - (item.completed_at or item.created_at) > PREVIEW_RETENTION_SEC
         ]
         remaining = [item for item in completed if item.build_id not in set(expired_preview)]
-        overflow = max(0, len(remaining) - MAX_COMPLETED_PER_WORKSPACE)
-        overflow_ids = (item.build_id for item in remaining[:overflow])
+        overflow = max(0, len(remaining) + reserved - MAX_COMPLETED_PER_WORKSPACE)
+        removable = [item for item in remaining if not item.final and not item.compiler_ref]
+        overflow_ids = (item.build_id for item in removable[:overflow])
         return tuple(dict.fromkeys([*expired_preview, *overflow_ids]))
 
 

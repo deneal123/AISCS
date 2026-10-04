@@ -1,11 +1,12 @@
 from __future__ import annotations
 
 import hashlib
+import json
 from types import SimpleNamespace
 
 import pytest
 from application.documents.projects import DocumentProjectError
-from application.documents.sources import DocumentSourceService
+from application.documents.sources import DocumentSourceService, _archive
 from application.history import SAFE_SNAPSHOT_TYPES
 
 
@@ -15,6 +16,26 @@ def _item():
 
 def test_document_authoring_snapshot_has_a_fixed_safe_commit_type() -> None:
     assert "document_authoring" in SAFE_SNAPSHOT_TYPES
+
+
+@pytest.mark.parametrize("draft_version", [1, True, "2"])
+def test_bundle_cannot_disagree_with_semantic_draft_version(draft_version):
+    draft = {"version": draft_version, "title": "Test", "blocks": []}
+    digest = hashlib.sha256(
+        json.dumps(draft, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode()
+    ).hexdigest()
+    files = {
+        "main.tex": "test",
+        ".gpthub-authoring.json": json.dumps(
+            {
+                "draft_version": 2,
+                "draft_digest": digest,
+                "draft": draft,
+            }
+        ),
+    }
+    with pytest.raises(DocumentProjectError, match="authoring_invalid"):
+        _archive(files, authoring_version=2, draft_digest=digest)
 
 
 @pytest.mark.asyncio
@@ -53,7 +74,7 @@ async def test_source_bundle_is_one_atomic_publish_and_one_snapshot() -> None:
     assert len(calls) == 2
     command, payload = next(call for call in calls if call[1] is not None)
     assert payload is not None
-    assert "mv /workspace/documents/paper" in command
+    assert "renameat2" in command
     assert "authoring-backup" in command
     assert calls[-1][1] is None
     assert calls[-1][0].startswith("rm -rf ")
@@ -143,8 +164,9 @@ async def test_source_bundle_rolls_back_when_snapshot_is_not_committed() -> None
     assert len(commands) == 2
     rollback, payload = commands[-1]
     assert payload is None
-    assert "rm -rf /workspace/documents/paper" in rollback
-    assert "mv /workspace/.gpthub-document/authoring-backup-" in rollback
+    assert "renameat2" in rollback
+    assert "rm -rf /workspace/documents/paper" not in rollback
+    assert "authoring-backup-" in rollback
 
 
 @pytest.mark.asyncio

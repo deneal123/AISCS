@@ -278,7 +278,10 @@ class DockerCliDriver:
             )
         except DriverError:
             # Не добили — говорим ГРОМКО: это утечка процессора, которую иначе не увидеть.
-            logger.error("не удалось добить группу процессов в песочнице %s", ref.container_id)
+            logger.error(
+                "workspace process cleanup failed",
+                extra={"component": "workspace_driver", "failure_code": "process_cleanup_failed"},
+            )
 
     async def destroy(self, ref: ContainerRef) -> None:
         code, _, err = await _docker("rm", "-f", ref.container_id)

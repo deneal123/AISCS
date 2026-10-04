@@ -16,6 +16,7 @@ from application.documents import (
     DocumentVendorOverlayService,
     DocumentVendorProfileService,
 )
+from application.documents.source_recovery import SourcePublicationRecovery
 from application.history import HistoryService
 from application.importer import fetch
 from application.lifecycle import WorkspaceNotFound, WorkspaceRegistry
@@ -172,13 +173,16 @@ revert_workspace = _history_handlers.revert_workspace
 # Trusted profiles fail fast at import/startup. Runtime Docker access remains lazy.
 document_catalog = load_profile_catalog()
 document_projects = DocumentProjectService(_route_run_file_op, _route_snapshot, document_catalog)
+document_checkpoints = DocumentCheckpointService(_route_run_file_op, document_projects)
+document_source_recovery = SourcePublicationRecovery(_route_run_file_op, _route_snapshot)
 document_sources = DocumentSourceService(
     _route_run_file_op,
     _route_snapshot,
     _route_revision,
     document_projects,
+    document_checkpoints,
+    document_source_recovery,
 )
-document_checkpoints = DocumentCheckpointService(_route_run_file_op, document_projects)
 document_vendors = DocumentVendorOverlayService(
     _route_run_file_op,
     _route_snapshot,

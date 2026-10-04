@@ -266,4 +266,10 @@ class WorkspaceRegistry:
                 await self.reap()
                 await self.reconcile()
             except Exception:  # noqa: BLE001
-                logger.exception("workspace maintenance failed")
+                logger.error(
+                    "workspace maintenance failed",
+                    extra={
+                        "component": "workspace_lifecycle",
+                        "failure_code": "maintenance_failed",
+                    },
+                )

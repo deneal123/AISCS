@@ -22,7 +22,10 @@ class _Compiler:
         self.destroyed = False
 
     async def prepare(self, *_args, **_kwargs):
-        return PreparedCompilerJob("build-123456789", "container-private", "paper")
+        job = PreparedCompilerJob("build-123456789", "container-private", "paper")
+        await _kwargs["before_create"](job.job_ref)
+        await _kwargs["on_allocated"](job)
+        return job
 
     async def execute(self, *_args, **_kwargs):
         assert _kwargs["final"] is True
@@ -50,6 +53,7 @@ class _Compiler:
 
     async def destroy(self, _container_id):
         self.destroyed = True
+        return True
 
     def health(self):
         return {"compiler_cleanup": 0, "compiler_cleanup_failures": 0}
@@ -109,6 +113,8 @@ class _Registry:
 
     async def exec_raw(self, _item, command, **_kwargs):
         self.commands.append(command)
+        if "-maxdepth 1 -name '*.json'" in command:
+            return SimpleNamespace(stdout="", exit_code=0)
         return SimpleNamespace(stdout="__OK__")
 
 
@@ -154,6 +160,7 @@ async def test_build_publishes_one_atomic_artifact_directory() -> None:
     ]
     assert compiler.published is True
     assert compiler.destroyed is True
+    assert build.compiler_ref == ""
     assert build.page_blocks == {1: ("introduction",), 2: ("results_slide",)}
     command = next(
         command for command in registry.commands if "mv /workspace/.gpthub-document" in command
@@ -334,6 +341,7 @@ async def test_reconcile_preserves_live_job_and_removes_expired_or_legacy(monkey
     assert compiler.health() == {
         "compiler_cleanup": 2,
         "compiler_cleanup_failures": 0,
+        "compiler_preparation_pending": 0,
     }
 
 

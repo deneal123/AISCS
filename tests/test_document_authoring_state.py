@@ -2,11 +2,14 @@ from __future__ import annotations
 
 import base64
 import hashlib
+import io
 import json
+import tarfile
 from types import SimpleNamespace
 
 import pytest
 from application.documents.projects import DocumentProjectError, DocumentProjectService
+from application.documents.sources import _archive
 from domain.documents import load_profile_catalog
 
 
@@ -97,3 +100,42 @@ async def test_authoring_state_reads_the_unreleased_legacy_id_shape() -> None:
     result = await _service(_legacy_manifest()).authoring_state(_item(), "documents/report")
 
     assert result["block_files"]["intro-001"] == "content/intro.tex"
+
+
+def _source_only_manifest():
+    payload, _ = _archive(
+        {"main.tex": "source-only text"},
+        authoring_version=1,
+        draft_digest="a" * 64,
+    )
+    with tarfile.open(fileobj=io.BytesIO(payload)) as archive:
+        stream = archive.extractfile(".gpthub-authoring.json")
+        assert stream is not None
+        return json.load(stream)
+
+
+@pytest.mark.asyncio
+async def test_published_source_only_bundle_can_build_without_claiming_semantic_draft():
+    service = _service(_source_only_manifest())
+    assert await service.authoring(_item(), "documents/report") == (0, "")
+    with pytest.raises(DocumentProjectError, match="authoring_missing"):
+        await service.authoring_state(_item(), "documents/report")
+    assert await service.block_provenance(_item(), "documents/report") == {}
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "changed",
+    [
+        {"draft_version": True},
+        {"draft_digest": "invalid"},
+        {"schema_version": 2},
+        {"schema_version": True},
+        {"draft": None},
+        {"intent": {}},
+    ],
+)
+async def test_source_only_compatibility_does_not_hide_corrupt_or_semantic_manifests(changed):
+    service = _service({**_source_only_manifest(), **changed})
+    with pytest.raises(DocumentProjectError, match="authoring_invalid"):
+        await service.authoring(_item(), "documents/report")
