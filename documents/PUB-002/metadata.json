@@ -1,0 +1,47 @@
+{
+  "id": "PUB-002",
+  "status": "draft",
+  "kind": "critical_narrative_review",
+  "title_ru": "Вычислительные модели нейронных систем в нейроинженерии: источники ограничений, данные и валидация",
+  "title_en": "Computational models of neural systems in neuroengineering: sources of constraints, data and validation",
+  "venue": "Биомедицинская радиоэлектроника",
+  "issn": "1560-4136",
+  "planned_manuscript_ready": "2026-11",
+  "udc": "612.8:004.942",
+  "udc_status": "proposed_for_editorial_confirmation",
+  "reviewer_version": "anonymous",
+  "author_list_status": "awaiting_author_confirmation",
+  "contact_details_status": "not_supplied",
+  "approvals": [],
+  "table_captions_en": {
+    "1": "Independent axes for model comparison.",
+    "2": "Distinct model properties and evaluation procedures.",
+    "3": "Models, observations, evaluation and limitations of all included publications.",
+    "4": "Evaluation domains and admissible conclusions."
+  },
+  "keywords_count": 8,
+  "table_column_weights": {
+    "1": [
+      0.25,
+      0.75
+    ],
+    "2": [
+      0.28,
+      0.72
+    ],
+    "3": [
+      0.13,
+      0.235,
+      0.225,
+      0.205,
+      0.205
+    ],
+    "4": [
+      0.25,
+      0.375,
+      0.375
+    ]
+  },
+  "figure_path": "figures/observation-scheme.png",
+  "figure_caption_en": "Figure 1. Dynamics, observation operator and signal: 1 — input; 2 — internal state; 3 — observation operator; 4 — measured signal; 5 — testable conclusion. Dynamics and measurement have separate parameters. Author-proposed scheme."
+}

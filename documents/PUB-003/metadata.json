@@ -1,0 +1,61 @@
+{
+  "id": "PUB-003",
+  "status": "draft",
+  "kind": "critical_narrative_review",
+  "title_ru": "Коннектомно-ограниченное предобучение для биофизического моделирования вызванных составных потенциалов действия при стимуляции спинного мозга: предпосылки и критерии проверки",
+  "title_en": "Connectome-constrained pretraining for biophysical modelling of evoked compound action potentials during spinal cord stimulation: rationale and evaluation criteria",
+  "venue": "Биомедицинская радиоэлектроника",
+  "issn": "1560-4136",
+  "planned_manuscript_ready": "2027-03",
+  "udc": "612.8:004.942",
+  "udc_status": "proposed_for_editorial_confirmation",
+  "reviewer_version": "anonymous",
+  "author_list_status": "awaiting_author_confirmation",
+  "contact_details_status": "not_supplied",
+  "approvals": [],
+  "table_captions_en": {
+    "1": "Included sources, reviewed results and limits. J: journal publication; P: preprint. Available full text denotes reading the relevant sections, not independent reproduction.",
+    "2": "Comparable properties and hypothesis status.",
+    "3": "Four links of the evidence and evaluation scheme.",
+    "4": "Control conditions for a future comparison."
+  },
+  "figure_caption_en": "Figure 1. Proposed evaluation scheme: 1, fly dynamics and source adapter; 2, temporal module pretraining; 3, target adapter and human recruitment; 4, recording operator; 5, ECAP-like signal and growth curve. The arrow from 2 to 3 transfers initial parameters, not anatomy.",
+  "keywords_count": 8,
+  "figure_path": "figures/transfer-scheme.png",
+  "table_column_weights": {
+    "1": [
+      0.29,
+      0.32,
+      0.39
+    ],
+    "2": [
+      0.22,
+      0.47,
+      0.31
+    ],
+    "3": [
+      0.23,
+      0.24,
+      0.53
+    ],
+    "4": [
+      0.35,
+      0.24,
+      0.41
+    ]
+  },
+  "equations": {
+    "source": {
+      "word": "x_F(t+1) = F_θF(x_F(t), u_F(t); G_F);  z_F(t) = E_ω(P_F(x_F(≤t), u_F(≤t)))",
+      "tex": "x^F_{t+1}=F_{\\theta_F}(x^F_t,u^F_t;G_F),\\quad z^F_t=E_\\omega(P_F(x^F_{\\leq t},u^F_{\\leq t}))"
+    },
+    "target": {
+      "word": "r_H(t) = B_α(E_ω(P_H(u_H(≤t))));  y_H(t) = H_φ(r_H)(t)",
+      "tex": "r^H_t=B_\\alpha(E_\\omega(P_H(u^H_{\\leq t}))),\\quad y^H(t)=H_\\varphi(r^H)(t)"
+    },
+    "metric": {
+      "word": "E_i = √[(1/m_i) ∑_j (Â_ij − A_ij)²];  E = (1/N) ∑_i E_i;  Δ = E_control − E_transfer",
+      "tex": "E_i=\\sqrt{\\frac{1}{m_i}\\sum_j(\\widehat A_{ij}-A_{ij})^2},\\quad E=\\frac{1}{N}\\sum_i E_i,\\quad\\Delta=E_{\\mathrm{control}}-E_{\\mathrm{transfer}}"
+    }
+  }
+}

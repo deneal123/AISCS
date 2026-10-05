@@ -117,6 +117,29 @@ def test_path_traversal_and_optimistic_write(tmp_path: Path) -> None:
     assert result["applied"] is False
 
 
+@pytest.mark.parametrize("structured", [False, True])
+def test_import_research_supports_structured_and_legacy_data(
+    tmp_path: Path, structured: bool
+) -> None:
+    data = tmp_path / "research" / "data"
+    data.mkdir(parents=True)
+    contract = "research/scientific-contract.json" if structured else "scientific-contract.json"
+    matrix = "evidence/human-dataset-matrix.json" if structured else "human-dataset-matrix.json"
+    payloads = {
+        "records.json": {"sources": [{"id": "S743", "title": "source"}]},
+        "ST.json": {"categories": []},
+        contract: {"test_contract": True},
+        matrix: {"test_matrix": True},
+    }
+    for name, value in payloads.items():
+        path = data / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(value), encoding="utf-8")
+    result = DocumentSidecar(ROOT).import_research(data.parent, ["S743"], apply=False)
+    assert result["ok"] is True
+    assert result["selected_refs"] == ["S743"]
+
+
 def test_imported_research_item_hash_is_enforced(tmp_path: Path) -> None:
     destination = tmp_path / "sidecar"
     shutil.copytree(

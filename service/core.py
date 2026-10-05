@@ -451,11 +451,17 @@ class DocumentSidecar:
         missing = [ref for ref in refs if ref not in source_map and ref not in resource_map]
         if missing:
             raise SidecarError(f"research refs not found: {missing}")
+        contract_path = data / "research" / "scientific-contract.json"
+        if not contract_path.is_file():
+            contract_path = data / "scientific-contract.json"
+        dataset_path = data / "evidence" / "human-dataset-matrix.json"
+        if not dataset_path.is_file():
+            dataset_path = data / "human-dataset-matrix.json"
         evidence_files = [
             data / "records.json",
             data / "ST.json",
-            data / "scientific-contract.json",
-            data / "human-dataset-matrix.json",
+            contract_path,
+            dataset_path,
         ]
         source_fingerprint = (
             hashlib.sha256("|".join(sha256(path) for path in evidence_files).encode())
@@ -469,14 +475,15 @@ class DocumentSidecar:
                 "source": "aspa-research",
                 "source_fingerprint": source_fingerprint,
                 "source_files": [
-                    {"name": path.name, "sha256": sha256(path)} for path in evidence_files
+                    {"name": path.relative_to(data).as_posix(), "sha256": sha256(path)}
+                    for path in evidence_files
                 ],
             },
             "selected_refs": sorted(set(refs)),
             "sources": [source_map[ref] for ref in refs if ref in source_map],
             "resources": [resource_map[ref] for ref in refs if ref in resource_map],
-            "scientific_contract": load_json(data / "scientific-contract.json"),
-            "human_dataset_matrix": load_json(data / "human-dataset-matrix.json"),
+            "scientific_contract": load_json(contract_path),
+            "human_dataset_matrix": load_json(dataset_path),
         }
         payload["item_hashes"] = {
             (item.get("id") or item.get("resource_id")): object_sha256(item)

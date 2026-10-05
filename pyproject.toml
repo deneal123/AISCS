@@ -1,6 +1,6 @@
 [project]
 name = "aspa-publications-sidecar"
-version = "1.0.0"
+version = "1.1.0"
 description = "Autonomous dissertation publications authoring sidecar"
 readme = "README.md"
 requires-python = ">=3.12,<3.14"

@@ -1,6 +1,14 @@
 {
-  "meta": {"schema_version": "1.0.0", "sidecar_version": "1.0.0", "updated_at": "2026-09-23"},
-  "release_approvals": {"author_review": false, "coauthor_review": false, "venue_requirements_checked": false},
+  "meta": {
+    "schema_version": "1.0.0",
+    "sidecar_version": "1.0.0",
+    "updated_at": "2026-10-03"
+  },
+  "release_approvals": {
+    "author_review": false,
+    "coauthor_review": false,
+    "venue_requirements_checked": false
+  },
   "documents": [
     {
       "id": "PUB-001",
@@ -9,20 +17,35 @@
       "language": "ru",
       "venue": "Международная научно-техническая конференция «Микроэлектронные имплантируемые нейроинтерфейсы 2026» (МИН-2026)",
       "status": "submitted",
-      "authors": ["Д. Ф. Вольхин", "Д. И. Рябкин", "А. Ю. Герасименко"],
+      "authors": [
+        "Д. Ф. Вольхин",
+        "Д. И. Рябкин",
+        "А. Ю. Герасименко"
+      ],
       "deadline": null,
-      "source_dir": "conference/neiro-miet/ru",
+      "source_dir": "documents/PUB-001/neiro-miet/ru",
       "entrypoint": null,
-      "primary_output": "conference/neiro-miet/ru/article.pdf",
+      "primary_output": "documents/PUB-001/neiro-miet/ru/article.pdf",
       "research_snapshot": null,
       "evidence_refs": [],
-      "approvals": ["submitted_version_locked"],
+      "approvals": [
+        "submitted_version_locked"
+      ],
       "immutable": true,
       "immutable_tree_sha256": "FF1CCD1F87DDC2521937C66A551FE71E7C054579E32457661452EBB2363E2D1E",
       "immutable_files": [
-        {"path": "conference/neiro-miet/ru/article.docx", "sha256": "A1F833CDD8E664176D8D1F7383D9C7F3A983B0E8A1E26FBF0710C7F4A59B057E"},
-        {"path": "conference/neiro-miet/ru/article.pdf", "sha256": "3D65F0CC94BAA2D167A47BC1DDD03A9DE917B12B56058197A8B54BCEBCC8F777"},
-        {"path": "conference/neiro-miet/ru/article.preview.pdf", "sha256": "AA4BAEEAF0B239E0C5F5592C162FE310927934A354E98F3219E0B742F81570FE"}
+        {
+          "path": "documents/PUB-001/neiro-miet/ru/article.docx",
+          "sha256": "A1F833CDD8E664176D8D1F7383D9C7F3A983B0E8A1E26FBF0710C7F4A59B057E"
+        },
+        {
+          "path": "documents/PUB-001/neiro-miet/ru/article.pdf",
+          "sha256": "3D65F0CC94BAA2D167A47BC1DDD03A9DE917B12B56058197A8B54BCEBCC8F777"
+        },
+        {
+          "path": "documents/PUB-001/neiro-miet/ru/article.preview.pdf",
+          "sha256": "AA4BAEEAF0B239E0C5F5592C162FE310927934A354E98F3219E0B742F81570FE"
+        }
       ]
     },
     {
@@ -42,6 +65,167 @@
       "approvals": [],
       "immutable": false,
       "immutable_files": []
+    },
+    {
+      "id": "PUB-002",
+      "slug": "neural-models-review",
+      "title": "Вычислительные модели нейронных систем в нейроинженерии: источники ограничений, данные и валидация",
+      "kind": "critical_narrative_review",
+      "language": "ru",
+      "venue": "Биомедицинская радиоэлектроника",
+      "status": "draft",
+      "authors": [],
+      "deadline": null,
+      "source_dir": "documents/PUB-002",
+      "entrypoint": "documents/PUB-002/main.tex",
+      "primary_output": "documents/PUB-002/build/article.doc",
+      "research_snapshot": "data/research-snapshot/snapshot.json",
+      "evidence_refs": [
+        "S285",
+        "S743",
+        "S775",
+        "S212",
+        "S741",
+        "S766",
+        "S767",
+        "S105",
+        "S159",
+        "S162",
+        "S780",
+        "S836",
+        "S149"
+      ],
+      "approvals": [],
+      "immutable": false,
+      "immutable_files": [],
+      "planned_manuscript_ready": "2026-11",
+      "author_list_status": "awaiting_author_confirmation",
+      "traceability": [
+        {
+          "section": "Ограничения и функциональные наблюдения",
+          "refs": [
+            "S285",
+            "S743",
+            "S775",
+            "S212",
+            "S741"
+          ],
+          "target_construct": "simulation_dynamics"
+        },
+        {
+          "section": "Измерительный канал и независимость проверки",
+          "refs": [
+            "S766",
+            "S767",
+            "S105",
+            "S159",
+            "S162"
+          ],
+          "target_construct": "ecap_like_observation"
+        },
+        {
+          "section": "Синтетические данные и область обобщения",
+          "refs": [
+            "S836",
+            "S149"
+          ],
+          "target_construct": "methodological_transfer"
+        },
+        {
+          "section": "Измерительный канал и независимость проверки",
+          "refs": [
+            "S780"
+          ],
+          "target_construct": "clinical_scs_response"
+        }
+      ]
+    },
+    {
+      "id": "PUB-003",
+      "slug": "connectome-ecap-review",
+      "title": "Коннектомно-ограниченное предобучение для биофизического моделирования вызванных составных потенциалов действия при стимуляции спинного мозга: предпосылки и критерии проверки",
+      "kind": "critical_narrative_review",
+      "language": "ru",
+      "venue": "Биомедицинская радиоэлектроника",
+      "status": "draft",
+      "authors": [],
+      "deadline": null,
+      "source_dir": "documents/PUB-003",
+      "entrypoint": "documents/PUB-003/main.tex",
+      "primary_output": "documents/PUB-003/build/article.doc",
+      "research_snapshot": "data/research-snapshot/snapshot.json",
+      "evidence_refs": [
+        "S767",
+        "S764",
+        "S766",
+        "S787",
+        "S743",
+        "S775",
+        "S901",
+        "S910",
+        "S029",
+        "S212",
+        "S900",
+        "S909",
+        "S741",
+        "S892",
+        "S149",
+        "S105",
+        "S159",
+        "S162",
+        "S780",
+        "S781",
+        "S744",
+        "S746",
+        "S219"
+      ],
+      "approvals": [],
+      "immutable": false,
+      "immutable_files": [],
+      "planned_manuscript_ready": "2027-03",
+      "author_list_status": "awaiting_author_confirmation",
+      "traceability": [
+        {
+          "section": "Основания и границы источников",
+          "refs": [
+            "S775",
+            "S212",
+            "S744",
+            "S219"
+          ],
+          "target_construct": "simulation_dynamics"
+        },
+        {
+          "section": "Формальная схема переноса",
+          "refs": [
+            "S743",
+            "S746",
+            "S892",
+            "S149"
+          ],
+          "target_construct": "methodological_transfer"
+        },
+        {
+          "section": "Проверки, вытекающие из литературы",
+          "refs": [
+            "S105",
+            "S159",
+            "S162",
+            "S767",
+            "S766"
+          ],
+          "target_construct": "ecap_like_observation"
+        },
+        {
+          "section": "Основания и границы источников",
+          "refs": [
+            "S780",
+            "S781"
+          ],
+          "target_construct": "clinical_scs_response"
+        }
+      ],
+      "title_en": "Connectome-constrained pretraining for biophysical modelling of evoked compound action potentials during spinal cord stimulation: rationale and evaluation criteria"
     }
   ]
 }

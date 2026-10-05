@@ -1,0 +1,6 @@
+build/
+/main.pdf
+*.aux
+*.log
+*.out
+*.synctex.gz

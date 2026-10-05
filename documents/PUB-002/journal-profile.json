@@ -1,0 +1,137 @@
+{
+  "checked_at": "2026-10-05",
+  "venue": "Биомедицинская радиоэлектроника",
+  "issn": "1560-4136",
+  "guidelines_url": "https://radiotec.ru/ru/journal/Biomedical_Radioelectronics?page=for_authors",
+  "review_example_url": "https://radiotec.ru/ru/journal/Biomedical_Radioelectronics/number/2024-6",
+  "requirements": {
+    "submission_format": "Word 97-2003 (.doc)",
+    "font_size_pt": [
+      12,
+      14
+    ],
+    "line_spacing": 2,
+    "recommended_max_pages": 20,
+    "russian_abstract_words": [
+      200,
+      250
+    ],
+    "keywords": [
+      5,
+      10
+    ],
+    "minimum_references": 11,
+    "foreign_indexed_reference_share_minimum": 0.3,
+    "reference_order": "first_citation",
+    "bibliography_standard": "ГОСТ Р 7.0.5-2008",
+    "all_authors_in_reference": true,
+    "udc_required": true,
+    "english_extended_abstract_required": true,
+    "bilingual_figure_captions": true,
+    "numbered_pages": true,
+    "figure_dpi_minimum": 300,
+    "word_cross_reference_fields": "prohibited",
+    "reviewer_copy": "anonymous",
+    "submission_attachments": [
+      "представление НТС",
+      "экспертное заключение",
+      "авторское заявление",
+      "сведения об авторах"
+    ],
+    "english_extended_abstract_minimum_words": 350,
+    "margins_mm": {
+      "top": 20,
+      "bottom": 25,
+      "left": 30,
+      "right": 10
+    }
+  },
+  "layout_choices": {
+    "paper": "A4",
+    "font": "Times New Roman",
+    "font_size_pt": 12,
+    "margins_mm": {
+      "top": 20,
+      "bottom": 25,
+      "left": 30,
+      "right": 10
+    },
+    "margins_status": "publisher_detailed_submission_requirements",
+    "line_spacing": 2
+  },
+  "fees": "Рассмотрение и рецензирование бесплатны; за DOI, обработку метаданных и дополнительные услуги возможен сбор без указанной суммы.",
+  "vak": {
+    "status": "listed_for_2.2.12_technical_sciences",
+    "edition_date": "2026-09-15",
+    "official_registry_url": "https://vak.gisnauka.ru/documents/editions",
+    "checked_document_copy_url": "https://sibac.info/sites/default/files/blog/perechen-vak-15.09.2026.pdf",
+    "copy_host": "Sibac; copy of the VAK list, not the registry website",
+    "document_sha256": "d16ab69668fb4c4cab80eb75809928cca63b447df5ee246e4f9d56cae4d3273d",
+    "pdf_page": 123,
+    "row": 329,
+    "specialty": "2.2.12",
+    "degree_branch": "технические науки",
+    "verification": "Main agent checked the original PDF header and row visually; journal title and ISSN match the publisher. The official registry SPA could not be parsed."
+  },
+  "bibliography_indexing_check": {
+    "checked_at": "2026-10-05",
+    "verified_indexed_reference_count_minimum": 6,
+    "total_references": 20,
+    "verified_share_minimum": 0.3,
+    "scope": "Conservative lower bound from publisher journal-level indexing declarations; remaining publications not needed to meet the 30% threshold",
+    "publisher_declarations": [
+      {
+        "refs": [
+          "S767",
+          "S105"
+        ],
+        "url": "https://publishingsupport.iopscience.iop.org/journals/journal-of-neural-engineering/about-journal-neural-engineering/",
+        "index": "Scopus, Science Citation Index"
+      },
+      {
+        "refs": [
+          "S787"
+        ],
+        "url": "https://www.frontiersin.org/journals/neuroscience/about",
+        "index": "Scopus, SCIE"
+      },
+      {
+        "refs": [
+          "S149"
+        ],
+        "url": "https://www.frontiersin.org/journals/artificial-intelligence/about",
+        "index": "Scopus"
+      },
+      {
+        "refs": [
+          "S162"
+        ],
+        "url": "https://link.springer.com/journal/40122",
+        "index": "Scopus, SCIE"
+      },
+      {
+        "refs": [
+          "S780"
+        ],
+        "url": "https://jamanetwork.com/DocumentLibrary/Marketing/JN_site_license_cat.pdf",
+        "index": "Web of Science",
+        "pdf_page": 10
+      },
+      {
+        "refs": [
+          "EXT-PUB002-004"
+        ],
+        "url": "https://www.frontiersin.org/journals/neuroinformatics/about",
+        "index": "Scopus, SCIE",
+        "checked_at": "2026-10-05"
+      }
+    ]
+  },
+  "requirement_resolution": "Detailed Russian submission section overrides earlier general recommendations of 1.5 spacing; actual fields and .doc previously omitted and corrected 2026-10-03.",
+  "rules_recheck": {
+    "checked_at": "2026-10-05",
+    "url": "https://radiotec.ru/ru/journal/Biomedical_Radioelectronics?page=for_authors",
+    "sha256": "59675ba0b3a9f0aeab3cefadef6ad761b652c66ddacdf765fa18883dec8781a8",
+    "result": "Publisher detailed Russian requirements re-read; double spacing, TNR 12/14, margins 20/25/30/10, Russian abstract 200–250, English extended abstract >=350, 5–10 keywords, >=11 references, >=30% indexed foreign works."
+  }
+}

@@ -1,0 +1,3956 @@
+{
+  "searched_at": "2026-10-05",
+  "scope": "Bounded narrative-review supplementation, not systematic retrieval",
+  "period": [
+    "2015-01-01",
+    "2026-10-05"
+  ],
+  "ranking": "Provider relevance at search time; top 20 or entire smaller output",
+  "language": "English and Russian queries; no provider language restriction",
+  "screeners": 1,
+  "independent_double_screening": false,
+  "criteria": {
+    "include": "Identifiable primary or methodological work; defined model/property/validation and checkable result in available primary text or informative abstract.",
+    "exclude": "Outside scope, no checkable result, exact duplicate, redundant illustration; missing access restricts claims rather than inventing methods."
+  },
+  "counts": {
+    "returned_viewed": 211,
+    "unique_identifier_records": 210,
+    "exact_duplicates": 1,
+    "supplement_included": 6,
+    "foundational_added_outside_period": 1,
+    "final_sources": 20,
+    "decisions": {
+      "excluded_scope": 114,
+      "excluded_insufficient_metadata": 1,
+      "included": 6,
+      "not_selected_purposeful": 89,
+      "excluded_duplicate": 1
+    }
+  },
+  "queries": [
+    {
+      "id": "EN-1",
+      "topic": "constraints",
+      "database": "PubMed",
+      "query": "(neural model*[Title/Abstract] OR neuronal model*[Title/Abstract]) AND (biophysical[Title/Abstract] OR connectom*[Title/Abstract] OR constraint*[Title/Abstract])",
+      "searched_at": "2026-10-05",
+      "period": [
+        "2015-01-01",
+        "2026-10-05"
+      ],
+      "sort": "relevance",
+      "limit": 20,
+      "request_url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%28%28neural+model%2A%5BTitle%2FAbstract%5D+OR+neuronal+model%2A%5BTitle%2FAbstract%5D%29+AND+%28biophysical%5BTitle%2FAbstract%5D+OR+connectom%2A%5BTitle%2FAbstract%5D+OR+constraint%2A%5BTitle%2FAbstract%5D%29%29+AND+%28%222015%2F01%2F01%22%5BDate+-+Publication%5D+%3A+%222026%2F10%2F05%22%5BDate+-+Publication%5D%29&retmode=json&retmax=20&sort=relevance",
+      "full_query": "((neural model*[Title/Abstract] OR neuronal model*[Title/Abstract]) AND (biophysical[Title/Abstract] OR connectom*[Title/Abstract] OR constraint*[Title/Abstract])) AND (\"2015/01/01\"[Date - Publication] : \"2026/10/05\"[Date - Publication])",
+      "total_reported": 141,
+      "viewed_count": 20,
+      "viewed_fields": "Titles and available abstracts/metadata; selected works read at stated primary-text scope",
+      "records_file": "literature-search.json#/screening"
+    },
+    {
+      "id": "EN-2",
+      "topic": "identifiability",
+      "database": "PubMed",
+      "query": "(neural[Title/Abstract] OR neuronal[Title/Abstract] OR biological[Title/Abstract]) AND (identifiability[Title/Abstract] OR parameter inference[Title/Abstract])",
+      "searched_at": "2026-10-05",
+      "period": [
+        "2015-01-01",
+        "2026-10-05"
+      ],
+      "sort": "relevance",
+      "limit": 20,
+      "request_url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%28%28neural%5BTitle%2FAbstract%5D+OR+neuronal%5BTitle%2FAbstract%5D+OR+biological%5BTitle%2FAbstract%5D%29+AND+%28identifiability%5BTitle%2FAbstract%5D+OR+parameter+inference%5BTitle%2FAbstract%5D%29%29+AND+%28%222015%2F01%2F01%22%5BDate+-+Publication%5D+%3A+%222026%2F10%2F05%22%5BDate+-+Publication%5D%29&retmode=json&retmax=20&sort=relevance",
+      "full_query": "((neural[Title/Abstract] OR neuronal[Title/Abstract] OR biological[Title/Abstract]) AND (identifiability[Title/Abstract] OR parameter inference[Title/Abstract])) AND (\"2015/01/01\"[Date - Publication] : \"2026/10/05\"[Date - Publication])",
+      "total_reported": 408,
+      "viewed_count": 20,
+      "viewed_fields": "Titles and available abstracts/metadata; selected works read at stated primary-text scope",
+      "records_file": "literature-search.json#/screening"
+    },
+    {
+      "id": "EN-3",
+      "topic": "verification_validation",
+      "database": "PubMed",
+      "query": "(computational model*[Title/Abstract] OR simulation[Title/Abstract]) AND (verification[Title/Abstract] OR validation[Title/Abstract]) AND (neural[Title/Abstract] OR neuroengineering[Title/Abstract] OR medical device*[Title/Abstract])",
+      "searched_at": "2026-10-05",
+      "period": [
+        "2015-01-01",
+        "2026-10-05"
+      ],
+      "sort": "relevance",
+      "limit": 20,
+      "request_url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%28%28computational+model%2A%5BTitle%2FAbstract%5D+OR+simulation%5BTitle%2FAbstract%5D%29+AND+%28verification%5BTitle%2FAbstract%5D+OR+validation%5BTitle%2FAbstract%5D%29+AND+%28neural%5BTitle%2FAbstract%5D+OR+neuroengineering%5BTitle%2FAbstract%5D+OR+medical+device%2A%5BTitle%2FAbstract%5D%29%29+AND+%28%222015%2F01%2F01%22%5BDate+-+Publication%5D+%3A+%222026%2F10%2F05%22%5BDate+-+Publication%5D%29&retmode=json&retmax=20&sort=relevance",
+      "full_query": "((computational model*[Title/Abstract] OR simulation[Title/Abstract]) AND (verification[Title/Abstract] OR validation[Title/Abstract]) AND (neural[Title/Abstract] OR neuroengineering[Title/Abstract] OR medical device*[Title/Abstract])) AND (\"2015/01/01\"[Date - Publication] : \"2026/10/05\"[Date - Publication])",
+      "total_reported": 1135,
+      "viewed_count": 20,
+      "viewed_fields": "Titles and available abstracts/metadata; selected works read at stated primary-text scope",
+      "records_file": "literature-search.json#/screening"
+    },
+    {
+      "id": "EN-4",
+      "topic": "synthetic_generalization",
+      "database": "PubMed",
+      "query": "(synthetic data[Title/Abstract] OR simulation-based inference[Title/Abstract]) AND (EEG[Title/Abstract] OR neural[Title/Abstract] OR neurophysiolog*[Title/Abstract]) AND (validation[Title/Abstract] OR generalization[Title/Abstract] OR generalisation[Title/Abstract] OR inference[Title/Abstract])",
+      "searched_at": "2026-10-05",
+      "period": [
+        "2015-01-01",
+        "2026-10-05"
+      ],
+      "sort": "relevance",
+      "limit": 20,
+      "request_url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%28%28synthetic+data%5BTitle%2FAbstract%5D+OR+simulation-based+inference%5BTitle%2FAbstract%5D%29+AND+%28EEG%5BTitle%2FAbstract%5D+OR+neural%5BTitle%2FAbstract%5D+OR+neurophysiolog%2A%5BTitle%2FAbstract%5D%29+AND+%28validation%5BTitle%2FAbstract%5D+OR+generalization%5BTitle%2FAbstract%5D+OR+generalisation%5BTitle%2FAbstract%5D+OR+inference%5BTitle%2FAbstract%5D%29%29+AND+%28%222015%2F01%2F01%22%5BDate+-+Publication%5D+%3A+%222026%2F10%2F05%22%5BDate+-+Publication%5D%29&retmode=json&retmax=20&sort=relevance",
+      "full_query": "((synthetic data[Title/Abstract] OR simulation-based inference[Title/Abstract]) AND (EEG[Title/Abstract] OR neural[Title/Abstract] OR neurophysiolog*[Title/Abstract]) AND (validation[Title/Abstract] OR generalization[Title/Abstract] OR generalisation[Title/Abstract] OR inference[Title/Abstract])) AND (\"2015/01/01\"[Date - Publication] : \"2026/10/05\"[Date - Publication])",
+      "total_reported": 289,
+      "viewed_count": 20,
+      "viewed_fields": "Titles and available abstracts/metadata; selected works read at stated primary-text scope",
+      "records_file": "literature-search.json#/screening"
+    },
+    {
+      "id": "EN-5",
+      "topic": "identifiability",
+      "database": "Crossref",
+      "query": "Observability and Structural Identifiability of Nonlinear Biological Systems",
+      "searched_at": "2026-10-05",
+      "period": [
+        "2015-01-01",
+        "2026-10-05"
+      ],
+      "sort": "relevance",
+      "limit": 20,
+      "request_url": "https://api.crossref.org/works?query=Observability+and+Structural+Identifiability+of+Nonlinear+Biological+Systems&rows=20&filter=from-pub-date%3A2015-01-01%2Cuntil-pub-date%3A2026-10-05&sort=relevance",
+      "full_query": "Observability and Structural Identifiability of Nonlinear Biological Systems",
+      "total_reported": 3775121,
+      "viewed_count": 20,
+      "viewed_fields": "Titles and available abstracts/metadata; selected works read at stated primary-text scope",
+      "records_file": "literature-search.json#/screening"
+    },
+    {
+      "id": "EN-6",
+      "topic": "verification_validation",
+      "database": "PubMed",
+      "query": "(neural network simulation[Title/Abstract] OR neural simulations[Title/Abstract]) AND (verification[Title/Abstract] OR reproducible[Title/Abstract] OR validation[Title/Abstract])",
+      "searched_at": "2026-10-05",
+      "period": [
+        "2015-01-01",
+        "2026-10-05"
+      ],
+      "sort": "relevance",
+      "limit": 20,
+      "request_url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%28%28neural+network+simulation%5BTitle%2FAbstract%5D+OR+neural+simulations%5BTitle%2FAbstract%5D%29+AND+%28verification%5BTitle%2FAbstract%5D+OR+reproducible%5BTitle%2FAbstract%5D+OR+validation%5BTitle%2FAbstract%5D%29%29+AND+%28%222015%2F01%2F01%22%5BDate+-+Publication%5D+%3A+%222026%2F10%2F05%22%5BDate+-+Publication%5D%29&retmode=json&retmax=20&sort=relevance",
+      "full_query": "((neural network simulation[Title/Abstract] OR neural simulations[Title/Abstract]) AND (verification[Title/Abstract] OR reproducible[Title/Abstract] OR validation[Title/Abstract])) AND (\"2015/01/01\"[Date - Publication] : \"2026/10/05\"[Date - Publication])",
+      "total_reported": 11,
+      "viewed_count": 11,
+      "viewed_fields": "Titles and available abstracts/metadata; selected works read at stated primary-text scope",
+      "records_file": "literature-search.json#/screening"
+    },
+    {
+      "id": "EN-7",
+      "topic": "synthetic_generalization",
+      "database": "PubMed",
+      "query": "(neural dynamics[Title/Abstract] OR neural model[Title/Abstract]) AND (simulation-based inference[Title/Abstract] OR density estimators[Title/Abstract] OR Bayesian inference[Title/Abstract])",
+      "searched_at": "2026-10-05",
+      "period": [
+        "2015-01-01",
+        "2026-10-05"
+      ],
+      "sort": "relevance",
+      "limit": 20,
+      "request_url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%28%28neural+dynamics%5BTitle%2FAbstract%5D+OR+neural+model%5BTitle%2FAbstract%5D%29+AND+%28simulation-based+inference%5BTitle%2FAbstract%5D+OR+density+estimators%5BTitle%2FAbstract%5D+OR+Bayesian+inference%5BTitle%2FAbstract%5D%29%29+AND+%28%222015%2F01%2F01%22%5BDate+-+Publication%5D+%3A+%222026%2F10%2F05%22%5BDate+-+Publication%5D%29&retmode=json&retmax=20&sort=relevance",
+      "full_query": "((neural dynamics[Title/Abstract] OR neural model[Title/Abstract]) AND (simulation-based inference[Title/Abstract] OR density estimators[Title/Abstract] OR Bayesian inference[Title/Abstract])) AND (\"2015/01/01\"[Date - Publication] : \"2026/10/05\"[Date - Publication])",
+      "total_reported": 28,
+      "viewed_count": 20,
+      "viewed_fields": "Titles and available abstracts/metadata; selected works read at stated primary-text scope",
+      "records_file": "literature-search.json#/screening"
+    },
+    {
+      "id": "RU-1",
+      "topic": "constraints",
+      "database": "Crossref",
+      "query": "биофизическое моделирование нейронных систем ограничения данные",
+      "searched_at": "2026-10-05",
+      "period": [
+        "2015-01-01",
+        "2026-10-05"
+      ],
+      "sort": "relevance",
+      "limit": 20,
+      "request_url": "https://api.crossref.org/works?query=%D0%B1%D0%B8%D0%BE%D1%84%D0%B8%D0%B7%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%BE%D0%B5+%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5+%D0%BD%D0%B5%D0%B9%D1%80%D0%BE%D0%BD%D0%BD%D1%8B%D1%85+%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC+%D0%BE%D0%B3%D1%80%D0%B0%D0%BD%D0%B8%D1%87%D0%B5%D0%BD%D0%B8%D1%8F+%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D0%B5&rows=20&filter=from-pub-date%3A2015-01-01%2Cuntil-pub-date%3A2026-10-05&sort=relevance",
+      "full_query": "биофизическое моделирование нейронных систем ограничения данные",
+      "total_reported": 46943,
+      "viewed_count": 20,
+      "viewed_fields": "Titles and available abstracts/metadata; selected works read at stated primary-text scope",
+      "records_file": "literature-search.json#/screening"
+    },
+    {
+      "id": "RU-2",
+      "topic": "identifiability",
+      "database": "Crossref",
+      "query": "идентифицируемость параметров математической модели нейрона",
+      "searched_at": "2026-10-05",
+      "period": [
+        "2015-01-01",
+        "2026-10-05"
+      ],
+      "sort": "relevance",
+      "limit": 20,
+      "request_url": "https://api.crossref.org/works?query=%D0%B8%D0%B4%D0%B5%D0%BD%D1%82%D0%B8%D1%84%D0%B8%D1%86%D0%B8%D1%80%D1%83%D0%B5%D0%BC%D0%BE%D1%81%D1%82%D1%8C+%D0%BF%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D0%BE%D0%B2+%D0%BC%D0%B0%D1%82%D0%B5%D0%BC%D0%B0%D1%82%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%BE%D0%B9+%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D0%B8+%D0%BD%D0%B5%D0%B9%D1%80%D0%BE%D0%BD%D0%B0&rows=20&filter=from-pub-date%3A2015-01-01%2Cuntil-pub-date%3A2026-10-05&sort=relevance",
+      "full_query": "идентифицируемость параметров математической модели нейрона",
+      "total_reported": 26955,
+      "viewed_count": 20,
+      "viewed_fields": "Titles and available abstracts/metadata; selected works read at stated primary-text scope",
+      "records_file": "literature-search.json#/screening"
+    },
+    {
+      "id": "RU-3",
+      "topic": "verification_validation",
+      "database": "Crossref",
+      "query": "верификация валидация вычислительных моделей биомедицинских систем",
+      "searched_at": "2026-10-05",
+      "period": [
+        "2015-01-01",
+        "2026-10-05"
+      ],
+      "sort": "relevance",
+      "limit": 20,
+      "request_url": "https://api.crossref.org/works?query=%D0%B2%D0%B5%D1%80%D0%B8%D1%84%D0%B8%D0%BA%D0%B0%D1%86%D0%B8%D1%8F+%D0%B2%D0%B0%D0%BB%D0%B8%D0%B4%D0%B0%D1%86%D0%B8%D1%8F+%D0%B2%D1%8B%D1%87%D0%B8%D1%81%D0%BB%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D1%85+%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D0%B5%D0%B9+%D0%B1%D0%B8%D0%BE%D0%BC%D0%B5%D0%B4%D0%B8%D1%86%D0%B8%D0%BD%D1%81%D0%BA%D0%B8%D1%85+%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC&rows=20&filter=from-pub-date%3A2015-01-01%2Cuntil-pub-date%3A2026-10-05&sort=relevance",
+      "full_query": "верификация валидация вычислительных моделей биомедицинских систем",
+      "total_reported": 33991,
+      "viewed_count": 20,
+      "viewed_fields": "Titles and available abstracts/metadata; selected works read at stated primary-text scope",
+      "records_file": "literature-search.json#/screening"
+    },
+    {
+      "id": "RU-4",
+      "topic": "synthetic_generalization",
+      "database": "Crossref",
+      "query": "синтетические данные электроэнцефалограмма обобщение модели",
+      "searched_at": "2026-10-05",
+      "period": [
+        "2015-01-01",
+        "2026-10-05"
+      ],
+      "sort": "relevance",
+      "limit": 20,
+      "request_url": "https://api.crossref.org/works?query=%D1%81%D0%B8%D0%BD%D1%82%D0%B5%D1%82%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B5+%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D0%B5+%D1%8D%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D1%8D%D0%BD%D1%86%D0%B5%D1%84%D0%B0%D0%BB%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%B0+%D0%BE%D0%B1%D0%BE%D0%B1%D1%89%D0%B5%D0%BD%D0%B8%D0%B5+%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D0%B8&rows=20&filter=from-pub-date%3A2015-01-01%2Cuntil-pub-date%3A2026-10-05&sort=relevance",
+      "full_query": "синтетические данные электроэнцефалограмма обобщение модели",
+      "total_reported": 19408,
+      "viewed_count": 20,
+      "viewed_fields": "Titles and available abstracts/metadata; selected works read at stated primary-text scope",
+      "records_file": "literature-search.json#/screening"
+    }
+  ],
+  "screening": [
+    {
+      "query_id": "EN-1",
+      "rank": 1,
+      "pmid": "28891500",
+      "doi": "10.3233/JIN-170008",
+      "pmc": null,
+      "title": "On the Nernst-Planck equation.",
+      "journal": "Journal of integrative neuroscience",
+      "year": "2017",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28891500/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-1",
+      "rank": 2,
+      "pmid": "27347898",
+      "doi": "10.1002/cphy.c150040",
+      "pmc": null,
+      "title": "Neurophysiology of Skin Thermal Sensations.",
+      "journal": "Comprehensive physiology",
+      "year": "2016",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27347898/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-1",
+      "rank": 3,
+      "pmid": "32966019",
+      "metadata_missing": true,
+      "decision": "excluded_insufficient_metadata",
+      "reason": "В ответе NCBI нет разобранной статьи; библиографическая запись не используется как доказательство."
+    },
+    {
+      "query_id": "EN-1",
+      "rank": 4,
+      "pmid": "34183826",
+      "doi": "10.1038/s41583-021-00473-5",
+      "pmc": "PMC7612527",
+      "title": "Biological constraints on neural network models of cognitive function.",
+      "journal": "Nature reviews. Neuroscience",
+      "year": "2021",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34183826/",
+      "decision": "included",
+      "article_source_id": "EXT-PUB002-001",
+      "reason": "Источник самостоятельного определения или выбранного методического примера; первичный контекст проверен."
+    },
+    {
+      "query_id": "EN-1",
+      "rank": 5,
+      "pmid": "32961404",
+      "doi": "10.1016/j.nicl.2020.102420",
+      "pmc": "PMC7509458",
+      "title": "Obesity is associated with reduced orbitofrontal cortex volume: A coordinate-based meta-analysis.",
+      "journal": "NeuroImage. Clinical",
+      "year": "2020",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32961404/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-1",
+      "rank": 6,
+      "pmid": "35031845",
+      "doi": "10.1007/s00422-021-00915-4",
+      "pmc": null,
+      "title": "A biophysical counting mechanism for keeping time.",
+      "journal": "Biological cybernetics",
+      "year": "2022",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35031845/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-1",
+      "rank": 7,
+      "pmid": "31915255",
+      "doi": "10.1523/JNEUROSCI.1689-19.2019",
+      "pmc": "PMC7046325",
+      "title": "GABA-ergic Dynamics in Human Frontotemporal Networks Confirmed by Pharmaco-Magnetoencephalography.",
+      "journal": "The Journal of neuroscience : the official journal of the Society for Neuroscience",
+      "year": "2020",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31915255/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-1",
+      "rank": 8,
+      "pmid": "32848628",
+      "doi": "10.3389/fncel.2020.00240",
+      "pmc": "PMC7411185",
+      "title": "The Importance of Cerebellar Connectivity on Simulated Brain Dynamics.",
+      "journal": "Frontiers in cellular neuroscience",
+      "year": "2020",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32848628/",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-1",
+      "rank": 9,
+      "pmid": "34880741",
+      "doi": "10.3389/fncom.2021.746204",
+      "pmc": "PMC8645638",
+      "title": "Biologically Inspired Deep Learning Model for Efficient Foveal-Peripheral Vision.",
+      "journal": "Frontiers in computational neuroscience",
+      "year": "2021",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34880741/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-1",
+      "rank": 10,
+      "pmid": "32278058",
+      "doi": "10.1016/j.neuroscience.2020.03.048",
+      "pmc": "PMC7541517",
+      "title": "The Unexplored Territory of Neural Models: Potential Guides for Exploring the Function of Metabotropic Neuromodulation.",
+      "journal": "Neuroscience",
+      "year": "2021",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32278058/",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-1",
+      "rank": 11,
+      "pmid": "35465293",
+      "doi": "10.1109/ner49283.2021.9441222",
+      "pmc": "PMC9033155",
+      "title": "An Efficient Pipeline for Biophysical Modeling of Neurons.",
+      "journal": "International IEEE/EMBS Conference on Neural Engineering : [proceedings]. International IEEE EMBS Conference on Neural Engineering",
+      "year": "2021",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35465293/",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-1",
+      "rank": 12,
+      "pmid": "27881953",
+      "doi": "10.3389/fnana.2016.00110",
+      "pmc": "PMC5101213",
+      "title": "Connectomic Analysis of Brain Networks: Novel Techniques and Future Directions.",
+      "journal": "Frontiers in neuroanatomy",
+      "year": "2016",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27881953/",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-1",
+      "rank": 13,
+      "pmid": "26141378",
+      "doi": "10.1016/j.biosystems.2015.06.008",
+      "pmc": null,
+      "title": "Optimal decoding and information transmission in Hodgkin-Huxley neurons under metabolic cost constraints.",
+      "journal": "Bio Systems",
+      "year": "2015",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26141378/",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-1",
+      "rank": 14,
+      "pmid": "27242503",
+      "doi": "10.3389/fninf.2016.00016",
+      "pmc": "PMC4861729",
+      "title": "Building the Ferretome.",
+      "journal": "Frontiers in neuroinformatics",
+      "year": "2016",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27242503/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-1",
+      "rank": 15,
+      "pmid": "33511990",
+      "doi": "10.1093/cercor/bhaa407",
+      "pmc": null,
+      "title": "Connectome-Based Predictive Modeling of Individual Anxiety.",
+      "journal": "Cerebral cortex (New York, N.Y. : 1991)",
+      "year": "2021",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33511990/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-1",
+      "rank": 16,
+      "pmid": "29626169",
+      "doi": "10.1523/JNEUROSCI.2260-17.2018",
+      "pmc": "PMC5932645",
+      "title": "On the Flexibility of Basic Risk Attitudes in Monkeys.",
+      "journal": "The Journal of neuroscience : the official journal of the Society for Neuroscience",
+      "year": "2018",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29626169/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-1",
+      "rank": 17,
+      "pmid": "29212924",
+      "doi": "10.1152/jn.00808.2017",
+      "pmc": "PMC5966738",
+      "title": "Robust mixture modeling reveals category-free selectivity in reward region neuronal ensembles.",
+      "journal": "Journal of neurophysiology",
+      "year": "2018",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29212924/",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-1",
+      "rank": 18,
+      "pmid": "25348578",
+      "doi": "10.1007/s10162-014-0492-6",
+      "pmc": "PMC4310862",
+      "title": "Modeling binaural responses in the auditory brainstem to electric stimulation of the auditory nerve.",
+      "journal": "Journal of the Association for Research in Otolaryngology : JARO",
+      "year": "2015",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25348578/",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-1",
+      "rank": 19,
+      "pmid": "33279967",
+      "doi": "10.1093/cercor/bhaa339",
+      "pmc": null,
+      "title": "Brain Network Simulations Indicate Effects of Neuregulin-1 Genotype on Excitation-Inhibition Balance in Cortical Dynamics.",
+      "journal": "Cerebral cortex (New York, N.Y. : 1991)",
+      "year": "2021",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33279967/",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-1",
+      "rank": 20,
+      "pmid": "32959939",
+      "doi": "10.1002/hbm.25208",
+      "pmc": "PMC7721236",
+      "title": "Neural modelling of the semantic predictability gain under challenging listening conditions.",
+      "journal": "Human brain mapping",
+      "year": "2021",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32959939/",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-2",
+      "rank": 1,
+      "pmid": "32597465",
+      "doi": "10.1093/bib/bbaa122",
+      "pmc": null,
+      "title": "Structured sparsity regularization for analyzing high-dimensional omics data.",
+      "journal": "Briefings in bioinformatics",
+      "year": "2021",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32597465/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-2",
+      "rank": 2,
+      "pmid": "26077506",
+      "doi": "10.1208/s12248-015-9795-8",
+      "pmc": "PMC4540726",
+      "title": "A Priori Identifiability of Target-Mediated Drug Disposition Models and Approximations.",
+      "journal": "The AAPS journal",
+      "year": "2015",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26077506/",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-2",
+      "rank": 3,
+      "pmid": "33453411",
+      "doi": "10.1016/j.mcpro.2021.100046",
+      "pmc": "PMC7950205",
+      "title": "Ethical Principles, Constraints and Opportunities in Clinical Proteomics.",
+      "journal": "Molecular & cellular proteomics : MCP",
+      "year": "2021",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33453411/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-2",
+      "rank": 4,
+      "pmid": "35075254",
+      "doi": "10.1038/s42003-022-03018-3",
+      "pmc": "PMC8786869",
+      "title": "Designing and interpreting 4D tumour spheroid experiments.",
+      "journal": "Communications biology",
+      "year": "2022",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35075254/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-2",
+      "rank": 5,
+      "pmid": "34303793",
+      "doi": "10.1016/j.neuroimage.2021.118418",
+      "pmc": null,
+      "title": "Multivariate semi-blind deconvolution of fMRI time series.",
+      "journal": "NeuroImage",
+      "year": "2021",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34303793/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-2",
+      "rank": 6,
+      "pmid": "31454628",
+      "doi": "10.1016/j.mbs.2019.108242",
+      "pmc": "PMC6759390",
+      "title": "The parameter Houlihan: A solution to high-throughput identifiability indeterminacy for brutally ill-posed problems.",
+      "journal": "Mathematical biosciences",
+      "year": "2019",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31454628/",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-2",
+      "rank": 7,
+      "pmid": "34583566",
+      "doi": "10.1098/rsif.2021.0393",
+      "pmc": "PMC8479358",
+      "title": "Inferring kinetic parameters of oscillatory gene regulation from single cell time-series data.",
+      "journal": "Journal of the Royal Society, Interface",
+      "year": "2021",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34583566/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-2",
+      "rank": 8,
+      "pmid": "33206658",
+      "doi": "10.1371/journal.pcbi.1007575",
+      "pmc": "PMC7710119",
+      "title": "Systems biology informed deep learning for inferring parameters and hidden dynamics.",
+      "journal": "PLoS computational biology",
+      "year": "2020",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33206658/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-2",
+      "rank": 9,
+      "pmid": "36334785",
+      "doi": "10.1016/j.mbs.2022.108928",
+      "pmc": null,
+      "title": "On predicting heterogeneity in nanoparticle dosage.",
+      "journal": "Mathematical biosciences",
+      "year": "2022",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36334785/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-2",
+      "rank": 10,
+      "pmid": "32716891",
+      "doi": "10.1109/TNNLS.2020.3007259",
+      "pmc": null,
+      "title": "Enhancing Explainability of Neural Networks Through Architecture Constraints.",
+      "journal": "IEEE transactions on neural networks and learning systems",
+      "year": "2021",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32716891/",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-2",
+      "rank": 11,
+      "pmid": "29119503",
+      "doi": "10.1007/978-1-4939-7456-6_6",
+      "pmc": null,
+      "title": "Inverse Problems in Systems Biology: A Critical Review.",
+      "journal": "Methods in molecular biology (Clifton, N.J.)",
+      "year": "2018",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29119503/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-2",
+      "rank": 12,
+      "pmid": "33740210",
+      "doi": "10.1007/s11538-021-00870-y",
+      "pmc": "PMC7979634",
+      "title": "Bespoke Turing Systems.",
+      "journal": "Bulletin of mathematical biology",
+      "year": "2021",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33740210/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-2",
+      "rank": 13,
+      "pmid": "33405225",
+      "doi": "10.1007/978-1-0716-1032-9_11",
+      "pmc": null,
+      "title": "Optimal Experimental Design for Systems and Synthetic Biology Using AMIGO2.",
+      "journal": "Methods in molecular biology (Clifton, N.J.)",
+      "year": "2021",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33405225/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-2",
+      "rank": 14,
+      "pmid": "27181677",
+      "doi": "10.1016/j.cmpb.2016.04.024",
+      "pmc": null,
+      "title": "Three novel approaches to structural identifiability analysis in mixed-effects models.",
+      "journal": "Computer methods and programs in biomedicine",
+      "year": "2019",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27181677/",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-2",
+      "rank": 15,
+      "pmid": "37074575",
+      "doi": "10.1007/978-1-0716-3008-2_4",
+      "pmc": null,
+      "title": "Systems Biology: Identifiability Analysis and Parameter Identification via Systems-Biology-Informed Neural Networks.",
+      "journal": "Methods in molecular biology (Clifton, N.J.)",
+      "year": "2023",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37074575/",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-2",
+      "rank": 16,
+      "pmid": "32657404",
+      "doi": "10.1093/bioinformatics/btaa397",
+      "pmc": "PMC7355286",
+      "title": "Efficient exact inference for dynamical systems with noisy measurements using sequential approximate Bayesian computation.",
+      "journal": "Bioinformatics (Oxford, England)",
+      "year": "2020",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32657404/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-2",
+      "rank": 17,
+      "pmid": "34656052",
+      "doi": "10.1016/j.conb.2021.09.007",
+      "pmc": null,
+      "title": "Small brains for big science.",
+      "journal": "Current opinion in neurobiology",
+      "year": "2021",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34656052/",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-2",
+      "rank": 18,
+      "pmid": "31698571",
+      "doi": "10.3934/mbe.2019322",
+      "pmc": null,
+      "title": "Calculating all multiple parameter solutions of ODE models to avoid biological misinterpretations.",
+      "journal": "Mathematical biosciences and engineering : MBE",
+      "year": "2019",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31698571/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-2",
+      "rank": 19,
+      "pmid": "30945255",
+      "doi": "10.1007/978-1-4939-9102-0_16",
+      "pmc": null,
+      "title": "Recipes for Analysis of Molecular Networks Using the Data2Dynamics Modeling Environment.",
+      "journal": "Methods in molecular biology (Clifton, N.J.)",
+      "year": "2019",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30945255/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-2",
+      "rank": 20,
+      "pmid": "32704868",
+      "doi": "10.1093/tas/txz017",
+      "pmc": "PMC7200542",
+      "title": "Multivariate modeling for retained protein and lipid.",
+      "journal": "Translational animal science",
+      "year": "2019",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32704868/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-3",
+      "rank": 1,
+      "pmid": "35471542",
+      "doi": "10.1007/978-3-030-89439-9_10",
+      "pmc": null,
+      "title": "Computational Concepts for Reconstructing and Simulating Brain Tissue.",
+      "journal": "Advances in experimental medicine and biology",
+      "year": "2022",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35471542/",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-3",
+      "rank": 2,
+      "pmid": "33018950",
+      "doi": "10.1109/EMBC44109.2020.9175440",
+      "pmc": null,
+      "title": "Design and microfabrication strategies for thin-film, flexible optical neural implant.",
+      "journal": "Annual International Conference of the IEEE Engineering in Medicine and Biology Society. IEEE Engineering in Medicine and Biology Society. Annual International Conference",
+      "year": "2020",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33018950/",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-3",
+      "rank": 3,
+      "pmid": "29270194",
+      "doi": "10.1155/2017/1292801",
+      "pmc": "PMC5706074",
+      "title": "Toward Model Building for Visual Aesthetic Perception.",
+      "journal": "Computational intelligence and neuroscience",
+      "year": "2017",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29270194/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-3",
+      "rank": 4,
+      "pmid": "32982673",
+      "doi": "10.3389/fnins.2020.00878",
+      "pmc": "PMC7487417",
+      "title": "Optimizing BCPNN Learning Rule for Memory Access.",
+      "journal": "Frontiers in neuroscience",
+      "year": "2020",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32982673/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-3",
+      "rank": 5,
+      "pmid": "39747679",
+      "doi": "10.1038/s41591-024-03329-4",
+      "pmc": "PMC11750711",
+      "title": "International multicenter validation of AI-driven ultrasound detection of ovarian cancer.",
+      "journal": "Nature medicine",
+      "year": "2025",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39747679/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-3",
+      "rank": 6,
+      "pmid": "35909884",
+      "doi": "10.3389/fninf.2022.855765",
+      "pmc": "PMC9326306",
+      "title": "A Spiking Neural Network Builder for Systematic Data-to-Model Workflow.",
+      "journal": "Frontiers in neuroinformatics",
+      "year": "2022",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35909884/",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-3",
+      "rank": 7,
+      "pmid": "30743031",
+      "doi": "10.1016/j.wneu.2019.01.192",
+      "pmc": null,
+      "title": "A Virtual Repository of Neurosurgical Instrumentation for Neuroengineering Research and Collaboration.",
+      "journal": "World neurosurgery",
+      "year": "2019",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30743031/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-3",
+      "rank": 8,
+      "pmid": "29873013",
+      "doi": "10.1007/s10439-018-2054-2",
+      "pmc": null,
+      "title": "Learning-Based Cell Injection Control for Precise Drop-on-Demand Cell Printing.",
+      "journal": "Annals of biomedical engineering",
+      "year": "2018",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29873013/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-3",
+      "rank": 9,
+      "pmid": "26528982",
+      "doi": "10.3390/s151127625",
+      "pmc": "PMC4701248",
+      "title": "A Model-Based Approach to Support Validation of Medical Cyber-Physical Systems.",
+      "journal": "Sensors (Basel, Switzerland)",
+      "year": "2015",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26528982/",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-3",
+      "rank": 10,
+      "pmid": "32265196",
+      "doi": "10.1523/ENEURO.0512-19.2019",
+      "pmc": "PMC7358332",
+      "title": "Decoding Task-Specific Cognitive States with Slow, Directed Functional Networks in the Human Brain.",
+      "journal": "eNeuro",
+      "year": "2020",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32265196/",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-3",
+      "rank": 11,
+      "pmid": "29790009",
+      "doi": "10.1007/s00422-018-0759-9",
+      "pmc": null,
+      "title": "A new model of the spinal locomotor networks of a salamander and its properties.",
+      "journal": "Biological cybernetics",
+      "year": "2018",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29790009/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-3",
+      "rank": 12,
+      "pmid": "32101806",
+      "doi": "10.1088/1361-6560/ab7a6d",
+      "pmc": null,
+      "title": "Estimation of glandular dose in mammography based on artificial neural networks.",
+      "journal": "Physics in medicine and biology",
+      "year": "2020",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32101806/",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-3",
+      "rank": 13,
+      "pmid": "33200621",
+      "doi": "10.1142/S0129065720500719",
+      "pmc": null,
+      "title": "Dendrite P Systems Toolbox: Representation, Algorithms and Simulators.",
+      "journal": "International journal of neural systems",
+      "year": "2021",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33200621/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-3",
+      "rank": 14,
+      "pmid": "34930975",
+      "doi": "10.1038/s41598-021-03650-9",
+      "pmc": "PMC8688545",
+      "title": "Air quality assessment and pollution forecasting using artificial neural networks in Metropolitan Lima-Peru.",
+      "journal": "Scientific reports",
+      "year": "2021",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34930975/",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-3",
+      "rank": 15,
+      "pmid": "41341463",
+      "doi": "10.3389/fdgth.2025.1633539",
+      "pmc": "PMC12671388",
+      "title": "Digital twins in healthcare: a comprehensive review and future directions.",
+      "journal": "Frontiers in digital health",
+      "year": "2025",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41341463/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-3",
+      "rank": 16,
+      "pmid": "33852134",
+      "doi": "10.1007/s12021-021-09515-w",
+      "pmc": null,
+      "title": "A Measure of Concurrent Neural Firing Activity Based on Mutual Information.",
+      "journal": "Neuroinformatics",
+      "year": "2021",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33852134/",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-3",
+      "rank": 17,
+      "pmid": "34683223",
+      "doi": "10.3390/mi12101174",
+      "pmc": "PMC8539088",
+      "title": "Macro-Modeling for N-Type Feedback Field-Effect Transistor for Circuit Simulation.",
+      "journal": "Micromachines",
+      "year": "2021",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34683223/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-3",
+      "rank": 18,
+      "pmid": "28596730",
+      "doi": "10.3389/fninf.2017.00034",
+      "pmc": "PMC5442232",
+      "title": "Integration of Continuous-Time Dynamics in a Spiking Neural Network Simulator.",
+      "journal": "Frontiers in neuroinformatics",
+      "year": "2017",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28596730/",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-3",
+      "rank": 19,
+      "pmid": "30155224",
+      "doi": "10.1039/c7sc01247k",
+      "pmc": "PMC6100542",
+      "title": "Predicting electronic structure properties of transition metal complexes with neural networks.",
+      "journal": "Chemical science",
+      "year": "2017",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30155224/",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-3",
+      "rank": 20,
+      "pmid": "28671262",
+      "doi": "10.1002/bit.26373",
+      "pmc": null,
+      "title": "An efficient model construction strategy to simulate microalgal lutein photo-production dynamic process.",
+      "journal": "Biotechnology and bioengineering",
+      "year": "2017",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28671262/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-4",
+      "rank": 1,
+      "pmid": "30856172",
+      "doi": "10.1371/journal.pcbi.1006895",
+      "pmc": "PMC6472832",
+      "title": "Latent goal models for dynamic strategic interaction.",
+      "journal": "PLoS computational biology",
+      "year": "2019",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30856172/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-4",
+      "rank": 2,
+      "pmid": "34039411",
+      "doi": "10.1186/s13321-021-00519-x",
+      "pmc": "PMC8157407",
+      "title": "Benchmarks for interpretation of QSAR models.",
+      "journal": "Journal of cheminformatics",
+      "year": "2021",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34039411/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-4",
+      "rank": 3,
+      "pmid": "36086081",
+      "doi": "10.1109/EMBC48229.2022.9871971",
+      "pmc": null,
+      "title": "Physically constrained neural networks for inferring physiological system models.",
+      "journal": "Annual International Conference of the IEEE Engineering in Medicine and Biology Society. IEEE Engineering in Medicine and Biology Society. Annual International Conference",
+      "year": "2022",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36086081/",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-4",
+      "rank": 4,
+      "pmid": "35746120",
+      "doi": "10.3390/s22124338",
+      "pmc": "PMC9227471",
+      "title": "Few-Shot Emergency Siren Detection.",
+      "journal": "Sensors (Basel, Switzerland)",
+      "year": "2022",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35746120/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-4",
+      "rank": 5,
+      "pmid": "28386161",
+      "doi": "10.1007/s00521-015-2109-3",
+      "pmc": "PMC5362677",
+      "title": "Interval probabilistic neural network.",
+      "journal": "Neural computing & applications",
+      "year": "2017",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28386161/",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-4",
+      "rank": 6,
+      "pmid": "34725441",
+      "doi": "10.1038/s42003-021-02751-5",
+      "pmc": "PMC8560929",
+      "title": "Identifying spatio-temporal seizure propagation patterns in epilepsy using Bayesian inference.",
+      "journal": "Communications biology",
+      "year": "2021",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34725441/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-4",
+      "rank": 7,
+      "pmid": "32658726",
+      "doi": "10.1016/j.compbiomed.2020.103804",
+      "pmc": null,
+      "title": "Multiclass magnetic resonance imaging brain tumor classification using artificial intelligence paradigm.",
+      "journal": "Computers in biology and medicine",
+      "year": "2020",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32658726/",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-4",
+      "rank": 8,
+      "pmid": "34505116",
+      "doi": null,
+      "pmc": "PMC8425354",
+      "title": "Sensitivity and specificity of a Bayesian single trial analysis for time varying neural signals.",
+      "journal": "Neurons, behavior, data analysis, and theory",
+      "year": "2020",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34505116/",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-4",
+      "rank": 9,
+      "pmid": "33619859",
+      "doi": "10.1002/jmri.27573",
+      "pmc": "PMC9681557",
+      "title": "Reducing Contrast Agent Dose in Cardiovascular MR Angiography with Deep Learning.",
+      "journal": "Journal of magnetic resonance imaging : JMRI",
+      "year": "2021",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33619859/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-4",
+      "rank": 10,
+      "pmid": "33207826",
+      "doi": "10.3390/s20226548",
+      "pmc": "PMC7697573",
+      "title": "A Novel GAN-Based Synthesis Method for In-Air Handwritten Words.",
+      "journal": "Sensors (Basel, Switzerland)",
+      "year": "2020",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33207826/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-4",
+      "rank": 11,
+      "pmid": "34381793",
+      "doi": "10.3389/fmed.2021.661309",
+      "pmc": "PMC8350122",
+      "title": "Deep Learning for Identification of Acute Illness and Facial Cues of Illness.",
+      "journal": "Frontiers in medicine",
+      "year": "2021",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34381793/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-4",
+      "rank": 12,
+      "pmid": "36034594",
+      "doi": "10.3389/frai.2022.927676",
+      "pmc": "PMC9402934",
+      "title": "Direct domain adaptation through reciprocal linear transformations.",
+      "journal": "Frontiers in artificial intelligence",
+      "year": "2022",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36034594/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-4",
+      "rank": 13,
+      "pmid": "25069111",
+      "doi": "10.1109/TMI.2014.2341732",
+      "pmc": null,
+      "title": "Relating structural and functional connectivity in MRI: a simple model for a complex brain.",
+      "journal": "IEEE transactions on medical imaging",
+      "year": "2015",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25069111/",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-4",
+      "rank": 14,
+      "pmid": "34413921",
+      "doi": "10.1214/20-AOAS1383",
+      "pmc": "PMC8373042",
+      "title": "ANALYZING SECOND ORDER STOCHASTICITY OF NEURAL SPIKING UNDER STIMULI-BUNDLE EXPOSURE.",
+      "journal": "The annals of applied statistics",
+      "year": "2021",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34413921/",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-4",
+      "rank": 15,
+      "pmid": "29034482",
+      "doi": "10.1002/mp.12625",
+      "pmc": "PMC5734677",
+      "title": "Deep reinforcement learning for automated radiation adaptation in lung cancer.",
+      "journal": "Medical physics",
+      "year": "2017",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29034482/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-4",
+      "rank": 16,
+      "pmid": "30594770",
+      "doi": "10.1016/j.media.2018.12.002",
+      "pmc": null,
+      "title": "Towards cross-modal organ translation and segmentation: A cycle- and shape-consistent generative adversarial network.",
+      "journal": "Medical image analysis",
+      "year": "2019",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30594770/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-4",
+      "rank": 17,
+      "pmid": "34470272",
+      "doi": "10.1121/10.0005936",
+      "pmc": null,
+      "title": "Seabed classification from merchant ship-radiated noise using a physics-based ensemble of deep learning algorithms.",
+      "journal": "The Journal of the Acoustical Society of America",
+      "year": "2021",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34470272/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-4",
+      "rank": 18,
+      "pmid": "31946284",
+      "doi": "10.1109/EMBC.2019.8856316",
+      "pmc": null,
+      "title": "Sparse, Predictive, and Interpretable Functional Connectomics with UoILasso.",
+      "journal": "Annual International Conference of the IEEE Engineering in Medicine and Biology Society. IEEE Engineering in Medicine and Biology Society. Annual International Conference",
+      "year": "2019",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31946284/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-4",
+      "rank": 19,
+      "pmid": "32471948",
+      "doi": "10.1073/pnas.1912789117",
+      "pmc": "PMC7720103",
+      "title": "The frontier of simulation-based inference.",
+      "journal": "Proceedings of the National Academy of Sciences of the United States of America",
+      "year": "2020",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32471948/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-4",
+      "rank": 20,
+      "pmid": "28827790",
+      "doi": "10.1371/journal.pcbi.1005645",
+      "pmc": "PMC5578681",
+      "title": "Neuron's eye view: Inferring features of complex stimuli from neural responses.",
+      "journal": "PLoS computational biology",
+      "year": "2017",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28827790/",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-5",
+      "rank": 1,
+      "doi": "10.1155/2019/8497093",
+      "title": "Observability and Structural Identifiability of Nonlinear Biological Systems",
+      "journal": "Complexity",
+      "date": {
+        "date-parts": [
+          [
+            2019,
+            1
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.1155/2019/8497093",
+      "decision": "included",
+      "article_source_id": "EXT-PUB002-002",
+      "reason": "Источник самостоятельного определения или выбранного методического примера; первичный контекст проверен."
+    },
+    {
+      "query_id": "EN-5",
+      "rank": 2,
+      "doi": "10.17979/ja-cea.2026.47.13688",
+      "title": "Symmetry-Based Structural Identifiability and Observability Analysis of PDE and ODE Models Symmetry-Based Structural Identifiability and Observability Analysis of PDE and ODE Models in STRIKE-GOLDD",
+      "journal": "Jornadas de Automática",
+      "date": {
+        "date-parts": [
+          [
+            2026,
+            9,
+            1
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.17979/ja-cea.2026.47.13688",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-5",
+      "rank": 3,
+      "doi": "10.1007/978-3-319-18072-4_20",
+      "title": "Identifiability and Observability of Nonlinear Time-Delay Systems with Unknown Inputs",
+      "journal": "Advances in Delays and Dynamics Recent Results on Nonlinear Delay Control Systems",
+      "date": {
+        "date-parts": [
+          [
+            2015,
+            7,
+            15
+          ]
+        ]
+      },
+      "publication_type": "book-chapter",
+      "url": "https://doi.org/10.1007/978-3-319-18072-4_20",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-5",
+      "rank": 4,
+      "doi": "10.1016/j.ifacol.2020.12.1312",
+      "title": "Data-based Identifiability and Observability Assessment for Nonlinear Control Systems using the Profile Likelihood Method",
+      "journal": "IFAC-PapersOnLine",
+      "date": {
+        "date-parts": [
+          [
+            2020
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.1016/j.ifacol.2020.12.1312",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-5",
+      "rank": 5,
+      "doi": "10.1109/codit62066.2024.10708320",
+      "title": "Global Observability and Identifiability of Nonlinear Systems with Inputs Using Interval Arithmetic",
+      "journal": "2024 10th International Conference on Control, Decision and Information Technologies (CoDIT)",
+      "date": {
+        "date-parts": [
+          [
+            2024,
+            7,
+            1
+          ]
+        ]
+      },
+      "publication_type": "proceedings-article",
+      "url": "https://doi.org/10.1109/codit62066.2024.10708320",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-5",
+      "rank": 6,
+      "doi": "10.37256/cm.3220221258",
+      "title": "Structural Identifiability of Feedback Systems with Nonlinear Adulterating",
+      "journal": "Contemporary Mathematics",
+      "date": {
+        "date-parts": [
+          [
+            2022,
+            6,
+            22
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.37256/cm.3220221258",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-5",
+      "rank": 7,
+      "doi": "10.1201/9781315151908-18",
+      "title": "Appendix A: System Theoretic Concepts – Controllability, Observability, Identifiability and Estimability",
+      "journal": "Nonlinear Filtering",
+      "date": {
+        "date-parts": [
+          [
+            2017,
+            5,
+            29
+          ]
+        ]
+      },
+      "publication_type": "other",
+      "url": "https://doi.org/10.1201/9781315151908-18",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-5",
+      "rank": 8,
+      "doi": "10.4018/979-8-3373-0822-7.ch007",
+      "title": "Structural Identifiability of Nonlinear Systems",
+      "journal": "New Approaches to Identifying Structures Using Geometric Structure Analysis",
+      "date": {
+        "date-parts": [
+          [
+            2025,
+            9,
+            10
+          ]
+        ]
+      },
+      "publication_type": "book-chapter",
+      "url": "https://doi.org/10.4018/979-8-3373-0822-7.ch007",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-5",
+      "rank": 9,
+      "doi": "10.1109/summa50634.2020.9280635",
+      "title": "Structural Identifiability of Nonlinear Systems with Hysteresis",
+      "journal": "2020 2nd International Conference on Control Systems, Mathematical Modeling, Automation and Energy Efficiency (SUMMA)",
+      "date": {
+        "date-parts": [
+          [
+            2020,
+            11,
+            11
+          ]
+        ]
+      },
+      "publication_type": "proceedings-article",
+      "url": "https://doi.org/10.1109/summa50634.2020.9280635",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-5",
+      "rank": 10,
+      "doi": "10.3390/sym12030469",
+      "title": "Finding and Breaking Lie Symmetries: Implications for Structural Identifiability and Observability in Biological Modelling",
+      "journal": "Symmetry",
+      "date": {
+        "date-parts": [
+          [
+            2020,
+            3,
+            16
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.3390/sym12030469",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-5",
+      "rank": 11,
+      "doi": "10.1117/12.2514040",
+      "title": "Enhanced identifiability of nonlinear ultrasonic superharmonics for crack detection using an aluminum-lead composite bandgap meta-surface",
+      "journal": "Health Monitoring of Structural and Biological Systems XIII",
+      "date": {
+        "date-parts": [
+          [
+            2019,
+            4,
+            1
+          ]
+        ]
+      },
+      "publication_type": "proceedings-article",
+      "url": "https://doi.org/10.1117/12.2514040",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-5",
+      "rank": 12,
+      "doi": "10.3390/bioengineering12101048",
+      "title": "Analysing the Structural Identifiability and Observability of Mechanistic Models of Tumour Growth",
+      "journal": "Bioengineering",
+      "date": {
+        "date-parts": [
+          [
+            2025,
+            9,
+            29
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.3390/bioengineering12101048",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-5",
+      "rank": 13,
+      "doi": "10.17979/ja-cea.2025.46.12194",
+      "title": "Structural identifiability and observability of tumour growth models with and without chemotherapy",
+      "journal": "Jornadas de Automática",
+      "date": {
+        "date-parts": [
+          [
+            2025,
+            9,
+            1
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.17979/ja-cea.2025.46.12194",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-5",
+      "rank": 14,
+      "doi": "10.1016/j.ifacol.2016.12.121",
+      "title": "Structural Identifiability Analysis via Extended Observability and Decomposition",
+      "journal": "IFAC-PapersOnLine",
+      "date": {
+        "date-parts": [
+          [
+            2016
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.1016/j.ifacol.2016.12.121",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-5",
+      "rank": 15,
+      "doi": "10.1109/summa53307.2021.9632033",
+      "title": "Structural Identifiability of System with Nonlinear Adulteration",
+      "journal": "2021 3rd International Conference on Control Systems, Mathematical Modeling, Automation and Energy Efficiency (SUMMA)",
+      "date": {
+        "date-parts": [
+          [
+            2021,
+            11,
+            10
+          ]
+        ]
+      },
+      "publication_type": "proceedings-article",
+      "url": "https://doi.org/10.1109/summa53307.2021.9632033",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-5",
+      "rank": 16,
+      "doi": "10.31390/lsucontrol.26.40",
+      "title": "Identifiability, Observability, Parameter Reduction, and State Estimation for Nonsmooth Dynamical Systems",
+      "journal": "2026 LSU Symposium on Control, Learning, and Intelligent Systems Abstracts",
+      "date": {
+        "date-parts": [
+          [
+            2026
+          ]
+        ]
+      },
+      "publication_type": "proceedings-article",
+      "url": "https://doi.org/10.31390/lsucontrol.26.40",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-5",
+      "rank": 17,
+      "doi": "10.14736/kyb-2021-6-0939",
+      "title": "Structural identifiability analysis of nonlinear time delayed systems with generalized frequency response functions",
+      "journal": "Kybernetika",
+      "date": {
+        "date-parts": [
+          [
+            2022,
+            1,
+            30
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.14736/kyb-2021-6-0939",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-5",
+      "rank": 18,
+      "doi": "10.20944/preprints202502.1380.v1",
+      "title": "On Structural Identifiability of Decentralised Systems",
+      "journal": "",
+      "date": {
+        "date-parts": [
+          [
+            2025,
+            2,
+            18
+          ]
+        ]
+      },
+      "publication_type": "posted-content",
+      "url": "https://doi.org/10.20944/preprints202502.1380.v1",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-5",
+      "rank": 19,
+      "doi": "10.1007/978-3-319-45723-9_3",
+      "title": "Structural vs Practical Identifiability of Nonlinear Differential Equation Models in Systems Biology",
+      "journal": "Dynamics of Mathematical Models in Biology",
+      "date": {
+        "date-parts": [
+          [
+            2016
+          ]
+        ]
+      },
+      "publication_type": "book-chapter",
+      "url": "https://doi.org/10.1007/978-3-319-45723-9_3",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-5",
+      "rank": 20,
+      "doi": "10.1109/rusautocon49822.2020.9208171",
+      "title": "Classification of the Qualitative Concepts of Observability, Controllability and Identifiability of Dynamical Systems",
+      "journal": "2020 International Russian Automation Conference (RusAutoCon)",
+      "date": {
+        "date-parts": [
+          [
+            2020,
+            9
+          ]
+        ]
+      },
+      "publication_type": "proceedings-article",
+      "url": "https://doi.org/10.1109/rusautocon49822.2020.9208171",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-6",
+      "rank": 1,
+      "pmid": "36368778",
+      "doi": "10.1021/acsami.2c15497",
+      "pmc": null,
+      "title": "Highly Reproducible Heterosynaptic Plasticity Enabled by MoS2/ZrO2-x Heterostructure Memtransistor.",
+      "journal": "ACS applied materials & interfaces",
+      "year": "2022",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36368778/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-6",
+      "rank": 2,
+      "pmid": "41919650",
+      "doi": "10.1021/acsami.5c26369",
+      "pmc": null,
+      "title": "Highly Reliable and Uniform Synaptic Transistors Enabled by a Polymer-Engineered Semiconducting Nanotube Network.",
+      "journal": "ACS applied materials & interfaces",
+      "year": "2026",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41919650/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-6",
+      "rank": 3,
+      "pmid": "35712458",
+      "doi": "10.3389/fnins.2022.883360",
+      "pmc": "PMC9197133",
+      "title": "Mapping and Validating a Point Neuron Model on Intel's Neuromorphic Hardware Loihi.",
+      "journal": "Frontiers in neuroscience",
+      "year": "2022",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35712458/",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-6",
+      "rank": 4,
+      "pmid": "36726406",
+      "doi": "10.3389/fninf.2022.883360",
+      "pmc": "PMC9886005",
+      "title": "Mapping and Validating a Point Neuron Model on Intel's Neuromorphic Hardware Loihi.",
+      "journal": "Frontiers in neuroinformatics",
+      "year": "2022",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36726406/",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-6",
+      "rank": 5,
+      "pmid": "35121735",
+      "doi": "10.1038/s41467-022-28303-x",
+      "pmc": "PMC8816951",
+      "title": "High-precision and linear weight updates by subnanosecond pulses in ferroelectric tunnel junction for neuro-inspired computing.",
+      "journal": "Nature communications",
+      "year": "2022",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35121735/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-6",
+      "rank": 6,
+      "pmid": "30618696",
+      "doi": "10.3389/fninf.2018.00090",
+      "pmc": "PMC6305903",
+      "title": "Reproducible Neural Network Simulations: Statistical Methods for Model Validation on the Level of Network Activity Data.",
+      "journal": "Frontiers in neuroinformatics",
+      "year": "2018",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30618696/",
+      "decision": "included",
+      "article_source_id": "EXT-PUB002-004",
+      "reason": "Источник самостоятельного определения или выбранного методического примера; первичный контекст проверен."
+    },
+    {
+      "query_id": "EN-6",
+      "rank": 7,
+      "pmid": "36903230",
+      "doi": "10.3390/ma16052115",
+      "pmc": "PMC10004364",
+      "title": "Ultrasonic Welding of PEEK Plates with CF Fabric Reinforcement-The Optimization of the Process by Neural Network Simulation.",
+      "journal": "Materials (Basel, Switzerland)",
+      "year": "2023",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36903230/",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-6",
+      "rank": 8,
+      "pmid": "36187877",
+      "doi": "10.3389/fninf.2022.1023486",
+      "pmc": "PMC9518215",
+      "title": "Corrigendum: Mapping and validating a point neuron model on intel's neuromorphic hardware Loihi.",
+      "journal": "Frontiers in neuroinformatics",
+      "year": "2022",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36187877/",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-6",
+      "rank": 9,
+      "pmid": "37694108",
+      "doi": "10.3389/fnins.2023.1198282",
+      "pmc": "PMC10484528",
+      "title": "Sensitivity analysis of point neuron model simulations implemented on neuromorphic hardware.",
+      "journal": "Frontiers in neuroscience",
+      "year": "2023",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37694108/",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-6",
+      "rank": 10,
+      "pmid": "36733423",
+      "doi": "10.3389/fninf.2022.1107838",
+      "pmc": "PMC9887169",
+      "title": "Erratum: Mapping and validating a point neuron model on Intel's neuromorphic hardware Loihi.",
+      "journal": "Frontiers in neuroinformatics",
+      "year": "2022",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36733423/",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-6",
+      "rank": 11,
+      "pmid": "42801561",
+      "doi": "10.1002/advs.78038",
+      "pmc": "PMC13616391",
+      "title": "Highly Stable and Non-Volatile Optoelectronic Synapses for Sensing, Memory, and Computing Enabled by a Deep-Potential Floating Gate.",
+      "journal": "Advanced science (Weinheim, Baden-Wurttemberg, Germany)",
+      "year": "2026",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42801561/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-7",
+      "rank": 1,
+      "pmid": "40903597",
+      "doi": "10.1038/s41586-025-09226-1",
+      "pmc": "PMC12408363",
+      "title": "Brain-wide representations of prior information in mouse decision-making.",
+      "journal": "Nature",
+      "year": "2025",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40903597/",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-7",
+      "rank": 2,
+      "pmid": "29988020",
+      "doi": "10.7554/eLife.32055",
+      "pmc": "PMC6039184",
+      "title": "Adaptive coding for dynamic sensory inference.",
+      "journal": "eLife",
+      "year": "2018",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29988020/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-7",
+      "rank": 3,
+      "pmid": "36279461",
+      "doi": "10.1073/pnas.2207632119",
+      "pmc": "PMC9636970",
+      "title": "Energy-efficient network activity from disparate circuit parameters.",
+      "journal": "Proceedings of the National Academy of Sciences of the United States of America",
+      "year": "2022",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36279461/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-7",
+      "rank": 4,
+      "pmid": "33239652",
+      "doi": "10.1038/s42003-020-01438-7",
+      "pmc": "PMC7688644",
+      "title": "Differences in visually induced MEG oscillations reflect differences in deep cortical layer activity.",
+      "journal": "Communications biology",
+      "year": "2020",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33239652/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-7",
+      "rank": 5,
+      "pmid": "33921298",
+      "doi": "10.3390/e23040454",
+      "pmc": "PMC8069154",
+      "title": "Neural Dynamics under Active Inference: Plausibility and Efficiency of Information Processing.",
+      "journal": "Entropy (Basel, Switzerland)",
+      "year": "2021",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33921298/",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-7",
+      "rank": 6,
+      "pmid": "36621045",
+      "doi": "10.1016/j.addbeh.2022.107595",
+      "pmc": "PMC10214928",
+      "title": "Computational models of behavioral addictions: State of the art and future directions.",
+      "journal": "Addictive behaviors",
+      "year": "2023",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36621045/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-7",
+      "rank": 7,
+      "pmid": "36108798",
+      "doi": "10.1016/j.neuroimage.2022.119624",
+      "pmc": "PMC7614773",
+      "title": "Psychedelics and schizophrenia: Distinct alterations to Bayesian inference.",
+      "journal": "NeuroImage",
+      "year": "2022",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36108798/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-7",
+      "rank": 8,
+      "pmid": "36279158",
+      "doi": "10.7554/eLife.76145",
+      "pmc": "PMC9642994",
+      "title": "Neural dynamics of causal inference in the macaque frontoparietal circuit.",
+      "journal": "eLife",
+      "year": "2022",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36279158/",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-7",
+      "rank": 9,
+      "pmid": "40756012",
+      "doi": "10.1038/s42005-024-01748-w",
+      "pmc": "PMC12310519",
+      "title": "Simulation-based inference of developmental EEG maturation with the spectral graph model.",
+      "journal": "Communications physics",
+      "year": "2024",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40756012/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-7",
+      "rank": 10,
+      "pmid": "39040639",
+      "doi": null,
+      "pmc": "PMC11261974",
+      "title": "Simulation-based Inference of Developmental EEG Maturation with the Spectral Graph Model.",
+      "journal": "ArXiv",
+      "year": "2024",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39040639/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-7",
+      "rank": 11,
+      "pmid": "25775565",
+      "doi": "10.1073/pnas.1422036112",
+      "pmc": "PMC4378445",
+      "title": "Latent structure in random sequences drives neural learning toward a rational bias.",
+      "journal": "Proceedings of the National Academy of Sciences of the United States of America",
+      "year": "2015",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25775565/",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-7",
+      "rank": 12,
+      "pmid": "32940606",
+      "doi": "10.7554/eLife.56261",
+      "pmc": "PMC7581433",
+      "title": "Training deep neural density estimators to identify mechanistic models of neural dynamics.",
+      "journal": "eLife",
+      "year": "2020",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32940606/",
+      "decision": "included",
+      "article_source_id": "EXT-PUB002-005",
+      "reason": "Источник самостоятельного определения или выбранного методического примера; первичный контекст проверен."
+    },
+    {
+      "query_id": "EN-7",
+      "rank": 13,
+      "pmid": "32818873",
+      "doi": "10.1016/j.neunet.2020.07.037",
+      "pmc": null,
+      "title": "Synthesis of recurrent neural dynamics for monotone inclusion with application to Bayesian inference.",
+      "journal": "Neural networks : the official journal of the International Neural Network Society",
+      "year": "2020",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32818873/",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-7",
+      "rank": 14,
+      "pmid": "38669271",
+      "doi": "10.1371/journal.pcbi.1011975",
+      "pmc": "PMC11078355",
+      "title": "Bayesian inference of structured latent spaces from neural population activity with the orthogonal stochastic linear mixing model.",
+      "journal": "PLoS computational biology",
+      "year": "2024",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38669271/",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-7",
+      "rank": 15,
+      "pmid": "28827790",
+      "doi": "10.1371/journal.pcbi.1005645",
+      "pmc": "PMC5578681",
+      "title": "Neuron's eye view: Inferring features of complex stimuli from neural responses.",
+      "journal": "PLoS computational biology",
+      "year": "2017",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28827790/",
+      "decision": "excluded_duplicate",
+      "reason": "Точный повтор DOI или PMID.",
+      "duplicate_of": "EN-4:20"
+    },
+    {
+      "query_id": "EN-7",
+      "rank": 16,
+      "pmid": "41587565",
+      "doi": "10.1016/j.neures.2026.105025",
+      "pmc": null,
+      "title": "Triple equivalence in modelling insight and creativity: Classical and quantum perspectives.",
+      "journal": "Neuroscience research",
+      "year": "2026",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41587565/",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "EN-7",
+      "rank": 17,
+      "pmid": "38408099",
+      "doi": "10.1371/journal.pcbi.1011108",
+      "pmc": "PMC10919875",
+      "title": "Methods and considerations for estimating parameters in biophysically detailed neural models with simulation based inference.",
+      "journal": "PLoS computational biology",
+      "year": "2024",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38408099/",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-7",
+      "rank": 18,
+      "pmid": "42096130",
+      "doi": "10.1007/s12021-026-09788-z",
+      "pmc": null,
+      "title": "Fractional-Order Spiking Bayesian Neural Model for Cognitive Computations.",
+      "journal": "Neuroinformatics",
+      "year": "2026",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42096130/",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-7",
+      "rank": 19,
+      "pmid": "37131818",
+      "doi": "10.1101/2023.04.17.537118",
+      "pmc": "PMC10153146",
+      "title": "Methods and considerations for estimating parameters in biophysically detailed neural models with simulation based inference.",
+      "journal": "bioRxiv : the preprint server for biology",
+      "year": "2023",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37131818/",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "EN-7",
+      "rank": 20,
+      "pmid": "34920087",
+      "doi": "10.1016/j.neuroimage.2021.118821",
+      "pmc": "PMC8823284",
+      "title": "Similar network compositions, but distinct neural dynamics underlying belief updating in environments with and without explicit outcomes.",
+      "journal": "NeuroImage",
+      "year": "2022",
+      "language": [
+        "eng"
+      ],
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34920087/",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "RU-1",
+      "rank": 1,
+      "doi": "10.37539/2949-1991.2025.26.3.016",
+      "title": "МОДЕЛИРОВАНИЕ УСТОЙЧИВОСТИ ТЕРРИТОРИЙ С ИСПОЛЬЗОВАНИЕМ ГРАФОВЫХ НЕЙРОННЫХ СЕТЕЙ: ПРЕИМУЩЕСТВА И ОГРАНИЧЕНИЯ",
+      "journal": "Флагман науки",
+      "date": {
+        "date-parts": [
+          [
+            2025,
+            4,
+            13
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.37539/2949-1991.2025.26.3.016",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "RU-1",
+      "rank": 2,
+      "doi": "10.36581/citp.2020.12.26.030",
+      "title": "Использование искусственных нейронных сетей для распознавания образов уличных сцен",
+      "journal": "Информационные технологии и математическое моделирование систем 2020",
+      "date": {
+        "date-parts": [
+          [
+            2021,
+            1,
+            21
+          ]
+        ]
+      },
+      "publication_type": "proceedings-article",
+      "url": "https://doi.org/10.36581/citp.2020.12.26.030",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "RU-1",
+      "rank": 3,
+      "doi": "10.36581/citp.2020.42.61.031",
+      "title": "Использование генеративно-состязательных нейронных сетей для решения проблемы дефицита медицинских данных",
+      "journal": "Информационные технологии и математическое моделирование систем 2020",
+      "date": {
+        "date-parts": [
+          [
+            2021,
+            1,
+            21
+          ]
+        ]
+      },
+      "publication_type": "proceedings-article",
+      "url": "https://doi.org/10.36581/citp.2020.42.61.031",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "RU-1",
+      "rank": 4,
+      "doi": "10.18411/lj-31-08-2017-36",
+      "title": "Моделирование одного класса динамических систем",
+      "journal": "ТЕНДЕНЦИИ РАЗВИТИЯ НАУКИ И ОБРАЗОВАНИЯ",
+      "date": {
+        "date-parts": [
+          [
+            2017
+          ]
+        ]
+      },
+      "publication_type": "proceedings-article",
+      "url": "https://doi.org/10.18411/lj-31-08-2017-36",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-1",
+      "rank": 5,
+      "doi": "10.18411/spc-16-01-2018-01",
+      "title": "Моделирование нелинейных колебаний измерительных систем",
+      "journal": "Научные тенденции: Вопросы точных и технических наук",
+      "date": {
+        "date-parts": [
+          [
+            2018
+          ]
+        ]
+      },
+      "publication_type": "proceedings-article",
+      "url": "https://doi.org/10.18411/spc-16-01-2018-01",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-1",
+      "rank": 6,
+      "doi": "10.67668/mj/2026iss4/985",
+      "title": "МЕТОДОЛОГИЯ ОЦЕНКИ ПЛАТФОРМЕННОЙ РЫНОЧНОЙ ВЛАСТИНА ЦИФРОВЫХ РЫНКАХ УЗБЕКИСТАНА - ДАННЫЕ, АЛГОРИТМЫИ РИСКИ ОГРАНИЧЕНИЯ КОНКУРЕНЦИИ",
+      "journal": "Marketing Jurnali",
+      "date": {
+        "date-parts": [
+          [
+            2026,
+            5,
+            11
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.67668/mj/2026iss4/985",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-1",
+      "rank": 7,
+      "doi": "10.17586/1023-5086-2021-88-12-17-27",
+      "title": "Сегментация зрительных изображений: экспериментальные данные и моделирование",
+      "journal": "Оптический журнал",
+      "date": {
+        "date-parts": [
+          [
+            2021
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.17586/1023-5086-2021-88-12-17-27",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-1",
+      "rank": 8,
+      "doi": "10.25136/2409-7144.2018.3.25688",
+      "title": "Петухов А.Ю. Моделирование пороговых эффектов в информационных процессах общественных систем.",
+      "journal": "Социодинамика",
+      "date": {
+        "date-parts": [
+          [
+            2018,
+            3
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.25136/2409-7144.2018.3.25688",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-1",
+      "rank": 9,
+      "doi": "10.36627/2304-6473-2022-3-3-208-223",
+      "title": "Организационный дизайн в сфере банковской безопасности с применением ключевых подходов теории ограничения систем (часть 2)",
+      "journal": "Менеджмент сегодня Management Today",
+      "date": {
+        "date-parts": [
+          [
+            2022
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.36627/2304-6473-2022-3-3-208-223",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-1",
+      "rank": 10,
+      "doi": "10.36627/2304-6473-2022-2-2-104-117",
+      "title": "Организационный дизайн в сфере банковской безопасности с применением ключевых подходов теории ограничения систем (часть 1)",
+      "journal": "Менеджмент сегодня Management Today",
+      "date": {
+        "date-parts": [
+          [
+            2022
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.36627/2304-6473-2022-2-2-104-117",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-1",
+      "rank": 11,
+      "doi": "10.24143/2073-5537-2017-4-53-59",
+      "title": "MODELLING TRENDS OF SOCIO-ECONOMIC SYSTEMS DEVELOPMENT BASED ON NEURAL NETWORKS",
+      "journal": "Vestnik of Astrakhan State Technical University. Series: Economics",
+      "date": {
+        "date-parts": [
+          [
+            2017,
+            12,
+            25
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.24143/2073-5537-2017-4-53-59",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "RU-1",
+      "rank": 12,
+      "doi": "10.18411/trnio-01-2024-271",
+      "title": "Применения нейроморфных систем (спайковых нейронных систем) при инкриминировании уголовно – правовых норм",
+      "journal": "ТЕНДЕНЦИИ РАЗВИТИЯ НАУКИ И ОБРАЗОВАНИЯ",
+      "date": {
+        "date-parts": [
+          [
+            2024
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.18411/trnio-01-2024-271",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "RU-1",
+      "rank": 13,
+      "doi": "10.17759/mda.2026160308",
+      "title": "Embedding Physics-Informed Neural Networks into Numerical Schemes for Modeling Dynamical Systems",
+      "journal": "Modelling and Data Analysis Моделирование и анализ данных",
+      "date": {
+        "date-parts": [
+          [
+            2026,
+            9,
+            30
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.17759/mda.2026160308",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "RU-1",
+      "rank": 14,
+      "doi": "10.14451/1.255.453",
+      "title": "МОДЕЛИРОВАНИЕ ЦЕН АРЕНДЫ ЖИЛЬЯ МОСКОВСКОГО РЫНКА НА ОСНОВЕ ИСКУССТВЕННЫХ НЕЙРОННЫХ СЕТЕЙ",
+      "journal": "Экономические науки",
+      "date": {
+        "date-parts": [
+          [
+            2026,
+            2,
+            28
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.14451/1.255.453",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "RU-1",
+      "rank": 15,
+      "doi": "10.26102/2310-6018/2020.29.2.037",
+      "title": "А classification approach based on a combination of deep neural networks for predicting failures of complex multi-object systems",
+      "journal": "МОДЕЛИРОВАНИЕ, ОПТИМИЗАЦИЯ И ИНФОРМАЦИОННЫЕ ТЕХНОЛОГИИ",
+      "date": {
+        "date-parts": [
+          [
+            2020,
+            5,
+            16
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.26102/2310-6018/2020.29.2.037",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "RU-1",
+      "rank": 16,
+      "doi": "10.25791/pribor.10.2024.1532",
+      "title": "РАЗРАБОТКА МЕТОДОЛОГИИ ИДЕНТИФИКАЦИИ И МОДЕЛИРОВАНИЕ ДИНАМИЧЕСКИХ СИСТЕМ НА ОСНОВЕ НЕЙРОННЫХ СЕТЕЙ В СРЕДЕ MATLAB",
+      "journal": "Приборы и системы. Управление, контроль, диагностика",
+      "date": {
+        "date-parts": [
+          [
+            2024,
+            10,
+            28
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.25791/pribor.10.2024.1532",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "RU-1",
+      "rank": 17,
+      "doi": "10.36581/citp.2020.80.33.002",
+      "title": "Совместимость операционных систем",
+      "journal": "Информационные технологии и математическое моделирование систем 2020",
+      "date": {
+        "date-parts": [
+          [
+            2021,
+            1,
+            21
+          ]
+        ]
+      },
+      "publication_type": "proceedings-article",
+      "url": "https://doi.org/10.36581/citp.2020.80.33.002",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-1",
+      "rank": 18,
+      "doi": "10.53297/18293336-2022.1-37",
+      "title": "ОПРЕДЕЛЕНИЕ И МОДЕЛИРОВАНИЕ ОБЩЕГО КОЛИЧЕСТВА\nПАРАМЕТРОВ ИСКУССТВЕННЫХ НЕЙРОННЫХ СЕТЕЙ",
+      "journal": "INFORMATION TECHNOLOGIES, ELECTRONICS, RADIO ENGINEERING",
+      "date": {
+        "date-parts": [
+          [
+            2022
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.53297/18293336-2022.1-37",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "RU-1",
+      "rank": 19,
+      "doi": "10.14357/20718632250305",
+      "title": "ПРИМЕНЕНИЕ НЕЙРОННЫХ ОПЕРАТОРОВ В ЗАДАЧАХ ГАЗОДИНАМИЧЕСКОГО МОДЕЛИРОВАНИЯ ТРУБОПРОВОДНЫХ СИСТЕМ ЭНЕРГЕТИКИ",
+      "journal": "ИНФОРМАЦИОННЫЕ ТЕХНОЛОГИИ И ВЫЧИСЛИТЕЛЬНЫЕ СИСТЕМЫ",
+      "date": {
+        "date-parts": [
+          [
+            2025,
+            9,
+            23
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.14357/20718632250305",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "RU-1",
+      "rank": 20,
+      "doi": "10.25743/bntm.2025.32.82.006",
+      "title": "МОДЕЛИРОВАНИЕ ПРИРОДНО-ТЕХНИЧЕСКИХ СИСТЕМ: МОДЕЛИ, АЛГОРИТМЫ, СЕРВИСЫ И ПРИЛОЖЕНИЯ",
+      "journal": "ФУНДАМЕНТАЛЬНЫЕ ИССЛЕДОВАНИЯ БАЙКАЛЬСКОЙ ПРИРОДНОЙ ТЕРРИТОРИИ НА ОСНОВЕ СИСТЕМЫ ВЗАИМОСВЯЗАННЫХ БАЗОВЫХ МЕТОДОВ, МОДЕЛЕЙ, НЕЙРОННЫХ СЕТЕЙ И ЦИФРОВОЙ ПЛАТФОРМЫ ЭКОЛОГИЧЕСКОГО МОНИТОРИНГА ОКРУЖАЮЩЕЙ СРЕДЫ",
+      "date": {
+        "date-parts": [
+          [
+            2025,
+            11,
+            19
+          ]
+        ]
+      },
+      "publication_type": "proceedings-article",
+      "url": "https://doi.org/10.25743/bntm.2025.32.82.006",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-2",
+      "rank": 1,
+      "doi": "10.36622/vstu.2022.88.2.004",
+      "title": "PARAMETER IDENTIFIABILITY OF THE MATHEMATICAL MODEL OF A CHEMICAL REACTION",
+      "journal": "СИСТЕМЫ УПРАВЛЕНИЯ И ИНФОРМАЦИОННЫЕ ТЕХНОЛОГИИ",
+      "date": {
+        "date-parts": [
+          [
+            2022,
+            6,
+            5
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.36622/vstu.2022.88.2.004",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "RU-2",
+      "rank": 2,
+      "doi": "10.36622/vstu.2021.84.2.003",
+      "title": "SENSITIVITY ANALYSIS AND IDENTIFIABILITY OF A MATHEMATICAL MODEL OF A CHEMICAL REACTION",
+      "journal": "СИСТЕМЫ УПРАВЛЕНИЯ И ИНФОРМАЦИОННЫЕ ТЕХНОЛОГИИ",
+      "date": {
+        "date-parts": [
+          [
+            2021,
+            3,
+            1
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.36622/vstu.2021.84.2.003",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "RU-2",
+      "rank": 3,
+      "doi": "10.31857/s0044466921050021",
+      "title": "Расчет индуктивностей и пространственных распределений токов в модели сверхпроводникового нейрона",
+      "journal": "Журнал вычислительной математики и математической физики",
+      "date": {
+        "date-parts": [
+          [
+            2021
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.31857/s0044466921050021",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "RU-2",
+      "rank": 4,
+      "doi": "10.47576/2949-1878.2025.5.5.004",
+      "title": "Идентификация параметров в математической модели информационного противоборства",
+      "journal": "Journal of Applied Research",
+      "date": {
+        "date-parts": [
+          [
+            2025,
+            5,
+            19
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.47576/2949-1878.2025.5.5.004",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-2",
+      "rank": 5,
+      "doi": "10.25791/infizik.6.2025.1483",
+      "title": "ОПРЕДЕЛЕНИЕ ПАРАМЕТРОВ ВИБРОИЗОЛЯТОРА С ПОМОЩЬЮ МАТЕМАТИЧЕСКОЙ МОДЕЛИ",
+      "journal": "Инженерная физика",
+      "date": {
+        "date-parts": [
+          [
+            2025,
+            6,
+            28
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.25791/infizik.6.2025.1483",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-2",
+      "rank": 6,
+      "doi": "10.1134/s0040363618100089",
+      "title": "Верификация математической модели и численное исследование теплогидравлических параметров тепловыделяющих сборок с шаровыми микротвэлами",
+      "journal": "Теплоэнергетика",
+      "date": {
+        "date-parts": [
+          [
+            2018
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.1134/s0040363618100089",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "RU-2",
+      "rank": 7,
+      "doi": "10.46573/2658-5030-2025-2-51-57",
+      "title": "НЕОБХОДИМОСТЬ РАЗРАБОТКИ МАТЕМАТИЧЕСКОЙ МОДЕЛИ ОПРЕДЕЛЕНИЯ ПАРАМЕТРОВ БЛОКОВОГО СПОСОБА РАЗРАБОТКИ КАРЬЕРНЫХ ПОЛЕЙ",
+      "journal": "Вестник Тверского государственного технического университета. Серия Технические науки",
+      "date": {
+        "date-parts": [
+          [
+            2025,
+            5,
+            22
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.46573/2658-5030-2025-2-51-57",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-2",
+      "rank": 8,
+      "doi": "10.48081/jgze9345",
+      "title": "РАЗРАБОТКА ВЕРОЯТНОСТНОЙ-ИМИТАЦИОННОЙ МАТЕМАТИЧЕСКОЙ МОДЕЛИ ФОРМИРОВАНИЯ ПАРАМЕТРОВ ПОВРЕЖДЕННОСТИ ОБРАБОТАННОЙ ПОВЕРХНОСТИ  ПРИ ДВУКРАТНОМ ТЕХНОЛОГИЧЕСКОМ ВОЗДЕЙСТВИИ",
+      "journal": "Science and Technology of Kazakhstan",
+      "date": {
+        "date-parts": [
+          [
+            2022,
+            3,
+            27
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.48081/jgze9345",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-2",
+      "rank": 9,
+      "doi": "10.26089/nummet.v19r327",
+      "title": "Numerical analysis of parameter identifiability for a mathematical model of a chemical reaction",
+      "journal": "Numerical Methods and Programming (Vychislitel'nye Metody i Programmirovanie)",
+      "date": {
+        "date-parts": [
+          [
+            2018,
+            7,
+            25
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.26089/nummet.v19r327",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "RU-2",
+      "rank": 10,
+      "doi": "10.18411/gdsn-28-02-2017-19",
+      "title": "Разработка математической модели теплообмена излучением в камере сгорания судового дизеля",
+      "journal": "Global science. Development and novelty",
+      "date": {
+        "date-parts": [
+          [
+            2017
+          ]
+        ]
+      },
+      "publication_type": "proceedings-article",
+      "url": "https://doi.org/10.18411/gdsn-28-02-2017-19",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-2",
+      "rank": 11,
+      "doi": "10.7256/2306-4196.2016.4.19655",
+      "title": "Дерендяев Д.А., Гатчин Ю.А., Безруков В.А. Алгоритм представления математической модели остаточного риска",
+      "journal": "Кибернетика и программирование",
+      "date": {
+        "date-parts": [
+          [
+            2016,
+            4
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.7256/2306-4196.2016.4.19655",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-2",
+      "rank": 12,
+      "doi": "10.25791/aviakosmos.06.2019.675",
+      "title": "AERODYNAMIC FORCES AND MOMENTS MATHEMATICAL MODEL OF THE UAV PARAMETERS DETERMINATION ACCORDING TO FLIGHT TESTS RESULTS",
+      "journal": "Авиакосмическое приборостроение",
+      "date": {
+        "date-parts": [
+          [
+            2019,
+            5,
+            29
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.25791/aviakosmos.06.2019.675",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-2",
+      "rank": 13,
+      "doi": "10.25699/sssb.2021.40.6.029",
+      "title": "DEVELOPMENT OF A MATHEMATICAL MODEL FOR RESEARCHING THE PROCESS OF REDUCTION OF TUNGSTEN HEXAFLUORIDE BY GASEOUS HYDROGEN",
+      "journal": "Южно-Сибирский научный вестник",
+      "date": {
+        "date-parts": [
+          [
+            2021,
+            12,
+            20
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.25699/sssb.2021.40.6.029",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-2",
+      "rank": 14,
+      "doi": "10.37882/2223-2966.2020.10.28",
+      "title": "Методика определения проектных параметров центробежного воздушного компрессора на основе математической модели безотборной системы кондиционирования воздуха",
+      "journal": "Естественные и Технические Науки",
+      "date": {
+        "date-parts": [
+          [
+            2020
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.37882/2223-2966.2020.10.28",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-2",
+      "rank": 15,
+      "doi": "10.15407/emodel.38.02.105",
+      "title": "Solving the Problem of Operating Variables Identification in the Models of Natural System Dynamics.",
+      "journal": "Èlektronnoe modelirovanie",
+      "date": {
+        "date-parts": [
+          [
+            2016,
+            8,
+            4
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.15407/emodel.38.02.105",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-2",
+      "rank": 16,
+      "doi": "10.47390/ts-v4i5y2026n15",
+      "title": "ОПТИМИЗАЦИЯ ПАРАМЕТРОВ МАТЕМАТИЧЕСКОЙ МОДЕЛИ ИЗМЕРИТЕЛЬНОГО УСТРОЙСТВА ДЛЯ КОНТРОЛЯ РЕОЛОГИЧЕСКИХ СВОЙСТВ ЖИДКИХ СРЕД OPTIMIZATION OF MATHEMATICAL MODEL PARAMETERS OF A MEASURING DEVICE FOR CONTROLLING THE REOLOGICAL PROPERTIES OF LIQUID MEDIA",
+      "journal": "Techscience uz - Topical Issues of Technical Sciences",
+      "date": {
+        "date-parts": [
+          [
+            2026,
+            5,
+            14
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.47390/ts-v4i5y2026n15",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-2",
+      "rank": 17,
+      "doi": "10.25206/1813-8225-2018-159-133-136",
+      "title": "The development of mathematical model of process of information system monitoring",
+      "journal": "Omsk Scientific Bulletin",
+      "date": {
+        "date-parts": [
+          [
+            2018
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.25206/1813-8225-2018-159-133-136",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-2",
+      "rank": 18,
+      "doi": "10.33236/2307-910x-2019-2-26-12-27",
+      "title": "АНАЛИЗ ПАРАМЕТРОВ КЛИЕНТ-СЕРВЕРНОЙ МОДЕЛИ КОРПОРАТИВНОЙ ИНФОРМАЦИОННОЙ СИСТЕМЫ",
+      "journal": "",
+      "date": {
+        "date-parts": [
+          [
+            2019,
+            6,
+            10
+          ]
+        ]
+      },
+      "publication_type": "report",
+      "url": "https://doi.org/10.33236/2307-910x-2019-2-26-12-27",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-2",
+      "rank": 19,
+      "doi": "10.24143/2072-9502-2021-2-99-108",
+      "title": "IDENTIFICATION OF PARAMETERS OF MATHEMATICAL  NON-LINEAR MODEL OF VESSEL LONGITUDINAL MOTION",
+      "journal": "Vestnik of Astrakhan State Technical University. Series: Management, computer science and informatics",
+      "date": {
+        "date-parts": [
+          [
+            2021,
+            4,
+            30
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.24143/2072-9502-2021-2-99-108",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-2",
+      "rank": 20,
+      "doi": "10.21883/jtf.2020.03.48939.93-19",
+      "title": "Механизмы перехода от ритмической активности к пачечной в модели ноцицептивного нейрона",
+      "journal": "Журнал технической физики",
+      "date": {
+        "date-parts": [
+          [
+            2020
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.21883/jtf.2020.03.48939.93-19",
+      "decision": "included",
+      "article_source_id": "EXT-PUB002-006",
+      "reason": "Источник самостоятельного определения или выбранного методического примера; первичный контекст проверен."
+    },
+    {
+      "query_id": "RU-3",
+      "rank": 1,
+      "doi": "10.18698/0536-1044-2022-9-100-115",
+      "title": "Digital Simulation Verification and Validation",
+      "journal": "Proceedings of Higher Educational Institutions. Маchine Building",
+      "date": {
+        "date-parts": [
+          [
+            2022,
+            9
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.18698/0536-1044-2022-9-100-115",
+      "decision": "included",
+      "article_source_id": "EXT-PUB002-007",
+      "reason": "Источник самостоятельного определения или выбранного методического примера; первичный контекст проверен."
+    },
+    {
+      "query_id": "RU-3",
+      "rank": 2,
+      "doi": "10.23968/bimac.2023.026",
+      "title": "Верификация и валидация информационных моделей на основе стандарта IFC в сложных проектах",
+      "journal": "BIM-моделирование в задачах строительства и архитектуры: материалы VI Международной научно-практической конференции. Под общ. ред. А. А. Семенова",
+      "date": {
+        "date-parts": [
+          [
+            2023,
+            4
+          ]
+        ]
+      },
+      "publication_type": "proceedings-article",
+      "url": "https://doi.org/10.23968/bimac.2023.026",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "RU-3",
+      "rank": 3,
+      "doi": "10.18411/lj-31-07-2017-19",
+      "title": "Тенденции и перспективы развития процесса проектирования отказоустойчивых вычислительных систем",
+      "journal": "ТЕНДЕНЦИИ РАЗВИТИЯ НАУКИ И ОБРАЗОВАНИЯ",
+      "date": {
+        "date-parts": [
+          [
+            2017
+          ]
+        ]
+      },
+      "publication_type": "proceedings-article",
+      "url": "https://doi.org/10.18411/lj-31-07-2017-19",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-3",
+      "rank": 4,
+      "doi": "10.7256/2305-6061.2015.4.17891",
+      "title": "Поначугин А.В. Проблемы надежности функционирования и сопровождения современных вычислительных систем",
+      "journal": "Программные системы и вычислительные методы",
+      "date": {
+        "date-parts": [
+          [
+            2015,
+            4
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.7256/2305-6061.2015.4.17891",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-3",
+      "rank": 5,
+      "doi": "10.15407/emodel.38.05.061",
+      "title": "The use of Nanoelectromechanical Systems to Create Some Information Models and Specialized Computing Devices.",
+      "journal": "Èlektronnoe modelirovanie",
+      "date": {
+        "date-parts": [
+          [
+            2016,
+            10,
+            6
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.15407/emodel.38.05.061",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-3",
+      "rank": 6,
+      "doi": "10.15827/0236-235x.128.547-555",
+      "title": "Верификация моделей систем на базе эквациональной характеристики формул CTL",
+      "journal": "Международный журнал \"Программные продукты и системы\" International journal \"Programmnye produkty i sistemy\"",
+      "date": {
+        "date-parts": [
+          [
+            2019,
+            11,
+            19
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.15827/0236-235x.128.547-555",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "RU-3",
+      "rank": 7,
+      "doi": "10.15827/0236-235x.119.456-460",
+      "title": "Верификация моделей систем на базе эквациональной характеристики формул LTL",
+      "journal": "Международный журнал \"Программные продукты и системы\" International journal \"Programmnye produkty i sistemy\"",
+      "date": {
+        "date-parts": [
+          [
+            2017,
+            8,
+            25
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.15827/0236-235x.119.456-460",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "RU-3",
+      "rank": 8,
+      "doi": "10.24108/preprints-3112009",
+      "title": "АВТОРСКИЙ ПОДХОД К ТОПОЛОГИЧЕСКОМУ МОДЕЛИРОВАНИЮ ПАРАЛЛЕЛЬНЫХ ВЫЧИСЛИТЕЛЬНЫХ СИСТЕМ",
+      "journal": "",
+      "date": {
+        "date-parts": [
+          [
+            2020,
+            3,
+            19
+          ]
+        ]
+      },
+      "publication_type": "posted-content",
+      "url": "https://doi.org/10.24108/preprints-3112009",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-3",
+      "rank": 9,
+      "doi": "10.32362/2500-316x-2018-5-6-11-19",
+      "title": "Методики оценки производительности гетерогенных вычислительных систем",
+      "journal": "Российский технологический журнал",
+      "date": {
+        "date-parts": [
+          [
+            2017,
+            12,
+            20
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.32362/2500-316x-2018-5-6-11-19",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-3",
+      "rank": 10,
+      "doi": "10.32362/2500-316x-2017-5-6-11-19",
+      "title": "Методики оценки производительности гетерогенных вычислительных систем",
+      "journal": "Российский технологический журнал",
+      "date": {
+        "date-parts": [
+          [
+            2017,
+            12,
+            20
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.32362/2500-316x-2017-5-6-11-19",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-3",
+      "rank": 11,
+      "doi": "10.14357/20718632180303",
+      "title": "АВТОМАТИЗАЦИЯ ПРОЕКТИРОВАНИЯ ПРИКЛАДНЫХ ИНФОРМАЦИОННО-ВЫЧИСЛИТЕЛЬНЫХ СИСТЕМ",
+      "journal": "Информационные технологии и вычислительные системы",
+      "date": {
+        "date-parts": [
+          [
+            2018,
+            9,
+            25
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.14357/20718632180303",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-3",
+      "rank": 12,
+      "doi": "10.32362/2500-316x-2018-6-4-5-12",
+      "title": "Общий классификатор системных проблем. Часть I: Анализ, синтез, валидация и верификация",
+      "journal": "Российский технологический журнал",
+      "date": {
+        "date-parts": [
+          [
+            2018,
+            8,
+            8
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.32362/2500-316x-2018-6-4-5-12",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "RU-3",
+      "rank": 13,
+      "doi": "10.26456/mfcsics-21-31",
+      "title": "Верификация криптографических протоколов",
+      "journal": "Математические основы информатики и информационно-коммуникационных систем",
+      "date": {
+        "date-parts": [
+          [
+            2021,
+            12,
+            27
+          ]
+        ]
+      },
+      "publication_type": "proceedings-article",
+      "url": "https://doi.org/10.26456/mfcsics-21-31",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "RU-3",
+      "rank": 14,
+      "doi": "10.24108/preprints-3112026",
+      "title": "О ТОПОЛОГИЧЕСКОЙ СОВМЕСТИМОСТИ ПАРАЛЛЕЛЬНЫХ ЗАДАЧ И ВЫЧИСЛИТЕЛЬНЫХ СИСТЕМ",
+      "journal": "",
+      "date": {
+        "date-parts": [
+          [
+            2020,
+            4,
+            12
+          ]
+        ]
+      },
+      "publication_type": "posted-content",
+      "url": "https://doi.org/10.24108/preprints-3112026",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-3",
+      "rank": 15,
+      "doi": "10.18411/trnio-12-2022-493",
+      "title": "Теоретические аспекты использования систем массового обслуживания для оценки производительности вычислительных систем",
+      "journal": "ТЕНДЕНЦИИ РАЗВИТИЯ НАУКИ И ОБРАЗОВАНИЯ",
+      "date": {
+        "date-parts": [
+          [
+            2022
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.18411/trnio-12-2022-493",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-3",
+      "rank": 16,
+      "doi": "10.14357/20718632210302",
+      "title": "ТОПОЛОГИЯ MKNS ДЛЯ КОММУНИКАЦИОННЫХ СЕТЕЙ ВЫЧИСЛИТЕЛЬНЫХ СИСТЕМ",
+      "journal": "ИНФОРМАЦИОННЫЕ ТЕХНОЛОГИИ И ВЫЧИСЛИТЕЛЬНЫЕ СИСТЕМЫ",
+      "date": {
+        "date-parts": [
+          [
+            2021,
+            9,
+            21
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.14357/20718632210302",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-3",
+      "rank": 17,
+      "doi": "10.31857/s0032180x22100045",
+      "title": "ПОЛЕВАЯ ВЕРИФИКАЦИЯ ЭРОЗИОННЫХ МОДЕЛЕЙ НА ОСНОВЕ ИССЛЕДОВАНИЙ МАЛОГО ВОДОСБОРА В БАССЕЙНЕ Р. ВОРОБЖИ (КУРСКАЯ ОБЛАСТЬ)",
+      "journal": "Почвоведение",
+      "date": {
+        "date-parts": [
+          [
+            2022,
+            10
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.31857/s0032180x22100045",
+      "decision": "not_selected_purposeful",
+      "reason": "Смежная или повторяющаяся задача; для этой оси выбран проверенный пример. Не утверждается научная непригодность или отсутствие результата."
+    },
+    {
+      "query_id": "RU-3",
+      "rank": 18,
+      "doi": "10.24108/preprints-3112168",
+      "title": "ФОРМАЛЬНЫЙ МЕТОД СИНТЕЗА ОПТИМАЛЬНЫХ ТОПОЛОГИЙ ВЫЧИСЛИТЕЛЬНЫХ СИСТЕМ, ОСНОВАННЫЙ НА ПРОЕКТИВНОМ ОПИСАНИИ ГРАФОВ",
+      "journal": "",
+      "date": {
+        "date-parts": [
+          [
+            2021,
+            10,
+            24
+          ]
+        ]
+      },
+      "publication_type": "posted-content",
+      "url": "https://doi.org/10.24108/preprints-3112168",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-3",
+      "rank": 19,
+      "doi": "10.21685/2072-3059-2025-3-3",
+      "title": "Formalization and implementation of logical-probabilistic and logical-algebraic operational models of the functional architecture of cluster computing systems",
+      "journal": "University proceedings. Volga region. Technical sciences",
+      "date": {
+        "date-parts": [
+          [
+            2025
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.21685/2072-3059-2025-3-3",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-3",
+      "rank": 20,
+      "doi": "10.24108/preprints-3113529",
+      "title": "AlEM: новый параллельный алгоритм линейного программирования для кластерных вычислительных систем",
+      "journal": "",
+      "date": {
+        "date-parts": [
+          [
+            2025,
+            5,
+            6
+          ]
+        ]
+      },
+      "publication_type": "posted-content",
+      "url": "https://doi.org/10.24108/preprints-3113529",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-4",
+      "rank": 1,
+      "doi": "10.24108/preprints-3113603",
+      "title": "Обобщение и конкретизация психических функций, создание общей модели функционирования психики.",
+      "journal": "",
+      "date": {
+        "date-parts": [
+          [
+            2025,
+            6,
+            22
+          ]
+        ]
+      },
+      "publication_type": "posted-content",
+      "url": "https://doi.org/10.24108/preprints-3113603",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-4",
+      "rank": 2,
+      "doi": "10.7868/s0015323016050156",
+      "title": "Фрактальное обобщение модели Томаса–Ферми",
+      "journal": "Физика металлов и металловедение",
+      "date": {
+        "date-parts": [
+          [
+            2016
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.7868/s0015323016050156",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-4",
+      "rank": 3,
+      "doi": "10.17323/demreview.v4i4.7528",
+      "title": "Рождаемость в семьях мигрантов: данные, гипотезы, модели (обзор зарубежных исследований)",
+      "journal": "Демографическое обозрение",
+      "date": {
+        "date-parts": [
+          [
+            2017,
+            12,
+            26
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.17323/demreview.v4i4.7528",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-4",
+      "rank": 4,
+      "doi": "10.34925/eip.2020.123.10.034",
+      "title": "Generalization of Lucas model taking into account power-law memory",
+      "journal": "Экономика и предпринимательство",
+      "date": {
+        "date-parts": [
+          [
+            2020,
+            11,
+            15
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.34925/eip.2020.123.10.034",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-4",
+      "rank": 5,
+      "doi": "10.56304/s023427582407161x",
+      "title": "Синтетические пептиды как природоподобные лекарства: транскриптомные подходы к их исследованию в модели ишемического инсульта",
+      "journal": "Biotekhnologiya",
+      "date": {
+        "date-parts": [
+          [
+            2024
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.56304/s023427582407161x",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-4",
+      "rank": 6,
+      "doi": "10.12731/2658-4034-2022-13-2-3-16-21",
+      "title": "DESIGNING A MODEL FOR FORMING STUDENTS’ ABILITY TO ANALYZE QUANTITATIVE AND QUALITATIVE DATA",
+      "journal": "",
+      "date": {
+        "date-parts": [
+          [
+            2022
+          ]
+        ]
+      },
+      "publication_type": "report",
+      "url": "https://doi.org/10.12731/2658-4034-2022-13-2-3-16-21",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-4",
+      "rank": 7,
+      "doi": "10.31857/s0002333720030035",
+      "title": "Эффекты сейсмических волн в изменениях уровня воды в скважине: экспериментальные данные и модели",
+      "journal": "Физика Земли",
+      "date": {
+        "date-parts": [
+          [
+            2020
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.31857/s0002333720030035",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-4",
+      "rank": 8,
+      "doi": "10.21146/2074-1472-2023-29-2-9-35",
+      "title": "A natural generalization of the Turing computability model",
+      "journal": "Logical Investigations",
+      "date": {
+        "date-parts": [
+          [
+            2023
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.21146/2074-1472-2023-29-2-9-35",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-4",
+      "rank": 9,
+      "doi": "10.25681/iaras.2018.978-5-94375-261-2.19-21",
+      "title": "ТРАДИЦИИ И МОДЕЛИ ЦВЕТНОГО МЕТАЛЛОПРОИЗВОДСТВА ЗАПАДНОЙ И ВОСТОЧНОЙ ЗОНЫ ЯМНОЙ КУЛЬТУРНО-ИСТОРИЧЕСКОЙ ОБЛАСТИ",
+      "journal": "СВЯЗИ И ВЗАИМООТНОШЕНИЯ КУЛЬТУР БРОНЗОВОГО ВЕКА ЦИРКУМПОНТИЙСКОГО РЕГИОНА: НОВЫЕ ДАННЫЕ И МАТЕРИАЛЫ",
+      "date": {
+        "date-parts": [
+          [
+            2018,
+            12,
+            18
+          ]
+        ]
+      },
+      "publication_type": "proceedings-article",
+      "url": "https://doi.org/10.25681/iaras.2018.978-5-94375-261-2.19-21",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-4",
+      "rank": 10,
+      "doi": "10.30547/mediaalmanah.1.2018.1427",
+      "title": "Big data: данные и модели коммуникации нового формата в инфопространстве цифровой экономики России",
+      "journal": "MediaAlmanah",
+      "date": {
+        "date-parts": [
+          [
+            2018,
+            1,
+            25
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.30547/mediaalmanah.1.2018.1427",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-4",
+      "rank": 11,
+      "doi": "10.29039/rusjbpc.2023.0645",
+      "title": "GENERALIZATION OF THE THERMOKINETIC OREGONATOR MODEL",
+      "journal": "Russian Journal of Biological Physics and Chemisrty",
+      "date": {
+        "date-parts": [
+          [
+            2024,
+            6,
+            6
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.29039/rusjbpc.2023.0645",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-4",
+      "rank": 12,
+      "doi": "10.25682/niisi.2018.4.9973",
+      "title": "Обобщение решения Онсагера для двумерной модели Изинга конечных размеров",
+      "journal": "Труды НИИСИ РАН",
+      "date": {
+        "date-parts": [
+          [
+            2018,
+            2,
+            6
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.25682/niisi.2018.4.9973",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-4",
+      "rank": 13,
+      "doi": "10.53454/978598620_30",
+      "title": "Новые данные о расположении Южного магнитного полюса и модели глобального магнитного поля Земли",
+      "journal": "Проблемы Геокосмоса - 2022. Материалы XIV школы-конференции с международным участием",
+      "date": {
+        "date-parts": [
+          [
+            2022
+          ]
+        ]
+      },
+      "publication_type": "proceedings-article",
+      "url": "https://doi.org/10.53454/978598620_30",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-4",
+      "rank": 14,
+      "doi": "10.20948/abrau-2024-6",
+      "title": "Synthetic data in the problem of anomaly detection in the field of information security",
+      "journal": "Scientific Conference “Scientific Services &amp; Internet” Proceedings of 26th Scientific Conference “Scientific Services &amp; Internet – 2024”",
+      "date": {
+        "date-parts": [
+          [
+            2024
+          ]
+        ]
+      },
+      "publication_type": "proceedings-article",
+      "url": "https://doi.org/10.20948/abrau-2024-6",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-4",
+      "rank": 15,
+      "doi": "10.20339/am.06-26.008",
+      "title": "Summarizing the experience of Russian universities’ transition to a new educational model (using Kribrum.Pro)",
+      "journal": "Alma mater Vestnik Vysshey Shkoly",
+      "date": {
+        "date-parts": [
+          [
+            2026
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.20339/am.06-26.008",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-4",
+      "rank": 16,
+      "doi": "10.7868/s0869565216330161",
+      "title": "ОБОБЩЕНИЕ МОДЕЛИ СЛОЯ НЕРНСТА ДЛЯ УЧЕТА РАЗЛИЧНЫХ КОЭФФИЦИЕНТОВ ДИФФУЗИИ КОМПОНЕНТОВ СИСТЕМЫ ПРИ ВОССТАНОВЛЕНИИ БРОМАТА ПРИ СТАЦИОНАРНОМ ОДНОМЕРНОМ РЕЖИМЕ. ЛИМИТИРОВАНИЕ ТОКА ТРАНСПОРТОМ ПРОТОНОВ",
+      "journal": "Доклады Академии наук",
+      "date": {
+        "date-parts": [
+          [
+            2016
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.7868/s0869565216330161",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-4",
+      "rank": 17,
+      "doi": "10.7256/2073-8560.2015.3.14299",
+      "title": "Корчагин О.Н., Чирков Д.К. Синтетические наркотики в Российской Федерации: современные тенденции и меры противодействия их незаконному обороту",
+      "journal": "Национальная безопасность / nota bene",
+      "date": {
+        "date-parts": [
+          [
+            2015,
+            3
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.7256/2073-8560.2015.3.14299",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-4",
+      "rank": 18,
+      "doi": "10.21128/1812-7126-2016-6-84-98",
+      "title": "Personal data: Russian and German national models of the constitutional protection in comparative perspective",
+      "journal": "Sravnitel'noe konstitucionnoe obozrenie",
+      "date": {
+        "date-parts": [
+          [
+            2016
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.21128/1812-7126-2016-6-84-98",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-4",
+      "rank": 19,
+      "doi": "10.21320/2500-2139-2017-10-1-75-84",
+      "title": "Myelofibrosis Models: Literature Review and Own Data Модели миелофиброза (обзор литературы и собственные данные)",
+      "journal": "Clinical Oncohematology",
+      "date": {
+        "date-parts": [
+          [
+            2017,
+            1,
+            1
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.21320/2500-2139-2017-10-1-75-84",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    },
+    {
+      "query_id": "RU-4",
+      "rank": 20,
+      "doi": "10.36871/ek.up.p.r.2026.03.08.019",
+      "title": "SYNTHETIC DATA AS AN ECONOMIC RESOURCE: ASSESSING GENERATION COSTS, GAINS IN DATA AVAILABILITY, AND THE GROWTH OF MODEL RISKS",
+      "journal": "EKONOMIKA I UPRAVLENIE: PROBLEMY, RESHENIYA",
+      "date": {
+        "date-parts": [
+          [
+            2026
+          ]
+        ]
+      },
+      "publication_type": "journal-article",
+      "url": "https://doi.org/10.36871/ek.up.p.r.2026.03.08.019",
+      "decision": "excluded_scope",
+      "reason": "Название и доступное описание не относятся к выбранным моделям нейродинамики/измерений либо общим определениям их проверки."
+    }
+  ],
+  "foundational_additions": [
+    {
+      "source_id": "EXT-PUB002-003",
+      "doi": "10.1093/bioinformatics/btp358",
+      "reason": "Первичное определение различия структурной/практической идентифицируемости; цитатный маршрут из Villaverde, reference 53. Не включено в датированную тематическую выдачу."
+    }
+  ],
+  "web_use": "Exploratory navigation and exact-title/DOI/publisher-route resolution; not counted as an additional independently screened database. All included supplementary works except the explicit foundational addition occur in the archived ranked database output."
+}
