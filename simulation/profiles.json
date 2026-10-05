@@ -1,0 +1,232 @@
+{
+  "SIM-001": {
+    "image": "python:3.12-slim",
+    "admission_bytes": 1073741824,
+    "install": "python -m venv /work/env; /work/env/bin/pip install --disable-pip-version-check \".[test]\"; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
+    "native_tests": "/work/env/bin/python -m pytest -q --capture=sys -o cache_dir=/work/pytest-cache --basetemp=/work/pytest-tmp tests/test_checkpoint.py tests/test_environment.py",
+    "smoke": "/work/env/bin/python -m fly_arena --help",
+    "functional": "/work/env/bin/python /work/probes/fly_arena_probe.py",
+    "data_scope": "body_demo_without_connectome",
+    "native_tests_reason": "No upstream test entry point qualified for this data-free profile",
+    "functional_reason": "Registered data and a separately reviewed functional adapter are required",
+    "native_tests_admission_bytes": 268435456,
+    "smoke_admission_bytes": 134217728,
+    "functional_admission_bytes": 805306368,
+    "runtime_prefix": "mkdir -p /work/apt-cache/partial /work/apt-lists/partial; apt-get -o Dir::State::lists=/work/apt-lists update -qq; apt-get -o Dir::State::lists=/work/apt-lists -o Dir::Cache::archives=/work/apt-cache install -y --no-install-recommends libegl1 libgl1 libopengl0 libgl1-mesa-dri; dpkg-query -W > /work/system-packages.txt; "
+  },
+  "SIM-002": {
+    "image": "python:3.12-slim",
+    "admission_bytes": 2147483648,
+    "install": "python -m venv /work/env; /work/env/bin/pip install --disable-pip-version-check -r requirements.txt brainscale==0.1.0; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
+    "native_tests": null,
+    "smoke": "/work/env/bin/python drosophila_whole_brain_fitting.py --help && /work/env/bin/python /work/probes/fitting_import_probe.py",
+    "functional": null,
+    "data_scope": "module-import-only",
+    "native_tests_reason": "No upstream test entry point qualified for this data-free profile",
+    "functional_reason": "Registered data and a separately reviewed functional adapter are required"
+  },
+  "SIM-005": {
+    "image": "python:3.12-slim",
+    "admission_bytes": 2147483648,
+    "install": "python -m venv /work/env; /work/env/bin/pip install torch --index-url https://download.pytorch.org/whl/cpu; /work/env/bin/pip install --disable-pip-version-check numpy scipy matplotlib torch --index-url https://pypi.org/simple; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
+    "native_tests": null,
+    "smoke": "/work/env/bin/python -c \"import numpy, scipy, torch\"",
+    "functional": "/work/env/bin/python /work/probes/connconstr_probe.py",
+    "data_scope": "software_fixture_separate_from_author_figure_reproduction",
+    "native_tests_reason": "No upstream test entry point qualified for this data-free profile",
+    "functional_reason": "Registered data and a separately reviewed functional adapter are required"
+  },
+  "SIM-006": {
+    "image": "python:3.10-slim",
+    "admission_bytes": 2147483648,
+    "install": "python -m venv /work/env; /work/env/bin/pip install torch --index-url https://download.pytorch.org/whl/cpu; /work/env/bin/pip install --disable-pip-version-check numpy scipy pandas pyarrow brian2 torch; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
+    "native_tests": null,
+    "smoke": "/work/env/bin/python main.py --help",
+    "functional": null,
+    "data_scope": "module-import-only",
+    "native_tests_reason": "No upstream test entry point qualified for this data-free profile",
+    "functional_reason": "Registered data and a separately reviewed functional adapter are required"
+  },
+  "SIM-007": {
+    "image": "python:3.12-slim",
+    "admission_bytes": 536870912,
+    "install": "python -m venv /work/env; /work/env/bin/pip install --disable-pip-version-check -r code/confirmatory/requirements-confirmatory.txt; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
+    "native_tests": "/work/env/bin/python code/confirmatory/tests/test_bounds.py; /work/env/bin/python code/confirmatory/tests/test_confirmatory.py",
+    "smoke": "/work/env/bin/python -c \"import numpy, scipy, pandas, pyarrow\"",
+    "functional": null,
+    "data_scope": "native_synthetic_confirmatory_fixtures",
+    "native_tests_reason": "No upstream test entry point qualified for this data-free profile",
+    "functional_reason": "Registered data and a separately reviewed functional adapter are required"
+  },
+  "SIM-009": {
+    "image": "python:3.12-slim",
+    "admission_bytes": 2147483648,
+    "install": "python -m venv /work/env; /work/env/bin/pip install torch --index-url https://download.pytorch.org/whl/cpu; /work/env/bin/pip install --disable-pip-version-check -r backend/requirements.txt pytest; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
+    "native_tests": "cd backend; /work/env/bin/python -m pytest -q tests/test_core.py",
+    "smoke": "/work/env/bin/python -c \"import numpy, fastapi\"",
+    "functional": null,
+    "data_scope": "mockbrain_backend_not_real_connectome",
+    "native_tests_reason": "No upstream test entry point qualified for this data-free profile",
+    "functional_reason": "Registered data and a separately reviewed functional adapter are required"
+  },
+  "SIM-012": {
+    "image": "python:3.12-slim",
+    "admission_bytes": 2147483648,
+    "install": "python -m venv /work/env; /work/env/bin/pip install torch --index-url https://download.pytorch.org/whl/cpu; /work/env/bin/pip install --disable-pip-version-check .; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
+    "native_tests": null,
+    "smoke": "/work/env/bin/python -c \"import fanc\"",
+    "functional": null,
+    "data_scope": "module-import-only",
+    "native_tests_reason": "No upstream test entry point qualified for this data-free profile",
+    "functional_reason": "Registered data and a separately reviewed functional adapter are required"
+  },
+  "SIM-014": {
+    "image": "python:3.12-slim",
+    "admission_bytes": 1073741824,
+    "install": "python -m venv /work/env; /work/env/bin/pip install --disable-pip-version-check -r requirements.txt; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
+    "native_tests": null,
+    "smoke": "/work/env/bin/python -c \"import brian2, brian2tools\"",
+    "functional": null,
+    "data_scope": "module-import-only",
+    "native_tests_reason": "No upstream test entry point qualified for this data-free profile",
+    "functional_reason": "Registered data and a separately reviewed functional adapter are required"
+  },
+  "SIM-016": {
+    "image": "python:3.12-slim",
+    "admission_bytes": 134217728,
+    "install": "python -m venv /work/env; /work/env/bin/pip install --disable-pip-version-check \".[dev,data]\"; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
+    "native_tests": "/work/env/bin/python -m pytest -q",
+    "smoke": "/work/env/bin/soup-connectome run --dataset example --device cpu",
+    "functional": "/work/env/bin/python /work/probes/soup_probe.py",
+    "data_scope": "upstream_four_neuron_design_fixture",
+    "native_tests_reason": "No upstream test entry point qualified for this data-free profile",
+    "functional_reason": "Registered data and a separately reviewed functional adapter are required"
+  },
+  "SIM-018": {
+    "image": "python:3.12-slim",
+    "admission_bytes": 2147483648,
+    "install": "python -m venv /work/env; /work/env/bin/pip install torch --index-url https://download.pytorch.org/whl/cpu; /work/env/bin/pip install --disable-pip-version-check -r environment/requirements.txt; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
+    "native_tests": null,
+    "smoke": "/work/env/bin/python -c \"import torch, numpy\"",
+    "functional": null,
+    "data_scope": "module-import-only",
+    "native_tests_reason": "No upstream test entry point qualified for this data-free profile",
+    "functional_reason": "Registered data and a separately reviewed functional adapter are required"
+  },
+  "SIM-019": {
+    "image": "python:3.12-slim",
+    "admission_bytes": 2147483648,
+    "install": "python -m venv /work/env; /work/env/bin/pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu; /work/env/bin/pip install --disable-pip-version-check -r scalebreak_flyvis/requirements.txt pytest; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
+    "native_tests": "/work/env/bin/python -m pytest -q scalebreak_flyvis/tests",
+    "smoke": "/work/env/bin/python -c \"import flyvis\"",
+    "functional": null,
+    "data_scope": "module-import-only",
+    "native_tests_reason": "No upstream test entry point qualified for this data-free profile",
+    "functional_reason": "Registered data and a separately reviewed functional adapter are required"
+  },
+  "SIM-020": {
+    "image": "python:3.12-slim",
+    "admission_bytes": 1073741824,
+    "install": "python -m venv /work/env; /work/env/bin/pip install --disable-pip-version-check . pytest; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
+    "native_tests": "/work/env/bin/python -m pytest -q tests/core/test_anatomy.py",
+    "smoke": "/work/env/bin/python -c \"import flygym; from importlib.metadata import version; print(version('flygym'))\"",
+    "functional": null,
+    "data_scope": "anatomy_not_neural_simulation",
+    "native_tests_reason": "No upstream test entry point qualified for this data-free profile",
+    "functional_reason": "Registered data and a separately reviewed functional adapter are required"
+  },
+  "SIM-021": {
+    "image": "python:3.12-slim",
+    "admission_bytes": 1073741824,
+    "install": "python -m venv /work/env; /work/env/bin/pip install --disable-pip-version-check . pytest; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
+    "native_tests": null,
+    "smoke": "/work/env/bin/python -c \"import flygym_gymnasium\"",
+    "functional": null,
+    "data_scope": "module-import-only",
+    "native_tests_reason": "No upstream test entry point qualified for this data-free profile",
+    "functional_reason": "Registered data and a separately reviewed functional adapter are required"
+  },
+  "SIM-022": {
+    "image": "python:3.10-slim",
+    "admission_bytes": 2147483648,
+    "install": "python -m venv /work/env; /work/env/bin/pip install torch --index-url https://download.pytorch.org/whl/cpu; /work/env/bin/pip install --disable-pip-version-check -r requirements.txt; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
+    "native_tests": null,
+    "smoke": "/work/env/bin/python -c \"import snntorch, torch\"",
+    "functional": null,
+    "data_scope": "module-import-only",
+    "native_tests_reason": "No upstream test entry point qualified for this data-free profile",
+    "functional_reason": "Registered data and a separately reviewed functional adapter are required"
+  },
+  "SIM-024": {
+    "image": "python:3.10-slim",
+    "admission_bytes": 1073741824,
+    "install": "python -m venv /work/env; /work/env/bin/pip install --disable-pip-version-check numpy==1.24.4 brian2==2.5.1 pandas joblib pyarrow; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
+    "native_tests": null,
+    "smoke": "/work/env/bin/python -c \"import model; print(model.default_params)\"",
+    "functional": null,
+    "data_scope": "module-import-only",
+    "native_tests_reason": "No upstream test entry point qualified for this data-free profile",
+    "functional_reason": "Registered data and a separately reviewed functional adapter are required"
+  },
+  "SIM-025": {
+    "image": "python:3.11-slim",
+    "admission_bytes": 1073741824,
+    "install": "python -m venv /work/env; /work/env/bin/pip install --disable-pip-version-check .; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
+    "native_tests": null,
+    "smoke": "/work/env/bin/python -c \"import mbi_paper\"",
+    "functional": null,
+    "data_scope": "module-import-only",
+    "native_tests_reason": "No upstream test entry point qualified for this data-free profile",
+    "functional_reason": "Registered data and a separately reviewed functional adapter are required"
+  },
+  "SIM-027": {
+    "image": "python:3.12-slim",
+    "admission_bytes": 2147483648,
+    "install": "python -m venv /work/env; /work/env/bin/pip install --disable-pip-version-check .; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
+    "native_tests": null,
+    "smoke": "/work/env/bin/python test_configs.py",
+    "functional": null,
+    "data_scope": "module-import-only",
+    "native_tests_reason": "No upstream test entry point qualified for this data-free profile",
+    "functional_reason": "Registered data and a separately reviewed functional adapter are required"
+  },
+  "SIM-031": {
+    "image": "python:3.12-slim",
+    "admission_bytes": 2147483648,
+    "install": "python -m venv /work/env; /work/env/bin/pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu; /work/env/bin/pip install --disable-pip-version-check . pytest; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
+    "native_tests": "/work/env/bin/python -m pytest -q tests/test_initialization.py",
+    "smoke": "/work/env/bin/python -c \"import flyvis\"",
+    "functional": null,
+    "data_scope": "module-import-only",
+    "native_tests_reason": "No upstream test entry point qualified for this data-free profile",
+    "functional_reason": "Registered data and a separately reviewed functional adapter are required"
+  },
+  "SIM-029": {
+    "image": "node:22.19.0",
+    "admission_bytes": 67108864,
+    "install": "node --version",
+    "install_scope": "no_dependency_native_runner",
+    "native_tests": "node tests/run-node.js",
+    "smoke": "node --check js/sim-worker.js",
+    "functional": "node /work/probes/snedea_worker.cjs",
+    "assets": [
+      {
+        "source": "SIM-029/assets/connectome.bin.gz",
+        "destination": "connectome.bin.gz",
+        "sha256": "fbf8d440ca1207c7573e1acdd2366f9d0beb9b533c1710f21681264f81b1cc49"
+      }
+    ],
+    "functional_admission_bytes": 201326592,
+    "data_scope": "legacy_fixture_native_tests_then_real_export_worker_in_Node"
+  },
+  "SIM-003": {
+    "image": "node:22.19.0",
+    "admission_bytes": 1073741824,
+    "install": "npm ci --cache /work/npm-cache; npm ls --all > /work/dependencies.lock.txt",
+    "native_tests": "npm test",
+    "smoke": "npm run typecheck",
+    "functional": null,
+    "functional_reason": "Full terrarium browser scenario requires pinned graph assets",
+    "data_scope": "browser_build_and_native_checks"
+  }
+}

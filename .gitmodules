@@ -26,3 +26,99 @@
 	path = agents
 	url = https://github.com/deneal123/AISCS.git
 	branch = agents
+[submodule "simulation/SIM-001"]
+	path = simulation/sidecars/artem-x-meta--fly-arena
+	url = https://github.com/artem-x-meta/fly-arena.git
+[submodule "simulation/SIM-002"]
+	path = simulation/sidecars/chaobrain--fitting_drosophila_whole_brain_spiking_model
+	url = https://github.com/chaobrain/fitting_drosophila_whole_brain_spiking_model.git
+[submodule "simulation/SIM-003"]
+	path = simulation/sidecars/cnqso--infinite-sugar
+	url = https://github.com/cnqso/infinite-sugar.git
+[submodule "simulation/SIM-004"]
+	path = simulation/sidecars/cooneypc4--larval_escape_manuscript
+	url = https://github.com/cooneypc4/larval_escape_manuscript.git
+[submodule "simulation/SIM-005"]
+	path = simulation/sidecars/emebeiran--connconstr
+	url = https://github.com/emebeiran/connconstr.git
+[submodule "simulation/SIM-006"]
+	path = simulation/sidecars/eonsystemspbc--fly-brain
+	url = https://github.com/eonsystemspbc/fly-brain.git
+[submodule "simulation/SIM-007"]
+	path = simulation/sidecars/erankopel--maleCNS-depth
+	url = https://github.com/erankopel/maleCNS-depth.git
+[submodule "simulation/SIM-008"]
+	path = simulation/sidecars/flyconnectome--2025malecns
+	url = https://github.com/flyconnectome/2025malecns.git
+[submodule "simulation/SIM-009"]
+	path = simulation/sidecars/gauravvvvvvvvvv--flybox
+	url = https://github.com/gauravvvvvvvvvv/flybox.git
+[submodule "simulation/SIM-010"]
+	path = simulation/sidecars/hsseung--OpticLobe.jl
+	url = https://github.com/hsseung/OpticLobe.jl.git
+[submodule "simulation/SIM-012"]
+	path = simulation/sidecars/htem--FANC_auto_recon
+	url = https://github.com/htem/FANC_auto_recon.git
+[submodule "simulation/SIM-013"]
+	path = simulation/sidecars/jajmcallister--Conn_ESN_Paper
+	url = https://github.com/jajmcallister/Conn_ESN_Paper.git
+[submodule "simulation/SIM-014"]
+	path = simulation/sidecars/JNLiew--flylif_orientation_maps
+	url = https://github.com/JNLiew/flylif_orientation_maps.git
+[submodule "simulation/SIM-015"]
+	path = simulation/sidecars/legacyindiesubmissions-ai--claude-fly
+	url = https://github.com/legacyindiesubmissions-ai/claude-fly.git
+[submodule "simulation/SIM-016"]
+	path = simulation/sidecars/MakazhanAlpamys--soup-connectome
+	url = https://github.com/MakazhanAlpamys/soup-connectome.git
+[submodule "simulation/SIM-017"]
+	path = simulation/sidecars/murthylab--flywire-network-analysis
+	url = https://github.com/murthylab/flywire-network-analysis.git
+[submodule "simulation/SIM-018"]
+	path = simulation/sidecars/nalin-dhiman--Connectome-Constrained-Neural-Networks
+	url = https://github.com/nalin-dhiman/Connectome-Constrained-Neural-Networks.git
+[submodule "simulation/SIM-019"]
+	path = simulation/sidecars/nalin-dhiman--ScaleBreak-FlyVis
+	url = https://github.com/nalin-dhiman/ScaleBreak-FlyVis.git
+[submodule "simulation/SIM-020"]
+	path = simulation/sidecars/NeLy-EPFL--flygym
+	url = https://github.com/NeLy-EPFL/flygym.git
+[submodule "simulation/SIM-021"]
+	path = simulation/sidecars/NeLy-EPFL--flygym-gymnasium
+	url = https://github.com/NeLy-EPFL/flygym-gymnasium.git
+[submodule "simulation/SIM-022"]
+	path = simulation/sidecars/Neuromorphicism--fly-brain-snntorch
+	url = https://github.com/Neuromorphicism/fly-brain-snntorch.git
+[submodule "simulation/SIM-023"]
+	path = simulation/sidecars/nftechie--doomfly
+	url = https://github.com/nftechie/doomfly.git
+[submodule "simulation/SIM-024"]
+	path = simulation/sidecars/philshiu--Drosophila_brain_model
+	url = https://github.com/philshiu/Drosophila_brain_model.git
+[submodule "simulation/SIM-025"]
+	path = simulation/sidecars/rdarie--modular-bionic-interface-2026
+	url = https://github.com/rdarie/modular-bionic-interface-2026.git
+[submodule "simulation/SIM-026"]
+	path = simulation/sidecars/seung-lab--FlyConnectome
+	url = https://github.com/seung-lab/FlyConnectome.git
+[submodule "simulation/SIM-027"]
+	path = simulation/sidecars/smpuglie--Pugliese_2026
+	url = https://github.com/smpuglie/Pugliese_2026.git
+[submodule "simulation/SIM-030"]
+	path = simulation/sidecars/Stavros963--fcta
+	url = https://github.com/Stavros963/fcta.git
+[submodule "simulation/SIM-031"]
+	path = simulation/sidecars/TuragaLab--flyvis
+	url = https://github.com/TuragaLab/flyvis.git
+[submodule "simulation/SIM-032"]
+	path = simulation/sidecars/TuragaLab--wormvae
+	url = https://github.com/TuragaLab/wormvae.git
+[submodule "simulation/SIM-033"]
+	path = simulation/sidecars/YijieYin--connectome_data_prep
+	url = https://github.com/YijieYin/connectome_data_prep.git
+[submodule "simulation/SIM-011"]
+	path = simulation/sidecars/htem--BANC-project
+	url = https://github.com/htem/BANC-project.git
+[submodule "simulation/SIM-029"]
+	path = simulation/sidecars/snedea--flybrain
+	url = https://github.com/snedea/flybrain.git

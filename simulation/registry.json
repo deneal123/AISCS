@@ -1,0 +1,1807 @@
+{
+  "schema_version": "1.0",
+  "discovered_at": "2026-10-04",
+  "scientific_gate": "G0_REVISE",
+  "knowledge_generation": "g-56b4c46e48ad7a8b5db92c99",
+  "repository_aliases": {
+    "NSSIL/ScaleBreak-FlyVis": "nalin-dhiman/ScaleBreak-FlyVis",
+    "smpuglie/Pugliese_cpg_2025": "smpuglie/Pugliese_2026"
+  },
+  "policy": {
+    "cpu_threads": 4,
+    "memory_bytes": 0,
+    "vram_bytes": 5368709120,
+    "host_reserve_bytes": 0,
+    "install_seconds": 1800,
+    "smoke_seconds": 600,
+    "functional_seconds": 1800,
+    "seeds": [
+      1,
+      2,
+      3
+    ],
+    "lfs_attempts": 2,
+    "disk_reserve_bytes": 21474836480,
+    "unrestricted_memory": true
+  },
+  "candidates": [
+    {
+      "repository": "artem-x-meta/fly-arena",
+      "url": "https://github.com/artem-x-meta/fly-arena.git",
+      "origins": [
+        "ST011"
+      ],
+      "source_ids": [],
+      "recorded_commit": "12f48c702ed170b5bdc4643afa7ce65e952b353d",
+      "recorded_license": "MIT",
+      "status": "attached",
+      "id": "SIM-001",
+      "path": "simulation/sidecars/artem-x-meta--fly-arena",
+      "commit": "12f48c702ed170b5bdc4643afa7ce65e952b353d",
+      "sparse_checkout": true,
+      "checkout_clean": true,
+      "role": "embodied",
+      "pin_origin": "registered-baseline",
+      "license_files": {
+        "LICENSE": "149627250cdaaa7b8a43bb892e5d5088ed6bd4653e8776768ab2d311d31654f3"
+      },
+      "license_scope": "upstream-files-recorded",
+      "dependencies": [
+        "pyproject.toml"
+      ],
+      "native_test_files": 52,
+      "static_python": {
+        "parsed": 161,
+        "errors": []
+      },
+      "checkout_bytes": 1512926,
+      "source_inventory": "research/.work/simulator-evaluation/SIM-001/source-inventory.json",
+      "upstream_tree": "https://github.com/artem-x-meta/fly-arena/tree/12f48c702ed170b5bdc4643afa7ce65e952b353d",
+      "evaluation": {
+        "status": "partial",
+        "result": "research/.work/simulator-evaluation/SIM-001/20261005T105111Z-6999dc/result.json",
+        "data_scope": "body_demo_without_connectome",
+        "phases": [
+          {
+            "stage": "install",
+            "status": "passed",
+            "host_available_bytes": 3696078848,
+            "admission_bytes": 1073741824,
+            "host_reserve_bytes": 2147483648,
+            "peak_memory_bytes": 136548352,
+            "seconds": 816.734,
+            "reason": null
+          },
+          {
+            "stage": "native_tests",
+            "status": "passed",
+            "host_available_bytes": 3511111680,
+            "admission_bytes": 268435456,
+            "host_reserve_bytes": 2147483648,
+            "peak_memory_bytes": 432259072,
+            "seconds": 26.484,
+            "reason": null
+          },
+          {
+            "stage": "smoke",
+            "status": "passed",
+            "host_available_bytes": 3173953536,
+            "admission_bytes": 134217728,
+            "host_reserve_bytes": 2147483648,
+            "peak_memory_bytes": 415256576,
+            "seconds": 17.594,
+            "reason": null
+          },
+          {
+            "stage": "functional",
+            "status": "blocked",
+            "host_available_bytes": 3391291392,
+            "admission_bytes": 805306368,
+            "host_reserve_bytes": 2147483648,
+            "peak_memory_bytes": 746942464,
+            "seconds": 168.812,
+            "termination_confirmed": true,
+            "reason": "host_memory_reserve"
+          }
+        ],
+        "functional_evidence": {
+          "receipt": "research/.work/simulator-evaluation/SIM-001/20261005T105111Z-6999dc/body-export-audit.json",
+          "completed_seeds": [
+            1,
+            2,
+            3
+          ],
+          "repeat_seed_status": "verified_across_completed_attempts",
+          "repeat_prefix_exact_equal": true,
+          "body_scenario_status": "reproduced_from_verified_completed_exports",
+          "repeat_rows": 300
+        }
+      },
+      "launch_review": {
+        "status": "passed_tested_scenarios",
+        "date": "2026-10-05",
+        "summary": "Fly Arena успешно запускается: body-demo seeds 1/2/3 и повтор seed 1; полный MaleCNS 166700 нейронов / 25582938 связей прошёл короткий запуск 0,1 с без ошибок. В проверенных сценариях нерешённых блокеров запуска нет.",
+        "scope": "7 штатных тестов, CLI, тело, подготовка графа, короткий headless запуск полной сети, CSV/JSON/MP4 и сохранение нейронного состояния.",
+        "receipts": [
+          "research/.work/simulator-evaluation/SIM-001/20261005T105111Z-6999dc/body-export-audit.json",
+          "research/.work/simulator-evaluation/SIM-001/20261005T105111Z-6999dc/full-connectome-trial.json",
+          "research/.work/simulator-evaluation/SIM-001/20261005T105111Z-6999dc/full-connectome-export-audit.json"
+        ],
+        "memory": {
+          "prepare": 2564194304,
+          "connectome": 1263214592
+        },
+        "resolved_issues": [
+          "Mesa/EGL для headless Linux",
+          "pytest capture=sys на Windows bind mount",
+          "Закрытие writable mmap перед SHA-256 в рабочей копии",
+          "Резерв RAM снят по разрешению пользователя для полного испытания; лимит контейнера 4 ГиБ сохранён"
+        ],
+        "strengths": [
+          "Уже объединены физическое тело, среда, полный MaleCNS и управляемая нейродинамика",
+          "CLI, seeds, телеметрия, видео и нейронные checkpoints облегчают автоматизацию",
+          "CPU достаточен для проверенного сценария; публичные данные с SHA-256; код MIT, коннектом CC BY 4.0"
+        ],
+        "weaknesses": [
+          "Упрощённая LIF-модель, условные знаки медиаторов и управляемый CPG не подтверждают естественное поведение",
+          "0,1 с модели требуют около 3,6 с цикла на нашей машине; интерактивная скорость не подтверждена",
+          "Долгие сценарии, повторяемость полной сети, абляции и полное восстановление арены не проверены",
+          "Человеческого физического оператора ECAP нет"
+        ],
+        "options": {
+          "adapt": "Сильный кандидат для быстрого прототипа среды Drosophila. Потребуются устойчивый API шаг/reset/наблюдение/стимуляция, длительные проверки и научная калибровка.",
+          "compose": "Кандидат на отдельный сервис тела/среды; нейронный backend и человеческий ECAP-оператор можно отделить. Нужно согласовать граф, единицы, шаг времени, состояние и задержки; совместимость ещё не проверена.",
+          "from_scratch": "Использовать подготовку разреженного графа, порты и экспорт как технические образцы. Собственная реализация даст контроль, но потребует заново проверять физику, динамику и воспроизводимость."
+        },
+        "recommendation": "Сохранить как работоспособного кандидата для адаптации и композиции; окончательный выбор после сопоставимых испытаний остальных репозиториев."
+      }
+    },
+    {
+      "repository": "chaobrain/fitting_drosophila_whole_brain_spiking_model",
+      "url": "https://github.com/chaobrain/fitting_drosophila_whole_brain_spiking_model.git",
+      "origins": [
+        "ST013"
+      ],
+      "source_ids": [],
+      "recorded_commit": "f1389ba8b0e7c9f4059d2538b6b799c3e88342ee",
+      "recorded_license": null,
+      "status": "attached",
+      "id": "SIM-002",
+      "path": "simulation/sidecars/chaobrain--fitting_drosophila_whole_brain_spiking_model",
+      "commit": "f1389ba8b0e7c9f4059d2538b6b799c3e88342ee",
+      "sparse_checkout": true,
+      "checkout_clean": true,
+      "role": "neural-fitting",
+      "pin_origin": "registered-baseline",
+      "license_files": {},
+      "license_scope": "unresolved",
+      "dependencies": [
+        "requirements.txt"
+      ],
+      "native_test_files": 0,
+      "static_python": {
+        "parsed": 2,
+        "errors": []
+      },
+      "checkout_bytes": 104743,
+      "source_inventory": "research/.work/simulator-evaluation/SIM-002/source-inventory.json",
+      "upstream_tree": "https://github.com/chaobrain/fitting_drosophila_whole_brain_spiking_model/tree/f1389ba8b0e7c9f4059d2538b6b799c3e88342ee",
+      "evaluation": {
+        "status": "partial",
+        "result": "research/.work/simulator-evaluation/SIM-002/20261005T115256Z-de6935/result.json",
+        "data_scope": "module-import-only",
+        "phases": [
+          {
+            "stage": "install",
+            "status": "passed",
+            "host_available_bytes": 3385036800,
+            "minimum_host_available_bytes": 2454376448,
+            "admission_bytes": 2147483648,
+            "host_reserve_bytes": 0,
+            "peak_memory_bytes": 251105280,
+            "seconds": 698.015,
+            "reason": null
+          },
+          {
+            "stage": "native_tests",
+            "status": "inapplicable",
+            "reason": "No upstream test entry point qualified for this data-free profile"
+          },
+          {
+            "stage": "smoke",
+            "status": "failed",
+            "host_available_bytes": 3251089408,
+            "minimum_host_available_bytes": 3017740288,
+            "admission_bytes": 2147483648,
+            "host_reserve_bytes": 0,
+            "peak_memory_bytes": 354889728,
+            "seconds": 28.375,
+            "reason": "upstream_command_failed"
+          }
+        ]
+      },
+      "launch_review": {
+        "status": "partial_missing_data",
+        "date": "2026-10-05",
+        "summary": "SIM-002 установлен; pip check, CLI и загрузка реальных классов модели прошли после добавления brainscale==0.1.0. Полный расчёт не воспроизведён: конструктор Population останавливается на отсутствии data/Completeness_630_final.csv. Это частичная проверка, а не успешно работающий полный симулятор.",
+        "scope": "CPU Docker, Python 3.12; установка исходных requirements, отдельно исправление зависимости, импорт Population/load_syn, реальный вызов конструктора. Штатные тесты отсутствуют; обучение, прогноз, seeds и экспорт динамики не проверены.",
+        "receipts": [
+          "research/.work/simulator-evaluation/SIM-002/20261005T115256Z-de6935/result.json",
+          "research/.work/simulator-evaluation/SIM-002/20261005T115256Z-de6935/dependency-repair.json",
+          "research/.work/simulator-evaluation/SIM-002/20261005T115256Z-de6935/data-probe-result.json",
+          "research/.work/simulator-evaluation/SIM-002/20261005T115256Z-de6935/data-prerequisite.json",
+          "research/.work/simulator-evaluation/SIM-002/20261005T115256Z-de6935/author-data-access.json"
+        ],
+        "memory": {
+          "repair": 50454528,
+          "model_probe": 473313280
+        },
+        "resolved_issues": [
+          "BrainX из исходных requirements не содержит импортируемый brainscale; установка brainscale==0.1.0 исправила импорт; изменён только профиль окружения",
+          "Резерв RAM отключён по указанию пользователя для испытания, лимит контейнера 4 ГиБ сохранён"
+        ],
+        "strengths": [
+          "Коннектомно-ограниченная LIF-модель, разреженный CSR и низкоранговая адаптация пригодны для изучения обучаемого представления",
+          "Двухэтапная схема SNN и RNN, генерация промежуточных данных и оценка предсказания активности",
+          "Явный выбор FlyWire v630/v783; код описывает работу с областями мозга и нейронной активностью"
+        ],
+        "weaknesses": [
+          "Нет физического тела, среды, взаимодействия с объектами и человеческого ECAP-оператора",
+          "Авторские CSV/parquet/NPZ отсутствуют в checkout; Google Drive отдаёт страницу подтверждения проверки большого файла, архив не скачан и его содержимое не проверено. Это не доказательство недоступности данных",
+          "Версии исходных requirements не закреплены, потребовалась дополнительная зависимость; сохранены исходный и исправленный lock-файлы",
+          "Лицензия всего репозитория не установлена: два Python-файла содержат Apache-2.0 headers, отдельного LICENSE нет",
+          "Скорость и память полного расчёта, обучение и воспроизводимость не измерены; вывод кальциевой активности в спайковые частоты требует проверки допущений"
+        ],
+        "options": {
+          "adapt": "Рассматривать для подгонки нейродинамики и обучения представления, но не как готовую embodied-среду. До адаптации получить и проверить точные авторские данные, права и воспроизводимость вычислений.",
+          "compose": "Возможный отдельный модуль обучения нейронной динамики рядом с сервисом тела. Нужно согласовать графы, популяции, наблюдаемые величины и время; FlyWire v630/v783 нельзя незаметно заменить MaleCNS.",
+          "from_scratch": "Полезны разреженная связность, LoRA и двухэтапная подгонка. Свой модуль может дать строгий контракт данных и тестируемый reset; корректность метода и перенос в ECAP ещё предстоит доказать."
+        },
+        "recommendation": "Сохранить как методического кандидата на обучение представления. Не выбирать основным симулятором до получения данных и функционального воспроизведения."
+      }
+    },
+    {
+      "repository": "cnqso/infinite-sugar",
+      "url": "https://github.com/cnqso/infinite-sugar.git",
+      "origins": [
+        "canonical-source"
+      ],
+      "source_ids": [
+        "S201"
+      ],
+      "recorded_commit": null,
+      "recorded_license": null,
+      "status": "attached",
+      "id": "SIM-003",
+      "path": "simulation/sidecars/cnqso--infinite-sugar",
+      "commit": "fdbbd866b203a709a164970b0a8996108edd57a5",
+      "sparse_checkout": true,
+      "checkout_clean": true,
+      "role": "neural",
+      "pin_origin": "upstream-snapshot-2026-10-04",
+      "license_files": {},
+      "license_scope": "unresolved",
+      "dependencies": [
+        "package.json"
+      ],
+      "native_test_files": 1,
+      "static_python": {
+        "parsed": 7,
+        "errors": []
+      },
+      "checkout_bytes": 13990389,
+      "source_inventory": "research/.work/simulator-evaluation/SIM-003/source-inventory.json",
+      "upstream_tree": "https://github.com/cnqso/infinite-sugar/tree/fdbbd866b203a709a164970b0a8996108edd57a5",
+      "evaluation": {
+        "status": "partial",
+        "result": "research/.work/simulator-evaluation/SIM-003/20261005T121548Z-529787/result.json",
+        "data_scope": "browser_build_and_native_checks",
+        "phases": [
+          {
+            "stage": "install",
+            "status": "passed",
+            "host_available_bytes": 2745688064,
+            "minimum_host_available_bytes": 2464239616,
+            "admission_bytes": 1073741824,
+            "host_reserve_bytes": 0,
+            "peak_memory_bytes": 184741888,
+            "seconds": 13.875,
+            "reason": null
+          },
+          {
+            "stage": "native_tests",
+            "status": "passed",
+            "host_available_bytes": 3092025344,
+            "minimum_host_available_bytes": 2512330752,
+            "admission_bytes": 1073741824,
+            "host_reserve_bytes": 0,
+            "peak_memory_bytes": 684908544,
+            "seconds": 102.157,
+            "reason": null
+          },
+          {
+            "stage": "smoke",
+            "status": "passed",
+            "host_available_bytes": 2931658752,
+            "minimum_host_available_bytes": 2882351104,
+            "admission_bytes": 1073741824,
+            "host_reserve_bytes": 0,
+            "peak_memory_bytes": 122626048,
+            "seconds": 3.359,
+            "reason": null
+          },
+          {
+            "stage": "functional",
+            "status": "inapplicable",
+            "reason": "Full terrarium browser scenario requires pinned graph assets"
+          }
+        ]
+      },
+      "launch_review": {
+        "status": "passed_tested_scenarios",
+        "date": "2026-10-05",
+        "summary": "SIM-003 Infinite Sugar успешно собирается и запускается в настоящем Edge с программным WebGL: 139255 нейронов / 2700513 связей. npm test и typecheck прошли; проверены старт, продвижение времени сети/физики, пауза, включение/выключение сахара, центрирование камеры и инспектор. В проверенных сценариях нерешённых блокеров запуска нет.",
+        "scope": "Закреплённые Git blobs, Node 22.19.0, штатные проверки нейронной карты и MuJoCo WASM, headless Edge 1280x800. Состояния нейронов и физики конечны; ошибок страницы и загрузки ресурсов нет. Профиль браузера, скриншоты и квитанции сохранены в .work.",
+        "receipts": [
+          "research/.work/simulator-evaluation/SIM-003/20261005T121548Z-529787/result.json",
+          "research/.work/simulator-evaluation/SIM-003/20261005T121548Z-529787/pinned-assets.json",
+          "research/.work/simulator-evaluation/SIM-003/20261005T121548Z-529787/browser-result.json",
+          "research/.work/simulator-evaluation/SIM-003/20261005T121548Z-529787/browser-scene.png",
+          "research/.work/simulator-evaluation/SIM-003/20261005T121548Z-529787/browser-inspector.png"
+        ],
+        "memory": {
+          "install": 184741888,
+          "native_tests": 684908544,
+          "smoke": 122626048
+        },
+        "resolved_issues": [
+          "Sparse checkout исключал manifest, граф и модели тела; точные blobs закреплённого коммита восстановлены только в рабочей копии. Восстановление включено в simctl",
+          "В браузерной проверке учтён автоматически открываемый About; это исправление тестового сценария, исходный интерфейс не менялся",
+          "Резерв RAM отключён по разрешению пользователя; контейнерные этапы ограничены 4 ГиБ. Браузер проверен отдельным коротким host-сценарием, его пик RAM отдельно не измерялся"
+        ],
+        "strengths": [
+          "Настоящий интерактивный браузерный запуск без Python/CUDA и нейронный граф в поставляемых файлах",
+          "Проверенные тесты используют реальный граф и MuJoCo WASM, включая сахарный отклик, молчание, устойчивость тела и сброс часов",
+          "Есть раздельные brain/controller/physics компоненты, отображение активности и программный доступ к состояниям"
+        ],
+        "weaknesses": [
+          "Весовые коэффициенты подобраны вручную; движения крыльев и часть движений лап задаются шаблонами, сцена не является полноценным сенсорным миром",
+          "139255/2700513 — поставляемый обработанный граф FlyWire, он не эквивалентен MaleCNS Fly Arena; фильтры и исходную lineage нужно сравнивать отдельно",
+          "Лицензия кода не установлена; README относит данные FlyWire к CC BY-NC 4.0, права на все компоненты требуют проверки",
+          "Сброс тела сохраняет состояние мозга; интерфейс seeds и потокового экспорта для датасета нужно доработать",
+          "Длительные browser-сценарии, три независимых seeds, интерактивная скорость на GPU и биологическая достоверность не проверены; ECAP-оператора нет"
+        ],
+        "options": {
+          "adapt": "Хороший кандидат для интерактивной демонстрации и быстрой проверки стимул/нейродинамика/тело. Для генератора потребуются права, headless API, единый reset, seeds, экспорт единиц и состояния.",
+          "compose": "Можно использовать как браузерный клиент и отдельный WASM-компонент, сохранив вычислительный backend отдельно. Нужны контракт наблюдений, синхронизация времени и проверка эквивалентности графов.",
+          "from_scratch": "Полезны эффективный JS LIF-kernel, разреженная задержанная ингибиция, привязка портов и тесты. Заимствование кода возможно после установления лицензии; своё ядро надо валидировать заново."
+        },
+        "recommendation": "Сохранить как работоспособного кандидата для демонстрации/фронтенда и методический образец. Для основного генератора сравнить научный контроль, экспорт и лицензии с другими проектами."
+      }
+    },
+    {
+      "repository": "cooneypc4/larval_escape_manuscript",
+      "url": "https://github.com/cooneypc4/larval_escape_manuscript.git",
+      "origins": [
+        "canonical-source"
+      ],
+      "source_ids": [
+        "S864"
+      ],
+      "recorded_commit": null,
+      "recorded_license": null,
+      "status": "attached",
+      "id": "SIM-004",
+      "path": "simulation/sidecars/cooneypc4--larval_escape_manuscript",
+      "commit": "c927d42b7234add7df3ead576a8effc02facce18",
+      "sparse_checkout": true,
+      "checkout_clean": true,
+      "role": "author-analysis",
+      "pin_origin": "upstream-snapshot-2026-10-04",
+      "license_files": {},
+      "license_scope": "unresolved",
+      "dependencies": [],
+      "native_test_files": 0,
+      "static_python": {
+        "parsed": 1,
+        "errors": []
+      },
+      "checkout_bytes": 224647,
+      "source_inventory": "research/.work/simulator-evaluation/SIM-004/source-inventory.json",
+      "upstream_tree": "https://github.com/cooneypc4/larval_escape_manuscript/tree/c927d42b7234add7df3ead576a8effc02facce18",
+      "evaluation": {
+        "status": "blocked",
+        "reason": "missing_matlab_and_author_inputs",
+        "result": "research/.work/simulator-evaluation/SIM-004/20261005T123456Z-preflight/preflight.json",
+        "data_scope": "larval_experimental_analysis",
+        "phases": [
+          {
+            "stage": "python_syntax",
+            "status": "passed"
+          },
+          {
+            "stage": "functional",
+            "status": "blocked",
+            "reason": "missing_matlab_and_author_inputs"
+          }
+        ]
+      },
+      "launch_review": {
+        "status": "blocked_missing_runtime_and_data",
+        "date": "2026-10-05",
+        "summary": "SIM-004 larval_escape_manuscript — авторский анализ поведения личинок и SCAPE-съёмки мышц, не симулятор. Проверены закреплённые исходники и синтаксис Python; MATLAB/Octave не найдены в PATH и стандартных каталогах. Вычислительное воспроизведение заблокировано отсутствием среды и исходных данных.",
+        "scope": "Проверка чистого pinned checkout, рабочая копия, статический инвентарь MATLAB/Python, точные входные файлы и GUI-зависимости. MATLAB, Python-анализ данных и экспериментальные результаты не исполнялись.",
+        "receipts": [
+          "research/.work/simulator-evaluation/SIM-004/20261005T123456Z-preflight/preflight.json"
+        ],
+        "memory": {},
+        "resolved_issues": [
+          "Демо-сервер SIM-003 остановлен; исходные sidecars не изменены",
+          "Установлено фактическое назначение: анализ экспериментальных измерений личинки, а не генерация синтетических нейронных состояний"
+        ],
+        "strengths": [
+          "Методы сопоставления мышечных флуоресцентных сигналов с движением, ROI, тепловые карты и анализ PMN/MN связности",
+          "Первичный авторский код связан с зарегистрированной работой S864; полезен как материал для протокола экспериментальной проверки наблюдаемых величин"
+        ],
+        "weaknesses": [
+          "Нет тела/среды симуляции, нейронного solver, стимуляции, генератора данных или ECAP-оператора",
+          "Нет двух необходимых XLSX, исходных SCAPE MAT/TIFF и Track_gui_PC.fig; README не содержит маршрута получения данных и требований окружения",
+          "GUI/ручной выбор ROI, персональные абсолютные пути и незакреплённые зависимости препятствуют пакетному воспроизведению",
+          "Лицензия переиспользования кода не установлена; личинка и мышечная кальциевая активность не эквивалентны взрослому коннектому и спайковым состояниям"
+        ],
+        "options": {
+          "adapt": "Низкий приоритет для самого генератора. Может пригодиться для анализа реальных наблюдений после получения данных, MATLAB-среды и устранения ручных путей/GUI.",
+          "compose": "Рассматривать только как отдельную офлайн-процедуру анализа/валидации, а не сервис симуляции. Сначала определить входные схемы, единицы и автоматизацию ROI.",
+          "from_scratch": "Использовать идеи обработки ROI, сопоставления поведения и сигналов, shuffle-сравнений. Переписать нужный анализ с явными контрактами; перенос кода требует разрешённой лицензии."
+        },
+        "recommendation": "Не считать кандидатом ядра генератора. Сохранить как методический материал валидации личиночных/мышечных измерений; не подменять отсутствие данных успешным запуском."
+      }
+    },
+    {
+      "repository": "emebeiran/connconstr",
+      "url": "https://github.com/emebeiran/connconstr.git",
+      "origins": [
+        "ST108",
+        "canonical-source",
+        "drosophila-connectome-audit"
+      ],
+      "source_ids": [
+        "S743"
+      ],
+      "recorded_commit": "f5f397b88f8dd5c2a5c13558ce6039194a284586",
+      "recorded_license": null,
+      "status": "attached",
+      "id": "SIM-005",
+      "path": "simulation/sidecars/emebeiran--connconstr",
+      "commit": "f5f397b88f8dd5c2a5c13558ce6039194a284586",
+      "sparse_checkout": true,
+      "checkout_clean": true,
+      "role": "method-comparator",
+      "pin_origin": "registered-baseline",
+      "license_files": {},
+      "license_scope": "unresolved",
+      "dependencies": [],
+      "native_test_files": 0,
+      "static_python": {
+        "parsed": 27,
+        "errors": []
+      },
+      "checkout_bytes": 758981,
+      "source_inventory": "research/.work/simulator-evaluation/SIM-005/source-inventory.json",
+      "upstream_tree": "https://github.com/emebeiran/connconstr/tree/f5f397b88f8dd5c2a5c13558ce6039194a284586",
+      "evaluation": {
+        "status": "partial",
+        "result": "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/result.json",
+        "data_scope": "software_fixture_separate_from_author_figure_reproduction",
+        "phases": [
+          {
+            "stage": "install",
+            "status": "passed",
+            "host_available_bytes": 2335825920,
+            "minimum_host_available_bytes": 316682240,
+            "admission_bytes": 2147483648,
+            "host_reserve_bytes": 0,
+            "peak_memory_bytes": 274038784,
+            "seconds": 796.64,
+            "reason": null
+          },
+          {
+            "stage": "smoke",
+            "status": "passed",
+            "host_available_bytes": 2317930496,
+            "minimum_host_available_bytes": 2002894848,
+            "admission_bytes": 2147483648,
+            "host_reserve_bytes": 0,
+            "peak_memory_bytes": 241176576,
+            "seconds": 17.078,
+            "reason": null
+          },
+          {
+            "stage": "native_tests",
+            "status": "inapplicable",
+            "reason": "No upstream test entry point qualified for this data-free profile"
+          },
+          {
+            "stage": "functional",
+            "status": "passed",
+            "host_available_bytes": 2165485568,
+            "minimum_host_available_bytes": 2017132544,
+            "admission_bytes": 2147483648,
+            "host_reserve_bytes": 0,
+            "peak_memory_bytes": 357339136,
+            "seconds": 67.39,
+            "reason": null
+          }
+        ]
+      },
+      "launch_review": {
+        "status": "passed_tested_scenarios",
+        "date": "2026-10-05",
+        "summary": "Установка и pip check, функциональная проверка RNN, авторская модель Figure 1 (300 нейронов) прошли. Авторский сценарий Figure 5 на hemibrain: passed.",
+        "scope": "Программная проверка, авторские синтетические веса и модель центрального комплекса из hemibrain. Не модель всего мозга, тела или человеческого ECAP; не воспроизведение всех результатов статьи.",
+        "receipts": [
+          "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/result.json",
+          "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/author-archive.json",
+          "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/extracted-author-data.json",
+          "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/author_dependencies-result.json",
+          "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/author_run-result.json",
+          "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/exports/connconstr-fixture/result.json",
+          "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/exports/connconstr-author-teacher/result.json"
+        ],
+        "memory": {
+          "author_figure5_peak_bytes": 4769677312
+        },
+        "resolved_issues": [
+          "Добавлена pandas для авторского сценария; подготовлен каталог Figs и безоконный backend Agg.",
+          "Архив Zenodo 16618353 скачан и проверен по MD5 и SHA-256.",
+          "По решению пользователя сняты ограничение RAM Docker и проверка запаса RAM; сценарий действительно запущен."
+        ],
+        "strengths": [
+          "Авторский код обучения connectome-constrained RNN и доступные данные для Figure 1–5.",
+          "Доступ к весам, нейронным состояниям, loss и экспорту NumPy/PyTorch.",
+          "Короткие seeded проверки и восстановление состояния воспроизводимы на CPU."
+        ],
+        "weaknesses": [
+          "Нет тела, среды и физического оператора ECAP.",
+          "Исследовательские монолитные скрипты без штатного тестового пакета; зависимости требуют явного закрепления.",
+          "Плотная матрица полного hemibrain загружается перед выделением небольшой подсети.",
+          "Лицензия архива Zenodo CC BY 4.0 не устанавливает автоматически лицензию всего Git-репозитория.",
+          "Полный авторский сценарий не имеет внешнего задания seed; его повторяемость отдельно не подтверждена."
+        ],
+        "options": {
+          "adapt": "Выделить RNN, обучение и загрузчик подсети в отдельный модуль; заменить плотную подготовку графа при необходимости и закрепить единицы/seed/экспорт.",
+          "compose": "Использовать отдельный компонент обучения представлений рядом с embodied-симулятором и независимым человеческим ECAP-оператором.",
+          "from_scratch": "Использовать как методический ориентир и контрольную реализацию; права на перенос кода проверить отдельно."
+        },
+        "recommendation": "Сохранить как методический кандидат обучения и проверки переносимых представлений. Архитектуру генератора выбирать после испытаний остальных репозиториев."
+      }
+    },
+    {
+      "repository": "eonsystemspbc/fly-brain",
+      "url": "https://github.com/eonsystemspbc/fly-brain.git",
+      "origins": [
+        "ST007",
+        "canonical-source"
+      ],
+      "source_ids": [
+        "S732"
+      ],
+      "recorded_commit": "a3db62f9436074e485c0278290c2164ed6150808",
+      "recorded_license": "GPL-2.0",
+      "status": "attached",
+      "id": "SIM-006",
+      "path": "simulation/sidecars/eonsystemspbc--fly-brain",
+      "commit": "a3db62f9436074e485c0278290c2164ed6150808",
+      "sparse_checkout": true,
+      "checkout_clean": true,
+      "role": "neural",
+      "pin_origin": "registered-baseline",
+      "license_files": {
+        "code/paper-phil-drosophila/LICENSE": "7f80266a88ee61669cfa54b6a8a3683c56f275487bd518d446bd48112267c65d",
+        "LICENSE": "189b1af95d661151e054cea10c91b3d754e4de4d3fecfb074c1fb29476f7167b"
+      },
+      "license_scope": "upstream-files-recorded",
+      "dependencies": [
+        "environment-brian2genn.yml",
+        "environment.yml"
+      ],
+      "native_test_files": 0,
+      "static_python": {
+        "parsed": 13,
+        "errors": []
+      },
+      "checkout_bytes": 438881,
+      "source_inventory": "research/.work/simulator-evaluation/SIM-006/source-inventory.json",
+      "upstream_tree": "https://github.com/eonsystemspbc/fly-brain/tree/a3db62f9436074e485c0278290c2164ed6150808",
+      "evaluation": {
+        "status": "blocked",
+        "result": "research/.work/simulator-evaluation/SIM-006/20261004T210300Z-899b31/result.json",
+        "phases": [
+          {
+            "stage": "install",
+            "status": "blocked",
+            "reason": "host_memory_reserve",
+            "host_available_bytes": 888311808,
+            "host_reserve_bytes": 2147483648,
+            "admission_bytes": 2147483648
+          }
+        ]
+      }
+    },
+    {
+      "repository": "erankopel/maleCNS-depth",
+      "url": "https://github.com/erankopel/maleCNS-depth.git",
+      "origins": [
+        "canonical-source"
+      ],
+      "source_ids": [
+        "S857"
+      ],
+      "recorded_commit": null,
+      "recorded_license": null,
+      "status": "attached",
+      "id": "SIM-007",
+      "path": "simulation/sidecars/erankopel--maleCNS-depth",
+      "commit": "e80dcf643beefff08afd936a741ac8cc50723cb4",
+      "sparse_checkout": true,
+      "checkout_clean": true,
+      "role": "connectome-preparation",
+      "pin_origin": "upstream-snapshot-2026-10-04",
+      "license_files": {
+        "LICENSE": "a2e604e6c25635d6eb9d0fea6e1bd068875a87a401c8265fb506c3b5a31f3481"
+      },
+      "license_scope": "upstream-files-recorded",
+      "dependencies": [
+        "code/confirmatory/requirements-confirmatory.txt"
+      ],
+      "native_test_files": 3,
+      "static_python": {
+        "parsed": 37,
+        "errors": []
+      },
+      "checkout_bytes": 266172,
+      "source_inventory": "research/.work/simulator-evaluation/SIM-007/source-inventory.json",
+      "upstream_tree": "https://github.com/erankopel/maleCNS-depth/tree/e80dcf643beefff08afd936a741ac8cc50723cb4",
+      "evaluation": {
+        "status": "blocked",
+        "result": "research/.work/simulator-evaluation/SIM-007/20261004T210300Z-a84bf7/result.json",
+        "phases": [
+          {
+            "stage": "install",
+            "status": "blocked",
+            "reason": "host_memory_reserve",
+            "host_available_bytes": 888418304,
+            "host_reserve_bytes": 2147483648,
+            "admission_bytes": 536870912
+          }
+        ]
+      }
+    },
+    {
+      "repository": "flyconnectome/2025malecns",
+      "url": "https://github.com/flyconnectome/2025malecns.git",
+      "origins": [
+        "drosophila-connectome-audit"
+      ],
+      "source_ids": [],
+      "recorded_commit": "67767d2233657983993ff6c2be48e836a935863c",
+      "recorded_license": null,
+      "status": "attached",
+      "id": "SIM-008",
+      "path": "simulation/sidecars/flyconnectome--2025malecns",
+      "commit": "67767d2233657983993ff6c2be48e836a935863c",
+      "sparse_checkout": true,
+      "checkout_clean": true,
+      "role": "connectome-preparation",
+      "pin_origin": "registered-baseline",
+      "license_files": {},
+      "license_scope": "unresolved",
+      "dependencies": [],
+      "native_test_files": 0,
+      "static_python": {
+        "parsed": 0,
+        "errors": []
+      },
+      "checkout_bytes": 28994,
+      "source_inventory": "research/.work/simulator-evaluation/SIM-008/source-inventory.json",
+      "upstream_tree": "https://github.com/flyconnectome/2025malecns/tree/67767d2233657983993ff6c2be48e836a935863c",
+      "evaluation": {
+        "status": "blocked",
+        "reason": "Notebook/data release, not a simulator; supplementary tables must be registered before numerical replay",
+        "installation": "not_attempted",
+        "biological_validation": false
+      }
+    },
+    {
+      "repository": "gauravvvvvvvvvv/flybox",
+      "url": "https://github.com/gauravvvvvvvvvv/flybox.git",
+      "origins": [
+        "ST107",
+        "canonical-source",
+        "drosophila-connectome-audit"
+      ],
+      "source_ids": [
+        "S737"
+      ],
+      "recorded_commit": "5880d221e21b1f3385b7246a6ffc3b2cf0029c2c",
+      "recorded_license": "Apache-2.0",
+      "status": "attached",
+      "id": "SIM-009",
+      "path": "simulation/sidecars/gauravvvvvvvvvv--flybox",
+      "commit": "5880d221e21b1f3385b7246a6ffc3b2cf0029c2c",
+      "sparse_checkout": true,
+      "checkout_clean": true,
+      "role": "browser-neural",
+      "pin_origin": "registered-baseline",
+      "license_files": {
+        "LICENSE": "4b23242263b45bfa92cbb8d9624be82b0b266763274f0994e793a113faac0983"
+      },
+      "license_scope": "upstream-files-recorded",
+      "dependencies": [
+        "backend/requirements.txt",
+        "frontend/package.json"
+      ],
+      "native_test_files": 1,
+      "static_python": {
+        "parsed": 19,
+        "errors": []
+      },
+      "checkout_bytes": 489495,
+      "source_inventory": "research/.work/simulator-evaluation/SIM-009/source-inventory.json",
+      "upstream_tree": "https://github.com/gauravvvvvvvvvv/flybox/tree/5880d221e21b1f3385b7246a6ffc3b2cf0029c2c",
+      "evaluation": {
+        "status": "blocked",
+        "result": "research/.work/simulator-evaluation/SIM-009/20261004T210300Z-b02dbb/result.json",
+        "phases": [
+          {
+            "stage": "install",
+            "status": "blocked",
+            "reason": "host_memory_reserve",
+            "host_available_bytes": 888246272,
+            "host_reserve_bytes": 2147483648,
+            "admission_bytes": 2147483648
+          }
+        ]
+      }
+    },
+    {
+      "repository": "hsseung/OpticLobe.jl",
+      "url": "https://github.com/hsseung/OpticLobe.jl.git",
+      "origins": [
+        "canonical-source"
+      ],
+      "source_ids": [
+        "S888"
+      ],
+      "recorded_commit": null,
+      "recorded_license": null,
+      "status": "attached",
+      "id": "SIM-010",
+      "path": "simulation/sidecars/hsseung--OpticLobe.jl",
+      "commit": "3352e97c37b0f96ab08f27b70b4420f3d4ac2726",
+      "sparse_checkout": true,
+      "checkout_clean": true,
+      "role": "connectome-preparation",
+      "pin_origin": "upstream-snapshot-2026-10-04",
+      "license_files": {
+        "LICENSE": "58aeab0bfecc96ce5e8ce09286cbaaf75d18d43959dbfb32fa8a12af952e0e67"
+      },
+      "license_scope": "upstream-files-recorded",
+      "dependencies": [
+        "FormVisionPaper/Project.toml",
+        "PartsListPaper/Project.toml",
+        "Project.toml"
+      ],
+      "native_test_files": 0,
+      "static_python": {
+        "parsed": 0,
+        "errors": []
+      },
+      "checkout_bytes": 443327,
+      "source_inventory": "research/.work/simulator-evaluation/SIM-010/source-inventory.json",
+      "upstream_tree": "https://github.com/hsseung/OpticLobe.jl/tree/3352e97c37b0f96ab08f27b70b4420f3d4ac2726",
+      "evaluation": {
+        "status": "blocked",
+        "reason": "Julia scientific analysis requires its Julia lock environment and matching optic-lobe datasets",
+        "installation": "not_attempted",
+        "biological_validation": false
+      }
+    },
+    {
+      "repository": "htem/BANC-project",
+      "url": "https://github.com/htem/BANC-project.git",
+      "origins": [
+        "drosophila-connectome-audit"
+      ],
+      "source_ids": [],
+      "recorded_commit": null,
+      "recorded_license": null,
+      "status": "attached",
+      "id": "SIM-011",
+      "path": "simulation/sidecars/htem--BANC-project",
+      "commit": "e31a2e26b9937dca72e5ca1c1960df6454d76114",
+      "sparse_checkout": true,
+      "checkout_clean": true,
+      "role": "connectome-preparation",
+      "pin_origin": "upstream-snapshot-2026-10-04",
+      "license_files": {},
+      "license_scope": "unresolved",
+      "dependencies": [
+        "requirements.txt"
+      ],
+      "native_test_files": 0,
+      "static_python": {
+        "parsed": 20,
+        "errors": []
+      },
+      "checkout_bytes": 103935049,
+      "source_inventory": "research/.work/simulator-evaluation/SIM-011/source-inventory.json",
+      "upstream_tree": "https://github.com/htem/BANC-project/tree/e31a2e26b9937dca72e5ca1c1960df6454d76114",
+      "evaluation": {
+        "status": "blocked",
+        "reason": "R BANC analysis depends on a materialisation, data exports and server credentials; it is not an executable fly simulator",
+        "installation": "not_attempted",
+        "biological_validation": false
+      }
+    },
+    {
+      "repository": "htem/FANC_auto_recon",
+      "url": "https://github.com/htem/FANC_auto_recon.git",
+      "origins": [
+        "canonical-source",
+        "drosophila-connectome-audit"
+      ],
+      "source_ids": [
+        "S773"
+      ],
+      "recorded_commit": null,
+      "recorded_license": null,
+      "status": "attached",
+      "id": "SIM-012",
+      "path": "simulation/sidecars/htem--FANC_auto_recon",
+      "commit": "89d9769457583051e3ec9ec7b34a5f3575537bf5",
+      "sparse_checkout": true,
+      "checkout_clean": true,
+      "role": "connectome-preparation",
+      "pin_origin": "upstream-snapshot-2026-10-04",
+      "license_files": {
+        "LICENSE": "230184f60bae2feaf244f10a8bac053c8ff33a183bcc365b4d8b876d2b7f4809"
+      },
+      "license_scope": "upstream-files-recorded",
+      "dependencies": [
+        "pyproject.toml"
+      ],
+      "native_test_files": 1,
+      "static_python": {
+        "parsed": 48,
+        "errors": []
+      },
+      "checkout_bytes": 15659385,
+      "source_inventory": "research/.work/simulator-evaluation/SIM-012/source-inventory.json",
+      "upstream_tree": "https://github.com/htem/FANC_auto_recon/tree/89d9769457583051e3ec9ec7b34a5f3575537bf5",
+      "evaluation": {
+        "status": "blocked",
+        "result": "research/.work/simulator-evaluation/SIM-012/20261004T210300Z-2a1f47/result.json",
+        "phases": [
+          {
+            "stage": "install",
+            "status": "blocked",
+            "reason": "host_memory_reserve",
+            "host_available_bytes": 888225792,
+            "host_reserve_bytes": 2147483648,
+            "admission_bytes": 2147483648
+          }
+        ]
+      }
+    },
+    {
+      "repository": "jajmcallister/Conn_ESN_Paper",
+      "url": "https://github.com/jajmcallister/Conn_ESN_Paper.git",
+      "origins": [
+        "canonical-source"
+      ],
+      "source_ids": [
+        "S872"
+      ],
+      "recorded_commit": null,
+      "recorded_license": null,
+      "status": "attached",
+      "id": "SIM-013",
+      "path": "simulation/sidecars/jajmcallister--Conn_ESN_Paper",
+      "commit": "55b9069b919951c39dfc3a342b7b31e6cb575838",
+      "sparse_checkout": true,
+      "checkout_clean": true,
+      "role": "method-comparator",
+      "pin_origin": "upstream-snapshot-2026-10-04",
+      "license_files": {},
+      "license_scope": "unresolved",
+      "dependencies": [],
+      "native_test_files": 0,
+      "static_python": {
+        "parsed": 0,
+        "errors": []
+      },
+      "checkout_bytes": 515488,
+      "source_inventory": "research/.work/simulator-evaluation/SIM-013/source-inventory.json",
+      "upstream_tree": "https://github.com/jajmcallister/Conn_ESN_Paper/tree/55b9069b919951c39dfc3a342b7b31e6cb575838",
+      "evaluation": {
+        "status": "blocked",
+        "reason": "Julia 1.11 ESN experiment requires weight matrices and the author environment, not a body simulator",
+        "installation": "not_attempted",
+        "biological_validation": false
+      }
+    },
+    {
+      "repository": "JNLiew/flylif_orientation_maps",
+      "url": "https://github.com/JNLiew/flylif_orientation_maps.git",
+      "origins": [
+        "canonical-source"
+      ],
+      "source_ids": [
+        "S841"
+      ],
+      "recorded_commit": null,
+      "recorded_license": null,
+      "status": "attached",
+      "id": "SIM-014",
+      "path": "simulation/sidecars/JNLiew--flylif_orientation_maps",
+      "commit": "d73b18712579c969feba625ecfd3df52f4d328f4",
+      "sparse_checkout": true,
+      "checkout_clean": true,
+      "role": "neural",
+      "pin_origin": "upstream-snapshot-2026-10-04",
+      "license_files": {},
+      "license_scope": "unresolved",
+      "dependencies": [
+        "requirements.txt"
+      ],
+      "native_test_files": 0,
+      "static_python": {
+        "parsed": 15,
+        "errors": []
+      },
+      "checkout_bytes": 6424846,
+      "source_inventory": "research/.work/simulator-evaluation/SIM-014/source-inventory.json",
+      "upstream_tree": "https://github.com/JNLiew/flylif_orientation_maps/tree/d73b18712579c969feba625ecfd3df52f4d328f4",
+      "evaluation": {
+        "status": "blocked",
+        "result": "research/.work/simulator-evaluation/SIM-014/20261004T210300Z-0d57f0/result.json",
+        "phases": [
+          {
+            "stage": "install",
+            "status": "blocked",
+            "reason": "host_memory_reserve",
+            "host_available_bytes": 887902208,
+            "host_reserve_bytes": 2147483648,
+            "admission_bytes": 1073741824
+          }
+        ]
+      }
+    },
+    {
+      "repository": "legacyindiesubmissions-ai/claude-fly",
+      "url": "https://github.com/legacyindiesubmissions-ai/claude-fly.git",
+      "origins": [
+        "ST008",
+        "canonical-source",
+        "drosophila-connectome-audit"
+      ],
+      "source_ids": [
+        "S292"
+      ],
+      "recorded_commit": "3a035275148e97539711728422548bffe2a77566",
+      "recorded_license": "MIT",
+      "status": "attached",
+      "id": "SIM-015",
+      "path": "simulation/sidecars/legacyindiesubmissions-ai--claude-fly",
+      "commit": "3a035275148e97539711728422548bffe2a77566",
+      "sparse_checkout": true,
+      "checkout_clean": true,
+      "role": "embodied",
+      "pin_origin": "registered-baseline",
+      "license_files": {
+        "LICENSE": "17cfc52eccdeb25fbcc67be78af2efd68981d673ea2fc4c04a4fde0c621ff038"
+      },
+      "license_scope": "upstream-files-recorded",
+      "dependencies": [
+        "environment.yml"
+      ],
+      "native_test_files": 0,
+      "static_python": {
+        "parsed": 32,
+        "errors": []
+      },
+      "checkout_bytes": 786108,
+      "source_inventory": "research/.work/simulator-evaluation/SIM-015/source-inventory.json",
+      "upstream_tree": "https://github.com/legacyindiesubmissions-ai/claude-fly/tree/3a035275148e97539711728422548bffe2a77566",
+      "evaluation": {
+        "status": "blocked",
+        "reason": "Legacy FlyGym API coupling and pretrained LFS weights need resolution before an offline embodied run",
+        "installation": "not_attempted",
+        "biological_validation": false
+      }
+    },
+    {
+      "repository": "MakazhanAlpamys/soup-connectome",
+      "url": "https://github.com/MakazhanAlpamys/soup-connectome.git",
+      "origins": [
+        "ST012"
+      ],
+      "source_ids": [],
+      "recorded_commit": "40aa07f87995a7061f75f92f8ddd0465ede89577",
+      "recorded_license": null,
+      "status": "attached",
+      "id": "SIM-016",
+      "path": "simulation/sidecars/MakazhanAlpamys--soup-connectome",
+      "commit": "40aa07f87995a7061f75f92f8ddd0465ede89577",
+      "sparse_checkout": true,
+      "checkout_clean": true,
+      "role": "neural",
+      "pin_origin": "registered-baseline",
+      "license_files": {},
+      "license_scope": "unresolved",
+      "dependencies": [
+        "pyproject.toml",
+        "web/package.json",
+        "web/wasm/Cargo.toml"
+      ],
+      "native_test_files": 11,
+      "static_python": {
+        "parsed": 31,
+        "errors": []
+      },
+      "checkout_bytes": 233643,
+      "source_inventory": "research/.work/simulator-evaluation/SIM-016/source-inventory.json",
+      "upstream_tree": "https://github.com/MakazhanAlpamys/soup-connectome/tree/40aa07f87995a7061f75f92f8ddd0465ede89577",
+      "evaluation": {
+        "status": "blocked",
+        "result": "research/.work/simulator-evaluation/SIM-016/20261004T210600Z-4b1eb6/result.json",
+        "phases": [
+          {
+            "stage": "install",
+            "status": "blocked",
+            "host_available_bytes": 2722054144,
+            "admission_bytes": 134217728,
+            "host_reserve_bytes": 2147483648,
+            "peak_memory_bytes": 105705472,
+            "seconds": 51.531,
+            "termination_confirmed": true,
+            "reason": "host_memory_reserve"
+          }
+        ]
+      }
+    },
+    {
+      "repository": "murthylab/flywire-network-analysis",
+      "url": "https://github.com/murthylab/flywire-network-analysis.git",
+      "origins": [
+        "ST003"
+      ],
+      "source_ids": [],
+      "recorded_commit": "ee4944c03429edf857a6b10bcf98bea7dcef35b8",
+      "recorded_license": "MIT",
+      "status": "attached",
+      "id": "SIM-017",
+      "path": "simulation/sidecars/murthylab--flywire-network-analysis",
+      "commit": "ee4944c03429edf857a6b10bcf98bea7dcef35b8",
+      "sparse_checkout": true,
+      "checkout_clean": true,
+      "role": "connectome-preparation",
+      "pin_origin": "registered-baseline",
+      "license_files": {
+        "LICENSE": "cf81303041e11c98f6f90a75edebca404e3e0c85c1421ec41559e749f9878be6"
+      },
+      "license_scope": "upstream-files-recorded",
+      "dependencies": [],
+      "native_test_files": 0,
+      "static_python": {
+        "parsed": 21,
+        "errors": []
+      },
+      "checkout_bytes": 35738423,
+      "source_inventory": "research/.work/simulator-evaluation/SIM-017/source-inventory.json",
+      "upstream_tree": "https://github.com/murthylab/flywire-network-analysis/tree/ee4944c03429edf857a6b10bcf98bea7dcef35b8",
+      "evaluation": {
+        "status": "blocked",
+        "reason": "Linux graph-tool and FlyWire v630 data/cluster analyses require a dedicated graph-tool environment",
+        "installation": "not_attempted",
+        "biological_validation": false
+      }
+    },
+    {
+      "repository": "nalin-dhiman/Connectome-Constrained-Neural-Networks",
+      "url": "https://github.com/nalin-dhiman/Connectome-Constrained-Neural-Networks.git",
+      "origins": [
+        "drosophila-connectome-audit"
+      ],
+      "source_ids": [],
+      "recorded_commit": "336e0d12a6edd92a7340cfffb71985a3879055ce",
+      "recorded_license": null,
+      "status": "attached",
+      "id": "SIM-018",
+      "path": "simulation/sidecars/nalin-dhiman--Connectome-Constrained-Neural-Networks",
+      "commit": "336e0d12a6edd92a7340cfffb71985a3879055ce",
+      "sparse_checkout": true,
+      "checkout_clean": true,
+      "role": "neural",
+      "pin_origin": "registered-baseline",
+      "license_files": {
+        "LICENSE": "5ca2920d4f56954100c8f365461aba7b6c6154da49734f7b2703d9275ad49d11"
+      },
+      "license_scope": "upstream-files-recorded",
+      "dependencies": [
+        "environment/requirements.txt"
+      ],
+      "native_test_files": 0,
+      "static_python": {
+        "parsed": 36,
+        "errors": []
+      },
+      "checkout_bytes": 380167,
+      "source_inventory": "research/.work/simulator-evaluation/SIM-018/source-inventory.json",
+      "upstream_tree": "https://github.com/nalin-dhiman/Connectome-Constrained-Neural-Networks/tree/336e0d12a6edd92a7340cfffb71985a3879055ce",
+      "evaluation": {
+        "status": "blocked",
+        "result": "research/.work/simulator-evaluation/SIM-018/20261004T210300Z-ebef6e/result.json",
+        "phases": [
+          {
+            "stage": "install",
+            "status": "blocked",
+            "reason": "host_memory_reserve",
+            "host_available_bytes": 875032576,
+            "host_reserve_bytes": 2147483648,
+            "admission_bytes": 2147483648
+          }
+        ]
+      }
+    },
+    {
+      "repository": "nalin-dhiman/ScaleBreak-FlyVis",
+      "url": "https://github.com/nalin-dhiman/ScaleBreak-FlyVis.git",
+      "origins": [
+        "canonical-source"
+      ],
+      "source_ids": [
+        "S853"
+      ],
+      "recorded_commit": null,
+      "recorded_license": null,
+      "status": "attached",
+      "id": "SIM-019",
+      "path": "simulation/sidecars/nalin-dhiman--ScaleBreak-FlyVis",
+      "commit": "24c87489efdca64970ecbe93efc683b68f778cdf",
+      "sparse_checkout": true,
+      "checkout_clean": true,
+      "role": "method-comparator",
+      "pin_origin": "upstream-snapshot-2026-10-04",
+      "license_files": {},
+      "license_scope": "unresolved",
+      "dependencies": [
+        "scalebreak_flyvis/requirements.txt"
+      ],
+      "native_test_files": 5,
+      "static_python": {
+        "parsed": 60,
+        "errors": []
+      },
+      "checkout_bytes": 584697,
+      "source_inventory": "research/.work/simulator-evaluation/SIM-019/source-inventory.json",
+      "upstream_tree": "https://github.com/nalin-dhiman/ScaleBreak-FlyVis/tree/24c87489efdca64970ecbe93efc683b68f778cdf",
+      "evaluation": {
+        "status": "blocked",
+        "result": "research/.work/simulator-evaluation/SIM-019/20261004T210300Z-3abde6/result.json",
+        "phases": [
+          {
+            "stage": "install",
+            "status": "blocked",
+            "reason": "host_memory_reserve",
+            "host_available_bytes": 875401216,
+            "host_reserve_bytes": 2147483648,
+            "admission_bytes": 2147483648
+          }
+        ]
+      }
+    },
+    {
+      "repository": "NeLy-EPFL/flygym",
+      "url": "https://github.com/NeLy-EPFL/flygym.git",
+      "origins": [
+        "ST106",
+        "canonical-source"
+      ],
+      "source_ids": [
+        "S734"
+      ],
+      "recorded_commit": "38c8ec61034cd59bc5ba0de20688d4a3c0000d60",
+      "recorded_license": "Apache-2.0",
+      "status": "attached",
+      "id": "SIM-020",
+      "path": "simulation/sidecars/NeLy-EPFL--flygym",
+      "commit": "38c8ec61034cd59bc5ba0de20688d4a3c0000d60",
+      "sparse_checkout": true,
+      "checkout_clean": true,
+      "role": "body-environment",
+      "pin_origin": "registered-baseline",
+      "license_files": {
+        "LICENSE": "4e89fc37e50d41ea81616b413b23db4e8db395898930490fced1fa7d1eae863c"
+      },
+      "license_scope": "upstream-files-recorded",
+      "dependencies": [
+        "pyproject.toml"
+      ],
+      "native_test_files": 23,
+      "static_python": {
+        "parsed": 99,
+        "errors": []
+      },
+      "checkout_bytes": 1636671,
+      "source_inventory": "research/.work/simulator-evaluation/SIM-020/source-inventory.json",
+      "upstream_tree": "https://github.com/NeLy-EPFL/flygym/tree/38c8ec61034cd59bc5ba0de20688d4a3c0000d60",
+      "evaluation": {
+        "status": "blocked",
+        "result": "research/.work/simulator-evaluation/SIM-020/20261004T210300Z-4d39c6/result.json",
+        "phases": [
+          {
+            "stage": "install",
+            "status": "blocked",
+            "reason": "host_memory_reserve",
+            "host_available_bytes": 875425792,
+            "host_reserve_bytes": 2147483648,
+            "admission_bytes": 1073741824
+          }
+        ]
+      }
+    },
+    {
+      "repository": "NeLy-EPFL/flygym-gymnasium",
+      "url": "https://github.com/NeLy-EPFL/flygym-gymnasium.git",
+      "origins": [
+        "official-FlyGym-1.x-compatibility"
+      ],
+      "source_ids": [],
+      "recorded_commit": null,
+      "recorded_license": null,
+      "status": "attached",
+      "id": "SIM-021",
+      "path": "simulation/sidecars/NeLy-EPFL--flygym-gymnasium",
+      "commit": "d285260a1c8a7b3494150cd1590f2c9fe4b5e06b",
+      "sparse_checkout": true,
+      "checkout_clean": true,
+      "role": "body-environment-compatibility",
+      "pin_origin": "upstream-snapshot-2026-10-04",
+      "license_files": {
+        "LICENSE": "1eb85fc97224598dad1852b5d6483bbcf0aa8608790dcc657a5a2a761ae9c8c6"
+      },
+      "license_scope": "upstream-files-recorded",
+      "dependencies": [
+        "doc/Makefile",
+        "pyproject.toml"
+      ],
+      "native_test_files": 21,
+      "static_python": {
+        "parsed": 88,
+        "errors": []
+      },
+      "checkout_bytes": 3978914,
+      "source_inventory": "research/.work/simulator-evaluation/SIM-021/source-inventory.json",
+      "upstream_tree": "https://github.com/NeLy-EPFL/flygym-gymnasium/tree/d285260a1c8a7b3494150cd1590f2c9fe4b5e06b",
+      "evaluation": {
+        "status": "blocked",
+        "result": "research/.work/simulator-evaluation/SIM-021/20261004T210300Z-2a13ee/result.json",
+        "phases": [
+          {
+            "stage": "install",
+            "status": "blocked",
+            "reason": "host_memory_reserve",
+            "host_available_bytes": 875233280,
+            "host_reserve_bytes": 2147483648,
+            "admission_bytes": 1073741824
+          }
+        ]
+      }
+    },
+    {
+      "repository": "Neuromorphicism/fly-brain-snntorch",
+      "url": "https://github.com/Neuromorphicism/fly-brain-snntorch.git",
+      "origins": [
+        "ST105",
+        "canonical-source"
+      ],
+      "source_ids": [
+        "S733"
+      ],
+      "recorded_commit": "fe55fb0cff275a2b6b54926524c8d831838e32fc",
+      "recorded_license": "MIT",
+      "status": "attached",
+      "id": "SIM-022",
+      "path": "simulation/sidecars/Neuromorphicism--fly-brain-snntorch",
+      "commit": "fe55fb0cff275a2b6b54926524c8d831838e32fc",
+      "sparse_checkout": true,
+      "checkout_clean": true,
+      "role": "neural",
+      "pin_origin": "registered-baseline",
+      "license_files": {
+        "LICENSE": "22c94f0b68bea259f75866399bdfa127f2c3e86260b664c281029a509d948b97"
+      },
+      "license_scope": "upstream-files-recorded",
+      "dependencies": [
+        "requirements.txt"
+      ],
+      "native_test_files": 0,
+      "static_python": {
+        "parsed": 2,
+        "errors": []
+      },
+      "checkout_bytes": 8373305,
+      "source_inventory": "research/.work/simulator-evaluation/SIM-022/source-inventory.json",
+      "upstream_tree": "https://github.com/Neuromorphicism/fly-brain-snntorch/tree/fe55fb0cff275a2b6b54926524c8d831838e32fc",
+      "evaluation": {
+        "status": "blocked",
+        "result": "research/.work/simulator-evaluation/SIM-022/20261004T210300Z-910089/result.json",
+        "phases": [
+          {
+            "stage": "install",
+            "status": "blocked",
+            "reason": "host_memory_reserve",
+            "host_available_bytes": 874356736,
+            "host_reserve_bytes": 2147483648,
+            "admission_bytes": 2147483648
+          }
+        ]
+      }
+    },
+    {
+      "repository": "nftechie/doomfly",
+      "url": "https://github.com/nftechie/doomfly.git",
+      "origins": [
+        "ST084",
+        "canonical-source",
+        "drosophila-connectome-audit"
+      ],
+      "source_ids": [
+        "S200"
+      ],
+      "recorded_commit": "71ecf53d78eaffaf1a57ed7b0ccf5d458abc9f33",
+      "recorded_license": "MIT",
+      "status": "attached",
+      "id": "SIM-023",
+      "path": "simulation/sidecars/nftechie--doomfly",
+      "commit": "71ecf53d78eaffaf1a57ed7b0ccf5d458abc9f33",
+      "sparse_checkout": true,
+      "checkout_clean": true,
+      "role": "embodied-game",
+      "pin_origin": "registered-baseline",
+      "license_files": {
+        "LICENSE": "484b339d0a9ae8c3607eb8704346ef86d2e52960d93e3b75d2ecc26d576706c7",
+        "licenses/npm/base-ui__react/LICENSE": "218e9eacf5651ae25473e8e4d1ca3d9dd2c64d704fc93b19e90d38f1ce7efca8",
+        "licenses/npm/class-variance-authority/LICENSE": "b0401544e97d85b9d600c09c8007c2e31d0bc59613cd2b62ff03c6ea17fab5dc",
+        "licenses/npm/clsx/license": "bd3d45c67c661b5a4caca3187d6d09722a5065869a6896c26ed50e06f0f0b3c3",
+        "licenses/npm/cmdk/LICENSE.md": "1eff0c9118e89083a7a9b0fc92b425f136170aeaa490c7bb4c54753bcbbd1b01",
+        "licenses/npm/date-fns/LICENSE.md": "7d4effbf1eadc4c7013df753b0269a24cc30eb89f032d11ef9b79aa0e23cd777",
+        "licenses/npm/embla-carousel-react/LICENSE": "d78caa8c2139976d799fd468f2f8615a09ecc2a8bba4fa3410a1ad2dfce5a11f",
+        "licenses/npm/input-otp/LICENSE": "24809f6273eff8f26867889d6f1376452dc3f1e142ae41d9608924cb24b91a56",
+        "licenses/npm/lucide-react/LICENSE": "6fc5b7332939dd5c61af3a5f97450f7bc05d4a396dd0bc21ac341716b3b05096",
+        "licenses/npm/openai__sites-vite-plugin/LICENSE": "3dd119f149df88296e82981a51e5131b1018ba2e2f2f6f4bbec2b83d58a43a45",
+        "licenses/npm/react/LICENSE": "63e8210e6bf3e8c032dc0c69b1d1d2e3ab72c14b02cabcc0dada2618bb188b97",
+        "licenses/npm/react-day-picker/LICENSE": "e0bb0612f7d35e051f439b14a69bd15aef65a664f7c162621f1bd2cd099e7c36",
+        "licenses/npm/react-dom/LICENSE": "63e8210e6bf3e8c032dc0c69b1d1d2e3ab72c14b02cabcc0dada2618bb188b97",
+        "licenses/npm/react-resizable-panels/LICENSE.md": "747eb7a4ee2f6fb01ad2cdc1ea28be3c230ee2b847c899cfd8560444677e8b9c",
+        "licenses/npm/react-server-dom-webpack/LICENSE": "63e8210e6bf3e8c032dc0c69b1d1d2e3ab72c14b02cabcc0dada2618bb188b97",
+        "licenses/npm/recharts/LICENSE": "47a083dc1744b2e618e10056b5ba8211e72daaf8419f4d04e63150fc43a90631",
+        "licenses/npm/shadcn/LICENSE.md": "a14c2d6fb5ba9925cba04633226a3b93e6c5566ca6b550dbfaead7ab3fa93b24",
+        "licenses/npm/shadcn__react/LICENSE.md": "a14c2d6fb5ba9925cba04633226a3b93e6c5566ca6b550dbfaead7ab3fa93b24",
+        "licenses/npm/tailwind-merge/LICENSE.md": "62105f7418bbb254e8db3dc18961b45e39bdfe68332ae1ec90832279f9fbf759",
+        "licenses/npm/tw-animate-css/LICENSE": "9ef7b5c4130fd83eca6d7c65f947ffb309a5949937bd54cf2b26e537fd9a2026",
+        "licenses/npm/vinext/LICENSE": "0245d948b074fd1b1849bffea025e9566b45b6153b362da00991080daf6efcca"
+      },
+      "license_scope": "upstream-files-recorded",
+      "dependencies": [
+        "doom-ui/package.json",
+        "doom/requirements.txt",
+        "pyproject.toml",
+        "requirements-neural.txt"
+      ],
+      "native_test_files": 16,
+      "static_python": {
+        "parsed": 324,
+        "errors": []
+      },
+      "checkout_bytes": 2594422,
+      "source_inventory": "research/.work/simulator-evaluation/SIM-023/source-inventory.json",
+      "upstream_tree": "https://github.com/nftechie/doomfly/tree/71ecf53d78eaffaf1a57ed7b0ccf5d458abc9f33",
+      "evaluation": {
+        "status": "blocked",
+        "reason": "Native C++ MaleCNS/ViZDoom engine requires a compiled toolchain, pinned game assets and full graph",
+        "installation": "not_attempted",
+        "biological_validation": false
+      }
+    },
+    {
+      "repository": "philshiu/Drosophila_brain_model",
+      "url": "https://github.com/philshiu/Drosophila_brain_model.git",
+      "origins": [
+        "ST010"
+      ],
+      "source_ids": [],
+      "recorded_commit": "91bdd1e7dcf193f3e7ca5a8933497fcef63b7960",
+      "recorded_license": "MIT",
+      "status": "attached",
+      "id": "SIM-024",
+      "path": "simulation/sidecars/philshiu--Drosophila_brain_model",
+      "commit": "91bdd1e7dcf193f3e7ca5a8933497fcef63b7960",
+      "sparse_checkout": true,
+      "checkout_clean": true,
+      "role": "neural",
+      "pin_origin": "registered-baseline",
+      "license_files": {
+        "LICENSE": "7f80266a88ee61669cfa54b6a8a3683c56f275487bd518d446bd48112267c65d"
+      },
+      "license_scope": "upstream-files-recorded",
+      "dependencies": [
+        "environment.yml",
+        "environment_full.yml"
+      ],
+      "native_test_files": 0,
+      "static_python": {
+        "parsed": 2,
+        "errors": []
+      },
+      "checkout_bytes": 66902,
+      "source_inventory": "research/.work/simulator-evaluation/SIM-024/source-inventory.json",
+      "upstream_tree": "https://github.com/philshiu/Drosophila_brain_model/tree/91bdd1e7dcf193f3e7ca5a8933497fcef63b7960",
+      "evaluation": {
+        "status": "blocked",
+        "result": "research/.work/simulator-evaluation/SIM-024/20261004T210300Z-e3c7b0/result.json",
+        "phases": [
+          {
+            "stage": "install",
+            "status": "blocked",
+            "reason": "host_memory_reserve",
+            "host_available_bytes": 874049536,
+            "host_reserve_bytes": 2147483648,
+            "admission_bytes": 1073741824
+          }
+        ]
+      }
+    },
+    {
+      "repository": "rdarie/modular-bionic-interface-2026",
+      "url": "https://github.com/rdarie/modular-bionic-interface-2026.git",
+      "origins": [
+        "canonical-source"
+      ],
+      "source_ids": [
+        "S875"
+      ],
+      "recorded_commit": null,
+      "recorded_license": null,
+      "status": "attached",
+      "id": "SIM-025",
+      "path": "simulation/sidecars/rdarie--modular-bionic-interface-2026",
+      "commit": "604d17fe1d39a6618fd8f26694922a823aeed8c8",
+      "sparse_checkout": true,
+      "checkout_clean": true,
+      "role": "human-neural-interface-comparator",
+      "pin_origin": "upstream-snapshot-2026-10-04",
+      "license_files": {
+        "LICENSE": "6b0369bb0b593b2b1441842859b721e7fa47f3e0daae1fa59c05984d106df454"
+      },
+      "license_scope": "upstream-files-recorded",
+      "dependencies": [
+        "pyproject.toml"
+      ],
+      "native_test_files": 0,
+      "static_python": {
+        "parsed": 10,
+        "errors": []
+      },
+      "checkout_bytes": 46830,
+      "source_inventory": "research/.work/simulator-evaluation/SIM-025/source-inventory.json",
+      "upstream_tree": "https://github.com/rdarie/modular-bionic-interface-2026/tree/604d17fe1d39a6618fd8f26694922a823aeed8c8",
+      "evaluation": {
+        "status": "blocked",
+        "result": "research/.work/simulator-evaluation/SIM-025/20261004T210300Z-aef132/result.json",
+        "phases": [
+          {
+            "stage": "install",
+            "status": "blocked",
+            "reason": "host_memory_reserve",
+            "host_available_bytes": 873861120,
+            "host_reserve_bytes": 2147483648,
+            "admission_bytes": 1073741824
+          }
+        ]
+      }
+    },
+    {
+      "repository": "seung-lab/FlyConnectome",
+      "url": "https://github.com/seung-lab/FlyConnectome.git",
+      "origins": [
+        "ST002"
+      ],
+      "source_ids": [],
+      "recorded_commit": "9b1790b5553082e1f57921790564c7aae7c9c99a",
+      "recorded_license": null,
+      "status": "attached",
+      "id": "SIM-026",
+      "path": "simulation/sidecars/seung-lab--FlyConnectome",
+      "commit": "9b1790b5553082e1f57921790564c7aae7c9c99a",
+      "sparse_checkout": true,
+      "checkout_clean": true,
+      "role": "connectome-preparation",
+      "pin_origin": "registered-baseline",
+      "license_files": {},
+      "license_scope": "unresolved",
+      "dependencies": [],
+      "native_test_files": 0,
+      "static_python": {
+        "parsed": 0,
+        "errors": []
+      },
+      "checkout_bytes": 2169076,
+      "source_inventory": "research/.work/simulator-evaluation/SIM-026/source-inventory.json",
+      "upstream_tree": "https://github.com/seung-lab/FlyConnectome/tree/9b1790b5553082e1f57921790564c7aae7c9c99a",
+      "evaluation": {
+        "status": "blocked",
+        "reason": "CAVE/cloudvolume tutorials require credentials or reachable public routes; preparation utility, not simulator",
+        "installation": "not_attempted",
+        "biological_validation": false
+      }
+    },
+    {
+      "repository": "smpuglie/Pugliese_2026",
+      "url": "https://github.com/smpuglie/Pugliese_2026.git",
+      "origins": [
+        "drosophila-connectome-audit"
+      ],
+      "source_ids": [],
+      "recorded_commit": "10e7661bf414ba7b4c2edf795cd36d0f878c17c0",
+      "recorded_license": null,
+      "status": "attached",
+      "id": "SIM-027",
+      "path": "simulation/sidecars/smpuglie--Pugliese_2026",
+      "commit": "10e7661bf414ba7b4c2edf795cd36d0f878c17c0",
+      "sparse_checkout": true,
+      "checkout_clean": true,
+      "role": "motor-cpg",
+      "pin_origin": "registered-baseline",
+      "license_files": {},
+      "license_scope": "unresolved",
+      "dependencies": [
+        "environment.yaml",
+        "pyproject.toml",
+        "setup.py"
+      ],
+      "native_test_files": 1,
+      "static_python": {
+        "parsed": 22,
+        "errors": []
+      },
+      "checkout_bytes": 9801511,
+      "source_inventory": "research/.work/simulator-evaluation/SIM-027/source-inventory.json",
+      "upstream_tree": "https://github.com/smpuglie/Pugliese_2026/tree/10e7661bf414ba7b4c2edf795cd36d0f878c17c0",
+      "evaluation": {
+        "status": "blocked",
+        "result": "research/.work/simulator-evaluation/SIM-027/20261004T210300Z-9c5a18/result.json",
+        "phases": [
+          {
+            "stage": "install",
+            "status": "blocked",
+            "reason": "host_memory_reserve",
+            "host_available_bytes": 873893888,
+            "host_reserve_bytes": 2147483648,
+            "admission_bytes": 2147483648
+          }
+        ]
+      }
+    },
+    {
+      "repository": "snedea/flybrain",
+      "url": "https://github.com/snedea/flybrain.git",
+      "origins": [
+        "ST009"
+      ],
+      "source_ids": [],
+      "recorded_commit": "9191824d17871b7851645782d53d23f213ddb938",
+      "recorded_license": "MIT",
+      "status": "attached",
+      "id": "SIM-029",
+      "path": "simulation/sidecars/snedea--flybrain",
+      "commit": "9191824d17871b7851645782d53d23f213ddb938",
+      "sparse_checkout": true,
+      "checkout_clean": true,
+      "role": "browser-neural",
+      "pin_origin": "registered-baseline",
+      "license_files": {
+        "license.md": "44722bff2fea0a8ae1a164b8c5319c13e7685febf733903c68c32d15efae1b15"
+      },
+      "license_scope": "upstream-files-recorded",
+      "dependencies": [
+        "package.json"
+      ],
+      "native_test_files": 1,
+      "static_python": {
+        "parsed": 1,
+        "errors": []
+      },
+      "checkout_bytes": 1223809,
+      "source_inventory": "research/.work/simulator-evaluation/SIM-029/source-inventory.json",
+      "upstream_tree": "https://github.com/snedea/flybrain/tree/9191824d17871b7851645782d53d23f213ddb938",
+      "evaluation": {
+        "status": "blocked",
+        "result": "research/.work/simulator-evaluation/SIM-029/20261004T214055Z-32b443/result.json",
+        "data_scope": "legacy_fixture_native_tests_then_real_export_worker_in_Node",
+        "phases": [
+          {
+            "stage": "install",
+            "status": "blocked",
+            "reason": "host_memory_reserve",
+            "host_available_bytes": 553406464,
+            "host_reserve_bytes": 2147483648,
+            "admission_bytes": 67108864
+          }
+        ]
+      }
+    },
+    {
+      "repository": "Stavros963/fcta",
+      "url": "https://github.com/Stavros963/fcta.git",
+      "origins": [
+        "canonical-source"
+      ],
+      "source_ids": [
+        "S854"
+      ],
+      "recorded_commit": null,
+      "recorded_license": null,
+      "status": "attached",
+      "id": "SIM-030",
+      "path": "simulation/sidecars/Stavros963--fcta",
+      "commit": "af8e451d9010294c185b966c953616b212f0294c",
+      "sparse_checkout": true,
+      "checkout_clean": true,
+      "role": "connectome-analysis",
+      "pin_origin": "upstream-snapshot-2026-10-04",
+      "license_files": {
+        "LICENSE": "4cd8648a2959cfac09cce697b5be797bc0f11baf42aecca9bd57312f9108532e"
+      },
+      "license_scope": "upstream-files-recorded",
+      "dependencies": [
+        "requirements.lock.txt"
+      ],
+      "native_test_files": 0,
+      "static_python": {
+        "parsed": 1,
+        "errors": []
+      },
+      "checkout_bytes": 11415,
+      "source_inventory": "research/.work/simulator-evaluation/SIM-030/source-inventory.json",
+      "upstream_tree": "https://github.com/Stavros963/fcta/tree/af8e451d9010294c185b966c953616b212f0294c",
+      "evaluation": {
+        "status": "blocked",
+        "reason": "Public repository contains sealed results, verify.py, seeds and lock; simulation pipeline explicitly withheld pending publication",
+        "installation": "not_attempted",
+        "biological_validation": false
+      }
+    },
+    {
+      "repository": "TuragaLab/flyvis",
+      "url": "https://github.com/TuragaLab/flyvis.git",
+      "origins": [
+        "drosophila-connectome-audit"
+      ],
+      "source_ids": [],
+      "recorded_commit": null,
+      "recorded_license": null,
+      "status": "attached",
+      "id": "SIM-031",
+      "path": "simulation/sidecars/TuragaLab--flyvis",
+      "commit": "92b3845cc426dd309a1a0e1b3890156c42e14021",
+      "sparse_checkout": true,
+      "checkout_clean": true,
+      "role": "visual-neural",
+      "pin_origin": "upstream-snapshot-2026-10-04",
+      "license_files": {
+        "license": "ffdd9afb62e09f906d762ec1ea37ffe80fec7de415964e249e46cf20999d0ab2"
+      },
+      "license_scope": "upstream-files-recorded",
+      "dependencies": [
+        "pyproject.toml"
+      ],
+      "native_test_files": 19,
+      "static_python": {
+        "parsed": 118,
+        "errors": []
+      },
+      "checkout_bytes": 3456623,
+      "source_inventory": "research/.work/simulator-evaluation/SIM-031/source-inventory.json",
+      "upstream_tree": "https://github.com/TuragaLab/flyvis/tree/92b3845cc426dd309a1a0e1b3890156c42e14021",
+      "evaluation": {
+        "status": "blocked",
+        "result": "research/.work/simulator-evaluation/SIM-031/20261004T210300Z-63052e/result.json",
+        "phases": [
+          {
+            "stage": "install",
+            "status": "blocked",
+            "reason": "host_memory_reserve",
+            "host_available_bytes": 862334976,
+            "host_reserve_bytes": 2147483648,
+            "admission_bytes": 2147483648
+          }
+        ]
+      }
+    },
+    {
+      "repository": "TuragaLab/wormvae",
+      "url": "https://github.com/TuragaLab/wormvae.git",
+      "origins": [
+        "ST109"
+      ],
+      "source_ids": [],
+      "recorded_commit": "15b58bff08bdf4eb04709434d766fca6835d7d79",
+      "recorded_license": null,
+      "status": "attached",
+      "id": "SIM-032",
+      "path": "simulation/sidecars/TuragaLab--wormvae",
+      "commit": "15b58bff08bdf4eb04709434d766fca6835d7d79",
+      "sparse_checkout": true,
+      "checkout_clean": true,
+      "role": "other-organism-comparator",
+      "pin_origin": "registered-baseline",
+      "license_files": {},
+      "license_scope": "unresolved",
+      "dependencies": [
+        "environment.yml"
+      ],
+      "native_test_files": 0,
+      "static_python": {
+        "parsed": 16,
+        "errors": []
+      },
+      "checkout_bytes": 2929715,
+      "source_inventory": "research/.work/simulator-evaluation/SIM-032/source-inventory.json",
+      "upstream_tree": "https://github.com/TuragaLab/wormvae/tree/15b58bff08bdf4eb04709434d766fca6835d7d79",
+      "evaluation": {
+        "status": "blocked",
+        "reason": "Author pins Python 3.6/PyTorch 1.8/numpy 1.16; a separate legacy image plus worm recordings is required",
+        "installation": "not_attempted",
+        "biological_validation": false
+      }
+    },
+    {
+      "repository": "YijieYin/connectome_data_prep",
+      "url": "https://github.com/YijieYin/connectome_data_prep.git",
+      "origins": [
+        "ST004"
+      ],
+      "source_ids": [],
+      "recorded_commit": "a4df3b0d5345d2a34dac813f897d8427f6a6eb45",
+      "recorded_license": null,
+      "status": "attached",
+      "id": "SIM-033",
+      "path": "simulation/sidecars/YijieYin--connectome_data_prep",
+      "commit": "a4df3b0d5345d2a34dac813f897d8427f6a6eb45",
+      "sparse_checkout": true,
+      "checkout_clean": true,
+      "role": "connectome-preparation",
+      "pin_origin": "registered-baseline",
+      "license_files": {},
+      "license_scope": "unresolved",
+      "dependencies": [],
+      "native_test_files": 1,
+      "static_python": {
+        "parsed": 25,
+        "errors": []
+      },
+      "checkout_bytes": 207140161,
+      "source_inventory": "research/.work/simulator-evaluation/SIM-033/source-inventory.json",
+      "upstream_tree": "https://github.com/YijieYin/connectome_data_prep/tree/a4df3b0d5345d2a34dac813f897d8427f6a6eb45",
+      "evaluation": {
+        "status": "blocked",
+        "reason": "Data preparation requires selected dataset exports plus connectome_interpreter dependency; no generic data-free simulator entry point",
+        "installation": "not_attempted",
+        "biological_validation": false
+      }
+    }
+  ]
+}
