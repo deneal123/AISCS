@@ -5,6 +5,7 @@
 - [Итоговый срез](final-validation-report.md): текущие решения и границы.
 - [Рабочий TODO](../TODO.md) и [журнал решений](audits/todo-decision-ledger.md): актуальные критерии и подробная история по ID задач.
 - [Концепция](dissertation-concept.md), [научный контракт](scientific-contract.md), [каталог новизны](novelty-landscape.md): документы для ИПР и уточнения темы.
+- [Научный аудит ИПР](audits/ipr-scientific-review.md): выбранная рабочая постановка, первичные основания и границы переноса Drosophila → ECAP/SCS.
 - [Тематические аудиты](audits/README.md): первичные локаторы, решения по кластерам, матрице и доступу.
 - [Эксплуатационный справочник](reference/operations.md): CLI, MCP, HTTP, Docker и проверки.
 - [Рабочий регламент](reference/curation-workflow.md), [контракт данных](reference/data-contract.md), [архитектура](reference/architecture.md): правила редакции и устройство базы.

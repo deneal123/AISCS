@@ -32,17 +32,17 @@ def test_scientific_contract_and_human_matrix_pass_repository_gate() -> None:
     assert len(contract["experiments"]) == 4
     assert [item["from"] for item in contract["transfer_chain"]] == [
         "connectome_constrained_drosophila_simulation",
-        "abstract_nociceptive_dynamics",
+        "abstract_temporal_dynamics",
         "human_neural_recruitment_interface",
         "physical_ecap_observation",
     ]
     assert [item["to"] for item in contract["transfer_chain"]] == [
-        "abstract_nociceptive_dynamics",
+        "abstract_temporal_dynamics",
         "human_neural_recruitment_interface",
         "physical_ecap_observation",
         "scs_programming_or_evaluation_task",
     ]
-    assert contract["entities"][3]["name"] == "transferable_nociceptive_dynamics"
+    assert contract["entities"][3]["name"] == "abstract_dynamic_representation"
     assert contract["experiments"][2]["name"] == "physical_ecap_observation_validation"
     assert {item["id"] for item in contract["stop_criteria"]} == {
         "STOP-H1",

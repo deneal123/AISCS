@@ -5,26 +5,32 @@
     "gate": "G0_REVISE",
     "author_review_required": true,
     "supervisor_decision_required": true,
-    "author_review_scope": "Delegated EVD-05 acceptance of bounded evidence conclusions on 2026-09-30; future substantive evidence changes and experiment proposals still require review. This does not approve the topic or establish GO."
+    "author_review_scope": "Delegated EVD-05 acceptance of bounded evidence conclusions on 2026-09-30; future substantive evidence changes and experiment proposals still require review. This does not approve the topic or establish GO.",
+    "ipr_revision": {
+      "date": "2026-10-05",
+      "basis": "User-approved response to the IPR review",
+      "scope": "ECAP-first topic, six prospective tasks, data conditions and conditional reserve; no supervisor approval or GO",
+      "artifact": "docs/audits/ipr-scientific-review.md"
+    }
   },
-  "title_ru": "Методы коннектомно-ограниченного моделирования нейродинамики Drosophila и переноса представлений в физически обоснованные модели ECAP для адаптивной спинальной нейростимуляции",
-  "title_en": "Connectome-constrained modelling of Drosophila neural dynamics and representation transfer to physically grounded ECAP models for adaptive spinal cord stimulation",
+  "title_ru": "Метод биофизического моделирования вызванных составных потенциалов действия при стимуляции спинного мозга с предобучением динамического представления на коннектомной модели Drosophila melanogaster",
+  "title_en": "A method for biophysical modelling of evoked compound action potentials during spinal cord stimulation with pretraining of a dynamical representation on a Drosophila melanogaster connectome model",
   "architecture": {
     "id": "ARCH-DROSOPHILA-ECAP-SCS-01",
     "chain": [
       "Drosophila connectome-constrained dynamics",
-      "abstract nociceptive-response representation",
-      "separate human ECAP physical observation model",
-      "SCS programming or evaluation task"
+      "initial parameters of an abstract temporal representation",
+      "separate human ECAP biophysical formation and recording operator",
+      "human ECAP growth-curve modelling and technical applicability to SCS"
     ]
   },
-  "scientific_problem": "This project asks whether constraints learned from a Drosophila connectome add measurable value to human ECAP/SCS modelling beyond human-only and randomized synthetic controls; the reviewed prior art and current data access do not establish that contribution.",
-  "object": "Neural dynamics and evoked electrophysiological responses under external stimulation.",
-  "subject": "Methods for connectome-constrained simulation, representation transfer, and physical ECAP observation in adaptive SCS tasks.",
-  "goal": "Develop and falsifiably evaluate a two-model method in which Drosophila connectome dynamics constrain a transferable representation and a separate physical operator maps human neural recruitment to ECAP for an SCS task.",
+  "scientific_problem": "Научная проблема состоит в установлении условий, при которых предобучение временного модуля на динамике, ограниченной структурой коннектома Drosophila, даёт дополнительную точность и устойчивость моделирования ECAP по сравнению с обучением только на данных человека, синтетическим предобучением и контрольными вариантами структуры и динамики. Предполагается исследовать как наличие такого эффекта, так и условия его отсутствия при сопоставимых объёмах данных и вычислительных затратах.",
+  "object": "процесс формирования и регистрации вызванного составного потенциала действия в измерительном канале систем стимуляции спинного мозга.",
+  "subject": "методы биофизического моделирования ECAP, предобучения временного модуля на коннектомно-ограниченной динамике Drosophila, адаптации его параметров к данным человека, оценки неопределённости и установления области применимости модели.",
+  "goal": "Разработать метод биофизического моделирования ECAP с предобучением динамического представления на коннектомной модели Drosophila и установить наличие, отсутствие либо неопределённость его дополнительного вклада в точность моделирования кривой роста ECAP на независимых данных человека.",
   "hypothesis": {
     "id": "H-DES-01",
-    "text": "A representation pretrained on biologically constrained Drosophila neural dynamics, when connected to a separately validated ECAP observation model, improves a predeclared human ECAP/SCS metric over human-only, degree-preserving rewired-connectome ensemble with shared initialization, shuffled-dynamics, and naive-synthetic controls without worsening calibration."
+    "text": "Будет проверена гипотеза о том, что предобучение временного модуля на коннектомно-ограниченной динамике Drosophila обеспечивает практически значимое снижение ошибки моделирования кривой роста ECAP относительно обучения без переноса, предобучения на синтетических данных человеческого ECAP, перемешанной временной динамики и ансамбля перестроенных коннектомов. Сравнение будет проводиться при одинаковом объёме человеческих данных, сопоставимой целевой архитектуре, едином биофизическом операторе и согласованных вычислительных затратах. Дополнительным условием подтверждения гипотезы будет сохранение калибровки прогнозных интервалов в пределах заранее установленного допуска.\n\nПрактически значимое преимущество, его подтверждённое отсутствие, ухудшение и статистически неопределённый результат планируется различать по доверительным интервалам. Недостаточная точность оценки или отсутствие пригодных данных не будут трактоваться как опровержение гипотезы. Необходимость временного модуля будет проверяться обязательным сравнением с простой моделью кривой роста без временного представления."
   },
   "actuality": [
     {
@@ -79,33 +85,33 @@
   "tasks": [
     {
       "id": "TASK-01",
-      "text": "Construct and validate a bounded Drosophila nociceptive-dynamics simulator."
+      "text": "Проанализировать методы коннектомного моделирования, предобучения и биофизического моделирования ECAP. Определить требования к происхождению, совместимости и условиям использования исходных данных; выбрать основной и независимый наборы ECAP после подтверждения доступа и пригодности для исследования."
     },
     {
       "id": "TASK-02",
-      "text": "Define the transferable state and randomized biological controls."
+      "text": "Разработать коннектомно-ограниченную модель нейродинамики Drosophila и алгоритм генерации синтетических временных рядов. Проверить модель по наблюдениям, совместимым с выбранной версией коннектома и стадией развития; оценить влияние структуры связей и параметров динамики на воспроизводимые характеристики активности."
     },
     {
       "id": "TASK-03",
-      "text": "Implement the independent ECAP forward/measurement model."
+      "text": "Определить состав переносимого временного представления и разработать алгоритм предобучения и адаптации начальных параметров целевого модуля. Проверить допустимость сопоставления динамических характеристик и их значение для моделирования формы ECAP и кривой роста без предположения анатомической эквивалентности видов."
     },
     {
       "id": "TASK-04",
-      "text": "Evaluate transfer on subject-level human ECAP data."
+      "text": "Разработать прямой биофизический оператор формирования и регистрации ECAP с учётом рекрутирования волокон, распространения возбуждения, объёмной проводимости, геометрии электродов, артефакта и шума. Провести его отдельную проверку на независимых человеческих записях при подтверждённой пригодности и доступности данных."
     },
     {
       "id": "TASK-05",
-      "text": "Evaluate an SCS programming task and calibration against baselines."
+      "text": "Разработать и заранее зафиксировать протокол сравнительной оценки метода переноса, включая контрольные модели, основную метрику, допуски, разбиения и статистический анализ. Провести сравнение на участниках, не использованных при обучении и выборе модели; оценить вклад структуры, динамики и предобучения, а также необходимость временного модуля."
     },
     {
       "id": "TASK-06",
-      "text": "Conditionally evaluate clinical response only with linked outcome data."
+      "text": "Установить область применимости метода, чувствительность к параметрам измерительного канала и условия получения достоверных оценок неопределённости. Разработать программную реализацию и методику воспроизведения расчётов; определить границы технических выводов для систем стимуляции спинного мозга."
     }
   ],
   "novelty_claims": [
     {
       "id": "NOV-01",
-      "text": "Candidate method: a two-model Drosophila-dynamics and human-ECAP bridge with an explicit physical observation operator.",
+      "text": "Candidate method: coupling initial parameters of a temporal module pretrained on Drosophila dynamics to a separately validated human ECAP biophysical operator; this remains a proposal.",
       "source_refs": [
         "S738",
         "S739",
@@ -119,7 +125,7 @@
     },
     {
       "id": "NOV-02",
-      "text": "Candidate experiment: isolate biological contribution using degree-preserving rewired-connectome ensemble with shared initialization, shuffled-dynamics, naive-synthetic, and human-only controls.",
+      "text": "Candidate comparison: isolate the contribution of connectome structure and temporal dynamics using matched human-only, human-ECAP synthetic, shuffled-dynamics and degree-preserving rewired-connectome controls; require a simple growth-curve baseline.",
       "source_refs": [
         "S149",
         "S739",
@@ -134,7 +140,7 @@
     },
     {
       "id": "NOV-03",
-      "text": "Candidate system result: uncertainty-aware SCS parameter estimation that abstains outside the validated ECAP domain.",
+      "text": "Candidate system result: define the applicability and uncertainty limits of ECAP modelling. Individual calibration and SCS parameter selection are conditional extensions, not assumed results.",
       "source_refs": [
         "S105",
         "S159",
@@ -182,7 +188,7 @@
     },
     {
       "id": "DEF-03",
-      "text": "Candidate proposition: any incremental contribution of connectome-derived pretraining would have to survive registered human-only, naive-synthetic and graph-null comparisons on held-out participants without worse calibration; no gain has been demonstrated.",
+      "text": "Candidate proposition: practically meaningful transfer gain must survive all prespecified matched controls, including shuffled dynamics and a simple growth-curve model, on held-out participants within a registered calibration tolerance. Insufficient data or precision leave the result undetermined; no gain has been demonstrated.",
       "status": "proposal_unverified_STOP_EXP03_COMPARISON",
       "falsification_experiment": "TODO EXP-03 and EXP-04: matched comparison arms, one frozen primary score, participant-level inference and calibration with leakage controls; no execution until data and input STOPs reopen.",
       "source_refs": [
@@ -198,7 +204,7 @@
   "falsification": [
     "Reject the simulator claim if it fails predefined fly activity or behavior observables.",
     "Reject the ECAP-like claim if waveform/latency/recruitment tolerances fail on human ECAP.",
-    "Reject the transfer hypothesis if the primary metric does not improve or calibration worsens.",
+    "With eligible data and a locked protocol, reject practically meaningful transfer benefit if confidence intervals establish insufficient gain or unacceptable calibration; distinguish deterioration and statistical uncertainty. Missing data do not refute the hypothesis.",
     "Do not make a clinical-response claim without linked longitudinal SCS outcomes."
   ],
   "forbidden_claims": [
@@ -220,6 +226,27 @@
       21,
       22
     ],
-    "boundary": "These directions are candidate alignments for a medical signal measurement, physical ECAP model, and SCS control method. Software implementation or a proposed protocol alone is not an obtained scientific result; directions involving clinical prediction or treatment benefit require separately authorized patient-level evidence. The mapping is a proposal and has no author or supervisor acceptance."
+    "boundary": "Primary candidate alignment is ECAP signal modelling and analysis (1, 14, 15). AI and software are supporting methods; therapy/control requires a separately tested task. The user approved the editorial framing on 2026-10-05; no supervisor approval, obtained scientific result or GO is implied.",
+    "primary_directions": [
+      1,
+      14,
+      15
+    ],
+    "conditional_directions": [
+      3,
+      21,
+      22
+    ],
+    "primary_route_recheck": {
+      "checked_at": "2026-10-05",
+      "official_passport_url": "https://vak.gisnauka.ru/s3-files/01cc80c69fae4988a0246a8f5e2774e7%3Afisgna/public/media/uploaded/news_files/4dfe14e2-84dc-45c3-9909-718a368c5fe6/e4f1b427-67d2-4832-8468-c5c7cd5_jo6SnYT.pdf",
+      "verified_directions": [
+        1,
+        14,
+        15
+      ],
+      "locator": "pages 1-2, research directions 1, 14, 15",
+      "decision": "Candidate alignment with biomedical signal analysis and modelling; no supervisor approval or obtained result is implied."
+    }
   }
 }

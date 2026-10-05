@@ -4,14 +4,21 @@
     "prepared_at": "2026-09-24",
     "status": "contract_complete_pending_author_and_supervisor_review",
     "gate": "G0_REVISE",
-    "scope": "Pre-registered scientific boundaries for connectome-constrained Drosophila dynamics, abstract representation transfer, a separate physical ECAP observation model, and SCS programming or evaluation tasks.",
+    "scope": "Prospective method for human ECAP growth-curve modelling with Drosophila connectome-constrained pretraining, a separate biophysical formation/recording operator, and matched participant-level evaluation; SCS control and clinical response remain conditional extensions.",
     "invariants": [
       "A simulation label is not subjective human pain.",
       "ECAP measures evoked neural recruitment and is not a direct measure of pain.",
       "Drosophila is not treated as a direct model or digital twin of the human spinal cord.",
       "Clinical SCS claims require patient-level human ECAP or telemetry linked to a pre-specified clinical outcome."
     ],
-    "author_review_scope": "Delegated EVD-05 acceptance of bounded evidence conclusions on 2026-09-30; future substantive evidence changes and experiment proposals still require review. This does not approve the topic or establish GO."
+    "author_review_scope": "Delegated EVD-05 acceptance of bounded evidence conclusions on 2026-09-30; future substantive evidence changes and experiment proposals still require review. This does not approve the topic or establish GO.",
+    "editorial_revision": {
+      "date": "2026-10-05",
+      "basis": "User-approved IPR revision",
+      "supervisor_approved": false
+    },
+    "working_title_ru": "Метод биофизического моделирования вызванных составных потенциалов действия при стимуляции спинного мозга с предобучением динамического представления на коннектомной модели Drosophila melanogaster",
+    "working_title_en": "A method for biophysical modelling of evoked compound action potentials during spinal cord stimulation with pretraining of a dynamical representation on a Drosophila melanogaster connectome model"
   },
   "entities": [
     {
@@ -65,13 +72,13 @@
     },
     {
       "id": "ENT-04",
-      "name": "transferable_nociceptive_dynamics",
+      "name": "abstract_dynamic_representation",
       "carrier": "connectome-constrained Drosophila simulation and its explicitly defined latent state",
-      "measurement": "temporal neural population representation with stimulus, individual, and scenario provenance",
+      "measurement": "initial parameters of a pretrained temporal module; latent trajectories describe the training representation, not human anatomy or measured ECAP",
       "time_scale": "milliseconds to behavioral episode",
       "analysis_unit": "trial nested in a held-out synthetic individual and scenario",
-      "primary_target_construct": "dynamic_nociceptive_representation",
-      "permitted_conclusion": "The representation preserves reproducible dynamical invariants useful for a separately tested downstream task.",
+      "primary_target_construct": "abstract_temporal_representation",
+      "permitted_conclusion": "A proposed temporal prior may be adapted to a separately specified human recruitment module; benefit requires matched independent comparison.",
       "prohibited_interpretation": "The latent state is subjective pain, a human spinal-cord state, or an ECAP waveform.",
       "source_refs": [
         "S066",
@@ -199,13 +206,13 @@
     {
       "id": "EXP-04",
       "name": "scs_programming_and_evaluation",
-      "primary_entity_id": "ENT-06",
+      "primary_entity_id": "ENT-05",
       "input": "human ECAP or SCS telemetry, stimulation settings, and only for the clinical subtask pre-specified patient covariates",
-      "output": "a pre-registered technical SCS target such as recruitment estimation, parameter selection, or closed-loop control; clinical response only when linked outcomes exist",
+      "output": "primary ECAP growth-curve modelling comparison; setting/control and linked clinical outcome prediction are separate conditional extensions",
       "training_data": "authorized human SCS cohort split by participant; clinical labels are optional and task-specific",
       "independent_test": "held-out patients or a separate SCS cohort, with unseen settings where the task requires them",
-      "success_criterion": "incremental value over a clinical or engineering baseline and the same model without Drosophila-derived pretraining, with calibrated uncertainty",
-      "falsification_criterion": "no gain over controls, dependence on within-patient leakage, or absence of the outcome required by the declared task",
+      "success_criterion": "practically meaningful growth-curve accuracy gain over all prespecified matched controls, including the simple static model, on independent participants with calibration within tolerance",
+      "falsification_criterion": "eligible locked data establish no meaningful gain or calibration failure; leakage invalidates generalization, and unavailable target data block evaluation rather than refute the hypothesis",
       "source_refs": [
         "S079",
         "S105",
@@ -217,9 +224,9 @@
     {
       "id": "TR-01",
       "from": "connectome_constrained_drosophila_simulation",
-      "to": "abstract_nociceptive_dynamics",
+      "to": "abstract_temporal_dynamics",
       "input": "neural activity, simulation state, movement, pose, and protective behavior",
-      "output": "masked temporal embeddings with modality identity and no claim of species equivalence",
+      "output": "pretrained temporal-module parameters and versioned synthetic time series with explicit configuration, units and seed; nociceptive interpretations require compatible observations",
       "training_data": "training synthetic individuals and scenarios",
       "independent_test": "held-out synthetic individuals and scenarios",
       "success_criterion": "representation preserves pre-registered stimulus and response information under perturbation",
@@ -233,14 +240,14 @@
     },
     {
       "id": "TR-02",
-      "from": "abstract_nociceptive_dynamics",
+      "from": "abstract_temporal_dynamics",
       "to": "human_neural_recruitment_interface",
-      "input": "frozen Drosophila-derived temporal representation and electrically evoked population-activity descriptors",
-      "output": "species-agnostic dynamical features with explicit provenance and no neuron-to-neuron anatomical equivalence",
+      "input": "initial parameters of the Drosophila-pretrained temporal module, adapted in dimension and time scale within human training folds",
+      "output": "human population-response module feeding a separate biophysical ECAP operator; no asserted neuron correspondence or direct fly-to-ECAP signal conversion",
       "training_data": "synthetic individuals plus only the training partition of human recruitment data",
       "independent_test": "held-out human participants and stimulation configurations",
-      "success_criterion": "transfer exceeds human-only, naive synthetic, randomized-connectome, and no-pretraining controls",
-      "falsification_criterion": "no defensible common dynamical observable or no gain after participant-safe evaluation",
+      "success_criterion": "prespecified practically meaningful gain over all matched controls, including human-only, human-ECAP synthetic, shuffled dynamics, graph-null and simple growth-curve models, without calibration loss beyond tolerance",
+      "falsification_criterion": "no defensible dynamical correspondence stops transfer claims; an eligible locked comparison refutes meaningful benefit only when intervals establish insufficient gain or unacceptable calibration; insufficient precision is undetermined",
       "source_refs": [
         "S036",
         "S039",
@@ -270,11 +277,11 @@
       "from": "physical_ecap_observation",
       "to": "scs_programming_or_evaluation_task",
       "input": "validated human ECAP or telemetry representation plus stimulation settings and task-specific covariates",
-      "output": "one pre-specified SCS target: recruitment estimation, artifact removal, parameter selection, closed-loop control, or conditional clinical response",
+      "output": "primary technical target: ECAP growth curve; waveform/time characteristics test operator validity and need for the temporal module. SCS control and clinical response require separately approved extensions.",
       "training_data": "participant-disjoint SCS training data containing the exact target required by the declared task",
       "independent_test": "held-out SCS patients or a separate cohort; clinical claims additionally require linked outcomes and follow-up",
-      "success_criterion": "incremental task-level value over engineering or clinical baselines and the same model without Drosophila-derived transfer",
-      "falsification_criterion": "gain vanishes under participant holdout, requires target leakage, or the required target data are unavailable",
+      "success_criterion": "practically meaningful growth-curve accuracy gain over all prespecified matched controls, including the simple static model, on independent participants with calibration within tolerance",
+      "falsification_criterion": "eligible locked data establish no meaningful gain or calibration failure; leakage invalidates generalization, and unavailable target data block evaluation rather than refute the hypothesis",
       "source_refs": [
         "S079",
         "S105",
@@ -344,10 +351,10 @@
     },
     {
       "id": "STOP-H2-B",
-      "trigger": "Drosophila-derived pretraining does not improve the pre-selected participant-level ECAP or SCS metric over human-only, naive synthetic, and randomized-connectome controls, or worsens calibration.",
-      "measurement": "participant-level bootstrap confidence interval and calibration comparison on locked independent ECAP or SCS data",
-      "decision": "reject the representation-transfer hypothesis for the tested method and task",
-      "reserve_result": "report the negative transfer result and conditions under which synthetic pretraining fails",
+      "trigger": "An eligible locked participant-level comparison establishes no prespecified practically meaningful gain against a required control or calibration degradation beyond the allowed tolerance. A nonsignificant point estimate alone does not trigger rejection.",
+      "measurement": "participant-level confidence intervals for control error minus transfer error and calibration difference, with multiplicity rules fixed before independent evaluation",
+      "decision": "report confirmed absence of practical benefit, deterioration or unacceptable calibration as applicable; leave overlapping intervals undetermined and missing data unevaluated",
+      "reserve_result": "report bounded negative or inconclusive results and applicability limits; neither insufficient precision nor unavailable data proves a null transfer effect",
       "forbidden_conclusion": "Connectome-constrained Drosophila pretraining improves human ECAP or SCS tasks.",
       "source_refs": [
         "S036",
@@ -395,5 +402,79 @@
       "scope": "EVD-05 bounded evidence conclusions and disputed cluster boundaries; no supervisor or experiment approval",
       "artifact": "docs/audits/author-decision-packet-2026-09-25.md"
     }
-  ]
+  ],
+  "ipr_evaluation_protocol": {
+    "status": "prospective_not_executed",
+    "primary_target": "ECAP growth curve: amplitude versus stimulation intensity",
+    "transfer_object": "initial parameters of a temporal module, adapted within human training folds",
+    "unit_of_inference": "participant; pulses, electrode configurations and sessions are repeated measurements",
+    "independent_validation_boundary": "Final transfer-test participants are not used to calibrate or revise the human physical operator; separate participant partitions are fixed before independent testing.",
+    "controls": [
+      "human_only",
+      "human_ecap_physical_synthetic",
+      "shuffled_dynamics",
+      "degree_preserving_graph_null",
+      "simple_static_growth_curve"
+    ],
+    "matched_conditions": [
+      "human data amount",
+      "target architecture for transfer arms",
+      "human biophysical operator",
+      "random initialization policy; pretrained parameters vary only with the experimental condition",
+      "optimization and compute budget",
+      "individual calibration sample size"
+    ],
+    "training_only_selection": [
+      "hyperparameters",
+      "features",
+      "representation dimension",
+      "time scale",
+      "epoch",
+      "uncertainty calibration"
+    ],
+    "lock_before_independent_test": "Use human training data to justify sample size, configuration coverage and interval precision; freeze scores, tolerances, splits and multiplicity rules by November 2028 before accessing the independent test partition.",
+    "gain_definition": "error of control minus error of transfer; higher is better",
+    "minimal_practical_gain": null,
+    "maximum_calibration_degradation": null,
+    "outcomes": {
+      "practical_gain_supported": "For every required comparator the gain interval lies wholly above the prespecified practical threshold and calibration remains within tolerance.",
+      "practical_gain_absent": "For at least one required comparator the gain interval lies wholly below the practical threshold; identify that comparator and do not generalize beyond the tested design.",
+      "deterioration": "Gain interval wholly below zero or calibration difference establishes unacceptable degradation.",
+      "undetermined": "Intervals overlap decision boundaries, precision is insufficient, or calibration remains uncertain.",
+      "not_evaluated": "Required data, independent split, permissions or representation correspondence are absent."
+    },
+    "conditions": [
+      {
+        "by": "2027-05",
+        "result": "select primary and independent ECAP data after access and suitability checks"
+      },
+      {
+        "by": "2027-11",
+        "result": "fix compatible graph/observations, licenses and input versions"
+      },
+      {
+        "by": "2028-05",
+        "result": "separate pilot checks of Drosophila model and ECAP-like operator"
+      },
+      {
+        "by": "2028-11",
+        "result": "lock metric, thresholds, sample adequacy, splits and statistical plan"
+      },
+      {
+        "by": "2029-05",
+        "result": "independent physical-operator check"
+      },
+      {
+        "by": "2029-11",
+        "result": "complete primary comparison if conditions hold"
+      }
+    ],
+    "reserve": "Without human data retain computational validation, identifiability and uncertainty analyses; without defensible transfer retain separate Drosophila and ECAP-like models. Neither fulfills independent human validation. Revisions require supervisor consideration.",
+    "source_refs": [
+      "S105",
+      "S159",
+      "S764",
+      "S743"
+    ]
+  }
 }
