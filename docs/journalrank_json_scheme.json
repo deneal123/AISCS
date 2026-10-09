@@ -1,0 +1,1238 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "array",
+  "items": {
+    "description": "Журнал",
+    "type": "object",
+    "properties": {
+      "title": {
+        "description": "Название журнала",
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "issns": {
+        "description": "ISSN журнала",
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "links": {
+        "description": "Ссылки (URL)",
+        "type": "object",
+        "additionalProperties": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "level_2023": {
+        "description": "Уровень журнала в БС 2023",
+        "type": "integer"
+      },
+      "level_2025": {
+        "description": "Уровень журнала в БС 2025",
+        "type": "integer"
+      },
+      "level_2026": {
+        "description": "Уровень журнала в БС 2026",
+        "type": "integer"
+      },
+      "wos_cc": {
+        "description": "Web of Science Core Collection (WoS CC)",
+        "type": "object",
+        "properties": {
+          "value": {
+            "description": "Признак индексации",
+            "type": "boolean"
+          },
+          "id": {
+            "description": "Идентификаторы",
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "update": {
+            "description": "Дата обновления",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value"
+        ]
+      },
+      "scopus": {
+        "description": "Scopus",
+        "type": "object",
+        "properties": {
+          "value": {
+            "description": "Признак индексации",
+            "type": "boolean"
+          },
+          "id": {
+            "description": "Идентификаторы",
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "update": {
+            "description": "Дата обновления",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value"
+        ]
+      },
+      "rsci": {
+        "description": "Russian Science Citation Index (RSCI)",
+        "type": "object",
+        "properties": {
+          "value": {
+            "description": "Признак индексации",
+            "type": "boolean"
+          },
+          "id": {
+            "description": "Идентификаторы",
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "update": {
+            "description": "Дата обновления",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value"
+        ]
+      },
+      "sherpa": {
+        "description": "SHERPA ROMEO",
+        "type": "object",
+        "properties": {
+          "value": {
+            "description": "Признак индексации",
+            "type": "boolean"
+          },
+          "id": {
+            "description": "Идентификаторы",
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "update": {
+            "description": "Дата обновления",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value"
+        ]
+      },
+      "ajg21": {
+        "description": "Academic Journal Guide",
+        "type": "object",
+        "properties": {
+          "value": {
+            "description": "Позиция в рейтинге",
+            "type": "string"
+          },
+          "update": {
+            "description": "Дата обновления",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value"
+        ]
+      },
+      "doaj": {
+        "description": "DOAJ",
+        "type": "object",
+        "properties": {
+          "value": {
+            "description": "Признак индексации",
+            "type": "boolean"
+          },
+          "id": {
+            "description": "Идентификаторы",
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "update": {
+            "description": "Дата обновления",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value"
+        ]
+      },
+      "erih": {
+        "description": "ERIH PLUS",
+        "type": "object",
+        "properties": {
+          "value": {
+            "description": "Признак индексации",
+            "type": "boolean"
+          },
+          "id": {
+            "description": "Идентификаторы",
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "update": {
+            "description": "Дата обновления",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value"
+        ]
+      },
+      "eclit": {
+        "description": "EconLit",
+        "type": "object",
+        "properties": {
+          "value": {
+            "description": "Признак индексации",
+            "type": "boolean"
+          },
+          "id": {
+            "description": "Идентификаторы",
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "update": {
+            "description": "Дата обновления",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value"
+        ]
+      },
+      "ecbiz": {
+        "description": "EconBiz",
+        "type": "object",
+        "properties": {
+          "value": {
+            "description": "Признак индексации",
+            "type": "boolean"
+          },
+          "id": {
+            "description": "Идентификаторы",
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "update": {
+            "description": "Дата обновления",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value"
+        ]
+      },
+      "inspec": {
+        "description": "Inspec",
+        "type": "object",
+        "properties": {
+          "value": {
+            "description": "Признак индексации",
+            "type": "boolean"
+          },
+          "id": {
+            "description": "Идентификаторы",
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "update": {
+            "description": "Дата обновления",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value"
+        ]
+      },
+      "dblp": {
+        "description": "DBLP",
+        "type": "object",
+        "properties": {
+          "value": {
+            "description": "Признак индексации",
+            "type": "boolean"
+          },
+          "id": {
+            "description": "Идентификаторы",
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "update": {
+            "description": "Дата обновления",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value"
+        ]
+      },
+      "msn": {
+        "description": "MathSciNet",
+        "type": "object",
+        "properties": {
+          "value": {
+            "description": "Признак индексации",
+            "type": "boolean"
+          },
+          "id": {
+            "description": "Идентификаторы",
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "update": {
+            "description": "Дата обновления",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value"
+        ]
+      },
+      "zbm": {
+        "description": "zbMath",
+        "type": "object",
+        "properties": {
+          "value": {
+            "description": "Признак индексации",
+            "type": "boolean"
+          },
+          "id": {
+            "description": "Идентификаторы",
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "update": {
+            "description": "Дата обновления",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value"
+        ]
+      },
+      "medline": {
+        "description": "MEDLINE",
+        "type": "object",
+        "properties": {
+          "value": {
+            "description": "Признак индексации",
+            "type": "boolean"
+          },
+          "id": {
+            "description": "Идентификаторы",
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "update": {
+            "description": "Дата обновления",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value"
+        ]
+      },
+      "embase": {
+        "description": "Embase",
+        "type": "object",
+        "properties": {
+          "value": {
+            "description": "Признак индексации",
+            "type": "boolean"
+          },
+          "id": {
+            "description": "Идентификаторы",
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "update": {
+            "description": "Дата обновления",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value"
+        ]
+      },
+      "agricola": {
+        "description": "AGRICOLA",
+        "type": "object",
+        "properties": {
+          "value": {
+            "description": "Признак индексации",
+            "type": "boolean"
+          },
+          "id": {
+            "description": "Идентификаторы",
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "update": {
+            "description": "Дата обновления",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value"
+        ]
+      },
+      "cab": {
+        "description": "CAB Abstracts",
+        "type": "object",
+        "properties": {
+          "value": {
+            "description": "Признак индексации",
+            "type": "boolean"
+          },
+          "id": {
+            "description": "Идентификаторы",
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "update": {
+            "description": "Дата обновления",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value"
+        ]
+      },
+      "cpx": {
+        "description": "Compendex",
+        "type": "object",
+        "properties": {
+          "value": {
+            "description": "Признак индексации",
+            "type": "boolean"
+          },
+          "id": {
+            "description": "Идентификаторы",
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "update": {
+            "description": "Дата обновления",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value"
+        ]
+      },
+      "georef": {
+        "description": "GeoRef",
+        "type": "object",
+        "properties": {
+          "value": {
+            "description": "Признак индексации",
+            "type": "boolean"
+          },
+          "id": {
+            "description": "Идентификаторы",
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "update": {
+            "description": "Дата обновления",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value"
+        ]
+      },
+      "geobase": {
+        "description": "GeoBase",
+        "type": "object",
+        "properties": {
+          "value": {
+            "description": "Признак индексации",
+            "type": "boolean"
+          },
+          "id": {
+            "description": "Идентификаторы",
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "update": {
+            "description": "Дата обновления",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value"
+        ]
+      },
+      "oax": {
+        "description": "OpenAlex",
+        "type": "object",
+        "properties": {
+          "value": {
+            "description": "Признак индексации",
+            "type": "boolean"
+          },
+          "id": {
+            "description": "Идентификаторы",
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "update": {
+            "description": "Дата обновления",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value"
+        ]
+      },
+      "job": {
+        "description": "Journal Observatory",
+        "type": "object",
+        "properties": {
+          "value": {
+            "description": "Признак индексации",
+            "type": "boolean"
+          },
+          "id": {
+            "description": "Идентификаторы",
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "update": {
+            "description": "Дата обновления",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value"
+        ]
+      },
+      "abdc22": {
+        "description": "ABDC Journal Quality List",
+        "type": "object",
+        "properties": {
+          "value": {
+            "description": "Позиция в рейтинге",
+            "type": "string"
+          },
+          "update": {
+            "description": "Дата обновления",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value"
+        ]
+      },
+      "sudoc": {
+        "description": "Sudoc",
+        "type": "object",
+        "properties": {
+          "value": {
+            "description": "Признак индексации",
+            "type": "boolean"
+          },
+          "id": {
+            "description": "Идентификаторы",
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "update": {
+            "description": "Дата обновления",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value"
+        ]
+      },
+      "cref": {
+        "description": "Crossref",
+        "type": "object",
+        "properties": {
+          "value": {
+            "description": "Признак индексации",
+            "type": "boolean"
+          },
+          "id": {
+            "description": "Идентификаторы",
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "update": {
+            "description": "Дата обновления",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value"
+        ]
+      },
+      "scilit": {
+        "description": "Scilit",
+        "type": "object",
+        "properties": {
+          "value": {
+            "description": "Признак индексации",
+            "type": "boolean"
+          },
+          "id": {
+            "description": "Идентификаторы",
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "update": {
+            "description": "Дата обновления",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value"
+        ]
+      },
+      "wikidata": {
+        "description": "Wikidata",
+        "type": "object",
+        "properties": {
+          "value": {
+            "description": "Признак индексации",
+            "type": "boolean"
+          },
+          "id": {
+            "description": "Идентификаторы",
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "update": {
+            "description": "Дата обновления",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value"
+        ]
+      },
+      "fatcat": {
+        "description": "Fatcat",
+        "type": "object",
+        "properties": {
+          "value": {
+            "description": "Признак индексации",
+            "type": "boolean"
+          },
+          "id": {
+            "description": "Идентификаторы",
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "update": {
+            "description": "Дата обновления",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value"
+        ]
+      },
+      "fsta": {
+        "description": "FSTA",
+        "type": "object",
+        "properties": {
+          "value": {
+            "description": "Признак индексации",
+            "type": "boolean"
+          },
+          "id": {
+            "description": "Идентификаторы",
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "update": {
+            "description": "Дата обновления",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value"
+        ]
+      },
+      "hsabs": {
+        "description": "Historical Abstracts",
+        "type": "object",
+        "properties": {
+          "value": {
+            "description": "Признак индексации",
+            "type": "boolean"
+          },
+          "id": {
+            "description": "Идентификаторы",
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "update": {
+            "description": "Дата обновления",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value"
+        ]
+      },
+      "wpsa": {
+        "description": "Worldwide Political Science Abstracts",
+        "type": "object",
+        "properties": {
+          "value": {
+            "description": "Признак индексации",
+            "type": "boolean"
+          },
+          "id": {
+            "description": "Идентификаторы",
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "update": {
+            "description": "Дата обновления",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value"
+        ]
+      },
+      "socabs": {
+        "description": "Sociological Abstracts",
+        "type": "object",
+        "properties": {
+          "value": {
+            "description": "Признак индексации",
+            "type": "boolean"
+          },
+          "id": {
+            "description": "Идентификаторы",
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "update": {
+            "description": "Дата обновления",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value"
+        ]
+      },
+      "chim": {
+        "description": "Chimica",
+        "type": "object",
+        "properties": {
+          "value": {
+            "description": "Признак индексации",
+            "type": "boolean"
+          },
+          "id": {
+            "description": "Идентификаторы",
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "update": {
+            "description": "Дата обновления",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value"
+        ]
+      },
+      "zoorec": {
+        "description": "Zoological Record",
+        "type": "object",
+        "properties": {
+          "value": {
+            "description": "Признак индексации",
+            "type": "boolean"
+          },
+          "id": {
+            "description": "Идентификаторы",
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "update": {
+            "description": "Дата обновления",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value"
+        ]
+      },
+      "biabs": {
+        "description": "Biological Abstracts",
+        "type": "object",
+        "properties": {
+          "value": {
+            "description": "Признак индексации",
+            "type": "boolean"
+          },
+          "id": {
+            "description": "Идентификаторы",
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "update": {
+            "description": "Дата обновления",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value"
+        ]
+      },
+      "petro": {
+        "description": "Petroleum Abstracts (TULSA)",
+        "type": "object",
+        "properties": {
+          "value": {
+            "description": "Признак индексации",
+            "type": "boolean"
+          },
+          "id": {
+            "description": "Идентификаторы",
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "update": {
+            "description": "Дата обновления",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value"
+        ]
+      },
+      "dnb": {
+        "description": "Немецкая национальная библиотека (DNB)",
+        "type": "object",
+        "properties": {
+          "value": {
+            "description": "Признак индексации",
+            "type": "boolean"
+          },
+          "id": {
+            "description": "Идентификаторы",
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "update": {
+            "description": "Дата обновления",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value"
+        ]
+      },
+      "cas_core": {
+        "description": "CAS Core",
+        "type": "object",
+        "properties": {
+          "value": {
+            "description": "Признак индексации",
+            "type": "boolean"
+          },
+          "id": {
+            "description": "Идентификаторы",
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "update": {
+            "description": "Дата обновления",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value"
+        ]
+      },
+      "date_accepted": {
+        "description": "Дата включения в «Белый список»",
+        "type": "string"
+      },
+      "date_discontinued": {
+        "description": "Дата исключения из «Белого списка»",
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "state": {
+        "description": "Тип отметки",
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "notice": {
+        "description": "Примечание",
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "title",
+      "issns",
+      "links",
+      "level_2023",
+      "level_2025",
+      "level_2026",
+      "wos_cc",
+      "scopus",
+      "rsci",
+      "sherpa",
+      "ajg21",
+      "doaj",
+      "erih",
+      "eclit",
+      "ecbiz",
+      "inspec",
+      "dblp",
+      "msn",
+      "zbm",
+      "medline",
+      "embase",
+      "agricola",
+      "cab",
+      "cpx",
+      "georef",
+      "geobase",
+      "oax",
+      "job",
+      "abdc22",
+      "sudoc",
+      "cref",
+      "scilit",
+      "wikidata",
+      "fatcat",
+      "fsta",
+      "hsabs",
+      "wpsa",
+      "socabs",
+      "chim",
+      "zoorec",
+      "biabs",
+      "petro",
+      "dnb",
+      "cas_core",
+      "date_accepted"
+    ]
+  }
+}
