@@ -1,46 +1,73 @@
 % !TEX program = xelatex
-\documentclass[14pt,a4paper]{extreport}
+\documentclass[14pt,a4paper,oneside]{extreport}
 \usepackage{fontspec}
 \usepackage[main=russian,english]{babel}
-\usepackage[left=30mm,right=15mm,top=20mm,bottom=20mm]{geometry}
-\usepackage{setspace}
-\usepackage{indentfirst}
-\usepackage{titlesec}
-\usepackage{booktabs}
-\usepackage{tabularx}
-\usepackage{amsmath}
-\usepackage{xcolor}
-\usepackage{hyperref}
-\ifdefined\ASPADraft
-  \newcommand{\printbibliography}[1][]{\chapter*{СПИСОК ЛИТЕРАТУРЫ}\textit{Черновой профиль: библиография формируется Biber в release-профиле.}}
-\else
-\usepackage[backend=biber,style=numeric,sorting=none]{biblatex}
-\addbibresource{backmatter/references.bib}
-\fi
 \setmainfont{Times New Roman}
 \setsansfont{Arial}
-\onehalfspacing
-\setlength{\parindent}{1.25cm}
+\setmonofont[Scale=0.85]{Courier New}
+\newfontfamily\PageNumberFont{Times New Roman}
+\usepackage[left=25mm,right=10mm,top=20mm,bottom=20mm,headheight=14pt,headsep=19.7pt]{geometry}
+\usepackage{indentfirst,titlesec,fancyhdr,graphicx,caption,array,tabularx,longtable,amsmath,tikz,placeins,needspace}
+\usetikzlibrary{arrows.meta,positioning,fit}
+\usepackage{unicode-math}
+\setmathfont{TeX Gyre Termes Math}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\makeatletter
+\renewcommand{\l@chapter}[2]{\begingroup\interlinepenalty=10000\vskip 1em\@dottedtocline{0}{0em}{1.5em}{\bfseries #1}{\bfseries #2}\endgroup}
+\renewcommand\normalsize{\@setfontsize\normalsize{13pt}{22.4pt}}
+\newcommand{\CompactContents}{\begingroup\normalsize\hyphenpenalty=10000\exhyphenpenalty=10000\tableofcontents\endgroup}
+\makeatother
+\normalsize
+\setlength{\emergencystretch}{3em}
+\tolerance=2000
+\newlength{\GOSTParagraphIndent}
+\settowidth{\GOSTParagraphIndent}{00000}
+\setlength{\parindent}{\GOSTParagraphIndent}
+\setlength{\parskip}{0pt}
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{2}
+\newlength{\GOSTHeadingGap}
+\setlength{\GOSTHeadingGap}{67.2pt}
+\newcommand{\GOSTHeadingFont}{\centering\bfseries\fontsize{14}{22.4}\selectfont\hyphenpenalty=10000\exhyphenpenalty=10000}
+\titleformat{\chapter}[block]{\GOSTHeadingFont}{Глава~\thechapter}{1em}{}
+\titleformat{name=\chapter,numberless}[block]{\GOSTHeadingFont}{}{0pt}{}
+\titlespacing*{\chapter}{0pt}{0pt}{\GOSTHeadingGap}
+\titleformat{\section}[block]{\GOSTHeadingFont}{\thesection}{1em}{}
+\titlespacing*{\section}{0pt}{\GOSTHeadingGap}{\GOSTHeadingGap}
+\titleformat{\subsection}[block]{\GOSTHeadingFont}{\thesubsection}{1em}{}
+\titlespacing*{\subsection}{0pt}{\GOSTHeadingGap}{\GOSTHeadingGap}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyheadoffset[L]{15mm}\fancyhead[C]{\PageNumberFont\fontsize{12}{14}\selectfont\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\fancypagestyle{plain}{\fancyhf{}\fancyheadoffset[L]{15mm}\fancyhead[C]{\PageNumberFont\fontsize{12}{14}\selectfont\thepage}\renewcommand{\headrulewidth}{0pt}}
+\input{config/object-layout.tex}
+\numberwithin{equation}{chapter}
+\renewcommand{\contentsname}{Оглавление}
+\providecommand{\Asbuk}[1]{\ifcase\value{#1}\or А\or Б\or В\or Г\or Д\or Е\or Ж\or З\or И\or К\or Л\or М\or Н\or О\or П\or Р\or С\or Т\or У\or Ф\fi}
+\input{config/bibliography.tex}
 \input{config/metadata.tex}
-\newcommand{\EvidenceRef}[1]{\textsuperscript{\textcolor{gray}{[#1]}}}
-\newcommand{\ResultPending}[1]{\par\noindent\fbox{\parbox{0.94\linewidth}{\textbf{Ожидаемый результат:} #1}}\par}
-\newcommand{\Blocked}[2]{\par\noindent\fbox{\parbox{0.94\linewidth}{\textbf{BLOCKED (#1):} #2}}\par}
-\hypersetup{colorlinks=true,linkcolor=black,citecolor=black,urlcolor=blue,pdftitle={\WorkingTitle}}
+% Evidence is kept in the registry, not printed as internal source identifiers.
+\newcommand{\EvidenceRef}[1]{}
+\newcommand{\ResultPending}[1]{\par #1\par}
+\hypersetup{pdftitle={\WorkingTitle},pdfauthor={\AuthorName}}
 \begin{document}
 \input{frontmatter/title.tex}
+\setcounter{page}{2}
+\CompactContents
 \input{frontmatter/abstract.tex}
-\tableofcontents
 \input{chapters/00-introduction.tex}
-\input{chapters/01-evidence.tex}
-\input{chapters/02-contract.tex}
-\input{chapters/03-simulation.tex}
-\input{chapters/04-synthetic-dataset.tex}
-\input{chapters/05-human-transfer.tex}
-\input{chapters/06-scs.tex}
-\input{chapters/07-results-discussion.tex}
+\input{chapters/01-foundations.tex}
+\input{chapters/02-data-components.tex}
+\input{chapters/03-transfer-evaluation.tex}
+\input{chapters/04-validation.tex}
 \input{backmatter/conclusion.tex}
 \input{backmatter/glossary.tex}
-\printbibliography[title={СПИСОК ЛИТЕРАТУРЫ}]
+\ifdefined\ASPADraft\printbibliography\else\nocite{*}\printbibliography[heading=bibintoc,title={Список литературы}]\fi
+\input{backmatter/illustrations.tex}
 \appendix
+\renewcommand{\thechapter}{\Asbuk{chapter}}
+\titleformat{\chapter}[block]{\GOSTHeadingFont}{Приложение~\thechapter}{1em}{}
 \input{backmatter/appendices.tex}
 \end{document}

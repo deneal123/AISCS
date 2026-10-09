@@ -1,15 +1,71 @@
 {
-  "meta":{"schema_version":"1.0.0","sidecar_version":"1.0.0","updated_at":"2026-09-23"},
-  "release_approvals":{"author_review":false,"supervisor_review":false,"official_title_approved":false,"title_page_approved":false},
-  "documents":[{
-    "id":"TEXT-001","title":"Рабочий текст диссертации","kind":"dissertation","language":"ru","status":"draft","source_dir":"document","entrypoint":"document/dissertation.tex","primary_output":null,"research_snapshot":"data/research-snapshot/snapshot.json",
-    "evidence_refs":["S029","S062","S090","S105","S159","S162","S280","S291","S730","S731","ST031","ST032","ST033","ST034","ST035","ST039","ST040","ST041"],
-    "immutable":false,"immutable_files":[],
-    "traceability":[
-      {"section":"chapter-01-evidence","target_construct":"human_experimental_nociception","refs":["S280","S291","S730","ST031","ST032","ST033","ST034","ST035","ST039","ST040","ST041"]},
-      {"section":"chapter-02-contract","target_construct":"construct_boundaries","refs":["S029","S062","S090","S105","S159","S162","S731"]},
-      {"section":"chapter-03-simulation","target_construct":"simulation_dynamics","refs":["S029","S062","S090","S731"]},
-      {"section":"chapter-06-scs","target_construct":"clinical_scs_response","refs":["S105","S159","S162"]}
-    ]
-  }]
+  "meta": {
+    "schema_version": "1.0.0",
+    "sidecar_version": "1.0.0",
+    "updated_at": "2026-10-08"
+  },
+  "release_approvals": {
+    "author_review": false,
+    "supervisor_review": false,
+    "official_title_approved": false,
+    "title_page_approved": false
+  },
+  "documents": [
+    {
+      "id": "TEXT-001",
+      "title": "Проект диссертационного исследования",
+      "kind": "dissertation",
+      "language": "ru",
+      "status": "draft",
+      "source_dir": "document",
+      "entrypoint": "document/dissertation.tex",
+      "primary_output": null,
+      "research_snapshot": "data/research-snapshot/snapshot.json",
+      "evidence_refs": [
+        "S105",
+        "S743",
+        "S744",
+        "S766",
+        "S767",
+        "S775"
+      ],
+      "immutable": false,
+      "immutable_files": [],
+      "traceability": [
+        {
+          "section": "00-introduction",
+          "slides": null,
+          "target_construct": "ecap_like_observation",
+          "refs": [
+            "S766",
+            "S767"
+          ]
+        },
+        {
+          "section": "01-foundations",
+          "slides": null,
+          "target_construct": "simulation_dynamics",
+          "refs": [
+            "S743",
+            "S744",
+            "S775"
+          ]
+        },
+        {
+          "section": "03-transfer-evaluation",
+          "slides": null,
+          "target_construct": "methodological_transfer",
+          "refs": [
+            "S105",
+            "S743"
+          ]
+        }
+      ],
+      "formatting_reference": {
+        "name": "ГОСТ Р 7.0.11—2011 Диссертация и автореферат диссертации.pdf",
+        "sha256": "e7524f138be22cc6b66c521380cb8b6515b6528ef338b9cdbcb07cd6ccaffa1d",
+        "kind": "dissertation_formatting_standard"
+      }
+    }
+  ]
 }

@@ -1,0 +1,18 @@
+\urlstyle{same}
+% Verified descriptions shared with the homework bibliography; no new scientific claims.
+\ifdefined\ASPADraft
+  \newcommand{\printbibliography}[1][]{\chapter*{Список литературы}\addcontentsline{toc}{chapter}{Список литературы}\input{backmatter/bibliography-draft.tex}}
+  \renewcommand{\cite}[1]{\textup{[\csname bibnumber@#1\endcsname]}}
+  \input{backmatter/bibliography-numbers.tex}
+\else
+  \usepackage[backend=biber,style=numeric,sorting=none]{biblatex}
+  \DeclareSortingTemplate{gostorder}{\sort{\field{sortkey}}}
+  \ExecuteBibliographyOptions{sorting=gostorder}
+  \DeclareFieldFormat{usera}{#1}
+  \DeclareBibliographyDriver{misc}{\printfield{usera}}
+  \renewcommand*{\bibfont}{\fontsize{12}{20.7}\selectfont\raggedright}
+  \defbibenvironment{bibliography}
+    {\list{\printfield{labelnumber}.}{\setlength{\leftmargin}{10mm}\setlength{\labelwidth}{8mm}\setlength{\labelsep}{2mm}\setlength{\itemsep}{0pt}\setlength{\parsep}{0pt}\setlength{\topsep}{0pt}}}
+    {\endlist}{\item}
+  \addbibresource{backmatter/references.bib}
+\fi

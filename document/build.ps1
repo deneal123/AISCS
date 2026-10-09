@@ -23,15 +23,23 @@ try {
     }
     else {
         Invoke-XeLaTeX "dissertation.tex"
-        Push-Location $output
+        # Perl on Windows may reject the inherited locale even when Biber succeeds.
+        $previousLang = $env:LANG
+        $previousLocale = $env:LC_ALL
         try {
-            & biber dissertation
+            $env:LANG = "C"
+            $env:LC_ALL = "C"
+            & biber "--output-directory=$output" (Join-Path $output "dissertation")
             if ($LASTEXITCODE -ne 0) { throw "Biber failed." }
         }
-        finally { Pop-Location }
+        finally {
+            $env:LANG = $previousLang
+            $env:LC_ALL = $previousLocale
+        }
         Invoke-XeLaTeX "dissertation.tex"
         Invoke-XeLaTeX "dissertation.tex"
     }
 }
 finally { Pop-Location }
+Copy-Item -LiteralPath (Join-Path $output "dissertation.pdf") -Destination (Join-Path $root "dissertation.pdf") -Force
 Write-Output (Join-Path $output "dissertation.pdf")
