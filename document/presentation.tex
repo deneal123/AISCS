@@ -1,30 +1,51 @@
 % !TEX program = xelatex
-\documentclass[aspectratio=169,11pt]{beamer}
+\documentclass[aspectratio=43,14pt,t]{beamer}
 \usepackage{fontspec}
 \usepackage[main=russian,english]{babel}
-\usepackage{booktabs}
-\usepackage{tabularx}
-\usepackage{xcolor}
+\usepackage{graphicx,array,tabularx,amsmath,tikz}
+\usepackage{unicode-math}
+\setmathfont{Cambria Math}
+\usetikzlibrary{arrows.meta,positioning,calc,fit}
+\geometry{paperwidth=254mm,paperheight=190.5mm}
 \setmainfont{Arial}
 \setsansfont{Arial}
-\definecolor{aspaBlue}{HTML}{123A63}
-\definecolor{aspaLight}{HTML}{EEF4F8}
-\setbeamercolor{structure}{fg=aspaBlue}
-\setbeamercolor{block title}{fg=white,bg=aspaBlue}
-\setbeamercolor{block body}{fg=black,bg=aspaLight}
+\setmonofont{Courier New}
+\usefonttheme{professionalfonts}
+\setbeamercolor{normal text}{fg=black,bg=white}
+\setbeamercolor{structure}{fg=black}
+\setbeamercolor{frametitle}{fg=black,bg=white}
+\setbeamercolor{block title}{fg=black,bg=white}
+\setbeamercolor{block body}{fg=black,bg=white}
+\setbeamerfont{frametitle}{size=\fontsize{18}{21.6}\selectfont,series=\mdseries}
+\setbeamerfont{normal text}{size=\fontsize{14}{16.8}\selectfont}
+\setbeamerfont{block title}{size=\fontsize{16}{21}\selectfont,series=\bfseries}
+\setbeamerfont{block body}{size=\fontsize{14}{16.8}\selectfont}
+\setbeamersize{text margin left=12mm,text margin right=12mm}
+\input{config/object-layout.tex}
 \setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize item}{\textbullet}
+\setbeamertemplate{itemize subitem}{\textendash}
+\setbeamertemplate{frametitle}{\vspace{4mm}\centering\hyphenpenalty=10000\exhyphenpenalty=10000\insertframetitle\par\vspace{3mm}}
+\setbeamertemplate{footline}{\hfill\fontsize{12}{14.4}\selectfont\insertframenumber/\inserttotalframenumber\hspace{9mm}\vspace{4mm}}
+\setbeamertemplate{caption}[numbered]
+\setbeamerfont{caption}{size=\fontsize{14}{16.8}\selectfont}
+\newcommand{\SourceNote}[1]{\par\vspace{\SourceNoteGap}{\fontsize{10}{13}\selectfont #1\par}}
+\newcommand{\Evidence}[1]{}
+\newcommand{\ResultPending}[1]{#1}
+\tikzset{process/.style={draw=black,fill=white,align=center,minimum height=18mm,text width=50mm,font=\fontsize{14}{16.8}\selectfont},flow/.style={-{Latex[length=3mm]},thick}}
 \input{config/metadata.tex}
-\newcommand{\Evidence}[1]{\hfill{\tiny\color{gray}Evidence: #1}}
-\newcommand{\ResultPending}[1]{\begin{block}{Результат ещё не получен}\small #1\end{block}}
-\title{\WorkingTitle}
-\subtitle{\PresentationStatus}
-\author{\AuthorName}
-\institute{\InstitutionName}
-\date{Рабочая версия, 2026}
+\hypersetup{pdftitle={\WorkingTitle},pdfauthor={\AuthorName},colorlinks=false}
 \begin{document}
+\fontsize{14}{16.8}\selectfont
 \input{slides/01-title.tex}
-\input{slides/02-problem-contract.tex}
-\input{slides/03-transfer-data.tex}
-\input{slides/04-ecap-experiments.tex}
-\input{slides/05-results-limits.tex}
+\input{slides/02-relevance.tex}
+\input{slides/03-problem-goal.tex}
+\input{slides/04-tasks.tex}
+\input{slides/05-method.tex}
+\input{slides/06-neurodynamics.tex}
+\input{slides/07-operator.tex}
+\input{slides/08-transfer-metric.tex}
+\input{slides/09-controls.tex}
+\input{slides/10-calendar.tex}
+\input{slides/11-contribution.tex}
 \end{document}

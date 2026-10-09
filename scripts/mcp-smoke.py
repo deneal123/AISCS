@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import sys
 from pathlib import Path
 
 from mcp import Client, StdioServerParameters
@@ -11,8 +12,9 @@ ROOT = Path(__file__).resolve().parents[1]
 
 async def exercise() -> None:
     parameters = StdioServerParameters(
-        command="uv.exe",
-        args=["run", "--directory", str(ROOT), "--frozen", "presentation-mcp"],
+        command=sys.executable,
+        args=["-m", "service.mcp_server"],
+        cwd=str(ROOT),
     )
     async with Client(parameters) as client:
         tools = await client.list_tools()

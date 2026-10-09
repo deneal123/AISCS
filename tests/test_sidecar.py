@@ -19,7 +19,13 @@ def test_document_folder_builds_after_independent_copy(tmp_path: Path) -> None:
     if shutil.which("xelatex") is None:
         pytest.skip("xelatex is unavailable")
     portable = tmp_path / "presentation-document"
-    shutil.copytree(ROOT / "document", portable)
+    shutil.copytree(
+        ROOT / "document", portable,
+        ignore=shutil.ignore_patterns(
+            "build", "*.aux", "*.log", "*.out", "*.nav", "*.snm", "*.toc",
+            "*.synctex.gz", "*.pdf",
+        ),
+    )
     output = portable / "build"
     output.mkdir()
     result = subprocess.run(

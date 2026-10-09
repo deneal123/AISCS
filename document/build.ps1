@@ -13,4 +13,5 @@ try {
     }
 }
 finally { Pop-Location }
+Copy-Item -LiteralPath (Join-Path $output "presentation.pdf") -Destination (Join-Path $root "presentation.pdf") -Force
 Write-Output (Join-Path $output "presentation.pdf")

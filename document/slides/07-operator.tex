@@ -1,0 +1,20 @@
+\begin{frame}{Физическая модель человеческого ECAP}
+\centering
+\begin{tikzpicture}[node distance=12mm]
+\node[process] (stim) {Импульс стимуляции\\ и геометрия};
+\node[process,right=of stim] (exc) {Возбуждение волокон\\ и распространение};
+\node[process,right=of exc] (reg) {Объёмная проводимость\\ и регистрация};
+\draw[flow] (stim)--(exc);\draw[flow] (exc)--(reg);
+\end{tikzpicture}
+\SlideFigureCaption{Формирование и регистрация ECAP}
+\SlideGap
+\raggedright
+\begin{itemize}
+\item Модель рекрутирования задаёт физически допустимые характеристики возбуждения волокон. Оператор регистрации преобразует их в измеряемый сигнал.
+\item Возбуждение волокон будет рассчитываться однократно.
+\item Артефакт, шум и условия регистрации будут учитываться отдельно.
+\item Проверка потребует независимых человеческих записей и известных параметров измерительного канала.
+\end{itemize}
+До независимой проверки по записям человека результат будет обозначаться как \textbf{ECAP-подобный сигнал}.
+\SourceNote{Anaya et al., Neuromodulation, 2020. DOI: \href{https://doi.org/10.1111/ner.12965}{10.1111/ner.12965}.}
+\end{frame}

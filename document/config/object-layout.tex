@@ -1,0 +1,26 @@
+% Measured reference profile: PPTX cell margins and PDF caption clearances.
+\newlength{\SlideParagraphGap}
+\setlength{\SlideParagraphGap}{6pt}
+\newlength{\SourceNoteGap}
+\setlength{\SourceNoteGap}{4pt}
+\newlength{\SlideTableCaptionGap}
+\setlength{\SlideTableCaptionGap}{6pt}
+\newlength{\SlideFigureCaptionGap}
+\setlength{\SlideFigureCaptionGap}{5.1pt}
+\newcommand{\SlideGap}{\par\vspace{\SlideParagraphGap}}
+\setlength{\arrayrulewidth}{1pt}
+\setlength{\tabcolsep}{2.5pt}
+\renewcommand{\arraystretch}{1.15}
+\renewcommand{\tabularxcolumn}[1]{m{#1}}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash\setlength{\parindent}{0pt}}m{#1}}
+\newcolumntype{Y}{>{\raggedright\arraybackslash\setlength{\parindent}{0pt}}X}
+\newcommand{\SlideTableTitle}[1]{%
+  \refstepcounter{table}%
+  {\raggedright\fontsize{14}{16.8}\selectfont Табл. \thetable. #1\par}%
+  \nobreak\vspace{\SlideTableCaptionGap}%
+}
+\newcommand{\SlideFigureCaption}[1]{%
+  \par\nobreak\vspace{\SlideFigureCaptionGap}%
+  \refstepcounter{figure}%
+  {\centering\fontsize{14}{16.8}\selectfont Рис. \thefigure. #1\par}%
+}

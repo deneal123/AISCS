@@ -1,0 +1,23 @@
+\begin{frame}{Схема предполагаемого метода}
+\centering
+\begin{tikzpicture}[node distance=13mm]
+\node[process] (graph) {Коннектом\\ Drosophila};
+\node[process,right=of graph] (dyn) {Нейродинамика\\ и временные ряды};
+\node[process,right=of dyn] (pre) {Предобучение\\ временного модуля};
+\draw[flow] (graph)--(dyn);\draw[flow] (dyn)--(pre);
+\node[process,below=38mm of pre] (adapt) {Адаптация\\ временного модуля};
+\draw[flow] (pre)--node[right,text width=32mm,font=\fontsize{14}{16.8}\selectfont,align=left]{Начальные\\ параметры}(adapt);
+\node[process,left=of adapt] (human) {Рекрутирование\\ волокон человека};
+\node[process,left=of human] (signal) {Регистрация сигнала\\ и кривая роста};
+\draw[flow] (adapt)--(human);\draw[flow] (human)--(signal);
+\node[draw,dashed,fit=(graph)(dyn)(pre),inner sep=4mm] (source) {};
+\node[anchor=south west,font=\bfseries] at (source.north west) {Предобучение на Drosophila};
+\node[draw,dashed,fit=(adapt)(human)(signal),inner sep=4mm] (target) {};
+\node[anchor=south west,font=\bfseries] at (target.north west) {Целевая модель человеческого сигнала};
+\end{tikzpicture}
+\SlideFigureCaption{Схема планируемого метода}
+\SlideGap
+\raggedright
+\parbox{0.94\linewidth}{Адаптация будет выполняться по обучающим записям ECAP. Рекрутирование и регистрация рассчитываются раздельно; анатомическое соответствие видов не предполагается.}
+\SourceNote{Авторская схема планируемого метода. Исходная нейродинамика, физический оператор и вклад переноса требуют отдельных проверок.}
+\end{frame}
