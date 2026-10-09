@@ -58,7 +58,7 @@
     "docs/audits/author-decision-packet-2026-09-25.md": "0acdddfe1a3721e78f6c8efea18b8706764092a3b9f7c9bee5de69230dfa4de9",
     "docs/audits/cluster-content-review-log-2026-09-25.md": "5f00e49f74e5cb57f6431136c97e44f6f06995db45faa35b65a38ba9b1f8b0dd",
     "docs/audits/evd03-evidence-matrix-audit-2026-09-25.md": "b281ff4d19fe66b0448c96648b9a552e30dbb0b9ff310d9bf40d208e80eb4498",
-    "docs/audits/ipr-scientific-review.md": "e4658fb099992a014cda5cf52b468630d05a80208216effd188911beffc81aee",
+    "docs/audits/ipr-scientific-review.md": "9aa28ded8f64b1905ecc958cc4ed211fe592ba4811eed3c3f5d66db98966fb09",
     "docs/audits/ns11-primary-access-review-2026-09-25.md": "f1c7309968ce667f2e286c25aa13015680d6c7876eb57bea6584a154d96cab01",
     "docs/audits/README.md": "311dca95e59fc491501c67229a2e8419c5eaecb51c4ea4d9a386f5be6f24f6ca",
     "docs/audits/report-source-notes.md": "d4305276b7cee41cd6f37b907b991ec5e3f9971f17970352a8471e33625d9ce6",
@@ -98,5 +98,5 @@
     "SKILL.md": "e893c8e962e43f485b6f50e98ef6dbfa8ef48f5a7edf279de0526cdacabeaeec",
     "TODO.md": "3af3cfb737e9821d9fe17e05aecfc82ea47b4346dc38fdda1da8cd688460535d"
   },
-  "aggregate_sha256": "d38938c1a4d0818385608ebdbdbd10921103ce18a3f0a01fa2df77cc14c2b680"
+  "aggregate_sha256": "a78fbc380751a777670875d1a79b5bf5b76a6f2ae38b7f28c726e0311745ff13"
 }
