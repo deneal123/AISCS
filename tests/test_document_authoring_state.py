@@ -90,6 +90,22 @@ async def test_authoring_state_verifies_digest_and_reverses_known_block_paths() 
 
 
 @pytest.mark.asyncio
+async def test_block_provenance_preserves_full_source_path() -> None:
+    result = await _service(_manifest()).block_provenance(_item(), "documents/report")
+    assert result == {"content/intro.tex": "intro-001", "content/table.tex": "table-001"}
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "path", ["content/../intro.tex", "content//intro.tex", "content/./intro.tex"]
+)
+async def test_authoring_state_does_not_assign_noncanonical_source_paths(path) -> None:
+    raw = _manifest()
+    raw["block_files"] = {path: "intro-001"}
+    assert await _service(raw).block_provenance(_item(), "documents/report") == {}
+
+
+@pytest.mark.asyncio
 async def test_authoring_state_rejects_tampered_semantic_draft() -> None:
     with pytest.raises(DocumentProjectError, match="authoring_invalid"):
         await _service(_manifest(digest="0" * 64)).authoring_state(_item(), "documents/report")

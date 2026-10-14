@@ -9,12 +9,18 @@ DOCUMENT_RUNTIME_VERSION = "s36.v2"
 _SERVICE_ROOT = Path(__file__).resolve().parents[2]
 _RUNTIME_FILES = (
     "domain/documents/audit.py",
+    "domain/documents/font_audit.py",
+    "domain/documents/source_identity.py",
+    "domain/documents/project_validation.py",
     "domain/documents/contracts.py",
     "domain/documents/profiles.py",
     "application/documents/builds.py",
+    "application/documents/artifact_integrity.py",
+    "application/documents/registry_retention.py",
     "application/lifecycle.py",
     "application/documents/admission.py",
     "application/documents/build_store.py",
+    "application/documents/visual_transitions.py",
     "application/documents/build_preparation.py",
     "application/documents/projects.py",
     "application/documents/checkpoints.py",
@@ -27,6 +33,8 @@ _RUNTIME_FILES = (
     "drivers/docker_cli.py",
     "infrastructure/document_cleanup.py",
     "infrastructure/document_processes.py",
+    "infrastructure/document_output_runtime.py",
+    "infrastructure/document_report.py",
     "domain/documents/runtime_digest.py",
 )
 _RUNTIME_DATA_GLOBS = ("domain/documents/profile_data/**/*",)

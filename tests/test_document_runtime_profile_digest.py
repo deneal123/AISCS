@@ -54,7 +54,15 @@ def test_runtime_identity_includes_project_manifest_reader(tmp_path):
     assert runtime_digest.compute_document_runtime_digest(tmp_path) != before
 
 
-@pytest.mark.parametrize("relative", ["application/lifecycle.py", "drivers/docker_cli.py"])
+@pytest.mark.parametrize(
+    "relative",
+    [
+        "application/lifecycle.py",
+        "drivers/docker_cli.py",
+        "application/documents/registry_retention.py",
+        "application/documents/visual_transitions.py",
+    ],
+)
 def test_runtime_identity_includes_operation_and_driver_boundaries(tmp_path, relative):
     root = runtime_digest._SERVICE_ROOT
     for name in {*runtime_digest._RUNTIME_FILES, relative}:

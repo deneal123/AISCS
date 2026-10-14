@@ -14,6 +14,8 @@ network+inference горячие) — сам рантайм не берём: о�
 from __future__ import annotations
 
 from dataclasses import dataclass, fields, replace
+from math import isfinite
+from pathlib import PurePosixPath
 from typing import Any
 
 from domain.contracts import (
@@ -59,12 +61,41 @@ class WorkspacePolicy:
         # ⚠️ Проверка ЗДЕСЬ, а не в конструкторе запроса: политика собирается и из тела
         # запроса, и из дефолтов сервиса, и из горячей правки — проверять надо объект, а
         # не каждую из трёх дорог к нему.
-        if self.exec_timeout_sec <= 0 or self.exec_timeout_sec > HARD_EXEC_TIMEOUT_SEC:
+        for name in ("memory_bytes", "pids_limit", "quota_bytes", "max_output_chars"):
+            value = getattr(self, name)
+            if type(value) is not int or not 0 < value <= 2**63 - 1:
+                raise ValueError(f"invalid policy field: {name}")
+        for name in ("cpus", "exec_timeout_sec"):
+            value = getattr(self, name)
+            if type(value) not in (int, float) or not 0 < value <= 2**63 - 1 or not isfinite(value):
+                raise ValueError(f"invalid policy field: {name}")
+        if not 1 <= self.cpus * 1_000_000_000 <= 2**63 - 1:
+            raise ValueError("invalid policy field: cpus")
+        if type(self.read_only_root) is not bool:
+            raise ValueError("invalid policy field: read_only_root")
+        for name in ("image", "network", "user"):
+            value = getattr(self, name)
+            if (
+                not isinstance(value, str)
+                or not value
+                or len(value.encode("utf-8")) > 4096
+                or value.startswith("-")
+                or any(char.isspace() or ord(char) < 32 or ord(char) == 127 for char in value)
+            ):
+                raise ValueError(f"invalid policy field: {name}")
+        if (
+            not isinstance(self.root, str)
+            or not self.root.startswith("/")
+            or self.root == "/"
+            or self.root.startswith("//")
+            or len(self.root.encode("utf-8")) > 4096
+            or self.root != str(PurePosixPath(self.root))
+            or ".." in PurePosixPath(self.root).parts
+            or any(char in ":,\\" or ord(char) < 32 or ord(char) == 127 for char in self.root)
+        ):
+            raise ValueError("invalid policy field: root")
+        if self.exec_timeout_sec > HARD_EXEC_TIMEOUT_SEC:
             raise ValueError(f"exec_timeout_sec вне (0, {HARD_EXEC_TIMEOUT_SEC}]")
-        if self.max_output_chars <= 0:
-            raise ValueError("max_output_chars должен быть положительным")
-        if not str(self.root).startswith("/"):
-            raise ValueError("root должен быть абсолютным путём")
 
     def with_update(self, update: dict[str, Any]) -> WorkspacePolicy:
         """Горячая правка. Запертое поле — ОТКАЗ, а не частичное применение.

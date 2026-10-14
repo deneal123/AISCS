@@ -51,6 +51,17 @@ class _Compiler:
     async def publish_outputs(self, *_args, **_kwargs):
         self.published = True
 
+    async def artifact_facts(self, _ref, path, *, max_bytes):
+        facts = {
+            "document.pdf": ("a" * 64, 20),
+            "preview.png": ("b" * 64, 10),
+            "source.zip": ("c" * 64, 30),
+            "visual-pages.tar": ("e" * 64, 40),
+        }
+        value = facts[path.rsplit("/", 1)[-1]]
+        assert max_bytes == value[1]
+        return value
+
     async def destroy(self, _container_id):
         self.destroyed = True
         return True
@@ -112,9 +123,16 @@ class _Registry:
         yield
 
     async def exec_raw(self, _item, command, **_kwargs):
+        import base64
+
         self.commands.append(command)
         if "-maxdepth 1 -name '*.json'" in command:
-            return SimpleNamespace(stdout="", exit_code=0)
+            return SimpleNamespace(stdout="__GPTHUB_MANIFESTS_COMPLETE__\n", exit_code=0)
+        if "/.gpthub-document/jobs/" in command and "stdin_payload" in _kwargs:
+            size = len(base64.b64decode(_kwargs["stdin_payload"]))
+            return SimpleNamespace(stdout=f"__OK__ {size}\n", exit_code=0)
+        if "rm -f" in command and "/.gpthub-document/jobs/" in command:
+            return SimpleNamespace(stdout="__OK__\n", exit_code=0)
         return SimpleNamespace(stdout="__OK__")
 
 
@@ -168,6 +186,38 @@ async def test_build_publishes_one_atomic_artifact_directory() -> None:
     assert "mv /workspace/.gpthub-document/build-123456789" in command
     assert "/workspace/paper/artifacts/build-123456789" in command
     assert "mv /workspace/.gpthub-document/build-123456789/document.pdf" not in command
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "filename", ["document.pdf", "preview.png", "source.zip", "visual-pages.tar"]
+)
+@pytest.mark.parametrize("mismatch", ["digest", "size"])
+async def test_mismatched_staged_artifact_never_publishes_directory(filename, mismatch):
+    class MismatchedCompiler(_Compiler):
+        async def artifact_facts(self, ref, path, *, max_bytes):
+            digest, size = await super().artifact_facts(ref, path, max_bytes=max_bytes)
+            if path.rsplit("/", 1)[-1] == filename:
+                return ("f" * 64, size) if mismatch == "digest" else (digest, size - 1)
+            return digest, size
+
+    compiler = MismatchedCompiler()
+    manager = DocumentBuildManager(compiler, _Projects(), lambda _item: _value("rev-1"))
+    registry = _Registry()
+    item = SimpleNamespace(
+        workspace_id="workspace-1",
+        ref=SimpleNamespace(container_id="fixture"),
+        policy=SimpleNamespace(root="/workspace"),
+    )
+    started = await manager.start(
+        registry, item, project_path="paper", expected_revision="rev-1", final=True
+    )
+    build = await _finished(manager, started.build_id)
+    assert build.state == "failed"
+    assert build.failure_code == "artifact_invalid"
+    assert build.artifacts == ()
+    assert not any("mv /workspace/.gpthub-document" in command for command in registry.commands)
+    assert compiler.destroyed is True
 
 
 @pytest.mark.asyncio
@@ -313,18 +363,19 @@ async def _value(value):
 
 
 @pytest.mark.asyncio
-async def test_reconcile_preserves_live_job_and_removes_expired_or_legacy(monkeypatch) -> None:
+async def test_reconcile_preserves_live_and_unknown_legacy_but_removes_expired(monkeypatch) -> None:
     removed: list[str] = []
+    fresh, expired, legacy = "a" * 64, "b" * 64, "c" * 64
 
     async def command(*argv, **_kwargs):
         if argv[1:3] == ("ps", "-aq"):
-            return 0, b"fresh\nexpired\nlegacy\n"
+            return 0, f"{fresh}\n{expired}\n{legacy}\n".encode()
         if argv[1:3] == ("inspect", "--format"):
             template, container_id = argv[3], argv[4]
             if "Labels" in template:
-                if container_id == "fresh":
+                if container_id == fresh:
                     return 0, b'{"gpthub.document.expires_at":"9999999999"}'
-                if container_id == "expired":
+                if container_id == expired:
                     return 0, b'{"gpthub.document.expires_at":"1"}'
                 return 0, b'{"gpthub.document":"1"}'
             return 0, b"true"
@@ -336,11 +387,11 @@ async def test_reconcile_preserves_live_job_and_removes_expired_or_legacy(monkey
     monkeypatch.setattr(document_compiler, "_command", command)
     compiler = DockerDocumentCompiler()
 
-    assert await compiler.reconcile() == 2
-    assert removed == ["expired", "legacy"]
+    assert await compiler.reconcile() == 1
+    assert removed == [expired]
     assert compiler.health() == {
-        "compiler_cleanup": 2,
-        "compiler_cleanup_failures": 0,
+        "compiler_cleanup": 1,
+        "compiler_cleanup_failures": 1,
         "compiler_preparation_pending": 0,
     }
 
@@ -400,18 +451,14 @@ async def test_compiler_streams_tmpfs_outputs_through_container_tar(monkeypatch)
     )
 
     producer, consumer = piped[0]
-    assert producer == (
-        "docker",
-        "exec",
-        "compiler-container",
-        "tar",
-        "-C",
-        "/output",
-        "-cf",
-        "-",
-        ".",
-    )
+    assert producer[:5] == ("docker", "exec", "compiler-container", "/bin/sh", "-c")
+    assert "document.pdf report.json" in producer[-1]
+    assert "preview.png source.zip visual-pages.tar" in producer[-1]
+    assert '"$@"' in producer[-1]
     assert consumer[:4] == ("docker", "exec", "-i", "workspace-container")
+    assert consumer[4:6] == ("python3", "-c")
+    assert "O_NOFOLLOW" in consumer[6] and "member_name" in consumer[6]
+    assert consumer[7] == "/workspace/.gpthub-document/build-123"
 
 
 @pytest.mark.asyncio

@@ -24,12 +24,19 @@ from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from drivers import build_driver, driver_names
+from drivers import DriverError, build_driver, driver_names
 from presentation import workspace_routes
 from presentation.collaboration_routes import CollaborationDependencies, create_collaboration_router
 
 PORT = int(os.environ.get("PORT", "8080"))
 logger = logging.getLogger("workspace-sidecar")
+_HTTP_ERROR_DETAILS = {
+    "unauthorized": "service authorization required",
+    "forbidden": "workspace authorization failed",
+    "not_found": "resource not found",
+    "request_too_large": "request body exceeds size limit",
+    "internal": "workspace request failed",
+}
 
 app = FastAPI(
     title="GPTHub workspace sidecar", version=SERVICE_VERSION, docs_url=None, redoc_url=None
@@ -41,12 +48,21 @@ async def http_error(_request: Request, exc: StarletteHTTPException):
     code = {401: "unauthorized", 403: "forbidden", 404: "not_found", 413: "request_too_large"}.get(
         exc.status_code, "internal"
     )
-    return workspace_routes.error_response(code, str(exc.detail), exc.status_code)
+    return workspace_routes.error_response(code, _HTTP_ERROR_DETAILS[code], exc.status_code)
 
 
 @app.exception_handler(RequestValidationError)
-async def validation_error(_request: Request, exc: RequestValidationError):
-    return workspace_routes.error_response("invalid_request", str(exc.errors()[:3]), 422)
+async def validation_error(_request: Request, _exc: RequestValidationError):
+    return workspace_routes.error_response("invalid_request", "workspace request is invalid", 422)
+
+
+@app.exception_handler(DriverError)
+async def driver_error(_request: Request, _exc: DriverError):
+    logger.warning(
+        "workspace driver operation failed",
+        extra={"component": "workspace_driver", "failure_code": "driver_failed"},
+    )
+    return workspace_routes.error_response("driver_failed", "workspace driver failed", 502)
 
 
 @app.middleware("http")

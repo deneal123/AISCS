@@ -10,15 +10,21 @@ import asyncio
 import json
 import os
 import secrets
-import shlex
 import time
 from collections.abc import AsyncIterator, Awaitable, Callable
 from dataclasses import dataclass
+from pathlib import Path
 
 from drivers import ContainerRef
 
 from . import document_processes
-from .document_cleanup import compiler_inventory, compiler_state, container_absent
+from .document_cleanup import (
+    CompilerInventoryInvalid,
+    compiler_inventory,
+    compiler_state,
+    container_absent,
+)
+from .document_report import parse_report, ready_artifacts_valid
 
 DOCUMENT_IMAGE = os.environ.get("WORKSPACE_DOCUMENT_IMAGE", "gpthub-document-runtime:latest")
 MAX_SOURCE_BYTES = int(os.environ.get("WORKSPACE_DOCUMENT_MAX_SOURCE_BYTES", str(32 * 1024 * 1024)))
@@ -57,7 +63,7 @@ class CompilerResult:
 async def _command(*argv: str, timeout: float = 60.0, input_bytes: bytes | None = None):
     try:
         return await document_processes.command(*argv, timeout=timeout, input_bytes=input_bytes)
-    except TimeoutError:
+    except (TimeoutError, document_processes.CommandOutputLimit):
         raise CompilerFailure("runtime_unavailable") from None
 
 
@@ -290,9 +296,15 @@ class DockerDocumentCompiler:
         )
         if report_code:
             return CompilerResult("failed", "runtime_unavailable", {})
-        try:
-            report = json.loads(report_bytes[:262_144])
-        except (UnicodeError, ValueError):
+        report = parse_report(report_bytes, code)
+        if report is None:
+            return CompilerResult("failed", "runtime_unavailable", {})
+        if report["status"] == "ready" and not ready_artifacts_valid(
+            report,
+            final=final,
+            artifact_limit=MAX_ARTIFACT_BYTES,
+            visual_limit=MAX_VISUAL_BYTES,
+        ):
             return CompilerResult("failed", "runtime_unavailable", {})
         status = "ready" if code == 0 and report.get("status") == "ready" else "failed"
         failure = "" if status == "ready" else str(report.get("failure_code") or "compile_failed")
@@ -305,38 +317,33 @@ class DockerDocumentCompiler:
         *,
         staging_dir: str,
     ) -> None:
-        code, _ = await _command(
-            "docker",
-            "exec",
-            workspace_ref.container_id,
-            "/bin/sh",
-            "-c",
-            f"mkdir -p {shlex.quote(staging_dir)}",
+        exporter = (
+            "set -- document.pdf report.json; "
+            "for name in preview.png source.zip visual-pages.tar; do "
+            'if test -e "/output/$name" || test -L "/output/$name"; then '
+            'set -- "$@" "$name"; fi; done; exec tar --format=ustar -C /output -cf - "$@"'
         )
-        if code:
-            raise CompilerFailure("runtime_unavailable")
+        receiver = Path(__file__).with_name("document_output_runtime.py").read_text("utf-8")
         await _pipe(
             (
                 "docker",
                 "exec",
                 job.container_id,
-                "tar",
-                "-C",
-                "/output",
-                "-cf",
-                "-",
-                ".",
+                "/bin/sh",
+                "-c",
+                exporter,
             ),
             (
                 "docker",
                 "exec",
                 "-i",
                 workspace_ref.container_id,
-                "tar",
-                "-C",
+                "python3",
+                "-c",
+                receiver,
                 staging_dir,
-                "-xf",
-                "-",
+                str(MAX_ARTIFACT_BYTES),
+                str(MAX_VISUAL_BYTES),
             ),
             timeout=60.0,
         )
@@ -449,27 +456,16 @@ class DockerDocumentCompiler:
             if await self.cleanup_recovered(container_id, workspace_ref, job_ref):
                 self._preparation_cleanup.pop(job_ref, None)
         try:
-            code, out = await _command(
-                "docker",
-                "ps",
-                "-aq",
-                "--no-trunc",
-                "--filter",
-                "label=gpthub.document=1",
-                timeout=30.0,
-            )
-        except (OSError, CompilerFailure):
+            identifiers = await compiler_inventory(_command)
+        except CompilerInventoryInvalid:
             self.cleanup_failures += 1
-            return 0
-        if code:
+            raise CompilerFailure("runtime_unavailable") from None
+        except (OSError, ValueError, CompilerFailure):
             self.cleanup_failures += 1
             return 0
         removed = 0
         now = time.time()
-        for container_id in out.decode().splitlines()[:128]:
-            container_id = container_id.strip()
-            if not container_id:
-                continue
+        for container_id in sorted(identifiers)[:128]:
             try:
                 observed = await compiler_state(_command, container_id)
                 if observed is None:

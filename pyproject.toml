@@ -7,7 +7,7 @@
 # здесь — тесты обязаны идти на той же версии, что исполняет прод.
 [project]
 name = "gpthub-workspace-sidecar"
-version = "0.1.1"
+version = "0.1.2"
 description = "Сайдкар workspace: файловая песочница для агента"
 requires-python = ">=3.12"
 
@@ -51,6 +51,6 @@ known-first-party = [
 ]
 
 [tool.pytest.ini_options]
-pythonpath = ["service"]
+pythonpath = ["service", "docker", "service/domain/documents"]
 testpaths = ["tests"]
 asyncio_mode = "auto"

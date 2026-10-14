@@ -22,16 +22,24 @@ import json
 import logging
 import shlex
 import time
+from collections.abc import Awaitable
 
 from domain.policy import WorkspacePolicy
 
 from drivers.base import (
+    ContainerCreationCancelled,
+    ContainerCreationFailed,
+    ContainerCreationUncertain,
+    ContainerCreationUncertainCancelled,
     ContainerRef,
     DriverError,
     ExecResult,
     IsolationUnverified,
     ManagedContainer,
 )
+from drivers.creation_cleanup import settle_creation
+from drivers.isolation import inspection_complete
+from drivers.isolation import isolation_complaints as _isolation_complaints
 
 logger = logging.getLogger("workspace-sidecar.docker")
 
@@ -43,12 +51,55 @@ _KILL_GRACE_SEC = 3.0
 _PGID_FILE = "/tmp/.ws-exec.pgid"
 
 
+async def _cancel_process_cleanup(
+    proc: asyncio.subprocess.Process, group_cleanup: Awaitable[None] | None
+) -> bool:
+    try:
+        try:
+            if group_cleanup is not None:
+                await asyncio.wait_for(group_cleanup, timeout=_KILL_GRACE_SEC + 12.0)
+        finally:
+            with contextlib.suppress(ProcessLookupError):
+                proc.kill()
+            # Drain both pipes: wait() alone can deadlock when a command filled one.
+            with contextlib.suppress(ProcessLookupError):
+                await asyncio.wait_for(proc.communicate(), timeout=5.0)
+    except Exception:
+        # A failed shielded task can itself be logged by asyncio after repeated cancellation.
+        # Keep its result bounded instead of letting private exception text escape the task.
+        return False
+    return True
+
+
+async def _settle_cancelled_process(
+    proc: asyncio.subprocess.Process, group_cleanup: Awaitable[None] | None = None
+) -> None:
+    """Repeated request cancellation cannot interrupt bounded owned-process retirement."""
+    cleanup = asyncio.create_task(_cancel_process_cleanup(proc, group_cleanup))
+    while not cleanup.done():
+        try:
+            await asyncio.shield(cleanup)
+        except asyncio.CancelledError:
+            if cleanup.cancelled():
+                break  # Process shutdown cancelled the cleanup itself; do not spin.
+        except Exception:
+            break
+    if not cleanup.cancelled() and not cleanup.result():
+        logger.error(
+            "workspace process cleanup failed",
+            extra={"component": "workspace_driver", "failure_code": "process_cleanup_failed"},
+        )
+
+
 async def _docker(*args: str, timeout_sec: float = _CLI_TIMEOUT_SEC) -> tuple[int, str, str]:
     proc = await asyncio.create_subprocess_exec(
         "docker", *args, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
     try:
         out, err = await asyncio.wait_for(proc.communicate(), timeout=timeout_sec)
+    except asyncio.CancelledError:
+        await _settle_cancelled_process(proc)
+        raise
     except TimeoutError:
         proc.kill()
         await proc.wait()
@@ -62,6 +113,7 @@ def _create_argv(
     """Аргументы `docker create`. Каждый флаг здесь — ограничение, а не настройка."""
     argv = [
         "create",
+        "--init",
         "--name",
         f"gpthub-ws-{workspace_id}",
         "--label",
@@ -119,18 +171,34 @@ class DockerCliDriver:
     async def create(
         self, workspace_id: str, policy: WorkspacePolicy, *, labels: dict[str, str] | None = None
     ) -> ContainerRef:
-        code, out, err = await _docker(*_create_argv(workspace_id, policy, labels))
+        try:
+            code, out, err = await _docker(*_create_argv(workspace_id, policy, labels))
+        except asyncio.CancelledError:
+            raise ContainerCreationUncertainCancelled from None
+        except Exception:
+            raise ContainerCreationUncertain from None
         if code != 0:
             raise DriverError(f"не удалось создать песочницу: {err.strip() or out.strip()}")
         container_id = out.strip()
-        code, _, err = await _docker("start", container_id)
-        if code != 0:
-            await self.destroy(ContainerRef(DRIVER_NAME, container_id))
-            raise DriverError(f"не удалось запустить песочницу: {err.strip()}")
-        return ContainerRef(DRIVER_NAME, container_id)
+        if len(container_id) != 64 or any(char not in "0123456789abcdef" for char in container_id):
+            # A successful but malformed reply is not a safe destruction target.
+            raise ContainerCreationUncertain
+        ref = ContainerRef(DRIVER_NAME, container_id)
+        try:
+            code, _, _ = await _docker("start", container_id)
+            if code != 0:
+                raise DriverError("container start failed")
+        except (Exception, asyncio.CancelledError) as exc:
+            debt, interrupted = await settle_creation(ref, self.destroy)
+            if interrupted or isinstance(exc, asyncio.CancelledError):
+                raise ContainerCreationCancelled(debt) from None
+            raise ContainerCreationFailed(debt) from None
+        return ref
 
     async def list_managed(self) -> list[ManagedContainer]:
-        code, out, _ = await _docker("ps", "-aq", "--filter", "label=gpthub.workspace=1")
+        code, out, _ = await _docker(
+            "ps", "-aq", "--no-trunc", "--filter", "label=gpthub.workspace=1"
+        )
         if code != 0:
             raise DriverError("docker discovery failed")
         found: list[ManagedContainer] = []
@@ -150,13 +218,15 @@ class DockerCliDriver:
 
     async def verify_isolation(self, ref: ContainerRef, policy: WorkspacePolicy) -> None:
         """Сверить ЗАЯВЛЕННОЕ с ФАКТИЧЕСКИМ. Расхождение — отказ, а не предупреждение."""
-        code, out, err = await _docker("inspect", "--format", "{{json .}}", ref.container_id)
+        code, out, _ = await _docker("inspect", "--format", "{{json .}}", ref.container_id)
         if code != 0:
-            raise IsolationUnverified(f"инспекция не удалась: {err.strip()}")
+            raise DriverError("isolation inspection unavailable")
         try:
             info = json.loads(out)
-        except ValueError as exc:
-            raise IsolationUnverified("инспекция вернула не JSON") from exc
+        except ValueError:
+            raise DriverError("isolation inspection unavailable") from None
+        if not inspection_complete(info):
+            raise DriverError("isolation inspection unavailable")
         for complaint in _isolation_complaints(info, policy):
             raise IsolationUnverified(complaint)
 
@@ -198,6 +268,9 @@ class DockerCliDriver:
         timed_out = False
         try:
             out, err = await asyncio.wait_for(proc.communicate(payload), timeout=timeout_sec)
+        except asyncio.CancelledError:
+            await _settle_cancelled_process(proc)
+            raise
         except TimeoutError:
             timed_out = True
             out, err = b"", b""
@@ -236,6 +309,9 @@ class DockerCliDriver:
         timed_out = False
         try:
             out, err = await asyncio.wait_for(proc.communicate(), timeout=timeout_sec)
+        except asyncio.CancelledError:
+            await _settle_cancelled_process(proc, self._kill_process_group(ref))
+            raise
         except TimeoutError:
             timed_out = True
             out, err = b"", b""
@@ -293,28 +369,3 @@ def _clip(text: str, limit: int) -> tuple[str, bool]:
     if len(text) <= limit:
         return text, False
     return text[:limit] + "…[обрезано]", True
-
-
-def _isolation_complaints(info: dict, policy: WorkspacePolicy) -> list[str]:
-    """Чем факт разошёлся с заявленным. Пусто — изоляция подтверждена.
-
-    ⚠️ Отдельной функцией, потому что это ЕДИНСТВЕННОЕ место, где написано, что мы вообще
-    считаем песочницей. Спрятанное внутри метода, оно проверялось бы только через docker.
-    """
-    host = (info or {}).get("HostConfig") or {}
-    complaints: list[str] = []
-    if str(host.get("NetworkMode") or "") != str(policy.network):
-        complaints.append(
-            f"сеть контейнера {host.get('NetworkMode')!r}, а политика требует {policy.network!r}"
-        )
-    if host.get("Privileged"):
-        complaints.append("контейнер привилегированный")
-    if host.get("CapAdd"):
-        complaints.append(f"добавлены возможности ядра: {host.get('CapAdd')}")
-    if policy.read_only_root and not host.get("ReadonlyRootfs"):
-        complaints.append("корень не только для чтения")
-    if int(host.get("Memory") or 0) <= 0:
-        complaints.append("потолок памяти не выставлен")
-    if int(host.get("PidsLimit") or 0) <= 0:
-        complaints.append("потолок числа процессов не выставлен")
-    return complaints

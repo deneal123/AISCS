@@ -128,12 +128,30 @@ def _inspect(**overrides) -> dict:
         "NetworkMode": "none",
         "Privileged": False,
         "CapAdd": None,
+        "CapDrop": ["ALL"],
+        "SecurityOpt": ["no-new-privileges"],
         "ReadonlyRootfs": True,
         "Memory": 512 * 1024 * 1024,
+        "MemorySwap": 512 * 1024 * 1024,
         "PidsLimit": 256,
+        "NanoCpus": 1_000_000_000,
+        "Tmpfs": {
+            "/workspace": "rw,exec,size=268435456,mode=1777",
+            "/tmp": "rw,exec,size=268435456,mode=1777",
+        },
     }
     host.update(overrides)
-    return {"HostConfig": host}
+    return {
+        "HostConfig": host,
+        "Config": {
+            "Image": WorkspacePolicy().image,
+            "User": "65534:65534",
+            "WorkingDir": "/workspace",
+        },
+        "NetworkSettings": {"Networks": {"none": {}}},
+        "State": {"Running": True},
+        "Mounts": [],
+    }
 
 
 def test_correct_container_passes_verification() -> None:

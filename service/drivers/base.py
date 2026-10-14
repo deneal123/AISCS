@@ -14,6 +14,7 @@ compose, — и разойдётся молча.
 
 from __future__ import annotations
 
+import asyncio
 from dataclasses import dataclass
 from typing import Protocol, runtime_checkable
 
@@ -34,6 +35,33 @@ class ContainerRef:
 
     driver: str
     container_id: str
+
+
+class ContainerCreationFailed(DriverError):
+    """Private cleanup debt; never serialized into the public error response."""
+
+    def __init__(self, cleanup_ref: ContainerRef | None) -> None:
+        super().__init__("container start failed")
+        self.cleanup_ref = cleanup_ref
+
+
+class ContainerCreationCancelled(asyncio.CancelledError):
+    """Preserves cancellation semantics while handing cleanup debt to the registry."""
+
+    def __init__(self, cleanup_ref: ContainerRef | None) -> None:
+        super().__init__()
+        self.cleanup_ref = cleanup_ref
+
+
+class ContainerCreationUncertain(DriverError):
+    """Create response was lost; no container ID or non-creation proof is available."""
+
+    def __init__(self) -> None:
+        super().__init__("container creation uncertain")
+
+
+class ContainerCreationUncertainCancelled(asyncio.CancelledError):
+    """Cancellation after submitting create requires ownership reconciliation."""
 
 
 @dataclass(frozen=True, slots=True)

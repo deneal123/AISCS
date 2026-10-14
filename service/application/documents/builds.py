@@ -11,28 +11,21 @@ from collections.abc import AsyncIterator, Awaitable, Callable
 from typing import Any
 
 from domain.documents import DocumentArtifact, DocumentBuild, DocumentDiagnostic
+from domain.documents.source_identity import diagnostic_block
 from domain.files import safe_path
 from infrastructure.document_compiler import CompilerFailure, DockerDocumentCompiler
 
 from .admission import BuildAdmission
+from .artifact_integrity import verify_staged_artifacts
 from .build_preparation import prepare_build
 from .build_store import ACTIVE_STATES, MAX_COMPLETED_PER_WORKSPACE, BuildManifestStore
 from .projects import DocumentProjectError, DocumentProjectService
+from .registry_retention import evict_retired_builds
+from .visual_transitions import VISUAL_AUDIT_LEASE_SEC as VISUAL_AUDIT_LEASE_SEC
+from .visual_transitions import VISUAL_DIAGNOSTIC_CODES as VISUAL_DIAGNOSTIC_CODES
+from .visual_transitions import cancel_recovered, claim_visual, complete_visual, resolve_observed
 
 Revision = Callable[[Any], Awaitable[str]]
-VISUAL_DIAGNOSTIC_CODES = frozenset(
-    {
-        "visual_blank_page",
-        "visual_clipping",
-        "visual_overlap",
-        "visual_readability",
-        "visual_table_overflow",
-        "visual_image_quality",
-        "visual_header_footer",
-        "visual_composition",
-    }
-)
-VISUAL_AUDIT_LEASE_SEC = 120
 
 
 class DocumentBuildManager:
@@ -303,6 +296,7 @@ class DocumentBuildManager:
                 build.state = "publishing"
                 staging = f"{item.policy.root}/.gpthub-document/{build.build_id}"
                 await self.compiler.publish_outputs(prepared, item.ref, staging_dir=staging)
+                await verify_staged_artifacts(self.compiler, item.ref, staging, report)
                 artifact_dir = f"{build.project_path}/artifacts"
                 published_dir = f"{artifact_dir}/{build.build_id}"
                 filename = f"{profile.profile_id}-{build.build_id[:8]}.pdf"
@@ -476,7 +470,7 @@ class DocumentBuildManager:
                     relative_path=path,
                     line=int(line) if isinstance(line, int) and line > 0 else None,
                     count=max(1, int(item.get("count") or 1)),
-                    block_id=(provenance or {}).get(path, ""),
+                    block_id=diagnostic_block(item, provenance or {}),
                 )
             )
         return tuple(out[:100])
@@ -487,7 +481,10 @@ class DocumentBuildManager:
 
     async def find(self, registry: Any, item: Any, build_id: str) -> DocumentBuild | None:
         await self.recover(registry, item)
-        return self.get(item.workspace_id, build_id)
+        build = self.get(item.workspace_id, build_id)
+        if build is not None:
+            await resolve_observed(self, registry, item, build)
+        return build
 
     async def latest_for_project(
         self, registry: Any, item: Any, project_path: str
@@ -501,7 +498,10 @@ class DocumentBuildManager:
             for build in self._builds.values()
             if build.workspace_id == item.workspace_id and build.project_path == target
         )
-        return max(candidates, key=lambda build: build.created_at, default=None)
+        build = max(candidates, key=lambda build: build.created_at, default=None)
+        if build is not None:
+            await resolve_observed(self, registry, item, build)
+        return build
 
     async def cancel(
         self, registry: Any, item: Any, workspace_id: str, build_id: str
@@ -517,11 +517,8 @@ class DocumentBuildManager:
                 await task
             except asyncio.CancelledError:
                 pass
-        elif not build.terminal:
-            build.failure_code = "build_cancelled"
-            build.completed_at = time.time()
-            build.state = "cancelled"
-            await self._persist(registry, item, build)
+        else:
+            await cancel_recovered(self, registry, item, build)
         return build
 
     async def artifact_stream(
@@ -551,21 +548,7 @@ class DocumentBuildManager:
         build = await self.find(registry, item, build_id)
         if build is None:
             raise DocumentProjectError("build_missing")
-        async with self._lock:
-            claim_expired = (
-                build.state == "visual_audit"
-                and build.visual_audit_claimed_at is not None
-                and time.time() - build.visual_audit_claimed_at >= VISUAL_AUDIT_LEASE_SEC
-            )
-            if build.state == "visual_audit" and not claim_expired:
-                raise DocumentProjectError("audit_busy")
-            if build.state not in {"visual_pending", "visual_audit"} or not build.final:
-                raise DocumentProjectError("audit_unavailable")
-            build.state = "visual_audit"
-            build.failure_code = ""
-            build.visual_audit_claimed_at = time.time()
-        await self._persist(registry, item, build)
-        return build
+        return await claim_visual(self, registry, item, build)
 
     async def visual_bundle_stream(
         self, registry: Any, item: Any, build_id: str
@@ -648,43 +631,20 @@ class DocumentBuildManager:
         diagnostics: list[dict[str, object]],
     ) -> DocumentBuild:
         build = await self.find(registry, item, build_id)
-        if build is None or build.state not in {"visual_pending", "visual_audit"}:
+        if build is None:
             raise DocumentProjectError("audit_unavailable")
-        pdf = next((artifact for artifact in build.artifacts if artifact.role == "pdf"), None)
-        if pdf is None or source_digest != build.source_digest or artifact_sha256 != pdf.sha256:
-            raise DocumentProjectError("source_changed")
-        visual = tuple(
-            DocumentDiagnostic(
-                severity="error",
-                code=str(entry.get("code") or "")[:64],
-                line=(int(entry["page"]) if isinstance(entry.get("page"), int) else None),
-                count=max(1, int(entry.get("count") or 1)),
-                block_id=(
-                    build.page_blocks[int(entry["page"])][0]
-                    if isinstance(entry.get("page"), int)
-                    and len(build.page_blocks.get(int(entry["page"]), ())) == 1
-                    else ""
-                ),
-            )
-            for entry in diagnostics[:100]
-            if isinstance(entry, dict) and str(entry.get("code") or "") in VISUAL_DIAGNOSTIC_CODES
+        return await complete_visual(
+            self,
+            registry,
+            item,
+            build,
+            source_digest=source_digest,
+            artifact_sha256=artifact_sha256,
+            passed=passed,
+            retryable=retryable,
+            audit_version=audit_version,
+            diagnostics=diagnostics,
         )
-        build.visual_audit_version = max(1, int(audit_version or 1))
-        build.visual_audit_claimed_at = None
-        if passed and not visual:
-            build.failure_code = ""
-            build.completed_at = time.time()
-            build.state = "ready"
-        elif retryable:
-            build.failure_code = "visual_unavailable"
-            build.state = "visual_pending"
-        else:
-            build.failure_code = "visual_audit_failed"
-            build.completed_at = time.time()
-            build.diagnostics = (*build.diagnostics, *visual)[:100]
-            build.state = "failed"
-        await self._persist(registry, item, build)
-        return build
 
     def health(self) -> dict[str, int]:
         values = tuple(self._builds.values())
@@ -778,10 +738,26 @@ class DocumentBuildManager:
                 await self.recover(registry, item)
                 for build in tuple(self._builds.values()):
                     if build.workspace_id == item.workspace_id:
+                        await resolve_observed(self, registry, item, build)
                         await self._cleanup_interrupted_compiler(registry, item, build)
             except DocumentProjectError:
                 continue
         await self.compiler.reconcile()
+
+        # Discovery/cleanup awaits can admit a new workspace. Recheck before
+        # eviction; an outage at either inventory leaves all obligations intact.
+        async with self._lock:
+            current = await registry.active_workspaces()
+            retained = active_ids | {str(item.workspace_id) for item in current}
+            retained.update(key for key, lock in self._workspace_starts.items() if lock.locked())
+            retained.update(key for key, lock in self._recovery_locks.items() if lock.locked())
+            evict_retired_builds(
+                self._builds,
+                self._tasks,
+                self._cancel_requested,
+                self._recovered_workspaces,
+                retained,
+            )
 
     async def reconcile_forever(self, registry: Any, interval_sec: float = 60.0) -> None:
         while True:

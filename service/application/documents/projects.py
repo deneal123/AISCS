@@ -17,6 +17,12 @@ from pathlib import Path
 from typing import Any
 
 from domain.documents import DocumentProfile, ProfileCatalog
+from domain.documents.project_validation import (
+    resolve_project_settings,
+    update_project_mode,
+    validate_locale,
+)
+from domain.documents.source_identity import source_path
 from domain.files import parse_read, read_command, safe_path, write_command
 
 RunCommand = Callable[..., Awaitable[Any]]
@@ -50,6 +56,10 @@ class DocumentProjectError(RuntimeError):
 
 
 def _toml(profile: DocumentProfile, *, mode: str, locale: str) -> str:
+    try:
+        validate_locale(locale)
+    except ValueError:
+        raise DocumentProjectError("invalid_project") from None
     sections = ", ".join(f'"{item}"' for item in profile.required_sections)
     locked = ", ".join(f'"{item}"' for item in sorted(profile.locked_fields))
     allowed = ", ".join(f'"{item}"' for item in sorted(profile.allowed_overrides))
@@ -216,7 +226,12 @@ class DocumentProjectService:
             raise DocumentProjectError("profile_mismatch")
         if raw.get("mode") == "submission" and profile.anonymize_supported and not anonymize:
             raise DocumentProjectError("profile_mismatch")
-        _effective, resolved = await self.effective_profile(item, path, profile)
+        try:
+            configured = resolve_project_settings(raw, profile)
+        except ValueError as error:
+            code = "invalid_project" if error.args == ("invalid_project",) else "profile_mismatch"
+            raise DocumentProjectError(code) from None
+        _effective, resolved = await self.effective_profile(item, path, configured)
         return raw, resolved
 
     async def effective_profile(
@@ -398,6 +413,7 @@ class DocumentProjectService:
                 block_id = str(block_value or "")
                 if (
                     relative.startswith("content/")
+                    and source_path(relative) == relative
                     and relative.endswith(".tex")
                     and 1 <= len(relative) <= 200
                     and block_id in block_ids
@@ -422,10 +438,7 @@ class DocumentProjectService:
         mapping = state.get("block_files")
         if not isinstance(mapping, dict):
             return {}
-        return {
-            posixpath.basename(str(relative)): str(block_id)
-            for block_id, relative in mapping.items()
-        }
+        return {str(relative): str(block_id) for block_id, relative in mapping.items()}
 
     async def status(self, item: Any, path: str) -> dict[str, object]:
         raw, profile = await self.manifest(item, path)
@@ -540,10 +553,23 @@ class DocumentProjectService:
                 "content_status": content_status,
                 "revision_changed": True,
             }
+        read = await self._run(item, read_command(item.policy.root, f"{source}/document.toml"))
+        try:
+            source_manifest, truncated = parse_read(read.stdout)
+            if truncated:
+                raise ValueError("invalid_project")
+            next_manifest = update_project_mode(
+                source_manifest,
+                mode=next_mode,
+                locale=next_locale,
+                anonymize=next_mode == "submission" and profile.anonymize_supported,
+            )
+        except (ValueError, OSError, UnicodeError):
+            raise DocumentProjectError("invalid_project") from None
         command, body = write_command(
             item.policy.root,
             f"{source}/document.toml",
-            _toml(profile, mode=next_mode, locale=next_locale),
+            next_manifest,
         )
         result = await self._run(item, command, stdin_payload=body)
         if "__OK__" not in result.stdout:
@@ -552,7 +578,7 @@ class DocumentProjectService:
         return {
             "outcome": "updated",
             "path": source_relative,
-            "profile": profile.public_dict(),
+            "profile": current_profile.public_dict(),
             "mode": next_mode,
             "locale": next_locale,
             "revision_changed": True,

@@ -14,10 +14,12 @@
 
 from __future__ import annotations
 
+import asyncio
 import base64
 import json
 import logging
 import shlex
+from pathlib import Path
 from urllib.parse import urlparse
 
 import httpx
@@ -52,12 +54,27 @@ async def fetch(url: str, *, timeout_sec: float = DOWNLOAD_TIMEOUT_SEC) -> bytes
     if parsed.scheme not in ("http", "https"):
         raise ImportRefused("ссылка должна быть http(s)")
     try:
-        await assert_public_host(parsed.hostname or "")
-    except UnsafeUrlError as exc:
-        raise ImportRefused("source address is not allowed") from exc
-    try:
-        async with httpx.AsyncClient(follow_redirects=False, timeout=timeout_sec) as client:
-            response = await client.get(str(url))
+        # HTTPX limits inactivity per operation, not the duration of the import.
+        # Include address validation and progressing bodies in one deadline.
+        async with asyncio.timeout(timeout_sec):
+            try:
+                await assert_public_host(parsed.hostname or "")
+            except UnsafeUrlError as exc:
+                raise ImportRefused("source address is not allowed") from exc
+            async with httpx.AsyncClient(follow_redirects=False, timeout=timeout_sec) as client:
+                async with client.stream("GET", str(url)) as response:
+                    if 300 <= response.status_code < 400:
+                        raise ImportRefused("редирект не поддерживается")
+                    if response.status_code >= 400:
+                        raise ImportRefused("source rejected the request")
+                    data = bytearray()
+                    async for chunk in response.aiter_bytes():
+                        if len(chunk) > MAX_FILE_BYTES - len(data):
+                            raise ImportRefused(f"файл больше {MAX_FILE_BYTES} байт")
+                        data.extend(chunk)
+                    return bytes(data)
+    except ImportRefused:
+        raise
     except Exception as exc:  # noqa: BLE001
         # The URL, hostname and exception body are private integration data.
         # Operators need a bounded category here; callers receive the same safe
@@ -67,14 +84,6 @@ async def fetch(url: str, *, timeout_sec: float = DOWNLOAD_TIMEOUT_SEC) -> bytes
             extra={"component": "workspace_import", "failure_code": "transport"},
         )
         raise ImportRefused("source is temporarily unavailable") from exc
-    if 300 <= response.status_code < 400:
-        raise ImportRefused("редирект не поддерживается")
-    if response.status_code >= 400:
-        raise ImportRefused("source rejected the request")
-    data = response.content or b""
-    if len(data) > MAX_FILE_BYTES:
-        raise ImportRefused(f"файл больше {MAX_FILE_BYTES} байт")
-    return data
 
 
 def write_command(root: str, name: str, data: bytes) -> tuple[str, bytes]:
@@ -212,27 +221,10 @@ def unpack_command(root: str, name: str) -> str:
 
     target = safe_path(root, name)
     dest = target.rsplit(".", 1)[0] or f"{target}-unpacked"
-    script = (
-        "import os,sys,zipfile\n"
-        "src,dst=sys.argv[1],sys.argv[2]\n"
-        "if not zipfile.is_zipfile(src): print('__NOT_ARCHIVE__'); raise SystemExit(0)\n"
-        "total=0; taken=0\n"
-        "with zipfile.ZipFile(src) as z:\n"
-        "    for info in z.infolist():\n"
-        "        if info.is_dir(): continue\n"
-        f"        if taken>={MAX_UNPACKED_FILES} or total>{MAX_UNPACKED_BYTES}:\n"
-        "            print('__TRUNCATED__'); break\n"
-        "        out=os.path.realpath(os.path.join(dst,info.filename))\n"
-        "        if not out.startswith(os.path.realpath(dst)+os.sep): continue\n"
-        "        os.makedirs(os.path.dirname(out),exist_ok=True)\n"
-        "        with z.open(info) as fh, open(out,'wb') as w:\n"
-        "            data=fh.read(); w.write(data)\n"
-        "        total+=len(data); taken+=1\n"
-        "print('__OK__',taken)\n"
-    )
+    script = Path(__file__).with_name("archive_runtime.py").read_text(encoding="utf-8")
     return (
-        f"mkdir -p {shlex.quote(dest)} && "
-        f"python3 -c {shlex.quote(script)} {shlex.quote(target)} {shlex.quote(dest)}"
+        f"python3 -c {shlex.quote(script)} {shlex.quote(target)} {shlex.quote(dest)} "
+        f"{shlex.quote(root)} {MAX_UNPACKED_FILES} {MAX_UNPACKED_BYTES}"
     )
 
 

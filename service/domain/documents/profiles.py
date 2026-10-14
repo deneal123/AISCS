@@ -48,7 +48,10 @@ def default_profile_root() -> Path:
 
 def _tree_digest(directory: Path) -> str:
     digest = hashlib.sha256()
-    for path in sorted(item for item in directory.rglob("*") if item.is_file()):
+    paths = sorted(directory.rglob("*"))
+    if directory.is_symlink() or any(path.is_symlink() for path in paths):
+        raise ProfileConfigurationError("profile_invalid")
+    for path in (item for item in paths if item.is_file()):
         relative = path.relative_to(directory).as_posix()
         digest.update(relative.encode())
         digest.update(b"\0")
@@ -65,21 +68,40 @@ def _strings(value: object, *, field: str) -> tuple[str, ...]:
     return tuple(dict.fromkeys(item.strip() for item in value if item.strip()))
 
 
+def _validate_policy_types(raw: dict[str, object]) -> None:
+    for field in ("version", "max_pages"):
+        value = raw.get(field)
+        if field == "max_pages" and value is None:
+            continue
+        if type(value) is not int or value <= 0:
+            raise ProfileConfigurationError("profile_invalid")
+    for field in ("bibliography_required", "anonymize_supported"):
+        if type(raw.get(field, False)) is not bool:
+            raise ProfileConfigurationError("profile_invalid")
+
+
 def _load_profile(directory: Path) -> DocumentProfile:
     manifest = directory / "profile.toml"
+    if directory.is_symlink() or manifest.is_symlink():
+        raise ProfileConfigurationError("profile_invalid")
     if not manifest.is_file():
         raise ProfileConfigurationError("manifest_missing")
     try:
         raw = tomllib.loads(manifest.read_text(encoding="utf-8"))
     except (OSError, UnicodeError, tomllib.TOMLDecodeError) as exc:
         raise ProfileConfigurationError("manifest_invalid") from exc
+    _validate_policy_types(raw)
     profile_id = str(raw.get("profile_id") or "").strip()
     entrypoint = str(raw.get("entrypoint") or "").strip()
     if not _PROFILE_ID.fullmatch(profile_id):
         raise ProfileConfigurationError("profile_id_invalid")
     if profile_id != directory.name:
         raise ProfileConfigurationError("profile_name_mismatch")
-    if not _SAFE_RELATIVE.fullmatch(entrypoint) or entrypoint.startswith(("/", "../")):
+    if (
+        not _SAFE_RELATIVE.fullmatch(entrypoint)
+        or entrypoint.startswith("/")
+        or any(part in {"", ".", ".."} for part in entrypoint.split("/"))
+    ):
         raise ProfileConfigurationError("entrypoint_invalid")
     if not (directory / entrypoint).is_file():
         raise ProfileConfigurationError("entrypoint_missing")

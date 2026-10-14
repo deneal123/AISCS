@@ -61,6 +61,13 @@ async def main(data):
   assert not build.compiler_ref and manager._occupied_compiler_slots()==0
  records=await BuildManifestStore().load(registry,item)
  assert len(records)==1 and records[0].compiler_ref==build.compiler_ref
+ if data.get('retire',False):
+  assert not build.compiler_ref
+  await registry.destroy(item.workspace_id)
+  await manager.reconcile_registry(registry)
+  assert manager.get(item.workspace_id,data['build']) is None
+  assert not manager._builds and not manager._recovered_workspaces
+  assert manager.health()['failed']==0
  return {'recovered':True,'cleanup_pending':bool(build.compiler_ref),'capacity':manager._occupied_compiler_slots()}
 try:
  print(json.dumps({'status':'passed','checks':asyncio.run(main(json.load(sys.stdin)))}))
@@ -149,6 +156,14 @@ async def main():
   assert results==[{'recovered':True,'cleanup_pending':True,'capacity':1},
    {'recovered':True,'cleanup_pending':False,'capacity':0}]
   assert await container_absent(_command,compiler)
+  if REFERENCE=='retired':
+   stage='retired_inventory'
+   data['outage']=False; data['retire']=True
+   proc=await asyncio.create_subprocess_exec(sys.executable,'-c',CHILD,
+    stdin=asyncio.subprocess.PIPE,stdout=asyncio.subprocess.PIPE,stderr=asyncio.subprocess.DEVNULL)
+   raw,_=await asyncio.wait_for(proc.communicate(json.dumps(data).encode()),60)
+   assert proc.returncode==0 and json.loads(raw)['status']=='passed'
+   assert await container_absent(_command,source)
   return {'fresh_processes':2,'retained_capacity':True,'durable_reference':True,'cleanup_retry':True}
  finally:
   for value in reversed(owned):
@@ -173,7 +188,7 @@ def test_fresh_process_recovery_probe_parses_without_execution():
 @pytest.mark.skipif(
     os.getenv("S37_LIVE_REGISTRY_RECOVERY") != "1", reason="explicit isolated Docker acceptance"
 )
-@pytest.mark.parametrize("reference", ["id", "name", "journal", "journal_maintenance"])
+@pytest.mark.parametrize("reference", ["id", "name", "journal", "journal_maintenance", "retired"])
 def test_real_manifest_recovery_across_processes_retains_capacity_until_cleanup(reference):
     result = subprocess.run(
         ["docker", "exec", "-i", "gpthub-dev-workspace-1", "python3", "-"],

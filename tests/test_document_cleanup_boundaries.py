@@ -75,3 +75,40 @@ async def test_inventory_outage_is_visible_without_authorizing_removal(monkeypat
     assert await compiler.reconcile() == 0
     assert compiler.cleanup_failures == 1
     compiler.destroy.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("running", [True, False])
+@pytest.mark.parametrize("expiry", [None, "", "0", "-1", True, 1, "1.0", " 1 ", "1e2"])
+async def test_unknown_expiry_never_authorizes_compiler_removal(monkeypatch, running, expiry):
+    labels = {} if expiry is None else {"gpthub.document.expires_at": expiry}
+
+    async def command(*args, **_kwargs):
+        if args[1:3] == ("ps", "-aq"):
+            return 0, _ID.encode()
+        if "Labels" in args[3]:
+            return 0, json.dumps(labels).encode()
+        return 0, b"true" if running else b"false"
+
+    monkeypatch.setattr(document_compiler, "_command", command)
+    compiler = DockerDocumentCompiler()
+    compiler.destroy = AsyncMock(return_value=True)
+    assert await compiler.reconcile() == 0
+    compiler.destroy.assert_not_awaited()
+    assert compiler.cleanup_failures == 1
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "inventory", [b"compiler-name", b"--help", b"\xff", (_ID + "\n" + _ID).encode()]
+)
+async def test_malformed_inventory_cannot_dispatch_inspection_or_removal(monkeypatch, inventory):
+    command = AsyncMock(return_value=(0, inventory))
+    monkeypatch.setattr(document_compiler, "_command", command)
+    compiler = DockerDocumentCompiler()
+    compiler.destroy = AsyncMock(return_value=True)
+    with pytest.raises(CompilerFailure, match="^runtime_unavailable$"):
+        await compiler.reconcile()
+    command.assert_awaited_once()
+    compiler.destroy.assert_not_awaited()
+    assert compiler.cleanup_failures == 1

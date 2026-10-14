@@ -22,6 +22,20 @@ import tomllib
 import zipfile
 from pathlib import Path
 
+from document_page_audit import geometry_diagnostics, page_count, page_inventory
+from document_source_audit import (
+    SourceAuditFailure,
+    active_tex,
+    has_citation,
+    section_titles,
+)
+from document_source_audit import (
+    authored_source as project_tex_source,
+)
+from document_source_audit import authoring_manifest_audit as _authoring_manifest_audit
+from font_audit import font_diagnostics
+from source_identity import source_path
+
 MAX_LOG_BYTES = 4 * 1024 * 1024
 MAX_ARTIFACT_BYTES = 64 * 1024 * 1024
 MAX_VISUAL_BYTES = 256 * 1024 * 1024
@@ -106,18 +120,23 @@ _COMPILER_FAILURE_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
 )
 
 
-def _compiler_failure_location(log: str) -> tuple[str | None, int | None, str]:
+def _compiler_failure_identity(log: str) -> tuple[str | None, int | None, str, str]:
     """Return a user-safe TeX location and a bounded compiler error code."""
 
     file_line = re.compile(
-        r"(?m)^(?P<path>[^\r\n:]{1,512}\.tex):(?P<line>\d+):\s*(?P<message>[^\r\n]*)"
+        r"(?m)^(?P<path>[^\r\n:]{1,512}\.tex):(?P<line>\d{1,7}):\s*(?P<message>[^\r\n]*)"
     )
     matches = list(file_line.finditer(log))
     for match in matches:
+        line = int(match.group("line"))
+        if not 1 <= line <= 1_000_000:
+            continue
         message = match.group("message").casefold()
+        if re.match(r"(?:(?:latex|package\s+\S+)\s+)?warning:", message):
+            continue
         for code, needles in _COMPILER_FAILURE_PATTERNS:
             if any(needle in message for needle in needles):
-                return Path(match.group("path")).name, int(match.group("line")), code
+                return Path(match.group("path")).name, line, code, source_path(match.group("path"))
 
     folded = log.casefold()
     code = next(
@@ -128,14 +147,17 @@ def _compiler_failure_location(log: str) -> tuple[str | None, int | None, str]:
         ),
         "compile_failed",
     )
-    if matches:
-        match = matches[-1]
-        return Path(match.group("path")).name, int(match.group("line")), code
-    return None, None, code
+    return None, None, code, ""
+
+
+def _compiler_failure_location(log: str) -> tuple[str | None, int | None, str]:
+    """Compatibility projection of display location; never infers block ownership."""
+    path, line, code, _source_path = _compiler_failure_identity(log)
+    return path, line, code
 
 
 def _append_compiler_failure(out: list[dict[str, object]], log: str) -> list[dict[str, object]]:
-    path, line, code = _compiler_failure_location(log)
+    path, line, code, relative = _compiler_failure_identity(log)
     existing = next(
         (item for item in out if item.get("severity") == "error" and item.get("code") == code),
         None,
@@ -147,6 +169,7 @@ def _append_compiler_failure(out: list[dict[str, object]], log: str) -> list[dic
         existing["path"] = path
     if line is not None:
         existing["line"] = line
+    existing["source_path"] = relative
     return out
 
 
@@ -184,80 +207,12 @@ def output(argv: list[str], cwd: Path, timeout: float) -> str:
     return result.stdout[:MAX_LOG_BYTES].decode("utf-8", "replace")
 
 
-def project_tex_source(project: Path) -> str:
-    """Read bounded authored TeX sources without inspecting vendor or build output."""
-    excluded = {".git", ".gpthub-document", "artifacts", "vendor", "__pycache__"}
-    parts: list[str] = []
-    remaining = MAX_LOG_BYTES
-    for path in sorted(project.rglob("*.tex")):
-        relative = path.relative_to(project)
-        if any(part in excluded or part.startswith(".") for part in relative.parts):
-            continue
-        try:
-            chunk = path.read_bytes()[:remaining].decode("utf-8", "ignore")
-        except OSError:
-            continue
-        parts.append(chunk)
-        remaining -= len(chunk.encode("utf-8"))
-        if remaining <= 0:
-            break
-    return "\n".join(parts)
-
-
-def authoring_manifest_audit(project: Path, profile_id: str) -> list[dict[str, object]]:
+def authoring_manifest_audit(
+    project: Path, profile_id: str, publication: bool = True
+) -> list[dict[str, object]]:
     """Validate renderer-owned semantic provenance without returning authored text."""
 
-    path = project / ".gpthub-authoring.json"
-    if not path.is_file():
-        return []
-    try:
-        raw = json.loads(path.read_text("utf-8"))
-        if (
-            isinstance(raw, dict)
-            and set(raw) == {"schema_version", "draft_version", "draft_digest"}
-            and type(raw["schema_version"]) is int
-            and raw["schema_version"] == 1
-            and type(raw["draft_version"]) is int
-            and 1 <= raw["draft_version"] <= 1_000_000
-            and isinstance(raw["draft_digest"], str)
-            and re.fullmatch(r"[0-9a-f]{64}", raw["draft_digest"])
-        ):
-            # Atomic raw-source publication records identity, not a semantic draft.
-            # The source digest and ordinary profile/PDF audits still apply.
-            return []
-        draft = raw.get("draft") if isinstance(raw, dict) else None
-        blocks = draft.get("blocks") if isinstance(draft, dict) else None
-        encoded = json.dumps(
-            draft,
-            ensure_ascii=False,
-            sort_keys=True,
-            separators=(",", ":"),
-        ).encode()
-        valid = (
-            raw.get("schema_version") == 1
-            and raw.get("profile_id") == profile_id
-            and isinstance(raw.get("draft_version"), int)
-            and raw.get("draft_version") == draft.get("version")
-            and isinstance(blocks, list)
-            and hashlib.sha256(encoded).hexdigest() == raw.get("draft_digest")
-        )
-    except (OSError, UnicodeError, TypeError, ValueError):
-        valid = False
-        raw = {}
-        blocks = []
-    if not valid:
-        return [{"severity": "error", "code": "authoring_invalid", "count": 1}]
-    intent = raw.get("intent") if isinstance(raw.get("intent"), dict) else {}
-    required = intent.get("required_sections") if isinstance(intent, dict) else []
-    if not isinstance(required, list) or not all(isinstance(item, str) for item in required[:24]):
-        return [{"severity": "error", "code": "authoring_invalid", "count": 1}]
-    headings = {
-        str(block.get("title") or block.get("text") or "").strip().casefold()
-        for block in blocks
-        if isinstance(block, dict) and block.get("kind") in {"section", "slide"}
-    }
-    missing = sum(1 for section in required[:24] if section.strip().casefold() not in headings)
-    return [{"severity": "error", "code": "required_section", "count": missing}] if missing else []
+    return _authoring_manifest_audit(project, profile_id, publication)
 
 
 def lint_diagnostics(entrypoint: Path, project: Path, timeout: float) -> list[dict[str, object]]:
@@ -273,23 +228,43 @@ def lint_diagnostics(entrypoint: Path, project: Path, timeout: float) -> list[di
 
 
 def pdf_metadata(pdf: Path, cwd: Path, timeout: float) -> tuple[dict[str, object], list[dict]]:
-    info = output(["pdfinfo", str(pdf)], cwd, timeout)
-    fonts = output(["pdffonts", str(pdf)], cwd, timeout)
+    info_result = run(["pdfinfo", str(pdf)], cwd, timeout)
+    info = info_result.stdout[:MAX_LOG_BYTES].decode("utf-8", "replace")
+    fonts = run(["pdffonts", str(pdf)], cwd, timeout)
     qpdf = run(["qpdf", "--check", str(pdf)], cwd, timeout)
-    pages = re.search(r"Pages:\s*(\d+)", info, re.IGNORECASE)
-    size = re.search(r"Page size:\s*([\d.]+)\s+x\s+([\d.]+)\s+pts", info, re.IGNORECASE)
     meta: dict[str, object] = {
-        "page_count": int(pages.group(1)) if pages else 0,
-        "page_width_pt": float(size.group(1)) if size else 0.0,
-        "page_height_pt": float(size.group(2)) if size else 0.0,
+        "page_count": 0,
+        "page_width_pt": 0.0,
+        "page_height_pt": 0.0,
     }
     author = re.search(r"^Author:\s*(.*)$", info, re.IGNORECASE | re.MULTILINE)
     meta["author_present"] = bool(author and author.group(1).strip())
     audit: list[dict] = []
+    try:
+        if info_result.returncode != 0 or len(info_result.stdout) > MAX_LOG_BYTES:
+            raise ValueError("pdf_invalid")
+        count = page_count(info)
+        detailed = run(["pdfinfo", "-f", "1", "-l", str(count), str(pdf)], cwd, timeout)
+        if detailed.returncode != 0 or len(detailed.stdout) > MAX_LOG_BYTES:
+            raise ValueError("pdf_invalid")
+        inventory = page_inventory(detailed.stdout.decode("utf-8", "strict"), count)
+        meta.update(
+            page_count=count,
+            page_width_pt=inventory[0][0],
+            page_height_pt=inventory[0][1],
+            _page_geometry=inventory,
+        )
+    except (ValueError, UnicodeError):
+        audit.append({"severity": "error", "code": "pdf_invalid", "count": 1})
     if qpdf.returncode != 0:
         audit.append({"severity": "error", "code": "pdf_invalid", "count": 1})
-    if "type 3" in fonts.lower():
-        audit.append({"severity": "error", "code": "type3_font", "count": 1})
+    font_report = fonts.stdout[:MAX_LOG_BYTES].decode("utf-8", "replace")
+    font_errors = (
+        font_diagnostics(font_report)
+        if fonts.returncode == 0 and len(fonts.stdout) <= MAX_LOG_BYTES
+        else (("font_unavailable", 1),)
+    )
+    audit.extend({"severity": "error", "code": code, "count": count} for code, count in font_errors)
     return meta, audit
 
 
@@ -377,19 +352,15 @@ def manifest_audit(
         out.append({"severity": "error", "code": "page_limit", "count": pages - max_pages})
     width = float(metadata.get("page_width_pt") or 0.0)
     height = float(metadata.get("page_height_pt") or 0.0)
-    expected = {
-        "a4": (595.3, 841.9),
-        "letter": (612.0, 792.0),
-        "slide_16_9": (453.5, 255.1),
-    }.get(str(manifest.get("paper") or ""))
-    if expected and (abs(width - expected[0]) > 4.0 or abs(height - expected[1]) > 4.0):
-        out.append({"severity": "error", "code": "page_geometry", "count": 1})
-    orientation = str(manifest.get("orientation") or "portrait")
-    wrong_orientation = (orientation == "landscape" and width <= height) or (
-        orientation == "portrait" and height <= width
+    inventory = metadata.get("_page_geometry", ((width, height, 0),))
+    out.extend(
+        {"severity": "error", "code": code, "count": count}
+        for code, count in geometry_diagnostics(
+            inventory,
+            str(manifest.get("paper") or ""),
+            str(manifest.get("orientation") or "portrait"),
+        )
     )
-    if width and height and wrong_orientation:
-        out.append({"severity": "error", "code": "page_orientation", "count": 1})
     if manifest.get("bibliography_required"):
         bibliography = project / "bibliography" / "references.bib"
         bibliography_text = (
@@ -407,14 +378,14 @@ def manifest_audit(
         out.append({"severity": "error", "code": "anonymization_failed", "count": 1})
     entrypoint = project / str(manifest.get("entrypoint") or "main.tex")
     try:
-        entrypoint_source = entrypoint.read_text("utf-8", errors="ignore")
-    except OSError:
-        entrypoint_source = ""
-    source = project_tex_source(project)
-    out.extend(authoring_manifest_audit(project, str(manifest.get("profile_id") or "")))
-    if manifest.get("bibliography_required") and not re.search(
-        r"\\(?:auto|paren|text|foot|super)?cite\*?(?:\[[^\]]*\])?\{", source
-    ):
+        entrypoint_source = active_tex(entrypoint.read_text("utf-8"))
+        source = project_tex_source(project, str(manifest.get("entrypoint") or "main.tex"))
+    except (OSError, UnicodeError, SourceAuditFailure):
+        return [{"severity": "error", "code": "authoring_invalid", "count": 1}]
+    out.extend(
+        authoring_manifest_audit(project, str(manifest.get("profile_id") or ""), publication)
+    )
+    if manifest.get("bibliography_required") and not has_citation(source):
         out.append(
             {
                 "severity": "error" if publication else "warning",
@@ -425,20 +396,20 @@ def manifest_audit(
     documentclass = re.search(r"\\documentclass(?:\[[^\]]*\])?\{([^}]+)\}", entrypoint_source)
     if not documentclass or documentclass.group(1) != manifest.get("documentclass"):
         out.append({"severity": "error", "code": "documentclass_mismatch", "count": 1})
-    source_folded = source.casefold()
+    headings = section_titles(source)
     abstract_environment = bool(re.search(r"\\begin\s*\{abstract\}", source, re.IGNORECASE))
     bibliography_environment = bool(
         re.search(r"\\(?:printbibliography|bibliography\s*\{)", source, re.IGNORECASE)
     )
     for section in manifest.get("required_sections") or []:
-        normalized_section = str(section).strip().casefold()
+        normalized_section = " ".join(str(section).split()).casefold()
         semantic_environment_present = (
             normalized_section in {"abstract", "аннотация"} and abstract_environment
         ) or (
             normalized_section in {"bibliography", "references", "литература", "список литературы"}
             and bibliography_environment
         )
-        if normalized_section not in source_folded and not semantic_environment_present:
+        if normalized_section not in headings and not semantic_environment_present:
             out.append({"severity": "error", "code": "required_section", "count": 1})
     if re.search(r"\{\{[A-Z][A-Z0-9_]{2,}\}\}", source) or "\\DocumentPlaceholder{" in source:
         out.append(
@@ -554,6 +525,15 @@ def source_bundle(project: Path, target: Path) -> None:
 def visual_bundle(pdf: Path, output_dir: Path, cwd: Path, timeout: float) -> tuple[Path, Path]:
     """Raster every page and pack deterministic, bounded visual-audit input."""
 
+    inventory = run(["pdfinfo", str(pdf)], cwd, timeout)
+    if inventory.returncode != 0 or len(inventory.stdout) > MAX_LOG_BYTES:
+        raise ValueError("visual bundle unavailable")
+    try:
+        expected_pages = page_count(inventory.stdout.decode("utf-8", "strict"))
+    except (ValueError, UnicodeError):
+        raise ValueError("visual bundle unavailable") from None
+    if expected_pages > MAX_VISUAL_PAGES:
+        raise ValueError("visual bundle unavailable")
     pages_dir = output_dir / "visual-pages"
     pages_dir.mkdir(parents=True, exist_ok=True)
     rendered = run(
@@ -561,7 +541,17 @@ def visual_bundle(pdf: Path, output_dir: Path, cwd: Path, timeout: float) -> tup
         cwd,
         timeout,
     )
-    pages = sorted(pages_dir.glob("page-*.png"))
+    numbered = []
+    for path in pages_dir.glob("page-*.png"):
+        match = re.fullmatch(r"page-([0-9]{1,5})\.png", path.name)
+        if not match or path.is_symlink() or not path.is_file():
+            raise ValueError("visual bundle unavailable")
+        numbered.append((int(match[1]), path))
+    if len(numbered) != expected_pages or {number for number, _ in numbered} != set(
+        range(1, expected_pages + 1)
+    ):
+        raise ValueError("visual bundle unavailable")
+    pages = [path for _, path in sorted(numbered)]
     total = sum(path.stat().st_size for path in pages)
     if (
         rendered.returncode != 0
@@ -606,10 +596,15 @@ def main() -> int:
             report["failure_code"] = "invalid_project"
             return 2
         out_dir.mkdir(parents=True, exist_ok=True)
+        # Imported auxiliary state must not stand in for this build's dependency
+        # evidence. Force an engine pass with a fresh recorder inventory.
+        entrypoint.with_suffix(".fls").unlink(missing_ok=True)
         engine_flag = f"-{ENGINES[args.engine]}"
         result = run(
             [
                 "latexmk",
+                "-g",
+                "-recorder",
                 engine_flag,
                 "-interaction=nonstopmode",
                 "-halt-on-error",
@@ -633,6 +628,8 @@ def main() -> int:
             report["failure_code"] = "artifact_too_large"
             return 1
         meta, pdf_audit = pdf_metadata(pdf, project, min(30.0, args.timeout))
+        if args.publication and int(meta.get("page_count") or 0) > MAX_VISUAL_PAGES:
+            pdf_audit.append({"severity": "error", "code": "page_limit", "count": 1})
         report["diagnostics"] = [
             *report["diagnostics"],
             *lint_diagnostics(entrypoint, project, args.timeout),
@@ -681,7 +678,7 @@ def main() -> int:
         source_bundle(project, bundle)
         if bundle.stat().st_size > MAX_ARTIFACT_BYTES:
             bundle.unlink(missing_ok=True)
-        report.update(meta)
+        report.update({key: value for key, value in meta.items() if not key.startswith("_")})
         report.update(
             {
                 "status": "ready",

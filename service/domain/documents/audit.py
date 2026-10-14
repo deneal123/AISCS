@@ -5,6 +5,7 @@ from __future__ import annotations
 import re
 
 from .contracts import DocumentDiagnostic, DocumentProfile
+from .font_audit import font_diagnostics
 
 _FILE_LINE = re.compile(r"(?:^|\n)([^\n:]{1,180}\.tex):(\d+):")
 _PAGES = re.compile(r"Pages:\s*(\d+)", re.IGNORECASE)
@@ -75,11 +76,10 @@ def audit_pdf(
         diagnostics.append(DocumentDiagnostic("error", "orientation_mismatch"))
     if profile.orientation == "portrait" and width and height and width >= height:
         diagnostics.append(DocumentDiagnostic("error", "orientation_mismatch"))
-    fonts = str(pdffonts_text or "").lower()
-    if "type 3" in fonts or "type3" in fonts:
-        diagnostics.append(DocumentDiagnostic("error", "type3_font"))
-    if fonts and re.search(r"\bno\s+(?:yes|no)\s+(?:yes|no)\s+\S+\s*$", fonts, re.MULTILINE):
-        diagnostics.append(DocumentDiagnostic("error", "font_not_embedded"))
+    diagnostics.extend(
+        DocumentDiagnostic("error", code, count=count)
+        for code, count in font_diagnostics(pdffonts_text)
+    )
     if profile.bibliography_required and not re.search(
         r"references|bibliography|литератур", str(extracted_text or ""), re.IGNORECASE
     ):

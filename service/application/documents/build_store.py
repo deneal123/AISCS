@@ -16,6 +16,18 @@ ACTIVE_STATES = frozenset(
 )
 MAX_COMPLETED_PER_WORKSPACE = 64
 PREVIEW_RETENTION_SEC = 24 * 60 * 60
+INVENTORY_COMPLETE = "__GPTHUB_MANIFESTS_COMPLETE__\n"
+
+
+def _completed(result: Any) -> bool:
+    code = getattr(result, "exit_code", None)
+    return (
+        type(code) is int
+        and code == 0
+        and not getattr(result, "truncated", False)
+        and not getattr(result, "timed_out", False)
+        and isinstance(getattr(result, "stdout", None), str)
+    )
 
 
 class BuildManifestStore:
@@ -57,12 +69,8 @@ class BuildManifestStore:
             + command
         )
         result = await registry.exec_raw(item, command, stdin_payload=stdin, max_output_chars=1024)
-        if (
-            int(getattr(result, "exit_code", 0) or 0) != 0
-            or getattr(result, "truncated", False)
-            or getattr(result, "timed_out", False)
-            or "__OK__" not in str(result.stdout or "")
-        ):
+        expected = f"__OK__ {len(payload.encode('utf-8'))}\n"
+        if not _completed(result) or result.stdout != expected:
             raise RuntimeError("build manifest unavailable")
 
     async def load(self, registry: Any, item: Any) -> tuple[DocumentBuild, ...]:
@@ -77,14 +85,12 @@ class BuildManifestStore:
             )
             + " sh {} +"
         )
+        command = f"( {command} ) && printf {shlex.quote(INVENTORY_COMPLETE)}"
         result = await registry.exec_raw(item, command, max_output_chars=2 * 1024 * 1024)
-        lines = str(result.stdout or "").splitlines()
-        if (
-            int(getattr(result, "exit_code", 0) or 0) != 0
-            or getattr(result, "truncated", False)
-            or getattr(result, "timed_out", False)
-            or len(lines) > 256
-        ):
+        if not _completed(result) or not result.stdout.endswith(INVENTORY_COMPLETE):
+            raise RuntimeError("build manifest inventory unavailable")
+        lines = result.stdout[: -len(INVENTORY_COMPLETE)].splitlines()
+        if len(lines) > 256:
             raise RuntimeError("build manifest inventory unavailable")
         builds: list[DocumentBuild] = []
         seen_ids: set[str] = set()
@@ -109,12 +115,7 @@ class BuildManifestStore:
             f"rm -f {shlex.quote(path)} && echo __OK__",
             max_output_chars=128,
         )
-        if (
-            int(getattr(result, "exit_code", 0) or 0) != 0
-            or getattr(result, "truncated", False)
-            or getattr(result, "timed_out", False)
-            or "__OK__" not in str(result.stdout or "")
-        ):
+        if not _completed(result) or result.stdout != "__OK__\n":
             raise RuntimeError("build manifest deletion unavailable")
 
     async def verify_artifacts(self, registry: Any, item: Any, build: DocumentBuild) -> bool:
@@ -134,8 +135,17 @@ class BuildManifestStore:
                 f"test \"$(sha256sum {shlex.quote(build.visual_bundle_path)} | cut -d' ' -f1)\" = "
                 f"{shlex.quote(build.visual_bundle_sha256)}"
             )
-        result = await registry.exec_raw(item, checks, max_output_chars=128)
-        return int(getattr(result, "exit_code", 0) or 0) == 0
+        result = await registry.exec_raw(item, checks + " && echo __OK__", max_output_chars=128)
+        code = getattr(result, "exit_code", None)
+        if (
+            type(code) is not int
+            or code not in {0, 1}
+            or getattr(result, "timed_out", False)
+            or getattr(result, "truncated", False)
+            or (code == 0 and getattr(result, "stdout", None) != "__OK__\n")
+        ):
+            raise RuntimeError("artifact verification unavailable")
+        return code == 0
 
     @staticmethod
     def prune_candidates(

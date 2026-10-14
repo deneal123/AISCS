@@ -6,7 +6,7 @@ from types import SimpleNamespace
 from unittest.mock import AsyncMock
 
 import pytest
-from application.documents.build_store import BuildManifestStore
+from application.documents.build_store import INVENTORY_COMPLETE, BuildManifestStore
 from application.documents.builds import DocumentBuildManager
 from application.documents.projects import DocumentProjectError
 from domain.documents import DocumentBuild
@@ -87,7 +87,7 @@ async def test_uncertain_manifest_deletion_preserves_prunable_record_until_retry
     assert manager._builds[build.build_id] is build
     assert manager.manifest_failures == 1
 
-    registry.exec_raw.return_value = SimpleNamespace(stdout="__OK__", exit_code=0)
+    registry.exec_raw.return_value = SimpleNamespace(stdout="__OK__\n", exit_code=0)
     await manager._prune(registry, item)
     assert build.build_id not in manager._builds
     assert registry.exec_raw.await_count == 2
@@ -97,7 +97,9 @@ async def test_uncertain_manifest_deletion_preserves_prunable_record_until_retry
 @pytest.mark.parametrize("body", ["{", "{}", "null", "[]", '{"schema_version":99}'])
 async def test_corrupt_individual_manifest_is_not_silently_omitted(body):
     registry = SimpleNamespace(
-        exec_raw=AsyncMock(return_value=SimpleNamespace(stdout=body, exit_code=0))
+        exec_raw=AsyncMock(
+            return_value=SimpleNamespace(stdout=body + "\n" + INVENTORY_COMPLETE, exit_code=0)
+        )
     )
     item = SimpleNamespace(workspace_id="owned", policy=SimpleNamespace(root="/workspace"))
     with pytest.raises(RuntimeError, match="manifest inventory invalid"):
@@ -123,7 +125,8 @@ async def test_mixed_valid_and_foreign_record_does_not_publish_partial_inventory
     registry = SimpleNamespace(
         exec_raw=AsyncMock(
             return_value=SimpleNamespace(
-                stdout=json.dumps(valid) + "\n" + json.dumps(foreign), exit_code=0
+                stdout=json.dumps(valid) + "\n" + json.dumps(foreign) + "\n" + INVENTORY_COMPLETE,
+                exit_code=0,
             )
         )
     )
@@ -153,7 +156,8 @@ async def test_duplicate_build_identity_blocks_recovery_before_cleanup(same_payl
     registry = SimpleNamespace(
         exec_raw=AsyncMock(
             return_value=SimpleNamespace(
-                stdout=json.dumps(first) + "\n" + json.dumps(second), exit_code=0
+                stdout=json.dumps(first) + "\n" + json.dumps(second) + "\n" + INVENTORY_COMPLETE,
+                exit_code=0,
             )
         ),
         operation=operation,
@@ -170,7 +174,9 @@ async def test_duplicate_build_identity_blocks_recovery_before_cleanup(same_payl
     manager._cleanup_interrupted_compiler.assert_not_awaited()
     manager._prune.assert_not_awaited()
 
-    registry.exec_raw.return_value = SimpleNamespace(stdout=json.dumps(first), exit_code=0)
+    registry.exec_raw.return_value = SimpleNamespace(
+        stdout=json.dumps(first) + "\n" + INVENTORY_COMPLETE, exit_code=0
+    )
     await manager.recover(registry, item)
     assert set(manager._builds) == {"duplicate-build"}
     assert "owned" not in manager._pending_recovery

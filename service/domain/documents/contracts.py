@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import math
 import time
 from dataclasses import dataclass, field
 from typing import Literal
@@ -26,6 +27,48 @@ BUILD_STATES = frozenset(
 )
 DIAGNOSTIC_SEVERITIES = frozenset({"info", "warning", "error"})
 ARTIFACT_ROLES = frozenset({"pdf", "source_bundle", "thumbnail", "report"})
+
+
+def _validate_manifest_types(raw: dict[str, object]) -> None:
+    """Reject corrupt persisted values before coercion can change their meaning."""
+    if type(raw.get("schema_version")) is not int or raw.get("schema_version") != 1:
+        raise ValueError("unsupported build manifest")
+    if "final" in raw and type(raw["final"]) is not bool:
+        raise ValueError("invalid build manifest")
+    if "mode" in raw and (not isinstance(raw["mode"], str) or raw["mode"] not in BUILD_MODES):
+        raise ValueError("invalid build manifest")
+    for key in (
+        "profile_version",
+        "authoring_version",
+        "page_count",
+        "visual_bundle_size",
+        "visual_audit_version",
+    ):
+        if key not in raw:
+            continue
+        value = raw[key]
+        minimum = 1 if key == "profile_version" else 0
+        if type(value) is not int or not minimum <= value <= 2**53 - 1:
+            raise ValueError("invalid build manifest")
+    for key in (
+        "created_at",
+        "completed_at",
+        "visual_audit_claimed_at",
+        "page_width_pt",
+        "page_height_pt",
+    ):
+        if key not in raw:
+            continue
+        value = raw[key]
+        if value is None and key in {"completed_at", "visual_audit_claimed_at"}:
+            continue
+        if (
+            type(value) not in {int, float}
+            or not 0 <= value <= 2**53 - 1
+            or not math.isfinite(value)
+        ):
+            raise ValueError("invalid build manifest")
+
 
 BuildState = Literal[
     "queued",
@@ -176,6 +219,7 @@ class DocumentBuild:
     visual_audit_version: int = 0
     visual_audit_claimed_at: float | None = field(default=None, repr=False)
     page_blocks: dict[int, tuple[str, ...]] = field(default_factory=dict, repr=False)
+    manifest_uncertain: bool = field(default=False, repr=False)
 
     @property
     def terminal(self) -> bool:
@@ -227,8 +271,7 @@ class DocumentBuild:
 
     @classmethod
     def from_manifest(cls, raw: dict[str, object]) -> DocumentBuild:
-        if raw.get("schema_version") != 1:
-            raise ValueError("unsupported build manifest")
+        _validate_manifest_types(raw)
         state = str(raw.get("state") or "")
         if state not in BUILD_STATES:
             raise ValueError("invalid build state")

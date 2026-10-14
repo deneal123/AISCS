@@ -15,6 +15,10 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 COPY docker/document_runner.py /opt/document-runtime/runner.py
+COPY docker/document_source_audit.py /opt/document-runtime/document_source_audit.py
+COPY docker/document_page_audit.py /opt/document-runtime/document_page_audit.py
+COPY service/domain/documents/font_audit.py /opt/document-runtime/font_audit.py
+COPY service/domain/documents/source_identity.py /opt/document-runtime/source_identity.py
 COPY docker/generate_document_sbom.py /opt/document-runtime/generate_sbom.py
 RUN chmod 0555 /opt/document-runtime/runner.py \
     && python3 /opt/document-runtime/generate_sbom.py \

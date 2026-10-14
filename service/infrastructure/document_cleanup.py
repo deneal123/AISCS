@@ -3,11 +3,14 @@
 from __future__ import annotations
 
 import json
-import math
 import re
 from collections.abc import Awaitable, Callable
 
 Command = Callable[..., Awaitable[tuple[int, bytes]]]
+
+
+class CompilerInventoryInvalid(ValueError):
+    """A successful command returned an inventory that cannot prove identity."""
 
 
 async def compiler_inventory(command: Command) -> frozenset[str]:
@@ -15,13 +18,18 @@ async def compiler_inventory(command: Command) -> frozenset[str]:
     code, raw = await command(
         "docker", "ps", "-aq", "--no-trunc", "--filter", "label=gpthub.document=1", timeout=30.0
     )
-    if code or len(raw) > 1024 * 1024:
+    if code:
         raise ValueError("compiler inventory unavailable")
-    identifiers = raw.decode().splitlines()
+    if len(raw) > 1024 * 1024:
+        raise CompilerInventoryInvalid("compiler inventory invalid")
+    try:
+        identifiers = raw.decode().splitlines()
+    except UnicodeError:
+        raise CompilerInventoryInvalid("compiler inventory invalid") from None
     if any(not re.fullmatch(r"[0-9a-f]{64}", item) for item in identifiers) or len(
         set(identifiers)
     ) != len(identifiers):
-        raise ValueError("compiler inventory invalid")
+        raise CompilerInventoryInvalid("compiler inventory invalid")
     return frozenset(identifiers)
 
 
@@ -55,9 +63,12 @@ async def compiler_state(command: Command, container_id: str) -> tuple[float, bo
         state = state_raw.decode().strip().lower()
         if not isinstance(labels, dict) or state not in {"true", "false"}:
             return None
-        expires_at = float(labels.get("gpthub.document.expires_at") or 0)
-        if not math.isfinite(expires_at):
+        expiry = labels.get("gpthub.document.expires_at")
+        # Issued by prepare as a positive decimal Unix timestamp. Missing or
+        # malformed metadata is unknown, not permission to destroy an orphan.
+        if not isinstance(expiry, str) or not re.fullmatch(r"[1-9][0-9]{0,19}", expiry):
             return None
+        expires_at = float(expiry)
     except (TypeError, ValueError, UnicodeError):
         return None
     return expires_at, state == "true"
