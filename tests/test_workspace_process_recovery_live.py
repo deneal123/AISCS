@@ -9,6 +9,7 @@ import uuid
 from pathlib import Path
 
 import pytest
+from workspace_probe_sources import allocation_bootstrap
 
 _PROBE = """
 import asyncio,hashlib,json,os,sys
@@ -18,10 +19,18 @@ import drivers.docker_cli as driver_module
 from application.recovery import LABEL_MANIFEST,parse_manifest,owner_binding
 from domain.policy import WorkspacePolicy
 from domain import ownership
+from drivers.base import ContainerRef,ManagedContainer
 for module,key in ((lifecycle,'lifecycle'),(driver_module,'driver')):
  source=SOURCES[key]
  assert hashlib.sha256(source.encode()).hexdigest()==DIGESTS[key]
  exec(compile(source,module.__file__,'exec'),module.__dict__)
+# The running service must not adopt/reap this separately owned acceptance
+# container. Its private registry still reads the same signed manifest.
+native_argv=driver_module._create_argv
+def fixture_argv(*args,**kwargs):
+ return ['gpthub.workspace=0' if value=='gpthub.workspace=1' else value
+  for value in native_argv(*args,**kwargs)]
+driver_module._create_argv=fixture_argv
 owner='process-acceptance-'+MARKER
 stage=MODE
 class Driver(driver_module.DockerCliDriver):
@@ -30,7 +39,11 @@ class Driver(driver_module.DockerCliDriver):
   assert code==0
   ids=set(raw.splitlines())
   if not ids: return []
-  found=[item for item in await super().list_managed() if item.ref.container_id in ids]
+  found=[]
+  for container_id in ids:
+   code,details,_=await driver_module._docker('inspect','--format','{{json .Config.Labels}}',container_id)
+   assert code==0
+   found.append(ManagedContainer(ContainerRef(self.name,container_id),json.loads(details)))
   assert len(found)==len(ids)==1
   for item in found:
    manifest=parse_manifest(item.labels.get(LABEL_MANIFEST))
@@ -97,7 +110,7 @@ def test_registry_survives_actual_interpreter_exit(expired):
         )
         result = subprocess.run(
             ["docker", "exec", "-i", "gpthub-dev-workspace-1", "python3", "-"],
-            input=(header + _PROBE).encode(),
+            input=(header + allocation_bootstrap() + _PROBE).encode(),
             capture_output=True,
             timeout=120,
             check=False,

@@ -119,3 +119,100 @@ async def test_native_batch_never_publishes_a_staged_subset_or_leaves_attempt_fi
     finally:
         # Exact isolated fixture name only; no managed workspace or broad label cleanup.
         await docker("rm", "-f", name)
+
+
+@pytest.mark.parametrize("alias", ["project", "figures", "destination", "staging", "none"])
+async def test_nested_project_asset_never_follows_a_destination_or_staging_alias(alias):
+    name = "s37-pdf-asset-" + uuid4().hex
+    destination = "documents/paper/figures/library_fixture.png"
+    payload = b"\x00\x01owned-library-binary-fixture"
+    try:
+        await docker(
+            "run",
+            "-d",
+            "--name",
+            name,
+            "--label",
+            "gpthub.s37.import=1",
+            "--network=none",
+            "--read-only",
+            "--cap-drop=ALL",
+            "--security-opt=no-new-privileges",
+            "--user=65534:65534",
+            "--memory=128m",
+            "--cpus=1",
+            "--pids-limit=32",
+            "--tmpfs",
+            "/workspace:rw,size=32m,mode=1777",
+            "gpthub-workspace-runtime:latest",
+            "sleep",
+            "180",
+        )
+        setup = """
+import pathlib,sys
+r=pathlib.Path('/workspace'); foreign=r/'foreign'; foreign.mkdir()
+alias=sys.argv[1]
+if alias == 'project':
+    (r/'documents').symlink_to(foreign, target_is_directory=True)
+else:
+    project=r/'documents/paper'; project.mkdir(parents=True)
+    if alias == 'figures':
+        (project/'figures').symlink_to(foreign, target_is_directory=True)
+    else:
+        (project/'figures').mkdir()
+        if alias == 'destination':
+            (foreign/'sentinel').write_bytes(b'untouched')
+            (project/'figures/library_fixture.png').symlink_to(foreign/'sentinel')
+if alias == 'staging':
+    (r/'.gpthub-import-staging').symlink_to(foreign, target_is_directory=True)
+"""
+        await docker("exec", name, "python3", "-c", setup, alias)
+        snapshots = []
+
+        async def run(_item, command, *, stdin_payload=None):
+            process = await asyncio.to_thread(
+                subprocess.run,
+                ["docker", "exec", "-i", name, "sh", "-c", command],
+                input=stdin_payload,
+                capture_output=True,
+                timeout=30,
+            )
+            return SimpleNamespace(stdout=process.stdout.decode(), exit_code=process.returncode)
+
+        async def snapshot(_item, kind):
+            snapshots.append(kind)
+            return {}
+
+        async def revision(_item):
+            return "base"
+
+        async def fetcher(_url):
+            return payload
+
+        item = SimpleNamespace(policy=SimpleNamespace(root="/workspace"), imported=set())
+        result = await ImportService(run, snapshot, revision, fetcher).execute(
+            item,
+            [{"name": destination, "url": "https://owned.invalid/fixture"}],
+            expected_revision="base",
+        )
+        assert result["imported"] == (1 if alias == "none" else 0)
+        assert result["kept"] == 0
+        probe = """
+import json,pathlib
+r=pathlib.Path('/workspace'); foreign=r/'foreign'; staging=r/'.gpthub-import-staging'
+print(json.dumps({'foreign':sorted(str(p.relative_to(foreign)) for p in foreign.rglob('*')),
+ 'sentinel': (foreign/'sentinel').read_text() if (foreign/'sentinel').exists() else None,
+ 'asset_hex':(r/'documents/paper/figures/library_fixture.png').read_bytes().hex()
+   if not (r/'documents').is_symlink() and not (r/'documents/paper/figures').is_symlink()
+   and (r/'documents/paper/figures/library_fixture.png').is_file() else None,
+ 'staging_empty':staging.is_symlink() or not staging.exists() or not any(staging.iterdir())}))
+"""
+        observed = json.loads(await docker("exec", name, "python3", "-c", probe))
+        assert observed["foreign"] == (["sentinel"] if alias == "destination" else [])
+        assert observed["sentinel"] == ("untouched" if alias == "destination" else None)
+        if alias == "none":
+            assert observed["asset_hex"] == payload.hex()
+        assert observed["staging_empty"]
+        assert snapshots == (["import"] if alias == "none" else [])
+    finally:
+        await docker("rm", "-f", name)

@@ -103,6 +103,7 @@ def test_installed_runtime_rechecks_owned_container_before_recovery(case):
     paths = [
         "domain/policy.py",
         "application/lifecycle.py",
+        "application/allocations.py",
         "application/recovery.py",
         "drivers/base.py",
         "drivers/docker_cli.py",

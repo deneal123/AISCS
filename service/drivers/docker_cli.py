@@ -23,6 +23,7 @@ import logging
 import shlex
 import time
 from collections.abc import Awaitable
+from typing import Any
 
 from domain.policy import WorkspacePolicy
 
@@ -230,6 +231,18 @@ class DockerCliDriver:
         for complaint in _isolation_complaints(info, policy):
             raise IsolationUnverified(complaint)
 
+    def exec_binary(
+        self, ref: ContainerRef, program: str, **kwargs: Any
+    ) -> contextlib.AbstractAsyncContextManager:
+        """Private cooperative helper only; never shell/repository script execution."""
+        from drivers.binary_exec import binary_exchange
+
+        if ref.driver != self.name or not program or len(program.encode()) > 96 * 1024:
+            raise DriverError("binary helper unavailable")
+        return binary_exchange(
+            ("docker", "exec", "-i", ref.container_id, "python3", "-I", "-c", program), **kwargs
+        )
+
     async def exec_with_input(
         self,
         ref: ContainerRef,
@@ -360,9 +373,9 @@ class DockerCliDriver:
             )
 
     async def destroy(self, ref: ContainerRef) -> None:
-        code, _, err = await _docker("rm", "-f", ref.container_id)
-        if code != 0:
-            raise DriverError("docker destroy failed")
+        from drivers.container_cleanup import destroy_known_container
+
+        await destroy_known_container(ref, _docker)
 
 
 def _clip(text: str, limit: int) -> tuple[str, bool]:

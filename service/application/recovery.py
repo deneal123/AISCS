@@ -6,7 +6,8 @@ import base64
 import hashlib
 import hmac
 import json
-from dataclasses import dataclass
+import re
+from dataclasses import dataclass, field
 from typing import Any
 
 from domain.ownership import _secret
@@ -16,6 +17,24 @@ LABEL_MANAGED = "gpthub.workspace"
 LABEL_MANIFEST = "gpthub.workspace.manifest.v2"
 MANIFEST_VERSION = 2
 _DOMAIN = b"gpthub-workspace-manifest-v2|"
+_RESTORE_DOMAIN = b"gpthub-workspace-manifest-v3|"
+
+
+@dataclass(frozen=True, slots=True)
+class RestoreSnapshot:
+    """Private selected immutable capsule identity, not arbitrary source bytes."""
+
+    sha256: str = field(repr=False)
+    size: int
+
+    def __post_init__(self) -> None:
+        if (
+            type(self.sha256) is not str
+            or not re.fullmatch(r"[0-9a-f]{64}", self.sha256)
+            or type(self.size) is not int
+            or not 0 < self.size < 2**31
+        ):
+            raise ValueError("invalid_restore_snapshot")
 
 
 @dataclass(frozen=True, slots=True)
@@ -24,6 +43,7 @@ class RecoveryManifest:
     expires_at: float
     owner_binding: str
     policy: WorkspacePolicy
+    restore_snapshot: RestoreSnapshot | None = field(default=None, repr=False)
 
 
 def owner_binding(workspace_id: str, user_id: str) -> str:
@@ -36,18 +56,26 @@ def _canonical(payload: dict[str, Any]) -> bytes:
 
 
 def mint_manifest(
-    workspace_id: str, user_id: str, expires_at: float, policy: WorkspacePolicy
+    workspace_id: str,
+    user_id: str,
+    expires_at: float,
+    policy: WorkspacePolicy,
+    *,
+    restore_snapshot: RestoreSnapshot | None = None,
 ) -> str:
     payload = {
-        "v": MANIFEST_VERSION,
+        "v": 3 if restore_snapshot else MANIFEST_VERSION,
         "workspace_id": str(workspace_id),
         "expires_at": int(expires_at),
         "owner_binding": owner_binding(str(workspace_id), str(user_id)),
         "policy": policy.as_dict(),
     }
+    if restore_snapshot is not None:
+        payload["restore"] = {"sha256": restore_snapshot.sha256, "size": restore_snapshot.size}
     raw = _canonical(payload)
     encoded = base64.urlsafe_b64encode(raw).decode().rstrip("=")
-    signature = hmac.new(_secret().encode(), _DOMAIN + raw, hashlib.sha256).hexdigest()
+    domain = _RESTORE_DOMAIN if restore_snapshot else _DOMAIN
+    signature = hmac.new(_secret().encode(), domain + raw, hashlib.sha256).hexdigest()
     return f"{encoded}.{signature}"
 
 
@@ -57,13 +85,24 @@ def parse_manifest(value: str | None) -> RecoveryManifest | None:
         return None
     try:
         raw = base64.urlsafe_b64decode(encoded + "=" * (-len(encoded) % 4))
-        expected = hmac.new(_secret().encode(), _DOMAIN + raw, hashlib.sha256).hexdigest()
+        payload = json.loads(raw)
+        if type(payload) is not dict:
+            return None
+        version = payload.get("v")
+        domain = _RESTORE_DOMAIN if version == 3 else _DOMAIN
+        expected = hmac.new(_secret().encode(), domain + raw, hashlib.sha256).hexdigest()
         if not hmac.compare_digest(expected, signature):
             return None
-        payload = json.loads(raw)
-        if set(payload) != {"v", "workspace_id", "expires_at", "owner_binding", "policy"}:
+        fields = {"v", "workspace_id", "expires_at", "owner_binding", "policy"}
+        if version == 3:
+            fields.add("restore")
+        if set(payload) != fields:
             return None
-        if payload["v"] != MANIFEST_VERSION or not isinstance(payload["workspace_id"], str):
+        if (
+            type(version) is not int
+            or version not in {MANIFEST_VERSION, 3}
+            or not isinstance(payload["workspace_id"], str)
+        ):
             return None
         if not isinstance(payload["owner_binding"], str) or len(payload["owner_binding"]) != 64:
             return None
@@ -72,6 +111,17 @@ def parse_manifest(value: str | None) -> RecoveryManifest | None:
             expires_at=float(payload["expires_at"]),
             owner_binding=payload["owner_binding"],
             policy=WorkspacePolicy(**payload["policy"]),
+            restore_snapshot=RestoreSnapshot(**payload["restore"]) if version == 3 else None,
         )
     except (TypeError, ValueError, json.JSONDecodeError):
         return None
+
+
+def restore_receipt(manifest: str) -> str:
+    """A sandbox cannot mint completion from the visible signed creation label."""
+    parsed = parse_manifest(manifest)
+    if parsed is None or parsed.restore_snapshot is None:
+        raise ValueError("invalid_restore_manifest")
+    return hmac.new(
+        _secret().encode(), b"gpthub-ide-restore-ready-v1|" + manifest.encode(), hashlib.sha256
+    ).hexdigest()

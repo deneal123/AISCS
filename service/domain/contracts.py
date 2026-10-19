@@ -17,6 +17,7 @@ import os
 # Версия КОНТРАКТА, не образа. Поднимать при несовместимом изменении формы запроса/ответа.
 SERVICE_VERSION = "1.1.0"
 SERVICE_NAME = "workspace"
+ALLOCATION_PROTOCOL = 1
 
 # 🔴 Поля политики, ЗАПЕРТЫЕ при создании. Попытка изменить любое на живой песочнице —
 # отказ `static_policy_locked`, а не молчаливое применение части изменений.
@@ -63,6 +64,22 @@ ERROR_CODES = frozenset(
         "request_too_large",  # 413
         "exec_timeout",  # 504
         "workspace_unavailable",  # 503 - temporary coordinator/sidecar transport failure
+        "workspace_allocation_pending",
+        "workspace_allocation_conflict",
+        "workspace_allocation_expired",
+        "workspace_cleanup_pending",  # 409 - retired, physical deletion not acknowledged
+        "ide_path_forbidden",
+        "ide_file_missing",
+        "ide_file_changed",
+        "ide_file_unsupported",
+        "ide_read_unavailable",
+        "ide_bundle_invalid",
+        "ide_bundle_limit",
+        "ide_bundle_changed",
+        "ide_bundle_unsupported",
+        "ide_bundle_busy",
+        "ide_bundle_target_not_empty",
+        "ide_bundle_unavailable",
         "driver_failed",  # 502 — не смогли создать/выполнить
         "invalid_project",
         "profile_missing",

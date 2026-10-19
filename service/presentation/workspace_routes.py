@@ -40,6 +40,11 @@ from presentation.routes.dependencies import WorkspaceRouteDependencies
 from presentation.routes.documents import DocumentRouteDependencies, create_documents_router
 from presentation.routes.files import create_files_router
 from presentation.routes.history import create_history_router
+from presentation.routes.ide_capture import create_ide_capture_router
+from presentation.routes.ide_git import create_ide_git_router
+from presentation.routes.ide_reads import create_ide_read_router
+from presentation.routes.ide_restore import create_ide_restore_router
+from presentation.routes.ide_writes import create_ide_write_router
 from presentation.routes.imports import create_import_router
 from presentation.routes.lifecycle import create_lifecycle_router
 
@@ -153,6 +158,11 @@ update_policy = _lifecycle_handlers.update_policy
 delete_workspace = _lifecycle_handlers.delete_workspace
 _files_router, _file_handlers = create_files_router(_route_dependencies)
 router.include_router(_files_router)
+router.include_router(create_ide_read_router(_route_dependencies))
+router.include_router(create_ide_write_router(_route_dependencies))
+router.include_router(create_ide_git_router(_route_dependencies))
+router.include_router(create_ide_capture_router(_route_dependencies))
+router.include_router(create_ide_restore_router(_route_dependencies))
 list_files = _file_handlers.list_files
 tree_files = _file_handlers.tree_files
 workspace_view = _file_handlers.workspace_view

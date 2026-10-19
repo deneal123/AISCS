@@ -65,7 +65,7 @@ async def test_one_failed_source_prevents_publication_of_other_staged_files(fail
     assert all(entry["outcome"] == "stage_failed" for entry in result["files"])
     assert item.imported == set()
     assert snapshots == []
-    assert sum(command.startswith("rm -rf ") for command in commands) == 1
+    assert sum("rm -rf " in command for command in commands) == 1
 
 
 @pytest.mark.asyncio
@@ -87,7 +87,7 @@ async def test_total_byte_budget_is_checked_before_staging_next_payload(monkeypa
         assert result["files"][-1]["reason"] == "import byte limit reached"
         assert item.imported == set()
         assert snapshots == []
-    assert sum(command.startswith("rm -rf ") for command in commands) == 1
+    assert sum("rm -rf " in command for command in commands) == 1
 
 
 @pytest.mark.asyncio
@@ -101,7 +101,7 @@ async def test_first_stage_failure_cleans_its_private_attempt_directory(failure)
         result = await service.execute(item, ENTRIES[:1], expected_revision="base")
         assert result["files"][0]["outcome"] == "stage_failed"
 
-    assert sum(command.startswith("rm -rf ") for command in commands) == 1
+    assert sum("rm -rf " in command for command in commands) == 1
     assert not any("os.replace" in command for command in commands)
     assert snapshots == []
 
@@ -116,4 +116,4 @@ async def test_complete_batch_preserves_collision_and_one_snapshot_contract():
     assert item.imported == {"one.txt", "two.txt"}
     assert snapshots == ["import"]
     assert sum("os.replace" in command for command in commands) == 1
-    assert sum(command.startswith("rm -rf ") for command in commands) == 1
+    assert sum("rm -rf " in command for command in commands) == 1

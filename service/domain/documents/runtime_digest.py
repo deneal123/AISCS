@@ -8,6 +8,7 @@ from pathlib import Path
 DOCUMENT_RUNTIME_VERSION = "s36.v2"
 _SERVICE_ROOT = Path(__file__).resolve().parents[2]
 _RUNTIME_FILES = (
+    "domain/files.py",
     "domain/documents/audit.py",
     "domain/documents/font_audit.py",
     "domain/documents/source_identity.py",

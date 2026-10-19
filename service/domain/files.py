@@ -290,6 +290,7 @@ def read_command(root: str, path: str, *, max_bytes: int = MAX_READ_BYTES) -> st
     return (
         f'if [ -d {_q(target)} ]; then echo "{IS_DIRECTORY_MARKER}"; exit 0; fi; '
         f'if [ ! -f {_q(target)} ]; then echo "__MISSING__"; exit 0; fi; '
+        f'if [ ! -s {_q(target)} ]; then echo "__EMPTY__"; exit 0; fi; '
         f"head -c {int(max_bytes) + 1} {_q(target)} | base64 | tr -d '\\n'"
     )
 
@@ -303,6 +304,8 @@ def parse_read(output: str, *, max_bytes: int = MAX_READ_BYTES) -> tuple[str, bo
     raw = (output or "").strip()
     if raw == IS_DIRECTORY_MARKER:
         raise IsADirectory("это каталог, а не файл")
+    if raw == "__EMPTY__":
+        return "", False
     if raw == "__MISSING__" or not raw:
         raise FileNotFoundError("файла нет")
     data = base64.b64decode(raw, validate=False)
@@ -429,6 +432,8 @@ def parse_download(output: str) -> tuple[str, bool]:
     пользователю после такого разбора, не откроется. Артефакт обязан доехать побайтово.
     """
     raw = (output or "").strip()
+    if raw == "__EMPTY__":
+        return "", False
     if raw == "__MISSING__" or not raw:
         raise FileNotFoundError("файла нет")
     # Обрезку определяем по длине base64: 4 символа на 3 байта.

@@ -13,9 +13,11 @@ import os
 import uvicorn
 from application.lifecycle import WorkspaceRegistry
 from domain.contracts import (
+    ALLOCATION_PROTOCOL,
     CREATE_RESPONSE_FIELDS,
     ERROR_CODES,
     EXEC_RESPONSE_FIELDS,
+    HARD_TTL_SEC,
     MAX_BODY_BYTES,
     SERVICE_NAME,
     SERVICE_VERSION,
@@ -111,6 +113,8 @@ async def health():
             "source_publications": workspace_routes.document_source_recovery.health(),
         },
         "contract": {
+            "allocation_protocol": ALLOCATION_PROTOCOL,
+            "allocation_max_ttl_sec": int(HARD_TTL_SEC),
             "create_response_fields": sorted(CREATE_RESPONSE_FIELDS),
             "exec_response_fields": sorted(EXEC_RESPONSE_FIELDS),
             "error_codes": sorted(ERROR_CODES),

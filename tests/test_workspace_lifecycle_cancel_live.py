@@ -8,6 +8,7 @@ import subprocess
 from pathlib import Path
 
 import pytest
+from workspace_probe_sources import allocation_bootstrap
 
 _PROBE = """
 import asyncio,hashlib,json,sys,uuid
@@ -105,7 +106,7 @@ def test_owned_docker_cleanup_after_creation_cancellation(cleanup_fails, cancel_
     )
     result = subprocess.run(
         ["docker", "exec", "-i", "gpthub-dev-workspace-1", "python3", "-"],
-        input=(header + _PROBE).encode(),
+        input=(header + allocation_bootstrap() + _PROBE).encode(),
         capture_output=True,
         timeout=120,
         check=False,

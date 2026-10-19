@@ -58,6 +58,7 @@ def test_runtime_identity_includes_project_manifest_reader(tmp_path):
     "relative",
     [
         "application/lifecycle.py",
+        "domain/files.py",
         "drivers/docker_cli.py",
         "application/documents/registry_retention.py",
         "application/documents/visual_transitions.py",

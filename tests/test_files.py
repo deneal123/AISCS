@@ -128,7 +128,16 @@ def test_missing_file_is_distinguishable_from_an_empty_one() -> None:
     """Пустой файл и отсутствующий — разные ответы; иначе «нет файла» выглядит как «пусто»."""
     with pytest.raises(FileNotFoundError):
         parse_read("__MISSING__")
+    with pytest.raises(FileNotFoundError):
+        parse_read("")
+    assert parse_read("__EMPTY__\n") == ("", False)
     assert parse_read(base64.b64encode(b" ").decode()) == (" ", False)
+
+
+def test_read_command_emits_an_explicit_empty_file_receipt() -> None:
+    command = read_command(ROOT, "empty.bib")
+    assert command.index("__MISSING__") < command.index("__EMPTY__") < command.index("head -c")
+    assert "[ ! -s " in command
 
 
 def test_binary_content_does_not_crash_the_read() -> None:
@@ -232,6 +241,9 @@ def test_missing_artifact_is_distinguishable() -> None:
 
     with pytest.raises(FileNotFoundError):
         parse_download("__MISSING__")
+    with pytest.raises(FileNotFoundError):
+        parse_download("")
+    assert parse_download("__EMPTY__\n") == ("", False)
 
 
 def test_download_path_is_checked_like_any_other() -> None:

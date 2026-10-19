@@ -299,6 +299,24 @@ def test_failed_compilation_always_has_bounded_error() -> None:
     )
 
 
+def test_unicode_failure_retains_safe_code_and_location_not_authored_text() -> None:
+    diagnostics = _runner().diagnostics(
+        "./main.tex:18: LaTeX Error: Unicode character Р (U+0420)\n"
+        "not set up for use with LaTeX.\nprivate manuscript paragraph\n",
+        compilation_failed=True,
+    )
+    assert diagnostics == [
+        {
+            "severity": "error",
+            "code": "unsupported_character",
+            "count": 1,
+            "path": "main.tex",
+            "line": 18,
+            "source_path": "main.tex",
+        }
+    ]
+
+
 def test_effective_vendor_profile_is_applied_to_deterministic_audit(tmp_path: Path) -> None:
     runner = _runner()
     project = tmp_path / "vendor"

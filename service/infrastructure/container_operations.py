@@ -18,6 +18,10 @@ class ContainerOperations:
     def driver_name(self) -> str:
         return str(getattr(self._driver, "name", "unknown"))
 
+    @property
+    def driver(self):
+        return self._driver
+
     async def create(
         self, workspace_id: str, policy: WorkspacePolicy, labels: dict[str, str]
     ) -> ContainerRef:

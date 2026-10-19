@@ -95,6 +95,10 @@ def missing_file_count(log: str) -> int:
 
 
 _COMPILER_FAILURE_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
+    (
+        "unsupported_character",
+        ("unicode character", "inputenc error", "unavailable in encoding"),
+    ),
     ("missing_math_delimiter", ("missing $ inserted", "math shift")),
     (
         "unbalanced_group",

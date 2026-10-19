@@ -9,12 +9,14 @@ import logging
 import secrets
 import time
 from dataclasses import dataclass, field
+from typing import TYPE_CHECKING
 
 import domain.ownership as ownership
 from domain.contracts import DEFAULT_TTL_SEC, HARD_TTL_SEC, MAX_WORKSPACES
 from domain.policy import WorkspacePolicy
 from infrastructure.container_operations import ContainerOperations
 
+from application.allocations import AllocationConflict, AllocationPending, WorkspaceAllocation
 from application.recovery import (
     LABEL_MANAGED,
     LABEL_MANIFEST,
@@ -31,6 +33,10 @@ from drivers.base import (
     ContainerCreationUncertainCancelled,
 )
 
+if TYPE_CHECKING:
+    from application.ide_restore import IdeRestore
+    from application.recovery import RestoreSnapshot
+
 logger = logging.getLogger("workspace-sidecar.core")
 REAP_INTERVAL_SEC = 30.0
 _CLEANUP_BACKOFF_MAX_SEC = 60.0
@@ -38,6 +44,10 @@ _CLEANUP_BACKOFF_MAX_SEC = 60.0
 
 class WorkspaceNotFound(Exception):
     pass
+
+
+class WorkspaceCleanupPending(Exception):
+    """The exact resource is retired, but physical deletion is not acknowledged."""
 
 
 class TooManyWorkspaces(Exception):
@@ -53,6 +63,7 @@ class Workspace:
     owner_binding: str = ""
     user_id: str = ""
     recovered: bool = False
+    restore_snapshot: RestoreSnapshot | None = field(default=None, repr=False)
     created_at: float = field(default_factory=time.time)
     imported: set[str] = field(default_factory=set)
     operation_lock: asyncio.Lock = field(default_factory=asyncio.Lock, repr=False)
@@ -90,21 +101,42 @@ class WorkspaceRegistry:
         )
 
     async def create(
-        self, user_id: str, policy: WorkspacePolicy, ttl_sec: float = DEFAULT_TTL_SEC
+        self,
+        user_id: str,
+        policy: WorkspacePolicy,
+        ttl_sec: float = DEFAULT_TTL_SEC,
+        *,
+        allocation: WorkspaceAllocation | None = None,
+        _restore: IdeRestore | None = None,
     ) -> tuple[Workspace, str]:
+        # Validate before reaping/reserving or invoking the driver. The fixed
+        # deadline belongs to the persisted backend allocation generation.
+        ttl = allocation.remaining() if allocation else min(max(1.0, float(ttl_sec)), HARD_TTL_SEC)
+        workspace_id = allocation.workspace_id(user_id) if allocation else secrets.token_hex(8)
         await self.reap()
-        ttl = min(max(1.0, float(ttl_sec)), HARD_TTL_SEC)
         async with self._lock:
+            if allocation:
+                existing = self.lookup_allocation(user_id, allocation)
+                if existing:
+                    snapshot = _restore.snapshot if _restore else None
+                    if existing.policy != policy or existing.restore_snapshot != snapshot:
+                        raise AllocationConflict
+                    return existing, self.allocation_token(existing, user_id)
             if self.count() >= self._max:
                 raise TooManyWorkspaces("workspace capacity reached")
-            workspace_id = secrets.token_hex(8)
             self._reserved.add(workspace_id)
-        expires_at = time.time() + ttl
+        expires_at = allocation.expires_at if allocation else time.time() + ttl
         ref: ContainerRef | None = None
         try:
             labels = {
                 LABEL_MANAGED: "1",
-                LABEL_MANIFEST: mint_manifest(workspace_id, str(user_id), expires_at, policy),
+                LABEL_MANIFEST: mint_manifest(
+                    workspace_id,
+                    str(user_id),
+                    expires_at,
+                    policy,
+                    **({"restore_snapshot": _restore.snapshot} if _restore else {}),
+                ),
             }
             ref = await self._containers.create(workspace_id, policy, labels)
             await self._containers.verify(ref, policy)
@@ -115,11 +147,18 @@ class WorkspaceRegistry:
                 expires_at=expires_at,
                 owner_binding=owner_binding(workspace_id, str(user_id)),
                 user_id=str(user_id),
+                restore_snapshot=_restore.snapshot if _restore else None,
             )
+            if _restore is not None:
+                await _restore.initialize(self._containers.driver, item, labels[LABEL_MANIFEST])
             # Prepare credentials before publishing an active workspace. A
             # mint failure must not leave a sandbox the caller cannot reach.
-            token = ownership.mint(workspace_id, str(user_id), ttl_sec=ttl)
+            if allocation:
+                allocation.remaining()
+            token = self.allocation_token(item, user_id)
             async with self._lock:
+                if allocation:
+                    allocation.remaining()
                 self._reserved.discard(workspace_id)
                 self._items[workspace_id] = item
         except (Exception, asyncio.CancelledError) as exc:
@@ -137,6 +176,58 @@ class WorkspaceRegistry:
                 raise asyncio.CancelledError from None
             raise
         return item, token
+
+    async def create_restored(
+        self,
+        user_id: str,
+        policy: WorkspacePolicy,
+        *,
+        allocation: WorkspaceAllocation,
+        source,
+        limits,
+        expected_size: int,
+        expected_sha256: str,
+    ) -> tuple[Workspace, str]:
+        """Only a fresh selected generation. Never restore into an existing repo."""
+        from application.ide_restore import IdeRestore
+        from application.recovery import RestoreSnapshot
+
+        snapshot = RestoreSnapshot(expected_sha256, expected_size)
+        if (
+            not isinstance(allocation, WorkspaceAllocation)
+            or policy.root != "/workspace"
+            or snapshot.size > limits.archive_bytes
+        ):
+            raise ValueError("invalid_restore_allocation")
+        return await self.create(
+            user_id, policy, allocation=allocation, _restore=IdeRestore(source, snapshot, limits)
+        )
+
+    def lookup_allocation(self, user_id: str, allocation: WorkspaceAllocation) -> Workspace | None:
+        """Read only: no Docker inventory, allocation, Git init or TTL refresh."""
+        allocation.remaining()
+        key = allocation.workspace_id(user_id)
+        if (
+            key in self._reserved
+            or key in self._uncertain_creates
+            or key in self._recovery_pending
+            or key in self._pending_cleanup
+        ):
+            raise AllocationPending
+        item = self._items.get(key)
+        if item is None:
+            return None
+        if item.expires_at != allocation.expires_at or not hmac.compare_digest(
+            item.owner_binding, owner_binding(key, str(user_id))
+        ):
+            raise AllocationConflict
+        return item
+
+    @staticmethod
+    def allocation_token(item: Workspace, user_id: str) -> str:
+        return ownership.mint(
+            item.workspace_id, str(user_id), ttl_sec=item.expires_at - time.time()
+        )
 
     async def _settle_creation_cleanup(
         self,
@@ -190,6 +281,21 @@ class WorkspaceRegistry:
             raise WorkspaceNotFound("workspace is unavailable")
         return item
 
+    def authorize_cleanup(self, workspace_id: str, user_id: str, token: str) -> None:
+        """A valid owner can retry the same cleanup debt without reviving access."""
+        key = str(workspace_id)
+        ownership.verify(token, key, str(user_id))
+        item = self._items.get(key) or self._recovery_pending.get(key)
+        if item is not None:
+            if not hmac.compare_digest(item.owner_binding, owner_binding(key, str(user_id))):
+                raise ownership.OwnershipError("workspace ownership mismatch")
+            return
+        if key in self._pending_cleanup:
+            return
+        if key in self._reserved or key in self._uncertain_creates:
+            raise WorkspaceCleanupPending
+        raise WorkspaceNotFound("workspace is unavailable")
+
     @contextlib.asynccontextmanager
     async def operation(self, item: Workspace):
         async with item.operation_lock:
@@ -200,15 +306,28 @@ class WorkspaceRegistry:
             item.policy = item.policy.with_update(update)
             return item.policy
 
-    async def destroy(self, workspace_id: str) -> None:
+    async def destroy(self, workspace_id: str) -> bool:
+        key = str(workspace_id)
         async with self._lock:
-            item = self._items.pop(str(workspace_id), None)
-            if item is None:
+            item = self._items.pop(key, None) or self._recovery_pending.pop(key, None)
+            if item is None and key not in self._pending_cleanup:
                 raise WorkspaceNotFound("workspace is unavailable")
             # Ownership retirement and cleanup capacity are one state change.
             # Cancellation during the subsequent driver call must retain debt.
-            self._pending_cleanup.setdefault(item.workspace_id, (item.ref, "explicit", 0, 0.0))
+            if item is not None:
+                self._pending_cleanup.setdefault(key, (item.ref, "explicit", 0, 0.0))
         await self._drain_cleanup()
+        async with self._lock:
+            return not any(
+                key in entries
+                for entries in (
+                    self._items,
+                    self._reserved,
+                    self._uncertain_creates,
+                    self._recovery_pending,
+                    self._pending_cleanup,
+                )
+            )
 
     async def exec(self, item: Workspace, command: str):
         return await self._containers.exec(
@@ -217,6 +336,29 @@ class WorkspaceRegistry:
             timeout_sec=item.policy.exec_timeout_sec,
             max_output_chars=item.policy.max_output_chars,
         )
+
+    async def git_ide(self, item: Workspace, **kwargs):
+        from application.ide_git import run_git
+
+        return await run_git(self._containers.driver, item, **kwargs)
+
+    def capture_ide(self, item: Workspace, limits):
+        from application.ide_bundles import IdeBundleService
+
+        # The caller owns operation_lock and checks ownership/coordination on
+        # both sides of capture. The helper never mutates repository contents.
+        return IdeBundleService(self._containers.driver).capture_verified(item, limits)
+
+    async def move_ide(self, item: Workspace, **kwargs):
+        from application.ide_moves import move_file
+
+        return await move_file(self._containers.driver, item, **kwargs)
+
+    async def write_ide(self, item: Workspace, **kwargs):
+        from application.ide_writes import IdeWriteService
+
+        # The route owns operation_lock and the authenticated coordinator fence.
+        return await IdeWriteService(self._containers.driver).write(item, **kwargs)
 
     async def exec_raw(
         self,
@@ -342,11 +484,22 @@ class WorkspaceRegistry:
                 expires_at=manifest.expires_at,
                 owner_binding=manifest.owner_binding,
                 recovered=True,
+                restore_snapshot=getattr(manifest, "restore_snapshot", None),
             )
             # Retain capacity even if inspection is interrupted or unavailable.
             self._recovery_pending.setdefault(key, item)
         try:
             await self._containers.verify(container.ref, manifest.policy)
+            if item.restore_snapshot is not None:
+                from application.ide_bundles import IdeBundleService
+                from application.recovery import restore_receipt
+
+                ready = await IdeBundleService(self._containers.driver).receipt(
+                    item, restore_receipt(container.labels[LABEL_MANIFEST]), write=False
+                )
+                if not ready:
+                    await self._queue_cleanup(key, container.ref, "restore_incomplete")
+                    return False
         except IsolationUnverified:
             await self._queue_cleanup(key, container.ref, "isolation")
             return False

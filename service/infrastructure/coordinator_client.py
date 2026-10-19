@@ -142,6 +142,21 @@ async def preflight(
     )
 
 
+async def release_ide_lease(capability: str, *, workspace_id: str, path: str, fence: int) -> bool:
+    data = await _request(
+        "/internal/workspace-coordination/ide/release",
+        {
+            "capability": capability,
+            "workspace_id": workspace_id,
+            "path": path,
+            "fence": fence,
+        },
+    )
+    if not isinstance(data.get("released"), bool):
+        raise CoordinationError("invalid lease release acknowledgement")
+    return data["released"]
+
+
 async def safe_boundary(capability: str, *, correlation_id: str = "") -> str:
     data = await _request(
         "/internal/workspace-coordination/boundary",

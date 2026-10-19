@@ -18,6 +18,7 @@ import asyncio
 import base64
 import json
 import logging
+import posixpath
 import shlex
 from pathlib import Path
 from urllib.parse import urlparse
@@ -136,6 +137,25 @@ def write_command(root: str, name: str, data: bytes) -> tuple[str, bytes]:
     return command, base64.b64encode(data)
 
 
+def _guard_parent_links(root: str, target: str, *, exit_code: int = 1) -> str:
+    """The operation lock serializes imports; never traverse existing directory aliases."""
+    base = safe_path(root, root)
+    parent = posixpath.dirname(safe_path(root, target))
+    parents = []
+    while parent != base:
+        parents.append(parent)
+        next_parent = posixpath.dirname(parent)
+        if next_parent == parent:
+            raise ImportRefused("invalid import parent")
+        parent = next_parent
+    parents.append(base)
+    quoted = " ".join(shlex.quote(path) for path in reversed(parents))
+    return (
+        f"for gpthub_import_parent in {quoted}; do "
+        f'[ ! -L "$gpthub_import_parent" ] || exit {exit_code}; done; '
+    )
+
+
 def stage_command(root: str, staging_id: str, name: str, data: bytes) -> tuple[str, bytes]:
     """Write one validated import payload into a private staging directory."""
     try:
@@ -147,7 +167,7 @@ def stage_command(root: str, staging_id: str, name: str, data: bytes) -> tuple[s
         raise ImportRefused(f"файл больше {MAX_FILE_BYTES} байт")
     parent = shlex.quote(target.rsplit("/", 1)[0] or root)
     quoted = shlex.quote(target)
-    command = (
+    command = _guard_parent_links(root, target) + (
         f"mkdir -p {parent} && tmp=$(mktemp {parent}/.stage.XXXXXX) && "
         "trap 'rm -f \"$tmp\"' EXIT && "
         f'base64 -d > "$tmp" && mv -f "$tmp" {quoted} && echo __OK__'
@@ -171,6 +191,17 @@ def publish_command(root: str, staging_id: str, names: list[str]) -> str:
         "try:\n"
         "  for name in names:\n"
         "    src=os.path.join(stage,name); dst=os.path.join(root,name)\n"
+        "    for candidate in (src,dst):\n"
+        "      parent=os.path.dirname(candidate)\n"
+        "      while parent != root:\n"
+        "        if os.path.islink(parent): raise RuntimeError('parent_symlink')\n"
+        "        next_parent=os.path.dirname(parent)\n"
+        "        if next_parent == parent: raise RuntimeError('invalid_parent')\n"
+        "        parent=next_parent\n"
+        "    if os.path.islink(root) or os.path.islink(src) or os.path.islink(dst):\n"
+        "      raise RuntimeError('file_symlink')\n"
+        "    if os.path.lexists(dst) and not os.path.isfile(dst):\n"
+        "      raise RuntimeError('destination_not_file')\n"
         "    if os.path.lexists(dst): kept.append(name); continue\n"
         "    if not os.path.isfile(src): raise RuntimeError('staging_missing')\n"
         "  for name in names:\n"
@@ -196,7 +227,7 @@ def publish_command(root: str, staging_id: str, names: list[str]) -> str:
 
 def cleanup_staging_command(root: str, staging_id: str) -> str:
     target = safe_path(root, f"{STAGING_DIR}/{staging_id}")
-    return f"rm -rf {shlex.quote(target)}"
+    return _guard_parent_links(root, target, exit_code=0) + f"rm -rf {shlex.quote(target)}"
 
 
 # Разворачивание архива. 🔴 Загруженный `.zip` давал КАРТУ репозитория для промпта, но

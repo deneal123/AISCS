@@ -8,7 +8,7 @@ LABEL org.opencontainers.image.title="GPTHub Document Runtime" \
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-        biber chktex fontconfig ghostscript latexmk poppler-utils qpdf tar zip \
+        biber chktex cm-super fontconfig ghostscript latexmk poppler-utils qpdf tar zip \
         texlive-bibtex-extra texlive-fonts-recommended texlive-lang-cyrillic \
         texlive-latex-base texlive-latex-extra texlive-latex-recommended \
         texlive-luatex texlive-pictures texlive-publishers texlive-science texlive-xetex \

@@ -6,7 +6,13 @@ import logging
 from dataclasses import dataclass
 from typing import Any
 
-from application.lifecycle import TooManyWorkspaces, WorkspaceNotFound
+from application.allocations import (
+    AllocationConflict,
+    AllocationExpired,
+    AllocationPending,
+    WorkspaceAllocation,
+)
+from application.lifecycle import TooManyWorkspaces, WorkspaceCleanupPending, WorkspaceNotFound
 from domain.contracts import GIT_AUTHOR
 from domain.files import git_init_command, reject_control_bytes
 from domain.ownership import OwnershipError
@@ -14,7 +20,14 @@ from domain.policy import StaticPolicyLocked, policy_from_request
 from fastapi import APIRouter, Header
 
 from drivers import DriverError, IsolationUnverified
-from presentation.routes.contracts import CreateRequest, ExecRequest, OwnerRequest, PolicyRequest
+from presentation.routes.contracts import (
+    AllocationCreateRequest,
+    AllocationLookupRequest,
+    CreateRequest,
+    ExecRequest,
+    OwnerRequest,
+    PolicyRequest,
+)
 from presentation.routes.dependencies import WorkspaceRouteDependencies
 
 logger = logging.getLogger("workspace-sidecar")
@@ -33,9 +46,8 @@ def create_lifecycle_router(
 ) -> tuple[APIRouter, LifecycleHandlers]:
     router = APIRouter(tags=["workspace-lifecycle"])
 
-    @router.post("/workspaces")
-    async def create_workspace(
-        payload: CreateRequest, authorization: str | None = Header(default=None)
+    async def create_owned_workspace(
+        payload: CreateRequest, authorization: str | None, *, initialize_history: bool
     ):
         deps.auth(authorization)
         registry = deps.registry()
@@ -43,7 +55,16 @@ def create_lifecycle_router(
             return deps.error("workspace_unavailable", "workspace registry is not ready", 503)
         try:
             policy = policy_from_request(payload.policy)
-            item, token = await registry.create(payload.user_id, policy, ttl_sec=payload.ttl_sec)
+            options: dict[str, Any] = {"ttl_sec": payload.ttl_sec}
+            if payload.allocation:
+                options["allocation"] = WorkspaceAllocation(**payload.allocation.model_dump())
+            item, token = await registry.create(payload.user_id, policy, **options)
+        except AllocationPending:
+            return deps.error("workspace_allocation_pending", "allocation is pending", 409)
+        except AllocationConflict:
+            return deps.error("workspace_allocation_conflict", "allocation changed", 409)
+        except AllocationExpired:
+            return deps.error("workspace_allocation_expired", "allocation expired", 410)
         except (TypeError, ValueError):
             return deps.error("invalid_request", "workspace policy is invalid", 422)
         except TooManyWorkspaces:
@@ -54,22 +75,67 @@ def create_lifecycle_router(
         except DriverError:
             return deps.error("driver_failed", "workspace driver failed", 502)
         versioned = False
-        try:
-            result = await registry.exec_raw(
-                item, git_init_command(item.policy.root, GIT_AUTHOR), max_output_chars=4096
-            )
-            versioned = "__OK__" in (result.stdout or "")
-        except Exception:  # noqa: BLE001 - workspace remains usable without git history.
-            logger.warning(
-                "workspace git initialization failed",
-                extra={"failure_code": "history_init"},
-            )
+        if initialize_history:
+            try:
+                result = await registry.exec_raw(
+                    item, git_init_command(item.policy.root, GIT_AUTHOR), max_output_chars=4096
+                )
+                versioned = "__OK__" in (result.stdout or "")
+            except Exception:  # noqa: BLE001 - workspace remains usable without git history.
+                logger.warning(
+                    "workspace git initialization failed",
+                    extra={"failure_code": "history_init"},
+                )
         return {
             "versioned": versioned,
             "workspace_id": item.workspace_id,
             "token": token,
             "root": item.policy.root,
-            "expires_at": item.expires_at,
+            "expires_at": payload.allocation.expires_at if payload.allocation else item.expires_at,
+            "policy": item.policy.as_dict(),
+        }
+
+    @router.post("/workspaces")
+    async def create_workspace(
+        payload: CreateRequest, authorization: str | None = Header(default=None)
+    ):
+        return await create_owned_workspace(payload, authorization, initialize_history=True)
+
+    @router.post("/workspaces/allocations")
+    async def create_allocation(
+        payload: AllocationCreateRequest, authorization: str | None = Header(default=None)
+    ):
+        # Runtime allocation is not Git initialization. Legacy recovery commits
+        # must never become the user's repository history or block a fresh clone.
+        return await create_owned_workspace(payload, authorization, initialize_history=False)
+
+    @router.post("/workspaces/allocations/lookup")
+    async def lookup_allocation(
+        payload: AllocationLookupRequest, authorization: str | None = Header(default=None)
+    ):
+        deps.auth(authorization)
+        registry = deps.registry()
+        if registry is None:
+            return deps.error("workspace_unavailable", "workspace registry is not ready", 503)
+        try:
+            allocation = WorkspaceAllocation(**payload.allocation.model_dump())
+            item = registry.lookup_allocation(payload.user_id, allocation)
+            if item is None:
+                return deps.error("workspace_not_found", "allocation was not found", 404)
+            token = registry.allocation_token(item, payload.user_id)
+        except AllocationPending:
+            return deps.error("workspace_allocation_pending", "allocation is pending", 409)
+        except AllocationConflict:
+            return deps.error("workspace_allocation_conflict", "allocation changed", 409)
+        except AllocationExpired:
+            return deps.error("workspace_allocation_expired", "allocation expired", 410)
+        except (TypeError, ValueError):
+            return deps.error("invalid_request", "allocation is invalid", 422)
+        return {
+            "workspace_id": item.workspace_id,
+            "token": token,
+            "root": item.policy.root,
+            "expires_at": allocation.expires_at,
             "policy": item.policy.as_dict(),
         }
 
@@ -142,12 +208,16 @@ def create_lifecycle_router(
         if registry is None:
             return deps.error("workspace_unavailable", "workspace registry is not ready", 503)
         try:
-            registry.get(workspace_id, payload.user_id, payload.token)
-            await registry.destroy(workspace_id)
+            registry.authorize_cleanup(workspace_id, payload.user_id, payload.token)
+            confirmed = await registry.destroy(workspace_id)
         except OwnershipError:
             return deps.error("forbidden", "workspace ownership mismatch", 403)
         except WorkspaceNotFound:
             return deps.error("workspace_not_found", "workspace not found", 404)
+        except WorkspaceCleanupPending:
+            return deps.error("workspace_cleanup_pending", "workspace cleanup is pending", 409)
+        if confirmed is not True:
+            return deps.error("workspace_cleanup_pending", "workspace cleanup is pending", 409)
         return {"deleted": workspace_id}
 
     return router, LifecycleHandlers(

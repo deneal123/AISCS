@@ -18,6 +18,8 @@ from presentation.routes.contracts import (
     DocumentPathRequest,
     DocumentProfileApplyRequest,
     DocumentProjectRequest,
+    DocumentProposalLookupRequest,
+    DocumentProposalRequest,
     DocumentSourceRequest,
     DocumentVendorActivateRequest,
     DocumentVendorOverlayRequest,
@@ -75,6 +77,50 @@ def _status(code: str) -> int:
 
 def create_documents_router(deps: DocumentRouteDependencies) -> APIRouter:
     router = APIRouter(tags=["workspace-documents"])
+
+    @router.post("/workspaces/{workspace_id}/documents/proposals")
+    async def propose_edit(
+        workspace_id: str,
+        payload: DocumentProposalRequest,
+        authorization: str | None = Header(default=None),
+    ):
+        from application.documents.proposals import store_proposal
+
+        deps.common.auth(authorization)
+        item, failure = deps.common.owned(workspace_id, payload)
+        if failure is not None:
+            return failure
+        registry = deps.common.registry()
+        if registry is None:
+            return deps.common.error("workspace_unavailable", "workspace unavailable", 503)
+        try:
+            async with registry.operation(item):
+                if await deps.common.revision(item) != payload.expected_revision:
+                    raise DocumentProjectError("source_changed")
+                return await store_proposal(deps.projects, item, payload.path, payload.proposal)
+        except DocumentProjectError as exc:
+            return deps.common.error(exc.code, "document proposal unavailable", _status(exc.code))
+
+    @router.post("/workspaces/{workspace_id}/documents/proposals/read")
+    async def read_edit_proposal(
+        workspace_id: str,
+        payload: DocumentProposalLookupRequest,
+        authorization: str | None = Header(default=None),
+    ):
+        from application.documents.proposals import read_proposal
+
+        deps.common.auth(authorization)
+        item, failure = deps.common.owned(workspace_id, payload)
+        if failure is not None:
+            return failure
+        registry = deps.common.registry()
+        if registry is None:
+            return deps.common.error("workspace_unavailable", "workspace unavailable", 503)
+        try:
+            async with registry.operation(item):
+                return await read_proposal(deps.projects, item, payload.proposal_id)
+        except DocumentProjectError as exc:
+            return deps.common.error(exc.code, "document proposal unavailable", _status(exc.code))
 
     @router.get("/document-profiles")
     async def profiles(authorization: str | None = Header(default=None)):
@@ -177,6 +223,10 @@ def create_documents_router(deps: DocumentRouteDependencies) -> APIRouter:
                 current = await deps.common.revision(item)
                 if current != payload.expected_revision:
                     raise DocumentProjectError("revision_conflict")
+                if payload.expected_source_digest is not None:
+                    project = await deps.projects.status(item, payload.path)
+                    if project.get("source_digest") != payload.expected_source_digest:
+                        raise DocumentProjectError("source_changed")
                 return await deps.sources.publish(
                     item,
                     path=payload.path,

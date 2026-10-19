@@ -2,14 +2,33 @@
 
 from __future__ import annotations
 
+from uuid import UUID
+
 from domain.contracts import DEFAULT_TTL_SEC
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
+
+
+class AllocationRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    allocation_id: UUID
+    expires_at: int = Field(gt=0, strict=True)
 
 
 class CreateRequest(BaseModel):
     user_id: str
     ttl_sec: float = DEFAULT_TTL_SEC
     policy: dict | None = None
+    allocation: AllocationRequest | None = None
+
+
+class AllocationLookupRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    user_id: str
+    allocation: AllocationRequest
+
+
+class AllocationCreateRequest(CreateRequest):
+    allocation: AllocationRequest
 
 
 class ExecRequest(BaseModel):
@@ -79,7 +98,17 @@ class DocumentSourceRequest(DocumentPathRequest):
     authoring_version: int = Field(ge=1, le=1_000_000)
     draft_digest: str = Field(min_length=64, max_length=64, pattern="^[0-9a-f]{64}$")
     expected_revision: str = Field(min_length=1, max_length=128)
+    expected_source_digest: str | None = Field(default=None, pattern="^[a-f0-9]{64}$")
     coordination_fence: int | None = Field(default=None, ge=1)
+
+
+class DocumentProposalRequest(DocumentPathRequest):
+    proposal: dict
+    expected_revision: str = Field(min_length=1, max_length=128)
+
+
+class DocumentProposalLookupRequest(OwnerRequest):
+    proposal_id: str = Field(pattern=r"^[a-f0-9]{32}$")
 
 
 class DocumentCheckpointRequest(DocumentPathRequest):
