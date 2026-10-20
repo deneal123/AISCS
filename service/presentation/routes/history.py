@@ -48,6 +48,9 @@ def create_history_router(
         if registry is None:
             return await deps.snapshot(item, "agent_run")
         async with registry.operation(item):
+            guarded = await deps.coordination_guard(payload, "snapshot", workspace_id=workspace_id)
+            if deps.guard_denied(guarded):
+                return guarded
             snapshot = await deps.snapshot(item, "agent_run")
             snapshot["revision"] = await deps.revision(item)
             return snapshot
@@ -115,6 +118,11 @@ def create_history_router(
         if registry is None:
             return deps.error("workspace_unavailable", "workspace registry is not ready", 503)
         async with registry.operation(item):
+            guarded = await deps.coordination_guard(
+                payload, "revert", path=payload.path or "", workspace_id=workspace_id
+            )
+            if deps.guard_denied(guarded):
+                return guarded
             if await deps.revision(item) != payload.expected_revision:
                 return deps.error("workspace_conflict", "workspace revision changed", 409)
             try:

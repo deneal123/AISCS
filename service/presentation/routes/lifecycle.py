@@ -33,6 +33,11 @@ from presentation.routes.dependencies import WorkspaceRouteDependencies
 logger = logging.getLogger("workspace-sidecar")
 
 
+class _PolicyDenied(Exception):
+    def __init__(self, response):
+        self.response = response
+
+
 @dataclass(frozen=True, slots=True)
 class LifecycleHandlers:
     create_workspace: Any
@@ -161,6 +166,9 @@ def create_lifecycle_router(
             return deps.error("workspace_unavailable", "workspace registry is not ready", 503)
         try:
             async with registry.operation(item):
+                guarded = await deps.coordination_guard(payload, "exec", workspace_id=workspace_id)
+                if deps.guard_denied(guarded):
+                    return guarded
                 result = await registry.exec(item, command)
         except DriverError:
             return deps.error("driver_failed", "workspace driver failed", 502)
@@ -189,8 +197,16 @@ def create_lifecycle_router(
         registry = deps.registry()
         if registry is None:
             return deps.error("workspace_unavailable", "workspace registry is not ready", 503)
+
+        async def before_update():
+            checked = await deps.coordination_guard(payload, "policy", workspace_id=workspace_id)
+            if deps.guard_denied(checked):
+                raise _PolicyDenied(checked)
+
         try:
-            policy = await registry.update_policy(item, payload.update)
+            policy = await registry.update_policy(item, payload.update, before_update=before_update)
+        except _PolicyDenied as denied:
+            return denied.response
         except StaticPolicyLocked:
             return deps.error("static_policy_locked", "static workspace policy is locked", 409)
         except (TypeError, ValueError):

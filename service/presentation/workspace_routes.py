@@ -41,6 +41,7 @@ from presentation.routes.documents import DocumentRouteDependencies, create_docu
 from presentation.routes.files import create_files_router
 from presentation.routes.history import create_history_router
 from presentation.routes.ide_capture import create_ide_capture_router
+from presentation.routes.ide_commands import create_ide_command_router
 from presentation.routes.ide_git import create_ide_git_router
 from presentation.routes.ide_reads import create_ide_read_router
 from presentation.routes.ide_restore import create_ide_restore_router
@@ -162,6 +163,7 @@ router.include_router(create_ide_read_router(_route_dependencies))
 router.include_router(create_ide_write_router(_route_dependencies))
 router.include_router(create_ide_git_router(_route_dependencies))
 router.include_router(create_ide_capture_router(_route_dependencies))
+router.include_router(create_ide_command_router(_route_dependencies))
 router.include_router(create_ide_restore_router(_route_dependencies))
 list_files = _file_handlers.list_files
 tree_files = _file_handlers.tree_files

@@ -8,6 +8,7 @@ import hmac
 import logging
 import secrets
 import time
+from collections.abc import Awaitable, Callable
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
@@ -25,7 +26,7 @@ from application.recovery import (
     owner_binding,
     parse_manifest,
 )
-from drivers import ComputeDriver, ContainerRef, IsolationUnverified, ManagedContainer
+from drivers import ComputeDriver, ContainerRef, DriverError, IsolationUnverified, ManagedContainer
 from drivers.base import (
     ContainerCreationCancelled,
     ContainerCreationFailed,
@@ -301,8 +302,16 @@ class WorkspaceRegistry:
         async with item.operation_lock:
             yield item
 
-    async def update_policy(self, item: Workspace, update: dict) -> WorkspacePolicy:
+    async def update_policy(
+        self,
+        item: Workspace,
+        update: dict,
+        *,
+        before_update: Callable[[], Awaitable[None]] | None = None,
+    ) -> WorkspacePolicy:
         async with self.operation(item):
+            if before_update is not None:
+                await before_update()
             item.policy = item.policy.with_update(update)
             return item.policy
 
@@ -348,6 +357,21 @@ class WorkspaceRegistry:
         # The caller owns operation_lock and checks ownership/coordination on
         # both sides of capture. The helper never mutates repository contents.
         return IdeBundleService(self._containers.driver).capture_verified(item, limits)
+
+    def command_driver(self):
+        driver = self._containers.driver
+        if not all(
+            callable(getattr(driver, name, None))
+            for name in (
+                "create_command",
+                "ready_command",
+                "dispatch_command",
+                "command_status",
+                "stop_command",
+            )
+        ):
+            raise DriverError("command_driver_unavailable")
+        return driver
 
     async def move_ide(self, item: Workspace, **kwargs):
         from application.ide_moves import move_file

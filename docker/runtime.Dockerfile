@@ -26,3 +26,7 @@ RUN mkdir -p /workspace && chown 65534:65534 /workspace
 RUN git config --system --add safe.directory '*'
 
 WORKDIR /workspace
+
+# Root-owned control plane; project files and /tmp cannot replace the supervisor.
+COPY docker/harness /opt/gpthub-harness
+RUN chmod -R a-w /opt/gpthub-harness

@@ -169,6 +169,68 @@ class DockerCliDriver:
 
     name = DRIVER_NAME
 
+    def command_lifecycle(self):
+        from drivers.commands.lifecycle import DockerCommands
+
+        if not hasattr(self, "_commands"):
+            self._commands = DockerCommands()
+        return self._commands
+
+    async def create_command(self, ref, operation_id):
+        return await self.command_lifecycle().create(ref, operation_id)
+
+    async def ready_command(self, ref, operation_id, exec_id):
+        return await self.command_lifecycle().ready(ref, operation_id, exec_id)
+
+    async def dispatch_command(self, ref, operation_id, exec_id, **options):
+        return await self.command_lifecycle().dispatch(ref, operation_id, exec_id, **options)
+
+    async def command_status(self, ref, operation_id, exec_id, **options):
+        return await self.command_lifecycle().status(ref, operation_id, exec_id, **options)
+
+    async def stop_command(
+        self, ref, operation_id, exec_id, *, supervisor, user_start_disallowed=False
+    ):
+        lifecycle = self.command_lifecycle()
+        # Validate the Engine instance before addressing a process inside it.
+        existing = await lifecycle.status(
+            ref,
+            operation_id,
+            exec_id,
+            supervisor=supervisor,
+            user_start_disallowed=user_start_disallowed,
+        )
+        if not existing["running"]:
+            return existing
+        pid, started = supervisor.get("pid"), supervisor.get("start_time")
+        if (
+            type(pid) is not int
+            or pid <= 1
+            or not isinstance(started, str)
+            or not started.isdigit()
+        ):
+            raise DriverError("command_identity_invalid")
+        code, _, _ = await _docker(
+            "exec",
+            "--user",
+            "65534:65534",
+            ref.container_id,
+            "python3",
+            "-I",
+            "-S",
+            "/opt/gpthub-harness/stop.py",
+            str(pid),
+            started,
+        )
+        if code != 0:
+            raise DriverError("command_stop_unknown")
+        async with asyncio.timeout(10):
+            while True:
+                result = await lifecycle.status(ref, operation_id, exec_id, supervisor=supervisor)
+                if not result["running"]:
+                    return result
+                await asyncio.sleep(0.05)
+
     async def create(
         self, workspace_id: str, policy: WorkspacePolicy, *, labels: dict[str, str] | None = None
     ) -> ContainerRef:

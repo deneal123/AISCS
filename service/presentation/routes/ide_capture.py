@@ -69,7 +69,7 @@ def create_ide_capture_router(deps: WorkspaceRouteDependencies) -> APIRouter:
                     if item.policy.root != "/workspace" or item.expired():
                         return deps.error("workspace_not_found", "workspace is unavailable", 404)
                     guarded = await deps.coordination_guard(
-                        payload, "snapshot", workspace_id=workspace_id
+                        payload, "capture", workspace_id=workspace_id
                     )
                     if deps.guard_denied(guarded):
                         return guarded

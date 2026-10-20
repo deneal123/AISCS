@@ -62,7 +62,7 @@ def fixture():
         state.closed = True
 
     async def guard(*args, **kwargs):
-        assert state.locked and args[1] == "snapshot"
+        assert state.locked and args[1] == "capture"
         assert kwargs == {"workspace_id": "owned"}
         state.guards += 1
         return (
