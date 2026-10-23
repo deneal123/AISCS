@@ -88,6 +88,18 @@ class DockerCommands:
         finally:
             session.result = asyncio.create_task(self._collect(session, timeout_sec))
 
+    async def idle_identity(self, ref, operation_id, exec_id):
+        state = await self.status(ref, operation_id, exec_id)
+        session = self.sessions.get(exec_id)
+        if (
+            not state["running"]
+            or session is None
+            or session.sent
+            or session.identity.get("operation_id") != str(operation_id)
+        ):
+            raise DriverError("command_dispatch_unknown")
+        return {key: session.identity[key] for key in ("pid", "start_time", "operation_id")}
+
     @staticmethod
     async def _collect(session, timeout):
         try:

@@ -39,6 +39,7 @@ from drivers.base import (
     ManagedContainer,
 )
 from drivers.creation_cleanup import settle_creation
+from drivers.inventory import DockerInventory
 from drivers.isolation import inspection_complete
 from drivers.isolation import isolation_complaints as _isolation_complaints
 
@@ -109,7 +110,11 @@ async def _docker(*args: str, timeout_sec: float = _CLI_TIMEOUT_SEC) -> tuple[in
 
 
 def _create_argv(
-    workspace_id: str, policy: WorkspacePolicy, labels: dict[str, str] | None = None
+    workspace_id: str,
+    policy: WorkspacePolicy,
+    labels: dict[str, str] | None = None,
+    *,
+    inventory: DockerInventory | None = None,
 ) -> list[str]:
     """Аргументы `docker create`. Каждый флаг здесь — ограничение, а не настройка."""
     argv = [
@@ -118,7 +123,7 @@ def _create_argv(
         "--name",
         f"gpthub-ws-{workspace_id}",
         "--label",
-        "gpthub.workspace=1",
+        (inventory or DockerInventory()).label,
         # 🔴 Сеть по умолчанию `none`: содержимое песочницы пишет модель, и выход в
         # локальную сеть означал бы доступ к Postgres, Redis, MinIO и всем сайдкарам,
         # которые внутри периметра не спрашивают аутентификации.
@@ -169,6 +174,9 @@ class DockerCliDriver:
 
     name = DRIVER_NAME
 
+    def __init__(self, *, inventory: DockerInventory | None = None) -> None:
+        self.inventory = inventory or DockerInventory.from_environment()
+
     def command_lifecycle(self):
         from drivers.commands.lifecycle import DockerCommands
 
@@ -187,6 +195,9 @@ class DockerCliDriver:
 
     async def command_status(self, ref, operation_id, exec_id, **options):
         return await self.command_lifecycle().status(ref, operation_id, exec_id, **options)
+
+    async def command_idle_identity(self, ref, operation_id, exec_id):
+        return await self.command_lifecycle().idle_identity(ref, operation_id, exec_id)
 
     async def stop_command(
         self, ref, operation_id, exec_id, *, supervisor, user_start_disallowed=False
@@ -235,7 +246,9 @@ class DockerCliDriver:
         self, workspace_id: str, policy: WorkspacePolicy, *, labels: dict[str, str] | None = None
     ) -> ContainerRef:
         try:
-            code, out, err = await _docker(*_create_argv(workspace_id, policy, labels))
+            code, out, err = await _docker(
+                *_create_argv(workspace_id, policy, labels, inventory=self.inventory)
+            )
         except asyncio.CancelledError:
             raise ContainerCreationUncertainCancelled from None
         except Exception:
@@ -260,7 +273,7 @@ class DockerCliDriver:
 
     async def list_managed(self) -> list[ManagedContainer]:
         code, out, _ = await _docker(
-            "ps", "-aq", "--no-trunc", "--filter", "label=gpthub.workspace=1"
+            "ps", "-aq", "--no-trunc", "--filter", f"label={self.inventory.label}"
         )
         if code != 0:
             raise DriverError("docker discovery failed")
@@ -276,7 +289,8 @@ class DockerCliDriver:
                 labels = dict((payload.get("Config") or {}).get("Labels") or {})
             except (IndexError, TypeError, json.JSONDecodeError):
                 labels = {}
-            found.append(ManagedContainer(ContainerRef(DRIVER_NAME, container_id), labels))
+            if labels.get("gpthub.workspace") == self.inventory.scope:
+                found.append(ManagedContainer(ContainerRef(DRIVER_NAME, container_id), labels))
         return found
 
     async def verify_isolation(self, ref: ContainerRef, policy: WorkspacePolicy) -> None:

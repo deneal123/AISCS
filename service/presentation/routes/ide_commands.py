@@ -39,8 +39,11 @@ class CommandRequest(BaseModel):
 def create_ide_command_router(deps):
     router = APIRouter(tags=["ide-commands"])
 
-    async def fingerprint(registry, item, limits):
-        async with registry.capture_ide(item, BundleLimits(**limits.model_dump())) as capsule:
+    async def fingerprint(registry, item, limits, *, idle_supervisor=None):
+        options = {"idle_supervisor": idle_supervisor} if idle_supervisor else {}
+        async with registry.capture_ide(
+            item, BundleLimits(**limits.model_dump()), **options
+        ) as capsule:
             return capsule.sha256
 
     async def permit(payload, workspace_id, *, observed_revision=None):
@@ -110,7 +113,19 @@ def create_ide_command_router(deps):
                         current, failure = deps.owned(workspace_id, payload)
                         if failure is not None or current is not item:
                             raise DriverError("command_binding_changed")
-                        revision = await fingerprint(registry, item, payload.limits)
+                        idle = None
+                        if payload.action == "dispatch":
+                            idle = await driver.command_idle_identity(
+                                item.ref, payload.operation_id, payload.engine_id
+                            )
+                            if not payload.supervisor or any(
+                                payload.supervisor.get(key) != idle[key]
+                                for key in ("pid", "start_time")
+                            ):
+                                raise DriverError("command_identity_changed")
+                        revision = await fingerprint(
+                            registry, item, payload.limits, idle_supervisor=idle
+                        )
                         if revision != payload.source_revision:
                             return deps.error("workspace_conflict", "project changed", 409)
                         permitted = await permit(payload, workspace_id, observed_revision=revision)

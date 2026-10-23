@@ -351,12 +351,14 @@ class WorkspaceRegistry:
 
         return await run_git(self._containers.driver, item, **kwargs)
 
-    def capture_ide(self, item: Workspace, limits):
+    def capture_ide(self, item: Workspace, limits, *, idle_supervisor=None):
         from application.ide_bundles import IdeBundleService
 
         # The caller owns operation_lock and checks ownership/coordination on
         # both sides of capture. The helper never mutates repository contents.
-        return IdeBundleService(self._containers.driver).capture_verified(item, limits)
+        return IdeBundleService(self._containers.driver).capture_verified(
+            item, limits, idle_supervisor=idle_supervisor
+        )
 
     def command_driver(self):
         driver = self._containers.driver

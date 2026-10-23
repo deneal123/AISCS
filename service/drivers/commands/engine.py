@@ -112,10 +112,13 @@ class Engine:
             raise DriverError("command_identity_changed")
         if (
             type(data.get("Running")) is not bool
-            or type(data.get("ExitCode")) is not int
+            or "ExitCode" not in data
+            or (data["ExitCode"] is not None and type(data["ExitCode"]) is not int)
             or not isinstance(data.get("ProcessConfig"), dict)
         ):
             raise DriverError("command_engine_response_invalid")
+        # Engine reports null before start (and may do so while running).
+        # An unknown exit code never satisfies the cleanup exit_code == 0 check.
         return data
 
     async def start(self, exec_id):

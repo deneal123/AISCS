@@ -10,7 +10,7 @@ import pytest
 
 from drivers import docker_cli
 from drivers.base import ContainerRef, DriverError
-from drivers.commands.engine import ExecStream, identity
+from drivers.commands.engine import Engine, ExecStream, identity
 from drivers.commands.lifecycle import CommandSession, DockerCommands
 
 
@@ -40,6 +40,40 @@ def test_engine_ids_are_not_command_line_options_or_unbounded_paths(value):
         identity(value)
 
 
+@pytest.mark.parametrize("exit_code", [None, 0, 1])
+async def test_engine_inspect_accepts_unknown_or_integer_exit_code(exit_code):
+    engine = Engine()
+    engine.version = "/v1.51"
+    engine.request = AsyncMock(
+        return_value={
+            "ID": "b" * 64,
+            "ContainerID": "a" * 64,
+            "Running": False,
+            "ExitCode": exit_code,
+            "ProcessConfig": {},
+        }
+    )
+    data = await engine.inspect("b" * 64, "a" * 64)
+    assert data["ExitCode"] == exit_code
+
+
+@pytest.mark.parametrize("exit_code", [False, "0", 0.0, {}])
+async def test_engine_inspect_rejects_invalid_exit_code_types(exit_code):
+    engine = Engine()
+    engine.version = "/v1.51"
+    engine.request = AsyncMock(
+        return_value={
+            "ID": "b" * 64,
+            "ContainerID": "a" * 64,
+            "Running": False,
+            "ExitCode": exit_code,
+            "ProcessConfig": {},
+        }
+    )
+    with pytest.raises(DriverError, match="command_engine_response_invalid"):
+        await engine.inspect("b" * 64, "a" * 64)
+
+
 async def test_lost_send_ack_cannot_resend_the_command():
     lifecycle = DockerCommands()
     lifecycle.engine = SimpleNamespace(inspect=AsyncMock(return_value={"Running": True}))
@@ -58,14 +92,15 @@ async def test_lost_send_ack_cannot_resend_the_command():
     await session.result
 
 
-async def test_inspect_zero_without_recorded_ready_does_not_prove_cleanup():
+@pytest.mark.parametrize("exit_code", [0, None])
+async def test_exit_without_recorded_ready_does_not_prove_cleanup(exit_code):
     operation = uuid4()
     lifecycle = DockerCommands()
     lifecycle.engine = SimpleNamespace(
         inspect=AsyncMock(
             return_value={
                 "Running": False,
-                "ExitCode": 0,
+                "ExitCode": exit_code,
                 "ProcessConfig": {
                     "entrypoint": "python3",
                     "arguments": [
@@ -86,7 +121,8 @@ async def test_inspect_zero_without_recorded_ready_does_not_prove_cleanup():
         "b" * 64,
         supervisor={"pid": 2, "start_time": "123"},
     )
-    assert status["cleanup_confirmed"] and status["receipt"] is None
+    assert status["cleanup_confirmed"] is (exit_code == 0)
+    assert status["receipt"] is None
 
 
 async def test_stop_runs_as_supervisor_user_without_new_capabilities(monkeypatch):

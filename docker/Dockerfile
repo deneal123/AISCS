@@ -45,6 +45,7 @@ RUN chmod +x /opt/workspace-sidecar/entrypoint.sh
 # «в образе нет пакета, который код импортирует». Оба таких дефекта за день ловил ЗАПУСК,
 # и оба тесты увидеть не могли: у них зависимости из dev-набора.
 RUN PYTHONPATH=/opt/workspace-sidecar/service python3 -c "import app; print('импорт сервиса ок')"
+RUN PYTHONPATH=/opt/workspace-sidecar/service python3 -m application.documents.bundle_check
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONPATH=/opt/workspace-sidecar/service \

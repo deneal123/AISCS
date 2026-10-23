@@ -19,6 +19,8 @@ import threading
 
 from infrastructure.ide_bundle_files import capture_bundle, restore_empty
 from infrastructure.ide_bundle_format import CHUNK, BundleFailure, BundleLimits
+from infrastructure.ide_idle import idle as _idle
+from infrastructure.ide_idle import supervisor_identity
 from infrastructure.ide_restore_receipt import receipt
 
 
@@ -44,13 +46,16 @@ def _request() -> tuple[dict, BundleLimits]:
     request = json.loads(line)
     if (
         type(request) is not dict
-        or set(request) - {"ready_receipt"}
+        or set(request) - {"ready_receipt", "idle_supervisor"}
         != {"root", "operation", "limits", "input_size", "input_sha256", "timeout"}
         or request["operation"] not in {"capture", "restore", "seal", "receipt"}
         or type(request["limits"]) is not dict
     ):
         raise BundleFailure()
     limits = BundleLimits(**request["limits"])
+    supervisor_identity(request.get("idle_supervisor"))
+    if "idle_supervisor" in request and request["operation"] != "capture":
+        raise BundleFailure()
     proof = request.get("ready_receipt")
     if request["operation"] in {"seal", "receipt"}:
         if (
@@ -106,41 +111,6 @@ def _expired(_signum, _frame) -> None:
     raise BundleFailure("ide_bundle_unavailable")
 
 
-def _idle() -> None:
-    """Only Docker's init, its primary sleep and this helper may be running.
-
-    A caller-held operation lock must also prevent new trusted mutation starts.
-    Detached/background repository processes are busy, never silently killed.
-    """
-    primary, init = 0, False
-    with os.scandir("/proc") as processes:
-        for process in processes:
-            if not process.name.isdigit() or int(process.name) == os.getpid():
-                continue
-            try:
-                with open(f"/proc/{process.name}/stat") as source:
-                    state = source.read(4096).rpartition(")")[2].split()
-                if state[0] == "Z":
-                    continue
-                with open(f"/proc/{process.name}/cmdline", "rb") as source:
-                    argv = source.read(1025).rstrip(b"\0").split(b"\0")
-            except FileNotFoundError:
-                continue
-            if (
-                process.name == "1"
-                and len(argv) == 4
-                and argv[0].rsplit(b"/", 1)[-1] in {b"docker-init", b"tini"}
-                and argv[1:] == [b"--", b"sleep", b"infinity"]
-            ):
-                init = True
-            elif state[1] == "1" and argv == [b"sleep", b"infinity"]:
-                primary += 1
-            else:
-                raise BundleFailure("ide_bundle_busy")
-    if not init or primary != 1:
-        raise BundleFailure("ide_bundle_unsupported")
-
-
 def _report(body: dict) -> None:
     os.write(2, json.dumps(body, separators=(",", ":")).encode())
 
@@ -168,7 +138,7 @@ def main() -> None:
                 raise BundleFailure()
             threading.Thread(target=_watch, daemon=True).start()
             if request["operation"] != "receipt":
-                _idle()
+                _idle(request.get("idle_supervisor"))
             if request["operation"] in {"seal", "receipt"}:
                 ready = receipt(request["ready_receipt"], write=request["operation"] == "seal")
                 _report(dict(status="ok", operation=request["operation"], ready=ready))

@@ -21,6 +21,7 @@ from infrastructure import (
     ide_bundle_files,
     ide_bundle_format,
     ide_bundle_runtime,
+    ide_idle,
     ide_restore_receipt,
 )
 from infrastructure.ide_bundle_format import BundleFailure, BundleLimits, read_bundle
@@ -54,6 +55,7 @@ def program_source(*, extra_modules: tuple = (), entrypoint: str | None = None) 
             ide_bundle_format,
             ide_bundle_files,
             ide_restore_receipt,
+            ide_idle,
             ide_bundle_runtime,
             *extra_modules,
         )
@@ -119,6 +121,7 @@ class IdeBundleService:
         digest: str | None = None,
         *,
         ready_receipt: str | None = None,
+        idle_supervisor: dict | None = None,
     ) -> AbstractAsyncContextManager[BinaryExecReply]:
         run = getattr(self.driver, "exec_binary", None)
         if not callable(run):
@@ -138,6 +141,7 @@ class IdeBundleService:
                     input_sha256=digest,
                     timeout=timeout,
                     **({"ready_receipt": ready_receipt} if ready_receipt is not None else {}),
+                    **({"idle_supervisor": idle_supervisor} if idle_supervisor is not None else {}),
                 ),
                 separators=(",", ":"),
             ).encode()
@@ -185,11 +189,13 @@ class IdeBundleService:
 
     @asynccontextmanager
     async def capture_verified(
-        self, item: Any, limits: BundleLimits
+        self, item: Any, limits: BundleLimits, *, idle_supervisor: dict | None = None
     ) -> AsyncIterator[CapturedBundle]:
         async with AsyncExitStack() as resources:
             try:
-                reply = await resources.enter_async_context(self._exchange(item, "capture", limits))
+                reply = await resources.enter_async_context(
+                    self._exchange(item, "capture", limits, idle_supervisor=idle_supervisor)
+                )
             except BinaryExecFailure as failure:
                 raise BundleTransferFailure(failure.settled) from None
             except DriverError:
