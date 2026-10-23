@@ -8,7 +8,9 @@ import openai
 from openai._types import NOT_GIVEN
 from openai.types.chat.chat_completion_message_tool_call import ChatCompletionMessageToolCall
 
+from memos.configs.gateway import managed_memory_enabled
 from memos.configs.llm import AzureLLMConfig, OpenAILLMConfig
+from memos.embedders.transport_privacy import private_transport
 from memos.llms.base import BaseLLM
 from memos.llms.utils import remove_thinking_tags
 from memos.log import get_logger
@@ -23,9 +25,14 @@ class OpenAILLM(BaseLLM):
     """OpenAI LLM class via openai.chat.completions.create."""
 
     def __init__(self, config: OpenAILLMConfig):
+        if managed_memory_enabled():
+            config = config.model_copy(update={
+                "model_name_or_path": "gpthub-memory", "backup_client": False,
+            })
         self.config = config
         self.client = openai.Client(
-            api_key=config.api_key, base_url=config.api_base, default_headers=config.default_headers
+            api_key=config.api_key, base_url=config.api_base, default_headers=config.default_headers,
+            timeout=30, max_retries=0,
         )
         self.use_backup_client = config.backup_client
         if self.use_backup_client:
@@ -65,7 +72,7 @@ class OpenAILLM(BaseLLM):
         log_prefix="OpenAI LLM",
         log_extra_args=lambda self, messages, **kwargs: {
             "model_name_or_path": kwargs.get("model_name_or_path", self.config.model_name_or_path),
-            "messages": messages,
+            "message_count": len(messages),
         },
     )
     def generate(self, messages: MessageList, **kwargs) -> str:
@@ -80,33 +87,25 @@ class OpenAILLM(BaseLLM):
             "tools": kwargs.get("tools", NOT_GIVEN),
         }
         start_time = time.perf_counter()
-        logger.info(f"OpenAI LLM Request body: {request_body}")
+        logger.info("LLM: запрос, messages=%s", len(messages))
 
         try:
-            response = self.client.chat.completions.create(**request_body)
+            with private_transport():
+                response = self.client.chat.completions.create(**request_body)
             cost_time = time.perf_counter() - start_time
-            logger.info(
-                f"Request body: {request_body}, Response from OpenAI: "
-                f"{response.model_dump_json()}, Cost time: {cost_time}"
-            )
+            logger.info("LLM: ответ получен, elapsed=%.3f", cost_time)
             return self._parse_response(response)
         except Exception as e:
             if not self.use_backup_client:
-                raise
-            logger.warning(
-                f"Primary LLM request failed with {type(e).__name__}: {e}, "
-                f"falling back to backup client"
-            )
+                raise ValueError("memory_model_request_failed") from None
+            logger.warning("LLM: основной клиент недоступен, type=%s", type(e).__name__)
             backup_body = {
                 **request_body,
                 "model": self.config.backup_model_name_or_path or request_body["model"],
             }
             backup_response = self.backup_client.chat.completions.create(**backup_body)
             cost_time = time.perf_counter() - start_time
-            logger.info(
-                f"Backup LLM request succeeded, Response: "
-                f"{backup_response.model_dump_json()}, Cost time: {cost_time}"
-            )
+            logger.info("LLM: резервный ответ получен, elapsed=%.3f", cost_time)
             return self._parse_response(backup_response)
 
     @timed_with_status(
@@ -132,7 +131,7 @@ class OpenAILLM(BaseLLM):
             "tools": kwargs.get("tools", NOT_GIVEN),
         }
 
-        logger.info(f"OpenAI LLM Stream Request body: {request_body}")
+        logger.info("LLM: потоковый запрос, messages=%s", len(messages))
         response = self.client.chat.completions.create(**request_body)
 
         reasoning_started = False
@@ -193,7 +192,7 @@ class AzureLLM(BaseLLM):
             tools=kwargs.get("tools", NOT_GIVEN),
             extra_body=kwargs.get("extra_body", self.config.extra_body),
         )
-        logger.info(f"Response from Azure OpenAI: {response.model_dump_json()}")
+        logger.info("LLM: ответ Azure получен")
         if not response.choices:
             logger.warning("Azure OpenAI response has no choices")
             return ""

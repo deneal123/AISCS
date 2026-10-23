@@ -7,7 +7,9 @@ import uuid
 from datetime import datetime
 from typing import Any, Literal
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
+
+from memos.embedders.space import SpaceVector, attach_space
 
 
 ALLOWED_ROLES = {"user", "assistant", "system"}
@@ -174,6 +176,27 @@ class TextualMemoryMetadata(BaseModel):
 
 class TreeNodeTextualMemoryMetadata(TextualMemoryMetadata):
     """Extended metadata for structured memory, layered retrieval, and lifecycle tracking."""
+
+    embedding_space: str | None = Field(default=None, pattern=r"^[0-9a-f]{32}$")
+
+    @model_validator(mode="before")
+    @classmethod
+    def preserve_embedding_space(cls, values):
+        if isinstance(values, dict):
+            values = attach_space(dict(values), values.get("embedding"))
+        return values
+
+    @model_validator(mode="after")
+    def restore_vector_identity(self):
+        if self.embedding and self.embedding_space:
+            super().__setattr__("embedding", SpaceVector(self.embedding, self.embedding_space))
+        return self
+
+    def __setattr__(self, name, value):
+        if name == "embedding":
+            space = getattr(value, "space", None)
+            super().__setattr__("embedding_space", space)
+        super().__setattr__(name, value)
 
     memory_type: Literal[
         "WorkingMemory",

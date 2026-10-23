@@ -1,128 +1,76 @@
-import asyncio
+"""Эмбеддинги через OpenAI-совместимый транспорт и общий шлюз GPTHub."""
+
+import math
 import os
-import time
 
 from openai import AzureOpenAI as AzureClient
 from openai import OpenAI as OpenAIClient
 
 from memos.configs.embedder import UniversalAPIEmbedderConfig
 from memos.embedders.base import BaseEmbedder
-from memos.log import get_logger
-from memos.utils import timed_with_status
-
-
-logger = get_logger(__name__)
+from memos.embedders.space import SpaceVector
+from memos.embedders.transport_privacy import private_transport
 
 
 def _sanitize_unicode(text: str) -> str:
-    """
-    Remove Unicode surrogates and other problematic characters.
-    Surrogates (U+D800-U+DFFF) cause UnicodeEncodeError with some APIs.
-    """
-    try:
-        # Encode with 'surrogatepass' then decode, replacing invalid chars
-        cleaned = text.encode("utf-8", errors="surrogatepass").decode("utf-8", errors="replace")
-        # Replace replacement char with empty string for cleaner output
-        return cleaned.replace("\ufffd", "")
-    except Exception:
-        # Fallback: remove all non-BMP characters
-        return "".join(c for c in text if ord(c) < 0x10000)
+    return (
+        text.encode("utf-8", errors="surrogatepass")
+        .decode("utf-8", errors="replace")
+        .replace("\ufffd", "")
+    )
 
 
 class UniversalAPIEmbedder(BaseEmbedder):
     def __init__(self, config: UniversalAPIEmbedderConfig):
         self.provider = config.provider
         self.config = config
-
+        timeout = float(os.getenv("MOS_EMBEDDER_TIMEOUT", "15"))
+        if not math.isfinite(timeout) or timeout <= 0:
+            raise ValueError("invalid_embedding_timeout")
+        options = {"api_key": config.api_key, "timeout": timeout, "max_retries": 0}
         if self.provider == "openai":
             self.client = OpenAIClient(
-                api_key=config.api_key,
+                **options,
                 base_url=config.base_url,
-                default_headers=config.headers_extra if config.headers_extra else None,
+                default_headers=config.headers_extra or None,
             )
         elif self.provider == "azure":
             self.client = AzureClient(
+                **options,
                 azure_endpoint=config.base_url,
                 api_version="2024-03-01-preview",
-                api_key=config.api_key,
             )
         else:
-            raise ValueError(f"Embeddings unsupported provider: {self.provider}")
-        self.use_backup_client = config.backup_client
-        if self.use_backup_client:
-            self.backup_client = OpenAIClient(
-                api_key=config.backup_api_key,
-                base_url=config.backup_base_url,
-                default_headers=config.backup_headers_extra
-                if config.backup_headers_extra
-                else None,
-            )
+            raise ValueError("embedding_provider_unsupported")
+        # Резервный клиент не может безопасно писать в тот же индекс. Смена модели
+        # выполняется общим шлюзом и сопровождается идентичностью пространства.
+        if config.backup_client:
+            raise ValueError("embedding_backup_requires_isolated_space")
 
-    @timed_with_status(
-        log_prefix="model_timed_embedding",
-        log_extra_args=lambda self, texts: {
-            "model_name_or_path": "text-embedding-3-large",
-            "text_len": len(texts),
-            "text_content": texts,
-        },
-    )
     def embed(self, texts: list[str]) -> list[list[float]]:
         if isinstance(texts, str):
             texts = [texts]
-        # Sanitize Unicode to prevent encoding errors with emoji/surrogates
-        texts = [_sanitize_unicode(t) for t in texts]
-        # Truncate texts if max_tokens is configured
-        texts = self._truncate_texts(texts)
-        logger.info(f"Embeddings request with input: {texts}")
-        if self.provider == "openai" or self.provider == "azure":
-            try:
-
-                async def _create_embeddings():
-                    return self.client.embeddings.create(
-                        model=getattr(self.config, "model_name_or_path", "text-embedding-3-large"),
-                        input=texts,
-                    )
-
-                init_time = time.time()
-                response = asyncio.run(
-                    asyncio.wait_for(
-                        _create_embeddings(), timeout=int(os.getenv("MOS_EMBEDDER_TIMEOUT", 5))
-                    )
+        texts = self._truncate_texts([_sanitize_unicode(text) for text in texts])
+        if not texts:
+            return []
+        try:
+            with private_transport():
+                response = self.client.embeddings.create(
+                    model=self.config.model_name_or_path,
+                    input=texts,
                 )
-                logger.info(f"Embeddings request succeeded with {time.time() - init_time} seconds")
-                return [r.embedding for r in response.data]
-            except Exception as e:
-                if self.use_backup_client:
-                    logger.warning(
-                        f"Embeddings request ended with {type(e).__name__} error: {e}, try backup client"
-                    )
-                    try:
-
-                        async def _create_embeddings_backup():
-                            return self.backup_client.embeddings.create(
-                                model=getattr(
-                                    self.config,
-                                    "backup_model_name_or_path",
-                                    "text-embedding-3-large",
-                                ),
-                                input=texts,
-                            )
-
-                        init_time = time.time()
-                        response = asyncio.run(
-                            asyncio.wait_for(
-                                _create_embeddings_backup(),
-                                timeout=int(os.getenv("MOS_EMBEDDER_TIMEOUT", 5)),
-                            )
-                        )
-                        logger.info(
-                            f"Backup embeddings request succeeded with {time.time() - init_time} seconds"
-                        )
-                        logger.info(f"Backup embeddings request response: {response}")
-                        return [r.embedding for r in response.data]
-                    except Exception as e:
-                        raise ValueError(f"Backup embeddings request ended with error: {e}") from e
-                else:
-                    raise ValueError(f"Embeddings request ended with error: {e}") from e
-        else:
-            raise ValueError(f"Embeddings unsupported provider: {self.provider}")
+        except Exception:
+            # Не включаем тело ответа или исходный текст в исключение/диагностику.
+            raise ValueError("embedding_request_failed") from None
+        if len(response.data) != len(texts):
+            raise ValueError("embedding_count_mismatch")
+        ordered = sorted(response.data, key=lambda item: item.index)
+        if [item.index for item in ordered] != list(range(len(texts))):
+            raise ValueError("embedding_index_mismatch")
+        vectors = [item.embedding for item in ordered]
+        space = getattr(response, "gpthub_embedding_space", None)
+        if self.config.model_name_or_path == "gpthub-memory-embedding":
+            if not isinstance(space, str):
+                raise ValueError("embedding_space_missing")
+            return [SpaceVector(vector, space) for vector in vectors]
+        return vectors

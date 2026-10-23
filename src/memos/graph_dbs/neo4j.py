@@ -36,6 +36,8 @@ def _prepare_node_metadata(metadata: dict[str, Any]) -> dict[str, Any]:
     # Normalize embedding type
     embedding = metadata.get("embedding")
     if embedding and isinstance(embedding, list):
+        if getattr(embedding, "space", None):
+            metadata["embedding_space"] = embedding.space
         metadata["embedding"] = [float(x) for x in embedding]
 
     # serialization

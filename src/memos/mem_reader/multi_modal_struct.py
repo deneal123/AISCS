@@ -96,6 +96,10 @@ class MultiModalStructMemReader(SimpleStructMemReader):
             for w, emb in zip(valid, embeddings, strict=True):
                 w.metadata.embedding = emb
         except Exception as e:
+            if self.embedder.config.model_name_or_path == "gpthub-memory-embedding":
+                # Неизвестный ACK не разрешает повторить платную операцию по одному
+                # элементу. Неподтверждённый индекс не выдаём за сохранённую память.
+                raise ValueError("memory_embedding_unconfirmed") from None
             logger.error(f"[MultiModalStruct] Error batch computing embeddings: {e}")
             logger.warning("[EMBED_FALLBACK] batch_size=%d", len(texts))
             for w in valid:

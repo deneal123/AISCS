@@ -8,6 +8,7 @@ using dependency injection for better modularity and testability.
 from pydantic import validate_call
 
 from memos.api.handlers.base_handler import BaseHandler, HandlerDependencies
+from memos.api.handlers.write_receipt import indexed_results
 from memos.api.product_models import APIADDRequest, APIFeedbackRequest, MemoryResponse
 from memos.memories.textual.item import (
     list_all_fields,
@@ -52,9 +53,7 @@ class AddHandler(BaseHandler):
         Returns:
             MemoryResponse with added memory information
         """
-        self.logger.info(
-            f"[DIAGNOSTIC] server_router -> add_handler.handle_add_memories called (Modified at 2025-11-29 18:46). Full request: {add_req.model_dump_json(indent=2)}"
-        )
+        self.logger.info("AddHandler: запрос принят")
 
         if add_req.info:
             exclude_fields = list_all_fields()
@@ -107,6 +106,11 @@ class AddHandler(BaseHandler):
                 self.logger.warning(f"[ADDFeedbackHandler] Running error: {e}")
 
         results = cube_view.add_memories(add_req)
+
+        if add_req.async_mode == "sync":
+            results = indexed_results(self.graph_db, results)
+            if results is None:
+                return MemoryResponse(code=503, message="memory_persistence_unconfirmed", data=[])
 
         self.logger.info(f"[AddHandler] Final add results count={len(results)}")
 

@@ -554,7 +554,6 @@ from memos.lang_utils import (  # noqa: E402
 )
 
 
-
 def format_memory_item(memory_data: Any) -> dict[str, Any]:
     memory = memory_data.model_dump()
     memory_id = memory["id"]
@@ -590,6 +589,17 @@ def find_best_unrelated_subgroup(sentences: list, similarity_matrix: list, bar: 
 
 
 def cosine_similarity_matrix(embeddings: list[list[float]]) -> list[list[float]]:
+    groups = {}
+    for index, vector in enumerate(embeddings):
+        key = (getattr(vector, "space", None), len(vector))
+        groups.setdefault(key, []).append(index)
+    if len(groups) != 1:
+        # Несовместимые модели не сравниваем даже при равной размерности.
+        result = np.zeros((len(embeddings), len(embeddings)))
+        for indices in groups.values():
+            block = cosine_similarity_matrix([list(embeddings[i]) for i in indices])
+            result[np.ix_(indices, indices)] = block
+        return result
     embeddings_array = np.asarray(embeddings)
     norms = np.linalg.norm(embeddings_array, axis=1, keepdims=True)
     # Handle zero vectors to avoid division by zero

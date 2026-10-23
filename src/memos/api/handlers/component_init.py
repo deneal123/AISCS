@@ -169,6 +169,13 @@ def init_server() -> dict[str, Any]:
 
     # Create component instances
     graph_db = GraphStoreFactory.from_config(graph_db_config)
+    from memos.configs.gateway import managed_memory_enabled
+    from memos.vec_dbs.spaces import SpaceAwareQdrantVecDB
+
+    if managed_memory_enabled() and not isinstance(
+        getattr(graph_db, "vec_db", None), SpaceAwareQdrantVecDB
+    ):
+        raise ValueError("managed_memory_requires_namespaced_qdrant")
     llm = LLMFactory.from_config(llm_config)
     chat_llms = (
         _init_chat_llms(chat_llm_config)

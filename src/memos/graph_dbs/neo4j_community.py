@@ -1173,8 +1173,15 @@ class Neo4jCommunityGraphDB(Neo4jGraphDB):
                 node["sources"][idx] = json.loads(node["sources"][idx])
         new_node = {"id": node.pop("id"), "memory": node.pop("memory", ""), "metadata": node}
         try:
-            vec_item = self.vec_db.get_by_id(new_node["id"])
-            if vec_item and vec_item.vector:
+            reader = getattr(self.vec_db, "get_for_space", None)
+            vec_item = (
+                reader(new_node["id"], new_node["metadata"].get("embedding_space"))
+                if callable(reader) else self.vec_db.get_by_id(new_node["id"])
+            )
+            if vec_item and vec_item.vector and (
+                getattr(vec_item.vector, "space", None)
+                == new_node["metadata"].get("embedding_space")
+            ):
                 new_node["metadata"]["embedding"] = vec_item.vector
         except Exception as e:
             logger.warning(f"Failed to fetch vector for node {new_node['id']}: {e}")
@@ -1217,14 +1224,18 @@ class Neo4jCommunityGraphDB(Neo4jGraphDB):
         if node_ids:
             try:
                 vec_items = self.vec_db.get_by_ids(node_ids)
-                vec_items_map = {v.id: v.vector for v in vec_items if v and v.vector}
+                vec_items_map = {
+                    (v.id, getattr(v.vector, "space", None)): v.vector
+                    for v in vec_items if v and v.vector
+                }
             except Exception as e:
                 logger.warning(f"Failed to batch fetch vectors for {len(node_ids)} nodes: {e}")
 
         # Merge embeddings into parsed nodes
         for parsed_node in parsed_nodes:
             node_id = parsed_node["id"]
-            parsed_node["metadata"]["embedding"] = vec_items_map.get(node_id)
+            space = parsed_node["metadata"].get("embedding_space")
+            parsed_node["metadata"]["embedding"] = vec_items_map.get((node_id, space))
 
         return parsed_nodes
 

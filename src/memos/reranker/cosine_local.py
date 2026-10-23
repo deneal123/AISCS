@@ -74,6 +74,11 @@ class CosineLocalReranker(BaseReranker):
         if not query_embedding:
             return [(item, 0.0) for item in graph_results[:top_k]]
 
+        space = getattr(query_embedding, "space", None)
+        if space:
+            graph_results = [item for item in graph_results
+                             if getattr(item.metadata, "embedding_space", None) == space]
+
         items_with_emb = [
             it
             for it in graph_results
@@ -98,5 +103,5 @@ class CosineLocalReranker(BaseReranker):
             chosen = {it.id for it, _ in top_items}
             remain = [(it, -1.0) for it in graph_results if it.id not in chosen]
             top_items.extend(remain[: top_k - len(top_items)])
-        logger.info(f"CosineLocalReranker rerank result: {top_items[:1]}")
+        logger.info("CosineLocalReranker: results=%s", len(top_items))
         return top_items

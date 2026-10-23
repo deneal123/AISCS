@@ -152,7 +152,10 @@ def wipe_all_memory():
     try:
         vec_db = getattr(graph_db, "vec_db", None)
         if vec_db is not None:
-            vec_db.delete_collection(vec_db.config.collection_name)
+            if hasattr(vec_db, "wipe_spaces"):
+                vec_db.wipe_spaces()
+            else:
+                vec_db.delete_collection(vec_db.config.collection_name)
             result["qdrant_dropped"] = True
     except Exception as exc:
         logger.warning(f"wipe: qdrant drop failed: {exc}")

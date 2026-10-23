@@ -77,7 +77,7 @@ class SearchHandler(BaseHandler):
         Returns:
             SearchResponse with formatted results
         """
-        self.logger.info(f"[SearchHandler] Search Req is: {search_req}")
+        self.logger.info("SearchHandler: запрос принят")
 
         # Use deepcopy to avoid modifying the original request object
         search_req_local = copy.deepcopy(search_req)
@@ -136,9 +136,7 @@ class SearchHandler(BaseHandler):
         if hooked_results is not None:
             results = hooked_results
 
-        self.logger.info(
-            f"[SearchHandler] Final search results: count={len(results)} results={results}"
-        )
+        self.logger.info("SearchHandler: поиск завершён, groups=%s", len(results))
 
         return SearchResponse(
             message="Search completed successfully",

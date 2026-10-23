@@ -596,7 +596,7 @@ class APIConfig:
                 import json as _json
                 import urllib.request
 
-                with urllib.request.urlopen(  # noqa: S310 — внутренний backend
+                with urllib.request.urlopen(
                     f"{base}/api/analytics/memos-embedder", timeout=4
                 ) as resp:
                     data = _json.load(resp)
@@ -610,6 +610,18 @@ class APIConfig:
     def get_embedder_config() -> dict[str, Any]:
         """Get embedder configuration."""
         embedder_backend = os.getenv("MOS_EMBEDDER_BACKEND", "ollama")
+        from memos.configs.gateway import managed_memory_enabled
+
+        if managed_memory_enabled():
+            return {
+                "backend": "universal_api",
+                "config": {
+                    "provider": "openai",
+                    "api_key": os.getenv("MOS_EMBEDDER_API_KEY", "sk-xxxx"),
+                    "base_url": os.getenv("MOS_EMBEDDER_API_BASE"),
+                    "model_name_or_path": "gpthub-memory-embedding",
+                },
+            }
         override_model = (APIConfig._backend_embedder_override().get("model") or "").strip()
 
         if embedder_backend == "universal_api":

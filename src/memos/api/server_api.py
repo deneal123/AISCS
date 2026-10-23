@@ -8,8 +8,11 @@ from starlette.staticfiles import StaticFiles
 
 from memos.api.exceptions import APIExceptionHandler
 from memos.api.middleware.request_context import RequestContextMiddleware
+from memos.api.routers.server_router import components
 from memos.api.routers.server_router import router as server_router
+from memos.configs.gateway import managed_memory_enabled
 from memos.plugins.manager import plugin_manager
+from memos.vec_dbs.spaces import SpaceAwareQdrantVecDB
 
 
 load_dotenv()
@@ -45,6 +48,13 @@ def health_check():
         "status": "healthy",
         "service": "memos",
         "version": app.version,
+        "memory_runtime": {
+            "contract_version": 1,
+            "managed": managed_memory_enabled(),
+            "namespace_isolation": isinstance(
+                getattr(components.get("graph_db"), "vec_db", None), SpaceAwareQdrantVecDB
+            ),
+        },
     }
 
 

@@ -12,7 +12,7 @@ class TestUniversalAPIEmbedder(unittest.TestCase):
         """Test embedding a single text with OpenAI provider."""
         # Mock the embeddings.create return value
         mock_response = MagicMock()
-        mock_response.data = [MagicMock(embedding=[0.1, 0.2, 0.3, 0.4])]
+        mock_response.data = [MagicMock(index=0, embedding=[0.1, 0.2, 0.3, 0.4])]
         mock_openai_client.return_value.embeddings.create.return_value = mock_response
 
         config = UniversalAPIEmbedderConfig(
@@ -28,7 +28,11 @@ class TestUniversalAPIEmbedder(unittest.TestCase):
 
         # Assert OpenAIClient was created with proper args
         mock_openai_client.assert_called_once_with(
-            api_key="fake-api-key", base_url="https://api.openai.com/v1", default_headers=None
+            api_key="fake-api-key",
+            base_url="https://api.openai.com/v1",
+            default_headers=None,
+            timeout=15.0,
+            max_retries=0,
         )
 
         # Assert embeddings.create called with correct params
@@ -45,9 +49,9 @@ class TestUniversalAPIEmbedder(unittest.TestCase):
         # Mock response for multiple texts
         mock_response = MagicMock()
         mock_response.data = [
-            MagicMock(embedding=[0.1, 0.2]),
-            MagicMock(embedding=[0.3, 0.4]),
-            MagicMock(embedding=[0.5, 0.6]),
+            MagicMock(index=0, embedding=[0.1, 0.2]),
+            MagicMock(index=1, embedding=[0.3, 0.4]),
+            MagicMock(index=2, embedding=[0.5, 0.6]),
         ]
         mock_openai_client.return_value.embeddings.create.return_value = mock_response
 

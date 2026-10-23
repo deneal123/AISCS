@@ -62,9 +62,7 @@ class SingleCubeView(MemCubeView):
         but scoped to a single cube_id.
         """
         sync_mode = add_req.async_mode or self._get_sync_mode()
-        self.logger.info(
-            f"[DIAGNOSTIC] single_cube.add_memories called for cube_id: {self.cube_id}. sync_mode: {sync_mode}. Request: {add_req.model_dump_json(indent=2)}"
-        )
+        self.logger.info("SingleCubeView: запись, mode=%s", sync_mode)
         user_context = UserContext(
             user_id=add_req.user_id,
             mem_cube_id=self.cube_id,
@@ -104,7 +102,7 @@ class SingleCubeView(MemCubeView):
             mem_cube_id=self.cube_id,
             session_id=search_req.session_id or "default_session",
         )
-        self.logger.info(f"Search Req is: {search_req}")
+        self.logger.info("SingleCubeView: поиск")
 
         memories_result: MOSSearchResult = {
             "text_mem": [],
@@ -129,7 +127,6 @@ class SingleCubeView(MemCubeView):
             self.cube_id,
         )
 
-        self.logger.info(f"Search memories result: {memories_result}")
         self.logger.info(f"Search {len(memories_result)} memories.")
         return memories_result
 
@@ -516,6 +513,8 @@ class SingleCubeView(MemCubeView):
             mem_ids: List of memory IDs
             sync_mode: Synchronization mode
         """
+        if (add_req.info or {}).get("kind") == "summary" and add_req.mode == "fast":
+            return  # Резюме уже подготовлено: не запускаем ещё одну платную экстракцию.
         target_session_id = add_req.session_id or "default_session"
 
         if sync_mode == "async":

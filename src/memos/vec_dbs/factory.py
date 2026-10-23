@@ -1,5 +1,6 @@
 from typing import Any, ClassVar
 
+from memos.configs.gateway import managed_memory_enabled
 from memos.configs.vec_db import VectorDBConfigFactory
 from memos.vec_dbs.base import BaseVecDB
 from memos.vec_dbs.milvus import MilvusVecDB
@@ -20,4 +21,8 @@ class VecDBFactory(BaseVecDB):
         if backend not in cls.backend_to_class:
             raise ValueError(f"Invalid backend: {backend}")
         vec_db_class = cls.backend_to_class[backend]
+        if backend == "qdrant" and managed_memory_enabled():
+            from memos.vec_dbs.spaces import SpaceAwareQdrantVecDB
+
+            vec_db_class = SpaceAwareQdrantVecDB
         return vec_db_class(config_factory.config)
