@@ -108,11 +108,22 @@ def test_stream_preserves_exact_usage_and_one_terminal(gateway):
 
 
 def test_gateway_compiles_tools_without_executing_or_retrying(gateway):
-    gateway[3]["choices"][0]["message"]["content"] = json.dumps(
-        {
-            "tool_name": "read_file",
-            "arguments": {"path": "a.py"},
-        }
+    gateway[3]["choices"][0].update(
+        finish_reason="tool_calls",
+        message={
+            "role": "assistant",
+            "content": None,
+            "tool_calls": [
+                {
+                    "id": "native_fixed",
+                    "type": "function",
+                    "function": {
+                        "name": "read_file",
+                        "arguments": json.dumps({"path": "a.py"}),
+                    },
+                }
+            ],
+        },
     )
     tools = [
         {
@@ -135,8 +146,9 @@ def test_gateway_compiles_tools_without_executing_or_retrying(gateway):
     assert result["usage"] == gateway[3]["usage"]
     gateway[1].assert_called_once()
     sent = gateway[1].call_args.args[1]
-    assert "tools" not in sent and "tool_choice" not in sent
-    assert sent["response_format"]["type"] == "json_schema"
+    assert sent["tools"] == tools and sent["tool_choice"] == "required"
+    assert sent["parallel_tool_calls"] is False
+    assert "response_format" not in sent
 
 
 def test_upstream_failure_has_no_private_message_and_no_retry(gateway):

@@ -1,52 +1,58 @@
 """Ответ OpenAI и buffered SSE; usage относится к единственному фактическому вызову."""
 
-import hashlib
 import json
 from copy import deepcopy
 
 from jsonschema import Draft202012Validator
 
+from .compiler import response_schema
 from .contracts import CompiledRequest, ProtocolFailure
 
 
 def normalize_response(raw: dict, request: CompiledRequest) -> dict:
     result = deepcopy(raw)
-    if not request.structured_tools:
-        return result
     try:
+        if len(result["choices"]) != 1:
+            raise ValueError
         choice = result["choices"][0]
-        if choice.get("finish_reason") == "length":
+        message = choice["message"]
+        calls = message.get("tool_calls") or []
+        content = message.get("content")
+        if message.get("role") != "assistant" or (
+            content is not None and not isinstance(content, str)
+        ):
             raise ValueError
-        value = json.loads(choice["message"]["content"])
-        name = value["tool_name"]
-        if name is None and not request.allow_final:
-            raise ValueError
-        if name is None:
-            response = value["response"]
-            if not request.structured_response and not isinstance(response, str):
+        if calls:
+            if (
+                not isinstance(calls, list)
+                or len(calls) != 1
+                or choice.get("finish_reason") != "tool_calls"
+            ):
                 raise ValueError
-            choice["message"] = {
-                "role": "assistant",
-                "content": (
-                    json.dumps(response, ensure_ascii=False)
-                    if request.structured_response
-                    else response
-                ),
-            }
-            choice["finish_reason"] = "stop"
-        else:
-            arguments = value["arguments"]
-            if name not in request.functions or not isinstance(arguments, dict):
+            call = calls[0]
+            function = call["function"]
+            identity = call["id"]
+            name = function["name"]
+            if (
+                call.get("type") != "function"
+                or not isinstance(identity, str)
+                or not 1 <= len(identity) <= 128
+            ):
                 raise ValueError
+            if name not in request.functions or not isinstance(function["arguments"], str):
+                raise ValueError
+            arguments = json.loads(function["arguments"])
+            if not isinstance(arguments, dict):
+                raise ValueError
+            json.dumps(arguments, allow_nan=False)
             if not Draft202012Validator(request.functions[name]["parameters"]).is_valid(arguments):
                 raise ValueError
-            identity = hashlib.sha256((str(result["id"]) + name).encode()).hexdigest()[:24]
             choice["message"] = {
                 "role": "assistant",
-                "content": None,
+                "content": content,
                 "tool_calls": [
                     {
-                        "id": "call_" + identity,
+                        "id": identity,
                         "type": "function",
                         "function": {
                             "name": name,
@@ -55,7 +61,14 @@ def normalize_response(raw: dict, request: CompiledRequest) -> dict:
                     }
                 ],
             }
-            choice["finish_reason"] = "tool_calls"
+        elif not request.allow_final or choice.get("finish_reason") not in {"stop", "length"}:
+            raise ValueError
+        elif request.structured_response and choice.get("finish_reason") != "length":
+            schema, _ = response_schema(request.body)
+            value = json.loads(content)
+            json.dumps(value, allow_nan=False)
+            if not Draft202012Validator(schema).is_valid(value):
+                raise ValueError
     except (ValueError, KeyError, TypeError, IndexError):
         # Usage сохраняется. Нет внутреннего второго inference или фиктивного инструмента.
         if not result.get("choices"):

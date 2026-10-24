@@ -47,26 +47,47 @@ def completion(value, **changes):
                 "finish_reason": "stop",
                 "message": {
                     "role": "assistant",
-                    "content": json.dumps(value),
+                    "content": value.get("response")
+                    if isinstance(value, dict) and value.get("tool_name") is None
+                    else json.dumps(value),
                 },
             }
         ],
         "usage": {"prompt_tokens": 12, "completion_tokens": 9, "total_tokens": 21},
     }
+    if isinstance(value, dict) and value.get("tool_name") is not None:
+        result["choices"][0].update(
+            finish_reason="tool_calls",
+            message={
+                "role": "assistant",
+                "content": None,
+                "tool_calls": [
+                    {
+                        "id": "call_fixed",
+                        "type": "function",
+                        "function": {
+                            "name": value["tool_name"],
+                            "arguments": json.dumps(value["arguments"]),
+                        },
+                    }
+                ],
+            },
+        )
     result.update(changes)
     return result
 
 
-def test_compile_required_preserves_original_and_removes_native_parser(body):
+def test_compile_required_preserves_original_and_uses_native_tools(body):
     before = deepcopy(body)
     compiled = compile_request(body)
     assert body == before and compiled.structured_tools and not compiled.allow_final
-    assert "tools" not in compiled.body and "tool_choice" not in compiled.body
+    assert compiled.body["tools"] == body["tools"]
+    assert compiled.body["tool_choice"] == "required"
+    assert compiled.body["parallel_tool_calls"] is False
     assert compiled.body["stream"] is False
     assert compiled.body["max_tokens"] == 128
-    schema = compiled.body["response_format"]["json_schema"]["schema"]
-    assert len(schema["oneOf"]) == 1
-    assert schema["oneOf"][0]["properties"]["tool_name"] == {"const": "read_number"}
+    assert "response_format" not in compiled.body
+    assert compiled.body["messages"] == body["messages"]
 
 
 @pytest.mark.parametrize("reference", ["$dynamicRef", "$recursiveRef"])
@@ -93,10 +114,12 @@ def test_round_trip_has_stable_tool_identity_and_same_usage(body):
         ]
     )
     resumed = compile_request(body)
-    assert all(
-        not item.get("tool_calls") and item["role"] != "tool" for item in resumed.body["messages"]
-    )
-    assert "opaque-731" in resumed.body["messages"][-1]["content"]
+    assert resumed.body["messages"][-2]["tool_calls"][0]["id"] == call["id"]
+    assert resumed.body["messages"][-1] == {
+        "role": "tool",
+        "tool_call_id": call["id"],
+        "content": "opaque-731",
+    }
 
 
 @pytest.mark.parametrize(

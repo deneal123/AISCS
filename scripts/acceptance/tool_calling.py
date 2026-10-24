@@ -6,7 +6,7 @@ import sys
 import urllib.error
 import urllib.request
 
-MODEL = "lfm2.5-1.2b-instruct"
+MODEL = "qwen2.5-1.5b-instruct"
 PROGRESS = {"verified_rounds": 0, "calls": 0, "finish_reason": None}
 
 
