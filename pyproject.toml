@@ -1,6 +1,6 @@
 [project]
 name = "gpthub-local-llm"
-version = "0.1.0"
+version = "0.1.1"
 description = "Локальная CPU-модель GPTHub на llama.cpp"
 requires-python = ">=3.12"
 # Версия совпадает с python3-jsonschema из закреплённого runtime-образа.
