@@ -29,9 +29,6 @@ def serve(name):
         raise ValueError("comparison_model_unverified")
     command = list(settings.command)
     command[command.index("--model") + 1] = str(path)
-    if name == "granite1b":
-        # Контроль гипотезы: штатный RAM-кеш 8 ГиБ не соответствует лимиту 1,5 ГиБ.
-        command.extend(["--cache-ram", "0"])
     if name in {"qwen3", "qwen35", "qwen35-2b"}:
         # Штатный non-thinking режим Qwen; иначе короткий ответ тратится на размышление.
         command[command.index("--top-k") + 1] = "20"
@@ -49,7 +46,11 @@ def serve(name):
     settings = replace(settings, model_path=path, command=tuple(command))
     # Alias сохранён только ради неизменного контракта agents при A/B.
     # Фактические веса и ревизия всегда указаны в отдельном отчёте сравнения.
-    server = Gateway(settings.address, settings.api_key, upstream=LlamaTransport(settings.api_key))
+    server = Gateway(
+        settings.address,
+        settings.api_key,
+        upstream=LlamaTransport(settings.api_key, request_timeout=settings.request_timeout_sec),
+    )
     print(json.dumps({"candidate": name, "revision": CANDIDATES[name].revision}), flush=True)
     return run(server, settings.command, settings.child_environment)
 

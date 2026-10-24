@@ -69,9 +69,9 @@ def normalize_response(raw: dict, request: CompiledRequest) -> dict:
             json.dumps(value, allow_nan=False)
             if not Draft202012Validator(schema).is_valid(value):
                 raise ValueError
-    except (ValueError, KeyError, TypeError, IndexError):
+    except (ValueError, KeyError, TypeError, IndexError, AttributeError):
         # Usage сохраняется. Нет внутреннего второго inference или фиктивного инструмента.
-        if not result.get("choices"):
+        if not all(name in result for name in ("id", "model", "created", "usage")):
             raise ProtocolFailure("upstream_protocol_invalid", 502) from None
         result["choices"] = [
             {

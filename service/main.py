@@ -20,7 +20,11 @@ def main() -> int:
         print(code if code.startswith("local_llm_") else "local_llm_setting_invalid", flush=True)
         return 1
     try:
-        server = Gateway(runtime.address, runtime.api_key, upstream=LlamaTransport(runtime.api_key))
+        server = Gateway(
+            runtime.address,
+            runtime.api_key,
+            upstream=LlamaTransport(runtime.api_key, request_timeout=runtime.request_timeout_sec),
+        )
     except OSError:
         print("local_llm_bind_unavailable", flush=True)
         return 1

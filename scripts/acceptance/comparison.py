@@ -53,6 +53,7 @@ def exercise_history(request, *, rounds=16, on_step=None):
         "max_tokens": 256,
     }
     verified = calls = tokens = 0
+    observation = {}
     failure = ""
     try:
         for step in range(1, rounds + 1):
@@ -63,6 +64,7 @@ def exercise_history(request, *, rounds=16, on_step=None):
             reply = result["choices"][0]
             message = reply["message"]
             invoked = message.get("tool_calls") or []
+            observation = history_observation(result, step, "tool")
             if reply.get("finish_reason") != "tool_calls" or len(invoked) != 1:
                 raise ValueError("history_tool_missing")
             call = invoked[0]
@@ -85,6 +87,7 @@ def exercise_history(request, *, rounds=16, on_step=None):
             tokens += result.get("usage", {}).get("total_tokens", 0)
             reply = result["choices"][0]
             message = reply["message"]
+            observation = history_observation(result, step, "final")
             if (
                 reply.get("finish_reason") != "stop"
                 or message.get("tool_calls")
@@ -109,6 +112,19 @@ def exercise_history(request, *, rounds=16, on_step=None):
         "inferences": calls,
         "tokens": tokens,
         "failure": failure,
+        "failed_reply": observation if failure else None,
+    }
+
+
+def history_observation(result, step, phase):
+    """Только закрытые метаданные отказа, без текста, аргументов и кода инструмента."""
+    choice = result["choices"][0]
+    reason = choice.get("finish_reason")
+    return {
+        "step": step,
+        "phase": phase,
+        "finish_reason": reason if reason in {"stop", "length", "tool_calls"} else "other",
+        "protocol_error": bool(result.get("local_protocol_error")),
     }
 
 

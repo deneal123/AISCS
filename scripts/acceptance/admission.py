@@ -37,6 +37,48 @@ CASES = (
     },
 )
 
+EXTRA_CASES = (
+    {
+        "name": "different_script",
+        "goal": (
+            "Создай subtract.py с функцией subtract(a, b), возвращающей a - b. "
+            "Прочитай и проверь файл."
+        ),
+        "kind": "change",
+        "criterion_kind": "file",
+        "target": "subtract.py",
+        "clarify": False,
+    },
+    {
+        "name": "two_files",
+        "goal": (
+            "Создай emit_a.py и emit_b.py. Каждый скрипт выводит своё имя и перевод строки. "
+            "Сохрани, прочитай и запусти оба. Не устанавливай зависимости."
+        ),
+        "kind": "change",
+        "clarify": False,
+        "expected_targets": (("file", "emit_a.py"), ("file", "emit_b.py")),
+    },
+)
+
+
+def case_set(suite):
+    if suite == "basic":
+        return CASES
+    if suite == "extended":
+        return (*CASES, *EXTRA_CASES)
+    raise ValueError("admission_suite_invalid")
+
+
+def matches(proposal, case):
+    targets = case.get("expected_targets") or ((case["criterion_kind"], case["target"]),)
+    return (
+        proposal.kind == case["kind"]
+        and proposal.needs_clarification == case["clarify"]
+        and len(proposal.criteria) == len(targets)
+        and {(item.kind, item.target) for item in proposal.criteria} == set(targets)
+    )
+
 
 def concise_messages(admission):
     return [
@@ -63,7 +105,7 @@ def concise_messages(admission):
     ]
 
 
-def guided_messages(admission):
+def guided_messages(admission, *, workflow=False):
     messages = concise_messages(admission)
     messages[0]["content"] += (
         "\nОбразцы ответа функции, только примеры формы, не текущая задача:\n"
@@ -77,6 +119,18 @@ def guided_messages(admission):
         '{"kind":"change","criteria":[{"criterion_id":"config","kind":"file",'
         '"target":"settings.py"}],"needs_clarification":true,'
         '"question":"Какое значение таймаута установить?"}\n'
+    )
+    if workflow:
+        messages[0]["content"] += (
+            "Запрос: Создай worker.py, печатающий готово. "
+            "Сохрани, прочитай и запусти его для проверки.\n"
+            '{"kind":"change","criteria":[{"criterion_id":"worker","kind":"file",'
+            '"target":"worker.py"}],"needs_clarification":false,"question":""}\n'
+            "Чтение и запуск для проверки правки входят в серверную проверку файла, "
+            "а не добавляют отдельные результаты. "
+            "Каждый запрошенный файл остаётся отдельным file-критерием. "
+        )
+    messages[0]["content"] += (
         "Пути и значения в образцах не относятся к текущему запросу. "
         "Текущий запрос — последнее сообщение пользователя."
     )
@@ -84,9 +138,14 @@ def guided_messages(admission):
 
 
 def selected_builders(profile, baseline):
-    builders = {"baseline": baseline, "concise": concise_messages, "guided": guided_messages}
+    builders = {
+        "baseline": baseline,
+        "concise": concise_messages,
+        "guided": guided_messages,
+        "workflow_guided": lambda admission: guided_messages(admission, workflow=True),
+    }
     if profile == "all":
-        return tuple(builders.items())
+        return tuple((name, builders[name]) for name in ("baseline", "concise", "guided"))
     if profile == "both":
         return tuple((name, builders[name]) for name in ("baseline", "concise"))
     if profile not in builders:
@@ -94,7 +153,7 @@ def selected_builders(profile, baseline):
     return ((profile, builders[profile]),)
 
 
-async def _exercise(key, selected_profile):
+async def _exercise(key, selected_profile, suite):
     os.environ["AGENTS__LOCAL_API_KEY"] = key
     os.environ["AGENTS__LOCAL_BASE_URL"] = "http://local-llm:8080/v1"
     from service.application.harness.proposal import (
@@ -113,7 +172,7 @@ async def _exercise(key, selected_profile):
 
     rows = []
     for profile, message_builder in selected_builders(selected_profile, contract_messages):
-        for case in CASES:
+        for case in case_set(suite):
             admission = SimpleNamespace(
                 surface="ide", actions=("read", "write", "exec"), goal=case["goal"]
             )
@@ -148,12 +207,7 @@ async def _exercise(key, selected_profile):
                         valid = True
                         row.update(
                             proposal=proposal.model_dump(mode="json"),
-                            matched=(
-                                proposal.kind == case["kind"]
-                                and proposal.needs_clarification == case["clarify"]
-                                and {(item.kind, item.target) for item in proposal.criteria}
-                                == {(case["criterion_kind"], case["target"])}
-                            ),
+                            matched=matches(proposal, case),
                         )
                     except ValueError as error:
                         row.update(matched=False, failure="proposal_protocol_invalid")
@@ -169,13 +223,14 @@ async def _exercise(key, selected_profile):
         "case_count": len(final),
         "synthetic_read_only": True,
         "adopted": False,
+        "suite": suite,
         "results": rows,
     }
 
 
-async def exercise(key, selected_profile="both"):
+async def exercise(key, selected_profile="both", suite="basic"):
     async with asyncio.timeout(300):
-        return await _exercise(key, selected_profile)
+        return await _exercise(key, selected_profile, suite)
 
 
 if __name__ == "__main__":
@@ -183,7 +238,13 @@ if __name__ == "__main__":
         request = json.load(sys.stdin)
         print(
             json.dumps(
-                asyncio.run(exercise(request["key"], request.get("admission_profile", "both"))),
+                asyncio.run(
+                    exercise(
+                        request["key"],
+                        request.get("admission_profile", "both"),
+                        request.get("admission_suite", "basic"),
+                    )
+                ),
                 ensure_ascii=False,
             )
         )

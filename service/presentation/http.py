@@ -2,6 +2,7 @@
 
 import hmac
 import json
+import logging
 import threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
@@ -10,6 +11,7 @@ from ..domain.protocol.contracts import ProtocolFailure
 from ..domain.protocol.response import stream_events
 
 MAX_BYTES = 1048576
+logger = logging.getLogger(__name__)
 
 
 class Gateway(ThreadingHTTPServer):
@@ -95,7 +97,8 @@ class Handler(BaseHTTPRequestHandler):
             self.send_json(200, self.server.upstream(self.path))
         except ProtocolFailure as error:
             self.fail(error)
-        except Exception:
+        except Exception as error:
+            logger.warning("local_llm_gateway_failure kind=%s", type(error).__name__)
             self.fail(ProtocolFailure("request_unavailable", 503))
 
     def do_POST(self):
@@ -132,5 +135,6 @@ class Handler(BaseHTTPRequestHandler):
                     self.wfile.flush()
         except ProtocolFailure as error:
             self.fail(error)
-        except Exception:
+        except Exception as error:
+            logger.warning("local_llm_gateway_failure kind=%s", type(error).__name__)
             self.fail(ProtocolFailure("request_unavailable", 503))

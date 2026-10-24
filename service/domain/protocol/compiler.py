@@ -1,5 +1,6 @@
 """Проверенный native tools API Qwen/llama.cpp, без исполнения или ретраев."""
 
+import json
 import re
 from copy import deepcopy
 
@@ -112,8 +113,21 @@ def compile_request(body: dict) -> CompiledRequest:
     eligible = [forced] if forced else list(functions)
     if functions:
         raw["tools"] = [{"type": "function", "function": functions[name]} for name in eligible]
-        raw["tool_choice"] = body.get("tool_choice", "auto")
+        # llama.cpp b11846 принимает только строковый выбор. Именованный OpenAI
+        # вызов задаём как required с единственной разрешённой функцией.
+        raw["tool_choice"] = choice
         raw["parallel_tool_calls"] = False
+        if choice == "required":
+            # Нативный префикс Qwen: required не допускает свободного текста,
+            # который маленькая модель иначе повторяет до лимита вместо вызова.
+            prefix = "<tool_call>\n"
+            if forced:
+                # Имя уже задано вызывающей стороной. Аргументы всегда генерирует
+                # модель, а готовый native call и его ID возвращает llama.cpp.
+                prefix += '{"name": ' + json.dumps(forced) + ', "arguments": '
+            raw["messages"].append({"role": "assistant", "content": prefix})
+            raw["continue_final_message"] = "content"
+            raw["add_generation_prompt"] = False
     return CompiledRequest(
         raw,
         {name: functions[name] for name in eligible} if choice != "none" else {},

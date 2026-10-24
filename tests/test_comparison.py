@@ -155,6 +155,12 @@ def test_long_history_verifies_new_step_and_stops_after_wrong_final():
     result = exercise_history(bad_final)
     assert not result["passed"] and result["verified_rounds"] == 0
     assert result["inferences"] == 2 and result["failure"] == "history_final_invalid"
+    assert result["failed_reply"] == {
+        "step": 1,
+        "phase": "final",
+        "finish_reason": "stop",
+        "protocol_error": False,
+    }
 
 
 def test_sampling_profiles_do_not_change_source_request():

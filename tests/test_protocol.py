@@ -87,7 +87,10 @@ def test_compile_required_preserves_original_and_uses_native_tools(body):
     assert compiled.body["stream"] is False
     assert compiled.body["max_tokens"] == 128
     assert "response_format" not in compiled.body
-    assert compiled.body["messages"] == body["messages"]
+    assert compiled.body["messages"][:-1] == body["messages"]
+    assert compiled.body["messages"][-1] == {"role": "assistant", "content": "<tool_call>\n"}
+    assert compiled.body["continue_final_message"] == "content"
+    assert compiled.body["add_generation_prompt"] is False
 
 
 @pytest.mark.parametrize("reference", ["$dynamicRef", "$recursiveRef"])
@@ -114,8 +117,8 @@ def test_round_trip_has_stable_tool_identity_and_same_usage(body):
         ]
     )
     resumed = compile_request(body)
-    assert resumed.body["messages"][-2]["tool_calls"][0]["id"] == call["id"]
-    assert resumed.body["messages"][-1] == {
+    assert resumed.body["messages"][-3]["tool_calls"][0]["id"] == call["id"]
+    assert resumed.body["messages"][-2] == {
         "role": "tool",
         "tool_call_id": call["id"],
         "content": "opaque-731",
@@ -150,9 +153,58 @@ def test_length_is_not_accepted_even_if_json_looks_complete(body):
     assert result["usage"] == raw["usage"]
 
 
+@pytest.mark.parametrize("fault", ["empty", "message", "function", "parallel", "arguments"])
+def test_malformed_native_reply_preserves_receipt_and_usage(body, fault):
+    raw = completion({"tool_name": "read_number", "arguments": {"step": 1}})
+    message = raw["choices"][0]["message"]
+    if fault == "empty":
+        raw["choices"] = []
+    elif fault == "message":
+        raw["choices"][0]["message"] = []
+    elif fault == "function":
+        message["tool_calls"][0]["function"] = None
+    elif fault == "parallel":
+        message["tool_calls"].append(deepcopy(message["tool_calls"][0]))
+    else:
+        message["tool_calls"][0]["function"]["arguments"] = '{"step":NaN}'
+    result = normalize_response(raw, compile_request(body))
+    assert result["id"] == raw["id"] and result["usage"] == raw["usage"]
+    assert result["local_protocol_error"] == "tool_response_invalid"
+    assert result["choices"][0]["finish_reason"] == "length"
+    assert not result["choices"][0]["message"].get("tool_calls")
+
+
+def test_none_and_named_choice_cannot_execute_another_function(body):
+    raw = completion({"tool_name": "read_number", "arguments": {"step": 1}})
+    body["tool_choice"] = "none"
+    result = normalize_response(raw, compile_request(body))
+    assert result["local_protocol_error"] == "tool_response_invalid"
+    body["tools"].append(
+        {
+            "type": "function",
+            "function": {
+                "name": "other",
+                "parameters": {"type": "object"},
+            },
+        }
+    )
+    body["tool_choice"] = {"type": "function", "function": {"name": "other"}}
+    compiled = compile_request(body)
+    assert compiled.body["tool_choice"] == "required"
+    assert [tool["function"]["name"] for tool in compiled.body["tools"]] == ["other"]
+    assert compiled.body["messages"][-1]["content"] == (
+        '<tool_call>\n{"name": "other", "arguments": '
+    )
+    result = normalize_response(raw, compiled)
+    assert result["local_protocol_error"] == "tool_response_invalid"
+    assert result["usage"] == raw["usage"]
+
+
 def test_auto_can_return_actual_text_and_stream_usage_once(body):
     body.update(tool_choice="auto", stream=True, stream_options={"include_usage": True})
     compiled = compile_request(body)
+    assert compiled.body["messages"] == body["messages"]
+    assert "continue_final_message" not in compiled.body
     result = normalize_response(completion({"tool_name": None, "response": "Ответ"}), compiled)
     chunks = list(stream_events(result, include_usage=True))
     assert chunks[-1] == b"data: [DONE]\n\n"
