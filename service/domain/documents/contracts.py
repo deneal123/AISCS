@@ -7,6 +7,8 @@ import time
 from dataclasses import dataclass, field
 from typing import Literal
 
+from .document_review import operation_build_id
+
 DOCUMENT_KINDS = frozenset({"article", "presentation", "legal", "report", "generic"})
 ENGINES = frozenset({"pdflatex", "xelatex", "lualatex"})
 BUILD_MODES = frozenset({"draft", "submission", "camera_ready"})
@@ -35,6 +37,14 @@ def _validate_manifest_types(raw: dict[str, object]) -> None:
         raise ValueError("unsupported build manifest")
     if "final" in raw and type(raw["final"]) is not bool:
         raise ValueError("invalid build manifest")
+    if "operation_id" in raw:
+        operation = raw["operation_id"]
+        if not isinstance(operation, str):
+            raise ValueError("invalid build manifest")
+        if operation and operation_build_id(
+            str(raw.get("workspace_id") or ""), operation
+        ) != raw.get("build_id"):
+            raise ValueError("invalid build operation")
     if "mode" in raw and (not isinstance(raw["mode"], str) or raw["mode"] not in BUILD_MODES):
         raise ValueError("invalid build manifest")
     for key in (
@@ -220,6 +230,7 @@ class DocumentBuild:
     visual_audit_claimed_at: float | None = field(default=None, repr=False)
     page_blocks: dict[int, tuple[str, ...]] = field(default_factory=dict, repr=False)
     manifest_uncertain: bool = field(default=False, repr=False)
+    operation_id: str = field(default="", repr=False)
 
     @property
     def terminal(self) -> bool:
@@ -235,6 +246,7 @@ class DocumentBuild:
         return {
             "schema_version": 1,
             "build_id": self.build_id,
+            "operation_id": self.operation_id,
             "workspace_id": self.workspace_id,
             "project_path": self.project_path,
             "profile_id": self.profile_id,
@@ -302,6 +314,7 @@ class DocumentBuild:
         )
         build = cls(
             build_id=str(raw.get("build_id") or ""),
+            operation_id=str(raw.get("operation_id") or ""),
             workspace_id=str(raw.get("workspace_id") or ""),
             project_path=str(raw.get("project_path") or ""),
             profile_id=str(raw.get("profile_id") or ""),

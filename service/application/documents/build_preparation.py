@@ -7,6 +7,7 @@ import time
 from typing import Any
 
 from domain.documents import DocumentBuild
+from domain.documents.document_review import operation_build_id
 from domain.files import safe_path
 
 from .projects import DocumentProjectError
@@ -20,6 +21,7 @@ async def prepare_build(
     project_path: str,
     expected_revision: str,
     final: bool,
+    operation_id: str | None = None,
 ) -> tuple[Any, Any, Any]:
     build = None
     create_permitted = False
@@ -45,8 +47,13 @@ async def prepare_build(
 
             async def before_create(job_ref: str) -> None:
                 nonlocal build, create_permitted
+                if operation_id and job_ref != operation_build_id(
+                    str(item.workspace_id), operation_id
+                ):
+                    raise DocumentProjectError("runtime_unavailable")
                 build = DocumentBuild(
                     build_id=job_ref,
+                    operation_id=operation_id or "",
                     workspace_id=item.workspace_id,
                     project_path=target,
                     profile_id=profile.profile_id,
@@ -75,6 +82,11 @@ async def prepare_build(
                 project_path=target,
                 before_create=before_create,
                 on_allocated=on_allocated,
+                **(
+                    {"job_ref": operation_build_id(str(item.workspace_id), operation_id)}
+                    if operation_id
+                    else {}
+                ),
             )
             if build is None or not create_permitted:
                 # Production compilers must honor the journaling contract.

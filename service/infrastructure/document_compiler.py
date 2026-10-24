@@ -9,6 +9,7 @@ from __future__ import annotations
 import asyncio
 import json
 import os
+import re
 import secrets
 import time
 from collections.abc import AsyncIterator, Awaitable, Callable
@@ -143,9 +144,12 @@ class DockerDocumentCompiler:
         project_path: str,
         before_create: Callable[[str], Awaitable[None]] | None = None,
         on_allocated: Callable[[PreparedCompilerJob], Awaitable[None]] | None = None,
+        job_ref: str | None = None,
     ) -> PreparedCompilerJob:
+        if job_ref is not None and re.fullmatch(r"[a-f0-9]{24}", job_ref) is None:
+            raise CompilerFailure("invalid_project")
         await self._validate_source(workspace_ref, project_path)
-        job_ref = secrets.token_hex(12)
+        job_ref = job_ref or secrets.token_hex(12)
         container_name = f"gpthub-doc-{job_ref}"
         args = (
             "docker",

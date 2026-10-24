@@ -207,11 +207,21 @@ def git_init_command(root: str, author: str) -> str:
 def git_commit_command(root: str, message: str) -> str:
     """Снимок текущего состояния. Пусто изменений — не коммитим и говорим об этом."""
     text = reject_control_bytes(message, "сообщение коммита")[:200] or "изменения агента"
+    private = (".gpthub-document", ".gpthub-import-staging")
+    selected = " ".join(_q(f":(glob)**/{name}/**") for name in private)
+    excluded = " ".join(_q(f":(exclude,glob)**/{name}/**") for name in private)
     return (
         "command -v git >/dev/null 2>&1 || { echo __NO_GIT__; exit 0; }; "
         f"cd {_q(root)} || exit 0; "
         "[ -d .git ] || { echo __NO_REPO__; exit 0; }; "
-        "git add -A >/dev/null 2>&1; "
+        # Не доверяем .gitignore. Новые private-изменения в чужом индексе дают
+        # закрытый отказ. Исторические данные не стираем и не переписываем:
+        # неизменённые старые blobs могут остаться, но новые версии не добавляются.
+        f"private_index=$(git diff --cached --name-only HEAD -- {selected} 2>/dev/null) || "
+        "{ echo __FAILED__; exit 0; }; "
+        '[ -z "$private_index" ] || { echo __FAILED__; exit 0; }; '
+        f"git add -A -- . {excluded} >/dev/null 2>&1 || "
+        "{ echo __FAILED__; exit 0; }; "
         "if git diff --cached --quiet 2>/dev/null; then "
         "printf '__NO_CHANGES__ '; git rev-parse HEAD 2>/dev/null || echo __FAILED__; exit 0; fi; "
         f"if git commit -q -m {_q(text)} >/dev/null 2>&1; then "

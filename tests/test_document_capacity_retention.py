@@ -29,6 +29,7 @@ def test_pruning_does_not_erase_cleanup_intent_or_final_delivery_sources(now):
     builds = tuple(
         SimpleNamespace(
             build_id=str(index),
+            operation_id="",
             state="failed",
             compiler_ref="a" * 64 if index == 0 else "",
             final=index == 1,
@@ -166,6 +167,7 @@ async def _operation(_item):
 def _retained(index, *, final=True, state="ready", workspace="owned"):
     return SimpleNamespace(
         build_id=str(index),
+        operation_id="",
         workspace_id=workspace,
         state=state,
         final=final,

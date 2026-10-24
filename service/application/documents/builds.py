@@ -17,6 +17,7 @@ from infrastructure.document_compiler import CompilerFailure, DockerDocumentComp
 
 from .admission import BuildAdmission
 from .artifact_integrity import verify_staged_artifacts
+from .build_operations import claim_operation, existing_operation
 from .build_preparation import prepare_build
 from .build_store import ACTIVE_STATES, MAX_COMPLETED_PER_WORKSPACE, BuildManifestStore
 from .projects import DocumentProjectError, DocumentProjectService
@@ -165,14 +166,52 @@ class DocumentBuildManager:
         project_path: str,
         expected_revision: str,
         final: bool,
+        operation_id: str | None = None,
     ) -> DocumentBuild:
         await self.recover(registry, item)
+        if operation_id is not None:
+            try:
+                existing = existing_operation(
+                    self,
+                    item,
+                    operation_id=operation_id,
+                    project_path=project_path,
+                    expected_revision=expected_revision,
+                    final=final,
+                )
+            except ValueError:
+                raise DocumentProjectError("invalid_project") from None
+            if existing is not None:
+                return existing
         if self._pending_recovery or self._reconciliation_unavailable:
             raise DocumentProjectError("runtime_unavailable")
         async with self._admission.reserve():
             workspace_id = str(item.workspace_id)
             lock = self._workspace_starts.setdefault(workspace_id, asyncio.Lock())
             async with lock:
+                if operation_id is not None:
+                    existing = existing_operation(
+                        self,
+                        item,
+                        operation_id=operation_id,
+                        project_path=project_path,
+                        expected_revision=expected_revision,
+                        final=final,
+                    )
+                    if existing is not None:
+                        return existing
+                    claimed = await claim_operation(
+                        registry,
+                        item,
+                        operation_id=operation_id,
+                        project_path=project_path,
+                        expected_revision=expected_revision,
+                        final=final,
+                    )
+                    if not claimed:
+                        # There may have been a crash before the first manifest.
+                        # Absence of that manifest never authorizes another create.
+                        raise DocumentProjectError("runtime_unavailable")
                 await self._reserve_manifest(registry, item)
                 return await self._start_reserved(
                     registry,
@@ -180,6 +219,7 @@ class DocumentBuildManager:
                     project_path=project_path,
                     expected_revision=expected_revision,
                     final=final,
+                    operation_id=operation_id,
                 )
 
     async def _reserve_manifest(self, registry: Any, item: Any) -> None:
@@ -223,6 +263,7 @@ class DocumentBuildManager:
         project_path: str,
         expected_revision: str,
         final: bool,
+        operation_id: str | None = None,
     ) -> DocumentBuild:
         build, prepared, profile = await prepare_build(
             self,
@@ -231,6 +272,7 @@ class DocumentBuildManager:
             project_path=project_path,
             expected_revision=expected_revision,
             final=final,
+            operation_id=operation_id,
         )
         try:
             await self._persist(registry, item, build)

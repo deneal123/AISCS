@@ -91,6 +91,10 @@ class DocumentBuildRequest(DocumentPathRequest):
     expected_revision: str = Field(min_length=1, max_length=128)
     coordination_fence: int | None = Field(default=None, ge=1)
     final: bool = False
+    operation_id: str | None = Field(
+        default=None,
+        pattern=r"^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$",
+    )
 
 
 class DocumentSourceRequest(DocumentPathRequest):

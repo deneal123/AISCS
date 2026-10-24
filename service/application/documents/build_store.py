@@ -160,12 +160,17 @@ class BuildManifestStore:
             item.build_id
             for item in completed
             if not item.final
+            and not item.operation_id
             and not item.compiler_ref
             and current - (item.completed_at or item.created_at) > PREVIEW_RETENTION_SEC
         ]
         remaining = [item for item in completed if item.build_id not in set(expired_preview)]
         overflow = max(0, len(remaining) + reserved - MAX_COMPLETED_PER_WORKSPACE)
-        removable = [item for item in remaining if not item.final and not item.compiler_ref]
+        removable = [
+            item
+            for item in remaining
+            if not item.final and not item.compiler_ref and not item.operation_id
+        ]
         overflow_ids = (item.build_id for item in removable[:overflow])
         return tuple(dict.fromkeys([*expired_preview, *overflow_ids]))
 

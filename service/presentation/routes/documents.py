@@ -449,6 +449,7 @@ def create_documents_router(deps: DocumentRouteDependencies) -> APIRouter:
                 project_path=payload.path,
                 expected_revision=payload.expected_revision,
                 final=payload.final,
+                **({"operation_id": payload.operation_id} if payload.operation_id else {}),
             )
             return build.public_dict()
         except DocumentProjectError as exc:
