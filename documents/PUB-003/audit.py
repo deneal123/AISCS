@@ -7,6 +7,7 @@
 import hashlib
 import json
 import re
+import unicodedata
 from pathlib import Path
 from zipfile import ZipFile
 
@@ -86,6 +87,33 @@ if not review.get("post_revision_recheck") or any(
     for q in review.get("post_revision_recheck", [])
 ):
     errors.append("Post-revision retrieval check incomplete")
+
+editorial = evidence.get("editorial_review", {})
+if editorial.get("manuscript_sha256") != hashlib.sha256(
+    (ROOT / "manuscript.md").read_bytes()
+).hexdigest():
+    errors.append("Editorial evidence is stale for the current manuscript")
+if editorial.get("generation") != evidence["generation"]:
+    errors.append("Editorial generation mismatch")
+for query in editorial.get("queries", []) + editorial.get("source_filtered_queries", []):
+    if query.get("mode") != "hybrid" or query.get("errors"):
+        errors.append("Editorial retrieval used fallback or failed")
+for context in editorial.get("primary_contexts", []):
+    if (
+        context.get("source_id") not in reads
+        or context.get("generation") != evidence["generation"]
+        or not context.get("primary_url")
+        or not context.get("locators")
+        or not context.get("excerpt")
+        or context.get("include_unreviewed") is not False
+        or not re.fullmatch(r"[a-f0-9]{64}", context.get("document_sha256", ""))
+    ):
+        errors.append("Incomplete editorial primary context")
+for claim in editorial.get("claim_checks", []):
+    if not set(claim["source_ids"]) <= reads.keys() or not claim.get("decision"):
+        errors.append("Invalid editorial decision")
+if not editorial.get("claim_checks") or not editorial.get("primary_contexts"):
+    errors.append("Missing editorial decisions or primary contexts")
 
 search_log = json.loads((ROOT / "literature-search.json").read_text("utf-8"))
 screening = search_log["screening"]
@@ -174,6 +202,39 @@ with ZipFile(docx_path) as archive:
     if re.search(r"\b(?:REF|PAGEREF|NOTEREF)\b", xml):
         errors.append("Forbidden Word cross-reference field")
 all_text = "\n".join(p.text for p in doc.paragraphs)
+bibliography = {}
+in_bibliography = False
+for paragraph in doc.paragraphs:
+    if paragraph.text == "Список литературы":
+        in_bibliography = True
+        continue
+    if in_bibliography and paragraph.text == "Extended abstract":
+        break
+    match = re.match(r"^(\d+)\. ", paragraph.text) if in_bibliography else None
+    if match:
+        bibliography[int(match[1])] = paragraph.text
+if set(bibliography) != set(range(1, len(evidence["sources"]) + 1)):
+    errors.append("Incomplete rendered Word bibliography")
+for number, source in enumerate(evidence["sources"], 1):
+    description = bibliography.get(number, "")
+    identifier = source.get("doi") or source["primary_url"]
+    if identifier not in description:
+        errors.append("Bibliographic DOI or versioned URL lost: " + source["source_id"])
+    if re.search(r"[А-Яа-яЁё]", source["title"]):
+        for field, label in (("volume", "Т."), ("issue", "№"), ("page", "С.")):
+            if source.get(field):
+                value = str(source[field]).replace("-", "–")
+                if label + " " + value not in description:
+                    errors.append("Wrong Russian bibliography label: " + field)
+if any(s["source_id"] == "S741" for s in evidence["sources"]) and "Dhiman N." not in all_text:
+    errors.append("Personal author surname/initial formatting lost")
+in_extended = False
+for paragraph in doc.paragraphs:
+    in_extended = in_extended or paragraph.text == "Extended abstract"
+    if in_extended or paragraph.text.startswith(("Table ", "Figure ")):
+        for run in paragraph.runs:
+            if run.text and run._r.xpath("./w:rPr/w:lang/@w:val") != ["en-GB"]:
+                errors.append("Missing English proofing language")
 if len(meta.get("equations", {})) != text.count("@@equation "):
     errors.append("Equation count mismatch")
 if "@@equation" in all_text:
@@ -205,11 +266,23 @@ if "Yu S.-c." not in all_text and "Yu S.-C." not in all_text:
     errors.append("Hyphenated or collective authors lost")
 if re.search(r"\.\.|,\s*,|https\\://", all_text):
     errors.append("Broken bibliography punctuation or URL")
-for image_path in re.findall(r"!\[[^]]*\]\(([^)]+)\)", text):
+for number, image_match in enumerate(re.finditer(r"!\[[^]]*\]\([^)]+\)", text), 1):
+    preceding = re.split(r"\n\s*\n", text[:image_match.start()].rstrip())[-1]
+    if not re.search(rf"\bрис(?:унок|унке|унки|унках|\.)\s*{number}\b", preceding, re.I):
+        errors.append("Figure not introduced in the immediately preceding paragraph")
+for image_index, image_path in enumerate(re.findall(r"!\[[^]]*\]\(([^)]+)\)", text)):
     with Image.open(ROOT / image_path) as image:
         if min(image.info.get("dpi", (0, 0))) < 299:
             errors.append("Figure resolution")
+        shape = doc.inline_shapes[image_index]
+        density = min(image.width / shape.width.inches, image.height / shape.height.inches)
+        if density < profile["requirements"]["figure_dpi_minimum"]:
+            errors.append("Figure effective density below 300 dpi at Word placement")
 roundtrip = json.loads((ROOT / "build/doc-roundtrip.json").read_text("utf-8"))
+for name in ("article.docx", "article.doc", "article.pdf", "article-doc.pdf"):
+    current_sha256 = hashlib.sha256((ROOT / "build" / name).read_bytes()).hexdigest()
+    if roundtrip.get("sha256", {}).get(name) != current_sha256:
+        errors.append("Stale Word export or roundtrip report: " + name)
 if (
     not all(roundtrip[key] for key in ("same_text", "same_tables", "same_pictures"))
     or roundtrip["doc_pages"] != roundtrip["docx_pages"]
@@ -230,14 +303,33 @@ with olefile.OleFileIO(ROOT / "build/article.doc") as legacy:
         errors.append("Legacy reviewer author metadata")
 pdf_reports = {}
 pdf_texts = {}
+
+
+def caption_text(value):
+    """Compare content without line breaks, punctuation or math-index markup."""
+    return re.sub(r"[\W_]+", "", unicodedata.normalize("NFKC", value)).casefold()
+
+
+figure_caption_ru = re.search(r"^Рисунок 1\..+$", text, re.M)[0]
 for relative in ("build/article.pdf", "build/article-doc.pdf", "build/latex/article-latex.pdf"):
     pdf = pymupdf.open(ROOT / relative)
-    fonts, outside = set(), []
+    fonts, outside, unembedded = set(), [], set()
     for i, page in enumerate(pdf):
         if not page.get_text().strip():
             errors.append(relative + ": blank page")
+        for font in page.get_fonts():
+            if not font[0] or not pdf.extract_font(font[0])[3]:
+                unembedded.add(font[3])
         # All printed text must stay within the prescribed horizontal margins.
         left, right = 30 * 72 / 25.4, page.rect.width - 10 * 72 / 25.4
+        if relative.endswith("article-latex.pdf"):
+            paths = [drawing["rect"] for drawing in page.get_drawings()]
+            full_rules = [
+                box for box in paths if box.width > 0.95 * (right - left) and box.height < 1
+            ]
+            table_sides = [box for box in paths if box.width < 1 and box.height > 2]
+            if full_rules and not table_sides:
+                errors.append(relative + f": orphan table border on page {i + 1}")
         for block in page.get_text("rawdict")["blocks"]:
             for line in block.get("lines", []):
                 for span in line["spans"]:
@@ -254,16 +346,32 @@ for relative in ("build/article.pdf", "build/article-doc.pdf", "build/latex/arti
                             outside.append({"page": i + 1, "text": char["c"]})
     if outside:
         errors.append(relative + ": text outside margins")
+    if unembedded:
+        errors.append(relative + ": fonts not embedded")
     if len(pdf) > 20:
         errors.append(relative + ": page limit")
+    caption_pages = [
+        i for i, page in enumerate(pdf)
+        if caption_text(figure_caption_ru) in caption_text(page.get_text())
+        and caption_text(meta["figure_caption_en"]) in caption_text(page.get_text())
+    ]
+    if len(caption_pages) != 1:
+        errors.append(relative + ": figure captions split across pages or incomplete")
+    elif not relative.endswith("article-latex.pdf") and not pdf[caption_pages[0]].get_image_info():
+        errors.append(relative + ": figure separated from bilingual captions")
     if any(
         "TimesNewRoman" not in f
-        and not (relative.endswith("article-latex.pdf") and f.startswith("TeXGyreTermesMath"))
+        and not (relative.endswith("article-latex.pdf") and "TeXGyreTermesMath" in f)
         for f in fonts
     ) or pdf.metadata.get("author"):
         errors.append(relative + ": font or author metadata")
     pdf_texts[relative] = re.sub(r"\s+", "", "".join(p.get_text() for p in pdf))
-    pdf_reports[relative] = {"pages": len(pdf), "fonts": sorted(fonts), "outside": outside}
+    if re.search(r"[α-ω]_[FH]", pdf_texts[relative]):
+        errors.append(relative + ": Greek parameter index rendered as literal markup")
+    pdf_reports[relative] = {
+        "pages": len(pdf), "fonts": sorted(fonts), "outside": outside,
+        "unembedded_fonts": sorted(unembedded),
+    }
 if pdf_texts["build/article.pdf"] != pdf_texts["build/article-doc.pdf"]:
     errors.append("DOC PDF text differs from DOCX PDF")
 log = (ROOT / "build/latex/article-latex.log").read_text("utf-8", errors="replace")
@@ -290,6 +398,10 @@ paths = [
         "audit.py",
         "main.tex",
         "figures/transfer-scheme.png",
+        "figures/transfer-scheme.pdf",
+        "figures/transfer-scheme.svg",
+        "figures/transfer-scheme.tex",
+        "figures/transfer-diagram.tex",
         "build/article.docx",
         "build/article.doc",
         "build/article.pdf",

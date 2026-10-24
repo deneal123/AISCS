@@ -1,6 +1,6 @@
 # /// script
 # requires-python = ">=3.12"
-# dependencies = ["python-docx>=1.2,<2", "Pillow>=11,<13"]
+# dependencies = ["python-docx>=1.2,<2", "Pillow>=11,<13", "PyMuPDF>=1.26,<2"]
 # ///
 """Build an anonymous Word manuscript and XeLaTeX source from Markdown."""
 
@@ -8,14 +8,15 @@ import hashlib
 import html
 import json
 import re
+import subprocess
 from pathlib import Path
 
+import pymupdf
 from docx import Document
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 from docx.shared import Mm, Pt, RGBColor
-from PIL import Image, ImageDraw, ImageFont
 
 ROOT = Path(__file__).resolve().parent
 OUT = ROOT / "build"
@@ -46,18 +47,23 @@ def reference(item):
             authors.append((author.get("family", "") + " " + initials).strip())
     assert authors and all(authors), "Empty bibliography author"
     title = clean(item["title"]).rstrip(".")
+    russian = bool(re.search(r"[А-Яа-яЁё]", title))
     if len(authors) > 4:
         first = title + " / " + ", ".join(authors).rstrip(".") + "."
     else:
         first = ", ".join(authors).rstrip(".") + ". " + title + "."
     parts = [first, clean(item["journal"]).rstrip(".") + ".", str(item["year"]) + "."]
-    for key, label in (("volume", "Vol."), ("issue", "No.")):
+    labels = (
+        (("volume", "Т."), ("issue", "№"))
+        if russian else (("volume", "Vol."), ("issue", "No."))
+    )
+    for key, label in labels:
         if item.get(key):
             parts.append(label + " " + str(item[key]) + ".")
     if item.get("article_number"):
-        parts.append("Art. " + str(item["article_number"]) + ".")
+        parts.append(("Статья " if russian else "Art. ") + str(item["article_number"]) + ".")
     elif item.get("page"):
-        parts.append("P. " + str(item["page"]).replace("-", "–") + ".")
+        parts.append(("С. " if russian else "P. ") + str(item["page"]).replace("-", "–") + ".")
     if item.get("publication_type") == "posted-content":
         version = item.get("bibliographic_version_note") or item.get("reviewed_version", "")
         parts.append("Preprint. " + version.rstrip(".") + ".")
@@ -79,21 +85,37 @@ assert all(s.get("metadata_verified") and s.get("authors_full") for s in EVIDENC
 if META.get("figure_caption_en"):
     figure = ROOT / META["figure_path"]
     figure.parent.mkdir(exist_ok=True)
-    canvas = Image.new("RGB", (1800, 340), "white")
-    draw = ImageDraw.Draw(canvas)
-    font = ImageFont.truetype("C:/Windows/Fonts/times.ttf", 66)
-    for i in range(5):
-        left = 30 + i * 355
-        draw.rectangle((left, 70, left + 270, 260), outline="black", width=4)
-        draw.text((left + 135, 165), str(i + 1), fill="black", font=font, anchor="mm")
-        if i < 4:
-            draw.line((left + 285, 165, left + 335, 165), fill="black", width=4)
-            draw.polygon([(left + 335, 165), (left + 315, 152), (left + 315, 178)], fill="black")
-    canvas.save(figure, dpi=(300, 300))
+    # Editable drawing and vector PDF; Word uses a 400 dpi PNG.
+    command = ["xelatex", "-interaction=nonstopmode", "-halt-on-error",
+               "-output-directory=" + str(OUT), "figures/transfer-scheme.tex"]
+    result = subprocess.run(command, cwd=ROOT, capture_output=True, timeout=120)
+    (OUT / "figure-console.log").write_bytes(result.stdout + result.stderr)
+    if result.returncode:
+        raise RuntimeError("Scientific figure compilation failed; see build/figure-console.log")
+    pdf_path = figure.with_suffix(".pdf")
+    pdf_path.write_bytes((OUT / "transfer-scheme.pdf").read_bytes())
+    with pymupdf.open(pdf_path) as drawing:
+        assert len(drawing) == 1
+        drawing[0].get_pixmap(dpi=400, alpha=False).save(figure)
+        figure.with_suffix(".svg").write_text(
+            drawing[0].get_svg_image(), encoding="utf-8", newline="\n",
+        )
 
 doc = Document()
 doc.core_properties.author = doc.core_properties.last_modified_by = ""
 doc.core_properties.title = META["title_ru"]
+word_language = "ru-RU"
+
+
+def set_word_language(element, value):
+    properties = element.get_or_add_rPr()
+    language = properties.find(qn("w:lang"))
+    if language is None:
+        language = OxmlElement("w:lang")
+        properties.append(language)
+    language.set(qn("w:val"), value)
+
+
 section = doc.sections[0]
 section.page_width, section.page_height = Mm(210), Mm(297)
 section.top_margin, section.bottom_margin = Mm(20), Mm(25)
@@ -115,6 +137,7 @@ for name in ("Normal", "Title", "Heading 1", "Heading 2"):
         fonts.attrib.pop(qn("w:" + attr), None)
     for attr in ("ascii", "hAnsi", "eastAsia", "cs"):
         fonts.set(qn("w:" + attr), "Times New Roman")
+    set_word_language(style.element, "ru-RU")
     for border in style.element.xpath("./w:pPr/w:pBdr"):
         border.getparent().remove(border)
 footer = section.footer.paragraphs[0]
@@ -128,13 +151,14 @@ def plain(value):
     return value.replace("**", "")
 
 
-def paragraph(value, heading=None, caption=False):
+def paragraph(value, heading=None, caption=False, language=None):
     p = doc.add_paragraph(style=heading)
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER if heading == "Title" else WD_ALIGN_PARAGRAPH.JUSTIFY
     if heading or caption or value.startswith("**"):
         p.paragraph_format.first_line_indent = Mm(0)
     if caption:
         p.paragraph_format.keep_with_next = True
+        p.paragraph_format.keep_together = True
     if value.startswith(("**Ключевые слова:**", "**Keywords:**")):
         p.paragraph_format.keep_together = True
     for part in re.split(r"(\*\*.*?\*\*)", value):
@@ -149,6 +173,7 @@ def paragraph(value, heading=None, caption=False):
             run.font.color.rgb = RGBColor(0, 0, 0)
             run.font.subscript = token.startswith("_")
             run.bold = bool(heading or part.startswith("**"))
+            set_word_language(run._r, language or word_language)
     return p
 
 
@@ -164,14 +189,15 @@ def latex(value):
         "}": r"\}",
     }
     symbols = {"ω": r"\omega", "α": r"\alpha", "φ": r"\varphi"}
-    parts = re.split(r"([A-Za-zÂ]_[FHijkα-ω]+)", plain(value))
-    return "".join(
+    parts = re.split(r"([A-Za-zÂα-ω]_[FHijkα-ω]+)", plain(value))
+    rendered = "".join(
         r"\ensuremath{" + (r"\widehat{A}" if p[0] == "Â" else p[0])
         + "_{" + symbols.get(p[2:], p[2:]) + "}}"
-        if re.fullmatch(r"[A-Za-zÂ]_[FHijkα-ω]+", p)
+        if re.fullmatch(r"[A-Za-zÂα-ω]_[FHijkα-ω]+", p)
         else "".join(replacements.get(c, c) for c in p)
         for p in parts
     )
+    return re.sub(r"\s+(\[[\d, –-]+\])", lambda m: r"~\mbox{" + m[1] + "}", rendered)
 
 
 def latex_reference(entry):
@@ -200,6 +226,7 @@ tex = [
     r"\setmathfont{TeX Gyre Termes Math}",
     r"\urlstyle{same}",
     r"\doublespacing",
+    r"\clubpenalty=10000\widowpenalty=10000",
     r"\setlength{\emergencystretch}{3em}",
     r"\setlength{\parindent}{1.25cm}",
     r"\begin{document}",
@@ -217,19 +244,22 @@ while index < len(lines):
         paragraph("Список литературы", "Heading 1")
         tex.append(r"\section*{Список литературы}")
         for number, entry in enumerate(references, 1):
-            p = paragraph(f"{number}. {entry}")
-            p.paragraph_format.first_line_indent = Mm(0)
             language = (
                 "russian"
                 if re.search(r"[А-Яа-яЁё]", EVIDENCE["sources"][number - 1]["title"])
                 else "english"
             )
+            p = paragraph(f"{number}. {entry}", language=(
+                "ru-RU" if language == "russian" else "en-US"
+            ))
+            p.paragraph_format.first_line_indent = Mm(0)
             tex.append(
                 r"\noindent\foreignlanguage{" + language + "}{"
                 + latex_reference(f"{number}. {entry}")
                 + r"}\par"
             )
         tex.append(r"\selectlanguage{english}")
+        word_language = "en-GB"
     if line.startswith("# "):
         paragraph(line[2:], "Title")
         tex.append(
@@ -266,7 +296,9 @@ while index < len(lines):
         p.add_run().add_picture(str(ROOT / path), width=Mm(160))
         p.paragraph_format.keep_with_next = True
         tex.append(
-            r"\begin{center}\includegraphics[width=0.96\linewidth]{" + path + r"}\end{center}"
+            r"\noindent\begin{minipage}{\linewidth}\begin{center}"
+            r"\includegraphics[width=0.96\linewidth]{"
+            + Path(path).with_suffix(".pdf").as_posix() + r"}\end{center}"
         )
         figures += 1
     elif line.startswith("|"):
@@ -318,13 +350,14 @@ while index < len(lines):
         header = " & ".join(r"\textbf{" + latex(cell) + "}" for cell in rows[0]) + r" \\ \hline"
         tex.extend(
             [header, r"\endfirsthead", r"\hline", header,
-             r"\endhead", r"\endfoot", r"\endlastfoot"]
+             r"\endhead", r"\endfoot", r"\hline", r"\endlastfoot"]
         )
         for row_index, cells in enumerate(rows[1:], 1):
             rendered = [
                 r"\textbf{" + latex(cell) + "}" if row_index == 0 else latex(cell) for cell in cells
             ]
-            tex.append(" & ".join(rendered) + r" \\ \hline")
+            ending = r" \\ \hline" if row_index < len(rows) - 1 else r" \\"
+            tex.append(" & ".join(rendered) + ending)
         tex.append(r"\end{longtable}\par\smallskip")
         doc.add_paragraph()
         tables += 1
@@ -344,8 +377,11 @@ while index < len(lines):
                 if match[1] == "Таблица"
                 else META["figure_caption_en"]
             )
-            paragraph(caption, caption=match[1] == "Таблица")
+            translated_caption = paragraph(caption, caption=True, language="en-GB")
+            translated_caption.paragraph_format.keep_with_next = match[1] == "Таблица"
             tex.append(r"\foreignlanguage{english}{" + latex(caption) + r"}\par")
+            if match[1] == "Рисунок":
+                tex.append(r"\end{minipage}\par\addvspace{0.5\baselineskip}")
     index += 1
 tex.append(r"\end{document}")
 doc.save(OUT / "article.docx")

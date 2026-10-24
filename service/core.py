@@ -61,6 +61,61 @@ def tree_sha256(root: Path) -> str:
     return hashlib.sha256("\n".join(entries).encode()).hexdigest().upper()
 
 
+def source_inventory(root: Path) -> list[dict[str, str]]:
+    """Inventory source bytes; Python bytecode caches are derived files."""
+    entries = []
+    for path in sorted(item for item in root.rglob("*") if item.is_file()):
+        relative = path.relative_to(root)
+        if "__pycache__" in relative.parts and path.suffix == ".pyc":
+            continue
+        if not path.resolve().is_relative_to(root.resolve()):
+            raise SidecarError("immutable source file resolves outside its directory")
+        entries.append({"path": relative.as_posix(), "sha256": sha256(path)})
+    return entries
+
+
+def inventory_errors(root: Path, manifest: dict[str, Any]) -> list[str]:
+    """Check complete membership and bytes, without changing a locked source."""
+    if manifest.get("format") != "aspa-immutable-source-inventory-v1":
+        return ["unsupported immutable source inventory format"]
+    files = manifest.get("files")
+    if not isinstance(files, list) or not files:
+        return ["empty immutable source inventory"]
+    expected = {}
+    for entry in files:
+        if not isinstance(entry, dict):
+            return ["invalid immutable inventory entry"]
+        name, digest = entry.get("path"), entry.get("sha256")
+        if (
+            not isinstance(name, str)
+            or not name
+            or "\\" in name
+            or ":" in name
+            or name.startswith("/")
+            or any(part in {"", ".", ".."} for part in name.split("/"))
+            or not isinstance(digest, str)
+            or not re.fullmatch(r"[A-F0-9]{64}", digest)
+            or name in expected
+        ):
+            return ["invalid or duplicate immutable inventory entry"]
+        expected[name] = digest
+    try:
+        actual = {entry["path"]: entry["sha256"] for entry in source_inventory(root)}
+    except SidecarError as exc:
+        return [str(exc)]
+    errors = [f"immutable file missing: {name}" for name in sorted(expected.keys() - actual)]
+    errors.extend(
+        f"unexpected immutable source file: {name}"
+        for name in sorted(actual.keys() - expected.keys())
+    )
+    errors.extend(
+        f"immutable hash mismatch: {name}"
+        for name in sorted(expected.keys() & actual.keys())
+        if expected[name] != actual[name]
+    )
+    return errors
+
+
 def atomic_write_text(path: Path, text: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     handle = tempfile.NamedTemporaryFile(
@@ -289,7 +344,26 @@ class DocumentSidecar:
                 elif sha256(path) != item.get("sha256"):
                     errors.append(f"{current_id}: immutable hash mismatch: {item.get('path')}")
             expected_tree = document.get("immutable_tree_sha256")
-            if expected_tree and source_dir.is_dir() and tree_sha256(source_dir) != expected_tree:
+            inventory = document.get("immutable_source_inventory")
+            if inventory:
+                if not isinstance(inventory, dict) or not isinstance(inventory.get("path"), str):
+                    errors.append(f"{current_id}: invalid immutable inventory reference")
+                else:
+                    path = (self.root / inventory["path"]).resolve()
+                    allowed = (self.root / "data" / "immutable-manifests").resolve()
+                    if not path.is_relative_to(allowed) or not path.is_file():
+                        errors.append(f"{current_id}: immutable inventory path is invalid")
+                    elif sha256(path) != inventory.get("sha256"):
+                        errors.append(f"{current_id}: immutable inventory manifest hash mismatch")
+                    else:
+                        try:
+                            errors.extend(
+                                f"{current_id}: {issue}"
+                                for issue in inventory_errors(source_dir, load_json(path))
+                            )
+                        except SidecarError as exc:
+                            errors.append(f"{current_id}: {exc}")
+            elif expected_tree and source_dir.is_dir() and tree_sha256(source_dir) != expected_tree:
                 errors.append(f"{current_id}: immutable source tree hash mismatch")
 
         selected = self.get_document(document_id) if document_id else None

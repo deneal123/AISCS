@@ -2,7 +2,7 @@ $ErrorActionPreference = "Stop"
 $publicationRoot = $PSScriptRoot
 Push-Location $publicationRoot
 try {
-    & uv run --script build.py
+    & uv run --quiet --script build.py
     if ($LASTEXITCODE -ne 0) { throw "Publication build failed." }
 }
 finally { Pop-Location }

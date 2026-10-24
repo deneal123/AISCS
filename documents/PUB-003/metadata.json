@@ -19,7 +19,7 @@
     "3": "Four links of the evidence and evaluation scheme.",
     "4": "Control conditions for a future comparison."
   },
-  "figure_caption_en": "Figure 1. Proposed evaluation scheme: 1, fly dynamics and source adapter; 2, temporal module pretraining; 3, target adapter and human recruitment; 4, recording operator; 5, ECAP-like signal and growth curve. The arrow from 2 to 3 transfers initial parameters, not anatomy.",
+  "figure_caption_en": "Figure 1. Proposed connection between pretraining and the human model. The dashed arrow transfers only initial parameters ω₀, without the fly graph or states. B_α describes excitation and propagation under the prescribed stimulus u_H; H_φ converts computed currents r_H to voltage. A(I) is amplitude extracted from the signal. Graph and curves are schematic; no transfer benefit is established.",
   "keywords_count": 8,
   "figure_path": "figures/transfer-scheme.png",
   "table_column_weights": {
@@ -46,12 +46,12 @@
   },
   "equations": {
     "source": {
-      "word": "x_F(t+1) = F_θF(x_F(t), u_F(t); G_F);  z_F(t) = E_ω(P_F(x_F(≤t), u_F(≤t)))",
-      "tex": "x^F_{t+1}=F_{\\theta_F}(x^F_t,u^F_t;G_F),\\quad z^F_t=E_\\omega(P_F(x^F_{\\leq t},u^F_{\\leq t}))"
+      "word": "x_F(t+1) = F(x_F(t), u_F(t); G_F, θ_F)\no_F(t) = Q_F(x_F(≤t))\nô_F(t+h) = D_F(E_ω(P_F(o_F(≤t), u_F(≤t)))),  h > 0",
+      "tex": "\\begin{aligned}x^F_{t+1}&=F(x^F_t,u^F_t;G_F,\\theta_F),\\\\o^F_t&=Q_F(x^F_{\\leq t}),\\\\\\widehat o^F_{t+h}&=D_F\\!\\left(E_\\omega(P_F(o^F_{\\leq t},u^F_{\\leq t}))\\right),\\quad h>0\\end{aligned}"
     },
     "target": {
-      "word": "r_H(t) = B_α(E_ω(P_H(u_H(≤t))));  y_H(t) = H_φ(r_H)(t)",
-      "tex": "r^H_t=B_\\alpha(E_\\omega(P_H(u^H_{\\leq t}))),\\quad y^H(t)=H_\\varphi(r^H)(t)"
+      "word": "r_H(t) = B_α(u_H(≤t), E_ω(P_H(u_H(≤t), c_H)); c_H)\nŷ_H(t) = H_φ(r_H)(t; c_H)",
+      "tex": "\\begin{aligned}r^H_t&=B_\\alpha\\!\\left(u^H_{\\leq t},E_\\omega(P_H(u^H_{\\leq t},c_H));c_H\\right),\\\\\\widehat y^H(t)&=H_\\varphi(r^H)(t;c_H)\\end{aligned}"
     },
     "metric": {
       "word": "E_i = √[(1/m_i) ∑_j (Â_ij − A_ij)²];  E = (1/N) ∑_i E_i;  Δ = E_control − E_transfer",

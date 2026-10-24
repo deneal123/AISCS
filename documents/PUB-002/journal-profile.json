@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-05",
+  "checked_at": "2026-10-23",
   "venue": "Биомедицинская радиоэлектроника",
   "issn": "1560-4136",
   "guidelines_url": "https://radiotec.ru/ru/journal/Biomedical_Radioelectronics?page=for_authors",
@@ -133,5 +133,19 @@
     "url": "https://radiotec.ru/ru/journal/Biomedical_Radioelectronics?page=for_authors",
     "sha256": "59675ba0b3a9f0aeab3cefadef6ad761b652c66ddacdf765fa18883dec8781a8",
     "result": "Publisher detailed Russian requirements re-read; double spacing, TNR 12/14, margins 20/25/30/10, Russian abstract 200–250, English extended abstract >=350, 5–10 keywords, >=11 references, >=30% indexed foreign works."
+  },
+  "guidelines_recheck": {
+    "checked_at": "2026-10-23",
+    "primary_url": "https://radiotec.ru/ru/journal/Biomedical_Radioelectronics?page=for_authors",
+    "html_sha256": "4482872541d69d449316afc25a028b4936494f9e6e9cf862e977971afc86d7f3",
+    "verified_scope": "Publisher detailed Russian submission instructions; formatting and references. Historical VAK and indexing checks retain their own dates.",
+    "conflict_resolution": "Detailed submission section requires double spacing despite 1.5 spacing in general recommendations.",
+    "additional_requirements": {
+      "word_equation_editor": "Editable text or MathType 6.x; built-in Word OMML is excluded",
+      "formula_numbering": "Number only formulas cited in the text",
+      "figure_location": "Immediately after the first referring paragraph",
+      "figure_labels": "Use numeral or letter keys; move explanatory text to captions",
+      "source": "Publisher instructions, sections on manuscript formatting, formulas, figures and references"
+    }
   }
 }

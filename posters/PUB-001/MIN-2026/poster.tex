@@ -1,0 +1,310 @@
+% !TeX program = xelatex
+% MIN-2026, poster 23. A1 portrait, 594 x 841 mm. Run XeLaTeX twice.
+% Academic layout: white field, regular headings, labelled tables and figures.
+% Scientific counts and claims are preserved from the supplied poster.
+% The original conference background is embedded as a vector PDF.
+\documentclass{article}
+\usepackage[paperwidth=594mm,paperheight=841mm,margin=0mm]{geometry}
+\usepackage{iftex}
+\ifXeTeX\else
+  \PackageError{poster}{Compile with XeLaTeX}{Run xelatex poster.tex.}
+\fi
+\usepackage{fontspec,graphicx,tikz,qrcode}
+\usepackage[unicode,hidelinks]{hyperref}
+\IfFileExists{assets/fonts/NimbusSans-Regular.otf}{}{%
+  \PackageError{poster}{Bundled fonts were not found}{Unpack the whole bundle.}}
+\setmainfont{NimbusSans}[
+  IgnoreFontspecFile,Path=assets/fonts/,Extension=.otf,
+  UprightFont=*-Regular,BoldFont=*-Bold,Ligatures=TeX]
+\setsansfont{NimbusSans}[
+  IgnoreFontspecFile,Path=assets/fonts/,Extension=.otf,
+  UprightFont=*-Regular,BoldFont=*-Bold,Ligatures=TeX]
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
+\tracinglostchars=3
+
+% Identity and semantic roles. Bright green is an accent, not small body text.
+\definecolor{MINblue}{HTML}{2549A4}
+\definecolor{MINgreen}{HTML}{4CBD38}
+\definecolor{MINink}{HTML}{000000}
+\definecolor{MINmuted}{HTML}{000000}
+\definecolor{MINline}{HTML}{D5E0EC}
+
+\newcommand{\TitleA}{Методы оценки болевого состояния}
+\newcommand{\TitleB}{по биомедицинским данным}
+\newcommand{\TitleC}{целевые переменные, доступные наборы данных и требования к валидации}
+\newcommand{\Authors}{Д. Ф. Вольхин, Д. И. Рябкин, А. Ю. Герасименко}
+\newcommand{\Institution}{Национальный исследовательский университет «МИЭТ», Москва, Россия}
+\newcommand{\SupplementURL}{https://github.com/deneal123/AISCS/releases/tag/min-2026-review-v1.0.0}
+\hypersetup{
+  pdftitle={\TitleA\space\TitleB: \TitleC},
+  pdfauthor={\Authors},
+  pdfsubject={МИН-2026. Постер № 23. Систематическое картирование литературы},
+  pdfkeywords={оценка боли, целевые переменные, наборы данных, валидация, ECAP, SCS},
+  pdfdisplaydoctitle=true,pdfcreator={XeLaTeX}}
+
+% Counts are the single source of truth for labels, percentages and chart bars.
+\def\NPubMed{343}
+\def\NEvidenceMap{60}
+\def\NDuplicates{21}
+\def\NScreenExcluded{185}
+\def\NUnavailable{65}
+\def\NFullExcluded{2}
+\pgfmathtruncatemacro{\NFound}{\NPubMed+\NEvidenceMap}
+\pgfmathtruncatemacro{\NScreened}{\NFound-\NDuplicates}
+\pgfmathtruncatemacro{\NSought}{\NScreened-\NScreenExcluded}
+\pgfmathtruncatemacro{\NAssessed}{\NSought-\NUnavailable}
+\pgfmathtruncatemacro{\NIncluded}{\NAssessed-\NFullExcluded}
+\def\NDatasets{15}
+\def\NModels{98}
+\def\NTechnical{13}
+\def\NDescriptive{4}
+\def\NCrossSubject{30}
+\def\NExternal{11}
+\def\NCalibration{0}
+\def\NUncertainty{1}
+\def\NClinical{59}
+\def\NReported{72}
+\def\MedianN{66}
+\def\NBioVid{87}
+\def\NXITE{134}
+\def\NPhysioPain{93}
+\def\NUNBC{25}
+\def\NEmoPain{30}
+\pgfmathsetmacro{\ClinicalPercent}{100*\NClinical/\NModels}
+\pgfmathtruncatemacro{\NCorpusSum}{\NDatasets+\NModels+\NTechnical+\NDescriptive}
+\ifnum\NCorpusSum=\NIncluded\relax\else
+  \PackageError{poster}{Corpus counts do not sum correctly}{Check the source data.}
+\fi
+
+% All coordinates are in millimetres from the page top-left.
+\def\Left{22}
+\def\Right{572}
+\def\ContentWidth{550}
+\def\ColWidth{265}
+\def\RightX{307}
+\def\ChartX{314}
+\def\ChartRight{565}
+\def\ChartWidth{251}
+\newcommand{\TitleFont}{\fontsize{58}{62}\selectfont\bfseries}
+\newcommand{\SubtitleFont}{\fontsize{29}{34}\selectfont}
+\newcommand{\SectionFont}{\fontsize{30}{35}\selectfont}
+\newcommand{\BodyFont}{\fontsize{24}{29}\selectfont}
+\newcommand{\AnalysisFont}{\fontsize{22}{25.5}\selectfont}
+\newcommand{\ComparisonFont}{\fontsize{24}{27}\selectfont}
+\newcommand{\TableFont}{\fontsize{22}{25}\selectfont}
+\newcommand{\SmallFont}{\fontsize{21}{25}\selectfont}
+\newcommand{\RefFont}{\fontsize{18}{22}\selectfont}
+\def\CaptionGap{4}
+\def\BlockGap{8}
+
+\tikzset{
+  textblock/.style={anchor=north west,inner sep=0pt,outer sep=0pt,
+    align=left,text=MINink,font=\BodyFont}}
+
+\newcommand{\TextAt}[5]{%
+  \node[textblock,text width=#3mm,font=#4] at (#1,#2) {#5};}
+\newcommand{\CenteredAt}[5]{%
+  \node[textblock,text width=#3mm,font=#4,align=center] at (#1,#2) {#5};}
+\newcommand{\SectionAt}[4]{%
+  \node[textblock,text width=#3mm,font=\SectionFont,text=MINink,align=center]
+    at (#1,#2) {#4};
+  \draw[MINline,line width=0.8pt] (#1,{#2+16}) -- ({#1+#3},{#2+16});}
+
+% Each row contains 98 unit cells. Positions show counts, not study identities.
+\newcommand{\ValidationRow}[4]{%
+  \pgfmathsetmacro{\PercentValue}{100*(#3)/\NModels}
+  \pgfmathtruncatemacro{\GridColumns}{\NModels/2}
+  \pgfmathsetmacro{\CellPitch}{\ChartWidth/\GridColumns}
+  \TextAt{\ChartX}{#1}{165}{\BodyFont}{#2}
+  \node[anchor=north east,inner sep=0pt,outer sep=0pt,text=MINink,
+    font=\fontsize{24}{29}\selectfont] at (\ChartRight,#1)
+    {\textbf{#3/\NModels}\;·\;\pgfmathprintnumber[
+      fixed,precision=1,fixed zerofill,use comma,assume math mode=true]
+      {\PercentValue}\,\%};
+  \foreach \study in {1,...,\NModels} {
+    \pgfmathtruncatemacro{\CellColumn}{mod(\study-1,\GridColumns)}
+    \pgfmathtruncatemacro{\CellRow}{floor((\study-1)/\GridColumns)}
+    \ifnum\study>#3\relax
+      \def\CellColour{MINline}
+    \else
+      \def\CellColour{#4}
+    \fi
+    \fill[\CellColour]
+      ({\ChartX+\CellColumn*\CellPitch},{#1+12+\CellRow*4.1}) rectangle
+      ({\ChartX+(\CellColumn+1)*\CellPitch-0.7},{#1+15.4+\CellRow*4.1});
+  }}
+
+\begin{document}
+\null
+\begin{tikzpicture}[remember picture,overlay,x=1mm,y=-1mm]
+  \coordinate (origin) at (current page.north west);
+  \begin{scope}[shift={(origin)}]
+    \node[inner sep=0pt] at (297,420.5) {\includegraphics[
+      width=594mm,height=841mm,keepaspectratio]{assets/conference-background.pdf}};
+
+    \TextAt{\Left}{132}{480}{\TitleFont}{\TitleA\\\TitleB:}
+    \TextAt{\Left}{180}{\ContentWidth}{\SubtitleFont}{\TitleC}
+    \node[anchor=north east,inner sep=0pt,outer sep=0pt,text=MINblue,
+      font=\fontsize{24}{28}\selectfont\bfseries]
+      at (\Right,133) {Постер № 23};
+    \TextAt{\Left}{197}{\ContentWidth}{\fontsize{26}{30}\selectfont}{\Authors}
+    \TextAt{\Left}{211}{\ContentWidth}{\BodyFont}{\Institution}
+
+    % The number is accompanied by the finding and its practical meaning.
+    \draw[MINblue,line width=1pt] (\Left,231) -- (\Right,231);
+    \TextAt{\Left}{234}{166}{\fontsize{80}{82}\selectfont\bfseries}{\color{MINblue}\NExternal/\NModels}
+    \TextAt{24}{265}{164}{\BodyFont}{исследований моделей\\с внешней валидацией}
+    \TextAt{145}{234}{427}{\fontsize{46}{49}\selectfont\bfseries}{%
+      Применимость модели в новых условиях\\требует независимой внешней валидации.}
+    \TextAt{145}{278}{427}{\BodyFont}{%
+      В корпусе обзора внешняя валидация подтверждена в \NExternal\ из \NModels\ исследований моделей.\\
+      Её критерием служила проверка на независимой группе участников или наборе данных.}
+
+    % LEFT: literature comparison, not a list of modality names.
+    \SectionAt{\Left}{307}{\ColWidth}{Данные и оцениваемые показатели}
+    \TextAt{\Left}{330}{\ColWidth}{\BodyFont}{%
+      Оцениваемые показатели зависят от разметки данных.}
+    % Caption glyphs occupy 8.9 mm; keep a 4 mm clear gap above the grid.
+    \TextAt{22}{355-\CaptionGap-8.9}{170}{\BodyFont}{Табл. 1. Примеры наборов данных}
+    \node[anchor=north east,inner sep=0pt,outer sep=0pt,text=MINink,
+      font=\fontsize{20}{23}\selectfont] at (287,343.5) {N --- число участников};
+    % Five columns; 22 pt text and at least 3 mm of clear cell padding.
+    \draw[MINink,line width=1pt] (22,355) rectangle (287,536);
+    \foreach \x in {68,88,151,215}
+      \draw[MINink,line width=1pt] (\x,355) -- (\x,536);
+    \foreach \y in {371,404,437,470,503}
+      \draw[MINink,line width=1pt] (22,\y) -- (287,\y);
+    \TextAt{26}{359}{39}{\TableFont}{Набор}
+    \CenteredAt{71}{359}{14}{\TableFont}{N}
+    \TextAt{92}{359}{55}{\TableFont}{Сигналы}
+    \TextAt{155}{359}{56}{\TableFont}{Показатель}
+    \TextAt{219}{359}{64}{\TableFont}{Доступ}
+    \TextAt{26}{374.2}{39}{\TableFont}{BioVid}
+    \CenteredAt{71}{374.2}{14}{\TableFont}{\NBioVid}
+    \TextAt{92}{374.2}{55}{\TableFont}{EDA, ECG,\\EMG, видео}
+    \TextAt{155}{374.2}{56}{\TableFont}{Класс\\стимула}
+    \TextAt{219}{374.2}{64}{\TableFont}{Признаки\\открыты; данные\\по запросу}
+    \TextAt{26}{407.2}{39}{\TableFont}{X-ITE}
+    \CenteredAt{71}{407.2}{14}{\TableFont}{\NXITE}
+    \TextAt{92}{407.2}{55}{\TableFont}{Видео, аудио;\\EDA, ECG,\\EMG}
+    \TextAt{155}{407.2}{56}{\TableFont}{Тепловой /\\электрический\\стимул}
+    \TextAt{219}{407.2}{64}{\TableFont}{По запросу}
+    \TextAt{26}{440.2}{39}{\TableFont}{PhysioPain}
+    \CenteredAt{71}{440.2}{14}{\TableFont}{\NPhysioPain}
+    \TextAt{92}{440.2}{55}{\TableFont}{EDA, BVP,\\температура;\\признаки EEG}
+    \TextAt{155}{440.2}{56}{\TableFont}{Самоотчёт;\\группа}
+    \TextAt{219}{440.2}{64}{\TableFont}{Открытый\\доступ}
+    \TextAt{26}{473.2}{39}{\TableFont}{UNBC}
+    \CenteredAt{71}{473.2}{14}{\TableFont}{\NUNBC}
+    \TextAt{92}{473.2}{55}{\TableFont}{Видео лица}
+    \TextAt{155}{473.2}{56}{\TableFont}{Мимические\\показатели;\\FACS/PSPI}
+    \TextAt{219}{473.2}{64}{\TableFont}{По запросу;\\соглашение}
+    \TextAt{26}{506.2}{39}{\TableFont}{EmoPain}
+    \CenteredAt{71}{506.2}{14}{\TableFont}{\NEmoPain}
+    \TextAt{92}{506.2}{55}{\TableFont}{IMU, EMG,\\видео}
+    \TextAt{155}{506.2}{56}{\TableFont}{Защитное\\поведение}
+    \TextAt{219}{506.2}{64}{\TableFont}{По запросу}
+    \TextAt{\Left}{536+\BlockGap}{\ColWidth}{\ComparisonFont}{%
+      Число уникальных участников установлено для \NReported\ из \NIncluded\\
+      публикаций; медиана --- \textbf{\MedianN\ участников}.\\
+      Кадры и окна одного участника --- повторные наблюдения.}
+    \TextAt{\Left}{576}{\ColWidth}{\ComparisonFont}{%
+      \textbf{Сопоставление моделей} требует согласования исходных данных,
+      целевых переменных, способов разбиения выборок и порядка
+      предварительной обработки.}
+
+    % RIGHT: each result has an adjacent interpretation.
+    \SectionAt{\RightX}{307}{\ColWidth}{Валидация моделей}
+    \TextAt{\RightX}{330}{\ColWidth}{\fontsize{21}{25}\selectfont}{%
+      Оценка моделей во включённых исследованиях (n = \NModels)}
+    % One chart area, followed by its caption and explanatory paragraphs.
+    \draw[MINink,line width=1pt] (307,340) rectangle (572,447);
+    \ValidationRow{347}{Межсубъектная валидация}{\NCrossSubject}{MINblue}
+    \ValidationRow{369}{Внешняя валидация}{\NExternal}{MINgreen}
+    \ValidationRow{391}{Калибровка}{\NCalibration}{MINblue}
+    \ValidationRow{413}{Оценка неопределённости}{\NUncertainty}{MINblue}
+    \TextAt{\ChartX}{436}{\ChartWidth}{\fontsize{20}{23}\selectfont}{%
+      Одна ячейка --- исследование; цветом отмечено подтверждение.}
+    \node[textblock,text width=265mm,font=\BodyFont,align=center]
+      at (307,{447+\CaptionGap-0.4}) {Рис. 1. Валидация моделей в корпусе обзора};
+    \TextAt{\RightX}{467.5}{\ColWidth}{\fontsize{20}{23}\selectfont}{%
+      Серые ячейки --- отсутствие подтверждения. Категории пересекаются.\\
+      Неописанные процедуры не считались подтверждёнными; порядок условный.}
+    \TextAt{\RightX}{487.5}{\ColWidth}{\AnalysisFont}{%
+      \textbf{Зависимость наблюдений.} Попадание наблюдений\\
+      одного участника в обучающую и тестовую выборки\\
+      создаёт риск завышения точности. Участников разделяют\\
+      до предобработки; её параметры определяют по обучающим данным.}
+    \TextAt{\RightX}{528.5}{\ColWidth}{\AnalysisFont}{%
+      \textbf{Внешняя валидация.} Независимые выборки позволяют\\
+      оценить влияние различий протоколов и оборудования.\\
+      Клиническую применимость оценивают в целевой популяции.}
+    \TextAt{\RightX}{560}{\ColWidth}{\AnalysisFont}{%
+      \textbf{Калибровка и неопределённость.} Прогнозируемые\\
+      вероятности сопоставляют с наблюдаемыми частотами исходов.\\
+      Неопределённость прогноза оценивают отдельно. При низком\\
+      качестве сигнала или вне проверенных условий применения\\
+      следует воздержаться от числовой оценки.}
+
+    % This is a sample property, not another validation tier.
+    \TextAt{\Left}{610}{\ContentWidth}{\BodyFont}{%
+      \textbf{Клинические выборки: \NClinical/\NModels\;·\;\pgfmathprintnumber[
+        fixed,precision=1,fixed zerofill,use comma,assume math mode=true]
+        {\ClinicalPercent}\,\%.}\quad
+      Клинический состав выборки не подтверждает независимость валидации.}
+
+    % Compact methods preserve the complete selection arithmetic.
+    \draw[MINline,line width=0.8pt] (\Left,622) -- (\Right,622);
+    \TextAt{\Left}{626}{\ContentWidth}{\BodyFont}{%
+      \textbf{Отбор публикаций.} Выявлены \NFound\ записи; после удаления \NDuplicates\ дубликата
+      выполнен скрининг \NScreened\ записей, исключены \NScreenExcluded.\\
+      Запрошены \NSought\ полных текстов: оценены \NAssessed, исключены \NFullExcluded,
+      включены \NIncluded; \NUnavailable\ текстов недоступны.}
+    \TextAt{\Left}{651}{\ContentWidth}{\fontsize{20}{23}\selectfont}{%
+      Поиск 07.09.2026; 2010--2026. PubMed \NPubMed; дополнение \NEvidenceMap.
+      \NDatasets\ описаний наборов, \NModels\ исследований моделей,
+      \NTechnical\ работ SCS, \NDescriptive\ описательные валидации.}
+
+    % Two highlighted implications, using the conference's existing colours.
+    \fill[MINblue!5] (22,666) rectangle (287,718);
+    \fill[MINgreen!8] (307,666) rectangle (572,718);
+    \draw[MINblue,line width=2pt] (22,666) -- (22,718);
+    \draw[MINgreen!55!black,line width=2pt] (307,666) -- (307,718);
+    \TextAt{28}{672}{253}{\BodyFont\bfseries}{\color{MINblue}Технический контроль: ECAP}
+    \TextAt{313}{672}{253}{\BodyFont\bfseries}{\color{MINgreen!55!black}Поддержка клинических решений}
+    \TextAt{28}{685}{253}{\BodyFont}{%
+      Вызванный составной потенциал действия\\
+      характеризует вызванную активацию нервных волокон [2].\\
+      ECAP не является прямой мерой интенсивности боли [1].}
+    \TextAt{313}{685}{253}{\BodyFont}{%
+      Самоотчёт и функциональные исходы оценивают\\
+      отдельно [3]. В авторской схеме решения принимает\\
+      специалист; модель не изменяет параметры SCS автономно.}
+
+    \draw[MINline,line width=0.8pt] (\Left,720) -- (\Right,720);
+    \TextAt{\Left}{722}{\ContentWidth}{\fontsize{20}{23}\selectfont}{%
+      \textbf{Ограничения.} Скрининг выполнен одним исследователем. Полные тексты \NUnavailable\ работ недоступны.\\
+      Неоднородность задач не позволила провести общий метаанализ точности. Выводы относятся к включённым исследованиям.}
+    \TextAt{\Left}{746}{425}{\RefFont}{%
+      [1] Raja S. N. et al. Pain. 2020;161:1976--1982.\;
+      \href{https://doi.org/10.1097/j.pain.0000000000001939}{doi:10.1097/j.pain.0000000000001939}.\\
+      {}[2] Parker J. L. et al. Pain. 2012;153:593--601.\;
+      \href{https://doi.org/10.1016/j.pain.2011.11.023}{doi:10.1016/j.pain.2011.11.023}.\\
+      {}[3] Dworkin R. H. et al. Pain. 2005;113:9--19.\;
+      \href{https://doi.org/10.1016/j.pain.2004.09.012}{doi:10.1016/j.pain.2004.09.012}.}
+    \TextAt{\Left}{769}{425}{\RefFont}{%
+      \href{mailto:deneal123@mail.ru}{deneal123@mail.ru}\;·\;
+      \href{\SupplementURL}{github.com/deneal123/AISCS/releases/tag/min-2026-review-v1.0.0}}
+    \foreach \y/\labeltext in {750/Реестр,759/{и полная},768/библиография}
+      \node[anchor=north east,inner sep=0pt,outer sep=0pt,text=MINink,
+        font=\fontsize{20}{24}\selectfont] at (527,\y) {\labeltext};
+    \fill[white] (531,741) rectangle (573,782);
+    \node[anchor=north west,inner sep=0pt,outer sep=0pt]
+      at (535,744) {\qrcode[height=33mm,level=M,hyperlink]{\SupplementURL}};
+  \end{scope}
+\end{tikzpicture}
+\end{document}

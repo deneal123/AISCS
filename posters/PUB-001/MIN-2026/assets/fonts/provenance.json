@@ -1,0 +1,26 @@
+{
+  "repository": "https://github.com/ArtifexSoftware/urw-base35-fonts",
+  "commit": "3c0ba3b5687632dfc66526544a4e811fe0ec0cd9",
+  "files": {
+    "NimbusSans-Regular.otf": {
+      "url": "https://raw.githubusercontent.com/ArtifexSoftware/urw-base35-fonts/3c0ba3b5687632dfc66526544a4e811fe0ec0cd9/fonts/NimbusSans-Regular.otf",
+      "sha256": "7c25be4d78155523080ab85b10277150657ff7dabbcad7037bdd536c9b6d0d08",
+      "bytes": 82264
+    },
+    "NimbusSans-Bold.otf": {
+      "url": "https://raw.githubusercontent.com/ArtifexSoftware/urw-base35-fonts/3c0ba3b5687632dfc66526544a4e811fe0ec0cd9/fonts/NimbusSans-Bold.otf",
+      "sha256": "7f33328e6b4d4cd21b45fa625791928c9407dc702db6780e56b09ca9a3ecaa67",
+      "bytes": 83264
+    },
+    "LICENSE": {
+      "url": "https://raw.githubusercontent.com/ArtifexSoftware/urw-base35-fonts/3c0ba3b5687632dfc66526544a4e811fe0ec0cd9/LICENSE",
+      "sha256": "772b1b47eead8722156abaed483154e1dd1137e7035290550cea6444192a2e3f",
+      "bytes": 440
+    },
+    "COPYING": {
+      "url": "https://raw.githubusercontent.com/ArtifexSoftware/urw-base35-fonts/3c0ba3b5687632dfc66526544a4e811fe0ec0cd9/COPYING",
+      "sha256": "57c8ff33c9c0cfc3ef00e650a1cc910d7ee479a8bc509f6c9209a7c2a11399d6",
+      "bytes": 34520
+    }
+  }
+}

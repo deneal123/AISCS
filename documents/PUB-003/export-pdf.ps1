@@ -42,6 +42,12 @@ try {
             doc_pages = $legacyDocument.ComputeStatistics(2)
             same_tables = $originalTables -eq $legacyDocument.Tables.Count
             same_pictures = $originalPictures -eq $legacyDocument.InlineShapes.Count
+            sha256 = @{
+                'article.docx' = (Get-FileHash -Algorithm SHA256 -LiteralPath $publicationDocx).Hash.ToLowerInvariant()
+                'article.doc' = (Get-FileHash -Algorithm SHA256 -LiteralPath $publicationDoc).Hash.ToLowerInvariant()
+                'article.pdf' = (Get-FileHash -Algorithm SHA256 -LiteralPath $publicationPdf).Hash.ToLowerInvariant()
+                'article-doc.pdf' = (Get-FileHash -Algorithm SHA256 -LiteralPath $roundtripPdf).Hash.ToLowerInvariant()
+            }
             normal_font = $legacyDocument.Styles.Item(-1).Font.Name
             normal_size = $legacyDocument.Styles.Item(-1).Font.Size
             normal_line_spacing_rule = $legacyDocument.Styles.Item(-1).ParagraphFormat.LineSpacingRule

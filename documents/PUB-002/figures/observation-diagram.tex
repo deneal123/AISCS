@@ -1,0 +1,43 @@
+% Original conceptual drawing. All traces are schematic, not measured data.
+\begin{tikzpicture}[x=1mm,y=1mm,font=\fontsize{12}{14}\selectfont,
+  line width=.55pt,>=Latex]
+\path[use as bounding box] (0,0) rectangle (160,66);
+\node[anchor=west,font=\bfseries] at (1,63) {а\quad Динамика};
+\node[anchor=west,font=\bfseries] at (57,63) {б\quad Наблюдение};
+\node[anchor=west,font=\bfseries] at (113,63) {в\quad Проверка};
+% Connectivity constrains dynamics; it is not itself the measured signal.
+\coordinate (a) at (5,44); \coordinate (b) at (18,53);
+\coordinate (c) at (18,35); \coordinate (d) at (31,44);
+\coordinate (e) at (31,55); \coordinate (f) at (44,44);
+\foreach \a/\b in {a/b,a/c,b/d,c/d,b/e,d/f,e/f}
+  \draw[->,gray] (\a)--(\b);
+\foreach \p in {a,b,c,d,e,f} \fill (\p) circle (.95);
+\node[anchor=north] at (43,32) {$G,\theta$};
+\draw[->,gray] (25,33)--(25,26);
+\draw[->] (3,9)--(47,9) node[below left] {$t$};
+\draw[->] (3,9)--(3,25) node[above right] {$x(t)$};
+\draw[thick] plot[smooth] coordinates {(4,15)(8,15)(11,24)(15,11)(20,14)(24,22)(29,13)(34,16)(40,20)(46,15)};
+% Observation involves a transformation and finite sampling.
+\draw[->] (48,18)--(53,18)--(53,44)--(60,44);
+\node at (54,49) {$Q_\varphi$};
+\draw[->] (63,35)--(106,35) node[below left] {$t$};
+\draw[->] (63,35)--(63,54) node[above right] {$y(t)$};
+\draw[gray,thick] plot[smooth] coordinates {(65,39)(71,40)(77,48)(83,49)(89,44)(95,40)(103,43)};
+\foreach \x/\y in {65/39,71/40,77/48,83/49,89/44,95/40,103/43} {
+  \draw[gray,densely dotted] (\x,35)--(\x,\y);
+  \fill (\x,\y) circle (.8);
+}
+\node[align=center] at (84,19) {Способ регистрации,\\дискретизация};
+% Independent reference: no arbitrary numerical accuracy is implied.
+\draw[->] (109,44)--(116,44);
+\draw[->] (118,25)--(157,25) node[below left] {$t$};
+\draw[->] (118,25)--(118,54);
+\node[anchor=south west] at (119,54) {$y,\hat y$};
+\draw[thick] plot[smooth] coordinates {(120,31)(126,33)(132,44)(138,47)(144,39)(150,33)(156,36)};
+\foreach \x/\y in {121/32,128/36,134/43,140/44,146/37,153/35}
+  \draw (\x-.7,\y-.7)--(\x+.7,\y+.7) (\x-.7,\y+.7)--(\x+.7,\y-.7);
+\draw[thick] (118,15)--(124,15);
+\node[anchor=west] at (126,15) {модель};
+\draw (120,8)--(122,10) (120,10)--(122,8);
+\node[anchor=west] at (126,9) {эталон};
+\end{tikzpicture}

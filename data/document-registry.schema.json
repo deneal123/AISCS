@@ -36,7 +36,16 @@
             "items": {"type": "string", "pattern": "^(S[0-9]{3,}|ST[0-9]{3,})$"},
             "uniqueItems": true
           },
-          "immutable": {"type": "boolean"}
+          "immutable": {"type": "boolean"},
+          "immutable_source_inventory": {
+            "type": "object",
+            "required": ["path", "sha256"],
+            "properties": {
+              "path": {"type": "string", "pattern": "^data/immutable-manifests/[A-Z0-9_-]+\\.json$"},
+              "sha256": {"type": "string", "pattern": "^[A-F0-9]{64}$"}
+            },
+            "additionalProperties": false
+          }
         },
         "additionalProperties": true
       }

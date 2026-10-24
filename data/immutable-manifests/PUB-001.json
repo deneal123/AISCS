@@ -1,0 +1,179 @@
+{
+  "format": "aspa-immutable-source-inventory-v1",
+  "document_id": "PUB-001",
+  "created_at": "2026-10-23",
+  "legacy_tree_sha256": "FF1CCD1F87DDC2521937C66A551FE71E7C054579E32457661452EBB2363E2D1E",
+  "basis": {
+    "git_commit": "a85b399c349578f4cefc1dc6beb30e483a495b4e",
+    "tracked_files_verified_against_index_and_HEAD": 39,
+    "original_locked_artifact_hashes_verified": 3,
+    "supplemental_file": "poster/MIN_2026_poster_A1.pdf",
+    "supplemental_file_origin": "Conference template supplied by the user for the PUB-001 poster; bytes retained",
+    "excluded_derived_files": "Only .pyc files inside __pycache__; all other source membership is checked",
+    "scope": "Content and paths under PUB-001 are unchanged. Historical whole-tree hash retained for provenance.",
+    "legacy_client_compatibility": "Whole-tree snapshot updated for already running older clients; new clients verify the complete content-bound source inventory. Original legacy hash is retained above."
+  },
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "03A871E0B2DA2BFFD282DEEC93C7938B368C53AE8117DBFD350A06F958DBEC99"
+    },
+    {
+      "path": "article.docx",
+      "sha256": "A1F833CDD8E664176D8D1F7383D9C7F3A983B0E8A1E26FBF0710C7F4A59B057E"
+    },
+    {
+      "path": "article.html",
+      "sha256": "BACAB4BFD6E00658E097E3B38AB8E84ED9CC43F0FE9C1A1E3128D91E0C5B96FD"
+    },
+    {
+      "path": "article.pdf",
+      "sha256": "3D65F0CC94BAA2D167A47BC1DDD03A9DE917B12B56058197A8B54BCEBCC8F777"
+    },
+    {
+      "path": "article.preview.pdf",
+      "sha256": "AA4BAEEAF0B239E0C5F5592C162FE310927934A354E98F3219E0B742F81570FE"
+    },
+    {
+      "path": "build.ps1",
+      "sha256": "941554BC113628BA59AFF17396430CF0EE2887C2E98061610DF5683A9C97CF6F"
+    },
+    {
+      "path": "build_article.py",
+      "sha256": "D9EEB710EA592D079C5FC40ADACC245474A2403266BF2B21A0BEEF8C0D9D298E"
+    },
+    {
+      "path": "export_word_pdf.ps1",
+      "sha256": "5007634B8B0D2058F575C93DEE3135FFF9C16B700A59EFDE0AC44CB350E1AB89"
+    },
+    {
+      "path": "figures/fig_prisma.png",
+      "sha256": "C684A4841D95ED8E9EB6D5F180F6865C0A57397B6965D86E95D1E8D517066753"
+    },
+    {
+      "path": "figures/fig_prisma.svg",
+      "sha256": "8127D436F120A1A0FBF83F1824C575C261BA7AC7528AFCE6CBBB8E34DF41EB2A"
+    },
+    {
+      "path": "figures/fig_scs.png",
+      "sha256": "46BF453AB0FF16293EDC4FF1A529B9BC77759CDC606DBEE189CF0E4907C229D3"
+    },
+    {
+      "path": "figures/fig_scs.svg",
+      "sha256": "4C13DE58CEE0F3E07BFED139FB9106A5D85DE46AA53DDF4E0163D07205A717D1"
+    },
+    {
+      "path": "manuscript.md",
+      "sha256": "294F955EF484635AB73188D13AFFDC6980D77902955999DAFF3A1632A36C7C37"
+    },
+    {
+      "path": "poster/MIN_2026_poster_A1.pdf",
+      "sha256": "1F96B2130A42A86F8458F01975B1F56E5E7DE3549E3BA85874504ACF76E975F4"
+    },
+    {
+      "path": "release_manifest.json",
+      "sha256": "3B681FFF006A47D3C6FCA275659F914427150937A396B3ACA5C0CF25A5E8F6CB"
+    },
+    {
+      "path": "render_pdf.py",
+      "sha256": "5EAF7BBA18D64EF75E68E2F36A0FBDEB5D123B82E32415FAD2FC81432684231F"
+    },
+    {
+      "path": "review/article_bibliography.csv",
+      "sha256": "DD672E1AA40D9C6506B9FCCF70B86E99215ECDC4756A6672435D68EDB4A8E3A6"
+    },
+    {
+      "path": "review/audit_existing_records.py",
+      "sha256": "2BC5174E6CCB89A339D3C4CBEFE9887085C828EC782F2ECC01CE8A05F40B69CA"
+    },
+    {
+      "path": "review/bibliography.csv",
+      "sha256": "BE083E1F294A481D24E0F10AB2BDEBD1AC6C3340D7A4EF894824BB16B214E49D"
+    },
+    {
+      "path": "review/corpus_metrics.json",
+      "sha256": "FCAF22437DBF30423081C395A21A4F3F18BD95E3DD8A8943B0B01CD54BD986FC"
+    },
+    {
+      "path": "review/curated_core.csv",
+      "sha256": "0D2988BB16E9FC5FD26C30502456EA76D2006445E703B74BDE8D511A24B620AE"
+    },
+    {
+      "path": "review/doi_verification.csv",
+      "sha256": "754EE9870F5FDDBA708D3AA4531E5AAC8F1BA3F063DB8F9B4945281BA80D250B"
+    },
+    {
+      "path": "review/extraction.csv",
+      "sha256": "331D6F948D1EFEEA5F6C393AC549965828C906C97B2C72E454355C8C3FFA4775"
+    },
+    {
+      "path": "review/full_text_status.csv",
+      "sha256": "E827650DF0E0C5126AD93395F9081F2479C6E450A1724800098F3ED9471682FB"
+    },
+    {
+      "path": "review/identifier_verification.csv",
+      "sha256": "DA96B5C0B26E472BBFA17B5324EF182C0C7DD85B5FA9F381EBA7C5388255D78E"
+    },
+    {
+      "path": "review/included_studies_bibliography.csv",
+      "sha256": "6BDE7E75A48EDA299B012B6294C0B400CEB1DA6BDCC23AE1BB607A36E18CF548"
+    },
+    {
+      "path": "review/pmc_full_text_audit.csv",
+      "sha256": "C43393C976C686BAFA208645D0258424B56043196CEDA84459E682E96A552D99"
+    },
+    {
+      "path": "review/prisma_counts.json",
+      "sha256": "AF88BF447259EAC11C8C256A7A314EE45379EC0F5905EBAE3038CAA095F1F9A4"
+    },
+    {
+      "path": "review/protocol.md",
+      "sha256": "564CD78323FBF9D42778D2412AB154040E6BA190208A6FBB4EDE343EB9403F45"
+    },
+    {
+      "path": "review/pubmed_metadata.csv",
+      "sha256": "815EA68B257FF6C99635FCFFD37461724DD97B1BC5F1F58C65707BA9A633462D"
+    },
+    {
+      "path": "review/raw_pubmed.json",
+      "sha256": "469A47113A08EC2F9BAB69576144FEC72BDDC4A462564F7703E88C91249A2703"
+    },
+    {
+      "path": "review/records.csv",
+      "sha256": "0B781AD7EDC739BA7004866704C43B0DEB8B5843CA5CED5ED5DDA0F4164C31AC"
+    },
+    {
+      "path": "review/records_public.csv",
+      "sha256": "72F47144F1DE6BFD9C1552F0B1B5A955203004EFA8FA5F2046E58A08B70C67B4"
+    },
+    {
+      "path": "review/risk_of_bias.csv",
+      "sha256": "5615AFA4C00D50680234ACF24E4F7AC33AC6694F479D0619A9513F445BD2B54E"
+    },
+    {
+      "path": "review/run_review.py",
+      "sha256": "E097A0916E01A4F3170D9F2A20B3591BF621B02F812982872B8127BADCD2DA9C"
+    },
+    {
+      "path": "review/screening.csv",
+      "sha256": "1FF2A3DA3B0226BAB9BB7D87A3121D92363AD534D49BDE157B985380267D398D"
+    },
+    {
+      "path": "review/search_log.csv",
+      "sha256": "17B4B7DF905610DA63A15E066CAC2D22EF830E272B3A34EE67D2C7B5B94B3E40"
+    },
+    {
+      "path": "review/verification_raw.json",
+      "sha256": "29371BC0868296FA1AA922B0E49AA70EE9BA281DAD1FA260DC3B992E0A083AA1"
+    },
+    {
+      "path": "validate_artifacts.py",
+      "sha256": "05F13A05CB234616DD47F36642DA813FDC726F969671E75F593C9D9B83BCDE19"
+    },
+    {
+      "path": "validation_word_stats.json",
+      "sha256": "896BF40E958F187066BFAFF74859A8AF75A7B0ED5DA9A65253E16A3BB40AD72A"
+    }
+  ],
+  "compatibility_tree_sha256": "766135EDFF56F5328A0232E293CA82F2848E5C459615A3F5C4ACEE08956AB50D"
+}

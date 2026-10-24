@@ -2,7 +2,7 @@
   "meta": {
     "schema_version": "1.0.0",
     "sidecar_version": "1.0.0",
-    "updated_at": "2026-10-03"
+    "updated_at": "2026-10-23"
   },
   "release_approvals": {
     "author_review": false,
@@ -32,7 +32,7 @@
         "submitted_version_locked"
       ],
       "immutable": true,
-      "immutable_tree_sha256": "FF1CCD1F87DDC2521937C66A551FE71E7C054579E32457661452EBB2363E2D1E",
+      "immutable_tree_sha256": "766135EDFF56F5328A0232E293CA82F2848E5C459615A3F5C4ACEE08956AB50D",
       "immutable_files": [
         {
           "path": "documents/PUB-001/neiro-miet/ru/article.docx",
@@ -46,7 +46,11 @@
           "path": "documents/PUB-001/neiro-miet/ru/article.preview.pdf",
           "sha256": "AA4BAEEAF0B239E0C5F5592C162FE310927934A354E98F3219E0B742F81570FE"
         }
-      ]
+      ],
+      "immutable_source_inventory": {
+        "path": "data/immutable-manifests/PUB-001.json",
+        "sha256": "297E951B8A0106C06027BD3935ECD107C8CD2BBE3E3941BA5E289BC25A640103"
+      }
     },
     {
       "id": "PUB-TEMPLATE-001",

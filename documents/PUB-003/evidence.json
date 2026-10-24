@@ -1660,10 +1660,44 @@
       "accessed_at": "2026-10-05",
       "metadata_checked_at": "2026-10-05",
       "metadata_sha256": "d1e097bc0ce8e1dc4fbc13ab41c605bbe3bc3598f773b22e938289a390afa2e1",
-      "reviewed_version": "bioRxiv, posted 2025-10-29; revision number of registered text not established; document hash pinned",
+      "reviewed_version": "bioRxiv v1, posted 2025-10-29; Version 1 explicitly stated in the registered PMC header",
       "text_sha256": "3e95f5761277db8ea2095b1b839360fb733cbab894d0e80477c9748de03f2914",
-      "version_status": "registered_checked_sections_revision_number_unresolved",
-      "bibliographic_version_note": "bioRxiv, posted 2025-10-29"
+      "version_status": "registered_version_1_verified",
+      "bibliographic_version_note": "bioRxiv v1, posted 2025-10-29",
+      "previous_version_status": "registered_checked_sections_revision_number_unresolved",
+      "version_verified_at": "2026-10-23",
+      "version_primary_locator": {
+        "node_id": "S029::79d301a07a6e::00000::4f7b08df3e2e",
+        "source_id": "S029",
+        "generation": "g-f36b941a0426b642916d1cc1",
+        "include_unreviewed": false,
+        "primary_url": "https://pubmed.ncbi.nlm.nih.gov/41280033/",
+        "document_sha256": "79d301a07a6ea6ceca4f767497059e7517953857c6eabe18a188c1a5b8fe3452",
+        "text_sha256": "4f7b08df3e2ef99c8a9af8894ca7f339ccc4737c1414a2316bfc35baafcfd7f0",
+        "locators": [
+          {
+            "chunk_id": "S029::79d301a07a6e::00000::4f7b08df3e2e",
+            "source_id": "S029",
+            "doc_sha256": "79d301a07a6ea6ceca4f767497059e7517953857c6eabe18a188c1a5b8fe3452",
+            "document_version": "79d301a07a6ea6ce",
+            "chunk_index": 0,
+            "chunk_count": 34,
+            "char_start": 2,
+            "char_end": 3754,
+            "page_start": null,
+            "page_end": null,
+            "section_labels": [
+              "front_matter"
+            ],
+            "token_estimate": 938,
+            "text_sha256": "4f7b08df3e2ef99c8a9af8894ca7f339ccc4737c1414a2316bfc35baafcfd7f0",
+            "chunk_sha256": "6299cf7e69028b16da35e81d4f6291bc14ef4e700838171b60fc4feb0b34e191"
+          }
+        ],
+        "excerpt": "[Version 1] doi: 10.1101/2025.10.28.684868 Search in PMC Search in PubMed View in NLM Catalog Add to search Ascending nociceptive pathways drive rapid",
+        "normalized_excerpt_start": 1271,
+        "verification": "get_evidence verified the chunk against its registered document"
+      }
     },
     {
       "source_id": "S212",
@@ -2131,8 +2165,8 @@
       "title": "Topological Sensitivity in Connectome-Constrained Neural Networks",
       "authors_full": [
         {
-          "family": "Dhiman",
-          "given": "Nalin"
+          "given": "Nalin",
+          "family": "Dhiman"
         }
       ],
       "year": 2026,
@@ -2331,6 +2365,30 @@
               "chunk_sha256": "d94f4e7d49ed5fe5af5df2adc5d55fc165e49d3561dd038cd9903a3b7452ff9e"
             }
           ]
+        },
+        {
+          "node_id": "S149::08ef7d92bcff::00026::6cdfeb2c53c4",
+          "locators": [
+            {
+              "chunk_id": "S149::08ef7d92bcff::00026::6cdfeb2c53c4",
+              "source_id": "S149",
+              "doc_sha256": "08ef7d92bcffe979c4874fc940415bd4a835e1e98181a98a8340e22269460e33",
+              "document_version": "08ef7d92bcffe979",
+              "chunk_index": 26,
+              "chunk_count": 52,
+              "char_start": 91083,
+              "char_end": 95154,
+              "page_start": 23,
+              "page_end": 23,
+              "section_labels": [
+                "methods"
+              ],
+              "token_estimate": 1018,
+              "text_sha256": "6cdfeb2c53c401f687aca45533555f1936017a68cae16885b679ab2b431c2999",
+              "chunk_sha256": "82808511361cb63bcdcd8c9838656a1471b31bb7ea7d8fac6c0580151a36c54f"
+            }
+          ],
+          "supports": "Section 4.7 adaptation protocol and its limits"
         }
       ],
       "judge_primary_scope": "registered_primary_span",
@@ -10602,6 +10660,1787 @@
       "10.3389/frai.2026.1827727"
     ],
     "original_source_count": 20,
-    "comparison": "Current revised PUB-002 on 2026-10-05; old 16/20 overlap estimate obsolete"
+    "comparison": "Current revised PUB-002 on 2026-10-05; old 16/20 overlap estimate obsolete",
+    "current_text_comparison_20261024": {
+      "checked_at": "2026-10-24",
+      "method": "NFKC, casefold, consecutive alphabetic tokens, 30-word windows; Markdown source includes captions and tables.",
+      "source_sha256": {
+        "PUB-001": "294f955ef484635ab73188d13affdc6980d77902955999daff3a1632a36c7c37",
+        "PUB-002": "d6100babc31063119c273482ffa5ecba093c9a610571a699b22ffbceca40a8c8",
+        "PUB-003": "b286f10550041fd89b9c81bc1ae90b39956e8d2b9f8abb958c6f27915672a255"
+      },
+      "word_counts": {
+        "PUB-001": 2728,
+        "PUB-002": 2778,
+        "PUB-003": 2504
+      },
+      "comparisons": [
+        {
+          "documents": [
+            "PUB-001",
+            "PUB-002"
+          ],
+          "common_30_word_sequences": 0,
+          "examples": []
+        },
+        {
+          "documents": [
+            "PUB-001",
+            "PUB-003"
+          ],
+          "common_30_word_sequences": 0,
+          "examples": []
+        },
+        {
+          "documents": [
+            "PUB-002",
+            "PUB-003"
+          ],
+          "common_30_word_sequences": 0,
+          "examples": []
+        }
+      ],
+      "shared_source_ids": [
+        "S105",
+        "S149",
+        "S159",
+        "S162",
+        "S212",
+        "S741",
+        "S743",
+        "S766",
+        "S767",
+        "S775",
+        "S780"
+      ],
+      "shared_over_pub003": "11/24",
+      "scope": "Exact long-fragment reuse only. Common citations and research topics are not reuse findings. No external plagiarism service, semantic originality score or publication approval.",
+      "distinct_questions": {
+        "PUB-001": "Mapping pain-related datasets, models, validation and relation to SCS.",
+        "PUB-002": "Descriptive axes linking model constraints, observations, evaluation and permissible conclusions.",
+        "PUB-003": "Rationale and falsifiable evaluation of temporal-parameter pretraining for ECAP growth-curve modelling."
+      }
+    }
+  },
+  "editorial_review": {
+    "checked_at": "2026-10-24",
+    "generation": "g-f36b941a0426b642916d1cc1",
+    "manuscript_sha256": "b286f10550041fd89b9c81bc1ae90b39956e8d2b9f8abb958c6f27915672a255",
+    "scope": "Scientific and editorial corrections; historical selection and previous source verification dates retained. No new literature search or canonical-card mutation.",
+    "initial_availability": {
+      "mode": "canonical_lexical",
+      "errors": [
+        "graph_unavailable",
+        "dense_unavailable"
+      ]
+    },
+    "recovery": "Restarted the four existing aspa-research-knowledge containers without rebuilding indices or changing other projects.",
+    "queries": [
+      {
+        "article": "both",
+        "role": "support",
+        "query": "connectome constrained neural activity identifiability fixed synaptic weights same external input initial conditions",
+        "generation": "g-f36b941a0426b642916d1cc1",
+        "mode": "hybrid",
+        "errors": []
+      },
+      {
+        "article": "both",
+        "role": "challenge",
+        "query": "matching neural activity does not uniquely identify parameters observation operator calibration identifiability",
+        "generation": "g-f36b941a0426b642916d1cc1",
+        "mode": "hybrid",
+        "errors": []
+      },
+      {
+        "article": "PUB-003",
+        "role": "support",
+        "query": "ECAP simulation reciprocity active axons action potential timing geometry amplitude",
+        "generation": "g-f36b941a0426b642916d1cc1",
+        "mode": "hybrid",
+        "errors": []
+      },
+      {
+        "article": "PUB-003",
+        "role": "challenge",
+        "query": "Drosophila pretraining ECAP growth curve temporal memory single stimulus independent human validation",
+        "generation": "g-f36b941a0426b642916d1cc1",
+        "mode": "hybrid",
+        "errors": []
+      },
+      {
+        "article": "both",
+        "role": "support",
+        "query": "S149 unlabeled target data full real dataset transductive adaptation test subjects",
+        "generation": "g-f36b941a0426b642916d1cc1",
+        "mode": "hybrid",
+        "errors": []
+      },
+      {
+        "article": "both",
+        "role": "challenge",
+        "query": "ECAP technical signal quality not pain relief clinical outcomes S162",
+        "generation": "g-f36b941a0426b642916d1cc1",
+        "mode": "hybrid",
+        "errors": []
+      }
+    ],
+    "source_filtered_queries": [
+      {
+        "source": "S149",
+        "query": "full unlabeled real dataset including test participants adaptation optimistic bias",
+        "generation": "g-f36b941a0426b642916d1cc1",
+        "mode": "hybrid",
+        "errors": []
+      },
+      {
+        "source": "S105",
+        "query": "every 11th waveform nested cross validation participants external split",
+        "generation": "g-f36b941a0426b642916d1cc1",
+        "mode": "hybrid",
+        "errors": []
+      },
+      {
+        "source": "S767",
+        "query": "reciprocity transmembrane current extracellular potentials recording axon action potential",
+        "generation": "g-f36b941a0426b642916d1cc1",
+        "mode": "hybrid",
+        "errors": []
+      },
+      {
+        "source": "S162",
+        "query": "baseline pain therapy efficacy outcomes not collected",
+        "generation": "g-f36b941a0426b642916d1cc1",
+        "mode": "hybrid",
+        "errors": []
+      },
+      {
+        "source": "S910",
+        "query": "terminate rolling shorten crawling latency SeIN128",
+        "generation": "g-f36b941a0426b642916d1cc1",
+        "mode": "hybrid",
+        "errors": []
+      }
+    ],
+    "primary_contexts": [
+      {
+        "node_id": "S743::b38018da4838::00003::768a10418e5e",
+        "source_id": "S743",
+        "generation": "g-f36b941a0426b642916d1cc1",
+        "include_unreviewed": false,
+        "primary_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12648571/",
+        "document_sha256": "b38018da48387f082128a721ccd972684de070188e1cb93f3a7b6df04be323d4",
+        "text_sha256": "768a10418e5ed32a16aced8e1bf3a028296f3906ed9493b885116663585c018b",
+        "locators": [
+          {
+            "chunk_id": "S743::b38018da4838::00003::768a10418e5e",
+            "source_id": "S743",
+            "doc_sha256": "b38018da48387f082128a721ccd972684de070188e1cb93f3a7b6df04be323d4",
+            "document_version": "b38018da48387f08",
+            "chunk_index": 3,
+            "chunk_count": 32,
+            "char_start": 9969,
+            "char_end": 13677,
+            "page_start": null,
+            "page_end": null,
+            "section_labels": [
+              "other",
+              "abstract",
+              "introduction"
+            ],
+            "token_estimate": 927,
+            "text_sha256": "768a10418e5ed32a16aced8e1bf3a028296f3906ed9493b885116663585c018b",
+            "chunk_sha256": "a58ad170cd9bf5e709d2429fe20d70dccdf67b0491fef4379d4b5f114043eac1"
+          }
+        ],
+        "excerpt": "Additionally, we assume that the external inputs and initial state x(t=0) are the same for teacher and student (see Discussion). Note that",
+        "normalized_excerpt_start": 475,
+        "verification": "get_evidence verified the chunk against its registered document"
+      },
+      {
+        "node_id": "S212::672469d0dff1::00012::c89d02466080",
+        "source_id": "S212",
+        "generation": "g-f36b941a0426b642916d1cc1",
+        "include_unreviewed": false,
+        "primary_url": "https://doi.org/10.1101/2025.09.25.678485",
+        "document_sha256": "672469d0dff1e5b3919f111636e8d11e642c536c9dc2e27cafa9cc54c2e2e50d",
+        "text_sha256": "c89d02466080490ce1e39e35fc7b59f43ce86157a41c5d9c69eadae8687b1be2",
+        "locators": [
+          {
+            "chunk_id": "S212::672469d0dff1::00012::c89d02466080",
+            "source_id": "S212",
+            "doc_sha256": "672469d0dff1e5b3919f111636e8d11e642c536c9dc2e27cafa9cc54c2e2e50d",
+            "document_version": "672469d0dff1e5b3",
+            "chunk_index": 12,
+            "chunk_count": 30,
+            "char_start": 39566,
+            "char_end": 43204,
+            "page_start": null,
+            "page_end": null,
+            "section_labels": [
+              "other"
+            ],
+            "token_estimate": 910,
+            "text_sha256": "c89d02466080490ce1e39e35fc7b59f43ce86157a41c5d9c69eadae8687b1be2",
+            "chunk_sha256": "4bffa83e7bd5bfed99423040b5be230f58dfa352950db289244810f249e27eec"
+          }
+        ],
+        "excerpt": "observed calcium response properties (i.e. excitation vs. inhibition) of these identified neurons. To test this, we constructed a recurrent firing rate model",
+        "normalized_excerpt_start": 375,
+        "verification": "get_evidence verified the chunk against its registered document"
+      },
+      {
+        "node_id": "S767::1b18a7b63ad5::00006::07c96e072ef6",
+        "source_id": "S767",
+        "generation": "g-f36b941a0426b642916d1cc1",
+        "include_unreviewed": false,
+        "primary_url": "https://iopscience.iop.org/article/10.1088/1741-2552/aceca4/pdf",
+        "document_sha256": "1b18a7b63ad5bc261d52ff2a85e5b9f7e8ee2a4f9948760a11196da5351271a1",
+        "text_sha256": "07c96e072ef66c66d31ae6463a2d94f6b80c1e57b83ec768674234106a4257aa",
+        "locators": [
+          {
+            "chunk_id": "S767::1b18a7b63ad5::00006::07c96e072ef6",
+            "source_id": "S767",
+            "doc_sha256": "1b18a7b63ad5bc261d52ff2a85e5b9f7e8ee2a4f9948760a11196da5351271a1",
+            "document_version": "1b18a7b63ad5bc26",
+            "chunk_index": 6,
+            "chunk_count": 19,
+            "char_start": 19551,
+            "char_end": 22004,
+            "page_start": 6,
+            "page_end": 6,
+            "section_labels": [
+              "methods"
+            ],
+            "token_estimate": 614,
+            "text_sha256": "07c96e072ef66c66d31ae6463a2d94f6b80c1e57b83ec768674234106a4257aa",
+            "chunk_sha256": "90d7667a073fc839e212c7458cc7302f84edf5418211ec2175c29ee43da43b1d"
+          }
+        ],
+        "excerpt": "the measured ECAP represents the summation of all active fibers passing by the recording configuration, rather than the single fiber shown here.",
+        "normalized_excerpt_start": 964,
+        "verification": "get_evidence verified the chunk against its registered document"
+      },
+      {
+        "node_id": "S029::79d301a07a6e::00000::4f7b08df3e2e",
+        "source_id": "S029",
+        "generation": "g-f36b941a0426b642916d1cc1",
+        "include_unreviewed": false,
+        "primary_url": "https://pubmed.ncbi.nlm.nih.gov/41280033/",
+        "document_sha256": "79d301a07a6ea6ceca4f767497059e7517953857c6eabe18a188c1a5b8fe3452",
+        "text_sha256": "4f7b08df3e2ef99c8a9af8894ca7f339ccc4737c1414a2316bfc35baafcfd7f0",
+        "locators": [
+          {
+            "chunk_id": "S029::79d301a07a6e::00000::4f7b08df3e2e",
+            "source_id": "S029",
+            "doc_sha256": "79d301a07a6ea6ceca4f767497059e7517953857c6eabe18a188c1a5b8fe3452",
+            "document_version": "79d301a07a6ea6ce",
+            "chunk_index": 0,
+            "chunk_count": 34,
+            "char_start": 2,
+            "char_end": 3754,
+            "page_start": null,
+            "page_end": null,
+            "section_labels": [
+              "front_matter"
+            ],
+            "token_estimate": 938,
+            "text_sha256": "4f7b08df3e2ef99c8a9af8894ca7f339ccc4737c1414a2316bfc35baafcfd7f0",
+            "chunk_sha256": "6299cf7e69028b16da35e81d4f6291bc14ef4e700838171b60fc4feb0b34e191"
+          }
+        ],
+        "excerpt": "[Version 1] doi: 10.1101/2025.10.28.684868 Search in PMC Search in PubMed View in NLM Catalog Add to search Ascending nociceptive pathways drive rapid",
+        "normalized_excerpt_start": 1271,
+        "verification": "get_evidence verified the chunk against its registered document"
+      },
+      {
+        "node_id": "S910::239429301522::00041::fdcff739dd18",
+        "source_id": "S910",
+        "generation": "g-f36b941a0426b642916d1cc1",
+        "include_unreviewed": false,
+        "primary_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11357356/fullTextXML",
+        "document_sha256": "2394293015228e26dd24de96493ca626db482e58f3d2fe128a2e1a73296f2127",
+        "text_sha256": "fdcff739dd18a22d0d1eb3fb51a09854aad6b674afb6dacd52123b086ce1cc39",
+        "locators": [
+          {
+            "chunk_id": "S910::239429301522::00041::fdcff739dd18",
+            "source_id": "S910",
+            "doc_sha256": "2394293015228e26dd24de96493ca626db482e58f3d2fe128a2e1a73296f2127",
+            "document_version": "2394293015228e26",
+            "chunk_index": 41,
+            "chunk_count": 51,
+            "char_start": 141113,
+            "char_end": 145130,
+            "page_start": null,
+            "page_end": null,
+            "section_labels": [
+              "references"
+            ],
+            "token_estimate": 1005,
+            "text_sha256": "fdcff739dd18a22d0d1eb3fb51a09854aad6b674afb6dacd52123b086ce1cc39",
+            "chunk_sha256": "2d66699dc3827d7b0524247a738451d8b41f3ac84d8204f8e7eeda42565c875d"
+          }
+        ],
+        "excerpt": "terminate rolling and shorten crawling latency. SeIN128 receives inputs from Basin-2 and A00c neurons, which facilitate rolling, and makes reciprocal inhibitory synapses",
+        "normalized_excerpt_start": 576,
+        "verification": "get_evidence verified the chunk against its registered document"
+      },
+      {
+        "node_id": "S149::08ef7d92bcff::00026::6cdfeb2c53c4",
+        "source_id": "S149",
+        "source_ids": [
+          "S149"
+        ],
+        "generation": "g-f36b941a0426b642916d1cc1",
+        "include_unreviewed": false,
+        "text_sha256": "6cdfeb2c53c401f687aca45533555f1936017a68cae16885b679ab2b431c2999",
+        "locators": [
+          {
+            "chunk_id": "S149::08ef7d92bcff::00026::6cdfeb2c53c4",
+            "source_id": "S149",
+            "doc_sha256": "08ef7d92bcffe979c4874fc940415bd4a835e1e98181a98a8340e22269460e33",
+            "document_version": "08ef7d92bcffe979",
+            "chunk_index": 26,
+            "chunk_count": 52,
+            "char_start": 91083,
+            "char_end": 95154,
+            "page_start": 23,
+            "page_end": 23,
+            "section_labels": [
+              "methods"
+            ],
+            "token_estimate": 1018,
+            "text_sha256": "6cdfeb2c53c401f687aca45533555f1936017a68cae16885b679ab2b431c2999",
+            "chunk_sha256": "82808511361cb63bcdcd8c9838656a1471b31bb7ea7d8fac6c0580151a36c54f"
+          }
+        ],
+        "document_sha256": "08ef7d92bcffe979c4874fc940415bd4a835e1e98181a98a8340e22269460e33",
+        "primary_url": "https://www.frontiersin.org/journals/artificial-intelligence/articles/10.3389/frai.2026.1827727/full",
+        "completeness": "full_text",
+        "excerpt": "Domain-adaptation\ndata usage:Stage 2/3 training (Section 3.5) used the full unlabeled\nreal pool Dr for all reported folds; we did not implement a strict\nper-fold restriction of Dr that would exclude, for a given test\nfold, any unlabeled real frames drawn from the same subjects.\nWe ﬂag this as a mild optimistic bias relative to a maximally\nconservative per-fold protocol, since Dr contains no pain labels\nand is drawn primarily from non-pain/neutral-expression sources\n",
+        "excerpt_sha256": "cac97c38dc9a326875b1f8a36f3a9254cdf2df262e0046850767d52ee3123c41",
+        "excerpt_offset_in_chunk": 2227,
+        "continuation": "distinct from the labeled test folds, but we did not empirically\nquantify the size of this bias.Test-label access:no test-fold pain\nlabels (UNBC, BioVid, or neonatal) were used at any training\nor model-selection stage; test labels are accessed only once, to\ncomputetheﬁnal reportedmetrics,foreach fold. Modelselection:",
+        "scope": "Section 4.7, page 23; full pool and missing per-fold subject exclusion. The continuation qualifies the source mix and says bias was not quantified. Architecture chunk 14 alone does not support this claim.",
+        "decision": "Existing cautious text retained: independence is not ensured; actual subject overlap and bias magnitude are not established. Test labels and unlabeled adaptation are distinct."
+      },
+      {
+        "node_id": "S105::584a50736293::00006::41e402156462",
+        "source_id": "S105",
+        "generation": "g-f36b941a0426b642916d1cc1",
+        "include_unreviewed": false,
+        "primary_url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+        "document_sha256": "584a507362934194fa4b5846dbcd10c1c260cf9816ff22c75572eb1b44fd42c3",
+        "text_sha256": "41e4021564624824fbeb0430adba6cb1ce06604ba97a5abd456b869dc5c714c9",
+        "locators": [
+          {
+            "chunk_id": "S105::584a50736293::00006::41e402156462",
+            "source_id": "S105",
+            "doc_sha256": "584a507362934194fa4b5846dbcd10c1c260cf9816ff22c75572eb1b44fd42c3",
+            "document_version": "584a507362934194",
+            "chunk_index": 6,
+            "chunk_count": 31,
+            "char_start": 21588,
+            "char_end": 25486,
+            "page_start": 6,
+            "page_end": 6,
+            "section_labels": [
+              "abstract",
+              "appendix"
+            ],
+            "token_estimate": 975,
+            "text_sha256": "41e4021564624824fbeb0430adba6cb1ce06604ba97a5abd456b869dc5c714c9",
+            "chunk_sha256": "db61d37e4c0a8aabb3fd085b408368acef5e0bfa672c3e2a15fbc410dd1b9cf8"
+          }
+        ],
+        "excerpt": "First,\nwe applied PCA to all of the waveforms to reduce the\ndimensionality of the data. W e used the first 5 PC,\nwhich explained 97.6% of the variance in the data.\nW e then removed extreme outliers (20 MAD (Median\nAbsolute Deviation)) in PCA space.\nSecond, we performed nested k-fold cross-\nvalidation using every 11th waveform in each outer\nloop. Within each outer loop, we used unsupervised\nalgorithm k-means to cluster the data. Initially, we\nused k-means to split the data into more manageable\nsizes using k = 4. W e then applied k-means a second\ntime using k from 4 to 12, where k was determ-\nined by silhouette width. For each cluster, outliers\n(greater than 10 MAD) in PCA space were removed.\nW e then labeled (supervised) clusters as represent-\ning non-ECAPs, ECAPs, or outliers based on the\naverage waveform within each cluster (figure 3(B),\nsupplementary figure 2(B)). Clusters with average\nwaveforms without any detectable peaks or valleys\nand P2P less than 15 µV were determined to rep-\nr",
+        "excerpt_offset_in_chunk": 1854,
+        "verification": "Registered primary context reread; Methods 2.7. PCA described for all waveforms, before reported outer waveform splits. No magnitude of bias inferred."
+      },
+      {
+        "node_id": "S767::1b18a7b63ad5::00005::d5f575c91750",
+        "source_id": "S767",
+        "generation": "g-f36b941a0426b642916d1cc1",
+        "include_unreviewed": false,
+        "primary_url": "https://iopscience.iop.org/article/10.1088/1741-2552/aceca4/pdf",
+        "document_sha256": "1b18a7b63ad5bc261d52ff2a85e5b9f7e8ee2a4f9948760a11196da5351271a1",
+        "text_sha256": "d5f575c9175035d2ec73ab107afd482cef8e48676461dd510de16b7a2460ff42",
+        "locators": [
+          {
+            "chunk_id": "S767::1b18a7b63ad5::00005::d5f575c91750",
+            "source_id": "S767",
+            "doc_sha256": "1b18a7b63ad5bc261d52ff2a85e5b9f7e8ee2a4f9948760a11196da5351271a1",
+            "document_version": "1b18a7b63ad5bc26",
+            "chunk_index": 5,
+            "chunk_count": 19,
+            "char_start": 15624,
+            "char_end": 19549,
+            "page_start": 4,
+            "page_end": 5,
+            "section_labels": [
+              "methods"
+            ],
+            "token_estimate": 982,
+            "text_sha256": "d5f575c9175035d2ec73ab107afd482cef8e48676461dd510de16b7a2460ff42",
+            "chunk_sha256": "3e7f0d7c761633c0490cf6e1ff3de059179c4191d89d31a22dd47a3c9183d41c"
+          }
+        ],
+        "excerpt": "reciprocity-based approach to calculate the SCS- induced ECAPs recorded from the implanted elec- trode array (figure 2) [ 29–31]. T o calculate",
+        "verification": "Authentic registered article Methods 2.3; reciprocity and axon simulations. Not an independently reproduced operator."
+      }
+    ],
+    "graph_expansions": [
+      {
+        "source_id": "S743",
+        "generation": "g-f36b941a0426b642916d1cc1",
+        "depth": 1,
+        "include_unreviewed": false,
+        "nodes": 40,
+        "edges": 39
+      },
+      {
+        "source_id": "S212",
+        "generation": "g-f36b941a0426b642916d1cc1",
+        "depth": 1,
+        "include_unreviewed": false,
+        "nodes": 25,
+        "edges": 24
+      },
+      {
+        "source_id": "S149",
+        "generation": "g-f36b941a0426b642916d1cc1",
+        "depth": 1,
+        "include_unreviewed": false,
+        "nodes": 50,
+        "edges": 49
+      }
+    ],
+    "claim_checks": [
+      {
+        "id": "ER01",
+        "question": "Достаточно ли числа рекрутированных волокон для расчёта ECAP?",
+        "verdict": "требует ограничения",
+        "source_ids": [
+          "S767",
+          "S766"
+        ],
+        "decision": "Необходимы состав и времена возбуждения либо эквивалентное достаточное описание; геометрия включена в условия целевой модели."
+      },
+      {
+        "id": "ER02",
+        "question": "Не подаётся ли будущая целевая активность на вход предобучения?",
+        "verdict": "авторское предложение",
+        "source_ids": [
+          "S212"
+        ],
+        "decision": "Введены оператор наблюдения, исходный декодер и положительный горизонт прогноза; предсказание использует только доступную историю."
+      },
+      {
+        "id": "ER03",
+        "question": "Что отличает отсутствие практически значимого различия от статистической незначимости?",
+        "verdict": "авторское предложение",
+        "source_ids": [],
+        "decision": "Предложены непересекающиеся решения по доверительному интервалу относительно заранее выбранного практического допуска; прочие результаты неопределённы."
+      },
+      {
+        "id": "ER04",
+        "question": "Установлен ли номер версии препринта о восходящих путях?",
+        "verdict": "подтверждено",
+        "source_ids": [
+          "S029"
+        ],
+        "decision": "Версия 1 явно указана в зарегистрированном первичном тексте; исправлены матрица, версия и библиография."
+      },
+      {
+        "id": "ER05",
+        "question": "Корректно ли говорить о торможении времени защитной реакции?",
+        "verdict": "требует ограничения",
+        "source_ids": [
+          "S910"
+        ],
+        "decision": "Результат описан как регуляция длительности реакции нисходящими нейронами, без переноса к человеческой боли."
+      },
+      {
+        "id": "ER06",
+        "question": "Установлено ли пересечение тестовых участников и пула адаптации?",
+        "verdict": "требует ограничения",
+        "source_ids": [
+          "S149"
+        ],
+        "decision": "Вместо утверждения о фактическом включении записано отсутствие гарантированного исключения; величина смещения не оценена."
+      },
+      {
+        "id": "ER07",
+        "question": "Можно ли считать сравнения по сигналам межучастнической проверкой?",
+        "verdict": "требует ограничения",
+        "source_ids": [
+          "S105"
+        ],
+        "decision": "Повторно прочитан метод разбиения по каждой одиннадцатой форме сигнала; прежнее ограничение сохранено."
+      },
+      {
+        "id": "ER20261024-01",
+        "question": "Не выглядит ли предлагаемый показатель как уже рассчитанный?",
+        "verdict": "авторское предложение",
+        "source_ids": [],
+        "decision": "В русской аннотации явно предложена RMSE каждого участника с последующим усреднением; завершённый расчёт не заявлен."
+      },
+      {
+        "id": "ER20261024-02",
+        "question": "Одинаковы ли контрольные условия и четыре исхода в двух языках?",
+        "verdict": "авторское предложение",
+        "source_ids": [],
+        "decision": "Английский реферат дополнен контролем топологии без обученной динамики и диагностическим удалением оператора. Термин absence of practically meaningful difference согласован с русским текстом; прежняя интервальная схема математически не опровергалась."
+      },
+      {
+        "id": "ER20261024-03",
+        "question": "Отделена ли настройка PCA от внешнего цикла?",
+        "verdict": "требует ограничения",
+        "source_ids": [
+          "S105"
+        ],
+        "decision": "Добавлено точное ограничение описанного протокола без утверждения измеренного оптимистического смещения."
+      }
+    ],
+    "journal_guidelines_url": "https://radiotec.ru/ru/journal/Biomedical_Radioelectronics?page=for_authors",
+    "journal_guidelines_html_sha256": "4482872541d69d449316afc25a028b4936494f9e6e9cf862e977971afc86d7f3",
+    "s162_scope": "No registered Chunk returned. Historical primary limitation retained; this pass does not claim a fresh full-text read.",
+    "revision_history": [
+      {
+        "checked_at": "2026-10-23",
+        "manuscript_sha256": "2ac3555ff32fb1091a24c2a5d796c9cc867526aa681d1aeb919df0bf569c6201"
+      },
+      {
+        "checked_at": "2026-10-24",
+        "manuscript_sha256": "3831762f12988d8139861a52424f5dc59149fa4edefb979a15eb15175dcdfefe"
+      },
+      {
+        "checked_at": "2026-10-24",
+        "manuscript_sha256": "9cc3a32d9a39d8d47b670c6c82df30ad8c977ea05214fa8e1b7fbd0840779f53"
+      },
+      {
+        "checked_at": "2026-10-24",
+        "manuscript_sha256": "523c46681542940802ca503aa8844839a3c22d02f56897974848be05e6b380df"
+      },
+      {
+        "checked_at": "2026-10-24",
+        "manuscript_sha256": "336598f40041d7d716ffc09e4f94adab189f0746b50e65a7e55ae1f1b2cfbc0a"
+      },
+      {
+        "checked_at": "2026-10-24",
+        "manuscript_sha256": "d526ab4067f9598582f8659ffae3d0edbfecaa0bce60e8ea9f64bf2fcccbc37b"
+      },
+      {
+        "checked_at": "2026-10-24",
+        "manuscript_sha256": "b3e4c89a372361a835747b5de1cc8db41ca704952c7eee44fcc444da674dd4a2"
+      },
+      {
+        "checked_at": "2026-10-24",
+        "manuscript_sha256": "58b2a2f04f5422307ac926d9112c87e1b9b3a8dda7f1e5cff938c48bb23c8729"
+      },
+      {
+        "checked_at": "2026-10-24",
+        "manuscript_sha256": "40907d6b6677d85c4fde10735caaaf2ac40676c4a69922bf614d1bd7f4798cad"
+      },
+      {
+        "checked_at": "2026-10-24",
+        "manuscript_sha256": "083285a552ad08219509305a85bc02701af494a3ddefa208f9ec4580a3653cec"
+      },
+      {
+        "checked_at": "2026-10-24",
+        "manuscript_sha256": "437d9d9b2cfb9e3264899b766cdcfb1a62d4ec7c6c9a5ef92a11a38e382fc1bf"
+      },
+      {
+        "checked_at": "2026-10-24",
+        "manuscript_sha256": "2e543e3b85e2f31dbe7a86d1ceba387873455b3cb2cd6f7de19824b4f83a2514"
+      },
+      {
+        "checked_at": "2026-10-24",
+        "manuscript_sha256": "f46ab5c58f00bcce830d4d93d4b3e2e6be78832ce21b09a2075742bad00c420a"
+      },
+      {
+        "checked_at": "2026-10-24",
+        "manuscript_sha256": "4bbc4c30cb4ee28019c223db4f74fd5b2ff237ab185633c7eb1037b9563a540a"
+      },
+      {
+        "checked_at": "2026-10-24",
+        "manuscript_sha256": "0a877b4486906f1bbf05f0ea504aaef84f2fd1a889d07d3a838ccc0af3592cd6"
+      },
+      {
+        "checked_at": "2026-10-24",
+        "manuscript_sha256": "f8e182d307517abc1a46f1e2b7342047dfaa1e0ed37951b9300eb24afbfc02a3"
+      },
+      {
+        "checked_at": "2026-10-24",
+        "manuscript_sha256": "850e7231e27731b4e4597b6169f16ee620b8a8c58171dbc16876fde53270b667"
+      },
+      {
+        "checked_at": "2026-10-24",
+        "manuscript_sha256": "4001421d0dddecddfe78c45a109904b5836b4ac5c083f0088fb28a2778aedcd7"
+      },
+      {
+        "checked_at": "2026-10-24",
+        "manuscript_sha256": "b51da41aae7819b9f62214177ca9e98890c4c594c62a154064794f9524028ede"
+      },
+      {
+        "checked_at": "2026-10-24",
+        "manuscript_sha256": "c99758e7498186cc476c16fe2d70ef4248bd51592435602e1eadd48a70220556"
+      },
+      {
+        "checked_at": "2026-10-24",
+        "manuscript_sha256": "b286f10550041fd89b9c81bc1ae90b39956e8d2b9f8abb958c6f27915672a255"
+      }
+    ],
+    "followup_20261024": {
+      "queries": [
+        {
+          "task": "pub003_metric",
+          "query": "ECAP independent participants repeated waveforms every eleventh signal cross validation growth curve",
+          "mode": "hybrid",
+          "errors": [],
+          "generation": "g-f36b941a0426b642916d1cc1",
+          "ids": [
+            "S746",
+            "S902",
+            "S807"
+          ]
+        },
+        {
+          "task": "pub003_counter",
+          "query": "spinal cord stimulation frequency ECAP biophysical model temporal dynamics without cross species pretraining",
+          "mode": "hybrid",
+          "errors": [],
+          "generation": "g-f36b941a0426b642916d1cc1",
+          "ids": [
+            "S789",
+            "S799",
+            "S159"
+          ]
+        }
+      ],
+      "scope": "Language, unit of evaluation, descriptive axes, consistency of proposed controls and outcomes; canonical cards and historical search dates unchanged.",
+      "word_language": "Explicit ru-RU for Russian styles/runs, en-GB for extended abstracts/captions, and source-language labels for bibliography entries; no automatic proofreader correction.",
+      "partial_primary_reads": "Only S105 Methods 2.7 freshly reread for this specific amendment; earlier version-specific source audits retained, not presented as new full readings."
+    },
+    "followup_design_20261024": {
+      "checked_at": "2026-10-24",
+      "generation": "g-f36b941a0426b642916d1cc1",
+      "scope": "Second-pass terminology, physical component boundary and evaluation-data independence. Author proposals are not tested methods.",
+      "queries": [
+        {
+          "query": "MANC male adult nerve cord abbreviation connectome reconstruction",
+          "generation": "g-f36b941a0426b642916d1cc1",
+          "mode": "hybrid",
+          "errors": [],
+          "task": "manc",
+          "result_ids": [],
+          "include_unreviewed": false,
+          "use": "S748 was triaged but not added; S766 indexed search-page material excluded; MANC empty chunks resolved through original primary route."
+        },
+        {
+          "query": "BANC brain and nerve cord adult female abbreviation",
+          "generation": "g-f36b941a0426b642916d1cc1",
+          "mode": "hybrid",
+          "errors": [],
+          "task": "banc",
+          "result_ids": [
+            "S738::8fc569a3c172::00073::a4ce06cf9566",
+            "S738::8fc569a3c172::00003::d1e75051619a",
+            "S738::8fc569a3c172::00034::de4f26263511"
+          ],
+          "include_unreviewed": false,
+          "use": "Scoped terminology/recording-method verification"
+        },
+        {
+          "query": "GABA gamma aminobutyric acid descending neurons larval rolling",
+          "generation": "g-f36b941a0426b642916d1cc1",
+          "mode": "hybrid",
+          "errors": [],
+          "task": "gaba",
+          "result_ids": [
+            "S910::239429301522::00019::cf89b54479aa",
+            "S910::239429301522::00001::392a80d41e4d",
+            "S910::239429301522::00002::a867a66fc8a5"
+          ],
+          "include_unreviewed": false,
+          "use": "Scoped terminology/recording-method verification"
+        },
+        {
+          "query": "independent validation calibration model selection test data reuse evaluation participants",
+          "generation": "g-f36b941a0426b642916d1cc1",
+          "mode": "hybrid",
+          "errors": [],
+          "task": "validation_reuse",
+          "result_ids": [
+            "S748",
+            "S034",
+            "S070"
+          ],
+          "include_unreviewed": false,
+          "use": "S748 was triaged but not added; S766 indexed search-page material excluded; MANC empty chunks resolved through original primary route."
+        },
+        {
+          "query": "transmembrane currents reciprocity extracellular recording compound action potential voltage",
+          "generation": "g-f36b941a0426b642916d1cc1",
+          "mode": "hybrid",
+          "errors": [],
+          "task": "current-map-search",
+          "result_ids": [
+            "S766::a77c2c1cb55a::00001::08f342cc36a6",
+            "S766::a77c2c1cb55a::00003::c91169f2fd21",
+            "S766::a77c2c1cb55a::00000::474fe14a718a"
+          ],
+          "include_unreviewed": false,
+          "use": "S748 was triaged but not added; S766 indexed search-page material excluded; MANC empty chunks resolved through original primary route."
+        },
+        {
+          "query": "reciprocity transmembrane currents recording electrodes finite element model",
+          "generation": "g-f36b941a0426b642916d1cc1",
+          "mode": "hybrid",
+          "errors": [],
+          "task": "current-map-good-search",
+          "result_ids": [
+            "S767::1b18a7b63ad5::00006::07c96e072ef6",
+            "S767::1b18a7b63ad5::00004::ebf384f5f6e4",
+            "S767::1b18a7b63ad5::00005::d5f575c91750"
+          ],
+          "include_unreviewed": false,
+          "use": "Scoped terminology/recording-method verification"
+        }
+      ],
+      "primary_contexts": [
+        {
+          "node_id": "S767::1b18a7b63ad5::00005::d5f575c91750",
+          "source_id": "S767",
+          "generation": "g-f36b941a0426b642916d1cc1",
+          "include_unreviewed": false,
+          "primary_url": "https://iopscience.iop.org/article/10.1088/1741-2552/aceca4/pdf",
+          "document_sha256": "1b18a7b63ad5bc261d52ff2a85e5b9f7e8ee2a4f9948760a11196da5351271a1",
+          "text_sha256": "d5f575c9175035d2ec73ab107afd482cef8e48676461dd510de16b7a2460ff42",
+          "locators": [
+            {
+              "chunk_id": "S767::1b18a7b63ad5::00005::d5f575c91750",
+              "source_id": "S767",
+              "doc_sha256": "1b18a7b63ad5bc261d52ff2a85e5b9f7e8ee2a4f9948760a11196da5351271a1",
+              "document_version": "1b18a7b63ad5bc26",
+              "chunk_index": 5,
+              "chunk_count": 19,
+              "char_start": 15624,
+              "char_end": 19549,
+              "page_start": 4,
+              "page_end": 5,
+              "section_labels": [
+                "methods"
+              ],
+              "token_estimate": 982,
+              "text_sha256": "d5f575c9175035d2ec73ab107afd482cef8e48676461dd510de16b7a2460ff42",
+              "chunk_sha256": "3e7f0d7c761633c0490cf6e1ff3de059179c4191d89d31a22dd47a3c9183d41c"
+            }
+          ],
+          "excerpt": "reciprocity-based approach to calculate the SCS- induced ECAPs recorded from the implanted elec- trode array (figure 2) [ 29–31]. T o calculate",
+          "verification": "Authentic registered article Methods 2.3; reciprocity and axon simulations. Not an independently reproduced operator."
+        }
+      ],
+      "direct_primary_reads": [
+        {
+          "source_id": "S774",
+          "primary_url": "https://elifesciences.org/reviewed-preprints/97769v1",
+          "locator": "1 Introduction and Motivation, paragraph beginning Here we present the first densely-reconstructed connectome; version header v1 23 May 2024",
+          "checked_at": "2026-10-24",
+          "material": "current primary HTML",
+          "html_sha256": "9c95e7abec4028ebdc9162e69c0f9880d07b54199234d676643aa715cb099a14",
+          "decision": "MANC means Male Adult Nerve Cord; no new claim on the exact runtime matrix export or immutable database release."
+        },
+        {
+          "source_id": "S738",
+          "node_id": "S738::8fc569a3c172::00003::d1e75051619a",
+          "locator": "Results, An open-source brain-and-nerve-cord connectome",
+          "scope": "Acronym Brain and Nerve Cord only; older preprint cannot support VOR/v888 claims.",
+          "decision": "Existing version-specific VOR audit retained; editorial reading does not change primary verification date."
+        },
+        {
+          "source_id": "S766",
+          "checked_at": "2026-10-24",
+          "scope": "Cached authentic publisher/PMC article: computational recording methods; not a fresh full download.",
+          "primary_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6920600/",
+          "path": "research\\.work\\pub003-review-20261005\\primary\\S766.html",
+          "sha256": "2715f3a125d3bb64cfdb724961c371f5d6d24b7464b19f51a620aa199cc0a0fd",
+          "current_live_access": "Browser verification page; no successful current article download claimed.",
+          "excluded_indexed_sha256": "a77c2c1cb55ada16b1af9d045f742ac59ff557b18b4da699e812bc6c5c0700d7",
+          "excluded_reason": "PubMed Cited In/search page, not the source article; its chunks were already excluded in the October 5 article audit.",
+          "locator": "Methods 2.1-2.4, especially Calculation of ECAP recordings",
+          "verified_result": "Extracellular stimulus drives multicompartment axon simulations yielding transmembrane currents; reciprocal unit-current FEM and superposition yield electrode voltages. The typed interface is an author-proposed decomposition of this physical sequence, not a new empirical result."
+        }
+      ],
+      "author_decisions": [
+        {
+          "id": "DESIGN-01",
+          "question": "Where do excitation and propagation end and recording begin?",
+          "verdict": "авторское предложение",
+          "source_ids": [
+            "S766",
+            "S767"
+          ],
+          "decision": "Declare r_H as compartment transmembrane currents in amperes on a specified space/time grid. B_alpha computes excitation and propagation; H_phi is passive current-to-voltage registration. Ohmic coefficients yield volts under the stated linear quasi-static approximation. No temporal-network architecture selected; no internal-current identifiability claimed."
+        },
+        {
+          "id": "DESIGN-02",
+          "question": "May operator selection data be reused as an untouched final transfer test?",
+          "verdict": "авторское предложение",
+          "source_ids": [],
+          "decision": "Participants used for model or protocol selection cannot count as final untouched transfer test participants. A joint prespecified use of one held-out group is distinguished from independent replication. Groups may be split within datasets; no third repository or known sample size is assumed. Define operator qualification/failure rules before its evaluation."
+        },
+        {
+          "id": "DESIGN-03",
+          "question": "Does agreement of ECAP validate each internal current separately?",
+          "verdict": "требует ограничения",
+          "source_ids": [
+            "S766",
+            "S767"
+          ],
+          "decision": "Human ECAP comparison checks the combined axon/recording output. It does not establish unique internal currents; no direct human measurement of every compartment is promised."
+        },
+        {
+          "id": "STYLE-01",
+          "question": "Must editorial correction history stay in the manuscript body?",
+          "verdict": "авторское предложение",
+          "source_ids": [
+            "S162",
+            "S780"
+          ],
+          "decision": "Removed repetitive process statements from PUB-003 body; both corrigenda, exact locators, quotes and decisions remain in evidence.json corrections and historical audit. Matrix corrected-publication status and corrected interpretation preserved."
+        }
+      ],
+      "pi_review": {
+        "completed_deliverables": [
+          "protocol-independence",
+          "operator-interface"
+        ],
+        "accepted": "Typed physical interface, units, no double propagation, evaluation-data selection rule, scope of output validation and predeclared failure rules.",
+        "not_accepted": [
+          "Two dataset names do not force a single reused cohort: participant groups can be partitioned within a dataset.",
+          "Counting a group once refers to unique participants, not automatically to one hypothesis or a prescribed alpha allocation. Multiplicity and dependent outcomes remain items for the final statistical plan.",
+          "A narrative formal scheme need not choose a network architecture or software schema; it can and should specify physical quantities and component boundaries.",
+          "No general non-identifiability theorem or numerical tolerance was inferred from a conceptual reviewer objection."
+        ]
+      }
+    },
+    "larval_response_recheck_20261024": {
+      "checked_at": "2026-10-24",
+      "source_id": "S212",
+      "generation": "g-f36b941a0426b642916d1cc1",
+      "queries": [
+        {
+          "query": "S212 larval brain correlated calcium imaging electron microscopy first instar third instar functional validation",
+          "mode": "hybrid",
+          "errors": [],
+          "generation": "g-f36b941a0426b642916d1cc1",
+          "result_ids": [
+            "S212::672469d0dff1::00005::3f3c7f1851b1",
+            "S212::672469d0dff1::00015::afd370e89ea2",
+            "S212::672469d0dff1::00004::10bd902d0e64",
+            "S212::672469d0dff1::00019::e40f6e4a7564"
+          ],
+          "include_unreviewed": false
+        },
+        {
+          "query": "inhibitory excitatory signed neurotransmitter model stochastic network cascades synaptic strengths",
+          "mode": "hybrid",
+          "errors": [],
+          "generation": "g-f36b941a0426b642916d1cc1",
+          "result_ids": [
+            "S212::672469d0dff1::00012::c89d02466080",
+            "S212::672469d0dff1::00020::721efc6f503c",
+            "S212::672469d0dff1::00001::7c555be21f74",
+            "S212::672469d0dff1::00021::82f7e7e93eae"
+          ],
+          "include_unreviewed": false
+        }
+      ],
+      "primary_contexts": [
+        {
+          "node_id": "S212::672469d0dff1::00004::10bd902d0e64",
+          "source_id": "S212",
+          "generation": "g-f36b941a0426b642916d1cc1",
+          "include_unreviewed": false,
+          "primary_url": "https://doi.org/10.1101/2025.09.25.678485",
+          "document_sha256": "672469d0dff1e5b3919f111636e8d11e642c536c9dc2e27cafa9cc54c2e2e50d",
+          "text_sha256": "10bd902d0e644154c2f5cbd820e1c70e30e78b89a7252f6ab6a212fa0a08b1f4",
+          "locators": [
+            {
+              "chunk_id": "S212::672469d0dff1::00004::10bd902d0e64",
+              "source_id": "S212",
+              "doc_sha256": "672469d0dff1e5b3919f111636e8d11e642c536c9dc2e27cafa9cc54c2e2e50d",
+              "document_version": "672469d0dff1e5b3",
+              "chunk_index": 4,
+              "chunk_count": 30,
+              "char_start": 12605,
+              "char_end": 16406,
+              "page_start": null,
+              "page_end": null,
+              "section_labels": [
+                "introduction",
+                "results",
+                "methods"
+              ],
+              "token_estimate": 951,
+              "text_sha256": "10bd902d0e644154c2f5cbd820e1c70e30e78b89a7252f6ab6a212fa0a08b1f4",
+              "chunk_sha256": "554cd003e99e3f0f4cec9f03755d8fe6d5ce02ae3abe76789fe7232fd476bc95"
+            }
+          ],
+          "verified_scope": "Results: Methodology for overlaying brainwide activity and connectivity maps; first-instar imaging, Figure 1"
+        },
+        {
+          "node_id": "S212::672469d0dff1::00019::e40f6e4a7564",
+          "source_id": "S212",
+          "generation": "g-f36b941a0426b642916d1cc1",
+          "include_unreviewed": false,
+          "primary_url": "https://doi.org/10.1101/2025.09.25.678485",
+          "document_sha256": "672469d0dff1e5b3919f111636e8d11e642c536c9dc2e27cafa9cc54c2e2e50d",
+          "text_sha256": "e40f6e4a7564ee69e6c9696c63fd36f56597209085129c00a563ccc70453e2e9",
+          "locators": [
+            {
+              "chunk_id": "S212::672469d0dff1::00019::e40f6e4a7564",
+              "source_id": "S212",
+              "doc_sha256": "672469d0dff1e5b3919f111636e8d11e642c536c9dc2e27cafa9cc54c2e2e50d",
+              "document_version": "672469d0dff1e5b3",
+              "chunk_index": 19,
+              "chunk_count": 30,
+              "char_start": 65143,
+              "char_end": 68667,
+              "page_start": null,
+              "page_end": null,
+              "section_labels": [
+                "other"
+              ],
+              "token_estimate": 881,
+              "text_sha256": "e40f6e4a7564ee69e6c9696c63fd36f56597209085129c00a563ccc70453e2e9",
+              "chunk_sha256": "07c40f9d244115cd14bae6af22f8534994123e3f46c600b862e544a9293783ad"
+            }
+          ],
+          "verified_scope": "Methods: Reconstruction of neurons; synaptic analysis in the previously published reference volume; third-instar validation"
+        },
+        {
+          "node_id": "S212::672469d0dff1::00012::c89d02466080",
+          "source_id": "S212",
+          "generation": "g-f36b941a0426b642916d1cc1",
+          "include_unreviewed": false,
+          "primary_url": "https://doi.org/10.1101/2025.09.25.678485",
+          "document_sha256": "672469d0dff1e5b3919f111636e8d11e642c536c9dc2e27cafa9cc54c2e2e50d",
+          "text_sha256": "c89d02466080490ce1e39e35fc7b59f43ce86157a41c5d9c69eadae8687b1be2",
+          "locators": [
+            {
+              "chunk_id": "S212::672469d0dff1::00012::c89d02466080",
+              "source_id": "S212",
+              "doc_sha256": "672469d0dff1e5b3919f111636e8d11e642c536c9dc2e27cafa9cc54c2e2e50d",
+              "document_version": "672469d0dff1e5b3",
+              "chunk_index": 12,
+              "chunk_count": 30,
+              "char_start": 39566,
+              "char_end": 43204,
+              "page_start": null,
+              "page_end": null,
+              "section_labels": [
+                "other"
+              ],
+              "token_estimate": 910,
+              "text_sha256": "c89d02466080490ce1e39e35fc7b59f43ce86157a41c5d9c69eadae8687b1be2",
+              "chunk_sha256": "4bffa83e7bd5bfed99423040b5be230f58dfa352950db289244810f249e27eec"
+            }
+          ],
+          "verified_scope": "Results: Comparing neural activations with connectome predictions; Figure 6"
+        },
+        {
+          "node_id": "S212::672469d0dff1::00020::721efc6f503c",
+          "source_id": "S212",
+          "generation": "g-f36b941a0426b642916d1cc1",
+          "include_unreviewed": false,
+          "primary_url": "https://doi.org/10.1101/2025.09.25.678485",
+          "document_sha256": "672469d0dff1e5b3919f111636e8d11e642c536c9dc2e27cafa9cc54c2e2e50d",
+          "text_sha256": "721efc6f503ccd1eac3141a7e1c2e3a6474e34527003464006fb7e7e2f6a7b10",
+          "locators": [
+            {
+              "chunk_id": "S212::672469d0dff1::00020::721efc6f503c",
+              "source_id": "S212",
+              "doc_sha256": "672469d0dff1e5b3919f111636e8d11e642c536c9dc2e27cafa9cc54c2e2e50d",
+              "document_version": "672469d0dff1e5b3",
+              "chunk_index": 20,
+              "chunk_count": 30,
+              "char_start": 68653,
+              "char_end": 72167,
+              "page_start": null,
+              "page_end": null,
+              "section_labels": [
+                "other"
+              ],
+              "token_estimate": 879,
+              "text_sha256": "721efc6f503ccd1eac3141a7e1c2e3a6474e34527003464006fb7e7e2f6a7b10",
+              "chunk_sha256": "6ab73777db9ead9a9bbb5c8e8ff9c8691aca3303cf3c83faf58833a4b0cab01c"
+            }
+          ],
+          "verified_scope": "Methods: Connectome-constrained firing rate model; synaptic weights and predicted signs"
+        },
+        {
+          "node_id": "S212::672469d0dff1::00021::82f7e7e93eae",
+          "source_id": "S212",
+          "generation": "g-f36b941a0426b642916d1cc1",
+          "include_unreviewed": false,
+          "primary_url": "https://doi.org/10.1101/2025.09.25.678485",
+          "document_sha256": "672469d0dff1e5b3919f111636e8d11e642c536c9dc2e27cafa9cc54c2e2e50d",
+          "text_sha256": "82f7e7e93eaed626c0e7bd8f224e3349b36bc3f93502634f0e27003a659a10d5",
+          "locators": [
+            {
+              "chunk_id": "S212::672469d0dff1::00021::82f7e7e93eae",
+              "source_id": "S212",
+              "doc_sha256": "672469d0dff1e5b3919f111636e8d11e642c536c9dc2e27cafa9cc54c2e2e50d",
+              "document_version": "672469d0dff1e5b3",
+              "chunk_index": 21,
+              "chunk_count": 30,
+              "char_start": 72122,
+              "char_end": 75998,
+              "page_start": null,
+              "page_end": null,
+              "section_labels": [
+                "other"
+              ],
+              "token_estimate": 969,
+              "text_sha256": "82f7e7e93eaed626c0e7bd8f224e3349b36bc3f93502634f0e27003a659a10d5",
+              "chunk_sha256": "be297437a84252cd03a01598b9cf62902b917ad37900836fb72a46600b715ff0"
+            }
+          ],
+          "verified_scope": "Methods: Comparison of observed and modelled responses; relative valence rather than absolute hyperpolarisation"
+        }
+      ],
+      "question": "Does same-animal imaging establish a same-animal full synaptic graph, and does the comparison validate absolute membrane dynamics?",
+      "finding": "Functional and subsequent EM images share a first-instar specimen. Synaptic connectivity is analysed in the reference volume after morphological matching; additional validation uses third-instar larvae. The rate model uses connectome-derived normalised weights and predicted neurotransmitter signs. Its main neural comparison ranks response valence and evaluates response signs, not absolute membrane hyperpolarisation. The distinct stochastic-cascade path analysis is not substituted for the rate-model validation.",
+      "verdict": "требует ограничения",
+      "correction": "Made the observation/graph provenance and relative response endpoint explicit in chapter 1; narrowed the two review descriptions. No new numerical effect claim or canonical card change."
+    },
+    "physical_interface_review_20261024": {
+      "checked_at": "2026-10-24",
+      "type": "author_proposal_review",
+      "pi_job_id": "464b0378-0f2e-419e-8765-d257f2e9408a",
+      "pi_result": "publications/.work/pi-workers/editorial-20261024-0c8f621c/final-interface-check/result.md",
+      "delivered_settled_exit_zero": true,
+      "accepted": [
+        {
+          "finding": "Latent coordinates cannot acquire physical-current meaning merely by relabelling.",
+          "decision": "Required the learned interface to preserve the human axon equations and units. The codomain is a proposed physical interface, not a measured internal current."
+        },
+        {
+          "finding": "Identifiability applies to fitted axon parameters as well as recording parameters.",
+          "decision": "Named both alpha and phi; no claim that either is uniquely determined by ECAP alone."
+        },
+        {
+          "finding": "Make the recording context scope clear.",
+          "decision": "Stated that passive registration uses conductivity, geometry and recording while the stimulus acts through the currents."
+        }
+      ],
+      "not_accepted": [
+        {
+          "finding": "Alpha must be fixed a priori independently of all target recordings.",
+          "reason": "Too strong. Physical parameters may be calibrated using declared training data; final-test separation and identifiability remain required."
+        },
+        {
+          "finding": "Passing a broad context to H necessarily violates passivity or invalidates voltage units.",
+          "reason": "Not logically implied: an operator can use only relevant context fields. Clarified the restriction in prose without inventing a different architecture."
+        },
+        {
+          "finding": "Different source forecast and target output times make transfer inconsistent; a new common horizon is required.",
+          "reason": "Source pretraining and target modelling are distinct tasks by design. The causal target depends on history through t; sharing initial temporal parameters does not require identical output heads or horizons."
+        },
+        {
+          "finding": "A new anatomical-overlap prohibition is needed.",
+          "reason": "The existing text explicitly excludes transferring the fly graph, anatomy, states and adapters. No extra anatomical quantity is introduced."
+        }
+      ],
+      "scope": "Scientific design and notation, not validation of an implemented model. No new experiment, architecture choice, literature claim or canonical card edit."
+    },
+    "parameter_boundary_review_20261024": {
+      "checked_at": "2026-10-24",
+      "scope": "Copy editing and clarification of stated mathematical assumptions; no empirical result or architecture selected.",
+      "worker_id": "e5afba06-bd01-4130-a706-fcd0bb9b9a2f",
+      "worker_deliverable": "text/.work/pi-workers/editorial-20261024-0c8f621c/chapter-language-1/result.md",
+      "accepted": [
+        {
+          "original": "сравнение с расчётной сетью",
+          "revised": "сравнение с результатом расчёта сети",
+          "reason": "The comparison is with a model output, not the abstract network."
+        },
+        {
+          "original": "включение обратных связей в рассмотрение динамики",
+          "revised": "учёт обратных связей при анализе динамики",
+          "reason": "Removed stacked nominal phrasing while preserving the role of feedback."
+        },
+        {
+          "original": "изменение порога или длительности поведения",
+          "revised": "изменение порога защитной реакции или её длительности",
+          "reason": "Named the measured reaction; did not adopt the less natural suggested threshold of behaviour."
+        }
+      ],
+      "not_accepted": [
+        {
+          "suggestion": "Само наличие is grammatically defective.",
+          "reason": "It is a valid Russian construction. The proposed word order is optional and not a correction of an error."
+        },
+        {
+          "suggestion": "Для препринтов существенна версия текста is an opaque grammatical ellipsis.",
+          "reason": "The subject and agreeing predicate are complete. The concise version requirement is retained."
+        },
+        {
+          "suggestion": "Replace description of result validation with actual result validation in selection criteria.",
+          "reason": "The original coordination is grammatical. The edit would change a reporting criterion into an empirical inclusion criterion."
+        }
+      ],
+      "main_agent_clarifications": [
+        {
+          "decision": "Specified resistive quasi-static volume conduction for the instantaneous current-to-voltage sum.",
+          "reason": "This is an explicit approximation of the proposed operator, not a claim that all tissue or recording interfaces are purely resistive."
+        },
+        {
+          "decision": "Distinguished source dynamics parameters theta_F from transferred temporal-module parameters omega.",
+          "reason": "The connectome constrains the source generator; the formal transfer moves the module initialisation, not the fly simulator, graph or states."
+        },
+        {
+          "decision": "Rephrased the closing data-availability condition.",
+          "reason": "Absence of human data does not enable component research; such research remains possible without those data, while transfer remains untested on human recordings."
+        }
+      ]
+    },
+    "selection_counts_review_20261024": {
+      "checked_at": "2026-10-24",
+      "scope": "Description of the existing 2026-10-05 selection, not a new search.",
+      "ledger": "literature-search.json",
+      "ledger_sha256": "cb45a84774a37e12d819655d268cf7dc96fc925cd68640396e55627ce7690ba9",
+      "verified_counts": {
+        "viewed": 195,
+        "exact_duplicate_entries": 13,
+        "unique_identities": 182,
+        "additional_search_inclusions": 1,
+        "historical_selection": 20,
+        "final_sources": 24
+      },
+      "prespecified_additions": [
+        "S744",
+        "EXT-PUB003-001",
+        "S746"
+      ],
+      "new_from_screened_results": {
+        "source_id": "EXT-PUB003-002",
+        "doi": "10.1088/1741-2552/ad7f8b"
+      },
+      "identity_check": "All 13 duplicate entries repeat an identity already encountered; all other identities are unique.",
+      "patent_status_basis": {
+        "source_id": "S746",
+        "primary_url": "https://patents.google.com/patent/WO2025224687A1/en",
+        "reviewed_version": "WO2025224687A1; published application, not an efficacy study"
+      },
+      "correction": "Explained the three planned additions plus one screened addition and the existing screening counts. Replaced generic patent with published patent application; no grant status or efficacy inferred.",
+      "method_compaction": {
+        "before_words": 162,
+        "after_words": 147,
+        "preserved": [
+          "Narrative genre and historical selection",
+          "Date and databases",
+          "Ten English plus two Russian queries; five directions",
+          "2015 to search date; first 20 by relevance per query",
+          "Three planned additions and one selected artifact study",
+          "195 viewed records; 13 exact duplicates; 24 final sources",
+          "Selection/exclusion criteria, partial-text scope and non-exhaustive coverage"
+        ],
+        "reason": "Restore the 20-page Word limit by reducing repetitions, without font or spacing changes."
+      }
+    },
+    "structural_representation_review_20261024": {
+      "checked_at": "2026-10-24",
+      "source_id": "S892",
+      "generation": "g-f36b941a0426b642916d1cc1",
+      "query": {
+        "query": "conditional generative latent representations connectome reservoir computing mouse cortical graph latent structure function pretraining",
+        "mode": "hybrid",
+        "errors": [],
+        "generation": "g-f36b941a0426b642916d1cc1"
+      },
+      "graph": {
+        "nodes": 12,
+        "edges": 11,
+        "depth": 1,
+        "include_unreviewed": false,
+        "use": "Navigation and typed canonical context, not causal or empirical proof."
+      },
+      "primary_context": {
+        "node_id": "S892::5399274f5667::00002::e31478c6e24b",
+        "source_id": "S892",
+        "generation": "g-f36b941a0426b642916d1cc1",
+        "include_unreviewed": false,
+        "primary_url": "https://arxiv.org/html/2609.06093",
+        "document_sha256": "5399274f566763580a92d5d2517c83708702c00c62915ea3af338666c363eff9",
+        "text_sha256": "e31478c6e24ba4ff28c6d53651acc3d857a5ed3401c411bad1c53ad363de550d",
+        "locators": [
+          {
+            "chunk_id": "S892::5399274f5667::00002::e31478c6e24b",
+            "source_id": "S892",
+            "doc_sha256": "5399274f566763580a92d5d2517c83708702c00c62915ea3af338666c363eff9",
+            "document_version": "5399274f56676358",
+            "chunk_index": 2,
+            "chunk_count": 15,
+            "char_start": 6668,
+            "char_end": 8992,
+            "page_start": null,
+            "page_end": null,
+            "section_labels": [
+              "introduction"
+            ],
+            "token_estimate": 581,
+            "text_sha256": "e31478c6e24ba4ff28c6d53651acc3d857a5ed3401c411bad1c53ad363de550d",
+            "chunk_sha256": "749407fe7eb745ef8e597ab3af02faf6a31bdb4e5e881b1858e54ab97714dc57"
+          }
+        ],
+        "excerpt": "We propose a conditional generative framework for connectome graphs",
+        "verified_scope": "Introduction, Figure 2a-b and contribution list"
+      },
+      "finding": "The conditional generative representation describes local connectome graph structure and supports reconstruction/sampling. Decoded graphs are evaluated as fixed reservoirs on computational tasks. This is distinct from pretraining a temporal module on observed dynamics; no biological or human ECAP transfer is established by this example.",
+      "verdict": "подтверждено",
+      "correction": "Separated the graph-representation analogue [14] from synthetic training and adaptation [15]. Removed a repeated generic warning; retained the specific S149/S105 independence limitations and the hypothesis status in the introduction, abstracts and conclusion. The original broad grouping was imprecise, not disproved.",
+      "chapter1": "Existing description already distinguishes graph representation from temporal-module pretraining; no chapter text change."
+    },
+    "publisher_font_recheck_20261024": {
+      "url": "https://radiotec.ru/ru/journal/Biomedical_Radioelectronics?page=for_authors",
+      "section": "Detailed manuscript submission requirements",
+      "verified": "The publisher permits Times New Roman 12 or 14 point and requires double spacing in the detailed requirements. Current 12-point body and 14-point headings are retained.",
+      "general_detailed_spacing_conflict": "General advice mentions 1.5 spacing; detailed submission requirements specify double spacing and govern these manuscripts.",
+      "source_review_date_preserved": true
+    },
+    "source_notation_review_20261024": {
+      "before": "Nested F subscript theta_F was flattened to one Word subscript level.",
+      "after": "F(x_F(t), u_F(t); G_F, theta_F); the parameter is explicit in both formats.",
+      "meaning": "Equivalent notation; only omega is transferred, not theta_F.",
+      "architecture_change": false
+    },
+    "dynamic_representation_row_review_20261024": {
+      "checked_at": "2026-10-24",
+      "generation": "g-f36b941a0426b642916d1cc1",
+      "scope": "Chapter 1 functional controls, figure completeness and PUB-003 evidence-table boundary",
+      "primary_contexts": [
+        {
+          "node_id": "S741::b64331d113bb::00011::610d69839f31",
+          "generation": "g-f36b941a0426b642916d1cc1",
+          "primary_url": "https://arxiv.org/abs/2604.04033",
+          "document_sha256": "b64331d113bb958cbc2cab4a0c47ac676cdd3c53b1ef1e393898e443eedee8ed",
+          "locators": [
+            {
+              "chunk_id": "S741::b64331d113bb::00011::610d69839f31",
+              "source_id": "S741",
+              "doc_sha256": "b64331d113bb958cbc2cab4a0c47ac676cdd3c53b1ef1e393898e443eedee8ed",
+              "document_version": "b64331d113bb958c",
+              "chunk_index": 11,
+              "chunk_count": 15,
+              "char_start": 30834,
+              "char_end": 33615,
+              "page_start": 13,
+              "page_end": 13,
+              "section_labels": [
+                "limitations",
+                "discussion"
+              ],
+              "token_estimate": 696,
+              "text_sha256": "610d69839f317774409ad2485e24babb005b9c8c298b53ae3793fe26852aaeca",
+              "chunk_sha256": "0333a170d195461595c42c2489fe14e0d04e61f5dffbdbccbbe92c0bcda550df"
+            }
+          ],
+          "include_unreviewed": false
+        },
+        {
+          "node_id": "S909::114ed1c5408f::00001::0a7502a58731",
+          "generation": "g-f36b941a0426b642916d1cc1",
+          "primary_url": "https://arxiv.org/html/2609.38665v1",
+          "document_sha256": "114ed1c5408f8d39524c2356d319d8c0d34c3632f41e04a60620240c7c938ced",
+          "locators": [
+            {
+              "chunk_id": "S909::114ed1c5408f::00001::0a7502a58731",
+              "source_id": "S909",
+              "doc_sha256": "114ed1c5408f8d39524c2356d319d8c0d34c3632f41e04a60620240c7c938ced",
+              "document_version": "114ed1c5408f8d39",
+              "chunk_index": 1,
+              "chunk_count": 29,
+              "char_start": 2199,
+              "char_end": 5884,
+              "page_start": null,
+              "page_end": null,
+              "section_labels": [
+                "abstract",
+                "introduction"
+              ],
+              "token_estimate": 922,
+              "text_sha256": "0a7502a587313c192b0ddad7357d5c8b1d87db6e135a5febf93c39f60625a5f6",
+              "chunk_sha256": "a262e4c20e8cb3253b3d27b831e5a27269a3f84a6953d12a89eb43243b34f27d"
+            }
+          ],
+          "include_unreviewed": false
+        },
+        {
+          "node_id": "S909::114ed1c5408f::00010::959d4be8285a",
+          "generation": "g-f36b941a0426b642916d1cc1",
+          "primary_url": "https://arxiv.org/html/2609.38665v1",
+          "document_sha256": "114ed1c5408f8d39524c2356d319d8c0d34c3632f41e04a60620240c7c938ced",
+          "locators": [
+            {
+              "chunk_id": "S909::114ed1c5408f::00010::959d4be8285a",
+              "source_id": "S909",
+              "doc_sha256": "114ed1c5408f8d39524c2356d319d8c0d34c3632f41e04a60620240c7c938ced",
+              "document_version": "114ed1c5408f8d39",
+              "chunk_index": 10,
+              "chunk_count": 29,
+              "char_start": 33224,
+              "char_end": 37119,
+              "page_start": null,
+              "page_end": null,
+              "section_labels": [
+                "discussion",
+                "methods",
+                "other"
+              ],
+              "token_estimate": 974,
+              "text_sha256": "959d4be8285a5ae006f474206bba6ccb799bf6ffd14b2c553c656b1702c9ec07",
+              "chunk_sha256": "f4fad81356e2d9b9547b1bad26b2ebf73e13c0e34cf9aa1f6531b448fc4e598f"
+            }
+          ],
+          "include_unreviewed": false
+        },
+        {
+          "source_id": "S900",
+          "primary_url": "https://www.biorxiv.org/content/10.1101/2024.11.01.621596v2.full",
+          "cached_primary_path": "research/.work/pub003-review-20261005/primary/S900.html",
+          "sha256": "91ba1d272980214a2721bd61d48eb5f8dbb620dace7eb59942903090afd80a2e",
+          "retrieved_at": "2026-10-05",
+          "reread_at": "2026-10-24",
+          "live_route": "403; not a fresh successful download",
+          "locators": [
+            "Methods > Experimental procedure > Fly preparation",
+            "Methods > Data analysis and model fitting",
+            "Figure 4h-k"
+          ],
+          "finding": "Own in-vivo EPG calcium observations and nonlinear least-squares profile fitting; no held-out-animal predictive result inferred."
+        }
+      ],
+      "queries": [
+        {
+          "source_id": "S900",
+          "mode": "hybrid",
+          "errors": [],
+          "chunk_count": 0
+        },
+        {
+          "source_id": "S909",
+          "mode": "hybrid",
+          "errors": [],
+          "chunk_count": 3
+        },
+        {
+          "source_id": "S741",
+          "mode": "hybrid",
+          "errors": [],
+          "chunk_count": 3
+        }
+      ],
+      "decisions": [
+        {
+          "source_id": "S741",
+          "verdict": "requires scope limitation",
+          "decision": "The chapter now limits the comparison to early training; no conclusion about final convergence. Registered first page and current arXiv landing page both identify v1."
+        },
+        {
+          "source_id": "S909",
+          "verdict": "supported within the computational model",
+          "decision": "Distinguish generic rhythmicity from antagonist coordination. No body, sensory feedback or recording-based phase validation is inferred."
+        },
+        {
+          "source_id": "S900",
+          "verdict": "supported by cached primary text",
+          "decision": "Name own calcium observations and fitted profiles; do not describe this as held-out-animal prediction."
+        },
+        {
+          "source_id": "S892",
+          "verdict": "requires classification correction",
+          "decision": "Remove [14] from the dynamics-to-representation row, retain structural-analogue prose and source matrix. Neither retained [11] nor [12] validates temporal-module transfer to human ECAP."
+        },
+        {
+          "source_id": null,
+          "verdict": "editorial consistency",
+          "decision": "State confirmed absence of practically meaningful advantage consistently with introduction and protocol. Add propagation explicitly to the ECAP formation figure."
+        }
+      ],
+      "pi_review": {
+        "job_id": "e17baa6a-7b2b-4eb9-a631-b7b2629fa09b",
+        "thread_id": "607383ee-73b4-4692-87e9-3867510650da",
+        "status": "completed",
+        "agent_settled": true,
+        "exit_code": 0,
+        "result_path": "publications/.work/pi-workers/editorial-20261024-0c8f621c/evidence-table-boundary/result.md",
+        "accepted": "Remove unqualified graph-representation analogue from the dynamics row.",
+        "qualification": "Worker used supplied facts and scoped files, not an independent primary reread; the main agent checked the underlying contexts. The retained sources motivate proposed tests but do not empirically validate the transfer."
+      },
+      "scientific_search_expansion": false,
+      "canonical_research_changed": false
+    },
+    "scientific_terminology_review_20261024": {
+      "checked_at": "2026-10-24",
+      "generation": "g-f36b941a0426b642916d1cc1",
+      "scope": "Scientific terminology and scope of cited transfer/thermal examples",
+      "primary_contexts": [
+        {
+          "source_id": "S901",
+          "primary_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8944580/",
+          "cached_primary_sha256": "f6014e4f487c2e7b33bc632f64fbc85d6a9b903d1f816a36d8307e7b760c8214",
+          "retrieved_at": "2026-10-05",
+          "reread_at": "2026-10-24",
+          "locator": "Abstract; Results > heat nociception and UVC-induced thermal hypersensitivity",
+          "finding": "Heat-evoked rolling and tissue-injury-induced heat hypersensitivity, not a general result across all stimulus modalities.",
+          "correction": "Specify thermal nociception in the chapter paragraph."
+        },
+        {
+          "source_id": "S873",
+          "retrieval": "canonical Source card only; no registered chunks returned",
+          "retained_scope": "Existing chapter explicitly relies on the available journal abstract. No donor-held-out validation or additional quantitative findings were added."
+        },
+        {
+          "source_id": "S836",
+          "retrieval": "registered chunks returned in hybrid mode; no errors",
+          "retained_scope": "No additional result added. The chapter restricts the example to EEG augmentation and its own target task."
+        }
+      ],
+      "language_corrections": [
+        {
+          "document": "Chapter 1",
+          "before": "кальциевое изображение; опубликованный патент",
+          "after": "кальциевая визуализация; опубликованный патентный документ",
+          "reason": "Name the imaging method and avoid implicitly treating a published application as a patent grant."
+        },
+        {
+          "document": "PUB-003",
+          "before": "разными конструкциями",
+          "after": "Explicitly distinguish fly neurodynamics/nocifensive behaviour, subjective human pain, ECAP and treatment outcomes.",
+          "reason": "Avoid mistranslation of construct and avoid implying mutually exclusive clinical constructs."
+        },
+        {
+          "document": "PUB-003",
+          "before": "обещать настройку лечения или обезболивание",
+          "after": "Improved growth-curve modelling accuracy does not establish clinical efficacy.",
+          "reason": "Replace conversational promise language with a precise boundary of inference."
+        },
+        {
+          "document": "PUB-003",
+          "before": "вычислительная идентифицируемость ... универсальный закон",
+          "after": "Identify reconstruction of activity in a computational reference and limit inference to the tested conditions.",
+          "reason": "Use the checked S743/FlyVis/topology contexts without a universal-law metaphor."
+        }
+      ],
+      "pagination_correction": "The first expanded wording produced 21 Word/DOC pages. Repeated introductory and observation-equivalence wording was shortened without reducing fonts or deleting a source or limitation. Final acceptance remains governed by the PDF audit.",
+      "grammar_probe": "A controlled Word grammar probe stalled before its first saved control. Its own hidden Word process and shell were identified by exact command, automation flag, hidden window and 0.378-second creation interval, then stopped. No valid grammar-control result was obtained and no automatic grammar-pass claim is made.",
+      "canonical_research_changed": false,
+      "literature_corpus_expanded": false
+    },
+    "bibliographic_presentation_recheck_20261024": {
+      "checked_at": "2026-10-24",
+      "scope": "Bibliographic presentation in unsubmitted manuscripts",
+      "author_primary": {
+        "url": "https://api.datacite.org/dois/10.48550/arXiv.2604.04033",
+        "locator": "data.attributes.creators[0].givenName/familyName",
+        "sha256": "3615812cd7faa10cca92679aad54b37a80544cc57c7cf7f56f93060d47dd0429"
+      },
+      "corrections": [
+        {
+          "document": "PUB-002",
+          "source_id": "S741",
+          "before": [
+            {
+              "literal": "Nalin Dhiman"
+            }
+          ],
+          "after": [
+            {
+              "given": "Nalin",
+              "family": "Dhiman"
+            }
+          ],
+          "doi_unchanged": null,
+          "versioned_url_preserved": "https://arxiv.org/abs/2604.04033v1"
+        },
+        {
+          "document": "PUB-003",
+          "source_id": "S741",
+          "before": [
+            {
+              "family": "Dhiman",
+              "given": "Nalin"
+            }
+          ],
+          "after": [
+            {
+              "given": "Nalin",
+              "family": "Dhiman"
+            }
+          ],
+          "doi_unchanged": null,
+          "versioned_url_preserved": "https://arxiv.org/abs/2604.04033v1"
+        }
+      ],
+      "language": "Russian reference uses Т., №, С.; original titles, DOI and page ranges are preserved.",
+      "canonical_research_changed": false,
+      "figure": "Only the local ECAP formation figure uses 18 mm equal minimum node heights; global process style and Chapter 3 figure are unchanged.",
+      "scientific_findings_changed": false,
+      "bibliographic_presentation_changed": true,
+      "author_identity_changed": false
+    },
+    "figure_reference_recheck_20261024": {
+      "checked_at": "2026-10-24",
+      "scope": "Figure reference and uniform local ECAP diagram nodes",
+      "pub003_correction": "An ordinary-text reference to Figure 1 now appears in the immediately preceding paragraph. No Word REF field added.",
+      "publisher_rule": {
+        "url": "https://radiotec.ru/ru/journal/Biomedical_Radioelectronics?page=for_authors",
+        "locator": "Detailed submission requirements > Figure placement after first mention"
+      },
+      "book_figure": {
+        "number": "1.1",
+        "page": 26,
+        "before_node_heights_pdf_pt": [
+          42.52,
+          42.52,
+          48.956,
+          42.52,
+          42.52,
+          42.52
+        ],
+        "after_node_heights_pdf_pt": [
+          51.0242919921875,
+          51.0242919921875,
+          51.0242919921875,
+          51.02423095703125,
+          51.02423095703125,
+          51.02423095703125
+        ],
+        "minimum_node_height_mm": 18,
+        "font_size_tex_pt": 13,
+        "global_style_changed": false
+      },
+      "scientific_findings_changed": false
+    },
+    "scientific_figure_redesign_20261024": {
+      "date": "2026-10-24",
+      "reason": "User requested replacement of abstract box-and-arrow drawings with scientifically informative illustrations.",
+      "figures": [
+        {
+          "document": "text",
+          "number": "1.1",
+          "content": "Stimulating contact, schematic myelinated fibres, propagation, weighted segment currents and differential recording; voltage and amplitude growth have separate axes."
+        },
+        {
+          "document": "text",
+          "number": "3.1",
+          "content": "Source connectivity and dynamics, initial parameter vector, target temporal history, human fibre currents and voltage-to-growth extraction. Explanatory Russian labels; no anatomical transfer."
+        },
+        {
+          "document": "PUB-002",
+          "number": "1",
+          "content": "Graph constraints, latent dynamics, observation/sampling and independent reference shown as different objects. State-to-observation path starts from activity, not directly from graph."
+        },
+        {
+          "document": "PUB-003",
+          "number": "1",
+          "content": "Source observation/pretraining and target physical model. Only omega0 crosses lanes. B_alpha excites/propagates; H_phi records computed currents; amplitude is extracted from voltage."
+        }
+      ],
+      "scientific_scope": "All topologies and traces are illustrative, not measured or newly simulated data. No architecture or transfer advantage selected.",
+      "article_formats": "Editable TikZ, vector PDF and SVG, 400dpi Word PNG; main XeLaTeX manuscripts include vector PDF.",
+      "pi_review": {
+        "job_id": "560bce8f-c9c6-4c5f-85ad-939805b9427f",
+        "thread_id": "3f5260c1-e2d4-4dd9-a609-3afa298146a0",
+        "completed": true,
+        "agent_settled": true,
+        "exit_code": 0,
+        "deliverable_verified": true,
+        "accepted": [
+          "Define observation notation; distinguish constraints/state/signal; independent reference and schematic status explicit.",
+          "Only temporal initial parameters transfer; computed currents and amplitude extraction made explicit."
+        ],
+        "not_accepted": [
+          "Notation shared across independent papers is not inherently a collision; each paper defines its symbols.",
+          "A is growth-curve amplitude, not an axon model; Cyrillic unit А labels current.",
+          "Do not impose geometry/conductivity only at H_phi: these also influence the excitation field and human fibre model.",
+          "Worker did not inspect PNGs and supplied no visual-layout approval."
+        ]
+      },
+      "pagination_edits": "Repeated prose shortened; all source tables, search counts, scientific boundaries and controls retained. Exact search strings remain in attached historical ledger.",
+      "supersedes": "Phase22 uniform rectangular nodes and former 2040x385 raster dimensions are historical. Their measurements are not assertions about these new drawings.",
+      "files": {
+        "text/document/figures/ecap-formation.tex": "5768125b345456ac315299c21e551d5531b10ab90c25b8c0c2e77be744a66c52",
+        "text/document/figures/planned-method.tex": "f832c361f3a9733365e37f0df8c7fc5a690cc8d41c8ff623187f131b66a9678d",
+        "publications/documents/PUB-002/figures/observation-diagram.tex": "cdf6e70720ecd7f3f0a53e5a349075a89afc7118f155c5da8a7975d25b1c02b9",
+        "publications/documents/PUB-002/figures/observation-scheme.pdf": "35ffa88a2cf91fe9bf65707566c86c352b6802038f3889617fdb828b8569f3f1",
+        "publications/documents/PUB-002/figures/observation-scheme.png": "734f9aef6ca7050625a493f752aa2f553b9bfc1029aff42a7cdf7b35befd80cc",
+        "publications/documents/PUB-002/figures/observation-scheme.svg": "a16ae248297d15609255671d2269cb9dbbcda827fe8c1062dc50f612b575133c",
+        "publications/documents/PUB-002/figures/observation-scheme.tex": "3643592441f32e38b0650de4447f645cc7c48b251ed75fa650c40be88cc823ef",
+        "publications/documents/PUB-003/figures/transfer-diagram.tex": "47c828605d91bf7920f57625bd6259e44434c008ff631d3eba87fd52377190b4",
+        "publications/documents/PUB-003/figures/transfer-scheme.pdf": "2438cea130e8922f118bcdbe3a5e02fe904edb9315a622880ebcaf8f96aa2589",
+        "publications/documents/PUB-003/figures/transfer-scheme.png": "9f2bfa954baa3a88fca7d92ae71e732bce0bab61fca623ed74c7aed22f77bd46",
+        "publications/documents/PUB-003/figures/transfer-scheme.svg": "461226adccec13c1bf020aa33d39cad5043457becc6ba56eb3599b64d39eda18",
+        "publications/documents/PUB-003/figures/transfer-scheme.tex": "e56ef4ad9a030731c818edaab3484c6788db073fdc59d5b204dd8df87bffddb0"
+      }
+    },
+    "caption_and_interpretation_review_20261024": {
+      "date": "2026-10-24",
+      "scope": "Final figure/caption pagination and statistical-language clarification; no new experiments or source cards.",
+      "S739_no_change_decision": {
+        "question": "Does one analysed fly mean the original data set contained only one animal?",
+        "generation": "g-f36b941a0426b642916d1cc1",
+        "node_id": "S739::a9d2ef6872f6::00016::0a3ccd693dc8",
+        "locators": [
+          {
+            "chunk_id": "S739::a9d2ef6872f6::00016::0a3ccd693dc8",
+            "source_id": "S739",
+            "doc_sha256": "a9d2ef6872f6e94a290ffa97c01fe691ad868d4920270ed6c2375bdb6131ed28",
+            "document_version": "a9d2ef6872f6e94a",
+            "chunk_index": 16,
+            "chunk_count": 29,
+            "char_start": 51798,
+            "char_end": 55413,
+            "page_start": null,
+            "page_end": null,
+            "section_labels": [
+              "discussion",
+              "methods",
+              "other"
+            ],
+            "token_estimate": 904,
+            "text_sha256": "0a3ccd693dc8ac745db41803ae25d612536494cd60c50fbe274a31a64996dbf7",
+            "chunk_sha256": "d55edf2a10691dcc5796dac9a70322f149cfc0851f5bd295c62a2c98d841b1a6"
+          }
+        ],
+        "document_sha256": "a9d2ef6872f6e94a290ffa97c01fe691ad868d4920270ed6c2375bdb6131ed28",
+        "excerpt": "All analyses are performed on an example fly, with at least five independently trained model instances per condition (n = 5 trained models throughout); the first half of that recording served as the training set, and the second half was held out for all generalization, effectome, and ablation analyses reported in the main text.\n\nCalcium-to-firing-rate deconvolution\n\nThe model generates per-neuron firing rates, while the measurements are slow, neuropil-averaged ΔF/F traces. To train against a signal the model can reproduce, we inverted the calcium forward model and recovered, for each neuropil, an instantaneous estimate of the local population",
+        "decision": "The methods explicitly analyse one example fly and train five model instances. Keep the distinction; do not infer that the source data set contains only one fly."
+      },
+      "accepted_corrections": [
+        "Dissertation introduction, chapter conclusions and appendices now use confirmed absence of a practically meaningful difference for the interval contained within [-delta,+delta]. Deterioration remains separate. Literal IPR goal and all six tasks unchanged.",
+        "Replace independent people with independent units of analysis in the introduction.",
+        "State explicitly that Figure 1.1 curves have no quantitative scale; label input history and recording in Figure 3.1.",
+        "Keep complete Russian and English figure captions together with the drawing in Word and XeLaTeX.",
+        "Restore the double baseline interval after the XeLaTeX minipage; reject widow/orphan paragraph lines, including a citation-only line carried to the next page.",
+        "Tie Word roundtrip reports by SHA-256 to the exact DOCX, DOC and both exported PDFs. A previous report cannot validate a new generation."
+      ],
+      "Pi_conference_review": {
+        "job_id": "d6dc2810-76dd-432a-af12-6432d24c0cc6",
+        "thread_id": "2ac5b68c-956c-4c80-8622-b10d55cbd31a",
+        "status": "failed",
+        "agent_settled": true,
+        "exit_code": 0,
+        "error": "Pi settled without assistant text",
+        "integrated_findings": false,
+        "decision": "Six conference descriptions were checked independently against saved publisher metadata by the main agent; no worker approval claimed."
+      },
+      "files": {
+        "text/document/chapters/00-introduction.tex": "7d57bcdc3bf5825210b3315be537d6e43aeb0854b5ed423ddfae5a5f03eba949",
+        "text/document/chapters/01-foundations.tex": "9c64d8a584d5c4a0d8ac0f6e3f768c2345a2384df00bb96dbd2c2f503ccab3c9",
+        "text/document/backmatter/appendices.tex": "c7464ad2b995e32f7d54e82b1108edb0c8883908ffc80a21e5a3582cf0ad4be8",
+        "text/document/figures/planned-method.tex": "f832c361f3a9733365e37f0df8c7fc5a690cc8d41c8ff623187f131b66a9678d"
+      }
+    },
+    "explicit_physical_input_review_20261024": {
+      "date": "2026-10-24",
+      "question": "Does the formal target model preserve the prescribed physical stimulus independently of the learned representation?",
+      "generation": "g-f36b941a0426b642916d1cc1",
+      "queries": [
+        {
+          "query": "human ECAP biophysical axon model physical stimulus waveform inputs surrogate latent variables observation operator reciprocity",
+          "mode": "hybrid",
+          "errors": [],
+          "generation": "g-f36b941a0426b642916d1cc1",
+          "result_ids": [
+            "S363::fb6ff12dd98d::00015::f0bbdd7395a6",
+            "S767::1b18a7b63ad5::00005::d5f575c91750",
+            "S767::1b18a7b63ad5::00006::07c96e072ef6",
+            "S764::0d9a7eaf0bc1::00005::75bf8e5d6d8b",
+            "S363::fb6ff12dd98d::00009::ca4d83a25444"
+          ]
+        },
+        {
+          "query": "ECAP growth curve static amplitude single pulse versus temporal stimulation history refractory recovery frequency",
+          "mode": "hybrid",
+          "errors": [],
+          "generation": "g-f36b941a0426b642916d1cc1",
+          "result_ids": [
+            "S787::9ebd04781f83::00005::abcf220cc3d0",
+            "S767::1b18a7b63ad5::00009::b689fd678f68",
+            "S159::fe627b05da40::00008::999954088c10",
+            "S767::1b18a7b63ad5::00008::6e7a5f4d9a48",
+            "S767::1b18a7b63ad5::00006::07c96e072ef6"
+          ]
+        }
+      ],
+      "primary_basis": {
+        "source": "S767",
+        "node_id": "S767::1b18a7b63ad5::00006::07c96e072ef6",
+        "primary_url": "https://iopscience.iop.org/article/10.1088/1741-2552/aceca4/pdf",
+        "document_sha256": "1b18a7b63ad5bc261d52ff2a85e5b9f7e8ee2a4f9948760a11196da5351271a1",
+        "locators": [
+          {
+            "chunk_id": "S767::1b18a7b63ad5::00006::07c96e072ef6",
+            "source_id": "S767",
+            "doc_sha256": "1b18a7b63ad5bc261d52ff2a85e5b9f7e8ee2a4f9948760a11196da5351271a1",
+            "document_version": "1b18a7b63ad5bc26",
+            "chunk_index": 6,
+            "chunk_count": 19,
+            "char_start": 19551,
+            "char_end": 22004,
+            "page_start": 6,
+            "page_end": 6,
+            "section_labels": [
+              "methods"
+            ],
+            "token_estimate": 614,
+            "text_sha256": "07c96e072ef66c66d31ae6463a2d94f6b80c1e57b83ec768674234106a4257aa",
+            "chunk_sha256": "90d7667a073fc839e212c7458cc7302f84edf5418211ec2175c29ee43da43b1d"
+          }
+        ],
+        "scope": "Figure 2 and modelling methods: known electrical stimulation, multicompartment axon response, propagation and reciprocity recording are separate physical stages."
+      },
+      "decision_kind": "Author-proposed clarification, not an empirical source result or a selected neural architecture.",
+      "changes": [
+        "In the proposed target equation, give B_alpha the prescribed u_H history explicitly alongside the temporal representation and c_H.",
+        "Show the separate prescribed-stimulus input in the PUB-003 and dissertation Figure 3.1 drawings; captions and English abstract agree.",
+        "Keep physical equations, units and independent operator validation as constraints. The learned module cannot silently redefine the physical input.",
+        "Retain the static growth-curve comparison: a temporal representation is not justified solely because the source model is dynamic."
+      ],
+      "not_inferred": [
+        "No benefit of Drosophila pretraining.",
+        "No architecture or dimensionality selected.",
+        "No newly retrieved source added to the bibliography or canonical corpus.",
+        "No experiments or simulations performed."
+      ],
+      "english_semantic_clarifications": {
+        "ten English queries covering five directions": "ten English queries covering five research areas",
+        "Source training predicts future observations without access to future targets.": "The source model predicts later observations from past inputs; prediction targets are excluded from its input.",
+        "on a declared spatial and temporal grid; excitation and propagation retain their equations and units.": "; excitation and propagation retain their equations and units.",
+        "under linear quasi-static, resistive volume conduction.": "in a linear, quasi-static resistive conductor.",
+        "The proposed endpoint is root mean square error (RMSE) of amplitude in microvolts, averaged equally across participants.": "The proposed endpoint is root mean square error (RMSE) of amplitude in microvolts, computed for each participant's growth curve and averaged equally across participants."
+      },
+      "files": {
+        "publications/documents/PUB-003/manuscript.md": "b286f10550041fd89b9c81bc1ae90b39956e8d2b9f8abb958c6f27915672a255",
+        "publications/documents/PUB-003/metadata.json": "53c1d50ea3dd5c7f4d5274761c2bbb00c020f8a8ebc675d11c280465771fd8ca",
+        "publications/documents/PUB-003/figures/transfer-diagram.tex": "47c828605d91bf7920f57625bd6259e44434c008ff631d3eba87fd52377190b4",
+        "text/document/chapters/01-foundations.tex": "9c64d8a584d5c4a0d8ac0f6e3f768c2345a2384df00bb96dbd2c2f503ccab3c9",
+        "text/document/figures/planned-method.tex": "f832c361f3a9733365e37f0df8c7fc5a690cc8d41c8ff623187f131b66a9678d"
+      }
+    },
+    "adaptation_protocol_locator_review_20261024": {
+      "query": "S149 \"full unlabeled\" \"test\" \"fold\" adaptation pool leakage",
+      "mode": "hybrid",
+      "errors": [],
+      "generation": "g-f36b941a0426b642916d1cc1",
+      "include_unreviewed": false,
+      "primary_context": "S149::08ef7d92bcff::00026::6cdfeb2c53c4",
+      "manuscript_changed": false,
+      "decision": "Existing cautious text retained: independence is not ensured; actual subject overlap and bias magnitude are not established. Test labels and unlabeled adaptation are distinct."
+    }
   }
 }

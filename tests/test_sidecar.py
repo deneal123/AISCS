@@ -9,10 +9,63 @@ from pathlib import Path
 import pytest
 from mcp import Client
 
-from service.core import DocumentSidecar, SidecarError, sha256
+from service.core import DocumentSidecar, SidecarError, inventory_errors, sha256, source_inventory
 from service.mcp_server import create_server
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+@pytest.mark.parametrize("change", ["content", "missing", "unexpected"])
+def test_immutable_inventory_rejects_source_changes(tmp_path: Path, change: str) -> None:
+    source = tmp_path / "source"
+    source.mkdir()
+    article = source / "article.pdf"
+    article.write_bytes(b"original publication")
+    manifest = {"format": "aspa-immutable-source-inventory-v1", "files": source_inventory(source)}
+    assert inventory_errors(source, manifest) == []
+    if change == "content":
+        article.write_bytes(b"modified publication")
+    elif change == "missing":
+        article.unlink()
+    else:
+        (source / "unexpected.txt").write_text("new source", encoding="utf-8")
+    assert inventory_errors(source, manifest)
+
+
+def test_python_cache_is_derived_but_source_inside_cache_is_checked(tmp_path: Path) -> None:
+    (tmp_path / "article.tex").write_text("source", encoding="utf-8")
+    manifest = {"format": "aspa-immutable-source-inventory-v1", "files": source_inventory(tmp_path)}
+    cache = tmp_path / "__pycache__"
+    cache.mkdir()
+    (cache / "source.cpython-312.pyc").write_bytes(b"regenerated cache")
+    assert inventory_errors(tmp_path, manifest) == []
+    (cache / "hidden.py").write_text("unexpected source", encoding="utf-8")
+    assert inventory_errors(tmp_path, manifest)
+
+
+def test_immutable_inventory_rejects_duplicate_entries(tmp_path: Path) -> None:
+    (tmp_path / "article.tex").write_text("source", encoding="utf-8")
+    files = source_inventory(tmp_path)
+    manifest = {"format": "aspa-immutable-source-inventory-v1", "files": files + files}
+    assert inventory_errors(tmp_path, manifest)
+
+
+def test_immutable_inventory_manifest_is_hash_bound(tmp_path: Path) -> None:
+    destination = tmp_path / "sidecar"
+    shutil.copytree(
+        ROOT,
+        destination,
+        ignore=shutil.ignore_patterns(
+            ".venv", ".pytest_cache", ".ruff_cache", "build", "archive", "examples"
+        ),
+    )
+    sidecar = DocumentSidecar(destination)
+    assert sidecar.validate(profile="draft")["ok"]
+    manifest = destination / "data/immutable-manifests/PUB-001.json"
+    manifest.write_text('{"files": []}', encoding="utf-8")
+    result = sidecar.validate(profile="draft")
+    assert not result["ok"]
+    assert any("immutable inventory manifest hash mismatch" in error for error in result["errors"])
 
 
 @pytest.mark.parametrize("template", ["article", "abstract", "supplement"])

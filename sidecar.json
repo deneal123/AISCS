@@ -1,7 +1,7 @@
 {
   "name": "aspa-publications-sidecar",
   "mcp_name": "aspa-publications",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "uses_biber": false,
   "registry": "data/publications.json",
   "outline": "docs/outline.md",

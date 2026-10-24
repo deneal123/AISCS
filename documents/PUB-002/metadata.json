@@ -14,7 +14,7 @@
   "contact_details_status": "not_supplied",
   "approvals": [],
   "table_captions_en": {
-    "1": "Independent axes for model comparison.",
+    "1": "Axes for model comparison.",
     "2": "Distinct model properties and evaluation procedures.",
     "3": "Models, observations, evaluation and limitations of all included publications.",
     "4": "Evaluation domains and admissible conclusions."
@@ -43,5 +43,5 @@
     ]
   },
   "figure_path": "figures/observation-scheme.png",
-  "figure_caption_en": "Figure 1. Dynamics, observation operator and signal: 1 — input; 2 — internal state; 3 — observation operator; 4 — measured signal; 5 — testable conclusion. Dynamics and measurement have separate parameters. Author-proposed scheme."
+  "figure_caption_en": "Figure 1. Dynamics and observation: G, connectivity; θ, dynamic parameters; x, state; Q_φ, observation operator with parameters φ; y, signal. Evaluation uses an independent, task-appropriate reference. Author-proposed schematic; graph and traces are illustrative."
 }
