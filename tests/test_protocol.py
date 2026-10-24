@@ -69,6 +69,13 @@ def test_compile_required_preserves_original_and_removes_native_parser(body):
     assert schema["oneOf"][0]["properties"]["tool_name"] == {"const": "read_number"}
 
 
+@pytest.mark.parametrize("reference", ["$dynamicRef", "$recursiveRef"])
+def test_unsupported_reference_cannot_enable_external_resolution(body, reference):
+    body["tools"][0]["function"]["parameters"][reference] = "http://private.invalid/schema"
+    with pytest.raises(ProtocolFailure, match="unsupported_schema_reference"):
+        compile_request(body)
+
+
 def test_round_trip_has_stable_tool_identity_and_same_usage(body):
     compiled = compile_request(body)
     raw = completion({"tool_name": "read_number", "arguments": {"step": 1}})

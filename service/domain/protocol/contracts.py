@@ -29,6 +29,9 @@ def checked_tree(value: Any, depth: int = 0) -> None:
         if len(value) > 256:
             raise ProtocolFailure("schema_limit")
         for name, child in value.items():
+            # Неподдержанный диалект не должен включать сетевой resolver валидатора.
+            if name in {"$dynamicRef", "$recursiveRef"}:
+                raise ProtocolFailure("unsupported_schema_reference")
             if name in {"$id", "$schema"}:
                 continue
             if name == "$ref" and (not isinstance(child, str) or not child.startswith("#")):
