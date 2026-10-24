@@ -93,6 +93,24 @@ def test_compile_required_preserves_original_and_uses_native_tools(body):
     assert compiled.body["add_generation_prompt"] is False
 
 
+@pytest.mark.parametrize("nullable", [True, False])
+def test_nullable_tool_argument_uses_the_same_schema_for_generation_and_receipt(body, nullable):
+    schema = body["tools"][0]["function"]["parameters"]["properties"]["step"]
+    schema["nullable"] = nullable
+    before = deepcopy(body)
+    compiled = compile_request(body)
+    assert body == before
+    assert compiled.body["tools"][0]["function"] == compiled.functions["read_number"]
+    raw = completion({"tool_name": "read_number", "arguments": {"step": None}})
+    result = normalize_response(raw, compiled)
+    assert result["id"] == raw["id"] and result["usage"] == raw["usage"]
+    assert ("local_protocol_error" not in result) is nullable
+    if nullable:
+        call = result["choices"][0]["message"]["tool_calls"][0]
+        assert call["id"] == "call_fixed"
+        assert json.loads(call["function"]["arguments"]) == {"step": None}
+
+
 @pytest.mark.parametrize("reference", ["$dynamicRef", "$recursiveRef"])
 def test_unsupported_reference_cannot_enable_external_resolution(body, reference):
     body["tools"][0]["function"]["parameters"][reference] = "http://private.invalid/schema"

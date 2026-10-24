@@ -9,6 +9,7 @@ from jsonschema.exceptions import SchemaError
 
 from ..model import MODEL_ID
 from .contracts import CompiledRequest, ProtocolFailure, checked_tree
+from .schema import native_schema
 from .transcript import canonical_messages
 
 _NAME = re.compile(r"^[A-Za-z_][A-Za-z0-9_-]{0,63}$")
@@ -32,11 +33,13 @@ def functions_from(tools):
         if not isinstance(function.get("description", ""), str):
             raise ProtocolFailure("tools_invalid")
         checked_tree(parameters)
+        parameters = native_schema(parameters)
         try:
             Draft202012Validator.check_schema(parameters)
         except SchemaError:
             raise ProtocolFailure("tool_schema_invalid") from None
         result[name] = deepcopy(function)
+        result[name]["parameters"] = parameters
     return result
 
 

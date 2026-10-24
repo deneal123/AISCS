@@ -4,6 +4,7 @@ import asyncio
 import json
 import os
 import sys
+from copy import deepcopy
 from types import SimpleNamespace
 
 CASES = (
@@ -137,12 +138,52 @@ def guided_messages(admission, *, workflow=False):
     return messages
 
 
+def decision_messages(admission):
+    return [
+        {
+            "role": "system",
+            "content": (
+                "Составь контракт результата задачи IDE и вызови submit_task_contract. "
+                "Не выполняй задачу и не объявляй успех.\n"
+                "1. Сначала реши, отсутствует ли существенный выбор пользователя. "
+                "Если пользователь просит своё желаемое значение, но его не указал, "
+                "нужен needs_clarification=true и конкретный вопрос по-русски. "
+                "Не подставляй своё значение. Если результат уже задан, используй false "
+                "и пустой question. Чтение доступных файлов и выбор способа реализации "
+                "не требуют вопроса.\n"
+                "2. Только чтение без изменений: kind=analysis, критерии kind=read. "
+                "Создание или изменение: kind=change, критерии kind=file.\n"
+                "3. criteria — список результатов, а не шагов. Каждый запрошенный файл "
+                "укажи ровно один раз, сохрани его имя в target. Пути относительные без ./ . "
+                "Сохранение, чтение и запуск создаваемого файла относятся к его проверке, "
+                "а не к дополнительным критериям. Для разных результатов используй разные "
+                "criterion_id: строчная латиница, цифры, _ и -. Не используй verify_project. "
+                "Не добавляй не запрошенные файлы и не убирай запрошенные. "
+                f"Разрешённые действия сервера: {','.join(admission.actions)}."
+            ),
+        },
+        {"role": "user", "content": "Запрос: " + admission.goal},
+    ]
+
+
+def candidate_tool(profile, original):
+    tool = deepcopy(original)
+    if profile in {"ordered", "decision_first"}:
+        schema = tool["function"]["parameters"]
+        order = ("needs_clarification", "question", "kind", "criteria")
+        schema["properties"] = {name: schema["properties"][name] for name in order}
+        schema["required"] = list(order)
+    return tool
+
+
 def selected_builders(profile, baseline):
     builders = {
         "baseline": baseline,
         "concise": concise_messages,
         "guided": guided_messages,
         "workflow_guided": lambda admission: guided_messages(admission, workflow=True),
+        "ordered": baseline,
+        "decision_first": decision_messages,
     }
     if profile == "all":
         return tuple((name, builders[name]) for name in ("baseline", "concise", "guided"))
@@ -153,7 +194,16 @@ def selected_builders(profile, baseline):
     return ((profile, builders[profile]),)
 
 
-async def _exercise(key, selected_profile, suite):
+def sampling_parameters(mode):
+    if mode == "runtime":
+        # Как в seal_harness: sampling провайдера не переопределяется.
+        return {"max_tokens": 2048}
+    if mode == "diagnostic":
+        return {"temperature": 0.1, "max_tokens": 512}
+    raise ValueError("admission_sampling_invalid")
+
+
+async def _exercise(key, selected_profile, suite, sampling):
     os.environ["AGENTS__LOCAL_API_KEY"] = key
     os.environ["AGENTS__LOCAL_BASE_URL"] = "http://local-llm:8080/v1"
     from service.application.harness.proposal import (
@@ -185,10 +235,9 @@ async def _exercise(key, selected_profile, suite):
                         model=MODEL_ID,
                         kind="meta_usage",
                         pin_provider="local",
-                        temperature=0.1,
-                        max_tokens=512,
+                        **sampling_parameters(sampling),
                         messages=messages,
-                        tools=[contract_tool(admission)],
+                        tools=[candidate_tool(profile, contract_tool(admission))],
                         tool_choice={"type": "function", "function": {"name": CONTRACT_FUNCTION}},
                     )
                     row = {
@@ -224,13 +273,14 @@ async def _exercise(key, selected_profile, suite):
         "synthetic_read_only": True,
         "adopted": False,
         "suite": suite,
+        "sampling": sampling,
         "results": rows,
     }
 
 
-async def exercise(key, selected_profile="both", suite="basic"):
+async def exercise(key, selected_profile="both", suite="basic", sampling="diagnostic"):
     async with asyncio.timeout(300):
-        return await _exercise(key, selected_profile, suite)
+        return await _exercise(key, selected_profile, suite, sampling)
 
 
 if __name__ == "__main__":
@@ -243,6 +293,7 @@ if __name__ == "__main__":
                         request["key"],
                         request.get("admission_profile", "both"),
                         request.get("admission_suite", "basic"),
+                        request.get("admission_sampling", "diagnostic"),
                     )
                 ),
                 ensure_ascii=False,

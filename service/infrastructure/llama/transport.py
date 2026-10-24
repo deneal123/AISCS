@@ -20,7 +20,16 @@ def failure_category(error):
         return "unknown"
     for category, markers in (
         ("grammar", ("grammar", "schema")),
-        ("tool_parse", ("tool call", "tool_call", "failed to parse")),
+        (
+            "tool_parse",
+            (
+                "tool call",
+                "tool_call",
+                "failed to parse",
+                "does not match the expected",
+                "invalid diff:",
+            ),
+        ),
         ("context_limit", ("context size", "context length", "context window")),
     ):
         if any(marker in message for marker in markers):

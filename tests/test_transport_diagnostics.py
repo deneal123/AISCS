@@ -39,6 +39,12 @@ def test_transport_diagnostic_never_reflects_error_values(monkeypatch, caplog, f
     [
         (b'{"error":{"message":"PRIVATE grammar rejected PRIVATE"}}', "grammar"),
         (b'{"error":{"message":"PRIVATE Failed to parse tool call"}}', "tool_parse"),
+        (
+            b'{"error":{"message":"The model produced output that does not match '
+            b'the expected PRIVATE format"}}',
+            "tool_parse",
+        ),
+        (b'{"error":{"message":"Invalid diff: PRIVATE"}}', "tool_parse"),
         (b'{"error":{"message":"PRIVATE context size exceeded"}}', "context_limit"),
         (b'{"error":{"message":"PRIVATE arbitrary failure"}}', "unknown"),
         (b'{"error":"PRIVATE"}', "unknown"),
