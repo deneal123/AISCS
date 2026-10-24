@@ -4,25 +4,37 @@ import signal
 import subprocess
 import threading
 
+from .diagnostics import RuntimeDiagnostics
+
 
 def run(server, command, child):
     stopped = threading.Event()
     process = None
+    reader = None
+    diagnostics = RuntimeDiagnostics()
     try:
         process = subprocess.Popen(
             command,
             env=child,
             stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
+            stderr=subprocess.PIPE,
         )
+        reader = threading.Thread(target=diagnostics.consume, args=(process.stderr,), daemon=True)
+        reader.start()
 
         def stop(signum, frame):
             stopped.set()
             threading.Thread(target=server.shutdown, daemon=True).start()
 
         def watch():
-            process.wait()
+            exit_code = process.wait()
+            reader.join(timeout=1)
             if not stopped.is_set():
+                print(
+                    f"local_llm_runtime_exited exit_code={exit_code} "
+                    f"reason={diagnostics.reason(exit_code)}",
+                    flush=True,
+                )
                 server.shutdown()
 
         signal.signal(signal.SIGTERM, stop)
@@ -42,3 +54,5 @@ def run(server, command, child):
             except subprocess.TimeoutExpired:
                 process.kill()
                 process.wait(timeout=5)
+        if reader is not None:
+            reader.join(timeout=1)

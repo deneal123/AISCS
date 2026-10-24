@@ -68,6 +68,14 @@ SSE буферизуется до окончания и проверки отв�
 
 Низкоуровневые команды для отдельной диагностики (ключи должны быть подготовлены):
 
+При аварии дочернего runtime выводится `local_llm_runtime_exited` с фактическим
+exit code и закрытой причиной: например, `signal_illegal_instruction`,
+`signal_killed`, `invalid_arguments` или `shared_library_unavailable`.
+`signal_killed` сам по себе не доказывает OOM. Хвост stderr ограничен 8192 байтами
+и используется только для классификации; его содержимое, ключ и команда не выводятся.
+При штатном Stop аварийного сообщения нет. Это диагностика, не автоматический
+повтор inference, смена runtime или увеличение полномочий.
+
 ```powershell
 docker compose --project-name gpthub-dev --env-file docker/.env.dev -f docker/docker-compose.dev.yaml --profile local-llm build local-llm
 docker compose --project-name gpthub-dev --env-file docker/.env.dev -f docker/docker-compose.dev.yaml --profile local-llm-setup run --rm --no-deps local-llm-model
