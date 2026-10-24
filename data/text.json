@@ -2,7 +2,7 @@
   "meta": {
     "schema_version": "1.0.0",
     "sidecar_version": "1.0.0",
-    "updated_at": "2026-10-08"
+    "updated_at": "2026-10-24"
   },
   "release_approvals": {
     "author_review": false,
@@ -22,35 +22,48 @@
       "primary_output": null,
       "research_snapshot": "data/research-snapshot/snapshot.json",
       "evidence_refs": [
+        "S029",
+        "S031",
         "S105",
+        "S149",
+        "S159",
+        "S162",
+        "S212",
+        "S285",
+        "S286",
+        "S738",
+        "S739",
+        "S741",
         "S743",
         "S744",
+        "S746",
         "S766",
         "S767",
-        "S775"
+        "S774",
+        "S775",
+        "S778",
+        "S780",
+        "S781",
+        "S787",
+        "S789",
+        "S795",
+        "S798",
+        "S810",
+        "S836",
+        "S854",
+        "S873",
+        "S876",
+        "S877",
+        "S892",
+        "S900",
+        "S901",
+        "S904",
+        "S909",
+        "S910"
       ],
       "immutable": false,
       "immutable_files": [],
       "traceability": [
-        {
-          "section": "00-introduction",
-          "slides": null,
-          "target_construct": "ecap_like_observation",
-          "refs": [
-            "S766",
-            "S767"
-          ]
-        },
-        {
-          "section": "01-foundations",
-          "slides": null,
-          "target_construct": "simulation_dynamics",
-          "refs": [
-            "S743",
-            "S744",
-            "S775"
-          ]
-        },
         {
           "section": "03-transfer-evaluation",
           "slides": null,
@@ -58,6 +71,157 @@
           "refs": [
             "S105",
             "S743"
+          ]
+        },
+        {
+          "section": "01-foundations",
+          "subsection": "1.1",
+          "title": "Физический стимул, нейронная реакция и защитное поведение Drosophila",
+          "slides": null,
+          "target_construct": "construct_boundaries",
+          "refs": [
+            "S029",
+            "S031",
+            "S212",
+            "S285",
+            "S778",
+            "S780",
+            "S781",
+            "S795",
+            "S810",
+            "S901",
+            "S910"
+          ]
+        },
+        {
+          "section": "01-foundations",
+          "subsection": "1.2",
+          "title": "Коннектомы Drosophila и анатомические ограничения нейродинамических моделей",
+          "slides": null,
+          "target_construct": "simulation_dynamics",
+          "refs": [
+            "S212",
+            "S285",
+            "S738",
+            "S739",
+            "S741",
+            "S743",
+            "S744",
+            "S774",
+            "S775",
+            "S854",
+            "S904"
+          ]
+        },
+        {
+          "section": "01-foundations",
+          "subsection": "1.3",
+          "title": "Формирование ECAP и измерительный канал системы стимуляции спинного мозга",
+          "slides": null,
+          "target_construct": "ecap_like_observation",
+          "refs": [
+            "S159",
+            "S162",
+            "S285",
+            "S766",
+            "S767",
+            "S780",
+            "S781",
+            "S787",
+            "S789",
+            "S798"
+          ]
+        },
+        {
+          "section": "01-foundations",
+          "subsection": "1.4",
+          "title": "Методы моделирования нейродинамики, формирования ECAP и переноса представлений",
+          "slides": null,
+          "target_construct": "methodological_transfer",
+          "refs": [
+            "S149",
+            "S212",
+            "S285",
+            "S286",
+            "S743",
+            "S766",
+            "S767",
+            "S775",
+            "S789",
+            "S836",
+            "S873",
+            "S876",
+            "S877",
+            "S892",
+            "S900",
+            "S909"
+          ]
+        },
+        {
+          "section": "01-foundations",
+          "subsection": "1.5",
+          "title": "Сравнительный анализ существующих подходов и выбор методов сравнения",
+          "slides": null,
+          "target_construct": "methodological_transfer",
+          "refs": [
+            "S149",
+            "S212",
+            "S741",
+            "S743",
+            "S744",
+            "S746",
+            "S766",
+            "S767",
+            "S775",
+            "S854",
+            "S877",
+            "S892"
+          ]
+        },
+        {
+          "section": "01-foundations",
+          "subsection": "1.6",
+          "title": "Требования к исходным данным и экспериментальной проверке",
+          "slides": null,
+          "target_construct": "ecap_like_observation",
+          "refs": [
+            "S105",
+            "S149",
+            "S159",
+            "S212",
+            "S285",
+            "S743",
+            "S746",
+            "S766",
+            "S767",
+            "S780",
+            "S781",
+            "S787",
+            "S836",
+            "S904"
+          ]
+        },
+        {
+          "section": "00-introduction",
+          "subsection": null,
+          "title": "Введение",
+          "slides": null,
+          "target_construct": "methodological_transfer",
+          "refs": [
+            "S149",
+            "S159",
+            "S286",
+            "S743",
+            "S744",
+            "S746",
+            "S766",
+            "S767",
+            "S775",
+            "S780",
+            "S781",
+            "S787",
+            "S798",
+            "S901"
           ]
         }
       ],

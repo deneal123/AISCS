@@ -1,17 +1,54 @@
-\begin{tikzpicture}[node distance=8mm]
-\node[research process] (graph) {Коннектом\\Drosophila};
-\node[research process,right=of graph] (dynamics) {Нейродинамика\\и временные ряды};
-\node[research process,right=of dynamics] (pretraining) {Предобучение\\временного модуля};
-\draw[research flow] (graph)--(dynamics);
-\draw[research flow] (dynamics)--(pretraining);
-\node[research process,below=29mm of pretraining] (adaptation) {Адаптация\\временного модуля};
-\node[research process,left=of adaptation] (recruitment) {Рекрутирование\\волокон человека};
-\node[research process,left=of recruitment] (recording) {Регистрация сигнала\\и кривая роста};
-\draw[research flow] (pretraining)--node[right,text width=24mm,align=left,font=\fontsize{13}{15.7}\selectfont]{Начальные\\параметры}(adaptation);
-\draw[research flow] (adaptation)--(recruitment);
-\draw[research flow] (recruitment)--(recording);
-\node[draw,dashed,fit=(graph)(dynamics)(pretraining),inner sep=2mm,line width=0.5pt] (source) {};
-\node[anchor=south west,font=\fontsize{13}{15.7}\selectfont] at (source.north west) {Предобучение на Drosophila};
-\node[draw,dashed,fit=(adaptation)(recruitment)(recording),inner sep=2mm,line width=0.5pt] (target) {};
-\node[anchor=south west,font=\fontsize{13}{15.7}\selectfont] at (target.north west) {Целевая модель человеческого сигнала};
+% Proposed model interface. No experimental response or anatomical transfer.
+\begin{tikzpicture}[x=1.09mm,y=1.09mm,font=\fontsize{13}{15.7}\selectfont,
+  line width=.55pt,>=Latex]
+\path[use as bounding box] (0,0) rectangle (160,83);
+\node[anchor=west,font=\bfseries] at (1,80) {Предобучение на Drosophila};
+\node[anchor=west,font=\bfseries] at (1,38) {Целевая модель человеческого сигнала};
+% Source connectivity, observed trajectories and learned initial parameters.
+\coordinate (a) at (5,62); \coordinate (b) at (15,70);
+\coordinate (c) at (17,54); \coordinate (d) at (28,64);
+\coordinate (e) at (38,55);
+\foreach \a/\b in {a/b,a/c,b/d,c/d,d/e,c/e} \draw[->,gray] (\a)--(\b);
+\foreach \p in {a,b,c,d,e} \fill (\p) circle (.9);
+\node at (22,47) {Коннектом};
+\draw[->] (44,63)--(53,63);
+\node at (48,72) {Модель};
+\draw[->] (56,52)--(98,52) node[below left] {$t$};
+\draw[->] (56,52)--(56,71) node[above right] {$o$};
+\draw[thick] plot[smooth] coordinates {(58,57)(62,58)(66,68)(70,57)(75,61)(80,66)(85,55)(91,62)(97,59)};
+\node[align=center] at (79,48) {Предобучение};
+\draw[->] (102,63)--(113,63);
+\foreach \x/\h in {118/7,123/13,128/5,133/10,138/16,143/8} {
+  \draw[gray] (\x,53)--(\x,53+\h);
+  \fill (\x,53+\h) circle (.7);
+}
+\node[anchor=west] at (145,62) {$\omega_0$};
+\node[align=center] at (133,76) {Начальные\\параметры};
+\draw[dashed,->] (132,49)--(132,34)--(29,34)--(29,31);
+% Target temporal representation is distinct from physical axonal currents.
+\draw[->] (3,10)--(44,10) node[below left] {$t$};
+\draw[thick] plot coordinates {(4,13)(8,13)(8,24)(11,24)(11,13)(19,13)(19,24)(22,24)(22,13)(32,13)(32,24)(35,24)(35,13)(43,13)};
+\node at (25,29) {Временной модуль};
+\node at (25,3) {История входа};
+\draw[->] (47,20)--(57,20) ;
+\node at (52,30) {Стимул};
+\draw[->] (52,27)--(52,21);
+\node at (79,31) {Волокна человека};
+\foreach \y/\k in {12/0,18/1,24/2} {
+  \draw[gray] (61,\y)--(97,\y);
+  \foreach \x in {64,74,84,94} \fill (\x,\y) circle (.6);
+  \draw[thick] (65+\k*5,\y)--(67+\k*5,\y+5)--(69+\k*5,\y-2)--(71+\k*5,\y);
+}
+\node[align=center] at (79,3) {Токи сегментов, А};
+\draw[->] (100,20)--(113,20) ;
+\node at (128,0) {Регистрация};
+% Passive recording produces voltage; amplitude depends on stimulus current.
+\draw[->] (116,15)--(134,15) node[below left] {$t$};
+\draw[->] (116,7)--(116,29) node[above right] {$y$};
+\draw[thick] plot[smooth] coordinates {(117,15)(120,16)(122,23)(124,8)(127,19)(130,16)(133,15)};
+\draw[->] (134,12)--(139,12);
+\draw[->] (141,9)--(158,9) node[below left] {$I$};
+\draw[->] (141,9)--(141,29) node[above right] {$A$};
+\draw[thick] plot[smooth] coordinates {(142,10)(146,10)(149,13)(152,18)(157,24)};
+\node at (80,-5) {Условное изображение; сигналы не в масштабе};
 \end{tikzpicture}

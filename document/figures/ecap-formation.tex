@@ -1,0 +1,47 @@
+% Qualitative illustration; traces are not simulated or experimental data.
+\begin{tikzpicture}[x=1mm,y=1mm,font=\fontsize{13}{15.7}\selectfont,
+  line width=.55pt,>=Latex]
+\path[use as bounding box] (0,0) rectangle (175,87);
+\node[anchor=west,font=\bfseries] at (1,83) {а\quad Возбуждение};
+\node[anchor=west,font=\bfseries] at (61,83) {б\quad Регистрация};
+\node[anchor=west,font=\bfseries] at (121,83) {в\quad Измерение};
+\draw[fill=black] (19,67) rectangle (26,70);
+\draw[->,thick] (22.5,77)--(22.5,71);
+\node[anchor=west] at (27,74) {$I$};
+\foreach \x/\y in {10/57,8/53,6/49}
+  \draw[gray] (\x,\y) .. controls (15,65) and (31,65) .. (45-\x+5,\y);
+\foreach \y/\offset in {40/0,47/1,54/2} {
+  \draw (4,\y)--(53,\y);
+  \foreach \x in {6,17,28,39} {
+    \draw[line width=2.2pt,gray!50,line cap=round] (\x,\y)--(\x+7,\y);
+    \fill (\x+9,\y) circle (.55);
+  }
+  \draw[thick] (15+\offset*5,\y)--(17+\offset*5,\y+5)--(19+\offset*5,\y-2)--(21+\offset*5,\y);
+}
+\node[align=center] at (28,25) {Поле, волокна,\\распространение};
+\foreach \x/\y in {66/42,78/50,87/38} {
+  \draw[->] (\x,\y)--(94,61);
+  \fill (\x,\y) circle (.7);
+}
+\draw[fill=black] (90,62) rectangle (97,65);
+\draw[fill=black] (105,62) rectangle (112,65);
+\draw (94,65)--(94,72)--(97,72);
+\draw (109,65)--(109,72)--(103,72);
+\draw (100,72) circle (3);
+\node at (100,72) {$V$};
+\node at (78,73) {$Z_{qk}$};
+\node[align=center] at (86,25) {Токи сегментов\\$\longrightarrow$ напряжение};
+\draw[->] (55,49)--(63,49);
+\draw[->] (113,57)--(121,57);
+\draw[->] (125,53)--(171,53) node[below left] {$t$};
+\draw[->] (125,42)--(125,74) node[above right] {$y$};
+\draw[gray,dashed] (127,53)--(128,70)--(130,46)--(133,53);
+\draw[thick] plot[smooth] coordinates {(128,53)(135,53)(139,59)(144,44)(150,58)(157,54)(169,53)};
+\node[anchor=north,align=center] at (149,39) {Артефакт, ответ, шум};
+\draw[->] (160,32)--(160,27);
+\draw[->] (125,7)--(171,7) node[below left] {$I$};
+\draw[->] (125,7)--(125,27) node[above right] {$A$};
+\draw[thick] plot[smooth] coordinates {(127,8)(135,8)(143,11)(152,17)(167,25)};
+\node[align=center] at (76,9) {Выделение амплитуды\\при заданном протоколе};
+\draw[->] (115,14)--(122,14);
+\end{tikzpicture}

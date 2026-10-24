@@ -1,0 +1,3975 @@
+{
+  "meta": {
+    "schema_version": "1.0.0",
+    "imported_at": "2026-10-07",
+    "source": "aspa-research",
+    "source_fingerprint": "A66DBDEA12CE7959",
+    "source_files": [
+      {
+        "name": "records.json",
+        "sha256": "299F0D99D9E40924AA568A8E86E1CC00D9206C06CE3DD39DEF3FEEE356D38C27"
+      },
+      {
+        "name": "ST.json",
+        "sha256": "CF99DD3373925BC4632763E594FAC9CF4A46A053DA182006E2AE1AD644F23EA2"
+      },
+      {
+        "name": "research/scientific-contract.json",
+        "sha256": "442C534B26092901FA39477036B88FD4D469702E3B738B8F93C58C0BA5FB3BB4"
+      },
+      {
+        "name": "evidence/human-dataset-matrix.json",
+        "sha256": "23C57DE7BCD3A37EF1C3EC99763104C12D9066D8CEEEC5D37775C689BAA7F97F"
+      }
+    ]
+  },
+  "selected_refs": [
+    "S105",
+    "S743",
+    "S744",
+    "S766",
+    "S767",
+    "S775"
+  ],
+  "sources": [
+    {
+      "id": "S105",
+      "название": "Feature extraction and prediction of spinal cord stimulation evoked compound action potentials in humans",
+      "авторы": "König, S.; Ramadan, A.; Sullivan, D. et al.",
+      "год": 2025,
+      "издание": "Journal of Neural Engineering 22(2)",
+      "модальность": "Epidural SCS ECAP waveforms recorded through two externalized percutaneous leads",
+      "задача": "Classify individual pulses as ECAP, non-ECAP or artifact and model waveform features across stimulation settings",
+      "метод": "Artifact cleaning, PCA clustering, K-nearest-neighbor classification and generalized linear mixed-effects models",
+      "датасет": "Fifteen chronic-pain participants recruited; 30 sessions from eight participants with externalized two-lead SCS selected, followed by exclusion of two sessions from one participant for uncertain electrode alignment",
+      "производительность": "AUC separated ECAP from non-ECAP better than peak-to-peak amplitude (d'=2.44 versus 2.27); preferred polarities reduced current by about 1.25 mA",
+      "кросс_субъект": "no: participant variability was modeled, but no held-out-participant validation is reported",
+      "релевантность": 5,
+      "ограничения": "Eight selected participants out of 15 recruited and 28 retained sessions after two exclusions. Nested k-fold classification selected every 11th waveform per outer loop; no participant-held-out evaluation or external cohort. Underlying data are available only on author request subject to ethics/IRB restrictions. ECAP classes and features are neural-response measures, not pain or treatment outcomes.",
+      "тип_источника": "метод",
+      "identifiers": {
+        "doi": "10.1088/1741-2552/adbfbe",
+        "pmid": "40073452",
+        "arxiv_id": null,
+        "patent_id": null,
+        "dataset_id": null,
+        "exact_url": "https://pubmed.ncbi.nlm.nih.gov/40073452/"
+      },
+      "provenance": {
+        "import_source": "archive/2026-09-21/records.json",
+        "retrieved_at": "2026-09-21",
+        "search_stream": "G0_primary_source_validation",
+        "query_or_seed": "Feature extraction and prediction of spinal cord stimulation evoked compound action potentials in humans",
+        "iteration": "2026-09-21-pass-1"
+      },
+      "evidence": {
+        "species": "Homo sapiens",
+        "population": "Fifteen recruited adults with chronic pain; eight contributed 30 selected recording sessions, of which two were excluded for uncertain electrode alignment.",
+        "subject_domain": "human_clinical",
+        "modalities": [
+          "ecap"
+        ],
+        "sample_size": 8,
+        "target_construct": "ecap_neural_recruitment",
+        "target_label": "Individual-pulse ECAP, non-ECAP or artifact class and waveform features",
+        "access_status": "open",
+        "evidence_role": "scs_ecap_validation"
+      },
+      "validation": {
+        "status": "verified_primary",
+        "screening_status": "included_core",
+        "full_text_status": "checked",
+        "checked_at": "2026-09-27",
+        "notes": "IOP Version of Record checked through text rendering of the official publisher PDF URL after direct IOP GET returned a Radware CAPTCHA. Methods 2.2 p. 3: 15 recruited, 30 sessions from eight selected, two sessions excluded. Methods 2.7 p. 5: outer cross-validation selects every 11th waveform, not a held-out participant. Table 1 p. 8: AUC median d-prime 2.44 for ECAP versus non-ECAP. Data availability p. 15: author request subject to ethics/IRB restrictions. No patient-level clinical pain outcome or independent validation.",
+        "split_unit": "recording",
+        "cross_subject": "no",
+        "external_validation": "no",
+        "calibration": "not_reported",
+        "uncertainty": "not_reported",
+        "exclusion_reason": null
+      },
+      "risk_flags": [
+        "ecap_not_pain_measure",
+        "missing_cross_subject_validation"
+      ],
+      "relations": [],
+      "field_resolution": {
+        "авторы": {
+          "state": "reported",
+          "value": "König, S.; Ramadan, A.; Sullivan, D. et al.",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+              "locator": "canonical field авторы"
+            }
+          ]
+        },
+        "год": {
+          "state": "reported",
+          "value": 2025,
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+              "locator": "canonical field год"
+            }
+          ]
+        },
+        "издание": {
+          "state": "reported",
+          "value": "Journal of Neural Engineering 22(2)",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+              "locator": "canonical field издание"
+            }
+          ]
+        },
+        "модальность": {
+          "state": "reported",
+          "value": "Epidural SCS ECAP waveforms recorded through two externalized percutaneous leads",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+              "locator": "canonical field модальность"
+            }
+          ]
+        },
+        "задача": {
+          "state": "reported",
+          "value": "Classify individual pulses as ECAP, non-ECAP or artifact and model waveform features across stimulation settings",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+              "locator": "canonical field задача"
+            }
+          ]
+        },
+        "метод": {
+          "state": "reported",
+          "value": "Artifact cleaning, PCA clustering, K-nearest-neighbor classification and generalized linear mixed-effects models",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+              "locator": "canonical field метод"
+            }
+          ]
+        },
+        "датасет": {
+          "state": "reported",
+          "value": "Fifteen chronic-pain participants recruited; 30 sessions from eight participants with externalized two-lead SCS selected, followed by exclusion of two sessions from one participant for uncertain electrode alignment",
+          "reason": "Primary publisher Methods distinguishes recruitment, selected sessions and exclusions.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/adbfbe/pdf",
+              "locator": "Version of Record, Methods 2.2 Participants, p. 3"
+            }
+          ]
+        },
+        "производительность": {
+          "state": "reported",
+          "value": "AUC separated ECAP from non-ECAP better than peak-to-peak amplitude (d'=2.44 versus 2.27); preferred polarities reduced current by about 1.25 mA",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+              "locator": "canonical field производительность"
+            }
+          ]
+        },
+        "кросс_субъект": {
+          "state": "reported",
+          "value": "no: participant variability was modeled, but no held-out-participant validation is reported",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+              "locator": "canonical field кросс_субъект"
+            }
+          ]
+        },
+        "ограничения": {
+          "state": "reported",
+          "value": "Eight selected participants out of 15 recruited and 28 retained sessions after two exclusions. Nested k-fold classification selected every 11th waveform per outer loop; no participant-held-out evaluation or external cohort. Underlying data are available only on author request subject to ethics/IRB restrictions. ECAP classes and features are neural-response measures, not pain or treatment outcomes.",
+          "reason": "Primary Methods and data statement constrain validation and reuse claims.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/adbfbe/pdf",
+              "locator": "Version of Record, Methods 2.2 p. 3, 2.7 p. 5; Data availability p. 15"
+            }
+          ]
+        },
+        "identifiers.doi": {
+          "state": "reported",
+          "value": "10.1088/1741-2552/adbfbe",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+              "locator": "canonical field identifiers.doi"
+            }
+          ]
+        },
+        "identifiers.pmid": {
+          "state": "reported",
+          "value": "40073452",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+              "locator": "canonical field identifiers.pmid"
+            }
+          ]
+        },
+        "identifiers.arxiv_id": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Поле неприменимо к типу и роли данного источника.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+              "locator": "canonical field identifiers.arxiv_id"
+            }
+          ]
+        },
+        "identifiers.patent_id": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Поле неприменимо к типу и роли данного источника.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+              "locator": "canonical field identifiers.patent_id"
+            }
+          ]
+        },
+        "identifiers.dataset_id": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Поле неприменимо к типу и роли данного источника.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+              "locator": "canonical field identifiers.dataset_id"
+            }
+          ]
+        },
+        "identifiers.exact_url": {
+          "state": "reported",
+          "value": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+              "locator": "canonical field identifiers.exact_url"
+            }
+          ]
+        },
+        "provenance.retrieved_at": {
+          "state": "reported",
+          "value": "2026-09-21",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+              "locator": "canonical field provenance.retrieved_at"
+            }
+          ]
+        },
+        "provenance.search_stream": {
+          "state": "reported",
+          "value": "G0_primary_source_validation",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+              "locator": "canonical field provenance.search_stream"
+            }
+          ]
+        },
+        "provenance.query_or_seed": {
+          "state": "reported",
+          "value": "Feature extraction and prediction of spinal cord stimulation evoked compound action potentials in humans",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+              "locator": "canonical field provenance.query_or_seed"
+            }
+          ]
+        },
+        "provenance.iteration": {
+          "state": "reported",
+          "value": "2026-09-21-pass-1",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+              "locator": "canonical field provenance.iteration"
+            }
+          ]
+        },
+        "evidence.species": {
+          "state": "reported",
+          "value": "Homo sapiens",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+              "locator": "canonical field evidence.species"
+            }
+          ]
+        },
+        "evidence.population": {
+          "state": "reported",
+          "value": "Fifteen recruited adults with chronic pain; eight contributed 30 selected recording sessions, of which two were excluded for uncertain electrode alignment.",
+          "reason": "Population and session flow reported in primary Methods.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/adbfbe/pdf",
+              "locator": "Version of Record, Methods 2.2 Participants, p. 3"
+            }
+          ]
+        },
+        "evidence.subject_domain": {
+          "state": "reported",
+          "value": "human_clinical",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+              "locator": "canonical field evidence.subject_domain"
+            }
+          ]
+        },
+        "evidence.modalities": {
+          "state": "reported",
+          "value": [
+            "ecap"
+          ],
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+              "locator": "canonical field evidence.modalities"
+            }
+          ]
+        },
+        "evidence.sample_size": {
+          "state": "reported",
+          "value": 8,
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+              "locator": "canonical field evidence.sample_size"
+            }
+          ]
+        },
+        "evidence.target_construct": {
+          "state": "reported",
+          "value": "ecap_neural_recruitment",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+              "locator": "canonical field evidence.target_construct"
+            }
+          ]
+        },
+        "evidence.target_label": {
+          "state": "reported",
+          "value": "Individual-pulse ECAP, non-ECAP or artifact class and waveform features",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+              "locator": "canonical field evidence.target_label"
+            }
+          ]
+        },
+        "evidence.access_status": {
+          "state": "reported",
+          "value": "open",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+              "locator": "canonical field evidence.access_status"
+            }
+          ]
+        },
+        "validation.checked_at": {
+          "state": "reported",
+          "value": "2026-09-27",
+          "reason": "Dated direct review of the publisher Version of Record via its text rendering.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/adbfbe/pdf",
+              "locator": "Publisher Version of Record"
+            }
+          ]
+        },
+        "validation.split_unit": {
+          "state": "reported",
+          "value": "recording",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+              "locator": "canonical field validation.split_unit"
+            }
+          ]
+        },
+        "validation.cross_subject": {
+          "state": "reported",
+          "value": "no",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+              "locator": "canonical field validation.cross_subject"
+            }
+          ]
+        },
+        "validation.external_validation": {
+          "state": "reported",
+          "value": "no",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+              "locator": "canonical field validation.external_validation"
+            }
+          ]
+        },
+        "validation.calibration": {
+          "state": "not_reported",
+          "value": null,
+          "reason": "Свойство не сообщено в проверенном первичном тексте.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+              "locator": "canonical field validation.calibration"
+            }
+          ]
+        },
+        "validation.uncertainty": {
+          "state": "not_reported",
+          "value": null,
+          "reason": "Свойство не сообщено в проверенном первичном тексте.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+              "locator": "canonical field validation.uncertainty"
+            }
+          ]
+        },
+        "validation.exclusion_reason": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Поле неприменимо к типу и роли данного источника.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/40073452/",
+              "locator": "canonical field validation.exclusion_reason"
+            }
+          ]
+        },
+        "validation.notes": {
+          "state": "reported",
+          "value": "IOP Version of Record checked through text rendering of the official publisher PDF URL after direct IOP GET returned a Radware CAPTCHA. Methods 2.2 p. 3: 15 recruited, 30 sessions from eight selected, two sessions excluded. Methods 2.7 p. 5: outer cross-validation selects every 11th waveform, not a held-out participant. Table 1 p. 8: AUC median d-prime 2.44 for ECAP versus non-ECAP. Data availability p. 15: author request subject to ethics/IRB restrictions. No patient-level clinical pain outcome or independent validation.",
+          "reason": "Replaces abstract-level source-card scope after primary Version of Record review.",
+          "checked_at": "2026-09-27",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/adbfbe/pdf",
+              "locator": "Version of Record, Methods 2.2/2.7, Table 1, Data availability"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "S743",
+      "название": "Prediction of neural activity in connectome-constrained recurrent networks",
+      "авторы": "Manuel Beiran; Ashok Litwin-Kumar",
+      "год": 2025,
+      "издание": "Nature Neuroscience",
+      "модальность": "connectome, neural_activity, simulation_state",
+      "задача": "Оценка идентифицируемости и вклада структурных ограничений коннектома",
+      "метод": "Teacher-student recurrent-network analysis with fixed connectome weights and uncertain single-neuron parameters",
+      "датасет": "Zarin et al. larval premotor; Scheffer et al. adult central complex; Vishwanathan et al. larval zebrafish connectomes; Figure 5 adult central-complex code uses neuPrint hemibrain:v1.2",
+      "производительность": "Characterizes when partial neural recordings and connectome constraints identify unrecorded activity and parameters.",
+      "кросс_субъект": "not_applicable",
+      "релевантность": 5,
+      "ограничения": "Theory and simulation of neural-activity identifiability with empirical connectome topologies. The teacher network is simulated ground truth; observing a subset of teacher neurons is not a biological recording comparator for the inferred dynamics. No nociception, ECAP or SCS transfer is tested.",
+      "тип_источника": "метод",
+      "identifiers": {
+        "doi": "10.1038/s41593-025-02080-4",
+        "pmid": null,
+        "arxiv_id": null,
+        "patent_id": null,
+        "dataset_id": null,
+        "exact_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12648571/"
+      },
+      "provenance": {
+        "import_source": "connectome-prior-art-refresh-2026-09-24",
+        "retrieved_at": "2026-09-24",
+        "search_stream": "NS-02/NS-05/NS-16",
+        "query_or_seed": "connectome-constrained dynamics transfer random graph controls",
+        "iteration": 2
+      },
+      "evidence": {
+        "species": "Drosophila melanogaster and Danio rerio",
+        "population": "Empirical connectivity examples from Drosophila larval premotor and adult central-complex circuits, plus larval zebrafish oculomotor circuit",
+        "subject_domain": "mixed",
+        "modalities": [
+          "connectome",
+          "neural_activity",
+          "simulation_state"
+        ],
+        "sample_size": null,
+        "target_construct": "technical_signal_quality",
+        "target_label": "connectome-constrained neural dynamics",
+        "access_status": "open",
+        "evidence_role": "method_baseline"
+      },
+      "validation": {
+        "status": "verified_primary",
+        "screening_status": "included_core",
+        "full_text_status": "checked",
+        "checked_at": "2026-09-24",
+        "split_unit": "not_applicable",
+        "cross_subject": "not_applicable",
+        "external_validation": "not_reported",
+        "calibration": "not_reported",
+        "uncertainty": "not_reported",
+        "exclusion_reason": null,
+        "notes": "Theory and simulation of neural-activity identifiability with empirical connectome topologies. The teacher network is simulated ground truth; observing a subset of teacher neurons is not a biological recording comparator for the inferred dynamics. No nociception, ECAP or SCS transfer is tested."
+      },
+      "relations": [
+        {
+          "type": "version_of",
+          "target_id": null,
+          "external_id": "doi:10.1101/2024.02.22.581667",
+          "note": "Journal version of the 2024 bioRxiv preprint."
+        }
+      ],
+      "risk_flags": [
+        "animal_to_human_transfer_unvalidated"
+      ],
+      "field_resolution": {
+        "авторы": {
+          "state": "reported",
+          "value": "Manuel Beiran; Ashok Litwin-Kumar",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12648571/",
+              "locator": "canonical field авторы"
+            }
+          ]
+        },
+        "год": {
+          "state": "reported",
+          "value": 2025,
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12648571/",
+              "locator": "canonical field год"
+            }
+          ]
+        },
+        "издание": {
+          "state": "reported",
+          "value": "Nature Neuroscience",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12648571/",
+              "locator": "canonical field издание"
+            }
+          ]
+        },
+        "модальность": {
+          "state": "reported",
+          "value": "connectome, neural_activity, simulation_state",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12648571/",
+              "locator": "canonical field модальность"
+            }
+          ]
+        },
+        "задача": {
+          "state": "reported",
+          "value": "Оценка идентифицируемости и вклада структурных ограничений коннектома",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12648571/",
+              "locator": "canonical field задача"
+            }
+          ]
+        },
+        "метод": {
+          "state": "reported",
+          "value": "Teacher-student recurrent-network analysis with fixed connectome weights and uncertain single-neuron parameters",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41593-025-02080-4",
+              "locator": "Primary full text, Abstract/Methods/Results/Discussion; field метод"
+            }
+          ]
+        },
+        "датасет": {
+          "state": "reported",
+          "value": "Zarin et al. larval premotor; Scheffer et al. adult central complex; Vishwanathan et al. larval zebrafish connectomes; Figure 5 adult central-complex code uses neuPrint hemibrain:v1.2",
+          "reason": "The author code and archived data README pin only the adult central-complex input.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41593-025-02080-4",
+              "locator": "Data availability: three source connectomes; Figure 5 adult central-complex example"
+            },
+            {
+              "url": "https://github.com/emebeiran/connconstr/blob/f5f397b88f8dd5c2a5c13558ce6039194a284586/nn_fig5_drosophilaCx_teacher.py#L431-L439",
+              "locator": "Lines 431-439: hemibrain dataset and exported-traced-adjacencies-v1.2 path"
+            },
+            {
+              "url": "https://zenodo.org/api/records/16618353/files/Code_NN.zip/content",
+              "locator": "Zip internal Code_NN/Data/Figure5/exported-traced-adjacencies-v1.2/README: neuPrint Client('neuprint.janelia.org', 'hemibrain:v1.2')"
+            }
+          ]
+        },
+        "производительность": {
+          "state": "reported",
+          "value": "Characterizes when partial neural recordings and connectome constraints identify unrecorded activity and parameters.",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12648571/",
+              "locator": "canonical field производительность"
+            }
+          ]
+        },
+        "кросс_субъект": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Поле неприменимо к типу и роли данного источника.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12648571/",
+              "locator": "canonical field кросс_субъект"
+            }
+          ]
+        },
+        "ограничения": {
+          "state": "reported",
+          "value": "Theory and simulation of neural-activity identifiability with empirical connectome topologies. The teacher network is simulated ground truth; observing a subset of teacher neurons is not a biological recording comparator for the inferred dynamics. No nociception, ECAP or SCS transfer is tested.",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41593-025-02080-4",
+              "locator": "Primary full text, Abstract/Methods/Results/Discussion; field ограничения"
+            }
+          ]
+        },
+        "identifiers.doi": {
+          "state": "reported",
+          "value": "10.1038/s41593-025-02080-4",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12648571/",
+              "locator": "canonical field identifiers.doi"
+            }
+          ]
+        },
+        "identifiers.pmid": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Поле неприменимо к типу и роли данного источника.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12648571/",
+              "locator": "canonical field identifiers.pmid"
+            }
+          ]
+        },
+        "identifiers.arxiv_id": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Поле неприменимо к типу и роли данного источника.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12648571/",
+              "locator": "canonical field identifiers.arxiv_id"
+            }
+          ]
+        },
+        "identifiers.patent_id": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Поле неприменимо к типу и роли данного источника.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12648571/",
+              "locator": "canonical field identifiers.patent_id"
+            }
+          ]
+        },
+        "identifiers.dataset_id": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Поле неприменимо к типу и роли данного источника.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12648571/",
+              "locator": "canonical field identifiers.dataset_id"
+            }
+          ]
+        },
+        "identifiers.exact_url": {
+          "state": "reported",
+          "value": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12648571/",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12648571/",
+              "locator": "canonical field identifiers.exact_url"
+            }
+          ]
+        },
+        "provenance.retrieved_at": {
+          "state": "reported",
+          "value": "2026-09-24",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12648571/",
+              "locator": "canonical field provenance.retrieved_at"
+            }
+          ]
+        },
+        "provenance.search_stream": {
+          "state": "reported",
+          "value": "NS-02/NS-05/NS-16",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12648571/",
+              "locator": "canonical field provenance.search_stream"
+            }
+          ]
+        },
+        "provenance.query_or_seed": {
+          "state": "reported",
+          "value": "connectome-constrained dynamics transfer random graph controls",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12648571/",
+              "locator": "canonical field provenance.query_or_seed"
+            }
+          ]
+        },
+        "provenance.iteration": {
+          "state": "reported",
+          "value": 2,
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12648571/",
+              "locator": "canonical field provenance.iteration"
+            }
+          ]
+        },
+        "evidence.species": {
+          "state": "reported",
+          "value": "Drosophila melanogaster and Danio rerio",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12648571/",
+              "locator": "canonical field evidence.species"
+            }
+          ]
+        },
+        "evidence.population": {
+          "state": "reported",
+          "value": "Empirical connectivity examples from Drosophila larval premotor and adult central-complex circuits, plus larval zebrafish oculomotor circuit",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41593-025-02080-4",
+              "locator": "Primary full text, Abstract/Methods/Results/Discussion; field evidence.population"
+            }
+          ]
+        },
+        "evidence.subject_domain": {
+          "state": "reported",
+          "value": "mixed",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41593-025-02080-4",
+              "locator": "Primary full text, Abstract/Methods/Results/Discussion; field evidence.subject_domain"
+            }
+          ]
+        },
+        "evidence.modalities": {
+          "state": "reported",
+          "value": [
+            "connectome",
+            "neural_activity",
+            "simulation_state"
+          ],
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41593-025-02080-4",
+              "locator": "Primary full text, Abstract/Methods/Results/Discussion; field evidence.modalities"
+            }
+          ]
+        },
+        "evidence.sample_size": {
+          "state": "not_reported",
+          "value": null,
+          "reason": "Свойство не сообщено в проверенном первичном тексте.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12648571/",
+              "locator": "canonical field evidence.sample_size"
+            }
+          ]
+        },
+        "evidence.target_construct": {
+          "state": "reported",
+          "value": "technical_signal_quality",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41593-025-02080-4",
+              "locator": "Primary full text, Abstract/Methods/Results/Discussion; field evidence.target_construct"
+            }
+          ]
+        },
+        "evidence.target_label": {
+          "state": "reported",
+          "value": "connectome-constrained neural dynamics",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41593-025-02080-4",
+              "locator": "Primary full text, Abstract/Methods/Results/Discussion; field evidence.target_label"
+            }
+          ]
+        },
+        "evidence.access_status": {
+          "state": "reported",
+          "value": "open",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12648571/",
+              "locator": "canonical field evidence.access_status"
+            }
+          ]
+        },
+        "validation.checked_at": {
+          "state": "reported",
+          "value": "2026-09-24",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12648571/",
+              "locator": "canonical field validation.checked_at"
+            }
+          ]
+        },
+        "validation.split_unit": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Поле неприменимо к типу и роли данного источника.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12648571/",
+              "locator": "canonical field validation.split_unit"
+            }
+          ]
+        },
+        "validation.cross_subject": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Поле неприменимо к типу и роли данного источника.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12648571/",
+              "locator": "canonical field validation.cross_subject"
+            }
+          ]
+        },
+        "validation.external_validation": {
+          "state": "not_reported",
+          "value": null,
+          "reason": "Свойство не сообщено в проверенном первичном тексте.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12648571/",
+              "locator": "canonical field validation.external_validation"
+            }
+          ]
+        },
+        "validation.calibration": {
+          "state": "not_reported",
+          "value": null,
+          "reason": "Свойство не сообщено в проверенном первичном тексте.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12648571/",
+              "locator": "canonical field validation.calibration"
+            }
+          ]
+        },
+        "validation.uncertainty": {
+          "state": "not_reported",
+          "value": null,
+          "reason": "Свойство не сообщено в проверенном первичном тексте.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12648571/",
+              "locator": "canonical field validation.uncertainty"
+            }
+          ]
+        },
+        "validation.exclusion_reason": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Поле неприменимо к типу и роли данного источника.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12648571/",
+              "locator": "canonical field validation.exclusion_reason"
+            }
+          ]
+        },
+        "validation.notes": {
+          "state": "reported",
+          "value": "Theory and simulation of neural-activity identifiability with empirical connectome topologies. The teacher network is simulated ground truth; observing a subset of teacher neurons is not a biological recording comparator for the inferred dynamics. No nociception, ECAP or SCS transfer is tested.",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41593-025-02080-4",
+              "locator": "Primary full text, Abstract/Methods/Results/Discussion; field validation.notes"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "S744",
+      "название": "Connectome-constrained networks predict neural activity across the fly visual system",
+      "авторы": "Janne K. Lappalainen; Fabian D. Tschopp; Sridhama Prakhya; Mason McGill; Aljoscha Nern; Kazunori Shinomiya; Shin-ya Takemura; Eyal Gruntman; Jakob H. Macke; Srinivas C. Turaga",
+      "год": 2024,
+      "издание": "Nature",
+      "модальность": "connectome, neural_activity",
+      "задача": "Оценка идентифицируемости и вклада структурных ограничений коннектома",
+      "метод": "Connectome-constrained deep mechanistic network with simplified neurons and synapses, optimized for visual motion",
+      "датасет": "Compiled adult fly visual-system connectome; official flyvis scaffold fib25-fib19_v2.2.json; 64 cell types",
+      "производительность": "Predicts neural responses across 64 visual-system cell types and tests connectome-derived constraints.",
+      "кросс_субъект": "not_applicable",
+      "релевантность": 5,
+      "ограничения": "The 64-cell-type visual network predicts measured single-neuron visual responses. The official flyvis implementation names the compiled scaffold fib25-fib19_v2.2.json; this is a constructed file, not a single FlyWire/BANC release. The endpoint is visual function, not VNC, nociception, ECAP or SCS.",
+      "тип_источника": "метод",
+      "identifiers": {
+        "doi": "10.1038/s41586-024-07939-3",
+        "pmid": "39261740",
+        "arxiv_id": null,
+        "patent_id": null,
+        "dataset_id": null,
+        "exact_url": "https://www.nature.com/articles/s41586-024-07939-3"
+      },
+      "provenance": {
+        "import_source": "connectome-prior-art-refresh-2026-09-24",
+        "retrieved_at": "2026-09-24",
+        "search_stream": "NS-02/NS-05/NS-16",
+        "query_or_seed": "connectome-constrained dynamics transfer random graph controls",
+        "iteration": 2
+      },
+      "evidence": {
+        "species": "Drosophila melanogaster",
+        "population": "Adult Drosophila visual system; 64 modeled cell types with published functional recordings",
+        "subject_domain": "drosophila_adult",
+        "modalities": [
+          "connectome",
+          "neural_activity"
+        ],
+        "sample_size": "64 modeled optic-lobe cell types; 45,669 model neurons; 1,513,231 model connections across 721 columns; 50 independently trained DMNs; comparisons to published neural recordings from 26 studies (not 26 animals).",
+        "target_construct": "technical_signal_quality",
+        "target_label": "connectome-constrained neural dynamics",
+        "access_status": "open",
+        "evidence_role": "method_baseline"
+      },
+      "validation": {
+        "status": "verified_primary",
+        "screening_status": "included_core",
+        "full_text_status": "checked",
+        "checked_at": "2026-09-28",
+        "split_unit": "not_applicable",
+        "cross_subject": "not_applicable",
+        "external_validation": "yes",
+        "calibration": "not_reported",
+        "uncertainty": "yes",
+        "exclusion_reason": null,
+        "notes": "The 64-cell-type visual network predicts measured single-neuron visual responses. The official flyvis implementation names the compiled scaffold fib25-fib19_v2.2.json; this is a constructed file, not a single FlyWire/BANC release. The endpoint is visual function, not VNC, nociception, ECAP or SCS. A prior relation to bioRxiv 10.1101/2023.05.02.539144 was removed: that preprint is Shiu et al., a distinct adult-brain model. BioRxiv 10.1101/2023.03.11.532232 matches Lappalainen et al. by title and authors, but a formal publisher-declared version link was not verified. Rechecked 2026-09-28: model predictions were compared with published neural recordings from 26 studies without fitting to those recordings; this is external within-species functional comparison, not human transfer. The paper reports 95% confidence intervals for some cross-model correlations, not predictive uncertainty or calibration. Model size and ensemble count are not biological animal sample sizes."
+      },
+      "relations": [],
+      "risk_flags": [
+        "animal_to_human_transfer_unvalidated"
+      ],
+      "field_resolution": {
+        "авторы": {
+          "state": "reported",
+          "value": "Janne K. Lappalainen; Fabian D. Tschopp; Sridhama Prakhya; Mason McGill; Aljoscha Nern; Kazunori Shinomiya; Shin-ya Takemura; Eyal Gruntman; Jakob H. Macke; Srinivas C. Turaga",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41586-024-07939-3",
+              "locator": "canonical field авторы"
+            }
+          ]
+        },
+        "год": {
+          "state": "reported",
+          "value": 2024,
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41586-024-07939-3",
+              "locator": "canonical field год"
+            }
+          ]
+        },
+        "издание": {
+          "state": "reported",
+          "value": "Nature",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41586-024-07939-3",
+              "locator": "canonical field издание"
+            }
+          ]
+        },
+        "модальность": {
+          "state": "reported",
+          "value": "connectome, neural_activity",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41586-024-07939-3",
+              "locator": "canonical field модальность"
+            }
+          ]
+        },
+        "задача": {
+          "state": "reported",
+          "value": "Оценка идентифицируемости и вклада структурных ограничений коннектома",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41586-024-07939-3",
+              "locator": "canonical field задача"
+            }
+          ]
+        },
+        "метод": {
+          "state": "reported",
+          "value": "Connectome-constrained deep mechanistic network with simplified neurons and synapses, optimized for visual motion",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41586-024-07939-3",
+              "locator": "Primary full text, Abstract/Methods/Results/Discussion; field метод"
+            }
+          ]
+        },
+        "датасет": {
+          "state": "reported",
+          "value": "Compiled adult fly visual-system connectome; official flyvis scaffold fib25-fib19_v2.2.json; 64 cell types",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41586-024-07939-3",
+              "locator": "Primary full text, Abstract/Methods/Results/Discussion; field датасет"
+            }
+          ]
+        },
+        "производительность": {
+          "state": "reported",
+          "value": "Predicts neural responses across 64 visual-system cell types and tests connectome-derived constraints.",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41586-024-07939-3",
+              "locator": "canonical field производительность"
+            }
+          ]
+        },
+        "кросс_субъект": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Поле неприменимо к типу и роли данного источника.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41586-024-07939-3",
+              "locator": "canonical field кросс_субъект"
+            }
+          ]
+        },
+        "ограничения": {
+          "state": "reported",
+          "value": "The 64-cell-type visual network predicts measured single-neuron visual responses. The official flyvis implementation names the compiled scaffold fib25-fib19_v2.2.json; this is a constructed file, not a single FlyWire/BANC release. The endpoint is visual function, not VNC, nociception, ECAP or SCS.",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41586-024-07939-3",
+              "locator": "Primary full text, Abstract/Methods/Results/Discussion; field ограничения"
+            }
+          ]
+        },
+        "identifiers.doi": {
+          "state": "reported",
+          "value": "10.1038/s41586-024-07939-3",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41586-024-07939-3",
+              "locator": "canonical field identifiers.doi"
+            }
+          ]
+        },
+        "identifiers.pmid": {
+          "state": "reported",
+          "value": "39261740",
+          "reason": "PubMed identity verified for the Nature DOI.",
+          "checked_at": "2026-09-30",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/39261740/",
+              "locator": "PMID and DOI in PubMed record"
+            }
+          ]
+        },
+        "identifiers.arxiv_id": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Поле неприменимо к типу и роли данного источника.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41586-024-07939-3",
+              "locator": "canonical field identifiers.arxiv_id"
+            }
+          ]
+        },
+        "identifiers.patent_id": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Поле неприменимо к типу и роли данного источника.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41586-024-07939-3",
+              "locator": "canonical field identifiers.patent_id"
+            }
+          ]
+        },
+        "identifiers.dataset_id": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Поле неприменимо к типу и роли данного источника.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41586-024-07939-3",
+              "locator": "canonical field identifiers.dataset_id"
+            }
+          ]
+        },
+        "identifiers.exact_url": {
+          "state": "reported",
+          "value": "https://www.nature.com/articles/s41586-024-07939-3",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41586-024-07939-3",
+              "locator": "canonical field identifiers.exact_url"
+            }
+          ]
+        },
+        "provenance.retrieved_at": {
+          "state": "reported",
+          "value": "2026-09-24",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41586-024-07939-3",
+              "locator": "canonical field provenance.retrieved_at"
+            }
+          ]
+        },
+        "provenance.search_stream": {
+          "state": "reported",
+          "value": "NS-02/NS-05/NS-16",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41586-024-07939-3",
+              "locator": "canonical field provenance.search_stream"
+            }
+          ]
+        },
+        "provenance.query_or_seed": {
+          "state": "reported",
+          "value": "connectome-constrained dynamics transfer random graph controls",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41586-024-07939-3",
+              "locator": "canonical field provenance.query_or_seed"
+            }
+          ]
+        },
+        "provenance.iteration": {
+          "state": "reported",
+          "value": 2,
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41586-024-07939-3",
+              "locator": "canonical field provenance.iteration"
+            }
+          ]
+        },
+        "evidence.species": {
+          "state": "reported",
+          "value": "Drosophila melanogaster",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41586-024-07939-3",
+              "locator": "canonical field evidence.species"
+            }
+          ]
+        },
+        "evidence.population": {
+          "state": "reported",
+          "value": "Adult Drosophila visual system; 64 modeled cell types with published functional recordings",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41586-024-07939-3",
+              "locator": "Primary full text, Abstract/Methods/Results/Discussion; field evidence.population"
+            }
+          ]
+        },
+        "evidence.subject_domain": {
+          "state": "reported",
+          "value": "drosophila_adult",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41586-024-07939-3",
+              "locator": "Primary full text, Abstract/Methods/Results/Discussion; field evidence.subject_domain"
+            }
+          ]
+        },
+        "evidence.modalities": {
+          "state": "reported",
+          "value": [
+            "connectome",
+            "neural_activity"
+          ],
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41586-024-07939-3",
+              "locator": "Primary full text, Abstract/Methods/Results/Discussion; field evidence.modalities"
+            }
+          ]
+        },
+        "evidence.sample_size": {
+          "state": "reported",
+          "value": "64 modeled optic-lobe cell types; 45,669 model neurons; 1,513,231 model connections across 721 columns; 50 independently trained DMNs; comparisons to published neural recordings from 26 studies (not 26 animals).",
+          "reason": "Separate model size, trained-model ensemble and prior-study count; the paper does not report these as a single animal sample.",
+          "checked_at": "2026-09-28",
+          "locators": [
+            {
+              "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11525180/fullTextXML",
+              "locator": "Main > DMN of the fly visual system; Main > DMN ensemble predicts known activity"
+            }
+          ]
+        },
+        "evidence.target_construct": {
+          "state": "reported",
+          "value": "technical_signal_quality",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41586-024-07939-3",
+              "locator": "Primary full text, Abstract/Methods/Results/Discussion; field evidence.target_construct"
+            }
+          ]
+        },
+        "evidence.target_label": {
+          "state": "reported",
+          "value": "connectome-constrained neural dynamics",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41586-024-07939-3",
+              "locator": "Primary full text, Abstract/Methods/Results/Discussion; field evidence.target_label"
+            }
+          ]
+        },
+        "evidence.access_status": {
+          "state": "reported",
+          "value": "open",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41586-024-07939-3",
+              "locator": "canonical field evidence.access_status"
+            }
+          ]
+        },
+        "validation.checked_at": {
+          "state": "reported",
+          "value": "2026-09-28",
+          "reason": "Dated full-text recheck.",
+          "checked_at": "2026-09-28",
+          "locators": [
+            {
+              "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11525180/fullTextXML",
+              "locator": "Abstract; Main; Methods; Extended Data Figure 2e"
+            }
+          ]
+        },
+        "validation.split_unit": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Поле неприменимо к типу и роли данного источника.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41586-024-07939-3",
+              "locator": "canonical field validation.split_unit"
+            }
+          ]
+        },
+        "validation.cross_subject": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Поле неприменимо к типу и роли данного источника.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41586-024-07939-3",
+              "locator": "canonical field validation.cross_subject"
+            }
+          ]
+        },
+        "validation.external_validation": {
+          "state": "reported",
+          "value": "yes",
+          "reason": "Neural response predictions are compared with published recordings from 26 prior studies that were not used to fit the DMN; validation is within Drosophila visual circuits, not external species or clinical cohort.",
+          "checked_at": "2026-09-28",
+          "locators": [
+            {
+              "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11525180/fullTextXML",
+              "locator": "Abstract; Main > DMN ensemble predicts known activity; Supplementary Note 3 and Supplementary Data files 5-6"
+            }
+          ]
+        },
+        "validation.calibration": {
+          "state": "not_reported",
+          "value": null,
+          "reason": "Свойство не сообщено в проверенном первичном тексте.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41586-024-07939-3",
+              "locator": "canonical field validation.calibration"
+            }
+          ]
+        },
+        "validation.uncertainty": {
+          "state": "reported",
+          "value": "yes",
+          "reason": "The paper reports 95% confidence intervals for some model-ensemble correlation analyses; this is statistical dispersion, not calibrated predictive uncertainty.",
+          "checked_at": "2026-09-28",
+          "locators": [
+            {
+              "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11525180/fullTextXML",
+              "locator": "Extended Data Figure 2e caption: model-ensemble correlation and 95% CI"
+            }
+          ]
+        },
+        "validation.exclusion_reason": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Поле неприменимо к типу и роли данного источника.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41586-024-07939-3",
+              "locator": "canonical field validation.exclusion_reason"
+            }
+          ]
+        },
+        "validation.notes": {
+          "state": "reported",
+          "value": "The 64-cell-type visual network predicts measured single-neuron visual responses. The official flyvis implementation names the compiled scaffold fib25-fib19_v2.2.json; this is a constructed file, not a single FlyWire/BANC release. The endpoint is visual function, not VNC, nociception, ECAP or SCS. A prior relation to bioRxiv 10.1101/2023.05.02.539144 was removed: that preprint is Shiu et al., a distinct adult-brain model. BioRxiv 10.1101/2023.03.11.532232 matches Lappalainen et al. by title and authors, but a formal publisher-declared version link was not verified. Rechecked 2026-09-28: model predictions were compared with published neural recordings from 26 studies without fitting to those recordings; this is external within-species functional comparison, not human transfer. The paper reports 95% confidence intervals for some cross-model correlations, not predictive uncertainty or calibration. Model size and ensemble count are not biological animal sample sizes.",
+          "reason": "Clarify external within-species comparator and limits of reported confidence intervals.",
+          "checked_at": "2026-09-28",
+          "locators": [
+            {
+              "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11525180/fullTextXML",
+              "locator": "Abstract; Main > DMN ensemble predicts known activity; Extended Data Figure 2e"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "S766",
+      "название": "Evoked potentials recorded from the spinal cord during neurostimulation for pain: a computational modeling study",
+      "авторы": "Carlos J. Anaya; Hans J. Zander; Robert D. Graham; Vishwanath Sankarasubramanian; Scott F. Lempka",
+      "год": 2020,
+      "издание": "Neuromodulation 23(1):64-73; published online 2019-06-19",
+      "модальность": "Simulated spinal ECAP and published human ECAP trace comparator",
+      "задача": "Explain the neural and physical origins of ECAPs recorded from SCS leads",
+      "метод": "Lower-thoracic 3-D finite-element volume conductor in COMSOL, multicompartment dorsal-column sensory axons in NEURON, and reciprocity-based projection of axonal transmembrane currents to inactive lead contacts",
+      "датасет": "Literature-based canonical human anatomy and axon-density inputs; one previously published clinical ECAP trace shown as a comparator in Figure 2C, not a new patient cohort",
+      "производительность": "At assumed model discomfort threshold, Figure 2C shows clinical and model P2-N1 amplitudes of 200 and 216 microvolts; qualitative N1/P2 morphology and latency agreement, not patient-independent prediction",
+      "кросс_субъект": "not_applicable: no patient-level model training or held-out-patient test",
+      "релевантность": 5,
+      "ограничения": "Canonical literature-based anatomy and lead placement omit interpatient variation. Model sensory threshold is assumed at at least 10% dorsal-column activation and discomfort threshold at 1.4 times this threshold, without established clinical mapping. Dorsal horn neurons are excluded; no new patient-linked pain-outcome validation.",
+      "тип_источника": "метод",
+      "identifiers": {
+        "doi": "10.1111/ner.12965",
+        "pmid": "31215720",
+        "arxiv_id": null,
+        "patent_id": null,
+        "dataset_id": null,
+        "exact_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6920600/"
+      },
+      "provenance": {
+        "import_source": "NS-07 PMC author-manuscript BioC full text",
+        "retrieved_at": "2026-09-24",
+        "search_stream": "NS-07",
+        "query_or_seed": "Anaya Zander Lempka ECAP computational modeling reciprocity",
+        "iteration": 2
+      },
+      "evidence": {
+        "species": "Homo sapiens (canonical anatomical model)",
+        "population": "Literature-derived lower-thoracic anatomy; published human ECAP comparator, no newly enrolled cohort",
+        "subject_domain": "simulation",
+        "modalities": [
+          "ecap",
+          "simulation_state"
+        ],
+        "sample_size": null,
+        "target_construct": "ecap_neural_recruitment",
+        "target_label": "Simulated ECAP P2-N1 amplitude, morphology, conduction velocity and dorsal-column recruitment",
+        "access_status": "open",
+        "evidence_role": "method_baseline"
+      },
+      "validation": {
+        "status": "verified_primary",
+        "screening_status": "included_core",
+        "full_text_status": "checked",
+        "checked_at": "2026-09-24",
+        "split_unit": "not_applicable",
+        "cross_subject": "not_applicable",
+        "external_validation": "no",
+        "calibration": "not_reported",
+        "uncertainty": "not_reported",
+        "exclusion_reason": null,
+        "notes": "Full PMC author manuscript checked via NCBI BioC XML. Figure 2C compares a model ECAP with a previously published clinical trace; this is not a patient-level external test or analgesic response validation."
+      },
+      "relations": [],
+      "risk_flags": [
+        "synthetic_only",
+        "ecap_not_pain_measure"
+      ],
+      "field_resolution": {
+        "авторы": {
+          "state": "reported",
+          "value": "Carlos J. Anaya; Hans J. Zander; Robert D. Graham; Vishwanath Sankarasubramanian; Scott F. Lempka",
+          "reason": "Checked in the primary author manuscript; the claim is bounded to the cited section.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_xml/PMC6920600/unicode",
+              "locator": "article byline; authorship statement"
+            }
+          ]
+        },
+        "год": {
+          "state": "reported",
+          "value": 2020,
+          "reason": "Checked in the primary author manuscript; the claim is bounded to the cited section.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_xml/PMC6920600/unicode",
+              "locator": "citation header: final 2020 issue and online 2019 publication"
+            }
+          ]
+        },
+        "издание": {
+          "state": "reported",
+          "value": "Neuromodulation 23(1):64-73; published online 2019-06-19",
+          "reason": "Checked in the primary author manuscript; the claim is bounded to the cited section.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_xml/PMC6920600/unicode",
+              "locator": "citation header"
+            }
+          ]
+        },
+        "модальность": {
+          "state": "reported",
+          "value": "Simulated spinal ECAP and published human ECAP trace comparator",
+          "reason": "Checked in the primary author manuscript; the claim is bounded to the cited section.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_xml/PMC6920600/unicode",
+              "locator": "Abstract; Materials and Methods; Figure 2C"
+            }
+          ]
+        },
+        "задача": {
+          "state": "reported",
+          "value": "Explain the neural and physical origins of ECAPs recorded from SCS leads",
+          "reason": "Checked in the primary author manuscript; the claim is bounded to the cited section.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_xml/PMC6920600/unicode",
+              "locator": "Abstract Objectives; Introduction final paragraph"
+            }
+          ]
+        },
+        "метод": {
+          "state": "reported",
+          "value": "Lower-thoracic 3-D finite-element volume conductor in COMSOL, multicompartment dorsal-column sensory axons in NEURON, and reciprocity-based projection of axonal transmembrane currents to inactive lead contacts",
+          "reason": "Checked in the primary author manuscript; the claim is bounded to the cited section.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_xml/PMC6920600/unicode",
+              "locator": "Materials and Methods > FEM of SCS; Multicompartment cable model of Sensory Axons; Assessment of direct axonal response; Calculation of ECAP recordings"
+            }
+          ]
+        },
+        "датасет": {
+          "state": "reported",
+          "value": "Literature-based canonical human anatomy and axon-density inputs; one previously published clinical ECAP trace shown as a comparator in Figure 2C, not a new patient cohort",
+          "reason": "Checked in the primary author manuscript; the claim is bounded to the cited section.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_xml/PMC6920600/unicode",
+              "locator": "Materials and Methods > FEM of SCS; Results > Model-based ECAP recordings, Figure 2C; Study limitations and future work"
+            }
+          ]
+        },
+        "производительность": {
+          "state": "reported",
+          "value": "At assumed model discomfort threshold, Figure 2C shows clinical and model P2-N1 amplitudes of 200 and 216 microvolts; qualitative N1/P2 morphology and latency agreement, not patient-independent prediction",
+          "reason": "Checked in the primary author manuscript; the claim is bounded to the cited section.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_xml/PMC6920600/unicode",
+              "locator": "Results > Model-based ECAP recordings, Figure 2C"
+            }
+          ]
+        },
+        "кросс_субъект": {
+          "state": "reported",
+          "value": "not_applicable: no patient-level model training or held-out-patient test",
+          "reason": "Checked in the primary author manuscript; the claim is bounded to the cited section.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_xml/PMC6920600/unicode",
+              "locator": "Materials and Methods and Study limitations: canonical simulation, no patient-level split"
+            }
+          ]
+        },
+        "ограничения": {
+          "state": "reported",
+          "value": "Canonical literature-based anatomy and lead placement omit interpatient variation. Model sensory threshold is assumed at at least 10% dorsal-column activation and discomfort threshold at 1.4 times this threshold, without established clinical mapping. Dorsal horn neurons are excluded; no new patient-linked pain-outcome validation.",
+          "reason": "Checked in the primary author manuscript; the claim is bounded to the cited section.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_xml/PMC6920600/unicode",
+              "locator": "Study limitations and future work, all three paragraphs"
+            }
+          ]
+        },
+        "identifiers.doi": {
+          "state": "reported",
+          "value": "10.1111/ner.12965",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6920600/",
+              "locator": "canonical field identifiers.doi"
+            }
+          ]
+        },
+        "identifiers.pmid": {
+          "state": "reported",
+          "value": "31215720",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/31215720/",
+              "locator": "PMID and DOI"
+            }
+          ]
+        },
+        "identifiers.arxiv_id": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Поле неприменимо к типу и роли данного источника.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6920600/",
+              "locator": "canonical field identifiers.arxiv_id"
+            }
+          ]
+        },
+        "identifiers.patent_id": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Поле неприменимо к типу и роли данного источника.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6920600/",
+              "locator": "canonical field identifiers.patent_id"
+            }
+          ]
+        },
+        "identifiers.dataset_id": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Поле неприменимо к типу и роли данного источника.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6920600/",
+              "locator": "canonical field identifiers.dataset_id"
+            }
+          ]
+        },
+        "identifiers.exact_url": {
+          "state": "reported",
+          "value": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6920600/",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6920600/",
+              "locator": "canonical field identifiers.exact_url"
+            }
+          ]
+        },
+        "provenance.retrieved_at": {
+          "state": "reported",
+          "value": "2026-09-24",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6920600/",
+              "locator": "canonical field provenance.retrieved_at"
+            }
+          ]
+        },
+        "provenance.search_stream": {
+          "state": "reported",
+          "value": "NS-07",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6920600/",
+              "locator": "canonical field provenance.search_stream"
+            }
+          ]
+        },
+        "provenance.query_or_seed": {
+          "state": "reported",
+          "value": "Anaya Zander Lempka ECAP computational modeling reciprocity",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6920600/",
+              "locator": "canonical field provenance.query_or_seed"
+            }
+          ]
+        },
+        "provenance.iteration": {
+          "state": "reported",
+          "value": 2,
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6920600/",
+              "locator": "canonical field provenance.iteration"
+            }
+          ]
+        },
+        "evidence.species": {
+          "state": "reported",
+          "value": "Homo sapiens (canonical anatomical model)",
+          "reason": "Checked in the primary author manuscript; the claim is bounded to the cited section.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_xml/PMC6920600/unicode",
+              "locator": "Materials and Methods > FEM of SCS: human cadaver-based anatomical dimensions"
+            }
+          ]
+        },
+        "evidence.population": {
+          "state": "reported",
+          "value": "Literature-derived lower-thoracic anatomy; published human ECAP comparator, no newly enrolled cohort",
+          "reason": "Checked in the primary author manuscript; the claim is bounded to the cited section.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_xml/PMC6920600/unicode",
+              "locator": "Materials and Methods > FEM of SCS; Results > Model-based ECAP recordings, Figure 2C"
+            }
+          ]
+        },
+        "evidence.subject_domain": {
+          "state": "reported",
+          "value": "simulation",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6920600/",
+              "locator": "canonical field evidence.subject_domain"
+            }
+          ]
+        },
+        "evidence.modalities": {
+          "state": "reported",
+          "value": [
+            "ecap",
+            "simulation_state"
+          ],
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6920600/",
+              "locator": "canonical field evidence.modalities"
+            }
+          ]
+        },
+        "evidence.sample_size": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Canonical simulation; a published trace is a comparator, not an enrolled sample.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_xml/PMC6920600/unicode",
+              "locator": "Methods and Figure 2C: canonical model and one published clinical trace; no enrolled cohort"
+            }
+          ]
+        },
+        "evidence.target_construct": {
+          "state": "reported",
+          "value": "ecap_neural_recruitment",
+          "reason": "Checked in the primary author manuscript; the claim is bounded to the cited section.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_xml/PMC6920600/unicode",
+              "locator": "Methods > Calculation of ECAP recordings"
+            }
+          ]
+        },
+        "evidence.target_label": {
+          "state": "reported",
+          "value": "Simulated ECAP P2-N1 amplitude, morphology, conduction velocity and dorsal-column recruitment",
+          "reason": "Checked in the primary author manuscript; the claim is bounded to the cited section.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_xml/PMC6920600/unicode",
+              "locator": "Methods > Evaluation of model ECAP recordings"
+            }
+          ]
+        },
+        "evidence.access_status": {
+          "state": "reported",
+          "value": "open",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6920600/",
+              "locator": "canonical field evidence.access_status"
+            }
+          ]
+        },
+        "validation.checked_at": {
+          "state": "reported",
+          "value": "2026-09-24",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6920600/",
+              "locator": "canonical field validation.checked_at"
+            }
+          ]
+        },
+        "validation.split_unit": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Checked in the primary author manuscript; the claim is bounded to the cited section.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_xml/PMC6920600/unicode",
+              "locator": "Methods: deterministic anatomical simulation without patient-level split"
+            }
+          ]
+        },
+        "validation.cross_subject": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Checked in the primary author manuscript; the claim is bounded to the cited section.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_xml/PMC6920600/unicode",
+              "locator": "Study limitations: interpatient variation not modeled"
+            }
+          ]
+        },
+        "validation.external_validation": {
+          "state": "reported",
+          "value": "no",
+          "reason": "Checked in the primary author manuscript; the claim is bounded to the cited section.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_xml/PMC6920600/unicode",
+              "locator": "Results > Figure 2C and Study limitations: published trace comparator only"
+            }
+          ]
+        },
+        "validation.calibration": {
+          "state": "not_reported",
+          "value": null,
+          "reason": "Checked in the primary author manuscript; the claim is bounded to the cited section.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_xml/PMC6920600/unicode",
+              "locator": "Study limitations and future work"
+            }
+          ]
+        },
+        "validation.uncertainty": {
+          "state": "not_reported",
+          "value": null,
+          "reason": "Checked in the primary author manuscript; the claim is bounded to the cited section.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_xml/PMC6920600/unicode",
+              "locator": "Study limitations and future work"
+            }
+          ]
+        },
+        "validation.exclusion_reason": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Поле неприменимо к типу и роли данного источника.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6920600/",
+              "locator": "canonical field validation.exclusion_reason"
+            }
+          ]
+        },
+        "validation.notes": {
+          "state": "reported",
+          "value": "Full PMC author manuscript checked via NCBI BioC XML. Figure 2C compares a model ECAP with a previously published clinical trace; this is not a patient-level external test or analgesic response validation.",
+          "reason": "Checked in the primary author manuscript; the claim is bounded to the cited section.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_xml/PMC6920600/unicode",
+              "locator": "Results > Figure 2C; Study limitations and future work"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "S767",
+      "название": "Evoked compound action potentials during spinal cord stimulation: effects of posture and pulse width on signal features and neural activation within the spinal cord",
+      "авторы": "Meagan K. Brucker-Hahn; Hans J. Zander; Andrew J. Will; Jayesh C. Vallabh; Jason S. Wolff; David A. Dinsmoor; Scott F. Lempka",
+      "год": 2023,
+      "издание": "Journal of Neural Engineering 20(4):046028",
+      "модальность": "Human spinal ECAP recordings plus computational dorsal-column recruitment model",
+      "задача": "Measure how posture and pulse width alter spinal ECAP features and test whether constant ECAP amplitude implies constant neural recruitment",
+      "метод": "Acute externalized SCS-trial ECAP growth-curve sweeps across postures and 90-300 microsecond pulse widths; artifact model and growth-curve estimation; FEM and 10,000 dorsal-column axons with reciprocity-based ECAP simulation across dorsal CSF thicknesses",
+      "датасет": "56 trial participants and 479 trials; 195 trials excluded from growth-curve fitting; analyzed 284 datasets from 45 participants. Human recordings are commercially sensitive and available only upon reasonable request, not public download.",
+      "производительность": "Experimental supine versus seated ECAP threshold was 65.7% lower and growth rate 178.5% higher; in the model a fixed 25 microvolt ECAP required 94% more activated axons at 4.4 mm versus 2.0 mm dorsal CSF thickness",
+      "кросс_субъект": "not_applicable: descriptive repeated-measure analysis, no held-out participant predictive model",
+      "релевантность": 5,
+      "ограничения": "Acute trial-phase recordings only; 11 of 56 participants had all growth-curve trials excluded. Model lacked stimulation artifact and biological noise, used averaged anatomy, and did not predict patient-linked analgesic outcomes. Constant ECAP amplitude failed to guarantee constant recruitment in simulation.",
+      "тип_источника": "метод",
+      "identifiers": {
+        "doi": "10.1088/1741-2552/aceca4",
+        "pmid": "37531954",
+        "arxiv_id": null,
+        "patent_id": null,
+        "dataset_id": null,
+        "exact_url": "https://iopscience.iop.org/article/10.1088/1741-2552/aceca4/pdf"
+      },
+      "provenance": {
+        "import_source": "NS-09 primary publisher PDF",
+        "retrieved_at": "2026-09-24",
+        "search_stream": "NS-09",
+        "query_or_seed": "ECAP posture pulse width constant amplitude neural recruitment Brucker-Hahn",
+        "iteration": 3
+      },
+      "evidence": {
+        "species": "Homo sapiens",
+        "population": "56 people undergoing commercial SCS trials; growth-curve analysis retained 45 people",
+        "subject_domain": "human_clinical",
+        "modalities": [
+          "ecap",
+          "simulation_state"
+        ],
+        "sample_size": "56 participants, 479 trials; 284 analyzed growth curves from 45 participants",
+        "target_construct": "ecap_neural_recruitment",
+        "target_label": "ECAP threshold, growth rate and modeled activated axon count across posture/CSF distance",
+        "access_status": "open",
+        "evidence_role": "method_baseline"
+      },
+      "validation": {
+        "status": "verified_primary",
+        "screening_status": "included_core",
+        "full_text_status": "checked",
+        "checked_at": "2026-09-24",
+        "split_unit": "not_applicable",
+        "cross_subject": "not_applicable",
+        "external_validation": "no",
+        "calibration": "not_reported",
+        "uncertainty": "not_reported",
+        "exclusion_reason": null,
+        "notes": "Publisher PDF sections 2-4 and data statement checked. Human ECAP feature variation and model-derived axon count are distinct evidence; no clinical pain-response prediction was tested."
+      },
+      "relations": [],
+      "risk_flags": [
+        "ecap_not_pain_measure",
+        "missing_cross_subject_validation"
+      ],
+      "field_resolution": {
+        "авторы": {
+          "state": "reported",
+          "value": "Meagan K. Brucker-Hahn; Hans J. Zander; Andrew J. Will; Jayesh C. Vallabh; Jason S. Wolff; David A. Dinsmoor; Scott F. Lempka",
+          "reason": "Checked in the publisher PDF; experimental and simulated findings are separated.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/aceca4/pdf",
+              "locator": "p. 1, byline"
+            }
+          ]
+        },
+        "год": {
+          "state": "reported",
+          "value": 2023,
+          "reason": "Checked in the publisher PDF; experimental and simulated findings are separated.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/aceca4/pdf",
+              "locator": "p. 1, citation and publication date"
+            }
+          ]
+        },
+        "издание": {
+          "state": "reported",
+          "value": "Journal of Neural Engineering 20(4):046028",
+          "reason": "Checked in the publisher PDF; experimental and simulated findings are separated.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/aceca4/pdf",
+              "locator": "p. 1, citation"
+            }
+          ]
+        },
+        "модальность": {
+          "state": "reported",
+          "value": "Human spinal ECAP recordings plus computational dorsal-column recruitment model",
+          "reason": "Checked in the publisher PDF; experimental and simulated findings are separated.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/aceca4/pdf",
+              "locator": "Abstract; sections 2.1-2.3"
+            }
+          ]
+        },
+        "задача": {
+          "state": "reported",
+          "value": "Measure how posture and pulse width alter spinal ECAP features and test whether constant ECAP amplitude implies constant neural recruitment",
+          "reason": "Checked in the publisher PDF; experimental and simulated findings are separated.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/aceca4/pdf",
+              "locator": "Abstract Objective; Introduction final two paragraphs"
+            }
+          ]
+        },
+        "метод": {
+          "state": "reported",
+          "value": "Acute externalized SCS-trial ECAP growth-curve sweeps across postures and 90-300 microsecond pulse widths; artifact model and growth-curve estimation; FEM and 10,000 dorsal-column axons with reciprocity-based ECAP simulation across dorsal CSF thicknesses",
+          "reason": "Checked in the publisher PDF; experimental and simulated findings are separated.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/aceca4/pdf",
+              "locator": "sections 2.1-2.3, Figure 1 and Figure 2; Appendix growth-curve fitting"
+            }
+          ]
+        },
+        "датасет": {
+          "state": "reported",
+          "value": "56 trial participants and 479 trials; 195 trials excluded from growth-curve fitting; analyzed 284 datasets from 45 participants. Human recordings are commercially sensitive and available only upon reasonable request, not public download.",
+          "reason": "Checked in the publisher PDF; experimental and simulated findings are separated.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/aceca4/pdf",
+              "locator": "section 3 Results opening paragraph; section 5 Data availability statement"
+            }
+          ]
+        },
+        "производительность": {
+          "state": "reported",
+          "value": "Experimental supine versus seated ECAP threshold was 65.7% lower and growth rate 178.5% higher; in the model a fixed 25 microvolt ECAP required 94% more activated axons at 4.4 mm versus 2.0 mm dorsal CSF thickness",
+          "reason": "Checked in the publisher PDF; experimental and simulated findings are separated.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/aceca4/pdf",
+              "locator": "Abstract Main results; section 3.3; section 4.3, Figure 8"
+            }
+          ]
+        },
+        "кросс_субъект": {
+          "state": "reported",
+          "value": "not_applicable: descriptive repeated-measure analysis, no held-out participant predictive model",
+          "reason": "Checked in the publisher PDF; experimental and simulated findings are separated.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/aceca4/pdf",
+              "locator": "sections 2.1 and 3: repeated descriptive trials, no prediction split"
+            }
+          ]
+        },
+        "ограничения": {
+          "state": "reported",
+          "value": "Acute trial-phase recordings only; 11 of 56 participants had all growth-curve trials excluded. Model lacked stimulation artifact and biological noise, used averaged anatomy, and did not predict patient-linked analgesic outcomes. Constant ECAP amplitude failed to guarantee constant recruitment in simulation.",
+          "reason": "Checked in the publisher PDF; experimental and simulated findings are separated.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/aceca4/pdf",
+              "locator": "section 3 opening paragraph; section 4.4 Study limitations and future work"
+            }
+          ]
+        },
+        "identifiers.doi": {
+          "state": "reported",
+          "value": "10.1088/1741-2552/aceca4",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/aceca4/pdf",
+              "locator": "canonical field identifiers.doi"
+            }
+          ]
+        },
+        "identifiers.pmid": {
+          "state": "reported",
+          "value": "37531954",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/37531954/",
+              "locator": "PMID and DOI"
+            }
+          ]
+        },
+        "identifiers.arxiv_id": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Поле неприменимо к типу и роли данного источника.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/aceca4/pdf",
+              "locator": "canonical field identifiers.arxiv_id"
+            }
+          ]
+        },
+        "identifiers.patent_id": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Поле неприменимо к типу и роли данного источника.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/aceca4/pdf",
+              "locator": "canonical field identifiers.patent_id"
+            }
+          ]
+        },
+        "identifiers.dataset_id": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Поле неприменимо к типу и роли данного источника.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/aceca4/pdf",
+              "locator": "canonical field identifiers.dataset_id"
+            }
+          ]
+        },
+        "identifiers.exact_url": {
+          "state": "reported",
+          "value": "https://iopscience.iop.org/article/10.1088/1741-2552/aceca4/pdf",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/aceca4/pdf",
+              "locator": "canonical field identifiers.exact_url"
+            }
+          ]
+        },
+        "provenance.retrieved_at": {
+          "state": "reported",
+          "value": "2026-09-24",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/aceca4/pdf",
+              "locator": "canonical field provenance.retrieved_at"
+            }
+          ]
+        },
+        "provenance.search_stream": {
+          "state": "reported",
+          "value": "NS-09",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/aceca4/pdf",
+              "locator": "canonical field provenance.search_stream"
+            }
+          ]
+        },
+        "provenance.query_or_seed": {
+          "state": "reported",
+          "value": "ECAP posture pulse width constant amplitude neural recruitment Brucker-Hahn",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/aceca4/pdf",
+              "locator": "canonical field provenance.query_or_seed"
+            }
+          ]
+        },
+        "provenance.iteration": {
+          "state": "reported",
+          "value": 3,
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/aceca4/pdf",
+              "locator": "canonical field provenance.iteration"
+            }
+          ]
+        },
+        "evidence.species": {
+          "state": "reported",
+          "value": "Homo sapiens",
+          "reason": "Checked in the publisher PDF; experimental and simulated findings are separated.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/aceca4/pdf",
+              "locator": "section 2.1 Experimental data acquisition"
+            }
+          ]
+        },
+        "evidence.population": {
+          "state": "reported",
+          "value": "56 people undergoing commercial SCS trials; growth-curve analysis retained 45 people",
+          "reason": "Checked in the publisher PDF; experimental and simulated findings are separated.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/aceca4/pdf",
+              "locator": "section 2.1; section 3 opening paragraph"
+            }
+          ]
+        },
+        "evidence.subject_domain": {
+          "state": "reported",
+          "value": "human_clinical",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/aceca4/pdf",
+              "locator": "canonical field evidence.subject_domain"
+            }
+          ]
+        },
+        "evidence.modalities": {
+          "state": "reported",
+          "value": [
+            "ecap",
+            "simulation_state"
+          ],
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/aceca4/pdf",
+              "locator": "canonical field evidence.modalities"
+            }
+          ]
+        },
+        "evidence.sample_size": {
+          "state": "reported",
+          "value": "56 participants, 479 trials; 284 analyzed growth curves from 45 participants",
+          "reason": "Checked in the publisher PDF; experimental and simulated findings are separated.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/aceca4/pdf",
+              "locator": "section 3 opening paragraph: 479, 195, 284 and 45 denominators"
+            }
+          ]
+        },
+        "evidence.target_construct": {
+          "state": "reported",
+          "value": "ecap_neural_recruitment",
+          "reason": "Checked in the publisher PDF; experimental and simulated findings are separated.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/aceca4/pdf",
+              "locator": "sections 2.2-2.3; Figure 8"
+            }
+          ]
+        },
+        "evidence.target_label": {
+          "state": "reported",
+          "value": "ECAP threshold, growth rate and modeled activated axon count across posture/CSF distance",
+          "reason": "Checked in the publisher PDF; experimental and simulated findings are separated.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/aceca4/pdf",
+              "locator": "sections 2.2-2.3; Figure 8"
+            }
+          ]
+        },
+        "evidence.access_status": {
+          "state": "reported",
+          "value": "open",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/aceca4/pdf",
+              "locator": "canonical field evidence.access_status"
+            }
+          ]
+        },
+        "validation.checked_at": {
+          "state": "reported",
+          "value": "2026-09-24",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/aceca4/pdf",
+              "locator": "canonical field validation.checked_at"
+            }
+          ]
+        },
+        "validation.split_unit": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Checked in the publisher PDF; experimental and simulated findings are separated.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/aceca4/pdf",
+              "locator": "section 2.1 and section 3: descriptive analysis, no train/test split"
+            }
+          ]
+        },
+        "validation.cross_subject": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Checked in the publisher PDF; experimental and simulated findings are separated.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/aceca4/pdf",
+              "locator": "section 2.1 and section 3: repeated recordings, no held-out test"
+            }
+          ]
+        },
+        "validation.external_validation": {
+          "state": "reported",
+          "value": "no",
+          "reason": "Checked in the publisher PDF; experimental and simulated findings are separated.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/aceca4/pdf",
+              "locator": "section 4.4: acute trial cohort and generalized model"
+            }
+          ]
+        },
+        "validation.calibration": {
+          "state": "not_reported",
+          "value": null,
+          "reason": "Checked in the publisher PDF; experimental and simulated findings are separated.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/aceca4/pdf",
+              "locator": "sections 3-4: no predictive calibration test"
+            }
+          ]
+        },
+        "validation.uncertainty": {
+          "state": "not_reported",
+          "value": null,
+          "reason": "Checked in the publisher PDF; experimental and simulated findings are separated.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/aceca4/pdf",
+              "locator": "sections 3-4: no predictive uncertainty test"
+            }
+          ]
+        },
+        "validation.exclusion_reason": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Поле неприменимо к типу и роли данного источника.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/aceca4/pdf",
+              "locator": "canonical field validation.exclusion_reason"
+            }
+          ]
+        },
+        "validation.notes": {
+          "state": "reported",
+          "value": "Publisher PDF sections 2-4 and data statement checked. Human ECAP feature variation and model-derived axon count are distinct evidence; no clinical pain-response prediction was tested.",
+          "reason": "Checked in the publisher PDF; experimental and simulated findings are separated.",
+          "checked_at": "2026-09-24",
+          "locators": [
+            {
+              "url": "https://iopscience.iop.org/article/10.1088/1741-2552/aceca4/pdf",
+              "locator": "section 4.4 Study limitations and future work"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "S775",
+      "название": "A Drosophila computational brain model reveals sensorimotor processing",
+      "авторы": "Philip K. Shiu; Gabriella R. Sterne; Nico Spiller; Romain Franconville; Andrea Sandoval; et al.",
+      "год": 2024,
+      "издание": "Nature 634:210–219",
+      "модальность": "Adult Drosophila FlyWire central-brain connectome, predicted neurotransmitter identity, simulated spike activity, optogenetic activation and feeding/grooming observations",
+      "задача": "Predict sensorimotor responses in feeding and antennal grooming circuits from a whole-brain connectome model",
+      "метод": "Brainwide leaky integrate-and-fire model with alpha-synapse dynamics on connectome weights and predicted excitatory/inhibitory identities; sensory and interneuron activation compared with neural and behavioral experiments",
+      "датасет": "Adult FlyWire central-brain connectome, public materialization v.630, with 127,400 proofread neurons included in the leaky integrate-and-fire model; the article describes over 125,000 neurons and 50 million synaptic connections in the broader connectome.",
+      "производительность": "Model predictions of taste-responsive and feeding-initiating neurons, taste interactions and antennal grooming circuits are tested by optogenetic activation and behavioral or neural observations; no pain, ECAP or SCS metric",
+      "кросс_субъект": "not_applicable: connectome simulation and fly experiments, not human participant prediction",
+      "релевантность": 4,
+      "ограничения": "The model concerns adult central-brain feeding and grooming circuits, not VNC walking or nociceptive subjective pain. Authors caution that absolute model firing rates are unreliable because morphology, receptor dynamics, gap junctions, peptides and neuromodulation are omitted. Fly experiments validate scoped circuit hypotheses, not human ECAP or SCS outcomes.",
+      "тип_источника": "метод",
+      "identifiers": {
+        "doi": "10.1038/s41586-024-07763-9",
+        "pmid": "39358519",
+        "arxiv_id": null,
+        "patent_id": null,
+        "dataset_id": null,
+        "exact_url": "https://www.nature.com/articles/s41586-024-07763-9"
+      },
+      "provenance": {
+        "import_source": "NS-02 primary Nature JATS via Europe PMC",
+        "retrieved_at": "2026-09-25",
+        "search_stream": "NS-02",
+        "query_or_seed": "Shiu whole-brain Drosophila LIF FlyWire sensorimotor model",
+        "iteration": 3
+      },
+      "evidence": {
+        "species": "Drosophila melanogaster",
+        "population": "Adult central-brain connectome and separate experimental flies in scoped feeding/grooming validations",
+        "subject_domain": "drosophila_adult",
+        "modalities": [
+          "connectome",
+          "neural_activity",
+          "behavior",
+          "simulation_state"
+        ],
+        "sample_size": "over 125,000 modeled neurons; experimental animal denominators vary by assay",
+        "target_construct": "not_applicable",
+        "target_label": "Feeding initiation and antennal grooming, not nociceptive protection",
+        "access_status": "open",
+        "evidence_role": "simulation_foundation"
+      },
+      "validation": {
+        "status": "verified_primary",
+        "screening_status": "included_core",
+        "full_text_status": "checked",
+        "checked_at": "2026-09-28",
+        "split_unit": "not_applicable",
+        "cross_subject": "not_applicable",
+        "external_validation": "no",
+        "calibration": "not_reported",
+        "uncertainty": "not_reported",
+        "exclusion_reason": null,
+        "notes": "Primary Nature/PMC full JATS checked again on 2026-09-28. Methods > Computational model explicitly pins this study's model graph to FlyWire materialization v.630 and 127,400 proofread neurons. Optogenetic and behavioral tests validate scoped feeding/grooming predictions in flies, not a held-out human cohort. This S775 release does not identify upstream releases of the separate S740 VNC simulation matrices."
+      },
+      "relations": [],
+      "risk_flags": [
+        "animal_to_human_transfer_unvalidated"
+      ],
+      "field_resolution": {
+        "авторы": {
+          "state": "reported",
+          "value": "Philip K. Shiu; Gabriella R. Sterne; Nico Spiller; Romain Franconville; Andrea Sandoval; et al.",
+          "reason": "Checked in the primary full JATS text; circuit and transfer boundaries are explicit.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11446845/fullTextXML",
+              "locator": "Article front matter: byline"
+            }
+          ]
+        },
+        "год": {
+          "state": "reported",
+          "value": 2024,
+          "reason": "Checked in the primary full JATS text; circuit and transfer boundaries are explicit.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11446845/fullTextXML",
+              "locator": "Article front matter: 2024"
+            }
+          ]
+        },
+        "издание": {
+          "state": "reported",
+          "value": "Nature 634:210–219",
+          "reason": "Checked in the primary full JATS text; circuit and transfer boundaries are explicit.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11446845/fullTextXML",
+              "locator": "Article front matter: Nature 634, 210–219"
+            }
+          ]
+        },
+        "модальность": {
+          "state": "reported",
+          "value": "Adult Drosophila FlyWire central-brain connectome, predicted neurotransmitter identity, simulated spike activity, optogenetic activation and feeding/grooming observations",
+          "reason": "Checked in the primary full JATS text; circuit and transfer boundaries are explicit.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11446845/fullTextXML",
+              "locator": "Abstract; Methods > Computational model and experimental assays"
+            }
+          ]
+        },
+        "задача": {
+          "state": "reported",
+          "value": "Predict sensorimotor responses in feeding and antennal grooming circuits from a whole-brain connectome model",
+          "reason": "Checked in the primary full JATS text; circuit and transfer boundaries are explicit.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11446845/fullTextXML",
+              "locator": "Abstract; Results > feeding and grooming"
+            }
+          ]
+        },
+        "метод": {
+          "state": "reported",
+          "value": "Brainwide leaky integrate-and-fire model with alpha-synapse dynamics on connectome weights and predicted excitatory/inhibitory identities; sensory and interneuron activation compared with neural and behavioral experiments",
+          "reason": "Checked in the primary full JATS text; circuit and transfer boundaries are explicit.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11446845/fullTextXML",
+              "locator": "Methods > Computational model; Neurotransmitter predictions"
+            }
+          ]
+        },
+        "датасет": {
+          "state": "reported",
+          "value": "Adult FlyWire central-brain connectome, public materialization v.630, with 127,400 proofread neurons included in the leaky integrate-and-fire model; the article describes over 125,000 neurons and 50 million synaptic connections in the broader connectome.",
+          "reason": "The primary Methods explicitly report materialization v.630 and the included neuron count.",
+          "checked_at": "2026-09-28",
+          "locators": [
+            {
+              "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11446845/fullTextXML",
+              "locator": "Methods > Computational model: all 127,400 proofread neurons from FlyWire public materialization v.630 are included in this S775 model."
+            }
+          ]
+        },
+        "производительность": {
+          "state": "reported",
+          "value": "Model predictions of taste-responsive and feeding-initiating neurons, taste interactions and antennal grooming circuits are tested by optogenetic activation and behavioral or neural observations; no pain, ECAP or SCS metric",
+          "reason": "Checked in the primary full JATS text; circuit and transfer boundaries are explicit.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11446845/fullTextXML",
+              "locator": "Abstract; Results > feeding and grooming comparisons"
+            }
+          ]
+        },
+        "кросс_субъект": {
+          "state": "reported",
+          "value": "not_applicable: connectome simulation and fly experiments, not human participant prediction",
+          "reason": "Checked in the primary full JATS text; circuit and transfer boundaries are explicit.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11446845/fullTextXML",
+              "locator": "Methods: fly circuit simulation rather than human prediction"
+            }
+          ]
+        },
+        "ограничения": {
+          "state": "reported",
+          "value": "The model concerns adult central-brain feeding and grooming circuits, not VNC walking or nociceptive subjective pain. Authors caution that absolute model firing rates are unreliable because morphology, receptor dynamics, gap junctions, peptides and neuromodulation are omitted. Fly experiments validate scoped circuit hypotheses, not human ECAP or SCS outcomes.",
+          "reason": "Primary Methods explicitly pins FlyWire materialization v.630; other circuit and transfer limits remain.",
+          "checked_at": "2026-09-30",
+          "locators": [
+            {
+              "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11446845/fullTextXML",
+              "locator": "Methods > Computational model and Computational modelling limitations"
+            }
+          ]
+        },
+        "identifiers.doi": {
+          "state": "reported",
+          "value": "10.1038/s41586-024-07763-9",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41586-024-07763-9",
+              "locator": "canonical field identifiers.doi"
+            }
+          ]
+        },
+        "identifiers.pmid": {
+          "state": "reported",
+          "value": "39358519",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://pubmed.ncbi.nlm.nih.gov/39358519/",
+              "locator": "PMID and DOI"
+            }
+          ]
+        },
+        "identifiers.arxiv_id": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Поле неприменимо к типу и роли данного источника.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41586-024-07763-9",
+              "locator": "canonical field identifiers.arxiv_id"
+            }
+          ]
+        },
+        "identifiers.patent_id": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Поле неприменимо к типу и роли данного источника.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41586-024-07763-9",
+              "locator": "canonical field identifiers.patent_id"
+            }
+          ]
+        },
+        "identifiers.dataset_id": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Поле неприменимо к типу и роли данного источника.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41586-024-07763-9",
+              "locator": "canonical field identifiers.dataset_id"
+            }
+          ]
+        },
+        "identifiers.exact_url": {
+          "state": "reported",
+          "value": "https://www.nature.com/articles/s41586-024-07763-9",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41586-024-07763-9",
+              "locator": "canonical field identifiers.exact_url"
+            }
+          ]
+        },
+        "provenance.retrieved_at": {
+          "state": "reported",
+          "value": "2026-09-25",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41586-024-07763-9",
+              "locator": "canonical field provenance.retrieved_at"
+            }
+          ]
+        },
+        "provenance.search_stream": {
+          "state": "reported",
+          "value": "NS-02",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41586-024-07763-9",
+              "locator": "canonical field provenance.search_stream"
+            }
+          ]
+        },
+        "provenance.query_or_seed": {
+          "state": "reported",
+          "value": "Shiu whole-brain Drosophila LIF FlyWire sensorimotor model",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41586-024-07763-9",
+              "locator": "canonical field provenance.query_or_seed"
+            }
+          ]
+        },
+        "provenance.iteration": {
+          "state": "reported",
+          "value": 3,
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41586-024-07763-9",
+              "locator": "canonical field provenance.iteration"
+            }
+          ]
+        },
+        "evidence.species": {
+          "state": "reported",
+          "value": "Drosophila melanogaster",
+          "reason": "Checked in the primary full JATS text; circuit and transfer boundaries are explicit.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11446845/fullTextXML",
+              "locator": "Abstract: adult Drosophila melanogaster"
+            }
+          ]
+        },
+        "evidence.population": {
+          "state": "reported",
+          "value": "Adult central-brain connectome and separate experimental flies in scoped feeding/grooming validations",
+          "reason": "Checked in the primary full JATS text; circuit and transfer boundaries are explicit.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11446845/fullTextXML",
+              "locator": "Methods > computational model and fly validation assays"
+            }
+          ]
+        },
+        "evidence.subject_domain": {
+          "state": "reported",
+          "value": "drosophila_adult",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41586-024-07763-9",
+              "locator": "canonical field evidence.subject_domain"
+            }
+          ]
+        },
+        "evidence.modalities": {
+          "state": "reported",
+          "value": [
+            "connectome",
+            "neural_activity",
+            "behavior",
+            "simulation_state"
+          ],
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41586-024-07763-9",
+              "locator": "canonical field evidence.modalities"
+            }
+          ]
+        },
+        "evidence.sample_size": {
+          "state": "reported",
+          "value": "over 125,000 modeled neurons; experimental animal denominators vary by assay",
+          "reason": "Checked in the primary full JATS text; circuit and transfer boundaries are explicit.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11446845/fullTextXML",
+              "locator": "Abstract: over 125,000 neurons and 50 million synapses"
+            }
+          ]
+        },
+        "evidence.target_construct": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Checked in the primary full JATS text; circuit and transfer boundaries are explicit.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11446845/fullTextXML",
+              "locator": "Abstract: feeding and grooming rather than nociception"
+            }
+          ]
+        },
+        "evidence.target_label": {
+          "state": "reported",
+          "value": "Feeding initiation and antennal grooming, not nociceptive protection",
+          "reason": "Checked in the primary full JATS text; circuit and transfer boundaries are explicit.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11446845/fullTextXML",
+              "locator": "Abstract: feeding initiation and grooming"
+            }
+          ]
+        },
+        "evidence.access_status": {
+          "state": "reported",
+          "value": "open",
+          "reason": "Значение сохранено из проверенной канонической карточки.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41586-024-07763-9",
+              "locator": "canonical field evidence.access_status"
+            }
+          ]
+        },
+        "validation.checked_at": {
+          "state": "reported",
+          "value": "2026-09-28",
+          "reason": "Repeat primary full-text check.",
+          "checked_at": "2026-09-28",
+          "locators": [
+            {
+              "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11446845/fullTextXML",
+              "locator": "Methods > Computational model: all 127,400 proofread neurons from FlyWire public materialization v.630 are included in this S775 model."
+            }
+          ]
+        },
+        "validation.split_unit": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Checked in the primary full JATS text; circuit and transfer boundaries are explicit.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11446845/fullTextXML",
+              "locator": "Methods: no held-out human prediction split"
+            }
+          ]
+        },
+        "validation.cross_subject": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Checked in the primary full JATS text; circuit and transfer boundaries are explicit.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11446845/fullTextXML",
+              "locator": "Methods: fly experiments, no human cross-subject task"
+            }
+          ]
+        },
+        "validation.external_validation": {
+          "state": "reported",
+          "value": "no",
+          "reason": "Checked in the primary full JATS text; circuit and transfer boundaries are explicit.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11446845/fullTextXML",
+              "locator": "Abstract; Results: scoped fly experiments, no independent graph or human cohort"
+            }
+          ]
+        },
+        "validation.calibration": {
+          "state": "not_reported",
+          "value": null,
+          "reason": "Checked in the primary full JATS text; circuit and transfer boundaries are explicit.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11446845/fullTextXML",
+              "locator": "Methods: no reported probability calibration"
+            }
+          ]
+        },
+        "validation.uncertainty": {
+          "state": "not_reported",
+          "value": null,
+          "reason": "Checked in the primary full JATS text; circuit and transfer boundaries are explicit.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11446845/fullTextXML",
+              "locator": "Methods > Computational modelling limitations"
+            }
+          ]
+        },
+        "validation.exclusion_reason": {
+          "state": "not_applicable",
+          "value": null,
+          "reason": "Поле неприменимо к типу и роли данного источника.",
+          "checked_at": "2026-09-25",
+          "locators": [
+            {
+              "url": "https://www.nature.com/articles/s41586-024-07763-9",
+              "locator": "canonical field validation.exclusion_reason"
+            }
+          ]
+        },
+        "validation.notes": {
+          "state": "reported",
+          "value": "Primary Nature/PMC full JATS checked again on 2026-09-28. Methods > Computational model explicitly pins this study's model graph to FlyWire materialization v.630 and 127,400 proofread neurons. Optogenetic and behavioral tests validate scoped feeding/grooming predictions in flies, not a held-out human cohort. This S775 release does not identify upstream releases of the separate S740 VNC simulation matrices.",
+          "reason": "Replace the false statement that the checked JATS omitted the graph release.",
+          "checked_at": "2026-09-28",
+          "locators": [
+            {
+              "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11446845/fullTextXML",
+              "locator": "Methods > Computational model: all 127,400 proofread neurons from FlyWire public materialization v.630 are included in this S775 model."
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "resources": [],
+  "scientific_contract": {
+    "meta": {
+      "schema_version": "1.0.0",
+      "prepared_at": "2026-09-24",
+      "status": "contract_complete_pending_author_and_supervisor_review",
+      "gate": "G0_REVISE",
+      "scope": "Prospective method for human ECAP growth-curve modelling with Drosophila connectome-constrained pretraining, a separate biophysical formation/recording operator, and matched participant-level evaluation; SCS control and clinical response remain conditional extensions.",
+      "invariants": [
+        "A simulation label is not subjective human pain.",
+        "ECAP measures evoked neural recruitment and is not a direct measure of pain.",
+        "Drosophila is not treated as a direct model or digital twin of the human spinal cord.",
+        "Clinical SCS claims require patient-level human ECAP or telemetry linked to a pre-specified clinical outcome."
+      ],
+      "author_review_scope": "Delegated EVD-05 acceptance of bounded evidence conclusions on 2026-09-30; future substantive evidence changes and experiment proposals still require review. This does not approve the topic or establish GO.",
+      "editorial_revision": {
+        "date": "2026-10-05",
+        "basis": "User-approved IPR revision",
+        "supervisor_approved": false
+      },
+      "working_title_ru": "Метод биофизического моделирования вызванных составных потенциалов действия при стимуляции спинного мозга с предобучением динамического представления на коннектомной модели Drosophila melanogaster",
+      "working_title_en": "A method for biophysical modelling of evoked compound action potentials during spinal cord stimulation with pretraining of a dynamical representation on a Drosophila melanogaster connectome model"
+    },
+    "entities": [
+      {
+        "id": "ENT-01",
+        "name": "noxious_stimulus",
+        "carrier": "simulation environment or experimental stimulus apparatus",
+        "measurement": "commanded location, intensity, duration, and waveform",
+        "time_scale": "stimulus event and trial",
+        "analysis_unit": "trial within an individual",
+        "primary_target_construct": "noxious_stimulus",
+        "permitted_conclusion": "The applied exposure can be detected or its parameters can be estimated.",
+        "prohibited_interpretation": "The individual experienced subjective pain.",
+        "source_refs": [
+          "S280",
+          "S730",
+          "S291",
+          "ST031",
+          "ST032",
+          "ST033"
+        ]
+      },
+      {
+        "id": "ENT-02",
+        "name": "nociceptive_response",
+        "carrier": "sensory and downstream neural or physiological system",
+        "measurement": "neural activity or physiological response after a noxious stimulus",
+        "time_scale": "milliseconds to seconds after stimulation",
+        "analysis_unit": "trial within an animal or participant",
+        "primary_target_construct": "nociceptive_response",
+        "permitted_conclusion": "A measurable response associated with potentially tissue-damaging stimulation occurred.",
+        "prohibited_interpretation": "The response is equivalent to subjective pain or chronic pain.",
+        "source_refs": [
+          "S730",
+          "ST033",
+          "ST040"
+        ]
+      },
+      {
+        "id": "ENT-03",
+        "name": "protective_behavior",
+        "carrier": "animal or human participant",
+        "measurement": "movement, pose, withdrawal, guarding, or expert behavioral annotation",
+        "time_scale": "event to session",
+        "analysis_unit": "animal or participant",
+        "primary_target_construct": "protective_behavior",
+        "permitted_conclusion": "Observable protective behavior was detected under the defined protocol.",
+        "prohibited_interpretation": "Behavior alone quantifies subjective pain intensity.",
+        "source_refs": [
+          "ST035"
+        ]
+      },
+      {
+        "id": "ENT-04",
+        "name": "abstract_dynamic_representation",
+        "carrier": "connectome-constrained Drosophila simulation and its explicitly defined latent state",
+        "measurement": "initial parameters of a pretrained temporal module; latent trajectories describe the training representation, not human anatomy or measured ECAP",
+        "time_scale": "milliseconds to behavioral episode",
+        "analysis_unit": "trial nested in a held-out synthetic individual and scenario",
+        "primary_target_construct": "abstract_temporal_representation",
+        "permitted_conclusion": "A proposed temporal prior may be adapted to a separately specified human recruitment module; benefit requires matched independent comparison.",
+        "prohibited_interpretation": "The latent state is subjective pain, a human spinal-cord state, or an ECAP waveform.",
+        "source_refs": [
+          "S066",
+          "S738",
+          "S739",
+          "S740"
+        ]
+      },
+      {
+        "id": "ENT-05",
+        "name": "ecap_neural_recruitment",
+        "carrier": "electrically stimulated and recorded human neural tissue",
+        "measurement": "artifact-controlled evoked compound action-potential morphology, latency, area, and peak-to-peak amplitude",
+        "time_scale": "sub-millisecond to tens of milliseconds after a stimulation pulse",
+        "analysis_unit": "pulse nested in electrode configuration, session, and participant",
+        "primary_target_construct": "ecap_neural_recruitment",
+        "permitted_conclusion": "The signal characterizes evoked neural recruitment and stimulation delivery under the recording configuration.",
+        "prohibited_interpretation": "ECAP is a direct measure of pain or proves clinical benefit.",
+        "source_refs": [
+          "S105",
+          "S159",
+          "S162"
+        ]
+      },
+      {
+        "id": "ENT-06",
+        "name": "scs_response",
+        "carrier": "human patient receiving spinal cord stimulation",
+        "measurement": "pre-specified patient-level clinical outcome at a fixed follow-up time",
+        "time_scale": "trial period to longitudinal follow-up",
+        "analysis_unit": "participant",
+        "primary_target_construct": "scs_response",
+        "permitted_conclusion": "The model predicts the defined clinical outcome in an independent patient-level evaluation.",
+        "prohibited_interpretation": "A waveform-only or within-patient window result establishes therapeutic efficacy or cross-subject prediction.",
+        "source_refs": [
+          "S079",
+          "S105",
+          "S162"
+        ]
+      }
+    ],
+    "simulation_domain": {
+      "id": "SIM-DOM-01",
+      "organism": "adult Drosophila melanogaster",
+      "neural_scope": "Peripheral nociceptors and connectome-addressable ascending nociceptive neurons implicated in rapid escape and sustained avoidance; exact cell/root IDs must be frozen in the simulator manifest for the selected connectome release.",
+      "state_variables": [
+        "neuron activation or spike state when the selected simulator supports it",
+        "synaptic input and output state when exposed by the simulator",
+        "body pose, joint state, contact state, and locomotor state",
+        "environment and stimulus state retained for audit but withheld from a detector when it is the target"
+      ],
+      "stimuli": [
+        "localized noxious mechanical exposure",
+        "localized noxious thermal exposure when supported by the selected sensory model",
+        "sham and non-noxious controls"
+      ],
+      "observable_sensors": [
+        "neural_activity",
+        "simulation_state",
+        "movement_pose",
+        "behavior"
+      ],
+      "observable_behaviors": [
+        "rapid escape",
+        "sustained avoidance",
+        "locomotor trajectory and pose-derived protective response"
+      ],
+      "fallback_domain": "A separate larval Class-IV multidendritic-nociceptor escape/rolling circuit may be used only as an explicitly different experiment; adult and larval circuits are not pooled.",
+      "excluded_claims": [
+        "subjective pain",
+        "human spinal-cord equivalence",
+        "clinical SCS response"
+      ],
+      "source_refs": [
+        "S029",
+        "S066",
+        "S090",
+        "S731",
+        "S738",
+        "S739",
+        "S740"
+      ]
+    },
+    "experiments": [
+      {
+        "id": "EXP-01",
+        "name": "simulation_stimulus_detection",
+        "primary_entity_id": "ENT-01",
+        "input": "simulated neural, pose, movement, or behavioral observations without the stimulus command",
+        "output": "location, intensity, duration, or presence of a noxious stimulus",
+        "training_data": "synthetic individuals and scenarios assigned only to training",
+        "independent_test": "held-out synthetic individuals and held-out stimulus scenarios",
+        "success_criterion": "pre-registered improvement over chance and leakage controls with confidence intervals",
+        "falsification_criterion": "performance collapses after removing the stimulus command or under individual/scenario holdout",
+        "source_refs": []
+      },
+      {
+        "id": "EXP-02",
+        "name": "simulation_response_estimation",
+        "primary_entity_id": "ENT-02",
+        "input": "stimulus parameters and pre-stimulus simulation state",
+        "output": "held-out neural or protective response",
+        "training_data": "synthetic individuals and perturbations assigned only to training",
+        "independent_test": "held-out individuals, parameter ranges, and perturbations",
+        "success_criterion": "response features remain identifiable and calibrated under pre-registered perturbations",
+        "falsification_criterion": "the response is not distinguishable from control or is determined by metadata leakage",
+        "source_refs": []
+      },
+      {
+        "id": "EXP-03",
+        "name": "physical_ecap_observation_validation",
+        "primary_entity_id": "ENT-05",
+        "input": "electrically recruited population activity passed through an explicit conduction, volume-conduction, electrode, artifact, and acquisition model",
+        "output": "ECAP-like waveform and recruitment characteristics",
+        "training_data": "simulated recruitment conditions plus the training partition of authorized human ECAP recordings",
+        "independent_test": "held-out participants, electrode configurations, and stimulation settings from human ECAP data",
+        "success_criterion": "pre-registered waveform, latency, recruitment, and artifact characteristics satisfy bounds fixed from the human training reference",
+        "falsification_criterion": "the physical observation model fails a required characteristic or matches only participants and configurations seen during fitting",
+        "source_refs": [
+          "S105",
+          "S159",
+          "S162"
+        ]
+      },
+      {
+        "id": "EXP-04",
+        "name": "scs_programming_and_evaluation",
+        "primary_entity_id": "ENT-05",
+        "input": "human ECAP or SCS telemetry, stimulation settings, and only for the clinical subtask pre-specified patient covariates",
+        "output": "primary ECAP growth-curve modelling comparison; setting/control and linked clinical outcome prediction are separate conditional extensions",
+        "training_data": "authorized human SCS cohort split by participant; clinical labels are optional and task-specific",
+        "independent_test": "held-out patients or a separate SCS cohort, with unseen settings where the task requires them",
+        "success_criterion": "practically meaningful growth-curve accuracy gain over all prespecified matched controls, including the simple static model, on independent participants with calibration within tolerance",
+        "falsification_criterion": "eligible locked data establish no meaningful gain or calibration failure; leakage invalidates generalization, and unavailable target data block evaluation rather than refute the hypothesis",
+        "source_refs": [
+          "S079",
+          "S105",
+          "S162"
+        ]
+      }
+    ],
+    "transfer_chain": [
+      {
+        "id": "TR-01",
+        "from": "connectome_constrained_drosophila_simulation",
+        "to": "abstract_temporal_dynamics",
+        "input": "neural activity, simulation state, movement, pose, and protective behavior",
+        "output": "pretrained temporal-module parameters and versioned synthetic time series with explicit configuration, units and seed; nociceptive interpretations require compatible observations",
+        "training_data": "training synthetic individuals and scenarios",
+        "independent_test": "held-out synthetic individuals and scenarios",
+        "success_criterion": "representation preserves pre-registered stimulus and response information under perturbation",
+        "falsification_criterion": "representation depends on command leakage or fails individual/scenario holdout",
+        "source_refs": [
+          "S066",
+          "S738",
+          "S739",
+          "S740"
+        ]
+      },
+      {
+        "id": "TR-02",
+        "from": "abstract_temporal_dynamics",
+        "to": "human_neural_recruitment_interface",
+        "input": "initial parameters of the Drosophila-pretrained temporal module, adapted in dimension and time scale within human training folds",
+        "output": "human population-response module feeding a separate biophysical ECAP operator; no asserted neuron correspondence or direct fly-to-ECAP signal conversion",
+        "training_data": "synthetic individuals plus only the training partition of human recruitment data",
+        "independent_test": "held-out human participants and stimulation configurations",
+        "success_criterion": "prespecified practically meaningful gain over all matched controls, including human-only, human-ECAP synthetic, shuffled dynamics, graph-null and simple growth-curve models, without calibration loss beyond tolerance",
+        "falsification_criterion": "no defensible dynamical correspondence stops transfer claims; an eligible locked comparison refutes meaningful benefit only when intervals establish insufficient gain or unacceptable calibration; insufficient precision is undetermined",
+        "source_refs": [
+          "S036",
+          "S039",
+          "S149",
+          "S191",
+          "S739"
+        ]
+      },
+      {
+        "id": "TR-03",
+        "from": "human_neural_recruitment_interface",
+        "to": "physical_ecap_observation",
+        "input": "population recruitment state, path lengths, fiber parameters, electrode geometry, stimulation settings, and acquisition disturbances",
+        "output": "artifact-controlled ECAP-like waveform with morphology, latency, amplitude, area, and recruitment descriptors",
+        "training_data": "physical simulations and the training partition of human ECAP comparator data",
+        "independent_test": "held-out participants, configurations, and stimulation settings",
+        "success_criterion": "all pre-registered physical and signal characteristics satisfy held-out comparator criteria",
+        "falsification_criterion": "any required characteristic fails or the result is reproduced by an unphysical aggregate or artifact shortcut",
+        "source_refs": [
+          "S105",
+          "S159",
+          "S162"
+        ]
+      },
+      {
+        "id": "TR-04",
+        "from": "physical_ecap_observation",
+        "to": "scs_programming_or_evaluation_task",
+        "input": "validated human ECAP or telemetry representation plus stimulation settings and task-specific covariates",
+        "output": "primary technical target: ECAP growth curve; waveform/time characteristics test operator validity and need for the temporal module. SCS control and clinical response require separately approved extensions.",
+        "training_data": "participant-disjoint SCS training data containing the exact target required by the declared task",
+        "independent_test": "held-out SCS patients or a separate cohort; clinical claims additionally require linked outcomes and follow-up",
+        "success_criterion": "practically meaningful growth-curve accuracy gain over all prespecified matched controls, including the simple static model, on independent participants with calibration within tolerance",
+        "falsification_criterion": "eligible locked data establish no meaningful gain or calibration failure; leakage invalidates generalization, and unavailable target data block evaluation rather than refute the hypothesis",
+        "source_refs": [
+          "S079",
+          "S105",
+          "S162"
+        ]
+      }
+    ],
+    "ecap_like_observation_model": {
+      "id": "ECAP-OBS-01",
+      "required_term_before_validation": "ECAP-like",
+      "source_activity": "population transmembrane action potentials elicited by electrical stimulation",
+      "conduction_delays": "path-length and fiber-parameter dependent delays applied before summation",
+      "spatial_summation": "signed summation over recruited fibers with distance and orientation weighting",
+      "electrode_geometry": "explicit stimulation and recording contact positions, spacing, polarity, and reference",
+      "volume_conduction": "forward observation operator from neural sources to recording contacts",
+      "disturbances": [
+        "stimulation artifact",
+        "physiological noise including EMG and movement",
+        "electronic noise and baseline drift",
+        "amplifier or ADC saturation",
+        "missing pulses, samples, and channels"
+      ],
+      "human_comparators": [
+        "S105",
+        "S159",
+        "S162"
+      ],
+      "measurable_characteristics": [
+        "waveform morphology and classifiability against non-ECAP and artifact waveforms",
+        "N1 and later-component latency relative to stimulation",
+        "area under the curve and peak-to-peak amplitude",
+        "signal-to-noise ratio and residual artifact",
+        "recruitment threshold and response versus amplitude, pulse width, polarity, and contact geometry"
+      ],
+      "tolerance_protocol": {
+        "status": "specified_pending_human_signal_access",
+        "reference": "participant- and configuration-stratified distributions from held-out human ECAP data",
+        "acceptance_rule": "Before analysis, register metric-specific bounds from the human training reference only; every required characteristic must fall within its registered 95% reference interval or registered standardized-distance bound on held-out human data.",
+        "numeric_bounds": null,
+        "reason_numeric_bounds_are_null": "Raw comparator signals and a locked preprocessing protocol are required; inventing numeric bounds from abstracts would be unsupported.",
+        "failure_rule": "Failure of any required characteristic keeps the label ECAP-like only and blocks claims of human ECAP equivalence."
+      },
+      "prohibited_claim": "A raw aggregate of simulator activity is an ECAP or a direct measure of pain."
+    },
+    "stop_criteria": [
+      {
+        "id": "STOP-H1",
+        "trigger": "The simulator cannot be reproduced from fixed code, configuration, and seed, or target performance is explained by direct access to the stimulus command.",
+        "measurement": "independent rerun plus command-removal and leakage-control evaluation",
+        "decision": "stop claims for H1 and do not proceed with the affected representation",
+        "reserve_result": "release the simulator audit, failure analysis, and a bounded stimulus/response benchmark if reproducible components remain",
+        "forbidden_conclusion": "The simulator models pain or provides valid pretraining data.",
+        "source_refs": []
+      },
+      {
+        "id": "STOP-H2-A",
+        "trigger": "No Drosophila-derived dynamical observable can be mapped to a defensible human neural-recruitment descriptor without anatomical or semantic equivalence assumptions.",
+        "measurement": "completed representation-correspondence matrix with every candidate path marked absent, unjustified, or testable",
+        "decision": "stop cross-species representation-transfer claims",
+        "reserve_result": "retain a Drosophila simulation, dataset-generation, and physical ECAP-modeling contribution as separate results",
+        "forbidden_conclusion": "Drosophila dynamics transfer to human spinal-cord recruitment or pain assessment.",
+        "source_refs": [
+          "S105",
+          "S149",
+          "S739"
+        ]
+      },
+      {
+        "id": "STOP-H2-B",
+        "trigger": "An eligible locked participant-level comparison establishes no prespecified practically meaningful gain against a required control or calibration degradation beyond the allowed tolerance. A nonsignificant point estimate alone does not trigger rejection.",
+        "measurement": "participant-level confidence intervals for control error minus transfer error and calibration difference, with multiplicity rules fixed before independent evaluation",
+        "decision": "report confirmed absence of practical benefit, deterioration or unacceptable calibration as applicable; leave overlapping intervals undetermined and missing data unevaluated",
+        "reserve_result": "report bounded negative or inconclusive results and applicability limits; neither insufficient precision nor unavailable data proves a null transfer effect",
+        "forbidden_conclusion": "Connectome-constrained Drosophila pretraining improves human ECAP or SCS tasks.",
+        "source_refs": [
+          "S036",
+          "S039",
+          "S149",
+          "S191"
+        ]
+      },
+      {
+        "id": "STOP-H3-A",
+        "trigger": "No legally and ethically available human dataset links SCS telemetry or ECAP to a pre-specified patient-level clinical outcome and follow-up time.",
+        "measurement": "documented dataset-access and field audit before the SCS experiment",
+        "decision": "do not run or claim clinical SCS-response prediction",
+        "reserve_result": "limit the dissertation result to Drosophila dynamics, ECAP-like physical observation modeling, and non-clinical human ECAP or SCS tasks supported by available data",
+        "forbidden_conclusion": "The method predicts clinical response to SCS.",
+        "source_refs": [
+          "S079",
+          "S105",
+          "S162"
+        ]
+      },
+      {
+        "id": "STOP-H3-B",
+        "trigger": "Performance exists only for windows from patients seen in training or disappears when patients are held out.",
+        "measurement": "patient-disjoint evaluation with participant-level confidence intervals",
+        "decision": "reject cross-patient SCS generalization",
+        "reserve_result": "report within-patient signal characterization only",
+        "forbidden_conclusion": "The model predicts SCS response for new patients.",
+        "source_refs": [
+          "S105"
+        ]
+      }
+    ],
+    "pending_decisions": [
+      "Author review of future experiment protocols and substantive changes beyond the accepted bounded evidence conclusions.",
+      "Supervisor decision on H1-H3, the reserve scenario, and G0.",
+      "Selection of primary and independent human ECAP or SCS datasets after lawful access and target compatibility are confirmed.",
+      "Numeric ECAP-like tolerances after raw human comparator access and protocol lock."
+    ],
+    "resolved_decisions": [
+      {
+        "historical_requirement": "Author review of the evidence matrix.",
+        "status": "accepted_under_delegated_authority",
+        "date": "2026-09-30",
+        "scope": "EVD-05 bounded evidence conclusions and disputed cluster boundaries; no supervisor or experiment approval",
+        "artifact": "docs/audits/author-decision-packet-2026-09-25.md"
+      }
+    ],
+    "ipr_evaluation_protocol": {
+      "status": "prospective_not_executed",
+      "primary_target": "ECAP growth curve: amplitude versus stimulation intensity",
+      "transfer_object": "initial parameters of a temporal module, adapted within human training folds",
+      "unit_of_inference": "participant; pulses, electrode configurations and sessions are repeated measurements",
+      "independent_validation_boundary": "Final transfer-test participants are not used to calibrate or revise the human physical operator; separate participant partitions are fixed before independent testing.",
+      "controls": [
+        "human_only",
+        "human_ecap_physical_synthetic",
+        "shuffled_dynamics",
+        "degree_preserving_graph_null",
+        "simple_static_growth_curve"
+      ],
+      "matched_conditions": [
+        "human data amount",
+        "target architecture for transfer arms",
+        "human biophysical operator",
+        "random initialization policy; pretrained parameters vary only with the experimental condition",
+        "optimization and compute budget",
+        "individual calibration sample size"
+      ],
+      "training_only_selection": [
+        "hyperparameters",
+        "features",
+        "representation dimension",
+        "time scale",
+        "epoch",
+        "uncertainty calibration"
+      ],
+      "lock_before_independent_test": "Use human training data to justify sample size, configuration coverage and interval precision; freeze scores, tolerances, splits and multiplicity rules by November 2028 before accessing the independent test partition.",
+      "gain_definition": "error of control minus error of transfer; higher is better",
+      "minimal_practical_gain": null,
+      "maximum_calibration_degradation": null,
+      "outcomes": {
+        "practical_gain_supported": "For every required comparator the gain interval lies wholly above the prespecified practical threshold and calibration remains within tolerance.",
+        "practical_gain_absent": "For at least one required comparator the gain interval lies wholly below the practical threshold; identify that comparator and do not generalize beyond the tested design.",
+        "deterioration": "Gain interval wholly below zero or calibration difference establishes unacceptable degradation.",
+        "undetermined": "Intervals overlap decision boundaries, precision is insufficient, or calibration remains uncertain.",
+        "not_evaluated": "Required data, independent split, permissions or representation correspondence are absent."
+      },
+      "conditions": [
+        {
+          "by": "2027-05",
+          "result": "select primary and independent ECAP data after access and suitability checks"
+        },
+        {
+          "by": "2027-11",
+          "result": "fix compatible graph/observations, licenses and input versions"
+        },
+        {
+          "by": "2028-05",
+          "result": "separate pilot checks of Drosophila model and ECAP-like operator"
+        },
+        {
+          "by": "2028-11",
+          "result": "lock metric, thresholds, sample adequacy, splits and statistical plan"
+        },
+        {
+          "by": "2029-05",
+          "result": "independent physical-operator check"
+        },
+        {
+          "by": "2029-11",
+          "result": "complete primary comparison if conditions hold"
+        }
+      ],
+      "reserve": "Without human data retain computational validation, identifiability and uncertainty analyses; without defensible transfer retain separate Drosophila and ECAP-like models. Neither fulfills independent human validation. Revisions require supervisor consideration.",
+      "source_refs": [
+        "S105",
+        "S159",
+        "S764",
+        "S743"
+      ]
+    }
+  },
+  "human_dataset_matrix": {
+    "meta": {
+      "schema_version": "1.0.0",
+      "audited_at": "2026-09-23",
+      "status": "candidate_audit_complete_access_not_yet_exercised",
+      "rule": "Each row has exactly one primary target construct. Datasets with different constructs are not pooled into one metric.",
+      "participant_manifest_status": "not_created",
+      "primary_dataset_status": "not_selected"
+    },
+    "datasets": [
+      {
+        "id": "HDS-BIOVID-A",
+        "name": "BioVid Heat Pain Database Part A",
+        "source_refs": [
+          "S280",
+          "ST031"
+        ],
+        "primary_url": "https://www.nit.ovgu.de/BioVid.html",
+        "license": "Academic non-commercial research under a signed institutional agreement; redistribution and public display are restricted by the agreement.",
+        "access_procedure": "A permanently employed academic principal investigator signs and submits the Part A-D agreement; students apply through their professor.",
+        "access_status": "agreement_required",
+        "population": "87 healthy human participants in Part A; subject-specific heat thresholds and tolerances",
+        "participants": 87,
+        "modalities": [
+          "video_face",
+          "eda",
+          "ecg",
+          "emg"
+        ],
+        "labels": "baseline plus four individualized heat-stimulus levels, 20 samples per class and participant",
+        "target_construct": "experimental_pain_class",
+        "split_unit": "participant",
+        "subject_disjoint_split_possible": true,
+        "compatibility_group": "experimental_stimulus_class",
+        "missing_correspondences": [
+          "fnirs",
+          "ecap",
+          "clinical_outcome",
+          "simulation_state"
+        ],
+        "permitted_use": "Participant-disjoint estimation of protocol-defined experimental heat-stimulus class.",
+        "prohibited_pooling": [
+          "self_reported_pain",
+          "protective_behavior",
+          "nociceptive_response",
+          "scs_response"
+        ],
+        "limitations": [
+          "Access has not yet been exercised by this project.",
+          "Stimulus class is not subjective chronic pain."
+        ]
+      },
+      {
+        "id": "HDS-PAINMONIT-PMED",
+        "name": "PainMonit Experimental Dataset",
+        "source_refs": [
+          "S730",
+          "ST033"
+        ],
+        "primary_url": "https://figshare.com/articles/dataset/The_PainMonit_Database_An_Experimental_and_Clinical_Physiological_Signal_Dataset_for_Automated_Pain_Recognition/26965159",
+        "license": "CC BY 4.0; the associated data-use agreement additionally restricts use to academic research.",
+        "access_procedure": "Download Figshare version 3 and comply with the accompanying data-use agreement.",
+        "access_status": "open",
+        "population": "55 healthy human participants exposed to heat stimuli",
+        "participants": 55,
+        "modalities": [
+          "bvp_ppg",
+          "eda",
+          "ecg",
+          "emg",
+          "other"
+        ],
+        "labels": "objective heater classes with additional perceived-pain information",
+        "target_construct": "experimental_pain_class",
+        "split_unit": "participant",
+        "subject_disjoint_split_possible": true,
+        "compatibility_group": "experimental_stimulus_class",
+        "missing_correspondences": [
+          "video_face",
+          "fnirs",
+          "ecap",
+          "clinical_outcome",
+          "simulation_state"
+        ],
+        "permitted_use": "Participant-disjoint prediction of the selected pre-declared PMED heater or rating target, never both under one primary metric.",
+        "prohibited_pooling": [
+          "self_reported_pain",
+          "protective_behavior",
+          "nociceptive_response",
+          "scs_response"
+        ],
+        "limitations": [
+          "Heat stimulation differs from naturally occurring pain.",
+          "The selected label definition must be locked before analysis."
+        ]
+      },
+      {
+        "id": "HDS-PAINMONIT-PMCD",
+        "name": "PainMonit Clinical Dataset",
+        "source_refs": [
+          "S730",
+          "ST033"
+        ],
+        "primary_url": "https://figshare.com/articles/dataset/The_PainMonit_Database_An_Experimental_and_Clinical_Physiological_Signal_Dataset_for_Automated_Pain_Recognition/26965159",
+        "license": "CC BY 4.0; the associated data-use agreement additionally restricts use to academic research.",
+        "access_procedure": "Download Figshare version 3 and comply with the accompanying data-use agreement.",
+        "access_status": "open",
+        "population": "49 physiotherapy participants with arm or neck pain",
+        "participants": 49,
+        "modalities": [
+          "bvp_ppg",
+          "eda",
+          "emg",
+          "other"
+        ],
+        "labels": "timestamped NRS 0-10 ratings and participant-specific no/moderate/severe classes with missing unlabeled intervals",
+        "target_construct": "self_reported_pain",
+        "split_unit": "participant",
+        "subject_disjoint_split_possible": true,
+        "compatibility_group": "clinical_self_report",
+        "missing_correspondences": [
+          "ecg",
+          "video_face",
+          "fnirs",
+          "ecap",
+          "clinical_outcome",
+          "simulation_state"
+        ],
+        "permitted_use": "Participant-disjoint estimation of sparse self-reported pain under the PMCD protocol.",
+        "prohibited_pooling": [
+          "experimental_pain_class",
+          "protective_behavior",
+          "nociceptive_response",
+          "scs_response"
+        ],
+        "limitations": [
+          "Self-reports are sparse and weakly label overlapping windows.",
+          "No stimulus intensity is available for the clinical procedure."
+        ]
+      },
+      {
+        "id": "HDS-AI4PAIN-2024",
+        "name": "AI4PAIN Grand Challenge 2024",
+        "source_refs": [
+          "S291",
+          "ST032"
+        ],
+        "primary_url": "https://sites.google.com/view/ai4pain/challenge-details",
+        "license": "Challenge data-use terms; no public redistribution license is stated on the checked challenge page.",
+        "access_procedure": "Register a team, accept the organizers' terms, and use the supplied train, validation, and held-out test partitions.",
+        "access_status": "registration_required",
+        "population": "65 human participants in a controlled experimental-pain challenge",
+        "participants": 65,
+        "modalities": [
+          "fnirs",
+          "video_face"
+        ],
+        "labels": "No Pain, Low Pain, and High Pain",
+        "target_construct": "experimental_pain_class",
+        "split_unit": "participant",
+        "subject_disjoint_split_possible": true,
+        "compatibility_group": "experimental_stimulus_class",
+        "missing_correspondences": [
+          "ecg",
+          "eda",
+          "emg",
+          "ecap",
+          "clinical_outcome",
+          "simulation_state"
+        ],
+        "permitted_use": "Evaluation on the official 41/12/12 participant train/validation/test protocol.",
+        "prohibited_pooling": [
+          "self_reported_pain",
+          "protective_behavior",
+          "nociceptive_response",
+          "scs_response"
+        ],
+        "limitations": [
+          "Project access has not yet been exercised.",
+          "The challenge classes do not establish clinical chronic-pain intensity."
+        ]
+      },
+      {
+        "id": "HDS-PAINMOTION",
+        "name": "PainMotion Dataset",
+        "source_refs": [
+          "ST034"
+        ],
+        "primary_url": "https://zenodo.org/records/17704417",
+        "license": "License recorded on the Zenodo record; verify the downloaded version's license file before use.",
+        "access_procedure": "Download the versioned Zenodo record and retain its DOI and license metadata.",
+        "access_status": "open",
+        "population": "17 healthy participants with DOMS and 6 participants with shoulder musculoskeletal disorders",
+        "participants": 23,
+        "modalities": [
+          "ecg",
+          "emg",
+          "movement_pose"
+        ],
+        "labels": "binary self-reported pain during industrial tasks",
+        "target_construct": "self_reported_pain",
+        "split_unit": "participant",
+        "subject_disjoint_split_possible": true,
+        "compatibility_group": "clinical_self_report",
+        "missing_correspondences": [
+          "video_face",
+          "fnirs",
+          "ecap",
+          "simulation_state"
+        ],
+        "permitted_use": "Participant-disjoint binary self-report modeling in the recorded task context.",
+        "prohibited_pooling": [
+          "experimental_pain_class",
+          "protective_behavior",
+          "nociceptive_response",
+          "scs_response"
+        ],
+        "limitations": [
+          "Small and heterogeneous groups.",
+          "Binary self-report is not a continuous clinical outcome."
+        ]
+      },
+      {
+        "id": "HDS-EMOPAIN",
+        "name": "EmoPain Database",
+        "source_refs": [
+          "ST035"
+        ],
+        "primary_url": "https://www.ucl.ac.uk/uclic/research/affective-computing/emopain-dataset",
+        "license": "No open redistribution license confirmed; access is controlled by the dataset owner.",
+        "access_procedure": "Contact the UCL dataset owner for the body-movement component and applicable terms.",
+        "access_status": "request_required",
+        "population": "12 healthy and 18 chronic-pain participants",
+        "participants": 30,
+        "modalities": [
+          "movement_pose",
+          "emg",
+          "behavior"
+        ],
+        "labels": "protective behavior independently annotated by domain experts",
+        "target_construct": "protective_behavior",
+        "split_unit": "participant",
+        "subject_disjoint_split_possible": true,
+        "compatibility_group": "protective_behavior",
+        "missing_correspondences": [
+          "video_face",
+          "fnirs",
+          "ecap",
+          "simulation_state"
+        ],
+        "permitted_use": "Participant-disjoint detection of annotated protective behavior.",
+        "prohibited_pooling": [
+          "experimental_pain_class",
+          "self_reported_pain",
+          "nociceptive_response",
+          "scs_response"
+        ],
+        "limitations": [
+          "Access has not been granted to this project.",
+          "Protective behavior is not pain intensity."
+        ]
+      },
+      {
+        "id": "HDS-VALIDPAIN2",
+        "name": "ValidPain2 Nociception Level Index",
+        "source_refs": [
+          "ST040"
+        ],
+        "primary_url": "https://openneuro.org/datasets/ds008115",
+        "license": "License is distributed with the OpenNeuro BIDS dataset and must be checked for the selected snapshot before use.",
+        "access_procedure": "Download the versioned OpenNeuro snapshot ds008115 and preserve its BIDS metadata and DOI.",
+        "access_status": "open",
+        "population": "180 mechanically ventilated intensive-care patients unable to self-report",
+        "participants": 180,
+        "modalities": [
+          "eeg",
+          "clinical_outcome"
+        ],
+        "labels": "responsiveness around potentially nociceptive clinical procedures",
+        "target_construct": "nociceptive_response",
+        "split_unit": "participant",
+        "subject_disjoint_split_possible": true,
+        "compatibility_group": "nociceptive_response",
+        "missing_correspondences": [
+          "video_face",
+          "fnirs",
+          "ecap",
+          "simulation_state"
+        ],
+        "permitted_use": "Participant-disjoint modeling of the defined responsiveness or nociception-monitor target.",
+        "prohibited_pooling": [
+          "experimental_pain_class",
+          "self_reported_pain",
+          "protective_behavior",
+          "scs_response"
+        ],
+        "limitations": [
+          "Participants could not provide pain self-report.",
+          "The target is not subjective pain intensity."
+        ]
+      },
+      {
+        "id": "HDS-NEUROPATHIC-EEG",
+        "name": "Chronic neuropathic pain EEG",
+        "source_refs": [
+          "ST039"
+        ],
+        "primary_url": "https://data.mendeley.com/datasets/yj52xrfgtz/4",
+        "license": "License is stated on the versioned Mendeley Data record and must be preserved with the download.",
+        "access_procedure": "Download version 4 and retain DOI 10.17632/yj52xrfgtz.4 and its terms.",
+        "access_status": "open",
+        "population": "36 patients with heterogeneous chronic neuropathic pain",
+        "participants": 36,
+        "modalities": [
+          "eeg",
+          "metadata"
+        ],
+        "labels": "painDETECT and Brief Pain Inventory questionnaire variables",
+        "target_construct": "self_reported_pain",
+        "split_unit": "participant",
+        "subject_disjoint_split_possible": true,
+        "compatibility_group": "clinical_self_report",
+        "missing_correspondences": [
+          "ecg",
+          "eda",
+          "emg",
+          "video_face",
+          "fnirs",
+          "ecap",
+          "simulation_state"
+        ],
+        "permitted_use": "Within-cohort association or participant-level stratification against a pre-selected questionnaire target.",
+        "prohibited_pooling": [
+          "experimental_pain_class",
+          "protective_behavior",
+          "nociceptive_response",
+          "scs_response"
+        ],
+        "limitations": [
+          "No healthy control group.",
+          "Etiology and medication exposure are heterogeneous."
+        ]
+      },
+      {
+        "id": "HDS-PHANTOM-LIMB-EEG",
+        "name": "Phantom Limb Pain EEG",
+        "source_refs": [
+          "ST041"
+        ],
+        "primary_url": "https://nemar.org/dataset/on006921",
+        "license": "The BIDS/OpenNeuro snapshot license must be checked and retained before use.",
+        "access_procedure": "Obtain the linked versioned OpenNeuro/NEMAR dataset and preserve DOI 10.18112/openneuro.ds006921.v1.1.1.",
+        "access_status": "open",
+        "population": "38 participants across phantom-limb-pain, amputee-control, and intact-control groups",
+        "participants": 38,
+        "modalities": [
+          "eeg",
+          "metadata"
+        ],
+        "labels": "group membership and pain-related phenotype variables",
+        "target_construct": "clinical_function",
+        "split_unit": "participant",
+        "subject_disjoint_split_possible": true,
+        "compatibility_group": "clinical_group_phenotype",
+        "missing_correspondences": [
+          "ecg",
+          "eda",
+          "emg",
+          "video_face",
+          "fnirs",
+          "ecap",
+          "simulation_state"
+        ],
+        "permitted_use": "Participant-level resting-state group comparison using a pre-specified phenotype.",
+        "prohibited_pooling": [
+          "experimental_pain_class",
+          "self_reported_pain",
+          "protective_behavior",
+          "nociceptive_response",
+          "scs_response"
+        ],
+        "limitations": [
+          "Not an evoked pain-intensity dataset.",
+          "No published NEMAR data-quality summary was confirmed in the source audit."
+        ]
+      }
+    ],
+    "compatibility_rules": [
+      {
+        "id": "COMP-01",
+        "target_construct": "experimental_pain_class",
+        "dataset_ids": [
+          "HDS-BIOVID-A",
+          "HDS-PAINMONIT-PMED",
+          "HDS-AI4PAIN-2024"
+        ],
+        "condition": "Targets must be harmonized as protocol-defined experimental classes; modality-specific encoders and participant-disjoint splits remain mandatory."
+      },
+      {
+        "id": "COMP-02",
+        "target_construct": "self_reported_pain",
+        "dataset_ids": [
+          "HDS-PAINMONIT-PMCD",
+          "HDS-PAINMOTION",
+          "HDS-NEUROPATHIC-EEG"
+        ],
+        "condition": "A common metric is allowed only after a single compatible self-report definition, scale transform, time reference, and population scope are pre-registered; otherwise evaluate separately."
+      },
+      {
+        "id": "COMP-03",
+        "target_construct": "protective_behavior",
+        "dataset_ids": [
+          "HDS-EMOPAIN"
+        ],
+        "condition": "Behavioral annotation remains a separate endpoint."
+      },
+      {
+        "id": "COMP-04",
+        "target_construct": "nociceptive_response",
+        "dataset_ids": [
+          "HDS-VALIDPAIN2"
+        ],
+        "condition": "Responsiveness to a potentially nociceptive procedure remains separate from self-reported pain."
+      },
+      {
+        "id": "COMP-05",
+        "target_construct": "clinical_function",
+        "dataset_ids": [
+          "HDS-PHANTOM-LIMB-EEG"
+        ],
+        "condition": "Resting-state group phenotype remains separate from evoked experimental and self-report targets."
+      }
+    ]
+  },
+  "item_hashes": {
+    "S105": "9151FA54221EC8432AA44D5C58257A08B2BA2C1F0FDCF29DD90380251FC125B9",
+    "S743": "C32B05961E24E284919783736397DCB26488AA17C288DC860043F088B54BD802",
+    "S744": "8153E4FD7C6BE3C311914753D46A33DC491AE828AF245A20B2C2CAE11AF98345",
+    "S766": "36AA99A15AA85B3CE8D2725FE4D8B0477B3BB23C86EA5BE91FD5E7D8263A823D",
+    "S767": "21C686D64D94E7A947391B2E5392D5A03C89844D242A47E6926588F2125425E6",
+    "S775": "A0AB9829BB770C5F02B96720D4B73E7CD2C4840D8E01D49A7731CFB2A8BA1835"
+  }
+}

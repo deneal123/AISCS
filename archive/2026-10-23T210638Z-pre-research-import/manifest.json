@@ -1,0 +1,207 @@
+{
+  "snapshot_at": "2026-10-23T21:06:38+00:00",
+  "status": "immutable_sidecar_snapshot",
+  "label": "pre-research-import",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 3265,
+      "sha256": "A6C8A5F345EC9A12B30964ADC6DEA948E9B5420E063D634B5A8C1237B9EA4407"
+    },
+    {
+      "path": "TODO.md",
+      "bytes": 16453,
+      "sha256": "6914D0C6A8F374FD65B1E16A9C0D8F67D0BDECA8C0165CB06C7F8D50D15B5AC4"
+    },
+    {
+      "path": "data/bibliography.json",
+      "bytes": 301997,
+      "sha256": "B4D9748352A28DFF6B555F70B26B62006462FF45BD1334EEF16A1352A2848466"
+    },
+    {
+      "path": "data/document-registry.schema.json",
+      "bytes": 1520,
+      "sha256": "CA840D82D1704F8A3F2446A7359C5FA5E4A948B604FA1C15FF86C5D813FFB667"
+    },
+    {
+      "path": "data/research-snapshot/snapshot.json",
+      "bytes": 188289,
+      "sha256": "EFFB615626AFA6B5A855D41AA14518B5AFD15F6677A39D5AED91B5115EB5C09B"
+    },
+    {
+      "path": "data/text.json",
+      "bytes": 1858,
+      "sha256": "29CC54B3109ED9BC31B47B4883885ECED620F117189F1D8E7F0AB6BE3132ECAC"
+    },
+    {
+      "path": "docs/formatting-audit.md",
+      "bytes": 26256,
+      "sha256": "2378E262ADC700E3F24A815F3F650608962710603B7C9B64151BDC0045FAF63E"
+    },
+    {
+      "path": "docs/git-branch.md",
+      "bytes": 508,
+      "sha256": "11A174318E8FE9DA0451DD7E1F8125044DE91D5ADB42C00AF7D95ABC2448535F"
+    },
+    {
+      "path": "docs/outline.md",
+      "bytes": 2143,
+      "sha256": "B0274A83917F53FC202B4C438D9CF605619D099BCF18E6AB4C9E77EC5E5AFE14"
+    },
+    {
+      "path": "docs/ГОСТ Р 7.0.11—2011 Диссертация и автореферат диссертации.pdf",
+      "bytes": 124148,
+      "sha256": "E7524F138BE22CC6B66C521380CB8B6515B6528EF338B9CDBCB07CD6CCAFFA1D"
+    },
+    {
+      "path": "docs/ГОСТ библ. запись 2018.pdf",
+      "bytes": 646947,
+      "sha256": "48AE8C6380DACE8DE242FA3253B6125E83E5D191AAD12AC153FDC309748648AD"
+    },
+    {
+      "path": "document/.gitignore",
+      "bytes": 72,
+      "sha256": "2AA24E918EE77D09EEF216D3666964BD988A0042DFF4FCBB83E7AD07F37FFC77"
+    },
+    {
+      "path": "document/README.md",
+      "bytes": 3890,
+      "sha256": "FA558D8362579C6A75B5A4DAEE11B408C1D66C526BCFB2A50EE84A29F8A8D454"
+    },
+    {
+      "path": "document/backmatter/appendices.tex",
+      "bytes": 727,
+      "sha256": "DF166EDB3C502930ED005D658B83E04747DD941ACC2A529DED0895DEB9B25FE0"
+    },
+    {
+      "path": "document/backmatter/bibliography-draft.tex",
+      "bytes": 125114,
+      "sha256": "E246A3C4725D8C0846FCEC2F4F93A52A80BDEBAE9FAD56C45831B031BB934B6F"
+    },
+    {
+      "path": "document/backmatter/bibliography-numbers.tex",
+      "bytes": 16100,
+      "sha256": "2DE9325B2021350CCD8238C386A17ED0B961866106B53C4B225D50E5B38034F4"
+    },
+    {
+      "path": "document/backmatter/conclusion.tex",
+      "bytes": 861,
+      "sha256": "27212E80C6D95CEE64929A474624BBFDBBBAE54FBFF2A6CC46D954615E40A986"
+    },
+    {
+      "path": "document/backmatter/glossary.tex",
+      "bytes": 1927,
+      "sha256": "407B6B100BB77D3F2A9A004A47E41683804ED3A0334E2CE44304F0E91CCB7DC6"
+    },
+    {
+      "path": "document/backmatter/illustrations.tex",
+      "bytes": 1652,
+      "sha256": "E84AE80E51ADCE3B444AB6DA54A2C52A1127BD74BE2E5B636B8B45F71D6682D3"
+    },
+    {
+      "path": "document/backmatter/references.bib",
+      "bytes": 171017,
+      "sha256": "045AF7901636503479FFE1FFAE3E5F477E6528DFFB8281A30D706043D256C056"
+    },
+    {
+      "path": "document/build.ps1",
+      "bytes": 1614,
+      "sha256": "4789B4C4F46B63DDE143178774DA76AA8F3EB50D71E489B5718166FE9028EF4D"
+    },
+    {
+      "path": "document/build/dissertation.aux",
+      "bytes": 17127,
+      "sha256": "7636C8729A06A9A653EC6E597A2478B63014D3A35A682917D533AED789C90C0F"
+    },
+    {
+      "path": "document/build/dissertation.log",
+      "bytes": 68868,
+      "sha256": "205E5DC1DFA2D2E53337CECF54F85F518BC9EAFD3145F48BDB4DFB28A0F6E7DF"
+    },
+    {
+      "path": "document/build/dissertation.out",
+      "bytes": 25316,
+      "sha256": "7DBF2C892119322E290C3B19B32D02956852AC081F1D3A1B3EDA29F68F6CFF44"
+    },
+    {
+      "path": "document/build/dissertation.pdf",
+      "bytes": 338292,
+      "sha256": "47440812905BBE33AD36E285D56D857E579EEB617BC696766F15302F154DC3CB"
+    },
+    {
+      "path": "document/build/dissertation.toc",
+      "bytes": 8487,
+      "sha256": "F0A3FB71489E60EA7336E517F2245198B073EBF0A42EEDF8E6CE9F410911B0EA"
+    },
+    {
+      "path": "document/chapters/00-introduction.tex",
+      "bytes": 6412,
+      "sha256": "7A788F0838F84E6602EEF67E1AE62B01FF74A8C8DF96D05AD8703DFF87F74DF3"
+    },
+    {
+      "path": "document/chapters/01-foundations.tex",
+      "bytes": 100402,
+      "sha256": "86F73291266D5E176CB0CDBFB587187D5CBF748BD260E6AB43BD589A9BFF0436"
+    },
+    {
+      "path": "document/chapters/02-data-components.tex",
+      "bytes": 2374,
+      "sha256": "F05B6FFA8F56130C3E42151B3C653BCC92A850BDDBF4B9E9A9A82B7AFC6DE03D"
+    },
+    {
+      "path": "document/chapters/03-transfer-evaluation.tex",
+      "bytes": 5399,
+      "sha256": "E75CD78D8B9635A6E17F79C2AFD218701F10C9C69C78B92B005D1379B25439EE"
+    },
+    {
+      "path": "document/chapters/04-validation.tex",
+      "bytes": 2270,
+      "sha256": "3601D8EB4D7651C7C544459D2C97D8E34E0AC4119F90848923ADA335BDBC6CB0"
+    },
+    {
+      "path": "document/config/bibliography.tex",
+      "bytes": 1444,
+      "sha256": "3FFE96424FC2560E19A89D1B82F569AEA1FA8C1F41DB959A43BD3105140B3A1C"
+    },
+    {
+      "path": "document/config/metadata.tex",
+      "bytes": 1067,
+      "sha256": "286548880973722A29D32108FF82D14FA5248268AFBFDDC1FB5FC2280C789732"
+    },
+    {
+      "path": "document/config/object-layout.tex",
+      "bytes": 1139,
+      "sha256": "2C3B9F760E320A3FF0B775204C2F33D692B3D2B0D66090C6F55C337DCB150AE1"
+    },
+    {
+      "path": "document/dissertation.pdf",
+      "bytes": 338292,
+      "sha256": "47440812905BBE33AD36E285D56D857E579EEB617BC696766F15302F154DC3CB"
+    },
+    {
+      "path": "document/dissertation.tex",
+      "bytes": 3540,
+      "sha256": "50453B1B718C5B137E9DC757F04377FBD666D442B06F419A6CD5D1A007D13256"
+    },
+    {
+      "path": "document/figures/ecap-formation.tex",
+      "bytes": 1192,
+      "sha256": "01DB7AEB52A99EDF426D7FE4F3C4962E9810EBEB9CB02FAD834B0048FE5D804A"
+    },
+    {
+      "path": "document/figures/planned-method.tex",
+      "bytes": 1561,
+      "sha256": "67589441CB9D63C686F384B76ADF6A48A444C73538A2CF0F40E866ED7A93CEB3"
+    },
+    {
+      "path": "document/frontmatter/abstract.tex",
+      "bytes": 1868,
+      "sha256": "15D2EF04857D129381D1DAE462D58134A8FCA34CABF5E36EC3AB4D1AE152C01B"
+    },
+    {
+      "path": "document/frontmatter/title.tex",
+      "bytes": 1116,
+      "sha256": "E9A92C8B8F8F053022DA810BF9DDB2A25B28B3AD346DD344AC0F860A844BF102"
+    }
+  ]
+}

@@ -14,6 +14,8 @@
 \usepackage{xurl}
 \usepackage[hidelinks]{hyperref}
 \makeatletter
+% Count the depth of the last text line inside the nominal bottom margin.
+\AtBeginDocument{\maxdepth=0pt\@maxdepth=0pt}
 \renewcommand{\l@chapter}[2]{\begingroup\interlinepenalty=10000\vskip 1em\@dottedtocline{0}{0em}{1.5em}{\bfseries #1}{\bfseries #2}\endgroup}
 \renewcommand\normalsize{\@setfontsize\normalsize{13pt}{22.4pt}}
 \newcommand{\CompactContents}{\begingroup\normalsize\hyphenpenalty=10000\exhyphenpenalty=10000\tableofcontents\endgroup}
@@ -25,6 +27,10 @@
 \settowidth{\GOSTParagraphIndent}{00000}
 \setlength{\parindent}{\GOSTParagraphIndent}
 \setlength{\parskip}{0pt}
+% Keep paragraph edges and the first explanation line with displayed mathematics.
+\clubpenalty=10000
+\widowpenalty=10000
+\postdisplaypenalty=10000
 \setcounter{secnumdepth}{2}
 \setcounter{tocdepth}{2}
 \newlength{\GOSTHeadingGap}
@@ -45,7 +51,8 @@
 \input{config/object-layout.tex}
 \numberwithin{equation}{chapter}
 \renewcommand{\contentsname}{Оглавление}
-\providecommand{\Asbuk}[1]{\ifcase\value{#1}\or А\or Б\or В\or Г\or Д\or Е\or Ж\or З\or И\or К\or Л\or М\or Н\or О\or П\or Р\or С\or Т\or У\or Ф\fi}
+% Keep appendix labels independent of babel's complete Cyrillic alphabet.
+\newcommand{\GOSTAppendixLetter}[1]{\ifcase\value{#1}\or А\or Б\or В\or Г\or Д\or Е\or Ж\or И\or К\or Л\or М\or Н\or П\or Р\or С\or Т\or У\or Ф\or Х\or Ц\or Ш\or Щ\or Э\or Ю\or Я\else\PackageError{gostappendix}{Appendix letter outside supported range}{Define an explicit continuation of the appendix labels.}\fi}
 \input{config/bibliography.tex}
 \input{config/metadata.tex}
 % Evidence is kept in the registry, not printed as internal source identifiers.
@@ -67,7 +74,8 @@
 \ifdefined\ASPADraft\printbibliography\else\nocite{*}\printbibliography[heading=bibintoc,title={Список литературы}]\fi
 \input{backmatter/illustrations.tex}
 \appendix
-\renewcommand{\thechapter}{\Asbuk{chapter}}
-\titleformat{\chapter}[block]{\GOSTHeadingFont}{Приложение~\thechapter}{1em}{}
+\renewcommand{\thechapter}{\GOSTAppendixLetter{chapter}}
+% GOST 7.0.11, 5.7 -> GOST 2.105: designation, status and title on separate lines.
+\titleformat{\chapter}[display]{\GOSTHeadingFont}{Приложение~\thechapter\\{\normalfont\fontsize{13}{22.4}\selectfont(справочное)}}{0pt}{}
 \input{backmatter/appendices.tex}
 \end{document}

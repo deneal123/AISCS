@@ -1,0 +1,17 @@
+\begin{tikzpicture}[node distance=8mm]
+\node[research process] (graph) {Коннектом\\Drosophila};
+\node[research process,right=of graph] (dynamics) {Нейродинамика\\и временные ряды};
+\node[research process,right=of dynamics] (pretraining) {Предобучение\\временного модуля};
+\draw[research flow] (graph)--(dynamics);
+\draw[research flow] (dynamics)--(pretraining);
+\node[research process,below=29mm of pretraining] (adaptation) {Адаптация\\временного модуля};
+\node[research process,left=of adaptation] (recruitment) {Рекрутирование\\волокон человека};
+\node[research process,left=of recruitment] (recording) {Регистрация сигнала\\и кривая роста};
+\draw[research flow] (pretraining)--node[right,text width=24mm,align=left,font=\fontsize{13}{15.7}\selectfont]{Начальные\\параметры}(adaptation);
+\draw[research flow] (adaptation)--(recruitment);
+\draw[research flow] (recruitment)--(recording);
+\node[draw,dashed,fit=(graph)(dynamics)(pretraining),inner sep=2mm,line width=0.5pt] (source) {};
+\node[anchor=south west,font=\fontsize{13}{15.7}\selectfont] at (source.north west) {Предобучение на Drosophila};
+\node[draw,dashed,fit=(adaptation)(recruitment)(recording),inner sep=2mm,line width=0.5pt] (target) {};
+\node[anchor=south west,font=\fontsize{13}{15.7}\selectfont] at (target.north west) {Целевая модель человеческого сигнала};
+\end{tikzpicture}

@@ -1,0 +1,16 @@
+% DOCX: 0.5 pt grid, 13 pt captions, 8--9 pt clear figure-caption gap.
+\DeclareCaptionFont{sample}{\fontsize{13}{22.4}\selectfont}
+\DeclareCaptionLabelSeparator{sampledash}{\space---\space}
+\captionsetup{font=sample,labelsep=sampledash}
+\captionsetup[figure]{name=Рисунок,justification=centering,skip=2.7pt}
+\captionsetup[table]{name=Таблица,justification=raggedright,singlelinecheck=false,position=above,skip=3.6pt}
+\setlength{\arrayrulewidth}{0.5pt}
+\setlength{\tabcolsep}{5.4pt}
+\setlength{\textfloatsep}{11.2pt}
+\setlength{\intextsep}{11.2pt}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash\setlength{\parindent}{0pt}}m{#1}}
+\newcolumntype{Y}{>{\raggedright\arraybackslash\setlength{\parindent}{0pt}}X}
+\renewcommand{\tabularxcolumn}[1]{m{#1}}
+\newcommand{\ResearchTableFont}{\fontsize{13}{15.7}\selectfont}
+\newcommand{\CompactResearchTableFont}{\fontsize{10}{17.2}\selectfont}
+\tikzset{research process/.style={draw=black,fill=white,line width=0.5pt,align=center,minimum height=15mm,text width=40mm,inner sep=1.5mm,font=\fontsize{13}{15.7}\selectfont},research flow/.style={-{Latex[length=2.3mm]},line width=0.5pt}}

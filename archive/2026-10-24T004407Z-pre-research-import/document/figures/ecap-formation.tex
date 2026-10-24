@@ -1,0 +1,20 @@
+% Literature synthesis: separate excitation, recording and signal processing.
+\begin{tikzpicture}[x=1mm,y=1mm]
+\node[research process] (pulse) at (0,0) {Параметры\\импульса};
+\node[research process] (field) at (55,0) {Внешнее\\электрическое поле};
+\node[research process] (axon) at (110,0) {Возбуждение\\волокон};
+\node[research process] (curve) at (0,-34) {Кривая роста\\ECAP};
+\node[research process] (process) at (55,-34) {Обработка\\записи};
+\node[research process] (recording) at (110,-34) {Оператор\\регистрации};
+\node[draw,circle,inner sep=0pt,minimum size=3.4mm,line width=0.5pt,
+  font=\fontsize{13}{15.7}\selectfont] (sum) at (82.5,-34) {$+$};
+\node[font=\fontsize{13}{15.7}\selectfont,align=center,inner sep=0pt]
+  (noise) at (82.5,-17) {Артефакт и шум};
+\draw[research flow] (pulse) -- (field);
+\draw[research flow] (field) -- (axon);
+\draw[research flow] (axon) -- (recording);
+\draw[research flow] (recording) -- (sum);
+\draw[research flow] (sum) -- (process);
+\draw[research flow] (noise) -- (sum);
+\draw[research flow] (process) -- (curve);
+\end{tikzpicture}
