@@ -1,0 +1,24 @@
+[project]
+name = "gpthub-local-llm"
+version = "0.1.0"
+description = "Локальная CPU-модель GPTHub на llama.cpp"
+requires-python = ">=3.12"
+# Версия совпадает с python3-jsonschema из закреплённого runtime-образа.
+dependencies = ["jsonschema==4.10.3"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<9", "ruff>=0.6,<1"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["local_llm"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = [".."]
