@@ -156,12 +156,16 @@ HTTP-контур не содержит POST/PUT/DELETE. Это намеренн
 Он выполняет в одном закреплённом окружении:
 
 - проверку JSON, схемы, словарей, алиасов, кластеров, счётчиков и архивных SHA-256;
+- проверку структуры проекта, Git-исключений и неранжированного каталога новизны;
 - Ruff для сервиса и утилит;
 - unit/transport tests;
-- проверку состава release-манифеста, SHA-256, ссылок, якорей и согласованности текущих решений.
+- проверку состава release-манифеста, SHA-256, ссылок, якорей и согласованности текущих решений;
+- дополнительный HTTP ASGI и stdio MCP smoke без Docker.
 
-Первые три gate описаны в локальном `.pre-commit-config.yaml`; после установки
-окружения его можно подключить командой `pre-commit install`.
+Локальный pre-commit запускает тот же Python-сценарий с пропуском дополнительного
+протокольного smoke. Если `pre-commit` установлен как инструмент разработчика,
+hook можно подключить командой `pre-commit install`. Makefile и PowerShell используют
+`scripts/check.py`; отдельного расходящегося перечня проверок нет.
 
 Одноразовый `migrations/rebuild_2026_09_21.py` оставлен только для воспроизводимости
 первой миграции из `data/archive/2026-09-21`. Его нельзя использовать как обычный способ
@@ -173,12 +177,16 @@ HTTP-контур не содержит POST/PUT/DELETE. Это намеренн
 
 ```powershell
 docker build -t aspa-research-sidecar -f docker/Dockerfile .
-docker run --rm -p 8091:8080 aspa-research-sidecar
+docker run --rm -p 127.0.0.1:8091:8080 aspa-research-sidecar
 # или автономный hardened Compose
-docker compose up --build
+docker compose -f docker/compose.yaml up --build --wait
 ```
 
 Образ запускается от непривилегированного пользователя и перед HTTP-сервером
 выполняет integrity gate. Канонические данные включены в образ и доступны только
 для чтения на уровне API. Для локального live-корпуса можно явно примонтировать
 каталог в `/data:ro`.
+
+Графовый контур, пути к checkout шлюза и сертификату, сохранение томов и правила
+контекста описаны в [Docker-инструкции](../../docker/README.md). Проверка фактического
+BuildKit-контекста: `make docker-context` либо `uv run --frozen python scripts/check_docker_context.py`.

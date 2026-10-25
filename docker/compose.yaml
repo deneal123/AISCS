@@ -1,13 +1,14 @@
+name: research
 services:
   research:
     build:
-      context: .
+      context: ..
       dockerfile: docker/Dockerfile
     environment:
       PORT: "8080"
       RESEARCH_DATA_DIR: /data
     ports:
-      - "${RESEARCH_PORT:-8091}:8080"
+      - "127.0.0.1:${RESEARCH_PORT:-8091}:8080"
     read_only: true
     tmpfs:
       - /tmp:size=16m,noexec,nosuid,nodev

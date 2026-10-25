@@ -1,10 +1,23 @@
-.venv
-.work
-.knowledge
-.pytest_cache
-.ruff_cache
-__pycache__
-*.pyc
-build
+# Deny by default. Docker needs only the runtime, locked dependencies and registered data.
+**
+!pyproject.toml
+!uv.lock
+!README.md
+!docker/
+!docker/Dockerfile
+!docker/entrypoint.sh
+!service/
+!service/**
+!data/
+!data/**
+!knowledge/
+!knowledge/**
+
+# These exclusions override the data allowlist.
+**/__pycache__/
+**/*.py[cod]
+**/.env
+**/.env.*
 data/staging/inbox/*
-tests
+**/.work/
+**/.knowledge/

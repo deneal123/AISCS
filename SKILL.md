@@ -1,157 +1,46 @@
 ---
 name: aspa-research-curation
-description: Safely collect, validate, deduplicate, and publish dissertation evidence into the Aspa research knowledge base.
+description: Искать и проверять доказательства диссертации в research, вести канонические карточки и воспроизводимую поисковую проекцию без смешения научных конструктов.
 ---
 
-# Aspa research curation
+# Работа с исследовательской базой
 
-## Purpose
+Начать с [README](README.md) и нужного пункта [TODO](TODO.md). Канон — JSON в `data/`; первичные локаторы, результаты и ограничения важнее близости текстов. Исторические решения читать только в соответствующем разделе [журнала](docs/audits/todo-decision-ledger.md).
 
-For evidence retrieval use `search_knowledge`, `graph_context`, `get_evidence`, and
-`knowledge_status`; see [knowledge guide](knowledge/README.md). Inspect the returned
-primary locator, verification status and scientific restrictions before using a hit.
-Keep `include_unreviewed` disabled for scientific answers. Similarity and graph navigation
-do not establish novelty, causal transfer, pain measurement or clinical validity.
+## Аналитика через базу знаний
 
-Use this workflow when adding or reviewing sources in this directory. The canonical
-contract is defined by `data/schema/source-record.schema.json` and `data/schema/vocabularies.json`; never
-reconstruct a competing ad-hoc schema in chat.
+Использовать `knowledge_status`, `search_knowledge`, `graph_context`, `get_evidence`; подробности — в [инструкции knowledge](knowledge/README.md). Для существенного утверждения проверить вопрос, подтверждающий и ограничивающий контекст, точный локатор, доступную версию и допустимый вывод. Сохранять поколение и фактический режим поиска. Не называть лексический fallback гибридным поиском и не перестраивать индекс только из-за временной недоступности провайдера.
 
-## Required reading
+`include_unreviewed` по умолчанию выключен. Непроверенная связь, совпадение названий и членство в кластере помогают навигации, но не доказывают причинность, новизну или перенос. При частичном тексте ограничить вывод реально доступными разделами. Отсутствие поискового результата не считать опровержением.
 
-Before changing data, read:
+## Проверка источника
 
-1. [README](README.md) for commands and current corpus status;
-2. [Data contract](docs/reference/data-contract.md) for evidence boundaries;
-3. [Curation workflow](docs/reference/curation-workflow.md) for screening and publication rules;
-4. [Source schema](data/schema/source-record.schema.json) and [vocabularies](data/schema/vocabularies.json) for exact machine values.
+До записи прочитать [контракт данных](docs/reference/data-contract.md), [curation-регламент](docs/reference/curation-workflow.md), [схему](data/schema/source-record.schema.json) и [словари](data/schema/vocabularies.json). Не создавать параллельную схему в чате.
 
-Use [TODO](TODO.md) for current criteria and statuses. Read only the relevant task
-section of the [decision ledger](docs/audits/todo-decision-ledger.md) when earlier
-checks or superseded requirements are needed; historical open states do not
-override the current TODO.
+Сверить авторов, заглавие, год, издание, DOI/PMID/accession/патент и первичный URL. Установить вид или популяцию, число независимых участников, целевую переменную и разметку, метод, метрики, единицу разбиения, внешнюю проверку и ограничения. Метаданные, полный текст и локальный запуск — разные уровни проверки.
 
-## Scientific boundaries
+Для каждого nullable-научного поля schema 2.0 использовать `field_resolution` со значением `reported`, `not_reported`, `not_applicable` либо `unavailable_after_search`, причиной, датой и локатором. Не оставлять необъяснённый null, `unknown`, пустую строку или вымышленные реквизиты. Дату проверки источника не заменять датой редакторской уборки.
 
-- Keep noxious stimulus, nociceptive response, protective behavior, human
-  self-reported pain, ECAP recruitment, and clinical SCS response distinct.
-- Never label a Drosophila simulation target as subjective human pain.
-- Never treat ECAP as a direct pain measure.
-- Never infer human or SCS transfer from simulation results alone.
-- Do not use one-person self-experimentation as evidence of effectiveness or
-  cross-subject generalization.
-- An unverified or pending record is a work item, not evidence for a claim.
+## Безопасная запись
 
-## Source collection
-
-For every candidate, preserve the exact search query or seed, retrieval date, and
-origin. Prefer primary publications, official dataset pages, and official code
-repositories. Search snippets, news, vendor copy, and homepage-only URLs cannot
-validate a technical claim.
-
-Pi workers are read-only reviewers of primary routes. If a query needs a raw
-response for local inspection, put it under ignored `.work/pi-scratch/`, then
-record only checked query parameters, dated dispositions and primary locators in
-the living audit. Do not create raw query directories in `data/`.
-For every Codex subagent and Pi worker task, state that the project directory is
-`R:\Aspa\research` even if the bridge starts in `R:\Aspa`. Require the worker to
-change to that directory before running commands and to write every temporary
-download, probe, script, log, and intermediate file under `R:\Aspa\research\.work`.
-Do not create scratch files in the superproject root.
-Avoid bare `>nul`, `>NUL`, and similar discard redirections in worker shell
-commands: under the bridge's Windows working directory they can create a real
-`nul` file in the superproject. Redirect diagnostic output to `logs/` inside
-the worker's assigned artifact directory instead.
-For Picodex tasks, assign a unique folder
-`.work/pi-workers/<bridge-id>/<task-id>/` before submission. The worker writes
-`result.md` there with task ID, check date and the sections `Status`, `Primary
-locators`, `Verified findings`, `Unresolved`, and `Saved files`; optional raw
-responses go in `raw/` and logs in
-`logs/`. Resume the same Pi thread in that folder. The Codex coordinator keeps
-`.work/pi-workers/<bridge-id>/jobs.json` with `run_id`, `project`, and entries
-containing `task_id`, `job_id`, `thread_id`, `status`, and `result_path`; it
-writes each receipt immediately after submit, then independently checks the
-result before updating canonical files. Missing receipts stay explicit with
-null IDs; a saved result alone does not prove `agent_settled`.
-Write the run registry and worker results as UTF-8 without a byte-order mark.
-For failed, cancelled, or interrupted jobs without a worker result, the
-coordinator writes a `result.md` status stub in that task folder and does not
-integrate unfinished claims.
-Prune unused raw downloads from failed/cancelled jobs after recording their
-status; retain the stub, run registry and a small diagnostic log. Verify the
-resolved task path before removing anything. If automatic approval review
-rejects cleanup, retain the files and report the exact path and reason.
-
-Verify at least:
-
-- exact title, authors, year, venue, DOI/PMID/dataset ID, and exact URL;
-- species/population, sample size, target construct and target label;
-- modalities, dataset access, method, metrics and limitations;
-- split unit, cross-subject or external validation where reported;
-- whether full text or only metadata was checked.
-
-Schema 2.0 requires a `field_resolution` entry for every nullable scientific field.
-Use `reported`, `not_reported`, `not_applicable`, or `unavailable_after_search` with
-a reason, date, and locator. Never leave `unknown`, an empty string, an unexplained
-`null`, or `Не указано`; never invent a metric or upgrade a status without primary evidence.
-
-## Safe write workflow
-
-Generate a candidate with the next free ID:
+Команды выполняются из корня текущего checkout research:
 
 ```powershell
 uv run --frozen researchctl new "Exact source title" --output data/staging/inbox/source.json
-```
-
-Fill the candidate, then run:
-
-```powershell
 uv run --frozen researchctl stage data/staging/inbox/source.json
 uv run --frozen researchctl publish data/staging/inbox/source.json
 ```
 
-Both commands above are non-mutating. Review all same-title warnings manually.
-Publish only after that review:
+`stage` и `publish` без `--apply` проверяют кандидат и план записи, не меняя канон. Совпадения заглавий просматривать вручную. После содержательной проверки применить `publish ... --apply`; сохранить квитанцию и путь rollback-снимка. Новая карточка остаётся в очереди без кластера до ручного решения.
 
-```powershell
-uv run --frozen researchctl publish data/staging/inbox/source.json --apply
-```
+Дубликаты сверять сначала по точным идентификаторам, затем по заглавию, авторам и версии публикации. Подтверждённый дубль получает запись в `aliases.json`; неопределённое совпадение не удаляется. Препринт, статья и исправление могут быть самостоятельными версиями. Одноразовые миграции не запускать как способ добавления источника.
 
-Publishing creates a hashed pre-change snapshot under ignored
-`.work/research-snapshots/` and adds new records to the unclustered queue.
-Only the two newest automatic rollback snapshots are retained there; explicit
-snapshots and migration baselines remain under `data/archive/`. Do not assign a
-cluster automatically merely because terms overlap.
+Если поручение включает работников, использовать разрешённый в сессии способ делегирования. Работники возвращают предложения и не меняют канон; требования к папкам, квитанциям и завершению Pi — в [регламенте](docs/reference/curation-workflow.md#работники-и-временные-материалы). Само наличие SKILL не даёт разрешения запускать субагентов или новые поиски.
 
-## Deduplication
+## Границы и завершение
 
-Match in this order:
+Различать стимул, ноцицептивную реакцию, защитное поведение, субъективную боль, ECAP и клинический ответ SCS. Однопользовательский опыт не подтверждает эффективность или межсубъектное обобщение. `verified_primary` означает проверку первичного источника, а не независимое воспроизведение результата.
 
-1. DOI, PMID, patent ID, dataset ID;
-2. normalized exact title;
-3. title plus authors/year/venue;
-4. manual comparison of preprint, conference, and journal versions.
+После изменений выполнить `scripts/check.ps1` или `make check`. Изменив текущие документы или зарегистрированные файлы, обновить манифест через `uv run --frozen python scripts/check_release.py --write`, затем независимо проверить хеши. Отчёт должен назвать изменённые ID, решения о дублях, статусы, применённую запись/снимок, результаты проверок и остающиеся ограничения.
 
-Do not delete traceability. A confirmed duplicate becomes an entry in
-`data/aliases.json`. Keep uncertain semantic matches canonical and flag them for manual
-review. Do not rerun `migrations/rebuild_2026_09_21.py` to add a source: it is a one-time,
-reproducible migration from the frozen 2026-09-21 snapshot.
-
-## Required gates
-
-Before handing off any data change, run:
-
-```powershell
-.\scripts\check.ps1
-```
-
-The handoff must report:
-
-- new or changed canonical IDs;
-- validation and screening statuses;
-- duplicate or same-title decisions;
-- snapshot path if publication was applied;
-- integrity, lint, and test results;
-- remaining evidence limitations.
-
-Do not describe the corpus as validated merely because JSON integrity passes.
+Временные материалы размещать только в `.work/`, полные тексты и индексы — в `.knowledge/`. Базовые архивы и первичные оригиналы не переписывать. Сохранять 35/43, `G0_REVISE`, `saturation=false` и 15 неранжированных вариантов; закрытие отдельного TODO требует его доказательного критерия, а не зелёного технического теста.

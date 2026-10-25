@@ -1,10 +1,45 @@
+# Local environments, scratch data and package output
 .venv/
+.work/
 .pytest_cache/
 .ruff_cache/
+.mypy_cache/
 __pycache__/
 *.py[cod]
-build/
-data/staging/inbox/*.json
-!data/staging/inbox/.gitkeep
-.work
+/build/
+/dist/
+*.egg-info/
+.coverage
+htmlcov/
+
+# Credentials stay local; examples are versioned
+.env
+.env.*
+!.env.example
+.envrc
+
+# Regenerable TeX and office editor state; PDFs and source figures are deliverables
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.log
+*.lot
+*.nav
+*.out
+*.run.xml
+*.snm
+*.synctex.gz
+*.toc
+~$*
+*.swp
+.DS_Store
+Thumbs.db
+
+# Full texts, indices and candidate submissions
 .knowledge/
+data/staging/inbox/*
+!data/staging/inbox/.gitkeep

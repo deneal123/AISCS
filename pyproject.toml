@@ -1,7 +1,7 @@
 [project]
 name = "aspa-research-sidecar"
-version = "1.5.2"
-description = "Validated dissertation evidence registry with read-only HTTP and local MCP access"
+version = "1.5.3"
+description = "Dissertation evidence registry, curation, hybrid knowledge retrieval and read-only HTTP"
 readme = "README.md"
 requires-python = ">=3.12,<3.14"
 dependencies = [
@@ -12,6 +12,11 @@ dependencies = [
     "pypdf>=5,<7",
     "uvicorn==0.35.0",
 ]
+keywords = ["dissertation", "evidence", "research"]
+
+[project.urls]
+Repository = "https://github.com/deneal123/AISCS/tree/research"
+Documentation = "https://github.com/deneal123/AISCS/blob/research/README.md"
 
 [project.scripts]
 researchctl = "service.cli:main"
@@ -59,11 +64,11 @@ select = ["E", "F", "I", "B", "UP"]
 "scripts/populate_r4_correction_001.py" = ["E501"]
 "scripts/populate_r4_batch_003.py" = ["E501"]
 "scripts/populate_r4_batch_004.py" = ["E501"]
-  "scripts/populate_r4_batch_005.py" = ["E501"]
-  "scripts/populate_r4_batch_006.py" = ["E501"]
-  "scripts/populate_r4_batch_007.py" = ["E501"]
-  "scripts/populate_r3_batch_001.py" = ["E501"]
-  "scripts/populate_r3_batch_002.py" = ["E501"]
+"scripts/populate_r4_batch_005.py" = ["E501"]
+"scripts/populate_r4_batch_006.py" = ["E501"]
+"scripts/populate_r4_batch_007.py" = ["E501"]
+"scripts/populate_r3_batch_001.py" = ["E501"]
+"scripts/populate_r3_batch_002.py" = ["E501"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

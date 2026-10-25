@@ -1,16 +1,12 @@
+[CmdletBinding()]
+param([switch]$SkipMcp)
 $ErrorActionPreference = "Stop"
-$Root = Split-Path -Parent $PSScriptRoot
-Push-Location $Root
+$projectRoot = Split-Path -Parent $PSScriptRoot
+Push-Location $projectRoot
 try {
-    uv run --extra dev --frozen researchctl validate
-    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-    uv run --extra dev --frozen ruff check service tests migrations scripts
-    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-    uv run --extra dev --frozen pytest -q
-    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-    uv run --frozen python scripts/check_release.py
-    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+    $checkOptions = @()
+    if ($SkipMcp) { $checkOptions += "--skip-mcp" }
+    uv run --frozen --extra dev python scripts/check.py @checkOptions
+    if ($LASTEXITCODE -ne 0) { throw "Research checks failed ($LASTEXITCODE)." }
 }
-finally {
-    Pop-Location
-}
+finally { Pop-Location }

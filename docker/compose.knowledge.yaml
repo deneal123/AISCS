@@ -34,14 +34,19 @@ services:
   embedding-gateway:
     profiles: [knowledge]
     build:
-      context: ../agents
+      context: ${RESEARCH_AGENTS_DIR:-../../agents}
       dockerfile: docker/Dockerfile
-    env_file: [.knowledge/runtime.env]
+    env_file: [../.knowledge/runtime.env]
     environment:
       PORT: "8090"
       AGENTS__LLM_GATEWAY_ENABLED: "true"
       AGENTS__LLM_GATEWAY_API_KEY: ${RESEARCH_EMBEDDING_KEY:?set knowledge gateway key}
-    volumes: ["../infra/certs/gigachat-ca.pem:/run/certs/gigachat-ca.pem:ro"]
+    volumes:
+      - type: bind
+        source: ${RESEARCH_GIGACHAT_CA_FILE:-../../infra/certs/gigachat-ca.pem}
+        target: /run/certs/gigachat-ca.pem
+        read_only: true
+        bind: {create_host_path: false}
     ports: ["127.0.0.1:8092:8090"]
     mem_limit: 512m
     healthcheck:
@@ -58,7 +63,7 @@ services:
       qdrant: {condition: service_healthy}
       embedding-gateway: {condition: service_healthy}
     build:
-      context: .
+      context: ..
       dockerfile: docker/Dockerfile
     environment:
       RESEARCH_DATA_DIR: /data
@@ -69,7 +74,16 @@ services:
       RESEARCH_NEO4J_PASSWORD: ${RESEARCH_NEO4J_PASSWORD:?set research graph password}
       RESEARCH_EMBEDDING_URL: http://embedding-gateway:8090
       RESEARCH_EMBEDDING_KEY: ${RESEARCH_EMBEDDING_KEY:?set knowledge gateway key}
-    volumes: ["./.knowledge:/state", "./data:/data:ro"]
+    volumes:
+      - type: bind
+        source: ../.knowledge
+        target: /state
+        bind: {create_host_path: false}
+      - type: bind
+        source: ../data
+        target: /data
+        read_only: true
+        bind: {create_host_path: false}
     ports: ["127.0.0.1:8093:8080"]
     read_only: true
     tmpfs: ["/tmp:size=32m"]

@@ -13,7 +13,7 @@
    `RESEARCH_EMBEDDING_KEY` и действующие `AGENTS__GIGACHAT_*` настройки.
    `AGENTS__GIGACHAT_CA_BUNDLE=/run/certs/gigachat-ca.pem`; TLS включён.
    Этот файл игнорируется Git. Пароли не передаются в аргументах команды.
-2. Запустите `docker compose --env-file .knowledge/runtime.env -f compose.knowledge.yaml
+2. Запустите `docker compose --env-file .knowledge/runtime.env -f docker/compose.knowledge.yaml
    --profile knowledge up -d --build`.
 3. Выполните `python -m service.cli knowledge prepare --candidates .work/knowledge-candidates.json`.
    Каждый кандидат содержит `source_id`, `path`, `primary_url`; наличие ID в имени
@@ -65,7 +65,7 @@ Pi читает только зарегистрированный докумен
 
 ## Готовность и восстановление
 
-`docker compose --env-file .knowledge/runtime.env -f compose.knowledge.yaml --profile knowledge ps`
+`docker compose --env-file .knowledge/runtime.env -f docker/compose.knowledge.yaml --profile knowledge ps`
 показывает состояние четырёх healthcheck. Шлюз проверяет локальную готовность;
 доступность внешних эмбеддингов подтверждается реальным поиском, а не healthcheck.
 Для обычного запуска добавьте `up -d --build --wait`; собственные тома не удаляйте.

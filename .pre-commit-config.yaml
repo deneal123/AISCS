@@ -1,20 +1,9 @@
 repos:
   - repo: local
     hooks:
-      - id: research-integrity
-        name: research JSON integrity
-        entry: uv run --extra dev --frozen researchctl validate
-        language: system
-        pass_filenames: false
-        always_run: true
-      - id: research-ruff
-        name: research ruff
-        entry: uv run --extra dev --frozen ruff check service tests migrations scripts
-        language: system
-        pass_filenames: false
-      - id: research-tests
-        name: research tests
-        entry: uv run --extra dev --frozen pytest -q
+      - id: research-check
+        name: research repository and scientific registry checks
+        entry: uv run --frozen --extra dev python scripts/check.py --skip-mcp
         language: system
         pass_filenames: false
         always_run: true
