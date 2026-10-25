@@ -1,3 +1,4 @@
+* text=auto eol=lf
 archive/** -text
 conference/neiro-miet/ru/** -text
 documents/PUB-001/** -text
@@ -9,3 +10,7 @@ examples/** -text
 *.jpg binary
 *.otf binary
 posters/PUB-001/MIN-2026/assets/fonts/LICENSE -whitespace
+*.pptx binary
+*.jpeg binary
+*.ttf binary
+*.zip binary

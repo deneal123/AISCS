@@ -2,8 +2,8 @@ repos:
   - repo: local
     hooks:
       - id: publications-check
-        name: publications sidecar check
-        entry: uv run --extra dev --frozen pytest -q
+        name: publications repository and source checks
+        entry: uv run --frozen --extra dev python scripts/check.py --skip-build --skip-mcp
         language: system
         pass_filenames: false
         always_run: true

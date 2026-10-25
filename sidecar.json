@@ -1,12 +1,39 @@
 {
   "name": "aspa-publications-sidecar",
   "mcp_name": "aspa-publications",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "uses_biber": false,
   "registry": "data/publications.json",
   "outline": "docs/outline.md",
-  "source_roots": ["conference", "documents"],
-  "snapshot_paths": ["data", "conference", "documents", "docs", "README.md", "TODO.md"],
-  "placeholder_patterns": ["\\\\ResultPending", "\\bTODO\\b", "\\bBLOCKED\\b"]
-  ,"allowed_target_constructs": ["construct_boundaries", "nociceptive_response", "human_pain_self_report", "human_experimental_nociception", "ecap_like_observation", "clinical_scs_response", "simulation_dynamics", "methodological_transfer"]
+  "source_roots": [
+    "documents",
+    "posters"
+  ],
+  "snapshot_paths": [
+    "data",
+    "documents",
+    "posters",
+    "docs",
+    "README.md",
+    "TODO.md",
+    "SKILL.md",
+    "sidecar.json",
+    "pyproject.toml",
+    "uv.lock"
+  ],
+  "placeholder_patterns": [
+    "\\\\ResultPending",
+    "\\bTODO\\b",
+    "\\bBLOCKED\\b"
+  ],
+  "allowed_target_constructs": [
+    "construct_boundaries",
+    "nociceptive_response",
+    "human_pain_self_report",
+    "human_experimental_nociception",
+    "ecap_like_observation",
+    "clinical_scs_response",
+    "simulation_dynamics",
+    "methodological_transfer"
+  ]
 }

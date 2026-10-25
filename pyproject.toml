@@ -1,10 +1,15 @@
 [project]
 name = "aspa-publications-sidecar"
-version = "1.2.0"
-description = "Autonomous dissertation publications authoring sidecar"
+version = "1.2.1"
+description = "Manuscript and poster sources, immutable submissions and guarded publication workflows"
 readme = "README.md"
 requires-python = ">=3.12,<3.14"
 dependencies = ["jsonschema>=4.23,<5", "mcp==2.2.0"]
+keywords = ["dissertation", "evidence", "publications"]
+
+[project.urls]
+Repository = "https://github.com/deneal123/AISCS/tree/publications"
+Documentation = "https://github.com/deneal123/AISCS/blob/publications/README.md"
 
 [project.scripts]
 pubctl = "service.cli:main"
