@@ -1,3 +1,4 @@
+* text=auto eol=lf
 archive/** -text
 examples/** -text
 *.pdf binary
@@ -6,3 +7,7 @@ examples/** -text
 *.png binary
 *.jpg binary
 *.otf binary
+*.pptx binary
+*.jpeg binary
+*.ttf binary
+*.zip binary

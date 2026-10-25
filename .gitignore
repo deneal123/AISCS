@@ -1,9 +1,24 @@
+# Local environments, scratch data and package output
 .venv/
+.work/
 .pytest_cache/
 .ruff_cache/
+.mypy_cache/
 __pycache__/
 *.py[cod]
-build/
+/build/
+/dist/
+*.egg-info/
+.coverage
+htmlcov/
+
+# Credentials stay local; examples are versioned
+.env
+.env.*
+!.env.example
+.envrc
+
+# Regenerable TeX and office editor state; PDFs and source figures are deliverables
 *.aux
 *.bbl
 *.bcf
@@ -13,7 +28,13 @@ build/
 *.lof
 *.log
 *.lot
+*.nav
 *.out
 *.run.xml
+*.snm
 *.synctex.gz
 *.toc
+~$*
+*.swp
+.DS_Store
+Thumbs.db

@@ -1,10 +1,16 @@
 [project]
 name = "aspa-text-sidecar"
-version = "1.1.0"
-description = "Autonomous dissertation text authoring sidecar"
+version = "1.1.1"
+description = "Source-based dissertation writing, evidence traceability and guarded XeLaTeX builds"
 readme = "README.md"
 requires-python = ">=3.12,<3.14"
 dependencies = ["jsonschema>=4.23,<5", "mcp==2.2.0"]
+keywords = ["dissertation", "evidence", "text"]
+
+[project.urls]
+Repository = "https://github.com/deneal123/AISCS/tree/text"
+Documentation = "https://github.com/deneal123/AISCS/blob/text/README.md"
+
 [project.scripts]
 textctl = "service.cli:main"
 text-mcp = "service.mcp_server:main"

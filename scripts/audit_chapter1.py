@@ -44,7 +44,10 @@ def main() -> None:
     assert refs <= set(snapshot["selected_refs"])
     for source in snapshot["sources"]:
         material = json.dumps(
-            source, ensure_ascii=False, sort_keys=True, separators=(",", ":"),
+            source,
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
         ).encode()
         assert hashlib.sha256(material).hexdigest().upper() == snapshot["item_hashes"][source["id"]]
     for source in proof["sources"]:
@@ -62,7 +65,8 @@ def main() -> None:
         assert context["generation"] == meta["generation"]
     assert proof["retrieval"]["unreviewed_included"] is False
     assert all(
-        query["generation"] == meta["generation"] and not query["errors"]
+        query["generation"] == meta["generation"]
+        and not query["errors"]
         and query["mode"] == "hybrid"
         for query in proof["retrieval"]["queries"]
     )
@@ -94,7 +98,8 @@ def main() -> None:
         ipr_tasks = re.findall(r"^[1-6]\. (.+)$", ipr_text, re.MULTILINE)
         assert tasks == ipr_tasks, "Introduction tasks drifted from the IPR"
     all_tex = "\n".join(
-        item.read_text(encoding="utf-8") for item in (ROOT / "document").rglob("*.tex")
+        item.read_text(encoding="utf-8")
+        for item in (ROOT / "document").rglob("*.tex")
         if "build" not in item.relative_to(ROOT / "document").parts
     )
     all_labels = re.findall(r"\\label\{([^}]+)\}", all_tex)
@@ -118,9 +123,21 @@ def main() -> None:
         if " // " in entry["description"]:
             description = entry["description"]
             assert description.index("Текст : электронный") < description.index(" // ")
-    print(json.dumps({"ok": True, "sections": 6, "sources": len(refs),
-                      "citation_groups": len(groups), "tables": 5, "figures": 1,
-                      "equations": 5, "bibliography": 300}, ensure_ascii=False))
+    print(
+        json.dumps(
+            {
+                "ok": True,
+                "sections": 6,
+                "sources": len(refs),
+                "citation_groups": len(groups),
+                "tables": 5,
+                "figures": 1,
+                "equations": 5,
+                "bibliography": 300,
+            },
+            ensure_ascii=False,
+        )
+    )
 
 
 def sha256_bytes(value: str) -> str:
