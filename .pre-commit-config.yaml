@@ -2,8 +2,8 @@ repos:
   - repo: local
     hooks:
       - id: presentation-check
-        name: presentation sidecar check
-        entry: uv run --extra dev --frozen pytest -q
+        name: presentation repository and source checks
+        entry: uv run --frozen --extra dev python scripts/check.py --skip-build --skip-mcp
         language: system
         pass_filenames: false
         always_run: true

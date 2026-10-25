@@ -1,10 +1,16 @@
 [project]
 name = "aspa-presentation-sidecar"
-version = "1.0.2"
-description = "Autonomous dissertation presentation authoring sidecar"
+version = "1.0.3"
+description = "Dissertation presentation sources, evidence references and guarded XeLaTeX builds"
 readme = "README.md"
 requires-python = ">=3.12,<3.14"
 dependencies = ["jsonschema>=4.23,<5", "mcp==2.2.0"]
+keywords = ["dissertation", "evidence", "presentation"]
+
+[project.urls]
+Repository = "https://github.com/deneal123/AISCS/tree/presentation"
+Documentation = "https://github.com/deneal123/AISCS/blob/presentation/README.md"
+
 [project.scripts]
 presentationctl = "service.cli:main"
 presentation-mcp = "service.mcp_server:main"
