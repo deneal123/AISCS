@@ -1,0 +1,83 @@
+{
+  "id": "SIM-005",
+  "commit": "f5f397b88f8dd5c2a5c13558ce6039194a284586",
+  "artifacts": [
+    {
+      "source": "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/source/Figs/activity-preview.png",
+      "file": "activity-preview.png",
+      "caption": "connconstr: activity-preview",
+      "scope": "Вывод авторского сценария connconstr на hemibrain (1500 эпох) либо его PNG-предпросмотр. Сопоставляются обученная модель и целевой паттерн; это не человеческий ECAP и не полноценная модель тела. Точные параметры и происхождение — в квитанциях author_run и extracted-author-data.",
+      "sha256": "be2380d488a1c395991f606aa213db3984d41d5e0d90a1c23932c3e96e85730a"
+    },
+    {
+      "source": "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/source/Figs/angle-preview.png",
+      "file": "angle-preview.png",
+      "caption": "connconstr: angle-preview",
+      "scope": "Вывод авторского сценария connconstr на hemibrain (1500 эпох) либо его PNG-предпросмотр. Сопоставляются обученная модель и целевой паттерн; это не человеческий ECAP и не полноценная модель тела. Точные параметры и происхождение — в квитанциях author_run и extracted-author-data.",
+      "sha256": "7fa3dc58f182b36f372c08f38fecb4f3092eb0d7f84ae1e51eda9ceff07ea770"
+    },
+    {
+      "source": "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/source/Figs/simplering2_matrix_final.pdf",
+      "file": "simplering2_matrix_final.pdf",
+      "caption": "connconstr: simplering2_matrix_final",
+      "scope": "Вывод авторского сценария connconstr на hemibrain (1500 эпох) либо его PNG-предпросмотр. Сопоставляются обученная модель и целевой паттерн; это не человеческий ECAP и не полноценная модель тела. Точные параметры и происхождение — в квитанциях author_run и extracted-author-data.",
+      "sha256": "7fd049285498c29a06a5d38603e6eb6ce28735113db6471cf083ee8abe014bf5"
+    },
+    {
+      "source": "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/source/Figs/simplering2_matrix_scatter.pdf",
+      "file": "simplering2_matrix_scatter.pdf",
+      "caption": "connconstr: simplering2_matrix_scatter",
+      "scope": "Вывод авторского сценария connconstr на hemibrain (1500 эпох) либо его PNG-предпросмотр. Сопоставляются обученная модель и целевой паттерн; это не человеческий ECAP и не полноценная модель тела. Точные параметры и происхождение — в квитанциях author_run и extracted-author-data.",
+      "sha256": "918b7b6f242d9809c0f803180c98d351a74a049a43e6ee43112f745d94e51028"
+    },
+    {
+      "source": "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/source/Figs/simplering2_matrix_spect.pdf",
+      "file": "simplering2_matrix_spect.pdf",
+      "caption": "connconstr: simplering2_matrix_spect",
+      "scope": "Вывод авторского сценария connconstr на hemibrain (1500 эпох) либо его PNG-предпросмотр. Сопоставляются обученная модель и целевой паттерн; это не человеческий ECAP и не полноценная модель тела. Точные параметры и происхождение — в квитанциях author_run и extracted-author-data.",
+      "sha256": "4b23316e4a101d9d0499a0ba8d8272846382e27aad158be505c0f765037b1639"
+    },
+    {
+      "source": "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/source/Figs/simplering2_netAngle_exampleBump_trial_0.pdf",
+      "file": "simplering2_netAngle_exampleBump_trial_0.pdf",
+      "caption": "connconstr: simplering2_netAngle_exampleBump_trial_0",
+      "scope": "Вывод авторского сценария connconstr на hemibrain (1500 эпох) либо его PNG-предпросмотр. Сопоставляются обученная модель и целевой паттерн; это не человеческий ECAP и не полноценная модель тела. Точные параметры и происхождение — в квитанциях author_run и extracted-author-data.",
+      "sha256": "fac15ce60d242befecaedca4f89ccd4fa9c9f6d5f907182879fcba514744464b"
+    },
+    {
+      "source": "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/source/Figs/simplering2_netAngle_exampleBump_trial_1.pdf",
+      "file": "simplering2_netAngle_exampleBump_trial_1.pdf",
+      "caption": "connconstr: simplering2_netAngle_exampleBump_trial_1",
+      "scope": "Вывод авторского сценария connconstr на hemibrain (1500 эпох) либо его PNG-предпросмотр. Сопоставляются обученная модель и целевой паттерн; это не человеческий ECAP и не полноценная модель тела. Точные параметры и происхождение — в квитанциях author_run и extracted-author-data.",
+      "sha256": "7b9ba2888a84b39873cb1ff72fa216bc6b97e9f2219aefa5e486e772ca91df85"
+    },
+    {
+      "source": "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/source/Figs/simplering2_netAngle_exampleBump_trialFinal_1.pdf",
+      "file": "simplering2_netAngle_exampleBump_trialFinal_1.pdf",
+      "caption": "connconstr: simplering2_netAngle_exampleBump_trialFinal_1",
+      "scope": "Вывод авторского сценария connconstr на hemibrain (1500 эпох) либо его PNG-предпросмотр. Сопоставляются обученная модель и целевой паттерн; это не человеческий ECAP и не полноценная модель тела. Точные параметры и происхождение — в квитанциях author_run и extracted-author-data.",
+      "sha256": "3d2b62995203330f7c260acc8428cbc1d114b5ddb614be84bec90da2d93cd7e1"
+    },
+    {
+      "source": "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/source/Figs/simplering2_netAngle_final.pdf",
+      "file": "simplering2_netAngle_final.pdf",
+      "caption": "connconstr: simplering2_netAngle_final",
+      "scope": "Вывод авторского сценария connconstr на hemibrain (1500 эпох) либо его PNG-предпросмотр. Сопоставляются обученная модель и целевой паттерн; это не человеческий ECAP и не полноценная модель тела. Точные параметры и происхождение — в квитанциях author_run и extracted-author-data.",
+      "sha256": "2125996a75ada21a8768042e587dc5586778c161490357ef10bbe1cb94faf28f"
+    },
+    {
+      "source": "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/source/Figs/simplering2_netAngle_readout_final.pdf",
+      "file": "simplering2_netAngle_readout_final.pdf",
+      "caption": "connconstr: simplering2_netAngle_readout_final",
+      "scope": "Вывод авторского сценария connconstr на hemibrain (1500 эпох) либо его PNG-предпросмотр. Сопоставляются обученная модель и целевой паттерн; это не человеческий ECAP и не полноценная модель тела. Точные параметры и происхождение — в квитанциях author_run и extracted-author-data.",
+      "sha256": "29444a721b386acd791a70f536f2afdcca99744d25d02e41cc8d5076f7859d39"
+    },
+    {
+      "source": "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/source/Figs/simplering2_synws_hist.pdf",
+      "file": "simplering2_synws_hist.pdf",
+      "caption": "connconstr: simplering2_synws_hist",
+      "scope": "Вывод авторского сценария connconstr на hemibrain (1500 эпох) либо его PNG-предпросмотр. Сопоставляются обученная модель и целевой паттерн; это не человеческий ECAP и не полноценная модель тела. Точные параметры и происхождение — в квитанциях author_run и extracted-author-data.",
+      "sha256": "f820b14fb1b2c38be81d204c9250a5cf5b2a865bd6bcd5c44e83af73e5b24799"
+    }
+  ]
+}

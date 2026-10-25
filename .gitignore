@@ -35,6 +35,7 @@ __pycache__/
 .pytest_cache/
 .mypy_cache/
 *.egg-info/
+node_modules/
 
 # --- Данные и состояние стека (бинд-маунты docker compose) --------------------
 # ⚠️ Это ЖИВЫЕ ДАННЫЕ локального стека, а не кэш: тома postgres/minio/redis и

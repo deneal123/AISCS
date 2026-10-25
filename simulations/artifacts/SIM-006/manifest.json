@@ -1,0 +1,20 @@
+{
+  "id": "SIM-006",
+  "commit": "a3db62f9436074e485c0278290c2164ed6150808",
+  "artifacts": [
+    {
+      "source": "research/.work/simulator-evaluation/SIM-006/20261025T103703Z-5caefe/exports/eon/spike-raster-seed1.png",
+      "file": "spike-raster-seed1.png",
+      "caption": "Eon: спайковая активность полного FlyWire v783",
+      "scope": "Фактический CPU-расчёт 138639 нейронов, seed 1, 100 мс: 1515 модельных спайков у 316 активных нейронов. Ось Y — ранг активного нейрона, не анатомическая координата. Это выход модели, не измеренная активность и не ECAP.",
+      "sha256": "ede256533750e44b889550b2f6304695ab908ac90ee0e510e8148a92f0d6dd26"
+    },
+    {
+      "source": "research/.work/simulator-evaluation/SIM-006/20261025T103703Z-5caefe/exports/eon/spike-raster-seed1.pdf",
+      "file": "spike-raster-seed1.pdf",
+      "caption": "Eon: спайковая активность полного FlyWire v783",
+      "scope": "Фактический CPU-расчёт 138639 нейронов, seed 1, 100 мс: 1515 модельных спайков у 316 активных нейронов. Ось Y — ранг активного нейрона, не анатомическая координата. Это выход модели, не измеренная активность и не ECAP.",
+      "sha256": "73d16b0258b0ce40f2fd1196165235dd8af39e6cdacc6fdd9d8b0b4ff18c7d97"
+    }
+  ]
+}

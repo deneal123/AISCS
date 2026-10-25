@@ -23,4 +23,4 @@ Dockerfile      text eol=lf
 *.pem  binary
 
 # Preserve the exact supplied metadata bytes and their audited checksum.
-docs/journalrank_json_scheme.json -text whitespace=cr-at-eol
+"docs/Белый список изданий/journalrank_json_scheme.json" -text whitespace=cr-at-eol

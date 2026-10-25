@@ -1,0 +1,3133 @@
+{
+  "generation": "g-56b4c46e48ad7a8b5db92c99",
+  "candidates": [
+    {
+      "id": "SIM-001",
+      "commit": "12f48c702ed170b5bdc4643afa7ce65e952b353d",
+      "role": "embodied",
+      "checks": [
+        {
+          "id": "source",
+          "label": "Проверить закреплённые исходники, зависимости и лицензию",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-001/source-inventory.json",
+            "https://github.com/artem-x-meta/fly-arena/tree/12f48c702ed170b5bdc4643afa7ce65e952b353d"
+          ]
+        },
+        {
+          "id": "environment",
+          "label": "Установить окружение и проверить зависимости",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-001/20261005T105111Z-6999dc/result.json"
+          ]
+        },
+        {
+          "id": "software",
+          "label": "Выполнить штатные или явно обозначенные программные проверки",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-001/20261005T105111Z-6999dc/result.json"
+          ]
+        },
+        {
+          "id": "smoke",
+          "label": "Проверить минимальный запуск или CLI",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-001/20261005T105111Z-6999dc/result.json"
+          ]
+        },
+        {
+          "id": "functional",
+          "label": "Выполнить функциональный сценарий с согласованными данными",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-001/20261005T105111Z-6999dc/body-export-audit.json",
+            "research/.work/simulator-evaluation/SIM-001/20261005T105111Z-6999dc/full-connectome-trial.json",
+            "research/.work/simulator-evaluation/SIM-001/20261005T105111Z-6999dc/full-connectome-export-audit.json"
+          ]
+        },
+        {
+          "id": "reproducibility",
+          "label": "Проверить повторяемость короткого сценария и seeds, где применимо",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-001/20261005T105111Z-6999dc/body-export-audit.json"
+          ]
+        },
+        {
+          "id": "visuals",
+          "label": "Сохранить проверенные визуальные материалы",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-001/20261005T105111Z-6999dc/exports/full-connectome-seed1.mp4"
+          ]
+        },
+        {
+          "id": "review",
+          "label": "Записать итог, ограничения и три варианта применения",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-001/20261005T105111Z-6999dc/body-export-audit.json",
+            "research/.work/simulator-evaluation/SIM-001/20261005T105111Z-6999dc/full-connectome-trial.json",
+            "research/.work/simulator-evaluation/SIM-001/20261005T105111Z-6999dc/full-connectome-export-audit.json"
+          ]
+        },
+        {
+          "id": "cleanup",
+          "label": "Удалить временные окружения, кэши и ненужные ресурсы запуска",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/maintenance/cleanup-20261025T123716Z.json"
+          ]
+        }
+      ],
+      "launch_review": {
+        "status": "passed_tested_scenarios",
+        "date": "2026-10-05",
+        "summary": "Fly Arena успешно запускается: body-demo seeds 1/2/3 и повтор seed 1; полный MaleCNS 166700 нейронов / 25582938 связей прошёл короткий запуск 0,1 с без ошибок. В проверенных сценариях нерешённых блокеров запуска нет.",
+        "scope": "7 штатных тестов, CLI, тело, подготовка графа, короткий headless запуск полной сети, CSV/JSON/MP4 и сохранение нейронного состояния.",
+        "receipts": [
+          "research/.work/simulator-evaluation/SIM-001/20261005T105111Z-6999dc/body-export-audit.json",
+          "research/.work/simulator-evaluation/SIM-001/20261005T105111Z-6999dc/full-connectome-trial.json",
+          "research/.work/simulator-evaluation/SIM-001/20261005T105111Z-6999dc/full-connectome-export-audit.json"
+        ],
+        "memory": {
+          "prepare": 2564194304,
+          "connectome": 1263214592
+        },
+        "resolved_issues": [
+          "Mesa/EGL для headless Linux",
+          "pytest capture=sys на Windows bind mount",
+          "Закрытие writable mmap перед SHA-256 в рабочей копии",
+          "Резерв RAM снят по разрешению пользователя для полного испытания; лимит контейнера 4 ГиБ сохранён"
+        ],
+        "strengths": [
+          "Уже объединены физическое тело, среда, полный MaleCNS и управляемая нейродинамика",
+          "CLI, seeds, телеметрия, видео и нейронные checkpoints облегчают автоматизацию",
+          "CPU достаточен для проверенного сценария; публичные данные с SHA-256; код MIT, коннектом CC BY 4.0"
+        ],
+        "weaknesses": [
+          "Упрощённая LIF-модель, условные знаки медиаторов и управляемый CPG не подтверждают естественное поведение",
+          "0,1 с модели требуют около 3,6 с цикла на нашей машине; интерактивная скорость не подтверждена",
+          "Долгие сценарии, повторяемость полной сети, абляции и полное восстановление арены не проверены",
+          "Человеческого физического оператора ECAP нет"
+        ],
+        "options": {
+          "adapt": "Сильный кандидат для быстрого прототипа среды Drosophila. Потребуются устойчивый API шаг/reset/наблюдение/стимуляция, длительные проверки и научная калибровка.",
+          "compose": "Кандидат на отдельный сервис тела/среды; нейронный backend и человеческий ECAP-оператор можно отделить. Нужно согласовать граф, единицы, шаг времени, состояние и задержки; совместимость ещё не проверена.",
+          "from_scratch": "Использовать подготовку разреженного графа, порты и экспорт как технические образцы. Собственная реализация даст контроль, но потребует заново проверять физику, динамику и воспроизводимость."
+        },
+        "recommendation": "Сохранить как работоспособного кандидата для адаптации и композиции; окончательный выбор после сопоставимых испытаний остальных репозиториев."
+      },
+      "biological_validation": false,
+      "human_ecap_operator": false
+    },
+    {
+      "id": "SIM-002",
+      "commit": "f1389ba8b0e7c9f4059d2538b6b799c3e88342ee",
+      "role": "neural-fitting",
+      "checks": [
+        {
+          "id": "source",
+          "label": "Проверить закреплённые исходники, зависимости и лицензию",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-002/source-inventory.json",
+            "https://github.com/chaobrain/fitting_drosophila_whole_brain_spiking_model/tree/f1389ba8b0e7c9f4059d2538b6b799c3e88342ee"
+          ]
+        },
+        {
+          "id": "environment",
+          "label": "Установить окружение и проверить зависимости",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-002/20261005T115256Z-de6935/result.json"
+          ]
+        },
+        {
+          "id": "software",
+          "label": "Выполнить штатные или явно обозначенные программные проверки",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "smoke",
+          "label": "Проверить минимальный запуск или CLI",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-002/20261005T115256Z-de6935/dependency-repair.json"
+          ]
+        },
+        {
+          "id": "functional",
+          "label": "Выполнить функциональный сценарий с согласованными данными",
+          "status": "blocked",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-002/20261005T115256Z-de6935/result.json",
+            "research/.work/simulator-evaluation/SIM-002/20261005T115256Z-de6935/dependency-repair.json",
+            "research/.work/simulator-evaluation/SIM-002/20261005T115256Z-de6935/data-probe-result.json",
+            "research/.work/simulator-evaluation/SIM-002/20261005T115256Z-de6935/data-prerequisite.json",
+            "research/.work/simulator-evaluation/SIM-002/20261005T115256Z-de6935/author-data-access.json"
+          ]
+        },
+        {
+          "id": "reproducibility",
+          "label": "Проверить повторяемость короткого сценария и seeds, где применимо",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "visuals",
+          "label": "Сохранить проверенные визуальные материалы",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "review",
+          "label": "Записать итог, ограничения и три варианта применения",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-002/20261005T115256Z-de6935/result.json",
+            "research/.work/simulator-evaluation/SIM-002/20261005T115256Z-de6935/dependency-repair.json",
+            "research/.work/simulator-evaluation/SIM-002/20261005T115256Z-de6935/data-probe-result.json",
+            "research/.work/simulator-evaluation/SIM-002/20261005T115256Z-de6935/data-prerequisite.json",
+            "research/.work/simulator-evaluation/SIM-002/20261005T115256Z-de6935/author-data-access.json"
+          ]
+        },
+        {
+          "id": "cleanup",
+          "label": "Удалить временные окружения, кэши и ненужные ресурсы запуска",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/maintenance/cleanup-20261025T123716Z.json"
+          ]
+        }
+      ],
+      "launch_review": {
+        "status": "partial_missing_data",
+        "date": "2026-10-05",
+        "summary": "SIM-002 установлен; pip check, CLI и загрузка реальных классов модели прошли после добавления brainscale==0.1.0. Полный расчёт не воспроизведён: конструктор Population останавливается на отсутствии data/Completeness_630_final.csv. Это частичная проверка, а не успешно работающий полный симулятор.",
+        "scope": "CPU Docker, Python 3.12; установка исходных requirements, отдельно исправление зависимости, импорт Population/load_syn, реальный вызов конструктора. Штатные тесты отсутствуют; обучение, прогноз, seeds и экспорт динамики не проверены.",
+        "receipts": [
+          "research/.work/simulator-evaluation/SIM-002/20261005T115256Z-de6935/result.json",
+          "research/.work/simulator-evaluation/SIM-002/20261005T115256Z-de6935/dependency-repair.json",
+          "research/.work/simulator-evaluation/SIM-002/20261005T115256Z-de6935/data-probe-result.json",
+          "research/.work/simulator-evaluation/SIM-002/20261005T115256Z-de6935/data-prerequisite.json",
+          "research/.work/simulator-evaluation/SIM-002/20261005T115256Z-de6935/author-data-access.json"
+        ],
+        "memory": {
+          "repair": 50454528,
+          "model_probe": 473313280
+        },
+        "resolved_issues": [
+          "BrainX из исходных requirements не содержит импортируемый brainscale; установка brainscale==0.1.0 исправила импорт; изменён только профиль окружения",
+          "Резерв RAM отключён по указанию пользователя для испытания, лимит контейнера 4 ГиБ сохранён"
+        ],
+        "strengths": [
+          "Коннектомно-ограниченная LIF-модель, разреженный CSR и низкоранговая адаптация пригодны для изучения обучаемого представления",
+          "Двухэтапная схема SNN и RNN, генерация промежуточных данных и оценка предсказания активности",
+          "Явный выбор FlyWire v630/v783; код описывает работу с областями мозга и нейронной активностью"
+        ],
+        "weaknesses": [
+          "Нет физического тела, среды, взаимодействия с объектами и человеческого ECAP-оператора",
+          "Авторские CSV/parquet/NPZ отсутствуют в checkout; Google Drive отдаёт страницу подтверждения проверки большого файла, архив не скачан и его содержимое не проверено. Это не доказательство недоступности данных",
+          "Версии исходных requirements не закреплены, потребовалась дополнительная зависимость; сохранены исходный и исправленный lock-файлы",
+          "Лицензия всего репозитория не установлена: два Python-файла содержат Apache-2.0 headers, отдельного LICENSE нет",
+          "Скорость и память полного расчёта, обучение и воспроизводимость не измерены; вывод кальциевой активности в спайковые частоты требует проверки допущений"
+        ],
+        "options": {
+          "adapt": "Рассматривать для подгонки нейродинамики и обучения представления, но не как готовую embodied-среду. До адаптации получить и проверить точные авторские данные, права и воспроизводимость вычислений.",
+          "compose": "Возможный отдельный модуль обучения нейронной динамики рядом с сервисом тела. Нужно согласовать графы, популяции, наблюдаемые величины и время; FlyWire v630/v783 нельзя незаметно заменить MaleCNS.",
+          "from_scratch": "Полезны разреженная связность, LoRA и двухэтапная подгонка. Свой модуль может дать строгий контракт данных и тестируемый reset; корректность метода и перенос в ECAP ещё предстоит доказать."
+        },
+        "recommendation": "Сохранить как методического кандидата на обучение представления. Не выбирать основным симулятором до получения данных и функционального воспроизведения."
+      },
+      "biological_validation": false,
+      "human_ecap_operator": false
+    },
+    {
+      "id": "SIM-003",
+      "commit": "fdbbd866b203a709a164970b0a8996108edd57a5",
+      "role": "neural",
+      "checks": [
+        {
+          "id": "source",
+          "label": "Проверить закреплённые исходники, зависимости и лицензию",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-003/source-inventory.json",
+            "https://github.com/cnqso/infinite-sugar/tree/fdbbd866b203a709a164970b0a8996108edd57a5"
+          ]
+        },
+        {
+          "id": "environment",
+          "label": "Установить окружение и проверить зависимости",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-003/20261005T121548Z-529787/result.json"
+          ]
+        },
+        {
+          "id": "software",
+          "label": "Выполнить штатные или явно обозначенные программные проверки",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-003/20261005T121548Z-529787/result.json"
+          ]
+        },
+        {
+          "id": "smoke",
+          "label": "Проверить минимальный запуск или CLI",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-003/20261005T121548Z-529787/result.json"
+          ]
+        },
+        {
+          "id": "functional",
+          "label": "Выполнить функциональный сценарий с согласованными данными",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-003/20261005T121548Z-529787/result.json",
+            "research/.work/simulator-evaluation/SIM-003/20261005T121548Z-529787/pinned-assets.json",
+            "research/.work/simulator-evaluation/SIM-003/20261005T121548Z-529787/browser-result.json",
+            "research/.work/simulator-evaluation/SIM-003/20261005T121548Z-529787/browser-scene.png",
+            "research/.work/simulator-evaluation/SIM-003/20261005T121548Z-529787/browser-inspector.png"
+          ]
+        },
+        {
+          "id": "reproducibility",
+          "label": "Проверить повторяемость короткого сценария и seeds, где применимо",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "visuals",
+          "label": "Сохранить проверенные визуальные материалы",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-003/20261005T121548Z-529787/browser-scene.png",
+            "research/.work/simulator-evaluation/SIM-003/20261005T121548Z-529787/browser-inspector.png"
+          ]
+        },
+        {
+          "id": "review",
+          "label": "Записать итог, ограничения и три варианта применения",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-003/20261005T121548Z-529787/result.json",
+            "research/.work/simulator-evaluation/SIM-003/20261005T121548Z-529787/pinned-assets.json",
+            "research/.work/simulator-evaluation/SIM-003/20261005T121548Z-529787/browser-result.json",
+            "research/.work/simulator-evaluation/SIM-003/20261005T121548Z-529787/browser-scene.png",
+            "research/.work/simulator-evaluation/SIM-003/20261005T121548Z-529787/browser-inspector.png"
+          ]
+        },
+        {
+          "id": "cleanup",
+          "label": "Удалить временные окружения, кэши и ненужные ресурсы запуска",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/maintenance/cleanup-20261025T123716Z.json"
+          ]
+        }
+      ],
+      "launch_review": {
+        "status": "passed_tested_scenarios",
+        "date": "2026-10-05",
+        "summary": "SIM-003 Infinite Sugar успешно собирается и запускается в настоящем Edge с программным WebGL: 139255 нейронов / 2700513 связей. npm test и typecheck прошли; проверены старт, продвижение времени сети/физики, пауза, включение/выключение сахара, центрирование камеры и инспектор. В проверенных сценариях нерешённых блокеров запуска нет.",
+        "scope": "Закреплённые Git blobs, Node 22.19.0, штатные проверки нейронной карты и MuJoCo WASM, headless Edge 1280x800. Состояния нейронов и физики конечны; ошибок страницы и загрузки ресурсов нет. Профиль браузера, скриншоты и квитанции сохранены в .work.",
+        "receipts": [
+          "research/.work/simulator-evaluation/SIM-003/20261005T121548Z-529787/result.json",
+          "research/.work/simulator-evaluation/SIM-003/20261005T121548Z-529787/pinned-assets.json",
+          "research/.work/simulator-evaluation/SIM-003/20261005T121548Z-529787/browser-result.json",
+          "research/.work/simulator-evaluation/SIM-003/20261005T121548Z-529787/browser-scene.png",
+          "research/.work/simulator-evaluation/SIM-003/20261005T121548Z-529787/browser-inspector.png"
+        ],
+        "memory": {
+          "install": 184741888,
+          "native_tests": 684908544,
+          "smoke": 122626048
+        },
+        "resolved_issues": [
+          "Sparse checkout исключал manifest, граф и модели тела; точные blobs закреплённого коммита восстановлены только в рабочей копии. Восстановление включено в simctl",
+          "В браузерной проверке учтён автоматически открываемый About; это исправление тестового сценария, исходный интерфейс не менялся",
+          "Резерв RAM отключён по разрешению пользователя; контейнерные этапы ограничены 4 ГиБ. Браузер проверен отдельным коротким host-сценарием, его пик RAM отдельно не измерялся"
+        ],
+        "strengths": [
+          "Настоящий интерактивный браузерный запуск без Python/CUDA и нейронный граф в поставляемых файлах",
+          "Проверенные тесты используют реальный граф и MuJoCo WASM, включая сахарный отклик, молчание, устойчивость тела и сброс часов",
+          "Есть раздельные brain/controller/physics компоненты, отображение активности и программный доступ к состояниям"
+        ],
+        "weaknesses": [
+          "Весовые коэффициенты подобраны вручную; движения крыльев и часть движений лап задаются шаблонами, сцена не является полноценным сенсорным миром",
+          "139255/2700513 — поставляемый обработанный граф FlyWire, он не эквивалентен MaleCNS Fly Arena; фильтры и исходную lineage нужно сравнивать отдельно",
+          "Лицензия кода не установлена; README относит данные FlyWire к CC BY-NC 4.0, права на все компоненты требуют проверки",
+          "Сброс тела сохраняет состояние мозга; интерфейс seeds и потокового экспорта для датасета нужно доработать",
+          "Длительные browser-сценарии, три независимых seeds, интерактивная скорость на GPU и биологическая достоверность не проверены; ECAP-оператора нет"
+        ],
+        "options": {
+          "adapt": "Хороший кандидат для интерактивной демонстрации и быстрой проверки стимул/нейродинамика/тело. Для генератора потребуются права, headless API, единый reset, seeds, экспорт единиц и состояния.",
+          "compose": "Можно использовать как браузерный клиент и отдельный WASM-компонент, сохранив вычислительный backend отдельно. Нужны контракт наблюдений, синхронизация времени и проверка эквивалентности графов.",
+          "from_scratch": "Полезны эффективный JS LIF-kernel, разреженная задержанная ингибиция, привязка портов и тесты. Заимствование кода возможно после установления лицензии; своё ядро надо валидировать заново."
+        },
+        "recommendation": "Сохранить как работоспособного кандидата для демонстрации/фронтенда и методический образец. Для основного генератора сравнить научный контроль, экспорт и лицензии с другими проектами."
+      },
+      "biological_validation": false,
+      "human_ecap_operator": false
+    },
+    {
+      "id": "SIM-004",
+      "commit": "c927d42b7234add7df3ead576a8effc02facce18",
+      "role": "author-analysis",
+      "checks": [
+        {
+          "id": "source",
+          "label": "Проверить закреплённые исходники, зависимости и лицензию",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-004/source-inventory.json",
+            "https://github.com/cooneypc4/larval_escape_manuscript/tree/c927d42b7234add7df3ead576a8effc02facce18"
+          ]
+        },
+        {
+          "id": "environment",
+          "label": "Установить окружение и проверить зависимости",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "software",
+          "label": "Выполнить штатные или явно обозначенные программные проверки",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "smoke",
+          "label": "Проверить минимальный запуск или CLI",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "functional",
+          "label": "Выполнить функциональный сценарий с согласованными данными",
+          "status": "blocked",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-004/20261005T123456Z-preflight/preflight.json"
+          ]
+        },
+        {
+          "id": "reproducibility",
+          "label": "Проверить повторяемость короткого сценария и seeds, где применимо",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "visuals",
+          "label": "Сохранить проверенные визуальные материалы",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "review",
+          "label": "Записать итог, ограничения и три варианта применения",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-004/20261005T123456Z-preflight/preflight.json"
+          ]
+        },
+        {
+          "id": "cleanup",
+          "label": "Удалить временные окружения, кэши и ненужные ресурсы запуска",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/maintenance/cleanup-20261025T123716Z.json"
+          ]
+        }
+      ],
+      "launch_review": {
+        "status": "blocked_missing_runtime_and_data",
+        "date": "2026-10-05",
+        "summary": "SIM-004 larval_escape_manuscript — авторский анализ поведения личинок и SCAPE-съёмки мышц, не симулятор. Проверены закреплённые исходники и синтаксис Python; MATLAB/Octave не найдены в PATH и стандартных каталогах. Вычислительное воспроизведение заблокировано отсутствием среды и исходных данных.",
+        "scope": "Проверка чистого pinned checkout, рабочая копия, статический инвентарь MATLAB/Python, точные входные файлы и GUI-зависимости. MATLAB, Python-анализ данных и экспериментальные результаты не исполнялись.",
+        "receipts": [
+          "research/.work/simulator-evaluation/SIM-004/20261005T123456Z-preflight/preflight.json"
+        ],
+        "memory": {},
+        "resolved_issues": [
+          "Демо-сервер SIM-003 остановлен; исходные sidecars не изменены",
+          "Установлено фактическое назначение: анализ экспериментальных измерений личинки, а не генерация синтетических нейронных состояний"
+        ],
+        "strengths": [
+          "Методы сопоставления мышечных флуоресцентных сигналов с движением, ROI, тепловые карты и анализ PMN/MN связности",
+          "Первичный авторский код связан с зарегистрированной работой S864; полезен как материал для протокола экспериментальной проверки наблюдаемых величин"
+        ],
+        "weaknesses": [
+          "Нет тела/среды симуляции, нейронного solver, стимуляции, генератора данных или ECAP-оператора",
+          "Нет двух необходимых XLSX, исходных SCAPE MAT/TIFF и Track_gui_PC.fig; README не содержит маршрута получения данных и требований окружения",
+          "GUI/ручной выбор ROI, персональные абсолютные пути и незакреплённые зависимости препятствуют пакетному воспроизведению",
+          "Лицензия переиспользования кода не установлена; личинка и мышечная кальциевая активность не эквивалентны взрослому коннектому и спайковым состояниям"
+        ],
+        "options": {
+          "adapt": "Низкий приоритет для самого генератора. Может пригодиться для анализа реальных наблюдений после получения данных, MATLAB-среды и устранения ручных путей/GUI.",
+          "compose": "Рассматривать только как отдельную офлайн-процедуру анализа/валидации, а не сервис симуляции. Сначала определить входные схемы, единицы и автоматизацию ROI.",
+          "from_scratch": "Использовать идеи обработки ROI, сопоставления поведения и сигналов, shuffle-сравнений. Переписать нужный анализ с явными контрактами; перенос кода требует разрешённой лицензии."
+        },
+        "recommendation": "Не считать кандидатом ядра генератора. Сохранить как методический материал валидации личиночных/мышечных измерений; не подменять отсутствие данных успешным запуском."
+      },
+      "biological_validation": false,
+      "human_ecap_operator": false
+    },
+    {
+      "id": "SIM-005",
+      "commit": "f5f397b88f8dd5c2a5c13558ce6039194a284586",
+      "role": "method-comparator",
+      "checks": [
+        {
+          "id": "source",
+          "label": "Проверить закреплённые исходники, зависимости и лицензию",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-005/source-inventory.json",
+            "https://github.com/emebeiran/connconstr/tree/f5f397b88f8dd5c2a5c13558ce6039194a284586"
+          ]
+        },
+        {
+          "id": "environment",
+          "label": "Установить окружение и проверить зависимости",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/result.json"
+          ]
+        },
+        {
+          "id": "software",
+          "label": "Выполнить штатные или явно обозначенные программные проверки",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/exports/connconstr-fixture/result.json"
+          ]
+        },
+        {
+          "id": "smoke",
+          "label": "Проверить минимальный запуск или CLI",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/result.json"
+          ]
+        },
+        {
+          "id": "functional",
+          "label": "Выполнить функциональный сценарий с согласованными данными",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/result.json"
+          ]
+        },
+        {
+          "id": "reproducibility",
+          "label": "Проверить повторяемость короткого сценария и seeds, где применимо",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/exports/connconstr-author-teacher/result.json",
+            "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/exports/connconstr-fixture/result.json"
+          ]
+        },
+        {
+          "id": "visuals",
+          "label": "Сохранить проверенные визуальные материалы",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/source/Figs/activity-preview.png",
+            "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/source/Figs/angle-preview.png",
+            "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/source/Figs/simplering2_matrix_final.pdf",
+            "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/source/Figs/simplering2_matrix_scatter.pdf",
+            "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/source/Figs/simplering2_matrix_spect.pdf",
+            "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/source/Figs/simplering2_netAngle_exampleBump_trial_0.pdf",
+            "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/source/Figs/simplering2_netAngle_exampleBump_trial_1.pdf",
+            "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/source/Figs/simplering2_netAngle_exampleBump_trialFinal_1.pdf",
+            "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/source/Figs/simplering2_netAngle_final.pdf",
+            "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/source/Figs/simplering2_netAngle_readout_final.pdf",
+            "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/source/Figs/simplering2_synws_hist.pdf"
+          ]
+        },
+        {
+          "id": "review",
+          "label": "Записать итог, ограничения и три варианта применения",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/result.json",
+            "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/author-archive.json",
+            "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/extracted-author-data.json",
+            "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/author_dependencies-result.json",
+            "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/author_run-result.json",
+            "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/exports/connconstr-fixture/result.json",
+            "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/exports/connconstr-author-teacher/result.json"
+          ]
+        },
+        {
+          "id": "cleanup",
+          "label": "Удалить временные окружения, кэши и ненужные ресурсы запуска",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/maintenance/cleanup-20261025T123716Z.json"
+          ]
+        }
+      ],
+      "launch_review": {
+        "status": "passed_tested_scenarios",
+        "date": "2026-10-05",
+        "summary": "Установка и pip check, функциональная проверка RNN, авторская модель Figure 1 (300 нейронов) прошли. Авторский сценарий Figure 5 на hemibrain: passed.",
+        "scope": "Программная проверка, авторские синтетические веса и модель центрального комплекса из hemibrain. Не модель всего мозга, тела или человеческого ECAP; не воспроизведение всех результатов статьи.",
+        "receipts": [
+          "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/result.json",
+          "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/author-archive.json",
+          "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/extracted-author-data.json",
+          "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/author_dependencies-result.json",
+          "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/author_run-result.json",
+          "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/exports/connconstr-fixture/result.json",
+          "research/.work/simulator-evaluation/SIM-005/20261005T123535Z-48648e/exports/connconstr-author-teacher/result.json"
+        ],
+        "memory": {
+          "author_figure5_peak_bytes": 4769677312
+        },
+        "resolved_issues": [
+          "Добавлена pandas для авторского сценария; подготовлен каталог Figs и безоконный backend Agg.",
+          "Архив Zenodo 16618353 скачан и проверен по MD5 и SHA-256.",
+          "По решению пользователя сняты ограничение RAM Docker и проверка запаса RAM; сценарий действительно запущен."
+        ],
+        "strengths": [
+          "Авторский код обучения connectome-constrained RNN и доступные данные для Figure 1–5.",
+          "Доступ к весам, нейронным состояниям, loss и экспорту NumPy/PyTorch.",
+          "Короткие seeded проверки и восстановление состояния воспроизводимы на CPU."
+        ],
+        "weaknesses": [
+          "Нет тела, среды и физического оператора ECAP.",
+          "Исследовательские монолитные скрипты без штатного тестового пакета; зависимости требуют явного закрепления.",
+          "Плотная матрица полного hemibrain загружается перед выделением небольшой подсети.",
+          "Лицензия архива Zenodo CC BY 4.0 не устанавливает автоматически лицензию всего Git-репозитория.",
+          "Полный авторский сценарий не имеет внешнего задания seed; его повторяемость отдельно не подтверждена."
+        ],
+        "options": {
+          "adapt": "Выделить RNN, обучение и загрузчик подсети в отдельный модуль; заменить плотную подготовку графа при необходимости и закрепить единицы/seed/экспорт.",
+          "compose": "Использовать отдельный компонент обучения представлений рядом с embodied-симулятором и независимым человеческим ECAP-оператором.",
+          "from_scratch": "Использовать как методический ориентир и контрольную реализацию; права на перенос кода проверить отдельно."
+        },
+        "recommendation": "Сохранить как методический кандидат обучения и проверки переносимых представлений. Архитектуру генератора выбирать после испытаний остальных репозиториев."
+      },
+      "biological_validation": false,
+      "human_ecap_operator": false
+    },
+    {
+      "id": "SIM-006",
+      "commit": "a3db62f9436074e485c0278290c2164ed6150808",
+      "role": "neural",
+      "checks": [
+        {
+          "id": "source",
+          "label": "Проверить закреплённые исходники, зависимости и лицензию",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-006/source-inventory.json",
+            "https://github.com/eonsystemspbc/fly-brain/tree/a3db62f9436074e485c0278290c2164ed6150808"
+          ]
+        },
+        {
+          "id": "environment",
+          "label": "Установить окружение и проверить зависимости",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-006/20261025T103703Z-5caefe/result.json"
+          ]
+        },
+        {
+          "id": "software",
+          "label": "Выполнить штатные или явно обозначенные программные проверки",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-006/20261025T103703Z-5caefe/result.json"
+          ]
+        },
+        {
+          "id": "smoke",
+          "label": "Проверить минимальный запуск или CLI",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-006/20261025T103703Z-5caefe/result.json"
+          ]
+        },
+        {
+          "id": "functional",
+          "label": "Выполнить функциональный сценарий с согласованными данными",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-006/20261025T103703Z-5caefe/result.json"
+          ]
+        },
+        {
+          "id": "reproducibility",
+          "label": "Проверить повторяемость короткого сценария и seeds, где применимо",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-006/20261025T103703Z-5caefe/exports/eon/full-result.json",
+            "research/.work/simulator-evaluation/SIM-006/20261025T103703Z-5caefe/exports/eon/software-result.json"
+          ]
+        },
+        {
+          "id": "visuals",
+          "label": "Сохранить проверенные визуальные материалы",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-006/20261025T103703Z-5caefe/exports/eon/spike-raster-seed1.png",
+            "research/.work/simulator-evaluation/SIM-006/20261025T103703Z-5caefe/exports/eon/spike-raster-seed1.pdf"
+          ]
+        },
+        {
+          "id": "review",
+          "label": "Записать итог, ограничения и три варианта применения",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-006/20261025T103703Z-5caefe/result.json",
+            "research/.work/simulator-evaluation/SIM-006/20261025T103703Z-5caefe/pinned-assets.json",
+            "research/.work/simulator-evaluation/SIM-006/20261025T103703Z-5caefe/input-identity.json",
+            "research/.work/simulator-evaluation/SIM-006/20261025T103703Z-5caefe/dependencies.lock.txt",
+            "research/.work/simulator-evaluation/SIM-006/20261025T103703Z-5caefe/exports/eon/software-result.json",
+            "research/.work/simulator-evaluation/SIM-006/20261025T103703Z-5caefe/exports/eon/full-result.json",
+            "research/.work/simulator-evaluation/SIM-006/20261025T103703Z-5caefe/visual-result.json",
+            "research/.work/simulator-evaluation/SIM-006/20261025T103703Z-5caefe/exports/eon/spike-raster-seed1.png",
+            "research/.work/simulator-evaluation/SIM-006/20261025T103703Z-5caefe/exports/eon/spike-raster-seed1.pdf",
+            "research/.work/simulator-evaluation/SIM-006/20261025T103703Z-5caefe/review-evidence.json"
+          ]
+        },
+        {
+          "id": "cleanup",
+          "label": "Удалить временные окружения, кэши и ненужные ресурсы запуска",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/maintenance/cleanup-20261025T123716Z.json"
+          ]
+        }
+      ],
+      "launch_review": {
+        "status": "passed_tested_scenarios_with_limitations",
+        "date": "2026-10-25",
+        "summary": "SIM-006 Eon fly-brain запущен на CPU с полным закреплённым FlyWire v783: 138 639 нейронов и 15 091 983 строки связности. Четыре расчёта по 100 мс (seeds 1/2/3/1) завершены; повтор seed 1 совпадает точно, включая Parquet. У PyTorch-варианта выявлены функциональные ограничения, поэтому результат не распространяется на все заявленные возможности.",
+        "scope": "Установка и pip check; CLI; восьминейронные проверки настоящих классов TorchModel и Brian2 runtime; полный граф в неизменённом PyTorch CLI с заданием seeds и диагностикой конечности состояний. Это нейродинамика без тела, среды и человеческого ECAP; длительные сценарии, C++/CUDA/GeNN/NEST и биологическая достоверность не проверены.",
+        "receipts": [
+          "research/.work/simulator-evaluation/SIM-006/20261025T103703Z-5caefe/result.json",
+          "research/.work/simulator-evaluation/SIM-006/20261025T103703Z-5caefe/pinned-assets.json",
+          "research/.work/simulator-evaluation/SIM-006/20261025T103703Z-5caefe/input-identity.json",
+          "research/.work/simulator-evaluation/SIM-006/20261025T103703Z-5caefe/dependencies.lock.txt",
+          "research/.work/simulator-evaluation/SIM-006/20261025T103703Z-5caefe/exports/eon/software-result.json",
+          "research/.work/simulator-evaluation/SIM-006/20261025T103703Z-5caefe/exports/eon/full-result.json",
+          "research/.work/simulator-evaluation/SIM-006/20261025T103703Z-5caefe/visual-result.json",
+          "research/.work/simulator-evaluation/SIM-006/20261025T103703Z-5caefe/exports/eon/spike-raster-seed1.png",
+          "research/.work/simulator-evaluation/SIM-006/20261025T103703Z-5caefe/exports/eon/spike-raster-seed1.pdf",
+          "research/.work/simulator-evaluation/SIM-006/20261025T103703Z-5caefe/review-evidence.json"
+        ],
+        "memory": {
+          "functional_container_peak_bytes": 5081124864,
+          "install_container_peak_bytes": 1041461248
+        },
+        "resolved_issues": [
+          "Зависимости PyTorch устанавливаются из PyPI с дополнительным официальным CPU-индексом; исходный CPU-only индекс не предоставлял нужную зависимость сборки flit_core.",
+          "Исключённые sparse checkout файлы v783 восстановлены только в рабочую копию; оба Git blob и SHA-256 проверены, upstream чистый.",
+          "Окружение Python 3.10 с numpy 1.26.4, Brian2 2.8.0, PyTorch 2.14.1+cpu; полные разрешённые версии сохранены в dependencies.lock.txt."
+        ],
+        "strengths": [
+          "Реальный версионированный коннектом, разреженная матрица и доступ к состояниям LIF-модели",
+          "Штатный экспорт спайков с временем в мс, trial, индексом нейрона и FlyWire ID; сохранены CSV, манифесты, SHA-256, график и соответствие активных ID",
+          "Короткий полный CPU-сценарий воспроизводим; среднее между вариантами реализации не подменяет проверку конкретного backend"
+        ],
+        "weaknesses": [
+          "В проверенном PyTorch runner поле neu_slnc не подавляет активность, а neu_exc2 не действует: это подтверждено отдельным программным примером и чтением реализации",
+          "В стандартном TorchModel ноль обучаемых параметров; готового контура предобучения и адаптации нет",
+          "Нет тела, среды, явного ноцицептивного сценария, человеческого рекрутирования и оператора регистрации ECAP",
+          "100 мс вычислены за 44,792–47,405 с с проверкой конечности каждого состояния; это не оценка чистой скорости backend и не длительная проверка устойчивости",
+          "Корневая лицензия GPL-2.0-or-later и MIT у вложенных материалов Shiu должны учитываться отдельно; условия данных не выводятся автоматически из лицензии кода"
+        ],
+        "options": {
+          "adapt": "Рабочий кандидат нейронного компонента. Потребуются явные интерфейсы воздействий, реализация недостающего управления PyTorch, управление состоянием и отдельный обучаемый временной модуль.",
+          "compose": "Можно рассматривать как сервис нейродинамики с версией графа, конфигурацией, seed и экспортом состояний. Тело/среда и человеческий ECAP-оператор должны оставаться отдельными компонентами; межреализационное численное соответствие ещё требуется проверить.",
+          "from_scratch": "Полезен как исполняемый ориентир LIF-модели, разреженной связности, формата спайков и контрольных расчётов. Собственная реализация должна воспроизвести согласованные сценарии и явно учитывать лицензии при переносе кода."
+        },
+        "recommendation": "Сохранить в сравнении как реально запущенный нейронный кандидат с ограничениями PyTorch API. Не выбирать архитектуру генератора до проверки остальных репозиториев.",
+        "metrics": {
+          "neurons": 138639,
+          "connectivity_rows": 15091983,
+          "duration_ms_per_trial": 100,
+          "dt_ms": 0.1,
+          "trials": [
+            {
+              "seed": 1,
+              "spikes": 1515,
+              "active_neurons": 316,
+              "simulation_seconds": 44.792,
+              "setup_seconds": 18.128,
+              "export_bytes": 16130,
+              "path": "data/results/evaluation_seed1_attempt0/round_01/pytorch_t0.1s_n1.parquet",
+              "sha256": "ff9668b364d7a6d9e8c544cf388e9d9a38033ade68ea9d00a300324ef22fa02d"
+            },
+            {
+              "seed": 2,
+              "spikes": 1715,
+              "active_neurons": 330,
+              "simulation_seconds": 47.405,
+              "setup_seconds": 6.777,
+              "export_bytes": 16998,
+              "path": "data/results/evaluation_seed2_attempt1/round_01/pytorch_t0.1s_n1.parquet",
+              "sha256": "ab5ddca4e49c1ec29a10ee7651cf21c3ee6bfe0e1102c4e8d061940c1529fcd8"
+            },
+            {
+              "seed": 3,
+              "spikes": 1505,
+              "active_neurons": 310,
+              "simulation_seconds": 45.851,
+              "setup_seconds": 5.28,
+              "export_bytes": 15907,
+              "path": "data/results/evaluation_seed3_attempt2/round_01/pytorch_t0.1s_n1.parquet",
+              "sha256": "7a4c4a2e025bcee8d0f477971bcf2f90280e53fa67ca1f92627b42a8d3307529"
+            },
+            {
+              "seed": 1,
+              "spikes": 1515,
+              "active_neurons": 316,
+              "simulation_seconds": 45.477,
+              "setup_seconds": 4.948,
+              "export_bytes": 16130,
+              "path": "data/results/evaluation_seed1_attempt3/round_01/pytorch_t0.1s_n1.parquet",
+              "sha256": "ff9668b364d7a6d9e8c544cf388e9d9a38033ade68ea9d00a300324ef22fa02d"
+            }
+          ],
+          "repeat_seed_equal": true,
+          "finite_state_checks": {
+            "steps": 4000,
+            "state_tensor_values": 12754788000
+          },
+          "install_seconds": 1148.609,
+          "functional_phase_seconds": 258.39
+        },
+        "functionality": {
+          "scope": "8-neuron control fixture; upstream runner unchanged",
+          "scenarios": [
+            {
+              "request": "stimulated",
+              "spikes": 4,
+              "path": "/work/source/data/results/software_control_stimulated/round_01/pytorch_t0.04s_n1.parquet"
+            },
+            {
+              "request": "silencing_requested",
+              "spikes": 4,
+              "path": "/work/source/data/results/software_control_silencing_requested/round_01/pytorch_t0.04s_n1.parquet"
+            },
+            {
+              "request": "second_population_only",
+              "spikes": 0,
+              "path": "/work/source/data/results/software_control_second_population_only/round_01/pytorch_t0.04s_n1.parquet"
+            }
+          ],
+          "silencing_request_has_effect": false,
+          "second_population_only_produces_spikes": false,
+          "brian_runtime_fixture": {
+            "status": "passed",
+            "scope": "8-neuron runtime fixture, not C++ or full graph",
+            "spikes": 3,
+            "brian2": "2.8.0"
+          },
+          "interpretation": "A request field is supported only if applied by the backend; the observed limitations are not repaired in this upstream run"
+        },
+        "runtime_versions": {
+          "packages": [
+            "Brian2==2.8.0",
+            "cloudpickle==3.1.2",
+            "contourpy==1.3.2",
+            "cycler==0.12.1",
+            "Cython==3.3.0",
+            "filelock==4.1.0",
+            "fonttools==4.65.0",
+            "fsspec==2026.9.0",
+            "Jinja2==3.1.6",
+            "joblib==1.6.0",
+            "kiwisolver==1.5.1",
+            "MarkupSafe==3.0.4",
+            "matplotlib==3.10.9",
+            "mpmath==1.3.0",
+            "networkx==3.4.2",
+            "numpy==1.26.4",
+            "packaging==26.3",
+            "pandas==2.3.3",
+            "pillow==12.3.0",
+            "pip==23.0.1",
+            "pyarrow==25.0.1",
+            "pyparsing==3.3.3",
+            "python-dateutil==3.0.0",
+            "pytz==2026.5",
+            "scipy==1.15.3",
+            "setuptools==79.0.1",
+            "six==1.17.0",
+            "sympy==1.14.0",
+            "torch==2.14.1+cpu",
+            "tqdm==4.70.1",
+            "typing_extensions==4.16.0",
+            "tzdata==2026.5"
+          ],
+          "lock_sha256": "5bb18cb38a6b269d2084a8acea7bb2bad0c80edfab6060f73a3690ffb35402d4",
+          "docker_image_id": "sha256:6ff506466f8b1e981719b468cc0023b8ef000b983cdec0eafe119d01f379e31d",
+          "docker_repo_digests": [
+            "python@sha256:6ff506466f8b1e981719b468cc0023b8ef000b983cdec0eafe119d01f379e31d"
+          ],
+          "python_version": "3.10.22"
+        }
+      },
+      "biological_validation": false,
+      "human_ecap_operator": false
+    },
+    {
+      "id": "SIM-007",
+      "commit": "e80dcf643beefff08afd936a741ac8cc50723cb4",
+      "role": "connectome-preparation",
+      "checks": [
+        {
+          "id": "source",
+          "label": "Проверить закреплённые исходники, зависимости и лицензию",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-007/source-inventory.json",
+            "https://github.com/erankopel/maleCNS-depth/tree/e80dcf643beefff08afd936a741ac8cc50723cb4"
+          ]
+        },
+        {
+          "id": "environment",
+          "label": "Установить окружение и проверить зависимости",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-007/20261025T110749Z-7c38a9/result.json"
+          ]
+        },
+        {
+          "id": "software",
+          "label": "Выполнить штатные или явно обозначенные программные проверки",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-007/20261025T110749Z-7c38a9/result.json"
+          ]
+        },
+        {
+          "id": "smoke",
+          "label": "Проверить минимальный запуск или CLI",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-007/20261025T110749Z-7c38a9/result.json"
+          ]
+        },
+        {
+          "id": "functional",
+          "label": "Выполнить функциональный сценарий с согласованными данными",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-007/20261025T110749Z-7c38a9/result.json"
+          ]
+        },
+        {
+          "id": "reproducibility",
+          "label": "Проверить повторяемость короткого сценария и seeds, где применимо",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-007/20261025T110749Z-7c38a9/exports/malecns-depth/real-graph-result.json",
+            "research/.work/simulator-evaluation/SIM-007/20261025T110749Z-7c38a9/exports/malecns-depth/synthetic-seeds-result.json"
+          ]
+        },
+        {
+          "id": "visuals",
+          "label": "Сохранить проверенные визуальные материалы",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "review",
+          "label": "Записать итог, ограничения и три варианта применения",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-007/20261025T110749Z-7c38a9/result.json",
+            "research/.work/simulator-evaluation/SIM-007/20261025T110749Z-7c38a9/dependencies.lock.txt",
+            "research/.work/simulator-evaluation/SIM-007/20261025T110749Z-7c38a9/native_tests.log",
+            "research/.work/simulator-evaluation/SIM-007/20261025T110749Z-7c38a9/exports/malecns-depth/real-graph-result.json",
+            "research/.work/simulator-evaluation/SIM-007/20261025T110749Z-7c38a9/exports/malecns-depth/synthetic-seeds-result.json",
+            "research/.work/simulator-evaluation/SIM-007/20261025T110749Z-7c38a9/seed_checks-result.json",
+            "research/.work/simulator-evaluation/SIM-007/20261025T110749Z-7c38a9/exports/malecns-depth/build-graph-attempt1.log",
+            "research/.work/simulator-evaluation/SIM-007/20261025T110749Z-7c38a9/exports/malecns-depth/build-graph-attempt2.log",
+            "research/.work/simulator-evaluation/SIM-007/20261025T110749Z-7c38a9/review-evidence.json"
+          ]
+        },
+        {
+          "id": "cleanup",
+          "label": "Удалить временные окружения, кэши и ненужные ресурсы запуска",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/maintenance/cleanup-20261025T123716Z.json"
+          ]
+        }
+      ],
+      "launch_review": {
+        "status": "passed_tested_scenarios_with_limitations",
+        "date": "2026-10-25",
+        "summary": "SIM-007 maleCNS-depth работает как аналитический инструмент: установка, pip check, штатные проверки границ и интеграционные тесты на синтетических данных прошли. Авторский скрипт дважды построил реальный граф MaleCNS v1.0: 166 700 нейронов, 25 582 938 рёбер, сумма весов 124 177 617. Хеш содержимого совпал с авторским зафиксированным значением cd6bbde8…; повтор полностью совпадает по содержимому массивов.",
+        "scope": "Проверки программного обеспечения и подготовки графа. Отдельно выполнен авторский синтетический генератор с seeds 1/2/3 и повтором 1 (3000 узлов). Реальная подтверждающая серия H1–H5 не воспроизведена этим сценарием. Это не симулятор нейронной динамики, тела или ECAP.",
+        "receipts": [
+          "research/.work/simulator-evaluation/SIM-007/20261025T110749Z-7c38a9/result.json",
+          "research/.work/simulator-evaluation/SIM-007/20261025T110749Z-7c38a9/dependencies.lock.txt",
+          "research/.work/simulator-evaluation/SIM-007/20261025T110749Z-7c38a9/native_tests.log",
+          "research/.work/simulator-evaluation/SIM-007/20261025T110749Z-7c38a9/exports/malecns-depth/real-graph-result.json",
+          "research/.work/simulator-evaluation/SIM-007/20261025T110749Z-7c38a9/exports/malecns-depth/synthetic-seeds-result.json",
+          "research/.work/simulator-evaluation/SIM-007/20261025T110749Z-7c38a9/seed_checks-result.json",
+          "research/.work/simulator-evaluation/SIM-007/20261025T110749Z-7c38a9/exports/malecns-depth/build-graph-attempt1.log",
+          "research/.work/simulator-evaluation/SIM-007/20261025T110749Z-7c38a9/exports/malecns-depth/build-graph-attempt2.log",
+          "research/.work/simulator-evaluation/SIM-007/20261025T110749Z-7c38a9/review-evidence.json"
+        ],
+        "memory": {
+          "real_graph_preparation_peak_bytes": 1921490944,
+          "native_synthetic_tests_peak_bytes": 1042886656
+        },
+        "resolved_issues": [
+          "Среда Python 3.11 согласована с авторской веткой; NumPy 2.4.4, SciPy 1.17.1, pandas 3.0.2 и pyarrow 25.0.1 установлены по закреплённому requirements.",
+          "Три первичных файла MaleCNS v1.0 повторно использованы из проверенного кэша SIM-001; проверены SHA-256 и авторские MD5. Файлы FlyWire v783 не подставлялись.",
+          "Исправлено создание вложенного каталога assets/malecns в инструменте испытаний; регрессионный тест прошёл. Upstream не редактировался.",
+          "Вместо скрипта с абсолютным /home/claude выполнен авторский Python build_graph.py с явным MALECNS_DATA внутри рабочей копии."
+        ],
+        "strengths": [
+          "Проверяемые первичные входы, зафиксированные MD5, логический SHA-256 графа и отдельные подтверждающие и исследовательские сценарии",
+          "Штатные проверки сравнивают границы с точными плотными вычислениями и проверяют повторяемость, отказ от перезаписи и обнаружение повреждённых данных",
+          "Потоковая обработка исходной таблицы, компактный NPZ и код подготовки графа с лицензией MIT"
+        ],
+        "weaknesses": [
+          "Случайное блуждание и спектральные характеристики графа не являются спайками, биофизическим временем, ноцицепцией или ECAP",
+          "Для полной реальной серии нужны дополнительные syn-partners (около 6,8 ГБ) и отдельный численный запуск H1–H5; они здесь не объявлены воспроизведёнными",
+          "Абсолютные пути авторских shell-скриптов требуют внешней параметризации; готового API генератора и модели тела нет"
+        ],
+        "options": {
+          "adapt": "Подходит для подготовки и контроля структуры графов; не подходит как непосредственное ядро генерации нейродинамики. Понадобятся стабильная схема входов и пакетный интерфейс.",
+          "compose": "Рассматривать как отдельную пакетную стадию подготовки и структурной диагностики перед нейронным симулятором. Версия графа и определение весов должны передаваться явно.",
+          "from_scratch": "Использовать формат компактного графа, проверки входных хешей, независимые эталонные вычисления и разделение подтверждающего/исследовательского анализа. Динамический solver и ECAP-оператор потребуются отдельно."
+        },
+        "recommendation": "Сохранить как проверенный компонент подготовки и диагностики коннектома, а не как альтернативу нейронному симулятору. Выбор общей архитектуры остаётся открытым.",
+        "metrics": {
+          "real_graph": {
+            "content_sha256": "cd6bbde8abf155fa746aaa64afc34f5c5b2454ac7867426a2a4972fc2566b0e8",
+            "neurons": 166700,
+            "connectivity_rows": 25582938,
+            "synapse_weight_sum": 124177617,
+            "arrays": {
+              "pre": {
+                "shape": [
+                  25582938
+                ],
+                "dtype": "int32"
+              },
+              "post": {
+                "shape": [
+                  25582938
+                ],
+                "dtype": "int32"
+              },
+              "w": {
+                "shape": [
+                  25582938
+                ],
+                "dtype": "int32"
+              },
+              "body_ids": {
+                "shape": [
+                  166700
+                ],
+                "dtype": "int64"
+              }
+            }
+          },
+          "real_graph_repeat_equal": true,
+          "synthetic_seed_trials": [
+            {
+              "seed": 1,
+              "content_sha256": "ef65245fcd9b1a0c1daa6e8b3976234ef0fb1cdf2726422435499d2854e79c8e",
+              "N": 3000,
+              "edges": 74249,
+              "synapses": 413674,
+              "rows": 434357
+            },
+            {
+              "seed": 2,
+              "content_sha256": "34ef92b01ddd1dcd080ae8c9c888474af78c71a291a115b5d4eee01fc7f7082b",
+              "N": 3000,
+              "edges": 74456,
+              "synapses": 416166,
+              "rows": 436974
+            },
+            {
+              "seed": 3,
+              "content_sha256": "d345ee10d2d4ba9bb5aa42f9d415856c49e48106b9c5fd7cc900155371fe2f00",
+              "N": 3000,
+              "edges": 73925,
+              "synapses": 414090,
+              "rows": 434794
+            },
+            {
+              "seed": 1,
+              "content_sha256": "ef65245fcd9b1a0c1daa6e8b3976234ef0fb1cdf2726422435499d2854e79c8e",
+              "N": 3000,
+              "edges": 74249,
+              "synapses": 413674,
+              "rows": 434357
+            }
+          ],
+          "native_tests_seconds": 215.391,
+          "real_graph_phase_seconds": 105.812
+        },
+        "runtime_versions": {
+          "packages": [
+            "numpy==2.4.4",
+            "pandas==3.0.2",
+            "pip==24.0",
+            "pyarrow==25.0.1",
+            "python-dateutil==3.0.0",
+            "scipy==1.17.1",
+            "setuptools==79.0.1",
+            "six==1.17.0",
+            "tzdata==2026.5"
+          ],
+          "lock_sha256": "0bc0332532a5a042f0c22b9ae298e1bf5048e0c893f94c31f2e1a15faef7398b",
+          "docker_image_id": "sha256:b7a9e5f6a93d6d4a31f129bbd4bdee69efccb6ded0fb230d78aafaf37af98377",
+          "docker_repo_digests": [
+            "python@sha256:b7a9e5f6a93d6d4a31f129bbd4bdee69efccb6ded0fb230d78aafaf37af98377"
+          ]
+        }
+      },
+      "biological_validation": false,
+      "human_ecap_operator": false
+    },
+    {
+      "id": "SIM-008",
+      "commit": "67767d2233657983993ff6c2be48e836a935863c",
+      "role": "connectome-preparation",
+      "checks": [
+        {
+          "id": "source",
+          "label": "Проверить закреплённые исходники, зависимости и лицензию",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-008/source-inventory.json",
+            "https://github.com/flyconnectome/2025malecns/tree/67767d2233657983993ff6c2be48e836a935863c"
+          ]
+        },
+        {
+          "id": "environment",
+          "label": "Установить окружение и проверить зависимости",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-008/20261025T113426Z-3ab3f7/result.json"
+          ]
+        },
+        {
+          "id": "software",
+          "label": "Выполнить штатные или явно обозначенные программные проверки",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-008/20261025T113426Z-3ab3f7/result.json"
+          ]
+        },
+        {
+          "id": "smoke",
+          "label": "Проверить минимальный запуск или CLI",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-008/20261025T113426Z-3ab3f7/result.json"
+          ]
+        },
+        {
+          "id": "functional",
+          "label": "Выполнить функциональный сценарий с согласованными данными",
+          "status": "blocked",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-008/20261025T113426Z-3ab3f7/result.json"
+          ]
+        },
+        {
+          "id": "reproducibility",
+          "label": "Проверить повторяемость короткого сценария и seeds, где применимо",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-008/20261025T113426Z-3ab3f7/exports/malecns-notebook/software-result.json"
+          ]
+        },
+        {
+          "id": "visuals",
+          "label": "Сохранить проверенные визуальные материалы",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "review",
+          "label": "Записать итог, ограничения и три варианта применения",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-008/20261025T113426Z-3ab3f7/result.json",
+            "research/.work/simulator-evaluation/SIM-008/20261025T113426Z-3ab3f7/dependencies.lock.txt",
+            "research/.work/simulator-evaluation/SIM-008/20261025T113426Z-3ab3f7/pinned-supplements.json",
+            "research/.work/simulator-evaluation/SIM-008/20261025T113426Z-3ab3f7/exports/malecns-notebook/software-result.json",
+            "research/.work/simulator-evaluation/SIM-008/20261025T113426Z-3ab3f7/exports/malecns-notebook/supplements-result.json",
+            "research/.work/simulator-evaluation/SIM-008/20261025T113426Z-3ab3f7/exports/malecns-notebook/input-identity-result.json",
+            "research/.work/simulator-evaluation/SIM-008/20261025T113426Z-3ab3f7/functional-retry-docker-events.jsonl",
+            "research/.work/simulator-evaluation/SIM-008/20261025T113426Z-3ab3f7/kernel-memory-observation.json",
+            "research/.work/simulator-evaluation/SIM-008/20261025T113426Z-3ab3f7/functional-f442b317.log",
+            "research/.work/simulator-evaluation/SIM-008/20261025T113426Z-3ab3f7/review-evidence.json"
+          ]
+        },
+        {
+          "id": "cleanup",
+          "label": "Удалить временные окружения, кэши и ненужные ресурсы запуска",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/maintenance/cleanup-20261025T123716Z.json"
+          ]
+        }
+      ],
+      "launch_review": {
+        "status": "partial_full_notebook_blocked_by_observed_global_oom",
+        "date": "2026-10-25",
+        "summary": "SIM-008 установлен; шесть закреплённых дополнительных таблиц читаются. Входы MaleCNS v0.9 проверены по размеру, SHA-256 и первичному CRC32C GCS. После исправлений малый программный пример воспроизводим. Полный ноутбук на этой машине не завершён: ядро WSL подтвердило global_oom и завершило Python нашего контейнера при загрузке таблицы связности (код 137).",
+        "scope": "Проверка форматов ресурсов, целостности и версии входов, воспроизведение ошибок и исправлений на шестистрочном примере; действительная попытка полного ноутбука. Это выпуск дополнительных данных и структурный анализ, не симулятор нейродинамики.",
+        "receipts": [
+          "research/.work/simulator-evaluation/SIM-008/20261025T113426Z-3ab3f7/result.json",
+          "research/.work/simulator-evaluation/SIM-008/20261025T113426Z-3ab3f7/dependencies.lock.txt",
+          "research/.work/simulator-evaluation/SIM-008/20261025T113426Z-3ab3f7/pinned-supplements.json",
+          "research/.work/simulator-evaluation/SIM-008/20261025T113426Z-3ab3f7/exports/malecns-notebook/software-result.json",
+          "research/.work/simulator-evaluation/SIM-008/20261025T113426Z-3ab3f7/exports/malecns-notebook/supplements-result.json",
+          "research/.work/simulator-evaluation/SIM-008/20261025T113426Z-3ab3f7/exports/malecns-notebook/input-identity-result.json",
+          "research/.work/simulator-evaluation/SIM-008/20261025T113426Z-3ab3f7/functional-retry-docker-events.jsonl",
+          "research/.work/simulator-evaluation/SIM-008/20261025T113426Z-3ab3f7/kernel-memory-observation.json",
+          "research/.work/simulator-evaluation/SIM-008/20261025T113426Z-3ab3f7/functional-f442b317.log",
+          "research/.work/simulator-evaluation/SIM-008/20261025T113426Z-3ab3f7/review-evidence.json"
+        ],
+        "memory": {
+          "full_notebook_observed_peak_bytes": 5257150464,
+          "measurement_note": "Максимальное наблюдение cgroup peak; терминальный пик может быть выше"
+        },
+        "resolved_issues": [
+          "В исходном ноутбуке отсутствует import os; ошибка воспроизведена до добавления модуля в контекст исполнения рабочей копии.",
+          "Пропущенные метки приводят к TypeError в строковых фильтрах. Исходные строковые условия сохранены, к ним допускаются только значения str; порог веса >=5 не изменён.",
+          "Исключённые sparse checkout таблицы восстановлены из шести закреплённых Git blob только в .work; v1.0 таблицы не подставлялись в v0.9 ноутбук.",
+          "Исправлен монитор испытаний: тайм-аут отдельного чтения телеметрии теперь не завершает живой процесс. Повторный полный запуск прерван global_oom, не монитором."
+        ],
+        "strengths": [
+          "Первичные дополнительные таблицы по MaleCNS: классы DN/AN, слои обхода графа, зрительные колонки и показатели качества/полноты реконструкции",
+          "Проверяемые версии, Git blob, поколения объектов GCS, CRC32C и SHA-256 входов",
+          "Небольшой прозрачный ноутбук подсчёта нейронов, рёбер и агрегации по типам"
+        ],
+        "weaknesses": [
+          "Нет динамического solver, стимуляции, тела, среды и ECAP-оператора",
+          "Полный ноутбук одновременно разворачивает большую таблицу и дополнительные столбцы меток; действительная попытка завершилась из-за памяти WSL",
+          "Нет закреплённого окружения и штатного тестового пакета; обнаружены ошибки самодостаточного запуска и обработки пропусков",
+          "Наличие таблиц и чтение данных не воспроизводят расчёты maxflow или 10 000 обходов; такие результаты не объявлены повторёнными",
+          "Отдельная лицензия переиспользования Git-репозитория не установлена по исходникам"
+        ],
+        "options": {
+          "adapt": "Рассматривать для подготовки аннотаций и проверок полноты/структуры, с явной версией данных и обработкой пропусков. Для полного подсчёта нужна подтверждённая потоковая реализация либо подходящая вычислительная среда.",
+          "compose": "Подходит как версионированный пакет метаданных или офлайн-стадия подготовки данных; отдельного сервиса симуляции здесь нет.",
+          "from_scratch": "Использовать структуру таблиц и правила подсчёта как требования к своим загрузчикам/тестам, не переносить в генератор предположение об эквивалентности структурных слоёв и времени нейродинамики."
+        },
+        "recommendation": "Сохранить как полезный источник дополнительных данных и правил структурной проверки. Полный ноутбук на текущей машине не принят; переход к следующему кандидату не подменяет этот результат успешным запуском.",
+        "metrics": {
+          "tables": [
+            {
+              "file": "dnan_cluster_function_20260509.csv",
+              "rows": 3201,
+              "columns": [
+                "bodyId",
+                "type",
+                "type_lab",
+                "cluster",
+                "function",
+                "reference"
+              ],
+              "null_cells": 5785,
+              "sha256": "24770406ba3c0916b36d06e839a8a8febccd1551c2a2fefd8063692d757fe6b5"
+            },
+            {
+              "file": "male-cns-v1.0-synapse-connection-precision-recall-by-roi.csv",
+              "rows": 81,
+              "columns": [
+                "roi",
+                "recall",
+                "precision",
+                "plot_size",
+                "actual_size"
+              ],
+              "null_cells": 0,
+              "sha256": "ec7f81cf878c578bbc5ef6115cc2e92c4dcbeffcc6bc02ee3e7b5bb2306251ff"
+            },
+            {
+              "file": "male-cns-v1.0-synapse-tbar-precision-recall-by-roi.csv",
+              "rows": 81,
+              "columns": [
+                "roi",
+                "recall",
+                "precision",
+                "plot_size",
+                "actual_size"
+              ],
+              "null_cells": 0,
+              "sha256": "b8f20da2371a25bb5482d9ff15ac9e2c8bac6eeab8329f8f97f40c00776503fd"
+            },
+            {
+              "file": "male-cns-v1.0-traced-synapse-capture-by-roi.csv",
+              "rows": 108,
+              "columns": [
+                "compartment",
+                "roi",
+                "roi_base",
+                "roi_side",
+                "PreSyn",
+                "PostSyn",
+                "presyn_traced_frac",
+                "postsyn_traced_frac",
+                "conn_traced_frac",
+                "synweight_traced_frac"
+              ],
+              "null_cells": 0,
+              "sha256": "b91253bcb26d3496b1ddcf17c05006384ee98bebb729ed7d62e3529131e28e64"
+            },
+            {
+              "file": "optic-column-type-assignments-v1.0.xlsx",
+              "rows": 892,
+              "columns": [
+                "column",
+                "L1",
+                "R7",
+                "R7_type",
+                "R8",
+                "R8_type",
+                "column_type",
+                "aMe12_branch",
+                "Tm5a_branch",
+                "Notes"
+              ],
+              "null_cells": 891,
+              "sha256": "d4af1cacb751036f7e84bfecc9bec79ca010066ac066559c29b566003ec080d3"
+            },
+            {
+              "file": "sensory_network_traversal_model_layers.feather",
+              "rows": 166335,
+              "columns": [
+                "node",
+                "layer_min",
+                "layer_max",
+                "layer_mean",
+                "layer_median"
+              ],
+              "null_cells": 0,
+              "sha256": "a6d0f1ad66bcd7ce576f852f4245c4d7f3e86cdb7ab9da6b5309e6183d22cf35"
+            }
+          ],
+          "software_fixture": {
+            "annotations": 6,
+            "input_weight_rows": 6,
+            "valid_superclasses": 2,
+            "valid_types": 2,
+            "valid_edges": 4,
+            "valid_nodes": 4,
+            "thresholded_edges": 2,
+            "thresholded_nodes": 3,
+            "type_edges": 1,
+            "connected_types": 2
+          },
+          "software_repeat_equal": true,
+          "full_notebook_seconds_before_failure": 42.219,
+          "full_notebook_exit_code": 137,
+          "full_notebook_passed": false
+        },
+        "runtime_versions": {
+          "packages": [
+            "certifi==2026.10.23",
+            "charset-normalizer==3.5.2",
+            "et_xmlfile==2.0.0",
+            "google-crc32c==1.9.0",
+            "idna==3.20",
+            "numpy==2.4.4",
+            "openpyxl==3.1.5",
+            "pandas==3.0.2",
+            "pip==24.0",
+            "pyarrow==25.0.1",
+            "python-dateutil==3.0.0",
+            "requests==2.34.2",
+            "setuptools==79.0.1",
+            "six==1.17.0",
+            "tzdata==2026.5",
+            "urllib3==2.8.0"
+          ],
+          "lock_sha256": "959d49373397d66a586993ab6bbb15057812ff86b7aa51fed12cab87d070c89e"
+        }
+      },
+      "biological_validation": false,
+      "human_ecap_operator": false
+    },
+    {
+      "id": "SIM-009",
+      "commit": "5880d221e21b1f3385b7246a6ffc3b2cf0029c2c",
+      "role": "browser-neural",
+      "checks": [
+        {
+          "id": "source",
+          "label": "Проверить закреплённые исходники, зависимости и лицензию",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-009/source-inventory.json",
+            "https://github.com/gauravvvvvvvvvv/flybox/tree/5880d221e21b1f3385b7246a6ffc3b2cf0029c2c"
+          ]
+        },
+        {
+          "id": "environment",
+          "label": "Установить окружение и проверить зависимости",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-009/20261025T115431Z-143840/result.json"
+          ]
+        },
+        {
+          "id": "software",
+          "label": "Выполнить штатные или явно обозначенные программные проверки",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-009/20261025T115431Z-143840/result.json"
+          ]
+        },
+        {
+          "id": "smoke",
+          "label": "Проверить минимальный запуск или CLI",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-009/20261025T115431Z-143840/result.json"
+          ]
+        },
+        {
+          "id": "functional",
+          "label": "Выполнить функциональный сценарий с согласованными данными",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-009/20261025T115431Z-143840/result.json"
+          ]
+        },
+        {
+          "id": "reproducibility",
+          "label": "Проверить повторяемость короткого сценария и seeds, где применимо",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-009/20261025T115431Z-143840/exports/flybox/browser-result.json",
+            "research/.work/simulator-evaluation/SIM-009/20261025T115431Z-143840/exports/flybox/connectome-result.json"
+          ]
+        },
+        {
+          "id": "visuals",
+          "label": "Сохранить проверенные визуальные материалы",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-009/20261025T115431Z-143840/exports/flybox/browser-play.png",
+            "research/.work/simulator-evaluation/SIM-009/20261025T115431Z-143840/exports/flybox/browser-lab.png"
+          ]
+        },
+        {
+          "id": "review",
+          "label": "Записать итог, ограничения и три варианта применения",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-009/20261025T115431Z-143840/result.json",
+            "research/.work/simulator-evaluation/SIM-009/20261025T115431Z-143840/dependencies.lock.txt",
+            "research/.work/simulator-evaluation/SIM-009/20261025T115431Z-143840/npm-dependency-tree.json",
+            "research/.work/simulator-evaluation/SIM-009/20261025T115431Z-143840/node-version.txt",
+            "research/.work/simulator-evaluation/SIM-009/20261025T115431Z-143840/exports/flybox/connectome-result.json",
+            "research/.work/simulator-evaluation/SIM-009/20261025T115431Z-143840/exports/flybox/browser-result.json",
+            "research/.work/simulator-evaluation/SIM-009/20261025T115431Z-143840/exports/flybox/experiment-export.json.gz"
+          ]
+        },
+        {
+          "id": "cleanup",
+          "label": "Удалить временные окружения, кэши и ненужные ресурсы запуска",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/maintenance/cleanup-20261025T141017Z.json"
+          ]
+        }
+      ],
+      "launch_review": {
+        "status": "passed_tested_scenarios",
+        "date": "2026-10-25",
+        "summary": "FLYBOX запускается в браузере с реальным компактным MaleCNS: 166700 нейронов и 25088107 связей. Отдельно прошли 17 Python-тестов MockBrain, TypeScript/browser audit и расчёт неизменённого нейронного движка. Seeds 1/2/3/1 повторены в Node и браузерном PURE LAB; численные результаты seed 1 совпали.",
+        "scope": "Установка и версии, pip check, Python MockBrain tests, tsc и штатный browser audit, сборка Vite, полный компактный граф в Node, настоящий Edge/WebWorker, pause/step/reset, checkpoint времени, API стимуляции/подавления/восстановления LC4, изменение мира, анатомический sample и JSON-экспорт.",
+        "receipts": [
+          "research/.work/simulator-evaluation/SIM-009/20261025T115431Z-143840/result.json",
+          "research/.work/simulator-evaluation/SIM-009/20261025T115431Z-143840/dependencies.lock.txt",
+          "research/.work/simulator-evaluation/SIM-009/20261025T115431Z-143840/npm-dependency-tree.json",
+          "research/.work/simulator-evaluation/SIM-009/20261025T115431Z-143840/node-version.txt",
+          "research/.work/simulator-evaluation/SIM-009/20261025T115431Z-143840/exports/flybox/connectome-result.json",
+          "research/.work/simulator-evaluation/SIM-009/20261025T115431Z-143840/exports/flybox/browser-result.json",
+          "research/.work/simulator-evaluation/SIM-009/20261025T115431Z-143840/exports/flybox/experiment-export.json.gz"
+        ],
+        "memory": {
+          "container_peak_install_bytes": 608681984,
+          "container_peak_neural_probe_bytes": 525660160,
+          "browser_peak_bytes": null,
+          "scope": "Docker cgroup phases only; browser RAM not measured"
+        },
+        "resolved_issues": [
+          "Подготовлен воспроизводимый Node 22/Python образ; отсутствующий upstream npm lock создаётся только в рабочей копии перед npm ci.",
+          "pytest использует capture=sys и временные каталоги внутри прогона для Windows bind mount.",
+          "Пропущенный sparse checkout vercel.json восстановлен из закреплённого Git blob в рабочую копию.",
+          "Проверка подавления читает опубликованный API populations, поскольку FlyFrame не раскрывает внутренний silenced.",
+          "Недоступная локальная Vercel-аналитика записана как необязательная телеметрия; основные ресурсы и JavaScript работают без ошибок."
+        ],
+        "strengths": [
+          "Браузерная среда и полный компактный граф работают локально на CPU; предусмотрены PLAY и явно отделённый PURE LAB.",
+          "Есть стимуляция, подавление, seeded lesions, снимки/ветвление и экспорт; Node-проверки подтвердили повторяемость, восстановление нейронного состояния и нулевой рекуррентный ток при удалении всех рёбер.",
+          "Реальные 140638 soma-позиций доступны для инспекции; сохранены скриншоты сцены и нейронного интерфейса."
+        ],
+        "weaknesses": [
+          "PLAY содержит игровые двигательные эвристики, а тело — упрощённая двумерная сцена, не биомеханическая модель Drosophila.",
+          "Веса квантизованы в 8 бит и логарифмически кодированы; напряжения нормированы. Компактный экспорт не объявляется эквивалентным исходному графу MaleCNS с 25582938 строками.",
+          "Python-тесты используют MockBrain и не доказывают эквивалентность Python и TypeScript. В браузере проверено восстановление времени; полное совпадение будущей динамики после rewind там отдельно не установлено.",
+          "Запуск и программные вмешательства не подтверждают биологическую причинность поведения; человеческого оператора ECAP нет.",
+          "Необязательный скрипт Vercel отсутствует в локальной раздаче; пиковая RAM браузера и VRAM не измерены. Лицензии Apache-2.0 проекта, MIT движка и права на внешний экспорт рассматриваются раздельно."
+        ],
+        "options": {
+          "adapt": "Подходит для интерактивного прототипа и изучения управляемых нейронных состояний. Для генератора нужны устойчивый API экспорта, проверенные сенсорно-моторные отображения, единицы и длительные сценарии без PLAY-эвристик.",
+          "compose": "Кандидат на отдельный браузерный интерфейс наблюдения и вмешательств. Сервис нейродинамики, биомеханику тела и человеческий ECAP-оператор следует сопрягать через проверенные контракты; готовая совместимость с другими SIM не установлена.",
+          "from_scratch": "Полезны контракты worker RPC, воспроизводимые вмешательства и визуальная инспекция как технические образцы. Собственная реализация даст контроль над динамикой и единицами, но потребует заново проверять наблюдение, экспорт и сенсорно-моторную связь."
+        },
+        "recommendation": "Сохранить как работоспособный интерактивный кандидат; выбирать основу генератора после сравнения остальных репозиториев. Не использовать PLAY-поведение как биологическую разметку.",
+        "metrics": {
+          "neurons": 166700,
+          "edges": 25088107,
+          "node_spikes_seeds_1_2_3_1": [
+            34094,
+            28522,
+            26260,
+            34094
+          ],
+          "node_seconds_with_diagnostics": [
+            0.158852539,
+            0.12813199899999972,
+            0.1415568360000002,
+            0.13562897399999974
+          ],
+          "browser_load_seconds": 1.8661402,
+          "browser_duration_seconds": 0.4000000000000001,
+          "mapped_soma": 140638,
+          "browser_repeat_seed_equal": true
+        }
+      },
+      "biological_validation": false,
+      "human_ecap_operator": false
+    },
+    {
+      "id": "SIM-010",
+      "commit": "3352e97c37b0f96ab08f27b70b4420f3d4ac2726",
+      "role": "connectome-preparation",
+      "checks": [
+        {
+          "id": "source",
+          "label": "Проверить закреплённые исходники, зависимости и лицензию",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-010/source-inventory.json",
+            "https://github.com/hsseung/OpticLobe.jl/tree/3352e97c37b0f96ab08f27b70b4420f3d4ac2726"
+          ]
+        },
+        {
+          "id": "environment",
+          "label": "Установить окружение и проверить зависимости",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "software",
+          "label": "Выполнить штатные или явно обозначенные программные проверки",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "smoke",
+          "label": "Проверить минимальный запуск или CLI",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "functional",
+          "label": "Выполнить функциональный сценарий с согласованными данными",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "reproducibility",
+          "label": "Проверить повторяемость короткого сценария и seeds, где применимо",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "visuals",
+          "label": "Сохранить проверенные визуальные материалы",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "review",
+          "label": "Записать итог, ограничения и три варианта применения",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "cleanup",
+          "label": "Удалить временные окружения, кэши и ненужные ресурсы запуска",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/maintenance/cleanup-20261025T123716Z.json"
+          ]
+        }
+      ],
+      "launch_review": null,
+      "biological_validation": false,
+      "human_ecap_operator": false
+    },
+    {
+      "id": "SIM-011",
+      "commit": "e31a2e26b9937dca72e5ca1c1960df6454d76114",
+      "role": "connectome-preparation",
+      "checks": [
+        {
+          "id": "source",
+          "label": "Проверить закреплённые исходники, зависимости и лицензию",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-011/source-inventory.json",
+            "https://github.com/htem/BANC-project/tree/e31a2e26b9937dca72e5ca1c1960df6454d76114"
+          ]
+        },
+        {
+          "id": "environment",
+          "label": "Установить окружение и проверить зависимости",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "software",
+          "label": "Выполнить штатные или явно обозначенные программные проверки",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "smoke",
+          "label": "Проверить минимальный запуск или CLI",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "functional",
+          "label": "Выполнить функциональный сценарий с согласованными данными",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "reproducibility",
+          "label": "Проверить повторяемость короткого сценария и seeds, где применимо",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "visuals",
+          "label": "Сохранить проверенные визуальные материалы",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "review",
+          "label": "Записать итог, ограничения и три варианта применения",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "cleanup",
+          "label": "Удалить временные окружения, кэши и ненужные ресурсы запуска",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/maintenance/cleanup-20261025T123716Z.json"
+          ]
+        }
+      ],
+      "launch_review": null,
+      "biological_validation": false,
+      "human_ecap_operator": false
+    },
+    {
+      "id": "SIM-012",
+      "commit": "89d9769457583051e3ec9ec7b34a5f3575537bf5",
+      "role": "connectome-preparation",
+      "checks": [
+        {
+          "id": "source",
+          "label": "Проверить закреплённые исходники, зависимости и лицензию",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-012/source-inventory.json",
+            "https://github.com/htem/FANC_auto_recon/tree/89d9769457583051e3ec9ec7b34a5f3575537bf5"
+          ]
+        },
+        {
+          "id": "environment",
+          "label": "Установить окружение и проверить зависимости",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "software",
+          "label": "Выполнить штатные или явно обозначенные программные проверки",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "smoke",
+          "label": "Проверить минимальный запуск или CLI",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "functional",
+          "label": "Выполнить функциональный сценарий с согласованными данными",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "reproducibility",
+          "label": "Проверить повторяемость короткого сценария и seeds, где применимо",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "visuals",
+          "label": "Сохранить проверенные визуальные материалы",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "review",
+          "label": "Записать итог, ограничения и три варианта применения",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "cleanup",
+          "label": "Удалить временные окружения, кэши и ненужные ресурсы запуска",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/maintenance/cleanup-20261025T123716Z.json"
+          ]
+        }
+      ],
+      "launch_review": null,
+      "biological_validation": false,
+      "human_ecap_operator": false
+    },
+    {
+      "id": "SIM-013",
+      "commit": "55b9069b919951c39dfc3a342b7b31e6cb575838",
+      "role": "method-comparator",
+      "checks": [
+        {
+          "id": "source",
+          "label": "Проверить закреплённые исходники, зависимости и лицензию",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-013/source-inventory.json",
+            "https://github.com/jajmcallister/Conn_ESN_Paper/tree/55b9069b919951c39dfc3a342b7b31e6cb575838"
+          ]
+        },
+        {
+          "id": "environment",
+          "label": "Установить окружение и проверить зависимости",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "software",
+          "label": "Выполнить штатные или явно обозначенные программные проверки",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "smoke",
+          "label": "Проверить минимальный запуск или CLI",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "functional",
+          "label": "Выполнить функциональный сценарий с согласованными данными",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "reproducibility",
+          "label": "Проверить повторяемость короткого сценария и seeds, где применимо",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "visuals",
+          "label": "Сохранить проверенные визуальные материалы",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "review",
+          "label": "Записать итог, ограничения и три варианта применения",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "cleanup",
+          "label": "Удалить временные окружения, кэши и ненужные ресурсы запуска",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/maintenance/cleanup-20261025T123716Z.json"
+          ]
+        }
+      ],
+      "launch_review": null,
+      "biological_validation": false,
+      "human_ecap_operator": false
+    },
+    {
+      "id": "SIM-014",
+      "commit": "d73b18712579c969feba625ecfd3df52f4d328f4",
+      "role": "neural",
+      "checks": [
+        {
+          "id": "source",
+          "label": "Проверить закреплённые исходники, зависимости и лицензию",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-014/source-inventory.json",
+            "https://github.com/JNLiew/flylif_orientation_maps/tree/d73b18712579c969feba625ecfd3df52f4d328f4"
+          ]
+        },
+        {
+          "id": "environment",
+          "label": "Установить окружение и проверить зависимости",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "software",
+          "label": "Выполнить штатные или явно обозначенные программные проверки",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "smoke",
+          "label": "Проверить минимальный запуск или CLI",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "functional",
+          "label": "Выполнить функциональный сценарий с согласованными данными",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "reproducibility",
+          "label": "Проверить повторяемость короткого сценария и seeds, где применимо",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "visuals",
+          "label": "Сохранить проверенные визуальные материалы",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "review",
+          "label": "Записать итог, ограничения и три варианта применения",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "cleanup",
+          "label": "Удалить временные окружения, кэши и ненужные ресурсы запуска",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/maintenance/cleanup-20261025T123716Z.json"
+          ]
+        }
+      ],
+      "launch_review": null,
+      "biological_validation": false,
+      "human_ecap_operator": false
+    },
+    {
+      "id": "SIM-015",
+      "commit": "3a035275148e97539711728422548bffe2a77566",
+      "role": "embodied",
+      "checks": [
+        {
+          "id": "source",
+          "label": "Проверить закреплённые исходники, зависимости и лицензию",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-015/source-inventory.json",
+            "https://github.com/legacyindiesubmissions-ai/claude-fly/tree/3a035275148e97539711728422548bffe2a77566"
+          ]
+        },
+        {
+          "id": "environment",
+          "label": "Установить окружение и проверить зависимости",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "software",
+          "label": "Выполнить штатные или явно обозначенные программные проверки",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "smoke",
+          "label": "Проверить минимальный запуск или CLI",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "functional",
+          "label": "Выполнить функциональный сценарий с согласованными данными",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "reproducibility",
+          "label": "Проверить повторяемость короткого сценария и seeds, где применимо",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "visuals",
+          "label": "Сохранить проверенные визуальные материалы",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "review",
+          "label": "Записать итог, ограничения и три варианта применения",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "cleanup",
+          "label": "Удалить временные окружения, кэши и ненужные ресурсы запуска",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/maintenance/cleanup-20261025T123716Z.json"
+          ]
+        }
+      ],
+      "launch_review": null,
+      "biological_validation": false,
+      "human_ecap_operator": false
+    },
+    {
+      "id": "SIM-016",
+      "commit": "40aa07f87995a7061f75f92f8ddd0465ede89577",
+      "role": "neural",
+      "checks": [
+        {
+          "id": "source",
+          "label": "Проверить закреплённые исходники, зависимости и лицензию",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-016/source-inventory.json",
+            "https://github.com/MakazhanAlpamys/soup-connectome/tree/40aa07f87995a7061f75f92f8ddd0465ede89577"
+          ]
+        },
+        {
+          "id": "environment",
+          "label": "Установить окружение и проверить зависимости",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "software",
+          "label": "Выполнить штатные или явно обозначенные программные проверки",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "smoke",
+          "label": "Проверить минимальный запуск или CLI",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "functional",
+          "label": "Выполнить функциональный сценарий с согласованными данными",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "reproducibility",
+          "label": "Проверить повторяемость короткого сценария и seeds, где применимо",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "visuals",
+          "label": "Сохранить проверенные визуальные материалы",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "review",
+          "label": "Записать итог, ограничения и три варианта применения",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "cleanup",
+          "label": "Удалить временные окружения, кэши и ненужные ресурсы запуска",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/maintenance/cleanup-20261025T123716Z.json"
+          ]
+        }
+      ],
+      "launch_review": null,
+      "biological_validation": false,
+      "human_ecap_operator": false
+    },
+    {
+      "id": "SIM-017",
+      "commit": "ee4944c03429edf857a6b10bcf98bea7dcef35b8",
+      "role": "connectome-preparation",
+      "checks": [
+        {
+          "id": "source",
+          "label": "Проверить закреплённые исходники, зависимости и лицензию",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-017/source-inventory.json",
+            "https://github.com/murthylab/flywire-network-analysis/tree/ee4944c03429edf857a6b10bcf98bea7dcef35b8"
+          ]
+        },
+        {
+          "id": "environment",
+          "label": "Установить окружение и проверить зависимости",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "software",
+          "label": "Выполнить штатные или явно обозначенные программные проверки",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "smoke",
+          "label": "Проверить минимальный запуск или CLI",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "functional",
+          "label": "Выполнить функциональный сценарий с согласованными данными",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "reproducibility",
+          "label": "Проверить повторяемость короткого сценария и seeds, где применимо",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "visuals",
+          "label": "Сохранить проверенные визуальные материалы",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "review",
+          "label": "Записать итог, ограничения и три варианта применения",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "cleanup",
+          "label": "Удалить временные окружения, кэши и ненужные ресурсы запуска",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/maintenance/cleanup-20261025T123716Z.json"
+          ]
+        }
+      ],
+      "launch_review": null,
+      "biological_validation": false,
+      "human_ecap_operator": false
+    },
+    {
+      "id": "SIM-018",
+      "commit": "336e0d12a6edd92a7340cfffb71985a3879055ce",
+      "role": "neural",
+      "checks": [
+        {
+          "id": "source",
+          "label": "Проверить закреплённые исходники, зависимости и лицензию",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-018/source-inventory.json",
+            "https://github.com/nalin-dhiman/Connectome-Constrained-Neural-Networks/tree/336e0d12a6edd92a7340cfffb71985a3879055ce"
+          ]
+        },
+        {
+          "id": "environment",
+          "label": "Установить окружение и проверить зависимости",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "software",
+          "label": "Выполнить штатные или явно обозначенные программные проверки",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "smoke",
+          "label": "Проверить минимальный запуск или CLI",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "functional",
+          "label": "Выполнить функциональный сценарий с согласованными данными",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "reproducibility",
+          "label": "Проверить повторяемость короткого сценария и seeds, где применимо",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "visuals",
+          "label": "Сохранить проверенные визуальные материалы",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "review",
+          "label": "Записать итог, ограничения и три варианта применения",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "cleanup",
+          "label": "Удалить временные окружения, кэши и ненужные ресурсы запуска",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/maintenance/cleanup-20261025T123716Z.json"
+          ]
+        }
+      ],
+      "launch_review": null,
+      "biological_validation": false,
+      "human_ecap_operator": false
+    },
+    {
+      "id": "SIM-019",
+      "commit": "24c87489efdca64970ecbe93efc683b68f778cdf",
+      "role": "method-comparator",
+      "checks": [
+        {
+          "id": "source",
+          "label": "Проверить закреплённые исходники, зависимости и лицензию",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-019/source-inventory.json",
+            "https://github.com/nalin-dhiman/ScaleBreak-FlyVis/tree/24c87489efdca64970ecbe93efc683b68f778cdf"
+          ]
+        },
+        {
+          "id": "environment",
+          "label": "Установить окружение и проверить зависимости",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "software",
+          "label": "Выполнить штатные или явно обозначенные программные проверки",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "smoke",
+          "label": "Проверить минимальный запуск или CLI",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "functional",
+          "label": "Выполнить функциональный сценарий с согласованными данными",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "reproducibility",
+          "label": "Проверить повторяемость короткого сценария и seeds, где применимо",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "visuals",
+          "label": "Сохранить проверенные визуальные материалы",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "review",
+          "label": "Записать итог, ограничения и три варианта применения",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "cleanup",
+          "label": "Удалить временные окружения, кэши и ненужные ресурсы запуска",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/maintenance/cleanup-20261025T123716Z.json"
+          ]
+        }
+      ],
+      "launch_review": null,
+      "biological_validation": false,
+      "human_ecap_operator": false
+    },
+    {
+      "id": "SIM-020",
+      "commit": "38c8ec61034cd59bc5ba0de20688d4a3c0000d60",
+      "role": "body-environment",
+      "checks": [
+        {
+          "id": "source",
+          "label": "Проверить закреплённые исходники, зависимости и лицензию",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-020/source-inventory.json",
+            "https://github.com/NeLy-EPFL/flygym/tree/38c8ec61034cd59bc5ba0de20688d4a3c0000d60"
+          ]
+        },
+        {
+          "id": "environment",
+          "label": "Установить окружение и проверить зависимости",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "software",
+          "label": "Выполнить штатные или явно обозначенные программные проверки",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "smoke",
+          "label": "Проверить минимальный запуск или CLI",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "functional",
+          "label": "Выполнить функциональный сценарий с согласованными данными",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "reproducibility",
+          "label": "Проверить повторяемость короткого сценария и seeds, где применимо",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "visuals",
+          "label": "Сохранить проверенные визуальные материалы",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "review",
+          "label": "Записать итог, ограничения и три варианта применения",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "cleanup",
+          "label": "Удалить временные окружения, кэши и ненужные ресурсы запуска",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/maintenance/cleanup-20261025T123716Z.json"
+          ]
+        }
+      ],
+      "launch_review": null,
+      "biological_validation": false,
+      "human_ecap_operator": false
+    },
+    {
+      "id": "SIM-021",
+      "commit": "d285260a1c8a7b3494150cd1590f2c9fe4b5e06b",
+      "role": "body-environment-compatibility",
+      "checks": [
+        {
+          "id": "source",
+          "label": "Проверить закреплённые исходники, зависимости и лицензию",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-021/source-inventory.json",
+            "https://github.com/NeLy-EPFL/flygym-gymnasium/tree/d285260a1c8a7b3494150cd1590f2c9fe4b5e06b"
+          ]
+        },
+        {
+          "id": "environment",
+          "label": "Установить окружение и проверить зависимости",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "software",
+          "label": "Выполнить штатные или явно обозначенные программные проверки",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "smoke",
+          "label": "Проверить минимальный запуск или CLI",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "functional",
+          "label": "Выполнить функциональный сценарий с согласованными данными",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "reproducibility",
+          "label": "Проверить повторяемость короткого сценария и seeds, где применимо",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "visuals",
+          "label": "Сохранить проверенные визуальные материалы",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "review",
+          "label": "Записать итог, ограничения и три варианта применения",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "cleanup",
+          "label": "Удалить временные окружения, кэши и ненужные ресурсы запуска",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/maintenance/cleanup-20261025T123716Z.json"
+          ]
+        }
+      ],
+      "launch_review": null,
+      "biological_validation": false,
+      "human_ecap_operator": false
+    },
+    {
+      "id": "SIM-022",
+      "commit": "fe55fb0cff275a2b6b54926524c8d831838e32fc",
+      "role": "neural",
+      "checks": [
+        {
+          "id": "source",
+          "label": "Проверить закреплённые исходники, зависимости и лицензию",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-022/source-inventory.json",
+            "https://github.com/Neuromorphicism/fly-brain-snntorch/tree/fe55fb0cff275a2b6b54926524c8d831838e32fc"
+          ]
+        },
+        {
+          "id": "environment",
+          "label": "Установить окружение и проверить зависимости",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "software",
+          "label": "Выполнить штатные или явно обозначенные программные проверки",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "smoke",
+          "label": "Проверить минимальный запуск или CLI",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "functional",
+          "label": "Выполнить функциональный сценарий с согласованными данными",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "reproducibility",
+          "label": "Проверить повторяемость короткого сценария и seeds, где применимо",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "visuals",
+          "label": "Сохранить проверенные визуальные материалы",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "review",
+          "label": "Записать итог, ограничения и три варианта применения",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "cleanup",
+          "label": "Удалить временные окружения, кэши и ненужные ресурсы запуска",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/maintenance/cleanup-20261025T123716Z.json"
+          ]
+        }
+      ],
+      "launch_review": null,
+      "biological_validation": false,
+      "human_ecap_operator": false
+    },
+    {
+      "id": "SIM-023",
+      "commit": "71ecf53d78eaffaf1a57ed7b0ccf5d458abc9f33",
+      "role": "embodied-game",
+      "checks": [
+        {
+          "id": "source",
+          "label": "Проверить закреплённые исходники, зависимости и лицензию",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-023/source-inventory.json",
+            "https://github.com/nftechie/doomfly/tree/71ecf53d78eaffaf1a57ed7b0ccf5d458abc9f33"
+          ]
+        },
+        {
+          "id": "environment",
+          "label": "Установить окружение и проверить зависимости",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "software",
+          "label": "Выполнить штатные или явно обозначенные программные проверки",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "smoke",
+          "label": "Проверить минимальный запуск или CLI",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "functional",
+          "label": "Выполнить функциональный сценарий с согласованными данными",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "reproducibility",
+          "label": "Проверить повторяемость короткого сценария и seeds, где применимо",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "visuals",
+          "label": "Сохранить проверенные визуальные материалы",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "review",
+          "label": "Записать итог, ограничения и три варианта применения",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "cleanup",
+          "label": "Удалить временные окружения, кэши и ненужные ресурсы запуска",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/maintenance/cleanup-20261025T123716Z.json"
+          ]
+        }
+      ],
+      "launch_review": null,
+      "biological_validation": false,
+      "human_ecap_operator": false
+    },
+    {
+      "id": "SIM-024",
+      "commit": "91bdd1e7dcf193f3e7ca5a8933497fcef63b7960",
+      "role": "neural",
+      "checks": [
+        {
+          "id": "source",
+          "label": "Проверить закреплённые исходники, зависимости и лицензию",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-024/source-inventory.json",
+            "https://github.com/philshiu/Drosophila_brain_model/tree/91bdd1e7dcf193f3e7ca5a8933497fcef63b7960"
+          ]
+        },
+        {
+          "id": "environment",
+          "label": "Установить окружение и проверить зависимости",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "software",
+          "label": "Выполнить штатные или явно обозначенные программные проверки",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "smoke",
+          "label": "Проверить минимальный запуск или CLI",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "functional",
+          "label": "Выполнить функциональный сценарий с согласованными данными",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "reproducibility",
+          "label": "Проверить повторяемость короткого сценария и seeds, где применимо",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "visuals",
+          "label": "Сохранить проверенные визуальные материалы",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "review",
+          "label": "Записать итог, ограничения и три варианта применения",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "cleanup",
+          "label": "Удалить временные окружения, кэши и ненужные ресурсы запуска",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/maintenance/cleanup-20261025T123716Z.json"
+          ]
+        }
+      ],
+      "launch_review": null,
+      "biological_validation": false,
+      "human_ecap_operator": false
+    },
+    {
+      "id": "SIM-025",
+      "commit": "604d17fe1d39a6618fd8f26694922a823aeed8c8",
+      "role": "human-neural-interface-comparator",
+      "checks": [
+        {
+          "id": "source",
+          "label": "Проверить закреплённые исходники, зависимости и лицензию",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-025/source-inventory.json",
+            "https://github.com/rdarie/modular-bionic-interface-2026/tree/604d17fe1d39a6618fd8f26694922a823aeed8c8"
+          ]
+        },
+        {
+          "id": "environment",
+          "label": "Установить окружение и проверить зависимости",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "software",
+          "label": "Выполнить штатные или явно обозначенные программные проверки",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "smoke",
+          "label": "Проверить минимальный запуск или CLI",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "functional",
+          "label": "Выполнить функциональный сценарий с согласованными данными",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "reproducibility",
+          "label": "Проверить повторяемость короткого сценария и seeds, где применимо",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "visuals",
+          "label": "Сохранить проверенные визуальные материалы",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "review",
+          "label": "Записать итог, ограничения и три варианта применения",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "cleanup",
+          "label": "Удалить временные окружения, кэши и ненужные ресурсы запуска",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/maintenance/cleanup-20261025T123716Z.json"
+          ]
+        }
+      ],
+      "launch_review": null,
+      "biological_validation": false,
+      "human_ecap_operator": false
+    },
+    {
+      "id": "SIM-026",
+      "commit": "9b1790b5553082e1f57921790564c7aae7c9c99a",
+      "role": "connectome-preparation",
+      "checks": [
+        {
+          "id": "source",
+          "label": "Проверить закреплённые исходники, зависимости и лицензию",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-026/source-inventory.json",
+            "https://github.com/seung-lab/FlyConnectome/tree/9b1790b5553082e1f57921790564c7aae7c9c99a"
+          ]
+        },
+        {
+          "id": "environment",
+          "label": "Установить окружение и проверить зависимости",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "software",
+          "label": "Выполнить штатные или явно обозначенные программные проверки",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "smoke",
+          "label": "Проверить минимальный запуск или CLI",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "functional",
+          "label": "Выполнить функциональный сценарий с согласованными данными",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "reproducibility",
+          "label": "Проверить повторяемость короткого сценария и seeds, где применимо",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "visuals",
+          "label": "Сохранить проверенные визуальные материалы",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "review",
+          "label": "Записать итог, ограничения и три варианта применения",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "cleanup",
+          "label": "Удалить временные окружения, кэши и ненужные ресурсы запуска",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/maintenance/cleanup-20261025T123716Z.json"
+          ]
+        }
+      ],
+      "launch_review": null,
+      "biological_validation": false,
+      "human_ecap_operator": false
+    },
+    {
+      "id": "SIM-027",
+      "commit": "10e7661bf414ba7b4c2edf795cd36d0f878c17c0",
+      "role": "motor-cpg",
+      "checks": [
+        {
+          "id": "source",
+          "label": "Проверить закреплённые исходники, зависимости и лицензию",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-027/source-inventory.json",
+            "https://github.com/smpuglie/Pugliese_2026/tree/10e7661bf414ba7b4c2edf795cd36d0f878c17c0"
+          ]
+        },
+        {
+          "id": "environment",
+          "label": "Установить окружение и проверить зависимости",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "software",
+          "label": "Выполнить штатные или явно обозначенные программные проверки",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "smoke",
+          "label": "Проверить минимальный запуск или CLI",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "functional",
+          "label": "Выполнить функциональный сценарий с согласованными данными",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "reproducibility",
+          "label": "Проверить повторяемость короткого сценария и seeds, где применимо",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "visuals",
+          "label": "Сохранить проверенные визуальные материалы",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "review",
+          "label": "Записать итог, ограничения и три варианта применения",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "cleanup",
+          "label": "Удалить временные окружения, кэши и ненужные ресурсы запуска",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/maintenance/cleanup-20261025T123716Z.json"
+          ]
+        }
+      ],
+      "launch_review": null,
+      "biological_validation": false,
+      "human_ecap_operator": false
+    },
+    {
+      "id": "SIM-029",
+      "commit": "9191824d17871b7851645782d53d23f213ddb938",
+      "role": "browser-neural",
+      "checks": [
+        {
+          "id": "source",
+          "label": "Проверить закреплённые исходники, зависимости и лицензию",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-029/source-inventory.json",
+            "https://github.com/snedea/flybrain/tree/9191824d17871b7851645782d53d23f213ddb938"
+          ]
+        },
+        {
+          "id": "environment",
+          "label": "Установить окружение и проверить зависимости",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "software",
+          "label": "Выполнить штатные или явно обозначенные программные проверки",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "smoke",
+          "label": "Проверить минимальный запуск или CLI",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "functional",
+          "label": "Выполнить функциональный сценарий с согласованными данными",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "reproducibility",
+          "label": "Проверить повторяемость короткого сценария и seeds, где применимо",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "visuals",
+          "label": "Сохранить проверенные визуальные материалы",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "review",
+          "label": "Записать итог, ограничения и три варианта применения",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "cleanup",
+          "label": "Удалить временные окружения, кэши и ненужные ресурсы запуска",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/maintenance/cleanup-20261025T123716Z.json"
+          ]
+        }
+      ],
+      "launch_review": null,
+      "biological_validation": false,
+      "human_ecap_operator": false
+    },
+    {
+      "id": "SIM-030",
+      "commit": "af8e451d9010294c185b966c953616b212f0294c",
+      "role": "connectome-analysis",
+      "checks": [
+        {
+          "id": "source",
+          "label": "Проверить закреплённые исходники, зависимости и лицензию",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-030/source-inventory.json",
+            "https://github.com/Stavros963/fcta/tree/af8e451d9010294c185b966c953616b212f0294c"
+          ]
+        },
+        {
+          "id": "environment",
+          "label": "Установить окружение и проверить зависимости",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "software",
+          "label": "Выполнить штатные или явно обозначенные программные проверки",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "smoke",
+          "label": "Проверить минимальный запуск или CLI",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "functional",
+          "label": "Выполнить функциональный сценарий с согласованными данными",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "reproducibility",
+          "label": "Проверить повторяемость короткого сценария и seeds, где применимо",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "visuals",
+          "label": "Сохранить проверенные визуальные материалы",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "review",
+          "label": "Записать итог, ограничения и три варианта применения",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "cleanup",
+          "label": "Удалить временные окружения, кэши и ненужные ресурсы запуска",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/maintenance/cleanup-20261025T123716Z.json"
+          ]
+        }
+      ],
+      "launch_review": null,
+      "biological_validation": false,
+      "human_ecap_operator": false
+    },
+    {
+      "id": "SIM-031",
+      "commit": "92b3845cc426dd309a1a0e1b3890156c42e14021",
+      "role": "visual-neural",
+      "checks": [
+        {
+          "id": "source",
+          "label": "Проверить закреплённые исходники, зависимости и лицензию",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-031/source-inventory.json",
+            "https://github.com/TuragaLab/flyvis/tree/92b3845cc426dd309a1a0e1b3890156c42e14021"
+          ]
+        },
+        {
+          "id": "environment",
+          "label": "Установить окружение и проверить зависимости",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "software",
+          "label": "Выполнить штатные или явно обозначенные программные проверки",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "smoke",
+          "label": "Проверить минимальный запуск или CLI",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "functional",
+          "label": "Выполнить функциональный сценарий с согласованными данными",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "reproducibility",
+          "label": "Проверить повторяемость короткого сценария и seeds, где применимо",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "visuals",
+          "label": "Сохранить проверенные визуальные материалы",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "review",
+          "label": "Записать итог, ограничения и три варианта применения",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "cleanup",
+          "label": "Удалить временные окружения, кэши и ненужные ресурсы запуска",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/maintenance/cleanup-20261025T123716Z.json"
+          ]
+        }
+      ],
+      "launch_review": null,
+      "biological_validation": false,
+      "human_ecap_operator": false
+    },
+    {
+      "id": "SIM-032",
+      "commit": "15b58bff08bdf4eb04709434d766fca6835d7d79",
+      "role": "other-organism-comparator",
+      "checks": [
+        {
+          "id": "source",
+          "label": "Проверить закреплённые исходники, зависимости и лицензию",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-032/source-inventory.json",
+            "https://github.com/TuragaLab/wormvae/tree/15b58bff08bdf4eb04709434d766fca6835d7d79"
+          ]
+        },
+        {
+          "id": "environment",
+          "label": "Установить окружение и проверить зависимости",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "software",
+          "label": "Выполнить штатные или явно обозначенные программные проверки",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "smoke",
+          "label": "Проверить минимальный запуск или CLI",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "functional",
+          "label": "Выполнить функциональный сценарий с согласованными данными",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "reproducibility",
+          "label": "Проверить повторяемость короткого сценария и seeds, где применимо",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "visuals",
+          "label": "Сохранить проверенные визуальные материалы",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "review",
+          "label": "Записать итог, ограничения и три варианта применения",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "cleanup",
+          "label": "Удалить временные окружения, кэши и ненужные ресурсы запуска",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/maintenance/cleanup-20261025T123716Z.json"
+          ]
+        }
+      ],
+      "launch_review": null,
+      "biological_validation": false,
+      "human_ecap_operator": false
+    },
+    {
+      "id": "SIM-033",
+      "commit": "a4df3b0d5345d2a34dac813f897d8427f6a6eb45",
+      "role": "connectome-preparation",
+      "checks": [
+        {
+          "id": "source",
+          "label": "Проверить закреплённые исходники, зависимости и лицензию",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/SIM-033/source-inventory.json",
+            "https://github.com/YijieYin/connectome_data_prep/tree/a4df3b0d5345d2a34dac813f897d8427f6a6eb45"
+          ]
+        },
+        {
+          "id": "environment",
+          "label": "Установить окружение и проверить зависимости",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "software",
+          "label": "Выполнить штатные или явно обозначенные программные проверки",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "smoke",
+          "label": "Проверить минимальный запуск или CLI",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "functional",
+          "label": "Выполнить функциональный сценарий с согласованными данными",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "reproducibility",
+          "label": "Проверить повторяемость короткого сценария и seeds, где применимо",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "visuals",
+          "label": "Сохранить проверенные визуальные материалы",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "review",
+          "label": "Записать итог, ограничения и три варианта применения",
+          "status": "pending",
+          "evidence": []
+        },
+        {
+          "id": "cleanup",
+          "label": "Удалить временные окружения, кэши и ненужные ресурсы запуска",
+          "status": "passed",
+          "evidence": [
+            "research/.work/simulator-evaluation/maintenance/cleanup-20261025T123716Z.json"
+          ]
+        }
+      ],
+      "launch_review": null,
+      "biological_validation": false,
+      "human_ecap_operator": false
+    }
+  ],
+  "integrity_review": {
+    "date": "2026-10-25",
+    "protected_source_files": 279,
+    "research_manifest_files": 86,
+    "historical_differences": 27,
+    "excluded_python_caches": 2,
+    "published_commits": {
+      ".": "aef4ab42bc35770e49a79c9739f1adf929d4e3b1",
+      "research": "add1c5dd8beaf5064766d46ada814a75af42e75d",
+      "publications": "26f0003bf581fe89b4228c248724419e2883bb52",
+      "text": "3ca545ae0192fbc970f9f00256aeca6449f3b7b9"
+    },
+    "receipt": "research/.work/simulator-evaluation/SIM-006/evaluation-input-20261025/current-integrity.json",
+    "historical_check_passed": false,
+    "current_published_bytes_match": true
+  }
+}
