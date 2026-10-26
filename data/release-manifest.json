@@ -95,7 +95,7 @@
     "knowledge/library/catalog.schema.json": "24d1bd75ab4164c19d5f36fd252d4b7807489ebd22f1e265ba1ef18d35ad6d66",
     "knowledge/library/evaluation-results.json": "6e6fdba7f123e9476d6850c2775041f9c1ab54a8828994b4dd0bbe761ea0f618",
     "knowledge/library/evaluation.json": "af135f184d662a13e57cbe5cae2bd1a08d944df58b6c3a3f0a4b58a9dc57e7bb",
-    "knowledge/library/README.md": "364a158fc83fde64570650a8786e0fec1e867330324dfb00e3eef319fda7e247",
+    "knowledge/library/README.md": "1b9e9e25141b3bf98923df8141b145cbd3e31e6a46b95b3588ec054edcc2d7e7",
     "knowledge/library/snapshot.json": "eab1bdb5bf365b18e0840a7be22a1360d558344298cb4696aeb8e92e22f81fa8",
     "knowledge/README.md": "8c981ec638f95dff2c0bbd883ede3982c73d4329d534149f26a265ae2bafc7ec",
     "knowledge/snapshot.json": "5399f6f215dfb52a9e3469c790069ee45c46eb5ab328cb5e73c8b310a986076a",
@@ -105,5 +105,5 @@
     "SKILL.md": "834856032d2b36723a6b3719ff86adb393f70009dbda73141333fd3d13da78a5",
     "TODO.md": "d9bb4c3ed7df510d025a6ec88f97514d9aabefbddf200ad84bf2b6b9372012ae"
   },
-  "aggregate_sha256": "cd77048b6dee535cfa25020bfe594ca4524e0f2271d0ab8ba42faf9e187d8c1d"
+  "aggregate_sha256": "bfaee10746dacdcaa0b276bffa41ba4adc6778b255d226df00b7e08c944f7ac3"
 }

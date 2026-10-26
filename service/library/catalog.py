@@ -101,7 +101,26 @@ def load_catalog(project: Path) -> dict[str, Any]:
     return catalog
 
 
+def _imprint(book: dict[str, Any]) -> str:
+    return ", ".join(str(book[k]) for k in ("city", "publisher", "year") if book.get(k))
+
+
+def index_citation(book: dict[str, Any]) -> str:
+    """Citation frozen into projections and embedding headers.
+
+    It keeps the original punctuation (``Новиков А. М.. Title``): changing it changes
+    every generation input and would force a full re-embedding. Show ``citation`` instead.
+    """
+    imprint = _imprint(book)
+    return f"{', '.join(book['authors'])}. {book['title']}" + (f". {imprint}" if imprint else "")
+
+
+def _sentence(text: str) -> str:
+    return text if text.endswith((".", "?", "!")) else text + "."
+
+
 def citation(book: dict[str, Any]) -> str:
     """Short human citation; absent imprint fields are omitted, never guessed."""
-    imprint = ", ".join(str(book[k]) for k in ("city", "publisher", "year") if book.get(k))
-    return f"{', '.join(book['authors'])}. {book['title']}" + (f". {imprint}" if imprint else "")
+    imprint = _imprint(book)
+    head = _sentence(", ".join(book["authors"])) + " " + book["title"]
+    return _sentence(head) + " " + imprint if imprint else head

@@ -32,7 +32,7 @@ from ..indexing.generations import (
 )
 from ..indexing.settings import KnowledgeSettings
 from ..indexing.stores import GraphStore, VectorStore
-from .catalog import citation, load_catalog
+from .catalog import catalog_path, citation, load_catalog
 from .prepare import read_documents
 from .projection import CHUNKER_VERSION, project_library
 
@@ -60,6 +60,7 @@ class LibraryEngine:
         self.generations = GenerationStore(self.state, "library")
         self._read_cache: tuple[Any, ...] | None = None
         self._stem_cache: tuple[Any, ...] | None = None
+        self._citation_cache: tuple[int, dict[str, str]] | None = None
 
     # -- state ---------------------------------------------------------------
 
@@ -75,6 +76,17 @@ class LibraryEngine:
     def _prepared(self) -> tuple[dict, list[dict]]:
         catalog = load_catalog(self.project)
         return catalog, read_documents(self.state)
+
+    def _citations(self) -> dict[str, str]:
+        """Display citations from the catalog; projections keep the frozen index form."""
+        try:
+            stamp = catalog_path(self.project).stat().st_mtime_ns
+        except OSError:
+            return {}
+        if self._citation_cache is None or self._citation_cache[0] != stamp:
+            books = load_catalog(self.project)["books"]
+            self._citation_cache = (stamp, {b["book_id"]: citation(b) for b in books})
+        return self._citation_cache[1]
 
     def _read(self) -> tuple[dict, dict | None, list[dict]]:
         active = self._active()
@@ -524,10 +536,13 @@ class LibraryEngine:
 
     @staticmethod
     def _pages(metadata: dict) -> str | None:
+        """Page range; spread labels such as ``98–99`` and ``100–101`` merge into ``98–101``."""
         start, end = metadata.get("page_start"), metadata.get("page_end")
         if start is None:
             return None
-        return start if start == end else f"{start}–{end}"
+        first = str(start).split("–")[0]
+        last = str(end if end is not None else start).split("–")[-1]
+        return first if first == last else f"{first}–{last}"
 
     def _item(self, nodes: dict, node: dict, score: float | None = None) -> dict:
         m = node["metadata"]
@@ -535,7 +550,7 @@ class LibraryEngine:
         item = {
             "chunk_id": node["id"],
             "book_id": m["book_id"],
-            "citation": book["citation"],
+            "citation": self._citations().get(m["book_id"], book["citation"]),
             "completeness": m["completeness"],
             "section_path": m["section_path"],
             "pages": self._pages(m),

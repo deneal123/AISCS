@@ -15,7 +15,7 @@ from ..indexing.chunking import (
     trim_span,
 )
 from ..indexing.generations import digest
-from .catalog import citation
+from .catalog import index_citation
 
 CHUNKER_VERSION = "library-chunker-v1"
 CHUNK_TARGET_TOKENS = 700
@@ -125,10 +125,10 @@ def project_library(catalog: dict[str, Any], documents: list[dict[str, Any]]) ->
             {
                 "id": book_node,
                 "type": "Book",
-                "text": citation(book) + "\n" + "; ".join(contents),
+                "text": index_citation(book) + "\n" + "; ".join(contents),
                 "metadata": {
                     "book_id": book_id,
-                    "citation": citation(book),
+                    "citation": index_citation(book),
                     "title": book["title"],
                     "authors": book["authors"],
                     "year": book.get("year"),
@@ -166,7 +166,7 @@ def project_library(catalog: dict[str, Any], documents: list[dict[str, Any]]) ->
                 _edge("section_of", node_id, parents[-1][1] if parents else book_node, book_id)
             )
             parents.append((section["level"], node_id))
-        header = citation(book) + (
+        header = index_citation(book) + (
             " (ознакомительный фрагмент)" if book["completeness"] == "fragment" else ""
         )
         previous: str | None = None

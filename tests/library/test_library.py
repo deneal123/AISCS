@@ -10,7 +10,7 @@ from service.common.errors import DataError
 from service.indexing.embedding import Embedder
 from service.indexing.settings import KnowledgeSettings
 from service.library import formats
-from service.library.catalog import load_catalog, validate_catalog
+from service.library.catalog import citation, load_catalog, validate_catalog
 from service.library.engine import LibraryEngine
 from service.library.formats import extract
 from service.library.prepare import read_documents
@@ -326,6 +326,25 @@ def test_offline_lifecycle_search_passage_and_isolation(library, tmp_path):
     # The evidence index pointer and corpus live one level up and are never created here.
     assert not (tmp_path / "state" / "active.json").exists()
     assert not (tmp_path / "state" / "corpus").exists()
+
+
+def test_display_citation_and_spread_pages_keep_index_inputs(library):
+    library.prepare()
+    projection, _, _ = library._read()
+    book = next(n for n in projection["nodes"] if n["id"] == "book:B001")
+    # The frozen index form stays in the projection, so published generations do not change.
+    assert book["metadata"]["citation"] == "Автор А. А.. Книга B001. Москва, Наука, 2001"
+    item = library.search("научная новизна")["items"][0]
+    assert item["citation"] == "Автор А. А. Книга B001. Москва, Наука, 2001"
+    assert citation({"authors": ["Эко Умберто"], "title": "Как?", "year": "2001"}) == (
+        "Эко Умберто. Как? 2001"
+    )
+    pages = LibraryEngine._pages
+    assert pages({"page_start": "98–99", "page_end": "100–101"}) == "98–101"
+    assert pages({"page_start": "24–25", "page_end": "24–25"}) == "24–25"
+    assert pages({"page_start": "27", "page_end": "28"}) == "27–28"
+    assert pages({"page_start": "7", "page_end": "7"}) == "7"
+    assert pages({"page_start": None, "page_end": None}) is None
 
 
 def test_changed_original_is_rejected(library, tmp_path):
