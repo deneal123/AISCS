@@ -23,12 +23,12 @@ def commands(role: str, *, skip_build: bool = False, skip_mcp: bool = False) -> 
         [py, "-m", "pytest", "-q"],
     ]
     if not skip_build:
-        document = {
-            "text": "TEXT-001",
-            "presentation": "PRES-001",
-            "publications": "PUB-TEMPLATE-001",
+        documents = {
+            "text": ["TEXT-001"],
+            "presentation": ["PRES-001", "PRES-002"],
+            "publications": ["PUB-TEMPLATE-001"],
         }[role]
-        steps.append([cli, "build", document, "--profile", "draft"])
+        steps += [[cli, "build", document, "--profile", "draft"] for document in documents]
     if not skip_mcp:
         steps.append([py, "scripts/mcp-smoke.py"])
     return steps

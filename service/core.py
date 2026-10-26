@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import fnmatch
 import hashlib
 import json
 import os
@@ -25,6 +26,8 @@ ROOT = Path(__file__).resolve().parents[1]
 CONFIG_PATH = ROOT / "sidecar.json"
 SAFE_NAME = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]*$")
 REFERENCE = re.compile(r"^(?:S\d{3,}|ST\d{3,})$")
+FRAME = re.compile(r"^[^%\n]*\\begin\{frame\}", re.MULTILINE)
+PDF_PAGES = re.compile(r"Output written on .*?\((\d+) pages?")
 
 
 def load_json(path: Path) -> dict[str, Any]:
@@ -125,6 +128,21 @@ def _now() -> str:
     return datetime.now(UTC).isoformat(timespec="seconds")
 
 
+def _excluded(relative: Path, patterns: list[str]) -> bool:
+    """A path is excluded when it or one of its parent directories matches a pattern."""
+    candidates = [relative.as_posix(), *(parent.as_posix() for parent in relative.parents)]
+    return any(fnmatch.fnmatchcase(item, pattern) for item in candidates for pattern in patterns)
+
+
+def _logged_pages(log: Path) -> int | None:
+    """Page count from the XeLaTeX log; TeX wraps long log lines, so newlines are removed."""
+    if not log.is_file():
+        return None
+    log_text = log.read_text(encoding="utf-8", errors="replace").replace("\n", "")
+    match = PDF_PAGES.search(log_text)
+    return int(match.group(1)) if match else None
+
+
 class DocumentSidecar:
     def __init__(self, root: Path | str = ROOT) -> None:
         self.root = Path(root).resolve()
@@ -222,6 +240,7 @@ class DocumentSidecar:
             if source_dir == self.root
             else [source_dir]
         )
+        excludes = [str(pattern) for pattern in document.get("source_excludes", [])]
         collected: dict[str, tuple[Path, Path]] = {}
         for root in roots:
             if root.is_file():
@@ -235,10 +254,18 @@ class DocumentSidecar:
                     if any(
                         part in {"build", "archive", "examples", "releases", ".venv"}
                         for part in relative.parts
-                    ):
+                    ) or _excluded(relative, excludes):
                         continue
                     collected[relative.as_posix()] = (path, relative)
         return [collected[key] for key in sorted(collected)]
+
+    def slide_count(self, document: dict[str, Any]) -> int:
+        """Frames declared in the document sources; commented-out frames are not counted."""
+        return sum(
+            len(FRAME.findall(path.read_text(encoding="utf-8", errors="replace")))
+            for path, _ in self._source_files(document)
+            if path.suffix.lower() == ".tex"
+        )
 
     def validate(self, *, profile: str = "draft", document_id: str | None = None) -> dict[str, Any]:
         errors: list[str] = []
@@ -307,6 +334,11 @@ class DocumentSidecar:
             expected_tree = document.get("immutable_tree_sha256")
             if expected_tree and source_dir.is_dir() and tree_sha256(source_dir) != expected_tree:
                 errors.append(f"{current_id}: immutable source tree hash mismatch")
+            limit = document.get("max_slides")
+            if limit is not None and source_dir.is_dir():
+                slides = self.slide_count(document)
+                if slides > limit:
+                    errors.append(f"{current_id}: {slides} slides exceed max_slides {limit}")
 
         selected = self.get_document(document_id) if document_id else None
         if document_id and selected is None:
@@ -589,6 +621,7 @@ class DocumentSidecar:
             if returncode:
                 break
         pdf = build_dir / f"{entry_path.stem}.pdf"
+        pages = _logged_pages(build_dir / f"{entry_path.stem}.log") if returncode == 0 else None
         report = {
             "ok": returncode == 0 and pdf.is_file(),
             "applied": True,
@@ -598,7 +631,12 @@ class DocumentSidecar:
             "returncode": returncode,
             "output": str(pdf),
             "sha256": sha256(pdf) if pdf.is_file() else None,
+            "pages": pages,
         }
+        limit = document.get("max_slides")
+        if report["ok"] and limit is not None and pages is not None and pages > limit:
+            report["ok"] = False
+            report["error"] = f"{pages} pages exceed max_slides {limit}"
         if report["ok"]:
             try:
                 atomic_copy_pdf(pdf, entry_path.with_suffix(".pdf"))

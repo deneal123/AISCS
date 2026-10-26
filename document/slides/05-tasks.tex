@@ -1,0 +1,19 @@
+\begin{frame}{Шесть задач ведут от исходных данных к проверке переноса}
+\centering
+\begin{tikzpicture}[
+  task/.style={nohyphen,draw=black,fill=white,align=left,text width=62mm,minimum height=27mm,inner sep=2.5mm,font=\fontsize{14}{16.8}\selectfont},
+  node distance=10mm and 9mm]
+\node[task] (t1) {\textbf{1.} Методы и требования к~данным ECAP\\[1mm] Главы 1--2};
+\node[task,right=of t1] (t2) {\textbf{2.} Модель нейродинамики Drosophila и генератор\\[1mm] Главы 2, 4};
+\node[task,right=of t2] (t3) {\textbf{3.} Переносимое представление и~адаптация\\[1mm] Глава 3};
+\node[task,below=of t1] (t4) {\textbf{4.} Оператор формирования и~регистрации ECAP\\[1mm] Главы 2, 4};
+\node[task,below=of t2] (t5) {\textbf{5.} Протокол и сравнение с~контролями\\[1mm] Главы 3--4};
+\node[task,below=of t3] (t6) {\textbf{6.} Применимость, неопределённость и ПО\\[1mm] Главы 3--4};
+\draw[flow] (t1)--(t2);\draw[flow] (t2)--(t3);\draw[flow] (t1)--(t4);
+\draw[flow] (t4)--(t5);\draw[flow] (t3.south west)--(t5.north east);\draw[flow] (t5)--(t6);
+\end{tikzpicture}
+\SlideFigureCaption{Задачи исследования и главы диссертации}
+\SlideGap
+\raggedright
+Физический оператор проверяется отдельно от переноса; сравнение начинается после фиксации протокола. Полные формулировки задач приведены во введении диссертации.
+\end{frame}

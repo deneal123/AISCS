@@ -1,0 +1,13 @@
+\begin{frame}{Граф знаний по статьям находит все \ProgSearchCases\ контрольных запросов}
+\SlideTableTitle{Корпус полных текстов и поисковый индекс}
+\begin{tabularx}{\linewidth}{|Y|L{0.26\linewidth}|}
+\hline Показатель & Значение \\\hline
+Полные тексты в корпусе & \ProgCorpusAvailable \\\hline
+Тексты недоступны / отклонены / требуют распознавания & \ProgCorpusMissing\ / \ProgCorpusRejected\ / \ProgCorpusOcr \\\hline
+Узлы и связи графа & \ProgGraphNodes\ / \ProgGraphEdges \\\hline
+Векторные фрагменты & \ProgVectors \\\hline
+Контрольные запросы найдены & \ProgSearchHits\ из \ProgSearchCases \\\hline
+\end{tabularx}
+\SlideGap
+Поиск гибридный: полнотекстовый и векторный. Найденный фрагмент указывает источник и место в тексте, но не является научным выводом; непроверенные связи не используются как основания.
+\end{frame}

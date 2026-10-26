@@ -1,6 +1,6 @@
 [project]
 name = "aspa-presentation-sidecar"
-version = "1.0.3"
+version = "1.1.0"
 description = "Dissertation presentation sources, evidence references and guarded XeLaTeX builds"
 readme = "README.md"
 requires-python = ">=3.12,<3.14"

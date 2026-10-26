@@ -1,10 +1,13 @@
-.PHONY: sync validate build test lint repository-check quick-check check mcp-smoke
+.PHONY: sync validate build progress test lint repository-check quick-check check mcp-smoke
 sync:
 	uv sync --frozen --extra dev
 validate:
 	uv run --frozen presentationctl validate
 build:
 	uv run --frozen presentationctl build PRES-001 --profile draft
+	uv run --frozen presentationctl build PRES-002 --profile draft
+progress:
+	uv run --frozen presentationctl progress-snapshot --apply
 test:
 	uv run --frozen --extra dev pytest -q
 lint:

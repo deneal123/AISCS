@@ -36,7 +36,13 @@
             "items": {"type": "string", "pattern": "^(S[0-9]{3,}|ST[0-9]{3,})$"},
             "uniqueItems": true
           },
-          "immutable": {"type": "boolean"}
+          "immutable": {"type": "boolean"},
+          "max_slides": {"type": "integer", "minimum": 1},
+          "source_excludes": {
+            "type": "array",
+            "items": {"type": "string", "minLength": 1},
+            "uniqueItems": true
+          }
         },
         "additionalProperties": true
       }

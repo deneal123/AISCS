@@ -1,0 +1,697 @@
+{
+  "meta": {
+    "schema_version": "1.0.0",
+    "generated_by": "presentationctl progress-snapshot",
+    "as_of": "2026-10-26",
+    "since": "2026-10-20",
+    "since_days": 7
+  },
+  "research": {
+    "version": "1.6.1",
+    "sources": 318,
+    "validation": {
+      "partially_verified": 42,
+      "rejected": 18,
+      "verified_metadata": 13,
+      "verified_primary": 245
+    },
+    "aliases": 271,
+    "clusters": 43,
+    "retired_clusters": 11,
+    "resources": 109,
+    "gate": "G0_REVISE",
+    "novelty_variants": 15,
+    "novelty_ranking": "prohibited",
+    "novelty_stop": "STOP-UNSATURATED",
+    "saturation": false,
+    "prior_art": "partial_analogues_only",
+    "tasks": 6,
+    "todo": {
+      "done": 35,
+      "open": 8,
+      "total": 43,
+      "open_codes": [
+        "EXP-01",
+        "EXP-02",
+        "EXP-03",
+        "EXP-04",
+        "EXP-05",
+        "CON-05",
+        "REL-01",
+        "REL-02"
+      ]
+    }
+  },
+  "knowledge": {
+    "generation": "g-f36b941a0426b642916d1cc1",
+    "corpus": {
+      "available": 106,
+      "missing": 125,
+      "needs_ocr": 1,
+      "rejected": 86
+    },
+    "nodes": 5219,
+    "edges": 6769,
+    "vectors": 2855,
+    "search_cases": 40,
+    "search_hits": 40
+  },
+  "library": {
+    "generation": "g-de56bca94309426fc6b0a94e",
+    "books": 10,
+    "full_text": 10,
+    "authors": [
+      "Эко",
+      "Адлер (2)",
+      "Новиков (2)",
+      "Непряхин",
+      "Муромцева",
+      "Харченко",
+      "Волков",
+      "Колесникова"
+    ],
+    "chunks": 1883,
+    "search_cases": 24,
+    "search_hits": 24
+  },
+  "simulations": {
+    "total": 32,
+    "by_status": {
+      "blocked": [
+        "SIM-004",
+        "SIM-027",
+        "SIM-029",
+        "SIM-030",
+        "SIM-031",
+        "SIM-032",
+        "SIM-033"
+      ],
+      "partial": [
+        "SIM-001",
+        "SIM-002",
+        "SIM-003",
+        "SIM-005",
+        "SIM-008",
+        "SIM-010",
+        "SIM-011",
+        "SIM-012",
+        "SIM-013",
+        "SIM-014",
+        "SIM-019",
+        "SIM-022",
+        "SIM-025",
+        "SIM-026"
+      ],
+      "reproduced": [
+        "SIM-006",
+        "SIM-007",
+        "SIM-009",
+        "SIM-015",
+        "SIM-016",
+        "SIM-017",
+        "SIM-018",
+        "SIM-020",
+        "SIM-021",
+        "SIM-023",
+        "SIM-024"
+      ]
+    },
+    "groups": {
+      "Методы сравнения и авторские анализы": {
+        "blocked": 2,
+        "partial": 4
+      },
+      "Нейродинамика": {
+        "partial": 4,
+        "reproduced": 5,
+        "blocked": 3
+      },
+      "Подготовка и анализ коннектома": {
+        "reproduced": 2,
+        "partial": 5,
+        "blocked": 2
+      },
+      "Тело и среда": {
+        "partial": 1,
+        "reproduced": 4
+      }
+    },
+    "visuals": 21,
+    "biological_validation": 0,
+    "human_ecap_operator": 0
+  },
+  "text": {
+    "version": "1.1.1",
+    "chapters": [
+      {
+        "file": "00-introduction.tex",
+        "label": "Введение",
+        "words": 1453,
+        "sections": 12,
+        "pending": 0
+      },
+      {
+        "file": "01-foundations.tex",
+        "label": "Глава 1",
+        "words": 6901,
+        "sections": 7,
+        "pending": 0
+      },
+      {
+        "file": "02-data-components.tex",
+        "label": "Глава 2",
+        "words": 134,
+        "sections": 7,
+        "pending": 7
+      },
+      {
+        "file": "03-transfer-evaluation.tex",
+        "label": "Глава 3",
+        "words": 298,
+        "sections": 9,
+        "pending": 9
+      },
+      {
+        "file": "04-validation.tex",
+        "label": "Глава 4",
+        "words": 135,
+        "sections": 7,
+        "pending": 7
+      }
+    ],
+    "bibliography": 300,
+    "todo": {
+      "done": 9,
+      "open": 9,
+      "total": 18,
+      "open_codes": [
+        "TXT-02",
+        "TXT-04",
+        "TXT-12",
+        "TXT-13",
+        "TXT-14",
+        "TXT-15",
+        "TXT-16",
+        "TXT-17",
+        "TXT-18"
+      ]
+    }
+  },
+  "publications": {
+    "version": "1.2.1",
+    "documents": [
+      {
+        "id": "PUB-001",
+        "venue": "МИН-2026",
+        "status": "submitted",
+        "due": null
+      },
+      {
+        "id": "PUB-002",
+        "venue": "Биомедицинская радиоэлектроника",
+        "status": "draft",
+        "due": "2026-11"
+      },
+      {
+        "id": "PUB-003",
+        "venue": "Биомедицинская радиоэлектроника",
+        "status": "draft",
+        "due": "2027-03"
+      }
+    ],
+    "ipr_plan": {
+      "journal": 11,
+      "conference": 5
+    },
+    "todo": {
+      "done": 3,
+      "open": 19,
+      "total": 22,
+      "open_codes": [
+        "PUBL-01",
+        "PUBL-02",
+        "PUBL-03",
+        "PUBL-04",
+        "PUBL-18",
+        "PUBL-19",
+        "PUBL-05",
+        "PUBL-06",
+        "PUBL-07",
+        "PUBL-08",
+        "PUBL-09",
+        "PUBL-10",
+        "PUBL-11",
+        "PUBL-12",
+        "PUBL-13",
+        "PUBL-14",
+        "PUBL-15",
+        "PUBL-16",
+        "PUBL-17"
+      ]
+    }
+  },
+  "presentation": {
+    "version": "1.1.0",
+    "decks": [
+      {
+        "id": "PRES-001",
+        "slides": 18,
+        "max_slides": 20
+      },
+      {
+        "id": "PRES-002",
+        "slides": 20,
+        "max_slides": null
+      }
+    ],
+    "todo": {
+      "done": 12,
+      "open": 7,
+      "total": 19,
+      "open_codes": [
+        "PRES-01",
+        "PRES-05",
+        "PRES-13",
+        "PRES-14",
+        "PRES-15",
+        "PRES-16",
+        "PRES-17"
+      ]
+    }
+  },
+  "history": {
+    "first_commit": "2026-09-12",
+    "releases": [
+      {
+        "date": "2026-09-26",
+        "component": "research",
+        "version": "1.3.0"
+      },
+      {
+        "date": "2026-09-28",
+        "component": "research",
+        "version": "1.4.0"
+      },
+      {
+        "date": "2026-10-03",
+        "component": "research",
+        "version": "1.5.0"
+      },
+      {
+        "date": "2026-10-05",
+        "component": "presentation",
+        "version": "1.0.1"
+      },
+      {
+        "date": "2026-10-05",
+        "component": "publications",
+        "version": "1.1.0"
+      },
+      {
+        "date": "2026-10-05",
+        "component": "research",
+        "version": "1.5.1"
+      },
+      {
+        "date": "2026-10-05",
+        "component": "text",
+        "version": "1.0.1"
+      },
+      {
+        "date": "2026-10-09",
+        "component": "presentation",
+        "version": "1.0.2"
+      },
+      {
+        "date": "2026-10-09",
+        "component": "research",
+        "version": "1.5.2"
+      },
+      {
+        "date": "2026-10-09",
+        "component": "text",
+        "version": "1.0.2"
+      },
+      {
+        "date": "2026-10-24",
+        "component": "publications",
+        "version": "1.2.0"
+      },
+      {
+        "date": "2026-10-24",
+        "component": "text",
+        "version": "1.1.0"
+      },
+      {
+        "date": "2026-10-25",
+        "component": "presentation",
+        "version": "1.0.3"
+      },
+      {
+        "date": "2026-10-25",
+        "component": "publications",
+        "version": "1.2.1"
+      },
+      {
+        "date": "2026-10-25",
+        "component": "research",
+        "version": "1.5.3"
+      },
+      {
+        "date": "2026-10-25",
+        "component": "text",
+        "version": "1.1.1"
+      },
+      {
+        "date": "2026-10-26",
+        "component": "research",
+        "version": "1.6.0"
+      },
+      {
+        "date": "2026-10-26",
+        "component": "research",
+        "version": "1.6.1"
+      }
+    ],
+    "week_commits": {
+      "research": 4,
+      "text": 2,
+      "publications": 2,
+      "presentation": 1,
+      "simulations": 1
+    }
+  },
+  "repositories": {
+    "presentation": "293c23f",
+    "publications": "396d813",
+    "research": "d4ffa5e",
+    "text": "8b9bb9a",
+    "workspace": "de0a4f7"
+  },
+  "uncommitted_sources": [
+    "simulations/data/assessment.json",
+    "simulations/data/registry.json"
+  ],
+  "sources": [
+    {
+      "path": "materials/presentation/TODO.md",
+      "sha256": "42F6212959D0FF555AE2BE6229884C63DDE7E2F2FFD627606E6549035FBB6FA8"
+    },
+    {
+      "path": "materials/presentation/data/presentation.json",
+      "sha256": "167640C2476D8DF99FC1C11C40EE5BBCFBC499588B2E278068BAE6554E14801F"
+    },
+    {
+      "path": "materials/presentation/document/config/metadata.tex",
+      "sha256": "286548880973722A29D32108FF82D14FA5248268AFBFDDC1FB5FC2280C789732"
+    },
+    {
+      "path": "materials/presentation/document/config/object-layout.tex",
+      "sha256": "C2A703FF24D5DD30BECE7AEBC35B6DC9C203B537A3A3ED475C7A6BD1703569E8"
+    },
+    {
+      "path": "materials/presentation/document/config/theme.tex",
+      "sha256": "7060EE3F5396537BF85DFF9E6B52700BC5CD18A3B6B1E1D7D306EA71AE1B86C6"
+    },
+    {
+      "path": "materials/presentation/document/presentation.tex",
+      "sha256": "64C63CE473B932F9260CB58FD432973A32EE15FCEA5307F249B56B813E5D12E2"
+    },
+    {
+      "path": "materials/presentation/document/progress.tex",
+      "sha256": "F6211CBCC16AFE7D1CDB614E1CA55F2BE1CFB4FE1D0E764AD3FA5A0DAC4BF562"
+    },
+    {
+      "path": "materials/presentation/document/progress/slides/01-title.tex",
+      "sha256": "3570FD60E2804ABE7B9CEA32AB9174D521D0E9C296FB72B5408231114637DB10"
+    },
+    {
+      "path": "materials/presentation/document/progress/slides/02-week.tex",
+      "sha256": "88920A3A7A306E19A350BFEEAB9D9DF65B0A143BB153054ED173B4308C81FCB8"
+    },
+    {
+      "path": "materials/presentation/document/progress/slides/03-topic.tex",
+      "sha256": "A6D40802735189A58256D4E9A062DFF7FB1BBF03FC2A4D6A4161CE6FCE2A5891"
+    },
+    {
+      "path": "materials/presentation/document/progress/slides/04-tasks.tex",
+      "sha256": "F1CF1B1E46E771D5D5189B9FF0E4F87763253A2E195B902ADD794E28776F63F7"
+    },
+    {
+      "path": "materials/presentation/document/progress/slides/05-timeline.tex",
+      "sha256": "6F4C7B5269CB98DD98DE50124F4181B1CB9D092A9F0CA2BF54B9276D1162BCAF"
+    },
+    {
+      "path": "materials/presentation/document/progress/slides/06-research-base.tex",
+      "sha256": "D8B6F73C60648585C9CC3FF6D0EF29C58A3A7DE7FA743F797F7FC9D665C2B703"
+    },
+    {
+      "path": "materials/presentation/document/progress/slides/07-novelty.tex",
+      "sha256": "8B654CB8FDE4B94FE61E69E70BC29E65499B28133A294115BEFD011F04C313F8"
+    },
+    {
+      "path": "materials/presentation/document/progress/slides/08-contract.tex",
+      "sha256": "966C901A1C04365F514B27A8E6C4C16D34409C6F95697407AC1AF90F85907C2E"
+    },
+    {
+      "path": "materials/presentation/document/progress/slides/09-knowledge.tex",
+      "sha256": "B3CAEE600B2F084F67F72BFCD18D44EDEBF1AE29F68882067C01BC8AF4FAEB03"
+    },
+    {
+      "path": "materials/presentation/document/progress/slides/10-library.tex",
+      "sha256": "CC873A2BC37B4C8143FD939C88D84101D7C7041E9B23B097E8F79CDE452240BA"
+    },
+    {
+      "path": "materials/presentation/document/progress/slides/11-simulators.tex",
+      "sha256": "D4EE52561CB18C56AF3B30C7A52E536DD0F3297E343B0C3AB98F12DFEC898A53"
+    },
+    {
+      "path": "materials/presentation/document/progress/slides/12-simulator-groups.tex",
+      "sha256": "1C89542905A0417600ABFB29AB2E0C3EE8C66D06D2B1BEFCE81BBC4C3647BF5B"
+    },
+    {
+      "path": "materials/presentation/document/progress/slides/13-text.tex",
+      "sha256": "70DBB406717CE157D2E55396E9509EF7CAB61C9A02F9E45B9EE65345B0F4F801"
+    },
+    {
+      "path": "materials/presentation/document/progress/slides/14-publications.tex",
+      "sha256": "34A86C889DDE3765E0516948E003F7FD9DA492713D14E29A82105BEF631289A6"
+    },
+    {
+      "path": "materials/presentation/document/progress/slides/15-defence.tex",
+      "sha256": "8267C3DCB3CB66ED1FA48EFF1AFAC0AEAFA18678D99B9447FC0D7BBE882AA5F0"
+    },
+    {
+      "path": "materials/presentation/document/progress/slides/16-infrastructure.tex",
+      "sha256": "63F1F217CB6FEEBB16CF5998E6D4AD4CEDCCD936041AA243CD7EB57F2606F244"
+    },
+    {
+      "path": "materials/presentation/document/progress/slides/17-open-tasks.tex",
+      "sha256": "ED60435863E08BD024386648A323EC7E7013CF32E139766CCA7E8F7FC03758BA"
+    },
+    {
+      "path": "materials/presentation/document/progress/slides/18-risks.tex",
+      "sha256": "30FDC4086645E01E3414658CE2280EB299AFF2F2D583A19E26F37CEE096E6546"
+    },
+    {
+      "path": "materials/presentation/document/progress/slides/19-decisions.tex",
+      "sha256": "0A53460169AC006B6C87FCDBBF89D39BCFE318F24744C192B6F16C9B8E66F150"
+    },
+    {
+      "path": "materials/presentation/document/progress/slides/20-next-week.tex",
+      "sha256": "7D9BD7C7B0E1847226EE98B47D0CBEAD514512EED1B12645374C5F4DC8AD3514"
+    },
+    {
+      "path": "materials/presentation/document/slides/01-title.tex",
+      "sha256": "BDAF1F5145925D2615698C738872F1EC4467DAD69C0166B955D536279790EE36"
+    },
+    {
+      "path": "materials/presentation/document/slides/02-relevance.tex",
+      "sha256": "DE1A8E9D1859206CE41342DE879066D33A47595CEF46381AEF2600BC85EFA6FE"
+    },
+    {
+      "path": "materials/presentation/document/slides/03-problem-goal.tex",
+      "sha256": "4FC09BD8B457001327661F72615368B0224AF5EFB74E1F6AFFBAFB62F143BD56"
+    },
+    {
+      "path": "materials/presentation/document/slides/04-object-subject.tex",
+      "sha256": "15ADA547C0C2E5F0EA1FD8EA4D9C49E9C5074B72312424EFC885EA59D90BBCD9"
+    },
+    {
+      "path": "materials/presentation/document/slides/05-tasks.tex",
+      "sha256": "8AF66DFF44E858827012239698D38BCD91136E11DAD26F57C4899015BC2ABFE1"
+    },
+    {
+      "path": "materials/presentation/document/slides/06-method.tex",
+      "sha256": "AB2D79FEA203BA4A5B126DCDDAF4808CAD2E1A783FD3E056B24451B7A81CC968"
+    },
+    {
+      "path": "materials/presentation/document/slides/07-neurodynamics.tex",
+      "sha256": "48F35DB6AC0154832908C39A89B7E24C236849EE1D0FCF67885D299647602AB4"
+    },
+    {
+      "path": "materials/presentation/document/slides/08-operator.tex",
+      "sha256": "65E6BF2D529901284B80821842925856B2050BF60D79AB27C8BB7B0B9D0364BC"
+    },
+    {
+      "path": "materials/presentation/document/slides/09-transfer-metric.tex",
+      "sha256": "EE2E465B470A24CBD2990D4254CE5DA77535C41554E1282D8B4168DF559EFDD1"
+    },
+    {
+      "path": "materials/presentation/document/slides/10-controls.tex",
+      "sha256": "5B66790032EDDCAEE072A185F7414961FEF36ECDC057145E66229D8032E80174"
+    },
+    {
+      "path": "materials/presentation/document/slides/11-novelty.tex",
+      "sha256": "3BA49E60E333825A675477A1021B6064D4AA803B4DD0029681B4116CB435D2F7"
+    },
+    {
+      "path": "materials/presentation/document/slides/12-propositions.tex",
+      "sha256": "2301466EBFE0E61AB6F3467D69E9153B634EB65F6DBFC65507A891B1B99E1B71"
+    },
+    {
+      "path": "materials/presentation/document/slides/13-significance.tex",
+      "sha256": "34775DE7DA09B6A0F6AEEC445EE53B49194C53F9669230ECC8522C3C52C2EEA0"
+    },
+    {
+      "path": "materials/presentation/document/slides/14-calendar.tex",
+      "sha256": "7110CC7A7951031EB14B972F107B53ED1B6E22E68F62FED71A171884F58A940E"
+    },
+    {
+      "path": "materials/presentation/document/slides/15-approbation.tex",
+      "sha256": "7AFD279F29B0B5237A4B3633338DC00220A8CC9E67DFE1B085089B8C2C6CCF08"
+    },
+    {
+      "path": "materials/presentation/document/slides/16-contribution.tex",
+      "sha256": "2719E05705006789DD684B3C2A93908EF20D86D3C450394FF93F11385945F1B7"
+    },
+    {
+      "path": "materials/presentation/document/slides/17-backup-data.tex",
+      "sha256": "7EE74982F76C001A2F4AF083A64C47DE421446C9C44A22A9DEC3B19FE4DE2393"
+    },
+    {
+      "path": "materials/presentation/document/slides/18-backup-scope.tex",
+      "sha256": "4A771DDE1EFE83C556C43E9BA560B8ECC14E7E26EA3FBC2485CF43A5DB6B1520"
+    },
+    {
+      "path": "materials/presentation/sidecar.json",
+      "sha256": "177304B39DB00CB5820A4153E83BD4F8E43AAFDA2F292A91101A69C67EB916FF"
+    },
+    {
+      "path": "materials/publications/TODO.md",
+      "sha256": "30DAED85450419EE5018E7D5500A838805D84AAD3A00F3617200C1ED9ECA5C41"
+    },
+    {
+      "path": "materials/publications/data/publications.json",
+      "sha256": "06C38497D13F0CEEE17EFC5C349B5309CCF6698706420F857CF3870156BB6352"
+    },
+    {
+      "path": "materials/publications/sidecar.json",
+      "sha256": "1959E538C5317B2F6CBED45A3761F9FC751C74A35F81538E80F84A4AF642498B"
+    },
+    {
+      "path": "materials/text/TODO.md",
+      "sha256": "65D6ADFEBAB8EBD8B5A8CF60DC702B30A7EB05DCF8650938527425BD037B24B6"
+    },
+    {
+      "path": "materials/text/document/backmatter/references.bib",
+      "sha256": "77BF3B5EA49ADF499634FE0D11654B599206F4174A4D5416318CA0C4C1350BC4"
+    },
+    {
+      "path": "materials/text/document/chapters/00-introduction.tex",
+      "sha256": "7D57BCDC3BF5825210B3315BE537D6E43AEB0854B5ED423DDFAE5A5F03EBA949"
+    },
+    {
+      "path": "materials/text/document/chapters/01-foundations.tex",
+      "sha256": "9C64D8A584D5C4A0D8AC0F6E3F768C2345A2384DF00BB96DBD2C2F503CCAB3C9"
+    },
+    {
+      "path": "materials/text/document/chapters/02-data-components.tex",
+      "sha256": "F05B6FFA8F56130C3E42151B3C653BCC92A850BDDBF4B9E9A9A82B7AFC6DE03D"
+    },
+    {
+      "path": "materials/text/document/chapters/03-transfer-evaluation.tex",
+      "sha256": "E75CD78D8B9635A6E17F79C2AFD218701F10C9C69C78B92B005D1379B25439EE"
+    },
+    {
+      "path": "materials/text/document/chapters/04-validation.tex",
+      "sha256": "3601D8EB4D7651C7C544459D2C97D8E34E0AC4119F90848923ADA335BDBC6CB0"
+    },
+    {
+      "path": "materials/text/sidecar.json",
+      "sha256": "4E76BCDCEADCBA4D60CBCFA2483097CF0F9CBFFBAA8833C1CFA6905F96C25781"
+    },
+    {
+      "path": "research/.knowledge/active.json",
+      "sha256": "F29D03F52C88D7BDA3A0117AB157CA7BCD11AE79EE258CDA6A22BA86D74C48E8"
+    },
+    {
+      "path": "research/.knowledge/library/active.json",
+      "sha256": "C92EAED7A725ED9B16DD9EA5CC3652A7150D4F9ED696FE9E7DBDCB104BDBE4F8"
+    },
+    {
+      "path": "research/TODO.md",
+      "sha256": "D9BB4C3ED7DF510D025A6EC88F97514D9AABEFBDDF200AD84BF2B6B9372012AE"
+    },
+    {
+      "path": "research/data/ST.json",
+      "sha256": "CF99DD3373925BC4632763E594FAC9CF4A46A053DA182006E2AE1AD644F23EA2"
+    },
+    {
+      "path": "research/data/aliases.json",
+      "sha256": "7370FDED9AFC87099EBE6291514C0D5B7C1D2DC168EE8F78572C6E77E40BE840"
+    },
+    {
+      "path": "research/data/clusters.json",
+      "sha256": "865380064E5FED15D2853C131767D6443928BE6654B604C86A7B047E63597D5E"
+    },
+    {
+      "path": "research/data/records.json",
+      "sha256": "299F0D99D9E40924AA568A8E86E1CC00D9206C06CE3DD39DEF3FEEE356D38C27"
+    },
+    {
+      "path": "research/data/research/dissertation-concept.json",
+      "sha256": "13C6A7E224F342F6341283F1F67943ABF170629CB7C0A78DBB33A58A67CCAD2F"
+    },
+    {
+      "path": "research/data/research/novelty-landscape.json",
+      "sha256": "7D09944992B81D2B219087DDF6681DD2186E7E5BA7ECB3C9261D7E4A2C5752EA"
+    },
+    {
+      "path": "research/knowledge/corpus-manifest.json",
+      "sha256": "D420572B59E707C1E3FF47FFC5D24C8F247FA77F9F6A83F54C8118C25BE69D69"
+    },
+    {
+      "path": "research/knowledge/evaluation-results.json",
+      "sha256": "42A9B03D929B5360C36850DC152C1BA47969B649DFCC6E05789DF88A7F688E63"
+    },
+    {
+      "path": "research/knowledge/library/catalog.json",
+      "sha256": "53E4786C036F4C6E01811BA9337CA9B778A39BD24DD30C8A003082A4FFD54D87"
+    },
+    {
+      "path": "research/knowledge/library/evaluation-results.json",
+      "sha256": "6E6FDBA7F123E9476D6850C2775041F9C1AB54A8828994B4DD0BBE761EA0F618"
+    },
+    {
+      "path": "research/knowledge/library/snapshot.json",
+      "sha256": "EAB1BDB5BF365B18E0840A7BE22A1360D558344298CB4696AEB8E92E22F81FA8"
+    },
+    {
+      "path": "research/knowledge/snapshot.json",
+      "sha256": "5399F6F215DFB52A9E3469C790069EE45C46EB5AB328CB5E73C8B310A986076A"
+    },
+    {
+      "path": "research/pyproject.toml",
+      "sha256": "6FA958312215003EB8DDF16CA97A5C690ACA5BD7C7FA0B57509081D2D79043BF"
+    },
+    {
+      "path": "simulations/data/assessment.json",
+      "sha256": "4F82DD0B1C484331651E47947137053F24458E2A1A65E1C724C00BEEED43F9DD"
+    },
+    {
+      "path": "simulations/data/registry.json",
+      "sha256": "AA9D76BEBE001889DD4FDC469916ABE5CE3131FDF084B5691FF9A7D1047FB6B1"
+    }
+  ]
+}

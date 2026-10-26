@@ -1,0 +1,36 @@
+% Shared Beamer theme for the defence and progress decks; entrypoints live in document/.
+\usepackage{fontspec}
+\usepackage[main=russian,english]{babel}
+\usepackage{graphicx,array,tabularx,amsmath,tikz}
+\usepackage{unicode-math}
+\setmathfont{Cambria Math}
+\usetikzlibrary{arrows.meta,positioning,calc,fit}
+\geometry{paperwidth=254mm,paperheight=190.5mm}
+\setmainfont{Arial}
+\setsansfont{Arial}
+\setmonofont{Courier New}
+\usefonttheme{professionalfonts}
+\setbeamercolor{normal text}{fg=black,bg=white}
+\setbeamercolor{structure}{fg=black}
+\setbeamercolor{frametitle}{fg=black,bg=white}
+\setbeamercolor{block title}{fg=black,bg=white}
+\setbeamercolor{block body}{fg=black,bg=white}
+\setbeamerfont{frametitle}{size=\fontsize{18}{21.6}\selectfont,series=\mdseries}
+\setbeamerfont{normal text}{size=\fontsize{14}{16.8}\selectfont}
+\setbeamerfont{block title}{size=\fontsize{16}{21}\selectfont,series=\bfseries}
+\setbeamerfont{block body}{size=\fontsize{14}{16.8}\selectfont}
+\setbeamersize{text margin left=12mm,text margin right=12mm}
+\input{config/object-layout.tex}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize item}{\textbullet}
+\setbeamertemplate{itemize subitem}{\textendash}
+\setbeamertemplate{frametitle}{\vspace{4mm}\centering\hyphenpenalty=10000\exhyphenpenalty=10000\insertframetitle\par\vspace{3mm}}
+\setbeamertemplate{footline}{\hfill\fontsize{12}{14.4}\selectfont\insertframenumber/\inserttotalframenumber\hspace{9mm}\vspace{4mm}}
+\setbeamertemplate{caption}[numbered]
+\setbeamerfont{caption}{size=\fontsize{14}{16.8}\selectfont}
+\newcommand{\SourceNote}[1]{\par\vspace{\SourceNoteGap}{\fontsize{10}{13}\selectfont #1\par}}
+\newcommand{\Evidence}[1]{}
+\newcommand{\ResultPending}[1]{#1}
+\tikzset{nohyphen/.style={execute at begin node={\hyphenpenalty=10000\exhyphenpenalty=10000}},process/.style={nohyphen,draw=black,fill=white,align=center,minimum height=18mm,text width=50mm,font=\fontsize{14}{16.8}\selectfont},flow/.style={-{Latex[length=3mm]},thick}}
+\input{config/metadata.tex}
+\hypersetup{pdftitle={\WorkingTitle},pdfauthor={\AuthorName},colorlinks=false}

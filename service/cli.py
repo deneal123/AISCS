@@ -4,10 +4,12 @@ from __future__ import annotations
 
 import argparse
 import json
+from datetime import date
 from pathlib import Path
 from typing import Any
 
 from .core import DocumentSidecar, SidecarError
+from .progress import progress_snapshot
 
 
 def emit(payload: Any) -> None:
@@ -40,6 +42,11 @@ def parser() -> argparse.ArgumentParser:
     package = sub.add_parser("package")
     package.add_argument("document_id")
     package.add_argument("--apply", action="store_true")
+    progress = sub.add_parser("progress-snapshot")
+    progress.add_argument("--workspace", type=Path)
+    progress.add_argument("--since", type=int, default=7)
+    progress.add_argument("--as-of", type=date.fromisoformat)
+    progress.add_argument("--apply", action="store_true")
     return result
 
 
@@ -67,6 +74,10 @@ def main() -> None:
             payload = sidecar.release(args.document_id, args.version, apply=args.apply)
         elif args.command == "package":
             payload = sidecar.package(args.document_id, apply=args.apply)
+        elif args.command == "progress-snapshot":
+            payload = progress_snapshot(
+                sidecar, args.workspace, since_days=args.since, as_of=args.as_of, apply=args.apply
+            )
         else:
             raise SidecarError("unsupported command")
     except SidecarError as exc:

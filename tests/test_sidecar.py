@@ -15,7 +15,8 @@ from service.mcp_server import create_server
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def test_document_folder_builds_after_independent_copy(tmp_path: Path) -> None:
+@pytest.mark.parametrize("entrypoint", ["presentation", "progress"])
+def test_document_folder_builds_after_independent_copy(tmp_path: Path, entrypoint: str) -> None:
     if shutil.which("xelatex") is None:
         pytest.skip("xelatex is unavailable")
     portable = tmp_path / "presentation-document"
@@ -34,7 +35,7 @@ def test_document_folder_builds_after_independent_copy(tmp_path: Path) -> None:
             "-interaction=nonstopmode",
             "-halt-on-error",
             f"-output-directory={output}",
-            "presentation.tex",
+            f"{entrypoint}.tex",
         ],
         cwd=portable,
         capture_output=True,
@@ -44,7 +45,7 @@ def test_document_folder_builds_after_independent_copy(tmp_path: Path) -> None:
         check=False,
     )
     assert result.returncode == 0, result.stdout[-2000:]
-    assert (output / "presentation.pdf").is_file()
+    assert (output / f"{entrypoint}.pdf").is_file()
 
 
 def test_integrity_and_release_gate() -> None:

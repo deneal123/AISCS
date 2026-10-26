@@ -1,0 +1,19 @@
+\begin{frame}{Методическая библиотека: \ProgLibraryBooks\ книг о подготовке и защите диссертации}
+\centering
+\begin{tikzpicture}[node distance=8mm,
+  stage/.style={process,text width=40mm,minimum height=22mm}]
+\node[stage] (ask) {Вопрос о тексте или докладе};
+\node[stage,right=of ask] (search) {Поиск по книгам};
+\node[stage,right=of search] (passage) {Отрывок с книгой и страницей};
+\node[stage,right=of passage] (edit) {Правка слайда или текста};
+\draw[flow] (ask)--(search);\draw[flow] (search)--(passage);\draw[flow] (passage)--(edit);
+\end{tikzpicture}
+\SlideFigureCaption{Использование методической библиотеки}
+\SlideGap
+\raggedright
+\begin{itemize}
+\item Авторы: \ProgLibraryAuthors.
+\item Полных текстов --- \ProgLibraryFullText, фрагментов --- \ProgLibraryChunks; контрольные запросы найдены: \ProgLibraryHits\ из \ProgLibraryCases.
+\item Советы книг не используются как научные доказательства. Первое применение --- презентация к защите; далее --- введение, автореферат и доклад.
+\end{itemize}
+\end{frame}
