@@ -5,7 +5,7 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from ..core import ResearchRepository
+from ..registry.repository import ResearchRepository
 from .engine import LibraryEngine
 
 

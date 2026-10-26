@@ -19,9 +19,9 @@ Repository = "https://github.com/deneal123/AISCS/tree/research"
 Documentation = "https://github.com/deneal123/AISCS/blob/research/README.md"
 
 [project.scripts]
-researchctl = "service.cli:main"
-research-mcp = "service.mcp_server:main"
-research-sidecar = "service.app:main"
+researchctl = "service.interfaces.cli:main"
+research-mcp = "service.interfaces.mcp:main"
+research-sidecar = "service.interfaces.http:main"
 
 [project.optional-dependencies]
 dev = [
@@ -48,28 +48,9 @@ select = ["E", "F", "I", "B", "UP"]
 "tests/*" = ["E501"]
 "migrations/rebuild_2026_09_21.py" = ["E501"]
 "migrations/upgrade_schema_2_0.py" = ["E501"]
-"scripts/generate_novelty_baseline.py" = ["E501"]
-"scripts/discover_relevance5.py" = ["E501"]
-"scripts/populate_batch_001.py" = ["E501"]
-"scripts/populate_remaining_batches.py" = ["E501"]
-"scripts/populate_st_batch_001.py" = ["E501"]
-"scripts/populate_st_batch_002.py" = ["E501"]
-"scripts/populate_st_batch_003.py" = ["E501"]
-"scripts/populate_st_batch_004.py" = ["E501"]
-"scripts/populate_st_batch_005.py" = ["E501"]
-"scripts/populate_st_batch_006.py" = ["E501"]
-"scripts/populate_st_batch_007.py" = ["E501"]
-"scripts/populate_r4_batch_001.py" = ["E501"]
-"scripts/populate_r4_batch_002.py" = ["E501"]
-"scripts/populate_r4_correction_001.py" = ["E501"]
-"scripts/populate_r4_batch_003.py" = ["E501"]
-"scripts/populate_r4_batch_004.py" = ["E501"]
-"scripts/populate_r4_batch_005.py" = ["E501"]
-"scripts/populate_r4_batch_006.py" = ["E501"]
-"scripts/populate_r4_batch_007.py" = ["E501"]
-"scripts/populate_r3_batch_001.py" = ["E501"]
-"scripts/populate_r3_batch_002.py" = ["E501"]
+"scripts/history/*" = ["E501"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["."]
 addopts = "-ra"

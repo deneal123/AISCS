@@ -2,7 +2,4 @@
 set -eu
 
 cd "$(dirname "$0")/.."
-uv run --extra dev --frozen researchctl validate
-uv run --extra dev --frozen ruff check service tests migrations scripts
-uv run --extra dev --frozen pytest -q
-uv run --frozen python scripts/check_release.py
+exec uv run --frozen --extra dev python scripts/check.py "$@"

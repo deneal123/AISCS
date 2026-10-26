@@ -12,7 +12,7 @@ from mcp import Client, StdioServerParameters
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from service.app import create_app  # noqa: E402 -- allow direct script execution from the checkout
+from service.interfaces.http import create_app  # noqa: E402 -- runnable from the checkout
 
 
 async def main() -> None:
@@ -21,7 +21,7 @@ async def main() -> None:
         assert ready.status_code == 200 and ready.json()["ok"]
         assert http.get("/v1/sources", params={"q": "ECAP", "limit": 3}).status_code == 200
     parameters = StdioServerParameters(
-        command=sys.executable, args=["-m", "service.mcp_server"], cwd=str(ROOT)
+        command=sys.executable, args=["-m", "service.interfaces.mcp"], cwd=str(ROOT)
     )
     async with Client(parameters) as client:
         tools = await client.list_tools()

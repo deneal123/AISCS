@@ -25,16 +25,34 @@ researchctl publish -- pre-change snapshot + atomic JSON writes + integrity gate
 
 ## Слои
 
-- `service/contracts.py` — стабильные имена сервиса, версия, endpoints и коды ошибок.
-- `service/core.py` — загрузка JSON, кеш по mtime/size, поиск, алиасы, сводки и экспорт.
-- `service/integrity.py` — независимый от FastAPI блокирующий контроль целостности.
-- `service/completeness.py` — терминальное разрешение nullable-полей schema 2.0.
-- `service/novelty.py` — проверка и поиск по неранжированному novelty landscape.
-- `service/pipeline.py` — staging, снимки и публикация новых записей.
-- `service/app.py` — тонкий HTTP-транспорт без операций записи.
-- `service/mcp_server.py` — локальный stdio MCP-транспорт; мутации делегируются существующим
-  pipeline/curation-функциям.
-- `service/cli.py` — единая точка для человека, CI и контейнера.
+Пакет `service/` разделён по ответственности. Зависимости направлены в одну сторону:
+`common` ← `registry` ← `curation` ← `interfaces` и `indexing` ← `knowledge`, `library` ←
+`interfaces`.
+
+- `common/` — утилиты без предметной логики: исключения (`errors`), строгое чтение и
+  атомарная запись JSON (`jsonio`), атомарная запись файлов (`files`), SHA-256 (`hashing`),
+  время (`clock`), декодирование текста (`text`).
+- `registry/` — канонический реестр: раскладка файлов (`layout`), кешируемый read-only
+  `ResearchRepository` (`repository`), идентификаторы (`ids`), полнота schema 2.0
+  (`completeness`), каталог новизны (`novelty`) и блокирующий контроль целостности
+  (`validation/`: карточка, тематические аудиты, научный контракт, общий шлюз).
+- `curation/` — запись в реестр: кандидаты для stage/publish (`candidates`), снимки отката
+  (`snapshots`), партии relevance-обзора (`sources`), кластеры (`clusters`), ресурсы ST
+  (`resources`) и чтение применённых партий (`batches`).
+- `indexing/` — общая инфраструктура поисковых индексов: настройки, эмбеддинги с кэшем,
+  Neo4j/Qdrant, поколения (`GenerationStore`, `index_vectors`), проверка ID бэкендов,
+  переносимые снимки, чанкинг и ограниченная HTTP-загрузка.
+- `knowledge/` — индекс доказательств по статьям: проекция реестра, корпус (`corpus/`: разбор,
+  идентичность, кандидаты, чанки, подготовка), извлечения, движок поиска, проверки, снимок.
+- `library/` — индекс методических книг: каталог, нормализаторы форматов (`formats/`),
+  подготовка, проекция и движок.
+- `interfaces/` — транспорты и контракт: `researchctl` (`cli`), read-only HTTP (`http`), stdio
+  MCP (`mcp`), стабильные имена, версия, endpoints и коды ошибок (`contracts`).
+
+Вне пакета: `scripts/` — проверки, smoke, запуск и регистрация MCP; `scripts/history/` —
+разовые скрипты наполнения сентября 2026 года; `migrations/` — датированные воспроизводимые
+преобразования. `scripts/check_imports.py` следит, чтобы их импорты `service.*` разрешались,
+а `scripts/check_reproducibility.py` — чтобы снимки пересобирали записанные поколения.
 
 ## Источники истины
 
@@ -66,12 +84,14 @@ Codex CLI / IDE
        |
        | stdio MCP
        v
-service/mcp_server.py
+service/interfaces/mcp.py
        |
        +--> ResearchRepository --------> records / aliases / clusters / ST / evidence
        |
-       +--> pipeline + curation --------> snapshot -> atomic write -> integrity gate
-                                              (только apply=true)
+       +--> curation ------------------> snapshot -> atomic write -> integrity gate
+       |                                     (только apply=true)
+       |
+       +--> knowledge / library -------> поколения индексов (Neo4j + Qdrant), только чтение
 ```
 
 Статические MCP resources ограничены руководством, TODO, аудитом, матрицей доказательств,

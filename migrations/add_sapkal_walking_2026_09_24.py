@@ -9,8 +9,9 @@ import json
 from pathlib import Path
 
 from migrations.add_connectome_prior_art_2026_09_24 import _record
-from service.completeness import migrate_record
-from service.pipeline import atomic_write_json, publish_candidates
+from service.common.jsonio import atomic_write_json
+from service.curation.candidates import publish_candidates
+from service.registry.completeness import migrate_record
 
 DATA = Path(__file__).resolve().parents[1] / "data"
 INBOX = DATA / "staging" / "inbox" / "sapkal-walking-2026-09-24.json"

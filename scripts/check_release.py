@@ -10,7 +10,7 @@ from collections import Counter
 from pathlib import Path
 from urllib.parse import unquote
 
-from service.data_layout import DATA_PATHS, current_data_files, data_path
+from service.registry.layout import DATA_PATHS, current_data_files, data_path
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"

@@ -8,8 +8,9 @@ import argparse
 import json
 from pathlib import Path
 
-from service.completeness import migrate_record
-from service.pipeline import atomic_write_json, new_candidate, publish_candidates
+from service.common.jsonio import atomic_write_json
+from service.curation.candidates import new_candidate, publish_candidates
+from service.registry.completeness import migrate_record
 
 DATA = Path(__file__).resolve().parents[1] / "data"
 INBOX = DATA / "staging" / "inbox" / "ns06-synthetic-analogues-2026-09-24.json"

@@ -8,7 +8,7 @@ import re
 from pathlib import Path
 from typing import Any
 
-from ..core import DataError
+from ..common.errors import DataError
 from .formats import FORMATS
 
 BOOK_ID = re.compile(r"^B\d{3}$")

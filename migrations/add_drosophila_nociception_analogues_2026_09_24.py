@@ -9,9 +9,10 @@ import json
 from copy import deepcopy
 from pathlib import Path
 
-from service.completeness import migrate_record
-from service.data_layout import data_path
-from service.pipeline import atomic_write_json, publish_candidates
+from service.common.jsonio import atomic_write_json
+from service.curation.candidates import publish_candidates
+from service.registry.completeness import migrate_record
+from service.registry.layout import data_path
 
 DATA = Path(__file__).resolve().parents[1] / "data"
 INBOX = DATA / "staging" / "inbox" / "drosophila-nociception-analogues-2026-09-24.json"

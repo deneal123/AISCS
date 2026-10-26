@@ -6,7 +6,7 @@ import hashlib
 import json
 from pathlib import Path
 
-from ..core import DataError
+from ..common.errors import DataError
 
 RELATIONS = frozenset(
     {

@@ -13,11 +13,11 @@ from copy import deepcopy
 from pathlib import Path
 from typing import Any
 
-from service.completeness import completeness_summary, migrate_record
-from service.core import load_json
-from service.data_layout import current_data_files, data_path
-from service.integrity import validate_repository
-from service.pipeline import atomic_write_json, snapshot_repository
+from service.common.jsonio import atomic_write_json, load_json
+from service.curation.snapshots import snapshot_repository
+from service.registry.completeness import completeness_summary, migrate_record
+from service.registry.layout import current_data_files, data_path
+from service.registry.validation import validate_repository
 
 DATA = Path(__file__).resolve().parents[1] / "data"
 DATE = "2026-09-24"

@@ -6,8 +6,8 @@ import argparse
 import json
 from pathlib import Path
 
-from ..core import ResearchRepository
-from ..pipeline import atomic_write_json
+from ..common.jsonio import atomic_write_json
+from ..registry.repository import ResearchRepository
 from .engine import KnowledgeEngine
 
 
@@ -55,7 +55,7 @@ def run(args: argparse.Namespace, repository: ResearchRepository) -> dict:
     if action == "status":
         return engine.status()
     if action in {"export", "restore"}:
-        from .portable import export_knowledge, restore_knowledge
+        from .snapshot import export_knowledge, restore_knowledge
 
         if action == "export":
             return export_knowledge(engine, args.output)

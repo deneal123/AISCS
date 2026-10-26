@@ -15,12 +15,12 @@
    Этот файл игнорируется Git. Пароли не передаются в аргументах команды.
 2. Запустите `docker compose --env-file .knowledge/runtime.env -f docker/compose.knowledge.yaml
    --profile knowledge up -d --build`.
-3. Выполните `python -m service.cli knowledge prepare --candidates .work/knowledge-candidates.json`.
+3. Выполните `uv run --frozen researchctl knowledge prepare --candidates .work/knowledge-candidates.json`.
    Каждый кандидат содержит `source_id`, `path`, `primary_url`; наличие ID в имени
    файла не подтверждает идентичность. `--download` разрешает первичные маршруты.
 4. Загрузите настройки из закрытого env-файла в окружение процесса, затем выполните
-   `python -m service.cli knowledge build`. После проверки кандидата —
-   `python -m service.cli knowledge publish <generation>`.
+   `uv run --frozen researchctl knowledge build`. После проверки кандидата —
+   `uv run --frozen researchctl knowledge publish <generation>`.
 
 `build --offline` проверяет локальную проекцию без провайдеров. Её можно явно
 опубликовать с `--allow-offline`; это **лексический режим**, без проверенного

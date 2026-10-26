@@ -18,9 +18,10 @@ def main() -> None:
     py = sys.executable
     steps = [
         [py, "scripts/check_repository.py"],
-        [py, "-m", "service.cli", "validate"],
-        [py, "-m", "service.cli", "novelty-check"],
+        [py, "-m", "service", "validate"],
+        [py, "-m", "service", "novelty-check"],
         [py, "-m", "ruff", "check", "service", "tests", "migrations", "scripts"],
+        [py, "scripts/check_imports.py"],
         [py, "-m", "pytest", "-q"],
         [py, "scripts/check_release.py"],
     ]

@@ -1,4 +1,4 @@
-.PHONY: sync validate audit novelty-check test lint repository-check quick-check check serve docker-build docker-smoke docker-config docker-context export smoke
+.PHONY: sync validate audit novelty-check test lint repository-check imports-check reproducibility-check quick-check check serve docker-build docker-smoke docker-config docker-context export smoke
 sync:
 	uv sync --frozen --extra dev
 validate:
@@ -13,6 +13,10 @@ lint:
 	uv run --frozen --extra dev ruff check service tests migrations scripts
 repository-check:
 	uv run --frozen python scripts/check_repository.py
+imports-check:
+	uv run --frozen python scripts/check_imports.py
+reproducibility-check:
+	uv run --frozen python scripts/check_reproducibility.py --renormalize
 quick-check:
 	uv run --frozen --extra dev python scripts/check.py --skip-mcp
 check:

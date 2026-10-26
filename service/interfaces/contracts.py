@@ -1,0 +1,37 @@
+"""Stable HTTP and CLI contract for the research sidecar.
+
+Keep this module dependency-free: CI and callers can inspect the contract without
+importing FastAPI or loading the corpus.
+"""
+
+from __future__ import annotations
+
+SERVICE_NAME = "research"
+SERVICE_VERSION = "1.6.0"
+DATA_SCHEMA_VERSION = "2.0.0"
+
+ERROR_CODES = frozenset(
+    {
+        "invalid_request",
+        "data_invalid",
+        "not_found",
+        "query_failed",
+    }
+)
+
+READ_ENDPOINTS = (
+    "GET /v1/knowledge/status",
+    "GET /v1/knowledge/search",
+    "GET /v1/knowledge/evidence/{node_id}",
+    "GET /v1/knowledge/graph/{node_id}",
+    "GET /health",
+    "GET /ready",
+    "GET /v1/meta",
+    "GET /v1/sources",
+    "GET /v1/sources/{source_id}",
+    "GET /v1/clusters",
+    "GET /v1/clusters/{cluster_id}",
+    "GET /v1/evidence-summary",
+    "GET /v1/export/sources.jsonl",
+)
+

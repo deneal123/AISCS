@@ -111,7 +111,7 @@ def check(root: Path = ROOT) -> list[str]:
     else:
         for path in root.glob("*compose*.y*ml"):
             errors.append("Docker configuration outside docker/: " + path.name)
-    module = root / "service" / ("contracts.py" if role == "research" else "__init__.py")
+    module = root / "service" / ("interfaces/contracts.py" if role == "research" else "__init__.py")
     symbol = "SERVICE_VERSION" if role == "research" else "__version__"
     versions = {
         node.targets[0].id: node.value.value

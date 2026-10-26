@@ -41,7 +41,7 @@ def main() -> None:
             "uv.lock",
             "README.md",
             "docker/entrypoint.sh",
-            "service/app.py",
+            "service/interfaces/http.py",
             "data/records.json",
         }
         if not required.issubset(actual):

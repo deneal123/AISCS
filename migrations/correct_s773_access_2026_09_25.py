@@ -5,8 +5,9 @@
 import json
 from pathlib import Path
 
-from service.data_layout import data_path
-from service.pipeline import atomic_write_json, snapshot_repository
+from service.common.jsonio import atomic_write_json
+from service.curation.snapshots import snapshot_repository
+from service.registry.layout import data_path
 
 DATA = Path(__file__).resolve().parents[1] / "data"
 URL = "https://www.nature.com/articles/s41586-024-07389-x"

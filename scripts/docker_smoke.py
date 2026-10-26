@@ -34,7 +34,7 @@ def main() -> None:
                 args.image,
                 "python",
                 "-m",
-                "service.cli",
+                "service",
                 "--data-dir",
                 "/data",
                 "validate",

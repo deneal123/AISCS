@@ -12,7 +12,8 @@
 | [knowledge/library/](knowledge/library/README.md) | Отдельный индекс методических книг о подготовке и защите диссертации |
 | [TODO.md](TODO.md) | Текущие критерии 43 исследовательских задач |
 | [SKILL.md](SKILL.md) | Инструкция поиска, проверки источников и безопасной записи |
-| `service/`, `scripts/`, `tests/` | CLI/MCP/HTTP, проверки и тесты |
+| [service/](docs/reference/architecture.md) | Пакеты `common`, `registry`, `curation`, `indexing`, `knowledge`, `library`, `interfaces` |
+| `scripts/`, `tests/` | Проверки, smoke и запуск; тесты по пакетам; `scripts/history/` — разовые скрипты наполнения |
 | `migrations/` | Датированные воспроизводимые преобразования; не текущий способ пополнения |
 | [docker/](docker/README.md) | Dockerfile, оба Compose-контура и инструкция запуска |
 
@@ -38,7 +39,7 @@ uv run --frozen researchctl stats
 
 ## Проверки
 
-`scripts/check.ps1` и `make check` запускают один набор: структуру и Git-исключения, `validate`, `novelty-check`, Ruff, pytest, release-манифест, HTTP ASGI и MCP smoke. `make quick-check` пропускает дополнительный протокольный smoke. Docker проверяется отдельными `make docker-build`, `make docker-smoke` и `make docker-config`.
+`scripts/check.ps1` и `make check` запускают один набор: структуру и Git-исключения, `validate`, `novelty-check`, Ruff, разрешимость импортов, pytest, release-манифест, HTTP ASGI и MCP smoke. `make quick-check` пропускает дополнительный протокольный smoke. Docker проверяется отдельными `make docker-build`, `make docker-smoke` и `make docker-config`.
 
 Успех проверки целостности не подтверждает первичный источник или научный вывод. Проверки и причины решений по задачам хранятся в [журнале TODO](docs/audits/todo-decision-ledger.md); история не переопределяет актуальный критерий.
 

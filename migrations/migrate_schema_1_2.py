@@ -14,9 +14,8 @@ RESEARCH_ROOT = Path(__file__).resolve().parents[1]
 if str(RESEARCH_ROOT) not in sys.path:
     sys.path.insert(0, str(RESEARCH_ROOT))
 
-from service.core import load_json  # noqa: E402
-from service.data_layout import data_path  # noqa: E402
-from service.pipeline import atomic_write_json  # noqa: E402
+from service.common.jsonio import atomic_write_json, load_json  # noqa: E402
+from service.registry.layout import data_path  # noqa: E402
 
 DATA = RESEARCH_ROOT / "data"
 

@@ -7,57 +7,22 @@ import json
 import os
 import re
 from collections import Counter, defaultdict
-from contextlib import contextmanager
 from copy import deepcopy
 from pathlib import Path
 
-from ..core import DataError, ResearchRepository
-from ..pipeline import atomic_write_json
-from .embedding import Embedder
-from .settings import KnowledgeSettings
-from .stores import GraphStore, VectorStore
-
-SAFE_ID = re.compile(r"^g-[0-9a-f]{24}$")
-
-
-def digest(value: object) -> str:
-    return hashlib.sha256(
-        json.dumps(value, ensure_ascii=False, sort_keys=True).encode()
-    ).hexdigest()
-
-
-def validate_projection(projection: dict) -> dict:
-    errors = []
-    ids = [n["id"] for n in projection["nodes"]]
-    if len(ids) != len(set(ids)):
-        errors.append("duplicate graph node IDs")
-    known = set(ids)
-    edges = projection["edges"]
-    if len({e["id"] for e in edges}) != len(edges):
-        errors.append("duplicate graph edge IDs")
-    for edge in edges:
-        if edge["source"] not in known or edge["target"] not in known:
-            errors.append("dangling edge " + edge["id"])
-        if edge.get("status") not in {"verified", "unreviewed"} or not edge.get("provenance"):
-            errors.append("edge lacks review status/provenance " + edge["id"])
-    return {"ok": not errors, "errors": errors, "nodes": len(ids), "edges": len(edges)}
-
-
-@contextmanager
-def writer_lock(directory: Path):
-    directory.mkdir(parents=True, exist_ok=True)
-    path = directory / "writer.lock"
-    try:
-        handle = path.open("x", encoding="utf-8")
-    except FileExistsError as exc:
-        raise DataError(
-            "knowledge writer already active; inspect writer.lock before recovery"
-        ) from exc
-    try:
-        with handle:
-            yield
-    finally:
-        path.unlink(missing_ok=True)
+from ..common.errors import DataError
+from ..common.jsonio import atomic_write_json
+from ..indexing.embedding import Embedder
+from ..indexing.generations import (
+    GenerationStore,
+    digest,
+    index_vectors,
+    validate_projection,
+    writer_lock,
+)
+from ..indexing.settings import KnowledgeSettings
+from ..indexing.stores import GraphStore, VectorStore
+from ..registry.repository import ResearchRepository
 
 
 class KnowledgeEngine:
@@ -68,6 +33,7 @@ class KnowledgeEngine:
         self.project = Path(
             os.environ.get("RESEARCH_KNOWLEDGE_PROJECT", repository.data_dir.parent)
         )
+        self.generations = GenerationStore(self.state, "knowledge")
         self._read_cache = None
 
     def _projection(self) -> dict:
@@ -76,13 +42,10 @@ class KnowledgeEngine:
         return project(self.repository)
 
     def _active(self) -> dict | None:
-        path = self.state / "active.json"
-        return json.loads(path.read_text(encoding="utf-8")) if path.is_file() else None
+        return self.generations.active()
 
     def _generation(self, generation: str) -> Path:
-        if not SAFE_ID.fullmatch(generation):
-            raise DataError("invalid knowledge generation ID")
-        return self.state / "generations" / generation
+        return self.generations.directory(generation)
 
     def _read(self) -> tuple[dict, dict | None]:
         active = self._active()  # Capture once: every component uses this same generation.
@@ -206,33 +169,22 @@ class KnowledgeEngine:
             graph.import_graph(generation, projection)
             vector.ensure(info["collection"])
             embedder = Embedder(self.settings)
-            checkpoint = directory / "indexed.json"
-            indexed = set(json.loads(checkpoint.read_text()) if checkpoint.exists() else [])
             expected = [n for n in projection["nodes"] if self._embeddable(n)]
-            pending = [node for node in expected if node["id"] not in indexed]
             titles = {
                 n["id"]: n["metadata"].get("title", "")
                 for n in projection["nodes"]
                 if n["type"] == "Source"
             }
-            for offset in range(0, len(pending), 16):
-                batch = pending[offset : offset + 16]
-                inputs = [
-                    "\n".join(
-                        [titles.get(n["source_ids"][0], "") if n["source_ids"] else "", n["text"]]
-                    )
-                    for n in batch
-                ]
-                embeddings = embedder.embed_many(inputs)
-                vector.upsert_many(
-                    info["collection"],
-                    [
-                        (node["id"], embedding)
-                        for node, embedding in zip(batch, embeddings, strict=True)
-                    ],
-                )
-                indexed.update(node["id"] for node in batch)
-                atomic_write_json(checkpoint, sorted(indexed))
+            index_vectors(
+                vector,
+                embedder,
+                info["collection"],
+                expected,
+                lambda n: "\n".join(
+                    [titles.get(n["source_ids"][0], "") if n["source_ids"] else "", n["text"]]
+                ),
+                directory / "indexed.json",
+            )
             info["vectors_expected"] = len(expected)
             info["graph_counts"] = graph.counts(generation)
             info["vectors"] = vector.count(info["collection"])
@@ -363,31 +315,16 @@ class KnowledgeEngine:
                     != info["vectors_expected"]
                 ):
                     raise DataError("knowledge backends changed since candidate validation")
-                from .verification import verify_backend_ids
+                from ..indexing.verification import verify_backend_ids
 
                 errors = verify_backend_ids(self.settings, projection, info, self._embeddable)
                 if errors:
                     raise DataError("knowledge candidate backend integrity: " + "; ".join(errors))
-            previous = self._active()
-            info["previous_generation"] = (
-                previous.get("previous_generation")
-                if previous and previous["generation"] == generation
-                else previous["generation"]
-                if previous
-                else None
-            )
-            atomic_write_json(self.state / "active.json", info)
-            return info
+            return self.generations.activate(info)
 
     def rollback(self) -> dict:
-        active = self._active()
-        if not active or not active.get("previous_generation"):
-            raise DataError("no previous knowledge generation")
-        previous = active["previous_generation"]
-        info = json.loads(
-            (self._generation(previous) / "generation.json").read_text(encoding="utf-8")
-        )
-        return self.publish(previous, allow_offline=info["offline"])
+        previous = self.generations.previous()
+        return self.publish(previous, allow_offline=self.generations.info(previous)["offline"])
 
     def status(self) -> dict:
         projection, active = self._read()

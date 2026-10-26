@@ -23,7 +23,7 @@ from copy import deepcopy
 from pathlib import Path
 from typing import Any
 
-from service.data_layout import data_path
+from service.registry.layout import data_path
 
 ROOT = Path(__file__).resolve().parents[1] / "data"
 SNAPSHOT = ROOT / "archive" / "2026-09-21"

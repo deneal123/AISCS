@@ -5,8 +5,8 @@
 import json
 from pathlib import Path
 
-from service.completeness import migrate_record
-from service.pipeline import atomic_write_json
+from service.common.jsonio import atomic_write_json
+from service.registry.completeness import migrate_record
 
 ROOT = Path(__file__).resolve().parents[1]
 PATH = ROOT / "data/staging/inbox/ns03-lehman-defensive-actions-2025.json"

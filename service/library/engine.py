@@ -14,226 +14,38 @@ import math
 import os
 import re
 import time
-from bisect import bisect_right
 from collections import Counter, defaultdict
 from dataclasses import replace
 from pathlib import Path
 from typing import Any
 
-from ..core import DataError
-from ..knowledge.corpus import (
-    _PARAGRAPH_RE,
-    _estimate_tokens,
-    _pack_units,
-    _split_oversized,
-    _trim,
+from ..common.errors import DataError
+from ..common.hashing import sha256_text
+from ..common.jsonio import atomic_write_json
+from ..indexing.embedding import Embedder
+from ..indexing.generations import (
+    GenerationStore,
+    digest,
+    index_vectors,
+    validate_projection,
+    writer_lock,
 )
-from ..knowledge.embedding import Embedder
-from ..knowledge.engine import SAFE_ID, digest, validate_projection, writer_lock
-from ..knowledge.settings import KnowledgeSettings
-from ..knowledge.stores import GraphStore, VectorStore
-from ..pipeline import atomic_write_json
+from ..indexing.settings import KnowledgeSettings
+from ..indexing.stores import GraphStore, VectorStore
 from .catalog import citation, load_catalog
-from .corpus import read_documents
+from .prepare import read_documents
+from .projection import CHUNKER_VERSION, project_library
 
-CHUNKER_VERSION = "library-chunker-v1"
-CHUNK_TARGET_TOKENS = 700
-CHUNK_OVERLAP_TOKENS = 80
-MIN_SEGMENT_CHARS = 1200
 GRAPH_LABEL = "Library"
 GRAPH_ANALYZER = "russian"
 MAX_PER_BOOK = 3
 _STEM_RE = re.compile(r"[^\W\d_]{3,}")
 
 
-def _sha(text: str) -> str:
-    return hashlib.sha256(text.encode()).hexdigest()
-
-
 def _stems(text: str) -> set[str]:
     """Crude prefix stems for the offline fallback; Neo4j applies real Russian stemming."""
     words = _STEM_RE.findall(text.casefold().replace("ё", "е"))
     return {w[:6] if len(w) > 6 else w for w in words}
-
-
-def _units(text: str, start: int, end: int) -> list[tuple[int, int]]:
-    units: list[tuple[int, int]] = []
-    hard_limit = CHUNK_TARGET_TOKENS * 4 * 2
-    for match in _PARAGRAPH_RE.finditer(text, start, end):
-        s, e = _trim(text, match.start(), match.end())
-        if s >= e:
-            continue
-        pieces = (
-            _split_oversized(text, s, e, CHUNK_TARGET_TOKENS)
-            if _estimate_tokens(text[s:e]) > CHUNK_TARGET_TOKENS
-            else [(s, e)]
-        )
-        for ps, pe in pieces:
-            # A run-on "sentence" from a broken conversion is cut at whitespace.
-            while pe - ps > hard_limit:
-                cut = text.rfind(" ", ps + hard_limit // 4, ps + hard_limit // 2)
-                if cut <= ps:
-                    cut = ps + hard_limit // 2
-                units.append(_trim(text, ps, cut))
-                ps = cut
-            units.append(_trim(text, ps, pe))
-    return [(s, e) for s, e in units if s < e]
-
-
-def _page_label(pages: list[dict[str, Any]], offset: int) -> str | None:
-    if not pages:
-        return None
-    position = bisect_right([p["char"] for p in pages], offset) - 1
-    return pages[position]["page"] if position >= 0 else pages[0]["page"]
-
-
-def chunk_book(document: dict[str, Any]) -> list[dict[str, Any]]:
-    """Section-bounded paragraph packing with exact offsets into the normalized book."""
-    text, sections, pages = document["text"], document["sections"], document["page_starts"]
-    starts = sorted({0, *(s["char_start"] for s in sections)})
-    spans = [(a, b) for a, b in zip(starts, [*starts[1:], len(text)], strict=True) if b > a]
-    segments: list[tuple[int, int]] = []
-    for a, b in spans:
-        if segments and segments[-1][1] - segments[-1][0] < MIN_SEGMENT_CHARS:
-            segments[-1] = (segments[-1][0], b)
-        else:
-            segments.append((a, b))
-    section_starts = [s["char_start"] for s in sections]
-    chunks: list[dict[str, Any]] = []
-    for a, b in segments:
-        units = _units(text, a, b)
-        if not units:
-            continue
-        for start, end in _pack_units(text, units, CHUNK_TARGET_TOKENS, CHUNK_OVERLAP_TOKENS):
-            position = bisect_right(section_starts, start) - 1
-            section = sections[position] if position >= 0 else None
-            chunks.append(
-                {
-                    "char_start": start,
-                    "char_end": end,
-                    "section_index": position if position >= 0 else None,
-                    "section_path": section["path"] if section else [],
-                    "page_start": _page_label(pages, start),
-                    "page_end": _page_label(pages, max(start, end - 1)),
-                    "text": text[start:end],
-                }
-            )
-    for index, chunk in enumerate(chunks):
-        text_hash = _sha(chunk["text"])
-        chunk.update(
-            chunk_id=f"{document['book_id']}::{document['sha256'][:12]}::{index:05d}"
-            f"::{text_hash[:12]}",
-            chunk_index=index,
-            chunk_count=len(chunks),
-            text_sha256=text_hash,
-        )
-    return chunks
-
-
-def _edge(kind: str, source: str, target: str, book_id: str) -> dict[str, Any]:
-    return {
-        "id": "edge:" + digest([kind, source, target])[:24],
-        "source": source,
-        "target": target,
-        "type": kind,
-        "status": "verified",
-        "provenance": {"book_id": book_id, "chunker": CHUNKER_VERSION},
-    }
-
-
-def project_library(catalog: dict[str, Any], documents: list[dict[str, Any]]) -> dict[str, Any]:
-    books = {b["book_id"]: b for b in catalog["books"]}
-    nodes: list[dict[str, Any]] = []
-    edges: list[dict[str, Any]] = []
-    for document in sorted(documents, key=lambda d: d["book_id"]):
-        book_id = document["book_id"]
-        book = books.get(book_id)
-        if book is None or book["sha256"] != document["sha256"]:
-            raise DataError("prepared book is not in the catalog: " + book_id)
-        book_node = "book:" + book_id
-        contents = [s["title"] for s in document["sections"] if s["level"] <= 2]
-        nodes.append(
-            {
-                "id": book_node,
-                "type": "Book",
-                "text": citation(book) + "\n" + "; ".join(contents),
-                "metadata": {
-                    "book_id": book_id,
-                    "citation": citation(book),
-                    "title": book["title"],
-                    "authors": book["authors"],
-                    "year": book.get("year"),
-                    "completeness": book["completeness"],
-                    "format": book["format"],
-                    "sha256": document["sha256"],
-                    "text_sha256": document["text_sha256"],
-                },
-            }
-        )
-        section_ids: list[str] = []
-        parents: list[tuple[int, str]] = []
-        for index, section in enumerate(document["sections"]):
-            node_id = f"section:{book_id}:{index:04d}"
-            section_ids.append(node_id)
-            while parents and parents[-1][0] >= section["level"]:
-                parents.pop()
-            nodes.append(
-                {
-                    "id": node_id,
-                    "type": "Section",
-                    "text": " › ".join(section["path"]),
-                    "metadata": {
-                        "book_id": book_id,
-                        "level": section["level"],
-                        "title": section["title"],
-                        "path": section["path"],
-                        "char_start": section["char_start"],
-                        "char_end": section["char_end"],
-                        "page": _page_label(document["page_starts"], section["char_start"]),
-                    },
-                }
-            )
-            edges.append(
-                _edge("section_of", node_id, parents[-1][1] if parents else book_node, book_id)
-            )
-            parents.append((section["level"], node_id))
-        header = citation(book) + (
-            " (ознакомительный фрагмент)" if book["completeness"] == "fragment" else ""
-        )
-        previous: str | None = None
-        for chunk in chunk_book(document):
-            parent = (
-                section_ids[chunk["section_index"]]
-                if chunk["section_index"] is not None
-                else book_node
-            )
-            nodes.append(
-                {
-                    "id": chunk["chunk_id"],
-                    "type": "Chunk",
-                    "text": chunk["text"],
-                    "metadata": {
-                        "book_id": book_id,
-                        "doc_sha256": document["sha256"],
-                        "text_sha256": chunk["text_sha256"],
-                        "chunk_index": chunk["chunk_index"],
-                        "chunk_count": chunk["chunk_count"],
-                        "char_start": chunk["char_start"],
-                        "char_end": chunk["char_end"],
-                        "page_start": chunk["page_start"],
-                        "page_end": chunk["page_end"],
-                        "section_id": parent,
-                        "section_path": chunk["section_path"],
-                        "completeness": book["completeness"],
-                        "embedding_header": header + "\n" + " › ".join(chunk["section_path"]),
-                    },
-                }
-            )
-            edges.append(_edge("fragment_of", chunk["chunk_id"], parent, book_id))
-            if previous:
-                edges.append(_edge("next", previous, chunk["chunk_id"], book_id))
-            previous = chunk["chunk_id"]
-    return {"nodes": nodes, "edges": edges}
 
 
 class LibraryEngine:
@@ -245,6 +57,7 @@ class LibraryEngine:
             base, state_dir=Path(library_dir) if library_dir else base.state_dir / "library"
         )
         self.state = self.settings.state_dir.resolve()
+        self.generations = GenerationStore(self.state, "library")
         self._read_cache: tuple[Any, ...] | None = None
         self._stem_cache: tuple[Any, ...] | None = None
 
@@ -254,13 +67,10 @@ class LibraryEngine:
         return GraphStore(self.settings, label=GRAPH_LABEL, analyzer=GRAPH_ANALYZER)
 
     def _active(self) -> dict | None:
-        path = self.state / "active.json"
-        return json.loads(path.read_text(encoding="utf-8")) if path.is_file() else None
+        return self.generations.active()
 
     def _generation(self, generation: str) -> Path:
-        if not SAFE_ID.fullmatch(generation):
-            raise DataError("invalid library generation ID")
-        return self.state / "generations" / generation
+        return self.generations.directory(generation)
 
     def _prepared(self) -> tuple[dict, list[dict]]:
         catalog = load_catalog(self.project)
@@ -303,7 +113,7 @@ class LibraryEngine:
     # -- lifecycle -----------------------------------------------------------
 
     def prepare(self, *, download: bool = False, source_dir: Path | None = None) -> dict:
-        from .corpus import prepare_library
+        from .prepare import prepare_library
 
         with writer_lock(self.state):
             return prepare_library(
@@ -360,19 +170,14 @@ class LibraryEngine:
             graph, vector = self._graph(), VectorStore(self.settings)
             graph.import_graph(generation, projection)
             vector.ensure(info["collection"])
-            embedder = Embedder(self.settings)
-            checkpoint = directory / "indexed.json"
-            indexed = set(json.loads(checkpoint.read_text()) if checkpoint.exists() else [])
-            pending = [n for n in expected if n["id"] not in indexed]
-            for offset in range(0, len(pending), 16):
-                batch = pending[offset : offset + 16]
-                vectors = embedder.embed_many([self._embedding_input(n) for n in batch])
-                vector.upsert_many(
-                    info["collection"],
-                    [(n["id"], v) for n, v in zip(batch, vectors, strict=True)],
-                )
-                indexed.update(n["id"] for n in batch)
-                atomic_write_json(checkpoint, sorted(indexed))
+            index_vectors(
+                vector,
+                Embedder(self.settings),
+                info["collection"],
+                expected,
+                self._embedding_input,
+                directory / "indexed.json",
+            )
             info["vectors_expected"] = len(expected)
             info["graph_counts"] = graph.counts(generation)
             info["vectors"] = vector.count(info["collection"])
@@ -404,28 +209,19 @@ class LibraryEngine:
             if not info["ready"] and not (allow_offline and info["offline"]):
                 raise DataError("graph and vector indexes must be ready before publication")
             if not info["offline"]:
-                from ..knowledge.verification import verify_backend_ids
+                from ..indexing.verification import verify_backend_ids
 
                 errors = verify_backend_ids(
                     self.settings, projection, info, self._embeddable, graph=self._graph()
                 )
                 if errors:
                     raise DataError("library candidate backend integrity: " + "; ".join(errors))
-            previous = self._active()
-            info["previous_generation"] = (
-                previous.get("previous_generation")
-                if previous and previous["generation"] == generation
-                else previous["generation"]
-                if previous
-                else None
-            )
-            atomic_write_json(self.state / "active.json", info)
             self._read_cache = None
-            return info
+            return self.generations.activate(info)
 
     def export(self, archive: Path | None = None) -> dict:
         """Portable snapshot of the published library (originals, texts, embedding cache)."""
-        from ..knowledge.portable import CACHE, export_snapshot, write_record
+        from ..indexing.snapshots import CACHE, export_snapshot, write_record
 
         active = self._active()
         if not active or not active.get("ready"):
@@ -457,7 +253,7 @@ class LibraryEngine:
         return record
 
     def restore(self, archive: Path, *, force: bool = False) -> dict:
-        from ..knowledge.portable import check_record, read_manifest, restore_snapshot
+        from ..indexing.snapshots import check_record, read_manifest, restore_snapshot
 
         manifest = read_manifest(archive)
         with writer_lock(self.state):
@@ -470,14 +266,8 @@ class LibraryEngine:
         return result
 
     def rollback(self) -> dict:
-        active = self._active()
-        if not active or not active.get("previous_generation"):
-            raise DataError("no previous library generation")
-        previous = active["previous_generation"]
-        info = json.loads(
-            (self._generation(previous) / "generation.json").read_text(encoding="utf-8")
-        )
-        return self.publish(previous, allow_offline=info["offline"])
+        previous = self.generations.previous()
+        return self.publish(previous, allow_offline=self.generations.info(previous)["offline"])
 
     def check(self, *, backends: bool = True) -> dict:
         projection, active, documents = self._read()
@@ -489,7 +279,7 @@ class LibraryEngine:
                 "sha256"
             ]:
                 errors.append("raw book digest mismatch: " + document["book_id"])
-            if _sha(document["text"]) != document["text_sha256"]:
+            if sha256_text(document["text"]) != document["text_sha256"]:
                 errors.append("normalized book digest mismatch: " + document["book_id"])
         chunks = 0
         for node in projection["nodes"]:
@@ -503,7 +293,7 @@ class LibraryEngine:
         errors.extend(validate_projection(projection)["errors"])
         backend_checked = False
         if backends and active and active["ready"]:
-            from ..knowledge.verification import verify_backend_ids
+            from ..indexing.verification import verify_backend_ids
 
             backend_errors = verify_backend_ids(
                 self.settings, projection, active, self._embeddable, graph=self._graph()

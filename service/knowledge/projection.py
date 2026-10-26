@@ -7,8 +7,9 @@ import json
 import re
 from collections import Counter
 
-from ..core import ResearchRepository, load_json
-from ..data_layout import DATA_PATHS, data_path
+from ..common.jsonio import load_json
+from ..registry.layout import DATA_PATHS, data_path
+from ..registry.repository import ResearchRepository
 
 
 def _hash(value: object) -> str:

@@ -13,9 +13,9 @@ from copy import deepcopy
 from pathlib import Path
 from typing import Any
 
-from service.completeness import RESOLVED_PATHS, completeness_summary, migrate_record
-from service.data_layout import data_path
-from service.pipeline import atomic_write_json
+from service.common.jsonio import atomic_write_json
+from service.registry.completeness import RESOLVED_PATHS, completeness_summary, migrate_record
+from service.registry.layout import data_path
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"

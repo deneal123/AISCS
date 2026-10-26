@@ -15,9 +15,9 @@ from pathlib import Path
 
 from pypdf import PdfReader
 
-from service.core import ResearchRepository
+from service.common.jsonio import atomic_write_json
 from service.knowledge.corpus import parse_document, prepare_corpus
-from service.pipeline import atomic_write_json
+from service.registry.repository import ResearchRepository
 
 
 def normalize(value: str) -> str:
