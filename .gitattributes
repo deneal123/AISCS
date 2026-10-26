@@ -20,6 +20,13 @@ Dockerfile      text eol=lf
 *.woff  binary
 *.woff2 binary
 *.xlsx binary
+*.doc binary
+*.docx binary
+*.pptx binary
+*.mp4 binary
+*.webm binary
+# Generated vector figures retain their original exporter bytes and hashes.
+simulations/artifacts/**/*.svg binary
 *.pem  binary
 
 # Preserve the exact supplied metadata bytes and their audited checksum.

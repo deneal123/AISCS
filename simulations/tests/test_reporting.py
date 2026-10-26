@@ -7,6 +7,7 @@ from pathlib import Path
 import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
+import check
 import checks
 import publish_artifacts
 from paths import REGISTRY, TODO
@@ -47,6 +48,29 @@ def test_repeated_failed_trial_does_not_prove_reproducibility():
     assert not checks.contains_repeat_proof(
         {"repeat_seed_equal": True, "status": "failed"}
     )
+
+
+def test_followup_cannot_close_unperformed_function(tmp_path, monkeypatch):
+    receipt = tmp_path / "proof.json"
+    receipt.write_text("{}")
+    monkeypatch.setattr(check, "ROOT", tmp_path)
+    row = {
+        "id": "SIM-TEST",
+        "followup_review": {
+            "date": "2026-10-26",
+            "checks": [
+                {
+                    "id": "functional",
+                    "decision": "resolved",
+                    "finding": "A note is not a successful run",
+                    "evidence": ["proof.json"],
+                }
+            ],
+        },
+    }
+    assert any("falsely closes" in value for value in check.followup_errors(row))
+    row["followup_review"]["checks"][0]["decision"] = "confirmed_blocker"
+    assert check.followup_errors(row) == []
 
 
 @pytest.mark.parametrize(

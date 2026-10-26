@@ -36,7 +36,7 @@ def counts(ns):
     }
 
 
-def execute(folder, supply_os=True, normalize_labels=True):
+def execute(folder, supply_os=True, normalize_labels=True, compact_labels=False):
     namespace = {"__name__": "__evaluation_notebook__"}
     previous = Path.cwd()
     os.chdir(folder)
@@ -62,6 +62,18 @@ def execute(folder, supply_os=True, normalize_labels=True):
             )
             if index == 0 and supply_os:
                 namespace["os"] = os
+            if index == 0 and compact_labels:
+                original_loader = namespace["load_table"]
+
+                def compact_loader(name, loader=original_loader):
+                    frame = loader(name)
+                    for column in ("superclass", "type"):
+                        if column in frame:
+                            frame[column] = frame[column].astype("category")
+                    return frame
+
+                # Same strings, missing values, indices and weights; only storage changes.
+                namespace["load_table"] = compact_loader
         assert namespace["VERSION"] == "v0.9"
         return counts(namespace)
     finally:
@@ -105,6 +117,8 @@ def software():
     first = execute(folder)
     second = execute(folder)
     assert first == second
+    compact = execute(folder, compact_labels=True)
+    assert compact == first
     assert first["valid_edges"] == 4 and first["thresholded_edges"] == 2
     assert first["valid_nodes"] == 4 and first["thresholded_nodes"] == 3
     assert first["type_edges"] == 1 and first["connected_types"] == 2
@@ -115,6 +129,7 @@ def software():
         "correction": "Supply import os and apply original string predicates to string labels only",
         "counts": first,
         "repeat_equal": True,
+        "categorical_storage_matches_original_fixture": True,
     }
 
 
@@ -195,8 +210,8 @@ def main():
         result = {
             "scope": "author notebook on its real pinned v0.9 inputs",
             "inputs": inputs,
-            "counts": execute(DATA),
-            "correction": "Missing os import supplied; exclude non-string missing labels; VERSION and string predicates unchanged",
+            "counts": execute(DATA, compact_labels=True),
+            "correction": "Missing os import supplied; exclude non-string missing labels; categorical annotation storage; VERSION, weights and string predicates unchanged",
             "limitations": [
                 "Graph counts, not neural dynamics",
                 "No human ECAP or body model",

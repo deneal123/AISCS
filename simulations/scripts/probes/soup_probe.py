@@ -34,7 +34,9 @@ def run(seed, disk_graph):
 
 target = Path("/work/exports")
 target.mkdir(exist_ok=True)
-artifact = write_artifact(example_graph(), target / "example.scx")
+artifact = target / "example.scx"
+if not artifact.exists():
+    write_artifact(example_graph(), artifact)
 assert load_artifact(artifact).graph == example_graph()
 disk_graph = open_artifact(artifact)
 results = {str(seed): run(seed, disk_graph) for seed in [1, 2, 3]}

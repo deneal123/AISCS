@@ -5,7 +5,7 @@ import re
 import subprocess
 from urllib.parse import unquote
 
-from checks import checklist
+from checks import LABELS, checklist
 from paths import ARTIFACTS, REGISTRY, ROOT, SIMULATION
 from publish_artifacts import publish
 from report_views import render
@@ -53,6 +53,44 @@ def markdown_links(path):
     return errors
 
 
+def followup_errors(row):
+    review = row.get("followup_review")
+    if not review:
+        return []
+    errors = []
+    states = {item["id"]: item["status"] for item in checklist(row)}
+    items = review.get("checks", [])
+    if (
+        not review.get("date")
+        or not items
+        or len({item["id"] for item in items}) != len(items)
+    ):
+        errors.append("Incomplete or duplicate followup: " + row["id"])
+    for item in items:
+        if item["id"] not in LABELS or item.get("decision") not in {
+            "resolved",
+            "confirmed_blocker",
+        }:
+            errors.append("Invalid followup decision: " + row["id"])
+        if not item.get("finding") or not item.get("evidence"):
+            errors.append("Missing followup finding/evidence: " + row["id"])
+        for relative in item.get("evidence", []):
+            if not (ROOT / relative).is_file():
+                errors.append("Missing followup receipt: " + relative)
+        if item.get("decision") == "resolved" and states.get(item["id"]) != "passed":
+            errors.append(
+                "Followup falsely closes check: " + row["id"] + "/" + item["id"]
+            )
+        if (
+            item.get("decision") == "confirmed_blocker"
+            and states.get(item["id"]) == "passed"
+        ):
+            errors.append(
+                "Followup contradicts passing check: " + row["id"] + "/" + item["id"]
+            )
+    return errors
+
+
 def validate(registry, submodules=True):
     errors = []
     for path in SIMULATION.iterdir():
@@ -69,11 +107,17 @@ def validate(registry, submodules=True):
     rows = registry["candidates"]
     for directory, allowed in {
         "data": {"registry.json", "profiles.json", "assessment.json"},
-        "docs": {"WORKFLOW.md", "generator-requirements.md"},
+        "docs": {
+            "WORKFLOW.md",
+            "generator-requirements.md",
+            "nociception-and-recording.md",
+        },
     }.items():
         actual = {p.name for p in (SIMULATION / directory).iterdir()}
         if actual != allowed:
-            errors.append(f"Unexpected file set in {directory}: {sorted(actual ^ allowed)}")
+            errors.append(
+                f"Unexpected file set in {directory}: {sorted(actual ^ allowed)}"
+            )
     expected = {f"SIM-{i:03d}" for i in range(1, 34)} - {"SIM-028"}
     if {c["id"] for c in rows} != expected or len(rows) != 32:
         errors.append("Expected exactly the 32 registered SIM IDs")
@@ -87,6 +131,7 @@ def validate(registry, submodules=True):
         errors.append("Unknown profile IDs")
     for row in rows:
         sid = row["id"]
+        errors.extend(followup_errors(row))
         if not re.fullmatch(r"[a-f0-9]{40}", row["commit"]):
             errors.append("Invalid pin: " + sid)
         for item in checklist(row):
@@ -116,7 +161,10 @@ def validate(registry, submodules=True):
                 if key not in review:
                     errors.append(f"Incomplete review: {sid}/{key}")
         for visual in row.get("visual_artifacts", []):
-            if not all(visual.get(key) for key in ("file", "source", "sha256", "caption", "scope")):
+            if not all(
+                visual.get(key)
+                for key in ("file", "source", "sha256", "caption", "scope")
+            ):
                 errors.append("Incomplete visual provenance: " + sid)
         if submodules:
             if git("-C", str(ROOT / row["path"]), "rev-parse", "HEAD") != row["commit"]:
@@ -172,6 +220,8 @@ def validate(registry, submodules=True):
                 ".json",
                 ".mjs",
                 ".cjs",
+                ".jl",
+                ".R",
             }:
                 continue
             raw = path.read_bytes()

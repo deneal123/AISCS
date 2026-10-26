@@ -1,5 +1,20 @@
 {
   "id": "SIM-033",
   "commit": "a4df3b0d5345d2a34dac813f897d8427f6a6eb45",
-  "artifacts": []
+  "artifacts": [
+    {
+      "file": "larval-preparation-checks.png",
+      "source": "research/.work/simulator-evaluation/SIM-033/20261026T204919Z-e980a6/exports/larval-preparation-checks.png",
+      "sha256": "61c649d280cac897beb1d1b0d13365f2c1717c5327939cf7a8a4da67675e7261",
+      "caption": "Фактически восстановленная AD-связность, сумма входных контактов, нормированные веса и проверка сумм столбцов; порядок узлов сохранён в отдельном CSV.",
+      "scope": "Наши графики реально подготовленных авторских матриц личиночного коннектома; это не результат симуляции активности и не биофизическая калибровка. Строки — presynaptic, столбцы — postsynaptic."
+    },
+    {
+      "file": "larval-preparation-checks.svg",
+      "source": "research/.work/simulator-evaluation/SIM-033/20261026T204919Z-e980a6/exports/larval-preparation-checks.svg",
+      "sha256": "35c096c0b77e857acb0cc9340941565a3a8f5a6f78b1c5d757383ad7b21b101a",
+      "caption": "Фактически восстановленная AD-связность, сумма входных контактов, нормированные веса и проверка сумм столбцов; порядок узлов сохранён в отдельном CSV.",
+      "scope": "Наши графики реально подготовленных авторских матриц личиночного коннектома; это не результат симуляции активности и не биофизическая калибровка. Строки — presynaptic, столбцы — postsynaptic."
+    }
+  ]
 }

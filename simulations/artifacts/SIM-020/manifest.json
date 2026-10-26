@@ -1,5 +1,41 @@
 {
   "id": "SIM-020",
   "commit": "38c8ec61034cd59bc5ba0de20688d4a3c0000d60",
-  "artifacts": []
+  "artifacts": [
+    {
+      "file": "body-start.png",
+      "source": "research/.work/simulator-evaluation/SIM-020/20261026T104750Z-07b1a3/exports/body-start.png",
+      "sha256": "f40c3733ae0d9903368c66cb51b7427ac1c046dc7187cdf112ddca9c2b1f54f0",
+      "caption": "Начальный кадр штатного MuJoCo-рендера: тело NeuroMechFly на плоской поверхности.",
+      "scope": "Механика тела и авторский контроллер; не коннектом, не ноцицепция и не ECAP."
+    },
+    {
+      "file": "body-finish.png",
+      "source": "research/.work/simulator-evaluation/SIM-020/20261026T104750Z-07b1a3/exports/body-finish.png",
+      "sha256": "f8c4036bdff260beb73b21bd9db1493bac8d8398e6b33f53146c324d6aead2fa",
+      "caption": "Последний кадр трёхсекундного сценария seed 1; тот же штатный tracking camera.",
+      "scope": "Механика тела и авторский контроллер; не коннектом, не ноцицепция и не ECAP."
+    },
+    {
+      "file": "body-recordings.png",
+      "source": "research/.work/simulator-evaluation/SIM-020/20261026T104750Z-07b1a3/exports/body-recordings.png",
+      "sha256": "d9af65c44282b954d1d23a8815c6b5d731d0d6afafdfb7f372825db2f7151c44",
+      "caption": "Траектории и высота тела для трёх seeds; команды семи приводов первой ноги.",
+      "scope": "Механика тела и авторский контроллер; не коннектом, не ноцицепция и не ECAP."
+    },
+    {
+      "file": "body-recordings.svg",
+      "source": "research/.work/simulator-evaluation/SIM-020/20261026T104750Z-07b1a3/exports/body-recordings.svg",
+      "sha256": "e6bb08416614818ae9da881c7f7d4bf1edc612b6386a58b24278977a25fe5601",
+      "caption": "Векторный график из сохранённых траекторий и управляющих команд.",
+      "scope": "Механика тела и авторский контроллер; не коннектом, не ноцицепция и не ECAP."
+    },
+    {
+      "file": "locomotion-seed-1.mp4",
+      "source": "research/.work/simulator-evaluation/SIM-020/20261026T104750Z-07b1a3/exports/locomotion-seed-1.mp4",
+      "sha256": "ea6bdb7e4da534c9d575c1f0fd41a7051d45c74b1187cde80d61b3afff2380be",
+      "caption": "Видеозапись трёх секунд движения с авторским CPG-контроллером, seed 1.",
+      "scope": "Механика тела и авторский контроллер; не коннектом, не ноцицепция и не ECAP."
+    }
+  ]
 }

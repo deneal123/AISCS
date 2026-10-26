@@ -15,15 +15,23 @@
     "runtime_prefix": "mkdir -p /work/apt-cache/partial /work/apt-lists/partial; apt-get -o Dir::State::lists=/work/apt-lists update -qq; apt-get -o Dir::State::lists=/work/apt-lists -o Dir::Cache::archives=/work/apt-cache install -y --no-install-recommends libegl1 libgl1 libopengl0 libgl1-mesa-dri; dpkg-query -W > /work/system-packages.txt; "
   },
   "SIM-002": {
-    "image": "python:3.12-slim",
+    "image": "python:3.12-slim@sha256:a0f57064cbdcd6285fa45f51237ab0b35ea8ebaed06a1f5973e89e19dfb86704",
     "admission_bytes": 2147483648,
-    "install": "python -m venv /work/env; /work/env/bin/pip install --disable-pip-version-check -r requirements.txt brainscale==0.1.0; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
-    "native_tests": null,
-    "smoke": "/work/env/bin/python drosophila_whole_brain_fitting.py --help && /work/env/bin/python /work/probes/fitting_import_probe.py",
-    "functional": null,
-    "data_scope": "module-import-only",
-    "native_tests_reason": "No upstream test entry point qualified for this data-free profile",
-    "functional_reason": "Registered data and a separately reviewed functional adapter are required"
+    "install": "python -m venv /work/env; /work/env/bin/pip install --disable-pip-version-check -r /work/assets/fitting-cpu.lock.txt --report /work/install-report.json; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
+    "native_tests": "/work/env/bin/python /work/probes/fitting_probe.py software",
+    "smoke": "/work/env/bin/python /work/probes/fitting_probe.py smoke",
+    "functional": "/work/env/bin/python -u /work/probes/fitting_probe.py full",
+    "data_scope": "exact_author_v630_archive_and_original_spiking_model_not_paper_fitting_or_human_ECAP",
+    "native_tests_reason": "No native suite; actual population step, ID mapping and observed reset/init behavior are checked explicitly",
+    "functional_reason": "Author RAR5 inputs, real full v630 FiringRateNetwork and sparse+LoRA recurrence with untrained parameters; seeds1/2/3/1 and no-input control",
+    "environment_storage": "docker-volume",
+    "assets": [
+      {
+        "source": "SIM-002/assets/fitting-cpu.lock.txt",
+        "destination": "fitting-cpu.lock.txt",
+        "sha256": "d0d66227f78e6b9380dd87c6c1d53ac504bd2f76fafd61df20f270a3a4230764"
+      }
+    ]
   },
   "SIM-005": {
     "image": "python:3.12-slim",
@@ -44,7 +52,7 @@
     "smoke": "/work/env/bin/python main.py --help",
     "functional": "/work/env/bin/python /work/probes/eon_probe.py full",
     "data_scope": "full_pinned_flywire_v783_pytorch_cpu_separate_software_fixture",
-    "native_tests_reason": "No upstream test suite; explicit upstream-module software fixture, separately labelled",
+    "native_tests_reason": "No upstream test entry point qualified for this data-free profile",
     "functional_reason": "Registered data and a separately reviewed functional adapter are required"
   },
   "SIM-007": {
@@ -78,186 +86,6 @@
       }
     ]
   },
-  "SIM-009": {
-    "image": "aspa-sim-flybox-node22-python:20261025",
-    "admission_bytes": 2147483648,
-    "install": "python3 -m venv /work/env; /work/env/bin/pip install --disable-pip-version-check -r backend/requirements.txt; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check; dpkg-query -W > /work/system-packages.txt; cd frontend; npm install --package-lock-only --ignore-scripts --cache /work/npm-cache --no-audit --no-fund; npm ci --cache /work/npm-cache --no-audit --no-fund; npm ls --json > /work/npm-dependency-tree.json; node --version > /work/node-version.txt; npm --version > /work/npm-version.txt",
-    "native_tests": "cd backend; /work/env/bin/python -m pytest -q --capture=sys -o cache_dir=/work/pytest-cache --basetemp=/work/pytest-tmp tests/test_core.py; cd ../frontend; npm run audit:browser; npm run typecheck",
-    "smoke": "export PATH=/work/env/bin:$PATH; export FLY_DATA=/work/brain-data; export VITE_CONNECTOME_BASE=/connectome/; cd frontend; npm run build",
-    "functional": "node /work/probes/flybox_connectome_probe.mjs",
-    "data_scope": "real_compact_malecns_browser_engine_separate_mock_backend_tests",
-    "native_tests_reason": "No upstream test entry point qualified for this data-free profile",
-    "functional_reason": "Registered data and a separately reviewed functional adapter are required",
-    "image_build": [
-      "docker",
-      "build",
-      "-t",
-      "aspa-sim-flybox-node22-python:20261025",
-      "-f",
-      "simulations/environments/flybox-node-python.Dockerfile",
-      "simulations/environments"
-    ]
-  },
-  "SIM-012": {
-    "image": "python:3.12-slim",
-    "admission_bytes": 2147483648,
-    "install": "python -m venv /work/env; /work/env/bin/pip install torch --index-url https://download.pytorch.org/whl/cpu; /work/env/bin/pip install --disable-pip-version-check .; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
-    "native_tests": null,
-    "smoke": "/work/env/bin/python -c \"import fanc\"",
-    "functional": null,
-    "data_scope": "module-import-only",
-    "native_tests_reason": "No upstream test entry point qualified for this data-free profile",
-    "functional_reason": "Registered data and a separately reviewed functional adapter are required"
-  },
-  "SIM-014": {
-    "image": "python:3.12-slim",
-    "admission_bytes": 1073741824,
-    "install": "python -m venv /work/env; /work/env/bin/pip install --disable-pip-version-check -r requirements.txt; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
-    "native_tests": null,
-    "smoke": "/work/env/bin/python -c \"import brian2, brian2tools\"",
-    "functional": null,
-    "data_scope": "module-import-only",
-    "native_tests_reason": "No upstream test entry point qualified for this data-free profile",
-    "functional_reason": "Registered data and a separately reviewed functional adapter are required"
-  },
-  "SIM-016": {
-    "image": "python:3.12-slim",
-    "admission_bytes": 134217728,
-    "install": "python -m venv /work/env; /work/env/bin/pip install --disable-pip-version-check \".[dev,data]\"; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
-    "native_tests": "/work/env/bin/python -m pytest -q",
-    "smoke": "/work/env/bin/soup-connectome run --dataset example --device cpu",
-    "functional": "/work/env/bin/python /work/probes/soup_probe.py",
-    "data_scope": "upstream_four_neuron_design_fixture",
-    "native_tests_reason": "No upstream test entry point qualified for this data-free profile",
-    "functional_reason": "Registered data and a separately reviewed functional adapter are required"
-  },
-  "SIM-018": {
-    "image": "python:3.12-slim",
-    "admission_bytes": 2147483648,
-    "install": "python -m venv /work/env; /work/env/bin/pip install torch --index-url https://download.pytorch.org/whl/cpu; /work/env/bin/pip install --disable-pip-version-check -r environment/requirements.txt; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
-    "native_tests": null,
-    "smoke": "/work/env/bin/python -c \"import torch, numpy\"",
-    "functional": null,
-    "data_scope": "module-import-only",
-    "native_tests_reason": "No upstream test entry point qualified for this data-free profile",
-    "functional_reason": "Registered data and a separately reviewed functional adapter are required"
-  },
-  "SIM-019": {
-    "image": "python:3.12-slim",
-    "admission_bytes": 2147483648,
-    "install": "python -m venv /work/env; /work/env/bin/pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu; /work/env/bin/pip install --disable-pip-version-check -r scalebreak_flyvis/requirements.txt pytest; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
-    "native_tests": "/work/env/bin/python -m pytest -q scalebreak_flyvis/tests",
-    "smoke": "/work/env/bin/python -c \"import flyvis\"",
-    "functional": null,
-    "data_scope": "module-import-only",
-    "native_tests_reason": "No upstream test entry point qualified for this data-free profile",
-    "functional_reason": "Registered data and a separately reviewed functional adapter are required"
-  },
-  "SIM-020": {
-    "image": "python:3.12-slim",
-    "admission_bytes": 1073741824,
-    "install": "python -m venv /work/env; /work/env/bin/pip install --disable-pip-version-check . pytest; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
-    "native_tests": "/work/env/bin/python -m pytest -q tests/core/test_anatomy.py",
-    "smoke": "/work/env/bin/python -c \"import flygym; from importlib.metadata import version; print(version('flygym'))\"",
-    "functional": null,
-    "data_scope": "anatomy_not_neural_simulation",
-    "native_tests_reason": "No upstream test entry point qualified for this data-free profile",
-    "functional_reason": "Registered data and a separately reviewed functional adapter are required"
-  },
-  "SIM-021": {
-    "image": "python:3.12-slim",
-    "admission_bytes": 1073741824,
-    "install": "python -m venv /work/env; /work/env/bin/pip install --disable-pip-version-check . pytest; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
-    "native_tests": null,
-    "smoke": "/work/env/bin/python -c \"import flygym_gymnasium\"",
-    "functional": null,
-    "data_scope": "module-import-only",
-    "native_tests_reason": "No upstream test entry point qualified for this data-free profile",
-    "functional_reason": "Registered data and a separately reviewed functional adapter are required"
-  },
-  "SIM-022": {
-    "image": "python:3.10-slim",
-    "admission_bytes": 2147483648,
-    "install": "python -m venv /work/env; /work/env/bin/pip install torch --index-url https://download.pytorch.org/whl/cpu; /work/env/bin/pip install --disable-pip-version-check -r requirements.txt; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
-    "native_tests": null,
-    "smoke": "/work/env/bin/python -c \"import snntorch, torch\"",
-    "functional": null,
-    "data_scope": "module-import-only",
-    "native_tests_reason": "No upstream test entry point qualified for this data-free profile",
-    "functional_reason": "Registered data and a separately reviewed functional adapter are required"
-  },
-  "SIM-024": {
-    "image": "python:3.10-slim",
-    "admission_bytes": 1073741824,
-    "install": "python -m venv /work/env; /work/env/bin/pip install --disable-pip-version-check numpy==1.24.4 brian2==2.5.1 pandas joblib pyarrow; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
-    "native_tests": null,
-    "smoke": "/work/env/bin/python -c \"import model; print(model.default_params)\"",
-    "functional": null,
-    "data_scope": "module-import-only",
-    "native_tests_reason": "No upstream test entry point qualified for this data-free profile",
-    "functional_reason": "Registered data and a separately reviewed functional adapter are required"
-  },
-  "SIM-025": {
-    "image": "python:3.11-slim",
-    "admission_bytes": 1073741824,
-    "install": "python -m venv /work/env; /work/env/bin/pip install --disable-pip-version-check .; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
-    "native_tests": null,
-    "smoke": "/work/env/bin/python -c \"import mbi_paper\"",
-    "functional": null,
-    "data_scope": "module-import-only",
-    "native_tests_reason": "No upstream test entry point qualified for this data-free profile",
-    "functional_reason": "Registered data and a separately reviewed functional adapter are required"
-  },
-  "SIM-027": {
-    "image": "python:3.12-slim",
-    "admission_bytes": 2147483648,
-    "install": "python -m venv /work/env; /work/env/bin/pip install --disable-pip-version-check .; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
-    "native_tests": null,
-    "smoke": "/work/env/bin/python test_configs.py",
-    "functional": null,
-    "data_scope": "module-import-only",
-    "native_tests_reason": "No upstream test entry point qualified for this data-free profile",
-    "functional_reason": "Registered data and a separately reviewed functional adapter are required"
-  },
-  "SIM-031": {
-    "image": "python:3.12-slim",
-    "admission_bytes": 2147483648,
-    "install": "python -m venv /work/env; /work/env/bin/pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu; /work/env/bin/pip install --disable-pip-version-check . pytest; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
-    "native_tests": "/work/env/bin/python -m pytest -q tests/test_initialization.py",
-    "smoke": "/work/env/bin/python -c \"import flyvis\"",
-    "functional": null,
-    "data_scope": "module-import-only",
-    "native_tests_reason": "No upstream test entry point qualified for this data-free profile",
-    "functional_reason": "Registered data and a separately reviewed functional adapter are required"
-  },
-  "SIM-029": {
-    "image": "node:22.19.0",
-    "admission_bytes": 67108864,
-    "install": "node --version",
-    "install_scope": "no_dependency_native_runner",
-    "native_tests": "node tests/run-node.js",
-    "smoke": "node --check js/sim-worker.js",
-    "functional": "node /work/probes/snedea_worker.cjs",
-    "assets": [
-      {
-        "source": "SIM-029/assets/connectome.bin.gz",
-        "destination": "connectome.bin.gz",
-        "sha256": "fbf8d440ca1207c7573e1acdd2366f9d0beb9b533c1710f21681264f81b1cc49"
-      }
-    ],
-    "functional_admission_bytes": 201326592,
-    "data_scope": "legacy_fixture_native_tests_then_real_export_worker_in_Node"
-  },
-  "SIM-003": {
-    "image": "node:22.19.0",
-    "admission_bytes": 1073741824,
-    "install": "npm ci --cache /work/npm-cache; npm ls --all > /work/dependencies.lock.txt",
-    "native_tests": "npm test",
-    "smoke": "npm run typecheck",
-    "functional": null,
-    "functional_reason": "Full terrarium browser scenario requires pinned graph assets",
-    "data_scope": "browser_build_and_native_checks"
-  },
   "SIM-008": {
     "image": "python:3.11-slim",
     "admission_bytes": 536870912,
@@ -285,5 +113,401 @@
         "sha256": "a7fb2ea8e157387868723c0b03b7bafada5de91af4b116bf728eddcec6ee4bd9"
       }
     ]
+  },
+  "SIM-009": {
+    "image": "aspa-sim-flybox-node22-python:20261025",
+    "admission_bytes": 2147483648,
+    "install": "python3 -m venv /work/env; /work/env/bin/pip install --disable-pip-version-check -r backend/requirements.txt; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check; dpkg-query -W > /work/system-packages.txt; cd frontend; npm install --package-lock-only --ignore-scripts --cache /work/npm-cache --no-audit --no-fund; npm ci --cache /work/npm-cache --no-audit --no-fund; npm ls --json > /work/npm-dependency-tree.json; node --version > /work/node-version.txt; npm --version > /work/npm-version.txt",
+    "native_tests": "cd backend; /work/env/bin/python -m pytest -q --capture=sys -o cache_dir=/work/pytest-cache --basetemp=/work/pytest-tmp tests/test_core.py; cd ../frontend; npm run audit:browser; npm run typecheck",
+    "smoke": "export PATH=/work/env/bin:$PATH; export FLY_DATA=/work/brain-data; export VITE_CONNECTOME_BASE=/connectome/; cd frontend; npm run build",
+    "functional": "node /work/probes/flybox_connectome_probe.mjs",
+    "data_scope": "real_compact_malecns_browser_engine_separate_mock_backend_tests",
+    "native_tests_reason": "No upstream test entry point qualified for this data-free profile",
+    "functional_reason": "Registered data and a separately reviewed functional adapter are required",
+    "image_build": [
+      "docker",
+      "build",
+      "-t",
+      "aspa-sim-flybox-node22-python:20261025",
+      "-f",
+      "simulations/environments/flybox-node-python.Dockerfile",
+      "simulations/environments"
+    ]
+  },
+  "SIM-012": {
+    "image": "python:3.12-slim@sha256:a0f57064cbdcd6285fa45f51237ab0b35ea8ebaed06a1f5973e89e19dfb86704",
+    "admission_bytes": 2147483648,
+    "install": "python -m venv /work/env; /work/env/bin/pip install --disable-pip-version-check --no-compile . pytest; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
+    "native_tests": "/work/env/bin/python -m pytest -q --capture=sys -o cache_dir=/work/pytest-cache --basetemp=/work/pytest-tmp tests/tests.py",
+    "smoke": "/work/env/bin/python -c 'import fanc; from importlib.metadata import version; print(version(\"fanc-fly\"))'",
+    "functional": "/work/env/bin/python /work/probes/fanc_probe.py",
+    "data_scope": "pinned_authored_swc_render_and_offline_coordinate_fixtures_separate_from_authenticated_FANC_data",
+    "native_tests_reason": "Unmodified tests/tests.py, including the deliberately false placeholder; no authenticated write operations",
+    "functional_reason": "Registered data and a separately reviewed functional adapter are required",
+    "diagnose_after_native_failure": true,
+    "diagnostic_reason": "Unmodified suite includes authenticated service tests and a literal assert 0 == 1; retain its result while checking offline operations separately"
+  },
+  "SIM-014": {
+    "image": "python:3.12-slim@sha256:a0f57064cbdcd6285fa45f51237ab0b35ea8ebaed06a1f5973e89e19dfb86704",
+    "admission_bytes": 1073741824,
+    "install": "python -m venv /work/env; /work/env/bin/pip install --disable-pip-version-check numpy==1.26.4 setuptools==80.9.0 /work/assets/markdown-strings-2.1.1.zip; /work/env/bin/pip install --disable-pip-version-check numpy==1.26.4 setuptools==80.9.0 -r requirements.txt; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
+    "native_tests": "/work/env/bin/python /work/probes/flylif_probe.py smoke",
+    "smoke": "cd /work/cache; /work/env/bin/python /work/source/main_single.py --help",
+    "functional": "/work/env/bin/python /work/probes/flylif_probe.py functional; ASPA_FLYLIF_EXPORT_DIR=/work/replay-export /work/env/bin/python /work/probes/flylif_probe.py functional; /work/env/bin/python /work/probes/flylif_probe.py verify",
+    "data_scope": "explicit_alternate_FAFB_v783_LIF_response_not_exact_author_graph_or_orientation_map_reproduction",
+    "native_tests_reason": "No upstream test suite; explicitly authored four-neuron numerical fixture",
+    "assets": [
+      {
+        "source": "SIM-014/assets/markdown-strings-2.1.1.zip",
+        "destination": "markdown-strings-2.1.1.zip",
+        "sha256": "79f7e889a652f1efefb62269f76352765bb859a89d34809040761759599360bf"
+      }
+    ]
+  },
+  "SIM-015": {
+    "image": "python:3.10-slim@sha256:6ff506466f8b1e981719b468cc0023b8ef000b983cdec0eafe119d01f379e31d",
+    "admission_bytes": 2147483648,
+    "install": "python -m venv /work/env; /work/env/bin/pip install --disable-pip-version-check --extra-index-url https://download.pytorch.org/whl/cpu -r /work/assets/dependencies.lock.txt; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
+    "native_tests": "/work/env/bin/python /work/probes/claude_probe.py software",
+    "smoke": "/work/env/bin/python fly_embodied.py --help; /work/env/bin/python fly_embodied.py --no-viewer --no-brain --duration 0.02",
+    "functional": "/work/env/bin/python /work/probes/claude_probe.py brain-fresh; /work/env/bin/python /work/probes/claude_embodied.py --fresh",
+    "data_scope": "pinned_v783_author_fresh_weights_CPU_not_missing_pretrained_checkpoint_reproduction",
+    "native_tests_reason": "Own four-unit software fixture; no upstream test suite",
+    "functional_reason": "Registered data and a separately reviewed functional adapter are required",
+    "environment_storage": "docker-volume",
+    "runtime_prefix": "mkdir -p /work/apt-cache/partial /work/apt-lists/partial; apt-get -o Dir::State::lists=/work/apt-lists update -qq; apt-get -o Dir::State::lists=/work/apt-lists -o Dir::Cache::archives=/work/apt-cache install -y --no-install-recommends libegl1 libgl1 libopengl0 libgl1-mesa-dri libglib2.0-0t64; dpkg-query -W > /work/system-packages.txt; ",
+    "assets": [
+      {
+        "source": "SIM-015/20261025T212717Z-3a8df1/dependencies.lock.txt",
+        "destination": "dependencies.lock.txt",
+        "sha256": "3823a477a5fb0ca416187c5358a91edac87a606be828ae24f76d3da8b905fbc3"
+      }
+    ]
+  },
+  "SIM-016": {
+    "image": "python:3.12-slim@sha256:a0f57064cbdcd6285fa45f51237ab0b35ea8ebaed06a1f5973e89e19dfb86704",
+    "admission_bytes": 134217728,
+    "install": "python -m venv /work/env; /work/env/bin/pip install --disable-pip-version-check \".[dev,data]\"; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
+    "native_tests": "/work/env/bin/python -m pytest -q --capture=sys -o cache_dir=/work/pytest-cache --basetemp=/work/pytest-tmp",
+    "smoke": "/work/env/bin/soup-connectome run --dataset example --device cpu",
+    "functional": "/work/env/bin/python /work/probes/soup_probe.py && ASPA_SOUP_SCRATCH=/tmp/aspa-soup /work/env/bin/python -u /work/probes/soup_full_probe.py run",
+    "data_scope": "upstream_four_neuron_fixture_and_registered_full_MaleCNS_v1_fixed_point_CPU_not_biological_validation",
+    "native_tests_reason": "No upstream test entry point qualified for this data-free profile",
+    "functional_reason": "Registered data and a separately reviewed functional adapter are required",
+    "data_prepare": "ASPA_SOUP_SCRATCH=/tmp/aspa-soup /work/env/bin/python -u /work/probes/soup_full_probe.py prepare",
+    "assets": [
+      {
+        "source": "SIM-001/20261005T105111Z-6999dc/connectome/raw/body-annotations-male-cns-v1.0-minconf-0.5.feather",
+        "destination": "malecns/body-annotations.feather",
+        "sha256": "2177e246113e4cfbf1e7772ec37c6da1955ff22e8063d0b1f833101f99a9a3b2",
+        "primary_url": "https://storage.googleapis.com/flyem-male-cns/v1.0/connectome-data/flat-connectome/body-annotations-male-cns-v1.0-minconf-0.5.feather"
+      },
+      {
+        "source": "SIM-001/20261005T105111Z-6999dc/connectome/raw/body-neurotransmitters-male-cns-v1.0.feather",
+        "destination": "malecns/body-nt.feather",
+        "sha256": "95c9289220663abeb3409f3ad9e5a7f8a53f8093f5139d15502cd08da8879621",
+        "primary_url": "https://storage.googleapis.com/flyem-male-cns/v1.0/connectome-data/flat-connectome/body-neurotransmitters-male-cns-v1.0.feather"
+      },
+      {
+        "source": "SIM-001/20261005T105111Z-6999dc/connectome/raw/connectome-weights-male-cns-v1.0-minconf-0.5.feather",
+        "destination": "malecns/connectome-weights.feather",
+        "sha256": "e35da783d1c686b2b58b3b87cd6a403ae43bfcfba8bff28e08ef752c1a56afc1",
+        "primary_url": "https://storage.googleapis.com/flyem-male-cns/v1.0/connectome-data/flat-connectome/connectome-weights-male-cns-v1.0-minconf-0.5.feather"
+      }
+    ]
+  },
+  "SIM-018": {
+    "image": "python:3.12-slim@sha256:a0f57064cbdcd6285fa45f51237ab0b35ea8ebaed06a1f5973e89e19dfb86704",
+    "admission_bytes": 2147483648,
+    "install": "python -m venv /work/env; /work/env/bin/pip install torch --index-url https://download.pytorch.org/whl/cpu; /work/env/bin/pip install --disable-pip-version-check torch torchvision --index-url https://download.pytorch.org/whl/cpu --report /work/torch-install.json; /work/env/bin/pip install --disable-pip-version-check -r environment/requirements.txt flyvis==1.2.0 --report /work/flyvis-install.json; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
+    "native_tests": "/work/env/bin/python /work/probes/control_study_probe.py software",
+    "smoke": "/work/env/bin/python scripts/build_degree_preserving_random_mask.py --help && /work/env/bin/python scripts/stage3_train_connectome_vs_random_matched_steps_fromscratch.py --help",
+    "functional": "/work/env/bin/python -u /work/probes/control_study_probe.py full && /work/env/bin/python /work/probes/control_study_plot.py",
+    "data_scope": "visual_full_configured_graph_structural_controls_and_bounded_forward_optimizer_checks",
+    "native_tests_reason": "Own six-node swap fixture; no upstream native test suite",
+    "functional_reason": "Registered data and a separately reviewed functional adapter are required",
+    "environment_storage": "docker-volume",
+    "runtime_prefix": "export FLYVIS_ROOT_DIR=/tmp/aspa-flyvis MPLBACKEND=Agg; "
+  },
+  "SIM-019": {
+    "image": "python:3.12-slim@sha256:a0f57064cbdcd6285fa45f51237ab0b35ea8ebaed06a1f5973e89e19dfb86704",
+    "admission_bytes": 2147483648,
+    "install": "python -m venv /work/env; /work/env/bin/pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu; /work/env/bin/pip install --disable-pip-version-check torch torchvision --index-url https://download.pytorch.org/whl/cpu --report /work/torch-install.json; /work/env/bin/pip install --disable-pip-version-check -r scalebreak_flyvis/requirements.txt flyvis==1.2.0 --report /work/study-install.json; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
+    "native_tests": "/work/env/bin/python -m pytest -q --capture=sys -o cache_dir=/work/pytest-cache --basetemp=/work/pytest-tmp scalebreak_flyvis/tests",
+    "smoke": "/work/env/bin/python scalebreak_flyvis/scripts/11_generate_flyvis_native_stimuli.py --help && /work/env/bin/python scalebreak_flyvis/scripts/12_run_flyvis_pilot_v2.py --help",
+    "functional": "/work/env/bin/python -u /work/probes/scalebreak_run.py",
+    "data_scope": "native_stimulus_and_analysis_tests_before_pretrained_functional_trial",
+    "native_tests_reason": "Author-provided tests under scalebreak_flyvis/tests",
+    "functional_reason": "Registered data and a separately reviewed functional adapter are required",
+    "environment_storage": "docker-volume",
+    "runtime_prefix": "export FLYVIS_ROOT_DIR=/tmp/aspa-flyvis WANDB_MODE=disabled MPLBACKEND=Agg; "
+  },
+  "SIM-020": {
+    "image": "python:3.12-slim@sha256:a0f57064cbdcd6285fa45f51237ab0b35ea8ebaed06a1f5973e89e19dfb86704",
+    "admission_bytes": 1073741824,
+    "install": "mkdir -p /work/apt-cache/partial /work/apt-lists/partial; apt-get -o Dir::State::lists=/work/apt-lists update -qq; apt-get -o Dir::State::lists=/work/apt-lists -o Dir::Cache::archives=/work/apt-cache install -y --no-install-recommends libegl1 libgl1 libopengl0 libgl1-mesa-dri; dpkg-query -W > /work/system-packages.txt; python -m venv /work/env; /work/env/bin/pip install --disable-pip-version-check . pytest pytest-cov; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
+    "native_tests": "/work/env/bin/python -m pytest -q --capture=sys -o cache_dir=/work/pytest-cache --basetemp=/work/pytest-tmp -m 'not warp and not rl and not tutorial and not network' tests/core/test_anatomy.py tests/core/test_pose.py tests/core/test_physics.py tests/core/test_compose.py tests/core/test_simulation.py tests/core/test_rendering.py tests/core/test_vision.py tests/core/test_utils.py tests/core/test_assets.py",
+    "smoke": "/work/env/bin/python -c \"import flygym; from importlib.metadata import version; print(version('flygym'))\"",
+    "functional": "/work/env/bin/python /work/probes/flygym2_probe.py",
+    "data_scope": "pinned_FlyGym_2_1_bundled_NeuroMechFly_CPU_components_not_connectome",
+    "native_tests_reason": "Selected author CPU core and offline asset tests; optional Warp, RL and remote-asset scenarios separate",
+    "functional_reason": "CPU body on flat ground; author CPG, seeds 1/2/3/1, reset, adhesion/amplitude/friction controls and video; not a connectome",
+    "environment_storage": "docker-volume",
+    "runtime_prefix": "mkdir -p /work/apt-cache/partial /work/apt-lists/partial; apt-get -o Dir::State::lists=/work/apt-lists update -qq; apt-get -o Dir::State::lists=/work/apt-lists -o Dir::Cache::archives=/work/apt-cache install -y --no-install-recommends libegl1 libgl1 libopengl0 libgl1-mesa-dri; dpkg-query -W > /work/system-packages.txt; "
+  },
+  "SIM-021": {
+    "image": "python:3.12-slim@sha256:a0f57064cbdcd6285fa45f51237ab0b35ea8ebaed06a1f5973e89e19dfb86704",
+    "admission_bytes": 1073741824,
+    "install": "mkdir -p /work/apt-cache/partial /work/apt-lists/partial; apt-get -o Dir::State::lists=/work/apt-lists update -qq; apt-get -o Dir::State::lists=/work/apt-lists -o Dir::Cache::archives=/work/apt-cache install -y --no-install-recommends libegl1 libgl1 libopengl0 libgl1-mesa-dri libglib2.0-0 ffmpeg; dpkg-query -W > /work/system-packages.txt; python -m venv /work/env; /work/env/bin/pip install --disable-pip-version-check . 'pytest>=8,<9' 'networkx>=3,<4'; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
+    "native_tests": "/work/env/bin/python -m pytest -q --capture=sys -o cache_dir=/work/pytest-cache --basetemp=/work/pytest-tmp flygym_gymnasium/tests flygym_gymnasium/examples/locomotion/tests/test_cpg.py flygym_gymnasium/examples/locomotion/tests/test_hybrid_turning.py",
+    "smoke": "/work/env/bin/python -c \"import flygym_gymnasium\"",
+    "functional": "/work/env/bin/python /work/probes/flygym_legacy_probe.py",
+    "data_scope": "pinned_FlyGym_Gymnasium_1_3_2_body_and_author_hybrid_controller_not_connectome",
+    "native_tests_reason": "Author core, Gymnasium, rendering, sensory and selected locomotion tests; optional learning examples separate",
+    "functional_reason": "Legacy CPU hybrid controller; seeds 1/2/3/1, native reset, asymmetric/zero drives, mixed terrain and decoded video",
+    "environment_storage": "docker-volume",
+    "runtime_prefix": "mkdir -p /work/apt-cache/partial /work/apt-lists/partial; apt-get -o Dir::State::lists=/work/apt-lists update -qq; apt-get -o Dir::State::lists=/work/apt-lists -o Dir::Cache::archives=/work/apt-cache install -y --no-install-recommends libegl1 libgl1 libopengl0 libgl1-mesa-dri libglib2.0-0 ffmpeg; dpkg-query -W > /work/system-packages.txt; "
+  },
+  "SIM-022": {
+    "image": "python:3.12-slim@sha256:a0f57064cbdcd6285fa45f51237ab0b35ea8ebaed06a1f5973e89e19dfb86704",
+    "admission_bytes": 2147483648,
+    "install": "python -m venv /work/env; /work/env/bin/pip install --disable-pip-version-check torch==2.14.1+cpu --index-url https://pypi.org/simple --extra-index-url https://download.pytorch.org/whl/cpu --report /work/torch-install.json; /work/env/bin/pip install --disable-pip-version-check -r requirements.txt --report /work/port-install.json; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
+    "native_tests": "/work/env/bin/python /work/probes/snntorch_probe.py software",
+    "smoke": "/work/env/bin/python /work/probes/snntorch_probe.py smoke",
+    "functional": "/work/env/bin/python /work/probes/snntorch_probe.py full",
+    "data_scope": "pinned_FlyWire_v630_sparse_snntorch_port_not_verified_Brian2_equivalence_or_nociception",
+    "native_tests_reason": "No author test suite; own six-node matrix orientation, duplicate-sum and repeated original simulation-function checks",
+    "functional_reason": "Exact port data; original sparse CPU functions, default 1000-ms sugar runs 1/2/3/1, sensory-ID coverage and discrete spike events",
+    "environment_storage": "docker-volume"
+  },
+  "SIM-024": {
+    "image": "python:3.10-slim@sha256:6ff506466f8b1e981719b468cc0023b8ef000b983cdec0eafe119d01f379e31d",
+    "admission_bytes": 1073741824,
+    "install": "mkdir -p /work/apt-cache/partial /work/apt-lists/partial; apt-get -o Dir::State::lists=/work/apt-lists update -qq; apt-get -o Dir::State::lists=/work/apt-lists -o Dir::Cache::archives=/work/apt-cache install -y --no-install-recommends build-essential; dpkg-query -W > /work/system-packages.txt; python -m venv /work/env; /work/env/bin/pip install --disable-pip-version-check pip==26.2.2; /work/env/bin/pip install --disable-pip-version-check numpy==1.24.4 scipy==1.8.1 pandas==1.4.3 brian2==2.5.1 Cython==0.29.33 pyarrow==11.0.0 joblib==1.2.0 sympy==1.12 setuptools==67.8.0 matplotlib==3.7.5 --build-constraint /work/build-constraints.txt --report /work/install-report.json; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
+    "native_tests": "/work/env/bin/python /work/probes/shiu_probe.py software",
+    "smoke": "/work/env/bin/python -c \"import model; print(model.default_params)\"",
+    "functional": "/work/env/bin/python /work/probes/shiu_probe.py full",
+    "data_scope": "pinned_original_Shiu_FlyWire_v630_Brian2_model_no_body_nociception_or_CAP",
+    "native_tests_reason": "No author test suite; own six-neuron fixture calls original model, Poisson input, outgoing-only silence and SpikeMonitor",
+    "functional_reason": "Original v630 graph, original equations/functions, seeded 100-ms sugar runs 1/2/3/1, no-input/output-silencing/two-rate controls and event exports",
+    "environment_storage": "docker-volume",
+    "runtime_prefix": "mkdir -p /work/apt-cache/partial /work/apt-lists/partial; apt-get -o Dir::State::lists=/work/apt-lists update -qq; apt-get -o Dir::State::lists=/work/apt-lists -o Dir::Cache::archives=/work/apt-cache install -y --no-install-recommends build-essential; dpkg-query -W > /work/system-packages.txt; ",
+    "data_prepare": "/work/env/bin/python /work/probes/shiu_probe.py data"
+  },
+  "SIM-025": {
+    "image": "python:3.11-slim@sha256:b7a9e5f6a93d6d4a31f129bbd4bdee69efccb6ded0fb230d78aafaf37af98377",
+    "admission_bytes": 1073741824,
+    "install": "python -m venv /work/env; /work/env/bin/pip install --disable-pip-version-check . numpy==1.26.4 pandas==2.2.3 pyarrow==19.0.1 seaborn==0.13.2 scipy==1.13.1 pypdf==6.1.1 --report /work/install-report.json; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
+    "native_tests": "/work/env/bin/python /work/probes/mbi_probe.py software",
+    "smoke": "/work/env/bin/python -c \"import mbi_paper\"",
+    "functional": "/work/env/bin/python -u /work/probes/mbi_probe.py full",
+    "data_scope": "pinned_recorded_benchtop_LFP_stimulation_EMG_analyses_not_neural_or_ECAP_simulator",
+    "native_tests_reason": "No author suite; own threshold-crossing fixtures call original utility, separately from recorded-data reproduction",
+    "functional_reason": "Seven original author figure scripts on all 72 verified OSF files; explicit TkAgg-to-Agg working-copy adaptation; missing inputs remain failures",
+    "environment_storage": "docker-volume",
+    "data_prepare": "/work/env/bin/python /work/probes/mbi_probe.py data"
+  },
+  "SIM-026": {
+    "image": "python:3.12-slim@sha256:a0f57064cbdcd6285fa45f51237ab0b35ea8ebaed06a1f5973e89e19dfb86704",
+    "admission_bytes": 536870912,
+    "install": "mkdir -p /work/apt-cache/partial /work/apt-lists/partial; apt-get -o Dir::State::lists=/work/apt-lists update -qq; apt-get -o Dir::State::lists=/work/apt-lists -o Dir::Cache::archives=/work/apt-cache install -y --no-install-recommends build-essential libegl1 libgl1 libopengl0 libgl1-mesa-dri libglib2.0-0t64 libxrender1 libxext6 libsm6; dpkg-query -W > /work/system-packages.txt; python -m venv /work/env; /work/env/bin/pip install --disable-pip-version-check --report /work/install-report.json caveclient==8.2.1 cloud-volume==12.15.2 meshparty==2.0.3 navis==1.12.0 ncollpyde==0.19.0 matplotlib==3.11.2 seaborn==0.13.2 numpy==2.5.4 pandas==2.3.3 scipy==1.18.1 vtk; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
+    "native_tests": "/work/env/bin/python /work/probes/flyconnectome_probe.py software",
+    "smoke": "/work/env/bin/python /work/probes/flyconnectome_probe.py smoke",
+    "functional": "/work/env/bin/python -u /work/probes/flyconnectome_probe.py full",
+    "data_scope": "registered_FlyWire_tutorial_volumes_meshes_annotations_not_simulator",
+    "native_tests_reason": "No author suite; own uint64 fixture calls the unchanged remap_seg notebook function",
+    "functional_reason": "Four registered tutorial domains: actual segmentation/EM, all 78 neuropils and point lookup, native MeshParty render, separate CAVE query attempt",
+    "environment_storage": "docker-volume",
+    "runtime_prefix": "mkdir -p /work/apt-cache/partial /work/apt-lists/partial; apt-get -o Dir::State::lists=/work/apt-lists update -qq; apt-get -o Dir::State::lists=/work/apt-lists -o Dir::Cache::archives=/work/apt-cache install -y --no-install-recommends build-essential libegl1 libgl1 libopengl0 libgl1-mesa-dri libglib2.0-0t64 libxrender1 libxext6 libsm6; dpkg-query -W > /work/system-packages.txt; export VTK_DEFAULT_OPENGL_WINDOW=vtkEGLRenderWindow; "
+  },
+  "SIM-027": {
+    "image": "python:3.12-slim@sha256:a0f57064cbdcd6285fa45f51237ab0b35ea8ebaed06a1f5973e89e19dfb86704",
+    "admission_bytes": 536870912,
+    "install": "python -m venv /work/env; /work/env/bin/pip install --disable-pip-version-check --report /work/install-report.json . 'jax[cpu]==0.6.2' diffrax==0.7.0 'numpy>=2,<3' pandas matplotlib scipy scikit-learn seaborn pyarrow 'omegaconf>=2.3,<2.4' 'hydra-core>=1.3,<2' 'sparse>=0.17,<0.19' h5py natsort nvidia-ml-py3 tqdm psutil pyyaml; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
+    "native_tests": "/work/env/bin/python /work/probes/pugliese_probe.py software",
+    "smoke": "/work/env/bin/python /work/probes/pugliese_probe.py smoke",
+    "functional": "/work/env/bin/python -u /work/probes/pugliese_probe.py full",
+    "data_scope": "registered_MANC_T1_rate_network_not_spike_or_ECAP_model",
+    "native_tests_reason": "test_configs.py is a Hydra demo; adapter executes it and adds explicit rate-equation and checkpoint checks",
+    "functional_reason": "Unchanged tutorial solver on exact MANC inputs, seeds 1/2/3/1 and explicit raw solver diagnostics",
+    "environment_storage": "docker-volume",
+    "runtime_prefix": "export JAX_PLATFORMS=cpu JAX_ENABLE_X64=false; "
+  },
+  "SIM-031": {
+    "image": "python:3.12-slim@sha256:a0f57064cbdcd6285fa45f51237ab0b35ea8ebaed06a1f5973e89e19dfb86704",
+    "admission_bytes": 2147483648,
+    "install": "python -m venv /work/env; /work/env/bin/pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu; /work/env/bin/pip install --disable-pip-version-check torch==2.14.1+cpu torchvision==0.29.1+cpu --index-url https://download.pytorch.org/whl/cpu --report /work/torch-install.json; /work/env/bin/pip install --disable-pip-version-check . datamate==1.0.0 numpy==2.5.2 matplotlib==3.11.2 pytest nbformat papermill tabulate ipywidgets --report /work/flyvis-install.json; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
+    "native_tests": "/work/env/bin/python -m pytest -q --capture=sys -m 'not slow and not require_large_download and not require_download and not gpu' -o cache_dir=/work/pytest-cache --basetemp=/tmp/aspa-flyvis-tests --junitxml=/work/native-tests.xml && /work/env/bin/python -m pytest -q --capture=sys tests/test_ensemble.py::test_ensemble_init tests/test_ensemble.py::test_yield_networks -o cache_dir=/work/pytest-cache --basetemp=/tmp/aspa-flyvis-ensemble-tests --junitxml=/work/ensemble-tests.xml",
+    "smoke": "/work/env/bin/python /work/probes/flyvis_probe.py smoke",
+    "functional": "/work/env/bin/python -u /work/probes/flyvis_probe.py full",
+    "data_scope": "pinned_Flyvis_optic_lobe_code_and_exact_official_pretrained_ensemble_not_whole_brain",
+    "native_tests_reason": "Native CPU suite excluding declared slow/GPU/download cases, then two real pretrained ensemble tests; fixture data distinguished from real inputs",
+    "functional_reason": "Exact model 000 weights, seeded stimuli 1/2/3/1, native flashes/moving edges, state-hook clamp, zero strength and restore",
+    "environment_storage": "docker-volume",
+    "runtime_prefix": "export FLYVIS_ROOT_DIR=/tmp/aspa-flyvis MPLBACKEND=Agg; /work/env/bin/python /work/probes/flyvis_prepare.py; "
+  },
+  "SIM-032": {
+    "image": "python:3.6.15-slim-buster@sha256:d59ee182c4629dd33b240b9bac1a6ff44276e79e66117eba17aed4016845d3b2",
+    "environment_storage": "docker-volume",
+    "install": "python -m venv /work/env; /work/env/bin/pip install --disable-pip-version-check pip==21.3.1 setuptools==59.6.0 wheel==0.37.1; /work/env/bin/pip install --disable-pip-version-check numpy==1.16.4 scipy==1.5.2 pandas==1.1.5 torch==1.8.0+cpu matplotlib==3.3.4 -f https://download.pytorch.org/whl/torch_stable.html; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
+    "native_tests": "/work/env/bin/python /work/probes/wormvae_probe.py software",
+    "smoke": "/work/env/bin/python /work/probes/wormvae_probe.py smoke",
+    "functional": "/work/env/bin/python -u /work/probes/wormvae_probe.py full",
+    "native_tests_reason": "No author suite; own checks call actual loaders, held-out mask and native connectome serialization",
+    "functional_reason": "Original current/conductance components on real C.elegans graph, seeds 1/2/3/1 and controls; one native VAE minibatch with exact checkpoint restoration, not paper performance",
+    "data_scope": "original_worm_recordings_and_connectome_not_trained_VAE_or_Drosophila",
+    "runtime_prefix": "/work/env/bin/python /work/probes/wormvae_prepare.py; "
+  },
+  "SIM-033": {
+    "image": "python:3.12-slim@sha256:a0f57064cbdcd6285fa45f51237ab0b35ea8ebaed06a1f5973e89e19dfb86704",
+    "admission_bytes": 536870912,
+    "install": "python -m venv /work/env; /work/env/bin/pip install --disable-pip-version-check numpy==1.26.4 scipy==1.12.0 pandas==2.2.3 matplotlib==3.9.4 seaborn tqdm; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
+    "native_tests": "/work/env/bin/python /work/probes/data_prep_probe.py software",
+    "smoke": "/work/env/bin/python /work/probes/data_prep_probe.py smoke",
+    "functional": "/work/env/bin/python -u /work/probes/data_prep_probe.py full",
+    "data_scope": "registered_larval_AD_notebook_preparation_no_neural_simulation",
+    "native_tests_reason": "No author suite for selected notebook; independent normalization and sparse round-trip checks on four actual supplied matrices",
+    "functional_reason": "Native larval AD notebook operations on exact raw table; preserve node map and compare to registered processed matrix by biological IDs",
+    "environment_storage": "docker-volume"
+  },
+  "SIM-030": {
+    "image": "python:3.11-slim@sha256:b7a9e5f6a93d6d4a31f129bbd4bdee69efccb6ded0fb230d78aafaf37af98377",
+    "install": "python -c \"import sys,json; print(sys.version); open('/work/runtime-version.json','w').write(json.dumps({'python':sys.version,'third_party_dependencies':False}))\"",
+    "native_tests": "python verify.py",
+    "smoke": "python /work/probes/fcta_probe.py inspect",
+    "functional": "python /work/probes/fcta_probe.py audit",
+    "install_scope": "standard_library_verification_only_not_author_numerical_environment",
+    "data_scope": "pinned_sealed_results_and_native_integrity_verifier_not_connectome_runtime",
+    "functional_reason": "Audit available bundle; numerical pipeline, raw ensemble and exact original graph inputs are not supplied"
+  },
+  "SIM-029": {
+    "image": "node:22.19.0-slim@sha256:4a4884e8a44826194dff92ba316264f392056cbe243dcc9fd3551e71cea02b90",
+    "admission_bytes": 67108864,
+    "install": "node --version",
+    "install_scope": "no_dependency_native_runner",
+    "native_tests": "node /work/probes/snedea_native.cjs",
+    "smoke": "node --check js/sim-worker.js",
+    "functional": "node /work/probes/snedea_full.cjs",
+    "data_prepare": "node /work/probes/snedea_prepare.cjs",
+    "assets": [
+      {
+        "source": "SIM-029/assets/connectome.bin.gz",
+        "destination": "connectome.bin.gz",
+        "sha256": "fbf8d440ca1207c7573e1acdd2366f9d0beb9b533c1710f21681264f81b1cc49"
+      }
+    ],
+    "functional_admission_bytes": 201326592,
+    "data_scope": "legacy_fixture_native_tests_then_real_export_worker_in_Node"
+  },
+  "SIM-003": {
+    "image": "node:22.19.0",
+    "admission_bytes": 1073741824,
+    "install": "npm ci --cache /work/npm-cache; npm ls --all > /work/dependencies.lock.txt",
+    "native_tests": "npm test",
+    "smoke": "npm run typecheck",
+    "functional": null,
+    "functional_reason": "Full terrarium browser scenario requires pinned graph assets",
+    "data_scope": "browser_build_and_native_checks"
+  },
+  "SIM-010": {
+    "image": "julia:1.11.6-bookworm@sha256:1623eb4161dc20ee57bcf694e48cb16cfc2aed71507e79b2ff170a206ccd7803",
+    "environment_dir": "home/.julia",
+    "dependency_lock": "dependencies.lock.toml",
+    "diagnose_after_native_failure": true,
+    "diagnostic_reason": "Keep the native synapse-total failure visible while checking current-data analysis; never waive or rewrite it",
+    "runtime_prefix": "export JULIA_DEPOT_PATH=/work/home/.julia JULIA_NUM_THREADS=4 JULIA_NUM_PRECOMPILE_TASKS=1 JULIA_PKG_PRECOMPILE_AUTO=0 DATADEPS_LOAD_PATH=/work/data DATADEPS_ALWAYS_ACCEPT=true; ",
+    "install": "export JULIA_DEPOT_PATH=/work/home/.julia JULIA_NUM_THREADS=4 JULIA_NUM_PRECOMPILE_TASKS=1 JULIA_PKG_PRECOMPILE_AUTO=0 DATADEPS_LOAD_PATH=/work/data DATADEPS_ALWAYS_ACCEPT=true; mkdir -p /work/home /work/data; if test -f /work/assets/Manifest.toml; then cp /work/assets/Manifest.toml Manifest.toml; fi; julia --project=. -e 'import Pkg; Pkg.instantiate(); Pkg.status(mode=Pkg.PKGMODE_MANIFEST)' ; cp Manifest.toml /work/dependencies.lock.toml; julia --version > /work/julia-version.txt",
+    "native_tests": "julia --project=. test/runtests.jl",
+    "smoke": "julia --project=. /work/probes/optic_lobe_probe.jl smoke",
+    "functional": "julia --project=. /work/probes/optic_lobe_probe.jl full",
+    "data_scope": "real_flywire_v783_princeton_connectivity_analysis_not_dynamic_simulation",
+    "admission_bytes": 1073741824,
+    "assets": [
+      {
+        "source": "SIM-010/20261025T142101Z-e5aad3/dependencies.lock.toml",
+        "destination": "Manifest.toml",
+        "sha256": "41b944fdc33dca135eec4d4081efd6baa0b39406773aae08f6e01a692152a57d"
+      }
+    ]
+  },
+  "SIM-011": {
+    "image": "python:3.12-slim@sha256:a0f57064cbdcd6285fa45f51237ab0b35ea8ebaed06a1f5973e89e19dfb86704",
+    "admission_bytes": 536870912,
+    "install": "python -m venv /work/env; /work/env/bin/pip install --disable-pip-version-check numpy==2.0.2 pandas==2.2.3 scipy==1.17.0 matplotlib==3.10.8 pyarrow==25.0.1; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
+    "native_tests": "/work/env/bin/python /work/probes/banc_probe.py software",
+    "smoke": "/work/env/bin/python /work/probes/banc_probe.py smoke",
+    "functional": "/work/env/bin/python /work/probes/banc_probe.py full",
+    "data_scope": "banc_v888_v2_real_graph_native_cascade_kernel_with_explicit_unique_id_adapter",
+    "native_tests_reason": "No upstream unit-test suite; adversarial software checks of the unmodified cascade module",
+    "functional_reason": "Registered data and a separately reviewed functional adapter are required",
+    "diagnose_after_native_failure": true,
+    "diagnostic_reason": "Retain observed upstream cascade defects; diagnose the real graph with an explicit adapter, without waiving failures",
+    "r_profile": {
+      "image": "rocker/r-ver:4.2.1@sha256:6f9339b3e58d872078cb947c2c0089759bb599b99c4f135d7d9ac7569870a808",
+      "install": "RGL_USE_NULL=TRUE Rscript /work/probes/banc_r_install.R",
+      "native_tests": "RGL_USE_NULL=TRUE Rscript /work/probes/banc_r_check.R",
+      "data_scope": "separate_R_4.2.1_minimal_README_environment_and_unmodified_startup"
+    }
+  },
+  "SIM-013": {
+    "execution_controller": "conn_esn_linux",
+    "image": "julia:1.11.6-bookworm@sha256:1623eb4161dc20ee57bcf694e48cb16cfc2aed71507e79b2ff170a206ccd7803",
+    "runtime_environment": "/opt/aspa-julia in disposable retained Linux container; fresh run required after cleanup",
+    "dependency_lock": "dependencies.lock.toml",
+    "install": "julia --project=. /work/probes/conn_esn_install.jl; julia --version > /work/julia-version.txt",
+    "native_tests": "julia --project=. /work/probes/conn_esn_probe.jl native",
+    "smoke": "julia --project=. /work/probes/conn_esn_probe.jl smoke",
+    "functional": "julia --project=. /work/probes/conn_esn_probe.jl full",
+    "native_repl": "julia --project=. /work/probes/conn_esn_native_repl.jl",
+    "diagnose_after_native_failure": true,
+    "diagnostic_reason": "Keep original script failures visible; diagnose source modules and authored weights separately without rewriting upstream",
+    "data_scope": "matched_first_authored_ESN_subnetworks_larva_and_adult_native_memory_task_not_ECAP_or_body",
+    "admission_bytes": 1073741824
+  },
+  "SIM-017": {
+    "image": "tiagopeixoto/graph-tool@sha256:6998e03f0f47004a580d03ddc3029628631be980b6300c17c1fe937b0286d9fc",
+    "environment_storage": "docker-volume",
+    "admission_bytes": 1073741824,
+    "install": "python -m venv --system-site-packages /work/env; /work/env/bin/pip install --disable-pip-version-check networkx seaborn tqdm pyintergraph jupyter-lsp rfc3339-validator rfc3986-validator terminado debugpy nest-asyncio2; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check",
+    "native_tests": "/work/env/bin/python /work/probes/flywire_probe.py software",
+    "native_tests_reason": "Own exhaustive motif and graph-helper fixtures; upstream has no native test suite",
+    "smoke": "/work/env/bin/python /work/probes/flywire_probe.py inspect",
+    "functional": "/work/env/bin/python -u /work/probes/flywire_probe.py full",
+    "data_scope": "registered_v630_full_graph_statistics_and_AL_R_structural_controls_not_neural_dynamics"
+  },
+  "SIM-023": {
+    "image": "python:3.11-slim@sha256:b7a9e5f6a93d6d4a31f129bbd4bdee69efccb6ded0fb230d78aafaf37af98377",
+    "admission_bytes": 2147483648,
+    "environment_storage": "docker-volume",
+    "install": "mkdir -p /work/apt-cache/partial /work/apt-lists/partial; apt-get -o Dir::State::lists=/work/apt-lists update -qq; apt-get -o Dir::State::lists=/work/apt-lists -o Dir::Cache::archives=/work/apt-cache install -y --no-install-recommends clang libgomp1 libsdl2-2.0-0 libgl1 libglib2.0-0; dpkg-query -W > /work/system-packages.txt; python -m venv /work/env; /work/env/bin/pip install --disable-pip-version-check 'pip>=25.3'; /work/env/bin/pip install --disable-pip-version-check -r requirements-neural.txt -r doom/requirements.txt --build-constraint neural-build-constraints.txt 'matplotlib<3.9' --report /work/install-report.json; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check; /work/env/bin/python -m doom.build_kernel",
+    "runtime_prefix": "mkdir -p /work/apt-cache/partial /work/apt-lists/partial; apt-get -o Dir::State::lists=/work/apt-lists update -qq; apt-get -o Dir::State::lists=/work/apt-lists -o Dir::Cache::archives=/work/apt-cache install -y --no-install-recommends clang libgomp1 libsdl2-2.0-0 libgl1 libglib2.0-0; dpkg-query -W > /work/system-packages.txt; ",
+    "native_tests": "/work/env/bin/python -m pytest -q --capture=sys -o cache_dir=/work/pytest-cache --basetemp=/work/pytest-tmp tests/test_doom.py tests/test_doom_reference.py tests/test_doom_checkpoint.py tests/test_doom_live_training.py tests/test_doom_learning_v6.py",
+    "native_tests_reason": "Author baseline, independent Brian2 oracle, real ViZDoom, checkpoint and experimental-learning software fixtures",
+    "smoke": "/work/env/bin/python -m doom.server --help",
+    "data_prepare": "/work/env/bin/python -m doom.connectome malecns_v1; /work/env/bin/python -m doom.prepare; /work/env/bin/python -m doom.audit_data",
+    "functional": "/work/env/bin/python /work/probes/doom_probe.py",
+    "functional_reason": "Full retained MaleCNS graph, original fixed-weight native engine and real RGB/game loop; seeds 1/2/3/1, explicit controls, count/state exports",
+    "data_scope": "pinned_MaleCNS_v1_all_retained_edges_fixed_weight_ViZDoom_not_validated_learning_nociception_or_CAP"
+  },
+  "SIM-004": {
+    "image": "aspa-sim-escape-octave:20261027",
+    "image_build": [
+      "docker",
+      "build",
+      "-t",
+      "aspa-sim-escape-octave:20261027",
+      "-f",
+      "simulations/environments/escape-octave.Dockerfile",
+      "simulations/environments"
+    ],
+    "environment_storage": "docker-volume",
+    "install": "python3 -m venv /work/env; /work/env/bin/pip install --disable-pip-version-check numpy==1.26.4 scipy==1.12.0 pandas==2.2.3 matplotlib==3.9.4 seaborn==0.13.2 statsmodels==0.14.4 openpyxl==3.1.5; /work/env/bin/pip freeze --all > /work/dependencies.lock.txt; /work/env/bin/pip check; dpkg-query -W > /work/system-packages.txt; octave --no-gui --quiet --version > /work/octave-version.txt",
+    "native_tests": "/work/env/bin/python /work/probes/escape_probe.py inspect",
+    "diagnose_after_native_failure": true,
+    "smoke": "/work/env/bin/python /work/probes/escape_probe.py smoke",
+    "functional": null,
+    "data_scope": "real_pinned_analysis_entry_attempts_no_substitute_SCAPE_data",
+    "native_tests_reason": "No author suite; actual Octave function compatibility and supplied-data inventory are checked explicitly",
+    "functional_reason": "Native processing requires actual author TIFF/MAT/Excel data and GUI assets; no substitute data are supplied"
   }
 }

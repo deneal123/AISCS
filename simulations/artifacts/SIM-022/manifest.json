@@ -1,5 +1,41 @@
 {
   "id": "SIM-022",
   "commit": "fe55fb0cff275a2b6b54926524c8d831838e32fc",
-  "artifacts": []
+  "artifacts": [
+    {
+      "file": "spike-recordings.png",
+      "source": "research/.work/simulator-evaluation/SIM-022/20261026T115750Z-789c8f/exports/spike-recordings.png",
+      "sha256": "af6732a2706b6be4f00ee9236adf2fe97913ad2ed8bb550dfe11658164addfc9",
+      "caption": "Все 14 617 575 событий seed 1: тепловая карта по 10 мс и группам до 128 индексов; ниже — число активных элементов за обновление.",
+      "scope": "Вычисленные события упрощённого порта и аудит ID; не биологическая калибровка и не ноцицепция."
+    },
+    {
+      "file": "spike-recordings.svg",
+      "source": "research/.work/simulator-evaluation/SIM-022/20261026T115750Z-789c8f/exports/spike-recordings.svg",
+      "sha256": "f45c74a779c74f1969ccf92d3c6482618cf7d9b62527fdaf492f32ac405987aa",
+      "caption": "Компактная SVG-версия полного распределения событий; сумма всех ячеек сверена с числом событий.",
+      "scope": "Вычисленные события упрощённого порта и аудит ID; не биологическая калибровка и не ноцицепция."
+    },
+    {
+      "file": "sensory-id-coverage.png",
+      "source": "research/.work/simulator-evaluation/SIM-022/20261026T115750Z-789c8f/exports/sensory-id-coverage.png",
+      "sha256": "03df5c60693a22a311cde2a5dc9aac7f197c61229a32ce56fa269f5d2922f303",
+      "caption": "Сопоставление сенсорных списков с точными ID графа: вкус 21/21, обоняние 76/78, зрение 635/796, слух 14/15.",
+      "scope": "Вычисленные события упрощённого порта и аудит ID; не биологическая калибровка и не ноцицепция."
+    },
+    {
+      "file": "sensory-id-coverage.svg",
+      "source": "research/.work/simulator-evaluation/SIM-022/20261026T115750Z-789c8f/exports/sensory-id-coverage.svg",
+      "sha256": "7b455e400959807dafbd5737b043a2f81cc22cf24d781ad06d551e82eaba9e06",
+      "caption": "Векторная диаграмма покрытия ID; отсутствующие идентификаторы не заменены другими версиями.",
+      "scope": "Вычисленные события упрощённого порта и аудит ID; не биологическая калибровка и не ноцицепция."
+    },
+    {
+      "file": "spike-scatter-unbinned.png",
+      "source": "research/.work/simulator-evaluation/SIM-022/20261026T114822Z-a75d76/exports/spike-scatter-unbinned.png",
+      "sha256": "e3d6bdebcfeb2eef0e00e4a7dbd510ff74f1691595b0a3b0baae27c5f0b632f2",
+      "caption": "Ранняя визуализация всех событий отдельными точками: плотность делает растр неразличимым. Сохранена как диагностический вывод; для анализа использовать тепловую карту.",
+      "scope": "Диагностический PNG предыдущего численного прогона; незавершённый гигабайтный SVG удалён с отдельной квитанцией."
+    }
+  ]
 }

@@ -1,5 +1,48 @@
 {
   "id": "SIM-010",
   "commit": "3352e97c37b0f96ab08f27b70b4420f3d4ac2726",
-  "artifacts": []
+  "artifacts": [
+    {
+      "file": "connectivity-analysis.png",
+      "source": "research/.work/simulator-evaluation/SIM-010/20261025T142101Z-e5aad3/exports/optic-lobe/connectivity-analysis.png",
+      "sha256": "ff3ac5ed8d6f9efeb0387de0aa2f6abdbe5f62b79086d8aa67282fcb74e1f759",
+      "caption": "Связность 230 типов и партнёры одной клетки Tm1",
+      "scope": "Диагностический график из реального экспорта Wtt: логарифмическая шкала числа синапсов, оба полушария; справа одна клетка правой стороны. Не нейронная активность. Данные: FlyWire; Matsliah, Yu et al. и Seung, 2024; CC BY-NC 4.0."
+    },
+    {
+      "file": "connectivity-analysis.svg",
+      "source": "research/.work/simulator-evaluation/SIM-010/20261025T142101Z-e5aad3/exports/optic-lobe/connectivity-analysis.svg",
+      "sha256": "ff401e47049297638cbf1c7a0f374b7371e739643621e6bdecd2e0989131688b",
+      "caption": "Связность и партнёры Tm1 — SVG",
+      "scope": "Та же диагностика в векторном формате; параметры преобразования и хеши входов сохранены в plot-provenance.json. Данные: FlyWire; Matsliah, Yu et al. и Seung, 2024; CC BY-NC 4.0."
+    },
+    {
+      "file": "native-hex-grating.png",
+      "source": "research/.work/simulator-evaluation/SIM-010/20261025T142101Z-e5aad3/exports/optic-lobe/native-hex-grating.png",
+      "sha256": "ebe10e7b3552348f6352dda563fa0be9997f88cfaf73c893e077b0a11c923c5a",
+      "caption": "Зрительный стимул на сетке колонок v783",
+      "scope": "Вывод sine_grating/eyeheat/rect2hex на 796 реальных позициях правого глаза. Синтетический вход, а не измеренный или смоделированный нейронный ответ. Данные: FlyWire; Matsliah, Yu et al. и Seung, 2024; CC BY-NC 4.0."
+    },
+    {
+      "file": "native-hex-grating.svg",
+      "source": "research/.work/simulator-evaluation/SIM-010/20261025T142101Z-e5aad3/exports/optic-lobe/native-hex-grating.svg",
+      "sha256": "63c8556303683969793cfaaf1b0dfb0cc358d4f9769e6607fe49160f65926353",
+      "caption": "Зрительный стимул — SVG",
+      "scope": "Векторный вывод тех же нативных функций на зарегистрированной геометрии v783. Данные: FlyWire; Matsliah, Yu et al. и Seung, 2024; CC BY-NC 4.0."
+    },
+    {
+      "file": "native-Tm1-T3-input-maps.png",
+      "source": "research/.work/simulator-evaluation/SIM-010/20261025T142101Z-e5aad3/exports/optic-lobe/native-Tm1-T3-input-maps.png",
+      "sha256": "d653ba9d9eb5d6bdcc9a672c9dc109a96ade305e0d577fe15a4ad3ca451fe12b",
+      "caption": "Анатомические входы Tm1 для трёх клеток T3",
+      "scope": "Реальные веса и колонковые координаты, полученные tracetypes/inmaps. Каждая карта нормирована на свой максимум; это не экспериментально измеренные рецептивные поля. PNG — целочисленный холст адаптера. Данные: FlyWire; Matsliah, Yu et al. и Seung, 2024; CC BY-NC 4.0."
+    },
+    {
+      "file": "native-Tm1-T3-input-maps.svg",
+      "source": "research/.work/simulator-evaluation/SIM-010/20261025T142101Z-e5aad3/exports/optic-lobe/native-Tm1-T3-input-maps.svg",
+      "sha256": "7b2366e748a3a9184bfbeb5660484e62e1c4345fc6011a08fbf41d6c06d0ce1c",
+      "caption": "Авторская функция montage — SVG",
+      "scope": "Нативный векторный montage тех же трёх карт. Подписи показывают окончания root ID; полные ID и суммы сохранены в full-result.json. Данные: FlyWire; Matsliah, Yu et al. и Seung, 2024; CC BY-NC 4.0."
+    }
+  ]
 }

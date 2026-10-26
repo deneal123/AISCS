@@ -1,5 +1,27 @@
 {
   "id": "SIM-015",
   "commit": "3a035275148e97539711728422548bffe2a77566",
-  "artifacts": []
+  "artifacts": [
+    {
+      "file": "full-brain.png",
+      "source": "research/.work/simulator-evaluation/SIM-015/20261025T213452Z-3dc2c0/export/full-brain.png",
+      "sha256": "ea98e84545a590535fc69cc1376807c65ce6bf5bd6d8c3a23ca6d94103a3d0f4",
+      "caption": "Динамика полного графа при стимуляции сахарных сенсорных нейронов: первые четыре из 18 наблюдаемых нисходящих элементов и суммарные спайки, seed 1.",
+      "scope": "Фактический экспорт модели с исходными весами; 100 мс нейронного времени. Имена и индексы 18 столбцов — в независимой проверке экспорта."
+    },
+    {
+      "file": "full-brain.svg",
+      "source": "research/.work/simulator-evaluation/SIM-015/20261025T213452Z-3dc2c0/export/full-brain.svg",
+      "sha256": "a0091b9882cdec698f07cf8a6b545c49c40344f439e45075abf4a56a794414a4",
+      "caption": "Векторная версия графика динамики полного графа; исходные веса, CPU, seed 1.",
+      "scope": "Модельные напряжения, не электрофизиологические измерения и не ECAP."
+    },
+    {
+      "file": "embodied-snapshot.png",
+      "source": "research/.work/simulator-evaluation/SIM-015/20261025T213452Z-3dc2c0/export/embodied-snapshot.png",
+      "sha256": "5e24b4e0c139fd27380b33fe3aea73542921ce8f1fa54ebe32c40cf4fdb88771",
+      "caption": "Снимок сцены MuJoCo после 1000 шагов штатного CLI с телом и нейронным компонентом.",
+      "scope": "0,1 с времени тела и 10 нейронных шагов. Снимок подтверждает отрисовку, а не воспроизведение поведения."
+    }
+  ]
 }

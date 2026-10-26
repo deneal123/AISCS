@@ -1,5 +1,55 @@
 {
   "id": "SIM-023",
   "commit": "71ecf53d78eaffaf1a57ed7b0ccf5d458abc9f33",
-  "artifacts": []
+  "artifacts": [
+    {
+      "file": "game-input-00.png",
+      "source": "research/.work/simulator-evaluation/SIM-023/20261026T145746Z-02de46/exports/game-input-00.png",
+      "sha256": "781c9778add9c40d425db102aa93494abc0599cf71cc314ed4bcf933afe5245c",
+      "caption": "Начальный RGB-кадр реального ViZDoom, seed 1.",
+      "scope": "Записанный программный сценарий; одна реконструкция MaleCNS, инженерный BCI. Не подтверждение полезного зрения, ноцицепции или субъективной боли."
+    },
+    {
+      "file": "game-input-34.png",
+      "source": "research/.work/simulator-evaluation/SIM-023/20261026T145746Z-02de46/exports/game-input-34.png",
+      "sha256": "7ada5139ccc007e1fb4b960c529a60e33d075a3acf4844c59a556450dfabc7d7",
+      "caption": "Предшествующий действию RGB-кадр 35-го такта, seed 1.",
+      "scope": "Записанный программный сценарий; одна реконструкция MaleCNS, инженерный BCI. Не подтверждение полезного зрения, ноцицепции или субъективной боли."
+    },
+    {
+      "file": "neural-game-recordings.png",
+      "source": "research/.work/simulator-evaluation/SIM-023/20261026T145746Z-02de46/exports/neural-game-recordings.png",
+      "sha256": "2688b0f20ec97e799f2361248fed61fcbfb1f72cb1193925462b54a908fa70f5",
+      "caption": "Все 166 700 нейронов: числа событий по индексным группам и игровым интервалам; ниже — фиксированные команды декодера.",
+      "scope": "Записанный программный сценарий; одна реконструкция MaleCNS, инженерный BCI. Не подтверждение полезного зрения, ноцицепции или субъективной боли."
+    },
+    {
+      "file": "neural-game-recordings.svg",
+      "source": "research/.work/simulator-evaluation/SIM-023/20261026T145746Z-02de46/exports/neural-game-recordings.svg",
+      "sha256": "2b565bfd833150727e515af481727246e474395614c3e6d6a5d9359b4501a164",
+      "caption": "Векторная версия записанной нейронной активности и игровых команд.",
+      "scope": "Записанный программный сценарий; одна реконструкция MaleCNS, инженерный BCI. Не подтверждение полезного зрения, ноцицепции или субъективной боли."
+    },
+    {
+      "file": "live-viewer.png",
+      "source": "research/.work/simulator-evaluation/SIM-023/20261026T145746Z-02de46/exports/browser/live-viewer.png",
+      "sha256": "6da2c89769c111a2f006c72510e9caadf7ed24ca464df0de647d56c64b35f43f",
+      "caption": "Живой авторский интерфейс: первое лицо, сетевые счётчики, зрительный вход и телеметрия; baseline без обучения.",
+      "scope": "Записанный программный сценарий; одна реконструкция MaleCNS, инженерный BCI. Не подтверждение полезного зрения, ноцицепции или субъективной боли."
+    },
+    {
+      "file": "native-camera-unavailable.png",
+      "source": "research/.work/simulator-evaluation/SIM-023/20261026T145746Z-02de46/exports/browser/before-native-spectator-viewer.png",
+      "sha256": "ead4070c3bca44e196edf56753e4dca3ebba6cf8c696e5f4db10ea819263f769",
+      "caption": "Исходная недоступность дополнительной 3D-камеры: HTTP 503 до её отдельной сборки. Основной поток продолжал работать.",
+      "scope": "Записанный программный сценарий; одна реконструкция MaleCNS, инженерный BCI. Не подтверждение полезного зрения, ноцицепции или субъективной боли."
+    },
+    {
+      "file": "native-camera-viewer.png",
+      "source": "research/.work/simulator-evaluation/SIM-023/20261026T145746Z-02de46/exports/browser/spectator-viewer.png",
+      "sha256": "fe0f2c13cc171c56bdb0379bbbb5a788b01786159bc0ba111be215a52f63654e",
+      "caption": "Живая нативная камера после сборки и проверки изоляции: реальная игровая сцена и иллюстративный аватар мухи; не биомеханика.",
+      "scope": "Записанный программный сценарий; одна реконструкция MaleCNS, инженерный BCI. Не подтверждение полезного зрения, ноцицепции или субъективной боли."
+    }
+  ]
 }

@@ -1,5 +1,34 @@
 {
   "id": "SIM-019",
   "commit": "24c87489efdca64970ecbe93efc683b68f778cdf",
-  "artifacts": []
+  "artifacts": [
+    {
+      "file": "native-retinal-inputs.png",
+      "source": "research/.work/simulator-evaluation/SIM-019/20261026T101706Z-621602/exports/native-retinal-inputs.png",
+      "sha256": "966f2585ed550add64d4d6639d9ac37d20e17bed53bb0b15deba19f61469824b",
+      "caption": "Семь видов синтетических ретинальных стимулов на 721 входе, два реально рассчитанных кадра.",
+      "scope": "Производные графики фактических массивов; не биологическая валидация и не перенос на ECAP."
+    },
+    {
+      "file": "native-retinal-inputs.svg",
+      "source": "research/.work/simulator-evaluation/SIM-019/20261026T101706Z-621602/exports/native-retinal-inputs.svg",
+      "sha256": "f0fe69c84421e71ba5f4a68635614bb6ed87f1e79824ebfcb3da06f579752310",
+      "caption": "Семь видов синтетических ретинальных стимулов на 721 входе, два реально рассчитанных кадра.",
+      "scope": "Производные графики фактических массивов; не биологическая валидация и не перенос на ECAP."
+    },
+    {
+      "file": "recorded-model-responses.png",
+      "source": "research/.work/simulator-evaluation/SIM-019/20261026T101706Z-621602/exports/recorded-model-responses.png",
+      "sha256": "0af297cb487417829dcefed18275d977eafc6238a040f238d50b892c5e8a40d1",
+      "caption": "Центральные ответы предобученной модели и конечные варианты вмешательств. Нестабильная перестановка явно отмечена и не нарисована как корректная кривая.",
+      "scope": "Производные графики фактических массивов; не биологическая валидация и не перенос на ECAP."
+    },
+    {
+      "file": "recorded-model-responses.svg",
+      "source": "research/.work/simulator-evaluation/SIM-019/20261026T101706Z-621602/exports/recorded-model-responses.svg",
+      "sha256": "f3d0cea57509f9b4e4fe32e7c3575409d1297c71b3d544e1151628cdc38af57c",
+      "caption": "Центральные ответы предобученной модели и конечные варианты вмешательств. Нестабильная перестановка явно отмечена и не нарисована как корректная кривая.",
+      "scope": "Производные графики фактических массивов; не биологическая валидация и не перенос на ECAP."
+    }
+  ]
 }

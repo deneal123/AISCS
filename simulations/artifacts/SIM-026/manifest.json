@@ -1,5 +1,55 @@
 {
   "id": "SIM-026",
   "commit": "9b1790b5553082e1f57921790564c7aae7c9c99a",
-  "artifacts": []
+  "artifacts": [
+    {
+      "file": "headless-neurons-with-neuropil.png",
+      "source": "research/.work/simulator-evaluation/SIM-026/20261026T173755Z-9cb9e6/check-de4deb7341/exports/headless-neurons-with-neuropil.png",
+      "sha256": "cfaa0a71a90cf906412a3e835ac75e19d1c953f837f27f3b355c401716177dd0",
+      "caption": "Две выбранные морфологии v783 внутри контура нейропиля; авторская камера и масштаб 4×, FXAA явно отключён.",
+      "scope": "Реальные данные из зарегистрированных маршрутов FlyWire/FAFB. Это анатомическая геометрия, не нейродинамика и не ноцицептивная или CAP-модель. Версии и исходные ID сохранены в квитанциях."
+    },
+    {
+      "file": "headless-neurons.png",
+      "source": "research/.work/simulator-evaluation/SIM-026/20261026T173755Z-9cb9e6/check-de4deb7341/exports/headless-neurons.png",
+      "sha256": "0d31db642bab58c38042586a5c214ce75f0416ce7636e470209a018c361e64fe",
+      "caption": "Те же две полные поверхности без контура мозга. Повтор PNG совпал побайтно; это статические поверхности, не активность сети.",
+      "scope": "Реальные данные из зарегистрированных маршрутов FlyWire/FAFB. Это анатомическая геометрия, не нейродинамика и не ноцицептивная или CAP-модель. Версии и исходные ID сохранены в квитанциях."
+    },
+    {
+      "file": "registered-cutout-preview.png",
+      "source": "research/.work/simulator-evaluation/SIM-026/20261026T173755Z-9cb9e6/check-de4deb7341/exports/registered-cutout-preview.png",
+      "sha256": "07dea4c5f7ee8f95ea054b350e83065fcc6277707498109e75c3f7683cdc073a",
+      "caption": "EM FAFB v14 и сегментация FlyWire v630: заданная область 8 × 8 мкм на Z=100 мкм; физические оси согласованы.",
+      "scope": "Независимое чтение NPY. Совпадение заданных координат не является отдельной оценкой точности регистрации. uint64 ID хранятся независимо от цвета."
+    },
+    {
+      "file": "neuropil-atlas-preview.png",
+      "source": "research/.work/simulator-evaluation/SIM-026/20261026T173755Z-9cb9e6/check-de4deb7341/exports/neuropil-atlas-preview.png",
+      "sha256": "16ea245328a7f27c92e4468bcacdcd48191fddd8e453f5465ba4424f90b3b341",
+      "caption": "Все 78 поверхностей областей и две точки из авторского примера: GNG и PB.",
+      "scope": "Положения пересчитаны по сохранённым поверхностям. Название области не является подтверждением функции или ноцицептивной роли. Метки точек наложены поверх прозрачных поверхностей для читаемости."
+    },
+    {
+      "file": "public-em-and-segmentation.png",
+      "source": "research/.work/simulator-evaluation/SIM-026/20261026T173755Z-9cb9e6/exports/public-em-and-segmentation.png",
+      "sha256": "72548ec08941229fc172a4ab93300a9b27d16d31c3d05080763bf289ea4fa81e",
+      "caption": "Первичный просмотр срезов в координатах вокселей: EM 1000×1000 и сегментация 500×500 на одной заданной физической области.",
+      "scope": "Реальные данные из зарегистрированных маршрутов FlyWire/FAFB. Это анатомическая геометрия, не нейродинамика и не ноцицептивная или CAP-модель. Версии и исходные ID сохранены в квитанциях. Раскраска использует неизменённую функцию remap_seg notebook; цветовые числа не заменяют исходные ID."
+    },
+    {
+      "file": "initial-native-neuron-render.png",
+      "source": "research/.work/simulator-evaluation/SIM-026/20261026T173755Z-9cb9e6/exports/native-neuron-render.png",
+      "sha256": "b14cba1167640922627e2752bb841443b6c809dc0548c256a03c132e99a20479",
+      "caption": "Диагностика: штатный FXAA записал чёрное изображение при успешном коде возврата.",
+      "scope": "Неуспешная визуализация сохранена отдельно от исправленного результата. Пиксельная проверка не обнаружила ожидаемой красной и синей геометрии."
+    },
+    {
+      "file": "initial-native-neuron-render-with-neuropil.png",
+      "source": "research/.work/simulator-evaluation/SIM-026/20261026T173755Z-9cb9e6/exports/native-neuron-render-with-neuropil.png",
+      "sha256": "db19d2c5f261b3d76b1d9cab4e94eeabea996e596066978189b183678c66e0e8",
+      "caption": "Диагностика: второй исходный чёрный кадр с контуром нейропиля; это не успешный результат.",
+      "scope": "Наличие файла и код возврата 0 не использованы как доказательство работоспособного рендера."
+    }
+  ]
 }

@@ -1,5 +1,48 @@
 {
   "id": "SIM-024",
   "commit": "91bdd1e7dcf193f3e7ca5a8933497fcef63b7960",
-  "artifacts": []
+  "artifacts": [
+    {
+      "file": "original-lif-events.png",
+      "source": "research/.work/simulator-evaluation/SIM-024/20261026T160249Z-76b072/exports/original-lif-events.png",
+      "sha256": "07ac374a07e586c82929fd405015df60199f810d68f06ff1053e8190db2da847",
+      "caption": "Все 1246 событий seed 1 за 100 мс; ниже — гистограммы seeds 1/2/3/1. Последний интервал 95–100 мс показан полностью; повтор совпадает.",
+      "scope": "Исходная Brian2-модель v630 и программная стимуляция; без тела, калиброванного повреждающего стимула или физического CAP/ECAP-оператора."
+    },
+    {
+      "file": "original-lif-events.svg",
+      "source": "research/.work/simulator-evaluation/SIM-024/20261026T160249Z-76b072/exports/original-lif-events.svg",
+      "sha256": "5200b3df986bef0a1d9ddedd761ce19dd76566c377b789ec708e7fcfd2ccea46",
+      "caption": "Векторная версия исходных спайковых событий и гистограмм; сумма всех интервалов сверена с числом событий.",
+      "scope": "Исходная Brian2-модель v630 и программная стимуляция; без тела, калиброванного повреждающего стимула или физического CAP/ECAP-оператора."
+    },
+    {
+      "file": "original-lif-controls.png",
+      "source": "research/.work/simulator-evaluation/SIM-024/20261026T160249Z-76b072/exports/original-lif-controls.png",
+      "sha256": "f44931aac74e9eb700ce62f4deb615ebd34cc50ae5fd5ffdd74b8802abc8ff65",
+      "caption": "Сопоставимые первые 50 мс при seed 1: интактная сеть 565 событий, нулевой вход 0, нулевые выходы стимулируемых клеток 147, две частоты 142. Отдельно показаны выбранные клетки и остальные нейроны.",
+      "scope": "Исходная Brian2-модель v630 и программная стимуляция; без тела, калиброванного повреждающего стимула или физического CAP/ECAP-оператора."
+    },
+    {
+      "file": "original-lif-controls.svg",
+      "source": "research/.work/simulator-evaluation/SIM-024/20261026T160249Z-76b072/exports/original-lif-controls.svg",
+      "sha256": "0bd6e86ff307f76ff18b06b20e35a9c654b2443547300ed0ddc9cf120d90f11b",
+      "caption": "Векторная диаграмма программных контролей. Разряды выбранных клеток не объявляются прямым счётчиком внешних пуассоновских событий.",
+      "scope": "Исходная Brian2-модель v630 и программная стимуляция; без тела, калиброванного повреждающего стимула или физического CAP/ECAP-оператора."
+    },
+    {
+      "file": "initial-step-plot.png",
+      "source": "research/.work/simulator-evaluation/SIM-024/20261026T160249Z-76b072/exports/initial-step-plot.png",
+      "sha256": "103d08add0157a01005f3393b00c9c7825523ad5da43048e066473a9f7bd40c3",
+      "caption": "Исходная диагностическая отрисовка: последний 5-мс интервал не показан линией полностью. Численные данные сохранны; исправленная основная диаграмма находится выше.",
+      "scope": "Исходная Brian2-модель v630 и программная стимуляция; без тела, калиброванного повреждающего стимула или физического CAP/ECAP-оператора."
+    },
+    {
+      "file": "initial-step-plot.svg",
+      "source": "research/.work/simulator-evaluation/SIM-024/20261026T160249Z-76b072/exports/initial-step-plot.svg",
+      "sha256": "449cca8e5bd15ed481928b091db6d14f74237f0c7675b107be4fba2c59bebdc5",
+      "caption": "Векторный исходник ранней диагностической отрисовки; сохранён отдельно от исправленного основного рисунка.",
+      "scope": "Исходная Brian2-модель v630 и программная стимуляция; без тела, калиброванного повреждающего стимула или физического CAP/ECAP-оператора."
+    }
+  ]
 }

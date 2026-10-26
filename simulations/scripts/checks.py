@@ -72,7 +72,12 @@ def checklist(row):
         if key == "functional" and row["id"] in {"SIM-001", "SIM-003"} and review:
             # These later, explicitly reviewed receipts supersede the earlier generic phase.
             item.update(status="passed", evidence=receipts)
-        if key == "functional" and row["id"] == "SIM-002" and review:
+        if (
+            key == "functional"
+            and row["id"] == "SIM-002"
+            and review
+            and phases.get("functional", {}).get("status") != "passed"
+        ):
             item.update(status="blocked", evidence=receipts)
         if key == "reproducibility":
             proof_paths = []

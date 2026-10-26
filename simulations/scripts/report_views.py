@@ -5,7 +5,7 @@ import json
 import os
 from pathlib import Path
 
-from checks import checklist
+from checks import LABELS, checklist
 from inventory import load
 from paths import ARTIFACTS, ASSESSMENT, REGISTRY, REPORT, ROOT, TODO
 
@@ -34,14 +34,26 @@ def render(registry):
         (
             "[Проверки](TODO.md) · [Визуальные результаты](artifacts/README.md) · "
             "[Порядок работы](docs/WORKFLOW.md) · [Реестр](data/registry.json) · [Профили запуска](data/profiles.json)"
+            " · [Возможности и запись активности](docs/nociception-and-recording.md)"
         ),
         "",
         "## Сводка",
+        "",
+        f"Версия среза испытаний: **{registry.get('release_version', 'не выпущена')}**.",
         "",
         (
             f"Подключено {len(rows)} репозитория. Разбор результатов зарегистрирован для "
             f"{sum(bool(c.get('launch_review')) for c in rows)}; визуальные материалы опубликованы для "
             f"{sum(bool(c.get('visual_artifacts')) for c in rows)}. Наличие исполняемого профиля не означает завершённого испытания."
+        ),
+        "",
+        (
+            f"Повторно рассмотрено {sum(len(c.get('followup_review', {}).get('checks', [])) for c in rows)} "
+            "ранее открытых проверок: "
+            f"{sum(x['decision'] == 'resolved' for c in rows for x in c.get('followup_review', {}).get('checks', []))} закрыто; "
+            f"{sum(x['decision'] == 'confirmed_blocker' for c in rows for x in c.get('followup_review', {}).get('checks', []))} "
+            "оставлено открытыми с подтверждённой блокировкой. Повторное чтение оснований "
+            "и новый вычислительный запуск обозначены раздельно в каждом решении."
         ),
         "",
         (
@@ -63,14 +75,44 @@ def render(registry):
         "",
         "## Происхождение и общие ограничения",
         "",
-        f"- Поколение оснований: `{registry['knowledge_generation']}`; исходный срез: `{registry['discovered_at']}`.",
+        f"- Поколение исходного инвентаря: `{registry['knowledge_generation']}`; дата: `{registry['discovered_at']}`. Поколение каждого последующего обращения указано в его поисковой квитанции.",
         "- Переименования сохранены в `repository_aliases` реестра; дубли не подключаются.",
         "- Лицензии кода, данных и право распространения производных проверяются раздельно. Отсутствие LICENSE не означает разрешение на использование.",
         "- Различия materialisation, фильтров, знаков, задержек и нормировки весов меняют модель. Сравнение скорости не подтверждает эквивалентность.",
         "- Исторические прогоны с резервом RAM остаются в квитанциях. Текущая политика: без лимита RAM и резерва; до четырёх CPU-потоков, один вычислительный запуск одновременно. GPU проверяется отдельно.",
     ]
+    validation = registry.get("release_validation")
+    if validation:
+        lines += [
+            "",
+            "## Проверка выпуска",
+            "",
+            (
+                f"Срез {validation['date']}: {validation['tests_passed']} тестов пройдено, "
+                f"{validation['tests_skipped']} пропущено. Ruff, структура, ссылки, UTF-8/LF, "
+                "манифест research и независимые SHA-256 проверены. HTTP проверен через "
+                "ASGI внутри процесса; MCP — через stdio. Это не заявление о Docker-приёмке исследовательского сервиса."
+            ),
+            "",
+            (
+                f"Живой поиск: `{validation['live_retrieval_mode']}`, поколение "
+                f"`{validation['live_knowledge_generation']}`, ошибок нет; непроверенные связи выключены. "
+                "Это проверка доступности, не повторная научная оценка результатов поиска."
+            ),
+            "",
+            (
+                "Research 1.6.1 дополнительно проверен в чистой среде по uv.lock. "
+                "Основная локальная .venv сохраняет прежнюю установленную версию 1.5.3: "
+                "обновление заблокировано работающим research-mcp.exe. Синхронизацию основной "
+                "среды следует повторить после штатного завершения этого процесса; действующий MCP не останавливался."
+            ),
+        ]
     integrity = registry.get("integrity_review")
-    maintenance = sorted({c["cleanup"]["receipt"] for c in rows if c.get("cleanup")})
+    maintenance = sorted(
+        {c["cleanup"]["receipt"] for c in rows if c.get("cleanup", {}).get("receipt")}
+    )
+    if maintenance or integrity:
+        lines.append("")
     if maintenance:
         receipt = load(ROOT / maintenance[-1])
         lines += [
@@ -127,6 +169,11 @@ def render(registry):
             "",
             "**Лицензии:** "
             + link(row["source_inventory"])
+            + (
+                "; декларации и границы проверки — " + link(row["license_evidence"])
+                if row.get("license_evidence")
+                else ""
+            )
             + "; хеши файлов — в реестре.",
             "",
             "| Проверка | Состояние | Основание |",
@@ -177,6 +224,26 @@ def render(registry):
                 "Итоговый разбор не завершён. Команды и результаты отдельных фаз находятся в реестре; успешная фаза не подтверждает остальные функции проекта.",
                 "",
             ]
+        followup = row.get("followup_review")
+        if followup:
+            lines += [
+                f"**Повторная проверка ({followup['date']}):**",
+                "",
+                "| Пункт | Вывод | Основание |",
+                "|---|---|---|",
+            ]
+            for item in followup["checks"]:
+                outcome = (
+                    "устранено"
+                    if item["decision"] == "resolved"
+                    else "блокировка подтверждена"
+                )
+                lines.append(
+                    f"| {LABELS[item['id']]} | {outcome}: {item['finding']} | "
+                    + "; ".join(link(p) for p in item["evidence"])
+                    + " |"
+                )
+            lines.append("")
         lines += [f"[Визуальные материалы {sid}](artifacts/{sid}/README.md).", ""]
         visuals = row.get("visual_artifacts", [])
         gallery.append(

@@ -22,6 +22,44 @@ def test_admission_keeps_entire_reserve():
     assert not simctl.admit(3 * simctl.GIB - 1, simctl.GIB, 2 * simctl.GIB)
 
 
+@pytest.mark.parametrize("preparation_status", ["passed", "failed"])
+def test_failed_data_preparation_prevents_dynamics(
+    tmp_path, monkeypatch, preparation_status
+):
+    monkeypatch.setattr(simctl, "ROOT", tmp_path)
+    monkeypatch.setattr(simctl, "WORK", tmp_path / "work")
+    monkeypatch.setattr(simctl, "free_memory", lambda: 10 * simctl.GIB)
+    monkeypatch.setattr(
+        simctl, "copy_checkout", lambda row, destination: destination.mkdir()
+    )
+    monkeypatch.setattr(simctl, "save", lambda *args: None)
+    calls = []
+
+    def phase(row, profile, stage, run, policy):
+        calls.append(stage)
+        return {
+            "stage": stage,
+            "status": preparation_status if stage == "data_prepare" else "passed",
+        }
+
+    monkeypatch.setattr(simctl, "phase", phase)
+    profile = {
+        key: "registered command"
+        for key in ("install", "native_tests", "smoke", "data_prepare", "functional")
+    }
+    profile["image"] = "registered image"
+    result = simctl.evaluate(
+        {"id": "SIM-TEST", "repository": "test/repo", "commit": "a" * 40},
+        profile,
+        {"unrestricted_memory": True, "host_reserve_bytes": 0},
+    )
+    assert calls[:4] == ["install", "native_tests", "smoke", "data_prepare"]
+    assert ("functional" in calls) == (preparation_status == "passed")
+    assert result["status"] == (
+        "reproduced" if preparation_status == "passed" else "partial"
+    )
+
+
 def test_unrestricted_memory_attempts_launch_without_ram_flags(tmp_path, monkeypatch):
     monkeypatch.setattr(simctl, "free_memory", lambda: 1)
     monkeypatch.setattr(
@@ -178,6 +216,117 @@ def test_resume_cannot_take_another_candidates_run(tmp_path, monkeypatch):
     other = tmp_path / "SIM-002" / "run"
     with pytest.raises(ValueError, match="does not belong"):
         simctl.evaluate({"id": "SIM-001"}, {}, {}, resume=str(other))
+
+
+def test_resume_invalidates_changed_probe_or_install_command(tmp_path):
+    (tmp_path / "probe.jl").write_text("first scenario\n")
+    command = "julia /work/probes/probe.jl"
+    profile = {"smoke": command, "install": "install==1"}
+    record = {
+        "stage": "smoke",
+        "status": "passed",
+        "command": command,
+        "probe_fingerprint": simctl.probe_fingerprint(command, tmp_path),
+    }
+    assert simctl.reusable_phase(record, profile, tmp_path)
+    (tmp_path / "probe.jl").write_text("changed scenario\n")
+    assert not simctl.reusable_phase(record, profile, tmp_path)
+    assert not simctl.reusable_phase(
+        {"stage": "smoke", "status": "passed", "command": command}, profile, tmp_path
+    )
+    assert not simctl.reusable_phase(
+        {"stage": "install", "status": "passed", "command": "install==0"},
+        profile,
+        tmp_path,
+    )
+
+
+def test_julia_resume_requires_retained_depot_and_skips_install(tmp_path, monkeypatch):
+    work = tmp_path / "work"
+    run = work / "SIM-TEST/run"
+    depot = run / "home/.julia"
+    depot.mkdir(parents=True)
+    (run / "dependencies.lock.toml").write_text("# resolved Julia environment\n")
+    profile = {
+        "image": "julia:pinned",
+        "environment_dir": "home/.julia",
+        "dependency_lock": "dependencies.lock.toml",
+        "install": "install",
+        "native_tests": "native",
+        "smoke": "smoke",
+        "functional": "functional",
+    }
+    previous = {
+        "commit": "a" * 40,
+        "profile": profile,
+        "phases": [{"stage": "install", "status": "passed", "command": "install"}],
+    }
+    monkeypatch.setattr(simctl, "ROOT", tmp_path)
+    monkeypatch.setattr(simctl, "WORK", work)
+    monkeypatch.setattr(
+        simctl, "load", lambda p: previous if p.name == "result.json" else {"files": {}}
+    )
+    monkeypatch.setattr(simctl, "save", Mock())
+    phase = Mock(
+        side_effect=lambda row, profile, stage, run, policy: {
+            "stage": stage,
+            "status": "passed",
+        }
+    )
+    monkeypatch.setattr(simctl, "phase", phase)
+    row = {"id": "SIM-TEST", "commit": "a" * 40, "repository": "test/Julia"}
+    result = simctl.evaluate(
+        row, profile, {"unrestricted_memory": True}, resume=str(run)
+    )
+    assert result["status"] == "reproduced"
+    assert [call.args[2] for call in phase.call_args_list] == [
+        "native_tests",
+        "smoke",
+        "functional",
+    ]
+    depot.rmdir()
+    with pytest.raises(ValueError, match="Runtime environment was cleaned"):
+        simctl.evaluate(row, profile, {}, resume=str(run))
+
+
+@pytest.mark.parametrize("diagnostic", [False, True])
+def test_diagnostic_continuation_never_accepts_failed_native_test(
+    tmp_path, monkeypatch, diagnostic
+):
+    monkeypatch.setattr(simctl, "ROOT", tmp_path)
+    monkeypatch.setattr(simctl, "WORK", tmp_path / "work")
+    monkeypatch.setattr(simctl, "save", Mock())
+    monkeypatch.setattr(simctl, "copy_checkout", lambda row, target: target.mkdir())
+    stages = []
+
+    def execute(row, profile, stage, run, policy):
+        stages.append(stage)
+        return {
+            "stage": stage,
+            "status": "failed" if stage == "native_tests" else "passed",
+        }
+
+    monkeypatch.setattr(simctl, "phase", execute)
+    profile = {
+        "image": "fixture",
+        "install": "install",
+        "native_tests": "tests",
+        "smoke": "smoke",
+        "functional": "full",
+        "diagnose_after_native_failure": diagnostic,
+    }
+    result = simctl.evaluate(
+        {"id": "SIM-TEST", "repository": "test/repo", "commit": "a" * 40},
+        profile,
+        {"unrestricted_memory": True},
+    )
+    assert stages == (
+        ["install", "native_tests", "smoke", "functional"]
+        if diagnostic
+        else ["install", "native_tests"]
+    )
+    assert result["status"] == "partial"
+    assert result["phases"][1]["status"] == "failed"
 
 
 def test_completed_evaluation_preserves_review_added_during_run(monkeypatch):

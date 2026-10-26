@@ -1,5 +1,20 @@
 {
   "id": "SIM-007",
   "commit": "e80dcf643beefff08afd936a741ac8cc50723cb4",
-  "artifacts": []
+  "artifacts": [
+    {
+      "file": "graph-statistics.png",
+      "source": "research/.work/simulator-evaluation/SIM-007/20261025T110749Z-7c38a9/exports/malecns-depth/graph-statistics.png",
+      "sha256": "5a72743458603a056f70af0269f55b685d0c009124e3a84b643684a4782d9956",
+      "caption": "Распределения входящих/исходящих партнёров и весов реального графа MaleCNS v1.0: 166 700 узлов и 25 582 938 рёбер.",
+      "scope": "Структурная статистика авторского подготовленного графа с совпавшим content SHA-256; это не активность, спайки или ECAP."
+    },
+    {
+      "file": "graph-statistics.svg",
+      "source": "research/.work/simulator-evaluation/SIM-007/20261025T110749Z-7c38a9/exports/malecns-depth/graph-statistics.svg",
+      "sha256": "fd3ef4cfed5f27f584741864007d3478d87d09c19b67e468725c855b3d9f5b5b",
+      "caption": "Распределения входящих/исходящих партнёров и весов реального графа MaleCNS v1.0: 166 700 узлов и 25 582 938 рёбер.",
+      "scope": "Структурная статистика авторского подготовленного графа с совпавшим content SHA-256; это не активность, спайки или ECAP."
+    }
+  ]
 }

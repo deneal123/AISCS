@@ -1,5 +1,34 @@
 {
   "id": "SIM-018",
   "commit": "336e0d12a6edd92a7340cfffb71985a3879055ce",
-  "artifacts": []
+  "artifacts": [
+    {
+      "file": "control-study-checks.png",
+      "source": "research/.work/simulator-evaluation/SIM-018/20261026T093128Z-2622d0/exports/control-study-checks.png",
+      "sha256": "200400669494ae38616948d9b59c9a45f697828f4fd05c33265b788b6256b667",
+      "caption": "Короткий расчёт активности полной настроенной сети и аудит типов целевых узлов после перестройки.",
+      "scope": "Производный график фактических численных экспортов. Обобщение, биологическая валидность и человеческий перенос не проверены."
+    },
+    {
+      "file": "control-study-checks.svg",
+      "source": "research/.work/simulator-evaluation/SIM-018/20261026T093128Z-2622d0/exports/control-study-checks.svg",
+      "sha256": "17f4a9de7c583d55c72b40ecdbce6a9011b778ef4861c8f31f0888c03a45ab85",
+      "caption": "Короткий расчёт активности полной настроенной сети и аудит типов целевых узлов после перестройки.",
+      "scope": "Производный график фактических численных экспортов. Обобщение, биологическая валидность и человеческий перенос не проверены."
+    },
+    {
+      "file": "control-study-training.png",
+      "source": "research/.work/simulator-evaluation/SIM-018/20261026T093128Z-2622d0/exports/control-study-training.png",
+      "sha256": "9c5a776af10ad19c36449629e17fa1045e1f189e0326cc67e73c414c60d8ab00",
+      "caption": "Два шага авторского оптимизатора на диагностическом входе для seeds 1, 2, 3; не оценка качества обучения на MovingEdge.",
+      "scope": "Производный график фактических численных экспортов. Обобщение, биологическая валидность и человеческий перенос не проверены."
+    },
+    {
+      "file": "control-study-training.svg",
+      "source": "research/.work/simulator-evaluation/SIM-018/20261026T093128Z-2622d0/exports/control-study-training.svg",
+      "sha256": "7e8c195fafd2b28eff41459a812b854ed9f19a56c5841bb9abdd5a7099f30816",
+      "caption": "Два шага авторского оптимизатора на диагностическом входе для seeds 1, 2, 3; не оценка качества обучения на MovingEdge.",
+      "scope": "Производный график фактических численных экспортов. Обобщение, биологическая валидность и человеческий перенос не проверены."
+    }
+  ]
 }

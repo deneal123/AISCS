@@ -1,5 +1,48 @@
 {
   "id": "SIM-027",
   "commit": "10e7661bf414ba7b4c2edf795cd36d0f878c17c0",
-  "artifacts": []
+  "artifacts": [
+    {
+      "file": "manc-rate-recordings.png",
+      "source": "research/.work/simulator-evaluation/SIM-027/20261026T184640Z-a562e6/exports/manc-rate-recordings.png",
+      "sha256": "eba713440c69cbef093891c1b27e6071c7acb2ba1126df2f3432ba87a297b9ea",
+      "caption": "Записанная активность 4604 нейронов и выбранных моторных нейронов за две модельные секунды.",
+      "scope": "Вычислительные частоты активности native rate-модели; не спайки, не экспериментальные записи мухи, не ноцицепция и не CAP/ECAP. Физическая калибровка частоты и входного воздействия не проверена."
+    },
+    {
+      "file": "manc-rate-recordings.svg",
+      "source": "research/.work/simulator-evaluation/SIM-027/20261026T184640Z-a562e6/exports/manc-rate-recordings.svg",
+      "sha256": "1c062c999580bce0a8ced7798cd6afd32eafe8a1a4fa12926295851a6406c6ee",
+      "caption": "Записанная активность 4604 нейронов и выбранных моторных нейронов за две модельные секунды.",
+      "scope": "Вычислительные частоты активности native rate-модели; не спайки, не экспериментальные записи мухи, не ноцицепция и не CAP/ECAP. Физическая калибровка частоты и входного воздействия не проверена."
+    },
+    {
+      "file": "manc-rate-controls.png",
+      "source": "research/.work/simulator-evaluation/SIM-027/20261026T184640Z-a562e6/exports/manc-rate-controls.png",
+      "sha256": "87f0de6b348e0071f82c368c870a404c6fe2cd4338629c36807ba0cd786c2252",
+      "caption": "Разные seeds, отсутствие входа, отключение связей стимулируемого нейрона, временная константа и допуски решателя.",
+      "scope": "Вычислительные частоты активности native rate-модели; не спайки, не экспериментальные записи мухи, не ноцицепция и не CAP/ECAP. Физическая калибровка частоты и входного воздействия не проверена."
+    },
+    {
+      "file": "manc-rate-controls.svg",
+      "source": "research/.work/simulator-evaluation/SIM-027/20261026T184640Z-a562e6/exports/manc-rate-controls.svg",
+      "sha256": "64f940e3458a4a528462b3f1e7a403345ee1f2450fa121f526318c9aa5cb4ca7",
+      "caption": "Разные seeds, отсутствие входа, отключение связей стимулируемого нейрона, временная константа и допуски решателя.",
+      "scope": "Вычислительные частоты активности native rate-модели; не спайки, не экспериментальные записи мухи, не ноцицепция и не CAP/ECAP. Физическая калибровка частоты и входного воздействия не проверена."
+    },
+    {
+      "file": "native-motor-modules.png",
+      "source": "research/.work/simulator-evaluation/SIM-027/20261026T184640Z-a562e6/exports/native-motor-modules.png",
+      "sha256": "c9382d5b1b09b8c49362ac797e0dec0ddb6d802b76a7bc4e1a023d1c2ac9572c",
+      "caption": "Штатный график motor module для шести моторных нейронов, первые 0,75 модельной секунды.",
+      "scope": "Вычислительные частоты активности native rate-модели; не спайки, не экспериментальные записи мухи, не ноцицепция и не CAP/ECAP. Физическая калибровка частоты и входного воздействия не проверена."
+    },
+    {
+      "file": "native-motor-modules.svg",
+      "source": "research/.work/simulator-evaluation/SIM-027/20261026T184640Z-a562e6/exports/native-motor-modules.svg",
+      "sha256": "4eb1b3d38757c8c378fba1eef3362f353da6e034b5215cb56eb2f28de88666bc",
+      "caption": "Штатный график motor module для шести моторных нейронов, первые 0,75 модельной секунды.",
+      "scope": "Вычислительные частоты активности native rate-модели; не спайки, не экспериментальные записи мухи, не ноцицепция и не CAP/ECAP. Физическая калибровка частоты и входного воздействия не проверена."
+    }
+  ]
 }

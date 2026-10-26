@@ -19,6 +19,7 @@ import subprocess
 import sys
 import time
 import uuid
+from contextlib import contextmanager
 from pathlib import Path
 
 sys.dont_write_bytecode = True
@@ -75,6 +76,81 @@ def command(args, **kwargs):
         check=False,
         **kwargs,
     )
+
+
+def run_profile_controller(profile, resume=None):
+    """Dispatch the explicitly reviewed retained-container backend."""
+    controller = profile.get("execution_controller")
+    if controller != "conn_esn_linux":
+        raise ValueError("Unknown execution controller: " + str(controller))
+    if resume:
+        raise ValueError(
+            "The disposable Linux depot requires a fresh run, not --resume"
+        )
+    script = Path(__file__).with_name("probes") / "conn_esn_linux.py"
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(script)], check=True)
+
+
+@contextmanager
+def runtime_environment(row, profile, run, result):
+    """Optionally keep the venv in an owned Linux volume across stage containers."""
+    if profile.get("environment_storage") not in (None, "bind", "docker-volume"):
+        raise ValueError("Unknown environment storage")
+    if profile.get("environment_storage") != "docker-volume":
+        yield profile
+        return
+    name = "aspa-sim-" + row["id"].lower() + "-env-" + uuid.uuid4().hex[:10]
+    record = {"name": name, "mount": "/work/env", "status": "allocating"}
+    result["environment_volume"] = record
+    try:
+        allocated = command(
+            [
+                "docker",
+                "volume",
+                "create",
+                "--label",
+                "aspa.simulation.owner=simctl",
+                "--label",
+                "aspa.simulation.id=" + row["id"],
+                name,
+            ]
+        )
+        if allocated.returncode:
+            raise RuntimeError(
+                "Owned environment volume creation failed: " + allocated.stderr
+            )
+        record["status"] = "allocated"
+        save(run / "result.json", result)
+        yield dict(profile, _environment_volume=name)
+    finally:
+        try:
+            inspected = command(["docker", "volume", "inspect", name])
+            if inspected.returncode:
+                record["absent"] = "no such volume" in inspected.stderr.lower()
+                record["observation"] = inspected.stderr.strip()
+            else:
+                info = json.loads(inspected.stdout)
+                if (
+                    len(info) != 1
+                    or info[0].get("Name") != name
+                    or (info[0].get("Labels") or {}).get("aspa.simulation.owner")
+                    != "simctl"
+                    or (info[0].get("Labels") or {}).get("aspa.simulation.id")
+                    != row["id"]
+                ):
+                    raise ValueError("Environment volume ownership mismatch")
+                removed = command(["docker", "volume", "rm", name])
+                after = command(["docker", "volume", "inspect", name])
+                record["removal_exit_code"] = removed.returncode
+                record["absent"] = (
+                    after.returncode != 0 and "no such volume" in after.stderr.lower()
+                )
+            record["status"] = "removed" if record.get("absent") else "cleanup_pending"
+        except (OSError, subprocess.SubprocessError, ValueError) as exc:
+            record.update(
+                status="cleanup_pending", absent=False, cleanup_error=str(exc)
+            )
+        save(run / "result.json", result)
 
 
 def checked_work(path):
@@ -139,7 +215,41 @@ def docker_memory(name):
         return 0
 
 
+def probe_fingerprint(command_text, directory):
+    if "/work/probes/" not in command_text:
+        return None
+    files = {
+        p.relative_to(directory).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
+        for p in sorted(directory.rglob("*"))
+        if p.is_file()
+        and "__pycache__" not in p.parts
+        and p.suffix not in {".pyc", ".pyo"}
+    }
+    if not files:
+        raise ValueError("Referenced probes are missing")
+    return hashlib.sha256(json.dumps(files, sort_keys=True).encode()).hexdigest()
+
+
+def reusable_phase(record, profile, probes):
+    stage = record["stage"]
+    if record["status"] != "passed" or stage not in {
+        "install",
+        "native_tests",
+        "smoke",
+    }:
+        return False
+    text = profile.get(stage)
+    if not text:
+        return False
+    if stage != "install":
+        text = profile.get("runtime_prefix", "") + text
+    return record.get("command") == text and record.get(
+        "probe_fingerprint"
+    ) == probe_fingerprint(text, probes)
+
+
 def phase(row, profile, stage, run, policy):
+    run = run.resolve()
     phase_command = profile[stage]
     if stage != "install":
         phase_command = profile.get("runtime_prefix", "") + phase_command
@@ -159,6 +269,7 @@ def phase(row, profile, stage, run, policy):
         "seconds": 0,
         "exit_code": None,
         "data_scope": profile.get("data_scope", "unknown"),
+        "probe_fingerprint": probe_fingerprint(phase_command, run / "probes"),
     }
     if not policy.get("unrestricted_memory") and not admit(
         available, expected, policy["host_reserve_bytes"]
@@ -225,6 +336,9 @@ def phase(row, profile, stage, run, policy):
         phase_command,
     ]
     (run / "tmp").mkdir(exist_ok=True)
+    if profile.get("_environment_volume"):
+        index = args.index(profile["image"])
+        args[index:index] = ["-v", profile["_environment_volume"] + ":/work/env"]
     if not policy.get("unrestricted_memory"):
         args[2:2] = [
             "--memory",
@@ -299,6 +413,8 @@ def phase(row, profile, stage, run, policy):
 
 
 def evaluate(row, profile, policy, resume=None):
+    if resume and profile.get("environment_storage") == "docker-volume":
+        raise ValueError("The disposable Linux venv requires a fresh run, not --resume")
     run = (
         checked_work(ROOT / resume)
         if resume
@@ -316,7 +432,7 @@ def evaluate(row, profile, policy, resume=None):
     if resume:
         if run.parent != WORK / row["id"]:
             raise ValueError("Resume path does not belong to this candidate")
-        if not (run / "env").is_dir():
+        if not checked_work(run / profile.get("environment_dir", "env")).is_dir():
             raise ValueError(
                 "Runtime environment was cleaned; create a new run and reinstall dependencies"
             )
@@ -331,7 +447,9 @@ def evaluate(row, profile, policy, resume=None):
             for p in previous["phases"]
         ):
             raise ValueError("Only a successfully installed environment can be resumed")
-        if not (run / "dependencies.lock.txt").is_file():
+        if not checked_work(
+            run / profile.get("dependency_lock", "dependencies.lock.txt")
+        ).is_file():
             raise ValueError("Installed dependency lock is missing")
     else:
         run.mkdir(parents=True, exist_ok=False)
@@ -350,30 +468,20 @@ def evaluate(row, profile, policy, resume=None):
         result["phases"] = [
             p
             for p in previous["phases"]
-            if p["status"] == "passed"
-            and (
-                p["stage"] == "install"
-                or (
-                    p["stage"] in {"native_tests", "smoke"}
-                    and p.get("command")
-                    == profile.get("runtime_prefix", "") + profile[p["stage"]]
-                )
-            )
+            if reusable_phase(p, profile, Path(__file__).with_name("probes"))
         ]
         result["prior_checks"] = previous.get("prior_checks", []) + [
-            {
-                k: v
-                for k, v in p.items()
-                if k in {"stage", "status", "reason", "log", "log_sha256"}
-            }
-            for p in previous["phases"]
-            if p not in result["phases"]
+            dict(p) for p in previous["phases"] if p not in result["phases"]
         ]
+    stages = ["install", "native_tests", "smoke"]
+    if profile.get("data_prepare"):
+        stages.append("data_prepare")
+    stages.append("functional")
     # Admission follows the next actual phase, including a resumed scenario.
     first_pending = next(
         (
             stage
-            for stage in ["install", "native_tests", "smoke", "functional"]
+            for stage in stages
             if profile.get(stage)
             and not any(
                 p["stage"] == stage and p["status"] == "passed"
@@ -449,6 +557,100 @@ def evaluate(row, profile, policy, resume=None):
             from probes.infinite_sugar_assets import hydrate
 
             hydrate(run, candidate_id="SIM-009")
+        if (
+            row["id"]
+            in {
+                "SIM-002",
+                "SIM-010",
+                "SIM-011",
+                "SIM-012",
+                "SIM-013",
+                "SIM-014",
+                "SIM-015",
+                "SIM-016",
+                "SIM-017",
+                "SIM-018",
+                "SIM-019",
+                "SIM-020",
+                "SIM-021",
+                "SIM-022",
+                "SIM-023",
+                "SIM-024",
+                "SIM-025",
+                "SIM-026",
+                "SIM-027",
+                "SIM-029",
+                "SIM-030",
+                "SIM-031",
+                "SIM-032",
+                "SIM-033",
+            }
+            and not previous
+        ):
+            if row["id"] == "SIM-002":
+                from probes.fitting_assets import hydrate
+            elif row["id"] == "SIM-010":
+                from probes.optic_lobe_assets import hydrate
+            elif row["id"] == "SIM-011":
+                from probes.banc_assets import hydrate
+            elif row["id"] == "SIM-012":
+                from probes.fanc_assets import hydrate
+            elif row["id"] == "SIM-013":
+                from probes.conn_esn_assets import hydrate
+            elif row["id"] == "SIM-014":
+                from probes.flylif_assets import hydrate
+            elif row["id"] == "SIM-015":
+                from probes.claude_assets import hydrate
+            elif row["id"] == "SIM-016":
+                from probes.soup_assets import hydrate
+            elif row["id"] == "SIM-017":
+                from probes.flywire_assets import hydrate
+            elif row["id"] == "SIM-018":
+                from probes.control_study_assets import hydrate
+            elif row["id"] == "SIM-019":
+                from probes.scalebreak_assets import hydrate
+            elif row["id"] == "SIM-022":
+                from probes.snntorch_assets import hydrate
+            elif row["id"] == "SIM-023":
+                from probes.doom_assets import hydrate
+            elif row["id"] == "SIM-024":
+                from probes.shiu_assets import hydrate
+            elif row["id"] == "SIM-025":
+                from probes.mbi_assets import hydrate
+            elif row["id"] == "SIM-026":
+                from probes.flyconnectome_assets import hydrate
+            elif row["id"] == "SIM-027":
+                from probes.pugliese_assets import hydrate
+            elif row["id"] == "SIM-029":
+                from probes.snedea_assets import hydrate
+            elif row["id"] == "SIM-030":
+                from probes.fcta_assets import hydrate
+            elif row["id"] == "SIM-031":
+                from probes.flyvis_assets import hydrate
+            elif row["id"] == "SIM-032":
+                from probes.wormvae_assets import hydrate
+            elif row["id"] == "SIM-033":
+                from probes.data_prep_assets import hydrate
+            else:
+                from probes.flygym2_assets import hydrate
+
+            try:
+                if row["id"] == "SIM-021":
+                    hydrate(run, candidate_id="SIM-021")
+                else:
+                    hydrate(run)
+            except (OSError, ValueError, subprocess.SubprocessError) as exc:
+                result["phases"].append(
+                    {
+                        "stage": "asset_validation",
+                        "status": "blocked",
+                        "reason": "pinned_connectome_input_unavailable",
+                        "detail": str(exc),
+                    }
+                )
+                result["status"] = "blocked"
+                save(run / "result.json", result)
+                return result
         for asset in profile.get("assets", []):
             source = checked_work(WORK / asset["source"])
             if (
@@ -467,27 +669,35 @@ def evaluate(row, profile, policy, resume=None):
             destination = checked_work(run / "assets" / asset["destination"])
             destination.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(source, destination)
-        for stage in ["install", "native_tests", "smoke", "functional"]:
-            if previous and any(
-                p["stage"] == stage and p["status"] == "passed"
-                for p in result["phases"]
-            ):
-                continue
-            if not profile.get(stage):
-                result["phases"].append(
-                    {
-                        "stage": stage,
-                        "status": "inapplicable",
-                        "reason": profile.get(
-                            stage + "_reason", "No native entry point registered"
-                        ),
-                    }
-                )
-                continue
-            item = phase(row, profile, stage, run, policy)
-            result["phases"].append(item)
-            if item["status"] != "passed":
-                break
+        with runtime_environment(row, profile, run, result) as runtime_profile:
+            for stage in stages:
+                if previous and any(
+                    p["stage"] == stage and p["status"] == "passed"
+                    for p in result["phases"]
+                ):
+                    continue
+                if not profile.get(stage):
+                    result["phases"].append(
+                        {
+                            "stage": stage,
+                            "status": "inapplicable",
+                            "reason": profile.get(
+                                stage + "_reason", "No native entry point registered"
+                            ),
+                        }
+                    )
+                    continue
+                item = phase(row, runtime_profile, stage, run, policy)
+                result["phases"].append(item)
+                if item["status"] != "passed":
+                    if (
+                        stage == "native_tests"
+                        and item["status"] == "failed"
+                        and profile.get("diagnose_after_native_failure") is True
+                    ):
+                        # Preserve the failed test when diagnosing the remaining functions.
+                        continue
+                    break
     states = [p["status"] for p in result["phases"]]
     result["status"] = (
         "reproduced"
@@ -555,6 +765,11 @@ def main():
                         "reason", "Source or execution profile unavailable"
                     ),
                 )
+                continue
+            if profile.get("execution_controller"):
+                run_profile_controller(profile, args.resume)
+                # The controller reconciles its owned runtime and writes the
+                # receipt/registry; do not overwrite it with stale queue state.
                 continue
             result = evaluate(row, profile, policy, resume=args.resume)
             row["evaluation"] = {

@@ -1,5 +1,90 @@
 {
   "id": "SIM-030",
   "commit": "af8e451d9010294c185b966c953616b212f0294c",
-  "artifacts": []
+  "artifacts": [
+    {
+      "file": "native-figure-1.pdf",
+      "source": "research/.work/simulator-evaluation/SIM-030/assets/bundle/figures/figure1.pdf",
+      "sha256": "2dd2d5090e948a6fffc95a844041aab4de8323a8c30d44c330adc4dac00df022",
+      "caption": "Авторская схема frozen-оператора, входных портов и семейств нулевых моделей.",
+      "scope": "Stavros Therianos, arXiv:2606.17745, исходный пакет Stavros963/fcta af8e451; CC BY 4.0 согласно README. Оригинальный авторский PDF или его прямое отображение Poppler 24.04.0. Численный pipeline и построение рисунка из графа здесь не воспроизведены."
+    },
+    {
+      "file": "native-figure-1.png",
+      "source": "research/.work/simulator-evaluation/SIM-030/20261026T193144Z-95260c/exports/figures/native-figure-1.png",
+      "sha256": "7a04c15ab69f6cbfbc5deecb3831379f1b39471b81aa01859992a18ecd314566",
+      "caption": "Авторская схема frozen-оператора, входных портов и семейств нулевых моделей.",
+      "scope": "Stavros Therianos, arXiv:2606.17745, исходный пакет Stavros963/fcta af8e451; CC BY 4.0 согласно README. Оригинальный авторский PDF или его прямое отображение Poppler 24.04.0. Численный pipeline и построение рисунка из графа здесь не воспроизведены."
+    },
+    {
+      "file": "native-figure-2.pdf",
+      "source": "research/.work/simulator-evaluation/SIM-030/assets/bundle/figures/figure2.pdf",
+      "sha256": "61b0e1843cb5a631b8d5a7bfbe1dbd9b3a23e6355af89d6f0b6cba669e9204b7",
+      "caption": "Авторские спектры, отношение сингулярного значения к спектральному радиусу и эффективная размерность.",
+      "scope": "Stavros Therianos, arXiv:2606.17745, исходный пакет Stavros963/fcta af8e451; CC BY 4.0 согласно README. Оригинальный авторский PDF или его прямое отображение Poppler 24.04.0. Численный pipeline и построение рисунка из графа здесь не воспроизведены."
+    },
+    {
+      "file": "native-figure-2.png",
+      "source": "research/.work/simulator-evaluation/SIM-030/20261026T193144Z-95260c/exports/figures/native-figure-2.png",
+      "sha256": "1abd2563fb81d844867e2e44178193b4c5814a007e060bb030f365c8a367dda9",
+      "caption": "Авторские спектры, отношение сингулярного значения к спектральному радиусу и эффективная размерность.",
+      "scope": "Stavros Therianos, arXiv:2606.17745, исходный пакет Stavros963/fcta af8e451; CC BY 4.0 согласно README. Оригинальный авторский PDF или его прямое отображение Poppler 24.04.0. Численный pipeline и построение рисунка из графа здесь не воспроизведены."
+    },
+    {
+      "file": "native-figure-3.pdf",
+      "source": "research/.work/simulator-evaluation/SIM-030/assets/bundle/figures/figure3.pdf",
+      "sha256": "dad1c3573373a0d408bd3ef0195b4c58477bfceac6497e1445bdfe31d355b933",
+      "caption": "Авторские матрицы и сравнение структурных статистик коннектома с ансамблем.",
+      "scope": "Stavros Therianos, arXiv:2606.17745, исходный пакет Stavros963/fcta af8e451; CC BY 4.0 согласно README. Оригинальный авторский PDF или его прямое отображение Poppler 24.04.0. Численный pipeline и построение рисунка из графа здесь не воспроизведены."
+    },
+    {
+      "file": "native-figure-3.png",
+      "source": "research/.work/simulator-evaluation/SIM-030/20261026T193144Z-95260c/exports/figures/native-figure-3.png",
+      "sha256": "047045a03b3ce937cc9a74250ffde22d06c7ae9ac6b27a7a890983bdaa89afca",
+      "caption": "Авторские матрицы и сравнение структурных статистик коннектома с ансамблем.",
+      "scope": "Stavros Therianos, arXiv:2606.17745, исходный пакет Stavros963/fcta af8e451; CC BY 4.0 согласно README. Оригинальный авторский PDF или его прямое отображение Poppler 24.04.0. Численный pipeline и построение рисунка из графа здесь не воспроизведены."
+    },
+    {
+      "file": "native-figure-4.pdf",
+      "source": "research/.work/simulator-evaluation/SIM-030/assets/bundle/figures/figure4.pdf",
+      "sha256": "6bf4d726bc1cf60adb7daca987651d4623fd03d3c32a86cf50a3b8ce0d1cd4ac",
+      "caption": "Авторские анализ мод и семейная поправка множественных сравнений.",
+      "scope": "Stavros Therianos, arXiv:2606.17745, исходный пакет Stavros963/fcta af8e451; CC BY 4.0 согласно README. Оригинальный авторский PDF или его прямое отображение Poppler 24.04.0. Численный pipeline и построение рисунка из графа здесь не воспроизведены."
+    },
+    {
+      "file": "native-figure-4.png",
+      "source": "research/.work/simulator-evaluation/SIM-030/20261026T193144Z-95260c/exports/figures/native-figure-4.png",
+      "sha256": "c2a7c2bb64ba627aeac7a43df1751f35b3ccd1f1c9884734396fb9e4bcaa0a80",
+      "caption": "Авторские анализ мод и семейная поправка множественных сравнений.",
+      "scope": "Stavros Therianos, arXiv:2606.17745, исходный пакет Stavros963/fcta af8e451; CC BY 4.0 согласно README. Оригинальный авторский PDF или его прямое отображение Poppler 24.04.0. Численный pipeline и построение рисунка из графа здесь не воспроизведены."
+    },
+    {
+      "file": "native-figure-5.pdf",
+      "source": "research/.work/simulator-evaluation/SIM-030/assets/bundle/figures/figure5.pdf",
+      "sha256": "41f6731b549ab20bf3f8aaa211c32bbe764f68ca6899696c5101466be04dbeeb",
+      "caption": "Авторское сопоставление маршрутизации активности при разреженном входе и разных уровнях контроля.",
+      "scope": "Stavros Therianos, arXiv:2606.17745, исходный пакет Stavros963/fcta af8e451; CC BY 4.0 согласно README. Оригинальный авторский PDF или его прямое отображение Poppler 24.04.0. Численный pipeline и построение рисунка из графа здесь не воспроизведены."
+    },
+    {
+      "file": "native-figure-5.png",
+      "source": "research/.work/simulator-evaluation/SIM-030/20261026T193144Z-95260c/exports/figures/native-figure-5.png",
+      "sha256": "105edab91ebbb46a8d1d29a0ba662bdb19bd78fe7c7f31de031a089a76ddb56e",
+      "caption": "Авторское сопоставление маршрутизации активности при разреженном входе и разных уровнях контроля.",
+      "scope": "Stavros Therianos, arXiv:2606.17745, исходный пакет Stavros963/fcta af8e451; CC BY 4.0 согласно README. Оригинальный авторский PDF или его прямое отображение Poppler 24.04.0. Численный pipeline и построение рисунка из графа здесь не воспроизведены."
+    },
+    {
+      "file": "native-figure-6.pdf",
+      "source": "research/.work/simulator-evaluation/SIM-030/assets/bundle/figures/figure6.pdf",
+      "sha256": "18be50e5f86e8ca47af1c30dae9384edef592347a3e55b37b69c548d22965add",
+      "caption": "Авторская итоговая сводка статистических и структурных вкладов. Это не наша оценка объяснённой дисперсии или пользы переноса.",
+      "scope": "Stavros Therianos, arXiv:2606.17745, исходный пакет Stavros963/fcta af8e451; CC BY 4.0 согласно README. Оригинальный авторский PDF или его прямое отображение Poppler 24.04.0. Численный pipeline и построение рисунка из графа здесь не воспроизведены."
+    },
+    {
+      "file": "native-figure-6.png",
+      "source": "research/.work/simulator-evaluation/SIM-030/20261026T193144Z-95260c/exports/figures/native-figure-6.png",
+      "sha256": "fea538da4d04b32b579993e831e060610ff2e1636ff03c69f6c2f0e64df79cfa",
+      "caption": "Авторская итоговая сводка статистических и структурных вкладов. Это не наша оценка объяснённой дисперсии или пользы переноса.",
+      "scope": "Stavros Therianos, arXiv:2606.17745, исходный пакет Stavros963/fcta af8e451; CC BY 4.0 согласно README. Оригинальный авторский PDF или его прямое отображение Poppler 24.04.0. Численный pipeline и построение рисунка из графа здесь не воспроизведены."
+    }
+  ]
 }
