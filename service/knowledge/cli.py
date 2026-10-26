@@ -25,6 +25,11 @@ def parser(subparsers: argparse._SubParsersAction) -> None:
     publish.add_argument("--allow-offline", action="store_true")
     actions.add_parser("rollback")
     actions.add_parser("check")
+    export = actions.add_parser("export", help="portable snapshot for another server")
+    export.add_argument("--output", type=Path, help="default: .knowledge/snapshots/")
+    restore = actions.add_parser("restore", help="place a verified snapshot, then build")
+    restore.add_argument("archive", type=Path)
+    restore.add_argument("--force", action="store_true", help="overwrite existing files")
     search = actions.add_parser("search")
     search.add_argument("query")
     search.add_argument("--mode", choices=("hybrid", "lexical", "dense"), default="hybrid")
@@ -49,6 +54,12 @@ def run(args: argparse.Namespace, repository: ResearchRepository) -> dict:
         return verify(engine)
     if action == "status":
         return engine.status()
+    if action in {"export", "restore"}:
+        from .portable import export_knowledge, restore_knowledge
+
+        if action == "export":
+            return export_knowledge(engine, args.output)
+        return restore_knowledge(engine, args.archive, force=args.force)
     if action == "prepare":
         from .corpus import portable_manifest, prepare_corpus
 

@@ -1,0 +1,327 @@
+{
+  "suite": "library-retrieval-v1",
+  "evaluated_at": "2026-10-26",
+  "generation": "g-de56bca94309426fc6b0a94e",
+  "collection": "aspa_library_g_de56bca94309426fc6b0a94e",
+  "chunker": "library-chunker-v1",
+  "cases": 24,
+  "hits": 24,
+  "recall_at_5": 1.0,
+  "quality_ok": true,
+  "requested_mode": "hybrid",
+  "all_backends_used": true,
+  "results": [
+    {
+      "id": "L01",
+      "hit": true,
+      "returned_books": [
+        "B007",
+        "B008",
+        "B008",
+        "B008",
+        "B004"
+      ],
+      "mode": "hybrid",
+      "errors": []
+    },
+    {
+      "id": "L02",
+      "hit": true,
+      "returned_books": [
+        "B008",
+        "B001",
+        "B004",
+        "B008",
+        "B004"
+      ],
+      "mode": "hybrid",
+      "errors": []
+    },
+    {
+      "id": "L03",
+      "hit": true,
+      "returned_books": [
+        "B008",
+        "B009",
+        "B001",
+        "B009",
+        "B008"
+      ],
+      "mode": "hybrid",
+      "errors": []
+    },
+    {
+      "id": "L04",
+      "hit": true,
+      "returned_books": [
+        "B008",
+        "B009",
+        "B009",
+        "B009",
+        "B001"
+      ],
+      "mode": "hybrid",
+      "errors": []
+    },
+    {
+      "id": "L05",
+      "hit": true,
+      "returned_books": [
+        "B001",
+        "B001",
+        "B009",
+        "B001",
+        "B009"
+      ],
+      "mode": "hybrid",
+      "errors": []
+    },
+    {
+      "id": "L06",
+      "hit": true,
+      "returned_books": [
+        "B002",
+        "B002",
+        "B002",
+        "B003",
+        "B006"
+      ],
+      "mode": "hybrid",
+      "errors": []
+    },
+    {
+      "id": "L07",
+      "hit": true,
+      "returned_books": [
+        "B003",
+        "B003",
+        "B003",
+        "B009",
+        "B002"
+      ],
+      "mode": "hybrid",
+      "errors": []
+    },
+    {
+      "id": "L08",
+      "hit": true,
+      "returned_books": [
+        "B003",
+        "B006",
+        "B006",
+        "B006",
+        "B003"
+      ],
+      "mode": "hybrid",
+      "errors": []
+    },
+    {
+      "id": "L09",
+      "hit": true,
+      "returned_books": [
+        "B005",
+        "B005",
+        "B005",
+        "B002",
+        "B009"
+      ],
+      "mode": "hybrid",
+      "errors": []
+    },
+    {
+      "id": "L10",
+      "hit": true,
+      "returned_books": [
+        "B005",
+        "B005",
+        "B005",
+        "B009",
+        "B006"
+      ],
+      "mode": "hybrid",
+      "errors": []
+    },
+    {
+      "id": "L11",
+      "hit": true,
+      "returned_books": [
+        "B008",
+        "B008",
+        "B004",
+        "B004",
+        "B004"
+      ],
+      "mode": "hybrid",
+      "errors": []
+    },
+    {
+      "id": "L12",
+      "hit": true,
+      "returned_books": [
+        "B010",
+        "B010",
+        "B010",
+        "B004",
+        "B008"
+      ],
+      "mode": "hybrid",
+      "errors": []
+    },
+    {
+      "id": "L13",
+      "hit": true,
+      "returned_books": [
+        "B010",
+        "B005",
+        "B010",
+        "B010",
+        "B004"
+      ],
+      "mode": "hybrid",
+      "errors": []
+    },
+    {
+      "id": "L14",
+      "hit": true,
+      "returned_books": [
+        "B009",
+        "B009",
+        "B009",
+        "B007",
+        "B010"
+      ],
+      "mode": "hybrid",
+      "errors": []
+    },
+    {
+      "id": "L15",
+      "hit": true,
+      "returned_books": [
+        "B007",
+        "B007",
+        "B008",
+        "B009",
+        "B010"
+      ],
+      "mode": "hybrid",
+      "errors": []
+    },
+    {
+      "id": "L16",
+      "hit": true,
+      "returned_books": [
+        "B004",
+        "B007",
+        "B008",
+        "B004",
+        "B004"
+      ],
+      "mode": "hybrid",
+      "errors": []
+    },
+    {
+      "id": "L17",
+      "hit": true,
+      "returned_books": [
+        "B004",
+        "B004",
+        "B004",
+        "B010",
+        "B010"
+      ],
+      "mode": "hybrid",
+      "errors": []
+    },
+    {
+      "id": "L18",
+      "hit": true,
+      "returned_books": [
+        "B009",
+        "B009",
+        "B009",
+        "B008",
+        "B008"
+      ],
+      "mode": "hybrid",
+      "errors": []
+    },
+    {
+      "id": "L19",
+      "hit": true,
+      "returned_books": [
+        "B007",
+        "B009",
+        "B009",
+        "B009",
+        "B004"
+      ],
+      "mode": "hybrid",
+      "errors": []
+    },
+    {
+      "id": "L20",
+      "hit": true,
+      "returned_books": [
+        "B006",
+        "B006",
+        "B006",
+        "B005",
+        "B005"
+      ],
+      "mode": "hybrid",
+      "errors": []
+    },
+    {
+      "id": "L21",
+      "hit": true,
+      "returned_books": [
+        "B006",
+        "B006",
+        "B006",
+        "B008",
+        "B001"
+      ],
+      "mode": "hybrid",
+      "errors": []
+    },
+    {
+      "id": "L22",
+      "hit": true,
+      "returned_books": [
+        "B006",
+        "B006",
+        "B006",
+        "B005",
+        "B003"
+      ],
+      "mode": "hybrid",
+      "errors": []
+    },
+    {
+      "id": "L23",
+      "hit": true,
+      "returned_books": [
+        "B005",
+        "B005",
+        "B005",
+        "B009",
+        "B009"
+      ],
+      "mode": "hybrid",
+      "errors": []
+    },
+    {
+      "id": "L24",
+      "hit": true,
+      "returned_books": [
+        "B005",
+        "B005",
+        "B005",
+        "B009",
+        "B009"
+      ],
+      "mode": "hybrid",
+      "errors": []
+    }
+  ]
+}

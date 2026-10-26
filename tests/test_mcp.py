@@ -51,6 +51,10 @@ def test_mcp_protocol_initialization_discovery_resource_and_read_tool() -> None:
                 "graph_context",
                 "get_evidence",
                 "knowledge_status",
+                "library_status",
+                "list_library_books",
+                "search_library",
+                "get_library_passage",
             } == {tool.name for tool in tools.tools}
             resources = await client.list_resources()
             resource_uris = {str(resource.uri) for resource in resources.resources}
@@ -66,6 +70,8 @@ def test_mcp_protocol_initialization_discovery_resource_and_read_tool() -> None:
             assert "research://novelty-landscape" in resource_uris
             assert "research://dissertation-concept" in resource_uris
             assert "research://runtime-audit" in resource_uris
+            assert "research://library-catalog" in resource_uris
+            assert "research://library-guide" in resource_uris
             templates = await client.list_resource_templates()
             assert {
                 "research://source/{source_id}",

@@ -1,0 +1,269 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "aspa-research/knowledge/library/catalog.schema.json",
+  "title": "Каталог методической библиотеки",
+  "description": "Проверяется кодом service.library.catalog.validate_catalog; схема документирует контракт.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "source_dir",
+    "books"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "library": {
+      "type": "string"
+    },
+    "purpose": {
+      "type": "string"
+    },
+    "source_dir": {
+      "type": "string",
+      "description": "Каталог оригиналов относительно корня research."
+    },
+    "checked_at": {
+      "type": "string",
+      "format": "date"
+    },
+    "books": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/book"
+      }
+    }
+  },
+  "$defs": {
+    "resolution": {
+      "type": "object",
+      "required": [
+        "status",
+        "reason"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "reported",
+            "not_reported",
+            "not_applicable",
+            "unavailable_after_search"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "locator": {
+          "type": "string"
+        }
+      }
+    },
+    "toc_item": {
+      "type": "object",
+      "required": [
+        "level",
+        "title",
+        "page"
+      ],
+      "properties": {
+        "level": {
+          "enum": [
+            1,
+            2,
+            3,
+            4
+          ]
+        },
+        "title": {
+          "type": "string"
+        },
+        "page": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "match": {
+          "type": "string",
+          "description": "Начало заголовка на странице, если оно отличается от title."
+        }
+      }
+    },
+    "book": {
+      "type": "object",
+      "required": [
+        "book_id",
+        "title",
+        "authors",
+        "format",
+        "completeness",
+        "origin",
+        "sha256"
+      ],
+      "properties": {
+        "book_id": {
+          "type": "string",
+          "pattern": "^B[0-9]{3}$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "authors": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "translators": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "language": {
+          "type": "string"
+        },
+        "original_language": {
+          "type": "string"
+        },
+        "year": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "publisher": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "city": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "isbn": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "edition": {
+          "type": "string"
+        },
+        "format": {
+          "enum": [
+            "fb2",
+            "doc",
+            "md",
+            "djvu_xml",
+            "html",
+            "pdf"
+          ]
+        },
+        "completeness": {
+          "enum": [
+            "full_text",
+            "fragment"
+          ]
+        },
+        "origin": {
+          "oneOf": [
+            {
+              "type": "object",
+              "required": [
+                "kind",
+                "file"
+              ],
+              "properties": {
+                "kind": {
+                  "const": "file"
+                },
+                "file": {
+                  "type": "string"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "required": [
+                "kind",
+                "url",
+                "retrieved_at"
+              ],
+              "properties": {
+                "kind": {
+                  "const": "url"
+                },
+                "url": {
+                  "type": "string",
+                  "pattern": "^https?://"
+                },
+                "pointer_file": {
+                  "type": "string"
+                },
+                "retrieved_at": {
+                  "type": "string",
+                  "format": "date"
+                }
+              }
+            }
+          ]
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "options": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "exclude_sections": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "toc": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/toc_item"
+              }
+            },
+            "inline_headings": {
+              "const": "roman_decimal"
+            },
+            "max_heading_level": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 6
+            },
+            "pdf_layout": {
+              "enum": [
+                "pages",
+                "spreads"
+              ],
+              "description": "spreads: разворот из двух печатных страниц на листе PDF."
+            },
+            "join_split_words": {
+              "type": "boolean",
+              "description": "Склеивать разорванные OCR пробелом слова, если слитная форма есть в книге."
+            }
+          }
+        },
+        "field_resolution": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/resolution"
+          }
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

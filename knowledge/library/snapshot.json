@@ -1,0 +1,17 @@
+{
+  "format": "aspa-index-snapshot",
+  "version": 1,
+  "index": "library",
+  "created_at": "2026-10-26T15:45:30+00:00",
+  "generation": "g-de56bca94309426fc6b0a94e",
+  "projection_sha256": "15819b6a7727842b70abe215b094b21f070140b3dc77fd9160c5e1425fb5799a",
+  "documents_sha256": "649940fb081fea15da6ae0421b3080cf2d1eca08c94e475d40781a61f159f633",
+  "catalog_sha256": "53e4786c036f4c6e01811ba9337ca9b778a39bd24dd30c8a003082a4ffd54d87",
+  "chunker": "library-chunker-v1",
+  "model": "gigachat:EmbeddingsGigaR",
+  "archive": "library-g-de56bca94309426fc6b0a94e.zip",
+  "archive_sha256": "8ec310bc48aa317882914c752215eb8f474df3a06ad6a43e4093f4fc56237bb8",
+  "archive_bytes": 22047045,
+  "file_count": 13,
+  "payload_bytes": 84609453
+}

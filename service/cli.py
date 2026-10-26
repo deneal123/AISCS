@@ -46,6 +46,8 @@ def build_parser() -> argparse.ArgumentParser:
     subparsers = parser.add_subparsers(dest="command", required=True)
     from .knowledge.cli import parser as knowledge_parser
     knowledge_parser(subparsers)
+    from .library.cli import parser as library_parser
+    library_parser(subparsers)
 
     validate = subparsers.add_parser("validate", help="run all repository integrity gates")
     validate.add_argument(
@@ -159,6 +161,12 @@ def main(argv: list[str] | None = None) -> int:
         if args.command == "knowledge":
             from .knowledge.cli import run
             report = run(args, repository)
+            emit(report)
+            return 0 if report.get("ok", report.get("quality_ok", True)) else 1
+        if args.command == "library":
+            from .library.cli import run as library_run
+
+            report = library_run(args, repository)
             emit(report)
             return 0 if report.get("ok", report.get("quality_ok", True)) else 1
         if args.command == "stats":

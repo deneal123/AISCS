@@ -85,20 +85,23 @@ def verify(engine, *, backends: bool = True) -> dict:
     }
 
 
-def verify_backend_ids(settings, projection: dict, info: dict, embeddable) -> list[str]:
+def verify_backend_ids(
+    settings, projection: dict, info: dict, embeddable, *, graph=None
+) -> list[str]:
     """Check candidate identities, not merely counts, before switching the pointer."""
     errors = []
     nodes = {n["id"]: n for n in projection["nodes"]}
     try:
-        graph = GraphStore(settings)
+        graph = graph or GraphStore(settings)
+        label = getattr(graph, "label", "Knowledge")
         actual = graph.query(
-            "MATCH (n:Knowledge {generation:$generation}) RETURN n.id AS id",
+            f"MATCH (n:{label} {{generation:$generation}}) RETURN n.id AS id",
             generation=info["generation"],
         )
         if {r["id"] for r in actual} != set(nodes):
             errors.append("Neo4j node IDs differ from projection")
         actual_edges = graph.query(
-            "MATCH (n:Knowledge {generation:$generation})-[r:LINK]->() RETURN r.id AS id",
+            f"MATCH (n:{label} {{generation:$generation}})-[r:LINK]->() RETURN r.id AS id",
             generation=info["generation"],
         )
         if {r["id"] for r in actual_edges} != {e["id"] for e in projection["edges"]}:

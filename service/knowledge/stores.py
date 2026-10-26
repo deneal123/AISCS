@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 import uuid
 
 import httpx
@@ -12,10 +13,26 @@ from ..core import DataError
 from .settings import KnowledgeSettings
 from .terminology import STOPWORDS
 
+LABEL = re.compile(r"^[A-Z][A-Za-z]{2,31}$")
+
 
 class GraphStore:
-    def __init__(self, settings: KnowledgeSettings):
+    """One node label per index family; ``Knowledge`` keeps its historical names."""
+
+    def __init__(
+        self,
+        settings: KnowledgeSettings,
+        *,
+        label: str = "Knowledge",
+        analyzer: str = "standard-no-stop-words",
+    ):
+        if not LABEL.fullmatch(label) or not re.fullmatch(r"[a-z-]+", analyzer):
+            raise DataError("invalid graph label or fulltext analyzer")
         self.settings = settings
+        self.label = label
+        self.analyzer = analyzer
+        self.index = label.lower() + "_text"
+        self.constraint = label.lower() + "_key"
 
     def query(self, cypher: str, **parameters: object) -> list[dict]:
         try:
@@ -33,13 +50,13 @@ class GraphStore:
 
     def import_graph(self, generation: str, projection: dict) -> None:
         self.query(
-            "CREATE CONSTRAINT knowledge_key IF NOT EXISTS "
-            "FOR (n:Knowledge) REQUIRE n.key IS UNIQUE"
+            f"CREATE CONSTRAINT {self.constraint} IF NOT EXISTS "
+            f"FOR (n:{self.label}) REQUIRE n.key IS UNIQUE"
         )
         self.query(
-            "CREATE FULLTEXT INDEX knowledge_text IF NOT EXISTS "
-            "FOR (n:Knowledge) ON EACH [n.text] "
-            "OPTIONS {indexConfig: {`fulltext.analyzer`: 'standard-no-stop-words'}}"
+            f"CREATE FULLTEXT INDEX {self.index} IF NOT EXISTS "
+            f"FOR (n:{self.label}) ON EACH [n.text] "
+            f"OPTIONS {{indexConfig: {{`fulltext.analyzer`: '{self.analyzer}'}}}}"
         )
         nodes = [
             {
@@ -54,14 +71,14 @@ class GraphStore:
         ]
         for start in range(0, len(nodes), 100):
             self.query(
-                "UNWIND $rows AS row MERGE (n:Knowledge {key:row.key}) SET n += row",
+                f"UNWIND $rows AS row MERGE (n:{self.label} {{key:row.key}}) SET n += row",
                 rows=nodes[start : start + 100],
             )
         for start in range(0, len(projection["edges"]), 200):
             self.query(
                 "UNWIND $rows AS row "
-                "MATCH (a:Knowledge {key:$generation+':'+row.source}) "
-                "MATCH (b:Knowledge {key:$generation+':'+row.target}) "
+                f"MATCH (a:{self.label} {{key:$generation+':'+row.source}}) "
+                f"MATCH (b:{self.label} {{key:$generation+':'+row.target}}) "
                 "MERGE (a)-[r:LINK {id:row.id}]->(b) "
                 "SET r.kind=row.type, r.status=row.status, r.document=row.document",
                 generation=generation,
@@ -84,7 +101,7 @@ class GraphStore:
         if not words:
             return []
         rows = self.query(
-            "CALL db.index.fulltext.queryNodes('knowledge_text',$query) "
+            f"CALL db.index.fulltext.queryNodes('{self.index}',$query) "
             "YIELD node,score WHERE node.generation=$generation "
             "AND ($allowed IS NULL OR node.id IN $allowed) "
             "RETURN node.id AS id ORDER BY score DESC, id LIMIT $limit",
@@ -97,11 +114,12 @@ class GraphStore:
 
     def counts(self, generation: str) -> dict:
         nodes = self.query(
-            "MATCH (n:Knowledge {generation:$generation}) RETURN count(n) AS count",
+            f"MATCH (n:{self.label} {{generation:$generation}}) RETURN count(n) AS count",
             generation=generation,
         )[0]["count"]
         edges = self.query(
-            "MATCH (n:Knowledge {generation:$generation})-[r:LINK]->() RETURN count(r) AS count",
+            f"MATCH (n:{self.label} {{generation:$generation}})-[r:LINK]->() "
+            "RETURN count(r) AS count",
             generation=generation,
         )[0]["count"]
         return {"nodes": nodes, "edges": edges}

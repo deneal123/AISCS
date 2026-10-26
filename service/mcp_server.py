@@ -25,7 +25,10 @@ SERVER_INSTRUCTIONS = (
     "Drosophila simulation, transfer to human pain datasets, and clinical SCS validation as "
     "separate evidence levels. The required bridge uses a Drosophila dynamics model and a "
     "separate physical human ECAP observation model; the fly is not a direct digital twin of "
-    "the human spinal cord. Mutating tools require an explicit apply=true where offered."
+    "the human spinal cord. Mutating tools require an explicit apply=true where offered. "
+    "The library_* tools search a separate index of methodology books (thesis writing, "
+    "defence, reading, argumentation, presenting); they give authors' advice with book, "
+    "section and page locators, never scientific evidence for the registry."
 )
 
 READ_ONLY = ToolAnnotations(readOnlyHint=True, destructiveHint=False, openWorldHint=False)
@@ -70,6 +73,15 @@ class ResearchMcpService:
         from .knowledge.engine import KnowledgeEngine
 
         self.knowledge = KnowledgeEngine(self.repository)
+        self._library = None
+
+    @property
+    def library(self):
+        if self._library is None:
+            from .library.engine import LibraryEngine
+
+            self._library = LibraryEngine(self.project_dir)
+        return self._library
 
     def status(self) -> dict[str, Any]:
         integrity = validate_repository(self.data_dir)
@@ -235,6 +247,8 @@ class ResearchMcpService:
         allowed = {
             "knowledge/README.md",
             "knowledge/corpus-manifest.json",
+            "knowledge/library/README.md",
+            "knowledge/library/catalog.json",
             "README.md",
             "TODO.md",
             "data/audits/summary/audit-report.json",
@@ -320,6 +334,32 @@ def create_server(data_dir: Path | str | None = None) -> MCPServer:
     def get_evidence(node_id: str, include_unreviewed: bool = False) -> dict[str, Any]:
         """Get exact evidence text, primary locators and scientific restrictions."""
         return service.knowledge.evidence(node_id, include_unreviewed=include_unreviewed)
+
+    @server.tool(annotations=READ_ONLY)
+    def library_status() -> dict[str, Any]:
+        """Return the book library generation, search mode and preparation warnings."""
+        return service.library.status()
+
+    @server.tool(annotations=READ_ONLY)
+    def list_library_books() -> dict[str, Any]:
+        """List methodology books with citation, completeness, chunk counts and contents."""
+        return service.library.books()
+
+    @server.tool(annotations=READ_ONLY)
+    def search_library(
+        query: str,
+        book_ids: list[str] | None = None,
+        mode: str = "hybrid",
+        limit: int = 8,
+    ) -> dict[str, Any]:
+        """Search the methodology books (Russian); returns passages with book, section and
+        page locators. Fragments are flagged; absence of a hit is not absence in the book."""
+        return service.library.search(query, book_ids=book_ids, mode=mode, limit=limit)
+
+    @server.tool(annotations=READ_ONLY)
+    def get_library_passage(chunk_id: str, context: int = 1) -> dict[str, Any]:
+        """Get a book passage verified against the normalized text, with neighbouring context."""
+        return service.library.passage(chunk_id, context=context)
 
     @server.tool(annotations=READ_ONLY)
     def search_sources(
@@ -421,6 +461,14 @@ def create_server(data_dir: Path | str | None = None) -> MCPServer:
     @server.resource("research://knowledge-registry", mime_type="application/json")
     def knowledge_registry() -> str:
         return service.read_text("knowledge/corpus-manifest.json")
+
+    @server.resource("research://library-guide", mime_type="text/markdown")
+    def library_guide() -> str:
+        return service.read_text("knowledge/library/README.md")
+
+    @server.resource("research://library-catalog", mime_type="application/json")
+    def library_catalog() -> str:
+        return service.read_text("knowledge/library/catalog.json")
 
     @server.resource("research://guide", mime_type="text/markdown")
     def guide() -> str:

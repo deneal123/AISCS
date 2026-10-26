@@ -1,6 +1,6 @@
 [project]
 name = "aspa-research-sidecar"
-version = "1.5.3"
+version = "1.6.0"
 description = "Dissertation evidence registry, curation, hybrid knowledge retrieval and read-only HTTP"
 readme = "README.md"
 requires-python = ">=3.12,<3.14"

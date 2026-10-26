@@ -9,7 +9,7 @@
   "historical_operational_snapshot": "research-operational-2026-09-26 (43/43 terminal decisions, including STOP)",
   "hash_algorithm": "SHA-256",
   "hash_scope": "README.md, SKILL.md, TODO.md, registered current data, curation bundles/queues, and docs; excludes manifest, archive, staging, provenance and frozen batches",
-  "file_count": 86,
+  "file_count": 93,
   "files": {
     "data/aliases.json": "7370fded9afc87099ebe6291514c0d5b7c1d2dc168ee8f78572c6e77e40be840",
     "data/audits/drosophila/drosophila-connectome-audit.json": "810c9c96571afef4c7b943588ae6fb4b27ed6e9b7df1e90777fa1bd0dcc5cd02",
@@ -81,7 +81,7 @@
     "docs/reference/architecture.md": "0874ee1cea6c9a6c523be5f4453c467c9888932aa01ee4ff888b8d034a6e49df",
     "docs/reference/curation-workflow.md": "a704cc0916a94ce3907248764cd3508a286f1258376030c627743586cea13761",
     "docs/reference/data-contract.md": "2c42468483426b93da9930cd0ffcfeba05da544469348c61e82163cdd0076a51",
-    "docs/reference/operations.md": "c9a39cf437e0416c2e303a4dcc1681d67b08f593607220dcceb6012e541fabdf",
+    "docs/reference/operations.md": "a4a806efb2007fecca9be415ef946dcfb4a2aba4d7af1061a32ebb26c9c7d028",
     "docs/scientific-contract.md": "01c982fbe095b57aac56335f52074f5f1606a6a1368679f3dce675c053fa854f",
     "knowledge/corpus-manifest.json": "d420572b59e707c1e3ff47ffc5d24c8f247fa77f9f6a83f54c8118c25be69d69",
     "knowledge/corpus.schema.json": "6d30f93d1d5f3e55172eaf2ad93a091e65e076e258af6e80b25a6e2cf7d9b9a9",
@@ -91,12 +91,19 @@
     "knowledge/evaluation.json": "93e37a3af4f7e81336f2bc0f424b778e614cdd69685e551ed55127a825544787",
     "knowledge/extraction.schema.json": "1094887c88e407746ae5bb3130d933212c013d9c2b7d99476f2dc991a02ae112",
     "knowledge/extractions.jsonl": "259a9b076c1e8aab34a3a524fa9ed92d33a90fb25713744a8239080358fb721b",
-    "knowledge/README.md": "d0f9b5e6774db6f46ab2609f57374f84357740d9eccbd026af52f6b3ab0bd37d",
+    "knowledge/library/catalog.json": "53e4786c036f4c6e01811ba9337ca9b778a39bd24dd30c8a003082a4ffd54d87",
+    "knowledge/library/catalog.schema.json": "24d1bd75ab4164c19d5f36fd252d4b7807489ebd22f1e265ba1ef18d35ad6d66",
+    "knowledge/library/evaluation-results.json": "6e6fdba7f123e9476d6850c2775041f9c1ab54a8828994b4dd0bbe761ea0f618",
+    "knowledge/library/evaluation.json": "af135f184d662a13e57cbe5cae2bd1a08d944df58b6c3a3f0a4b58a9dc57e7bb",
+    "knowledge/library/README.md": "364a158fc83fde64570650a8786e0fec1e867330324dfb00e3eef319fda7e247",
+    "knowledge/library/snapshot.json": "eab1bdb5bf365b18e0840a7be22a1360d558344298cb4696aeb8e92e22f81fa8",
+    "knowledge/README.md": "1c44d41bb007a5ff41be2d217f767b00f40301cc8f0df3943f16b574c1603c55",
+    "knowledge/snapshot.json": "5399f6f215dfb52a9e3469c790069ee45c46eb5ab328cb5e73c8b310a986076a",
     "knowledge/validation-report.json": "1a3f6ebc7a4d02ff0f3d685510b1ce0987f9da955deb23b1f9be36bb2c99e988",
     "knowledge/validation-report.md": "0ca8f9ba5dec4d70753972a0280a41faf0aacd09632240002117d0b6788619aa",
-    "README.md": "d502a65dfe4c7e5808062dc7aba2cc09bbbc4a9b4ba6103c7c7a4d2a50c3ad36",
-    "SKILL.md": "7f4606b086c0c55e60726e18ad859caa052fdee8fc2f666ea27a7047c21fd344",
+    "README.md": "4f5ef0e3d94b506fc1e8dd901c4dc50ebf2194b062f616a331a73bb52c51b1ce",
+    "SKILL.md": "834856032d2b36723a6b3719ff86adb393f70009dbda73141333fd3d13da78a5",
     "TODO.md": "d9bb4c3ed7df510d025a6ec88f97514d9aabefbddf200ad84bf2b6b9372012ae"
   },
-  "aggregate_sha256": "e87202862f2aecf5923d05de18793e46e4869b50da7862a5c2856795694daa75"
+  "aggregate_sha256": "4e0887fb2868f9f583fa85479acf89ccc56d8bcba3d7c94daa54f2ef9cf5fda0"
 }

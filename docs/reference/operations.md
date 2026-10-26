@@ -103,11 +103,18 @@ CLI и IDE используют общую конфигурацию MCP. Кон�
 | `review_batch` | check/apply существующей review-партии |
 | `cluster_manifest` | check/apply манифеста из `data/curation/cluster-assignments` |
 | `snapshot` | именованный неизменяемый снимок с SHA-256 manifest |
+| `library_status` | поколение и режим отдельного индекса методических книг |
+| `list_library_books` | каталог книг: библиография, полнота, число фрагментов, содержание |
+| `search_library` | поиск советов в книгах с книгой, разделом и страницей; не доказательство |
+| `get_library_passage` | сверенный с текстом отрывок книги с соседним контекстом |
 
 Примеры запросов агенту: «найди verified_primary источники по ECAP», «покажи контекст
 S149», «найди ограничения переноса в evidence matrix». Для публикации агент сначала вызывает
 `publish_candidate` без `apply`, показывает результат проверки и лишь затем повторяет вызов с
 `apply=true`.
+
+Индекс книг описан в [руководстве библиотеки](../../knowledge/library/README.md); каталог
+доступен как `research://library-catalog`.
 
 Рабочий TODO доступен как `research://todo`, история решений — как
 `research://todo-decisions`. Научный контракт доступен как `research://scientific-contract`, а подробная матрица
