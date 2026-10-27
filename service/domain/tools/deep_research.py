@@ -11,7 +11,7 @@ from service.domain.subagents.research import (
     run_native_research,
 )
 from service.domain.subagents.research.synthesis import _SYNTHESIS_SYSTEM
-from service.domain.tools.web_search import parse_url, search_budget_sec, web_search
+from service.domain.tools.search.client import parse_url, search_budget_sec, web_search
 
 # Compatibility template kept for prompt-contract tests and external imports. Runtime
 # uses the same shared text in ``research.synthesis``.

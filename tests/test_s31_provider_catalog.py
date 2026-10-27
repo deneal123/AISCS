@@ -5,16 +5,13 @@ from types import SimpleNamespace
 import pytest
 
 from service.domain.client import registry
-from service.domain.client.model_catalog import (
+from service.domain.client.models.catalog import (
     ModelCatalogSource,
     ModelCatalogStatus,
     ProviderModelCatalog,
 )
-from service.domain.client.model_requirements import (
-    ModelRequirement,
-    ProviderQualificationStatus,
-)
-from service.domain.client.providers.model_list_cache import ModelListCache
+from service.domain.client.models.list_cache import ModelListCache
+from service.domain.client.models.requirements import ModelRequirement, ProviderQualificationStatus
 from service.domain.client.providers.spec import ProviderSpec
 
 
@@ -240,8 +237,8 @@ async def test_profiled_cold_fallback_is_explicitly_unverified() -> None:
 
     assert tools.model in {"GigaChat-2", "GigaChat-2-Pro"}
     assert tools.status is ProviderQualificationStatus.COMPATIBLE_UNVERIFIED
-    assert vision.model is None
-    assert vision.status is ProviderQualificationStatus.CATALOG_UNAVAILABLE
+    assert vision.model == "GigaChat-2-Pro"
+    assert vision.status is ProviderQualificationStatus.COMPATIBLE_UNVERIFIED
 
 
 def test_provider_spec_requires_exact_safe_fallback_profiles() -> None:

@@ -11,8 +11,9 @@
 
 import pytest
 
-from service.application.processor import AgentProcessor
-from service.domain.pipeline import context_assembler, context_budget
+from service.application.processing.processor import AgentProcessor
+from service.domain.pipeline.context import assembler as context_assembler
+from service.domain.pipeline.context import budget as context_budget
 
 
 @pytest.fixture

@@ -6,11 +6,11 @@ from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
 from typing import Any
 
+from service.domain.execution.model import invoke_model_call
 from service.domain.llm_response import first_message_content
-from service.domain.model_runtime import invoke_model_call
 from service.domain.subagents.runtime import StageContext, StageRuntime
 from service.domain.subagents.web_search import _SOURCE_DISCIPLINE
-from service.domain.usage_ledger import UsageKind
+from service.domain.usage.ledger import UsageKind
 from service.shared import deadline
 
 from .audit import CitationAudit, audit_citations, strip_invalid_citations

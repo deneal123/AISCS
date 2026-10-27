@@ -10,8 +10,8 @@ from __future__ import annotations
 
 import pytest
 
-from service.domain.routing.auto_decision import SOURCE_SHORTCUT
-from service.domain.routing.auto_signals import build_auto_input, shortcut_decision
+from service.domain.routing.auto.decision import SOURCE_SHORTCUT
+from service.domain.routing.auto.signals import build_auto_input, shortcut_decision
 from service.shared.token_estimate import estimate_tokens
 
 
@@ -66,11 +66,7 @@ def test_vocabularies_cannot_contain_action_words():
     найдём» или «объясни». Тогда короткий путь начнёт молча съедать содержательные
     просьбы — без единой ошибки и без падения тестов. Стережём ровно это.
     """
-    from service.domain.routing.auto_signals import (
-        _ACTION_RE,
-        _CONTINUE_WORDS,
-        _SMALLTALK_WORDS,
-    )
+    from service.domain.routing.auto.signals import _ACTION_RE, _CONTINUE_WORDS, _SMALLTALK_WORDS
 
     guilty = sorted(w for w in (_SMALLTALK_WORDS | _CONTINUE_WORDS) if _ACTION_RE.search(w))
 
@@ -223,7 +219,7 @@ def test_rule_in_prompt_is_conditional_on_the_fact():
     Мутация «вернуть прежнюю формулировку» красит этот тест: прежняя объявляла посылку
     вечной истиной («его текст УЖЕ в контексте»), и случай «читать нечем» в неё не влезал.
     """
-    from service.domain.routing.auto_prompt import auto_prompt
+    from service.domain.routing.auto.prompt import auto_prompt
 
     text = auto_prompt()
     assert "текста вложения в контексте НЕТ" in text, (
@@ -236,15 +232,25 @@ def test_rule_in_prompt_is_conditional_on_the_fact():
 
 def test_fact_is_computed_from_the_prompt_not_guessed():
     """⚠️ ТОЧКА ВЫЗОВА. Факт считается тем же правилом, что решает состав промпта."""
+    import ast
     import inspect
 
-    from service.application import processor_steps as ps
+    from service.application.processing.routing import preparation
 
-    src = inspect.getsource(ps.ProcessorStepsMixin._resolve_route_and_plan)
-    assert "attachment_text_in_prompt=attachment_text_reaches_prompt(" in src, (
-        "решателю снова едет догадка вместо факта"
-    )
-    rule = inspect.getsource(ps.attachment_text_reaches_prompt)
+    tree = ast.parse(inspect.getsource(preparation.prepare_route))
+    passed = [
+        kw.value
+        for node in ast.walk(tree)
+        if isinstance(node, ast.Call) and getattr(node.func, "id", "") == "resolve_auto_plan"
+        for kw in node.keywords
+        if kw.arg == "attachment_text_in_prompt"
+    ]
+    assert (
+        len(passed) == 1
+        and isinstance(passed[0], ast.Call)
+        and (getattr(passed[0].func, "id", "") == "attachment_text_reaches_prompt")
+    ), "решателю снова едет догадка вместо факта"
+    rule = inspect.getsource(preparation.attachment_text_reaches_prompt)
     assert "_tabular_text_is_dropped" in rule, (
         "факт считается не тем правилом, по которому собирается промпт — они разойдутся"
     )
@@ -296,7 +302,7 @@ def test_an_ordinary_document_still_reports_its_text():
 def test_the_rule_for_a_map_is_in_the_prompt():
     """⚠️ Признак без правила бесполезен: решатель прочитает незнакомую строку и решит по
     прежним двум случаям, то есть как раньше."""
-    from service.domain.routing.auto_prompt import auto_prompt
+    from service.domain.routing.auto.prompt import auto_prompt
 
     text = auto_prompt()
 
@@ -320,7 +326,7 @@ def test_the_rule_for_a_map_is_in_the_prompt():
 def test_the_map_is_recognised_by_its_own_markers():
     """⚠️ Признак считает ТОТ ЖЕ помощник, что приписывает инструкцию к карте: два
     независимых определения «это карта» однажды разошлись бы, и одно осталось бы врать."""
-    from service.application.processor_steps import is_repo_map
+    from service.application.repo_map import is_repo_map
 
     assert is_repo_map(REPO_MAP) is True
     assert is_repo_map("# Graph Report\nбез второй секции") is False
@@ -373,26 +379,29 @@ def test_the_forced_flag_survives_a_refusing_decider():
     )
 
 
-def test_forcing_is_computed_from_the_map_fact():
-    """⚠️ Признак карты обязан ДОЕЗЖАТЬ до правила: посчитанный и не использованный факт —
-    это ровно то, что уже случалось у меня трижды."""
-    import ast
-    import inspect
-
+@pytest.mark.asyncio
+@pytest.mark.parametrize("is_map", [False, True])
+async def test_forcing_is_computed_from_the_map_fact(is_map):
+    """The map fact reaches grounding even when optional model routing is disabled."""
+    from service.domain.execution.context import (
+        GroundingRequirement,
+        PrivateRunResources,
+        use_run_execution,
+    )
     from service.domain.pipeline import auto_mode
 
-    tree = ast.parse(inspect.getsource(auto_mode.resolve_auto_plan).strip())
-    calls = [
-        node
-        for node in ast.walk(tree)
-        if isinstance(node, ast.Call)
-        and getattr(node.func, "id", "") == "_code_is_unreadable_without_tools"
-    ]
-
-    assert calls, "правило объявлено, но не вызывается — карта снова ни на что не влияет"
-    assert any(
-        getattr(a, "id", "") == "attachment_text_in_prompt_is_a_map" for c in calls for a in c.args
-    ), "правило зовётся не с признаком карты — оно будет отвечать про что-то другое"
+    with use_run_execution(PrivateRunResources()) as execution:
+        plan = await auto_mode.resolve_auto_plan(
+            user_input="Объясни устройство",
+            enabled=False,
+            attachment_text_in_prompt_is_a_map=is_map,
+            execution=execution,
+        )
+        assert plan.files_tool is is_map
+        expected = (
+            GroundingRequirement.WORKSPACE_SOURCE_ONLY if is_map else GroundingRequirement.NONE
+        )
+        assert execution.policy.grounding_reason is expected
 
 
 def test_ordinary_chat_is_not_forced_into_file_tools():
@@ -416,9 +425,9 @@ def test_the_map_fact_is_computed_at_the_call_site():
     import ast
     import inspect
 
-    from service.application import processor_steps as ps
+    from service.application.processing.routing import preparation
 
-    tree = ast.parse(inspect.getsource(ps.ProcessorStepsMixin._resolve_route_and_plan).strip())
+    tree = ast.parse(inspect.getsource(preparation.prepare_route))
     passed = [
         kw
         for node in ast.walk(tree)

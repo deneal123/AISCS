@@ -121,8 +121,8 @@ async def _embed_with_dim(texts: list[str]) -> tuple[list[list[float]], int, boo
     кандидат из doc_embedder_fallback.
     """
     from service.domain.client import circuit_breaker, provider_policy
-    from service.domain.client.provider_operations import ProviderOperation
-    from service.domain.run_context import current_execution
+    from service.domain.client.providers.management.operations import ProviderOperation
+    from service.domain.execution.context import current_execution
 
     execution = current_execution()
     admission = execution.provider_admission if execution is not None else None
@@ -162,7 +162,7 @@ async def _embed_with_dim(texts: list[str]) -> tuple[list[list[float]], int, boo
                 client = decision.client
                 real_model = decision.model or real_model
         else:
-            from service.domain.client.provider_compat import resolve_model_client
+            from service.domain.client.providers.management.compat import resolve_model_client
 
             provider_name, client = await resolve_model_client(
                 real_model,

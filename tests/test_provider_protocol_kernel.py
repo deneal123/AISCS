@@ -2,7 +2,9 @@ from __future__ import annotations
 
 from types import SimpleNamespace
 
+import httpx
 import pytest
+from openai import APIConnectionError, APITimeoutError
 
 from service.domain.client.protocol import (
     GIGACHAT_TOOL_CAPABILITIES,
@@ -13,7 +15,30 @@ from service.domain.client.protocol import (
     classify_provider_failure,
     compile_toolset,
 )
-from service.domain.usage_ledger import UsageKind, UsageLedger
+from service.domain.usage.ledger import UsageKind, UsageLedger
+
+
+@pytest.mark.parametrize(
+    ("exception_type", "expected"),
+    [
+        (APIConnectionError, ProviderFailureCode.TRANSPORT),
+        (APITimeoutError, ProviderFailureCode.TIMEOUT),
+    ],
+)
+def test_sdk_network_failures_keep_their_category_without_rendering_request(
+    exception_type, expected
+) -> None:
+    request = httpx.Request(
+        "POST",
+        "https://provider.invalid/SECRET-REQUEST",
+        headers={"Authorization": "Bearer SECRET-KEY"},
+        content=b"SECRET-CONTENT",
+    )
+    failure = classify_provider_failure(exception_type(request=request), provider="gigachat")
+    assert failure.code is expected
+    assert failure.retryable is True
+    assert failure.metadata() == {"failure_code": expected.value, "retryable": True}
+    assert "SECRET" not in repr(failure)
 
 
 def _tool(parameters: dict, *, dynamic: bool = False) -> dict:

@@ -129,7 +129,7 @@ async def test_no_new_tool_round_when_only_answer_time_is_left(monkeypatch):
     Начав его на исходе бюджета, мы гарантированно не успеваем ничего сказать, и уже
     оплаченная работа пропадает целиком.
     """
-    from service.domain.runners import chat_run as runner
+    from service.domain.runners.chat import run as runner
     from service.domain.subagents.general import GeneralAgent
 
     rounds: list[list[dict]] = []
@@ -147,7 +147,7 @@ async def test_no_new_tool_round_when_only_answer_time_is_left(monkeypatch):
             round_state.update({"prompt": 5, "completion": 2, "total": 7, "model": "m"})
 
     async def _toolset(_self, _model, _context=None):
-        from service.domain.capabilities.tool_spec import ToolSet
+        from service.domain.capabilities.tools.spec import ToolSet
 
         return ToolSet(tools=[{"type": "function", "function": {"name": "search_web"}}])
 
@@ -172,8 +172,8 @@ async def test_tool_rounds_run_normally_while_there_is_time(monkeypatch):
     Без него предыдущая проверка не отличала бы «инструменты сняты дедлайном» от
     «инструменты не работают вовсе».
     """
-    from service.domain.runners import chat_run as runner
-    from service.domain.runners import tool_loop
+    from service.domain.runners.chat import run as runner
+    from service.domain.runners.chat import tool_loop
     from service.domain.subagents.general import GeneralAgent
 
     calls = {"n": 0}
@@ -191,7 +191,7 @@ async def test_tool_rounds_run_normally_while_there_is_time(monkeypatch):
             round_state.update({"prompt": 5, "completion": 2, "total": 7, "model": "m"})
 
     async def _toolset(_self, _model, _context=None):
-        from service.domain.capabilities.tool_spec import ToolSet
+        from service.domain.capabilities.tools.spec import ToolSet
 
         return ToolSet(tools=[{"type": "function", "function": {"name": "search_web"}}])
 

@@ -16,8 +16,8 @@ from types import SimpleNamespace
 
 import pytest
 
-from service.domain.runners import sdk_run
-from service.domain.runners.sdk_run import SdkRunMixin, _describe_failure
+from service.domain.runners.sdk import run as sdk_run
+from service.domain.runners.sdk.run import SdkRunMixin, _describe_failure
 from service.events import AgentEvent, EventType
 
 

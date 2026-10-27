@@ -72,7 +72,7 @@ def test_fallback_path_uses_the_shared_chunker() -> None:
     столько мокинга проверяло бы в основном сам мок. Здесь закреплено ровно то, что
     ломалось: у агента больше НЕТ своей нарезки, а аварийный путь зовёт общую.
     """
-    from service.domain.runners import sdk_run
+    from service.domain.runners.sdk import run as sdk_run
 
     assert not hasattr(SimpleStreamingAgent, "_split_text_chunks"), (
         "вернулась своя нарезка — она теряет пробелы и режет внутри фенсов"

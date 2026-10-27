@@ -20,7 +20,7 @@ import pytest
 
 from service.domain.persona.lens import PersonaLens
 from service.domain.persona.schema import PersonaSpec
-from service.domain.pipeline.context_assembler import assemble_context
+from service.domain.pipeline.context.assembler import assemble_context
 from service.domain.subagents.general import GeneralAgent
 from service.settings import config
 

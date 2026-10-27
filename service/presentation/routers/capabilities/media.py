@@ -12,7 +12,7 @@ import base64
 from fastapi import APIRouter, Header
 from fastapi.responses import JSONResponse
 
-from service.domain.run_context import PrivateRunResources, use_run_execution
+from service.domain.execution.context import PrivateRunResources, use_run_execution
 from service.presentation.deps import internal_auth
 from service.schemas.vector import MediaAudioRequest, MediaImageRequest
 

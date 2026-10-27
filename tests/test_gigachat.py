@@ -8,7 +8,8 @@ import certifi
 import httpx
 import pytest
 
-from service.domain.client.providers import gigachat, gigachat_auth
+from service.domain.client.providers.gigachat import adapter as gigachat
+from service.domain.client.providers.gigachat import auth as gigachat_auth
 
 
 def _make_manager(monkeypatch, *, tokens=("tok-1", "tok-2", "tok-3"), expires_ahead_sec=3600):

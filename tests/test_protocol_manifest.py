@@ -1,22 +1,25 @@
 from service.contracts import ANSWER_USAGE_KINDS, RESULT_FIELDS, SERVICE_USAGE_KINDS
-from service.domain.client.model_catalog import (
+from service.domain.client.models.catalog import (
     CapabilityEvidenceSource,
     ModelCapability,
     ModelCatalogSource,
     ModelCatalogStatus,
 )
-from service.domain.client.model_requirements import ProviderQualificationStatus
+from service.domain.client.models.requirements import ProviderQualificationStatus
 from service.domain.client.protocol import ProviderFailureCode
-from service.domain.client.provider_generation import ProviderGenerationStatus
-from service.domain.client.provider_operations import ProviderAdmissionStatus, ProviderOperation
-from service.domain.grounding import GroundingFailureCode, GroundingState
+from service.domain.client.providers.management.generation import ProviderGenerationStatus
+from service.domain.client.providers.management.operations import (
+    ProviderAdmissionStatus,
+    ProviderOperation,
+)
+from service.domain.execution.grounding import GroundingFailureCode, GroundingState
 from service.domain.integration_failure import (
     IntegrationFailureCode,
     IntegrationSource,
     StatusFamily,
 )
 from service.domain.runners.tool_runtime.contracts import ToolCallStatus
-from service.domain.usage_ledger import USAGE_INTEGRITY_REASONS, UsageKind
+from service.domain.usage.ledger import USAGE_INTEGRITY_REASONS, UsageKind
 from service.events import (
     AUTO_REASON_CODES,
     ERROR_CATEGORIES,
@@ -31,7 +34,10 @@ from service.schemas.run import AgentRunInput
 def test_protocol_manifest_matches_agents_runtime_contracts() -> None:
     manifest = load_protocol_manifest()
 
-    assert manifest.version == "s33-v1"
+    assert manifest.version == "s37-usage-v1"
+    assert manifest.usage_checkpoint_key == "__usage_checkpoint__"
+    assert manifest.usage_checkpoint_header == "X-Execution-Attempt"
+    assert manifest.usage_checkpoint_version == 1
     assert manifest.run_input_fields == frozenset(AgentRunInput.model_fields)
     assert manifest.run_result_fields == RESULT_FIELDS
     assert manifest.required_result_fields == frozenset({"reply"})

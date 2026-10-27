@@ -8,9 +8,9 @@
 
 import pytest
 
-from service.application.processor import AgentProcessor
+from service.application.processing.processor import AgentProcessor
 from service.domain.pipeline import multimodal as mm
-from service.domain.usage_ledger import UsageKind
+from service.domain.usage.ledger import UsageKind
 from service.events import AgentEvent, EventType
 from service.schemas.agents import ModalityAttachment
 

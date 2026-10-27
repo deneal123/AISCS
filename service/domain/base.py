@@ -8,12 +8,14 @@ from collections.abc import AsyncGenerator
 from types import SimpleNamespace
 
 from service.domain import persona
-from service.domain.capabilities.tool_registry import resolve_toolset
-from service.domain.capabilities.tool_spec import ToolSet
+from service.domain.capabilities.tools.registry import resolve_toolset
+from service.domain.capabilities.tools.spec import ToolSet
 from service.domain.client import (
     is_chat_capable,
     list_qualified_models,
 )
+from service.domain.execution.documents import document_editing_instructions
+from service.domain.execution.ide import ide_instructions
 from service.domain.runners import ChatRunMixin, SdkRunMixin
 from service.domain.runners.support import (
     _tools_to_openai,
@@ -25,10 +27,41 @@ from service.shared.token_budget import estimate_tokens, trim_text_to_tokens
 logger = logging.getLogger(__name__)
 
 
+def _document_tools(tools: list) -> list:
+    from service.domain.execution.context import current_execution
+
+    execution = current_execution()
+    if execution and execution.policy.flag("human_questions_enabled"):
+        from service.domain.tools.human_question_tool import TOOL as question_tool
+
+        if all(getattr(item, "name", "") != question_tool.name for item in tools):
+            tools = [*tools, question_tool]
+    if execution and (execution.resources.workspace_ref or {}).get("ide_context"):
+        from service.domain.tools.ide.tools import TOOLS
+
+        # Business-named repository adapter, not the legacy snapshot/exec family.
+        retained = [
+            item
+            for item in tools
+            if not getattr(item, "name", "").startswith(("ws_", "tex_", "ide_"))
+        ]
+        return [*retained, *TOOLS]
+    if execution and (execution.resources.workspace_ref or {}).get("document_context"):
+        from service.domain.tools.document_proposal_tool import tool
+        from service.domain.tools.documents.structure import tool as structure_tool
+
+        offered = [tool]
+        if execution.policy.flag("document_structure_enabled"):
+            offered.append(structure_tool)
+        names = {getattr(item, "name", "") for item in tools}
+        return [*tools, *(item for item in offered if item.name not in names)]
+    return tools
+
+
 def _agent_flag(name: str, default):
     """Runtime-настройка агентов из админ-overlay (fail-safe → дефолт из config).
 
-    Тот же тонкий хелпер, что в `application/processor_steps.py`: читать overlay «своим»
+    Тот же тонкий хелпер, что в `application/processing/steps.py`: читать overlay «своим»
     способом в каждом файле значит однажды прочитать мимо него и получить декоративный
     тумблер в панели.
     """
@@ -182,8 +215,8 @@ class SimpleStreamingAgent(BaseAgent, SdkRunMixin, ChatRunMixin):
         # первой дельты, пиннинг между раундами tool-loop и per-provider `include_usage`.
         # SDK работает с ОДНИМ клиентом: уведи сюда трафик — и отказоустойчивость исчезнет
         # молча. Плюс GigaChat под SDK игнорирует канонические `tools`.
-        from service.domain.client.provider_compat import active_provider_name
-        from service.domain.run_context import require_current_execution
+        from service.domain.client.providers.management.compat import active_provider_name
+        from service.domain.execution.context import require_current_execution
 
         execution = require_current_execution()
         active_provider = (
@@ -191,7 +224,13 @@ class SimpleStreamingAgent(BaseAgent, SdkRunMixin, ChatRunMixin):
             if execution.provider_snapshot is not None
             else active_provider_name()
         )
-        if active_provider in ("mws", "openrouter", "gigachat", "routerai"):
+        # Product tasks must not fall back to an independent SDK tool loop: it
+        # bypasses selection, grounding, typed outcomes and the resume boundary.
+        reference = execution.resources.workspace_ref or {}
+        product_run = any(
+            isinstance(reference.get(key), dict) for key in ("ide_context", "document_context")
+        )
+        if product_run or active_provider in ("mws", "openrouter", "gigachat", "routerai", "local"):
             async for event in self._run_chat_streamed(user_input, context):
                 yield event
             return
@@ -233,8 +272,13 @@ class SimpleStreamingAgent(BaseAgent, SdkRunMixin, ChatRunMixin):
         Считается из ТЕХ ЖЕ кусков, что уходят в `messages[0]` и в поле `tools`, а не
         отдельным подсчётом: два независимых счётчика ровно так и разъехались.
         """
-        parts = [self._base_instructions(), persona.current().section()]
-        if self.tools:
+        parts = [
+            self._base_instructions(),
+            persona.current().section(),
+            ide_instructions(),
+            document_editing_instructions(),
+        ]
+        if self.tools or ide_instructions() or document_editing_instructions():
             # Схемы инструментов едут не в тексте промпта, а полем `tools` — но окно
             # модели занимают наравне с ним, и на коротком диалоге это самая крупная
             # часть после инструкций (замер: 416 из 1123 токенов).
@@ -262,7 +306,11 @@ class SimpleStreamingAgent(BaseAgent, SdkRunMixin, ChatRunMixin):
 
         Без активной личности строка собирается ровно как прежде — БАЙТ В БАЙТ.
         """
-        parts = [self._base_instructions()]
+        parts = [self._base_instructions(), ide_instructions(), document_editing_instructions()]
+        from service.domain.execution.questions import question_instructions
+
+        if question_hint := question_instructions():
+            parts.append(question_hint)
 
         section = persona.current().section()
         if section:
@@ -271,7 +319,7 @@ class SimpleStreamingAgent(BaseAgent, SdkRunMixin, ChatRunMixin):
         system_context = getattr(context, "system_context", None) if context else None
         if system_context:
             parts.append(str(system_context))
-        return "\n\n".join(parts)
+        return "\n\n".join(part for part in parts if part)
 
     def _build_input_items(self, question: str, context: UserContext | None) -> list[dict]:
         """История как реплики + текущий вопрос (без system — он в instructions)."""
@@ -312,7 +360,7 @@ class SimpleStreamingAgent(BaseAgent, SdkRunMixin, ChatRunMixin):
         Замер: analyze_data 227 токенов, search_knowledge_graph 192 из 781 на все пять —
         и уезжало это каждым сообщением, включая «привет».
         """
-        return resolve_toolset(self.tools, context).tools
+        return resolve_toolset(_document_tools(self.tools), context).tools
 
     async def _resolve_toolset(self, model: str, context: UserContext | None = None) -> ToolSet:
         """Что уходит модели и что НЕ уходит — с причиной на каждый отказ.
@@ -330,19 +378,32 @@ class SimpleStreamingAgent(BaseAgent, SdkRunMixin, ChatRunMixin):
         from service.shared.model_catalog import model_supports_tools
 
         try:
-            supports: bool | None = await model_supports_tools(model)
+            from service.domain.client.models.requirements import ModelRequirement
+            from service.domain.client.registry import qualify_model
+            from service.domain.execution.context import current_execution
+
+            execution = current_execution()
+            admission = execution.provider_admission if execution is not None else None
+            owner = admission.snapshot.owner_for(model) if admission is not None else None
+            if admission is not None:
+                decision = await qualify_model(
+                    owner or "", prefer=model, requirement=ModelRequirement(tools=True)
+                )
+                supports: bool | None = decision.model == model
+            else:
+                supports = await model_supports_tools(model)
         except Exception:  # noqa: BLE001
             logger.warning("tool capability catalog failed code=unavailable")
             supports = None
         if supports is False:
             logger.debug("Model %s has no tool support — streaming without tools", model)
-        resolved = resolve_toolset(self.tools, context, model_supports=supports)
+        resolved = resolve_toolset(_document_tools(self.tools), context, model_supports=supports)
         return ToolSet(tools=_tools_to_openai(resolved.tools), omissions=resolved.omissions)
 
     def _build_tool_context(self, context: UserContext | None):
         """RunContextWrapper для исполнителей инструментов (тот же контракт, что на
         SDK-пути: `ctx.context` — словарь с user_id/thread_id/input_type)."""
-        from service.domain.run_context import prompt_safe_context_payload
+        from service.domain.execution.context import prompt_safe_context_payload
 
         payload = prompt_safe_context_payload(context)
         try:

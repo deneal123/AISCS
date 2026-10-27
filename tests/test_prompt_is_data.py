@@ -18,7 +18,7 @@ GOLDEN = pathlib.Path(__file__).parent / "golden" / "auto_prompt.txt"
 
 
 def test_auto_prompt_matches_the_golden_snapshot():
-    from service.domain.routing.auto_prompt import auto_prompt
+    from service.domain.routing.auto.prompt import auto_prompt
 
     assert auto_prompt() == GOLDEN.read_text(encoding="utf-8")
 

@@ -94,10 +94,10 @@ async def test_a_broken_catalog_does_not_break_routing(monkeypatch):
     """⚠️ Каталог — внешний источник, и он падал уже не раз. Его сбой обязан оставлять
     прежнее поведение, а не ронять маршрутизацию."""
 
-    async def _boom():
+    def _boom():
         raise RuntimeError("каталог недоступен")
 
-    monkeypatch.setattr("service.shared.model_catalog.get_openrouter_catalog", _boom)
+    monkeypatch.setattr("service.shared.model_catalog.cached_openrouter_catalog", _boom)
 
     assert await router._constrain_to_seeing(MODELS) == MODELS
 
@@ -203,7 +203,7 @@ async def test_without_a_seeing_substitute_the_pool_is_rejected(monkeypatch):
 async def test_the_failover_applies_explicit_vision_requirement(monkeypatch):
     """The request requirement, rather than a model-name guess, governs failover."""
     from service.domain.client import registry
-    from service.domain.client.model_requirements import ModelRequirement
+    from service.domain.client.models.requirements import ModelRequirement
 
     class _Module:
         @staticmethod

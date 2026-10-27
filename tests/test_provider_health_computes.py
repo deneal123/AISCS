@@ -152,12 +152,12 @@ async def test_empty_only_means_nobody_not_everybody():
 async def test_health_exposes_only_bounded_catalog_and_qualification_aggregates(monkeypatch):
     import service.domain.client.registry as registry
     from service.domain.client.health import compute_provider_health
-    from service.domain.client.model_catalog import (
+    from service.domain.client.models.catalog import (
         ModelCatalogSource,
         ModelCatalogStatus,
         ProviderModelCatalog,
     )
-    from service.domain.client.model_requirements import (
+    from service.domain.client.models.requirements import (
         ModelQualification,
         ProviderQualificationStatus,
     )

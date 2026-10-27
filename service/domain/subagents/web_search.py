@@ -5,13 +5,13 @@ import logging
 from collections.abc import AsyncGenerator
 
 from service.domain.capabilities.agent_spec import COST_PAID, AgentSpec
+from service.domain.execution.context import RunExecutionContext, require_execution
+from service.domain.execution.model import invoke_model_call, record_estimated_model_call
 from service.domain.llm_response import first_message_content
-from service.domain.model_runtime import invoke_model_call, record_estimated_model_call
-from service.domain.run_context import RunExecutionContext, require_execution
 from service.domain.subagents.base import BaseSubAgent
 from service.domain.subagents.utils import pick_answer_model
-from service.domain.usage_ledger import UsageKind
-from service.domain.usage_tracking import build_token_usage_meta
+from service.domain.usage.ledger import UsageKind
+from service.domain.usage.tracking import build_token_usage_meta
 from service.events import AgentEvent, EventType
 from service.schemas.agents import UserContext
 from service.shared.token_budget import estimate_tokens
@@ -210,7 +210,7 @@ class WebSearchAgent(BaseSubAgent):
             from service.domain.subagents.context_query import (
                 build_standalone_query,
             )
-            from service.domain.tools.web_search import parse_url, search_budget_sec, web_search
+            from service.domain.tools.search.client import parse_url, search_budget_sec, web_search
 
             models = await list_qualified_models()
             model = pick_answer_model(models, self.preferred_model())

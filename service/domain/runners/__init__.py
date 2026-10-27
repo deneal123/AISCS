@@ -1,15 +1,12 @@
-"""Два пути исполнения агента, разнесённые по файлам.
+"""Public runner mixins; implementation is grouped by execution responsibility.
 
-`SimpleStreamingAgent` держал оба сразу и весил 741 строку. Это не варианты одного
-алгоритма: SDK сам ведёт цикл инструментов и отдаёт свои события, прямой стрим ведёт
-цикл сам. Метод `process()` остался диспетчером — начало, гардрейлы, выбор пути.
-
-    sdk_run.py   через Agents SDK (Responses-стрим) + аварийный chat/completions
-    chat_run.py  прямой chat/completions-стрим — для провайдеров, у которых SDK-стрим
-                 ненадёжен (mws, openrouter, gigachat, routerai)
+``chat`` owns the common provider-neutral loop used by IDE/PDF for all providers.
+``sdk`` retains the SDK path for other runs; it is not a second IDE/PDF harness.
+``ide`` verifies file receipts and repairs missing terminal reports, while
+``harness`` coordinates durable checkpoints. ``tool_runtime`` owns typed execution.
 """
 
-from service.domain.runners.chat_run import ChatRunMixin
-from service.domain.runners.sdk_run import SdkRunMixin
+from service.domain.runners.chat.run import ChatRunMixin
+from service.domain.runners.sdk.run import SdkRunMixin
 
 __all__ = ["ChatRunMixin", "SdkRunMixin"]

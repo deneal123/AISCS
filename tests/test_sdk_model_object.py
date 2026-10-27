@@ -13,7 +13,7 @@ from __future__ import annotations
 
 import pytest
 
-from service.domain.runners import sdk_run
+from service.domain.runners.sdk import run as sdk_run
 
 
 class _Client:
@@ -22,7 +22,7 @@ class _Client:
 
 @pytest.fixture
 def active_client(monkeypatch):
-    from service.domain.client import provider_compat
+    from service.domain.client.providers.management import compat as provider_compat
 
     client = _Client()
     monkeypatch.setattr(provider_compat, "active_provider_client", lambda: client)
@@ -103,7 +103,7 @@ async def test_runner_passes_object_to_agent(active_client, monkeypatch):
 
 def test_falls_back_to_string_without_client(monkeypatch):
     """Fail-open: нет клиента — отдаём строку, поведение как прежде, а не падение."""
-    from service.domain.client import provider_compat
+    from service.domain.client.providers.management import compat as provider_compat
 
     monkeypatch.setattr(provider_compat, "active_provider_client", lambda: None)
 

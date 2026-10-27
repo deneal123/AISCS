@@ -19,7 +19,7 @@ from pathlib import Path
 def test_web_search_does_not_call_human_repr() -> None:
     # importlib, а не `import ... as`: пакет tools реэкспортирует ФУНКЦИЮ web_search,
     # и она затеняет одноимённый модуль.
-    module = importlib.import_module("service.domain.tools.web_search")
+    module = importlib.import_module("service.domain.tools.search.client")
     source = Path(module.__file__).read_text(encoding="utf-8")
 
     assert ".human_repr()" not in source, "web_search снова зовёт human_repr()"

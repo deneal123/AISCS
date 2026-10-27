@@ -83,7 +83,7 @@ def test_the_processor_passes_it_down():
     правка объяснена."""
     import ast
 
-    from service.application import processor
+    from service.application.processing import processor
 
     tree = ast.parse(inspect.getsource(processor.AgentProcessor.process_message_stream).strip())
     passed = [
@@ -105,7 +105,7 @@ async def test_an_already_accepted_offer_is_not_repeated(monkeypatch):
     работы: приписка вешается по наличию предложения, поэтому чинить надо у источника.
     """
     from service.domain.pipeline import auto_mode
-    from service.domain.routing.auto_decision import AutoDecision
+    from service.domain.routing.auto.decision import AutoDecision
 
     monkeypatch.setattr(auto_mode, "_video_offer_allowed", lambda: True)
 

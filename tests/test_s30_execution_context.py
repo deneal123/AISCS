@@ -7,19 +7,19 @@ from collections.abc import AsyncGenerator
 import pytest
 
 from service.domain.client.protocol import PinSource, ProviderRoundState
-from service.domain.run_context import (
+from service.domain.execution.context import (
     PrivateRunResources,
     RunExecutionContextError,
     current_execution,
     require_current_execution,
     use_run_execution,
 )
-from service.domain.runners.chat_provider_round import provider_events
-from service.domain.usage_ledger import UsageKind, UsageLedger
+from service.domain.runners.chat.provider_round import provider_events
+from service.domain.usage.ledger import UsageKind, UsageLedger
 
 
 def test_missing_context_is_bounded_and_never_constructed_implicitly() -> None:
-    import service.domain.run_context as run_context
+    import service.domain.execution.context as run_context
 
     token = run_context._CURRENT.set(None)
     try:
@@ -159,7 +159,7 @@ def test_failed_provider_attempt_state_is_cleared_before_failover() -> None:
 @pytest.mark.asyncio
 async def test_legacy_stream_adapter_opens_one_scoped_run(monkeypatch) -> None:
     import service.domain.client.calls.legacy_stream as legacy_stream
-    import service.domain.run_context as run_context
+    import service.domain.execution.context as run_context
 
     observed = {}
 

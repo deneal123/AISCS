@@ -33,7 +33,7 @@ from datetime import UTC, datetime
 
 import pytest
 
-from service.domain.runners import chat_run as chat_runner
+from service.domain.runners.chat import run as chat_runner
 from service.domain.subagents.general import GeneralAgent
 from service.events import EventType
 from service.schemas.agents import UserContext
@@ -81,7 +81,7 @@ async def test_tool_cap_bills_the_rounds_it_already_paid_for(monkeypatch):
         yield  # pragma: no cover
 
     async def _tools(self, model, _context=None):
-        from service.domain.capabilities.tool_spec import ToolSet
+        from service.domain.capabilities.tools.spec import ToolSet
 
         return ToolSet(tools=[{"type": "function", "function": {"name": "x"}}])
 

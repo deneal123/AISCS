@@ -6,13 +6,13 @@ from types import SimpleNamespace
 
 import pytest
 
-from service.domain.grounding import GroundingFailureCode, GroundingState
-from service.domain.run_context import (
+from service.domain.execution.context import (
     GroundingRequirement,
     PrivateRunResources,
     use_run_execution,
 )
-from service.domain.runners.chat_stream_loop import ChatStreamLoopState, run_streamed_tool_loop
+from service.domain.execution.grounding import GroundingFailureCode, GroundingState
+from service.domain.runners.chat.stream_loop import ChatStreamLoopState, run_streamed_tool_loop
 from service.domain.runners.tool_runtime import (
     ToolCallOutcome,
     ToolCallStatus,

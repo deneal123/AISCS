@@ -11,7 +11,7 @@ from __future__ import annotations
 
 from types import SimpleNamespace
 
-from service.application.processor_steps import _files_for_prompt
+from service.application.processing.steps import _files_for_prompt
 from service.application.repo_map import annotate_repo_map
 
 # Как выглядит реальный GRAPH_REPORT (graphify): заголовок + характерные секции.

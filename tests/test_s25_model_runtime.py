@@ -8,13 +8,17 @@ import pytest
 
 from service.application.reply_assembler import ReplyAssembler
 from service.domain.client.protocol import PinSource, ProviderStreamEventKind
-from service.domain.legacy_usage import accumulate_usage
-from service.domain.model_runtime import invoke_model_call
-from service.domain.run_context import PrivateRunResources, current_execution, use_run_execution
-from service.domain.runners.chat_provider_round import provider_events
+from service.domain.execution.context import (
+    PrivateRunResources,
+    current_execution,
+    use_run_execution,
+)
+from service.domain.execution.model import invoke_model_call
+from service.domain.runners.chat.provider_round import provider_events
 from service.domain.subagents.context_query import resolve_query
 from service.domain.subagents.runtime import StageContext, StageReceipt, StageStatus
-from service.domain.usage_ledger import UsageKind, receipt_from_usage
+from service.domain.usage.ledger import UsageKind, receipt_from_usage
+from service.domain.usage.legacy import accumulate_usage
 
 
 def _response(*, prompt: int | None = 7, completion: int | None = 3):

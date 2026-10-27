@@ -13,7 +13,6 @@ from service.domain.documents import (
     DraftBlock,
     DraftPatch,
     apply_draft_patch,
-    authoring_repair,
     literal_draft,
     literal_shortcut,
     parse_document_draft,
@@ -21,6 +20,7 @@ from service.domain.documents import (
     render_document,
     repair_semantic_draft,
 )
+from service.domain.documents.authoring import repair as authoring_repair
 from service.domain.subagents import pdf_generation, pdf_generation_runtime
 from service.domain.subagents.research import (
     ResearchArtifact,
@@ -81,6 +81,26 @@ def test_exact_literal_shortcut_is_deterministic_and_escaped() -> None:
     assert len(rendered.draft_digest) == 64
     manifest = json.loads(rendered.files[".gpthub-authoring.json"])
     assert manifest["draft"]["blocks"][0]["block_id"] == "literal_text"
+
+
+@pytest.mark.parametrize("heading", ["Литература", "References"])
+def test_article_preview_without_evidence_retains_required_reference_section(heading) -> None:
+    intent = _intent(
+        kind="article",
+        profile_id="generic_article",
+        required_sections=(heading,),
+        citation_policy="required",
+    )
+    draft = DocumentDraft(1, 1, "Draft", (DraftBlock("body_block", "paragraph", text="Material"),))
+    rendered = render_document(intent, draft, scaffold_source=SCAFFOLD, enforce_evidence=False)
+    source = "\n".join(rendered.files.values())
+    assert f"\\section{{{heading}}}" in source
+    assert "\\bibliography{" not in rendered.files["main.tex"]
+    assert "\\printbibliography" not in rendered.files["main.tex"]
+    assert not rendered.files["bibliography/references.bib"].strip()
+    # Preserving the editable preview heading never admits an evidence-free final.
+    with pytest.raises(ValueError, match="evidence_required"):
+        render_document(intent, draft, scaffold_source=SCAFFOLD)
 
 
 def test_document_skill_catalog_digest_covers_the_editorial_contract() -> None:
@@ -207,7 +227,7 @@ def test_renderer_restores_profile_sections_removed_by_a_late_repair() -> None:
         for path, block_id in manifest["block_files"].items()
         if block_id == references_block["block_id"]
     )
-    assert rendered.files[references_path].strip() == ""
+    assert rendered.files[references_path].strip() == r"\section{References}"
 
 
 def test_legacy_pptx_agent_is_not_exported_as_an_active_subagent() -> None:
@@ -711,8 +731,20 @@ async def test_visual_repair_cannot_replace_an_unrelated_block(monkeypatch) -> N
 async def test_source_and_visual_repair_budgets_are_independent(monkeypatch) -> None:
     statuses = iter(
         (
-            {"state": "failed", "failure_code": "compile_failed"},
-            {"state": "failed", "failure_code": "compile_failed"},
+            {
+                "state": "failed",
+                "failure_code": "compile_failed",
+                "diagnostics": [
+                    {"code": "missing_math_delimiter", "block_id": "body_text", "severity": "error"}
+                ],
+            },
+            {
+                "state": "failed",
+                "failure_code": "compile_failed",
+                "diagnostics": [
+                    {"code": "missing_math_delimiter", "block_id": "body_text", "severity": "error"}
+                ],
+            },
             {"state": "visual_pending", "build_id": "build-3"},
             {"state": "ready", "build_id": "build-4"},
         )
@@ -732,6 +764,7 @@ async def test_source_and_visual_repair_budgets_are_independent(monkeypatch) -> 
     async def visual(_self, _status, *, execution):
         del execution
         _self.visual_repairs += 1
+        _self.visual_diagnostics = ("layout_overflow:body_text",)
         return {
             "state": "failed",
             "failure_code": "visual_audit_failed",

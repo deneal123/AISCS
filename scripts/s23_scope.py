@@ -35,17 +35,17 @@ REGISTERED_TRACKED = (
     "service/domain/client/calls/chat.py",
     "service/domain/client/calls/streaming.py",
     "service/domain/client/health.py",
-    "service/domain/client/providers/function_dialect.py",
-    "service/domain/client/providers/gigachat.py",
+    "service/domain/client/providers/gigachat/function_dialect.py",
+    "service/domain/client/providers/gigachat/adapter.py",
     "service/domain/client/providers/spec.py",
-    "service/domain/runners/chat_run.py",
-    "service/domain/runners/tool_loop.py",
-    "service/domain/tools/workspace_tools.py",
+    "service/domain/runners/chat/run.py",
+    "service/domain/runners/chat/tool_loop.py",
+    "service/domain/tools/workspace/tools.py",
 )
 REGISTERED_UNTRACKED = (
-    "service/domain/client/providers/gigachat_schema.py",
+    "service/domain/client/providers/gigachat/schema.py",
     "service/presentation/cli/__init__.py",
-    "service/presentation/cli/gigachat_tools_smoke.py",
+    "service/presentation/cli/gigachat/tools.py",
 )
 
 

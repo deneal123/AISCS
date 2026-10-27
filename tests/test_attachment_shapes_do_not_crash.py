@@ -21,7 +21,7 @@
 
 from __future__ import annotations
 
-from service.domain.routing.auto_signals import _attachment_shapes
+from service.domain.routing.auto.signals import _attachment_shapes
 from service.schemas.agents import ModalityAttachment
 
 

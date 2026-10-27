@@ -13,8 +13,9 @@ from datetime import UTC, datetime
 import pytest
 
 from service.domain import base as base_mod
-from service.domain.runners import chat_run, tool_loop
-from service.domain.runners.tool_execution import ToolCallCache, ToolCallOutcome
+from service.domain.runners.chat import run as chat_run
+from service.domain.runners.chat import tool_loop
+from service.domain.runners.tool_runtime import ToolCallCache, ToolCallOutcome
 from service.domain.subagents.general import GeneralAgent
 from service.events import EventType
 from service.schemas.agents import UserContext
@@ -209,7 +210,7 @@ async def test_tool_loop_golden_provider_usage_and_terminal_contract(monkeypatch
             round_state.update({"prompt": 7, "completion": 3, "total": 10, "model": model})
 
     async def resolve_tools(_self, _model, _context=None):
-        from service.domain.capabilities.tool_spec import ToolSet
+        from service.domain.capabilities.tools.spec import ToolSet
         from service.domain.runners.support import _tools_to_openai
         from service.domain.tools.function_tools import DEFAULT_FUNCTION_TOOLS
 

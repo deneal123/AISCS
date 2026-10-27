@@ -20,7 +20,8 @@ import pytest
 
 from service.domain.client import active, registry
 from service.domain.client.protocol import GIGACHAT_TOOL_CAPABILITIES
-from service.domain.client.providers import credentials, function_dialect
+from service.domain.client.providers import credentials
+from service.domain.client.providers.gigachat import function_dialect
 from service.domain.client.providers.runtime import ProviderRuntime, module_getattr
 from service.domain.client.providers.spec import ProviderSpec
 from tests.test_provider_module_contract import assert_provider_module_contract
@@ -106,6 +107,9 @@ def test_function_dialect_follows_the_spec(dummy_provider):
 def test_explicit_choice_reaches_the_new_provider(dummy_provider, monkeypatch):
     """Явный `llm_provider=dummy` выбирает именно его."""
     from service.settings import config
+    from service.settings.providers import ProviderSettings
+
+    assert ProviderSettings(llm_provider="dummy").llm_provider == "dummy"
 
     monkeypatch.setattr(config.agents, "llm_provider", "dummy")
 

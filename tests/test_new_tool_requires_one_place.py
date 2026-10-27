@@ -17,8 +17,8 @@ import types
 
 import pytest
 
-from service.domain.capabilities import tool_registry
-from service.domain.capabilities.tool_spec import (
+from service.domain.capabilities.tools import registry as tool_registry
+from service.domain.capabilities.tools.spec import (
     CATALOG_UNKNOWN,
     MISSING_DATA,
     MODEL_NO_TOOL_SUPPORT,
@@ -80,7 +80,7 @@ def test_deduplication_is_explicitly_opted_in_by_tool_policy(dummy_tool):
 
 def test_billing_name_comes_from_the_spec(dummy_tool):
     """Иначе инструмент работает, а надбавка не берётся: счёт просто меньше."""
-    from service.domain.runners.tool_loop import ToolRoundMixin as ChatRunMixin
+    from service.domain.runners.chat.tool_loop import ToolRoundMixin as ChatRunMixin
 
     billed: set[str] = set()
     meta = ChatRunMixin._billable_tools_meta("dummy_tool", billed)
@@ -91,7 +91,7 @@ def test_billing_name_comes_from_the_spec(dummy_tool):
 
 def test_result_limit_comes_from_the_spec(dummy_tool):
     """Потолок у каждого инструмента свой: 6000 на всех — это про дампы, не про файлы."""
-    from service.domain.runners.tool_loop import _TOOL_TRUNCATION_NOTE, _trim_tool_result
+    from service.domain.runners.chat.tool_loop import _TOOL_TRUNCATION_NOTE, _trim_tool_result
 
     trimmed, _report = _trim_tool_result("x" * 500, "dummy_tool")
 
@@ -104,7 +104,7 @@ def test_result_limit_comes_from_the_spec(dummy_tool):
 
 def test_unlimited_tool_is_not_truncated():
     """⚠️ Для канонического чтения обрезка — это НЕВЕРНЫЙ результат, а не короткий."""
-    from service.domain.runners.tool_loop import _trim_tool_result
+    from service.domain.runners.chat.tool_loop import _trim_tool_result
 
     spec = ToolSpec(name="canonical", tool=_FakeTool("canonical"), result_limit_chars=None)
     module = types.ModuleType("service.domain.tools.canonical_for_test")
@@ -166,8 +166,8 @@ def test_nameless_tool_still_appears_in_the_report():
 # --------------------------------------------------------------------------- #
 def test_omissions_reach_the_event_stream(dummy_tool):
     """Причина обязана доехать до трейса: в логе её видит только оператор."""
-    from service.domain.capabilities.tool_spec import ToolSet
-    from service.domain.runners.tool_loop import _omissions_event
+    from service.domain.capabilities.tools.spec import ToolSet
+    from service.domain.runners.chat.tool_loop import _omissions_event
 
     event = _omissions_event(
         ToolSet(omissions=[Omission("dummy_tool", MISSING_DATA, "dummy_data")]), "general"
@@ -182,8 +182,8 @@ def test_omissions_reach_the_event_stream(dummy_tool):
 
 def test_no_event_when_everything_was_given(dummy_tool):
     """Событие без содержания — шум, который научатся не читать."""
-    from service.domain.capabilities.tool_spec import ToolSet
-    from service.domain.runners.tool_loop import _omissions_event
+    from service.domain.capabilities.tools.spec import ToolSet
+    from service.domain.runners.chat.tool_loop import _omissions_event
 
     assert _omissions_event(ToolSet(tools=[dummy_tool]), "general") is None
 

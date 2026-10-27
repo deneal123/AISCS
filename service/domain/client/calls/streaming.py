@@ -11,31 +11,36 @@
 
 from __future__ import annotations
 
+import asyncio
 import logging
 from dataclasses import dataclass, field
 
+from service.domain.client.models.requirements import ModelRequirement
 from service.domain.client.protocol import (
     GIGACHAT_TOOL_CAPABILITIES,
     OPENAI_TOOL_CAPABILITIES,
     PinSource,
+    ProviderFailure,
+    ProviderFailureCode,
+    ProviderProtocolError,
     ProviderRoundState,
     ProviderRunSession,
     classify_provider_failure,
     compile_toolset,
+)
+from service.domain.client.providers.gigachat.function_dialect import (
+    accumulate_function_call,
+    messages_to_legacy,
+    normalize_finish_reason,
+    uses_legacy_functions,
 )
 from service.domain.control_tokens import ControlTokenFilter
 from service.shared.step_timing import count_llm_call
 
 from .. import active
 from ..health import provider_error_detail
-from ..model_requirements import ModelRequirement
 from ..protocol.compiler import ProviderToolCompilationError
-from ..providers.function_dialect import (
-    accumulate_function_call,
-    messages_to_legacy,
-    normalize_finish_reason,
-    uses_legacy_functions,
-)
+from ..providers.image_transport_privacy import private_image_transport, private_stream_chunks
 from ..registry import (
     _pick_chat_capable_model,
     build_provider_order,
@@ -229,7 +234,15 @@ class _StreamRoundAccumulator:
             ]
 
 
-async def _stream_one_provider(
+def _stream_one_provider(client, provider_name: str, messages: list[dict], model: str, **kwargs):
+    from .harness_stream import provider_stream
+
+    return provider_stream(
+        client, provider_name, messages, model, kwargs, _stream_with_native_messages
+    )
+
+
+async def _stream_with_native_messages(
     client,
     provider_name: str,
     messages: list[dict],
@@ -243,6 +256,7 @@ async def _stream_one_provider(
     tool_choice: str | dict | None = None,
     provider_session: ProviderRunSession | None = None,
     compiled=None,
+    harness_call_id=None,
 ):
     """Стрим одного провайдера. Открытие стрима — с ретраями (до первого чанка)."""
     payload, legacy = _build_stream_payload(
@@ -261,39 +275,53 @@ async def _stream_one_provider(
     round_state.provider = provider_name
     round_state.model = model
 
-    stream = await with_retry(
-        lambda: client.chat.completions.create(**payload),
-        label=f"stream-open:{provider_name}",
-        **retry_params(),
-    )
+    with private_image_transport(enabled=provider_name == "gigachat"):
+        if harness_call_id is not None:
+            stream = await client.chat.completions.create(**payload)
+        else:
+            stream = await with_retry(
+                lambda: client.chat.completions.create(**payload),
+                label=f"stream-open:{provider_name}",
+                **retry_params(),
+            )
     accumulator = _StreamRoundAccumulator(
         legacy=legacy,
-        provider_call_id=(
+        provider_call_id=harness_call_id
+        or (
             provider_session.next_call_id(provider=provider_name)
             if provider_session is not None
             else None
         ),
         capture_private_state=provider_session is not None,
     )
-    async for chunk in stream:
-        clean = accumulator.consume(chunk, state=round_state, model=model)
-        if (
-            accumulator.accepted_delta
-            and provider_session is not None
-            and not provider_session.has_active_round
-        ):
-            provider_session.accept_round(
-                provider=provider_name,
-                model=model,
-                source=PinSource.STREAM_DELTA,
-                call_id=accumulator.provider_call_id,
-            )
-        if clean:
-            yield clean
+    try:
+        async for chunk in private_stream_chunks(stream, enabled=provider_name == "gigachat"):
+            clean = accumulator.consume(chunk, state=round_state, model=model)
+            if (
+                accumulator.accepted_delta
+                and provider_session is not None
+                and not provider_session.has_active_round
+            ):
+                provider_session.accept_round(
+                    provider=provider_name,
+                    model=model,
+                    source=PinSource.STREAM_DELTA,
+                    call_id=accumulator.provider_call_id,
+                )
+            if clean:
+                yield clean
 
-    if tail := accumulator.sanitizer.flush():
-        yield tail
-    accumulator.finalize(round_state)
+        if tail := accumulator.sanitizer.flush():
+            yield tail
+    finally:
+        accumulator.finalize(round_state)
+        close = getattr(stream, "close", None) or getattr(stream, "aclose", None)
+        if close is not None:
+            try:
+                async with asyncio.timeout(2):
+                    await close()
+            except Exception:
+                logger.warning("provider_stream_cleanup status=failed")
     if provider_session is not None and accumulator.private_state.get("value"):
         provider_session.set_private_state(provider_name, accumulator.private_state["value"])
     if provider_session is not None and accumulator.accepted_delta:
@@ -301,6 +329,27 @@ async def _stream_one_provider(
             usage=round_state.usage(),
             finish_reason=round_state.finish_reason,
         )
+
+
+async def _stream_provider_order(strict_provider, admission, requirement, model):
+    """Resolve admitted order once; never discover a catalog on an admitted hot path."""
+    if strict_provider:
+        return [strict_provider]
+    order = (
+        list(admission.snapshot.provider_order)
+        if admission is not None
+        else build_provider_order(active.get_active_provider())
+    )
+    model_index = (
+        admission.qualified_catalog(requirement, pick_model=_pick_chat_capable_model)[1]
+        if admission is not None
+        else (await get_model_catalog())[1]
+    )
+    order = reorder_owner_first(order, model, model_index)
+    if admission is None:
+        order = await provider_policy.drop_hard_off(order)
+        order = circuit_breaker.drop_cooled_down_local(order)
+    return order
 
 
 async def stream_provider_completion(
@@ -341,33 +390,18 @@ async def stream_provider_completion(
     strict_provider = pin_provider or (
         provider_session.pinned_provider if provider_session is not None else None
     )
-    from service.domain.run_context import current_execution
+    from service.domain.execution.context import current_execution
 
     execution = current_execution()
     admission = execution.provider_admission if execution is not None else None
-    if strict_provider:
-        order = [strict_provider]
-    else:
-        order = (
-            list(admission.snapshot.provider_order)
-            if admission is not None
-            else build_provider_order(active.ACTIVE_PROVIDER)
-        )
-        # Владелец выбранной модели — первым (точный роутинг без подмены модели).
-        _model_index = (
-            admission.qualified_catalog(
-                requirement,
-                pick_model=_pick_chat_capable_model,
-            )[1]
-            if admission is not None
-            else (await get_model_catalog())[1]
-        )
-        order = reorder_owner_first(order, model, _model_index)
-        if admission is None:
-            order = await provider_policy.drop_hard_off(order)
-            order = circuit_breaker.drop_cooled_down_local(order)
+    order = await _stream_provider_order(strict_provider, admission, requirement, model)
     last_exc: Exception | None = None
     any_client = False
+
+    if admission is not None and not order:
+        raise ProviderProtocolError(
+            ProviderFailure(code=ProviderFailureCode.REMOTE, retryable=False)
+        )
 
     for name in order:
         module = get_provider_module(name)
@@ -415,6 +449,10 @@ async def stream_provider_completion(
             await circuit_breaker.clear_down(name)
             return
         except Exception as exc:  # noqa: BLE001
+            from service.shared.harness_protocol import HarnessFailure
+
+            if isinstance(exc, HarnessFailure):
+                raise
             session_started = bool(
                 provider_session is not None and provider_session.pinned_provider == name
             )

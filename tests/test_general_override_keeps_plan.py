@@ -19,7 +19,7 @@ from __future__ import annotations
 
 import pytest
 
-from service.application import processor_steps as steps
+from service.application.processing import steps as steps
 from service.domain.pipeline.planning import plan_blockers
 
 

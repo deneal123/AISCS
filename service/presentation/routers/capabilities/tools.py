@@ -32,7 +32,7 @@ async def web_search_tool(
 
     internal_auth(authorization)
     try:
-        from service.domain.tools.web_search import web_search
+        from service.domain.tools.search.client import web_search
     except Exception as exc:  # noqa: BLE001
         return _unavailable(exc)
     query = payload.query.strip()
@@ -48,11 +48,12 @@ async def parse_url_tool(
 
     internal_auth(authorization)
     try:
-        from service.domain.tools.web_search import parse_url
+        from service.domain.tools.search.client import parse_url
     except Exception as exc:  # noqa: BLE001
         return _unavailable(exc)
     url = payload.url.strip()
-    return {"content": await parse_url(url) if url else ""}
+    parsed = await parse_url(url) if url else {}
+    return {"content": str(parsed.get("content") or "")}
 
 
 @router.post("/pptx")

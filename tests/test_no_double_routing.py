@@ -29,8 +29,8 @@ from __future__ import annotations
 
 import pytest
 
+from service.domain.execution.context import RunExecutionContext
 from service.domain.pipeline.processor_flow import resolve_agent_route
-from service.domain.run_context import RunExecutionContext
 
 
 class _CountingOrchestrator:
@@ -114,7 +114,7 @@ async def _decide(monkeypatch, routing_meta: dict, **kwargs):
     """Прогнать `/route` с заданным ответом роутер-LLM."""
     import service.domain.tools.router as router_mod
     from service.application.model_routing_service import ModelRoutingService
-    from service.domain.run_context import RunExecutionContext
+    from service.domain.execution.context import RunExecutionContext
 
     async def _fake_route_model(*, text, selected_model, input_type, execution=None):
         return "some/model", dict(routing_meta)

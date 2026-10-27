@@ -3,8 +3,8 @@ from __future__ import annotations
 import json
 from typing import Any
 
-from service.domain.usage_ledger import UsageLedger
-from service.domain.usage_tracking import is_billable
+from service.domain.usage.ledger import UsageLedger
+from service.domain.usage.tracking import is_billable
 
 
 class ReplyAssembler:
@@ -23,10 +23,22 @@ class ReplyAssembler:
         self.per_call_usage: list[dict[str, Any]] = []
         self._usage_ledger = usage_ledger
 
+    def bind_usage_ledger(self, ledger: UsageLedger) -> None:
+        """Attach the run owner's ledger once, including before its first event."""
+        if self._usage_ledger is not None and self._usage_ledger is not ledger:
+            raise RuntimeError("Run usage ownership unavailable")
+        self._usage_ledger = ledger
+
+    @property
+    def has_recorded_usage(self) -> bool:
+        return self._usage_ledger is not None and any(
+            receipt.billable for receipt in self._usage_ledger.receipts
+        )
+
     def consume(
         self, *, event: Any, stream_chunk_type: Any, error_type: Any, structured_output_type: Any
     ) -> None:
-        if event.metadata:
+        if event.metadata and event.metadata.get("kind") != "video_progress":
             md = event.metadata
             # Артефакты мульти-интента КОПИМ списком (иначе singular-ключи b64_json/
             # pptx_b64 при update затирали бы друг друга → юзер платит за N, получает 1,
@@ -138,6 +150,7 @@ class ReplyAssembler:
         """Project the immutable run ledger into the historical response contract."""
 
         self._sync_usage_from_ledger()
+        self.metadata.pop("usage_integrity", None)
         if self._usage_ledger is None:
             return
         anomalies = self._usage_ledger.anomaly_counts()

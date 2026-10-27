@@ -6,10 +6,11 @@ import logging
 from collections.abc import Callable
 from typing import Any
 
+from service.domain.client.models.requirements import ModelRequirement
+from service.domain.client.providers.management.operations import ProviderOperation
+
 from .. import active
-from ..model_requirements import ModelRequirement
 from ..protocol import ProviderFailure, ProviderFailureCode, ProviderProtocolError
-from ..provider_operations import ProviderOperation
 from .admitted_call import resolve_admitted_call
 
 logger = logging.getLogger(__name__)
@@ -62,6 +63,7 @@ async def select_stream_candidate(
             admission,
             provider,
             operation=_operation(requirement),
+            requirement=requirement,
             prefer=requested_model,
             tools=tools,
             tool_choice=tool_choice,
@@ -74,7 +76,7 @@ async def select_stream_candidate(
         )
     client = (
         active.get_openai_client()
-        if provider == active.ACTIVE_PROVIDER
+        if provider == active.get_active_provider()
         else getattr(module, "OPENAI_CLIENT", None)
         if module
         else None

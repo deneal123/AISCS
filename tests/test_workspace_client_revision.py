@@ -5,7 +5,7 @@ from __future__ import annotations
 import httpx
 import pytest
 
-from service.domain.tools import workspace_client
+from service.domain.tools.workspace import client as workspace_client
 
 
 @pytest.mark.asyncio

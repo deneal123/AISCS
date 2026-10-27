@@ -19,6 +19,8 @@
 
 from __future__ import annotations
 
+import asyncio
+
 import httpx
 import pytest
 
@@ -30,6 +32,55 @@ from service.infrastructure.sidecar import (
     SidecarUnavailable,
     set_correlation_id,
 )
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("operation", ["rpc", "video_stream"])
+async def test_internal_authorization_does_not_reach_environment_proxy(monkeypatch, operation):
+    target_headers = []
+    proxy_headers = []
+
+    async def respond(reader, writer, captured):
+        try:
+            captured.append(await asyncio.wait_for(reader.readuntil(b"\r\n\r\n"), 2))
+            writer.write(
+                b"HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n"
+                b"Content-Length: 11\r\nConnection: close\r\n\r\n"
+                b'{"ok":true}'
+            )
+            await writer.drain()
+        finally:
+            writer.close()
+            await writer.wait_closed()
+
+    target = await asyncio.start_server(lambda r, w: respond(r, w, target_headers), "127.0.0.1", 0)
+    proxy = await asyncio.start_server(lambda r, w: respond(r, w, proxy_headers), "127.0.0.1", 0)
+    try:
+        target_port = target.sockets[0].getsockname()[1]
+        proxy_port = proxy.sockets[0].getsockname()[1]
+        monkeypatch.setenv("HTTP_PROXY", f"http://127.0.0.1:{proxy_port}")
+        monkeypatch.setenv("NO_PROXY", "")
+        client = SidecarClient(
+            service="probe",
+            base_url=f"http://127.0.0.1:{target_port}",
+            timeout=3,
+        )
+        if operation == "video_stream":
+            from service.infrastructure.video_stream import acquire_video
+
+            result = await acquire_video(client, {}, "PRIVATE_TEST_KEY")
+        else:
+            result = await client.request_json(
+                "GET", "/health", headers={"Authorization": "Bearer PRIVATE_TEST_KEY"}
+            )
+        assert result == {"ok": True}
+        assert proxy_headers == []
+        assert len(target_headers) == 1 and b"Bearer PRIVATE_TEST_KEY" in target_headers[0]
+    finally:
+        target.close()
+        proxy.close()
+        await target.wait_closed()
+        await proxy.wait_closed()
 
 
 def _client(handler, *, timeout: float = 5.0) -> SidecarClient:

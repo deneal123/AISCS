@@ -25,7 +25,7 @@ from service.domain.tools import unbilled_calls
 
 
 def _meta(tool_name: str, billed: set[str]):
-    from service.domain.runners.tool_loop import ToolRoundMixin
+    from service.domain.runners.chat.tool_loop import ToolRoundMixin
 
     return ToolRoundMixin._billable_tools_meta(tool_name, billed)
 
@@ -100,9 +100,9 @@ def test_an_unpriced_tool_is_unaffected():
 @pytest.mark.parametrize(
     "module_path, marker",
     [
-        ("service/domain/tools/web_search_tool.py", "unbilled_calls.waive(BILLING_NAME)"),
+        ("service/domain/tools/search/tool.py", "unbilled_calls.waive(BILLING_NAME)"),
         ("service/domain/tools/video_tool.py", "unbilled_calls.waive(BILLING_NAME)"),
-        ("service/domain/tools/workspace_tools.py", "unbilled_calls.waive(BILLING_NAME)"),
+        ("service/domain/tools/workspace/tools.py", "unbilled_calls.waive(BILLING_NAME)"),
     ],
 )
 def test_the_refusing_tools_actually_waive(module_path, marker):
@@ -158,14 +158,14 @@ async def test_no_engine_answered_is_not_billed(monkeypatch):
 
     Живая проверка внутри сайдкара показала это прямо: «ОТКАЗ → надбавка ['web_search_tool']».
     """
-    from service.domain.tools import web_search_tool as wst
+    from service.domain.tools.search import tool as wst
 
     async def dead_engines(query, num_results=5, *, stats=None):
         if stats is not None:
             stats["engines_answered"] = 0
         return []
 
-    monkeypatch.setattr("service.domain.tools.web_search.web_search", dead_engines)
+    monkeypatch.setattr("service.domain.tools.search.client.web_search", dead_engines)
 
     with unbilled_calls.collect():
         text = await wst.search_web_tool(None, '{"query": "ставка"}')
@@ -178,14 +178,14 @@ async def test_no_engine_answered_is_not_billed(monkeypatch):
 async def test_engines_answered_but_found_nothing_is_billed(monkeypatch):
     """🔴 ГРАНИЦА. Движки ответили, находок нет — поиск СОСТОЯЛСЯ, и он платный. Слить эти
     два случая в один значит либо снова платить за пустоту, либо раздавать поиск даром."""
-    from service.domain.tools import web_search_tool as wst
+    from service.domain.tools.search import tool as wst
 
     async def empty_but_alive(query, num_results=5, *, stats=None):
         if stats is not None:
             stats["engines_answered"] = 2
         return []
 
-    monkeypatch.setattr("service.domain.tools.web_search.web_search", empty_but_alive)
+    monkeypatch.setattr("service.domain.tools.search.client.web_search", empty_but_alive)
 
     with unbilled_calls.collect():
         text = await wst.search_web_tool(None, '{"query": "ставка"}')
@@ -198,7 +198,7 @@ async def test_engines_answered_but_found_nothing_is_billed(monkeypatch):
 async def test_the_engine_counter_counts_only_answers(monkeypatch):
     """⚠️ Счётчик считает ОТВЕТИВШИХ, а не перебранных: инкремент до `await` сделал бы
     «ни один не ответил» недостижимым, и правило снова стало бы мёртвым."""
-    import service.domain.tools.web_search as ws
+    import service.domain.tools.search.client as ws
 
     async def boom(*a, **kw):
         raise TimeoutError
@@ -218,8 +218,8 @@ async def test_the_engine_counter_counts_only_answers(monkeypatch):
 def test_an_unreachable_sandbox_costs_nothing():
     """🔴 Файлы недоступны целиком — услуги не было."""
     from service.domain.integration_failure import IntegrationFailureCode
-    from service.domain.tools.workspace_client import WorkspaceUnavailable
-    from service.domain.tools.workspace_tools import _failure
+    from service.domain.tools.workspace.client import WorkspaceUnavailable
+    from service.domain.tools.workspace.tools import _failure
 
     with unbilled_calls.collect():
         outcome = _failure(WorkspaceUnavailable(IntegrationFailureCode.UNAVAILABLE, retryable=True))
@@ -233,8 +233,8 @@ def test_an_unreachable_sandbox_costs_nothing():
 def test_invalid_workspace_call_is_not_billed():
     """S24: failed/invalid/conflict outcomes never reach the charging seam."""
     from service.domain.integration_failure import IntegrationFailureCode
-    from service.domain.tools.workspace_client import WorkspaceUnavailable
-    from service.domain.tools.workspace_tools import _failure
+    from service.domain.tools.workspace.client import WorkspaceUnavailable
+    from service.domain.tools.workspace.tools import _failure
 
     with unbilled_calls.collect():
         outcome = _failure(WorkspaceUnavailable(IntegrationFailureCode.INVALID))

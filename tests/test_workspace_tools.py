@@ -12,11 +12,11 @@ import json
 import pytest
 
 from service.contracts import BILLABLE_TOOLS
-from service.domain.capabilities import tool_registry
+from service.domain.capabilities.tools import registry as tool_registry
 from service.domain.integration_failure import IntegrationFailureCode
 from service.domain.runners.tool_runtime import ToolCallOutcome
-from service.domain.tools import workspace_tools as wt
-from service.domain.tools.workspace_client import WorkspaceUnavailable
+from service.domain.tools.workspace import tools as wt
+from service.domain.tools.workspace.client import WorkspaceUnavailable
 
 REF = {"workspace_id": "ws1", "token": "t.sig", "user_id": "7", "root": "/workspace"}
 
@@ -194,7 +194,7 @@ async def test_artifacts_are_an_inventory_not_bytes(monkeypatch) -> None:
     берёт его из своего пространства имён, и подмена соседа на него не действует —
     первая версия теста именно так и зеленела бы вхолостую, вернув пустой список.
     """
-    from service.domain.tools import workspace_client as wc
+    from service.domain.tools.workspace import client as wc
 
     async def fake_call(ref, path, payload):
         assert path == "artifacts"
@@ -209,7 +209,7 @@ async def test_artifacts_are_an_inventory_not_bytes(monkeypatch) -> None:
 @pytest.mark.asyncio
 async def test_dead_sidecar_does_not_lose_the_finished_reply(monkeypatch) -> None:
     """🔴 Отчёт в КОНЦЕ прогона: уронить из-за него уже готовый ответ — худший размен."""
-    from service.domain.tools import workspace_client as wc
+    from service.domain.tools.workspace import client as wc
 
     async def dead(ref, path, payload):
         raise wc.WorkspaceUnavailable("сервис песочницы не отвечает")
@@ -227,7 +227,7 @@ async def test_no_workspace_means_the_sidecar_is_not_asked_at_all(monkeypatch) -
     бы непроверенной.
     """
     from service.application.agent_execution_service import _workspace_artifacts
-    from service.domain.tools import workspace_client as wc
+    from service.domain.tools.workspace import client as wc
 
     asked = []
 
@@ -243,7 +243,7 @@ async def test_no_workspace_means_the_sidecar_is_not_asked_at_all(monkeypatch) -
 @pytest.mark.asyncio
 async def test_junk_entries_never_reach_the_inventory(monkeypatch) -> None:
     """Опись уезжает в биллинг и в UI: строка вместо записи сломала бы потребителя."""
-    from service.domain.tools import workspace_client as wc
+    from service.domain.tools.workspace import client as wc
 
     async def fake_call(ref, path, payload):
         return {"artifacts": [{"path": "a", "size": 1}, "мусор", None, 42]}
@@ -358,7 +358,7 @@ def test_orchestrator_signal_needs_a_workspace_too() -> None:
         planning=None,
         resolved_category=None,
     )
-    from service.domain.run_context import require_execution
+    from service.domain.execution.context import require_execution
 
     assert require_execution().policy.flag("workspace_tools_enabled") is True
 
@@ -377,7 +377,7 @@ def test_prompt_teaches_the_distinction_in_users_own_words() -> None:
     """🔴 Рядовой пользователь про «workspace» не знает и никогда его не назовёт — решать
     обязан оркестратор ПО СМЫСЛУ просьбы. Поэтому в промпте живые формулировки с обеих
     сторон границы, а не термин системы."""
-    from service.domain.routing.auto_prompt import auto_prompt
+    from service.domain.routing.auto.prompt import auto_prompt
 
     text = auto_prompt()
     assert "needs_files" in text
@@ -398,7 +398,7 @@ async def test_decision_reaches_the_plan(monkeypatch) -> None:
     from datetime import UTC, datetime
 
     from service.domain.pipeline import auto_mode
-    from service.domain.routing.auto_decision import AutoDecision
+    from service.domain.routing.auto.decision import AutoDecision
     from service.schemas.agents import UserContext
 
     async def decided(*args, **kwargs):

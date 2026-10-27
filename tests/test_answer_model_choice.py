@@ -85,7 +85,7 @@ async def test_web_search_synthesis_uses_the_user_model(monkeypatch):
     """Сквозной: синтез ответа уходит на модель пользователя, а не на дефолт."""
     import service.domain.client as client_mod
     from service.domain.subagents.web_search import WebSearchAgent
-    from service.domain.tools import web_search as tools_ws
+    from service.domain.tools.search import client as tools_ws
 
     seen: dict = {}
 
@@ -123,7 +123,7 @@ async def test_context_compression_stays_on_the_cheap_model(monkeypatch):
     выше остался бы зелёным — а счёт за запрос с крупным вложением вырос бы кратно.
     """
     import service.domain.client as client_mod
-    from service.domain.pipeline import context_compressor as cc
+    from service.domain.pipeline.context import compressor as cc
 
     seen: dict = {}
 

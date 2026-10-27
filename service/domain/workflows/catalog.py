@@ -266,7 +266,7 @@ async def retrieve(query: str) -> list[CatalogWorkflow]:
 def to_workflow_spec(candidate: CatalogWorkflow) -> WorkflowSpec | None:
     """Revalidate every recorded step against the current local capability registry."""
     from service.domain.capabilities.runtime import get_static_catalog
-    from service.domain.run_context import current_execution
+    from service.domain.execution.context import current_execution
 
     execution = current_execution()
     agents = (

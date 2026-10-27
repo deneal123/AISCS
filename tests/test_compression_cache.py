@@ -20,7 +20,7 @@ import logging
 
 import pytest
 
-from service.domain.pipeline import context_compressor as cc
+from service.domain.pipeline.context import compressor as cc
 
 
 async def _fixed_model() -> str:

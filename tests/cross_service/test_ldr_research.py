@@ -236,7 +236,7 @@ class _FakeResp:
 @pytest.mark.asyncio
 async def test_rewrite_to_russian_translates_and_bills(monkeypatch):
     from service.domain import client as client_mod
-    from service.domain.run_context import require_execution
+    from service.domain.execution.context import require_execution
 
     async def fake_ccc(**kwargs):
         # англоязычный отчёт уходит пользовательским сообщением

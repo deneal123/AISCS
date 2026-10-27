@@ -16,7 +16,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from service.domain.client.providers import openai_compatible as oc
+from service.domain.client.providers.openai import compatible as oc
 
 
 class _Recorder:
@@ -184,7 +184,9 @@ async def test_embedding_passes_text_as_input():
 # --------------------------------------------------------------------------- #
 def test_http_client_without_proxy(monkeypatch):
     monkeypatch.setattr(
-        "service.domain.client.providers._http.build_proxy_url", lambda _name: "", raising=True
+        "service.domain.client.providers.transports.http.build_proxy_url",
+        lambda _name: "",
+        raising=True,
     )
 
     client = oc.make_http_client("acme", timeout=7.0)
@@ -203,7 +205,7 @@ def test_http_client_survives_broken_proxy_config(monkeypatch, caplog):
         return "://это-не-url"
 
     monkeypatch.setattr(
-        "service.domain.client.providers._http.build_proxy_url", _boom, raising=True
+        "service.domain.client.providers.transports.http.build_proxy_url", _boom, raising=True
     )
 
     client = oc.make_http_client("acme", timeout=3.0)

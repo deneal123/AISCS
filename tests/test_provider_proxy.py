@@ -19,7 +19,8 @@ import certifi
 import httpx
 import pytest
 
-from service.domain.client.providers import _http, openai_compatible
+from service.domain.client.providers.openai import compatible as openai_compatible
+from service.domain.client.providers.transports import http as _http
 
 
 @pytest.fixture
@@ -126,7 +127,7 @@ def test_openai_compatible_client_without_proxy_passes_none(proxy_settings):
 
 def test_gigachat_client_gets_the_proxy(proxy_settings):
     """У GigaChat свой HTTP-клиент — прокси собирается отдельным кодом."""
-    from service.domain.client.providers import gigachat
+    from service.domain.client.providers.gigachat import adapter as gigachat
     from service.settings import config
 
     proxy_settings.setattr(config.agents, "proxy_providers", "gigachat")
@@ -148,7 +149,7 @@ async def test_gigachat_oauth_request_gets_the_proxy(proxy_settings):
     Прокси, применённый только к чат-клиенту, оставил бы недостижимым сам вход — то есть
     провайдер не работал бы вовсе, а выглядело бы как «неверный ключ».
     """
-    from service.domain.client.providers.gigachat_auth import GigaChatTokenManager
+    from service.domain.client.providers.gigachat.auth import GigaChatTokenManager
 
     seen = _captured_kwargs(proxy_settings)
     manager = GigaChatTokenManager(

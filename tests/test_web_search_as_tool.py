@@ -12,7 +12,7 @@ from datetime import UTC, datetime
 
 import pytest
 
-from service.domain.runners import tool_loop as chat_run
+from service.domain.runners.chat import tool_loop as chat_run
 from service.domain.subagents.general import GeneralAgent
 from service.schemas.agents import UserContext
 
@@ -127,7 +127,7 @@ def test_billing_name_is_declared_in_the_contract():
 @pytest.mark.asyncio
 async def test_results_are_compact(monkeypatch):
     """Результат уходит в диалог и переотправляется КАЖДЫМ раундом — тел страниц не шлём."""
-    from service.domain.tools import web_search_tool as mod
+    from service.domain.tools.search import tool as mod
 
     async def _search(query, num_results=5, *, stats=None):
         if stats is not None:
@@ -137,7 +137,7 @@ async def test_results_are_compact(monkeypatch):
             {"title": "Ещё", "url": "https://x/2", "snippet": "коротко"},
         ]
 
-    monkeypatch.setattr("service.domain.tools.web_search.web_search", _search)
+    monkeypatch.setattr("service.domain.tools.search.client.web_search", _search)
 
     out = await mod.search_web_tool(None, '{"query": "курс биткоина"}')
 
@@ -148,14 +148,14 @@ async def test_results_are_compact(monkeypatch):
 @pytest.mark.asyncio
 async def test_empty_results_say_so_explicitly(monkeypatch):
     """🔴 Пустая строка читалась бы моделью как «нашлось» → выдуманные цифры со ссылкой."""
-    from service.domain.tools import web_search_tool as mod
+    from service.domain.tools.search import tool as mod
 
     async def _search(query, num_results=5, *, stats=None):
         if stats is not None:
             stats["engines_answered"] = 1
         return []
 
-    monkeypatch.setattr("service.domain.tools.web_search.web_search", _search)
+    monkeypatch.setattr("service.domain.tools.search.client.web_search", _search)
 
     out = await mod.search_web_tool(None, '{"query": "чепуха"}')
 
@@ -164,14 +164,14 @@ async def test_empty_results_say_so_explicitly(monkeypatch):
 
 @pytest.mark.asyncio
 async def test_search_failure_is_reported_not_swallowed(monkeypatch):
-    from service.domain.tools import web_search_tool as mod
+    from service.domain.tools.search import tool as mod
 
     async def _search(query, num_results=5, *, stats=None):
         if stats is not None:
             stats["engines_answered"] = 1
         raise RuntimeError("движки легли")
 
-    monkeypatch.setattr("service.domain.tools.web_search.web_search", _search)
+    monkeypatch.setattr("service.domain.tools.search.client.web_search", _search)
 
     out = await mod.search_web_tool(None, '{"query": "курс"}')
 

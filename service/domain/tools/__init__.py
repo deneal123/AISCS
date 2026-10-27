@@ -1,15 +1,9 @@
-"""Инструменты, которые может звать агент: веб-поиск, разбор ссылки, презентация, SQL.
+"""Tool integrations without eager clients or function re-exports.
 
-Пакет намеренно ПУСТОЙ. Здесь лежали семь реэкспортов, из которых потреблялся ровно
-один (`DEFAULT_FUNCTION_TOOLS`), — теперь и он берётся из своего подмодуля.
+``search`` owns search transport, parsing and per-run sources; ``ide`` and
+``workspace`` own their separate file contracts. Other integrations stay in
+explicit modules. Import DEFAULT_FUNCTION_TOOLS from ``function_tools``.
 
-⚠️ И это не вкусовщина. Реэкспорт ЗАТЕНЯЛ одноимённые подмодули: после
-`from .web_search import web_search` атрибутом пакета `web_search` становилась ФУНКЦИЯ,
-и форма `import service.domain.tools.web_search as ws` возвращала её вместо модуля. То
-же с `deep_research`. Из-за этого тесты, которым нужен модуль (подменить в нём атрибут),
-были вынуждены обходить пакет через `importlib.import_module` — с комментарием-
-предупреждением, чтобы следующий не наступил снова.
-
-Второй эффект тот же, что у `pipeline`: импорты на уровне пакета тянули ВСЮ цепочку
-инструментов при обращении к любому одному.
+Historical re-exports shadowed modules with equally named functions and loaded
+the entire tool chain on any import. Keep this initializer free of runtime work.
 """

@@ -16,15 +16,19 @@ AGENT_SOURCES = (
 )
 
 WORKFLOW_SOURCES = (
-    "service.domain.workflows.research_pdf_presentation",
-    "service.domain.workflows.research_pdf_document",
+    "service.domain.workflows.research.pdf_presentation",
+    "service.domain.workflows.research.pdf_document",
 )
 
 TOOL_SOURCES = (
     "service.domain.tools.function_tools",
-    "service.domain.tools.web_search_tool",
-    "service.domain.tools.workspace_tools",
+    "service.domain.tools.search.tool",
+    "service.domain.tools.workspace.tools",
+    "service.domain.tools.ide.tools",
+    "service.domain.tools.human_question_tool",
     "service.domain.tools.latex_tools",
+    "service.domain.tools.document_proposal_tool",
+    "service.domain.tools.documents.structure",
     "service.domain.tools.video_tool",
 )
 

@@ -1,6 +1,6 @@
 """Document Forge brief, skill and source contracts."""
 
-from .authoring import (
+from service.domain.documents.authoring.execution import (
     DocumentAuthoringCheckpoint,
     DocumentAuthoringResult,
     author_semantic_draft,
@@ -9,8 +9,12 @@ from .authoring import (
     resolve_document_intent,
     restore_authoring_checkpoint,
 )
-from .brief import DocumentBrief, normalize_brief
-from .draft import (
+from service.domain.documents.evidence.bundle import (
+    DocumentEvidenceBundle,
+    build_document_evidence_bundle,
+)
+from service.domain.documents.evidence.citations import CitationRegistry
+from service.domain.documents.semantic.draft import (
     DocumentDraft,
     DraftBlock,
     DraftPatch,
@@ -19,14 +23,17 @@ from .draft import (
     parse_document_draft,
     parse_draft_patch,
 )
-from .evidence import CitationRegistry
-from .evidence_bundle import DocumentEvidenceBundle, build_document_evidence_bundle
+from service.domain.documents.semantic.rendering import RenderedSourceBundle, render_document
+from service.domain.documents.skills.catalog import DOCUMENT_SKILL_CATALOG, DocumentSkillCatalog
+from service.domain.documents.skills.contracts import DocumentSkill, skill_for_profile
+from service.domain.documents.skills.profiles import (
+    DOCUMENT_PROFILE_CONTRACT_VERSION,
+    DOCUMENT_PROFILE_IDS,
+)
+
+from .brief import DocumentBrief, normalize_brief
 from .intent import DocumentIntent, deterministic_intent, literal_shortcut, parse_document_intent
-from .profile_contract import DOCUMENT_PROFILE_CONTRACT_VERSION, DOCUMENT_PROFILE_IDS
-from .rendering import RenderedSourceBundle, render_document
 from .run_outcome import DocumentRunOutcome, DocumentStage, document_status_event
-from .skill_catalog import DOCUMENT_SKILL_CATALOG, DocumentSkillCatalog
-from .skills import DocumentSkill, skill_for_profile
 from .source import (
     AuthoredDocument,
     parse_authored_document,

@@ -15,7 +15,7 @@
 
 from __future__ import annotations
 
-from service.domain.pipeline.context_assembler import SECTION_TITLES
+from service.domain.pipeline.context.assembler import SECTION_TITLES
 from service.domain.subagents.general import GENERAL_PROMPT
 
 

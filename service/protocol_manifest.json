@@ -1,5 +1,6 @@
 {
-  "version": "s33-v1",
+  "version": "s37-usage-v1",
+  "private_usage_checkpoint": {"key": "__usage_checkpoint__", "schema_version": 1, "attempt_header": "X-Execution-Attempt"},
   "run": {
     "input_fields": [
       "agent_settings",
@@ -35,6 +36,7 @@
       "workspace_ref"
     ],
     "result_fields": [
+      "_human_question_pause_v1",
       "completion_tokens",
       "metadata",
       "per_call_usage",
@@ -232,5 +234,66 @@
     "expired",
     "unknown"
   ],
+  "task_result": {
+    "schema_version": 1,
+    "supported_versions": [1, 2],
+    "statuses": ["partial", "cancelled"],
+    "blockers": ["no_progress", "prompt_budget", "round_limit", "unconfirmed_effect", "cancelled", "tool_failed", "verification_failed"],
+    "verified": false,
+    "v2": {
+      "statuses": ["completed", "partial", "blocked", "waiting_user", "cancelled"],
+      "blockers": ["cancelled", "cost_unknown", "verification_missing", "verification_failed", "operation_unknown", "plan_incomplete", "budget_exhausted", "budget_unavailable", "checkpoint_unavailable", "checkpoint_conflict", "provider_state_incompatible", "binding_changed", "user_decision_required", "verification_unavailable", "task_contract_invalid", "task_permission_denied", "dispatch_disabled", "harness_fenced", "unsupported_adapter", "usage_limit_exceeded", "operation_conflict", "no_progress", "prompt_budget", "round_limit", "unconfirmed_effect", "tool_failed"],
+      "evidence_required_for_completion": true
+    }
+  },
+  "private_harness_protocol": {
+    "version": 1,
+    "inspection_opcode": "operation_status",
+    "zero_credit_budget": "owned_zero_reservation_same_grants_no_paid_dispatch_v1",
+    "inspection_kinds": ["paid", "effect"],
+    "continuation_agent_field": "agent_name",
+    "effect_charge_field": "charged",
+    "tool_fee_reconciliation": "committed_adapter_receipt_only",
+    "model_usage_reconciliation": "exact_late_receipt_without_dispatch",
+    "usage_receipt_repost_limit": 1,
+    "model_receipt_provider_state": "private_binding_v1",
+    "length_continuation_counter": "backend_checkpoint_monotonic_v1",
+    "instruction_refinement": "private_candidate_v1_backend_verified_adoption_no_new_authority",
+    "instruction_refinement_intent": "one_per_task_stable_operation_id_source_change_conflict_v1",
+    "admission_call_window": "server_owned_job_two_contract_calls_global_budget_preserved_v1",
+    "workspace_binding": "backend_owned_workspace_id_legacy_resume_bound_no_public_projection_v1",
+    "terminal_evidence": "backend_current_snapshot_before_first_prepared_terminal_safe_reply_projection_v1",
+    "task_prompt_boundary": "admission_remaining_paid_calls_backend_grants_authoritative_v1",
+    "document_structural_review": "v2_replace_delete_insert_move_new_ids_base_and_selection_scoped_v1",
+    "document_review_identity": "content_addressed_immutable_proposal_read_ack_v1",
+    "document_build_identity": "operation_and_workspace_bound_no_create_replay_v1",
+    "instruction_lessons": "same_owner_project_generation_surface_provider_model_success_only_v1",
+    "model_receipt_finish_reason": "private_terminal_reason_v1_missing_blocks_execution_not_accounting",
+    "call_payload_codec": "transcript_v2_frozen_step_legacy_resume_blocked",
+    "model_request_journal": "canonical_body_and_single_continuation_step",
+    "completed_model_step_replay": "same_transcript_called_tools_and_original_receipt",
+    "worker_transport_recovery": "same_delivery_committed_attempt_counter_max3_no_effect_replay",
+    "resume_without_execution_owner": "blocked",
+    "read_only_inspection": true,
+    "dispatch_ack_replay": false,
+    "admission_checkpoint": {
+      "phase": "admitting",
+      "question_field": "question",
+      "active_time_field": "admission_active_ms",
+      "answer_field": "clarification",
+      "requires_committed_contract_receipt": true,
+      "seal_requires_accepted_answer": true,
+      "effect_permissions": false
+    },
+    "commands": {
+      "version": 1,
+      "actions": ["run", "status", "stop"],
+      "supervisor_control_version": 1,
+      "start_ack_replay": false,
+      "source_revision_owner": "backend_executor_receipt",
+      "verification_recipe_owner": "backend",
+      "separate_command_surcharge": false
+    }
+  },
   "work_snapshot_version": 2
 }

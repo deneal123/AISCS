@@ -141,6 +141,24 @@ def test_route_model_never_accepts_manual_model_without_admission_evidence():
         )
 
 
+@pytest.mark.parametrize("model", ["EmbeddingsGigaR", "text-embedding-3-small", "whisper-1"])
+def test_non_chat_manual_choice_never_becomes_auto_routing(model):
+    fallback = AsyncMock(return_value=None)
+    with (
+        patch("service.domain.tools.router._llm_route", new=fallback),
+        pytest.raises(SelectedModelUnavailable),
+    ):
+        asyncio.run(
+            route_model(
+                text="Создай PDF с текстом тест",
+                selected_model=model,
+                input_type="text",
+                available_models=["openai/gpt-4o"],
+            )
+        )
+    fallback.assert_not_awaited()
+
+
 # ── A2 (аудит): usage роутер-LLM отдаётся наверх для тарификации ──────────────
 
 
@@ -158,7 +176,7 @@ def test_llm_route_accumulates_usage():
         ],
         usage=SimpleNamespace(prompt_tokens=120, completion_tokens=15, total_tokens=135),
     )
-    from service.domain.run_context import RunExecutionContext
+    from service.domain.execution.context import RunExecutionContext
 
     execution = RunExecutionContext()
     with patch(
@@ -176,7 +194,7 @@ def test_llm_route_accumulates_usage():
 
 def test_route_model_manual_leaves_usage_empty():
     """В ручном режиме роутер-LLM не зовётся → usage_out пуст (тарифицировать нечего)."""
-    from service.domain.run_context import RunExecutionContext
+    from service.domain.execution.context import RunExecutionContext
 
     execution = RunExecutionContext()
     _model, meta = asyncio.run(

@@ -11,13 +11,13 @@ from types import ModuleType
 from typing import Any
 
 from service.contracts import BILLABLE_TOOLS, LEGACY_BILLING_NAMES
+from service.domain.capabilities.tools.spec import GROUNDING_ROLES, TOOL_EFFECTS, ToolSpec
 from service.settings import AgentsConfig
 
 from .agent_spec import COST_CLASSES, AgentSpec
 from .catalog import CapabilityProjections, StaticCapabilityCatalog, frozen_mapping
 from .metrics import record
 from .sources import AGENT_SOURCES, DYNAMIC_BILLING_NAMES, TOOL_SOURCES, WORKFLOW_SOURCES
-from .tool_spec import GROUNDING_ROLES, TOOL_EFFECTS, ToolSpec
 from .workflow_spec import WorkflowSpec
 
 CATALOG_VERSION = "s29.v1"
@@ -203,7 +203,7 @@ def _projections(
 def _digest_payload(
     agents: dict[str, AgentSpec], workflows: dict[str, WorkflowSpec], tools: dict[str, ToolSpec]
 ) -> dict[str, Any]:
-    from service.domain.documents.profile_contract import (
+    from service.domain.documents.skills.profiles import (
         DOCUMENT_PROFILE_CONTRACT_VERSION,
         DOCUMENT_PROFILE_IDS,
     )

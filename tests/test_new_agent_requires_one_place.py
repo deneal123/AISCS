@@ -123,7 +123,7 @@ def test_orchestrator_decision_keeps_the_new_route(dummy_agent):
     стратегии остаются. Значит новый агент, не попавший в словарь, выглядел бы как «модель
     его не выбрала» — при том, что она его выбрала.
     """
-    from service.domain.routing.auto_decision import normalize_decision
+    from service.domain.routing.auto.decision import normalize_decision
 
     decision = normalize_decision({"route": "dummy", "confidence": "high"})
 
@@ -172,7 +172,7 @@ def test_decompose_prompt_includes_the_new_agent(dummy_agent):
 def test_trace_label_exists_for_the_new_agent(dummy_agent):
     """Иначе человек видит в трейсе машинное имя вместо режима."""
     from service.domain.pipeline.auto_mode import _offer_event
-    from service.domain.routing.auto_decision import AutoDecision
+    from service.domain.routing.auto.decision import AutoDecision
 
     event = _offer_event(AutoDecision(route="dummy"), "dummy", "вопрос")
 
@@ -181,7 +181,7 @@ def test_trace_label_exists_for_the_new_agent(dummy_agent):
 
 def test_auto_prompt_offers_the_new_agent(dummy_agent):
     """Иначе для оркестратора агента не существует: выбрать его он не может."""
-    from service.domain.routing.auto_prompt import auto_prompt
+    from service.domain.routing.auto.prompt import auto_prompt
 
     text = auto_prompt()
 

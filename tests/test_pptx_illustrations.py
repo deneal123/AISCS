@@ -118,7 +118,7 @@ async def test_prompts_forbid_text_on_images(image_model):
     """Модели рисуют буквы с ошибками — просим их не рисовать вовсе."""
     await pptx_tool._render_images(_structure(), None)
 
-    assert all("no text" in p for p in image_model)
+    assert all("без текста" in p for p in image_model)
 
 
 # --------------------------------------------------------------------------- #
@@ -342,9 +342,11 @@ def test_prompt_keeps_the_deck_in_the_user_language():
         "в промпте не сказано, на каком языке делать слайды — модель уведёт дек "
         "в английский вслед за требованием к image_prompt"
     )
-    assert "ТОЛЬКО внутри полей `theme` и `image_prompt`" in prompt, (
-        "требование «на английском» не ограничено полями картинок"
-    )
+    assert (
+        "Инструкции генератору изображений в полях `theme` и `image_prompt` пиши на русском."
+        in prompt
+    ), "инструкции картинкам должны быть русскими, не меняя язык пользовательских слайдов"
+    assert "на английском" not in prompt
 
 
 def test_image_model_picker_prefers_verified_models():

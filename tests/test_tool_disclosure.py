@@ -7,13 +7,13 @@ from types import SimpleNamespace
 
 import pytest
 
-from service.domain.capabilities.tool_disclosure import (
+from service.domain.capabilities.tools.disclosure import (
     DisclosureResult,
     build_manifest,
     disclose,
     usage_event,
 )
-from service.domain.capabilities.tool_spec import NOT_IN_TIER, ToolSet
+from service.domain.capabilities.tools.spec import NOT_IN_TIER, ToolSet
 from service.shared.deadline import RunDeadline, use_deadline
 
 
@@ -262,7 +262,7 @@ async def test_prompt_budget_fallback_does_not_call_selector(monkeypatch):
 async def test_chat_runner_reselects_after_a_completed_tool_round(monkeypatch):
     """The second tier sees only completed tool names/statuses, never raw output."""
     from service.domain import base as base_mod
-    from service.domain.runners import chat_run as chat_runner
+    from service.domain.runners.chat import run as chat_runner
     from service.domain.subagents.general import GeneralAgent
     from service.schemas.agents import UserContext
 
@@ -290,7 +290,7 @@ async def test_chat_runner_reselects_after_a_completed_tool_round(monkeypatch):
     async def fake_toolset(self, _model, _context=None):
         return ToolSet(tools=_tools())
 
-    from service.domain.runners import tool_disclosure_state
+    from service.domain.runners.chat import disclosure as tool_disclosure_state
 
     monkeypatch.setattr(tool_disclosure_state, "disclose", fake_disclose)
     monkeypatch.setattr(chat_runner, "stream_chat_completion", fake_stream)
@@ -303,6 +303,47 @@ async def test_chat_runner_reselects_after_a_completed_tool_round(monkeypatch):
     assert [stage for stage, _executed in stages] == [1, 2]
     assert stages[1][1] == [{"tool": "tool_0", "status": "failed"}]
     assert any(event.data == "Готово" for event in events)
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("stage", [1, 3])
+@pytest.mark.parametrize("available", [False, True])
+@pytest.mark.parametrize("boundary_tool", ["ide_finish_task", "ask_user_question"])
+async def test_ide_finish_remains_offered_only_when_already_authorized(
+    monkeypatch, stage, available, boundary_tool
+):
+    """Tier optimization must not remove the IDE report or bypass policy gates."""
+    import service.domain.client as client
+    from service.domain.runners.support import _tools_to_openai
+
+    if boundary_tool == "ide_finish_task":
+        from service.domain.tools.ide.finish import TOOL
+    else:
+        from service.domain.tools.human_question_tool import TOOL
+
+    _overlay(monkeypatch)
+    monkeypatch.setattr(client, "list_qualified_models", lambda: _async(["gpt-4o-mini"]))
+    monkeypatch.setattr(
+        client,
+        "create_chat_completion",
+        lambda **_kwargs: _async(_response('{"tools":["tool_1"]}')),
+    )
+    candidates = _tools()
+    if available:
+        candidates.extend(_tools_to_openai([TOOL]))
+    result = await disclose(
+        ToolSet(tools=candidates),
+        question="Добавь инструкцию запуска",
+        agent_name="general",
+        context=_context(),
+        preferred_model="gpt-4o-mini",
+        stage=stage,
+        executed=[],
+    )
+    names = [tool["function"]["name"] for tool in result.toolset.tools]
+    assert names == (["tool_1", boundary_tool] if available else ["tool_1"])
+    assert boundary_tool not in {item.tool for item in result.toolset.omissions}
+    assert result.event.metadata["tool_disclosure"]["offered"] == len(names)
 
 
 async def _async(value):

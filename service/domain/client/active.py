@@ -18,13 +18,12 @@ from __future__ import annotations
 
 import logging
 
-from service.settings import config
-
-from .providers._sdk import (
+from service.domain.client.providers.transports.sdk import (
     set_default_openai_client,
     set_default_openai_key,
     set_tracing_disabled,
 )
+from service.settings import config
 
 logger = logging.getLogger(__name__)
 
@@ -53,9 +52,15 @@ def _select_active_provider():
     перечисляли провайдеров поимённо. Добавляя провайдера, надо было вписать себя в обе;
     пропуск любой давал провайдера, которого нельзя выбрать, причём молча.
     """
+    from service.shared.agent_settings import runtime_settings
+
     from .registry import get_provider_module
 
-    explicit = (config.agents.llm_provider or "auto").strip().lower()
+    explicit = (
+        str(runtime_settings.get_agents("llm_provider", config.agents.llm_provider) or "auto")
+        .strip()
+        .lower()
+    )
     ordered = _ordered_specs()
 
     if explicit and explicit != "auto":
@@ -108,7 +113,24 @@ OPENAI_CLIENT = getattr(_ACTIVE, "OPENAI_CLIENT", None)
 
 def get_active_provider() -> str:
     """Имя активного провайдера: 'mws', 'openai', 'openrouter', 'gigachat', 'routerai'."""
-    return ACTIVE_PROVIDER
+    from service.shared.agent_settings import runtime_settings
+
+    from .registry import get_provider_module
+
+    selected = (
+        str(runtime_settings.get_agents("llm_provider", ACTIVE_PROVIDER) or "auto").strip().lower()
+    )
+    if selected == "auto":
+        from . import provider_policy
+
+        disabled = provider_policy.disabled_providers()
+        for name, _spec in _ordered_specs():
+            if (
+                name not in disabled
+                and getattr(get_provider_module(name), "OPENAI_CLIENT", None) is not None
+            ):
+                return name
+    return selected if get_provider_module(selected) is not None else ACTIVE_PROVIDER
 
 
 def get_openai_client():
@@ -120,6 +142,11 @@ def get_openai_client():
     получал бы ЧУЖОЙ клиент: запросы ушли бы не туда, с чужим ключом и в чужой биллинг.
     Фабрика теперь даёт метод всем, а запас читает состояние САМОГО активного.
     """
+    selected = get_active_provider()
+    if selected != ACTIVE_PROVIDER:
+        from .registry import get_provider_module
+
+        return getattr(get_provider_module(selected), "OPENAI_CLIENT", None)
     if hasattr(_ACTIVE, "get_openai_client"):
         return _ACTIVE.get_openai_client()
     return getattr(_ACTIVE, "OPENAI_CLIENT", None)
@@ -178,7 +205,7 @@ async def rebuild_provider_generation(name: str) -> bool:
     if runtime is None or not hasattr(runtime, "rebuild_generation"):
         return rebuild_provider(name)
     try:
-        await runtime.rebuild_generation()
+        await runtime.rebuild_generation(discover=False)
     except Exception:  # noqa: BLE001 - new runs see bounded unavailable state
         logger.error("provider generation rebuild failed code=internal")
         return False

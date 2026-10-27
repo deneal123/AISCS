@@ -5,11 +5,11 @@ import logging
 from collections.abc import AsyncGenerator
 
 from service.domain.capabilities.agent_spec import COST_EXPENSIVE, AgentSpec
-from service.domain.run_context import require_execution
+from service.domain.execution.context import require_execution
 from service.domain.subagents.base import BaseSubAgent
 from service.domain.subagents.utils import pick_answer_model
-from service.domain.usage_ledger import UsageKind
-from service.domain.usage_tracking import build_token_usage_meta
+from service.domain.usage.ledger import UsageKind
+from service.domain.usage.tracking import build_token_usage_meta
 from service.events import AgentEvent, EventType
 from service.schemas.agents import UserContext
 
@@ -45,7 +45,7 @@ def _image_usage_meta(usage: dict, *, generated: int) -> dict | None:
     вместо цены image-модели, и картинка тарифится по чужому тарифу (аудит P1.5).
     """
     from service.domain.tools.image_gen import fixed_equivalent_usage
-    from service.domain.usage_tracking import build_token_usage_meta
+    from service.domain.usage.tracking import build_token_usage_meta
 
     meta = build_token_usage_meta(usage)
     if meta is not None:

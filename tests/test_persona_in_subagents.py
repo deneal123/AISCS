@@ -199,7 +199,7 @@ def test_router_prompt_is_persona_free():
     """Маршрут и цена запроса обязаны остаться детерминированными."""
     import inspect
 
-    from service.domain.routing import auto_prompt
+    from service.domain.routing.auto import prompt as auto_prompt
     from service.domain.tools import router
 
     # ⚠️ `constants` (категорийный роутер) удалён вместе с самим роутером; его место в

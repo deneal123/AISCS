@@ -41,7 +41,7 @@ class _FakeClient:
 
 @pytest.mark.asyncio
 async def test_web_search_parses_duckduckgo_result_blocks(monkeypatch):
-    ws = importlib.import_module("service.domain.tools.web_search")
+    ws = importlib.import_module("service.domain.tools.search.client")
 
     html_payload = """
     <html><body>
@@ -79,7 +79,7 @@ async def test_web_search_parses_duckduckgo_result_blocks(monkeypatch):
 
 @pytest.mark.asyncio
 async def test_web_search_uses_bing_fallback_when_duckduckgo_empty(monkeypatch):
-    ws = importlib.import_module("service.domain.tools.web_search")
+    ws = importlib.import_module("service.domain.tools.search.client")
 
     empty_html = "<html><body><a href='https://duckduckgo.com/'>DuckDuckGo</a></body></html>"
     # u=a1 + base64("https://example.org/news")
@@ -114,7 +114,7 @@ async def test_web_search_uses_bing_fallback_when_duckduckgo_empty(monkeypatch):
 
 @pytest.mark.asyncio
 async def test_web_search_uses_yandex_fallback_when_others_empty(monkeypatch):
-    ws = importlib.import_module("service.domain.tools.web_search")
+    ws = importlib.import_module("service.domain.tools.search.client")
 
     empty_html = "<html><body><div>no results</div></body></html>"
     yandex_html = """
@@ -150,7 +150,7 @@ async def test_web_search_uses_yandex_fallback_when_others_empty(monkeypatch):
 
 @pytest.mark.asyncio
 async def test_web_search_uses_brave_fallback_when_duck_bing_lite_empty(monkeypatch):
-    ws = importlib.import_module("service.domain.tools.web_search")
+    ws = importlib.import_module("service.domain.tools.search.client")
 
     empty_html = "<html><body><div>no results</div></body></html>"
     brave_html = """
@@ -195,7 +195,7 @@ async def test_brave_anchor_fallback_fires_when_blocks_yield_nothing_usable(monk
     результата нет. Условие «блоков не нашлось» такой случай пропустило бы, и Brave
     возвращал бы пустоту там, где раньше доставал ссылки якорями.
     """
-    ws = importlib.import_module("service.domain.tools.web_search")
+    ws = importlib.import_module("service.domain.tools.search.client")
 
     empty_html = "<html><body><div>no results</div></body></html>"
     brave_html = """

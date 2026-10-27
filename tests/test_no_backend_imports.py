@@ -94,7 +94,7 @@ def test_packages_do_not_shadow_their_submodules():
 
     Так было не всегда. `service/domain/tools/__init__.py` делал
     `from .web_search import web_search`, из-за чего атрибутом пакета `web_search`
-    становилась ФУНКЦИЯ — и форма `import service.domain.tools.web_search as ws`
+    становилась ФУНКЦИЯ — и форма `import service.domain.tools.search.client as ws`
     возвращала её вместо модуля (Python берёт атрибут родителя). То же с
     `deep_research`.
 
@@ -106,7 +106,7 @@ def test_packages_do_not_shadow_their_submodules():
     import types
 
     import service.domain.tools.deep_research as tools_deep_research
-    import service.domain.tools.web_search as tools_web_search
+    import service.domain.tools.search.client as tools_web_search
 
     assert isinstance(tools_web_search, types.ModuleType)
     assert isinstance(tools_deep_research, types.ModuleType)

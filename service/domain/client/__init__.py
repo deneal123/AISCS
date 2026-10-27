@@ -10,14 +10,13 @@ RouterAI / GigaChat.
 
     active.py     активный провайдер: выбор, привязка Agents SDK, пересборка после
                   смены ключа в админке. ЕДИНСТВЕННЫЙ дом изменяемого состояния
-    catalog.py    агрегированный каталог моделей: кэш с TTL, индекс model → владелец
-    chat.py       не-стримовые вызовы с ПОЛНЫМ фейловером
-    streaming.py  стрим: фейловер только ДО первой дельты
+    models/       catalog records, requirements, qualification и model-list cache
+    calls/        catalog, chat, streaming, retries и paid-call boundaries
+    providers/    concrete adapters, management и transport construction
     registry.py   реестр провайдер-модулей, порядок обхода, подбор модели
-    retry.py      классификация ошибок, бэкофф, параметры ретраев
 
-⚠️ Провайдер-специфичные модули (`mws_client`, `openai_client`, …) по-прежнему доступны
-как `service.domain.client.<имя>` — их импортируют напрямую реестр и здоровье.
+Конкретный адаптер выбирается через registry; его реализация лежит в providers/.
+Старых файлов-прокладок для перенесённых модулей нет.
 
 ⚠️ ЗДЕСЬ НЕТ реэкспорта изменяемых имён (`ACTIVE_PROVIDER`, `OPENAI_CLIENT`) как
 значений: их меняет `active.rebuild_provider()`, и связанная на импорте копия молча
@@ -35,6 +34,19 @@ RouterAI / GigaChat.
 `service/` и сверяет каждое запрошенное имя с тем, что пакет реально отдаёт.
 """
 
+from service.domain.client.models.catalog import (
+    CapabilityEvidenceSource,
+    ModelCatalogSource,
+    ModelCatalogStatus,
+    ProviderModelCatalog,
+    ProviderModelRecord,
+)
+from service.domain.client.models.requirements import (
+    ModelQualification,
+    ModelRequirement,
+    ProviderQualificationStatus,
+)
+
 from .active import (
     clear_models_cache,
     get_active_provider,
@@ -51,18 +63,6 @@ from .calls.chat import (
 )
 from .calls.legacy_stream import stream_chat_completion
 from .calls.streaming import stream_provider_completion
-from .model_catalog import (
-    CapabilityEvidenceSource,
-    ModelCatalogSource,
-    ModelCatalogStatus,
-    ProviderModelCatalog,
-    ProviderModelRecord,
-)
-from .model_requirements import (
-    ModelQualification,
-    ModelRequirement,
-    ProviderQualificationStatus,
-)
 from .registry import (
     build_provider_order,
     build_qualified_model_catalog,

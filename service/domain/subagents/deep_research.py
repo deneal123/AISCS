@@ -5,9 +5,9 @@ import re
 from collections.abc import AsyncGenerator
 
 from service.domain.capabilities.agent_spec import COST_EXPENSIVE, AgentSpec
+from service.domain.execution.context import RunExecutionContext, require_execution
+from service.domain.execution.model import invoke_model_call
 from service.domain.llm_response import first_message_content
-from service.domain.model_runtime import invoke_model_call
-from service.domain.run_context import RunExecutionContext, require_execution
 from service.domain.subagents.base import BaseSubAgent
 from service.domain.subagents.research.ldr_adapter import (
     classify_ldr_failure,
@@ -20,7 +20,7 @@ from service.domain.subagents.utils import (
     pick_answer_model,
     pick_meta_model,
 )
-from service.domain.usage_ledger import UsageKind
+from service.domain.usage.ledger import UsageKind
 from service.events import AgentEvent, EventType
 from service.schemas.agents import UserContext
 
@@ -365,7 +365,7 @@ class DeepResearchAgent(BaseSubAgent):
             m = await client.metrics(research_id)
             receipt = ldr_usage_receipt(m, default_model=meta["model"])
             if receipt:
-                from service.domain.usage_ledger import receipt_from_usage
+                from service.domain.usage.ledger import receipt_from_usage
 
                 usage_receipt = receipt_from_usage(
                     receipt,

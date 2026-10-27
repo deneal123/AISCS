@@ -13,6 +13,7 @@ from enum import StrEnum
 from typing import Any
 
 import httpx
+from openai import APIConnectionError, APITimeoutError
 
 
 class ProviderFailureCode(StrEnum):
@@ -62,18 +63,27 @@ class ProviderFailure:
         return data
 
 
+def _attribute(value: Any, name: str) -> Any:
+    try:
+        return getattr(value, name, None)
+    except Exception:  # noqa: BLE001 - foreign exception properties are untrusted
+        return None
+
+
 def _status_code(exc: BaseException) -> int | None:
-    value = getattr(exc, "status_code", None)
-    if isinstance(value, int):
+    value = _attribute(exc, "status_code")
+    if type(value) is int and 100 <= value <= 599:
         return value
-    response = getattr(exc, "response", None)
-    value = getattr(response, "status_code", None)
-    return value if isinstance(value, int) else None
+    response = _attribute(exc, "response")
+    value = _attribute(response, "status_code")
+    return value if type(value) is int and 100 <= value <= 599 else None
 
 
 def _reason_code(exc: BaseException) -> str:
-    value = getattr(exc, "reason_code", None)
-    return str(value or "").strip().lower()
+    value = _attribute(exc, "reason_code")
+    if type(value) not in (str, ProviderFailureCode) or str.__len__(value) > 64:
+        return ""
+    return str.strip(value).lower()
 
 
 def _status_family(status: int | None) -> str | None:
@@ -133,11 +143,13 @@ def classify_provider_failure(
     if code is None:
         if isinstance(exc, (asyncio.CancelledError, KeyboardInterrupt)):
             code = ProviderFailureCode.CANCELLED
-        elif isinstance(exc, (asyncio.TimeoutError, TimeoutError, httpx.TimeoutException)):
+        elif isinstance(
+            exc, (asyncio.TimeoutError, TimeoutError, httpx.TimeoutException, APITimeoutError)
+        ):
             code = ProviderFailureCode.TIMEOUT
         elif isinstance(exc, (ssl.SSLError, ssl.CertificateError)):
             code = ProviderFailureCode.TLS
-        elif isinstance(exc, httpx.TransportError):
+        elif isinstance(exc, (httpx.TransportError, APIConnectionError)):
             code = ProviderFailureCode.TRANSPORT
         else:
             code = ProviderFailureCode.REMOTE

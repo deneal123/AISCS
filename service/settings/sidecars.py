@@ -13,6 +13,7 @@ class SidecarSettings(BaseModel):
     """Поля соседних сервисов. Собирается в `AgentsConfig`, отдельно не читается."""
 
     mem0_api_key: str = Field(default_factory=str)
+    harness_backend_url: str = "http://backend:8000"
     mem0_app_id: str = "gpthub"
     # --- Память: выбор провайдера и MemOS (self-hosted/cloud) ---
     # ⚠️ Сайдкар это поле не читает (память собирает backend), но удалять нельзя:
@@ -23,15 +24,12 @@ class SidecarSettings(BaseModel):
     memos_mem_cube_id: str = "gpthub-{user_id}"
     memos_timeout_sec: float = 15.0
     memos_async_mode: str = "sync"
-    # Эмбеддер MemOS (админ-настройка). memos читает эти значения при старте (env
-    # MOS_EMBEDDER_MODEL/EMBEDDING_DIMENSION как фолбэк). Смена → полный wipe памяти
-    # MemOS (коллекция Qdrant привязана к размерности) + рестарт memos.
+    # Предпочтительный эмбеддер общего шлюза, не жёсткая привязка к провайдеру.
+    # GPTHub MemOS использует логический профиль gpthub-memory-embedding; каждая
+    # комбинация провайдер/модель/размерность получает отдельный индекс без wipe.
     memos_embedder_model: str = "openrouter:openai/text-embedding-3-small"
     memos_embedder_dim: int = 1536
-    # Фолбэк-эмбеддеры MemOS: если провайдер активного memos-эмбеддера заблокирован, каскад
-    # переключает memos на первый рабочий из списка + СТИРАЕТ память MemOS (dim меняется).
-    # ⚠️ memos применяет новый эмбеддер только после РЕСТАРТА контейнера (нет hot-reload):
-    # до рестарта память пуста/fail-open. [] = авто-переключение выключено.
+    # Совместимость прежних настроек админки; допуск доступных резервов принадлежит шлюзу.
     memos_embedder_fallback: list = Field(default_factory=list)
     # --- Deep research: провайдер и LDR (local-deep-research) микросервис ---
     # auto = LDR если доступен, иначе нативный deep_research(); native = только наш;

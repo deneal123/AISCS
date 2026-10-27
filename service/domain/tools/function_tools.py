@@ -138,7 +138,7 @@ async def fetch_url_tool(ctx: RunContextWrapper, args: str) -> str:
     полноценного веб-поиска. Ошибку/пустой текст возвращаем модели словами, а не
     роняем ход.
     """
-    from service.domain.tools.web_search import parse_url
+    from service.domain.tools.search.client import parse_url
 
     try:
         parsed = json.loads(args) if isinstance(args, str) else (args or {})
@@ -355,13 +355,13 @@ analyze_data = FunctionTool(
     on_invoke_tool=analyze_data_tool,
 )
 
-from service.domain.capabilities.tool_spec import (  # noqa: E402
+from service.domain.capabilities.tools.spec import (  # noqa: E402
     GROUNDING_FRESH_DATA,
     GROUNDING_REPOSITORY,
     GROUNDING_TABULAR,
     ToolSpec,
 )
-from service.domain.tools.web_search_tool import search_web  # noqa: E402
+from service.domain.tools.search.tool import search_web  # noqa: E402
 
 # 🔴 Декларации живут РЯДОМ с самими инструментами: новый инструмент — это один модуль
 # (или один блок здесь) плюс строка в источниках реестра. Гейт применимости, потолок
@@ -393,7 +393,7 @@ SPECS = [
 ]
 
 from service.domain.tools.video_tool import watch_video  # noqa: E402
-from service.domain.tools.workspace_tools import WORKSPACE_TOOLS  # noqa: E402
+from service.domain.tools.workspace.tools import WORKSPACE_TOOLS  # noqa: E402
 
 DEFAULT_FUNCTION_TOOLS = [
     # 🔴 `fetch_runtime_context` УДАЛЁН, а не «оставлен на всякий случай». Он отдавал модели

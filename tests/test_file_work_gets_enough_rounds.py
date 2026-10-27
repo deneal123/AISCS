@@ -19,13 +19,20 @@ Session.request и объясни построчно». Оба прогона к
 from __future__ import annotations
 
 from types import SimpleNamespace
+from unittest.mock import AsyncMock, Mock
 
-from service.domain.runners.chat_run import (
+import pytest
+
+from service.domain.capabilities.tools.spec import ToolSet
+from service.domain.execution.context import require_execution
+from service.domain.runners.chat import stream_state
+from service.domain.runners.chat.preparation import (
     FILE_WORK_TOOL_ROUNDS,
-    _compact_system_after_workspace_tool,
     _tool_rounds_for,
     _with_workspace_tool_protocol,
 )
+from service.domain.runners.chat.stream_state import ChatStreamLoopState, LoopDecision
+from service.domain.runners.chat.tool_state import compact_workspace_context
 
 
 def _tool(name: str) -> dict:
@@ -75,7 +82,7 @@ def test_the_serialized_shape_is_what_actually_arrives():
     """🔴 ГЛАВНОЕ ПОСЛЕ ЖИВОГО ОТЧЁТА. Набор приходит СЛОВАРЯМИ, и правило обязано читать
     имя оттуда. Форма взята из кода (`_tools_to_openai`), а не придумана."""
     from service.domain.base import _tools_to_openai
-    from service.domain.tools.workspace_tools import WORKSPACE_TOOLS
+    from service.domain.tools.workspace.tools import WORKSPACE_TOOLS
 
     real = _tools_to_openai(list(WORKSPACE_TOOLS))
 
@@ -116,16 +123,103 @@ def test_non_workspace_tools_do_not_change_prompt_or_cost():
     assert _with_workspace_tool_protocol(messages, []) is messages
 
 
-def test_repo_map_is_removed_from_followup_tool_rounds():
+@pytest.mark.parametrize("archive", ["# Graph Report\nGod Nodes\n", "# Файлы архива (1)\n"])
+def test_repo_map_is_removed_from_followup_tool_rounds(archive):
     """Карта архива нужна для первого ws-вызова, а не для каждого следующего prompt."""
-    context = SimpleNamespace(system_context="# Graph Report\nGod Nodes\n" + "x" * 20_000)
+    context = SimpleNamespace(system_context=archive + "x" * 20_000)
     initial = "Базовая инструкция\n\n" + context.system_context
-
-    compacted = _compact_system_after_workspace_tool(initial, context)
-
+    original = {"role": "system", "content": initial, "name": "instruction"}
+    question = {"role": "user", "content": "original question"}
+    receipt = {"role": "tool", "tool_call_id": "read", "content": "confirmed source"}
+    convo = [original, question, receipt]
+    assert compact_workspace_context(convo, [_tool("ws_read")], context)
+    compacted = convo[0]["content"]
     assert "God Nodes" not in compacted
     assert "Карта репозитория уже использована" in compacted
     assert len(compacted) < len(initial) // 10
+    assert compacted.startswith("Базовая инструкция")
+    assert convo[0]["role"] == "system" and convo[0]["name"] == "instruction"
+    assert convo[1] is question and convo[2] is receipt
+    assert original["content"] == initial
+    assert context.system_context == archive + "x" * 20_000
+    assert not compact_workspace_context(convo, [_tool("ws_read")], context)
+
+
+@pytest.mark.parametrize("reason", ["other_tool", "no_map", "suffix_mismatch", "no_context"])
+def test_workspace_compaction_noop_does_not_change_messages(reason):
+    archive = "# Graph Report\nGod Nodes\nmap"
+    context = SimpleNamespace(system_context="ordinary text" if reason == "no_map" else archive)
+    initial = {"role": "system", "content": "instruction\n" + archive}
+    if reason == "suffix_mismatch":
+        initial["content"] += "\nother protected context"
+    convo = [initial, {"role": "user", "content": "question"}]
+    before = list(convo)
+    assert not compact_workspace_context(
+        convo,
+        [_tool("fetch_url" if reason == "other_tool" else "ws_read")],
+        None if reason == "no_context" else context,
+    )
+    assert convo == before and convo[0] is initial
+
+
+@pytest.mark.asyncio
+async def test_real_tool_transition_compacts_once_before_the_next_model_round(monkeypatch):
+    execution = require_execution()
+    archive = "# Graph Report\nGod Nodes\n" + "x" * 20_000
+    initial = {"role": "system", "content": "instruction\n" + archive}
+    messages = [initial, {"role": "user", "content": "question"}]
+    disclosure = SimpleNamespace(
+        select=AsyncMock(
+            return_value=SimpleNamespace(
+                toolset=ToolSet(tools=[_tool("ws_read")]), events=[], estimated_prompt_tokens=0
+            )
+        ),
+        record=Mock(),
+    )
+    state = ChatStreamLoopState(
+        execution=execution,
+        usage_scope=execution.usage.open_scope(),
+        messages=messages,
+        convo=list(messages),
+        round_messages=list(messages),
+        openai_tools=[_tool("ws_read")],
+        tool_index={},
+        tool_ctx={},
+        disclosure_controller=disclosure,
+        tool_summary={},
+        model="synthetic",
+        max_tokens=100,
+        max_continuations=0,
+        max_tool_rounds=8,
+        prompt_budget=100_000,
+        estimated_prompt_spent=0,
+        context=SimpleNamespace(system_context=archive),
+    )
+    compact = Mock(wraps=compact_workspace_context)
+    monkeypatch.setattr(stream_state, "compact_workspace_context", compact)
+    calls = [{"id": "read", "function": {"name": "ws_read", "arguments": "{}"}}]
+
+    async def execute(convo, requested, *args, **kwargs):
+        convo.append({"role": "assistant", "tool_calls": requested, "content": None})
+        convo.append({"role": "tool", "tool_call_id": "read", "content": "confirmed source"})
+        if False:
+            yield None
+
+    for _ in range(2):
+        transitions = [
+            item
+            async for item in stream_state.run_requested_tools(
+                state, calls, agent_name="synthetic", execute_tool_round=execute
+            )
+        ]
+        assert transitions[-1] is LoopDecision.NEXT
+    compact.assert_called_once()
+    assert state.repo_context_compacted and state.tool_summary["repo_context_compacted"]
+    assert state.tool_rounds == 2
+    assert state.round_messages is state.convo
+    assert "God Nodes" not in state.round_messages[0]["content"]
+    assert messages[0] is initial and initial["content"].endswith(archive)
+    assert sum(message.get("role") == "tool" for message in state.convo) == 2
 
 
 def test_the_rule_looks_at_names_not_at_count():
@@ -143,9 +237,9 @@ def test_the_limit_is_applied_where_the_toolset_is_known():
     import ast
     import inspect
 
-    from service.domain.runners import chat_run
+    from service.domain.runners.chat import preparation
 
-    tree = ast.parse(inspect.getsource(chat_run))
+    tree = ast.parse(inspect.getsource(preparation))
     assigns = [
         node
         for node in ast.walk(tree)

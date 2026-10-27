@@ -12,8 +12,8 @@ from typing import Any
 
 from service.domain.capabilities import get_workflow
 from service.domain.capabilities.agent_spec import COST_CHEAP
+from service.domain.execution.context import RunExecutionContext
 from service.domain.pipeline.decomposition import decomposition_allowed
-from service.domain.run_context import RunExecutionContext
 from service.domain.workflows import catalog
 from service.events import AgentEvent
 

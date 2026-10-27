@@ -8,7 +8,7 @@
 
 import pytest
 
-from service.domain.pipeline import context_compressor as cc
+from service.domain.pipeline.context import compressor as cc
 
 
 async def _fixed_model() -> str:
@@ -80,7 +80,7 @@ async def test_compressed_section_reports_its_real_size():
     на фронте показывает занятость окна, и по нему же страховочная сетка решает, что
     резать. Секция, объявившая себя нулевой, невидима для сетки и врёт пользователю.
     """
-    from service.domain.pipeline.context_assembler import ContextSection, _fit
+    from service.domain.pipeline.context.assembler import ContextSection, _fit
     from service.shared.token_budget import estimate_tokens
 
     raw = "очень длинный исходный текст " * 200

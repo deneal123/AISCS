@@ -20,7 +20,7 @@ import asyncio
 
 import pytest
 
-from service.domain.tools import web_search as ws
+from service.domain.tools.search import client as ws
 
 
 class _Resp:

@@ -6,18 +6,18 @@ import json
 
 from agents import FunctionTool, RunContextWrapper
 
-from service.domain.capabilities.tool_spec import (
+from service.domain.capabilities.tools.spec import (
     EFFECT_READ_ONLY,
     EFFECT_WORKSPACE_MUTATION,
     GROUNDING_WORKSPACE,
     ToolSpec,
 )
 from service.domain.documents import audit_document_build
-from service.domain.run_context import require_execution
+from service.domain.execution.context import require_execution
 from service.domain.runners.tool_runtime import ToolCallOutcome, ToolFailureCode
 from service.domain.tools import unbilled_calls
-from service.domain.tools.workspace_client import WorkspaceUnavailable, call
-from service.domain.tools.workspace_tool_specs import BILLING_NAME, CONTEXT_ATTR, ENABLED_FIELD
+from service.domain.tools.workspace.client import WorkspaceUnavailable, call
+from service.domain.tools.workspace.specs import BILLING_NAME, CONTEXT_ATTR, ENABLED_FIELD
 
 _PATH = {
     "type": "string",
@@ -188,8 +188,8 @@ tex_profile_apply = FunctionTool(
             "vendor_package_id": {
                 "type": "string",
                 "description": (
-                    "Optional installed project-local vendor v2 package. The source project "
-                    "is cloned and probe-built before activation."
+                    "Необязательный установленный пакет издателя версии v2 внутри проекта. "
+                    "Перед активацией исходный проект клонируется и проходит пробную сборку."
                 ),
                 "pattern": "^[a-z][a-z0-9_-]{2,63}$",
             },

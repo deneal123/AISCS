@@ -13,7 +13,7 @@ from __future__ import annotations
 
 import pytest
 
-from service.domain.tools.web_search import (
+from service.domain.tools.search.client import (
     _collect,
     _parse_bing,
     _parse_brave,

@@ -17,8 +17,8 @@ from __future__ import annotations
 import pytest
 
 from service.domain.capabilities.agent_spec import COST_CHEAP, COST_EXPENSIVE, COST_PAID
-from service.domain.capabilities.tool_registry import resolve_toolset
-from service.domain.capabilities.tool_spec import (
+from service.domain.capabilities.tools.registry import resolve_toolset
+from service.domain.capabilities.tools.spec import (
     MISSING_DATA,
     NEEDS_CONFIRMATION,
     OMISSION_REASONS,
@@ -79,7 +79,7 @@ def registry(monkeypatch):
     """Подменяет реестр спек на заданный набор."""
 
     def _install(*specs: ToolSpec):
-        from service.domain.capabilities import tool_registry as tr
+        from service.domain.capabilities.tools import registry as tr
 
         monkeypatch.setattr(tr, "_discover", lambda: {s.name: s for s in specs})
         monkeypatch.setattr(tr, "_run_scoped_specs", tuple)

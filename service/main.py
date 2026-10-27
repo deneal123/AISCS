@@ -24,6 +24,7 @@ from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
+from service._version import VERSION
 from service.presentation import errors, runtime
 from service.presentation.routers import ALL_ROUTERS
 
@@ -43,14 +44,17 @@ async def _lifespan(app: FastAPI):
         raise
     app.state.capability_catalog = catalog
     try:
-        yield
+        from service.domain.client.models.maintenance import maintain_catalogs
+
+        async with maintain_catalogs():
+            yield
     finally:
         from service.domain.client.registry import drain_provider_generations
 
         await drain_provider_generations()
 
 
-app = FastAPI(title="gpthub-agents-sidecar", version="0.2.0", lifespan=_lifespan)
+app = FastAPI(title="gpthub-agents-sidecar", version=VERSION, lifespan=_lifespan)
 
 # ⚠️ Лимит тела ПЕРВЫМ: смысл в том, чтобы огромное тело не дошло ни до авторизации, ни
 # до pydantic. Его не было ни на одной ручке, а сайдкар долгоживущий и один на всю

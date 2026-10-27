@@ -43,7 +43,8 @@ def test_runners_pass_clean_tool_name():
     """Оба runner'а кладут чистое имя в metadata — не только data."""
     import inspect
 
-    from service.domain.runners import sdk_run, tool_loop
+    from service.domain.runners.chat import tool_loop
+    from service.domain.runners.sdk import run as sdk_run
 
     for mod in (tool_loop, sdk_run):
         src = inspect.getsource(mod)

@@ -12,9 +12,9 @@ from __future__ import annotations
 
 import logging
 
-from service.domain.model_runtime import invoke_model_call
-from service.domain.run_context import RunExecutionContext, require_execution
-from service.domain.usage_ledger import UsageKind, receipt_from_usage
+from service.domain.execution.context import RunExecutionContext, require_execution
+from service.domain.execution.model import invoke_model_call
+from service.domain.usage.ledger import UsageKind, receipt_from_usage
 
 logger = logging.getLogger(__name__)
 
@@ -43,18 +43,16 @@ async def generate_image_b64(
     текстом (multimodal content); модель редактирует её, а не рисует с нуля. Может быть
     ``data:``-URL или http(s). None — обычная генерация из текста.
 
-    ⚠️ Агрегаторы (OpenRouter/RouterAI) НЕ поддерживают OpenAI ``/images/generations`` —
-    там 404. Картинки у них генерируются через chat/completions с image-модальностью:
-    ответ приходит в ``message.images[].image_url.url`` как ``data:image/...;base64,...``.
-    Клиент адресуем напрямую: фасадный `create_chat_completion` не пробрасывает
-    `extra_body` с `modalities`.
+    RouterAI/OpenRouter используют ``/images`` для генераторов без текстового выхода
+    и ``chat/completions`` для диалоговых генераторов. Протокол выбирается до вызова
+    по снимку возможностей: не перебираем платные endpoint после потери результата.
 
     ⚠️ Модель адресуем ВЛАДЕЛЬЦУ из индекса каталога: активный провайдер может её не
     знать и вернуть 404.
     """
     execution = require_execution(execution)
 
-    from service.domain.client.provider_operations import ProviderOperation
+    from service.domain.client.providers.management.operations import ProviderOperation
 
     client = None
     provider_name: str | None = None
@@ -73,13 +71,22 @@ async def generate_image_b64(
                 image_model = decision.model or image_model
                 client = decision.client
         else:
-            from service.domain.client.provider_compat import resolve_model_client
+            from service.domain.client.providers.management.compat import resolve_model_client
 
             provider_name, client = await resolve_model_client(image_model)
     except Exception:  # noqa: BLE001 — каталог недоступен: пробуем активного
         client = None
     if client is None:
         return ""
+    from functools import partial
+
+    from service.domain.client.providers.images.transport import create_image, uses_dedicated_api
+
+    image_call = partial(
+        create_image,
+        client,
+        dedicated=uses_dedicated_api(execution, provider_name, image_model),
+    )
     if reference_image_url:
         # image-to-image: текст + картинка в одном user-сообщении. Порядок «текст, потом
         # картинка» — как в живой проверке провайдера; менять без причины не стоит.
@@ -102,7 +109,7 @@ async def generate_image_b64(
     b64 = ""
     for attempt in (1, 2):
         model_result = await invoke_model_call(
-            client.chat.completions.create,
+            image_call,
             model=image_model,
             kind=usage_kind,
             provider_name=provider_name,
@@ -145,8 +152,7 @@ async def generate_image_b64(
                 chargeable=True,
             )
             execution.usage.record(receipt)
-        else:
-            receipt = execution.usage.set_chargeable(receipt.receipt_id) or receipt
+        execution.usage.set_chargeable(receipt.receipt_id)
     return b64
 
 
@@ -160,25 +166,9 @@ def _bounded_finish_reason(resp) -> str:
 
 def _extract_b64(resp) -> str:
     """Достать base64 из ответа image-модальности. Пусто, если картинки нет."""
-    choices = getattr(resp, "choices", None) or []
-    if not choices:
-        return ""
-    msg = choices[0].message
-    images = getattr(msg, "images", None)
-    if not images and hasattr(msg, "model_dump"):
-        images = (msg.model_dump() or {}).get("images")
-    if not images:
-        return ""
-    first = images[0]
-    url = ""
-    if isinstance(first, dict):
-        image_url = first.get("image_url")
-        url = image_url.get("url") if isinstance(image_url, dict) else (image_url or "")
-    elif isinstance(first, str):
-        url = first
-    if not url or "," not in url:
-        return ""
-    return url.split(",", 1)[1].strip()
+    from service.domain.client.providers.images.responses import image_base64
+
+    return image_base64(resp)
 
 
 def fixed_equivalent_usage(model: str | None, count: int = 1) -> dict:

@@ -20,7 +20,7 @@ from types import SimpleNamespace
 import pytest
 
 from service.domain.client.calls import streaming as streaming_mod
-from service.domain.runners import chat_run as chat_runner
+from service.domain.runners.chat import run as chat_runner
 from service.domain.subagents.general import GeneralAgent
 from service.events import EventType
 from service.schemas.agents import UserContext

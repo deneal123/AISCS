@@ -23,7 +23,7 @@ SERVICE_ROOT = pathlib.Path(__file__).resolve().parents[1] / "service"
 
 def _emitted_kinds() -> dict[str, set[str]]:
     """Literal event kinds plus typed UsageKind values used by receipt calls."""
-    from service.domain.usage_ledger import UsageKind
+    from service.domain.usage.ledger import UsageKind
 
     found: dict[str, set[str]] = {}
     for path in SERVICE_ROOT.rglob("*.py"):

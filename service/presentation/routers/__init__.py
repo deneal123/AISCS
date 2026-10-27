@@ -45,6 +45,7 @@ from service.presentation.routers import health
 from service.presentation.routers.agent import route, run
 from service.presentation.routers.capabilities import (
     document_audit,
+    document_editor,
     media,
     tools,
     vector,
@@ -68,4 +69,5 @@ ALL_ROUTERS: tuple[APIRouter, ...] = (
     vector.router,
     workflow_catalog.router,
     document_audit.router,
+    document_editor.router,
 )

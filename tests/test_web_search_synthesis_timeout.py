@@ -22,7 +22,7 @@ from datetime import UTC, datetime
 
 import pytest
 
-from service.domain.run_context import require_execution
+from service.domain.execution.context import require_execution
 from service.domain.subagents.web_search import WebSearchAgent
 from service.schemas.agents import UserContext
 
@@ -165,13 +165,15 @@ async def test_deadline_follows_provider_settings(captured_deadline, monkeypatch
     болезнь: следующий провайдер с бо́льшим таймаутом снова окажется срезан. Поэтому
     поднимаем таймаут провайдера и требуем, чтобы дедлайн вырос вместе с ним.
     """
+    from service.domain.client.registry import max_provider_timeout_sec
     from service.settings import config
 
     agent = WebSearchAgent({"model": "test-model"})
     await agent._synthesize("вопрос", _ctx(), BIG_SEARCH_DATA, "test-model", {})
     before = captured_deadline["timeout"]
 
-    monkeypatch.setattr(config.agents, "routerai_timeout_sec", 300.0)
+    raised_timeout = max_provider_timeout_sec() + 60.0
+    monkeypatch.setattr(config.agents, "routerai_timeout_sec", raised_timeout)
     await agent._synthesize("вопрос", _ctx(), BIG_SEARCH_DATA, "test-model", {})
     after = captured_deadline["timeout"]
 
@@ -179,4 +181,4 @@ async def test_deadline_follows_provider_settings(captured_deadline, monkeypatch
         f"дедлайн не следует за настройками провайдеров ({before} → {after}): он задан "
         "числом, и следующий медленный провайдер снова будет срезан"
     )
-    assert after > 300.0, f"дедлайн {after} не переживает поднятый таймаут провайдера"
+    assert after > raised_timeout, f"дедлайн {after} не переживает поднятый таймаут провайдера"

@@ -26,8 +26,47 @@ def explicit_requested_tool(text: str) -> str | None:
     """
 
     value = str(text or "")
-    if _DOCUMENT_ACTION_RE.search(value) and _DOCUMENT_OUTPUT_RE.search(value):
+    # Video transcripts belong to the confirmed video workflow, not the generic
+    # PDF author. This is an exclusion from the PDF decision, not a route result.
+    video_transcript = bool(
+        re.search(
+            r"(?:транскрипц\w*|транскрипт\w*|транскрибир\w*|расшифров\w*|"
+            r"transcri(?:be|pt(?:ion)?|bing))",
+            value,
+            re.I,
+        )
+        and re.search(r"youtube\.com|youtu\.be|vimeo\.com|rutube\.ru", value, re.I)
+    )
+    if not _DOCUMENT_ACTION_RE.search(value) or not _DOCUMENT_OUTPUT_RE.search(value):
+        return None
+    if video_transcript:
+        return None
+
+    explicit_format = re.search(
+        r"(?:\.pdf\b|\bpdf\b|\.tex\b|\blatex\b|\bdocx\b|\.docx\b|\bword\b)",
+        value,
+        re.I,
+    )
+    explicit_file_action = re.search(
+        r"(?:\bfile\b|\bфайл\w*\b|\bформат\w*\b|\bэкспорт\w*\b|"
+        r"\bскача\w*\b|\bсохран\w*\b|\bdocument\b|\bdocumento\b|\bдокумент\w*\b)",
+        value,
+        re.I,
+    )
+    if explicit_format or explicit_file_action:
         return "pdf_gen"
+
+    # Articles alone normally request chat prose; presentations are document requests.
+    asks_presentation = re.search(
+        r"(?:\bпрезентац\w*\b|\bслайд\w*\b|\bpresentation\b|\bslide\s*deck\b)",
+        value,
+        re.I,
+    )
+    asks_article = re.search(r"(?:\bстать[ьюия]\w*\b|\barticle\b)", value, re.I)
+    if asks_presentation:
+        return "pdf_gen"
+    if asks_article:
+        return None
     return None
 
 

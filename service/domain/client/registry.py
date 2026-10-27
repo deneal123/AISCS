@@ -9,20 +9,23 @@ from __future__ import annotations
 import asyncio
 import logging
 
+from service.domain.client.models.catalog import (
+    ModelCatalogSource,
+    ModelCatalogStatus,
+    ProviderModelCatalog,
+)
+from service.domain.client.models.qualification import qualify_catalog
+from service.domain.client.models.requirements import ModelQualification, ModelRequirement
+from service.domain.client.providers import local, mws, openrouter, routerai
+from service.domain.client.providers.gigachat import adapter as gigachat
+from service.domain.client.providers.management.admission import RunProviderAdmission
+from service.domain.client.providers.openai import adapter as openai
 from service.settings import config
 from service.shared.agent_settings import runtime_settings
 from service.shared.model_class import is_not_pricier_than
 
-from .model_catalog import ModelCatalogSource, ModelCatalogStatus, ProviderModelCatalog
-from .model_qualification import (
-    qualify_catalog,
-)
-from .model_requirements import (
-    ModelQualification,
-    ModelRequirement,
-)
-from .provider_admission import RunProviderAdmission
-from .providers import gigachat, mws, openai, openrouter, routerai
+from .providers.management.lifecycle import drain_provider_generations  # noqa: F401
+from .vision_fallback import keep_same_modality as _keep_same_modality  # noqa: F401
 
 logger = logging.getLogger(__name__)
 
@@ -34,6 +37,7 @@ _PROVIDER_SOURCES = (
     openrouter,
     gigachat,
     routerai,
+    local,
 )
 
 
@@ -57,20 +61,6 @@ def _discover() -> dict:
 
 # Имя провайдера → модуль-обёртка.
 PROVIDER_MODULES = _discover()
-
-
-async def drain_provider_generations() -> None:
-    """Close retired provider clients without exposing connection details."""
-
-    await asyncio.gather(
-        *(
-            runtime.drain_generations()
-            for module in PROVIDER_MODULES.values()
-            if (runtime := getattr(module, "_RUNTIME", None)) is not None
-            and hasattr(runtime, "drain_generations")
-        ),
-        return_exceptions=True,
-    )
 
 
 # Модели, неспособные к текстовому chat/completions: покажи такую в каталоге — и юзер
@@ -259,6 +249,8 @@ async def _fetch_provider_catalogs(
     clients: dict[str, object] | None = None,
     configuration_keys: dict[str, str] | None = None,
     generation_catalogs: dict[str, ProviderModelCatalog] | None = None,
+    cached_only: bool = False,
+    force_refresh: bool = False,
 ) -> dict[str, ProviderModelCatalog]:
     """Модели по каждому СКОНФИГУРИРОВАННОМУ провайдеру (у кого есть клиент).
 
@@ -294,15 +286,17 @@ async def _fetch_provider_catalogs(
     if down:
         logger.info("Каталог: прячу модели упавших провайдеров (breaker): %s", sorted(down))
     live = [n for n in names if n not in down]
-    names = live or names
+    names = live if cached_only else live or names
 
     async def _one(name: str) -> ProviderModelCatalog:
-        if generation_catalogs is not None and name in generation_catalogs:
+        if not cached_only and generation_catalogs is not None and name in generation_catalogs:
             return generation_catalogs[name]
         return await get_provider_model_catalog(
             name,
+            force_refresh=force_refresh,
             client=clients.get(name) if clients is not None else None,
             configuration_key=(configuration_keys or {}).get(name),
+            cached_only=cached_only,
         )
 
     results = await asyncio.gather(*(_one(n) for n in names))
@@ -314,7 +308,7 @@ async def initialize_run_provider_admission(execution) -> RunProviderAdmission:
 
     if execution.provider_admission is not None:
         return execution.provider_admission
-    from .provider_snapshot import build_run_provider_admission
+    from service.domain.client.providers.management.snapshot import build_run_provider_admission
 
     execution.provider_admission = await build_run_provider_admission()
     return execution.provider_admission
@@ -330,7 +324,7 @@ async def _fetch_grouped_models() -> dict[str, list[str]]:
 async def build_model_catalog(active: str) -> tuple[list[str], dict[str, str]]:
     """Compatibility facade over the typed provider inventory builder."""
 
-    from .provider_inventory import build_model_catalog as build
+    from service.domain.client.providers.management.inventory import build_model_catalog as build
 
     return await build(active)
 
@@ -342,7 +336,9 @@ async def build_qualified_model_catalog(
 ) -> tuple[list[str], dict[str, str]]:
     """Compatibility facade over run-scoped or process-scoped qualification."""
 
-    from .provider_inventory import build_qualified_model_catalog as build
+    from service.domain.client.providers.management.inventory import (
+        build_qualified_model_catalog as build,
+    )
 
     return await build(active, requirement=requirement)
 
@@ -352,7 +348,7 @@ async def list_qualified_models(
 ) -> list[str]:
     """Return the qualified aggregate while keeping the legacy inventory facade intact."""
 
-    from service.domain.run_context import current_execution
+    from service.domain.execution.context import current_execution
 
     from .active import get_active_provider
 
@@ -378,6 +374,7 @@ async def get_provider_model_catalog(
     force_refresh: bool = False,
     client: object | None = None,
     configuration_key: str | None = None,
+    cached_only: bool = False,
 ) -> ProviderModelCatalog:
     """Read one provider inventory without erasing discovery provenance."""
     normalized = (provider_name or "").strip().lower()
@@ -392,6 +389,31 @@ async def get_provider_model_catalog(
         )
 
     runtime = getattr(module, "_RUNTIME", None)
+    if cached_only:
+        if runtime is not None and hasattr(runtime, "cached_model_catalog"):
+            return runtime.cached_model_catalog(configuration_key)
+        spec = getattr(module, "SPEC", None)
+        from service.domain.client.models.catalog import (
+            CapabilityEvidenceSource,
+            ProviderModelRecord,
+        )
+
+        models = tuple(getattr(spec, "fallback_models", ()) or ())
+        return ProviderModelCatalog(
+            provider=normalized,
+            models=models,
+            source=ModelCatalogSource.STATIC_FALLBACK,
+            status=ModelCatalogStatus.UNAVAILABLE,
+            fresh=False,
+            records=tuple(
+                ProviderModelRecord(
+                    model_id=model,
+                    capabilities=spec.fallback_capabilities(model),
+                    evidence_source=CapabilityEvidenceSource.STATIC_FALLBACK,
+                )
+                for model in models
+            ),
+        )
     if runtime is not None and hasattr(runtime, "model_catalog"):
         return await runtime.model_catalog(
             client=client,
@@ -434,7 +456,7 @@ async def qualify_model(
     normalized = (provider_name or "").strip().lower()
     effective = requirement or ModelRequirement()
     if catalog is None and not force_refresh:
-        from service.domain.run_context import current_execution
+        from service.domain.execution.context import current_execution
 
         execution = current_execution()
         if execution is not None and execution.provider_admission is not None:
@@ -476,25 +498,3 @@ async def resolve_model_for(
         requirement=requirement,
     )
     return decision.model
-
-
-async def _keep_same_modality(models: list[str], prefer: str) -> list[str]:
-    """Keep vision requests on explicitly evidenced vision-capable chat models."""
-    try:
-        from service.shared.model_catalog import get_openrouter_catalog, model_has_capability
-
-        catalog = await get_openrouter_catalog()
-        if not model_has_capability(prefer, "vision", catalog):
-            return models
-        seeing = [
-            m for m in models if model_has_capability(m, "vision", catalog) and is_chat_capable(m)
-        ]
-    except Exception:  # noqa: BLE001 — неизвестная capability не считается подтверждённой
-        logger.debug("model catalog unavailable", extra={"failure_code": "unavailable"})
-        return []
-    if not seeing:
-        logger.warning(
-            "У провайдера нет зрячей замены для '%s' — провайдер пропущен",
-            prefer,
-        )
-    return seeing

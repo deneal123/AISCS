@@ -21,7 +21,7 @@
 
 ## Что здесь ловится по-настоящему
 
-⚠️ `accumulate_usage` (`usage_tracking.py:94`) складывает `total` НАПРЯМУЮ из
+⚠️ Исторический `accumulate_usage` (`usage/tracking.py`) складывал `total` НАПРЯМУЮ из
 `total_tokens` провайдера, без фолбэка на `prompt + completion`. Провайдер, заполнивший
 `prompt_tokens`/`completion_tokens`, но не `total_tokens`, оставляет `total` нулём — при
 полностью тарифицируемом вызове.
@@ -46,8 +46,8 @@ from types import SimpleNamespace
 import pytest
 
 from service.application.reply_assembler import ReplyAssembler
-from service.domain.legacy_usage import accumulate_usage
-from service.domain.usage_tracking import build_token_usage_meta, is_billable
+from service.domain.usage.legacy import accumulate_usage
+from service.domain.usage.tracking import build_token_usage_meta, is_billable
 
 
 def _resp(*, prompt=40, completion=15, total=None):
@@ -185,8 +185,6 @@ def test_nobody_reimplements_the_billing_gate():
     offenders = []
     root = pathlib.Path(__file__).resolve().parent.parent / "service"
     for path in root.rglob("*.py"):
-        if path.name == "usage_tracking.py":  # дом самого канона
-            continue
         tree = ast.parse(path.read_text(encoding="utf-8"))
         for node in ast.walk(tree):
             if not isinstance(node, (ast.If, ast.IfExp)):

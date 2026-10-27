@@ -9,6 +9,7 @@ from __future__ import annotations
 import asyncio
 import logging
 import random
+import time
 from collections.abc import Awaitable, Callable
 from typing import Any, Literal
 
@@ -121,6 +122,7 @@ async def with_retry(
     base_delay: float = 0.4,
     max_delay: float = 4.0,
     label: str = "llm-call",
+    budget_sec: float | None = None,
 ) -> Any:
     """Выполнить async-вызов с ретраями только по повторяемым категориям.
 
@@ -130,8 +132,12 @@ async def with_retry(
     """
     total = max(1, int(attempts))
     last_exc: Exception | None = None
+    deadline = time.monotonic() + budget_sec if budget_sec is not None else None
     for attempt in range(total):
         try:
+            if attempt and deadline is not None:
+                async with asyncio.timeout(max(0.0, deadline - time.monotonic())):
+                    return await fn()
             return await fn()
         except Exception as exc:  # noqa: BLE001 — классифицируем ниже
             last_exc = exc
@@ -139,6 +145,8 @@ async def with_retry(
             if category not in _RETRYABLE or attempt >= total - 1:
                 raise
             delay = _backoff_delay(attempt, base_delay, max_delay)
+            if deadline is not None and time.monotonic() + delay >= deadline:
+                raise
             logger.warning(
                 "%s failed (%s), retry %d/%d in %.2fs",
                 label,
@@ -166,6 +174,10 @@ def retry_params() -> dict:
     from service.shared.agent_settings import runtime_settings
 
     return {
+        "budget_sec": runtime_settings.get_agents(
+            "llm_retry_budget_sec",
+            config.agents.llm_retry_budget_sec,
+        ),
         "attempts": runtime_settings.get_agents(
             "llm_retry_attempts", config.agents.llm_retry_attempts
         ),

@@ -19,13 +19,14 @@ import io
 import logging
 import re
 
+from service.domain.client.models.requirements import ModelRequirement
+from service.domain.execution.context import RunExecutionContext, require_execution
+from service.domain.execution.model import invoke_model_call
+from service.domain.usage.ledger import UsageKind
+
 from .barcode import decode_barcodes, format_codes
 from .client import list_qualified_models
-from .client.model_requirements import ModelRequirement
 from .client.protocol import ModelCallResult
-from .model_runtime import invoke_model_call
-from .run_context import RunExecutionContext, require_execution
-from .usage_ledger import UsageKind
 
 logger = logging.getLogger(__name__)
 
@@ -188,7 +189,7 @@ async def describe_image(
     provider_name = None
     client = None
     if admission is not None:
-        from .client.provider_operations import ProviderOperation
+        from service.domain.client.providers.management.operations import ProviderOperation
 
         decision = admission.admit_first(
             operation=ProviderOperation.VISION_INPUT,
@@ -203,7 +204,7 @@ async def describe_image(
             evidence_confirmed=False,
         )
         if vlm_model is not None:
-            from .client.provider_compat import resolve_model_client
+            from service.domain.client.providers.management.compat import resolve_model_client
 
             provider_name, client = await resolve_model_client(vlm_model)
     if vlm_model is None:
@@ -326,8 +327,11 @@ async def transcribe_via_providers(
     падала целиком. Идём по failover-порядку, выкидывая выключенных админом и
     заблокированных health-проверкой (``drop_hard_off``), у каждого — его модели.
     """
-    from .client.provider_compat import provider_client_models, provider_order
-    from .client.provider_operations import ProviderOperation
+    from service.domain.client.providers.management.compat import (
+        provider_client_models,
+        provider_order,
+    )
+    from service.domain.client.providers.management.operations import ProviderOperation
 
     active_execution = require_execution(execution)
     admission = active_execution.provider_admission

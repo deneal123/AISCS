@@ -169,6 +169,8 @@ def function_nodes(tree: ast.AST) -> list[ast.AST]:
 
 def evaluate(root: Path, critical_dirs: list[Path], thresholds: Thresholds) -> None:
     files = collect_python_files(root)
+    if not root.is_dir() or not files:
+        raise QualityError("Не найдена непустая директория Python-исходников; проверьте --root.")
     violations: list[tuple[str, int, str]] = []
     import_graph: dict[str, set[str]] = defaultdict(set)
     critical_modules: set[str] = set()

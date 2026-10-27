@@ -7,7 +7,6 @@
 from __future__ import annotations
 
 import asyncio
-import json
 import logging
 from collections.abc import AsyncIterator
 
@@ -15,13 +14,23 @@ from fastapi import APIRouter, Header
 from fastapi.responses import StreamingResponse
 
 from service.application.reply_assembler import ReplyAssembler
+from service.domain.execution.context import observe_run_usage
 from service.events import EventSerializer, EventType
 from service.infrastructure.mcp import current_health_event, open_mcp_tools
 from service.infrastructure.sidecar import set_correlation_id
 from service.presentation import runtime
 from service.presentation.deps import internal_auth
 from service.presentation.errors import error
-from service.presentation.routers.agent.run_recovery import build_timeout_result
+from service.presentation.routers.agent.run_recovery import (
+    build_failure_result,
+    build_timeout_result,
+    event_recovery_metadata,
+)
+from service.presentation.routers.agent.usage_checkpoint import (
+    ATTEMPT_HEADER,
+    UsageCheckpointBinding,
+    serialize_frame,
+)
 from service.protocol_manifest import load_protocol_manifest
 from service.schemas.run import AgentRunInput
 from service.shared.agent_settings import remember_settings, use_settings
@@ -70,6 +79,7 @@ async def run(
     payload: AgentRunInput,
     authorization: str | None = Header(default=None),
     correlation_id: str | None = Header(default=None, alias="X-Correlation-Id"),
+    execution_attempt: str | None = Header(default=None, alias=ATTEMPT_HEADER),
 ):
     # ⚠️ Ключ проверяем ДО всего остального: ручка несёт полный пользовательский
     # контекст и деньги, и до сих пор была открыта — в отличие от /tools/web-search.
@@ -92,6 +102,9 @@ async def run(
         recovery = ReplyAssembler()
         recovery_metadata: dict = {}
         terminal_emitted = False
+        usage_binding = UsageCheckpointBinding(
+            execution_attempt, recovery, lambda key, value: queue.put_nowait((key, value))
+        )
 
         def emit_terminal(key: str, value: object) -> None:
             """A single run may expose only one billing envelope."""
@@ -107,13 +120,7 @@ async def run(
             # Жёсткий стоп может отменить движок до его собственного result-dict. Копим
             # ровно тот минимум, который уже видел клиент: текст, usage и metadata —
             # чтобы оплаченные вызовы не исчезали вместе с отменённой корутиной.
-            recovery_metadata.update(
-                {
-                    key: value
-                    for key, value in (getattr(event, "metadata", None) or {}).items()
-                    if key != "token_usage"
-                }
-            )
+            recovery_metadata.update(event_recovery_metadata(event))
             recovery.consume(
                 event=event,
                 stream_chunk_type=EventType.STREAM_CHUNK,
@@ -145,6 +152,7 @@ async def run(
                     use_snapshot(payload.provider_policy),
                     use_settings(payload.agent_settings),
                     use_deadline(RunDeadline.start(limit)),
+                    observe_run_usage(usage_binding.bind),
                 ):
                     # Подключение к разрешённым MCP-серверам — ВНУТРИ снимка настроек: их
                     # объявление приезжает тем же админ-снимком, снаружи оно ещё не видно.
@@ -184,7 +192,12 @@ async def run(
                     ),
                 )
             except Exception:  # noqa: BLE001
-                emit_terminal(ERROR_KEY, "internal")
+                if recovery.has_recorded_usage:
+                    emit_terminal(
+                        RESULT_KEY, build_failure_result(recovery, recovery_metadata, payload)
+                    )
+                else:
+                    emit_terminal(ERROR_KEY, "internal")
             finally:
                 queue.put_nowait(done)
 
@@ -194,23 +207,12 @@ async def run(
                 item = await queue.get()
                 if item is done:
                     break
-                if isinstance(item, tuple):
-                    key, value = item
-                    # default=str — в result могут попасть не-JSON типы (datetime и пр.).
-                    yield (
-                        json.dumps({key: value}, ensure_ascii=False, default=lambda _value: None)
-                        + "\n"
-                    )
-                else:
-                    payload_line = serializer.serialize(event=item, job_id=job_id)
-                    yield (
-                        json.dumps(payload_line, ensure_ascii=False, default=lambda _value: None)
-                        + "\n"
-                    )
+                yield serialize_frame(item, serializer, job_id)
         finally:
             # Клиент отвалился/поток закрыт — не оставляем прогон висеть.
             if not task.done():
                 task.cancel()
             await asyncio.gather(task, return_exceptions=True)
+            usage_binding.close()
 
     return StreamingResponse(ndjson(), media_type="application/x-ndjson")

@@ -22,7 +22,7 @@ from contextvars import ContextVar
 from dataclasses import dataclass
 from typing import Any
 
-from service.domain.capabilities.tool_spec import ToolSpec
+from service.domain.capabilities.tools.spec import ToolSpec
 from service.events import AgentEvent, EventType
 from service.infrastructure.mcp.adapter import mcp_tool_specs
 from service.infrastructure.mcp.circuit import circuit_breaker

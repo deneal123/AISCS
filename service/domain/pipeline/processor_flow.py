@@ -5,7 +5,7 @@ from __future__ import annotations
 from datetime import UTC, datetime
 from typing import Any
 
-from service.domain.run_context import RunExecutionContext
+from service.domain.execution.context import RunExecutionContext
 from service.events import AgentEvent, EventType
 from service.schemas.agents import UserContext
 from service.shared import step_timing

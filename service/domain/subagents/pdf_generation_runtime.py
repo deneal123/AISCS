@@ -24,7 +24,14 @@ from service.domain.documents import (
     repair_semantic_draft,
     restore_authoring_checkpoint,
 )
-from service.domain.tools.workspace_client import WorkspaceUnavailable, call
+from service.domain.documents.repair_provenance import (
+    scoped_source_diagnostics,
+    scoped_visual_diagnostics,
+)
+from service.domain.documents.visual_audit import VISUAL_CODES
+from service.domain.execution.context import current_execution
+from service.domain.integration_failure import IntegrationFailureCode
+from service.domain.tools.workspace.client import WorkspaceUnavailable, call
 from service.shared import deadline
 
 MAX_SOURCE_REPAIRS = 2
@@ -173,20 +180,16 @@ async def resumable_document_project(
     if checkpoint is None or not project_path:
         return None
     scaffold_result = await call(ref, "files/read", {"path": f"{project_path}/main.tex"})
+    observed_revision = str(result.get("revision") or "")
+    if not observed_revision or scaffold_result.get("revision") != observed_revision:
+        execution = current_execution()
+        if execution is not None:
+            execution.workspace.invalidate(require_read=True)
+        raise WorkspaceUnavailable(IntegrationFailureCode.CONFLICT, retryable=True)
     scaffold_source = str(scaffold_result.get("content") or "")
     if "\\begin{document}" not in scaffold_source:
         return None
     return project_path, scaffold_source, checkpoint
-
-
-def _diagnostic_codes(status: dict[str, Any]) -> list[str]:
-    return [
-        (f"{str(item.get('code') or 'compile_failed')}:{str(item.get('block_id') or '')}").rstrip(
-            ":"
-        )
-        for item in status.get("diagnostics", [])
-        if isinstance(item, dict)
-    ] or [str(status.get("failure_code") or "compile_failed")]
 
 
 def _failure_stage(status: dict[str, Any] | None) -> DocumentStage:
@@ -255,6 +258,7 @@ class DocumentGenerationRun:
     diagnostics: list[str] = field(default_factory=list)
     source_repairs: int = 0
     visual_repairs: int = 0
+    visual_diagnostics: tuple[str, ...] = field(default=(), repr=False)
     authoring_repair_used: bool = False
     authoring_failure_stage: DocumentStage = DocumentStage.SECTION_AUTHORING
     authoring_rejection_reason: str | None = None
@@ -314,6 +318,7 @@ class DocumentGenerationRun:
                 self.model,
                 execution=execution,
                 citations=self.citations,
+                evidence=self.evidence,
             )
             if repaired is None:
                 return None
@@ -358,27 +363,46 @@ class DocumentGenerationRun:
         *,
         execution: Any,
     ) -> tuple[dict[str, Any], bool]:
+        # Sidecar status owns build state, but does not carry authoring recovery
+        # context. Preserve it across audit refreshes, including failed finals.
+        self.visual_diagnostics = ()
+        status = {**status, "stage": "visual_audit", "project_saved": True}
         await self._stage(DocumentStage.DETERMINISTIC_AUDIT, "ready")
         await self._stage(DocumentStage.VISUAL_AUDIT, "running")
         build_id = str(status.get("build_id") or "")
         audit = await audit_document_build(self.ref, build_id, execution=execution)
         if audit.passed:
             await self._stage(DocumentStage.VISUAL_AUDIT, "ready")
-            return await call(self.ref, f"documents/builds/{build_id}", {}), True
+            return {**status, **await call(self.ref, f"documents/builds/{build_id}", {})}, True
         if audit.retryable:
             await self._stage(DocumentStage.VISUAL_AUDIT, "pending")
             return {**status, "failure_code": audit.status}, False
-        audited = await call(self.ref, f"documents/builds/{build_id}", {})
+        audited = {**status, **await call(self.ref, f"documents/builds/{build_id}", {})}
         visual_failed = (
             audited.get("state") == "failed"
             and audited.get("failure_code") == "visual_audit_failed"
         )
-        can_repair = visual_failed and can_retry_visual_failure(
-            literal_text=self.brief.literal_text,
-            visual_repairs=self.visual_repairs,
+        scoped = (
+            scoped_visual_diagnostics(
+                getattr(audit, "diagnostics", ()),
+                getattr(audit, "block_pages", ()),
+                self.draft,
+                VISUAL_CODES,
+            )
+            if visual_failed
+            else None
+        )
+        can_repair = (
+            visual_failed
+            and scoped is not None
+            and can_retry_visual_failure(
+                literal_text=self.brief.literal_text,
+                visual_repairs=self.visual_repairs,
+            )
         )
         if can_repair:
             self.visual_repairs += 1
+            self.visual_diagnostics = scoped or ()
         await self._stage(DocumentStage.VISUAL_AUDIT, "failed")
         return audited, bool(not visual_failed or can_repair)
 
@@ -446,11 +470,18 @@ class DocumentGenerationRun:
                 and final_status.get("failure_code") == "visual_audit_failed"
             )
             if not visual_failure:
-                if self.source_repairs >= MAX_SOURCE_REPAIRS:
+                scoped = scoped_source_diagnostics(final_status, self.draft)
+                if (
+                    self.source_repairs >= MAX_SOURCE_REPAIRS
+                    or self.brief.literal_text is not None
+                    or scoped is None
+                ):
                     break
                 self.source_repairs += 1
-            self.diagnostics = _diagnostic_codes(final_status)
-            if self.diagnostics[0] in {"source_changed", "build_cancelled", "build_timeout"}:
+                self.diagnostics = list(scoped)
+            else:
+                self.diagnostics = list(self.visual_diagnostics)
+            if not self.diagnostics:
                 break
         return final_status
 

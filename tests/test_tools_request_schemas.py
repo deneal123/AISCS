@@ -120,10 +120,9 @@ def test_valid_body_reaches_the_tool(client, monkeypatch):
     """
     import importlib
 
-    # ⚠️ Именно `import_module`, а не `import service.domain.tools.web_search as ws`:
-    # пакет `tools` реэкспортирует одноимённую ФУНКЦИЮ, и форма с `as` возьмёт атрибут
-    # пакета, то есть функцию вместо модуля. Обработчик же берёт атрибут у модуля.
-    ws = importlib.import_module("service.domain.tools.web_search")
+    # Явный импорт модуля оставляет стабильную точку подмены. Исторические реэкспорты
+    # tools затеняли одноимённые модули функциями; теперь initializer пустой.
+    ws = importlib.import_module("service.domain.tools.search.client")
 
     seen: dict = {}
 

@@ -13,7 +13,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from service.domain.tools import found_sources
+from service.domain.tools.search import sources as found_sources
 
 
 def test_outside_a_run_nothing_is_collected() -> None:
@@ -73,14 +73,14 @@ async def test_web_search_tool_remembers_what_it_returned(monkeypatch) -> None:
 
     Мутация, снимающая одну строку в инструменте, оставила бы тесты выше зелёными.
     """
-    from service.domain.tools import web_search_tool
+    from service.domain.tools.search import tool as web_search_tool
 
     async def _fake_search(query: str, num_results: int = 5, *, stats=None) -> list[dict]:
         if stats is not None:
             stats["engines_answered"] = 1
         return [{"title": "Вакансия", "url": "https://hh.test/vacancy/1", "snippet": "текст"}]
 
-    monkeypatch.setattr("service.domain.tools.web_search.web_search", _fake_search)
+    monkeypatch.setattr("service.domain.tools.search.client.web_search", _fake_search)
 
     with found_sources.collect():
         out = await web_search_tool.search_web_tool(
@@ -96,12 +96,12 @@ async def test_web_search_tool_remembers_what_it_returned(monkeypatch) -> None:
 @pytest.mark.asyncio
 async def test_failed_search_leaves_no_sources(monkeypatch) -> None:
     """Ссылок нет — и приписки о них не будет: пустой список не должен появляться."""
-    from service.domain.tools import web_search_tool
+    from service.domain.tools.search import tool as web_search_tool
 
     async def _boom(query: str, num_results: int = 5) -> list[dict]:
         raise RuntimeError("поиск лёг")
 
-    monkeypatch.setattr("service.domain.tools.web_search.web_search", _boom)
+    monkeypatch.setattr("service.domain.tools.search.client.web_search", _boom)
 
     with found_sources.collect():
         await web_search_tool.search_web_tool(SimpleNamespace(context={}), '{"query": "x"}')

@@ -142,6 +142,7 @@ class PipelineSettings(BaseModel):
     # `docker/.env.example` и превращал скопировавшего его в обладателя мёртвого стека.
     max_body_bytes: int = 64 * 1024 * 1024
     run_timeout_sec: float = 570.0
+    harness_refinement_enabled: bool = False
 
     @field_validator("chat_history_messages_limit", mode="before")
     @classmethod

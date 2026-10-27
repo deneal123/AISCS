@@ -30,9 +30,9 @@ from service.domain.capabilities.runtime import (
     initialize_static_catalog,
     reset_static_catalog_for_tests,
 )
-from service.domain.capabilities.tool_spec import ToolSpec
+from service.domain.capabilities.tools.spec import ToolSpec
 from service.domain.capabilities.workflow_spec import WorkflowSpec, WorkflowStep
-from service.domain.run_context import PrivateRunResources, use_run_execution
+from service.domain.execution.context import PrivateRunResources, use_run_execution
 from service.shared.agent_settings import use_settings
 
 
@@ -259,7 +259,7 @@ def test_run_context_uses_its_immutable_snapshot_without_cross_run_mcp_leakage(m
 
 
 def test_tool_resolution_captures_typed_omissions_in_run_snapshot():
-    from service.domain.capabilities.tool_registry import resolve_toolset
+    from service.domain.capabilities.tools.registry import resolve_toolset
 
     tool = next(iter(initialize_static_catalog().native_tools.values())).tool
     with use_run_execution(PrivateRunResources()) as execution:
@@ -347,7 +347,7 @@ def test_production_pipeline_cannot_bypass_compiled_catalog():
     service_root = Path(__file__).parents[1] / "service"
     compatibility = {
         Path("domain/capabilities/registry.py"),
-        Path("domain/capabilities/tool_registry.py"),
+        Path("domain/capabilities/tools/registry.py"),
     }
     direct_calls = {"agent_specs", "workflow_specs", "tool_specs"}
     violations: list[str] = []

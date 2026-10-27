@@ -6,7 +6,7 @@ from fastapi import APIRouter, Header
 from fastapi.responses import JSONResponse
 
 from service.contracts import ROUTE_RESPONSE_FIELDS  # noqa: F401 — ре-экспорт
-from service.domain.run_context import PrivateRunResources, use_run_execution
+from service.domain.execution.context import PrivateRunResources, use_run_execution
 from service.presentation import runtime
 from service.presentation.deps import internal_auth
 from service.presentation.errors import error

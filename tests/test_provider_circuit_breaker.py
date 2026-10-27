@@ -74,12 +74,12 @@ def test_drop_cooled_down_local_removes_marked() -> None:
     assert "openrouter" in cb.drop_cooled_down_local(order)
 
 
-def test_drop_cooled_down_returns_all_when_everyone_down() -> None:
-    """Все мертвы → лучше попробовать хоть что-то, чем показать пустоту."""
+def test_drop_cooled_down_returns_empty_when_everyone_down() -> None:
+    """Do not turn a known outage into another full retry cycle."""
     order = ["a", "b"]
     asyncio.run(cb.mark_down("a"))
     asyncio.run(cb.mark_down("b"))
-    assert set(cb.drop_cooled_down_local(order)) == {"a", "b"}
+    assert cb.drop_cooled_down_local(order) == []
     asyncio.run(cb.clear_down("a"))
     asyncio.run(cb.clear_down("b"))
 

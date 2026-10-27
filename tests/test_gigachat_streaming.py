@@ -9,8 +9,8 @@ import pytest
 
 from service.domain.client.calls import streaming
 from service.domain.client.protocol import ProviderRunSession
-from service.domain.client.providers.function_dialect import PROVIDER_STATE_KEY
-from service.domain.runners.tool_loop import ToolRoundMixin
+from service.domain.client.providers.gigachat.function_dialect import PROVIDER_STATE_KEY
+from service.domain.runners.chat.tool_loop import ToolRoundMixin
 
 
 class _Stream:

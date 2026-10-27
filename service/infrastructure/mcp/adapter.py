@@ -20,7 +20,7 @@ from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
 from typing import Any
 
-from service.domain.capabilities.tool_spec import EFFECT_EXTERNAL_MUTATION, ToolSpec
+from service.domain.capabilities.tools.spec import EFFECT_EXTERNAL_MUTATION, ToolSpec
 from service.domain.runners.tool_runtime import ToolCallOutcome, ToolFailureCode
 from service.infrastructure.mcp.naming import make_tool_name
 from service.infrastructure.mcp.sanitize import sanitize_schema, tool_description, tool_result

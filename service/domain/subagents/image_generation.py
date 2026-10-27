@@ -5,13 +5,13 @@ import re
 from collections.abc import AsyncGenerator
 
 from service.domain.capabilities.agent_spec import COST_PAID, AgentSpec
+from service.domain.execution.context import RunExecutionContext, require_execution
+from service.domain.execution.model import invoke_model_call
 from service.domain.llm_response import first_message_content
-from service.domain.model_runtime import invoke_model_call
-from service.domain.run_context import RunExecutionContext, require_execution
 from service.domain.subagents.base import BaseSubAgent
 from service.domain.subagents.utils import pick_image_model, pick_meta_model
-from service.domain.usage_ledger import UsageKind
-from service.domain.usage_tracking import build_token_usage_meta
+from service.domain.usage.ledger import UsageKind
+from service.domain.usage.tracking import build_token_usage_meta
 from service.events import AgentEvent, EventType
 from service.schemas.agents import UserContext
 
@@ -108,10 +108,10 @@ class ImageGenerationAgent(BaseSubAgent):
                     "role": "system",
                     "content": (
                         "Пользователь хочет сгенерировать изображение, но прямой API "
-                        "генерации недоступен. Сформируй ОДИН качественный англоязычный "
+                        "генерации недоступен. Сформируй ОДИН качественный русскоязычный "
                         "промпт для SDXL / Flux / DALL-E. Сделай его детальным и "
-                        "управляемым: subject, scene, composition, lighting, style, mood, "
-                        "camera/lens, colors, details. Добавь негативный промпт (что "
+                        "управляемым: объект, сцена, композиция, освещение, стиль, настроение, "
+                        "камера и объектив, цвета, детали. Добавь негативный промпт (что "
                         "исключить) и краткие рекомендации по вариациям. Выведи результат "
                         "в Markdown-блоках: 'Промпт', 'Негативный промпт', 'Быстрые вариации'."
                     ),
@@ -153,6 +153,32 @@ class ImageGenerationAgent(BaseSubAgent):
             execution=require_execution(execution),
         )
 
+    async def _attempt_image(
+        self,
+        image_model: str,
+        request: str,
+        *,
+        reference_image_url: str | None,
+        execution: RunExecutionContext,
+    ) -> tuple[str, dict]:
+        from service.domain.client.providers.images.transport import ImageBillingUnavailable
+
+        reason: dict = {}
+        try:
+            image = await self._generate_image_b64(
+                image_model,
+                request,
+                reference_image_url=reference_image_url,
+                reason_out=reason,
+                execution=execution,
+            )
+            return image, reason
+        except ImageBillingUnavailable:
+            return "", {"failure_code": "image_billing_unavailable"}
+        except Exception:
+            logger.warning("Image generation failed code=internal")
+            return "", {"failure_code": "internal"}
+
     async def process(self, user_input: str, context: UserContext) -> AsyncGenerator[AgentEvent]:
         yield self.start_event("Запускаю генерацию изображения")
 
@@ -181,7 +207,7 @@ class ImageGenerationAgent(BaseSubAgent):
         image_model: str | None = None
         try:
             from service.domain.client import list_qualified_models
-            from service.domain.client.provider_operations import ProviderOperation
+            from service.domain.client.providers.management.operations import ProviderOperation
             from service.domain.subagents.context_query import (
                 build_standalone_query,
             )
@@ -196,11 +222,13 @@ class ImageGenerationAgent(BaseSubAgent):
             if execution.provider_admission is not None:
                 image_admission = execution.provider_admission.admit_first(
                     operation=ProviderOperation.IMAGE_OUTPUT,
-                    pick_model=lambda models, _prefer: models[0] if models else None,
+                    pick_model=lambda models, _prefer: (
+                        pick_image_model(models) or (models[0] if models else None)
+                    ),
                 )
                 image_model = image_admission.model if image_admission is not None else None
             else:
-                from service.domain.client.provider_compat import list_inventory_models
+                from service.domain.client.providers.management.compat import list_inventory_models
 
                 image_model = pick_image_model(await list_inventory_models())
 
@@ -226,19 +254,12 @@ class ImageGenerationAgent(BaseSubAgent):
                     ),
                 )
 
-                b64 = ""
-                gen_reason: dict = {}
-                try:
-                    b64 = await self._generate_image_b64(
-                        image_model,
-                        request,
-                        reference_image_url=reference_image_url,
-                        reason_out=gen_reason,
-                        execution=execution,
-                    )
-                except Exception:
-                    logger.warning("Image generation failed code=internal")
-                    gen_reason["failure_code"] = "internal"
+                b64, gen_reason = await self._attempt_image(
+                    image_model,
+                    request,
+                    reference_image_url=reference_image_url,
+                    execution=execution,
+                )
                 image_generated = bool(b64)
 
                 if b64:
@@ -248,6 +269,12 @@ class ImageGenerationAgent(BaseSubAgent):
                     yield await self.stream_text_event(
                         "Готово — изображение сгенерировано.",
                         metadata={"b64_json": b64, "model": image_model},
+                    )
+                elif gen_reason.get("failure_code") == "image_billing_unavailable":
+                    yield await self.stream_text_event(
+                        "Генерация этой моделью временно недоступна: проверяем единицы "
+                        "тарификации изображений. Запрос изображения не выполнялся; "
+                        "плата за изображение не начислена."
                     )
                 else:
                     # Генерация не удалась → отдаём качественный промпт как фолбэк.

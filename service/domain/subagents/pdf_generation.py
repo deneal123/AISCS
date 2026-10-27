@@ -18,7 +18,7 @@ from service.domain.documents import (
     document_status_event,
     resolve_document_intent,
 )
-from service.domain.run_context import require_execution
+from service.domain.execution.context import require_execution
 from service.domain.subagents.base import BaseSubAgent
 from service.domain.subagents.pdf_generation_runtime import (
     DocumentGenerationRun,
@@ -33,8 +33,8 @@ from service.domain.subagents.pdf_generation_runtime import (
 )
 from service.domain.subagents.research import ResearchArtifact
 from service.domain.subagents.utils import pick_answer_model
-from service.domain.tools.workspace_client import WorkspaceUnavailable
-from service.domain.usage_tracking import build_token_usage_meta
+from service.domain.tools.workspace.client import WorkspaceUnavailable
+from service.domain.usage.tracking import build_token_usage_meta
 from service.events import AgentEvent
 from service.schemas.agents import UserContext
 
@@ -122,6 +122,15 @@ class PDFGenerationAgent(BaseSubAgent):
     @staticmethod
     def _failure_message(status: dict[str, Any] | None) -> str:
         code = str((status or {}).get("failure_code") or "")
+        if code == "evidence_incomplete" and (status or {}).get("stage") in {
+            "outline",
+            "section_authoring",
+        }:
+            return (
+                "Выбранные материалы не помещаются в доступный бюджет контекста. "
+                "Проект и уже принятые разделы сохранены в Работе; PDF ещё не собран. "
+                "Уточните объем или разделите задачу на меньшие части."
+            )
         return {
             "draft_protocol": (
                 "Не удалось подготовить структуру документа. Проект сохранён в Работе; "

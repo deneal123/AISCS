@@ -121,7 +121,7 @@ async def test_codes_come_before_the_description(monkeypatch):
     async def _models(*_args) -> list[str]:
         return ["some-vendor/custom-vl-7b"]
 
-    from service.domain.client import provider_compat
+    from service.domain.client.providers.management import compat as provider_compat
 
     async def _client(_model):
         return "provider", _Client()
@@ -161,7 +161,7 @@ async def test_provider_failure_does_not_take_the_code_with_it(monkeypatch):
     async def _models(*_args) -> list[str]:
         return ["some-vendor/custom-vl-7b"]
 
-    from service.domain.client import provider_compat
+    from service.domain.client.providers.management import compat as provider_compat
 
     async def _client(_model):
         return "provider", _Boom()

@@ -6,7 +6,7 @@ import asyncio
 from dataclasses import dataclass
 from typing import Any
 
-from .model_requirements import ModelRequirement
+from service.domain.client.models.requirements import ModelRequirement
 
 
 @dataclass(frozen=True, slots=True)
@@ -118,11 +118,13 @@ async def probe_provider(name: str, context: ProviderProbeContext) -> tuple[str,
             catalog = await get_provider_model_catalog(name, force_refresh=context.force_probe)
             safe_catalog = _catalog_summary(catalog)
             chat, safe_qualification = await _qualification_summary(name, catalog)
-            if chat.model is not None:
+            if chat.model is not None and context.force_probe:
                 await _reach(client, chat.model)
         result = {
             "configured": True,
-            "reachable": chat.model is not None,
+            "reachable": chat.model is not None
+            and (context.force_probe or catalog.discovery_available),
+            "probe_kind": "chat" if context.force_probe else "catalog",
             "catalog": safe_catalog,
             "qualification": safe_qualification,
             "generation": generation,

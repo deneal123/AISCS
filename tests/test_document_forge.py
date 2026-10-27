@@ -8,7 +8,7 @@ import pytest
 from PIL import Image, ImageDraw
 
 from service.domain.capabilities import get_spec, get_workflow
-from service.domain.capabilities.tool_registry import get_tool_spec
+from service.domain.capabilities.tools.registry import get_tool_spec
 from service.domain.documents import (
     normalize_brief,
     parse_authored_document,
@@ -205,8 +205,8 @@ def test_visual_audit_prompt_accepts_sparse_but_visible_document() -> None:
     messages = _messages([(1, b"png")])
     instruction = messages[1]["content"][0]["text"]
 
-    assert "deliberately sparse page" in instruction
-    assert "no visible document content exists at all" in instruction
+    assert "с намеренно редким содержанием" in instruction
+    assert "полное отсутствие видимого содержания" in instruction
 
 
 def _png(*, visible: bool) -> bytes:

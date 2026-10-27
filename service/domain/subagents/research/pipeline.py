@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections.abc import AsyncGenerator, Callable
 from dataclasses import dataclass
 
-from service.domain.run_context import current_execution
+from service.domain.execution.context import current_execution
 from service.domain.subagents.runtime import StageContext
 from service.shared import deadline
 

@@ -23,8 +23,8 @@ import pytest
 
 from service.domain.integration_failure import IntegrationFailureCode
 from service.domain.runners.tool_runtime import ToolCallOutcome
-from service.domain.tools import workspace_tools as wt
-from service.domain.tools.workspace_client import WorkspaceUnavailable
+from service.domain.tools.workspace import tools as wt
+from service.domain.tools.workspace.client import WorkspaceUnavailable
 
 REF = {"workspace_id": "ws1", "token": "t.sig", "user_id": "7", "root": "/workspace"}
 

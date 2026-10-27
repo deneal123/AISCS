@@ -10,14 +10,14 @@ from __future__ import annotations
 import logging
 import re
 
+from service.domain.execution.context import RunExecutionContext, require_execution
 from service.domain.llm_response import first_message_content
-from service.domain.run_context import RunExecutionContext, require_execution
 from service.shared import step_timing
 
 logger = logging.getLogger(__name__)
 
 _COMPLEX_MARKERS = re.compile(
-    r"(сравни|сравнен|проанализир|разработай\s+план|поэтапн|пошагов|стратег|архитектур|"
+    r"(сравни|сравнен|проанализир|анализ|разработай\s+план|поэтапн|пошагов|стратег|архитектур|"
     r"спроектир|обоснуй|всесторонн|детальн|план\s+действий|декомпоз|"
     r"compare|step[\s-]?by[\s-]?step|trade[\s-]?off|pros and cons|design a|analyze|breakdown)",
     re.I,
@@ -63,9 +63,9 @@ async def assess_is_complex(
             create_chat_completion,
             list_qualified_models,
         )
-        from service.domain.model_runtime import invoke_model_call
+        from service.domain.execution.model import invoke_model_call
         from service.domain.subagents.utils import pick_meta_model
-        from service.domain.usage_ledger import UsageKind
+        from service.domain.usage.ledger import UsageKind
 
         models = await list_qualified_models()
         model = pick_meta_model(models, model)

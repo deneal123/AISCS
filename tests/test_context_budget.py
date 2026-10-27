@@ -3,11 +3,9 @@
 import httpx
 import pytest
 
-from service.domain.pipeline import (
-    context_assembler,
-    context_budget,
-    errors,
-)
+from service.domain.pipeline import errors
+from service.domain.pipeline.context import assembler as context_assembler
+from service.domain.pipeline.context import budget as context_budget
 from service.shared import token_budget
 
 

@@ -13,6 +13,10 @@ class ProviderSettings(BaseModel):
     """Поля провайдеров. Собирается в `AgentsConfig`, отдельно не читается."""
 
     llm_provider: str = "auto"
+    local_api_key: str = Field(default_factory=str)
+    local_base_url: str = "http://local-llm:8080/v1"
+    local_timeout_sec: float = Field(default=330.0, ge=1, le=600)
+    local_models_cache_ttl_sec: int = Field(default=180, ge=1)
     proxy_host: str = Field(default_factory=str)
     proxy_port: int | None = None
     proxy_user: str = Field(default_factory=str)
@@ -35,6 +39,13 @@ class ProviderSettings(BaseModel):
     routerai_base_url: str = Field(default_factory=str)
     routerai_timeout_sec: float = 45.0
     routerai_models_cache_ttl_sec: int = 180
+    image_only_api_enabled: bool = Field(
+        default=False,
+        description=(
+            "Разрешить отдельный Image API после проверки единиц тарификации. "
+            "По умолчанию выключен."
+        ),
+    )
     # --- Whisper.cpp (локальная STT через сайдкар) ---
     gigachat_authorization_key: str = Field(default_factory=str)
     gigachat_scope: str = "GIGACHAT_API_PERS"
@@ -54,6 +65,7 @@ class ProviderSettings(BaseModel):
     # включён. Выключенный провайдер скрыт у пользователей и не пробуется фейловером.
     provider_enabled: dict = Field(default_factory=dict)
     llm_retry_attempts: int = 2
+    llm_retry_budget_sec: float = Field(default=5.0, ge=0.1, le=30.0)
     llm_retry_base_delay_sec: float = 0.4
     llm_retry_max_delay_sec: float = 4.0
 
@@ -68,7 +80,13 @@ class ProviderSettings(BaseModel):
     @classmethod
     def _normalize_llm_provider(cls, value):
         provider = str(value or "auto").strip().lower()
-        if provider not in {"auto", "mws", "openai", "openrouter", "gigachat", "routerai"}:
+        if not (
+            provider
+            and len(provider) <= 64
+            and provider.isascii()
+            and provider[0].isalpha()
+            and provider.replace("_", "").replace("-", "").isalnum()
+        ):
             return "auto"
         return provider
 

@@ -19,9 +19,9 @@ from contextlib import contextmanager
 from contextvars import ContextVar
 from typing import Any
 
-from service.domain.capabilities.tool_registry import tool_timeout
+from service.domain.capabilities.tools.registry import tool_timeout
 from service.domain.integration_failure import IntegrationFailure, IntegrationFailureCode
-from service.domain.runners.tool_execution import ToolCallOutcome
+from service.domain.runners.tool_runtime import ToolCallOutcome
 from service.domain.runners.tool_runtime.contracts import ToolFailureCode
 from service.shared import deadline
 
@@ -110,7 +110,7 @@ async def invoke_tool_outcome(tool, ctx, arguments: str) -> ToolCallOutcome:
     """
     name = str(getattr(tool, "name", "?"))
     budget = deadline.clamp(tool_timeout(name))
-    from service.domain.run_context import tool_context_payload
+    from service.domain.execution.context import tool_context_payload
 
     source_context = getattr(ctx, "context", ctx)
     narrowed_payload = tool_context_payload(source_context, name)

@@ -5,13 +5,13 @@
 
     spec.py       ProviderSpec — чем один провайдер отличается от другого
     runtime.py    ФАБРИКА: одна обвязка на всех + хуки на экзотику
-    mws / openai / openrouter / routerai / gigachat — сами провайдеры
-    openai_compatible.py  общие тела вызовов OpenAI-совместимых
-    model_list_cache.py   кэш списка моделей с TTL и serve-stale
+    mws.py / openrouter.py / routerai.py — декларации простых адаптеров
+    gigachat/     адаптер, OAuth, изображения, schema/function dialect
+    openai/       нативный адаптер и общий OpenAI-compatible протокол
+    management/   admission, generations, inventory, snapshots и lifecycle
+    transports/   HTTP/proxy construction и optional SDK binding
+    ../models/    catalogs, qualification, requirements и model-list cache
     credentials.py        runtime-override ключей из админки
-    _http.py              per-provider прокси
-    _sdk.py               опциональные биндеры Agents SDK
-    gigachat_auth.py, function_dialect.py — специфика GigaChat, рядом с ним
 
 ⚠️ Пакет НИЧЕГО не реэкспортит. Провайдер адресуется через `registry`, а не импортом
 конкретного модуля: имя провайдера — это строка из настроек, и разрешать её должен

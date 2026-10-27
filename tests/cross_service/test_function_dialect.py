@@ -10,7 +10,7 @@ from unittest.mock import patch
 
 import pytest
 
-from service.domain.client.providers.function_dialect import (
+from service.domain.client.providers.gigachat.function_dialect import (
     PROVIDER_STATE_KEY,
     accumulate_function_call,
     messages_to_legacy,
@@ -159,7 +159,9 @@ def test_broken_arguments_do_not_crash_the_turn() -> None:
             ],
         }
     ]
-    with patch("service.domain.client.providers.function_dialect.logger.warning") as warning:
+    with patch(
+        "service.domain.client.providers.gigachat.function_dialect.logger.warning"
+    ) as warning:
         assert messages_to_legacy(msgs)[0]["function_call"]["arguments"] == {}
 
     rendered = warning.call_args.args[0] % warning.call_args.args[1:]
@@ -217,7 +219,7 @@ def test_string_arguments_are_still_concatenated() -> None:
 
 def test_has_tool_history_detects_tool_artifacts() -> None:
     """Даже без `tools` в текущем вызове история с tool-артефактами требует перевода."""
-    from service.domain.client.providers.function_dialect import has_tool_history
+    from service.domain.client.providers.gigachat.function_dialect import has_tool_history
 
     assert has_tool_history(_canonical_round()) is True  # есть role=tool + tool_calls
     assert has_tool_history([{"role": "user", "content": "привет"}]) is False
@@ -241,7 +243,7 @@ class _FakeSDKResponse:
 
 def test_response_to_canonical_translates_function_call() -> None:
     """B8: не-стрим ответ GigaChat (`function_call`) → канон (`tool_calls`)."""
-    from service.domain.client.providers.function_dialect import response_to_canonical
+    from service.domain.client.providers.gigachat.function_dialect import response_to_canonical
 
     resp = _FakeSDKResponse(
         {
@@ -273,7 +275,7 @@ def test_response_to_canonical_translates_function_call() -> None:
 
 def test_response_to_canonical_passthrough_without_function_call() -> None:
     """Обычный ответ (без вызова) возвращается КАК ЕСТЬ — без пересборки/накладных."""
-    from service.domain.client.providers.function_dialect import response_to_canonical
+    from service.domain.client.providers.gigachat.function_dialect import response_to_canonical
 
     resp = _FakeSDKResponse(
         {"choices": [{"finish_reason": "stop", "message": {"role": "assistant", "content": "hi"}}]}
@@ -285,7 +287,7 @@ def test_response_to_canonical_mutates_live_sdk_shaped_response_without_revalida
     """Live GigaChat omits required OpenAI envelope fields; only the message is translated."""
     from types import SimpleNamespace
 
-    from service.domain.client.providers.function_dialect import response_to_canonical
+    from service.domain.client.providers.gigachat.function_dialect import response_to_canonical
 
     message = SimpleNamespace(
         function_call=SimpleNamespace(name="submit", arguments={"value": "ok"}),

@@ -19,14 +19,22 @@
 from __future__ import annotations
 
 import logging
+import math
+from typing import TYPE_CHECKING
 
 from agents import FunctionTool, RunContextWrapper
 
 from service.domain.capabilities.agent_spec import COST_EXPENSIVE
-from service.domain.capabilities.tool_spec import ToolSpec
+from service.domain.capabilities.tools.spec import ToolSpec
+from service.domain.runners.tool_runtime.contracts import ToolCallOutcome, ToolFailureCode
 from service.infrastructure.sidecar import SidecarClient, SidecarError
+from service.infrastructure.video_stream import acquire_video
 from service.settings import config
 from service.shared.agent_settings import runtime_settings
+
+if TYPE_CHECKING:
+    from service.domain.execution.context import RunExecutionContext
+    from service.domain.video_summary.source import VideoTranscript
 
 logger = logging.getLogger(__name__)
 
@@ -61,7 +69,76 @@ def _context(ctx: RunContextWrapper):
     return context
 
 
-async def watch_video_tool(ctx: RunContextWrapper, arguments: str) -> str:
+def _transcript_payload_valid(data: object) -> bool:
+    return (
+        isinstance(data, dict)
+        and (data.get("transcript") is None or isinstance(data["transcript"], list))
+        and _frames_valid(data.get("frames"))
+    )
+
+
+def _frames_valid(frames: object) -> bool:
+    """Reject malformed inventory before STT fallback or any private publication."""
+    if frames is None:
+        return True
+    if not isinstance(frames, list):
+        return False
+    for frame in frames:
+        if not isinstance(frame, dict):
+            return False
+        timestamp = frame.get("t_sec")
+        image = frame.get("image_b64")
+        if type(timestamp) not in (int, float) or not isinstance(image, str) or not image.strip():
+            return False
+        try:
+            if timestamp < 0 or not math.isfinite(timestamp):
+                return False
+        except OverflowError:
+            return False
+    return True
+
+
+def _parse_source(url: str, data: dict) -> VideoTranscript | None:
+    from service.domain.video_summary.source import VideoSummaryFailure, VideoTranscript
+
+    if not _transcript_payload_valid(data):
+        raise VideoSummaryFailure("invalid")
+    return VideoTranscript.from_response(url, data)
+
+
+def _acquisition_failure(code: str) -> ToolCallOutcome:
+    from service.domain.video_summary.acquisition import MESSAGES, record_source_failure
+
+    record_source_failure(code)
+    failure = {
+        "timeout": ToolFailureCode.TIMEOUT,
+        "watch_timeout": ToolFailureCode.TIMEOUT,
+        "transport_error": ToolFailureCode.TRANSPORT,
+        "protocol": ToolFailureCode.PROTOCOL,
+        "too_long": ToolFailureCode.INVALID_ARGUMENTS,
+        "too_large": ToolFailureCode.INVALID_ARGUMENTS,
+        "unsupported_source": ToolFailureCode.INVALID_ARGUMENTS,
+    }.get(code, ToolFailureCode.UNAVAILABLE)
+    message = {
+        "too_long": "Ролик длиннее допустимого предела.",
+        "too_large": "Видео превышает допустимый размер.",
+        "unsupported_source": "Источник видео не удалось получить.",
+        "timeout": "Время получения видео истекло.",
+        "watch_timeout": "Время получения видео истекло.",
+    }.get(code, MESSAGES.get(code, "Просмотр видео сейчас недоступен."))
+    return ToolCallOutcome(
+        message + " Скажи об этом прямо, не выдумывай содержание.",
+        "failed",
+        0.0,
+        retryable=code not in {"source_access_challenge", "source_access_denied"}
+        and failure
+        in {ToolFailureCode.TIMEOUT, ToolFailureCode.TRANSPORT, ToolFailureCode.UNAVAILABLE},
+        billable=False,
+        failure_code=failure,
+    )
+
+
+async def watch_video_tool(ctx: RunContextWrapper, arguments: str) -> str | ToolCallOutcome:
     """Посмотреть ролик и вернуть модели ТЕКСТ: что было видно и что было сказано."""
     import json
 
@@ -75,13 +152,24 @@ async def watch_video_tool(ctx: RunContextWrapper, arguments: str) -> str:
     if not url:
         return "Ссылка на ролик не передана — смотреть нечего."
 
+    from service.domain.video_summary.acquisition import clear_source_failure
+
+    clear_source_failure()
+
+    from service.domain.execution.context import current_execution
+    from service.domain.video_summary.source import SOURCE_KEY, VideoSummaryFailure
+
+    execution = current_execution()
+    if execution is not None:
+        execution.artifacts.discard(SOURCE_KEY)
+
     client = _client()
     if client is None:
         # 🔴 Ролик не посмотрен — надбавка (она покрывает скачивание, ffmpeg и хранение
         # кадров) не заработана. Плата за неоказанную услугу — тот же дефект, что замерен
         # на упавшем веб-поиске.
         unbilled_calls.waive(BILLING_NAME)
-        return "Просмотр видео сейчас недоступен. Скажи об этом прямо, не выдумывай содержание."
+        return _acquisition_failure("unavailable")
 
     context = _context(ctx)
     payload = {
@@ -95,23 +183,55 @@ async def watch_video_tool(ctx: RunContextWrapper, arguments: str) -> str:
     # distributed with every chat run and must never contain a secret.
     key = str(config.agents.video_api_key or "")
     try:
-        data = await client.request_json(
-            "POST",
-            "/watch",
-            json_body=payload,
-            headers={"Authorization": f"Bearer {key}"} if key else None,
-        )
+        data = await acquire_video(client, payload, key)
     except SidecarError as exc:
         # ⚠️ Причину НАЗЫВАЕМ модели: «не смог» без причины она перескажет как «видео
         # недоступно», а отказ по длительности и сбой сети требуют разного от человека.
-        logger.warning("video sidecar failed code=%s", exc.code)
-        unbilled_calls.waive(BILLING_NAME)
-        return (
-            f"Посмотреть ролик не удалось (код: {exc.code}). "
-            "Скажи об этом прямо, не выдумывай содержание."
-        )
+        from service.infrastructure.video_stt import acquire_local_transcript
 
+        fallback = None
+        if exc.code in {
+            "toolchain_failed",
+            "source_rate_limited",
+            "source_access_challenge",
+            "source_access_denied",
+        }:
+            try:
+                fallback = await acquire_local_transcript(url)
+            except SidecarError:
+                pass
+        if fallback is None:
+            failure = _acquisition_failure(exc.code)
+            logger.warning("video sidecar failed code=%s", failure.failure_code)
+            unbilled_calls.waive(BILLING_NAME)
+            return failure
+        data = fallback
+        unbilled_calls.waive(BILLING_NAME)
+
+    if not _transcript_payload_valid(data):
+        unbilled_calls.waive(BILLING_NAME)
+        return _acquisition_failure("protocol")
+
+    if not data.get("transcript"):
+        from service.infrastructure.video_stt import acquire_local_transcript
+
+        try:
+            fallback = await acquire_local_transcript(url)
+        except SidecarError as exc:
+            unbilled_calls.waive(BILLING_NAME)
+            return _acquisition_failure(exc.code)
+        if fallback is not None:
+            data = {**data, **fallback}
+            unbilled_calls.waive(BILLING_NAME)
+
+    try:
+        transcript = _parse_source(url, data)
+    except VideoSummaryFailure:
+        unbilled_calls.waive(BILLING_NAME)
+        return _acquisition_failure("protocol")
     frames = data.get("frames") or []
+    if failure := _admit_source(execution, transcript, frames):
+        return failure
     if context is not None and frames:
         # Картинки уезжают ОПИСЬЮ ПРОГОНА — тем же путём вложений, которым уже ходят
         # изображения пользователя. В результат инструмента они не попадают: там они
@@ -125,6 +245,20 @@ async def watch_video_tool(ctx: RunContextWrapper, arguments: str) -> str:
         # Соседний `workspace_tools._ref` читает обе формы по той же причине.
         _remember_frames(context, frames)
     return _describe(data)
+
+
+def _admit_source(
+    execution: RunExecutionContext | None, transcript: VideoTranscript | None, frames: list
+) -> ToolCallOutcome | None:
+    from service.domain.tools import unbilled_calls
+    from service.domain.video_summary.source import SOURCE_KEY
+
+    if transcript is None and not frames:
+        unbilled_calls.waive(BILLING_NAME)
+        return _acquisition_failure("unavailable")
+    if execution is not None and transcript is not None:
+        execution.artifacts.publish(SOURCE_KEY, transcript, replace=True)
+    return None
 
 
 def _remember_frames(context, frames: list) -> None:
@@ -161,7 +295,8 @@ def _describe(data: dict) -> str:
     cues = (data.get("transcript") or [])[:MAX_CUES]
 
     head = [
-        f"Просмотрен ролик{f' «{title}»' if title else ''}"
+        ("Просмотрен ролик" if frames else "Получена расшифровка ролика")
+        + (f" «{title}»" if title else "")
         + (f", длительность {_duration_words(duration)}." if duration else "."),
         f"Кадров показано: {len(frames)} из {data.get('frames_examined') or len(frames)} "
         "просмотренных — они приложены к этому сообщению как изображения.",
@@ -174,11 +309,21 @@ def _describe(data: dict) -> str:
             "ролик целиком, и не описывай происходящее в промежутках."
         )
     for warning in data.get("warnings") or []:
-        head.append(f"⚠️ {warning}")
+        from service.domain.video_summary.acquisition import MESSAGES
+
+        if isinstance(warning, str):
+            head.append(
+                f"⚠️ {MESSAGES.get(warning, 'Источник сообщил ограничение обработки видео.')}"
+            )
 
     if cues:
-        text = "\n".join(f"[{c.get('t_sec', 0):.0f}с] {c.get('text', '')}" for c in cues)
+        text = "\n".join(f"[{float(c.get('t_sec', 0)):.0f}с] {c.get('text', '')}" for c in cues)
         head.append("Расшифровка:\n" + text[:MAX_TRANSCRIPT_CHARS])
+        if len(data.get("transcript") or []) > MAX_CUES or len(text) > MAX_TRANSCRIPT_CHARS:
+            head.append(
+                "⚠️ Расшифровка сокращена до бюджета инструмента. "
+                "Не называйте конспект полным: часть реплик не передана модели."
+            )
     else:
         head.append("Расшифровки нет — опирайся на кадры и не выдумывай реплики.")
     return "\n".join(head)

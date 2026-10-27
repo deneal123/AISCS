@@ -17,8 +17,8 @@ from __future__ import annotations
 
 import pytest
 
-from service.application import processor_steps as steps
-from service.domain.run_context import RunExecutionContext
+from service.application.processing import steps as steps
+from service.domain.execution.context import RunExecutionContext
 
 
 @pytest.fixture()

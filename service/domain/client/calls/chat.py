@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import logging
 
+from service.domain.client.models.requirements import ModelRequirement
 from service.domain.client.protocol import (
     OPENAI_TOOL_CAPABILITIES,
     ProviderFailure,
@@ -23,12 +24,11 @@ from service.domain.client.protocol import (
     compile_toolset,
 )
 from service.domain.client.protocol.compiler import ProviderToolCompilationError
+from service.domain.client.providers.management.operations import ProviderOperation
 from service.shared.step_timing import count_llm_call
 
 from .. import active
 from ..health import provider_error_detail
-from ..model_requirements import ModelRequirement
-from ..provider_operations import ProviderOperation
 from ..registry import (
     _pick_chat_capable_model,
     build_provider_order,
@@ -45,7 +45,7 @@ logger = logging.getLogger(__name__)
 
 
 def _current_execution():
-    from service.domain.run_context import current_execution
+    from service.domain.execution.context import current_execution
 
     return current_execution()
 
@@ -90,7 +90,7 @@ async def _provider_order(
     order = (
         list(admission.snapshot.provider_order)
         if admission is not None
-        else build_provider_order(active.ACTIVE_PROVIDER)
+        else build_provider_order(active.get_active_provider())
     )
     if strict_provider:
         owner = strict_provider
@@ -177,6 +177,7 @@ def _complete_provider_round(
     provider_name: str,
     model: str,
     result,
+    call_id: str | None = None,
 ) -> None:
     if session is None:
         return
@@ -187,6 +188,7 @@ def _complete_provider_round(
         model=model,
         response=result,
         finish_reason=str(finish_reason) if finish_reason else None,
+        call_id=call_id,
     )
 
 
@@ -205,6 +207,7 @@ async def _chat_candidate(
             admission,
             name,
             operation=_operation(requirement),
+            requirement=requirement,
             prefer=prefer_model,
             tools=tools,
             tool_choice=tool_choice,
@@ -264,6 +267,9 @@ async def create_chat_completion(*args, **kwargs):
     # кода, и тест «служебных вызовов не больше N» краснел бы по чужой вине.
     count_llm_call(_extract_model(args, kwargs))
     if kwargs.get("client") is not None:
+        from .harness_transport import require_explicit_transport_allowed
+
+        require_explicit_transport_allowed()
         return await with_retry(
             lambda: active._ACTIVE.create_chat_completion(*args, **kwargs),
             label="chat:explicit",
@@ -289,6 +295,10 @@ async def create_chat_completion(*args, **kwargs):
     any_compatible_model = False
     execution = _current_execution()
     run_admission = execution.provider_admission if execution is not None else None
+    if run_admission is not None and not order:
+        raise ProviderProtocolError(
+            ProviderFailure(code=ProviderFailureCode.REMOTE, retryable=False)
+        )
     for name in order:
         module = get_provider_module(name)
         client, use_model, compiled, admission_failure, admission_reason = await _chat_candidate(
@@ -342,10 +352,15 @@ async def create_chat_completion(*args, **kwargs):
             call_kwargs["_provider_session"] = provider_session
         call_kwargs["client"] = client
         try:
-            result = await with_retry(
-                lambda m=module, a=call_args, k=call_kwargs: m.create_chat_completion(*a, **k),
-                label=f"chat:{name}",
-                **retry_params(),
+            from .harness_transport import dispatch_chat
+
+            result, harness_call_id = await dispatch_chat(
+                module,
+                call_args,
+                call_kwargs,
+                provider=name,
+                model=str(use_model or prefer_model or ""),
+                execution=execution,
             )
             await circuit_breaker.clear_down(name)
             _complete_provider_round(
@@ -353,19 +368,14 @@ async def create_chat_completion(*args, **kwargs):
                 provider_name=name,
                 model=str(use_model or prefer_model or ""),
                 result=result,
+                call_id=harness_call_id,
             )
-            if provider_session is None:
-                # Meta/subagent calls intentionally do not pin the answer provider, but
-                # their accounting still needs the actual failover provider/model.
-                execution = _current_execution()
-                if execution is not None:
-                    execution.register_response_provider(
-                        result,
-                        name,
-                        str(use_model or prefer_model or ""),
-                    )
+            _register_unpinned_response(provider_session, result, name, use_model or prefer_model)
             return result
         except Exception as exc:  # noqa: BLE001
+            from .harness_transport import require_failover_safe
+
+            require_failover_safe(exc)
             last_exc = exc
             # Гасим и на 401/403/429 (лимит/квота/авторизация), не только на транспорте:
             # провайдер без денег бесполезен так же, как недоступный по сети.
@@ -385,6 +395,12 @@ async def create_chat_completion(*args, **kwargs):
         any_client=any_client,
         any_compatible_model=any_compatible_model,
     )
+
+
+def _register_unpinned_response(session, result, provider, model):
+    """Account meta/subagent calls without pinning the answer provider."""
+    if session is None and (execution := _current_execution()) is not None:
+        execution.register_response_provider(result, provider, str(model or ""))
 
 
 async def create_completion(*args, **kwargs):

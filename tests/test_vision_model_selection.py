@@ -145,7 +145,7 @@ async def test_the_chosen_model_is_the_one_actually_called(catalog, monkeypatch)
         return "openai", _FakeClient(seen)
 
     monkeypatch.setattr(
-        "service.domain.client.provider_compat.resolve_model_client",
+        "service.domain.client.providers.management.compat.resolve_model_client",
         _resolve,
     )
 
@@ -193,7 +193,7 @@ async def test_description_is_marked_as_a_description(catalog, monkeypatch) -> N
         return "openai", _FakeClient(seen)
 
     monkeypatch.setattr(
-        "service.domain.client.provider_compat.resolve_model_client",
+        "service.domain.client.providers.management.compat.resolve_model_client",
         _resolve,
     )
 

@@ -27,7 +27,7 @@ _BARRIER_TIMEOUT = 2.0
 
 def _tiny_budget():
     """Бюджет, при котором все три сжимаемые секции гарантированно не влезают."""
-    from service.domain.pipeline.context_budget import ContextBudget
+    from service.domain.pipeline.context.budget import ContextBudget
 
     return ContextBudget(
         window=4000,
@@ -59,7 +59,7 @@ async def test_compression_map_phase_runs_in_parallel(monkeypatch):
     До правки: до 12 полноценных LLM-вызовов подряд, каждый с ретраями и фейловером —
     десятки секунд до первого токена, и это лишь одна секция из трёх сжимаемых.
     """
-    from service.domain.pipeline import context_compressor as cc
+    from service.domain.pipeline.context import compressor as cc
 
     monkeypatch.setattr(cc, "get_redis", lambda: None)
     monkeypatch.setattr(cc, "_MAX_CHUNKS", 3)
@@ -98,7 +98,7 @@ async def test_context_sections_are_fitted_in_parallel(monkeypatch):
     версия делала именно это — проверяла свой же `asyncio.gather` — и потому оставалась
     зелёной при полностью последовательном рабочем коде.
     """
-    from service.domain.pipeline import context_assembler as ca
+    from service.domain.pipeline.context import assembler as ca
     from service.settings import config
 
     barrier = asyncio.Barrier(3)
@@ -214,7 +214,7 @@ async def test_web_search_agent_reads_pages_in_parallel(monkeypatch):
     """
     import service.domain.client as client_pkg
     from service.domain.subagents.web_search import WebSearchAgent
-    from service.domain.tools import web_search as tools_ws
+    from service.domain.tools.search import client as tools_ws
 
     barrier = asyncio.Barrier(2)
     passed: list[str] = []

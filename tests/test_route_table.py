@@ -37,9 +37,13 @@ SERVICE_ROUTES = {
     ("POST", "/route"),
     # private backend -> agents visual attestation for Document Forge
     ("POST", "/document-audit"),
+    ("POST", "/document-audit/v2"),
+    ("POST", "/document-editor/render"),
+    ("POST", "/document-editor/sources"),
     # providers/ — ключи, здоровье, каталог моделей
     ("POST", "/providers/keys"),
     ("GET", "/providers/health"),
+    ("GET", "/providers/status"),
     ("GET", "/catalog"),
     ("GET", "/catalog/chat-models"),
     # каталог личностей для селектора: реестром владеет сайдкар, он же его и публикует
@@ -66,7 +70,8 @@ GATEWAY_ROUTES = {
     ("POST", "/v1/chat/completions"),
     ("GET", "/v1/models"),
     ("POST", "/v1/embeddings"),
-    ("POST", "/v1/tokens/count"),
+    # Совместимое расширение: служебный профиль памяти, без платных проб/discovery.
+    ("GET", "/v1/memory/profile"),
 }
 
 

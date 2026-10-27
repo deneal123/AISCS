@@ -130,8 +130,8 @@ async def test_failover_attempts_count_as_one_logical_call(monkeypatch):
     monkeypatch.setattr(chat, "get_model_catalog", _cat)
 
     async def _qualify(_name, *, prefer=None, requirement=None, **_kwargs):
-        from service.domain.client.model_catalog import ModelCatalogSource, ModelCatalogStatus
-        from service.domain.client.model_requirements import (
+        from service.domain.client.models.catalog import ModelCatalogSource, ModelCatalogStatus
+        from service.domain.client.models.requirements import (
             ModelQualification,
             ModelRequirement,
             ProviderQualificationStatus,

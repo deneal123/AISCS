@@ -6,21 +6,22 @@ from types import SimpleNamespace
 import pytest
 
 from service.domain import media
-from service.domain.client import active, provider_snapshot, registry
-from service.domain.client.model_catalog import (
+from service.domain.client import active, registry
+from service.domain.client.models.catalog import (
     CapabilityEvidenceSource,
     ModelCatalogSource,
     ModelCatalogStatus,
     ProviderModelCatalog,
     ProviderModelRecord,
 )
-from service.domain.client.model_requirements import (
-    ModelRequirement,
-    ProviderQualificationStatus,
+from service.domain.client.models.list_cache import ModelListCache
+from service.domain.client.models.requirements import ModelRequirement, ProviderQualificationStatus
+from service.domain.client.providers.management import snapshot as provider_snapshot
+from service.domain.client.providers.management.admission import (
+    RunProviderAdmission,
+    RunProviderSnapshot,
 )
-from service.domain.client.provider_admission import RunProviderAdmission, RunProviderSnapshot
-from service.domain.client.providers.model_list_cache import ModelListCache
-from service.domain.run_context import PrivateRunResources, use_run_execution
+from service.domain.execution.context import PrivateRunResources, use_run_execution
 
 
 def _catalog(provider: str, model: str) -> ProviderModelCatalog:

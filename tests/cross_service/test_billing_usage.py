@@ -21,7 +21,7 @@ from service.application.use_cases.agent_execution_use_cases import (
 # ⚠️ `_extract_usage` живёт в `service.domain.usage_tracking`, а не в `base`. Раньше он
 # был виден и через `base` — как побочный эффект импорта; после разделения `base.py` на
 # пути исполнения импорт оттуда ушёл, и тест это вскрыл. Ссылаемся на настоящий дом.
-from service.domain import usage_tracking as base
+from service.domain.usage import tracking as base
 from service.events import EventType
 
 
@@ -216,8 +216,8 @@ async def _isolate_provider_order(monkeypatch, client_mod, provider: str) -> Non
     monkeypatch.setattr(circuit_breaker, "drop_cooled_down_local", lambda order: list(order))
 
     async def _qualify(_name, *, prefer=None, requirement=None, **_kwargs):
-        from service.domain.client.model_catalog import ModelCatalogSource, ModelCatalogStatus
-        from service.domain.client.model_requirements import (
+        from service.domain.client.models.catalog import ModelCatalogSource, ModelCatalogStatus
+        from service.domain.client.models.requirements import (
             ModelQualification,
             ModelRequirement,
             ProviderQualificationStatus,

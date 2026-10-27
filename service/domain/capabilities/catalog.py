@@ -7,8 +7,9 @@ from dataclasses import dataclass
 from types import MappingProxyType
 from typing import Any
 
+from service.domain.capabilities.tools.spec import Omission, ToolSpec
+
 from .agent_spec import AgentSpec
-from .tool_spec import Omission, ToolSpec
 from .workflow_spec import WorkflowSpec
 
 

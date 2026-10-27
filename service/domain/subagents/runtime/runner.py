@@ -11,8 +11,8 @@ from typing import Any, TypeVar
 import httpx
 
 from service.domain.client.protocol import ModelCallResult
-from service.domain.run_context import RunExecutionContext, require_current_execution
-from service.domain.usage_ledger import UsageLedger, UsageReceipt
+from service.domain.execution.context import RunExecutionContext, require_current_execution
+from service.domain.usage.ledger import UsageLedger, UsageReceipt
 from service.shared import deadline
 
 from .models import StageFailureCode, StageOutcome, StageReceipt, StageStatus

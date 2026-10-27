@@ -14,7 +14,7 @@ from __future__ import annotations
 
 import pytest
 
-from service.domain.run_context import PrivateRunResources, use_run_execution
+from service.domain.execution.context import PrivateRunResources, use_run_execution
 
 
 @pytest.fixture(autouse=True)

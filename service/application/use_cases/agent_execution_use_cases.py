@@ -4,14 +4,14 @@ import logging
 from dataclasses import dataclass
 from typing import Any
 
-from service.application.processor import AgentProcessor
+from service.application.processing.processor import AgentProcessor
 from service.application.reply_assembler import ReplyAssembler
 from service.application.route_contracts import build_provider_unavailable_reply
 from service.contracts import RESULT_FIELDS  # noqa: F401 — ре-экспорт для совместимости
 from service.domain import persona
 from service.domain.capabilities import forced_allowlist, modality_conflict
+from service.domain.execution.context import RunExecutionContext
 from service.domain.routing.policy import canonical_route
-from service.domain.run_context import RunExecutionContext
 from service.domain.sessions import PseudoSession
 from service.domain.tools.router import route_model
 from service.events import EventType
@@ -127,7 +127,7 @@ class RunAgentUseCase:
         # `events` result-dict, которое НИКТО не читал (ни сайдкар, ни backend) — на
         # крупном ответе это тысячи repr-ов события впустую и в памяти, и в сериализации.
         async for event in processor.process_message_stream(**kwargs):
-            if event.metadata:
+            if event.metadata and event.metadata.get("kind") != "video_progress":
                 # token_usage — внутренний учёт, в наружную metadata не кладём (его
                 # аккумулирует reply_assembler.consume). multi_intent_artifacts — сырые
                 # b64-блобы под-шагов: их СПИСКОМ копит reply_assembler (_pending_artifacts),
@@ -189,7 +189,7 @@ def _note_declined_mode(reply: str, metadata: dict) -> str:
     return f"{text}\n\n_⚠️ Режим «{label}» не запускался._"
 
 
-def _ensure_disclaimers(reply: str) -> str:
+def _ensure_disclaimers(reply: str, *, ordinary_conversation: bool = False) -> str:
     """Дописать оговорки личности, если модель их не вывела.
 
     🔴 ДЕТЕРМИНИРОВАННО, А НЕ ПРОСЬБОЙ В ПРОМПТЕ. Оговорки таролога, психолога и
@@ -203,6 +203,10 @@ def _ensure_disclaimers(reply: str) -> str:
     в связном месте ответа, а не приклеена в конец. Дубля не будет — проверяем вхождение.
     """
     text = str(reply or "")
+    if ordinary_conversation:
+        # A policy-confirmed conversation-only shortcut is not specialist advice.
+        # Do not strip a disclaimer the model already wrote or infer this from text.
+        return text
     if len(text.strip()) < _DISCLAIMER_MIN_CHARS:
         # ⚠️ «Привет! Чем могу помочь?» — 24 символа, и снизу оговорка про то, что
         # толкование не является финансовым советом. Дисклеймер относится к ТОЛКОВАНИЮ;
@@ -218,10 +222,19 @@ def _ensure_disclaimers(reply: str) -> str:
 @dataclass(slots=True)
 class PostprocessAgentReplyUseCase:
     def execute(
-        self, *, reply_assembler: ReplyAssembler, metadata: dict[str, Any]
+        self,
+        *,
+        reply_assembler: ReplyAssembler,
+        metadata: dict[str, Any],
+        execution: RunExecutionContext | None = None,
     ) -> tuple[str, dict[str, Any]]:
         reply = reply_assembler.build_reply()
-        metadata = {**metadata, **reply_assembler.metadata}
+        metadata = {
+            **{key: value for key, value in metadata.items() if key != "usage_integrity"},
+            **reply_assembler.metadata,
+        }
+        if metadata.get("awaiting_confirmation"):
+            return "Ожидаю решения об использовании платной возможности.", metadata
         # ⚠️ ОШИБКА ШАГА ТЕРЯЛАСЬ, ЕСЛИ ОТВЕТ ВСЁ-ТАКИ СОБРАЛСЯ. `error_messages`
         # использовались ТОЛЬКО при пустом ответе. В мульти-интенте упавший шаг
         # подставляет в синтез «[Шаг не выполнен: …]», синтез выдаёт связный текст —
@@ -270,7 +283,13 @@ class PostprocessAgentReplyUseCase:
             metadata["execution_status"] = "partial"
         else:
             metadata["execution_status"] = "completed"
-        return _note_declined_mode(_ensure_disclaimers(reply), metadata), metadata
+        reply = _ensure_disclaimers(
+            reply,
+            ordinary_conversation=bool(
+                execution and execution.policy.flag("ordinary_conversation")
+            ),
+        )
+        return _note_declined_mode(reply, metadata), metadata
 
 
 @dataclass(slots=True)
@@ -297,4 +316,5 @@ class PersistSessionHistoryUseCase:
             # ⚠️ ОПИСЬ созданного в песочнице, а не байты: файлы забирает backend, у
             # которого есть хранилище. Пусто — песочницы не было или агент ничего не создал.
             "workspace_artifacts": list(workspace_artifacts or []),
+            "_human_question_pause_v1": None,
         }

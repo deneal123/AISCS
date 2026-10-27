@@ -14,11 +14,11 @@ import re
 from dataclasses import dataclass
 
 from service.domain.capabilities import decomposable_names, render_decompose_categories
+from service.domain.execution.context import RunExecutionContext, require_execution
 from service.domain.json_fence import strip_json_fence
 from service.domain.llm_response import first_message_content
 from service.domain.pipeline.planning import PLANNABLE_OVERRIDE
 from service.domain.routing.policy import canonical_route
-from service.domain.run_context import RunExecutionContext, require_execution
 from service.settings import config
 from service.shared import step_timing
 from service.shared.agent_settings import runtime_settings
@@ -154,9 +154,9 @@ async def decompose_intents(
             create_chat_completion,
             list_qualified_models,
         )
-        from service.domain.model_runtime import invoke_model_call
+        from service.domain.execution.model import invoke_model_call
         from service.domain.subagents.utils import pick_meta_model
-        from service.domain.usage_ledger import UsageKind
+        from service.domain.usage.ledger import UsageKind
 
         models = await list_qualified_models()
         model = pick_meta_model(models, model)

@@ -67,7 +67,7 @@ async def test_web_search_synthesis_includes_user_context(monkeypatch):
 
     # tools.web_search — и модуль, и функция в нём (пакет реэкспортит), поэтому берём
     # модуль через importlib, а не `import ... as` (иначе имя схлопывается на функцию).
-    ws_tool = importlib.import_module("service.domain.tools.web_search")
+    ws_tool = importlib.import_module("service.domain.tools.search.client")
 
     captured: dict = {}
 

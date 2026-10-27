@@ -7,6 +7,7 @@ from collections.abc import Iterable
 from dataclasses import dataclass
 from threading import Lock
 
+from service.domain.capabilities.tools.spec import GROUNDING_ROLES, TOOL_EFFECTS, ToolSpec
 from service.settings import config
 from service.shared.agent_settings import runtime_settings
 
@@ -18,7 +19,6 @@ from .catalog import (
 )
 from .compiler import compile_static_catalog
 from .metrics import record
-from .tool_spec import GROUNDING_ROLES, TOOL_EFFECTS, ToolSpec
 
 _ACTIVE: StaticCapabilityCatalog | None = None
 _LOCK = Lock()

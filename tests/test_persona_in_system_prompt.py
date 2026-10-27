@@ -155,7 +155,7 @@ async def test_context_overhead_grows_with_persona():
     Иначе бюджет считает, что промпт короче, чем он есть, и секция «Специализация»
     молча съедает место, отведённое ВЛОЖЕНИЯМ пользователя.
     """
-    from service.domain.pipeline import context_budget
+    from service.domain.pipeline.context import budget as context_budget
     from service.settings import config
 
     async def _window(_model, _cfg):

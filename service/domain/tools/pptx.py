@@ -7,11 +7,11 @@ import json
 import logging
 
 from service.domain.client import create_chat_completion
+from service.domain.execution.context import RunExecutionContext
+from service.domain.execution.model import invoke_model_call
 from service.domain.json_fence import strip_json_fence
 from service.domain.llm_response import first_message_content
-from service.domain.model_runtime import invoke_model_call
-from service.domain.run_context import RunExecutionContext
-from service.domain.usage_ledger import UsageKind
+from service.domain.usage.ledger import UsageKind
 
 logger = logging.getLogger(__name__)
 
@@ -23,11 +23,11 @@ _PLAN_PROMPT = """Ты — ведущий консультант по бизне
 
 Требования к структуре:
 - 6-12 слайдов,
-- первый слайд: title + subtitle,
-- далее: content-слайды с ясным заголовком и 3-6 сильными bullets,
+- первый слайд: заголовок (title) и подзаголовок (subtitle),
+- далее: содержательные слайды (content) с ясным заголовком и 3-6 сильными тезисами (bullets),
 - финальный слайд: выводы / следующие шаги / призыв к действию.
 
-Требования к bullets:
+Требования к тезисам:
 - короткие, конкретные, без общих фраз,
 - ориентированы на решения, метрики, риски, действия,
 - без дублирования между слайдами.
@@ -37,24 +37,23 @@ _PLAN_PROMPT = """Ты — ведущий консультант по бизне
 конкретный объект. Хорошо: «абстрактные текучие формы, глубокий синий и бирюзовый,
 мягкий свет, минимализм, без текста». Плохо: «график роста продаж».
 
-Затем выбери РОВНО {max_illustrations} самых важных content-слайда и добавь им
+Затем выбери РОВНО {max_illustrations} самых важных содержательных слайда и добавь им
 `image_prompt` — описание иллюстрации, поддерживающей мысль слайда. Остальным слайдам
 `image_prompt` НЕ добавляй.
 
-⚠️ ЯЗЫК. Заголовки, подзаголовки и bullets — НА ЯЗЫКЕ ЗАПРОСА ПОЛЬЗОВАТЕЛЯ. Английский
-допустим ТОЛЬКО внутри полей `theme` и `image_prompt`: их читает генератор изображений,
-и он понимает английский лучше. Ни одна другая часть презентации язык не меняет.
+⚠️ ЯЗЫК. Заголовки, подзаголовки и тезисы — НА ЯЗЫКЕ ЗАПРОСА ПОЛЬЗОВАТЕЛЯ.
+Инструкции генератору изображений в полях `theme` и `image_prompt` пиши на русском.
 
 Требования к `image_prompt` и `theme` (и только к ним):
-- на английском,
+- на русском,
 - БЕЗ текста, букв, цифр и надписей на картинке — модели рисуют их с ошибками,
 - без логотипов, брендов и узнаваемых лиц,
 - в одной палитре с `theme`, чтобы слайды выглядели одной презентацией.
 
-Верни ТОЛЬКО JSON, без markdown и комментариев:
+Верни ТОЛЬКО JSON, без Markdown и комментариев:
 {{
     "title": "Название презентации",
-    "theme": "english description of the shared visual atmosphere, no text",
+    "theme": "Описание общей визуальной атмосферы на русском, без текста на изображении",
     "slides": [
         {{
             "type": "title",
@@ -65,7 +64,7 @@ _PLAN_PROMPT = """Ты — ведущий консультант по бизне
             "type": "content",
             "title": "Заголовок слайда",
             "bullets": ["тезис 1", "тезис 2", "тезис 3"],
-            "image_prompt": "english illustration description, no text"
+            "image_prompt": "Описание иллюстрации на русском, без текста на изображении"
         }}
     ]
 }}"""
@@ -86,12 +85,12 @@ _IMAGE_CONCURRENCY = 2
 _MAX_IMAGES_BYTES = 12 * 1024 * 1024
 
 _BACKGROUND_SUFFIX = (
-    ", abstract background, soft depth of field, no text, no letters, no numbers, "
-    "no logos, no faces, cinematic lighting, high detail"
+    ", абстрактный фон, малая глубина резкости, без текста, букв, цифр, "
+    "логотипов и лиц, кинематографическое освещение, высокая детализация"
 )
 _ILLUSTRATION_SUFFIX = (
-    ", clean editorial illustration, no text, no letters, no numbers, no logos, "
-    "consistent color palette, high detail"
+    ", лаконичная журнальная иллюстрация, без текста, букв, цифр и логотипов, "
+    "единая цветовая палитра, высокая детализация"
 )
 
 
@@ -108,7 +107,7 @@ async def _render_images(
     вызывающему, чтобы деградация доехала до пользователя и до логов, — иначе «дек без
     иллюстраций» неотличим от «так и задумано».
     """
-    from service.domain.client.provider_operations import ProviderOperation
+    from service.domain.client.providers.management.operations import ProviderOperation
     from service.domain.subagents.utils import pick_image_model
     from service.domain.tools.image_gen import generate_image_b64
 
@@ -121,7 +120,7 @@ async def _render_images(
             )
             image_model = image_admission.model if image_admission is not None else None
         else:
-            from service.domain.client.provider_compat import list_inventory_models
+            from service.domain.client.providers.management.compat import list_inventory_models
 
             image_model = pick_image_model(await list_inventory_models())
     except Exception:  # noqa: BLE001 — каталог недоступен
@@ -426,7 +425,7 @@ async def generate_pptx(
     обжигался генератор изображений (аудит B5): раскрытие follow-up текст-моделью
     подменяло модель картинки, и генерация тарифилась по чужой цене.
     """
-    from service.domain.run_context import require_execution
+    from service.domain.execution.context import require_execution
 
     execution = require_execution(execution)
     try:

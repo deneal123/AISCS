@@ -14,9 +14,9 @@ import logging
 
 import pytest
 
-from service.domain.pipeline import context_assembler as ca
-from service.domain.pipeline import context_budget as cb
-from service.domain.pipeline.context_budget import ContextBudget
+from service.domain.pipeline.context import assembler as ca
+from service.domain.pipeline.context import budget as cb
+from service.domain.pipeline.context.budget import ContextBudget
 from service.settings import config
 
 
@@ -157,10 +157,10 @@ async def test_unknown_window_falls_back_to_default_and_warns(monkeypatch, caplo
 async def test_known_window_is_marked_known(monkeypatch):
     """А известная модель отмечается как известная — иначе флаг был бы бесполезен."""
 
-    async def _catalog():
+    def _catalog():
         return {"acme/big": {"context_window": 1_000_000, "capabilities": [], "name": "big"}}
 
-    monkeypatch.setattr("service.shared.model_catalog.get_openrouter_catalog", _catalog)
+    monkeypatch.setattr("service.shared.model_catalog.cached_openrouter_catalog", _catalog)
 
     window, known = await cb.resolve_window("acme/big", config)
 

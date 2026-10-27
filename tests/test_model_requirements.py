@@ -3,7 +3,7 @@ from __future__ import annotations
 import pytest
 
 from service.domain.client import registry
-from service.domain.client.model_requirements import ModelRequirement
+from service.domain.client.models.requirements import ModelRequirement
 
 
 def test_requirement_detects_tools_and_nested_image_blocks() -> None:

@@ -74,7 +74,8 @@ async def compute_provider_health(
         active = None
     names = list(PROVIDER_MODULES)
     blocked, disabled, known_down = await _policy_state(names, force_probe)
-    targets = [name for name in names if only is None or name in only]
+    selected = [name for name in names if only is None or name in only]
+    targets = [name for name in selected if name not in disabled]
     context = ProviderProbeContext(
         known_down=frozenset(known_down),
         force_probe=force_probe,
@@ -82,9 +83,16 @@ async def compute_provider_health(
     )
     probed, balance = await asyncio.gather(
         asyncio.gather(*(probe_provider(name, context) for name in targets)),
-        _balance(),
+        _balance()
+        if "openrouter" in targets and "openrouter" not in disabled
+        else asyncio.sleep(0, result=None),
     )
     results = dict(probed)
+    from .registry import is_configured
+
+    for name in selected:
+        if name in disabled:
+            results[name] = {"configured": is_configured(name), "reachable": False}
     if balance is not None and "openrouter" in results:
         results["openrouter"]["balance"] = balance
     for name, info in results.items():

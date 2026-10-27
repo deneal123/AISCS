@@ -71,6 +71,7 @@ class ToolCallOutcome:
     dedup_reason: str | DedupReason = DedupReason.NONE
     failure_code: str | ToolFailureCode = ToolFailureCode.NONE
     billing_disposition: str | BillingDisposition = BillingDisposition.ELIGIBLE
+    pending: bool = False
 
     def __post_init__(self) -> None:
         status = str(self.status)

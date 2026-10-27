@@ -1,4 +1,4 @@
-"""Единый usage-контур прогона (`service/domain/usage_tracking.py`).
+"""Единый usage-контур прогона (`service/domain/usage/tracking.py`).
 
 Регрессия: субагенты обязаны писать МОДЕЛЬ в token_usage — иначе биллинг считает по
 ДЕФОЛТ-цене (resolve_model_price(None)) вместо реальной. Раньше _accumulate_usage был
@@ -7,8 +7,8 @@
 
 from types import SimpleNamespace
 
-from service.domain.legacy_usage import accumulate_usage
-from service.domain.usage_tracking import build_token_usage_meta
+from service.domain.usage.legacy import accumulate_usage
+from service.domain.usage.tracking import build_token_usage_meta
 
 
 def _resp(prompt: int = 10, completion: int = 20):

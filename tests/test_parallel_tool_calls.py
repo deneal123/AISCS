@@ -20,8 +20,8 @@ from datetime import UTC, datetime
 
 import pytest
 
-from service.domain.runners import tool_loop as chat_runner
-from service.domain.runners.tool_execution import ToolCallCache, ToolCallOutcome
+from service.domain.runners.chat import tool_loop as chat_runner
+from service.domain.runners.tool_runtime import ToolCallCache, ToolCallOutcome
 from service.domain.subagents.general import GeneralAgent
 from service.events import EventType
 from service.schemas.agents import UserContext

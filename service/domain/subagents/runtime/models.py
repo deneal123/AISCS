@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 from enum import StrEnum
 from typing import Any, TypeVar
 
-from service.domain.usage_ledger import UsageReceipt
+from service.domain.usage.ledger import UsageReceipt
 
 T = TypeVar("T")
 

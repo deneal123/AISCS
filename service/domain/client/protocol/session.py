@@ -7,7 +7,7 @@ from enum import StrEnum
 from typing import Any
 from uuid import uuid4
 
-from service.domain.usage_ledger import UsageKind, UsageLedger, UsageReceipt
+from service.domain.usage.ledger import UsageKind, UsageLedger, UsageReceipt
 
 from .failures import ProviderFailure, classify_provider_failure
 

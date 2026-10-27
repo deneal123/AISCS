@@ -13,19 +13,19 @@ from service.domain.documents import (
     document_status_event,
     restore_authoring_checkpoint,
 )
-from service.domain.documents import authoring as authoring_module
-from service.domain.documents.authoring_protocol import (
+from service.domain.documents.authoring import execution as authoring_module
+from service.domain.documents.authoring.protocol import (
     SECTION_TOOL,
     compile_section_tool,
     response_arguments,
 )
-from service.domain.documents.outline import (
+from service.domain.documents.semantic.outline import (
     DocumentOutline,
     DocumentOutlineSection,
     ensure_required_outline_sections,
     parse_document_outline_result,
 )
-from service.domain.documents.section_parser import parse_authored_section
+from service.domain.documents.semantic.section_parser import parse_authored_section
 from service.domain.subagents import pdf_generation
 from service.events import EventSerializer, EventType
 from service.schemas.agents import ModalityAttachment

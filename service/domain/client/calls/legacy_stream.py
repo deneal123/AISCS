@@ -15,12 +15,12 @@ from .streaming import stream_provider_completion
 
 
 async def stream_chat_completion(messages: list[dict], model: str, **kwargs):
-    from service.domain.legacy_usage import extract_legacy_projection
-    from service.domain.run_context import (
+    from service.domain.execution.context import (
         PrivateRunResources,
         current_execution,
         use_run_execution,
     )
+    from service.domain.usage.legacy import extract_legacy_projection
 
     projection = extract_legacy_projection(kwargs)
     current = current_execution()

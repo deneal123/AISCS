@@ -64,6 +64,9 @@ TOOL_CAPABLE_PREFIXES: tuple[str, ...] = ("gigachat",)
 # ⚠️ Значения из документации. ЗАНИЖАТЬ безопасно (бюджет консервативнее), ЗАВЫШАТЬ —
 # нет: переполним окно и получим ошибку провайдера.
 STATIC_CONTEXT_WINDOWS: dict[str, int] = {
+    # Фактический начальный CPU runtime; не максимальное обучающее окно модели.
+    "lfm2.5-1.2b-instruct": 8192,
+    "qwen2.5-1.5b-instruct": 8192,
     "mws-gpt-alpha": 32768,
     # routerai-нативные (в OpenRouter их нет даже без суффикса)
     "yandex/gpt-lite-5": 32768,
@@ -257,6 +260,11 @@ async def _fetch_openrouter() -> dict[str, dict]:
     return out
 
 
+def cached_openrouter_catalog() -> dict[str, dict]:
+    """Read known metadata without network I/O on a user request's critical path."""
+    return _cache["data"]
+
+
 async def get_openrouter_catalog() -> dict[str, dict]:
     """{model_id: {context_window, capabilities, name}} с TTL-кэшем; без ключа."""
     now = time.time()
@@ -311,6 +319,20 @@ def _remember_tool_support(key: tuple[float, str], value: bool) -> bool:
     return value
 
 
+def model_supports_tools_from_catalog(model_id: str, catalog: dict[str, dict]) -> bool:
+    """The runtime tool policy over an already loaded catalog, without network I/O."""
+    mid = str(model_id or "").strip()
+    if not mid:
+        return False
+    base = mid.split(":", 1)[0]
+    return (
+        mid in TOOL_CAPABLE_ALLOWLIST
+        or base in TOOL_CAPABLE_ALLOWLIST
+        or base.lower().startswith(TOOL_CAPABLE_PREFIXES)
+        or "tools" in (resolve_model_meta(mid, catalog).get("capabilities") or [])
+    )
+
+
 async def model_supports_tools(model_id: str) -> bool:
     """Умеет ли модель function-calling. Гейт перед отправкой `tools` в запрос.
 
@@ -335,16 +357,13 @@ async def model_supports_tools(model_id: str) -> bool:
     if cached is not None:
         return cached
 
-    base = mid.split(":", 1)[0]
-    if mid in TOOL_CAPABLE_ALLOWLIST or base in TOOL_CAPABLE_ALLOWLIST:
-        return _remember_tool_support(memo_key, True)
     # Провайдеры вне каталога OpenRouter: capability знаем сами, иначе resolve_model_meta
     # вернёт {} и вся линейка GigaChat навсегда останется «без инструментов».
-    if base.lower().startswith(TOOL_CAPABLE_PREFIXES):
+    if model_supports_tools_from_catalog(mid, {}):
         return _remember_tool_support(memo_key, True)
     catalog = await get_openrouter_catalog()
     # Ключ берём ПОСЛЕ прогрева: `get_openrouter_catalog` мог обновить каталог, и запись
     # под старым поколением была бы протухшей в момент создания.
     memo_key = (_cache["ts"], mid)
-    supported = "tools" in (resolve_model_meta(mid, catalog).get("capabilities") or [])
+    supported = model_supports_tools_from_catalog(mid, catalog)
     return _remember_tool_support(memo_key, supported)

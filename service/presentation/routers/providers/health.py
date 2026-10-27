@@ -16,6 +16,15 @@ from service.shared.provider_policy_context import describe as describe_policy
 router = APIRouter(prefix="/providers")
 
 
+@router.get("/status")
+async def status(authorization: str | None = Header(default=None)) -> dict:
+    """Read cached evidence without model calls, catalog refresh or paid probes."""
+    internal_auth(authorization)
+    from service.domain.client.providers.management.status import cached_provider_status
+
+    return await cached_provider_status()
+
+
 @router.get("/health")
 async def health(
     force: bool = False,

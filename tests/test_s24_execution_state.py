@@ -10,10 +10,9 @@ import httpx
 import pytest
 
 from service.application.reply_assembler import ReplyAssembler
-from service.domain.capabilities.tool_disclosure import disclose
-from service.domain.capabilities.tool_spec import ToolSet
-from service.domain.integration_failure import IntegrationFailureCode
-from service.domain.run_context import (
+from service.domain.capabilities.tools.disclosure import disclose
+from service.domain.capabilities.tools.spec import ToolSet
+from service.domain.execution.context import (
     GroundingRequirement,
     PrivateRunResources,
     prompt_safe_context_payload,
@@ -21,11 +20,12 @@ from service.domain.run_context import (
     tool_context_payload,
     use_run_execution,
 )
+from service.domain.integration_failure import IntegrationFailureCode
 from service.domain.runners.tool_runtime import ToolCallOutcome, execute_tool_calls
 from service.domain.subagents.runtime import StageContext
-from service.domain.tools import workspace_client
-from service.domain.tools.workspace_client import WorkspaceUnavailable
-from service.domain.usage_ledger import UsageKind, receipt_from_usage
+from service.domain.tools.workspace import client as workspace_client
+from service.domain.tools.workspace.client import WorkspaceUnavailable
+from service.domain.usage.ledger import UsageKind, receipt_from_usage
 from service.events import AgentEvent, EventType
 from service.schemas.agents import UserContext
 

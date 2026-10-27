@@ -405,8 +405,8 @@ async def test_attachments_do_not_cancel_multi_intent(monkeypatch) -> None:
     Такой страж красит сборку на рефакторингах и молчит на настоящих регрессиях: стоит
     заново завернуть декомпозицию в `else` с другим отступом, и подстрока найдётся.
     """
-    from service.application import processor_steps as steps_mod
-    from service.application.processor import AgentProcessor
+    from service.application.processing import steps as steps_mod
+    from service.application.processing.processor import AgentProcessor
     from service.domain.pipeline import multimodal as mm
 
     seen: dict = {}

@@ -27,8 +27,15 @@ _ROOT = pathlib.Path(__file__).resolve().parent.parent
 _SERVICE = _ROOT / "service"
 
 
-def _deferred_relative_imports() -> list[tuple[str, int, str]]:
-    """Все `from .X import ...` и `from ..X import ...` ВНУТРИ функций."""
+def _local_target(node: ast.ImportFrom, path: pathlib.Path) -> str | None:
+    if not node.level:
+        return node.module if (node.module or "").startswith("service.") else None
+    package = path.relative_to(_ROOT).parent.as_posix().replace("/", ".")
+    return importlib.util.resolve_name("." * node.level + (node.module or ""), package)
+
+
+def _deferred_service_imports() -> list[tuple[str, int, str]]:
+    """All deferred local imports, whether relative or package-qualified."""
     found: list[tuple[str, int, str]] = []
     for path in _SERVICE.rglob("*.py"):
         tree = ast.parse(path.read_text(encoding="utf-8"))
@@ -36,27 +43,22 @@ def _deferred_relative_imports() -> list[tuple[str, int, str]]:
             if not isinstance(func, (ast.FunctionDef, ast.AsyncFunctionDef)):
                 continue
             for node in ast.walk(func):
-                if isinstance(node, ast.ImportFrom) and node.level:
-                    pkg = path.relative_to(_ROOT).parent.as_posix().replace("/", ".")
-                    # `level` точек вверх от пакета, в котором лежит файл.
-                    parts = pkg.split(".")
-                    base = parts[: len(parts) - (node.level - 1)] if node.level > 1 else parts
-                    target = ".".join([*base, node.module]) if node.module else ".".join(base)
+                if isinstance(node, ast.ImportFrom) and (target := _local_target(node, path)):
                     found.append((str(path.relative_to(_ROOT)), node.lineno, target))
     return found
 
 
-def test_there_are_deferred_relative_imports_to_check():
+def test_there_are_deferred_service_imports_to_check():
     """Контроль предпосылки: если их не осталось, страж молча проверяет пустоту."""
-    assert len(_deferred_relative_imports()) >= 1
+    assert len(_deferred_service_imports()) >= 1
 
 
 @pytest.mark.parametrize(
     ("where", "line", "target"),
-    _deferred_relative_imports(),
+    _deferred_service_imports(),
     ids=lambda v: str(v),
 )
-def test_deferred_relative_import_points_at_a_real_module(where, line, target):
+def test_deferred_service_import_points_at_a_real_module(where, line, target):
     """Модуль, на который ссылается отложенный импорт, обязан существовать.
 
     `find_spec` не ИСПОЛНЯЕТ модуль — только проверяет, что он находится. Этого хватает:
@@ -89,12 +91,10 @@ def _deferred_names_from_packages() -> list[tuple[str, int, str, str]]:
             if not isinstance(func, (ast.FunctionDef, ast.AsyncFunctionDef)):
                 continue
             for node in ast.walk(func):
-                if not (isinstance(node, ast.ImportFrom) and node.level):
+                if not isinstance(node, ast.ImportFrom) or not (
+                    target := _local_target(node, path)
+                ):
                     continue
-                pkg = path.relative_to(_ROOT).parent.as_posix().replace("/", ".")
-                parts = pkg.split(".")
-                base = parts[: len(parts) - (node.level - 1)] if node.level > 1 else parts
-                target = ".".join([*base, node.module]) if node.module else ".".join(base)
                 for alias in node.names:
                     if alias.name != "*":
                         found.append(

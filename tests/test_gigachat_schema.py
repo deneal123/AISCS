@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import pytest
 
-from service.domain.capabilities.tool_registry import tool_specs
-from service.domain.client.providers.gigachat_schema import (
+from service.domain.capabilities.tools.registry import tool_specs
+from service.domain.client.providers.gigachat.schema import (
     GigaChatToolSchemaError,
     prepare_gigachat_functions,
 )

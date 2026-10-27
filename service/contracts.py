@@ -10,6 +10,7 @@ from __future__ import annotations
 # ответ. Читает через `.get(...) or 0`: переименование не падает, а тихо даёт ноль.
 RESULT_FIELDS = frozenset(
     {
+        "_human_question_pause_v1",
         "reply",
         "metadata",
         "resolved_model",
@@ -110,9 +111,11 @@ ANSWER_USAGE_KINDS = frozenset(
 # значение вычисляемое, и событие несёт статус разбора, а не `token_usage`.
 NON_USAGE_KINDS = frozenset(
     {
+        "tool",  # Private harness fee grant; no model tokens or answer attribution.
         "multi_intent_artifact",
         "multi_intent_progress",
         "research_progress",
+        "video_progress",
         # Наблюдаемость tool-loop: это состояние исполнения, не вызов модели и не usage.
         "tool_availability",
         "tool_plan",
@@ -140,6 +143,7 @@ NON_USAGE_KINDS = frozenset(
         # run loop, not by a model/provider call, so it must never affect
         # usage aggregation or provider substitution badges.
         "workspace_collaboration",
+        "human_question_pending",  # local pause boundary; no provider tokens of its own
         # Оркестратор обойдён, маршрут решал прежний роутер. Счётчик для его удаления.
         "legacy_route_used",
     }

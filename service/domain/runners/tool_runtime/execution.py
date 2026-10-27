@@ -139,7 +139,28 @@ class _ExecutionContext:
 
         async def _invoke() -> ToolCallOutcome | str:
             async with self.gate:
-                return await self.invoker(tool, self.tool_context, call.invoke_arguments)
+                from service.domain.execution.context import require_current_execution
+
+                if require_current_execution().cancelled:
+                    return ToolCallOutcome(
+                        "Операция отменена.",
+                        ToolCallStatus.CANCELLED,
+                        0.0,
+                        billable=False,
+                        failure_code=ToolFailureCode.CANCELLED,
+                    )
+                from service.domain.runners.harness.tools import execute_harness_tool
+
+                async def invoke_harness():
+                    return await execute_harness_tool(
+                        call, lambda: self.invoker(tool, self.tool_context, call.invoke_arguments)
+                    )
+
+                harness = require_current_execution().harness
+                if harness is not None:
+                    async with harness.effect_lock:
+                        return await invoke_harness()
+                return await invoke_harness()
 
         if group:
             lock = self.group_locks.setdefault(group, asyncio.Lock())
@@ -164,7 +185,7 @@ class _ExecutionContext:
         )
 
     async def run(self, call: Any, position: int) -> ToolCallOutcome:
-        from service.domain.run_context import require_current_execution
+        from service.domain.execution.context import require_current_execution
 
         run_execution = require_current_execution()
         if run_execution.cancelled:

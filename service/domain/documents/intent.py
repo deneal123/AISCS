@@ -7,8 +7,8 @@ import re
 from dataclasses import dataclass
 from typing import Any, Literal, cast
 
-from .outline import section_role
-from .profile_contract import DOCUMENT_PROFILE_REQUIRED_SECTIONS
+from service.domain.documents.semantic.outline import section_role
+from service.domain.documents.skills.profiles import DOCUMENT_PROFILE_REQUIRED_SECTIONS
 
 DocumentKind = Literal["generic", "article", "presentation", "legal", "report", "unsupported"]
 DocumentMode = Literal["draft", "submission", "camera_ready"]

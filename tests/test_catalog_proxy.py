@@ -15,7 +15,7 @@ from __future__ import annotations
 import httpx
 import pytest
 
-from service.domain.client.providers import _http
+from service.domain.client.providers.transports import http as _http
 from service.shared import model_catalog
 
 

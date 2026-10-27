@@ -6,11 +6,11 @@ import pytest
 
 from service.domain import base as base_mod
 
-# ⚠️ Прямой chat/completions-стрим переехал из `base.py` в примесь `runners/chat_run.py`.
+# ⚠️ Прямой chat/completions-стрим переехал из `base.py` в примесь `runners/chat/run.py`.
 # Патчить надо МОДУЛЬ-ВЛАДЕЛЕЦ: `base_mod.stream_chat_completion` после разделения
 # перестал бы существовать (AttributeError), а если бы имя там осталось — подмена молча
 # ничего бы не делала, и тест был бы зелёным, не проверив ничего.
-from service.domain.runners import chat_run as chat_runner
+from service.domain.runners.chat import run as chat_runner
 from service.domain.subagents.general import GeneralAgent
 from service.events import EventType
 from service.schemas.agents import UserContext
@@ -171,7 +171,7 @@ async def test_run_chat_streamed_tool_cap_graceful_message(monkeypatch):
         yield  # pragma: no cover
 
     async def _tools(self, model, _context=None):
-        from service.domain.capabilities.tool_spec import ToolSet
+        from service.domain.capabilities.tools.spec import ToolSet
 
         return ToolSet(tools=[{"type": "function", "function": {"name": "x"}}])
 

@@ -24,7 +24,7 @@ from __future__ import annotations
 
 import pytest
 
-from service.domain.run_context import RunExecutionContext
+from service.domain.execution.context import RunExecutionContext
 from service.domain.tools import deep_research as dr
 
 

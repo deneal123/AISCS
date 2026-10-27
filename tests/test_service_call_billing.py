@@ -56,7 +56,7 @@ async def test_route_model_use_case_forwards_usage(monkeypatch):
     """⚠️ Именно ЭТА половина A2 не была починена: `/route` накопитель передавал, а
     `/run` — нет, при том что боевой трафик идёт через `/run`."""
     from service.application.use_cases import agent_execution_use_cases as uc
-    from service.domain.run_context import RunExecutionContext
+    from service.domain.execution.context import RunExecutionContext
 
     async def _fake_route_model(*, text, selected_model, input_type, execution=None):
         assert execution is not None, "RouteModelUseCase не передал run context"
@@ -101,7 +101,7 @@ async def test_compression_bills_every_chunk(monkeypatch):
     ⚠️ Проверяем СУММУ по нескольким кускам, а не факт «хоть что-то записалось»: дыра
     была в том, что вызовов много, и потерять их можно было пачкой.
     """
-    from service.domain.pipeline import context_compressor as cc
+    from service.domain.pipeline.context import compressor as cc
 
     calls = {"n": 0}
 
@@ -123,7 +123,7 @@ async def test_compression_bills_every_chunk(monkeypatch):
 
     raw = "\n\n".join(f"абзац номер {i} с содержательным текстом" for i in range(400))
 
-    from service.domain.run_context import RunExecutionContext
+    from service.domain.execution.context import RunExecutionContext
 
     execution = RunExecutionContext()
     await cc.compress_to_budget(raw, target=900, kind="memory", execution=execution)
@@ -141,7 +141,7 @@ async def test_compressor_factory_carries_the_accumulator(monkeypatch):
     Тест держит именно эту связку — иначе `usage_out` можно было бы добавить в
     `_summarize` и не протащить до вызывающего, что и было исходной ошибкой.
     """
-    from service.domain.pipeline import context_compressor as cc
+    from service.domain.pipeline.context import compressor as cc
 
     seen: dict = {}
 
@@ -151,7 +151,7 @@ async def test_compressor_factory_carries_the_accumulator(monkeypatch):
 
     monkeypatch.setattr(cc, "compress_to_budget", _fake_compress)
 
-    from service.domain.run_context import RunExecutionContext
+    from service.domain.execution.context import RunExecutionContext
 
     execution = RunExecutionContext()
     compressor = cc.make_compressor(
@@ -175,7 +175,7 @@ def test_cache_key_survives_budget_drift():
     файла плывёт на десятки токенов, ключ каждый раз новый. Пять промахов вместо четырёх
     попаданий, каждый промах — до 13 провайдерских вызовов.
     """
-    from service.domain.pipeline.context_compressor import _cache_key
+    from service.domain.pipeline.context.compressor import _cache_key
 
     assert _cache_key("текст", 2000, "files") == _cache_key("текст", 2180, "files")
 
@@ -186,7 +186,7 @@ def test_cache_key_still_separates_different_budgets():
     Склеить их значило бы тихо ухудшить контекст, отдав слишком короткий пересказ там,
     где места было втрое больше.
     """
-    from service.domain.pipeline.context_compressor import _cache_key
+    from service.domain.pipeline.context.compressor import _cache_key
 
     assert _cache_key("текст", 500, "files") != _cache_key("текст", 5000, "files")
     assert _cache_key("текст", 900, "files") != _cache_key("текст", 900, "memory")

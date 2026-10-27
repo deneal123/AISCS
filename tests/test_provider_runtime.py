@@ -117,6 +117,7 @@ def test_headers_from_spec_reach_the_client(sdk, with_key):
     pr.ProviderRuntime(_SPEC)
 
     assert _FakeOpenAI.instances[-1].kw["default_headers"] == {"X-Title": "GPTHub"}
+    assert _FakeOpenAI.instances[-1].kw["max_retries"] == 0
 
 
 def test_no_headers_means_none_not_empty_dict(sdk, with_key):
@@ -313,10 +314,32 @@ async def test_rebuild_clears_the_model_cache(sdk, with_key):
 
 
 @pytest.mark.asyncio
+async def test_key_delivery_publishes_cold_generation_without_discovery(sdk, with_key, monkeypatch):
+    from unittest.mock import AsyncMock
+
+    runtime = pr.ProviderRuntime(_SPEC)
+    running = runtime.acquire_generation()
+    discovery = AsyncMock(side_effect=AssertionError("key delivery must not call models"))
+    monkeypatch.setattr(runtime.models, "get_snapshot", discovery)
+    with_key.setattr("service.settings.config.agents.openrouter_api_key", "sk-next")
+    await runtime.rebuild_generation(discover=False)
+    future = runtime.acquire_generation()
+    try:
+        assert future.client is not running.client
+        assert future.configuration_digest != running.configuration_digest
+        assert future.catalog is not None
+        assert future.catalog.source.value == "static_fallback"
+        discovery.assert_not_awaited()
+    finally:
+        running.release()
+        future.release()
+
+
+@pytest.mark.asyncio
 async def test_generation_rotation_publishes_client_and_catalog_atomically(
     sdk, with_key, monkeypatch
 ):
-    from service.domain.client.model_catalog import (
+    from service.domain.client.models.catalog import (
         ModelCatalogSource,
         ModelCatalogStatus,
         ProviderModelCatalog,

@@ -203,9 +203,9 @@ async def _constrain_to_seeing(models: list[str]) -> list[str]:
     """
     try:
         from service.domain.client.registry import is_chat_capable
-        from service.shared.model_catalog import get_openrouter_catalog, model_has_capability
+        from service.shared.model_catalog import cached_openrouter_catalog, model_has_capability
 
-        catalog = await get_openrouter_catalog()
+        catalog = cached_openrouter_catalog()
         # 🔴 ЗРЕНИЕ И ЧАТ-ПРИГОДНОСТЬ — РАЗНЫЕ СВОЙСТВА, И ОДНОГО МАЛО. Замер после первой
         # редакции: отбор оставил `openai/gpt-5-image` (каталог честно помечает её зрячей),
         # роутер её выбрал, а чат-путь отверг — «Blocked non-chat model in chat path» — и
@@ -272,8 +272,8 @@ async def _llm_route(
 ) -> dict | None:
     try:
         from service.domain.client import create_chat_completion
-        from service.domain.model_runtime import invoke_model_call
-        from service.domain.usage_ledger import UsageKind
+        from service.domain.execution.model import invoke_model_call
+        from service.domain.usage.ledger import UsageKind
 
         modalities = input_type if input_type and input_type != "text" else "text"
         if input_type and input_type != "text":
@@ -422,7 +422,7 @@ async def route_model(
     if not models:
         try:
             from service.domain.client import list_qualified_models
-            from service.domain.client.model_requirements import ModelRequirement
+            from service.domain.client.models.requirements import ModelRequirement
 
             requirement = ModelRequirement(vision=routed_input_type == "image")
             models = _normalize_models(await list_qualified_models(requirement))
@@ -437,7 +437,7 @@ async def route_model(
     manual_model = (selected_model or "").strip()
     if manual_model and manual_model.lower() != "auto":
         if not _is_chat_capable_model(manual_model):
-            meta["manual_model_blocked"] = manual_model
+            raise SelectedModelUnavailable("selected model is unavailable")
         elif any(m.lower() == manual_model.lower() for m in models):
             explicit_tool = explicit_requested_tool(text)
             return manual_model, {

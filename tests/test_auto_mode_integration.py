@@ -7,12 +7,14 @@
 from __future__ import annotations
 
 from types import SimpleNamespace
+from unittest.mock import AsyncMock
 
 import pytest
 
-from service.application import processor_steps as steps
+from service.application.processing import settings as processing_settings
+from service.application.processing import steps as steps
+from service.domain.execution.context import RunExecutionContext
 from service.domain.pipeline import auto_mode
-from service.domain.run_context import RunExecutionContext
 
 
 class _Orchestrator:
@@ -29,6 +31,117 @@ class _Step(steps.ProcessorStepsMixin):
 
     def __init__(self):
         self.orchestrator = _Orchestrator()
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("bypass", ["disabled", "explicit_general", "resolved_general"])
+async def test_explicit_transcription_parks_even_when_auto_routing_is_bypassed(
+    decider, monkeypatch, bypass
+):
+    monkeypatch.setattr(auto_mode, "_video_offer_allowed", lambda: True)
+    monkeypatch.setattr("service.domain.pipeline.video_offer._video_offer_allowed", lambda: True)
+    if bypass == "disabled":
+        monkeypatch.setattr(processing_settings, "_orchestrator_flags", lambda: {"enabled": False})
+    execution = RunExecutionContext()
+    step = _Step()
+    _, events = await _run(
+        step,
+        execution=execution,
+        context=SimpleNamespace(video_tool_enabled=False),
+        user_input="https://www.youtube.com/watch?v=sXKnmgmbkoE Сделай транскрипцию видео",
+        route_override="general" if bypass == "explicit_general" else None,
+        resolved_category="general" if bypass == "resolved_general" else None,
+    )
+    assert execution.policy.flag("confirmation_pending")
+    assert step.orchestrator.calls == 0
+    offers = [e for e in events if (e.metadata or {}).get("kind") == "mode_offer"]
+    assert len(offers) == 1
+    assert offers[0].metadata["mode_offer"]["mode"] == "watch_video"
+    assert offers[0].metadata["mode_offer"]["blocking"] is True
+
+
+@pytest.mark.asyncio
+async def test_invalid_auto_decision_still_parks_explicit_video_request(decider, monkeypatch):
+    monkeypatch.setattr(auto_mode, "_video_offer_allowed", lambda: True)
+    execution = RunExecutionContext()
+    step = _Step()
+    _, events = await _run(
+        step,
+        execution=execution,
+        user_input="https://youtu.be/uTR9FdR3Ob0 Нужно сделать полный конспект видео",
+    )
+    assert execution.policy.flag("confirmation_pending")
+    assert step.orchestrator.calls == 0
+    offers = [
+        e.metadata["mode_offer"] for e in events if (e.metadata or {}).get("kind") == "mode_offer"
+    ]
+    assert len(offers) == 1 and offers[0]["mode"] == "watch_video"
+    assert offers[0]["blocking"] is True
+
+
+@pytest.mark.asyncio
+async def test_invalid_auto_decision_does_not_reoffer_declined_video(decider, monkeypatch):
+    monkeypatch.setattr(auto_mode, "_video_offer_allowed", lambda: True)
+    execution = RunExecutionContext()
+    execution.policy.set_flag("confirmation_declined", True)
+    _, events = await _run(
+        _Step(),
+        execution=execution,
+        user_input="https://youtu.be/uTR9FdR3Ob0 Нужно сделать полный конспект видео",
+    )
+    assert not execution.policy.flag("confirmation_pending")
+    assert not any((e.metadata or {}).get("kind") == "mode_offer" for e in events)
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("route", ["deep_research", "image_gen", "pdf_gen"])
+async def test_all_expensive_route_offers_park_before_planning_or_execution(
+    decider, monkeypatch, route
+):
+    decider["decision"] = _decision(route=route, confidence="high", needs_plan=True)
+    _confirm(monkeypatch, {route})
+    execution = RunExecutionContext()
+    planning = AsyncMock(side_effect=AssertionError("planning before confirmation"))
+    monkeypatch.setattr(steps, "resolve_plan", planning)
+    step = _Step()
+    _, events = await _run(step, execution=execution)
+    assert execution.policy.flag("confirmation_pending")
+    assert step.orchestrator.calls == 0
+    planning.assert_not_called()
+    offer = next(
+        event.metadata["mode_offer"]
+        for event in events
+        if (event.metadata or {}).get("kind") == "mode_offer"
+    )
+    assert offer["blocking"] is True
+
+
+@pytest.mark.asyncio
+async def test_parked_processor_never_builds_context_or_generates_answer(monkeypatch):
+    from service.application.processing import processor as module
+    from service.domain.pipeline.confirmation import waiting_event
+    from service.events import EventType
+
+    execution = RunExecutionContext()
+    execution.policy.set_flag("confirmation_pending", True)
+    processor = module.AgentProcessor.__new__(module.AgentProcessor)
+    monkeypatch.setattr(module, "build_user_context", lambda **_kw: SimpleNamespace())
+    processor._resolve_route_and_plan = AsyncMock(
+        return_value=(steps.RouteDecision("general", None, None, "", False), [waiting_event()])
+    )
+    processor._build_context = AsyncMock(side_effect=AssertionError("answer before decision"))
+    events = [
+        event
+        async for event in processor.process_message_stream(
+            "request", "thread", execution=execution
+        )
+    ]
+    assert len(events) == 1
+    assert events[0].type == EventType.AGENT_COMPLETE
+    assert events[0].metadata["awaiting_confirmation"] is True
+    assert not events[0].data
+    processor._build_context.assert_not_called()
+    assert not execution.usage.receipts
 
 
 @pytest.fixture()
@@ -62,7 +175,7 @@ def decider(monkeypatch):
 
 
 def _decision(**kw):
-    from service.domain.routing.auto_decision import AutoDecision
+    from service.domain.routing.auto.decision import AutoDecision
 
     return AutoDecision(**{"route": "general", **kw})
 
@@ -75,7 +188,9 @@ def _confirm(monkeypatch, modes):
     """
     joined = ",".join(sorted(modes))
     monkeypatch.setattr(
-        steps, "_agent_flag", lambda name, default: joined if "confirm" in name else default
+        processing_settings,
+        "_agent_flag",
+        lambda name, default: joined if "confirm" in name else default,
     )
 
 
@@ -214,7 +329,7 @@ async def test_context_signals_reach_the_prompt(decider):
 @pytest.mark.asyncio
 async def test_disabled_flag_restores_the_old_path(decider, monkeypatch):
     """Откат — тумблером, а не релизом: выключенный оркестратор = сегодняшний код."""
-    monkeypatch.setattr(steps, "_agent_flag", lambda name, default: False)
+    monkeypatch.setattr(processing_settings, "_agent_flag", lambda name, default: False)
     decider["decision"] = _decision(route="deep_research")
     step = _Step()
 
@@ -279,6 +394,31 @@ async def test_explicit_choice_starts_the_costly_mode(decider, monkeypatch):
     decision, events = await _run(_Step(), route_override="deep_research")
 
     assert decision.agent_name == "deep_research"
+    assert not [e for e in events if (e.metadata or {}).get("kind") == "mode_offer"]
+
+
+@pytest.mark.asyncio
+async def test_owned_pdf_standing_consent_does_not_park_an_expensive_route(decider, monkeypatch):
+    from service.application.admission.document_tools import apply_document_tool_consent
+    from service.domain.execution.context import PrivateRunResources, RunExecutionContext
+
+    decider["decision"] = _decision(route="deep_research", confidence="low")
+    _confirm(monkeypatch, {"deep_research"})
+    execution = RunExecutionContext(
+        resources=PrivateRunResources(
+            workspace_ref={
+                "document_context": {
+                    "path": "documents/paper",
+                    "project_id": "owned",
+                    "tools_auto_approved": True,
+                },
+            }
+        )
+    )
+    assert apply_document_tool_consent(execution)
+    decision, events = await _run(_Step(), execution=execution)
+    assert decision.agent_name == "deep_research"
+    assert not execution.policy.flag("confirmation_pending")
     assert not [e for e in events if (e.metadata or {}).get("kind") == "mode_offer"]
 
 
@@ -529,8 +669,8 @@ async def test_offer_reaches_the_context(decider, monkeypatch):
         has_non_tabular_attachment=False,
     )
 
-    await _run(_Step(), context=context)
+    execution = RunExecutionContext()
+    await _run(_Step(), context=context, execution=execution)
 
-    from service.domain.run_context import require_execution
-
-    assert require_execution().policy.values["declined_mode"] == "deep_research"
+    assert execution.policy.flag("confirmation_pending")
+    assert "declined_mode" not in execution.policy.values

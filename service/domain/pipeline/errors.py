@@ -40,10 +40,14 @@ class CategorizedError:
 
 
 def categorize(exc: Exception) -> CategorizedError:
+    from service.domain.client.protocol import ProviderFailureCode, ProviderProtocolError
+
     # `asyncio.TimeoutError` — с Python 3.11 ПСЕВДОНИМ встроенного `TimeoutError` (проверено
     # на 3.13, которую требует проект: `is` даёт True). Кортеж из двух имён одного объекта
     # и отложенный импорт `asyncio` ради него ничего не проверяли.
-    if isinstance(exc, TimeoutError):
+    if isinstance(exc, ProviderProtocolError) and exc.failure.code is ProviderFailureCode.REMOTE:
+        category = "provider"
+    elif isinstance(exc, TimeoutError):
         category = "timeout"
     else:
         category = _CATEGORY_MAP.get(classify_error(exc), "unknown")

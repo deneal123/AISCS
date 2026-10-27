@@ -1,8 +1,8 @@
 """Сессия к MCP-серверу: JSON-RPC поверх streamable-HTTP.
 
 ⚠️ ЗАЧЕМ СВОЙ КЛИЕНТ, а не `agents.mcp` из SDK. Готовый подключается через
-`Agent(mcp_servers=…)`, а это исполняется только на SDK-пути (`runners/sdk_run.py`);
-живой путь для mws/openrouter/gigachat/routerai — `chat_run.py`. Взять готовое значило бы
+`Agent(mcp_servers=…)`, а это исполняется только на SDK-пути (`runners/sdk/run.py`);
+общий путь, включая IDE/PDF всех провайдеров, — `runners/chat/run.py`. Взять готовое значило бы
 перевести живой путь на SDK и потерять фейловер, пиннинг провайдера между раундами и
 per-provider `include_usage`. Протокол же здесь — три метода JSON-RPC.
 

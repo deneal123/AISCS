@@ -2,5 +2,5 @@
 
 Пакет намеренно ПУСТОЙ. Здесь жил ленивый реэкспорт трёх классов через `__getattr__`,
 которым не пользовался никто — все импортируют подмодули напрямую
-(`from service.application.processor import AgentProcessor`).
+(`from service.application.processing.processor import AgentProcessor`).
 """

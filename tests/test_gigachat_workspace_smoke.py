@@ -7,13 +7,13 @@ import io
 
 import pytest
 
-from service.domain.client.model_catalog import (
+from service.domain.client.models.catalog import (
     ModelCatalogSource,
     ModelCatalogStatus,
     ProviderModelCatalog,
 )
-from service.presentation.cli import gigachat_workspace_smoke as smoke
-from service.presentation.cli.gigachat_smoke_support import (
+from service.presentation.cli.gigachat import workspace as smoke
+from service.presentation.cli.gigachat.support import (
     GigaChatSmokeFailure,
     bounded_failure_code,
     require_chat_model,
@@ -95,7 +95,7 @@ async def test_live_smoke_rejects_oauth_scope_without_chat_model(monkeypatch) ->
         )
 
     monkeypatch.setattr(
-        "service.presentation.cli.gigachat_smoke_support.gigachat._RUNTIME.model_catalog",
+        "service.presentation.cli.gigachat.support.gigachat._RUNTIME.model_catalog",
         models,
     )
     with pytest.raises(GigaChatSmokeFailure) as raised:
@@ -107,8 +107,8 @@ async def test_live_smoke_rejects_oauth_scope_without_chat_model(monkeypatch) ->
 def test_live_smoke_diagnostics_do_not_use_exception_class_names() -> None:
     tools_source = inspect.getsource(
         __import__(
-            "service.presentation.cli.gigachat_tools_smoke",
-            fromlist=["gigachat_tools_smoke"],
+            "service.presentation.cli.gigachat.tools",
+            fromlist=["tools"],
         )
     )
     workspace_source = inspect.getsource(smoke)

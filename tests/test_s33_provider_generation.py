@@ -5,25 +5,28 @@ from types import SimpleNamespace
 
 import pytest
 
-from service.domain.client.model_catalog import (
+from service.domain.client.models.catalog import (
     CapabilityEvidenceSource,
     ModelCatalogSource,
     ModelCatalogStatus,
     ProviderModelCatalog,
     ProviderModelRecord,
 )
-from service.domain.client.provider_admission import RunProviderAdmission, RunProviderSnapshot
-from service.domain.client.provider_generation import (
+from service.domain.client.models.list_cache import ModelListCache
+from service.domain.client.providers.gigachat.adapter import SPEC as GIGACHAT_SPEC
+from service.domain.client.providers.management.admission import (
+    RunProviderAdmission,
+    RunProviderSnapshot,
+)
+from service.domain.client.providers.management.generation import (
     ProviderGenerationManager,
     ProviderGenerationStatus,
 )
-from service.domain.client.provider_operations import (
+from service.domain.client.providers.management.operations import (
     ProviderAdmissionStatus,
     ProviderOperation,
 )
-from service.domain.client.providers.gigachat import SPEC as GIGACHAT_SPEC
-from service.domain.client.providers.model_list_cache import ModelListCache
-from service.domain.run_context import PrivateRunResources, use_run_execution
+from service.domain.execution.context import PrivateRunResources, use_run_execution
 
 
 class _Client:
@@ -378,8 +381,7 @@ async def test_gateway_embedding_uses_admitted_generation_and_checks_dimension()
         async def create(self, **kwargs):
             seen.update(kwargs)
             return SimpleNamespace(
-                model="embedding",
-                data=[SimpleNamespace(index=0, embedding=[0.1] * 3)],
+                data=[SimpleNamespace(embedding=[0.1] * 3)],
             )
 
     client = SimpleNamespace(embeddings=_Embeddings())

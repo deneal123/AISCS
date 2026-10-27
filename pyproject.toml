@@ -80,7 +80,7 @@ max-complexity = 70
 "service/domain/tools/router.py" = ["E501"]
 "service/domain/tools/function_tools.py" = ["E501"]
 "service/domain/tools/deep_research.py" = ["E501"]
-"service/domain/tools/web_search.py" = ["E501"]
+"service/domain/tools/search/client.py" = ["E501"]
 "service/domain/routing/constants.py" = ["E101", "W191"]
 # ⚠️ Список проверен МУТАЦИЕЙ: каждая запись снималась, и файл прогонялся линтером.
 # Четыре записи ничего не подавляли — файлы давно почищены, а подавление осталось и

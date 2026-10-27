@@ -13,8 +13,8 @@ import service.domain.client.calls.chat as chat
 import service.domain.client.calls.streaming as streaming
 from service.domain.client import registry
 from service.domain.client.calls import retry
-from service.domain.client.model_catalog import ModelCatalogSource, ModelCatalogStatus
-from service.domain.client.model_requirements import (
+from service.domain.client.models.catalog import ModelCatalogSource, ModelCatalogStatus
+from service.domain.client.models.requirements import (
     ModelQualification,
     ModelRequirement,
     ProviderQualificationStatus,

@@ -14,8 +14,8 @@ import pytest
 from service.domain import persona
 from service.domain.persona.lens import PersonaLens
 from service.domain.persona.schema import PersonaSpec
-from service.domain.pipeline import context_compressor as cc
 from service.domain.pipeline import decomposition as dec
+from service.domain.pipeline.context import compressor as cc
 
 MARK_COMPRESS = "МАРКЕР-СЖАТИЕ: числа не терять"
 MARK_DECOMPOSE = "МАРКЕР-ДЕКОМПОЗИЦИЯ: отделяй сбор от интерпретации"

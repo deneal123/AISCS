@@ -10,8 +10,8 @@ from types import SimpleNamespace
 
 import pytest
 
-from service.domain.routing import auto_router
-from service.domain.routing.auto_decision import SOURCE_LLM, SOURCE_SHORTCUT
+from service.domain.routing.auto import router as auto_router
+from service.domain.routing.auto.decision import SOURCE_LLM, SOURCE_SHORTCUT
 
 
 def _resp(content: str):
@@ -54,7 +54,7 @@ async def test_shortcut_costs_nothing(llm):
 
 @pytest.mark.asyncio
 async def test_content_message_asks_the_model(llm):
-    from service.domain.run_context import RunExecutionContext
+    from service.domain.execution.context import RunExecutionContext
 
     decision = await auto_router.decide_modes(
         "а теперь найди свежее",
@@ -70,7 +70,7 @@ async def test_content_message_asks_the_model(llm):
 @pytest.mark.asyncio
 async def test_provider_failure_is_transparent(llm):
     """🔴 Сбой → `None` → поведение ровно прежнее: старый роутер И ЕСТЬ фолбэк нового."""
-    from service.domain.run_context import RunExecutionContext
+    from service.domain.execution.context import RunExecutionContext
 
     llm["boom"] = True
 
@@ -84,7 +84,7 @@ async def test_provider_failure_is_transparent(llm):
 
 @pytest.mark.asyncio
 async def test_unparseable_answer_is_transparent(llm):
-    from service.domain.run_context import RunExecutionContext
+    from service.domain.execution.context import RunExecutionContext
 
     llm["content"] = "конечно! вот решение:"
 
@@ -101,7 +101,7 @@ async def test_fenced_json_is_accepted(llm):
     """Модели заворачивают ответ в ```-ограду вопреки прямому запрету в промпте."""
     llm["content"] = '```json\n{"route":"general","needs_plan":true}\n```'
 
-    from service.domain.run_context import RunExecutionContext
+    from service.domain.execution.context import RunExecutionContext
 
     decision = await auto_router.decide_modes(
         "сравни подходы", prompt_input="к", model="m", execution=RunExecutionContext()
@@ -114,7 +114,7 @@ async def test_fenced_json_is_accepted(llm):
 async def test_usage_is_accumulated(llm):
     """Служебный вызов обязан попасть в счёт: иначе решение бесплатно для нас, но не для
     платформы."""
-    from service.domain.run_context import RunExecutionContext
+    from service.domain.execution.context import RunExecutionContext
 
     execution = RunExecutionContext()
     llm["content"] = '{"route":"general"}'

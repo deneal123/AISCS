@@ -15,13 +15,13 @@ from service.domain import base as base_mod
 
 # ⚠️ Модуль-ВЛАДЕЛЕЦ, а не фасад: `_accumulate_tool_calls` живёт в `streaming.py`.
 from service.domain.client.calls import streaming as client_mod
+from service.domain.runners import support
 
-# ⚠️ Прямой chat/completions-стрим переехал из `base.py` в примесь `runners/chat_run.py`.
+# ⚠️ Прямой chat/completions-стрим переехал из `base.py` в примесь `runners/chat/run.py`.
 # Патчить надо МОДУЛЬ-ВЛАДЕЛЕЦ: `base_mod.stream_chat_completion` после разделения
 # перестал бы существовать (AttributeError), а если бы имя там осталось — подмена молча
 # ничего бы не делала, и тест был бы зелёным, не проверив ничего.
-from service.domain.runners import chat_run as chat_runner
-from service.domain.runners import support
+from service.domain.runners.chat import run as chat_runner
 from service.domain.subagents.general import GeneralAgent
 from service.events import EventType
 from service.schemas.agents import UserContext
@@ -168,7 +168,7 @@ async def test_tools_not_sent_when_model_lacks_support(monkeypatch):
             round_state.update({"prompt": 1, "completion": 1, "total": 2, "model": model})
 
     async def _no_tools(_self, _model, _context=None):
-        from service.domain.capabilities.tool_spec import ToolSet
+        from service.domain.capabilities.tools.spec import ToolSet
 
         return ToolSet()
 
@@ -245,7 +245,7 @@ async def test_unknown_tool_reported_to_model_not_crash(monkeypatch):
 
 
 async def _always_tools(_self, _model, _context=None):
-    from service.domain.capabilities.tool_spec import ToolSet
+    from service.domain.capabilities.tools.spec import ToolSet
     from service.domain.tools.function_tools import DEFAULT_FUNCTION_TOOLS
 
     return ToolSet(tools=support._tools_to_openai(DEFAULT_FUNCTION_TOOLS))

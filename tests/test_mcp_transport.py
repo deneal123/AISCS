@@ -16,7 +16,7 @@ import json
 import httpx
 import pytest
 
-from service.domain.capabilities import tool_registry
+from service.domain.capabilities.tools import registry as tool_registry
 from service.infrastructure.mcp import runtime as mcp_runtime
 from service.infrastructure.mcp import transport as mcp_transport
 from service.infrastructure.mcp.adapter import BILLING_NAME

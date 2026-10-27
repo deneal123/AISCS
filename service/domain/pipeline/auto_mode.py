@@ -16,16 +16,19 @@ from service.domain.capabilities import (
     get_spec,
     route_labels,
 )
+from service.domain.execution.context import RunExecutionContext, require_execution
+from service.domain.pipeline.confirmation import offer_ttl_sec
+from service.domain.pipeline.confirmation import tool_offer_event as _tool_offer_event
 from service.domain.pipeline.video_offer import _mentions_a_video, _video_offer_allowed
-from service.domain.routing.auto_decision import (
+from service.domain.routing.auto.decision import (
     CONFIDENCE_HIGH,
+    REASON_SHORTCUT_SMALLTALK,
     SOURCE_SHORTCUT,
     AutoDecision,
 )
-from service.domain.routing.auto_router import decide_modes
-from service.domain.routing.auto_signals import build_auto_input
+from service.domain.routing.auto.router import decide_modes
+from service.domain.routing.auto.signals import build_auto_input
 from service.domain.routing.policy import canonical_route
-from service.domain.run_context import RunExecutionContext, require_execution
 from service.events import AgentEvent, EventType
 
 logger = logging.getLogger(__name__)
@@ -108,51 +111,6 @@ def _legacy_route_event(reason_code: str) -> AgentEvent:
     )
 
 
-def offer_ttl_sec() -> int:
-    """Сколько живёт предложение дорогого режима. Настраивается админом.
-
-    🔴 Предложение с бессрочной кнопкой человек либо жмёт ЗАДНИМ ЧИСЛОМ (через час,
-    когда ответ уже прочитан и не нужен), либо оно просто мозолит глаза. Решение имеет
-    смысл по ходу работы — значит и жить оно должно ровно столько.
-    """
-    from service.settings import config
-    from service.shared.agent_settings import runtime_settings
-
-    return max(
-        5, int(runtime_settings.get_agents("mode_offer_ttl_sec", config.agents.mode_offer_ttl_sec))
-    )
-
-
-def _tool_offer_event(tool: str, label: str, reason_code: str, _user_input: str) -> AgentEvent:
-    """Предложение дорогого ИНСТРУМЕНТА — той же карточкой, что и режима.
-
-    ⚠️ Карточка ОДНА на оба случая: у человека вопрос один — «запускать дорогое или нет», —
-    и второй виджет рядом отличался бы от первого сроком, формулировкой и поведением при
-    молчании. Различает их поле `kind`, по которому клиент выбирает, ЧТО отправить назад:
-    режим перезапускает прогон маршрутом, инструмент лишь снимает запор с признака.
-    """
-    return AgentEvent(
-        type=EventType.STATUS_UPDATE,
-        agent_name="router",
-        data=f"Предложено: {label}",
-        metadata={
-            "kind": "mode_offer",
-            "mode_offer": {
-                # ⚠️ `offer_kind`, а не `kind`: слово `kind` в метаданных уже занято ВИДОМ
-                # СОБЫТИЯ, и вложенное второе его значение спутало страж классификации —
-                # справедливо: читающий человек спутал бы так же.
-                "offer_kind": "tool",
-                "mode": tool,
-                "label": label,
-                "reason_code": reason_code,
-                "confidence": CONFIDENCE_HIGH,
-                "offered_at": datetime.now(UTC).isoformat(),
-                "expires_in_sec": offer_ttl_sec(),
-            },
-        },
-    )
-
-
 def _offer_event(decision: AutoDecision, mode: str, _user_input: str) -> AgentEvent:
     """Предложение запустить дорогой режим — кнопкой, а не молча.
 
@@ -173,6 +131,7 @@ def _offer_event(decision: AutoDecision, mode: str, _user_input: str) -> AgentEv
             "kind": "mode_offer",
             "mode_offer": {
                 "mode": mode,
+                "blocking": True,
                 "label": route_labels().get(mode, mode),
                 "reason_code": "confirmation_required",
                 "confidence": decision.confidence,
@@ -326,7 +285,7 @@ def apply_plan(
     ⚠️ `web_tool_enabled` дописывается в УЖЕ СОБРАННЫЙ контекст: решение о свежих данных
     принимается после его сборки, а инструмент поиска выдаётся по этому признаку.
     """
-    from service.domain.run_context import GroundingReason, require_execution, set_policy_flag
+    from service.domain.execution.context import GroundingReason, require_execution, set_policy_flag
 
     execution = require_execution(execution)
 
@@ -340,7 +299,7 @@ def apply_plan(
     if context is not None and plan.files_tool and getattr(context, "workspace_ref", None):
         set_policy_flag(context, "workspace_tools_enabled", True)
     if context is not None and plan.offered_mode:
-        from service.domain.run_context import set_policy_value
+        from service.domain.execution.context import set_policy_value
 
         set_policy_value(context, "declined_mode", plan.offered_mode)
     return (
@@ -348,6 +307,52 @@ def apply_plan(
         plan.planning if plan.planning is not None else planning,
         plan.route_hint or resolved_category,
     )
+
+
+def _unavailable_decision_plan(user_input, context, execution, explicit_files) -> AutoPlan:
+    fallback = AutoPlan.passthrough("decision_unavailable", files_tool=explicit_files)
+    if (
+        not execution.policy.flag("confirmation_declined")
+        and not getattr(context, "video_tool_enabled", False)
+        and _mentions_a_video(user_input)
+        and _video_offer_allowed()
+    ):
+        return replace(
+            fallback,
+            offered_tool="watch_video",
+            events=[
+                *fallback.events,
+                _tool_offer_event(
+                    "watch_video", "просмотр видео", "video_confirmation_required", user_input
+                ),
+            ],
+        )
+    return fallback
+
+
+def _is_smalltalk(decision: AutoDecision) -> bool:
+    return (
+        decision.source == SOURCE_SHORTCUT
+        and decision.reason_code == REASON_SHORTCUT_SMALLTALK
+        and decision.route == "general"
+    )
+
+
+def _apply_file_grounding(execution, user_input, context, text_present, text_is_map):
+    """Set deterministic source requirements before optional model routing."""
+    from service.domain.execution.context import GroundingReason
+
+    explicit_request = _explicitly_asks_for_files(user_input)
+    explicit_files = explicit_request or _code_is_unreadable_without_tools(text_is_map)
+    if explicit_files:
+        execution.policy.grounding_reason = (
+            GroundingReason.WORKSPACE_EXPLICIT
+            if explicit_request
+            else GroundingReason.WORKSPACE_SOURCE_ONLY
+        )
+    elif bool(getattr(context, "tabular_files", None)) and not text_present:
+        execution.policy.grounding_reason = GroundingReason.TABULAR_SOURCE_ONLY
+    return explicit_files
 
 
 async def resolve_auto_plan(
@@ -373,21 +378,14 @@ async def resolve_auto_plan(
     attachment_text_in_prompt_is_a_map: bool = False,
 ) -> AutoPlan:
     execution = require_execution(execution)
-    explicit_request = _explicitly_asks_for_files(user_input)
-    source_only = _code_is_unreadable_without_tools(attachment_text_in_prompt_is_a_map)
-    explicit_files = explicit_request or source_only
-    if explicit_files:
-        from service.domain.run_context import GroundingReason
-
-        execution.policy.grounding_reason = (
-            GroundingReason.WORKSPACE_EXPLICIT
-            if explicit_request
-            else GroundingReason.WORKSPACE_SOURCE_ONLY
-        )
-    elif bool(getattr(context, "tabular_files", None)) and not attachment_text_in_prompt:
-        from service.domain.run_context import GroundingReason
-
-        execution.policy.grounding_reason = GroundingReason.TABULAR_SOURCE_ONLY
+    execution.policy.set_flag("ordinary_conversation", False)
+    explicit_files = _apply_file_grounding(
+        execution,
+        user_input,
+        context,
+        attachment_text_in_prompt,
+        attachment_text_in_prompt_is_a_map,
+    )
     if not enabled:
         return AutoPlan.passthrough("disabled", files_tool=explicit_files)
     if reason_code := _blocking_reason_code(
@@ -426,15 +424,22 @@ async def resolve_auto_plan(
         user_input, prompt_input=prompt_input, model=model, execution=execution
     )
     if decision is None:
-        return AutoPlan.passthrough("decision_unavailable", files_tool=explicit_files)
+        return _unavailable_decision_plan(user_input, context, execution, explicit_files)
     canonical = canonical_route(decision.route)
     if canonical != decision.route:
         decision = replace(decision, route=canonical)
+    execution.policy.set_flag("ordinary_conversation", _is_smalltalk(decision))
 
     events = [_decision_event(decision, {})]  # заменим ниже, когда план будет посчитан
     offered_mode: str | None = None
     route_hint = decision.route
-    if route_hint and _needs_confirmation(route_hint, decision.confidence, confirm_modes):
+    declined = execution.policy.flag("confirmation_declined")
+    if (
+        route_hint
+        and not declined
+        and not execution.policy.flag("document_tools_auto_approved")
+        and _needs_confirmation(route_hint, decision.confidence, confirm_modes)
+    ):
         events.append(_offer_event(decision, route_hint, user_input))
         offered_mode = route_hint
         route_hint = "general"
@@ -457,6 +462,7 @@ async def resolve_auto_plan(
     offered_tool: str | None = None
     if (
         offered_mode is None
+        and not declined
         and not already_agreed
         and _mentions_a_video(user_input)
         and _video_offer_allowed()

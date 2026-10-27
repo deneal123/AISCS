@@ -14,7 +14,12 @@
 
 from __future__ import annotations
 
+from collections.abc import Mapping, Sequence
 from typing import Any
+
+
+def _field(value: Any, name: str) -> Any:
+    return value.get(name) if isinstance(value, Mapping) else getattr(value, name, None)
 
 
 def first_message_content(response: Any) -> str:
@@ -25,11 +30,12 @@ def first_message_content(response: Any) -> str:
     надо смотреть на `finish_reason` и usage, а не на длину строки — здесь их не видно
     по устройству.
 
-    Всё через `getattr`: ответы приходят от пяти разных провайдеров, и у части из них
-    это не pydantic-объекты OpenAI, а просто похожие структуры.
+    Поддерживаются SDK-объекты и декодированные mapping-ответы. Неизвестное
+    содержимое не преобразуется в repr: там могут оказаться приватные поля.
     """
-    choices = getattr(response, "choices", None) or []
-    if not choices:
+    choices = _field(response, "choices")
+    if not isinstance(choices, Sequence) or isinstance(choices, (str, bytes)) or not choices:
         return ""
-    message = getattr(choices[0], "message", None)
-    return str(getattr(message, "content", None) or "")
+    message = _field(choices[0], "message")
+    content = _field(message, "content")
+    return content if isinstance(content, str) else ""

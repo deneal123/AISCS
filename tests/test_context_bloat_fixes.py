@@ -18,8 +18,8 @@ from __future__ import annotations
 
 from datetime import UTC, datetime
 
-from service.domain.capabilities.tool_registry import tool_result_limit
-from service.domain.runners import tool_loop as chat_runner
+from service.domain.capabilities.tools.registry import tool_result_limit
+from service.domain.runners.chat import tool_loop as chat_runner
 from service.domain.subagents.general import GeneralAgent
 from service.schemas.agents import UserContext
 
@@ -80,7 +80,7 @@ def test_general_agent_caps_tool_rounds_low():
 # --------------------------------------------------------------------------- #
 from types import SimpleNamespace  # noqa: E402
 
-from service.application.processor_steps import _files_for_prompt  # noqa: E402
+from service.application.processing.steps import _files_for_prompt  # noqa: E402
 
 
 def test_tabular_file_text_is_not_inlined():
@@ -122,7 +122,7 @@ def test_notice_is_wired_into_the_assembled_context():
     """
     import inspect
 
-    from service.application import processor_context
+    from service.application.processing import context as processor_context
 
     src = inspect.getsource(processor_context.build_context_step)
 

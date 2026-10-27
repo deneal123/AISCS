@@ -21,7 +21,7 @@ class CapabilityBuildError(RuntimeError):
 
 
 def _catalog():
-    from service.domain.run_context import current_execution
+    from service.domain.execution.context import current_execution
 
     if _AGENT_SOURCES != AGENT_SOURCES or _WORKFLOW_SOURCES != WORKFLOW_SOURCES:
         # Isolated compatibility path for tests/internal callers injecting a synthetic

@@ -12,7 +12,7 @@ import logging
 
 import pytest
 
-from service.domain.pipeline import context_enricher
+from service.domain.pipeline.context import enricher as context_enricher
 
 logger = logging.getLogger(__name__)
 
@@ -176,7 +176,7 @@ async def test_passed_history_and_summary_reach_assembled_context() -> None:
     доходят до собранного контекста БЕЗ чтения сессии/Redis (session=None,
     compact_summary передан). Если бы пайплайн грузил сам — при session=None история
     была бы пустой, а резюме — прочитанным из Redis (пусто в тесте)."""
-    from service.application.processor import AgentProcessor
+    from service.application.processing.processor import AgentProcessor
 
     processor = AgentProcessor()
     cap = _CapturingGeneral()

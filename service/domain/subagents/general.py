@@ -9,10 +9,21 @@ from service.domain.guardrails import (
     fact_check_output,
     validate_response_relevance,
 )
-from service.domain.pipeline.context_assembler import SECTION_TITLES
+from service.domain.pipeline.context.assembler import SECTION_TITLES
 from service.domain.tools.function_tools import DEFAULT_FUNCTION_TOOLS
 
 GENERAL_PROMPT = """Ты — GPTHub, универсальный ведущий ИИ-ассистент для рабочих задач.
+
+Обычная беседа и роли:
+- На приветствие и бытовую реплику отвечай естественно и кратко. Не анализируй
+  скрытые мотивы, чувства или состояние без просьбы о таком разборе; специализация
+  не превращает каждую реплику в консультацию.
+- Отличай пользователя от ассистента: «ты Алина» задаёт обращение к ассистенту,
+  а не имя пользователя. Не выводи имя, возраст или пол пользователя из заданной
+  тебе роли. Явная поправка пользователя важнее ошибочного предположения в истории
+  или памяти.
+- Безопасное имя/образ для общения допустимы как условная роль. Не выдавай их за
+  настоящую человеческую биографию, тело, возраст или личный опыт.
 
 Режим работы:
 1) Сначала пойми цель пользователя и ограничения.
@@ -107,6 +118,69 @@ class GeneralAgent(SimpleStreamingAgent):
 
     # Стилевые строки базового промпта уступают личности (см. PERSONA_OVERRIDES).
     persona_overrides = PERSONA_OVERRIDES
+
+    async def process(self, user_input, context):
+        from service.domain.video_summary.pipeline import run_video_summary
+        from service.domain.video_summary.source import summary_video_url, video_request_kind
+
+        url = summary_video_url(user_input)
+        is_transcript = video_request_kind(user_input) == "transcript"
+        if url and not context.video_tool_enabled:
+            from service.domain.execution.context import require_current_execution
+            from service.events import AgentEvent, EventType
+
+            if require_current_execution().policy.flag("confirmation_declined"):
+                yield AgentEvent(
+                    type=EventType.STREAM_CHUNK,
+                    agent_name=self.name,
+                    data=(
+                        "Обработка видео не разрешена. Файл расшифровки не создавался."
+                        if is_transcript
+                        else "Просмотр видео не разрешён. Без расшифровки я не могу подготовить "
+                        "полный конспект. Пришлите текст расшифровки "
+                        "или разрешите обработку видео. "
+                        "Файл конспекта не создавался."
+                    ),
+                )
+                yield AgentEvent(type=EventType.AGENT_COMPLETE, agent_name=self.name, data="")
+                return
+            from service.domain.pipeline.confirmation import waiting_event
+            from service.domain.pipeline.video_offer import explicit_video_offer
+
+            execution = require_current_execution()
+            offer = explicit_video_offer(user_input, context, execution)
+            if offer is not None:
+                execution.policy.set_flag("confirmation_pending", True)
+                yield offer
+                yield waiting_event()
+                return
+            # A disabled source capability cannot be replaced with webpage HTML
+            # or a model-generated refusal masquerading as video processing.
+            yield AgentEvent(
+                type=EventType.ERROR,
+                agent_name=self.name,
+                data="Обработка видео сейчас недоступна. Файл не создавался.",
+                metadata={"failure_code": "unavailable"},
+            )
+            yield AgentEvent(type=EventType.AGENT_COMPLETE, agent_name=self.name, data="")
+            return
+        if not url or not context.video_tool_enabled:
+            async for event in super().process(user_input, context):
+                yield event
+            return
+        from service.events import AgentEvent, EventType
+
+        yield AgentEvent(
+            type=EventType.AGENT_START,
+            agent_name=self.name,
+            data="Готовлю файл расшифровки" if is_transcript else "Готовлю конспект-файл",
+        )
+        block = await self._input_guardrail_block(user_input)
+        if block is not None:
+            yield block
+            return
+        async for event in run_video_summary(self, user_input, context, url):
+            yield event
 
     def __init__(self, model_settings: dict):
         super().__init__(

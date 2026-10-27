@@ -15,8 +15,8 @@ from __future__ import annotations
 
 import pytest
 
-from service.domain.pipeline import context_assembler as ca
-from service.domain.pipeline.context_budget import ContextBudget
+from service.domain.pipeline.context import assembler as ca
+from service.domain.pipeline.context.budget import ContextBudget
 from service.settings import config
 
 

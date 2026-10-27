@@ -11,7 +11,7 @@ from types import SimpleNamespace
 import pytest
 
 import service.domain.client as client_mod
-from service.domain.run_context import require_execution
+from service.domain.execution.context import require_execution
 from service.domain.subagents.utils import pick_meta_model
 
 

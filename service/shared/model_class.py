@@ -61,8 +61,20 @@ def classify_model(model_id: str) -> str | None:
     return None
 
 
+def is_free_local_model(model_id: str | None) -> bool:
+    """Закреплённый локальный ID; облачные алиасы и похожие имена не бесплатны."""
+    return model_id in {"qwen2.5-1.5b-instruct", "lfm2.5-1.2b-instruct"}
+
+
+def allows_reserved_model(model_id: str, provider: str | None) -> bool:
+    """Бесплатный ID принадлежит только локальному runtime, не облачному тёзке."""
+    return not is_free_local_model(model_id) or provider == "local"
+
+
 def cost_rank(model_id: str | None) -> int:
     """Ранг дороговизны по имени модели. Больше — дороже."""
+    if is_free_local_model(model_id):
+        return -1
     return _COST_RANK[classify_model(str(model_id or ""))]
 
 

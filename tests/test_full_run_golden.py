@@ -16,13 +16,14 @@ from pathlib import Path
 import pytest
 
 from service.domain import base as base_mod
-from service.domain.capabilities.tool_spec import ToolSet
-from service.domain.run_context import (
+from service.domain.capabilities.tools.spec import ToolSet
+from service.domain.execution.context import (
     GroundingRequirement,
     PrivateRunResources,
     use_run_execution,
 )
-from service.domain.runners import chat_run, tool_loop
+from service.domain.runners.chat import run as chat_run
+from service.domain.runners.chat import tool_loop
 from service.domain.subagents.general import GeneralAgent
 from service.events import AgentEvent, EventSerializer, EventType
 from service.schemas.agents import UserContext

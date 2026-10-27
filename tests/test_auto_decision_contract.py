@@ -7,11 +7,7 @@
 
 from __future__ import annotations
 
-from service.domain.routing.auto_decision import (
-    SOURCE_LLM,
-    AutoDecision,
-    normalize_decision,
-)
+from service.domain.routing.auto.decision import SOURCE_LLM, AutoDecision, normalize_decision
 
 
 def test_full_answer_is_parsed():

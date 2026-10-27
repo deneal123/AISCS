@@ -145,11 +145,11 @@ async def clear_down(name: str) -> None:
 def drop_cooled_down_local(order: list[str]) -> list[str]:
     """Быстрый (in-memory) фильтр для ФЕЙЛОВЕРА: без Redis-раунда на каждый запрос.
 
-    Если живых не осталось — вернуть исходный порядок: лучше попробовать хоть что-то.
+    Если живых не осталось — быстрый отказ; восстановлением занимается фон.
     """
     now = time.monotonic()
     live = [n for n in order if _DOWN_UNTIL.get(n, 0.0) <= now]
-    return live or order
+    return live
 
 
 async def down_providers(names: list[str]) -> set[str]:

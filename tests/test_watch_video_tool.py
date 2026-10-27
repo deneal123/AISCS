@@ -12,8 +12,8 @@ import json
 import pytest
 
 from service.domain.capabilities.agent_spec import COST_EXPENSIVE
-from service.domain.capabilities.tool_registry import resolve_toolset, tool_specs
-from service.domain.capabilities.tool_spec import NEEDS_CONFIRMATION
+from service.domain.capabilities.tools.registry import resolve_toolset, tool_specs
+from service.domain.capabilities.tools.spec import NEEDS_CONFIRMATION
 from service.domain.tools import video_tool
 
 
@@ -83,6 +83,140 @@ def sidecar(monkeypatch):
 class _Wrapper:
     def __init__(self, context):
         self.context = context
+
+
+@pytest.mark.asyncio
+async def test_empty_source_is_unbilled_not_a_successful_view(sidecar, monkeypatch):
+    from unittest.mock import AsyncMock
+
+    from service.domain.tools import unbilled_calls
+    from service.infrastructure import video_stt
+
+    sidecar({"duration_sec": 10, "transcript": [], "frames": []})
+    fallback = AsyncMock(return_value=None)
+    monkeypatch.setattr(video_stt, "acquire_local_transcript", fallback)
+    with unbilled_calls.collect() as billing:
+        outcome = await video_tool.watch_video_tool(
+            _Wrapper(_Ctx()), json.dumps({"url": "https://v/1"})
+        )
+    assert outcome.status == "failed" and not outcome.billable
+    assert outcome.failure_code == "unavailable"
+    assert billing["waived"] == {"watch_video": 1}
+    fallback.assert_awaited_once()
+
+
+@pytest.mark.asyncio
+async def test_accepted_numeric_text_timestamps_are_renderable(sidecar):
+    sidecar({"duration_sec": "10", "transcript": [{"t_sec": "2.5", "text": "speech"}]})
+    outcome = await video_tool.watch_video_tool(
+        _Wrapper(_Ctx()), json.dumps({"url": "https://v/1"})
+    )
+    assert isinstance(outcome, str) and "speech" in outcome
+
+
+@pytest.mark.asyncio
+async def test_unknown_sidecar_warning_is_not_echoed_to_model(sidecar, caplog):
+    sidecar(
+        {
+            "duration_sec": 10,
+            "transcript": [{"t_sec": 0, "text": "speech"}],
+            "warnings": ["PRIVATE-PROXY-BODY"],
+        }
+    )
+    outcome = await video_tool.watch_video_tool(
+        _Wrapper(_Ctx()), json.dumps({"url": "https://v/1"})
+    )
+    assert isinstance(outcome, str)
+    assert "PRIVATE" not in outcome + caplog.text
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("scoped", [False, True])
+@pytest.mark.parametrize(
+    "transcript",
+    [
+        "PRIVATE-SOURCE",
+        {"text": "PRIVATE-SOURCE"},
+        0,
+        [{"t_sec": False, "text": "PRIVATE-SOURCE"}],
+        [{"t_sec": 0, "text": "PRIVATE-SOURCE\ud800"}],
+    ],
+    ids=["scalar", "mapping", "falsey-scalar", "boolean-time", "invalid-unicode"],
+)
+async def test_malformed_source_is_typed_before_frames_or_artifacts(
+    sidecar, caplog, monkeypatch, scoped, transcript
+):
+    from contextlib import nullcontext
+
+    from service.domain.execution.context import PrivateRunResources, use_run_execution
+    from service.domain.runners.tool_runtime.contracts import ToolCallOutcome
+    from service.domain.video_summary.source import SOURCE_KEY, VideoTranscript
+
+    sidecar(
+        {
+            "duration_sec": 10,
+            "transcript": transcript,
+            "frames": [{"t_sec": 0, "image_b64": "PRIVATE-FRAME"}],
+        }
+    )
+    context = _Ctx()
+    if not scoped:
+        monkeypatch.setattr("service.domain.execution.context.current_execution", lambda: None)
+    scope = use_run_execution(PrivateRunResources()) if scoped else nullcontext()
+    with scope as execution:
+        outcome = await video_tool.watch_video_tool(
+            _Wrapper(context), json.dumps({"url": "https://v/1"})
+        )
+        assert isinstance(outcome, ToolCallOutcome)
+        assert outcome.status == "failed" and not outcome.billable and not outcome.retryable
+        assert outcome.failure_code == "protocol"
+        assert not getattr(context, "watched_frames", [])
+        assert "PRIVATE" not in outcome.text + caplog.text
+        if execution is not None:
+            assert execution.artifacts.get(SOURCE_KEY, VideoTranscript) is None
+            assert execution.usage.billable_calls == 0
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("transcript", [[], [{"t_sec": 0, "text": "accepted speech"}]])
+@pytest.mark.parametrize(
+    "frames",
+    [
+        "PRIVATE-FRAME",
+        {"image_b64": "PRIVATE-FRAME"},
+        False,
+        [None],
+        [{"t_sec": 0}],
+        [{"t_sec": 0, "image_b64": 1}],
+        [{"t_sec": float("nan"), "image_b64": "PRIVATE-FRAME"}],
+        [{"t_sec": True, "image_b64": "PRIVATE-FRAME"}],
+    ],
+)
+async def test_invalid_frames_fail_before_fallback_or_source_publication(
+    sidecar, monkeypatch, caplog, frames, transcript
+):
+    from unittest.mock import AsyncMock
+
+    from service.domain.execution.context import PrivateRunResources, use_run_execution
+    from service.domain.runners.tool_runtime.contracts import ToolCallOutcome
+    from service.domain.video_summary.source import SOURCE_KEY, VideoTranscript
+    from service.infrastructure import video_stt
+
+    sidecar({"duration_sec": 10, "transcript": transcript, "frames": frames})
+    fallback = AsyncMock(return_value=None)
+    monkeypatch.setattr(video_stt, "acquire_local_transcript", fallback)
+    context = _Ctx()
+    with use_run_execution(PrivateRunResources()) as execution:
+        outcome = await video_tool.watch_video_tool(
+            _Wrapper(context), json.dumps({"url": "https://v/1"})
+        )
+        assert isinstance(outcome, ToolCallOutcome)
+        assert outcome.failure_code == "protocol" and not outcome.billable
+        assert not outcome.retryable
+        assert not getattr(context, "watched_frames", [])
+        assert execution.artifacts.get(SOURCE_KEY, VideoTranscript) is None
+        assert "PRIVATE" not in outcome.text + caplog.text
+    fallback.assert_not_awaited()
 
 
 @pytest.mark.asyncio
@@ -162,8 +296,9 @@ async def test_a_refusal_names_its_reason(sidecar):
 
     text = await video_tool.watch_video_tool(_Wrapper(_Ctx()), json.dumps({"url": "https://v/1"}))
 
-    assert "too_long" in text or "длиннее" in text
-    assert "не выдумывай" in text.lower()
+    assert text.status == "failed" and not text.billable
+    assert "длиннее" in text.text
+    assert "не выдумывай" in text.text.lower()
 
 
 @pytest.mark.asyncio
@@ -173,7 +308,33 @@ async def test_a_disabled_sidecar_is_said_out_loud(monkeypatch):
 
     text = await video_tool.watch_video_tool(_Wrapper(_Ctx()), json.dumps({"url": "https://v/1"}))
 
-    assert "недоступ" in text.lower() and "не выдумывай" in text.lower()
+    assert text.status == "failed" and not text.billable
+    assert "недоступ" in text.text.lower() and "не выдумывай" in text.text.lower()
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    ("code", "failure", "retryable"),
+    [
+        ("timeout", "timeout", True),
+        ("toolchain_failed", "unavailable", True),
+        ("too_large", "invalid_arguments", False),
+        ("PRIVATE-VIDEO-ERROR", "unavailable", True),
+    ],
+)
+async def test_sidecar_failure_is_typed_unbilled_and_private(
+    sidecar, caplog, code, failure, retryable
+):
+    from service.infrastructure.sidecar import SidecarUnavailable
+
+    sidecar(SidecarUnavailable("video", code, "PRIVATE-PROVIDER-BODY"))
+    outcome = await video_tool.watch_video_tool(
+        _Wrapper(_Ctx()), json.dumps({"url": "https://v/1"})
+    )
+    assert outcome.status == "failed" and not outcome.billable
+    assert outcome.failure_code == failure
+    assert outcome.retryable is retryable
+    assert "PRIVATE" not in outcome.text + caplog.text
 
 
 @pytest.mark.asyncio

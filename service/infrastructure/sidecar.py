@@ -143,7 +143,10 @@ class SidecarClient:
         started = time.perf_counter()
         try:
             async with httpx.AsyncClient(
-                timeout=timeout or self._timeout, transport=self._transport
+                timeout=timeout or self._timeout,
+                transport=self._transport,
+                trust_env=False,
+                follow_redirects=False,
             ) as client:
                 resp = await client.request(
                     method,

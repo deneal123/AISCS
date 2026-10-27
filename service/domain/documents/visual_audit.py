@@ -2,23 +2,32 @@
 
 from __future__ import annotations
 
+import asyncio
 import base64
 import json
-from dataclasses import dataclass
+import logging
+import re
+from collections.abc import Awaitable, Callable
+from dataclasses import dataclass, field
 from io import BytesIO
 from typing import Any
 
 from PIL import Image, UnidentifiedImageError
 
 from service.domain.client import create_chat_completion, list_qualified_models
-from service.domain.client.model_requirements import ModelRequirement
-from service.domain.model_runtime import invoke_model_call
-from service.domain.run_context import RunExecutionContext, require_execution
+from service.domain.client.models.requirements import ModelRequirement
+from service.domain.client.protocol.failures import classify_provider_failure
+from service.domain.execution.context import RunExecutionContext, require_execution
+from service.domain.execution.model import invoke_model_call
 from service.domain.subagents.utils import pick_text_model
-from service.domain.tools.workspace_client import WorkspaceUnavailable, call, download_binary
-from service.domain.usage_ledger import UsageKind
+from service.domain.tools.workspace.client import WorkspaceUnavailable, call, download_binary
+from service.domain.usage.ledger import UsageKind, UsageLedger
+from service.shared import deadline
+
+from .repair_provenance import PageBlocks, page_provenance
 
 AUDIT_VERSION = 1
+logger = logging.getLogger(__name__)
 PAGES_PER_CALL = 4
 MAX_PAGES = 200
 MAX_PAGE_BYTES = 16 * 1024 * 1024
@@ -39,30 +48,32 @@ _AUDIT_TOOL = {
     "type": "function",
     "function": {
         "name": _AUDIT_FUNCTION,
-        "description": "Return the bounded visual-layout audit for the supplied PDF pages.",
+        "description": "Вернуть результаты проверки вёрстки предоставленных страниц PDF.",
         "parameters": {
             "type": "object",
             "properties": {
                 "passed": {
                     "type": "boolean",
-                    "description": "True only when none of the supplied pages has a layout defect.",
+                    "description": "Значение true — только если на всех страницах нет дефектов.",
                 },
                 "issues": {
                     "type": "array",
-                    "description": "Bounded layout defects found on the supplied pages.",
+                    "maxItems": 100,
+                    "description": "Дефекты вёрстки предоставленных страниц из допустимого списка.",
                     "items": {
                         "type": "object",
+                        "description": "Один дефект вёрстки предоставленной страницы PDF.",
                         "properties": {
                             "code": {
                                 "type": "string",
                                 "enum": sorted(VISUAL_CODES),
-                                "description": "Closed diagnostic code for the layout defect.",
+                                "description": "Код дефекта вёрстки из закрытого списка.",
                             },
                             "page": {
                                 "type": "integer",
                                 "minimum": 1,
                                 "maximum": MAX_PAGES,
-                                "description": "One-based page number containing the defect.",
+                                "description": "Номер страницы с дефектом, начиная с единицы.",
                             },
                         },
                         "required": ["code", "page"],
@@ -83,6 +94,7 @@ class VisualAuditResult:
     passed: bool
     retryable: bool
     diagnostics: tuple[dict[str, int | str], ...] = ()
+    block_pages: PageBlocks = field(default=(), repr=False)
 
 
 def _parse_result(
@@ -98,18 +110,24 @@ def _parse_result(
             raw = json.loads(value)
         except (TypeError, ValueError):
             raise ValueError("invalid visual audit response") from None
-    if not isinstance(raw, dict) or not isinstance(raw.get("passed"), bool):
+    if (
+        not isinstance(raw, dict)
+        or set(raw) != {"passed", "issues"}
+        or not isinstance(raw.get("passed"), bool)
+    ):
         raise ValueError("invalid visual audit response")
     issues = raw.get("issues")
-    if not isinstance(issues, list):
+    if not isinstance(issues, list) or len(issues) > 100:
+        raise ValueError("invalid visual audit response")
+    if not raw["passed"] and not issues:
         raise ValueError("invalid visual audit response")
     normalized: list[dict[str, object]] = []
-    for item in issues[:100]:
-        if not isinstance(item, dict):
+    for item in issues:
+        if not isinstance(item, dict) or set(item) != {"code", "page"}:
             raise ValueError("invalid visual audit response")
         code = str(item.get("code") or "")
         page = item.get("page")
-        if code not in VISUAL_CODES or not isinstance(page, int) or page not in pages:
+        if code not in VISUAL_CODES or type(page) is not int or page not in pages:
             raise ValueError("invalid visual audit response")
         normalized.append({"code": code, "page": page, "count": 1})
     if raw["passed"] and normalized:
@@ -143,12 +161,13 @@ def _messages(images: list[tuple[int, bytes]]) -> list[dict[str, Any]]:
         {
             "type": "text",
             "text": (
-                "Inspect every supplied PDF page as a finished document. Use only the "
-                "required submit_visual_audit function. Mark passed=true only when no "
-                "listed visual defect is present. A deliberately sparse page with a small "
-                "but readable title or short statement is valid: visual_blank_page means "
-                "that no visible document content exists at all. Do not report composition "
-                "merely because the requested document is minimalist. Allowed codes: "
+                "Проверь каждую предоставленную страницу PDF как готовый документ. Используй "
+                "только обязательную функцию submit_visual_audit. Устанавливай passed=true "
+                "только при отсутствии всех перечисленных визуальных дефектов. Страница "
+                "с намеренно редким содержанием, небольшим читаемым заголовком или коротким "
+                "утверждением допустима: visual_blank_page означает полное отсутствие "
+                "видимого содержания. Не отмечай дефект композиции лишь из-за минималистичного "
+                "оформления запрошенного документа. Допустимые коды: "
                 + ", ".join(sorted(VISUAL_CODES))
                 + "."
             ),
@@ -157,7 +176,7 @@ def _messages(images: list[tuple[int, bytes]]) -> list[dict[str, Any]]:
     for page, payload in images:
         content.extend(
             [
-                {"type": "text", "text": f"Page {page}."},
+                {"type": "text", "text": f"Страница {page}."},
                 {
                     "type": "image_url",
                     "image_url": {
@@ -171,8 +190,9 @@ def _messages(images: list[tuple[int, bytes]]) -> list[dict[str, Any]]:
         {
             "role": "system",
             "content": (
-                "Perform a technical visual-layout audit. Do not summarize or return document "
-                "content. Return no prose: call the required function with bounded codes only."
+                "Выполни техническую проверку вёрстки. Не пересказывай и не возвращай "
+                "содержание документа. Без текстовых пояснений: вызови обязательную функцию "
+                "только с кодами из допустимого списка."
             ),
         },
         {"role": "user", "content": content},
@@ -237,33 +257,59 @@ async def _report(
     )
 
 
+async def _persist_usage(
+    checkpoint: Callable[[UsageLedger], Awaitable[None]] | None,
+    execution: RunExecutionContext,
+) -> None:
+    if checkpoint is not None:
+        await checkpoint(execution.usage)
+
+
+def _unavailable_status(stage: str) -> str:
+    return "unavailable" if stage == "checkpoint" else "vision_unavailable"
+
+
 async def audit_document_build(
     ref: dict[str, Any],
     build_id: str,
     *,
     execution: RunExecutionContext | None = None,
+    usage_checkpoint: Callable[[UsageLedger], Awaitable[None]] | None = None,
 ) -> VisualAuditResult:
     """Claim, review and attest one exact final build."""
 
     execution = require_execution(execution)
     claimed = await call(ref, f"documents/builds/{build_id}/visual-audit/claim", {})
-    audit = claimed.get("audit")
-    if not isinstance(audit, dict):
+    audit = claimed.get("audit") if isinstance(claimed, dict) else None
+    if (
+        not isinstance(audit, dict)
+        or type(audit.get("page_count")) is not int
+        or any(
+            not isinstance(audit.get(key), str) or re.fullmatch(r"[a-f0-9]{64}", audit[key]) is None
+            for key in ("source_digest", "artifact_sha256")
+        )
+    ):
+        logger.warning("document_visual_audit stage=claim code=invalid")
         return VisualAuditResult("invalid", False, False)
-    page_count = int(audit.get("page_count") or 0)
+    page_count = audit["page_count"]
     if page_count < 1 or page_count > MAX_PAGES:
         await _report(ref, build_id, audit, passed=False, retryable=False, diagnostics=[])
         return VisualAuditResult("page_limit", False, False)
-    models = await list_qualified_models(ModelRequirement(vision=True, tools=True))
-    model = pick_text_model(models)
-    if not model:
-        await _report(ref, build_id, audit, passed=False, retryable=True, diagnostics=[])
-        return VisualAuditResult("vision_unavailable", False, True)
     diagnostics: list[dict[str, object]] = []
+    stage = "qualification"
     try:
+        models = await list_qualified_models(ModelRequirement(vision=True, tools=True))
+        model = pick_text_model(models)
+        if not model:
+            await _report(ref, build_id, audit, passed=False, retryable=True, diagnostics=[])
+            return VisualAuditResult("vision_unavailable", False, True)
         for start in range(1, page_count + 1, PAGES_PER_CALL):
+            if deadline.must_finalize():
+                await _report(ref, build_id, audit, passed=False, retryable=True, diagnostics=[])
+                return VisualAuditResult("timeout", False, True)
             page_numbers = list(range(start, min(page_count + 1, start + PAGES_PER_CALL)))
             images: list[tuple[int, bytes]] = []
+            stage = "raster"
             for page in page_numbers:
                 payload, _headers = await download_binary(
                     ref,
@@ -271,6 +317,9 @@ async def audit_document_build(
                     max_bytes=MAX_PAGE_BYTES,
                 )
                 images.append((page, payload))
+            stage = "checkpoint"
+            await _persist_usage(usage_checkpoint, execution)
+            stage = "provider"
             result = await invoke_model_call(
                 create_chat_completion,
                 model=model,
@@ -287,6 +336,9 @@ async def audit_document_build(
                     else None
                 ),
             )
+            stage = "checkpoint"
+            await _persist_usage(usage_checkpoint, execution)
+            stage = "protocol"
             passed, issues = _parse_result(
                 _audit_tool_arguments(result.response), frozenset(page_numbers)
             )
@@ -297,6 +349,7 @@ async def audit_document_build(
             if not passed and not issues:
                 raise ValueError("invalid visual audit response")
         passed = not diagnostics
+        stage = "attestation"
         status = await _report(
             ref,
             build_id,
@@ -305,21 +358,39 @@ async def audit_document_build(
             retryable=False,
             diagnostics=diagnostics,
         )
-        if status.get("state") == "ready":
+        if passed and status.get("state") == "ready":
             return VisualAuditResult("passed", True, False)
-        return VisualAuditResult("failed", False, False, tuple(diagnostics))
-    except WorkspaceUnavailable:
+        return VisualAuditResult(
+            "failed",
+            False,
+            False,
+            tuple(diagnostics),
+            page_provenance(audit.get("block_pages"), page_count),
+        )
+    except asyncio.CancelledError:
+        # Hard budget/user cancellation must release a known claim, but cannot
+        # downgrade an already committed ready build (sidecar guards that state).
+        try:
+            async with asyncio.timeout(5):
+                await _report(ref, build_id, audit, passed=False, retryable=True, diagnostics=[])
+        except Exception:
+            logger.warning("document_visual_audit stage=cancel code=unavailable")
+        raise
+    except WorkspaceUnavailable as exc:
+        logger.warning("document_visual_audit stage=%s code=%s", stage, exc.code.value)
         try:
             await _report(ref, build_id, audit, passed=False, retryable=True, diagnostics=[])
         except WorkspaceUnavailable:
             pass
         return VisualAuditResult("workspace_unavailable", False, True)
-    except Exception:
+    except Exception as exc:
+        code = "invalid" if stage == "protocol" else classify_provider_failure(exc).code.value
+        logger.warning("document_visual_audit stage=%s code=%s", stage, code)
         try:
             await _report(ref, build_id, audit, passed=False, retryable=True, diagnostics=[])
         except WorkspaceUnavailable:
             pass
-        return VisualAuditResult("vision_unavailable", False, True)
+        return VisualAuditResult(_unavailable_status(stage), False, True)
 
 
 __all__ = ["AUDIT_VERSION", "VisualAuditResult", "audit_document_build"]

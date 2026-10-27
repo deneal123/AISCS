@@ -63,9 +63,12 @@ _MODEL_MESSAGES = {
 }
 
 
-@dataclass(frozen=True, slots=True)
+@dataclass(slots=True)
 class IntegrationFailure(Exception):
     """Failure safe for control flow; the originating exception is never retained."""
+
+    # Исключение нельзя замораживать: contextlib и asyncio меняют __traceback__
+    # при повторном выбросе. Иначе типизированный отказ превращается в TypeError.
 
     source: IntegrationSource
     code: IntegrationFailureCode

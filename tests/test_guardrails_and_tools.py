@@ -112,7 +112,7 @@ class _ToolCtx:
 def _patch_parse_url(monkeypatch, result):
     import importlib
 
-    ws = importlib.import_module("service.domain.tools.web_search")
+    ws = importlib.import_module("service.domain.tools.search.client")
 
     async def _parse(url, max_chars=5000):
         return {**result, "url": url}

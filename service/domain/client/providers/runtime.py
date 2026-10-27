@@ -29,19 +29,19 @@ from typing import Any
 import httpx
 from openai import AsyncOpenAI
 
-from service.domain.client.model_catalog import ProviderModelCatalog
-from service.domain.client.provider_generation import (
+from service.domain.client.models.catalog import ProviderModelCatalog
+from service.domain.client.models.list_cache import ModelListCache
+from service.domain.client.providers.management.generation import (
     ProviderGenerationLease,
     ProviderGenerationManager,
 )
-
-from ._sdk import (
+from service.domain.client.providers.transports.sdk import (
     set_default_openai_api,
     set_default_openai_client,
     set_default_openai_key,
     set_tracing_disabled,
 )
-from .model_list_cache import ModelListCache
+
 from .spec import ProviderSpec, settings_value
 
 logger = logging.getLogger(__name__)
@@ -129,7 +129,7 @@ class ProviderRuntime:
         return max(1, int(ttl))
 
     def make_http_client(self) -> httpx.AsyncClient:
-        from . import openai_compatible
+        from service.domain.client.providers.openai import compatible as openai_compatible
 
         if self.hooks.http_client_factory is not None:
             return self.hooks.http_client_factory()
@@ -161,6 +161,8 @@ class ProviderRuntime:
         sdk_key = self.hooks.sdk_api_key() if self.hooks.sdk_api_key else api_key
         try:
             client = AsyncOpenAI(
+                # Only the gateway owns retries; SDK defaults multiply every timeout.
+                max_retries=0,
                 api_key=sdk_key,
                 # Пустая база — это НЕ пустая строка, а `None`: SDK тогда берёт свой
                 # дефолт. Так устроен нативный OpenAI, у которого базы обычно нет.
@@ -204,7 +206,7 @@ class ProviderRuntime:
         self.models.clear()
         return self.client
 
-    async def rebuild_generation(self) -> AsyncOpenAI | None:
+    async def rebuild_generation(self, *, discover: bool = True) -> AsyncOpenAI | None:
         """Prepare client and catalog before publishing the next runtime generation."""
 
         api_key = self.resolve_api_key()
@@ -220,15 +222,17 @@ class ProviderRuntime:
                 bind_sdk=False,
             )
             self.models.clear()
-            catalog = (
-                await self.models.get_snapshot(
+            catalog = None
+            if candidate is not None and discover:
+                catalog = await self.models.get_snapshot(
                     client=candidate,
                     force_refresh=True,
                     configuration_key=digest,
                 )
-                if candidate is not None
-                else None
-            )
+            elif candidate is not None:
+                # Key delivery may run before a user request. Publish a complete
+                # cold generation locally; only background maintenance discovers.
+                catalog = self.models.cached_snapshot(digest)
             if candidate is not None:
                 sdk_key = self.hooks.sdk_api_key() if self.hooks.sdk_api_key else api_key
                 self._bind_sdk(candidate, sdk_key)
@@ -278,6 +282,9 @@ class ProviderRuntime:
             configuration_key=configuration_key or self._catalog_configuration_key(),
         )
 
+    def cached_model_catalog(self, configuration_key: str | None = None) -> ProviderModelCatalog:
+        return self.models.cached_snapshot(configuration_key or self._catalog_configuration_key())
+
     def _catalog_configuration_key(self) -> str:
         """Hash live connection identity without retaining or exposing credentials."""
         return self._configuration_digest(self.resolve_api_key(), self.resolve_base_url())
@@ -311,19 +318,19 @@ class ProviderRuntime:
         await self.generations.drain()
 
     async def chat_completion(self, client: AsyncOpenAI | None, **kw: Any):
-        from . import openai_compatible
+        from service.domain.client.providers.openai import compatible as openai_compatible
 
         if self.hooks.chat_completion is not None:
             return await self.hooks.chat_completion(client or self.client, **kw)
         return await openai_compatible.chat_completion(client or self.client, self.spec.label, **kw)
 
     async def completion(self, client: AsyncOpenAI | None, **kw: Any):
-        from . import openai_compatible
+        from service.domain.client.providers.openai import compatible as openai_compatible
 
         return await openai_compatible.completion(client or self.client, self.spec.label, **kw)
 
     async def embedding(self, client: AsyncOpenAI | None, **kw: Any):
-        from . import openai_compatible
+        from service.domain.client.providers.openai import compatible as openai_compatible
 
         return await openai_compatible.embedding(client or self.client, self.spec.label, **kw)
 

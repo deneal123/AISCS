@@ -109,7 +109,7 @@ async def test_relook_is_billed(vlm):
     Этот класс дыр в проекте находили трижды (веер аналитиков был бесплатным, мета-вызовы
     шли мимо биллинга, надбавка бралась за непроизведённый артефакт).
     """
-    from service.domain.run_context import require_execution
+    from service.domain.execution.context import require_execution
 
     execution = require_execution()
     cursor = execution.usage.cursor()
