@@ -17,7 +17,7 @@
 
 from __future__ import annotations
 
-from service.services.chat.infrastructure.chat_worker.turn_context import (
+from service.services.chat.infrastructure.chat_worker.context.turn import (
     _RECOVERED_TEXT_LIMIT,
     decode_as_text,
 )

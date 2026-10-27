@@ -9,12 +9,14 @@ from fastapi import HTTPException
 
 from service.infrastructure import workspace_client
 from service.infrastructure.agents_client.agent_file_bridge import persist_generated_artifacts
-from service.services.chat.application import document_publication_service
-from service.services.chat.infrastructure.chat_worker import artifacts
-from service.services.chat.presentation.routers.chat_api.workspace_contracts import (
+from service.services.chat.application.documents.publication import (
+    service as document_publication_service,
+)
+from service.services.chat.infrastructure.chat_worker.results import artifacts
+from service.services.chat.presentation.routers.chat_api.workspace.contracts import (
     DocumentVendorOverlayRequest,
 )
-from service.services.chat.presentation.routers.chat_api.workspace_document_routes import (
+from service.services.chat.presentation.routers.chat_api.workspace.documents import (
     _publication_descriptor,
     apply_document_vendor_overlay,
 )
@@ -208,6 +210,8 @@ async def test_delivered_pdf_atomically_marks_assistant_document_completed() -> 
         session,
         {
             "assistant_message_id": 7,
+            "user_id": uuid.uuid4(),
+            "thread_id": str(uuid.uuid4()),
             "role": "pdf",
             "filename": "document.pdf",
             "mime_type": "application/pdf",
@@ -281,7 +285,9 @@ def test_manual_publish_uses_canonical_descriptor_field_names() -> None:
 
 @pytest.mark.asyncio
 async def test_vendor_overlay_uses_private_owned_library_source(monkeypatch) -> None:
-    from service.services.chat.presentation.routers.chat_api import workspace_api
+    from service.services.chat.presentation.routers.chat_api.workspace import (
+        router as workspace_api,
+    )
 
     file_id = uuid.uuid4()
     owner = uuid.uuid4()

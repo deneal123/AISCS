@@ -12,6 +12,9 @@ from typing import Any
 @dataclass(frozen=True, slots=True)
 class ProtocolManifest:
     version: str
+    usage_checkpoint_key: str
+    usage_checkpoint_header: str
+    usage_checkpoint_version: int
     run_input_fields: frozenset[str]
     run_result_fields: frozenset[str]
     required_result_fields: frozenset[str]
@@ -68,6 +71,9 @@ def load_protocol_manifest() -> ProtocolManifest:
     if not isinstance(work_version, int) or work_version < 1:
         raise RuntimeError("invalid Work snapshot version")
     return ProtocolManifest(
+        usage_checkpoint_key=raw["private_usage_checkpoint"]["key"],
+        usage_checkpoint_header=raw["private_usage_checkpoint"]["attempt_header"],
+        usage_checkpoint_version=raw["private_usage_checkpoint"]["schema_version"],
         version=version,
         run_input_fields=_strings(run.get("input_fields"), "run.input_fields"),
         run_result_fields=_strings(run.get("result_fields"), "run.result_fields"),

@@ -281,9 +281,11 @@ async def test_repo_reserve_subtracts_active_reservations_from_available() -> No
 async def test_repo_release_reservation_marks_refunded() -> None:
     session = FakeDBSession()
     repo = BillingRepository(FakeConnector(session))
-    await repo.release_reservation(reservation_id="r1")
+    await repo.release_reservation(user_id="u1", reservation_id="r1")
     release = _find(session.executed, "status = 'refunded'")
     assert release and release[0][1]["rid"] == "r1"
+    assert "user_id = CAST(:user_id AS uuid)" in release[0][0]
+    assert release[0][1]["user_id"] == "u1"
     assert session._committed is True
 
 
@@ -302,6 +304,8 @@ async def test_repo_charge_with_reservation_id_commits_it() -> None:
         reservation_id="r1",
     )
     commit = _find(session.executed, "status = 'committed'")
+    assert "user_id = CAST(:user_id AS uuid)" in commit[0][0]
+    assert commit[0][1]["user_id"] == "u1"
     assert commit and commit[0][1]["rid"] == "r1"
 
 
@@ -355,6 +359,8 @@ async def test_repo_charge_skips_when_idempotency_key_already_charged() -> None:
     # Резерв этой попытки отпущен (refunded), а НЕ закоммичен.
     refunded = _find(session.executed, "status = 'refunded'")
     assert refunded and refunded[0][1]["rid"] == "r1"
+    assert "user_id = CAST(:user_id AS uuid)" in refunded[0][0]
+    assert refunded[0][1]["user_id"] == "u1"
     assert _find(session.executed, "status = 'committed'") == []
 
 
@@ -447,8 +453,8 @@ async def test_service_reserve_returns_none_when_repo_declines() -> None:
 async def test_service_release_reservation_delegates() -> None:
     repo = _FakeReservationRepo()
     svc = BillingService(repo, _Cfg())
-    await svc.release_reservation("r1")
-    assert repo.release_calls == [{"reservation_id": "r1"}]
+    await svc.release_reservation("r1", user_id="u1")
+    assert repo.release_calls == [{"reservation_id": "r1", "user_id": "u1"}]
 
 
 @pytest.mark.asyncio

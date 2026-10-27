@@ -3,7 +3,12 @@ from __future__ import annotations
 import base64
 import logging
 
-from service.infrastructure.sidecar import SidecarBadRequest, SidecarClient, SidecarError
+from service.infrastructure.sidecar import (
+    SidecarBadRequest,
+    SidecarClient,
+    SidecarError,
+    SidecarTimeout,
+)
 from service.services.chat.application.ports.media_analysis_port import MediaAnalysisPort
 
 logger = logging.getLogger(__name__)
@@ -12,6 +17,28 @@ logger = logging.getLogger(__name__)
 # поэтому отдельный multipart-транспорт ради него не городим; но таймаут щедрый: vision и
 # STT это реальные LLM-вызовы.
 _MEDIA_TIMEOUT_SEC = 180.0
+
+
+def _report_failure(path: str, error: SidecarError) -> None:
+    operation = {
+        "/media/describe-image": "describe_image",
+        "/media/transcribe": "transcribe",
+    }.get(path, "other")
+    failure = (
+        "invalid"
+        if isinstance(error, SidecarBadRequest)
+        else "timeout"
+        if isinstance(error, SidecarTimeout)
+        else "unavailable"
+    )
+    level = logging.INFO if isinstance(error, SidecarBadRequest) else logging.WARNING
+    logger.log(
+        level,
+        "Agents media operation %s failed: %s",
+        operation,
+        failure,
+        extra={"component": "agents", "operation": operation, "failure_code": failure},
+    )
 
 
 def _client(config) -> SidecarClient:
@@ -41,10 +68,10 @@ async def _sidecar_media(path: str, payload: dict, *, meta_out: dict | None = No
     try:
         data = await client.request_json("POST", path, json_body=payload)
     except SidecarBadRequest as exc:
-        logger.info("agents sidecar: %s отверг запрос (%s): %s", path, exc.code, exc.detail)
+        _report_failure(path, exc)
         return None
-    except SidecarError:
-        logger.warning("agents sidecar: %s недоступен, отдаём заглушку", path, exc_info=True)
+    except SidecarError as exc:
+        _report_failure(path, exc)
         return None
     # ⚠️ Ответ несёт не только текст: `usage` взгляда на пиксели нужен для тарификации, и
     # раньше он выбрасывался прямо здесь — вызов VLM оплачивала платформа.

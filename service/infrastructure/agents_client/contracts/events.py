@@ -157,10 +157,37 @@ def _add_legacy_guardrials_key(metadata: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _sanitize_video_progress_metadata(metadata: dict[str, Any]) -> dict[str, Any]:
+    raw = metadata.get("video_progress")
+    raw = raw if isinstance(raw, dict) else {}
+    stages = {
+        "probe",
+        "proxy_retry",
+        "download",
+        "frames",
+        "transcript",
+        "source_ready",
+        "authoring",
+        "workspace_save",
+        "library_delivery",
+    }
+    body: dict[str, Any] = {}
+    if isinstance(raw.get("stage"), str) and raw["stage"] in stages:
+        body["stage"] = raw["stage"]
+    body["heartbeat"] = raw.get("heartbeat") is True
+    for field in ("elapsed_sec", "current", "total"):
+        value = raw.get(field)
+        if type(value) is int and 0 <= value <= 100_000:
+            body[field] = value
+    return {"kind": "video_progress", "video_progress": body}
+
+
 def _sanitize_auto_mode_metadata(metadata: Any) -> Any:
     """Keep auto-mode trace and confirmation metadata bounded across old producers."""
     if not isinstance(metadata, dict):
         return metadata
+    if metadata.get("kind") == "video_progress":
+        return _sanitize_video_progress_metadata(metadata)
     if metadata.get("kind") == "document_status":
         return _sanitize_document_status_metadata(metadata)
     sanitized = dict(metadata)
@@ -256,6 +283,9 @@ class AgentEvent(BaseModel):
 
     @model_validator(mode="after")
     def _bound_error_payload(self):
+        if (self.metadata or {}).get("kind") == "video_progress":
+            self.data = ""
+            self.metadata = _sanitize_video_progress_metadata(self.metadata)
         if self.type == EventType.ERROR:
             self.data = _safe_error_data(self.metadata)
             self.metadata = _sanitize_error_metadata(self.metadata)
@@ -264,6 +294,9 @@ class AgentEvent(BaseModel):
     @model_serializer(mode="wrap")
     def serialize_with_legacy_guardrials(self, handler):
         payload = handler(self)
+        if (self.metadata or {}).get("kind") == "video_progress":
+            payload["data"] = ""
+            payload["metadata"] = _sanitize_video_progress_metadata(self.metadata)
         if self.type == EventType.ERROR:
             payload["data"] = _safe_error_data(self.metadata)
             payload["metadata"] = _sanitize_error_metadata(self.metadata)
@@ -297,6 +330,8 @@ class EventSerializer:
             else _sanitize_auto_mode_metadata(event.metadata or {})
         )
         event_data = _safe_error_data(event.metadata) if is_error else event.data
+        if isinstance(event_metadata, dict) and event_metadata.get("kind") == "video_progress":
+            event_data = ""
         payload = {
             "type": evt_type,
             "job_id": job_id,

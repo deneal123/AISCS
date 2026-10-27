@@ -18,7 +18,7 @@ from datetime import UTC, datetime, timedelta
 
 import pytest
 
-from service.services.chat.domain.mode_offer import expire_mode_offer
+from service.services.chat.domain.confirmation.mode import expire_mode_offer
 
 NOW = datetime(2026, 7, 28, 12, 0, 0, tzinfo=UTC)
 

@@ -24,7 +24,7 @@ from service.shared.security.secret_cipher import decrypt_secret, encrypt_secret
 logger = logging.getLogger(__name__)
 
 # Провайдеры, чей ключ можно заменять из админки (совпадает с PROVIDER_MODULES).
-PROVIDERS: tuple[str, ...] = ("openai", "openrouter", "routerai", "mws", "gigachat")
+PROVIDERS: tuple[str, ...] = ("openai", "openrouter", "routerai", "mws", "gigachat", "local")
 _VERSION_KEY = "provider_keys:version"
 
 # Версия ключей, применённая В ЭТОМ процессе (для дешёвой сверки с Redis).
@@ -40,6 +40,7 @@ def _env_key(provider: str) -> str:
         "routerai": a.routerai_api_key,
         "mws": a.mws_api_key or a.openai_api_key,
         "gigachat": a.gigachat_authorization_key,
+        "local": a.local_api_key,
     }.get(provider, "") or ""
 
 
@@ -68,7 +69,7 @@ class ProviderKeyService:
         # Довести до сайдкара СРАЗУ: иначе замена ключа в панели «не действует» до
         # следующего чат-сообщения (а то и вовсе — если воркер не перезапрашивал версию).
         await self.ensure_sidecar_keys()
-        logger.info("provider key replaced at runtime: %s (by %s)", provider, updated_by)
+        logger.info("provider key replaced", extra={"component": "provider_keys"})
         return await self._status_one(provider)
 
     async def delete_key(self, provider: str, *, updated_by: str | None) -> dict[str, Any]:
@@ -78,7 +79,7 @@ class ProviderKeyService:
         # Довести до сайдкара СРАЗУ: иначе замена ключа в панели «не действует» до
         # следующего чат-сообщения (а то и вовсе — если воркер не перезапрашивал версию).
         await self.ensure_sidecar_keys()
-        logger.info("provider key override removed: %s (by %s)", provider, updated_by)
+        logger.info("provider key override removed", extra={"component": "provider_keys"})
         return await self._status_one(provider)
 
     # --- чтение -----------------------------------------------------------------
@@ -115,7 +116,10 @@ class ProviderKeyService:
         try:
             await self.hydrate_all()
         except Exception:
-            logger.debug("provider keys hydrate failed during sync", exc_info=True)
+            logger.debug(
+                "provider keys hydrate failed during sync",
+                extra={"component": "provider_keys", "failure_code": "unavailable"},
+            )
             return False
         _applied_version = version
         return True
@@ -153,20 +157,25 @@ class ProviderKeyService:
 
         overrides: dict[str, str] = {}
         try:
-            stored = await self._safe_get_all()
+            # A failed read must not masquerade as an authoritative empty snapshot:
+            # pushing it would erase the sidecar's last successfully applied keys.
+            stored = await self._repo.get_all()
             for provider in PROVIDERS:
                 row = stored.get(provider)
                 if row and row.get("secret_enc"):
                     overrides[provider] = decrypt_secret(row["secret_enc"])
         except Exception:  # noqa: BLE001
-            logger.warning("не собрали override'ы ключей для сайдкара", exc_info=True)
+            logger.warning(
+                "provider key snapshot unavailable",
+                extra={"component": "provider_keys", "failure_code": "unavailable"},
+            )
             return False
 
         return await push_provider_keys(config, version=version, overrides=overrides)
 
     # --- внутреннее -------------------------------------------------------------
     def _redis(self):
-        from service.infrastructure.cache.redis_manager import RedisManager
+        from service.infrastructure.cache.manager import RedisManager
 
         return RedisManager(config.redis).get_client()
 
@@ -176,7 +185,10 @@ class ProviderKeyService:
             version = int(await self._redis().incr(_VERSION_KEY))
             _applied_version = version  # этот процесс уже применил изменение локально
         except Exception:
-            logger.debug("provider keys version bump failed (redis)", exc_info=True)
+            logger.debug(
+                "provider keys version bump failed",
+                extra={"component": "provider_keys", "failure_code": "unavailable"},
+            )
 
     @staticmethod
     def _validate(provider: str) -> str:
@@ -189,7 +201,10 @@ class ProviderKeyService:
         try:
             return await self._repo.get_all()
         except Exception:
-            logger.debug("provider secrets get_all failed", exc_info=True)
+            logger.debug(
+                "provider secrets read failed",
+                extra={"component": "provider_keys", "failure_code": "unavailable"},
+            )
             return {}
 
     async def _status_one(self, provider: str) -> dict[str, Any]:

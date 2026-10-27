@@ -83,29 +83,7 @@ def _key(thread_id: str) -> str:
 
 
 def _config():
-    from service.settings import config
-
-    agents = config.agents
-    return (
-        # Создаём, только если разрешена способность И включено автосоздание: второе
-        # выключено по умолчанию, потому что каждая песочница — контейнер на хосте.
-        bool(getattr(agents, "workspace_enabled", False))
-        and bool(getattr(agents, "workspace_autocreate", False)),
-        str(getattr(agents, "workspace_url", "") or "").rstrip("/"),
-        float(getattr(agents, "workspace_timeout_sec", 120.0) or 120.0),
-        str(getattr(agents, "workspace_api_key", "") or ""),
-        float(getattr(agents, "workspace_ttl_sec", 1800.0) or 1800.0),
-    )
-
-
-def _explicit_creation_config():
-    """Return sidecar settings for a deliberate Work Hub allocation.
-
-    ``workspace_autocreate`` protects ordinary chat/tool execution from
-    allocating a container just because a run happens to mention a file.  It
-    must not silently override an authenticated person's ``/work/activate``
-    action.
-    """
+    """Доступ к сайдкару, без разрешения на неявное создание среды."""
     from service.settings import config
 
     agents = config.agents
@@ -116,6 +94,23 @@ def _explicit_creation_config():
         str(getattr(agents, "workspace_api_key", "") or ""),
         float(getattr(agents, "workspace_ttl_sec", 1800.0) or 1800.0),
     )
+
+
+def _implicit_creation_config():
+    """Только фоновое выделение контейнера требует отдельного разрешения."""
+    from service.services.admin.application.runtime_settings import runtime_settings
+    from service.settings import config
+
+    enabled, *settings = _config()
+    autocreate = runtime_settings.get_agents(
+        "workspace_autocreate", config.agents.workspace_autocreate
+    )
+    return (enabled and bool(autocreate), *settings)
+
+
+def _explicit_creation_config():
+    """Явное действие пользователя не зависит от фонового автосоздания."""
+    return _config()
 
 
 def _is_async_client(redis_client) -> bool:
@@ -134,12 +129,12 @@ def _is_async_client(redis_client) -> bool:
     return inspect.iscoroutinefunction(getattr(type(redis_client), "execute_command", None))
 
 
-async def _redis_call(redis_client, method_name: str, *args):
+async def _redis_call(redis_client, method_name: str, *args, **kwargs):
     """Позвать команду Redis, не зная, синхронный клиент или асинхронный."""
     method = getattr(redis_client, method_name)
     if _is_async_client(redis_client):
-        return await method(*args)
-    return await asyncio.to_thread(method, *args)
+        return await method(*args, **kwargs)
+    return await asyncio.to_thread(method, *args, **kwargs)
 
 
 async def read_binding(redis_client, thread_id: str | None) -> dict | None:
@@ -233,7 +228,9 @@ async def _save_binding(redis_client, thread_id: str, ref: dict, ttl_sec: float)
 async def _create(base: str, key: str, timeout: float, user_id: str, ttl_sec: float) -> dict | None:
     headers = {"Authorization": f"Bearer {key}"} if key else {}
     try:
-        async with httpx.AsyncClient(timeout=timeout) as client:
+        async with httpx.AsyncClient(
+            timeout=timeout, trust_env=False, follow_redirects=False
+        ) as client:
             response = await client.post(
                 f"{base}/workspaces",
                 json={"user_id": str(user_id), "ttl_sec": ttl_sec},
@@ -307,7 +304,9 @@ async def _ensure_workspace(
 
 async def ensure_workspace(redis_client, thread_id: str | None, user_id: str | None) -> dict | None:
     """Create only when automatic sandbox allocation is enabled."""
-    return await _ensure_workspace(redis_client, thread_id, user_id, settings=_config())
+    return await _ensure_workspace(
+        redis_client, thread_id, user_id, settings=_implicit_creation_config()
+    )
 
 
 async def ensure_workspace_explicit(
@@ -322,32 +321,63 @@ async def ensure_workspace_explicit(
     )
 
 
-async def release_workspace(redis_client, thread_id: str | None) -> None:
-    """Отпустить песочницу треда: удалить контейнер и стереть привязку.
-
-    ⚠️ Привязку стираем ДАЖЕ ЕСЛИ удалить не вышло: оставленный ключ означал бы, что тред
-    навсегда указывает на песочницу, которой нет, — а не оставленный просто создаст новую.
-    """
+async def release_workspace(redis_client, thread_id: str | None) -> bool:
+    """Confirm destruction before forgetting only this exact workspace binding."""
     if not thread_id:
-        return
-    ref = await _read_binding(redis_client, str(thread_id))
-    enabled, base, timeout, key, _ = _config()
-    if ref and enabled and base:
+        return True
+    state, ref = await read_binding_state(redis_client, str(thread_id))
+    if state == "absent":
+        return True
+    _, base, timeout, key, _ = _config()
+    if ref and base:
         headers = {"Authorization": f"Bearer {key}"} if key else {}
         try:
-            async with httpx.AsyncClient(timeout=timeout) as client:
-                await client.request(
+            async with httpx.AsyncClient(
+                timeout=timeout, trust_env=False, follow_redirects=False
+            ) as client:
+                response = await client.request(
                     "DELETE",
                     f"{base}/workspaces/{ref['workspace_id']}",
                     json={"user_id": ref.get("user_id", ""), "token": ref.get("token", "")},
                     headers=headers,
                 )
+            result = response.json()
+            if not isinstance(result, dict) or not (
+                response.status_code == 200
+                and result.get("deleted") == ref["workspace_id"]
+                or response.status_code == 404
+                and result.get("error") == "workspace_not_found"
+            ):
+                _log_boundary_failure("destroy_remote", status=response.status_code)
+                return False
         except Exception:  # noqa: BLE001
             _log_boundary_failure("destroy_transport")
+            return False
+    else:
+        return False
     try:
-        await _redis_call(redis_client, "delete", _key(str(thread_id)))
+        removed = await _redis_call(
+            redis_client,
+            "eval",
+            _FORGET_DESTROYED_BINDING,
+            1,
+            _key(str(thread_id)),
+            ref["workspace_id"],
+        )
+        return removed == 1
     except Exception:  # noqa: BLE001
         _log_boundary_failure("binding_cleanup", level=logging.DEBUG)
+        return False
+
+
+_FORGET_DESTROYED_BINDING = """
+local raw = redis.call('GET', KEYS[1])
+if not raw then return 1 end
+local ok, value = pcall(cjson.decode, raw)
+if not ok or type(value) ~= 'table' or value.workspace_id ~= ARGV[1] then return 0 end
+redis.call('DEL', KEYS[1])
+return 1
+"""
 
 
 async def _call(
@@ -383,7 +413,9 @@ async def _call(
     }
     url = f"{base}/workspaces/{ref['workspace_id']}/{path.lstrip('/')}"
     try:
-        async with httpx.AsyncClient(timeout=timeout) as client:
+        async with httpx.AsyncClient(
+            timeout=timeout, trust_env=False, follow_redirects=False
+        ) as client:
             response = await client.post(url, json=payload, headers=headers)
     except Exception:  # noqa: BLE001 — transport/timeout is not proof that the sandbox died
         _log_boundary_failure("transport")
@@ -649,7 +681,7 @@ async def collect_artifacts(ref: dict | None, inventory: list[dict] | None) -> l
     out: list[dict] = []
     total = 0
     attempts = 0
-    for item in inventory:
+    for item in sorted(inventory, key=lambda item: not bool(item.get("required"))):
         # 🔴 Потолок на ОБРАЩЕНИЯ, а не на успехи. Считая успехи, мы при неудачных выгрузках
         # опрашивали бы сайдкар по КАЖДОЙ записи описи — а её пишет агент, и он мог создать
         # тысячу файлов циклом. Нашёл собственный тест: 30 запросов при потолке 10.
@@ -664,7 +696,9 @@ async def collect_artifacts(ref: dict | None, inventory: list[dict] | None) -> l
         body = {"user_id": ref.get("user_id", ""), "token": ref.get("token", ""), "path": path}
         url = f"{base}/workspaces/{ref['workspace_id']}/files/download"
         try:
-            async with httpx.AsyncClient(timeout=timeout) as client:
+            async with httpx.AsyncClient(
+                timeout=timeout, trust_env=False, follow_redirects=False
+            ) as client:
                 response = await client.post(url, json=body, headers=headers)
         except Exception:  # noqa: BLE001 — чужой сервис лёг, ответ пользователю не роняем
             _log_boundary_failure("artifact_transport")
@@ -678,7 +712,26 @@ async def collect_artifacts(ref: dict | None, inventory: list[dict] | None) -> l
             continue
         if not content:
             continue
+        digest_bound = isinstance(item.get("sha256"), str) and bool(item.get("sha256"))
+        if item.get("required") or digest_bound:
+            from service.infrastructure.agents_client.required_artifacts import verified_content
+
+            if verified_content(content, size, item.get("sha256"), MAX_ARTIFACT_BYTES) is None:
+                _log_boundary_failure("artifact_invalid")
+                continue
         total += size
         # Имя — БЕЗ каталогов: пользователю уезжает файл, а не путь внутри контейнера.
-        out.append({"filename": path.rsplit("/", 1)[-1], "file_b64": content})
+        from service.infrastructure.agents_client.required_artifacts import artifact_filename
+
+        out.append(
+            {
+                "filename": artifact_filename(item),
+                "file_b64": content,
+                **(
+                    {"required": True, "sha256": item["sha256"]}
+                    if item.get("required") or digest_bound
+                    else {}
+                ),
+            }
+        )
     return out

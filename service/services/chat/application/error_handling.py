@@ -29,7 +29,7 @@ _TRANSPORT_MAP = {
 def map_to_http_exception(error: Exception) -> HTTPException:
     if isinstance(error, HTTPException):
         return error
-    from service.services.chat.domain.confirmation_offer import ConfirmationOfferError
+    from service.services.chat.domain.confirmation.offer import ConfirmationOfferError
 
     if isinstance(error, ConfirmationOfferError):
         messages = {
@@ -76,7 +76,7 @@ def map_to_worker_error_payload(error: Exception, *, job_id: str) -> dict:
 def normalize_response_metadata(
     metadata: dict | None, *, selected_model: str | None = None
 ) -> dict:
-    from service.services.chat.domain.mode_offer import sanitize_mode_offer_metadata
+    from service.services.chat.domain.confirmation.mode import sanitize_mode_offer_metadata
 
     data = sanitize_mode_offer_metadata(metadata)
     if selected_model and "selected_model" not in data:

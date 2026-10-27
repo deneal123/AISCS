@@ -29,5 +29,8 @@ async def accumulate_spend(
             await redis_client.expire(key, window_seconds)
         return total
     except Exception:
-        logger.debug("Spend-rate accumulation failed", exc_info=True)
+        logger.debug(
+            "spend-rate observation unavailable",
+            extra={"component": "billing", "failure_code": "abuse_observation"},
+        )
         return None

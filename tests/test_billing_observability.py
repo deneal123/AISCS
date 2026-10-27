@@ -117,7 +117,7 @@ def test_the_worker_puts_the_reservation_into_metadata():
     import ast
     import inspect
 
-    from service.services.chat.infrastructure.chat_worker import charging
+    from service.services.chat.infrastructure.chat_worker.billing import charging
 
     tree = ast.parse(inspect.getsource(charging._charge_usage).strip())
     keys = {

@@ -217,6 +217,11 @@ async def test_chat_download_generated_file_returns_binary(monkeypatch):
     captured = {}
 
     class _FakeFileService:
+        async def require_owned_file_key(self, *, user_id, file_key):
+            assert user_id == _TEST_USER_ID
+            captured["owned_key"] = file_key
+            return file_key
+
         async def get_presigned_url_by_key(self, *, file_key: str, expiry_sec: int = 3600):
             captured["presigned_key"] = file_key
             return None
@@ -252,6 +257,11 @@ async def test_chat_download_generated_file_normalizes_legacy_local_path(monkeyp
     captured = {}
 
     class _FakeFileService:
+        async def require_owned_file_key(self, *, user_id, file_key):
+            assert user_id == _TEST_USER_ID
+            captured["owned_key"] = file_key
+            return file_key
+
         async def get_presigned_url_by_key(self, *, file_key: str, expiry_sec: int = 3600):
             return None
 

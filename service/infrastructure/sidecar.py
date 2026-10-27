@@ -23,9 +23,14 @@
 
 from __future__ import annotations
 
+import asyncio
+import json
 import logging
 import time
-from typing import Any
+from collections.abc import AsyncGenerator, AsyncIterator
+from contextlib import AsyncExitStack, aclosing, asynccontextmanager
+from dataclasses import dataclass, field
+from typing import Any, cast
 
 import httpx
 
@@ -34,6 +39,7 @@ from service.shared.observability.context import get_correlation_id
 logger = logging.getLogger(__name__)
 
 CORRELATION_HEADER = "X-Correlation-Id"
+_DIAGNOSTIC_COMPONENTS = frozenset({"agents", "agents-v1", "graphify", "opendataloader", "whisper"})
 
 
 class SidecarError(Exception):
@@ -63,6 +69,12 @@ class SidecarBadRequest(SidecarError):
     """
 
 
+@dataclass(frozen=True, slots=True)
+class BinarySidecarResponse:
+    headers: httpx.Headers = field(repr=False)
+    chunks: AsyncIterator[bytes] = field(repr=False)
+
+
 class SidecarClient:
     """База: таймаут из конфига, единая обработка ошибок, корреляция, телеметрия.
 
@@ -86,7 +98,9 @@ class SidecarClient:
         # `transport` — для тестов (httpx.MockTransport). Без него тест был бы вынужден
         # ПОВТОРИТЬ логику клиента у себя и проверял бы собственную копию.
         self._transport = transport
-        self._log = logging.getLogger(f"service.sidecar.{service}")
+        # Remote or extension-provided service names are not diagnostic labels.
+        self._component = service if service in _DIAGNOSTIC_COMPONENTS else "other"
+        self._log = logging.getLogger(f"service.sidecar.{self._component}")
 
     @property
     def available(self) -> bool:
@@ -101,6 +115,195 @@ class SidecarClient:
             # Пустой не шлём: заголовок-прочерк врал бы о наличии трассы.
             headers[CORRELATION_HEADER] = cid
         return headers
+
+    async def upload_binary_json(
+        self,
+        path: str,
+        *,
+        content: AsyncIterator[bytes] | bytes,
+        headers: dict[str, str],
+        timeout: float,
+    ) -> dict:
+        """One private upload, bounded JSON reply; no redirects/retry/raw errors."""
+        if not self.available:
+            raise SidecarUnavailable(self.service, "not_configured")
+        try:
+            async with (
+                httpx.AsyncClient(
+                    timeout=timeout,
+                    transport=self._transport,
+                    trust_env=False,
+                    follow_redirects=False,
+                ) as client,
+                client.stream(
+                    "POST",
+                    f"{self._base}{path}",
+                    content=content,
+                    headers=self._headers({**headers, "Accept-Encoding": "identity"}),
+                ) as response,
+            ):
+                if (
+                    response.headers.get("content-type", "").split(";", 1)[0] != "application/json"
+                    or response.headers.get("content-encoding", "identity") != "identity"
+                ):
+                    raise SidecarUnavailable(self.service, "protocol")
+                declared = response.headers.get("content-length")
+                if declared is not None and (
+                    not declared.isascii()
+                    or not declared.isdecimal()
+                    or not 0 < int(declared) <= 16384
+                ):
+                    raise SidecarUnavailable(self.service, "protocol")
+                body = bytearray()
+                stream = cast(AsyncGenerator[bytes], response.aiter_raw(4096))
+                async with aclosing(stream) as chunks:
+                    async for chunk in chunks:
+                        if len(body) + len(chunk) > 16384:
+                            raise SidecarUnavailable(self.service, "protocol")
+                        body.extend(chunk)
+                if declared is not None and len(body) != int(declared):
+                    raise SidecarUnavailable(self.service, "protocol")
+                value = json.loads(body)
+                if not isinstance(value, dict):
+                    raise SidecarUnavailable(self.service, "protocol")
+                if (
+                    response.status_code == 200
+                    and response.headers.get("cache-control") != "no-store"
+                ):
+                    raise SidecarUnavailable(self.service, "protocol")
+                if response.status_code != 200:
+                    code = value.get("error")
+                    if (
+                        response.status_code < 400
+                        or not isinstance(code, str)
+                        or not (
+                            code.isascii() and len(code) <= 64 and code.replace("_", "").isalnum()
+                        )
+                    ):
+                        raise SidecarUnavailable(self.service, "protocol")
+                    raise self._classify(response.status_code, code, "")
+                return value
+        except httpx.TimeoutException:
+            raise SidecarTimeout(self.service, "timeout") from None
+        except (httpx.HTTPError, ValueError, UnicodeError):
+            raise SidecarUnavailable(self.service, "protocol") from None
+
+    @asynccontextmanager
+    async def request_binary(
+        self, path: str, *, json_body: Any, max_bytes: int, timeout: float
+    ) -> AsyncIterator[BinarySidecarResponse]:
+        """Private bounded POST stream. No buffering, redirects, retries or raw errors."""
+        if type(max_bytes) is not int or not 0 < max_bytes < 2**31:
+            raise ValueError("invalid_binary_limit")
+        async with AsyncExitStack() as resources:
+            try:
+                client = await resources.enter_async_context(
+                    httpx.AsyncClient(
+                        timeout=timeout,
+                        transport=self._transport,
+                        follow_redirects=False,
+                    )
+                )
+                response = await resources.enter_async_context(
+                    client.stream(
+                        "POST",
+                        f"{self._base}{path}",
+                        json=json_body,
+                        headers=self._headers({"Accept-Encoding": "identity"}),
+                    )
+                )
+                if not 200 <= response.status_code < 300:
+                    cls = (
+                        SidecarBadRequest
+                        if 400 <= response.status_code < 500
+                        else SidecarUnavailable
+                    )
+                    raise cls(self.service, f"http_{response.status_code}")
+                if response.headers.get("content-encoding", "identity") != "identity":
+                    raise SidecarUnavailable(self.service, "protocol")
+            except (httpx.TimeoutException, TimeoutError):
+                raise SidecarTimeout(self.service, "timeout") from None
+            except httpx.HTTPError:
+                raise SidecarUnavailable(self.service, "protocol") from None
+
+            async def chunks():
+                size = 0
+                try:
+                    async with aclosing(response.aiter_raw(65536)) as source:
+                        async for chunk in source:
+                            size += len(chunk)
+                            if size > max_bytes:
+                                raise SidecarUnavailable(self.service, "binary_limit")
+                            yield chunk
+                except (httpx.TimeoutException, TimeoutError):
+                    raise SidecarTimeout(self.service, "timeout") from None
+                except httpx.HTTPError:
+                    raise SidecarUnavailable(self.service, "protocol") from None
+
+            # Consumer/storage failures are outside the transport error mapping.
+            iterator = chunks()
+            resources.push_async_callback(iterator.aclose)
+            yield BinarySidecarResponse(response.headers, iterator)
+
+    async def request_ndjson(
+        self,
+        method: str,
+        path: str,
+        *,
+        json_body: Any,
+        max_frame_bytes: int = 4 * 1024 * 1024,
+        max_frames: int = 256,
+    ) -> AsyncGenerator[dict]:
+        """Bounded private stream; no retries, redirects, response-body diagnostics."""
+        if not self.available:
+            raise SidecarUnavailable(self.service, "not_configured")
+        if not 1 <= max_frame_bytes <= 4 * 1024 * 1024 or not 1 <= max_frames <= 256:
+            raise SidecarBadRequest(self.service, "invalid")
+        try:
+            async with (
+                asyncio.timeout(self._timeout),
+                httpx.AsyncClient(
+                    timeout=self._timeout,
+                    transport=self._transport,
+                    follow_redirects=False,
+                    trust_env=False,
+                ) as client,
+                client.stream(
+                    method, f"{self._base}{path}", json=json_body, headers=self._headers()
+                ) as response,
+            ):
+                if response.status_code != 200:
+                    failure = (
+                        SidecarBadRequest if response.status_code < 500 else SidecarUnavailable
+                    )
+                    raise failure(self.service, "unavailable")
+                if (
+                    response.headers.get("content-type", "").split(";", 1)[0]
+                    != "application/x-ndjson"
+                ):
+                    raise SidecarUnavailable(self.service, "protocol")
+                buffer = bytearray()
+                count = 0
+                async for chunk in response.aiter_bytes():
+                    buffer.extend(chunk)
+                    while b"\n" in buffer:
+                        line, _, remainder = buffer.partition(b"\n")
+                        buffer = bytearray(remainder)
+                        count += 1
+                        if not line or len(line) > max_frame_bytes or count > max_frames:
+                            raise SidecarUnavailable(self.service, "protocol")
+                        frame = json.loads(line)
+                        if not isinstance(frame, dict):
+                            raise SidecarUnavailable(self.service, "protocol")
+                        yield frame
+                    if len(buffer) > max_frame_bytes:
+                        raise SidecarUnavailable(self.service, "protocol")
+                if buffer:
+                    raise SidecarUnavailable(self.service, "protocol")
+        except (TimeoutError, httpx.TimeoutException):
+            raise SidecarTimeout(self.service, "timeout") from None
+        except (httpx.HTTPError, ValueError, UnicodeError):
+            raise SidecarUnavailable(self.service, "protocol") from None
 
     async def request(
         self,
@@ -124,7 +327,10 @@ class SidecarClient:
         started = time.perf_counter()
         try:
             async with httpx.AsyncClient(
-                timeout=timeout or self._timeout, transport=self._transport
+                timeout=timeout or self._timeout,
+                transport=self._transport,
+                trust_env=False,
+                follow_redirects=False,
             ) as client:
                 resp = await client.request(
                     method,
@@ -142,12 +348,28 @@ class SidecarClient:
         elapsed_ms = (time.perf_counter() - started) * 1000
         if resp.status_code >= 400:
             code, detail = self._read_error(resp)
+            failure = (
+                "timeout"
+                if resp.status_code == 504
+                else "invalid"
+                if resp.status_code < 500
+                else "unavailable"
+            )
             self._log.warning(
-                "%s %s → HTTP %s (%s) за %.0fмс", method, path, resp.status_code, code, elapsed_ms
+                "Sidecar request failed: %s (HTTP %s, %.0fms)",
+                failure,
+                resp.status_code,
+                elapsed_ms,
+                extra={"component": self._component, "failure_code": failure},
             )
             raise self._classify(resp.status_code, code, detail)
 
-        self._log.debug("%s %s → %s за %.0fмс", method, path, resp.status_code, elapsed_ms)
+        self._log.debug(
+            "Sidecar request completed (HTTP %s, %.0fms)",
+            resp.status_code,
+            elapsed_ms,
+            extra={"component": self._component},
+        )
         return resp
 
     async def request_json(self, method: str, path: str, **kw: Any) -> dict:

@@ -15,7 +15,7 @@ import logging
 import time
 from typing import Any
 
-from service.services.admin.application.settings_registry import REGISTRY, SettingSpec
+from service.services.admin.application.settings.registry import REGISTRY, SettingSpec
 from service.settings import config
 from service.shared.agent_settings_port import runtime_settings as _agents_rs_proxy
 
@@ -30,6 +30,8 @@ class RuntimeSettings:
         self._repo_loop: asyncio.AbstractEventLoop | None = None
         self._cache: dict[str, Any] = {}
         self._expires_at: float = 0.0
+        self._generation = 0
+        self._refresh_task: asyncio.Task[None] | None = None
         # Лок создаётся ЛЕНИВО и привязывается к текущему event loop. Синглтон живёт весь
         # процесс, а celery-воркер крутит loop-per-task (новый loop на каждый таск) — лок,
         # привязанный к первому (уже закрытому) loop, ронял refresh с "bound to a different
@@ -47,6 +49,7 @@ class RuntimeSettings:
     def bind(self, repo: Any) -> None:
         """Привязать AppSettingsRepository (на старте процесса)."""
         self._repo = repo
+        self.invalidate()
         try:
             self._repo_loop = asyncio.get_running_loop()
         except RuntimeError:
@@ -61,8 +64,7 @@ class RuntimeSettings:
         # Celery opens a fresh loop for every synchronous task. Repositories
         # retain asyncpg pools, so they must not outlive the loop that owns them.
         if self._repo is None or (loop is not None and self._repo_loop is not loop):
-            self._repo = factory()
-            self._repo_loop = loop
+            self.bind(factory())
 
     @property
     def is_bound(self) -> bool:
@@ -75,6 +77,7 @@ class RuntimeSettings:
             return 30.0
 
     def invalidate(self) -> None:
+        self._generation += 1
         self._expires_at = 0.0
 
     async def refresh(self, *, force: bool = False) -> None:
@@ -85,20 +88,42 @@ class RuntimeSettings:
         async with self._get_lock():
             if not force and time.monotonic() < self._expires_at:
                 return
+            generation = self._generation
             try:
                 items = await self._repo.get_all()
+                if generation != self._generation:
+                    return
                 self._cache = items if isinstance(items, dict) else {}
                 self._expires_at = time.monotonic() + self._ttl()
             except Exception:
-                logger.debug("runtime settings refresh failed; keep stale/defaults", exc_info=True)
-                self._expires_at = time.monotonic() + _STALE_BACKOFF_SEC
+                logger.debug(
+                    "runtime settings refresh unavailable; retaining snapshot",
+                    extra={"component": "runtime_settings", "failure_code": "unavailable"},
+                )
+                if generation == self._generation:
+                    self._expires_at = time.monotonic() + _STALE_BACKOFF_SEC
+
+    async def _refresh_in_background(self) -> None:
+        try:
+            await self.refresh()
+        except Exception:
+            # Fire-and-forget failures must be consumed without raw task diagnostics.
+            logger.debug(
+                "background settings refresh unavailable",
+                extra={"component": "runtime_settings", "failure_code": "unavailable"},
+            )
+        finally:
+            if self._refresh_task is asyncio.current_task():
+                self._refresh_task = None
 
     def _raw(self, key: str) -> Any:
         """Синхронный снапшот значения + fire-and-forget refresh при устаревании."""
         if self._repo is not None and time.monotonic() >= self._expires_at:
             try:
                 loop = asyncio.get_running_loop()
-                loop.create_task(self.refresh())
+                task = self._refresh_task
+                if task is None or task.done() or task.get_loop() is not loop:
+                    self._refresh_task = loop.create_task(self._refresh_in_background())
             except RuntimeError:
                 pass  # нет event loop (sync-контекст) — обновимся при следующем async-доступе
         return self._cache.get(key)

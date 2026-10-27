@@ -21,7 +21,7 @@ def _is_async(client) -> bool:
     на `redis.asyncio` = ЛОЖЬ, поэтому асинхронный клиент уходил в `to_thread` и получал НЕ
     ДОЖДАННУЮ корутину. Команда не исполнялась ВОВСЕ и молчала об этом.
     """
-    from service.infrastructure.cache.redis_manager import is_async_client
+    from service.infrastructure.cache.manager import is_async_client
 
     return is_async_client(client)
 

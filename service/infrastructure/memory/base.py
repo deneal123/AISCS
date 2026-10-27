@@ -7,6 +7,9 @@ import logging
 import time
 from typing import Any
 
+from service.infrastructure.memory.diagnostics import log_memory_failure, operation_metadata
+from service.shared.memory_outcomes import MemoryWriteResult
+
 
 class BaseIntegration(abc.ABC):
     """Generic base contract for all agent integrations.
@@ -26,22 +29,19 @@ class BaseIntegration(abc.ABC):
 
     def _log_operation_start(self, operation: str, **details: Any) -> float:
         started = time.perf_counter()
-        if details:
-            self.logger.debug("%s started: %s", operation, details)
-        else:
-            self.logger.debug("%s started", operation)
+        metadata = operation_metadata(operation, "started", details)
+        self.logger.debug("Memory operation %s started", metadata["operation"], extra=metadata)
         return started
 
     def _log_operation_success(self, operation: str, started: float, **details: Any) -> None:
         elapsed_ms = (time.perf_counter() - started) * 1000
-        if details:
-            self.logger.info("%s completed in %.1fms: %s", operation, elapsed_ms, details)
-        else:
-            self.logger.info("%s completed in %.1fms", operation, elapsed_ms)
+        metadata = operation_metadata(operation, "completed", details)
+        metadata["elapsed_ms"] = max(0.0, elapsed_ms)
+        self.logger.info("Memory operation %s completed", metadata["operation"], extra=metadata)
 
     def _log_operation_failure(self, operation: str, started: float, exc: Exception) -> None:
         elapsed_ms = (time.perf_counter() - started) * 1000
-        self.logger.warning("%s failed in %.1fms: %s", operation, elapsed_ms, exc)
+        log_memory_failure(self.logger, operation, exc, warning=True, elapsed_ms=elapsed_ms)
 
 
 class BaseMemoryIntegration(BaseIntegration, abc.ABC):
@@ -58,7 +58,7 @@ class BaseMemoryIntegration(BaseIntegration, abc.ABC):
         user_id: str,
         messages: list[dict[str, Any]],
         metadata: dict[str, Any] | None = None,
-    ) -> None:
+    ) -> MemoryWriteResult:
         """Persist conversation fragments/facts into memory provider."""
 
     @abc.abstractmethod
@@ -106,8 +106,8 @@ class NoopMemoryIntegration(BaseMemoryIntegration):
         user_id: str,
         messages: list[dict[str, Any]],
         metadata: dict[str, Any] | None = None,
-    ) -> None:
-        return None
+    ) -> MemoryWriteResult:
+        return MemoryWriteResult.UNAVAILABLE
 
     async def list_facts(
         self,

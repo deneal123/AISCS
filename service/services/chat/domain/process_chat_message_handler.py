@@ -16,7 +16,7 @@ from service.services.chat.domain.chat_exceptions import (
     JobExecutionError,
     JobServiceUnavailableError,
 )
-from service.services.chat.domain.confirmation_offer import (
+from service.services.chat.domain.confirmation.offer import (
     claim_confirmation_offer,
     mark_confirmation_accepted,
     release_confirmation_claim,
@@ -111,6 +111,7 @@ class ProcessChatMessageHandler(ChatCommandPort):
                 offer_id,
                 thread_id=command.thread_id,
                 user_id=str(command.user_id or ""),
+                decision=(command.session_data or {}).get("confirmation_decision", "accept"),
             )
             if duplicate:
                 return ChatReplyResult(
@@ -150,10 +151,10 @@ class ProcessChatMessageHandler(ChatCommandPort):
                 file_context=command.file_context,
                 attachments=command.attachments,
             )
-        except Exception as exc:
-            if offer_id:
-                await release_confirmation_claim(self.redis_client, offer_id)
-            raise JobEnqueueError("Failed to enqueue chat task") from exc
+        except Exception:
+            # Delivery may precede the lost ACK. Retain the claim so another
+            # acceptance cannot enqueue a second paid continuation.
+            raise JobEnqueueError("Chat task dispatch unconfirmed") from None
         if confirmation_anchor is not None:
             try:
                 await mark_confirmation_accepted(

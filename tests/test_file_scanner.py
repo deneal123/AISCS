@@ -1,6 +1,10 @@
+import asyncio
+import hashlib
+from unittest.mock import AsyncMock
+
 import pytest
 
-from service.services.files.application.file_scanner_service import BasicFileScanner
+from service.services.files.application.scanning.service import BasicFileScanner
 
 
 class FakeStorage:
@@ -30,3 +34,25 @@ async def test_basic_scanner_handles_missing_getter():
     scanner = BasicFileScanner(NoGetStorage())
     res = await scanner.scan("x")
     assert res["status"] == "skipped"
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("data", [None, False, 0, "", [], {}])
+async def test_invalid_storage_result_is_not_a_successful_scan(data):
+    result = await BasicFileScanner(FakeStorage(data)).scan("private-file-key")
+    assert result == {"status": "error", "reason": "unavailable"}
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("data", [b"", bytearray()])
+async def test_empty_binary_file_has_a_real_digest(data):
+    result = await BasicFileScanner(FakeStorage(data)).scan("empty-file")
+    assert result == {"status": "ok", "size": 0, "sha256": hashlib.sha256(b"").hexdigest()}
+
+
+@pytest.mark.asyncio
+async def test_cancelled_read_is_not_reported_as_a_scan():
+    storage = FakeStorage(b"unused")
+    storage.get_file = AsyncMock(side_effect=asyncio.CancelledError)
+    with pytest.raises(asyncio.CancelledError):
+        await BasicFileScanner(storage).scan("cancelled-file")

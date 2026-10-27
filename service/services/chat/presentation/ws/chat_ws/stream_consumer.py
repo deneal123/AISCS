@@ -5,8 +5,10 @@ from datetime import datetime
 
 from starlette.websockets import WebSocketDisconnect
 
+from service.infrastructure.agents_client.contracts.events import ERROR_CODES
 from service.infrastructure.messaging import stream_helpers
-from service.services.chat.domain.mode_offer import sanitize_mode_offer_metadata
+from service.services.chat.domain.chat_exceptions import ChatErrorMapper
+from service.services.chat.domain.confirmation.mode import sanitize_mode_offer_metadata
 from service.services.chat.presentation.ws.chat_ws.metrics import ChatWsMetrics
 
 logger = logging.getLogger(__name__)
@@ -14,6 +16,20 @@ logger = logging.getLogger(__name__)
 # Устойчивый сбой (Redis недоступен / мёртвый сокет): после стольких подряд ошибок
 # консьюмер выходит, а не крутится вечно, спамя логами и держа корутину.
 _MAX_CONSECUTIVE_STREAM_ERRORS = 8
+_WORKER_ERROR_CODES = (
+    ERROR_CODES
+    | frozenset(ChatErrorMapper.ERROR_CODE_MAP.values())
+    | {
+        "chat_service_error",
+        "selected_model_unavailable",
+        "insufficient_funds",
+        "confirmation_expired",
+        "confirmation_forbidden",
+        "confirmation_busy",
+        "confirmation_invalid",
+        "confirmation_unavailable",
+    }
+)
 
 
 class ChatStreamConsumer:
@@ -294,4 +310,14 @@ class ChatStreamConsumer:
             "seq": event_data.get("seq"),
             "timestamp": timestamp,
         }
+        if event_type == "error":
+            code = event_data.get("error_code")
+            payload["error_code"] = (
+                code
+                if isinstance(code, str) and code in _WORKER_ERROR_CODES
+                else "chat_service_error"
+            )
+            status = event_data.get("status_code")
+            if type(status) is int and 400 <= status <= 599:
+                payload["status_code"] = status
         return {k: v for k, v in payload.items() if v is not None}

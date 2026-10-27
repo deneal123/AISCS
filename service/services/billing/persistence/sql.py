@@ -92,7 +92,8 @@ _TOPUP_BALANCE_SQL = (
 )
 _SUM_ACTIVE_RESERVATIONS_SQL = (
     "SELECT COALESCE(SUM(tokens_reserved), 0) FROM profile.token_reservations "
-    "WHERE user_id = CAST(:user_id AS uuid) AND status = 'reserved' AND expires_at > now()"
+    "WHERE user_id = CAST(:user_id AS uuid) AND status = 'reserved' "
+    "AND (expires_at > now() OR harness_task_id IS NOT NULL)"
 )
 _INSERT_RESERVATION_SQL = (
     "INSERT INTO profile.token_reservations "
@@ -101,19 +102,24 @@ _INSERT_RESERVATION_SQL = (
 )
 _COMMIT_RESERVATION_SQL = (
     "UPDATE profile.token_reservations SET status = 'committed', committed_at = now() "
-    "WHERE reservation_id = CAST(:rid AS uuid) AND status = 'reserved'"
+    "WHERE reservation_id = CAST(:rid AS uuid) AND user_id = CAST(:user_id AS uuid) "
+    "AND status = 'reserved'"
 )
-_RELEASE_RESERVATION_SQL = (
+_OWNED_RELEASE_RESERVATION_SQL = (
     "UPDATE profile.token_reservations SET status = 'refunded', refunded_at = now() "
-    "WHERE reservation_id = CAST(:rid AS uuid) AND status = 'reserved'"
+    "WHERE reservation_id = CAST(:rid AS uuid) AND user_id = CAST(:user_id AS uuid) "
+    "AND status = 'reserved' AND harness_task_id IS NULL"
 )
 _CLEANUP_EXPIRED_RESERVATIONS_SQL = (
     "UPDATE profile.token_reservations SET status = 'refunded', refunded_at = now() "
-    "WHERE status = 'reserved' AND expires_at <= now() RETURNING reservation_id"
+    "WHERE status = 'reserved' AND expires_at <= now() AND harness_task_id IS NULL "
+    "RETURNING reservation_id"
 )
 _RESERVATION_SNAPSHOT_SQL = (
-    "SELECT COUNT(*) FILTER (WHERE status = 'reserved' AND expires_at > now()), "
-    "COUNT(*) FILTER (WHERE status = 'reserved' AND expires_at <= now()) "
+    "SELECT COUNT(*) FILTER (WHERE status = 'reserved' "
+    "AND (expires_at > now() OR harness_task_id IS NOT NULL)), "
+    "COUNT(*) FILTER (WHERE status = 'reserved' AND expires_at <= now() "
+    "AND harness_task_id IS NULL) "
     "FROM profile.token_reservations"
 )
 _COST_GUARD_EVENTS_SQL = (

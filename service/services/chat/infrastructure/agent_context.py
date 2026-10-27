@@ -16,15 +16,27 @@ import asyncio
 import json
 import logging
 from collections.abc import Sequence
-from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
 from service.infrastructure.agents_client.ports import resolve_user_uuid
+from service.infrastructure.cache.manager import call_redis
+from service.services.chat.infrastructure.context.summary import (
+    gateway_summarizer as gateway_summarizer,
+)
+from service.services.chat.infrastructure.context.summary import (
+    get_or_build_history_summary as get_or_build_history_summary,
+)
+from service.services.chat.infrastructure.context.summary import (
+    read_cached_summary as read_cached_summary,
+)
 from service.services.chat.infrastructure.document_kinds import (
     _document_among,
     message_has_non_tabular_attachment,
 )
+from service.services.chat.infrastructure.history_session import PseudoSession
+from service.services.chat.infrastructure.image_metadata import last_image_key
+from service.services.chat.infrastructure.repository_references import read_thread_repo_graphs
 from service.settings import config
 from service.shared.tabular_shape import FORMAT_IS_TABLE, HEAD_BYTES, looks_tabular
 
@@ -52,55 +64,6 @@ def _ext(name: str) -> str:
     return Path(str(name or "")).suffix.lower()
 
 
-class PseudoSession:
-    """In-memory буфер истории на время подготовки запроса.
-
-    Копия доменной сессии без её телеметрии: здесь объект живёт секунды и в сайдкар не
-    едет, поэтому мерить его длину незачем.
-    """
-
-    def __init__(
-        self, session_id: str, ttl_seconds: int | None = None, max_items: int | None = None
-    ):
-        self.session_id = session_id
-        self._items: list[dict[str, Any]] = []
-        self._lock = asyncio.Lock()
-        self._ttl = ttl_seconds
-        self._max_items = max_items
-
-    async def get_items(self, limit: int | None = None) -> list[dict[str, Any]]:
-        async with self._lock:
-            items = list(self._items)
-
-        if self._ttl is not None:
-            cutoff = datetime.now(UTC).timestamp() - self._ttl
-            items = [
-                it for it in items if float(it.get("ts", datetime.now(UTC).timestamp())) >= cutoff
-            ]
-
-        if limit is not None:
-            items = items[-limit:]
-        return items
-
-    async def add_items(self, items: list[dict[str, Any]]) -> None:
-        async with self._lock:
-            self._items.extend(items)
-            if self._max_items is not None and len(self._items) > self._max_items:
-                self._items = self._items[-self._max_items :]
-
-    async def pop_item(self) -> dict[str, Any] | None:
-        async with self._lock:
-            if not self._items:
-                return None
-            item = self._items.pop()
-
-        return item
-
-    async def clear_session(self) -> None:
-        async with self._lock:
-            self._items.clear()
-
-
 def create_session(session_id: str) -> PseudoSession:
     """Сессия для СБОРА истории на стороне backend.
 
@@ -109,14 +72,6 @@ def create_session(session_id: str) -> PseudoSession:
     данные, а не объект), поэтому копия здесь — не дубль состояния, а локальный буфер.
     """
     return PseudoSession(session_id=session_id)
-
-
-def _summary_key(cache_prefix: str, session_id: str) -> str:
-    """Ключ кэша резюме. Формат ДОЛЖЕН совпадать с тем, которым пишет сайдкар: пишет
-    компактизацию он, читает воркер — разъедутся, и резюме молча перестанет находиться,
-    а контекст будет собираться без него (дороже и хуже, но без единой ошибки)."""
-    prefix = (cache_prefix or "gpthub").rstrip(":")
-    return f"{prefix}:agents:summary:{session_id}"
 
 
 async def load_memory_parts(
@@ -133,18 +88,34 @@ async def load_memory_parts(
         return "", ""
 
     try:
-        from service.services.analytics.application.memory_service import MemoryService
+        from service.services.analytics.application.memory.service import MemoryService
 
         mem_svc = MemoryService()
         # Запрос нужен для ОТБОРА фактов: без него в промпт уезжают просто самые
         # свежие, и вопрос про Python получает знак зодиака (замер на живой базе).
-        facts_ctx = await mem_svc.get_memory_context(str(user_id), query=query or "")
-        recall_ctx = ""
+        from service.shared.agent_settings_port import runtime_settings
+
+        budget = float(
+            runtime_settings.get_agents(
+                "memory_context_timeout_sec",
+                config.agents.memory_context_timeout_sec,
+            )
+        )
+
+        async def bounded(read) -> str:
+            try:
+                return await asyncio.wait_for(read, timeout=max(0.1, min(budget, 10.0))) or ""
+            except Exception:
+                logger.debug("Memory context unavailable", extra={"failure_code": "unavailable"})
+                return ""
+
+        reads = [bounded(mem_svc.get_memory_context(str(user_id), query=query or ""))]
         if query and str(query).strip():
-            recall_ctx = await mem_svc.recall_semantic(str(user_id), str(query))
-        return facts_ctx or "", recall_ctx or ""
+            reads.append(bounded(mem_svc.recall_semantic(str(user_id), str(query))))
+        parts = await asyncio.gather(*reads)
+        return parts[0], parts[1] if len(parts) > 1 else ""
     except Exception:
-        logger.debug("Memory context loading failed", exc_info=True)
+        logger.debug("Memory context loading failed", extra={"failure_code": "unavailable"})
         return "", ""
 
 
@@ -182,118 +153,6 @@ async def load_history_items(session: Any | None, logger, *, limit_messages: int
     return valid
 
 
-async def read_cached_summary(session_id: str, redis_client, cache_prefix: str = "gpthub") -> str:
-    """Дешёвое чтение готового саммери из Redis (без LLM). Пусто, если компактизации
-    ещё не было. Используется процессором per-turn для обрезки живого контекста."""
-    if not session_id or redis_client is None:
-        return ""
-    try:
-        raw = await redis_client.get(_summary_key(cache_prefix, session_id))
-        if not raw:
-            return ""
-        cached = json.loads(raw if isinstance(raw, str) else raw.decode("utf-8"))
-        return str(cached.get("summary") or "")
-    except Exception:
-        logger.debug("Summary cache read failed", exc_info=True)
-        return ""
-
-
-# --------------------------------------------------------- компактизация треда --
-# Сжатие истории живёт у backend, потому что кэш резюме — в ЕГО Redis, а сама сборка
-# истории идёт из ЕГО базы. LLM-часть при этом делегируется сайдкару: суммаризатор
-# передаётся аргументом, и backend подставляет вызов через шлюз (см. compact_context).
-
-
-async def gateway_summarizer(messages: list[dict], *, max_tokens: int) -> str:
-    """Суммаризатор через LLM-шлюз сайдкара — backend провайдеров не знает."""
-    from service.infrastructure.llm_gateway import chat_completion
-    from service.settings import config as _cfg
-
-    rendered = "\n".join(
-        f"{m.get('role', 'user')}: {str(m.get('content', '')).strip()}" for m in messages
-    )
-    result = await chat_completion(
-        _cfg,
-        messages=[
-            {
-                "role": "system",
-                "content": (
-                    "Сожми диалог в краткое резюме: факты, решения, договорённости. "
-                    "Без вводных фраз, только суть."
-                ),
-            },
-            {"role": "user", "content": rendered},
-        ],
-        model=str(getattr(_cfg.agents, "summary_model", "") or "openai:gpt-4o-mini"),
-        max_tokens=max_tokens,
-    )
-    return result[0] if result else ""
-
-
-async def get_or_build_history_summary(
-    *,
-    items: list[dict],
-    session_id: str,
-    redis_client,
-    cache_prefix: str = "gpthub",
-    trigger_messages: int = 12,
-    keep_recent: int = 6,
-    max_tokens: int = 400,
-    summarizer=None,
-) -> str:
-    """Вернуть (из кэша или построив) резюме старой части истории.
-
-    Возвращает "" если суммаризация не нужна/недоступна. Кэш инвалидируется, когда
-    появились новые сообщения сверх ранее покрытых (covered_upto).
-    """
-    if not session_id or redis_client is None or not items:
-        return ""
-    if len(items) <= trigger_messages:
-        return ""
-
-    older = items[: max(0, len(items) - keep_recent)]
-    covered = len(older)
-    if covered <= 0:
-        return ""
-
-    key = _summary_key(cache_prefix, session_id)
-    try:
-        raw = await redis_client.get(key)
-        if raw:
-            cached = json.loads(raw if isinstance(raw, str) else raw.decode("utf-8"))
-            if int(cached.get("covered_upto", 0)) >= covered and cached.get("summary"):
-                return str(cached["summary"])
-    except Exception:
-        logger.debug("Summary cache read failed", exc_info=True)
-
-    try:
-        # Суммаризатор ОБЯЗАН быть подан: backend провайдеров не знает, дефолта здесь
-        # нет и быть не может — молчаливый «дефолт» означал бы попытку звонить самому.
-        if summarizer is None:
-            logger.error("компактизация без суммаризатора: пропускаем")
-            return ""
-        build = summarizer
-        summary = await build(older, max_tokens=max_tokens)
-    except Exception:
-        logger.debug("History summarization failed", exc_info=True)
-        return ""
-
-    summary = str(summary or "").strip()
-    if not summary:
-        return ""
-
-    try:
-        payload = json.dumps(
-            {"summary": summary, "covered_upto": covered, "history_len": len(items)},
-            ensure_ascii=False,
-        )
-        await redis_client.set(key, payload)
-    except Exception:
-        logger.debug("Summary cache write failed", exc_info=True)
-
-    return summary
-
-
 # ------------------------------------------------- табличные файлы пользователя --
 # Ещё одна backend-половина шва (Фаза 0b.4): ссылки собирает тот, у кого есть PG и
 # MinIO, а скачивает по ним сайдкар. Байты по сети не гоняем — файл может весить
@@ -325,18 +184,17 @@ async def _recall_or_persist_thread_tabular(
         return current
     key = f"chat:{thread_id}:file_ids"
     try:
-        # redis_client воркера СИНХРОННЫЙ (redis.Redis) — блокирующие вызовы уводим в
-        # тред: `await` на sync-результате молча ломал бы фичу (так уже было с текстом
-        # вложения — «файл живёт в треде» не работал, а выглядел рабочим).
+        # Celery uses sync Redis; HTTP uses asyncio Redis. The shared adapter
+        # dispatches once and awaits the result without blocking the event loop.
         if has_new_file:
             if current:
-                await asyncio.to_thread(
-                    redis_client.set, key, json.dumps(current), ex=_THREAD_FILES_TTL_SEC
+                await call_redis(
+                    redis_client, "set", key, json.dumps(current), ex=_THREAD_FILES_TTL_SEC
                 )
             else:
-                await asyncio.to_thread(redis_client.delete, key)
+                await call_redis(redis_client, "delete", key)
             return current
-        prior = await asyncio.to_thread(redis_client.get, key)
+        prior = await call_redis(redis_client, "get", key)
         if prior:
             if isinstance(prior, bytes):
                 prior = prior.decode("utf-8", "ignore")
@@ -344,7 +202,10 @@ async def _recall_or_persist_thread_tabular(
             if isinstance(loaded, list):
                 return [str(x) for x in loaded]
     except Exception:
-        logger.debug("thread tabular ids recall/persist failed", exc_info=True)
+        logger.debug(
+            "attachment references unavailable",
+            extra={"component": "attachment_context", "failure_code": "unavailable"},
+        )
     return current
 
 
@@ -357,14 +218,17 @@ async def _forget_thread_files(redis_client, thread_id: str) -> None:
     if redis_client is None or not thread_id:
         return
     try:
-        await asyncio.to_thread(redis_client.delete, f"chat:{thread_id}:file_ids")
+        await call_redis(redis_client, "delete", f"chat:{thread_id}:file_ids")
         logger.warning(
-            "память треда %s о файлах СТЁРТА: все её идентификаторы мертвы. Следующий ход "
+            "память треда о файлах СТЁРТА: все её идентификаторы мертвы. Следующий ход "
             "возьмёт файлы заново из сообщения",
-            thread_id,
+            extra={"component": "attachment_context", "failure_code": "missing"},
         )
     except Exception:
-        logger.debug("не удалось стереть память треда о файлах", exc_info=True)
+        logger.debug(
+            "attachment references cleanup unavailable",
+            extra={"component": "attachment_context", "failure_code": "unavailable"},
+        )
 
 
 async def collect_thread_files(
@@ -419,28 +283,6 @@ async def collect_thread_tabular_files(
     return tabular
 
 
-async def read_thread_repo_graphs(redis_client, thread_id: str | None) -> list[str]:
-    """graph_id репозиториев, разобранных В ЭТОМ ТРЕДЕ (привязаны на аплоаде).
-
-    Нужно инструменту search_knowledge_graph: код репозитория лежит в ОТДЕЛЬНОМ графе
-    `repo-{uuid}`, а не в личном графе документов юзера. Без этой связи агент искал код в
-    графе PDF-документов и не находил (живой инцидент: 9 бесплодных вызовов, 9880 кр).
-    Best-effort: Redis лёг / ключа нет → пусто, инструмент работает по личному графу.
-    """
-    if redis_client is None or not thread_id:
-        return []
-    try:
-        # Список (lpush+ltrim на аплоаде): последние N графов треда, новейший первым.
-        raw = await asyncio.to_thread(redis_client.lrange, f"chat:{thread_id}:repo_graphs", 0, -1)
-    except Exception:
-        logger.debug("не удалось прочитать графы репозиториев треда", exc_info=True)
-        return []
-    out = []
-    for item in raw or []:
-        out.append(item.decode("utf-8", "ignore") if isinstance(item, bytes) else str(item))
-    return out
-
-
 async def collect_message_extras(
     redis_client,
     thread_id: str | None,
@@ -461,10 +303,11 @@ async def collect_message_extras(
     reference = await recall_last_thread_image_url(thread_id)
     if detach_files and redis_client is not None and thread_id:
         try:
-            await asyncio.to_thread(redis_client.delete, f"chat:{thread_id}:repo_graphs")
+            await call_redis(redis_client, "delete", f"chat:{thread_id}:repo_graphs")
         except Exception:
             logger.debug(
-                "не удалось стереть графы репозиториев треда при откреплении", exc_info=True
+                "repository references cleanup unavailable",
+                extra={"component": "attachment_context", "failure_code": "unavailable"},
             )
         repo_graphs: list[str] = []
     else:
@@ -498,8 +341,8 @@ async def recall_last_thread_image_url(thread_id: str | None) -> str | None:
 
     if not thread_id:
         return None
-    pg = ChatWorkerDependencyFactory().create_pg_connector(config)
     try:
+        pg = ChatWorkerDependencyFactory().create_pg_connector(config)
         async with pg.get_session_context() as session:
             row = (
                 await session.execute(
@@ -518,24 +361,32 @@ async def recall_last_thread_image_url(thread_id: str | None) -> str | None:
                 )
             ).fetchone()
     except Exception:
-        logger.warning("не удалось прочитать последнюю картинку треда", exc_info=True)
+        logger.warning(
+            "thread image records unavailable",
+            extra={"component": "attachment_context", "failure_code": "unavailable"},
+        )
         return None
     if not row:
         return None
 
-    metadata = row[0] if not isinstance(row[0], str) else json.loads(row[0])
-    files = (metadata or {}).get("generated_files") or []
-    key = next(
-        (f.get("file_key") for f in files if isinstance(f, dict) and f.get("kind") == "image"),
-        None,
-    )
+    try:
+        key = last_image_key(row[0])
+    except ValueError:
+        logger.warning(
+            "thread image metadata invalid",
+            extra={"component": "attachment_context", "failure_code": "invalid"},
+        )
+        return None
     if not key:
         return None
-    file_service = build_file_service(config, pg)
     try:
+        file_service = build_file_service(config, pg)
         return await file_service.get_presigned_url_by_key(file_key=key)
     except Exception:
-        logger.warning("не удалось презайнить последнюю картинку треда", exc_info=True)
+        logger.warning(
+            "thread image capability unavailable",
+            extra={"component": "attachment_context", "failure_code": "unavailable"},
+        )
         return None
 
 
@@ -624,7 +475,10 @@ async def _presign(file_service, file_key: str) -> str | None:
     try:
         return await file_service.get_presigned_url_by_key(file_key=file_key)
     except Exception:
-        logger.debug("презайнед-ссылка на %s не получена", file_key, exc_info=True)
+        logger.debug(
+            "attachment download capability unavailable",
+            extra={"component": "attachment_context", "failure_code": "unavailable"},
+        )
         return None
 
 
@@ -660,7 +514,10 @@ async def _dialog_file_rows(user_id: str | None, file_ids: Sequence[str] | None)
             result = await session.execute(select(UserFile).where(UserFile.user_id == user_uuid))
             rows = list(result.scalars().all())
     except Exception:
-        logger.warning("не удалось прочитать файлы пользователя (ссылки)", exc_info=True)
+        logger.warning(
+            "attachment records unavailable",
+            extra={"component": "attachment_context", "failure_code": "unavailable"},
+        )
         return [], None
 
     scoped = [
@@ -697,11 +554,16 @@ def _report_missing_rows(wanted: set[str] | None, found: int) -> None:
         return
     if not found:
         logger.warning(
-            "файлы диалога не найдены В БАЗЕ: запрошено %d идентификаторов (%s), найдено 0 — "
+            "файлы диалога не найдены В БАЗЕ: запрошено %d идентификаторов, найдено 0 — "
             "песочница останется ПУСТОЙ, и агент скажет человеку, что файлов нет. Обычно это "
             "значит, что записи удалены, а память треда о них ещё жива",
             len(wanted),
-            ", ".join(sorted(wanted)[:5]),
+            extra={
+                "component": "attachment_context",
+                "failure_code": "missing",
+                "requested_count": len(wanted),
+                "found_count": found,
+            },
         )
     elif found < len(wanted):
         logger.warning(
@@ -709,6 +571,12 @@ def _report_missing_rows(wanted: set[str] | None, found: int) -> None:
             "построен по НЕПОЛНОМУ набору",
             len(wanted),
             found,
+            extra={
+                "component": "attachment_context",
+                "failure_code": "partial",
+                "requested_count": len(wanted),
+                "found_count": found,
+            },
         )
 
 
@@ -724,6 +592,9 @@ async def _file_is_tabular(file_service, file_key: str) -> bool:
     try:
         head = await file_service.get_file_head_by_key(file_key=file_key, max_bytes=HEAD_BYTES)
     except Exception:
-        logger.debug("голова файла %s не прочиталась", file_key, exc_info=True)
+        logger.debug(
+            "attachment prefix unavailable",
+            extra={"component": "attachment_context", "failure_code": "unavailable"},
+        )
         head = None
     return looks_tabular(file_key, head)

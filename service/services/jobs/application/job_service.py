@@ -10,12 +10,25 @@ from service.services.chat.domain.chat_contracts import JobExecutionResult
 from service.services.jobs.application.dto import StartJobRequest
 from service.services.jobs.application.ports.interfaces import JobOrchestrationPort, JobQueuePort
 from service.services.jobs.persistence.job_repository import JobRepository
-from service.settings import JobConfig, config
+from service.settings import JobConfig
 from service.shared.repositories.exceptions import RepositoryIntegrityError
 
 logger = logging.getLogger(__name__)
 
 ANON_USER_UUID = UUID("00000000-0000-0000-0000-000000000000")
+
+
+def _worker_owns_terminal(job: JobLogic) -> bool:
+    """Age and transport state cannot supersede worker-owned chat recovery."""
+    return job.type == ServiceType.CHAT and any(
+        key in (job.payload or {})
+        for key in (
+            "thread_id",
+            "_accepted_turn_v1",
+            "_prepared_turn_v1",
+            "_materialization_plan_v1",
+        )
+    )
 
 
 class JobService(JobOrchestrationPort):
@@ -29,41 +42,13 @@ class JobService(JobOrchestrationPort):
         self.repository = repository
         self.job_queue = job_queue
 
-    @staticmethod
-    def _collect_admin_user_ids() -> list[UUID]:
-        ids: list[UUID] = []
-        seen: set[UUID] = set()
-        for raw_admin_id in config.service.admin_user_ids_set:
-            try:
-                admin_uuid = UUID(str(raw_admin_id))
-            except Exception:
-                continue
-            if admin_uuid in seen:
-                continue
-            ids.append(admin_uuid)
-            seen.add(admin_uuid)
-        return ids
-
     @classmethod
     def _resolve_chat_job_user_candidates(cls, user_id: UUID | None) -> list[UUID]:
-        """Resolve ordered list of user ids to try for chat job persistence.
-
-        For anonymous/invalid users we prefer configured admins first to avoid
-        FK violations when ANON row is not present in DB.
-        """
-        admins = cls._collect_admin_user_ids()
-
-        if user_id is None or user_id == ANON_USER_UUID:
-            return admins if admins else [ANON_USER_UUID]
-
-        candidates: list[UUID] = [user_id]
-        for admin_uuid in admins:
-            if admin_uuid != user_id:
-                candidates.append(admin_uuid)
-        return candidates
+        """Compatibility projection: a durable chat job has exactly one real owner."""
+        return [user_id] if isinstance(user_id, UUID) and user_id != ANON_USER_UUID else []
 
     async def create_job(self, user_id: UUID, request_body: StartJobRequest) -> JobExecutionResult:
-        logger.info(f"Creating job for user: {user_id} with params: {request_body.type}")
+        logger.info("creating job", extra={"component": "job_service"})
 
         user_ongoing_jobs = await self.repository.fetch_jobs_by_user_id(
             user_id, [ProcessingStatus.NEW, ProcessingStatus.PROCESSING]
@@ -76,6 +61,8 @@ class JobService(JobOrchestrationPort):
             stale_threshold = max(self.config.settings.processing_timeout_sec, 60)
             stale_jobs = []
             for j in user_ongoing_jobs:
+                if _worker_owns_terminal(j):
+                    continue
                 try:
                     ts = j.updated_at or j.created_at
                     if ts is None:
@@ -84,49 +71,45 @@ class JobService(JobOrchestrationPort):
                         ts = ts.replace(tzinfo=UTC)
                     age = (now - ts).total_seconds()
                     logger.debug(
-                        "Job %s: status=%s, updated_at=%s, age=%.0fs, threshold=%ds",
-                        j.id,
-                        j.status,
-                        ts,
-                        age,
-                        stale_threshold,
+                        "checking legacy job age",
+                        extra={"component": "job_service"},
                     )
                     if j.status == ProcessingStatus.PROCESSING and age > stale_threshold:
-                        stale_jobs.append((j, age))
-                except Exception as e:
-                    logger.warning("Error checking job %s staleness: %s", j.id, e)
+                        stale_jobs.append(j)
+                except Exception:
+                    logger.warning(
+                        "job age check unavailable",
+                        extra={"component": "job_service", "failure_code": "internal"},
+                    )
                     continue
 
             if stale_jobs:
                 logger.warning(
-                    "Found stale PROCESSING jobs for user %s: %s",
-                    user_id,
-                    [str(s[0].id) for s in stale_jobs],
+                    "legacy stale jobs found",
+                    extra={"component": "job_service", "result_count": len(stale_jobs)},
                 )
-                for stale_job, age in stale_jobs:
+                for stale_job in stale_jobs:
                     try:
                         stale_job.status = ProcessingStatus.FAILURE
                         if stale_job.payload and "celery_task_id" in stale_job.payload:
                             stale_job.payload.pop("celery_task_id", None)
                         await self.repository.update_job_status(stale_job)
                         logger.info(
-                            "Marked stale job %s as FAILURE (age=%.0fs) to unblock user %s",
-                            stale_job.id,
-                            age,
-                            user_id,
+                            "legacy stale job finalized",
+                            extra={"component": "job_service"},
                         )
                     except Exception:
-                        logger.exception("Failed to mark stale job %s as FAILURE", stale_job.id)
+                        logger.warning(
+                            "legacy stale job cleanup unavailable",
+                            extra={"component": "job_service", "failure_code": "persistence"},
+                        )
 
             user_ongoing_jobs = await self.repository.fetch_jobs_by_user_id(
                 user_id, [ProcessingStatus.NEW, ProcessingStatus.PROCESSING]
             )
 
         if user_ongoing_jobs:
-            logger.error(f"User: {user_id} has an ongoing job")
-            logger.debug(
-                f"Ongoing jobs: {[j.model_dump_json(indent=2) for j in user_ongoing_jobs]}"
-            )
+            logger.info("ongoing job blocks new file job", extra={"component": "job_service"})
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=(
@@ -145,7 +128,7 @@ class JobService(JobOrchestrationPort):
         )
         created_job = await self.repository.create_job(new_job)
 
-        logger.info(f"Job created with ID: {created_job.id} for user: {user_id}")
+        logger.info("job created", extra={"component": "job_service"})
 
         wait_time = self._resolve_wait_time(created_job.type)
 
@@ -173,7 +156,10 @@ class JobService(JobOrchestrationPort):
         Returns:
             JobResponse with job_id and status
         """
-        logger.info(f"Creating chat job for user: {user_id}, thread: {thread_id}")
+        candidates = self._resolve_chat_job_user_candidates(user_id)
+        if not candidates:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid job owner")
+        logger.info("creating chat job", extra={"component": "chat_job"})
 
         payload = {
             "thread_id": thread_id,
@@ -182,7 +168,6 @@ class JobService(JobOrchestrationPort):
         }
 
         created_job = None
-        candidates = self._resolve_chat_job_user_candidates(user_id)
         for candidate_user_id in candidates:
             try:
                 new_job = JobLogic(
@@ -192,32 +177,25 @@ class JobService(JobOrchestrationPort):
                     payload=payload,
                 )
                 created_job = await self.repository.create_job(new_job)
-                if candidate_user_id != (user_id or ANON_USER_UUID):
-                    logger.warning(
-                        "Chat job persisted via fallback user_id=%s for original user_id=%s",
-                        candidate_user_id,
-                        user_id,
-                    )
                 break
             except RepositoryIntegrityError:
                 logger.warning(
-                    "Integrity error creating chat job for user_id=%s "
-                    "(candidate=%s); trying next fallback",
-                    user_id,
-                    candidate_user_id,
+                    "chat job persistence unavailable",
+                    extra={"component": "chat_job", "failure_code": "persistence"},
                 )
                 continue
 
         if created_job is None:
             logger.error(
-                "Failed to create chat job for user_id=%s: no valid user candidate", user_id
+                "chat job creation failed",
+                extra={"component": "chat_job", "failure_code": "persistence"},
             )
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="Failed to create chat job",
             )
 
-        logger.info(f"Chat job created: {created_job.id} for user: {user_id}")
+        logger.info("chat job created", extra={"component": "chat_job"})
 
         return JobExecutionResult(
             job_id=created_job.id,
@@ -233,23 +211,27 @@ class JobService(JobOrchestrationPort):
         await self.repository.update_job_celery_task_id(job_id, celery_task_id)
 
     async def fetch_job_result(self, user_id: UUID, job_id: UUID) -> JobExecutionResult:
-        logger.info(f"Fetching job result for job: {job_id} and user: {user_id}")
+        logger.info("fetching job result", extra={"component": "chat_job"})
 
         job = await self.repository.fetch_job_by_id(job_id, user_id)
 
         if not job:
-            logger.error(f"Job not found for user: {user_id}")
+            logger.warning(
+                "job not found", extra={"component": "chat_job", "failure_code": "not_found"}
+            )
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Job not found")
 
         # Check Celery task status if job is still PROCESSING
-        celery_task_id = job.payload.get("celery_task_id") if job.payload else None
+        celery_task_id = job.celery_task_id or (
+            job.payload.get("celery_task_id") if job.payload else None
+        )
         if job.status == ProcessingStatus.PROCESSING and celery_task_id:
             job = await self._sync_celery_status(job, celery_task_id)
 
         # Extract celery_task_id from job payload if present
-        celery_task_id = None
-        if job.payload and "celery_task_id" in job.payload:
-            celery_task_id = job.payload["celery_task_id"]
+        celery_task_id = job.celery_task_id or (
+            job.payload.get("celery_task_id") if job.payload else None
+        )
 
         # Calculate elapsed time for PROCESSING jobs, otherwise return config value
         wait_time_sec = self.config.settings.wait_time_sec
@@ -271,6 +253,21 @@ class JobService(JobOrchestrationPort):
 
     async def _sync_celery_status(self, job: JobLogic, celery_task_id: str) -> JobLogic:
         """Check Celery task status and update job if completed."""
+        if _worker_owns_terminal(job):
+            # A returned Celery task can contain a recoverable domain failure.
+            # Only the worker's durable transaction owns chat finalization; polling
+            # must never persist transport metadata or invalidate private receipts.
+            try:
+                fresh = await self.repository.fetch_job_by_id(job.id, job.user_id)
+            except Exception:
+                logger.warning(
+                    "chat job status refresh unavailable",
+                    extra={"component": "chat_job", "failure_code": "unavailable"},
+                )
+                return job
+            if fresh is None:
+                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Job not found")
+            return fresh
         try:
             if not self.job_queue:
                 return job

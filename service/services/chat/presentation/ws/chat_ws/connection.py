@@ -37,8 +37,14 @@ class ChatWsConnectionService:
         try:
             owner = await self._chat_service.persistence_service.get_thread_owner(thread_id)
         except Exception:
-            logger.exception("Failed to resolve thread owner for %s", thread_id)
-            return True
+            # Ownership must be established before replay or Redis stream access.
+            # A DB outage cannot grant access to a requested thread's events.
+            logger.warning(
+                "chat ownership check unavailable",
+                extra={"component": "chat_ws", "failure_code": "unavailable"},
+            )
+            await websocket.close(code=status.WS_1011_INTERNAL_ERROR)
+            return False
         if owner is not None and str(owner) != str(requester_id):
             await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
             return False

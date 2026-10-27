@@ -16,7 +16,7 @@ import pytest
 
 # ⚠️ Импорт из НАСТОЯЩЕГО места (`chat_worker/message_meta.py`), а не транзитом через
 # воркер: транзитный импорт ломается при любом выносе, хотя правила не менялись.
-from service.services.chat.infrastructure.chat_worker.message_meta import (
+from service.services.chat.infrastructure.chat_worker.context.metadata import (
     build_public_usage_meta,
     persistable_meta,
     user_message_meta,
@@ -224,3 +224,15 @@ def test_auto_mode_metadata_redacts_legacy_reason_and_unknown_codes():
 
     assert meta["mode_offer"] == {"mode": "deep_research"}
     assert marker not in str(meta)
+
+
+def test_ide_mini_report_survives_reload_only_in_repository_scope():
+    metadata = {
+        "ide_repository": "20000000-0000-0000-0000-000000000001",
+        "ide_summary": "Добавлена инструкция запуска. Проверки не запускались.",
+        "ide_files_written": 1,
+    }
+    assert persistable_meta(metadata, None) == metadata
+    assert "ide_summary" not in persistable_meta({"ide_summary": "Wrong scope"}, None)
+    for invalid in ("", " x", "x\ncode", "x" * 281, {"text": "wrong"}, True):
+        assert "ide_summary" not in persistable_meta({**metadata, "ide_summary": invalid}, None)

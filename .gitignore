@@ -1,6 +1,7 @@
 __pycache__/
 *.py[cod]
 .venv/
+.work/
 .ruff_cache/
 .pytest_cache/
 .mypy_cache/
@@ -11,3 +12,4 @@ __pycache__/
 # graphify knowledge-graph output (dev tool, not source)
 graphify-out/
 .coverage
+.coverage.*

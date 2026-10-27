@@ -3,6 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 
+_WORKER_REDIS_TIMEOUT_SEC = 2.0
+
 
 @dataclass(slots=True)
 class ChatWorkerDependencyFactory:
@@ -22,6 +24,8 @@ class ChatWorkerDependencyFactory:
             db=config.redis.db,
             password=config.redis.password or None,
             decode_responses=True,
+            socket_timeout=_WORKER_REDIS_TIMEOUT_SEC,
+            socket_connect_timeout=_WORKER_REDIS_TIMEOUT_SEC,
         )
 
 
@@ -33,17 +37,11 @@ def build_file_service(config: Any, pg_connector: Any):
     chat_worker_tasks давал import-цикл agents→chat→agents. Здесь зависимости
     только на `service.services.files` + `service.infrastructure.storage` (без agents).
     """
+    from service.composition.storage import build_file_storage
     from service.services.files.application.file_saver_service import FileSaverService
     from service.services.files.persistence.file_repository import FileRepository
 
-    if config.storage.backend.strip().lower() == "minio":
-        from service.infrastructure.storage.minio_file_storage import MinioFileStorage
-
-        storage = MinioFileStorage(config.minio)
-    else:
-        from service.infrastructure.storage.local_file_storage import LocalFileStorage
-
-        storage = LocalFileStorage()
+    storage = build_file_storage(config)
 
     return FileSaverService(
         repository=FileRepository(pg_connector), folder_name="uploads", file_storage=storage

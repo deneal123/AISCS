@@ -60,16 +60,20 @@ class PgConnector:
             PgConnector._engine = None
             PgConnector._session_maker = None
             try:
-                # Роняем пул старого движка. Его event loop уже закрыт (воркер делает
-                # loop-per-task). ВАЖНО: close=False — иначе SQLAlchemy пытается ЗАКРЫТЬ
+                # Восстановительный путь для пула, оставленного чужим/закрытым loop.
+                # Штатный chat-worker закрывает свой пул до завершения loop.
+                # ВАЖНО: close=False — иначе SQLAlchemy пытается ЗАКРЫТЬ
                 # каждый asyncpg-коннект синхронно (`await_only` внутри), а его loop мёртв →
                 # `MissingGreenlet: greenlet_spawn has not been called` сыпется ERROR'ом на
                 # КАЖДЫЙ коннект, и закрытие всё равно не удаётся. close=False сбрасывает
                 # пул без этих обречённых закрытий; осиротевшие коннекты (их loop мёртв, они
-                # и так нерабочие) добирает GC/таймаут Postgres. Тихо и без ложных ошибок.
+                # и так нерабочие) добирает GC/таймаут Postgres. Это не замена штатной очистке.
                 old_engine.sync_engine.dispose(close=False)
-            except Exception as e:
-                logger.debug("Failed to dispose previous engine pool: %s", e, exc_info=True)
+            except Exception:
+                logger.warning(
+                    "database pool retirement failed",
+                    extra={"component": "database", "failure_code": "cleanup"},
+                )
 
         if not PgConnector._engine:
             PgConnector._engine = create_async_engine(
@@ -115,8 +119,11 @@ class PgConnector:
                 logger.debug("Database session created successfully")
                 yield session
                 logger.debug("Database session closed successfully")
-        except Exception as e:
-            logger.exception(f"Error managing database session: {e}")
+        except Exception:
+            logger.warning(
+                "database session failed",
+                extra={"component": "database", "failure_code": "internal"},
+            )
             raise
 
     def get_session_context(self) -> AsyncSession:
@@ -137,15 +144,38 @@ class PgConnector:
                 await session.execute(text("SELECT 1"))
                 await session.commit()
             logger.debug("PostgreSQL connection verified successfully")
-        except Exception as e:
-            logger.exception("Failed to verify PostgreSQL connection: %s", e)
+        except Exception:
+            logger.warning(
+                "database verification failed",
+                extra={"component": "database", "failure_code": "unavailable"},
+            )
             raise
 
     async def close(self) -> None:
         """Dispose engine connections gracefully."""
+        await self._dispose_engine(self._engine)
+
+    @classmethod
+    async def close_current_loop(cls) -> None:
+        """Закрыть только общий пул текущего worker-loop, не затрагивая чужой."""
+        if cls._bound_loop is not None and cls._bound_loop is not asyncio.get_running_loop():
+            return
+        await cls._dispose_engine(cls._engine)
+
+    @classmethod
+    async def _dispose_engine(cls, engine: AsyncEngine | None) -> None:
+        if engine is None:
+            return
         try:
-            if self._engine is not None:
-                await self._engine.dispose()
-                logger.debug("PostgreSQL engine disposed")
-        except Exception as e:
-            logger.exception("Error disposing PostgreSQL engine: %s", e)
+            await engine.dispose()
+            # Не сбрасываем новый пул, если владение изменилось за время await.
+            if cls._engine is engine:
+                cls._engine = None
+                cls._session_maker = None
+                cls._bound_loop = None
+            logger.debug("PostgreSQL engine disposed")
+        except Exception:
+            logger.warning(
+                "database cleanup failed",
+                extra={"component": "database", "failure_code": "cleanup"},
+            )

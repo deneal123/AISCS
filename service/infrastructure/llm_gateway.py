@@ -64,7 +64,10 @@ async def chat_completion(
         # она всё равно может, а код в этом случае просто не заполнится.
         data = await client.request_json("POST", "/v1/chat/completions", json_body=payload)
     except SidecarError:  # служебный вызов: его сбой не должен ронять вызывающего
-        logger.warning("LLM-шлюз сайдкара недоступен", exc_info=True)
+        logger.warning(
+            "LLM gateway unavailable",
+            extra={"component": "llm_gateway", "failure_code": "unavailable"},
+        )
         return None
 
     try:

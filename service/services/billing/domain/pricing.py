@@ -27,6 +27,8 @@ class ModelPrice:
     price_in_rub_per_1k: Decimal
     price_out_rub_per_1k: Decimal
     margin_override: Decimal | None = None
+    # Только доверенная политика модели; нулевой тариф из БД этого права не даёт.
+    is_free: bool = False
 
 
 @dataclass(frozen=True)
@@ -88,7 +90,11 @@ def compute_credits(
     raw_cost = Decimal(0)
     billable = Decimal(0)
 
+    has_calls = False
+    only_free = True
     for prompt_tokens, completion_tokens, price in per_call_prices:
+        has_calls = True
+        only_free = only_free and price.is_free
         cost = call_cost_rub(prompt_tokens, completion_tokens, price)
         margin = (
             price.margin_override if price.margin_override is not None else params.margin_multiplier
@@ -105,11 +111,18 @@ def compute_credits(
     complexity_factor = params.complexity_factor_complex if is_complex else Decimal(1)
     billable *= complexity_factor
 
+    if has_calls and only_free and raw_cost == 0:
+        return PriceResult(credits=0, raw_cost_rub=raw_cost, billable_rub=billable)
     credits_int = _to_credits(billable, params)
     # Доля надбавок — РАЗНИЦА двух прогонов одной формулы. Отдельное выражение
     # («надбавка × маржа / единица») разошлось бы с настоящим счётом: и complexity, и
     # округление вверх, и минимум применяются к СУММЕ, а не к слагаемым.
-    surcharge_credits = credits_int - _to_credits(tokens_only_billable * complexity_factor, params)
+    token_credits = (
+        0
+        if has_calls and only_free
+        else _to_credits(tokens_only_billable * complexity_factor, params)
+    )
+    surcharge_credits = credits_int - token_credits
     return PriceResult(
         credits=credits_int,
         raw_cost_rub=raw_cost,
@@ -145,9 +158,13 @@ def resolve_model_price(
     provider_key = (provider or "").strip().lower()
     if not provider_key and ":" in key:
         candidate, _, candidate_model = key.partition(":")
-        known_providers = {"openai", "openrouter", "routerai", "gigachat", "mws"}
+        known_providers = {"openai", "openrouter", "routerai", "gigachat", "mws", "local"}
         if candidate.lower() in known_providers and candidate_model:
             provider_key, key = candidate.lower(), candidate_model
+    from service.shared.model_class import is_free_local_model
+
+    if is_free_local_model(key) and provider_key in {"", "local"}:
+        return ModelPrice(Decimal(0), Decimal(0), is_free=True)
     # В реестре новый ключ — пара (provider, model_id). Строковый ключ оставлен
     # как совместимость для тестов и старых интеграций, а ('', model_id) — для
     # намеренно общих ручных тарифов.

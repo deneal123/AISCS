@@ -21,58 +21,70 @@ from service.services.chat.infrastructure.chat_worker import (
 from service.services.chat.infrastructure.chat_worker import (
     build_file_service as _build_file_service,
 )
-from service.services.chat.infrastructure.chat_worker.attachment_recovery import (
-    recover_attachment_text,
-)
-from service.services.chat.infrastructure.chat_worker.cancellation import (
-    CancelledByUser as CancelledByUser,
-)
-from service.services.chat.infrastructure.chat_worker.cancellation import (
-    run_with_cancel as _run_with_cancel,
-)
-from service.services.chat.infrastructure.chat_worker.catalog_events import (
-    record_workflow_catalog_events,
-)
-from service.services.chat.infrastructure.chat_worker.charging import (
+from service.services.chat.infrastructure.chat_worker.billing.charging import (
     _charge_memory_usage,
     _overlay_billing,
     _release_reservation,
 )
-from service.services.chat.infrastructure.chat_worker.failure import handle_worker_failure
-from service.services.chat.infrastructure.chat_worker.job_state import (
-    fetch_job_status,
-    mark_job_failed_committed,
-    redelivery_short_circuit,
-    update_job_status,
-)
-from service.services.chat.infrastructure.chat_worker.memory_maintenance import (
-    MemoryUserUnresolved,
-    extract_and_charge_memory,
-    maybe_compact_thread,
-    resolve_memory_user_id,
-    restore_pseudo_session_history,
-)
-from service.services.chat.infrastructure.chat_worker.message_meta import (
-    persona_switched as resolve_persona_switched,
-)
-from service.services.chat.infrastructure.chat_worker.message_meta import (
-    reply_or_provider_failure as _reply_or_provider_failure,
-)
-from service.services.chat.infrastructure.chat_worker.message_meta import user_message_meta
-from service.services.chat.infrastructure.chat_worker.publication import publish_committed_turn
-from service.services.chat.infrastructure.chat_worker.reservation import (
+from service.services.chat.infrastructure.chat_worker.billing.reservation.preflight import (
     emit_expensive_confirmation,
     emit_insufficient_credits,
     estimate_reservation_credits,
     reservation_context_chars,
     reserve_credits_or_short_circuit,
 )
-from service.services.chat.infrastructure.chat_worker.retention import delete_expired_chat_history
+from service.services.chat.infrastructure.chat_worker.context.attachment_recovery import (
+    recover_attachment_text,
+)
+from service.services.chat.infrastructure.chat_worker.context.memory import (
+    MemoryUserUnresolved,
+    extract_and_charge_memory,
+    maybe_compact_thread,
+    resolve_memory_user_id,
+    restore_pseudo_session_history,
+)
+from service.services.chat.infrastructure.chat_worker.context.metadata import (
+    persona_switched as resolve_persona_switched,
+)
+from service.services.chat.infrastructure.chat_worker.context.metadata import (
+    reply_or_provider_failure as _reply_or_provider_failure,
+)
+from service.services.chat.infrastructure.chat_worker.context.metadata import user_message_meta
+from service.services.chat.infrastructure.chat_worker.context.retention import (
+    delete_expired_chat_history,
+)
+from service.services.chat.infrastructure.chat_worker.context.thread_files import (
+    recall_or_persist_thread_file,
+)
+from service.services.chat.infrastructure.chat_worker.execution.cancellation import (
+    CancelledByUser as CancelledByUser,
+)
+from service.services.chat.infrastructure.chat_worker.execution.cancellation import (
+    run_with_cancel as _run_with_cancel,
+)
+from service.services.chat.infrastructure.chat_worker.execution.failure import handle_worker_failure
+from service.services.chat.infrastructure.chat_worker.execution.job_state import (
+    fetch_job_status,
+    mark_job_failed_committed,
+    redelivery_short_circuit,
+    update_job_status,
+)
+from service.services.chat.infrastructure.chat_worker.execution.run import execute_chat_job
+from service.services.chat.infrastructure.chat_worker.results.catalog import (
+    record_workflow_catalog_events,
+)
+from service.services.chat.infrastructure.chat_worker.results.publication import (
+    publish_committed_turn,
+)
+from service.services.chat.infrastructure.chat_worker.results.turn import (
+    _persist_chat_turn,
+    _persist_partial_turn_committed,
+    charge_and_describe,
+)
 from service.services.chat.infrastructure.chat_worker.run_contracts import (
     WorkerExecutionHooks,
     WorkerRunRequest,
 )
-from service.services.chat.infrastructure.chat_worker.run_execution import execute_chat_job
 from service.services.chat.infrastructure.chat_worker.runtime_sync import (
     bind_runtime_settings as _bind_runtime_settings,
 )
@@ -80,14 +92,6 @@ from service.services.chat.infrastructure.chat_worker.runtime_sync import (
     sync_provider_keys as _sync_provider_keys,
 )
 from service.services.chat.infrastructure.chat_worker.task_runtime import run_coroutine
-from service.services.chat.infrastructure.chat_worker.thread_file_context import (
-    recall_or_persist_thread_file,
-)
-from service.services.chat.infrastructure.chat_worker.turn_result import (
-    _persist_chat_turn,
-    _persist_partial_turn_committed,
-    charge_and_describe,
-)
 
 logger = logging.getLogger(__name__)
 
@@ -378,6 +382,10 @@ async def _redelivery_short_circuit(job_repo, job_id: str, session, user_id) -> 
 def _execution_hooks() -> WorkerExecutionHooks:
     """Resolve facade callbacks at call time so monkeypatches remain effective."""
 
+    from service.services.chat.infrastructure.chat_worker.results.prepared import (
+        PreparedResultCoordinator,
+    )
+
     return WorkerExecutionHooks(
         bind_runtime_settings=_bind_runtime_settings,
         sync_provider_keys=_sync_provider_keys,
@@ -399,6 +407,7 @@ def _execution_hooks() -> WorkerExecutionHooks:
         publish_committed_turn=publish_committed_turn,
         extract_memory=_extract_and_charge_memory,
         handle_failure=_handle_worker_failure,
+        prepared_results=PreparedResultCoordinator(),
     )
 
 
@@ -471,7 +480,7 @@ def process_agent_message(
                 "unknown_field_count": len(forward_compat),
             },
         )
-    return run_coroutine(
+    result = run_coroutine(
         process_agent_message_async(
             job_id=job_id,
             thread_id=thread_id,
@@ -494,6 +503,9 @@ def process_agent_message(
             celery_task_id=getattr(self.request, "id", None),
         )
     )
+    from service.services.chat.infrastructure.chat_worker.harness.interruption import retry_delivery
+
+    return retry_delivery(self, result)
 
 
 @shared_task(

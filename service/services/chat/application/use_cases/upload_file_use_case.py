@@ -134,7 +134,7 @@ class UploadFileUseCase:
         if len(content_bytes) > max_bytes:
             raise OverflowError(f"File too large (max {max_bytes // (1024 * 1024)}MB)")
 
-        saved_file_id, saved_file_url, saved_file_key = await self._save_file(
+        saved_file_id, saved_file_url, saved_file_key, library_reused = await self._save_file(
             filename, content_bytes, user_id, upload_intent_id
         )
         extracted_text, file_type = await self._extract_text(
@@ -177,6 +177,9 @@ class UploadFileUseCase:
             "file_url": saved_file_url,
             "file_key": saved_file_key,
             "temp_file": True,
+            # Private admission signal; the HTTP layer consumes it before
+            # building the public response or scheduling a paid index pass.
+            "_library_reused": library_reused,
             # Метаданные локальной транскрипции (для тарификации на аплоаде) — эндпоинт
             # снимает этот ключ перед сборкой ответа. None для не-локальных путей.
             "transcription": getattr(self.media_analysis_port, "last_transcription", None),
@@ -195,7 +198,7 @@ class UploadFileUseCase:
         content_bytes: bytes,
         user_id: str | None,
         upload_intent_id: str | None,
-    ) -> tuple[str, str, str]:
+    ) -> tuple[str, str, str, bool]:
         try:
             uploader_uuid = resolve_user_uuid(user_id, anonymous_fallback=True)
             if uploader_uuid is None:
@@ -209,7 +212,12 @@ class UploadFileUseCase:
             if upload_intent_id:
                 kwargs["upload_intent_id"] = uuid.UUID(str(upload_intent_id))
             saved = await self.file_service.save(**kwargs)
-            return str(saved.file_id), saved.file_url, saved.file_key
+            return (
+                str(saved.file_id),
+                saved.file_url,
+                saved.file_key,
+                getattr(saved, "reused", False) is True,
+            )
         except UploadIntentConflict as exc:
             raise AttachmentIntentConflict("upload_intent_conflict") from exc
         except AttachmentPersistenceError:
@@ -218,7 +226,10 @@ class UploadFileUseCase:
             # The extracted bytes may be available in this request, but
             # accepting them without a durable UserFile creates a phantom
             # attachment that cannot appear in Library or be reused safely.
-            logger.warning("chat attachment was not persisted", exc_info=True)
+            logger.warning(
+                "chat attachment was not persisted",
+                extra={"component": "chat_upload", "failure_code": "unavailable"},
+            )
             raise AttachmentPersistenceError("attachment persistence failed") from exc
 
     # Исходный код: классифицируем отдельно, чтобы направить в код-аналитика.
@@ -265,7 +276,10 @@ class UploadFileUseCase:
         try:
             tar_gz = zip_to_targz(content_bytes)
         except Exception:
-            logger.info("graphify: архив %s не разобрался — обычный путь", filename, exc_info=True)
+            logger.info(
+                "repository archive conversion unavailable; using ordinary intake",
+                extra={"component": "chat_upload", "failure_code": "unavailable"},
+            )
             return ""
 
         # 🔴 ПЕРЕЧЕНЬ ФАЙЛОВ — ФАКТ, И ОН НЕ ЗАВИСИТ ОТ ГРАФА. Замерено на архиве стилей
@@ -281,7 +295,10 @@ class UploadFileUseCase:
             result = await self.graph_client.build(tar_gz, graph_id=graph_id, mode="code")
         except Exception:
             # Не-кодовый архив — штатный случай, а не сбой: граф строить не из чего.
-            logger.info("graphify: граф по архиву %s не построен — отдаём дерево", filename)
+            logger.info(
+                "repository graph unavailable; returning archive listing",
+                extra={"component": "chat_upload", "failure_code": "unavailable"},
+            )
             return listing
         report = str(result.get("report") or "").strip()
         if not report:
@@ -348,7 +365,7 @@ class UploadFileUseCase:
             # и просил «вставьте текст», хотя статья лежала у него. Берём ЧИТАБЕЛЬНЕЕ.
             if lower_name.endswith(".pdf"):
                 py_text = self._pypdf_text(content_bytes)
-                if _text_quality(py_text) > _text_quality(markdown or ""):
+                if not markdown or _text_quality(py_text) > _text_quality(markdown):
                     return py_text, "pdf"
             # Не-PDF (или PyPDF2 не лучше): структурный markdown всё же лучше, чем ничего.
             if markdown:

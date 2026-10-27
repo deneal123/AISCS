@@ -14,7 +14,7 @@ from typing import Annotated, Any
 from fastapi import APIRouter, Depends, Header, HTTPException, Request
 from pydantic import BaseModel, Field
 
-from service.composition.state import get_optional_redis_client
+from service.composition.state import get_app_container, get_optional_redis_client
 from service.services.chat.application.workspace_collaboration import (
     SAFE_MUTATIONS,
     CollaborationCancelled,
@@ -22,12 +22,18 @@ from service.services.chat.application.workspace_collaboration import (
     CollaborationError,
     CollaborationForbidden,
     CollaborationPaused,
+    CollaborationUnavailable,
     WorkspaceCollaborationStore,
     verify_capability,
     verify_internal_request,
 )
+from service.services.chat.persistence.harness.commands.gate import require_mutation_available
+from service.services.chat.presentation.routers.harness_command_permit import (
+    router as command_router,
+)
 
 router = APIRouter(prefix="/internal/workspace-coordination", tags=["internal"])
+router.include_router(command_router)
 
 
 class PreflightPayload(BaseModel):
@@ -101,12 +107,27 @@ async def preflight(
             raise CollaborationForbidden("workspace capability does not match the route")
         if payload.mutation not in SAFE_MUTATIONS:
             raise CollaborationForbidden("unsupported workspace mutation")
+        try:
+            connector = get_app_container(request).infra.pg_connector
+        except RuntimeError:
+            raise CollaborationUnavailable() from None
+        await require_mutation_available(connector, capability.workspace_id, payload.mutation)
         store = WorkspaceCollaborationStore(
             redis, workspace_id=capability.workspace_id, expires_at=capability.expires_at
         )
-        return await store.preflight(
+        result = await store.preflight(
             capability, mutation=payload.mutation, path=payload.path, fence=payload.fence
         )
+        if capability.role == "ui" and payload.mutation != "capture":
+            from service.services.chat.persistence.harness.commands.invalidation import (
+                invalidate_external_write,
+            )
+
+            try:
+                await invalidate_external_write(connector, capability.workspace_id)
+            except Exception:
+                raise CollaborationUnavailable() from None
+        return result
     except CollaborationError as exc:
         raise _error(exc) from exc
 

@@ -3,7 +3,9 @@ from __future__ import annotations
 import pytest
 
 from service.services.chat.infrastructure.chat_worker.phases import RunPhase, RunPhaseState
-from service.services.chat.infrastructure.chat_worker.publication import publish_committed_turn
+from service.services.chat.infrastructure.chat_worker.results.publication import (
+    publish_committed_turn,
+)
 
 
 class _Publisher:
@@ -54,6 +56,36 @@ async def test_post_commit_publication_runs_memory_after_reply() -> None:
 
     assert publisher.payloads[0]["type"] == "agent_reply"
     assert calls == [{"bounded": True}]
+    assert phase.finalized is True
+    assert phase.publication_delivered is True
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("state", ["pending", "expired", "cancelled", "accepted"])
+async def test_question_step_publishes_without_memory_call(state: str) -> None:
+    publisher = _Publisher()
+    calls = 0
+
+    async def extract_memory(**_kwargs) -> None:
+        nonlocal calls
+        calls += 1
+
+    phase = _persisted_phase()
+    metadata = {"human_question": {"state": state}}
+    await publish_committed_turn(
+        publisher=publisher,
+        job_id="job",
+        reply="Which option?",
+        file_url=None,
+        metadata=metadata,
+        run_phase=phase,
+        memory_enabled=True,
+        extract_memory=extract_memory,
+        memory_kwargs={},
+    )
+
+    assert publisher.payloads[0]["metadata"] == metadata
+    assert calls == 0
     assert phase.finalized is True
     assert phase.publication_delivered is True
 

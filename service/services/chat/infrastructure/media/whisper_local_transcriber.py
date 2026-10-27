@@ -4,8 +4,14 @@ import io
 import logging
 import math
 import wave
+from typing import Literal
 
-from service.infrastructure.sidecar import SidecarBadRequest, SidecarClient, SidecarError
+from service.infrastructure.sidecar import (
+    SidecarBadRequest,
+    SidecarClient,
+    SidecarError,
+    SidecarTimeout,
+)
 from service.services.admin.application.runtime_settings import runtime_settings
 from service.settings import config
 
@@ -14,6 +20,23 @@ logger = logging.getLogger(__name__)
 # Оценка длительности сжатых форматов без аудио-библиотеки: ~128 кбит/с = 16000 байт/с.
 # Грубо, но не даёт БЕСПЛАТНОЙ транскрипции на не-WAV (см. audio_duration_sec).
 _ESTIMATE_BYTES_PER_SEC = 16000.0
+
+
+def _report_failure(operation: Literal["models", "transcribe"], error: SidecarError) -> None:
+    code = (
+        "timeout"
+        if isinstance(error, SidecarTimeout)
+        else "invalid"
+        if isinstance(error, SidecarBadRequest)
+        else "unavailable"
+    )
+    logger.log(
+        logging.DEBUG if operation == "models" else logging.WARNING,
+        "whisper operation failed: %s (%s)",
+        operation,
+        code,
+        extra={"component": "whisper", "operation": operation, "failure_code": code},
+    )
 
 
 def audio_duration_sec(content_bytes: bytes) -> tuple[float, bool]:
@@ -133,8 +156,8 @@ class WhisperLocalTranscriber(SidecarClient):
             return []
         try:
             data = await self.request_json("GET", "/models")
-        except SidecarError:
-            logger.debug("whisper list_models failed", exc_info=True)
+        except SidecarError as exc:
+            _report_failure("models", exc)
             return []
         return list(data.get("models") or [])
 
@@ -145,6 +168,7 @@ class WhisperLocalTranscriber(SidecarClient):
         model: str | None = None,
         language: str | None = None,
         max_duration_sec: float | None = None,
+        include_segments: bool = False,
     ) -> dict:
         """Транскрипция через сайдкар. → {'text', 'model', 'duration_sec'} или {}.
 
@@ -164,6 +188,8 @@ class WhisperLocalTranscriber(SidecarClient):
         }
         if max_duration_sec is not None:
             params["max_duration_sec"] = float(max_duration_sec)
+        if include_segments:
+            params["include_segments"] = True
         try:
             return await self.request_json(
                 "POST",
@@ -177,11 +203,13 @@ class WhisperLocalTranscriber(SidecarClient):
             # фолбэк, и запись, за которую не хватает денег, расшифровалась бы там — всё
             # так же за счёт платформы. Останавливаем цепочку целиком.
             if exc.code == "duration_exceeded":
-                raise TranscriptionTooExpensive(str(exc.detail or "")) from exc
+                raise TranscriptionTooExpensive(
+                    "Transcription duration exceeds available credits"
+                ) from None
             # 503 «веса ещё качаются» и 413 «файл велик» — разные поводы, и оба
             # исправимы вызывающим. До таксономии оба были неотличимы от «сервис лёг».
-            logger.warning("whisper отклонил запрос (%s): %s", exc.code, exc.detail)
+            _report_failure("transcribe", exc)
             return {}
-        except SidecarError:
-            logger.warning("whisper sidecar transcribe failed", exc_info=True)
+        except SidecarError as exc:
+            _report_failure("transcribe", exc)
             return {}

@@ -66,9 +66,17 @@ def build_services(
         folder_name="uploads",
         file_storage=infra.storage,
         message_bus=infra.message_bus_port,
+        upload_cache=infra.redis_cache,
     )
 
     analytics_service = AnalyticsService(AnalyticsVitalsRepository(redis_client=infra.redis_client))
+    if config.service.application_profile == "simulation":
+        return ServicesContainer(
+            profile_service=profile_service, auth_service=auth_service,
+            job_service=job_service, file_saver_service=file_saver_service,
+            analytics_service=None, process_chat_message_handler=None, new_job_processor=None,
+            chat_application_service=None, billing_service=None, admin_service=None,
+        )
 
     process_chat_message_handler = ProcessChatMessageHandler(
         job_service=job_service,

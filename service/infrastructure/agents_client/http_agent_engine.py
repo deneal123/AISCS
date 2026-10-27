@@ -17,8 +17,11 @@ backend уже собрал
 
 from __future__ import annotations
 
+import asyncio
 import json
 import logging
+from collections.abc import AsyncIterator
+from contextlib import aclosing, asynccontextmanager
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -29,6 +32,8 @@ from service.infrastructure.agents_client.contracts.protocol_manifest import (
     load_protocol_manifest,
 )
 from service.infrastructure.agents_client.contracts.run import AgentRunInput
+from service.infrastructure.agents_client.contracts.terminal import valid_run_result
+from service.infrastructure.agents_client.errors import AgentRunInterrupted
 
 logger = logging.getLogger(__name__)
 
@@ -63,16 +68,7 @@ class _RunTerminalState:
 
     @staticmethod
     def valid_result(value: Any) -> bool:
-        if not isinstance(value, dict) or not isinstance(value.get("reply"), str):
-            return False
-        metadata = value.get("metadata")
-        if metadata is not None and not isinstance(metadata, dict):
-            return False
-        per_call_usage = value.get("per_call_usage")
-        return per_call_usage is None or (
-            isinstance(per_call_usage, list)
-            and all(isinstance(item, dict) for item in per_call_usage)
-        )
+        return valid_run_result(value)
 
 
 def _run_integrity_event(state: _RunTerminalState) -> AgentEvent | None:
@@ -102,6 +98,29 @@ def _record_invalid_event(state: _RunTerminalState, correlation_id: str) -> None
         "agents sidecar protocol anomaly [cid=%s] category=invalid_event",
         correlation_id,
     )
+
+
+async def _accepted_lines(resp: Any, terminal: _RunTerminalState) -> AsyncIterator[str]:
+    """A reader interruption cannot undo a valid, already received billing envelope."""
+    try:
+        async with aclosing(resp.aiter_lines()) as lines:
+            async for line in lines:
+                yield line
+    except (asyncio.CancelledError, httpx.TransportError):
+        if terminal.result is None:
+            raise
+        terminal.anomaly("error_after_result")
+
+
+@asynccontextmanager
+async def _accepted_transport_cleanup(terminal: _RunTerminalState) -> AsyncIterator[None]:
+    """Closing HTTP resources cannot revoke an already accepted result."""
+    try:
+        yield
+    except (asyncio.CancelledError, httpx.TransportError):
+        if terminal.result is None:
+            raise
+        terminal.anomaly("error_after_result")
 
 
 class HttpAgentEngine:
@@ -173,12 +192,19 @@ class HttpAgentEngine:
         correlation_id = get_correlation_id() or "-"
 
         timeout = self._transport_timeout(payload.agent_settings)
-        async with httpx.AsyncClient(timeout=timeout) as client:
+        headers = self._headers()
+        checkpoint_sink = kwargs.get("on_usage_checkpoint")
+        if callable(checkpoint_sink) and kwargs.get("execution_attempt_id"):
+            headers[_PROTOCOL.usage_checkpoint_header] = str(kwargs["execution_attempt_id"])
+        async with (
+            _accepted_transport_cleanup(terminal),
+            httpx.AsyncClient(timeout=timeout, trust_env=False, follow_redirects=False) as client,
+        ):
             async with client.stream(
                 "POST",
                 f"{self._base}/run",
                 json=payload.model_dump(mode="json"),
-                headers=self._headers(),
+                headers=headers,
             ) as resp:
                 if resp.status_code >= 400:
                     # Error bodies are supplied by a remote process and can contain
@@ -190,9 +216,11 @@ class HttpAgentEngine:
                         correlation_id,
                         resp.status_code,
                     )
-                    raise RuntimeError(f"agents sidecar HTTP {resp.status_code}")
+                    error = AgentRunInterrupted if resp.status_code >= 500 else RuntimeError
+                    raise error(f"agents sidecar HTTP {resp.status_code}")
 
-                async for raw in resp.aiter_lines():
+                reader = _accepted_lines(resp, terminal)
+                async for raw in reader:
                     line = raw.strip()
                     if not line:
                         continue
@@ -209,6 +237,22 @@ class HttpAgentEngine:
 
                     if not isinstance(data, dict):
                         terminal.anomaly("invalid_record")
+                        continue
+
+                    if _PROTOCOL.usage_checkpoint_key in data:
+                        if (
+                            set(data) != {_PROTOCOL.usage_checkpoint_key}
+                            or terminal.result is not None
+                        ):
+                            terminal.anomaly("invalid_record")
+                        elif callable(checkpoint_sink):
+                            try:
+                                await checkpoint_sink(data[_PROTOCOL.usage_checkpoint_key])
+                            except BaseException:
+                                await reader.aclose()
+                                raise
+                        else:
+                            terminal.anomaly("invalid_record")
                         continue
 
                     has_result = RESULT_KEY in data
@@ -262,5 +306,7 @@ class HttpAgentEngine:
             raise RuntimeError("agents sidecar run failed")
         if terminal.result is None:
             # Молчаливый обрыв опаснее исключения: воркер иначе спишет деньги за пустоту.
-            raise RuntimeError("agents sidecar: поток /run кончился без терминального результата")
+            raise AgentRunInterrupted(
+                "agents sidecar: поток /run кончился без терминального результата"
+            )
         return terminal.result

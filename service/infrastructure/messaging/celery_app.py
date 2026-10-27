@@ -13,12 +13,20 @@ from celery import Celery  # type: ignore[import]
 logger = logging.getLogger(__name__)
 
 # Celery configuration from environment variables
-CELERY_BROKER_URL = os.getenv("CELERY__BROKER_URL", "amqp://guest:guest@rabbitmq:5672//")
+if (
+    os.getenv("CELERY__BROKER_URL")
+    and os.getenv("CELERY_BROKER_URL")
+    and os.environ["CELERY__BROKER_URL"] != os.environ["CELERY_BROKER_URL"]
+):
+    raise RuntimeError("Conflicting Celery broker configuration")
+CELERY_BROKER_URL = os.getenv("CELERY__BROKER_URL") or os.getenv(
+    "CELERY_BROKER_URL", "amqp://guest:guest@rabbitmq:5672//"
+)
 CELERY_RESULT_BACKEND = os.getenv("CELERY__RESULT_BACKEND", "redis://redis:6379/1")
 
 
 def _redact_url_credentials(url: str) -> str:
-    return re.sub(r"//([^:/@]+)(:[^@/]*)?@", "//***:***@", url)
+    return re.sub(r"//[^/@]*@", "//***:***@", url)
 
 
 # Create Celery app
@@ -29,6 +37,9 @@ celery_app = Celery(
     include=[
         "service.infrastructure.messaging.tasks",
         "service.services.notifications.tasks",
+        "service.services.files.infrastructure.maintenance",
+        "service.services.chat.infrastructure.ide_checkpoint_maintenance",
+        "service.services.simulations.tasks",
     ],
 )
 
@@ -58,6 +69,16 @@ celery_app.conf.update(
     # Queue routing with priorities
     task_default_queue="agents",  # Default queue for agent tasks
     task_routes={
+        "service.services.simulations.tasks.execute_run": {"queue": "simulation"},
+        "service.services.simulations.tasks.recover_runs": {"queue": "maintenance"},
+        "service.infrastructure.messaging.tasks.dispatch_human_question_children": {
+            "queue": "maintenance",
+            "priority": 3,
+        },
+        "service.services.files.infrastructure.maintenance.cleanup_pending_uploads": {
+            "queue": "maintenance",
+            "priority": 1,
+        },
         "service.infrastructure.messaging.tasks.process_agent_message": {
             "queue": "agents",
             "priority": 5,  # High priority for agent messages
@@ -82,6 +103,10 @@ celery_app.conf.update(
             "queue": "maintenance",
             "priority": 3,
         },
+        "service.services.chat.infrastructure.ide_checkpoint_maintenance.cleanup": {
+            "queue": "maintenance",
+            "priority": 1,
+        },
         "service.infrastructure.messaging.tasks.delete_old_chat_history": {
             "queue": "maintenance",
             "priority": 1,  # Low priority for cleanup tasks
@@ -93,6 +118,7 @@ celery_app.conf.update(
     },
     # Define queues with priority support
     task_queues={
+        "simulation": {"exchange": "simulation", "routing_key": "simulation"},
         "agents": {
             "exchange": "agents",
             "routing_key": "agents",
@@ -108,6 +134,18 @@ celery_app.conf.update(
 
 # Beat schedule for periodic tasks (if needed)
 celery_app.conf.beat_schedule = {
+    "cleanup-ide-checkpoints": {
+        "task": "service.services.chat.infrastructure.ide_checkpoint_maintenance.cleanup",
+        "schedule": 300.0,
+    },
+    "dispatch-human-question-children": {
+        "task": "service.infrastructure.messaging.tasks.dispatch_human_question_children",
+        "schedule": 60.0,
+    },
+    "cleanup-pending-uploads": {
+        "task": "service.services.files.infrastructure.maintenance.cleanup_pending_uploads",
+        "schedule": 3600.0,
+    },
     # Clean up old chat messages once per day by default (configurable via env)
     "cleanup-old-chat-history": {
         "task": "service.infrastructure.messaging.tasks.delete_old_chat_history",
@@ -152,5 +190,26 @@ celery_app.conf.beat_schedule = {
         "schedule": float(os.getenv("NOTIFICATIONS_SCHEDULE_SECONDS", str(24 * 3600))),
     },
 }
+
+if os.getenv("SERVICE__APPLICATION_PROFILE") == "simulation":
+    # Preserve shared storage/stream housekeeping. Chat, billing, provider and
+    # document schedules remain defined above for the GPTHub profile.
+    shared_maintenance = {
+        name: entry
+        for name, entry in celery_app.conf.beat_schedule.items()
+        if entry["task"]
+        in {
+            "service.services.files.infrastructure.maintenance.cleanup_pending_uploads",
+            "service.infrastructure.messaging.tasks.cleanup_old_streams",
+        }
+    }
+    celery_app.conf.beat_schedule = {
+        **shared_maintenance,
+        "recover-simulation-runs": {
+            "task": "service.services.simulations.tasks.recover_runs",
+            "schedule": 10.0,
+            "options": {"queue": "maintenance"},
+        },
+    }
 
 logger.info("Celery app configured with broker: %s", _redact_url_credentials(CELERY_BROKER_URL))

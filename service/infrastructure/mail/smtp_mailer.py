@@ -29,8 +29,8 @@ class SmtpMailer:
 
     async def send(self, *, to: str, subject: str, html: str, text: str) -> None:
         cfg = self._config
-        if not cfg.host or not cfg.login:
-            raise MailSendError("SMTP is not configured (MAIL__HOST / MAIL__LOGIN missing)")
+        if not cfg.host or bool(cfg.login) != bool(cfg.password):
+            raise MailSendError("smtp_config")
 
         # Импорт внутри метода — чтобы отсутствие пакета не ломало импорт модуля
         # в окружениях, где почта не используется.
@@ -48,12 +48,12 @@ class SmtpMailer:
                 message,
                 hostname=cfg.host,
                 port=cfg.port,
-                username=cfg.login,
-                password=cfg.password,
+                username=cfg.login or None,
+                password=cfg.password or None,
                 use_tls=cfg.use_tls,  # implicit TLS (1127)
-                start_tls=None if cfg.use_tls else True,  # STARTTLS (1126)
+                start_tls=None if cfg.use_tls else cfg.start_tls,
                 timeout=cfg.timeout_sec,
             )
-        except Exception as exc:  # noqa: BLE001
-            logger.exception("SMTP send failed to %s", to)
-            raise MailSendError(str(exc)) from exc
+        except Exception:  # noqa: BLE001
+            logger.warning("component=smtp code=smtp_unavailable")
+            raise MailSendError("smtp_unavailable") from None

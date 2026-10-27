@@ -18,7 +18,7 @@ from __future__ import annotations
 
 import pytest
 
-from service.infrastructure.cache.redis_manager import is_async_client
+from service.infrastructure.cache.manager import is_async_client
 
 
 class _AsyncLike:

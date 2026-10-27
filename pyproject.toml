@@ -1,6 +1,6 @@
 [project]
 name = "forgeincellcorp"
-version = "1.4.0"
+version = "1.5.0"
 requires-python = ">=3.13,<3.14"
 dependencies = [
     "pydantic>=2.11.7,<3.0.0",
@@ -80,7 +80,7 @@ max-complexity = 70
 # видом форматирования. Исключение поимённое: новый файл с длинными строками кода
 # упадёт, как и должен.
 [tool.ruff.lint.per-file-ignores]
-"service/services/analytics/application/memory_service.py" = ["E501"]
+"service/services/analytics/application/memory/service.py" = ["E501"]
 
 [tool.mypy]
 python_version = "3.13"

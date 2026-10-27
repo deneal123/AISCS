@@ -5,7 +5,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 
 from service.models.auth_models import AuthProfile
-from service.services.analytics.application.memory_service import MemoryService
+from service.services.analytics.application.memory.service import MemoryService
 from service.services.analytics.presentation.routers.memory_api.schemas import (
     AddMemoryFactRequest,
     AddMemoryFactResponse,

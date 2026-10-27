@@ -59,7 +59,10 @@ class CostGuardMetrics:
                 "billing_provider_health", "Provider health state", ["provider", "status"]
             )
         except Exception:  # pragma: no cover
-            logger.debug("Prometheus billing metrics unavailable", exc_info=True)
+            logger.debug(
+                "Prometheus billing metrics unavailable",
+                extra={"component": "billing_metrics", "failure_code": "unavailable"},
+            )
             self.prompt_budget_stops = self.pricing_fallbacks = self.reservation_events = None
             self.reservations_active = self.reservations_expired = None
             self.reconcile_last_success = self.provider_health = None
@@ -96,7 +99,10 @@ class CostGuardMetrics:
             for candidate in ("normal", "warning", "critical"):
                 metric.labels(provider=_provider(name), status=candidate).set(candidate == status)
         except Exception:
-            logger.debug("Failed to set provider metric", exc_info=True)
+            logger.debug(
+                "Provider metric update unavailable",
+                extra={"component": "billing_metrics", "failure_code": "unavailable"},
+            )
 
     @staticmethod
     def _inc(metric, **labels) -> None:
@@ -104,7 +110,10 @@ class CostGuardMetrics:
             try:
                 metric.labels(**labels).inc()
             except Exception:
-                logger.debug("Failed to increment billing metric", exc_info=True)
+                logger.debug(
+                    "Billing metric increment unavailable",
+                    extra={"component": "billing_metrics", "failure_code": "unavailable"},
+                )
 
     @staticmethod
     def _set(metric, value: int | float) -> None:
@@ -112,7 +121,10 @@ class CostGuardMetrics:
             try:
                 metric.set(value)
             except Exception:
-                logger.debug("Failed to set billing metric", exc_info=True)
+                logger.debug(
+                    "Billing metric update unavailable",
+                    extra={"component": "billing_metrics", "failure_code": "unavailable"},
+                )
 
 
 cost_guard_metrics = CostGuardMetrics()

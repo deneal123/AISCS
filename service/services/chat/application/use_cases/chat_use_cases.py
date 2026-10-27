@@ -31,11 +31,14 @@ class PostMessageUseCase:
                 web_search=payload.web_search,
                 deep_research=payload.deep_research,
                 file_context=payload.file_context,
+                document_context=getattr(payload, "_validated_document_context", None),
                 attachments=getattr(payload, "attachments", None) or None,
                 file_ids=list(getattr(payload, "file_ids", None) or []) or None,
                 watch_video=bool(getattr(payload, "watch_video", False)),
                 confirm_expensive_run=bool(getattr(payload, "confirm_expensive_run", False)),
                 confirmed_offer_id=getattr(payload, "confirm_offer_id", None),
+                confirmation_decision=getattr(payload, "confirmation_decision", "accept"),
+                confirmation_cancelled=bool(getattr(payload, "confirmation_cancelled", False)),
                 confirmed_resolved_category=getattr(payload, "confirmed_resolved_category", None),
             )
         )
@@ -67,12 +70,15 @@ class StreamChatResponseUseCase:
             web_search=bool(kwargs.get("web_search", False)),
             deep_research=bool(kwargs.get("deep_research", False)),
             file_context=kwargs.get("file_context") or "",
+            document_context=kwargs.get("document_context"),
             route_override=kwargs.get("route_override"),
             attachments=kwargs.get("attachments"),
             file_ids=kwargs.get("file_ids"),
             watch_video=bool(kwargs.get("watch_video", False)),
             confirm_expensive_run=bool(kwargs.get("confirm_expensive_run", False)),
             confirmed_offer_id=kwargs.get("confirmed_offer_id"),
+            confirmation_decision=kwargs.get("confirmation_decision", "accept"),
+            confirmation_cancelled=bool(kwargs.get("confirmation_cancelled", False)),
             confirmed_resolved_category=kwargs.get("confirmed_resolved_category"),
         )
         result = await self.chat_service.post_message(context)

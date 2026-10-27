@@ -52,7 +52,7 @@ SAFE_ACTIVITY_KINDS = frozenset(
         "workspace_recovered",
     }
 )
-SAFE_MUTATIONS = frozenset({"exec", "import", "write", "snapshot", "revert", "policy"})
+SAFE_MUTATIONS = frozenset({"exec", "import", "write", "snapshot", "capture", "revert", "policy"})
 SAFE_CONTROL_STATES = frozenset({"running", "pause_requested", "paused", "cancelled"})
 
 
@@ -250,13 +250,20 @@ class WorkspaceCollaborationStore:
     """Redis state store with absolute expiry inherited from the sandbox binding."""
 
     def __init__(
-        self, redis: Any, *, workspace_id: str, expires_at: int | float, thread_id: str = ""
+        self,
+        redis: Any,
+        *,
+        workspace_id: str,
+        expires_at: int | float,
+        thread_id: str = "",
+        mutation_guard: Any = None,
     ) -> None:
         self.redis = redis
         self.workspace_id = str(workspace_id)
         self.thread_id = str(thread_id)
         self.expires_at = max(_now() + 1, int(expires_at))
         self.prefix = f"workspace:collab:{self.workspace_id}"
+        self.mutation_guard = mutation_guard
 
     def _key(self, suffix: str) -> str:
         return f"{self.prefix}:{suffix}"
@@ -611,6 +618,8 @@ class WorkspaceCollaborationStore:
     ) -> dict[str, Any]:
         if mutation not in SAFE_MUTATIONS:
             raise CollaborationForbidden("unsupported workspace mutation")
+        if self.mutation_guard is not None:
+            await self.mutation_guard(self.workspace_id, mutation)
         await self.initialize()
         if capability.role == ROLE_AGENT:
             await self.agent_safe_boundary(capability)

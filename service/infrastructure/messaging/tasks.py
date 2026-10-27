@@ -8,6 +8,9 @@ from service.services.chat.domain.chat_contracts import (
     ChatProcessingMetadata,
     ChatReplyResult,
 )
+from service.services.chat.infrastructure.chat_worker.continuation.dispatch import (
+    dispatch_human_question_children,
+)
 from service.services.chat.infrastructure.chat_worker_tasks import (
     _persist_chat_turn,
     _resolve_memory_user_id,
@@ -104,9 +107,9 @@ def send_verification_email(to: str, subject: str, html: str, text: str) -> dict
         mailer = SmtpMailer(config.email)
         asyncio.run(mailer.send(to=to, subject=subject, html=html, text=text))
         return {"status": "sent"}
-    except Exception as exc:
-        logger.exception("send_verification_email failed for %s", to)
-        return {"status": "error", "error": str(exc)}
+    except Exception:
+        logger.warning("component=mail code=smtp_unavailable operation=verification")
+        return {"status": "error", "error": "smtp_unavailable"}
 
 
 @shared_task(name="service.infrastructure.messaging.tasks.send_payment_receipt_email")
@@ -135,14 +138,14 @@ def send_payment_receipt_email(
         mailer = SmtpMailer(config.email)
         asyncio.run(mailer.send(to=to, subject=subject, html=html, text=text))
         return {"status": "sent"}
-    except Exception as exc:
-        logger.exception("send_payment_receipt_email failed for %s", to)
-        return {"status": "error", "error": str(exc)}
+    except Exception:
+        logger.warning("component=mail code=smtp_unavailable operation=receipt")
+        return {"status": "error", "error": "smtp_unavailable"}
 
 
 @shared_task(name="service.infrastructure.messaging.tasks.cleanup_old_streams")
 def cleanup_old_streams():
-    from service.infrastructure.cache.redis_manager import RedisManager
+    from service.infrastructure.cache.manager import RedisManager
     from service.infrastructure.messaging import stream_helpers
     from service.settings import Config
 
@@ -245,6 +248,7 @@ def cleanup_expired_reservations():
         cleanup_expired_reservations as cleanup_reservations,
     )
     from service.services.billing.persistence.billing_repository import BillingRepository
+    from service.services.chat.application.video_stt.maintenance import settle_video_stt
     from service.settings import Config
 
     async def run_cleanup() -> dict:
@@ -252,14 +256,19 @@ def cleanup_expired_reservations():
         # Celery's synchronous task body otherwise binds it to a stale/default
         # loop before asyncio.run creates the task loop.
         config = Config()
-        repo = BillingRepository(PgConnector(config.pg))
-        return await cleanup_reservations(repo)
+        connector = PgConnector(config.pg, force_new=True)
+        try:
+            repo = BillingRepository(connector)
+            stt = await settle_video_stt(config, repo, connector)
+            return {**await cleanup_reservations(repo), "video_stt": stt}
+        finally:
+            await connector.close()
 
     try:
         return {"status": "success", **asyncio.run(run_cleanup())}
-    except Exception as exc:
-        logger.exception("Failed to cleanup expired reservations: %s", exc)
-        return {"status": "error", "error": str(exc)}
+    except Exception:
+        logger.warning("reservation maintenance failed code=unavailable")
+        return {"status": "error", "error": "unavailable"}
 
 
 @shared_task(name="service.infrastructure.messaging.tasks.refresh_provider_pricing")
@@ -297,8 +306,8 @@ def maintain_workflow_catalog():
         from service.services.admin.persistence.app_settings_repository import (
             AppSettingsRepository,
         )
-        from service.services.chat.persistence import workflow_catalog
-        from service.services.chat.persistence.workflow_catalog_metrics import catalog_metrics
+        from service.services.chat.persistence.workflows import catalog as workflow_catalog
+        from service.services.chat.persistence.workflows.metrics import catalog_metrics
         from service.settings import Config
 
         config = Config()
@@ -349,7 +358,7 @@ def maintain_workflow_catalog():
     except Exception as exc:
         logger.exception("Failed to maintain workflow catalog")
         try:
-            from service.services.chat.persistence.workflow_catalog_metrics import catalog_metrics
+            from service.services.chat.persistence.workflows.metrics import catalog_metrics
 
             catalog_metrics.maintenance("error")
         except Exception:
@@ -363,12 +372,12 @@ def deliver_document_publications():
 
     async def run_delivery() -> dict:
         from service.infrastructure.database.postgresql import PgConnector
-        from service.services.chat.application.document_publication_service import deliver_one
+        from service.services.chat.application.documents.publication.service import deliver_one
         from service.services.chat.infrastructure.chat_worker.factory import (
             ChatWorkerDependencyFactory,
             build_file_service,
         )
-        from service.services.chat.persistence import document_publications
+        from service.services.chat.persistence.documents import publication as document_publications
         from service.settings import Config
 
         config = Config()
@@ -422,6 +431,7 @@ def deliver_document_publications():
 
 
 __all__ = [
+    "dispatch_human_question_children",
     "process_chat_message_core",
     "process_chat_message",
     "reconcile_pending_payments",

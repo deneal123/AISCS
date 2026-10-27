@@ -5,6 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from service.services.billing.persistence.sql import (
     _CLEANUP_EXPIRED_RESERVATIONS_SQL,
+    _OWNED_RELEASE_RESERVATION_SQL,
     _RESERVATION_SNAPSHOT_SQL,
 )
 from service.shared.repositories.decorators.session_processor import connection, require_session
@@ -12,8 +13,18 @@ from service.shared.repositories.decorators.session_processor import connection,
 
 class ReservationMaintenanceMixin:
     @connection()
+    async def release_reservation(
+        self, *, user_id: str, reservation_id: str, session: AsyncSession | None = None
+    ) -> None:
+        """Release an ordinary unused hold, never a retained harness obligation."""
+        session = require_session(session)
+        await session.execute(
+            text(_OWNED_RELEASE_RESERVATION_SQL), {"rid": reservation_id, "user_id": user_id}
+        )
+
+    @connection()
     async def cleanup_expired_reservations(self, *, session: AsyncSession | None = None) -> int:
-        """Release only expired active reservations; committed records are immutable."""
+        """TTL cleans ordinary holds only; unresolved harness obligations survive."""
         session = require_session(session)
         rows = (await session.execute(text(_CLEANUP_EXPIRED_RESERVATIONS_SQL))).fetchall()
         return len(rows)

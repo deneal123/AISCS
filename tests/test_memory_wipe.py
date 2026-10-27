@@ -20,8 +20,8 @@ import httpx
 import pytest
 
 from service.infrastructure.memory.memos import MemOSMemoryIntegration
-from service.services.analytics.application import memory_cache
-from service.services.analytics.application.memory_service import MemoryService
+from service.services.analytics.application.memory import cache as memory_cache
+from service.services.analytics.application.memory.service import MemoryService
 
 
 class _FakeRepo:

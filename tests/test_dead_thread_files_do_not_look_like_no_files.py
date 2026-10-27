@@ -180,7 +180,9 @@ def test_losing_everything_is_reported_as_a_breakage(caplog):
     messages = " ".join(r.getMessage().lower() for r in caplog.records)
     assert "не найдены в базе" in messages, "полная потеря файлов молчит"
     assert "песочница останется пустой" in messages, "не сказано, чем это кончится для человека"
-    assert "dead-1" in messages, "идентификаторы не названы — разбираться будет нечем"
+    assert "dead-1" not in messages, "приватные идентификаторы не должны попадать в логи"
+    assert caplog.records[0].requested_count == 2
+    assert caplog.records[0].found_count == 0
 
 
 def test_losing_part_is_reported_differently(caplog):

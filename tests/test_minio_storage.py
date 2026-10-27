@@ -101,7 +101,7 @@ class TestMinioFileStorageInit:
 
             from service.infrastructure.storage.minio_file_storage import MinioFileStorage
 
-            with pytest.raises(RuntimeError, match="Failed to create/verify MinIO bucket"):
+            with pytest.raises(RuntimeError, match="^storage_init_failed$"):
                 MinioFileStorage(mock_minio_config)
 
 
@@ -226,15 +226,15 @@ class TestMinioFileStorageDelete:
         minio_storage._client.remove_object.assert_called_once_with("test-bucket", file_key)
 
     @pytest.mark.asyncio
-    async def test_delete_file_not_found_no_error(self, minio_storage):
-        """Test that deletion doesn't raise error if file doesn't exist"""
+    async def test_delete_unknown_failure_is_not_confirmed_absence(self, minio_storage):
+        """Exception text is not proof of deletion or absence."""
         file_key = "nonexistent.txt"
 
-        # Mock file not found (non-fatal)
+        # An arbitrary transport exception must not become a success acknowledgement.
         minio_storage._client.remove_object.side_effect = Exception("File not found")
 
-        # Should not raise exception (non-fatal for cleanup flows)
-        await minio_storage.delete_file(file_key=file_key)
+        with pytest.raises(RuntimeError, match="^storage_delete_failed$"):
+            await minio_storage.delete_file(file_key=file_key)
 
         # Should have attempted deletion retry_attempts times
         assert minio_storage._client.remove_object.call_count == minio_storage._retry_attempts
@@ -292,17 +292,20 @@ class TestMinioFileStoragePresignedUrls:
         assert "MinIO download capability created" in rendered
 
     @pytest.mark.asyncio
-    async def test_get_presigned_url_fallback_on_error(self, minio_storage):
-        """Test fallback to s3:// URL when presigned generation fails"""
+    async def test_get_presigned_url_failure_is_bounded_without_internal_locator(
+        self, minio_storage, caplog
+    ):
+        """A signing failure must not look like an available browser download."""
         file_key = "test.txt"
 
         # Mock presigned URL generation failure
-        minio_storage._client.presigned_get_object.side_effect = Exception("Presign failed")
+        minio_storage._client.presigned_get_object.side_effect = Exception("PRIVATE_PRESIGN_BODY")
 
-        result = await minio_storage.get_presigned_url(file_key=file_key)
-
-        # Should return fallback s3:// URL
-        assert result == "s3://test-bucket/test.txt"
+        with pytest.raises(RuntimeError, match="^storage_presign_failed$"):
+            await minio_storage.get_presigned_url(file_key=file_key)
+        assert "PRIVATE_PRESIGN_BODY" not in caplog.text
+        assert "s3://" not in caplog.text
+        assert file_key not in caplog.text
 
     @pytest.mark.asyncio
     async def test_get_presigned_upload_url_success(self, minio_storage):
@@ -324,7 +327,7 @@ class TestMinioFileStoragePresignedUrls:
 
         minio_storage._client.presigned_put_object.side_effect = Exception("Presign failed")
 
-        with pytest.raises(Exception, match="Presign failed"):
+        with pytest.raises(RuntimeError, match="^storage_presign_failed$"):
             await minio_storage.get_presigned_upload_url(file_key=file_key)
 
 

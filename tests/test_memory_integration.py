@@ -6,7 +6,7 @@ from service.infrastructure.memory.base import (
 )
 from service.infrastructure.memory.mem0 import Mem0MemoryIntegration
 from service.infrastructure.messaging.tasks import _resolve_memory_user_id
-from service.services.analytics.application.memory_service import MemoryService
+from service.services.analytics.application.memory.service import MemoryService
 
 
 class _FakeMem0Client:

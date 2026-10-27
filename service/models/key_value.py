@@ -20,3 +20,4 @@ class ProcessingStatus(StrEnum):
 
 class ServiceType(StrEnum):
     CHAT = "CHAT"  # Agent chat message processing
+    SIMULATION = "SIMULATION"  # Scientific runs; no chat billing or thread required.

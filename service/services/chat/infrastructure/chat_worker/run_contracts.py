@@ -3,9 +3,13 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from service.services.chat.infrastructure.chat_worker.phases import RunPhaseState
+
+if TYPE_CHECKING:
+    from service.services.chat.domain.human_questions.resume import QuestionResume
+    from service.services.chat.infrastructure.chat_worker.billing.usage.journal import UsageJournal
 
 
 @dataclass(frozen=True, slots=True)
@@ -29,6 +33,7 @@ class WorkerRunRequest:
     persona_ids: list[str] | None = None
     planning: bool | None = None
     celery_task_id: str | None = None
+    question_resume: QuestionResume | None = field(default=None, repr=False)
 
     @property
     def run_id(self) -> str:
@@ -38,7 +43,7 @@ class WorkerRunRequest:
     def from_mapping(cls, values: dict[str, Any]) -> WorkerRunRequest:
         """Build from a facade's locals while ignoring non-wire dependencies."""
 
-        return cls(**{name: values[name] for name in cls.__dataclass_fields__})
+        return cls(**{name: values[name] for name in cls.__dataclass_fields__ if name in values})
 
 
 @dataclass(frozen=True, slots=True)
@@ -63,6 +68,7 @@ class WorkerExecutionHooks:
     publish_committed_turn: Any
     extract_memory: Any
     handle_failure: Any
+    prepared_results: Any = None
 
 
 @dataclass(slots=True)
@@ -73,6 +79,19 @@ class MutableRunState:
     charged_credits: int = 0
     streamed_parts: list[str] = field(default_factory=list)
     engine_env: dict[str, Any] = field(default_factory=dict)
+    restored_result: dict[str, Any] | None = field(default=None, repr=False)
+    settled_credits: int = 0
+    accepted_captured: bool = field(default=False, repr=False)
+    execution_attempt_id: str | None = field(default=None, repr=False)
+    harness_task_id: str | None = field(default=None, repr=False)
+    harness_epoch: int = 1
+    harness_remaining: int = 0
+    harness_recovered: bool = False
+    cancelled_execution: bool = False
+    cancelled_without_dispatch: bool = False
+    usage_checkpointed: bool = field(default=False, repr=False)
+    usage_checkpoint_observed: bool = field(default=False, repr=False)
+    usage_journal: UsageJournal | None = field(default=None, repr=False)
 
 
 @dataclass(frozen=True, slots=True)

@@ -13,7 +13,7 @@ from typing import Any
 
 from sqlalchemy import text
 
-from service.infrastructure.cache.redis_manager import RedisManager
+from service.infrastructure.cache.manager import RedisManager
 from service.infrastructure.database.postgresql import PgConnector
 from service.settings import config
 

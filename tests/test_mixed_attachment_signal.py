@@ -59,10 +59,10 @@ def test_wired_into_worker():
     # ⚠️ СБОР ПЕРЕЕХАЛ в `chat_worker/turn_context.py` (вынос из разросшейся функции), а
     # ПЕРЕДАЧА движку осталась в воркере. Стережём оба звена: правило живёт в цепочке, и
     # разрыв в любом из них так же нем, как раньше.
-    from service.services.chat.infrastructure.chat_worker import turn_context as tc
+    from service.services.chat.infrastructure.chat_worker.context import turn as tc
 
     collected = inspect.getsource(tc.collect_engine_inputs)
-    from service.services.chat.infrastructure.chat_worker import run_execution
+    from service.services.chat.infrastructure.chat_worker.execution import run as run_execution
 
     passed = inspect.getsource(run_execution._execute_agent)
     assert "collect_message_extras" in collected, (

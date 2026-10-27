@@ -13,7 +13,7 @@ from service.services.chat.infrastructure.chat_worker.phases import RunPhase
 from service.services.chat.presentation.routers.chat_api.work_snapshot import (
     WORK_SNAPSHOT_VERSION,
 )
-from service.services.chat.presentation.routers.chat_api.workspace_metrics import _STATUSES
+from service.services.chat.presentation.routers.chat_api.workspace.metrics import _STATUSES
 from service.services.chat.presentation.ws.chat_ws.metrics import (
     _PROVIDER_QUALIFICATION_STATUSES,
     _RUN_INTEGRITY_REASONS,
@@ -25,7 +25,10 @@ from service.services.chat.presentation.ws.chat_ws.metrics import (
 def test_protocol_manifest_matches_backend_consumers() -> None:
     manifest = load_protocol_manifest()
 
-    assert manifest.version == "s33-v1"
+    assert manifest.version == "s37-usage-v1"
+    assert manifest.usage_checkpoint_key == "__usage_checkpoint__"
+    assert manifest.usage_checkpoint_header == "X-Execution-Attempt"
+    assert manifest.usage_checkpoint_version == 1
     assert manifest.run_input_fields == frozenset(AgentRunInput.model_fields)
     assert manifest.event_types == frozenset(item.value for item in EventType)
     assert manifest.auto_reason_codes == AUTO_REASON_CODES

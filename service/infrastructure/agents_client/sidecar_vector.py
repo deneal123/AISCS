@@ -28,10 +28,6 @@ INDEX_TIMEOUT_SEC = 120.0
 QUERY_TIMEOUT_SEC = 30.0
 
 
-def _base(config: Any) -> str:
-    return str(getattr(getattr(config, "agents", None), "sidecar_url", "") or "").rstrip("/")
-
-
 def _client(config: Any, timeout: float) -> SidecarClient:
     agents_cfg = getattr(config, "agents", None)
     return SidecarClient(

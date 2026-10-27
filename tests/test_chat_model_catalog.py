@@ -1,4 +1,5 @@
 import uuid
+from unittest.mock import AsyncMock
 
 import httpx
 import pytest
@@ -8,6 +9,7 @@ from service.composition.state import get_chat_application_service
 from service.main import app
 from service.models.auth_models import AuthProfile
 from service.models.key_value import UserTypes
+from service.services.chat.application.chat_application_service import ChatApplicationService
 from service.services.chat.infrastructure import model_catalog as catalog_module
 from service.services.chat.infrastructure.model_catalog import derive_capabilities
 from service.shared.security.auth_checker import check_auth
@@ -62,6 +64,44 @@ async def test_models_catalog_endpoint():
         assert "vision" in m["capabilities"]
     finally:
         app.dependency_overrides.pop(get_chat_application_service, None)
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("metadata_available", [True, False])
+async def test_research_catalog_uses_the_runtime_tool_policy(monkeypatch, metadata_available):
+    """GigaChat and allowlisted variants do not depend on OpenRouter metadata."""
+    models = ["GigaChat-2", "GigaChat-3-Pro", "qwen/qwen3-max:extended", "known", "unknown"]
+    catalog = {"known": {"capabilities": ["tools", "vision"]}} if metadata_available else {}
+    read = AsyncMock(return_value=catalog)
+    monkeypatch.setattr(catalog_module, "get_openrouter_catalog", read)
+    service = ChatApplicationService(None, None)
+    monkeypatch.setattr(service, "get_models", AsyncMock(return_value=models))
+    rows = {row["id"]: row for row in await service.get_models_catalog()}
+    for model in models[:3]:
+        assert "tools" in rows[model]["capabilities"]
+    assert ("tools" in rows["known"]["capabilities"]) is metadata_available
+    assert "tools" not in rows["unknown"]["capabilities"]
+    if metadata_available:
+        assert "vision" in rows["known"]["capabilities"]
+    read.assert_awaited_once()
+
+
+@pytest.mark.asyncio
+async def test_local_catalog_exposes_authoritative_free_marker(monkeypatch):
+    monkeypatch.setattr(catalog_module, "get_openrouter_catalog", AsyncMock(return_value={}))
+    service = ChatApplicationService(None, None)
+    monkeypatch.setattr(
+        service,
+        "get_models",
+        AsyncMock(
+            return_value=["qwen2.5-1.5b-instruct", "qwen/qwen2.5-1.5b-instruct", "GigaChat-2"]
+        ),
+    )
+    local, foreign, cloud = await service.get_models_catalog()
+    assert local["is_free"] is True and local["provider"] == "local"
+    assert local["context_window"] == 8192 and not local["context_estimated"]
+    assert "tools" in local["capabilities"]
+    assert foreign["is_free"] is False and cloud["is_free"] is False
 
 
 # --------------------------------------------------------------------------- #

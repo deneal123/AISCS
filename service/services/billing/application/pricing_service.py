@@ -68,7 +68,9 @@ class PricingService:
         """Пер-модельная маржа не может быть ниже min_margin (защита от убытка)."""
         min_margin = self._min_margin()
         if price.margin_override is not None and price.margin_override < min_margin:
-            return ModelPrice(price.price_in_rub_per_1k, price.price_out_rub_per_1k, min_margin)
+            return ModelPrice(
+                price.price_in_rub_per_1k, price.price_out_rub_per_1k, min_margin, price.is_free
+            )
         return price
 
     # --- основной расчёт -------------------------------------------------- #

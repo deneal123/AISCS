@@ -2,7 +2,7 @@ import logging
 from datetime import datetime
 from typing import Any
 
-from service.services.chat.domain.mode_offer import expire_mode_offer
+from service.services.chat.domain.confirmation.mode import expire_mode_offer
 from service.shared.repositories.exceptions import RepositoryNotFoundError
 
 logger = logging.getLogger(__name__)
@@ -119,7 +119,10 @@ class ChatPersistenceService:
                     if fresh:
                         url = fresh
                 except Exception:
-                    logger.debug("не удалось перевыпустить ссылку на %s", key, exc_info=True)
+                    logger.debug(
+                        "artifact link refresh failed: unavailable",
+                        extra={"component": "artifact_history", "failure_code": "unavailable"},
+                    )
             refreshed.append({**item, "file_url": url})
             if primary is None and url:
                 primary = url

@@ -15,7 +15,7 @@ from __future__ import annotations
 
 import pytest
 
-from service.services.analytics.application.memory_service import MemoryService
+from service.services.analytics.application.memory.service import MemoryService
 
 
 def _fact(key: str, value: str, *, when: str) -> dict:

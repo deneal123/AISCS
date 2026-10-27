@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 import re
 from pathlib import Path
+from uuid import UUID
 
 from fastapi import HTTPException
 
@@ -15,7 +16,7 @@ from service.services.chat.application.use_cases.chat_use_cases import (
     PostMessageUseCase,
 )
 from service.services.chat.domain.chat_service import ChatService
-from service.services.chat.domain.confirmation_offer import ConfirmationOfferError
+from service.services.chat.domain.confirmation.offer import ConfirmationOfferError
 from service.settings import config
 
 logger = logging.getLogger(__name__)
@@ -43,7 +44,7 @@ class ChatApplicationService:
         try:
             confirm_offer_id = str(getattr(payload, "confirm_offer_id", None) or "").strip()
             if confirm_offer_id:
-                from service.services.chat.domain.confirmation_offer import read_confirmation_offer
+                from service.services.chat.domain.confirmation.offer import read_confirmation_offer
 
                 anchor = await read_confirmation_offer(
                     self.redis_client,
@@ -51,18 +52,33 @@ class ChatApplicationService:
                     thread_id=thread_id,
                     user_id=requester_id,
                 )
+                if anchor.continuation.get("ide_context") is not None:
+                    # IDE has a repository-aware queued socket path. Until REST
+                    # shares it, fail closed rather than using Chat's sandbox.
+                    raise HTTPException(status_code=503, detail="ide_edit_unavailable")
+                from service.services.chat.domain.confirmation.continuation import (
+                    continuation_options,
+                )
+
+                continuation = continuation_options(anchor, payload.confirmation_decision)
                 payload = payload.model_copy(
                     update={
                         "text": anchor.text,
+                        "document_context": continuation.get("document_context"),
                         "user_id": requester_id,
                         "model": anchor.selected_model,
-                        "route_override": anchor.route_override,
+                        "route_override": continuation["route_override"],
                         "input_type": anchor.input_type,
                         "attachments": list(anchor.attachments),
                         "file_ids": list(anchor.file_ids),
                         "confirm_expensive_run": True,
                         "confirm_offer_id": anchor.offer_id,
-                        "confirmed_resolved_category": anchor.resolved_category,
+                        "confirmed_resolved_category": continuation["resolved_category"],
+                        "watch_video": continuation["watch_video"],
+                        "web_search": bool(continuation.get("web_search")),
+                        "deep_research": bool(continuation.get("deep_research")),
+                        "file_context": continuation.get("file_context", ""),
+                        "confirmation_cancelled": continuation["confirmation_cancelled"],
                     }
                 )
             else:
@@ -70,6 +86,17 @@ class ChatApplicationService:
                     raise HTTPException(status_code=422, detail="Message text is required")
                 payload.user_id = requester_id
             use_case = PostMessageUseCase(self.chat_service)
+            from service.services.chat.application.documents.context import (
+                validate_document_context,
+            )
+
+            raw_document = getattr(payload, "document_context", None)
+            payload._validated_document_context = await validate_document_context(
+                self.redis_client,
+                thread_id,
+                requester_id,
+                raw_document.model_dump() if hasattr(raw_document, "model_dump") else raw_document,
+            )
             result = await use_case.execute(thread_id=thread_id, payload=payload)
         except ConfirmationOfferError as exc:
             raise map_to_http_exception(exc) from exc
@@ -142,12 +169,12 @@ class ChatApplicationService:
         заполнение контекста для gigachat/mws.
         """
         from service.services.chat.infrastructure.model_catalog import (
-            TOOL_CAPABLE_ALLOWLIST,
             get_openrouter_catalog,
+            model_supports_tools_from_catalog,
             resolve_context_window_ex,
             resolve_model_meta,
         )
-        from service.shared.model_class import cost_rank
+        from service.shared.model_class import cost_rank, is_free_local_model
 
         models = await self.get_models()
         catalog = await get_openrouter_catalog()
@@ -155,8 +182,11 @@ class ChatApplicationService:
         for mid in models:
             meta = resolve_model_meta(mid, catalog)
             caps = list(meta.get("capabilities") or [])
-            # tool-capability у провайдеров без метаданных — по курируемому allowlist.
-            if mid in TOOL_CAPABLE_ALLOWLIST and "tools" not in caps:
+            # The picker must use the same positive tool evidence as execution,
+            # including local profiles (GigaChat) and allowlisted ID variants.
+            if "tools" not in caps and (
+                is_free_local_model(mid) or model_supports_tools_from_catalog(mid, catalog)
+            ):
                 caps.append("tools")
             # known=False → окно = дефолт (не подтверждено); пикер покажет «~».
             window, window_known = resolve_context_window_ex(mid, catalog)
@@ -173,6 +203,8 @@ class ChatApplicationService:
                     # Предупреждает о дорогих моделях в пикере (жалоба: pro слила все
                     # кредиты за один вопрос без предупреждения).
                     "cost_tier": cost_rank(mid),
+                    "is_free": is_free_local_model(mid),
+                    "provider": "local" if is_free_local_model(mid) else None,
                     "capabilities": caps,
                 }
             )
@@ -248,9 +280,22 @@ class ChatApplicationService:
             raise HTTPException(status_code=503, detail="DB unavailable") from exc
         return {"thread_id": thread_id, "title": clean}
 
-    async def download_generated_file(self, file_key: str, filename: str | None) -> dict:
+    async def download_generated_file(
+        self, file_key: str, filename: str | None, *, user_id: UUID
+    ) -> dict:
         normalized_key = self._normalize_download_file_key(file_key)
         file_service = self.file_service
+
+        # Authentication alone must never authorize a guessed storage locator.
+        # Keep legacy URL shape, but bind it to the same owned Library as ID routes.
+        try:
+            normalized_key = await file_service.require_owned_file_key(
+                user_id=user_id, file_key=normalized_key
+            )
+        except ValueError:
+            raise HTTPException(status_code=404, detail="file_not_found") from None
+        except Exception:
+            raise HTTPException(status_code=503, detail="file_unavailable") from None
 
         try:
             download_url = await file_service.get_presigned_url_by_key(file_key=normalized_key)
@@ -260,7 +305,10 @@ class ChatApplicationService:
         if isinstance(download_url, str) and download_url.startswith(("http://", "https://")):
             return {"redirect_url": download_url}
 
-        payload = await file_service.get_file_by_key(file_key=normalized_key)
+        try:
+            payload = await file_service.get_file_by_key(file_key=normalized_key)
+        except Exception:
+            raise HTTPException(status_code=503, detail="file_unavailable") from None
         if payload is None:
             raise HTTPException(status_code=404, detail="File not found")
 

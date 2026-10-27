@@ -72,13 +72,18 @@ async def get_task_status(
     service: Annotated[JobApplicationService, Depends(get_job_application_service)],
 ) -> TaskStatusResponse:
     try:
-        return await service.get_task_status(task_id)
-    except Exception as exc:
-        logger.exception("Failed to get task status for %s", task_id)
+        return await service.get_task_status(task_id, user_id=profile.user_id)
+    except HTTPException:
+        raise
+    except Exception:
+        logger.warning(
+            "task status unavailable",
+            extra={"component": "task_control", "failure_code": "unavailable"},
+        )
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to get task status",
-        ) from exc
+        ) from None
 
 
 @jobs_router.post("/task/{task_id}/cancel", summary="Cancel a Celery task")
@@ -88,12 +93,17 @@ async def cancel_task(
     service: Annotated[JobApplicationService, Depends(get_job_application_service)],
 ) -> dict:
     try:
-        result = await service.cancel_task(task_id)
-        logger.info("Task %s cancelled by user %s", task_id, profile.user_id)
+        result = await service.cancel_task(task_id, user_id=profile.user_id)
+        logger.info("task cancellation checked", extra={"component": "task_control"})
         return result
-    except Exception as exc:
-        logger.exception("Failed to cancel task %s", task_id)
+    except HTTPException:
+        raise
+    except Exception:
+        logger.warning(
+            "task cancel unavailable",
+            extra={"component": "task_control", "failure_code": "unavailable"},
+        )
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to cancel task",
-        ) from exc
+        ) from None

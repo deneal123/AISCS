@@ -6,7 +6,13 @@ import logging
 from dataclasses import dataclass
 from typing import Any
 
-from service.infrastructure.sidecar import SidecarClient, SidecarError
+from service.infrastructure.sidecar import (
+    SidecarBadRequest,
+    SidecarClient,
+    SidecarError,
+    SidecarTimeout,
+    SidecarUnavailable,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -64,21 +70,39 @@ async def deliver(config: Any, row: dict[str, Any]) -> DeliveryResult:
         )
         return DeliveryResult(True)
     except SidecarError as exc:
-        logger.warning("workflow catalog outbox delivery deferred (%s)", exc.code)
-        return DeliveryResult(False, _error_class(exc.code))
+        code = _error_class(exc)
+        logger.warning(
+            "Workflow catalog delivery deferred: %s",
+            code,
+            extra={"component": "agents", "operation": "workflow_delivery", "failure_code": code},
+        )
+        return DeliveryResult(False, code)
     except Exception:  # noqa: BLE001 - maintenance must release the lease safely
-        logger.warning("workflow catalog outbox delivery deferred (unknown)")
+        logger.warning(
+            "Workflow catalog delivery deferred: unknown",
+            extra={
+                "component": "agents",
+                "operation": "workflow_delivery",
+                "failure_code": "unknown",
+            },
+        )
         return DeliveryResult(False, "unknown")
 
 
-def _error_class(code: str) -> str:
-    code = str(code or "")
-    if "timeout" in code:
+def _error_class(error: SidecarError) -> str:
+    # Remote error text is not a classifier. Typed timeout wins over remote codes.
+    if isinstance(error, SidecarTimeout):
         return "timeout"
-    if "transport" in code or "connection" in code:
+    if error.code in {"timeout", "server_deadline"}:
+        return "timeout"
+    if error.code in {"transport_error", "connection_error"}:
         return "transport"
-    if "protocol" in code or "decode" in code:
+    if error.code in {"protocol_error", "decode_error", "invalid_json"}:
         return "protocol"
-    if "http" in code or "remote" in code:
+    if error.code == "not_configured":
+        return "unknown"
+    if isinstance(error, (SidecarBadRequest, SidecarUnavailable)):
+        return "remote"
+    if error.code in {"http_error", "remote_error"}:
         return "remote"
     return "unknown"

@@ -1,6 +1,6 @@
 """WS-чат обязан брать личность ТОЛЬКО из аутентифицированной сессии.
 
-Регрессия аудита (T1.1): `ws_message_use_case` брал `msg.get("user_id") or
+Регрессия аудита (T1.1): WS use case брал `msg.get("user_id") or
 session.get("user_id")` — тело клиента перекрывало сессию, и аутентифицированный A,
 прислав `user_id` жертвы B, создавал джоб и списание НА B. HTTP-путь всегда форсит
 user_id из check_auth; приводим WS к тому же контракту.
@@ -8,7 +8,7 @@ user_id из check_auth; приводим WS к тому же контракту
 
 import pytest
 
-from service.services.chat.application.use_cases.ws_message_use_case import (
+from service.services.chat.application.use_cases.ws_message.handler import (
     HandleWsChatMessageUseCase,
 )
 

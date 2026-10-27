@@ -1,12 +1,16 @@
 from typing import Literal
 
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, Field, PrivateAttr, model_validator
+
+from service.services.chat.domain.documents.context import DocumentContext
 
 
 class MessageRequest(BaseModel):
+    _validated_document_context: dict | None = PrivateAttr(default=None)
     # Empty text is accepted only together with a server-issued confirmation anchor.
     text: str = ""
     confirm_offer_id: str | None = Field(default=None, min_length=16, max_length=128)
+    confirmation_decision: Literal["accept", "decline"] = "accept"
     user_id: int | str | None = None
     model: str | None = None
     input_type: Literal["text", "image", "audio", "video"] | None = None
@@ -33,6 +37,7 @@ class MessageRequest(BaseModel):
     watch_video: bool = False
     confirm_expensive_run: bool = False
     file_context: str = ""
+    document_context: DocumentContext | None = None
     file_ids: list[str] = Field(default_factory=list)
     # Мультимодальные вложения: [{kind, name, content}], уже сведённые к тексту.
     attachments: list[dict] = Field(default_factory=list)

@@ -1,4 +1,4 @@
-from service.services.chat.presentation.routers.chat_api.workspace_metrics import (
+from service.services.chat.presentation.routers.chat_api.workspace.metrics import (
     WorkspaceOperationMetrics,
     bounded_workspace_operation,
     bounded_workspace_status,

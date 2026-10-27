@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import io
 from datetime import UTC, datetime, timedelta
 from types import SimpleNamespace
@@ -15,7 +16,7 @@ from service.services.chat.application.use_cases.upload_file_use_case import (
     AttachmentPersistenceError,
 )
 from service.services.chat.presentation.http import upload_api
-from service.services.chat.presentation.routers.chat_api import workspace_api as api
+from service.services.chat.presentation.routers.chat_api.workspace import router as api
 from service.services.files.application.file_saver_service import (
     FileSaverService,
     UploadIntentConflict,
@@ -153,7 +154,7 @@ async def test_direct_work_upload_persists_library_then_returns_safe_import_outc
         "file": {
             "file_id": str(files.file_id),
             "name": "brief.txt",
-            "file_type": "CHAT",
+            "file_type": "text",
             "availability": "ready",
         },
     }
@@ -187,7 +188,7 @@ async def test_library_page_keeps_legacy_rows_without_disclosing_storage_key():
             {
                 "file_id": str(file_id),
                 "name": "Ранее загруженный файл 11111111.pdf",
-                "file_type": "CHAT",
+                "file_type": "pdf",
                 "availability": "ready",
             }
         ],
@@ -278,7 +279,11 @@ async def test_chat_upload_fails_safely_when_a_durable_user_file_cannot_be_creat
 
     monkeypatch.setattr(upload_api, "get_upload_use_case", lambda _files: _UseCase())
     upload = UploadFile(filename="draft.txt", file=io.BytesIO(b"source"))
-    chat_service = SimpleNamespace(file_service=object())
+
+    async def ensure_thread_owner(_thread_id, _requester_id):
+        return None
+
+    chat_service = SimpleNamespace(file_service=object(), ensure_thread_owner=ensure_thread_owner)
 
     with pytest.raises(HTTPException) as exc:
         await upload_api.upload_file_to_chat(
@@ -375,6 +380,9 @@ async def test_failed_metadata_write_compensates_the_uploaded_object():
     class _Repository:
         async def add_file_metadata(self, _record):
             raise RuntimeError("db unavailable")
+
+        async def fetch_user_file_by_name(self, _user_id, _file_key):
+            return None
 
     class _Storage:
         deleted: list[str] = []
@@ -541,6 +549,87 @@ async def test_library_failure_does_not_hide_ready_workspace(ready_workspace):
     assert result["workspace"]["state"] == "ready"
     assert result["workspace"]["revision"] == "r1"
     assert result["library"]["state"] == "unavailable"
+
+
+@pytest.mark.asyncio
+async def test_work_discovery_starts_while_library_metadata_is_still_pending(
+    ready_workspace, monkeypatch
+):
+    view_started = asyncio.Event()
+    library_done = asyncio.Event()
+
+    async def view(_ref):
+        assert not library_done.is_set()
+        view_started.set()
+        return {"entries": [], "history": [], "revision": "r1"}
+
+    class Library:
+        async def list_chat_library_page(self, _user_id, *, limit, offset=0, cursor=""):
+            await asyncio.wait_for(view_started.wait(), timeout=1)
+            library_done.set()
+            return {"items": [{"file_id": "safe", "name": "notes.txt"}]}
+
+    monkeypatch.setattr(api.workspace_client, "view", view)
+    result = await api.work_snapshot("thread-1", _Profile(), _ChatService(), Library(), None, 20)
+    assert library_done.is_set()
+    assert result["workspace"]["state"] == "ready"
+    assert result["workspace"]["revision"] == "r1"
+    assert result["library"]["items"][0]["file_id"] == "safe"
+
+
+@pytest.mark.asyncio
+async def test_invalid_library_cursor_retires_and_awaits_the_owned_workspace_read(
+    ready_workspace, monkeypatch
+):
+    view_started = asyncio.Event()
+    view_retired = asyncio.Event()
+
+    async def view(_ref):
+        view_started.set()
+        try:
+            await asyncio.Future()
+        finally:
+            view_retired.set()
+
+    class Library:
+        async def list_chat_library_page(self, _user_id, *, limit, offset=0, cursor=""):
+            await asyncio.wait_for(view_started.wait(), timeout=1)
+            raise HTTPException(status_code=400, detail="invalid_library_cursor")
+
+    monkeypatch.setattr(api.workspace_client, "view", view)
+    with pytest.raises(HTTPException) as failure:
+        await api.work_snapshot("thread-1", _Profile(), _ChatService(), Library(), None, 20)
+    assert failure.value.status_code == 400
+    assert view_retired.is_set()
+
+
+@pytest.mark.asyncio
+async def test_retired_work_request_cancels_its_pending_workspace_read(
+    ready_workspace, monkeypatch
+):
+    view_started = asyncio.Event()
+    view_retired = asyncio.Event()
+
+    async def view(_ref):
+        view_started.set()
+        try:
+            await asyncio.Future()
+        finally:
+            view_retired.set()
+
+    class Library:
+        async def list_chat_library_page(self, _user_id, *, limit, offset=0, cursor=""):
+            await asyncio.Future()
+
+    monkeypatch.setattr(api.workspace_client, "view", view)
+    request = asyncio.create_task(
+        api.work_snapshot("thread-1", _Profile(), _ChatService(), Library(), None, 20)
+    )
+    await asyncio.wait_for(view_started.wait(), timeout=1)
+    request.cancel()
+    with pytest.raises(asyncio.CancelledError):
+        await request
+    assert view_retired.is_set()
 
 
 @pytest.mark.asyncio

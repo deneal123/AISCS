@@ -1,7 +1,9 @@
 import uuid
 from types import SimpleNamespace
+from unittest.mock import Mock
 
 import pytest
+from fastapi import HTTPException
 
 from service.models.key_value import ProcessingStatus
 from service.services.jobs.application.job_service import ANON_USER_UUID, JobService
@@ -22,8 +24,10 @@ class _FakeJobRepository:
 
 
 @pytest.mark.asyncio
-async def test_create_chat_job_prefers_admin_for_anonymous_user(
+@pytest.mark.parametrize("owner", [None, ANON_USER_UUID, "invalid"])
+async def test_create_chat_job_rejects_non_owner_before_repository(
     monkeypatch: pytest.MonkeyPatch,
+    owner,
 ) -> None:
     admin_uuid = uuid.uuid4()
     monkeypatch.setattr(config.service, "admin_user_ids", [str(admin_uuid)])
@@ -31,14 +35,14 @@ async def test_create_chat_job_prefers_admin_for_anonymous_user(
     repo = _FakeJobRepository(fail_user_ids={ANON_USER_UUID})
     service = JobService(JobConfig(), repo)
 
-    await service.create_chat_job(user_id=None, thread_id="thread-1", text="hello")
+    with pytest.raises(HTTPException):
+        await service.create_chat_job(user_id=owner, thread_id="thread-1", text="hello")
 
-    assert repo.seen_user_ids[0] == admin_uuid
-    assert ANON_USER_UUID not in repo.seen_user_ids
+    assert repo.seen_user_ids == []
 
 
 @pytest.mark.asyncio
-async def test_create_chat_job_fallbacks_to_admin_when_primary_fails(
+async def test_create_chat_job_never_changes_owner_when_primary_fails(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     user_uuid = uuid.uuid4()
@@ -48,7 +52,35 @@ async def test_create_chat_job_fallbacks_to_admin_when_primary_fails(
     repo = _FakeJobRepository(fail_user_ids={user_uuid})
     service = JobService(JobConfig(), repo)
 
-    await service.create_chat_job(user_id=user_uuid, thread_id="thread-2", text="hello")
+    with pytest.raises(HTTPException):
+        await service.create_chat_job(user_id=user_uuid, thread_id="thread-2", text="hello")
 
-    assert repo.seen_user_ids[0] == user_uuid
-    assert repo.seen_user_ids[1] == admin_uuid
+    assert repo.seen_user_ids == [user_uuid]
+
+
+@pytest.mark.asyncio
+async def test_successful_chat_job_uses_exact_owner_with_admin_configured(monkeypatch):
+    owner, admin = uuid.uuid4(), uuid.uuid4()
+    monkeypatch.setattr(config.service, "admin_user_ids", [str(admin)])
+    repository = _FakeJobRepository()
+    response = await JobService(JobConfig(), repository).create_chat_job(owner, "thread", "text")
+    assert response.status == ProcessingStatus.NEW
+    assert repository.seen_user_ids == [owner]
+
+
+@pytest.mark.asyncio
+async def test_chat_job_failure_diagnostics_never_include_request_or_owner(monkeypatch):
+    from service.services.jobs.application import job_service as module
+
+    owner = uuid.uuid4()
+    repository = _FakeJobRepository(fail_user_ids={owner})
+    loggers = [Mock() for _ in range(3)]
+    for level, logger in zip(("info", "warning", "error"), loggers, strict=True):
+        monkeypatch.setattr(module.logger, level, logger)
+    with pytest.raises(HTTPException):
+        await JobService(JobConfig(), repository).create_chat_job(
+            owner, "private-thread-marker", "private-request-marker"
+        )
+    output = repr([logger.call_args_list for logger in loggers])
+    assert str(owner) not in output
+    assert "private-thread-marker" not in output and "private-request-marker" not in output

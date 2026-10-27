@@ -13,7 +13,7 @@ from uuid import uuid4
 import pytest
 
 from service.models.key_value import ProcessingStatus
-from service.services.chat.infrastructure.chat_worker import message_meta
+from service.services.chat.infrastructure.chat_worker.context import metadata as message_meta
 from service.services.chat.infrastructure.chat_worker_tasks import (
     _mark_job_failed_committed,
     _persist_partial_turn_committed,
@@ -36,7 +36,7 @@ class _FakeJobRepo:
             payload={},
         )
 
-    async def update_job_status(self, job, session=None):
+    async def update_job_status(self, job, session=None, *, expected_recovery=None):
         self.updated_status = job.status
 
 
@@ -169,6 +169,23 @@ def test_build_public_usage_meta_omits_credits_when_zero() -> None:
 # --------------------------------------------------------------------------- #
 # _handle_worker_failure — единая очистка после падения/отмены                 #
 # --------------------------------------------------------------------------- #
+@pytest.mark.asyncio
+@pytest.mark.parametrize("user_id", [None, ""])
+async def test_reservation_cleanup_without_owner_does_not_invoke_billing(monkeypatch, user_id):
+    from service.services.billing.application import billing_service
+    from service.services.chat.infrastructure.chat_worker.billing.charging import (
+        _release_reservation,
+    )
+
+    def unavailable(*args, **kwargs):
+        pytest.fail("anonymous_cleanup_must_not_access_billing")
+
+    monkeypatch.setattr(billing_service, "BillingService", unavailable)
+    await _release_reservation(
+        pg_connector=object(), config=object(), user_id=user_id, reservation_id="r1"
+    )
+
+
 class _Pub:
     def __init__(self):
         self.published: list = []
@@ -185,6 +202,7 @@ async def test_handle_worker_failure_releases_and_persists_partial(monkeypatch) 
 
     async def _release(**kw):
         calls["released"] = kw["reservation_id"]
+        calls["release_owner"] = kw.get("user_id")
 
     async def _fail(pg, repo, jid, uid):
         calls["failed"] = jid
@@ -215,6 +233,7 @@ async def test_handle_worker_failure_releases_and_persists_partial(monkeypatch) 
     )
 
     assert calls["released"] == "r1"  # не списывали → резерв отпущен
+    assert calls["release_owner"] == "u1"
     assert calls["failed"] == "j1"  # FAILURE зафиксирован
     assert "Hello" in calls["partial"] and "прервана" in calls["partial"]
     # 🔴 Аварийный путь тоже пишет ВЛОЖЕНИЯ: без них приложенный файл виден до F5

@@ -8,7 +8,6 @@ MemOS + кэширует саммери (его читает процессор 
 
 from __future__ import annotations
 
-import hashlib
 import logging
 from typing import Any
 
@@ -20,13 +19,13 @@ class CompactContextUseCase:
         if not thread_id or not user_id:
             return {"ok": False, "reason": "no_thread_or_user"}
 
-        from service.infrastructure.cache.redis_manager import RedisManager
+        from service.infrastructure.cache.manager import RedisManager
         from service.infrastructure.database.postgresql import PgConnector
-        from service.services.analytics.application.memory_service import MemoryService
         from service.services.chat.infrastructure.agent_context import (
             gateway_summarizer,
             get_or_build_history_summary,
         )
+        from service.services.chat.infrastructure.context.projection import project_summary
         from service.services.chat.persistence.chat_worker_repository import ChatWorkerRepository
         from service.settings import config
 
@@ -55,24 +54,12 @@ class CompactContextUseCase:
             if not summary:
                 return {"ok": False, "reason": "no_summary"}
 
-            # В MemOS — только при изменении саммери (дедуп по хэшу), как в авто-пути.
-            digest = hashlib.sha256(summary.encode("utf-8")).hexdigest()[:16]
-            mark_key = f"gpthub:memos_summary_hash:{thread_id}"
-            try:
-                prev = await redis.get(mark_key)
-                prev = prev.decode() if isinstance(prev, (bytes, bytearray)) else prev
-            except Exception:
-                prev = None
-            if prev != digest:
-                await MemoryService().remember_conversation(
-                    str(user_id),
-                    [{"role": "user", "content": f"Резюме предыдущего диалога: {summary}"}],
-                    metadata={"kind": "summary", "thread_id": str(thread_id)},
-                )
-                try:
-                    await redis.set(mark_key, digest)
-                except Exception:
-                    logger.debug("compaction hash marker write failed", exc_info=True)
+            delivery = await project_summary(
+                client=redis,
+                thread_id=str(thread_id),
+                user_id=str(user_id),
+                summary=summary,
+            )
 
             # Отдаём и сам текст резюме (усечённый) — фронт покажет его в «шторке» под
             # разделителем сжатия, чтобы пользователь мог увидеть, во что свёрнут диалог.
@@ -81,6 +68,7 @@ class CompactContextUseCase:
                 "summary_len": len(summary),
                 "messages": len(items),
                 "summary": summary[:8000],
+                "memory_delivery": delivery,
             }
         except Exception:
             logger.debug("manual compaction failed", exc_info=True)

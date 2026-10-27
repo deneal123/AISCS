@@ -6,7 +6,7 @@ from service.services.chat.domain.chat_contracts import (
     ChatRequestContext,
     ChatRouteDecision,
 )
-from service.services.chat.domain.chat_exceptions import JobEnqueueError
+from service.services.chat.domain.chat_exceptions import JobServiceUnavailableError
 from service.services.chat.domain.chat_service import ChatService
 
 
@@ -95,12 +95,9 @@ async def test_post_message_fallback_persists(monkeypatch: pytest.MonkeyPatch) -
 
     class _FailingOrchestration:
         async def execute(self, **kwargs):
-            # ⚠️ Именно «задачу НЕ ПОСТАВИЛИ». Раньше здесь стоял JobExecutionError, но он
-            # значит «задача поставлена и исполняется»: там ход сохранит воркер, и персист
-            # в веб-процессе даёт ДУБЛЬ (живой прогон: дубль вопроса и ложное «сервис
-            # перегружен» поверх готового ответа). Путь fallback выражается ошибкой
-            # постановки — см. tests/test_slow_task_is_not_a_failure.py.
-            raise JobEnqueueError("boom")
+            # Missing service before transport is a proven pre-dispatch refusal.
+            # Unknown enqueue ACK is tested separately and must not persist fallback.
+            raise JobServiceUnavailableError("Job service unavailable")
 
     service = ChatService(
         routing_service=_FakeRoutingService(),
@@ -119,12 +116,7 @@ async def test_post_message_fallback_persists(monkeypatch: pytest.MonkeyPatch) -
 async def test_post_message_fallback_adds_error_code(monkeypatch: pytest.MonkeyPatch) -> None:
     class _FailingOrchestration:
         async def execute(self, **kwargs):
-            # ⚠️ Именно «задачу НЕ ПОСТАВИЛИ». Раньше здесь стоял JobExecutionError, но он
-            # значит «задача поставлена и исполняется»: там ход сохранит воркер, и персист
-            # в веб-процессе даёт ДУБЛЬ (живой прогон: дубль вопроса и ложное «сервис
-            # перегружен» поверх готового ответа). Путь fallback выражается ошибкой
-            # постановки — см. tests/test_slow_task_is_not_a_failure.py.
-            raise JobEnqueueError("boom")
+            raise JobServiceUnavailableError("Job service unavailable")
 
     service = ChatService(
         routing_service=_FakeRoutingService(),
@@ -136,4 +128,4 @@ async def test_post_message_fallback_adds_error_code(monkeypatch: pytest.MonkeyP
     result = await service.post_message(ChatRequestContext(thread_id="t1", text="hello", user_id=1))
 
     assert result.reply == "fallback"
-    assert result.metadata.data["error_code"] == "job_enqueue_failed"
+    assert result.metadata.data["error_code"] == "job_service_unavailable"

@@ -11,19 +11,28 @@ from service.shared.error_handling.error_mapper import (
 from service.shared.error_handling.exceptions import RateLimitedError
 from service.shared.repositories.exceptions import RepositoryError
 
+from .http_failure_boundary import HttpFailureBoundary, HttpResponseAborted
+from .validation_feedback import validation_feedback
+
 logger = logging.getLogger(__name__)
 
 
-async def http_exception_handler(request: Request, exc: HTTPException) -> JSONResponse:
+def _log_failure(code: str, status_code: int) -> None:
+    # Request paths, validation locations and exception bodies are untrusted.
     logger.warning(
-        "HTTP Exception occurred: %s - %s for request: %s %s",
-        exc.status_code,
-        exc.detail,
-        request.method,
-        request.url,
+        "HTTP request failed: %s (%s)",
+        code,
+        status_code,
+        extra={"component": "http_boundary", "failure_code": code, "status_code": status_code},
     )
+
+
+async def http_exception_handler(request: Request, exc: HTTPException) -> JSONResponse:
+    _log_failure("http", exc.status_code)
     payload = map_exception_to_error_response(exc)
-    return JSONResponse(status_code=exc.status_code, content=payload.model_dump())
+    return JSONResponse(
+        status_code=exc.status_code, content=payload.model_dump(), headers=exc.headers
+    )
 
 
 async def validation_exception_handler(
@@ -31,28 +40,10 @@ async def validation_exception_handler(
 ) -> JSONResponse:
     # НЕ логируем exc.errors() целиком и НЕ эхоим error["input"] обратно — там сырые
     # значения полей запроса (напр. plaintext-пароль с /register) → утечка PII/секретов
-    # в логи и в ответ. В лог — только пути полей и типы ошибок (без значений).
-    safe_fields = [
-        {
-            "field": ".".join(str(loc) for loc in error.get("loc", ())),
-            "type": error.get("type"),
-        }
-        for error in exc.errors()
-    ]
-    logger.warning(
-        "Validation error for request %s %s: %s",
-        request.method,
-        request.url,
-        safe_fields,
-    )
-    errors = [
-        {
-            "field": ".".join(str(loc) for loc in error["loc"]),
-            "message": error["msg"],
-            "type": error["type"],
-        }
-        for error in exc.errors()
-    ]
+    # в логи и в ответ. Даже loc может содержать пользовательский ключ:
+    # в лог передаём только bounded category, без полей/сообщений валидатора.
+    _log_failure("validation", status.HTTP_422_UNPROCESSABLE_ENTITY)
+    errors = validation_feedback(request, exc.errors())
     exception = HTTPException(
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
         detail={
@@ -69,29 +60,22 @@ async def validation_exception_handler(
 
 
 async def general_exception_handler(request: Request, exc: Exception) -> JSONResponse:
-    logger.exception("Unhandled exception occurred for request: %s %s", request.method, request.url)
     status_code = map_exception_to_status(exc)
+    if not isinstance(exc, HttpResponseAborted):
+        _log_failure("internal", status_code)
     payload = map_exception_to_error_response(exc)
     return JSONResponse(status_code=status_code, content=payload.model_dump())
 
 
 async def repository_exception_handler(request: Request, exc: RepositoryError) -> JSONResponse:
     status_code = map_exception_to_status(exc)
-    logger.warning(
-        "%s occurred for request %s %s: %s",
-        exc.__class__.__name__,
-        request.method,
-        request.url,
-        exc,
-    )
+    _log_failure("repository", status_code)
     payload = map_exception_to_error_response(exc)
     return JSONResponse(status_code=status_code, content=payload.model_dump())
 
 
 async def rate_limited_exception_handler(request: Request, exc: RateLimitedError) -> JSONResponse:
-    logger.warning(
-        "Rate limited: %s %s (retry_after=%s)", request.method, request.url, exc.retry_after
-    )
+    _log_failure("rate_limited", status.HTTP_429_TOO_MANY_REQUESTS)
     payload = map_exception_to_error_response(exc)
     retry_after = max(0, int(getattr(exc, "retry_after", 0) or 0))
     return JSONResponse(
@@ -102,6 +86,11 @@ async def rate_limited_exception_handler(request: Request, exc: RateLimitedError
 
 
 def setup_exception_handlers(app: FastAPI):
+    app.add_middleware(
+        HttpFailureBoundary,
+        error_handler=general_exception_handler,
+        failure_reporter=_log_failure,
+    )
     app.add_exception_handler(RateLimitedError, rate_limited_exception_handler)  # type: ignore[arg-type]
     app.add_exception_handler(HTTPException, http_exception_handler)  # type: ignore[arg-type]
     app.add_exception_handler(

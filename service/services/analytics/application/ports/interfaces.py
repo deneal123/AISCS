@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from typing import Any, Protocol, runtime_checkable
 
+from service.shared.memory_outcomes import MemoryWriteResult
+
 
 @runtime_checkable
 class MemoryIntegrationPort(Protocol):
@@ -12,7 +14,7 @@ class MemoryIntegrationPort(Protocol):
         user_id: str,
         messages: list[dict[str, Any]],
         metadata: dict[str, Any] | None = None,
-    ) -> None: ...
+    ) -> MemoryWriteResult: ...
     async def list_facts(
         self, *, user_id: str, query: str | None = None, top_k: int = 50
     ) -> list[dict[str, Any]]: ...

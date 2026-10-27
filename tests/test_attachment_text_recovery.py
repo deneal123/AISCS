@@ -106,7 +106,7 @@ def test_recovery_is_actually_wired_into_the_message_flow():
     """
     import inspect
 
-    from service.services.chat.infrastructure.chat_worker import run_execution
+    from service.services.chat.infrastructure.chat_worker.execution import run as run_execution
 
     src = inspect.getsource(run_execution._prepare_context)
 

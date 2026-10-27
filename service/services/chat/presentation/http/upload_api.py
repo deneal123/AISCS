@@ -78,7 +78,10 @@ async def _claim_transcription_charge(redis_client: Any, user_id: str, content_h
         was_set = await redis_client.set(key, "1", nx=True, ex=_TRANSCRIPTION_DEDUP_TTL)
         return bool(was_set)
     except Exception:
-        logger.debug("transcription dedup claim failed; charging", exc_info=True)
+        logger.debug(
+            "transcription dedup claim failed; charging",
+            extra={"component": "chat_upload", "failure_code": "unavailable"},
+        )
         return True
 
 
@@ -89,7 +92,10 @@ async def _release_transcription_charge(redis_client: Any, user_id: str, content
     try:
         await redis_client.delete(_transcription_marker_key(user_id, content_hash))
     except Exception:
-        logger.debug("transcription dedup release failed", exc_info=True)
+        logger.debug(
+            "transcription dedup release failed",
+            extra={"component": "chat_upload", "failure_code": "unavailable"},
+        )
 
 
 async def _charge_image_usage(
@@ -115,10 +121,10 @@ async def _charge_image_usage(
         return
     claimed = await _claim_transcription_charge(redis_client, user_id, f"img:{content_hash}")
     if not claimed:
-        logger.info("image describe charge deduped (recent duplicate) user=%s", user_id)
+        logger.info("image describe charge deduped", extra={"component": "chat_upload"})
         return
     try:
-        from service.services.chat.infrastructure.chat_worker.charging import _charge_usage
+        from service.services.chat.infrastructure.chat_worker.billing.charging import _charge_usage
         from service.services.chat.infrastructure.chat_worker.factory import (
             ChatWorkerDependencyFactory,
         )
@@ -147,7 +153,10 @@ async def _charge_image_usage(
     except Exception:
         # Маркер дедупа снимаем: иначе повтор загрузки останется бесплатным навсегда.
         await _release_transcription_charge(redis_client, user_id, f"img:{content_hash}")
-        logger.warning("image describe charge failed", exc_info=True)
+        logger.warning(
+            "image describe charge failed",
+            extra={"component": "chat_upload", "failure_code": "unavailable"},
+        )
 
 
 async def _affordable_transcription_sec(
@@ -167,7 +176,10 @@ async def _affordable_transcription_sec(
     try:
         balance = await billing_service.get_balance(user_id)
     except Exception:
-        logger.debug("не удалось узнать остаток для потолка расшифровки", exc_info=True)
+        logger.debug(
+            "transcription balance unavailable",
+            extra={"component": "chat_upload", "failure_code": "unavailable"},
+        )
         return float("inf")
     return affordable_duration_sec(
         int(balance.total or 0), str(model or _cfg.agents.whisper_default_model)
@@ -205,7 +217,7 @@ async def _charge_transcription(
     # занят → пропускаем (иначе двойное списание за одну загрузку).
     claimed = await _claim_transcription_charge(redis_client, user_id, content_hash)
     if not claimed:
-        logger.info("%s transcription charge deduped (recent duplicate) user=%s", engine, user_id)
+        logger.info("transcription charge deduped", extra={"component": "chat_upload"})
         return
     try:
         await billing_service.charge(
@@ -224,7 +236,10 @@ async def _charge_transcription(
     except Exception:
         # Списание не удалось — снимаем маркер, чтобы ретрай мог списать.
         await _release_transcription_charge(redis_client, user_id, content_hash)
-        logger.warning("%s transcription charge failed", engine, exc_info=True)
+        logger.warning(
+            "transcription charge failed",
+            extra={"component": "chat_upload", "failure_code": "unavailable"},
+        )
 
 
 def get_upload_use_case(file_service) -> UploadFileUseCase:
@@ -251,6 +266,9 @@ async def upload_file_to_chat(
     if not file.filename:
         raise HTTPException(status_code=400, detail="No file provided")
 
+    if thread_id:
+        await chat_application_service.ensure_thread_owner(thread_id, str(profile.user_id))
+
     # Кредитный гейт ДО дорогой обработки (транскрипция/медиа-анализ): списание идёт
     # пост-фактум и зажато GREATEST(0, ...), поэтому нулевой баланс иначе получал бы
     # платную операцию (сайдкар/LLM) бесплатно — работа уже сделана к моменту charge.
@@ -258,7 +276,10 @@ async def upload_file_to_chat(
     try:
         has_credits = await billing_service.has_sufficient_credits(str(profile.user_id))
     except Exception:
-        logger.debug("credit precheck failed on upload; allowing (fail-open)", exc_info=True)
+        logger.debug(
+            "credit precheck failed on upload; allowing (fail-open)",
+            extra={"component": "chat_upload", "failure_code": "unavailable"},
+        )
         has_credits = True
     if not has_credits:
         raise HTTPException(
@@ -266,7 +287,14 @@ async def upload_file_to_chat(
             detail="Недостаточно кредитов. Пополните баланс, чтобы обрабатывать вложения.",
         )
 
-    content_bytes = await file.read()
+    from service.settings import config as cfg
+
+    max_bytes = int(cfg.agents.upload_max_bytes or 20 * 1024 * 1024)
+    content_bytes = await file.read(max(0, max_bytes) + 1)
+    if len(content_bytes) > max_bytes:
+        raise HTTPException(
+            status_code=413, detail=f"File too large (max {max_bytes // (1024 * 1024)}MB)"
+        )
     # Хэш содержимого — ключ дедупа списания транскрибации (см. ниже).
     content_hash = hashlib.sha256(content_bytes).hexdigest()[:32]
     # 🔴 ГЕЙТ ВЫШЕ ПРОВЕРЯЛ НАЛИЧИЕ ДЕНЕГ, А НЕ ДОСТАТОЧНОСТЬ. Замерено: на счету ОДИН
@@ -288,29 +316,29 @@ async def upload_file_to_chat(
             max_transcription_sec=max_transcription_sec,
             upload_intent_id=str(upload_intent_id) if upload_intent_id else None,
         )
-    except AttachmentIntentConflict as exc:
-        raise HTTPException(status_code=409, detail="upload_intent_conflict") from exc
-    except AttachmentPersistenceError as exc:
+    except AttachmentIntentConflict:
+        raise HTTPException(status_code=409, detail="upload_intent_conflict") from None
+    except AttachmentPersistenceError:
         raise HTTPException(
             status_code=503,
             detail="Не удалось сохранить файл. Повторите загрузку.",
-        ) from exc
-    except TranscriptionTooExpensive as exc:
+        ) from None
+    except TranscriptionTooExpensive:
         # 🔴 402, А НЕ ТИХАЯ ПУСТОТА. Человек должен понять, что делать: запись длиннее,
         # чем покрывает остаток. Молчаливый пустой текст читался бы как «файл не понят».
         raise HTTPException(
             status_code=402,
-            detail=f"Не хватает кредитов на расшифровку: {exc.detail}. Пополните баланс.",
-        ) from exc
-    except ValueError as exc:
-        raise HTTPException(status_code=400, detail=str(exc)) from exc
-    except OverflowError as exc:
-        raise HTTPException(status_code=413, detail=str(exc)) from exc
-    except Exception as exc:
-        raise HTTPException(status_code=500, detail="File processing failed") from exc
+            detail="Не хватает кредитов на расшифровку. Пополните баланс или сократите запись.",
+        ) from None
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid file or unsupported format") from None
+    except OverflowError:
+        raise HTTPException(status_code=413, detail="File too large") from None
+    except Exception:
+        raise HTTPException(status_code=500, detail="File processing failed") from None
 
     try:
-        from service.services.chat.infrastructure.chat_worker.attachment_evidence import (
+        from service.services.chat.infrastructure.chat_worker.context.attachment_evidence import (
             cache_owner_attachment_evidence,
         )
 
@@ -347,7 +375,10 @@ async def upload_file_to_chat(
             await redis_client.ltrim(key, 0, _MAX_REPO_GRAPHS - 1)
             await redis_client.expire(key, _repo_graphs_ttl_sec())
         except Exception:
-            logger.debug("не удалось привязать граф репозитория к треду", exc_info=True)
+            logger.debug(
+                "repository graph binding unavailable",
+                extra={"component": "chat_upload", "failure_code": "unavailable"},
+            )
 
     transcription = result.pop("transcription", None)
     await _charge_transcription(
@@ -366,7 +397,11 @@ async def upload_file_to_chat(
         result.pop("image_usage", None),
     )
 
-    _schedule_graph_indexing(result, str(profile.user_id), billing_service)
+    # A repeated durable upload intent is the same Library source, not a new
+    # request for paid background indexing. Never expose this private signal.
+    library_reused = result.pop("_library_reused", False) is True
+    if not library_reused:
+        _schedule_graph_indexing(result, str(profile.user_id), billing_service)
     return UploadFileResponse(**result)
 
 
@@ -397,6 +432,13 @@ def _schedule_graph_indexing(result: dict, user_id: str, billing_service: Billin
     text = str(result.get("extracted_text") or "").strip()
     graph_id = user_graph_id(user_id)
     if not text or not graph_id or result.get("file_type") not in _INDEXABLE_TYPES:
+        return
+
+    try:
+        file_id = UUID(result.get("file_id", ""))
+    except (ValueError, TypeError, AttributeError):
+        # Indexing is optional; no owned Library identity means no chargeable
+        # background operation. Upload persistence already supplies a UUID.
         return
 
     client = GraphifyClient()
@@ -431,6 +473,7 @@ def _schedule_graph_indexing(result: dict, user_id: str, billing_service: Billin
                 credits=credits,
                 tokens=0,
                 raw_cost_rub=rub,
+                idempotency_key=f"graph-index:{file_id.hex}",
                 metadata={
                     "kind": "graph_index",
                     "filename": filename,
@@ -439,13 +482,19 @@ def _schedule_graph_indexing(result: dict, user_id: str, billing_service: Billin
                 },
             )
         except Exception:
-            logger.warning("graph index charge failed", exc_info=True)
+            logger.warning(
+                "graph index charge failed",
+                extra={"component": "chat_upload", "failure_code": "unavailable"},
+            )
 
     async def _guarded() -> None:
         try:
             await _index()
         except Exception:
-            logger.warning("graph indexing failed for %s", filename, exc_info=True)
+            logger.warning(
+                "graph indexing failed",
+                extra={"component": "chat_upload", "failure_code": "unavailable"},
+            )
 
     try:
         asyncio.get_running_loop().create_task(_guarded())

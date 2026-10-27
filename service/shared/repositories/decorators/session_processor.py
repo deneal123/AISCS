@@ -35,6 +35,25 @@ def require_session(session: AsyncSession | None) -> AsyncSession:
     return session
 
 
+async def _rollback_owned(session: AsyncSession | None) -> None:
+    """A failed rollback cannot prove a clean transaction or leak driver text.
+
+    Only the decorator-owned session is eligible. Do not retry or convert a
+    disconnect into integrity/not-found: callers need the uncertain persistence
+    path, not a claim that the original failure was safely rolled back.
+    """
+    if session is None:
+        return
+    try:
+        await session.rollback()
+    except Exception:
+        logger.warning(
+            "repository rollback unavailable",
+            extra={"component": "repository", "failure_code": "unavailable"},
+        )
+        raise RepositoryOperationalError("Database unavailable") from None
+
+
 async def _dispatch(func: Any, args: Any, kwargs: Any, *, session: AsyncSession | None) -> Any:
     """Выполнить репозиторный метод с маппингом ошибок SQLAlchemy → RepositoryError.
 
@@ -48,31 +67,41 @@ async def _dispatch(func: Any, args: Any, kwargs: Any, *, session: AsyncSession 
         if session is not None:
             await session.commit()
         return result
-    except IntegrityError as exc:
-        if session is not None:
-            await session.rollback()
-        logger.exception("Data integrity violation")
-        raise RepositoryIntegrityError("Uniqueness violation") from exc
-    except NoResultFound as exc:
-        if session is not None:
-            await session.rollback()
-        logger.warning("Record not found: %s", exc)
-        raise RepositoryNotFoundError("Record not found") from exc
-    except MultipleResultsFound as exc:
-        if session is not None:
-            await session.rollback()
-        logger.exception("Multiple records found")
-        raise RepositoryMultipleResultsError() from exc
-    except OperationalError as exc:
-        if session is not None:
-            await session.rollback()
-        logger.exception("Database connection error")
-        raise RepositoryOperationalError("Database unavailable") from exc
-    except Exception as exc:
-        if session is not None:
-            await session.rollback()
-        logger.exception("Unexpected error occurred")
-        raise RepositoryError("Internal repository error") from exc
+    except IntegrityError:
+        await _rollback_owned(session)
+        logger.warning(
+            "repository operation failed",
+            extra={"component": "repository", "failure_code": "integrity"},
+        )
+        raise RepositoryIntegrityError("Uniqueness violation") from None
+    except NoResultFound:
+        await _rollback_owned(session)
+        logger.warning(
+            "repository operation failed",
+            extra={"component": "repository", "failure_code": "not_found"},
+        )
+        raise RepositoryNotFoundError("Record not found") from None
+    except MultipleResultsFound:
+        await _rollback_owned(session)
+        logger.warning(
+            "repository operation failed",
+            extra={"component": "repository", "failure_code": "multiple_results"},
+        )
+        raise RepositoryMultipleResultsError() from None
+    except OperationalError:
+        await _rollback_owned(session)
+        logger.warning(
+            "repository operation failed",
+            extra={"component": "repository", "failure_code": "unavailable"},
+        )
+        raise RepositoryOperationalError("Database unavailable") from None
+    except Exception:
+        await _rollback_owned(session)
+        logger.warning(
+            "repository operation failed",
+            extra={"component": "repository", "failure_code": "internal"},
+        )
+        raise RepositoryError("Internal repository error") from None
 
 
 def connection() -> Callable[

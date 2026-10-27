@@ -61,14 +61,16 @@ def test_verification_email_reports_sent(monkeypatch):
     assert _Mailer.sent[0]["to"] == "a@b.c"
 
 
-def test_a_failed_email_names_its_reason(monkeypatch):
-    """🔴 «error» без причины бесполезен: Celery видит успех, и разбираться будет НЕ С ЧЕМ."""
+def test_a_failed_email_names_its_reason(monkeypatch, caplog):
+    """Worker reports a bounded reason without recipient/provider exception text."""
     monkeypatch.setattr("service.infrastructure.mail.smtp_mailer.SmtpMailer", _FailingMailer)
 
     result = tasks.send_verification_email("a@b.c", "тема", "html", "text")
 
     assert result["status"] == "error"
-    assert "SMTP отказал" in result["error"], "причина потеряна — отлаживать будет нечем"
+    assert result["error"] == "smtp_unavailable"
+    assert "SMTP отказал" not in caplog.text
+    assert "a@b.c" not in caplog.text
 
 
 def test_receipt_email_is_rendered_not_empty(monkeypatch):
@@ -119,7 +121,7 @@ def test_trim_reports_how_many_streams_it_touched(monkeypatch):
 
     monkeypatch.setattr("service.settings.Config", _config(True))
     monkeypatch.setattr(
-        "service.infrastructure.cache.redis_manager.RedisManager.get_client",
+        "service.infrastructure.cache.manager.RedisManager.get_client",
         lambda self: object(),
     )
     monkeypatch.setattr(
@@ -153,7 +155,7 @@ def test_a_broken_trim_reports_error_with_a_reason(monkeypatch):
 
     monkeypatch.setattr("service.settings.Config", _config(True))
     monkeypatch.setattr(
-        "service.infrastructure.cache.redis_manager.RedisManager.get_client",
+        "service.infrastructure.cache.manager.RedisManager.get_client",
         lambda self: object(),
     )
     monkeypatch.setattr(
@@ -251,8 +253,12 @@ def test_reservation_cleanup_constructs_connector_inside_task_loop(monkeypatch):
         pg = object()
 
     class _Connector:
-        def __init__(self, _cfg):
+        def __init__(self, _cfg, force_new=False):
             seen["constructed_in_running_loop"] = not asyncio.get_running_loop().is_closed()
+            seen["force_new"] = force_new
+
+        async def close(self):
+            seen["closed"] = True
 
     async def _cleanup(_repo):
         return {"expired": 2, "active": 3}
@@ -267,10 +273,24 @@ def test_reservation_cleanup_constructs_connector_inside_task_loop(monkeypatch):
         "service.services.billing.application.cost_guard.cleanup_expired_reservations", _cleanup
     )
 
+    async def _settle(*args):
+        return {"status": "ready", "examined": 0}
+
+    monkeypatch.setattr(
+        "service.services.chat.application.video_stt.maintenance.settle_video_stt", _settle
+    )
+
     result = tasks.cleanup_expired_reservations()
 
-    assert result == {"status": "success", "expired": 2, "active": 3}
+    assert result == {
+        "status": "success",
+        "expired": 2,
+        "active": 3,
+        "video_stt": {"status": "ready", "examined": 0},
+    }
     assert seen["constructed_in_running_loop"] is True
+    assert seen["force_new"] is True
+    assert seen["closed"] is True
 
 
 def test_provider_pricing_refresh_reports_catalog_failure(monkeypatch):

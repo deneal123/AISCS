@@ -185,7 +185,7 @@ async def test_ensure_pushes_decrypted_overrides_on_version_drift(monkeypatch) -
     )
 
     svc = ProviderKeyService.__new__(ProviderKeyService)
-    monkeypatch.setattr(svc, "_safe_get_all", _async({"openai": {"secret_enc": "ЗАШИФР"}}))
+    svc._repo = SimpleNamespace(get_all=_async({"openai": {"secret_enc": "ЗАШИФР"}}))
 
     assert await svc.ensure_sidecar_keys(9) is True
     assert pushed["version"] == 9

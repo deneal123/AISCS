@@ -17,7 +17,7 @@ from __future__ import annotations
 
 import pytest
 
-from service.services.chat.infrastructure.chat_worker import turn_result
+from service.services.chat.infrastructure.chat_worker.results import turn as turn_result
 
 
 @pytest.fixture
@@ -118,7 +118,7 @@ def test_the_worker_delegates_to_this_node():
     import ast
     import inspect
 
-    from service.services.chat.infrastructure.chat_worker import run_execution
+    from service.services.chat.infrastructure.chat_worker.execution import run as run_execution
 
     tree = ast.parse(inspect.getsource(run_execution._finalize_success).strip())
     used = [

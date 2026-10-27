@@ -19,7 +19,7 @@ import pytest
 
 import service.services.billing.application.billing_service as bs_mod
 import service.services.billing.application.pricing_service as ps_mod
-import service.services.chat.infrastructure.chat_worker.charging as charging
+import service.services.chat.infrastructure.chat_worker.billing.charging as charging
 from tests.test_helpers import FakeConnector, FakeDBSession
 
 

@@ -79,9 +79,7 @@ def test_detach_flag_is_read_as_has_new_file():
     правило переехало в `chat_worker/turn_context.py`, хотя само правило не изменилось.
     Проверка по тексту стережёт МЕСТО, а не смысл.
     """
-    from service.services.chat.infrastructure.chat_worker.turn_context import (
-        message_has_new_file,
-    )
+    from service.services.chat.infrastructure.chat_worker.context.turn import message_has_new_file
 
     assert message_has_new_file(None, {"detach_files": True}) is True, (
         "открепление не считается новым файлом — thread-память не сотрётся"
@@ -100,7 +98,7 @@ def test_the_worker_uses_that_rule():
     import ast
     import inspect
 
-    from service.services.chat.infrastructure.chat_worker import run_execution
+    from service.services.chat.infrastructure.chat_worker.execution import run as run_execution
 
     tree = ast.parse(inspect.getsource(run_execution._prepare_context).strip())
     used = [

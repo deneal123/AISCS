@@ -57,7 +57,7 @@ def charged(monkeypatch):
         return 42
 
     monkeypatch.setattr(
-        "service.services.chat.infrastructure.chat_worker.charging._charge_usage", _charge
+        "service.services.chat.infrastructure.chat_worker.billing.charging._charge_usage", _charge
     )
     monkeypatch.setattr(
         "service.services.chat.infrastructure.chat_worker.factory."
@@ -124,7 +124,7 @@ async def test_the_dedup_marker_is_released_when_charging_fails(monkeypatch):
         raise RuntimeError("биллинг недоступен")
 
     monkeypatch.setattr(
-        "service.services.chat.infrastructure.chat_worker.charging._charge_usage", _boom
+        "service.services.chat.infrastructure.chat_worker.billing.charging._charge_usage", _boom
     )
     monkeypatch.setattr(
         "service.services.chat.infrastructure.chat_worker.factory."

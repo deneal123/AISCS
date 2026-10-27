@@ -7,23 +7,25 @@ from uuid import UUID, uuid4
 import pytest
 
 from service.infrastructure.agents_client.contracts.events import EventSerializer, EventType
-from service.services.chat.application.use_cases.ws_message_use_case import (
+from service.services.chat.application.use_cases.ws_message.handler import (
     HandleWsChatMessageUseCase,
 )
 from service.services.chat.domain.attachment_meta import user_message_meta
-from service.services.chat.domain.confirmation_offer import (
+from service.services.chat.domain.confirmation.mode import expire_mode_offer
+from service.services.chat.domain.confirmation.offer import (
     ConfirmationOfferError,
     claim_confirmation_offer,
     create_confirmation_offer,
     mark_confirmation_accepted,
 )
-from service.services.chat.domain.mode_offer import expire_mode_offer
-from service.services.chat.infrastructure.chat_worker import reservation
-from service.services.chat.infrastructure.chat_worker.attachment_evidence import (
+from service.services.chat.infrastructure.chat_worker.billing.reservation import (
+    preflight as reservation,
+)
+from service.services.chat.infrastructure.chat_worker.context.attachment_evidence import (
     cache_owner_attachment_evidence,
     owner_checked_attachments,
 )
-from service.services.chat.infrastructure.chat_worker.message_meta import persistable_meta
+from service.services.chat.infrastructure.chat_worker.context.metadata import persistable_meta
 
 
 class FakeRedis:
@@ -44,9 +46,155 @@ class FakeRedis:
             self.values.pop(str(key), None)
 
 
+class SyncRedis(FakeRedis):
+    """Celery uses synchronous commands; HTTP uses asyncio commands."""
+
+    def set(self, key, value, **kwargs):
+        if kwargs.get("nx") and key in self.values:
+            return False
+        self.values[str(key)] = value
+        return True
+
+    def get(self, key):
+        return self.values.get(str(key))
+
+    def delete(self, *keys):
+        for key in keys:
+            self.values.pop(str(key), None)
+
+
 @pytest.mark.asyncio
-async def test_confirmation_anchor_is_owner_bound_and_idempotent() -> None:
+@pytest.mark.parametrize("failure_stage", ["broker_ack", "task_id_write"])
+async def test_failed_ack_after_enqueue_does_not_unlock_a_second_paid_continuation(
+    monkeypatch, failure_stage
+):
+    from unittest.mock import AsyncMock
+
+    from service.services.chat.application.use_cases.ws_message import handler as module
+
     redis = FakeRedis()
+    owner = str(uuid4())
+    anchor = await create_confirmation_offer(
+        redis,
+        thread_id="thread",
+        user_id=owner,
+        source_message_id=str(uuid4()),
+        text="request",
+        selected_model=None,
+        route_override=None,
+        resolved_category=None,
+        input_type="text",
+        attachments=None,
+        file_ids=None,
+    )
+    enqueue = []
+
+    def enqueue_with_unknown_ack(**kwargs):
+        enqueue.append(kwargs)
+        if failure_stage == "broker_ack":
+            raise RuntimeError("private-broker-ack-marker")
+        return "task"
+
+    jobs = SimpleNamespace(
+        job_queue=SimpleNamespace(enqueue_agent_message=enqueue_with_unknown_ack),
+        create_chat_job=AsyncMock(return_value=SimpleNamespace(job_id=uuid4())),
+        update_job_celery_task_id=AsyncMock(),
+    )
+    monkeypatch.setattr(
+        module, "mark_confirmation_accepted", AsyncMock(side_effect=RuntimeError("PRIVATE"))
+    )
+    use_case = HandleWsChatMessageUseCase(jobs, object(), redis)
+    kwargs = dict(
+        thread_id="thread", msg={"confirm_offer_id": anchor.offer_id}, session={"user_id": owner}
+    )
+    with pytest.raises(RuntimeError):
+        await use_case.execute(**kwargs)
+    with pytest.raises(ConfirmationOfferError, match="confirmation_busy"):
+        await use_case.execute(**kwargs)
+    assert len(enqueue) == 1
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "mode,kind",
+    [
+        ("watch_video", "tool"),
+        ("deep_research", "mode"),
+        ("image_gen", "mode"),
+        ("expensive_run", "tool"),
+    ],
+)
+@pytest.mark.parametrize("decision", ["accept", "decline"])
+async def test_all_confirmation_choices_are_owned_idempotent_and_restore_original_context(
+    mode, kind, decision
+):
+    from unittest.mock import AsyncMock
+
+    redis = FakeRedis()
+    owner = str(uuid4())
+    anchor = await create_confirmation_offer(
+        redis,
+        thread_id="thread",
+        user_id=owner,
+        source_message_id=str(uuid4()),
+        text="ORIGINAL_REQUEST",
+        selected_model="GigaChat-2",
+        route_override=None,
+        resolved_category=None,
+        input_type="text",
+        attachments=[{"name": "input.md", "content": "PRIVATE"}],
+        file_ids=["owned-file"],
+        offer_mode=mode,
+        offer_kind=kind,
+        continuation={"file_context": "SERVER_CONTEXT"},
+    )
+    queued = []
+    queue = SimpleNamespace(enqueue_agent_message=lambda **kw: queued.append(kw) or "task")
+    jobs = SimpleNamespace(
+        job_queue=queue,
+        create_chat_job=AsyncMock(return_value=SimpleNamespace(job_id=uuid4())),
+        update_job_celery_task_id=AsyncMock(),
+    )
+    use_case = HandleWsChatMessageUseCase(jobs, object(), redis)
+    message = {
+        "confirm_offer_id": anchor.offer_id,
+        "confirmation_decision": decision,
+        "text": "TAMPERED",
+        "watch_video": True,
+        "deep_research": True,
+        "model": "OTHER",
+    }
+    first = await use_case.execute(thread_id="thread", msg=message, session={"user_id": owner})
+    second = await use_case.execute(thread_id="thread", msg=message, session={"user_id": owner})
+    assert len(queued) == 1
+    assert first["job_id"] == second["job_id"]
+    assert first["confirmation_status"] == ("accepted" if decision == "accept" else "declined")
+    assert second["confirmation_status"] == first["confirmation_status"]
+    call = queued[0]
+    assert call["text"] == "ORIGINAL_REQUEST"
+    assert call["selected_model"] == "GigaChat-2"
+    assert call["attachments"][0]["content"] == "PRIVATE"
+    assert call["file_context"] == "SERVER_CONTEXT"
+    assert call["session_data"]["watch_video"] == (mode == "watch_video" and decision == "accept")
+    assert call["session_data"]["confirmation_cancelled"] == (
+        mode == "expensive_run" and decision == "decline"
+    )
+    assert "PRIVATE" not in repr(first)
+    with pytest.raises(ConfirmationOfferError, match="confirmation_invalid"):
+        await use_case.execute(
+            thread_id="thread",
+            msg={
+                **message,
+                "confirmation_decision": "decline" if decision == "accept" else "accept",
+            },
+            session={"user_id": owner},
+        )
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("redis_type", [FakeRedis, SyncRedis])
+async def test_confirmation_anchor_is_owner_bound_and_idempotent(redis_type) -> None:
+    redis = redis_type()
     user_id = str(uuid4())
     anchor = await create_confirmation_offer(
         redis,
@@ -103,8 +251,9 @@ async def test_confirmation_anchor_is_owner_bound_and_idempotent() -> None:
 
 
 @pytest.mark.asyncio
-async def test_ws_confirmation_restores_original_request_once() -> None:
-    redis = FakeRedis()
+@pytest.mark.parametrize("redis_type", [FakeRedis, SyncRedis])
+async def test_ws_confirmation_restores_original_request_once(redis_type) -> None:
+    redis = redis_type()
     user_id = str(uuid4())
     file_id = str(uuid4())
     anchor = await create_confirmation_offer(
@@ -225,8 +374,9 @@ async def test_ws_uses_shared_route_before_enqueuing_manual_document_request() -
 
 
 @pytest.mark.asyncio
-async def test_server_cached_attachment_text_wins_over_browser_payload() -> None:
-    redis = FakeRedis()
+@pytest.mark.parametrize("redis_type", [FakeRedis, SyncRedis])
+async def test_server_cached_attachment_text_wins_over_browser_payload(redis_type) -> None:
+    redis = redis_type()
     user_id = str(uuid4())
     file_id = str(uuid4())
     digest = "b" * 64

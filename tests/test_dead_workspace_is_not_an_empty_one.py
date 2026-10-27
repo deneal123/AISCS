@@ -110,7 +110,7 @@ async def test_the_panel_says_expired_and_forgets_the_binding(sidecar, monkeypat
     """🔴 ЧТО ВИДИТ ЧЕЛОВЕК: «истекла» (410), а не «Каталог пуст» (200 с пустым списком)."""
     from fastapi import HTTPException
 
-    from service.services.chat.presentation.routers.chat_api import workspace_api as api
+    from service.services.chat.presentation.routers.chat_api.workspace import router as api
 
     sidecar(404, {"error": "not_found"})
     forgotten: list[str] = []
@@ -135,7 +135,7 @@ async def test_the_panel_keeps_binding_when_sidecar_is_temporarily_unavailable(
 ):
     from fastapi import HTTPException
 
-    from service.services.chat.presentation.routers.chat_api import workspace_api as api
+    from service.services.chat.presentation.routers.chat_api.workspace import router as api
 
     sidecar(503, {"error": "driver_failed"})
     forgotten: list[str] = []
@@ -160,7 +160,7 @@ async def _record(sink: list, value):
 @pytest.mark.asyncio
 async def test_a_healthy_call_passes_through_untouched(sidecar):
     """Живая песочница через тот же проход обязана проходить без единой помехи."""
-    from service.services.chat.presentation.routers.chat_api import workspace_api as api
+    from service.services.chat.presentation.routers.chat_api.workspace import router as api
 
     sidecar(200, {"entries": [{"path": "/workspace/a.txt", "size": 3}]})
 
@@ -177,7 +177,7 @@ async def test_the_worker_forgets_the_binding_after_the_turn(sidecar, monkeypatc
     Снимок делается после КАЖДОГО хода, поэтому он и есть проверка живости. Узнав правду,
     он обязан стереть привязку: иначе следующий ход снова пойдёт к мёртвой песочнице.
     """
-    from service.services.chat.infrastructure.chat_worker import artifacts
+    from service.services.chat.infrastructure.chat_worker.results import artifacts
 
     sidecar(404, {"error": "not_found"})
     forgotten: list[str] = []
@@ -196,7 +196,7 @@ async def test_the_worker_forgets_the_binding_after_the_turn(sidecar, monkeypatc
 @pytest.mark.asyncio
 async def test_the_snapshot_still_never_breaks_the_reply(sidecar, monkeypatch):
     """⚠️ Лечение не отменяет best-effort: сбой снимка ответ пользователю не роняет."""
-    from service.services.chat.infrastructure.chat_worker import artifacts
+    from service.services.chat.infrastructure.chat_worker.results import artifacts
 
     def _boom(**_kw):
         raise RuntimeError("сайдкар лёг")
@@ -217,6 +217,9 @@ async def test_the_binding_carries_its_own_thread(monkeypatch):
     переиспользование проверяем на СТАРОЙ привязке, а не на только что сохранённой своей —
     иначе тест зелен от того, что поле в неё положил предыдущий шаг того же теста.
     """
+    from service.settings import config
+
+    monkeypatch.setattr(config.agents, "workspace_autocreate", True)
     saved: dict = {}
     monkeypatch.setattr(wc, "_config", lambda: (True, "http://ws:8080", 5.0, "k", 1800.0))
     monkeypatch.setattr(

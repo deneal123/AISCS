@@ -58,7 +58,7 @@ def test_wired_into_worker():
     """⚠️ repo_graph_ids собираются и доезжают до execute."""
     import inspect
 
-    from service.services.chat.infrastructure.chat_worker import run_execution
+    from service.services.chat.infrastructure.chat_worker.execution import run as run_execution
 
     src = inspect.getsource(run_execution._execute_agent)
     assert "repo_graph_ids" in src and "repo_graph_ids=prepared.repo_graph_ids" in src, (

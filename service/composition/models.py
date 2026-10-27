@@ -13,7 +13,7 @@ from service.services.analytics.application.analytics_service import AnalyticsSe
 from service.services.billing.application.billing_service import BillingService
 from service.services.chat.domain.process_chat_message_handler import ProcessChatMessageHandler
 from service.services.files.application.file_saver_service import FileSaverService
-from service.services.files.application.file_scanner_service import BasicFileScanner
+from service.services.files.application.scanning.service import BasicFileScanner
 from service.services.files.persistence.file_repository import FileRepository
 from service.services.jobs.application.job_processor import NewJobProcessor
 from service.services.jobs.application.job_service import JobService
@@ -55,11 +55,11 @@ class ServicesContainer:
     auth_service: AuthService
     job_service: JobService
     file_saver_service: FileSaverService
-    analytics_service: AnalyticsService
-    process_chat_message_handler: ProcessChatMessageHandler
-    new_job_processor: NewJobProcessor
+    analytics_service: AnalyticsService | None
+    process_chat_message_handler: ProcessChatMessageHandler | None
+    new_job_processor: NewJobProcessor | None
     chat_application_service: Any
-    billing_service: BillingService
+    billing_service: BillingService | None
     admin_service: Any
 
 

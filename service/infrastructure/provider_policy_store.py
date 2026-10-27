@@ -20,6 +20,34 @@ from typing import Any
 from service.settings import config
 
 logger = logging.getLogger(__name__)
+_DIAGNOSTIC_CODES = frozenset(
+    {
+        "redis_unavailable",
+        "prime_failed",
+        "redis_seed_failed",
+        "blocks_restored",
+        "persist_failed",
+        "redis_block_failed",
+        "provider_blocked",
+        "redis_clear_failed",
+        "provider_unblocked",
+        "redis_read_failed",
+    }
+)
+
+
+def _diagnostic(level: int, code: str) -> None:
+    # Codes are static call-site constants. Provider names, health reasons and
+    # exception bodies belong to private state, never diagnostic formatting.
+    logger.log(
+        level,
+        "provider policy operation",
+        extra={
+            "component": "provider_policy",
+            "failure_code": code if code in _DIAGNOSTIC_CODES else "policy_failed",
+        },
+    )
+
 
 _DB_KEY = "provider_blocked"
 _REDIS_KEY = "provider:blocked:{name}"
@@ -55,7 +83,7 @@ def _get_redis():
 
         _redis = redis.Redis.from_url(config.redis.dsn, decode_responses=True)
     except Exception:  # noqa: BLE001 - Redis необязателен, деградируем до памяти
-        logger.warning("provider_policy: Redis недоступен, остаюсь на in-memory")
+        _diagnostic(logging.WARNING, "redis_unavailable")
         _redis = None
     return _redis
 
@@ -63,7 +91,7 @@ def _get_redis():
 # Имена провайдеров. Реестр модулей живёт в домене (сайдкар), а backend'у для хранения
 # политики нужны только ИМЕНА — держим их списком, чтобы не тащить чужой пакет.
 # ⚠️ Появится новый провайдер — добавить сюда, иначе его блокировки не будут читаться.
-PROVIDER_NAMES: tuple[str, ...] = ("mws", "openai", "openrouter", "gigachat", "routerai")
+PROVIDER_NAMES: tuple[str, ...] = ("mws", "openai", "openrouter", "gigachat", "routerai", "local")
 
 
 def _all_provider_names() -> list[str]:
@@ -91,7 +119,7 @@ async def prime() -> None:
     try:
         settings = await _repo.get_all()
     except Exception:  # noqa: BLE001
-        logger.debug("provider_policy: prime из БД не удался", exc_info=True)
+        _diagnostic(logging.DEBUG, "prime_failed")
         return
     stored = settings.get(_DB_KEY)
     if isinstance(stored, str):
@@ -110,9 +138,9 @@ async def prime() -> None:
             try:
                 await asyncio.to_thread(r.set, _REDIS_KEY.format(name=name), reason)
             except Exception:  # noqa: BLE001
-                logger.debug("provider_policy: не смог засеять Redis для %s", name, exc_info=True)
+                _diagnostic(logging.DEBUG, "redis_seed_failed")
     if _BLOCKED:
-        logger.info("provider_policy: восстановлены блоки провайдеров: %s", sorted(_BLOCKED))
+        _diagnostic(logging.INFO, "blocks_restored")
 
 
 async def _persist_db() -> None:
@@ -124,7 +152,7 @@ async def _persist_db() -> None:
     try:
         await _repo.upsert(key=_DB_KEY, value=payload, updated_by="provider_policy")
     except Exception:  # noqa: BLE001
-        logger.warning("provider_policy: не смог сохранить блоки в БД", exc_info=True)
+        _diagnostic(logging.WARNING, "persist_failed")
 
 
 async def set_blocked(name: str, reason: str) -> None:
@@ -138,9 +166,9 @@ async def set_blocked(name: str, reason: str) -> None:
         try:
             await asyncio.to_thread(r.set, _REDIS_KEY.format(name=name), _BLOCKED[name])
         except Exception:  # noqa: BLE001
-            logger.debug("provider_policy: block в Redis не записан для %s", name, exc_info=True)
+            _diagnostic(logging.DEBUG, "redis_block_failed")
     await _persist_db()
-    logger.warning("provider_policy: провайдер '%s' ЗАБЛОКИРОВАН (%s)", name, _BLOCKED[name])
+    _diagnostic(logging.WARNING, "provider_blocked")
 
 
 async def clear_blocked(name: str) -> None:
@@ -154,9 +182,9 @@ async def clear_blocked(name: str) -> None:
         try:
             await asyncio.to_thread(r.delete, _REDIS_KEY.format(name=name))
         except Exception:  # noqa: BLE001
-            logger.debug("provider_policy: не смог снять block в Redis для %s", name, exc_info=True)
+            _diagnostic(logging.DEBUG, "redis_clear_failed")
     await _persist_db()
-    logger.info("provider_policy: провайдер '%s' разблокирован", name)
+    _diagnostic(logging.INFO, "provider_unblocked")
 
 
 async def blocked_providers(names: list[str] | None = None) -> set[str]:
@@ -170,5 +198,5 @@ async def blocked_providers(names: list[str] | None = None) -> set[str]:
         vals = await asyncio.to_thread(r.mget, [_REDIS_KEY.format(name=n) for n in names])
         blocked |= {n for n, v in zip(names, vals, strict=True) if v is not None}
     except Exception:  # noqa: BLE001
-        logger.debug("provider_policy: чтение block из Redis не удалось", exc_info=True)
+        _diagnostic(logging.DEBUG, "redis_read_failed")
     return blocked

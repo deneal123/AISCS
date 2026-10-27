@@ -8,9 +8,25 @@ Follow-up «перегенерируй с другим цветом волос»
 
 from __future__ import annotations
 
+import asyncio
+from types import SimpleNamespace
+from unittest.mock import AsyncMock
+
 import pytest
 
 from service.services.chat.infrastructure import agent_context as ac
+
+
+@pytest.fixture(autouse=True)
+def capture_component_records(caplog):
+    attached = caplog.handler not in ac.logger.handlers
+    if attached:
+        ac.logger.addHandler(caplog.handler)
+    try:
+        yield
+    finally:
+        if attached:
+            ac.logger.removeHandler(caplog.handler)
 
 
 class _Row:
@@ -144,6 +160,118 @@ async def test_db_failure_is_best_effort(monkeypatch):
     assert await ac.recall_last_thread_image_url("thread-uuid") is None
 
 
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "metadata",
+    [
+        "private-invalid-json",
+        "[]",
+        "true",
+        [],
+        True,
+        7,
+        {"generated_files": "private-files-body"},
+        {"generated_files": True},
+    ],
+)
+async def test_invalid_legacy_metadata_is_best_effort(wire, monkeypatch, metadata):
+    from service.services.chat.infrastructure.chat_worker import factory
+
+    wire([metadata])
+    presign = AsyncMock()
+    monkeypatch.setattr(
+        factory,
+        "build_file_service",
+        lambda *_: type("Service", (), {"get_presigned_url_by_key": presign})(),
+    )
+    assert await ac.recall_last_thread_image_url("thread-uuid") is None
+    presign.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("key", [None, "", 7, True, {"private": "invalid-key"}])
+async def test_invalid_candidate_does_not_hide_later_valid_image(wire, key):
+    wire(
+        [
+            {
+                "generated_files": [
+                    {"kind": "image", "file_key": key},
+                    {"kind": "image", "file_key": "uploads/CHAT/valid.png"},
+                ]
+            }
+        ]
+    )
+    assert await ac.recall_last_thread_image_url("thread-uuid") == (
+        "https://storage/fresh/uploads/CHAT/valid.png"
+    )
+
+
+@pytest.mark.asyncio
+async def test_connector_construction_failure_is_best_effort(monkeypatch):
+    from service.services.chat.infrastructure.chat_worker import factory
+
+    def unavailable(*_):
+        raise RuntimeError("private-connector-marker")
+
+    monkeypatch.setattr(factory.ChatWorkerDependencyFactory, "create_pg_connector", unavailable)
+    assert await ac.recall_last_thread_image_url("thread-uuid") is None
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("stage", ["metadata", "connector", "service", "presign"])
+async def test_image_recovery_failure_has_no_private_diagnostics(wire, monkeypatch, caplog, stage):
+    from service.services.chat.infrastructure.chat_worker import factory
+
+    marker, key = "private-image-body", "private-image-key"
+    wire(
+        [
+            marker
+            if stage == "metadata"
+            else {"generated_files": [{"kind": "image", "file_key": key}]}
+        ]
+    )
+
+    def unavailable(*_):
+        raise RuntimeError(marker)
+
+    if stage == "connector":
+        monkeypatch.setattr(factory.ChatWorkerDependencyFactory, "create_pg_connector", unavailable)
+    elif stage == "service":
+        monkeypatch.setattr(factory, "build_file_service", unavailable)
+    elif stage == "presign":
+        monkeypatch.setattr(
+            factory,
+            "build_file_service",
+            lambda *_: SimpleNamespace(
+                get_presigned_url_by_key=AsyncMock(side_effect=RuntimeError(marker))
+            ),
+        )
+    assert await ac.recall_last_thread_image_url("private-thread-id") is None
+    assert caplog.records
+    for record in caplog.records:
+        assert record.exc_info is None
+        assert record.component == "attachment_context"
+        assert record.failure_code in {"invalid", "unavailable"}
+        assert not any(
+            value in str(record.__dict__) for value in (marker, key, "private-thread-id")
+        )
+
+
+@pytest.mark.asyncio
+async def test_presign_cancellation_remains_cancelled(wire, monkeypatch, caplog):
+    from service.services.chat.infrastructure.chat_worker import factory
+
+    wire([{"generated_files": [{"kind": "image", "file_key": "fixture.png"}]}])
+    presign = AsyncMock(side_effect=asyncio.CancelledError())
+    monkeypatch.setattr(
+        factory, "build_file_service", lambda *_: SimpleNamespace(get_presigned_url_by_key=presign)
+    )
+    with pytest.raises(asyncio.CancelledError):
+        await ac.recall_last_thread_image_url("thread")
+    presign.assert_awaited_once_with(file_key="fixture.png")
+    assert not caplog.records
+
+
 def test_recall_is_wired_into_the_worker():
     """⚠️ Функция должна быть ПОДКЛЮЧЕНА к потоку, а не просто существовать."""
     import inspect
@@ -151,10 +279,10 @@ def test_recall_is_wired_into_the_worker():
     # ⚠️ СБОР ПЕРЕЕХАЛ в `chat_worker/turn_context.py` (вынос из разросшейся функции), а
     # ПЕРЕДАЧА движку осталась в воркере. Стережём оба звена: правило живёт в цепочке, и
     # разрыв в любом из них так же нем, как раньше.
-    from service.services.chat.infrastructure.chat_worker import turn_context as tc
+    from service.services.chat.infrastructure.chat_worker.context import turn as tc
 
     collected = inspect.getsource(tc.collect_engine_inputs)
-    from service.services.chat.infrastructure.chat_worker import run_execution
+    from service.services.chat.infrastructure.chat_worker.execution import run as run_execution
 
     passed = inspect.getsource(run_execution._execute_agent)
     # Сбор идёт через обёртку collect_message_extras (recall + признак документа).

@@ -104,9 +104,9 @@ async def test_partial_turn_keeps_the_attachment(monkeypatch):
         def get_session_context(self):
             return _Ctx()
 
-    # ⚠️ ПАТЧИМ ТАМ, ГДЕ ЧИТАЮТ: запись хода переехала в `chat_worker/turn_result.py`
+    # ⚠️ ПАТЧИМ ТАМ, ГДЕ ЧИТАЮТ: запись хода переехала в `chat_worker/results/turn.py`
     # вместе с остальной фиксацией результата — подмена в старом модуле не влияет.
-    from service.services.chat.infrastructure.chat_worker import turn_result
+    from service.services.chat.infrastructure.chat_worker.results import turn as turn_result
 
     monkeypatch.setattr(turn_result, "_persist_chat_turn", _persist)
 
@@ -183,8 +183,16 @@ def test_fallback_call_site_passes_the_attachments():
 
 
 def test_success_path_still_passes_the_attachments():
-    from service.services.chat.infrastructure.chat_worker import run_execution
+    from service.services.chat.infrastructure.chat_worker.execution import run as run_execution
 
-    src = inspect.getsource(run_execution._finalize_success)
-    assert "user_message_meta(request.attachments)" in src
-    assert "user_metadata={} if confirmed_offer else" in src
+    tree = ast.parse(inspect.getsource(run_execution._finalize_success).strip())
+    calls = [
+        node
+        for node in ast.walk(tree)
+        if isinstance(node, ast.Call)
+        and isinstance(node.func, ast.Name)
+        and node.func.id == "stage_turn_success"
+    ]
+    assert len(calls) == 1
+    assert isinstance(calls[0].args[0], ast.Name) and calls[0].args[0].id == "request"
+    # Actual fresh/offer/question payloads are covered by test_worker_turn_persistence.

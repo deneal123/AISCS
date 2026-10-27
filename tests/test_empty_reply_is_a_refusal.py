@@ -56,10 +56,25 @@ def test_missing_metadata_does_not_explode():
 
 def test_wired_into_the_worker():
     """⚠️ ТОЧКА ВЫЗОВА: подмена должна стоять НА ПУТИ ответа, а не рядом с ним."""
-    from service.services.chat.infrastructure.chat_worker import run_execution
+    import ast
 
-    src = inspect.getsource(run_execution._finalize_success)
+    from service.services.chat.infrastructure.chat_worker.execution import run as run_execution
+    from service.services.chat.infrastructure.chat_worker.results.preparation import (
+        prepare_turn_content,
+    )
+
+    tree = ast.parse(inspect.getsource(run_execution._finalize_success))
+    assert (
+        sum(
+            isinstance(node, ast.Call) and getattr(node.func, "id", "") == "prepare_turn_content"
+            for node in ast.walk(tree)
+        )
+        == 1
+    )
+    src = inspect.getsource(prepare_turn_content)
     assert "hooks.reply_or_provider_failure(execution_result)" in src, (
         "воркер снова публикует ответ модели напрямую — пустой уедет молчанием"
     )
-    assert 'reply = str(execution_result["reply"])' not in src
+    assert 'reply = str(execution_result["reply"])' not in src + inspect.getsource(
+        run_execution._finalize_success
+    )

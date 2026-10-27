@@ -24,7 +24,7 @@ from __future__ import annotations
 
 import pytest
 
-from service.services.chat.infrastructure.chat_worker.turn_result import (
+from service.services.chat.infrastructure.chat_worker.results.turn import (
     CANCELLED_NOTE,
     interrupted_reply_text,
 )
@@ -75,7 +75,7 @@ def test_the_worker_asks_this_function_instead_of_deciding_itself(cancelled):
     import ast
     import inspect
 
-    from service.services.chat.infrastructure.chat_worker import failure
+    from service.services.chat.infrastructure.chat_worker.execution import failure
 
     tree = ast.parse(inspect.getsource(failure.handle_worker_failure).strip())
     calls = [

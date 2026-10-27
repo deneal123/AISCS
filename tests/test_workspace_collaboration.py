@@ -8,7 +8,7 @@ import pytest
 
 from service.services.chat.application import workspace_collaboration as collaboration
 from service.services.chat.presentation.routers import workspace_coordination
-from service.services.chat.presentation.routers.chat_api.workspace_api import (
+from service.services.chat.presentation.routers.chat_api.workspace.router import (
     _request_active_run_cancellation,
     _ui_capability,
 )

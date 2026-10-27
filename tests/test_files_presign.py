@@ -38,6 +38,10 @@ class FakeSaver:
     async def get_presigned_url_by_key(self, *, file_key, expiry_sec=3600):
         return f"https://download.local/{file_key}"
 
+    async def get_owned_download_url(self, user_id, file_id):
+        meta = await self.fetch_file_metadata(user_id, file_id)
+        return await self.get_presigned_url_by_key(file_key=meta.file_key)
+
 
 def test_presign_and_callback():
     app.dependency_overrides[check_auth] = lambda: _fake_auth()

@@ -8,6 +8,7 @@ import os
 from typing import Any
 
 from service.infrastructure.memory.base import BaseMemoryIntegration
+from service.shared.memory_outcomes import MemoryWriteResult
 
 # Дистрибутив называется `mem0ai`, а ИМПОРТИРУЕМЫЙ пакет — `mem0`. Здесь был второй
 # фолбэк `from mem0ai import ...`, который не мог сработать никогда: модуля с таким
@@ -119,9 +120,9 @@ class Mem0MemoryIntegration(BaseMemoryIntegration):
         user_id: str,
         messages: list[dict[str, Any]],
         metadata: dict[str, Any] | None = None,
-    ) -> None:
+    ) -> MemoryWriteResult:
         if not user_id or not messages:
-            return
+            return MemoryWriteResult.UNAVAILABLE
 
         started = self._log_operation_start(
             "mem0.save_messages",
@@ -131,7 +132,7 @@ class Mem0MemoryIntegration(BaseMemoryIntegration):
         )
         client = await self._ensure_client()
         if client is None:
-            return
+            return MemoryWriteResult.UNAVAILABLE
 
         try:
             normalized_messages = [
@@ -143,7 +144,7 @@ class Mem0MemoryIntegration(BaseMemoryIntegration):
                 if str(item.get("content") or "").strip()
             ]
             if not normalized_messages:
-                return
+                return MemoryWriteResult.REJECTED
 
             await asyncio.to_thread(
                 self._add_memories_sync,
@@ -155,8 +156,10 @@ class Mem0MemoryIntegration(BaseMemoryIntegration):
             self._log_operation_success(
                 "mem0.save_messages", started, saved=len(normalized_messages)
             )
+            return MemoryWriteResult.CONFIRMED
         except Exception as exc:  # pragma: no cover - defensive provider boundary
             self._log_operation_failure("mem0.save_messages", started, exc)
+            return MemoryWriteResult.UNKNOWN
 
     async def list_facts(
         self,

@@ -7,7 +7,7 @@ from service.services.jobs.presentation.routers.jobs_api.jobs_api import get_job
 
 def test_get_task_status_custom_state():
     class _FakeAppService:
-        async def get_task_status(self, task_id: str) -> TaskStatusResponse:
+        async def get_task_status(self, task_id: str, *, user_id) -> TaskStatusResponse:
             return TaskStatusResponse(
                 task_id=task_id,
                 state="CUSTOM",

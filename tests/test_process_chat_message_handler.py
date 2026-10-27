@@ -1,5 +1,7 @@
 import threading
 import uuid
+from types import SimpleNamespace
+from unittest.mock import AsyncMock, Mock
 
 import pytest
 
@@ -47,6 +49,35 @@ def test_normalize_result_payload_marks_provider_unavailable_for_empty_reply() -
     assert normalized.reply
     assert normalized.metadata["provider_unavailable"] is True
     assert normalized.metadata["provider_error"] == "timeout"
+
+
+@pytest.mark.asyncio
+async def test_unknown_enqueue_ack_retains_http_confirmation_claim(monkeypatch):
+    from service.services.chat.domain import process_chat_message_handler as module
+    from service.services.chat.domain.chat_exceptions import JobEnqueueError
+
+    anchor = SimpleNamespace(offer_id="offer")
+    claim = AsyncMock(return_value=(anchor, False))
+    release = AsyncMock()
+    monkeypatch.setattr(module, "claim_confirmation_offer", claim)
+    monkeypatch.setattr(module, "release_confirmation_claim", release)
+    jobs = SimpleNamespace(
+        create_chat_job=AsyncMock(return_value=SimpleNamespace(job_id=uuid.uuid4()))
+    )
+    queue = SimpleNamespace(
+        enqueue_process_agent_message=Mock(side_effect=RuntimeError("private-enqueue-marker"))
+    )
+    handler = ProcessChatMessageHandler(job_service=jobs, job_queue=queue, redis_client=object())
+    command = ProcessChatMessageCommand(
+        thread_id="thread",
+        user_id=str(uuid.uuid4()),
+        text="request",
+        session_data={"confirmed_offer_id": "offer"},
+    )
+    with pytest.raises(JobEnqueueError, match="^Chat task dispatch unconfirmed$"):
+        await handler.dispatch_and_wait(command)
+    assert queue.enqueue_process_agent_message.call_count == 1
+    release.assert_not_awaited()
 
 
 @pytest.mark.asyncio

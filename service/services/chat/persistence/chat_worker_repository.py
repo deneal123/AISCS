@@ -134,7 +134,7 @@ class ChatWorkerRepository:
                 FROM profile.chat_messages m
                 JOIN profile.chat_threads t ON t.id = m.thread_id
                 WHERE t.thread_id = :thread_id
-                ORDER BY m.created_at DESC
+                ORDER BY m.created_at DESC, m.id DESC
                 LIMIT :lim
                 """
             ),

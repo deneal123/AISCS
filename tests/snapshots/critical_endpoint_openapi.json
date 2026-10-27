@@ -21,6 +21,46 @@
       "title": "CodeChallengeResponse",
       "type": "object"
     },
+    "DocumentContext": {
+      "additionalProperties": false,
+      "properties": {
+        "authoring_version": {
+          "default": 0,
+          "maximum": 1000000.0,
+          "minimum": 0.0,
+          "title": "Authoring Version",
+          "type": "integer"
+        },
+        "block_ids": {
+          "items": { "type": "string" },
+          "maxItems": 120,
+          "title": "Block Ids",
+          "type": "array"
+        },
+        "draft_digest": {
+          "anyOf": [
+            { "pattern": "^[a-f0-9]{64}$", "type": "string" },
+            { "type": "null" }
+          ],
+          "title": "Draft Digest"
+        },
+        "expected_revision": {
+          "maxLength": 64,
+          "minLength": 1,
+          "title": "Expected Revision",
+          "type": "string"
+        },
+        "path": {
+          "maxLength": 1024,
+          "minLength": 1,
+          "title": "Path",
+          "type": "string"
+        }
+      },
+      "required": ["path", "expected_revision"],
+      "title": "DocumentContext",
+      "type": "object"
+    },
     "HTTPValidationError": {
       "properties": {
         "detail": {
@@ -124,6 +164,15 @@
           "title": "Confirm Expensive Run",
           "type": "boolean"
         },
+        "confirmation_decision": {
+          "default": "accept",
+          "enum": [
+            "accept",
+            "decline"
+          ],
+          "title": "Confirmation Decision",
+          "type": "string"
+        },
         "confirm_offer_id": {
           "anyOf": [
             {
@@ -141,6 +190,12 @@
           "default": false,
           "title": "Deep Research",
           "type": "boolean"
+        },
+        "document_context": {
+          "anyOf": [
+            { "$ref": "#/components/schemas/DocumentContext" },
+            { "type": "null" }
+          ]
         },
         "file_context": {
           "default": "",
@@ -353,7 +408,8 @@
     },
     "ServiceType": {
       "enum": [
-        "CHAT"
+        "CHAT",
+        "SIMULATION"
       ],
       "title": "ServiceType",
       "type": "string"

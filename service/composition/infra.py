@@ -2,16 +2,16 @@ from __future__ import annotations
 
 import logging
 import os
-from typing import Any
 
 from service.composition.models import InfraContainer
+from service.composition.storage import build_file_storage
 from service.infrastructure.database.postgresql import PgConnector
 from service.infrastructure.messaging.ports import (
     CeleryJobQueuePort,
     RedisListMessageBusPort,
     RedisStreamPort,
 )
-from service.services.files.application.file_scanner_service import BasicFileScanner
+from service.services.files.application.scanning.service import BasicFileScanner
 from service.settings import Config
 from service.utils.background_task_manager import BackgroundTaskManager
 
@@ -19,6 +19,7 @@ logger = logging.getLogger(__name__)
 
 
 def build_infra(config: Config) -> InfraContainer:
+    storage = build_file_storage(config)
     background_task_manager = BackgroundTaskManager()
     pg_connector = PgConnector(config.pg)
 
@@ -29,17 +30,20 @@ def build_infra(config: Config) -> InfraContainer:
 
     if getattr(config, "redis", None) and config.redis.enabled:
         try:
-            from service.infrastructure.cache.redis_cache import RedisCacheService
-            from service.infrastructure.cache.redis_manager import RedisManager
-            from service.infrastructure.cache.redis_session_store import RedisSessionStore
+            from service.infrastructure.cache.cache import RedisCacheService
+            from service.infrastructure.cache.manager import RedisManager
+            from service.infrastructure.cache.sessions import RedisSessionStore
 
             redis_manager = RedisManager(config.redis)
             redis_client = redis_manager.get_client()
             redis_cache = RedisCacheService(redis_client, config.redis)
             redis_session_store = RedisSessionStore(redis_client, config.redis)
             logger.info("Initialized Redis cache and session backends")
-        except Exception as exc:  # noqa: BLE001
-            logger.warning("Failed to initialize Redis backend: %s", exc)
+        except Exception:  # noqa: BLE001
+            logger.warning(
+                "integration initialization failed",
+                extra={"component": "redis", "failure_code": "initialization_failed"},
+            )
     else:
         logger.info("Redis backend disabled via configuration")
 
@@ -47,27 +51,10 @@ def build_infra(config: Config) -> InfraContainer:
     message_bus_port = RedisListMessageBusPort(redis_client)
     job_queue_port = CeleryJobQueuePort()
 
-    backend = config.storage.backend.strip().lower()
-    storage: Any = None
-    try:
-        if backend == "minio":
-            from service.infrastructure.storage.minio_file_storage import MinioFileStorage
-
-            storage = MinioFileStorage(config.minio)
-            logger.info("Initialized MinIO storage backend")
-        else:
-            from service.infrastructure.storage.local_file_storage import LocalFileStorage
-
-            storage = LocalFileStorage()
-            logger.info("Initialized Local storage backend")
-    except Exception as exc:  # noqa: BLE001
-        logger.warning(
-            "Failed to initialize %s storage backend, falling back to local: %s", backend, exc
-        )
-        from service.infrastructure.storage.local_file_storage import LocalFileStorage
-
-        storage = LocalFileStorage()
-        logger.info("Fallback: Using Local storage backend")
+    logger.info(
+        "storage initialized",
+        extra={"component": "file_storage", "status": "ready"},
+    )
 
     file_scanner = None
     try:
@@ -77,7 +64,7 @@ def build_infra(config: Config) -> InfraContainer:
         logger.warning("Failed to initialize FileScanner service")
 
     celery_app = None
-    if os.getenv("CELERY_BROKER_URL"):
+    if os.getenv("CELERY__BROKER_URL") or os.getenv("CELERY_BROKER_URL"):
         try:
             from service.infrastructure.messaging.celery_app import (
                 celery_app as initialized_celery_app,
@@ -85,8 +72,11 @@ def build_infra(config: Config) -> InfraContainer:
 
             celery_app = initialized_celery_app
             logger.info("Initialized Celery app for background task processing")
-        except Exception as exc:  # noqa: BLE001
-            logger.warning("Failed to initialize Celery app: %s", exc)
+        except Exception:  # noqa: BLE001
+            logger.warning(
+                "integration initialization failed",
+                extra={"component": "celery", "failure_code": "initialization_failed"},
+            )
 
     return InfraContainer(
         background_task_manager=background_task_manager,

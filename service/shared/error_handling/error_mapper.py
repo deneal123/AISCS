@@ -13,6 +13,17 @@ from service.shared.repositories.exceptions import (
     RepositoryOperationalError,
 )
 
+_REPOSITORY_RESPONSES = {
+    RepositoryIntegrityError: ("Uniqueness violation", "RepositoryIntegrityError"),
+    RepositoryNotFoundError: ("Record not found", "RepositoryNotFoundError"),
+    RepositoryMultipleResultsError: (
+        "Multiple records found where one was expected",
+        "RepositoryMultipleResultsError",
+    ),
+    RepositoryOperationalError: ("Database unavailable", "RepositoryOperationalError"),
+    RepositoryError: ("Internal repository error", "RepositoryError"),
+}
+
 
 def map_exception_to_status(error: Exception) -> int:
     if isinstance(error, ApplicationError):
@@ -47,17 +58,17 @@ def map_exception_to_error_response(
         error_type = error.__class__.__name__
         details = error.details or None
     elif isinstance(error, RepositoryError):
-        # Repository-ошибки уже обёрнуты в безопасные сообщения (session_processor:
-        # «Record not found», «Database unavailable» и т.п.) — сырой SQL/детали в
-        # str() не просачиваются, поэтому сообщение можно отдать клиенту как есть.
-        message = str(error) or default_message
-        code = getattr(error, "code", error.__class__.__name__.lower())
-        error_type = error.__class__.__name__
+        # Even direct repository callers can attach private data. Only known
+        # static type/message projections cross the HTTP boundary.
+        message, error_type = _REPOSITORY_RESPONSES.get(
+            type(error), _REPOSITORY_RESPONSES[RepositoryError]
+        )
+        code = error_type.lower()
         details = None
     else:
         # Непредвиденное исключение (баг): НЕ отдаём str(error) наружу — там могут
         # быть SQL/пути/внутренние детали (information disclosure). Клиенту —
-        # статичное сообщение; подробности уходят в лог (по correlation_id/trace_id).
+        # статичное сообщение; raw exception не является безопасной диагностикой.
         message = default_message
         code = "internal_error"
         error_type = "InternalError"

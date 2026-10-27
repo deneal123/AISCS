@@ -5,7 +5,7 @@ from __future__ import annotations
 import pytest
 from fastapi import HTTPException
 
-from service.services.chat.persistence import workflow_catalog
+from service.services.chat.persistence.workflows import catalog as workflow_catalog
 
 
 class _Result:
@@ -103,7 +103,9 @@ async def test_feedback_upsert_is_idempotent_by_execution_and_user():
 
 @pytest.mark.asyncio
 async def test_obsolete_pin_endpoint_returns_explicit_gone():
-    from service.services.chat.presentation.routers.chat_api import workspace_api
+    from service.services.chat.presentation.routers.chat_api.workspace import (
+        router as workspace_api,
+    )
 
     class _Service:
         async def ensure_thread_owner(self, *_args):

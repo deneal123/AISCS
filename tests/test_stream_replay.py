@@ -17,8 +17,13 @@ class _FakeSessionStore:
         return None
 
 
+class _FakeChatPersistence:
+    async def get_thread_owner(self, thread_id):
+        return "u1"
+
+
 class _FakeChatService:
-    pass
+    persistence_service = _FakeChatPersistence()
 
 
 class _FakeChatAppService:

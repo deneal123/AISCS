@@ -19,6 +19,9 @@ from service.services.chat.infrastructure.feedback_store import (
 )
 from service.services.chat.infrastructure.trace_store import get_trace_map, set_trace
 from service.services.chat.presentation.http.upload_api import upload_router
+from service.services.chat.presentation.routers.chat_api.human_question_routes import (
+    router as human_question_router,
+)
 from service.services.chat.presentation.routers.chat_api.schemas import (
     FeedbackRequest,
     MessageRequest,
@@ -29,7 +32,7 @@ from service.services.chat.presentation.routers.chat_api.schemas import (
     ThreadUpdate,
     TraceSaveRequest,
 )
-from service.services.chat.presentation.routers.chat_api.workspace_api import workspace_router
+from service.services.chat.presentation.routers.chat_api.workspace.router import workspace_router
 from service.shared.security.auth_checker import check_auth
 
 logger = logging.getLogger(__name__)
@@ -40,6 +43,7 @@ chat_router.include_router(upload_router)
 # ⚠️ ВЫШЕ маршрутов вида `/{thread_id}`: тот ловит любой одиночный сегмент, и ручки
 # рабочего места ушли бы в обработчик тредов — как это уже случалось с `/personas`.
 chat_router.include_router(workspace_router)
+chat_router.include_router(human_question_router)
 
 
 @chat_router.get("/files/download")
@@ -49,7 +53,9 @@ async def download_generated_file(
     filename: Annotated[str | None, Query(description="Optional download filename")] = None,
     service: ChatApplicationService = Depends(get_chat_application_service),  # noqa: B008
 ):
-    download = await service.download_generated_file(file_key=file_key, filename=filename)
+    download = await service.download_generated_file(
+        file_key=file_key, filename=filename, user_id=profile.user_id
+    )
     if "redirect_url" in download:
         return RedirectResponse(url=download["redirect_url"], status_code=307)
     media_type = mimetypes.guess_type(download["filename"])[0] or "application/octet-stream"
@@ -102,6 +108,18 @@ async def get_models(
 ) -> ModelsResponse:
     models = await service.get_models()
     return ModelsResponse(models=models)
+
+
+@chat_router.get("/providers/status")
+async def get_provider_status(profile: Annotated[AuthProfile, Depends(check_auth)]):
+    from service.infrastructure.agents_client.sidecar_providers import fetch_provider_status
+    from service.infrastructure.provider_policy_store import blocked_providers, disabled_providers
+    from service.services.chat.application.provider_status import project_provider_status
+    from service.settings import config
+
+    return project_provider_status(
+        await fetch_provider_status(config), disabled_providers(), await blocked_providers()
+    )
 
 
 @chat_router.get("/models/catalog")
@@ -162,7 +180,7 @@ async def set_message_feedback(
     await set_feedback(redis, thread_id, payload.content_key, payload.rating)
     try:
         connector = get_app_container(request).infra.pg_connector
-        from service.services.chat.persistence import workflow_catalog
+        from service.services.chat.persistence.workflows import catalog as workflow_catalog
 
         async with connector.get_session_context() as session:
             await workflow_catalog.apply_feedback(

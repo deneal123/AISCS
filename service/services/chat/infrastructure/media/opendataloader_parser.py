@@ -1,8 +1,14 @@
 from __future__ import annotations
 
 import logging
+from typing import Literal
 
-from service.infrastructure.sidecar import SidecarBadRequest, SidecarClient, SidecarError
+from service.infrastructure.sidecar import (
+    SidecarBadRequest,
+    SidecarClient,
+    SidecarError,
+    SidecarTimeout,
+)
 from service.services.admin.application.runtime_settings import runtime_settings
 from service.services.chat.application.ports.document_parsing_port import DocumentParsingPort
 from service.settings import config
@@ -27,6 +33,16 @@ SIDECAR_EXTENSIONS = (
     ".html",
     ".htm",
 )
+
+
+def _report_failure(code: Literal["size_limit", "invalid", "timeout", "unavailable"]) -> None:
+    level = logging.INFO if code in {"size_limit", "invalid"} else logging.WARNING
+    logger.log(
+        level,
+        "Document parsing unavailable: %s",
+        code,
+        extra={"component": "opendataloader", "operation": "parse", "failure_code": code},
+    )
 
 
 class OpenDataLoaderParser(SidecarClient, DocumentParsingPort):
@@ -60,13 +76,13 @@ class OpenDataLoaderParser(SidecarClient, DocumentParsingPort):
         return bool(filename) and str(filename).lower().endswith(SIDECAR_EXTENSIONS)
 
     async def parse(self, content_bytes: bytes, filename: str) -> str:
+        self.last_parse = None
         if not self.enabled or not content_bytes or not self.supports(filename):
             return ""
         if len(content_bytes) > self._max_bytes:
-            logger.info("opendataloader: %s больше лимита сайдкара — старый путь", filename)
+            _report_failure("size_limit")
             return ""
 
-        self.last_parse = None
         try:
             data = await self.request_json(
                 "POST",
@@ -84,11 +100,11 @@ class OpenDataLoaderParser(SidecarClient, DocumentParsingPort):
                 "duration_sec": data.get("duration_sec"),
             }
             return markdown
-        except SidecarBadRequest as exc:
+        except SidecarBadRequest:
             # 415 «формат не поддержан» — это НЕ сбой сервиса: значит документ идёт
             # прежним путём, и знать причину полезно. Раньше сводилось к общему warning.
-            logger.info("opendataloader отклонил %s (%s)", filename, exc.code)
+            _report_failure("invalid")
             return ""
-        except SidecarError:
-            logger.warning("opendataloader sidecar parse failed", exc_info=True)
+        except SidecarError as exc:
+            _report_failure("timeout" if isinstance(exc, SidecarTimeout) else "unavailable")
             return ""

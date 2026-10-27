@@ -298,3 +298,20 @@ def test_serializer_redacts_auto_mode_rationale_before_redis_projection() -> Non
 
     assert payload["metadata"]["auto"] == {"reason_code": "model_classification"}
     assert marker not in str(payload)
+
+
+@pytest.mark.parametrize("code", ["model_routing_failed", "no_compatible_model"])
+def test_worker_error_projection_preserves_bounded_terminal_codes(code):
+    payload = ChatStreamConsumer.build_event_payload(
+        {"type": "error", "error_code": code, "status_code": 422, "job_id": "job"}
+    )
+    assert payload["error_code"] == code
+    assert payload["status_code"] == 422
+
+
+def test_worker_error_projection_does_not_publish_unknown_diagnostics():
+    payload = ChatStreamConsumer.build_event_payload(
+        {"type": "error", "error_code": "private-exception-marker", "status_code": 999}
+    )
+    assert payload["error_code"] == "chat_service_error"
+    assert "status_code" not in payload

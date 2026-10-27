@@ -7,14 +7,23 @@ these names while existing consumers migrate without a wire-contract change.
 
 from __future__ import annotations
 
+import asyncio
 import hashlib
 import re
 from collections.abc import AsyncIterator
+from contextlib import suppress
 from dataclasses import dataclass
 
 import httpx
 
 MAX_DOCUMENT_ARTIFACT_BYTES = 64 * 1024 * 1024
+
+
+async def _close_artifact_response(client: httpx.AsyncClient, response: httpx.Response) -> None:
+    try:
+        await response.aclose()
+    finally:
+        await client.aclose()
 
 
 class DocumentArtifactMissing(Exception):
@@ -52,8 +61,7 @@ class DocumentArtifactDownload:
             await self.close()
 
     async def close(self) -> None:
-        await self.response.aclose()
-        await self.client.aclose()
+        await _close_artifact_response(self.client, self.response)
 
 
 async def document_profiles() -> dict:
@@ -66,7 +74,9 @@ async def document_profiles() -> dict:
         raise WorkspaceUnavailable("workspace sidecar is temporarily unavailable")
     headers = {"Authorization": f"Bearer {key}"} if key else {}
     try:
-        async with httpx.AsyncClient(timeout=timeout) as client:
+        async with httpx.AsyncClient(
+            timeout=timeout, trust_env=False, follow_redirects=False
+        ) as client:
             response = await client.get(f"{base}/document-profiles", headers=headers)
     except Exception:
         _log_boundary_failure("document_profile_transport")
@@ -130,6 +140,7 @@ async def publish_document_source(
     draft_digest: str,
     expected_revision: str,
     fence: int,
+    expected_source_digest: str | None = None,
 ) -> dict | None:
     """Atomically replace only renderer-managed files in one document project."""
 
@@ -145,9 +156,12 @@ async def publish_document_source(
             "draft_digest": draft_digest,
             "expected_revision": expected_revision,
             "coordination_fence": fence,
+            **(
+                {"expected_source_digest": expected_source_digest} if expected_source_digest else {}
+            ),
         },
         bounded_errors=frozenset(
-            {"authoring_invalid", "source_too_large", "authoring_publish_failed"}
+            {"authoring_invalid", "source_too_large", "authoring_publish_failed", "source_changed"}
         ),
     )
 
@@ -253,19 +267,22 @@ async def start_document_build(
     expected_revision: str,
     fence: int,
     final: bool,
+    operation_id: str | None = None,
 ) -> dict | None:
     from .workspace_client import _call
 
-    return await _call(
-        ref,
-        "documents/builds",
-        {
-            "path": path,
-            "expected_revision": expected_revision,
-            "coordination_fence": fence,
-            "final": final,
-        },
-    )
+    payload = {
+        "path": path,
+        "expected_revision": expected_revision,
+        "coordination_fence": fence,
+        "final": final,
+        **({"operation_id": operation_id} if operation_id is not None else {}),
+    }
+    if operation_id is not None:
+        from .documents.build_ack import start_versioned_build
+
+        return await start_versioned_build(_call, ref, payload)
+    return await _call(ref, "documents/builds", payload)
 
 
 async def document_build_status(ref: dict | None, *, build_id: str) -> dict | None:
@@ -332,28 +349,31 @@ async def stream_document_artifact(
         f"{base}/workspaces/{ref['workspace_id']}/documents/builds/"
         f"{build_id}/artifacts/{artifact_id}"
     )
-    client = httpx.AsyncClient(timeout=timeout)
+    client = httpx.AsyncClient(timeout=timeout, trust_env=False, follow_redirects=False)
     try:
         request = client.build_request("POST", url, json=payload, headers=headers)
         response = await client.send(request, stream=True)
+    except asyncio.CancelledError:
+        # No download object exists yet to own this client. Cleanup failure
+        # must not turn cancellation into a retryable integration outcome.
+        with suppress(Exception):
+            await client.aclose()
+        raise
     except Exception:
         await client.aclose()
         _log_boundary_failure("document_artifact_transport")
         raise WorkspaceUnavailable("workspace sidecar is temporarily unavailable") from None
     if response.status_code == 404:
-        await response.aclose()
-        await client.aclose()
+        await _close_artifact_response(client, response)
         raise DocumentArtifactMissing("document artifact is unavailable")
     if response.status_code >= 400:
         status = response.status_code
-        await response.aclose()
-        await client.aclose()
+        await _close_artifact_response(client, response)
         _log_boundary_failure("document_artifact_remote", status=status)
         raise WorkspaceUnavailable("document artifact is temporarily unavailable")
     size, digest, mime_type, filename = _safe_artifact_headers(response)
     if not _valid_artifact_contract(size, digest, mime_type):
-        await response.aclose()
-        await client.aclose()
+        await _close_artifact_response(client, response)
         _log_boundary_failure("document_artifact_contract")
         raise WorkspaceUnavailable("document artifact contract is invalid")
     return DocumentArtifactDownload(client, response, filename, mime_type, size, digest)

@@ -27,8 +27,13 @@ class CeleryJobQueuePort(JobQueuePort):
 
     def enqueue_agent_message(self, **kwargs: Any) -> str | None:
         queue = kwargs.pop("queue", None)
-        routing = {"queue": queue} if queue else {}
-        task = tasks.process_agent_message.apply_async(kwargs=kwargs, **routing)
+        routing: dict[str, Any] = {"queue": queue} if queue else {}
+        delivery_id = kwargs.pop("_delivery_task_id", None)
+        if delivery_id is not None:
+            routing.update(task_id=delivery_id, retry=False)
+        # Outbox публикует из asyncio.to_thread: shared_task-прокси не владеет
+        # выбранным брокером в новом потоке. Транспорт принадлежит этому app.
+        task = celery_app.send_task(tasks.process_agent_message.name, kwargs=kwargs, **routing)
         return str(task.id) if task and task.id else None
 
     async def process_agent_message(self, **kwargs: Any) -> dict[str, Any]:

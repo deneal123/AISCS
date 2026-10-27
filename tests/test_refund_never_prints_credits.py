@@ -223,7 +223,7 @@ def test_the_worker_returns_the_actual_charge_not_the_price():
     import inspect
 
     # ⚠️ Биллинг хода живёт в `chat_worker/charging.py` — там же, где и правило про факт.
-    from service.services.chat.infrastructure.chat_worker import charging
+    from service.services.chat.infrastructure.chat_worker.billing import charging
 
     tree = ast.parse(inspect.getsource(charging._charge_usage).strip())
     returns = [n for n in ast.walk(tree) if isinstance(n, ast.Return) and n.value is not None]

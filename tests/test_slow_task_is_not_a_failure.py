@@ -11,8 +11,9 @@
     533 assistant Сервис временно перегружен…                                    ← ложь
 
 Причина — в том, что `JobOrchestrationError` смешивал два разных мира. `JobEnqueueError`
-и `JobCreationError` значат «задачу поставить не удалось»: отвечать некому, ход не
-сохранён, fallback обязан и ответить, и сохранить. `JobExecutionError` значит «задача
+не доказывает отказ доставки: unknown ACK запрещает fallback/history mutation.
+`JobCreationError` не подтверждает durable owner/commit и запрещает direct execution.
+`JobExecutionError` значит «задача
 ПОСТАВЛЕНА и исполняется»: воркер доведёт её до конца, сохранит ход сам и спишет деньги —
 и любое сохранение в веб-процессе тут даёт дубль, а любой отказ ложится поверх успешно
 выполненной и оплаченной работы.
@@ -26,7 +27,11 @@ from __future__ import annotations
 import pytest
 
 from service.services.chat.domain.chat_contracts import ChatRequestContext, ChatRouteDecision
-from service.services.chat.domain.chat_exceptions import JobEnqueueError, JobExecutionError
+from service.services.chat.domain.chat_exceptions import (
+    JobCreationError,
+    JobEnqueueError,
+    JobExecutionError,
+)
 from service.services.chat.domain.chat_service import ChatService
 
 
@@ -116,16 +121,20 @@ async def test_slow_task_is_not_reported_as_overload():
 
 
 @pytest.mark.asyncio
-async def test_unqueued_task_still_falls_back_and_persists():
-    """⚠️ Обратная сторона: «задачу не поставили» обязано работать КАК ПРЕЖДЕ.
+async def test_failed_job_creation_does_not_execute_or_persist_fallback():
+    service, persistence, fallback = _service(JobCreationError("Failed to create chat job"))
+    with pytest.raises(JobCreationError):
+        await service.post_message(_context())
+    assert fallback.calls == 0
+    assert persistence.persisted == []
 
-    Иначе, разведя случаи, легко потерять единственный путь, где ответ и сохранение
-    действительно лежат на веб-процессе, — и сообщение пропадёт бесследно.
-    """
+
+@pytest.mark.asyncio
+async def test_unknown_enqueue_ack_does_not_fall_back_or_persist():
+    """An unknown broker ACK must not put a false failure over a live worker turn."""
     service, persistence, fallback = _service(JobEnqueueError("Failed to enqueue chat task"))
 
-    result = await service.post_message(_context())
-
-    assert fallback.calls == 1, "очередь недоступна, а fallback не позван — отвечать некому"
-    assert persistence.persisted, "ход не сохранён никем: воркера нет, веб-процесс промолчал"
-    assert "перегружен" in result.reply
+    with pytest.raises(JobEnqueueError):
+        await service.post_message(_context())
+    assert fallback.calls == 0
+    assert persistence.persisted == []

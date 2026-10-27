@@ -1,12 +1,16 @@
 from __future__ import annotations
 
 import uuid
+from unittest.mock import AsyncMock
 
 import pytest
 
-from service.infrastructure.agents_client import document_audit
+from service.infrastructure.agents_client.document_audit import client as document_audit
 from service.models.db.db_models import DocumentAuditAttempt
-from service.services.chat.application import document_publication_service
+from service.services.chat.application.documents.publication import (
+    service as document_publication_service,
+)
+from tests.document_publication_fixtures import no_started_audit_rows as no_started_audit_rows
 
 
 @pytest.mark.asyncio
@@ -39,7 +43,7 @@ async def test_deferred_visual_audit_uses_one_idempotent_charge_key(monkeypatch)
         calls.append(kwargs)
         return 7
 
-    from service.services.chat.infrastructure.chat_worker import charging
+    from service.services.chat.infrastructure.chat_worker.billing import charging
 
     monkeypatch.setattr(charging, "_charge_usage", charge_usage)
     row = {
@@ -71,6 +75,7 @@ async def test_deferred_visual_audit_uses_one_idempotent_charge_key(monkeypatch)
     assert len(calls) == 1
     assert calls[0]["job_id"] == "job-1:document-audit:build-1"
     assert calls[0]["execution_result"]["per_call_usage"] == usage["calls"]
+    assert calls[0]["require_persisted"] is True
 
 
 def test_document_audit_usage_is_bounded_and_recomputed() -> None:
@@ -122,6 +127,11 @@ class _Session:
 
 @pytest.mark.asyncio
 async def test_charge_pending_attempt_resumes_without_second_visual_call(monkeypatch) -> None:
+    monkeypatch.setattr(
+        document_publication_service.document_audit_attempts,
+        "pending_charge",
+        AsyncMock(return_value=None),
+    )
     attempt_id = uuid.uuid4()
     usage = {
         "prompt": 30,
@@ -130,7 +140,7 @@ async def test_charge_pending_attempt_resumes_without_second_visual_call(monkeyp
         "model": "vision-model",
         "calls": [{"model": "vision-model", "prompt": 30, "completion": 3}],
     }
-    states = iter(({"state": "visual_pending"}, {"state": "ready"}))
+    states = iter((_audit_status("visual_pending"), _audit_status("ready")))
     audit_calls = 0
     charge_calls: list[uuid.UUID | None] = []
     settled: list[tuple[uuid.UUID, str]] = []
@@ -172,7 +182,7 @@ async def test_charge_pending_attempt_resumes_without_second_visual_call(monkeyp
         redis=object(),
         session=session,
         ref={"workspace_id": "opaque"},
-        row={"build_id": "build-1"},
+        row=dict(_AUDIT_FACTS),
     )
 
     assert result == "ready"
@@ -184,6 +194,11 @@ async def test_charge_pending_attempt_resumes_without_second_visual_call(monkeyp
 
 @pytest.mark.asyncio
 async def test_failed_visual_result_is_charged_before_terminal_decision(monkeypatch) -> None:
+    monkeypatch.setattr(
+        document_publication_service.document_audit_attempts,
+        "pending_charge",
+        AsyncMock(return_value=None),
+    )
     attempt_id = uuid.uuid4()
     usage = {
         "prompt": 40,
@@ -195,10 +210,10 @@ async def test_failed_visual_result_is_charged_before_terminal_decision(monkeypa
     order: list[str] = []
 
     async def status(*_args, **_kwargs):
-        return {"state": "visual_pending"}
+        return _audit_status("visual_pending")
 
     async def begin(*_args, **_kwargs):
-        return {"id": attempt_id, "state": "started"}
+        return {"id": attempt_id, "state": "started", "may_execute": True}
 
     async def audit(*_args, **_kwargs):
         order.append("audit")
@@ -208,7 +223,9 @@ async def test_failed_visual_result_is_charged_before_terminal_decision(monkeypa
         order.append("record")
         assert kwargs["usage"] == usage
         assert kwargs["failure_code"] == "audit_failed"
-        return True
+        return document_publication_service.document_audit_attempts.RecordedAuditResult(
+            usage, "audit_failed"
+        )
 
     async def charge(**kwargs):
         order.append("charge")
@@ -224,7 +241,7 @@ async def test_failed_visual_result_is_charged_before_terminal_decision(monkeypa
     monkeypatch.setattr(document_publication_service.document_audit_attempts, "begin", begin)
     monkeypatch.setattr(document_publication_service, "audit_document", audit)
     monkeypatch.setattr(
-        document_publication_service.document_audit_attempts, "record_result", record
+        document_publication_service.document_audit_attempts, "record_merged_result", record
     )
     monkeypatch.setattr(document_publication_service, "_charge_visual_audit", charge)
     monkeypatch.setattr(document_publication_service.document_audit_attempts, "settle", settle)
@@ -235,8 +252,48 @@ async def test_failed_visual_result_is_charged_before_terminal_decision(monkeypa
         redis=object(),
         session=_Session(),
         ref={"workspace_id": "opaque"},
-        row={"build_id": "build-1"},
+        row=dict(_AUDIT_FACTS),
     )
 
     assert result == "artifact_invalid"
     assert order == ["audit", "record", "charge", "settle"]
+
+
+_AUDIT_FACTS = {
+    "build_id": "build-1",
+    "source_digest": "a" * 64,
+    "artifact_id": "artifact-1",
+    "artifact_sha256": "b" * 64,
+    "artifact_size": 4,
+    "mime_type": "application/pdf",
+}
+
+
+def _audit_status(state):
+    return {
+        "state": state,
+        "build_id": "build-1",
+        "source_digest": "a" * 64,
+        "artifacts": [
+            {
+                "artifact_id": "artifact-1",
+                "sha256": "b" * 64,
+                "size": 4,
+                "mime_type": "application/pdf",
+            }
+        ],
+    }
+
+
+@pytest.fixture(autouse=True)
+def isolated_attestation_repository(monkeypatch):
+    monkeypatch.setattr(
+        document_publication_service.document_audit_attempts,
+        "attestation_pending",
+        AsyncMock(return_value=False),
+    )
+    monkeypatch.setattr(
+        document_publication_service.document_audit_attempts,
+        "confirm_attestation",
+        AsyncMock(return_value=False),
+    )

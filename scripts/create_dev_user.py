@@ -24,15 +24,20 @@ def _valid_password(pwd: str) -> bool:
 
 async def _run(email: str, password: str) -> None:
     from argon2 import PasswordHasher
+    from pydantic import ValidationError
 
     from service.infrastructure.database.postgresql import PgConnector
+    from service.services.profile.application.dto import EmailField
     from service.services.profile.persistence.profile_repository import ProfileRepository
     from service.settings import Config
 
-    email = email.strip().lower()
-    if "@" not in email:
-        print(f"ОШИБКА: '{email}' не похоже на email.")
-        raise SystemExit(2)
+    try:
+        # A verified fixture must also be serializable by ProfileResponse. A loose
+        # '@' check admitted special-use domains rejected by the normal auth API.
+        email = str(EmailField(email=email.strip().lower()).email)
+    except ValidationError:
+        print("ОШИБКА: email не соответствует контракту регистрации.")
+        raise SystemExit(2) from None
     if not _valid_password(password):
         print("ОШИБКА: пароль должен быть 8+ символов и содержать букву и цифру.")
         raise SystemExit(2)

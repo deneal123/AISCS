@@ -1,7 +1,7 @@
 import asyncio
 import time
 
-from service.services.chat.application.use_cases.ws_message_use_case import (
+from service.services.chat.application.use_cases.ws_message.handler import (
     HandleWsChatMessageUseCase,
 )
 from service.services.chat.presentation.error_mapper import map_to_ws_error_payload

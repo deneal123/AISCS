@@ -11,7 +11,7 @@ from service.services.admin.application.runtime_settings import (
     OverlayBillingConfig,
     RuntimeSettings,
 )
-from service.services.admin.application.settings_registry import all_specs
+from service.services.admin.application.settings.registry import all_specs
 from service.settings import config
 
 # Паттерны РЕАЛЬНЫХ секретов (а не безобидных "token_budget" и т.п.).

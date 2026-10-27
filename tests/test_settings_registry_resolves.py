@@ -21,7 +21,7 @@ from __future__ import annotations
 
 import pytest
 
-from service.services.admin.application.settings_registry import all_specs
+from service.services.admin.application.settings.registry import all_specs
 from service.settings import config
 
 

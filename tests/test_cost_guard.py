@@ -55,8 +55,8 @@ class _Repo:
     async def reserve(self, **_kwargs):
         return "reservation-1"
 
-    async def release_reservation(self, *, reservation_id):
-        self.released.append(reservation_id)
+    async def release_reservation(self, *, user_id, reservation_id):
+        self.released.append((user_id, reservation_id))
 
     async def cleanup_expired_reservations(self):
         return 2
@@ -96,8 +96,8 @@ async def test_reservation_lifecycle_and_reconcile_snapshot():
         repo, SimpleNamespace(free_plan_credits=100, credit_unit_rub=0.01, min_margin=1.0)
     )
     assert await service.reserve("u", credits=10) == "reservation-1"
-    await service.release_reservation("reservation-1")
-    assert repo.released == ["reservation-1"]
+    await service.release_reservation("reservation-1", user_id="u")
+    assert repo.released == [("u", "reservation-1")]
     assert await cleanup_expired_reservations(repo) == {"expired": 0, "active": 1}
     await service.charge(
         "u",

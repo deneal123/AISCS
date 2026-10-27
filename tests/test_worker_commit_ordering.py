@@ -14,7 +14,8 @@ from uuid import uuid4
 import pytest
 
 import service.services.chat.infrastructure.chat_worker_tasks as cwt
-from service.services.chat.infrastructure.chat_worker import publication, run_execution
+from service.services.chat.infrastructure.chat_worker.execution import run as run_execution
+from service.services.chat.infrastructure.chat_worker.results import publication
 
 _RUN_QUALITY_MANIFEST = Path(__file__).resolve().parent / "fixtures" / "run_quality_s16.json"
 
@@ -77,7 +78,8 @@ async def test_completed_job_redelivery_reuses_one_durable_billing_envelope(monk
             return durable_job
 
     class _Session:
-        pass
+        async def scalar(self, _statement, _params):
+            return True
 
     class _SessionContext:
         async def __aenter__(self):

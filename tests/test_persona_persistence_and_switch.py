@@ -14,7 +14,7 @@ from __future__ import annotations
 
 import pytest
 
-from service.services.chat.infrastructure.chat_worker import message_meta
+from service.services.chat.infrastructure.chat_worker.context import metadata as message_meta
 
 
 # --------------------------------------------------------------------------- #
@@ -153,7 +153,7 @@ def test_switch_is_wired_into_the_worker():
     """
     import inspect
 
-    from service.services.chat.infrastructure.chat_worker import run_execution
+    from service.services.chat.infrastructure.chat_worker.execution import run as run_execution
 
     prepare_src = inspect.getsource(run_execution._prepare_context)
     execute_src = inspect.getsource(run_execution._execute_agent)

@@ -42,6 +42,9 @@ def sidecar(monkeypatch):
         return {"workspace_id": f"ws{len(created)}", "token": "t.sig", "root": "/workspace"}
 
     monkeypatch.setattr(wc, "_create", fake_create)
+    from service.settings import config
+
+    monkeypatch.setattr(config.agents, "workspace_autocreate", True)
     monkeypatch.setattr(wc, "_config", lambda: (True, "http://workspace:8080", 30.0, "k", 1800.0))
     return created
 
@@ -148,8 +151,8 @@ async def test_broken_binding_does_not_poison_the_thread(sidecar) -> None:
 
 
 @pytest.mark.asyncio
-async def test_release_clears_the_binding_even_if_deletion_fails(monkeypatch, sidecar) -> None:
-    """⚠️ Оставленный ключ означал бы вечную ссылку на несуществующую песочницу."""
+async def test_release_retains_retryable_binding_if_deletion_fails(monkeypatch, sidecar) -> None:
+    """An unavailable DELETE is not proof that its container is absent."""
     redis = _Redis()
     await wc.ensure_workspace(redis, "t1", "7")
 
@@ -162,7 +165,8 @@ async def test_release_clears_the_binding_even_if_deletion_fails(monkeypatch, si
 
     monkeypatch.setattr(wc.httpx, "AsyncClient", lambda **kw: _Boom())
     await wc.release_workspace(redis, "t1")
-    assert "chat:t1:workspace" in redis.deleted
+    assert "chat:t1:workspace" not in redis.deleted
+    assert redis.get("chat:t1:workspace") is not None
 
 
 @pytest.mark.asyncio
@@ -186,7 +190,9 @@ async def test_autocreate_is_off_by_default() -> None:
     from service.settings import config
 
     assert config.agents.workspace_autocreate is False
-    assert wc._config()[0] is False, "создание включено при выключенном автосоздании"
+    assert wc._implicit_creation_config()[0] is False, (
+        "создание включено при выключенном автосоздании"
+    )
 
 
 @pytest.mark.asyncio

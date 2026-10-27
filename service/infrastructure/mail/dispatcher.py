@@ -15,8 +15,8 @@ class VerificationCodeDispatcher:
     Строит письмо и ставит Celery-таск (воркер = SMTP-клиент, HTTP-запрос не ждёт
     отправки). При недоступности брокера — отправляет инлайн. Ошибки отправки
     НЕ пробрасываются: код уже сохранён в Redis, пользователь может нажать «повторить».
-    В `dev_mode` код логируется (для E2E/отладки без реальной почты); при
-    `enabled=False` письмо не шлётся (код доступен только в логах — удобно в dev).
+    При `enabled=False` письмо не отправляется. OTP и адресат не логируются;
+    в dev письмо доступно через локальный Mailpit.
     """
 
     def __init__(
@@ -34,9 +34,9 @@ class VerificationCodeDispatcher:
 
     async def send(self, *, email: str, code: str, purpose: str) -> None:
         if self._dev_mode:
-            logger.info("DEV verification code for %s: %s", email, code)
+            logger.info("component=mail mode=dev status=verification_issued")
         if not self._enabled:
-            logger.info("MAIL__ENABLED=false → verification email not sent (code logged only)")
+            logger.info("component=mail status=disabled")
             return
 
         ttl_minutes = max(1, round(self._ttl_seconds / 60))
@@ -50,12 +50,10 @@ class VerificationCodeDispatcher:
             await asyncio.to_thread(tasks.send_verification_email.delay, email, subject, html, text)
             return
         except Exception:
-            logger.warning(
-                "Celery enqueue of verification email failed; sending inline", exc_info=True
-            )
+            logger.warning("component=mail code=enqueue_unavailable fallback=inline")
 
         # 2) Фолбэк — прямая отправка (напр. брокер недоступен). Не роняем флоу.
         try:
             await self._mailer.send(to=email, subject=subject, html=html, text=text)
         except Exception:
-            logger.exception("Inline verification email send failed for %s", email)
+            logger.warning("component=mail code=smtp_unavailable delivery=inline")

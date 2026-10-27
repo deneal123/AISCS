@@ -265,7 +265,7 @@ def test_call_site_actually_passes_the_dialog_files():
 
     # ...и сам сбор подключён к потоку обработки сообщения.
     # ⚠️ Сбор переехал в `chat_worker/turn_context.py`; правило про `file_ids` то же.
-    from service.services.chat.infrastructure.chat_worker import turn_context as tc
+    from service.services.chat.infrastructure.chat_worker.context import turn as tc
 
     assert _calls_to(tc.collect_engine_inputs, "collect_thread_files"), (
         "воркер не собирает файлы диалога — ни analyze_data, ни песочница их не увидят"

@@ -211,9 +211,11 @@ class BillingService:
             cost_guard_metrics.reservation("created")
         return reservation_id
 
-    async def release_reservation(self, reservation_id: str) -> None:
+    async def release_reservation(self, reservation_id: str, *, user_id: str) -> None:
         """Отпустить резерв без списания (job не выставлен в счёт / ошибка до чарджа)."""
-        await self._repo.release_reservation(reservation_id=str(reservation_id))
+        await self._repo.release_reservation(
+            user_id=str(user_id), reservation_id=str(reservation_id)
+        )
         cost_guard_metrics.reservation("released")
 
     async def refund(self, user_id: str, *, credits: int, reason: str) -> None:

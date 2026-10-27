@@ -16,6 +16,8 @@ from service.services.chat.domain.chat_contracts import (
 )
 from service.services.chat.domain.chat_exceptions import (
     ChatErrorMapper,
+    JobCreationError,
+    JobEnqueueError,
     JobExecutionError,
     JobOrchestrationError,
     ModelRoutingError,
@@ -57,7 +59,9 @@ class ChatService:
             deep_research=context.deep_research,
             route_override=context.route_override,
         )
-        if context.confirmed_offer_id:
+        if context.document_context:
+            route_decision.resolved_category = context.route_override or "general"
+        elif context.confirmed_offer_id:
             route_decision.resolved_category = context.confirmed_resolved_category
         else:
             try:
@@ -78,6 +82,11 @@ class ChatService:
         persisted_by_worker = True
         try:
             result = await self.job_orchestrator.execute(
+                **(
+                    {"document_context": context.document_context}
+                    if context.document_context
+                    else {}
+                ),
                 thread_id=context.thread_id,
                 text=context.text,
                 user_id=context.user_id,
@@ -91,6 +100,8 @@ class ChatService:
                 watch_video=context.watch_video,
                 confirm_expensive_run=context.confirm_expensive_run,
                 confirmed_offer_id=context.confirmed_offer_id,
+                confirmation_decision=context.confirmation_decision,
+                confirmation_cancelled=context.confirmation_cancelled,
                 route_override=route_decision.route_override,
                 routing_usage=route_decision.routing_usage,
                 resolved_category=route_decision.resolved_category,
@@ -108,8 +119,12 @@ class ChatService:
             logger.warning("Ожидание результата истекло, задача продолжает исполняться: %s", exc)
             result = build_still_processing_result(context.thread_id)
             result.metadata = result.metadata.merged({"error_code": ChatErrorMapper.to_code(exc)})
+        except (JobCreationError, JobEnqueueError):
+            # An unverified durable owner/commit is not permission to execute a
+            # new run outside the worker's reservation and persistence boundary.
+            raise
         except JobOrchestrationError as exc:
-            if context.confirmed_offer_id:
+            if context.confirmed_offer_id or context.document_context:
                 raise
             logger.warning("Job orchestration failed, fallback to direct agent path: %s", exc)
             result = await self.fallback_service.execute(

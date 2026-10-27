@@ -1,12 +1,10 @@
-import logging
-from uuid import UUID
-
-from service.infrastructure.agents_client.ports import resolve_user_uuid
-
-logger = logging.getLogger(__name__)
-
-
 class TempFilesManager:
+    """Compatibility name for connection-local attachment references.
+
+    Chat intake creates durable Library sources. Their retention is independent
+    of a WebSocket connection; only an explicit owner deletion may remove them.
+    """
+
     @staticmethod
     def register_temp_file_ids(session: dict, file_ids: list[str]) -> None:
         bucket = session.setdefault("_temp_file_ids", set())
@@ -20,14 +18,6 @@ class TempFilesManager:
 
     @staticmethod
     async def cleanup_temp_files(session: dict, file_service) -> None:
-        temp_file_ids = session.get("_temp_file_ids")
-        if not temp_file_ids or file_service is None:
-            return
-        user_uuid = resolve_user_uuid(session.get("user_id"), anonymous_fallback=True)
-        if user_uuid is None:
-            return
-        for raw_id in list(temp_file_ids):
-            try:
-                await file_service.delete(user_id=user_uuid, file_id=UUID(str(raw_id)))
-            except Exception:
-                logger.debug("Failed to cleanup temp file %s", raw_id, exc_info=True)
+        # Historical uploads were temporary; S21+ uploads are durable UserFiles.
+        # Never feed these IDs to FileSaverService.delete on disconnect/replay.
+        session.pop("_temp_file_ids", None)

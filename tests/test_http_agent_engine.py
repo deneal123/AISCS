@@ -19,6 +19,7 @@ import pytest
 
 from service.infrastructure.agents_client import http_agent_engine as hae
 from service.infrastructure.agents_client.contracts.events import EventType
+from service.infrastructure.agents_client.errors import AgentRunInterrupted
 
 RUN_FINALIZATION_CORPUS_VERSION = "s26-v1"
 _MANIFEST = Path(__file__).resolve().parent / "fixtures" / "run_quality_s16.json"
@@ -43,6 +44,54 @@ class _FakeResponse:
 
     async def aread(self) -> bytes:
         return b"sidecar boom"
+
+
+@pytest.mark.asyncio
+async def test_private_usage_is_awaited_not_forwarded_to_events(monkeypatch):
+    from unittest.mock import AsyncMock
+    from uuid import uuid4
+
+    attempt = str(uuid4())
+    checkpoint = {"schema_version": 1, "attempt_id": attempt, "revision": 1, "receipts": []}
+    result = {
+        "reply": "synthetic",
+        "prompt_tokens": 2,
+        "completion_tokens": 1,
+        "total_tokens": 3,
+        "per_call_usage": [],
+    }
+    engine, captured = _engine(
+        monkeypatch,
+        [json.dumps({"__usage_checkpoint__": checkpoint}), json.dumps({"__result__": result})],
+    )
+    events = []
+    sink = AsyncMock()
+    returned = await engine.execute(
+        text="synthetic",
+        thread_id="synthetic",
+        on_event=events.append,
+        execution_attempt_id=attempt,
+        on_usage_checkpoint=sink,
+    )
+    assert returned == result
+    sink.assert_awaited_once_with(checkpoint)
+    assert events == []
+    assert captured["headers"]["X-Execution-Attempt"] == attempt
+    assert "execution_attempt_id" not in captured["json"]
+
+
+@pytest.mark.asyncio
+async def test_private_usage_ack_failure_is_not_a_valid_result(monkeypatch):
+    from unittest.mock import AsyncMock
+
+    from service.services.chat.infrastructure.chat_worker.execution.job_state import (
+        JobStateUnavailable,
+    )
+
+    engine, _ = _engine(monkeypatch, [json.dumps({"__usage_checkpoint__": {}})])
+    sink = AsyncMock(side_effect=JobStateUnavailable("Usage checkpoint unavailable"))
+    with pytest.raises(JobStateUnavailable):
+        await engine.execute(text="synthetic", thread_id="synthetic", on_usage_checkpoint=sink)
 
 
 class _FakeStreamCtx:
@@ -354,7 +403,7 @@ async def test_result_after_error_preserves_usage_and_records_only_safe_signal(m
 async def test_invalid_result_without_recovery_fails_without_billing_envelope(monkeypatch) -> None:
     engine, _ = _engine(monkeypatch, [json.dumps({"__result__": {"reply": None}})])
 
-    with pytest.raises(RuntimeError, match="без терминального результата"):
+    with pytest.raises(AgentRunInterrupted, match="без терминального результата"):
         await engine.execute(on_event=lambda _event: None, **_base_kwargs())
 
 
@@ -402,9 +451,17 @@ async def test_stream_without_result_raises(monkeypatch) -> None:
 @pytest.mark.asyncio
 async def test_http_error_status_raises(monkeypatch) -> None:
     engine, _ = _engine(monkeypatch, [], status_code=503)
-    with pytest.raises(RuntimeError, match="503") as exc_info:
+    with pytest.raises(AgentRunInterrupted, match="503") as exc_info:
         await engine.execute(on_event=lambda _e: None, **_base_kwargs())
     assert "sidecar boom" not in str(exc_info.value)
+
+
+@pytest.mark.asyncio
+async def test_http_admission_rejection_is_not_a_retryable_transport_interruption(monkeypatch):
+    engine, _ = _engine(monkeypatch, [], status_code=403)
+    with pytest.raises(RuntimeError, match="403") as error:
+        await engine.execute(on_event=lambda _event: None, **_base_kwargs())
+    assert not isinstance(error.value, AgentRunInterrupted)
 
 
 @pytest.mark.asyncio

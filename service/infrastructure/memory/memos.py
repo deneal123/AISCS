@@ -17,7 +17,9 @@ from typing import Any
 import httpx
 
 from service.infrastructure.memory.base import BaseMemoryIntegration
+from service.infrastructure.memory.diagnostics import failure_code, log_memory_failure
 from service.settings import config
+from service.shared.memory_outcomes import MemoryWriteResult
 
 # Запрос для подтягивания релевантного профиля пользователя в контекст.
 _CONTEXT_QUERY = "user preferences profile facts goals constraints recent context"
@@ -72,7 +74,7 @@ class MemOSMemoryIntegration(BaseMemoryIntegration):
         return httpx.AsyncClient(
             base_url=self._base_url,
             headers=headers,
-            timeout=self._timeout,
+            timeout=httpx.Timeout(self._timeout, connect=min(self._timeout, 2.0), pool=2.0),
             transport=self._transport,
         )
 
@@ -83,9 +85,12 @@ class MemOSMemoryIntegration(BaseMemoryIntegration):
             async with self._client() as client:
                 resp = await client.post(path, json=body)
             if resp.status_code >= 400:
-                self.logger.warning("MemOS %s -> HTTP %s", path, resp.status_code)
+                log_memory_failure(self.logger, f"memos.post {path}", warning=True)
                 return None
             data = resp.json()
+            if isinstance(data, dict) and data.get("code", 200) != 200:
+                log_memory_failure(self.logger, f"memos.post {path}", warning=True)
+                return None
             self._log_operation_success(f"memos.post {path}", started)
             return data if isinstance(data, dict) else {"data": data}
         except Exception as exc:  # defensive provider boundary
@@ -115,9 +120,9 @@ class MemOSMemoryIntegration(BaseMemoryIntegration):
                 resp = await client.post("/product/admin/wipe", timeout=_WIPE_TIMEOUT_SEC)
         except Exception as exc:  # defensive provider boundary
             self._log_operation_failure("memos.wipe", started, exc)
-            return {"ok": False, "error": type(exc).__name__}
+            return {"ok": False, "error": failure_code(exc)}
         if resp.status_code >= 400:
-            self.logger.warning("MemOS wipe -> HTTP %s", resp.status_code)
+            log_memory_failure(self.logger, "memos.wipe", warning=True)
             return {"ok": False, "status": resp.status_code}
         self._log_operation_success("memos.wipe", started)
         try:
@@ -149,9 +154,9 @@ class MemOSMemoryIntegration(BaseMemoryIntegration):
                 )
         except Exception as exc:  # defensive provider boundary
             self._log_operation_failure("memos.forget_user", started, exc)
-            return {"ok": False, "error": type(exc).__name__}
+            return {"ok": False, "error": failure_code(exc)}
         if resp.status_code >= 400:
-            self.logger.warning("MemOS forget_user -> HTTP %s", resp.status_code)
+            log_memory_failure(self.logger, "memos.forget_user", warning=True)
             return {"ok": False, "status": resp.status_code}
         self._log_operation_success("memos.forget_user", started)
         try:
@@ -218,6 +223,8 @@ class MemOSMemoryIntegration(BaseMemoryIntegration):
                 "user_id": str(user_id),
                 "mem_cube_id": self._cube_for(user_id),
                 "top_k": top_k or self._default_top_k,
+                "mode": "fast",
+                "dedup": "no",
                 # Общий профильный запрос намеренно абстрактный ("user preferences
                 # profile..."), поэтому его cosine-релевантность к конкретным фактам
                 # часто ниже дефолтного порога MemOS (relativity >= 0.45) — тогда
@@ -243,25 +250,48 @@ class MemOSMemoryIntegration(BaseMemoryIntegration):
         user_id: str,
         messages: list[dict[str, Any]],
         metadata: dict[str, Any] | None = None,
-    ) -> None:
+    ) -> MemoryWriteResult:
         if not user_id or not self.available or not messages:
-            return
+            return MemoryWriteResult.UNAVAILABLE
         norm = [
             {"role": str(m.get("role") or "user"), "content": str(m.get("content") or "").strip()}
             for m in messages
             if str(m.get("content") or "").strip()
         ]
         if not norm:
-            return
+            return MemoryWriteResult.REJECTED
         body: dict[str, Any] = {
             "user_id": str(user_id),
             "mem_cube_id": self._cube_for(user_id),
             "messages": norm,
             "async_mode": self._async_mode,
+            # Факты извлекает backend, резюме уже сжато: повторный LLM-разбор не нужен.
+            "mode": "fast",
         }
         if metadata:
-            body["metadata"] = metadata
-        await self._post("/product/add", body)
+            body["info"] = metadata
+        try:
+            async with self._client() as client:
+                response = await client.post("/product/add", json=body)
+            if response.status_code in (400, 401, 403, 404, 422, 429):
+                return MemoryWriteResult.REJECTED
+            if response.status_code >= 400:
+                return MemoryWriteResult.UNKNOWN
+            data = response.json()
+        except (httpx.ConnectError, httpx.ConnectTimeout, httpx.PoolTimeout):
+            return MemoryWriteResult.UNAVAILABLE
+        except Exception:
+            log_memory_failure(self.logger, "memos.add")
+            return MemoryWriteResult.UNKNOWN
+        if not isinstance(data, dict) or data.get("code") != 200:
+            return MemoryWriteResult.UNKNOWN
+        # ACK очереди не подтверждает запись; пустой результат тоже не доказательство.
+        items = self._iter_items(data)
+        if self._async_mode != "sync" or not items:
+            return MemoryWriteResult.UNKNOWN
+        if not all(isinstance(item, dict) and item.get("indexed") is True for item in items):
+            return MemoryWriteResult.UNKNOWN
+        return MemoryWriteResult.CONFIRMED
 
     async def list_facts(
         self,
@@ -279,6 +309,8 @@ class MemOSMemoryIntegration(BaseMemoryIntegration):
                 "user_id": str(user_id),
                 "mem_cube_id": self._cube_for(user_id),
                 "top_k": top_k,
+                "mode": "fast",
+                "dedup": "no",
                 "relativity": 0 if not query else 0.45,
             },
         )
@@ -301,11 +333,13 @@ class MemOSMemoryIntegration(BaseMemoryIntegration):
         if not user_id or not self.available:
             return {}
         content = f"{fact_key}: {fact_value}".strip().strip(":").strip()
-        await self.save_messages(
+        outcome = await self.save_messages(
             user_id=user_id,
             messages=[{"role": "user", "content": content}],
             metadata={"fact_type": fact_type, "fact_key": fact_key, "source": "manual"},
         )
+        if outcome is not MemoryWriteResult.CONFIRMED:
+            return {}
         return {"fact_type": fact_type, "fact_key": fact_key, "fact_value": fact_value}
 
     async def delete_fact(self, *, user_id: str, fact_id: str) -> bool:

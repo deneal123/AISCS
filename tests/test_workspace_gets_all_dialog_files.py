@@ -157,7 +157,7 @@ def test_worker_imports_the_dialog_list_not_the_tabular_one():
     """
     # ⚠️ Сбор переехал в `chat_worker/turn_context.py` (вынос из разросшейся функции
     # воркера). Правило то же: в песочницу уезжает список ДИАЛОГА, а не табличный.
-    from service.services.chat.infrastructure.chat_worker import turn_context as tc
+    from service.services.chat.infrastructure.chat_worker.context import turn as tc
 
     tree = ast.parse(inspect.getsource(tc.collect_engine_inputs))
     calls = [

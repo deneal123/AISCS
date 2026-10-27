@@ -1,9 +1,12 @@
 """Фаза 5: детекция аномальной скорости трат + запись флага."""
 
 import json
+from types import SimpleNamespace
+from unittest.mock import AsyncMock, Mock
 
 import pytest
 
+from service.services.billing.application import abuse
 from service.services.billing.application.abuse import accumulate_spend
 from service.services.billing.persistence.billing_repository import BillingRepository
 from tests.test_helpers import FakeConnector, FakeDBSession
@@ -66,3 +69,23 @@ async def test_record_flag_writes_event():
     assert params["event_type"] == "abuse_flag"
     assert json.loads(params["metadata"])["spent_window"] == 999999
     assert session._committed is True
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("stage", ["increment", "expiry"])
+async def test_spend_transport_failure_has_only_bounded_diagnostics(monkeypatch, stage):
+    debug = Mock()
+    monkeypatch.setattr(abuse.logger, "debug", debug)
+    failure = RuntimeError("private-redis-transport-body-marker")
+    redis = SimpleNamespace(
+        incrby=AsyncMock(return_value=10, side_effect=failure if stage == "increment" else None),
+        expire=AsyncMock(side_effect=failure if stage == "expiry" else None),
+    )
+    assert (
+        await accumulate_spend(redis, user_id="synthetic", credits=10, window_seconds=60, now=1)
+        is None
+    )
+    debug.assert_called_once_with(
+        "spend-rate observation unavailable",
+        extra={"component": "billing", "failure_code": "abuse_observation"},
+    )

@@ -1,8 +1,11 @@
+import asyncio
+import hashlib
 import logging
+from collections.abc import Awaitable, Callable
 from datetime import datetime
 from uuid import UUID
 
-from sqlalchemy import and_, delete, or_, select
+from sqlalchemy import String, and_, cast, delete, func, or_, select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from service.models.db.db_models import UserFile
@@ -14,6 +17,66 @@ logger = logging.getLogger(__name__)
 
 
 class FileRepository(BaseRepository):
+    async def _lock_owned_file(self, session: AsyncSession, owner: UUID, file_id: UUID) -> None:
+        # A transaction-scoped lock also protects a currently absent row. The
+        # same session owns validation, mutation and commit; no extra pool slot.
+        digest = hashlib.sha256(b"gpthub:owned-file:v1" + owner.bytes + file_id.bytes).digest()
+        lock_id = int.from_bytes(digest[:8], "big", signed=True)
+        async with asyncio.timeout(10):
+            await session.execute(
+                text("SELECT pg_advisory_xact_lock(:lock_id)"), {"lock_id": lock_id}
+            )
+
+    @connection()
+    async def add_direct_file_metadata(
+        self,
+        file_metadata: UserFile,
+        verify_admission: Callable[[], Awaitable[bool]],
+        session: AsyncSession | None = None,
+    ) -> UserFile | None:
+        session = require_session(session)
+        await self._lock_owned_file(session, file_metadata.user_id, file_metadata.id)
+        if not await verify_admission():
+            return None
+        return await self.add_file_metadata(file_metadata, session=session)
+
+    @connection()
+    async def delete_owned_file_atomically(
+        self,
+        user_id: UUID,
+        file_id: UUID,
+        before_delete: Callable[[UserFile], Awaitable[None]],
+        session: AsyncSession | None = None,
+    ) -> bool:
+        session = require_session(session)
+        await self._lock_owned_file(session, user_id, file_id)
+        row = await self.fetch_user_file_by_id(user_id, file_id, session=session)
+        if row is None:
+            return False
+        await before_delete(row)
+        await self.delete_file_metadata(user_id, file_id, session=session)
+        return True
+
+    @connection()
+    async def remove_unreferenced_pending(
+        self,
+        owner: UUID,
+        file_id: UUID,
+        key: str,
+        remove: Callable[[], Awaitable[bool]],
+        session: AsyncSession | None = None,
+    ) -> bool:
+        """Serialize with callback/DELETE, protecting even legacy references to source keys."""
+        session = require_session(session)
+        await self._lock_owned_file(session, owner, file_id)
+        async with asyncio.timeout(10):
+            referenced = await session.scalar(
+                select(UserFile.id).where(UserFile.file_name == key).limit(1)
+            )
+        if referenced is not None:
+            return False
+        return await remove()
+
     @connection()
     async def fetch_user_files_metadata(
         self,
@@ -24,9 +87,20 @@ class FileRepository(BaseRepository):
         limit: int | None = None,
         offset: int = 0,
         before: tuple[datetime, UUID] | None = None,
+        search: str = "",
     ) -> list[UserFile]:
         session = require_session(session)
         query = select(UserFile).where(UserFile.user_id == user_id, UserFile.type == mode)
+        if search:
+            legacy_name = func.concat(
+                "Ранее загруженный файл ",
+                func.substr(cast(UserFile.id, String), 1, 8),
+                func.lower(func.substring(UserFile.file_name, r"\.[a-zA-Z0-9]{1,12}$")),
+            )
+            display_name = func.coalesce(
+                func.nullif(func.btrim(UserFile.original_name), ""), legacy_name
+            )
+            query = query.where(display_name.icontains(search, autoescape=True))
         if before is not None:
             created_at, file_id = before
             query = query.where(

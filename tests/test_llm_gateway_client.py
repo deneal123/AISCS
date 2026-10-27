@@ -125,7 +125,7 @@ async def test_memory_accumulates_usage_from_dict() -> None:
 
     Если бы он продолжил читать атрибуты, извлечение фактов молча стало бы бесплатным.
     """
-    from service.services.analytics.application.memory_service import MemoryService
+    from service.services.analytics.application.memory.service import MemoryService
 
     out: dict = {}
     MemoryService._accumulate_usage(
@@ -133,3 +133,17 @@ async def test_memory_accumulates_usage_from_dict() -> None:
     )
 
     assert out["prompt"] == 10 and out["completion"] == 3 and out["total"] == 13
+
+
+@pytest.mark.asyncio
+async def test_gateway_failure_does_not_log_private_exception(monkeypatch, caplog):
+    monkeypatch.setattr(llm_gateway_mod.logger, "disabled", False)
+    monkeypatch.setattr(llm_gateway_mod.logger, "propagate", False)
+    monkeypatch.setattr(llm_gateway_mod.logger, "handlers", [caplog.handler])
+    _patch(monkeypatch, boom=RuntimeError("private-gateway-marker"))
+    assert await chat_completion(_cfg(), messages=[], model="m") is None
+    assert len(caplog.records) == 1
+    record = caplog.records[0]
+    assert record.failure_code == "unavailable"
+    assert record.exc_info is None
+    assert "private-gateway-marker" not in str(record.__dict__)

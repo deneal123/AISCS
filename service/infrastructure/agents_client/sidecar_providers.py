@@ -15,9 +15,14 @@ from __future__ import annotations
 
 import logging
 from collections.abc import Sequence
-from typing import Any
+from typing import Any, Literal
 
-from service.infrastructure.sidecar import SidecarClient, SidecarError
+from service.infrastructure.sidecar import (
+    SidecarBadRequest,
+    SidecarClient,
+    SidecarError,
+    SidecarTimeout,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -35,6 +40,42 @@ HEALTH_TIMEOUT_SEC = 30.0
 # Доставка ключей — короткая операция (запись в память + пересборка клиента), но она на
 # пути замены ключа в панели: лучше подождать пару секунд, чем оставить сайдкар со старым.
 KEYS_TIMEOUT_SEC = 10.0
+
+
+async def fetch_provider_status(config: Any) -> dict[str, Any] | None:
+    """Read the gateway's existing evidence; this endpoint never probes providers."""
+    try:
+        return await _client(config, 2.0).request_json("GET", "/providers/status")
+    except SidecarError:
+        return None
+
+
+def _report_failure(
+    operation: Literal[
+        "provider_health",
+        "model_catalog",
+        "agent_catalog",
+        "persona_catalog",
+        "keys_version",
+        "push_keys",
+    ],
+    error: SidecarError,
+) -> None:
+    code = (
+        "timeout"
+        if isinstance(error, SidecarTimeout)
+        else "invalid"
+        if isinstance(error, SidecarBadRequest)
+        else "unavailable"
+    )
+    level = logging.DEBUG if operation == "keys_version" else logging.WARNING
+    logger.log(
+        level,
+        "Agents catalog operation %s failed: %s",
+        operation,
+        code,
+        extra={"component": "agents", "operation": operation, "failure_code": code},
+    )
 
 
 def _client(config: Any, timeout: float) -> SidecarClient:
@@ -69,7 +110,7 @@ async def fetch_provider_health(
             params=params,
         )
     except SidecarError as exc:
-        logger.warning("agents sidecar: /providers/health недоступен (%s)", exc.code)
+        _report_failure("provider_health", exc)
         return None
 
     # Минимальная проверка формы: панель ждёт providers-словарь. Мусор лучше отвергнуть
@@ -96,7 +137,7 @@ async def fetch_chat_model_catalog(
             params={"chat_only": str(bool(chat_only)).lower()},
         )
     except SidecarError as exc:
-        logger.warning("agents sidecar: /catalog/chat-models недоступен (%s)", exc.code)
+        _report_failure("model_catalog", exc)
         return None
     if not isinstance(data.get("models"), list):
         logger.warning("agents sidecar: неожиданная форма /catalog/chat-models")
@@ -109,20 +150,18 @@ async def fetch_keys_version(config: Any) -> int | None:
     """Версия набора ключей, применённая в сайдкаре. ``None`` = не смогли спросить."""
     try:
         data = await _client(config, KEYS_TIMEOUT_SEC).request_json("GET", "/health")
-    except SidecarError:
-        logger.debug(
-            "agents integration failure",
-            extra={"component": "provider_keys", "failure_code": "unavailable"},
-        )
+    except SidecarError as exc:
+        _report_failure("keys_version", exc)
         return None
-    version = (data.get("provider_keys") or {}).get("version")
-    return int(version) if isinstance(version, int) else None
+    keys = data.get("provider_keys")
+    version = keys.get("version") if isinstance(keys, dict) else None
+    return version if type(version) is int else None
 
 
 async def push_provider_keys(config: Any, *, version: int, overrides: dict[str, str]) -> bool:
     """Отправить снимок провайдерских ключей в сайдкар. ``False`` = не доставили.
 
-    ⚠️ В теле СЕКРЕТЫ: ни значения, ни их длины не логируем — только имена провайдеров.
+    ⚠️ В теле СЕКРЕТЫ: значения, длины и имена overrides не логируем.
     """
     try:
         await _client(config, KEYS_TIMEOUT_SEC).request(
@@ -131,12 +170,7 @@ async def push_provider_keys(config: Any, *, version: int, overrides: dict[str, 
             json_body={"version": int(version), "overrides": overrides},
         )
     except SidecarError as exc:
-        logger.warning(
-            "agents sidecar: не доставили ключи провайдеров %s (%s) — он останется на "
-            "ключах из env, и замена ключа в панели не подействует",
-            sorted(overrides),
-            exc.code,
-        )
+        _report_failure("push_keys", exc)
         return False
     return True
 
@@ -155,7 +189,7 @@ async def fetch_agent_catalog(config: Any) -> dict[str, dict] | None:
     try:
         data = await _client(config, HEALTH_TIMEOUT_SEC).request_json("GET", "/catalog/agents")
     except SidecarError as exc:
-        logger.warning("agents sidecar: /catalog/agents недоступен (%s)", exc.code)
+        _report_failure("agent_catalog", exc)
         return None
     items = data.get("agents")
     if not isinstance(items, dict) or not items:
@@ -175,7 +209,7 @@ async def fetch_persona_catalog(config: Any) -> list[dict[str, str]]:
     try:
         data = await _client(config, HEALTH_TIMEOUT_SEC).request_json("GET", "/catalog/personas")
     except SidecarError as exc:
-        logger.warning("agents sidecar: /catalog/personas недоступен (%s)", exc.code)
+        _report_failure("persona_catalog", exc)
         return []
     items = data.get("personas")
     if not isinstance(items, list):

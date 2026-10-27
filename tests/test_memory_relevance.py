@@ -11,7 +11,7 @@ from __future__ import annotations
 
 import pytest
 
-from service.services.analytics.application.memory_service import MemoryService
+from service.services.analytics.application.memory.service import MemoryService
 
 FACTS = [
     # Порядок как из репозитория: свежие первыми. Релевантные — НАМЕРЕННО в хвосте,

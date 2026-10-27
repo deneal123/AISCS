@@ -69,6 +69,19 @@ def _service():
 
 
 @pytest.mark.asyncio
+async def test_manually_disabled_providers_are_not_periodically_probed(
+    policy, sidecar, monkeypatch
+):
+    from service.infrastructure import provider_policy_store
+
+    monkeypatch.setattr(provider_policy_store, "disabled_providers", lambda: {"mws", "openai"})
+    out = await _service().recheck_blocked_providers()
+    assert out == {"checked": [], "cleared": []}
+    assert sidecar[0] == []
+    assert policy["cleared"] == []
+
+
+@pytest.mark.asyncio
 async def test_recovered_provider_is_unblocked(policy, sidecar):
     """⚠️ ГЛАВНОЕ. Снова доступный провайдер разблокируется без участия человека."""
     calls, reply = sidecar

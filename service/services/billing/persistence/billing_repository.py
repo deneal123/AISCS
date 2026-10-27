@@ -36,10 +36,10 @@ from service.services.billing.persistence.sql import (
     _INSERT_RESERVATION_SQL,
     _INSERT_USAGE_EVENT_SQL,
     _LIST_PRICING_SQL,
+    _OWNED_RELEASE_RESERVATION_SQL,
     _PROVISION_QUOTA_SQL,
     _RECORD_WEBHOOK_SQL,
     _REFUND_TOPUP_SQL,
-    _RELEASE_RESERVATION_SQL,
     _SET_PAYMENT_STATUS_SQL,
     _SET_PLAN_SQL,
     _SUM_ACTIVE_RESERVATIONS_SQL,
@@ -211,14 +211,6 @@ class BillingRepository(CostEvents, EventHistory, ResMaint, PricingSync, BaseRep
         return reservation_id
 
     @connection()
-    async def release_reservation(
-        self, *, reservation_id: str, session: AsyncSession | None = None
-    ) -> None:
-        """Отпустить неиспользованный резерв (job не был выставлен в счёт)."""
-        session = require_session(session)
-        await session.execute(text(_RELEASE_RESERVATION_SQL), {"rid": reservation_id})
-
-    @connection()
     async def charge(
         self,
         *,
@@ -246,6 +238,7 @@ class BillingRepository(CostEvents, EventHistory, ResMaint, PricingSync, BaseRep
         """
         session = require_session(session)
         credits = int(credits)
+        reservation_params = {"rid": reservation_id, "user_id": user_id}
 
         await session.execute(
             text(_PROVISION_QUOTA_SQL),
@@ -275,7 +268,7 @@ class BillingRepository(CostEvents, EventHistory, ResMaint, PricingSync, BaseRep
             ).first()
             if dup is not None:
                 if reservation_id:
-                    await session.execute(text(_RELEASE_RESERVATION_SQL), {"rid": reservation_id})
+                    await session.execute(text(_OWNED_RELEASE_RESERVATION_SQL), reservation_params)
                 return {"from_subscription": 0, "from_topup": 0, "idempotent": True}
 
         # Распределение — доменное правило; остаток докупа читаем под блокировкой строки,
@@ -350,7 +343,7 @@ class BillingRepository(CostEvents, EventHistory, ResMaint, PricingSync, BaseRep
             },
         )
         if reservation_id:
-            await session.execute(text(_COMMIT_RESERVATION_SQL), {"rid": reservation_id})
+            await session.execute(text(_COMMIT_RESERVATION_SQL), reservation_params)
         return {"from_subscription": from_subscription, "from_topup": from_topup}
 
     @connection()

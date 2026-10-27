@@ -11,7 +11,7 @@ from service.shared.repositories.decorators.session_processor import connection,
 logger = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
-    from service.infrastructure.cache.redis_session_store import RedisSessionStore
+    from service.infrastructure.cache.sessions import RedisSessionStore
 
 
 class AuthRepository(BaseRepository):

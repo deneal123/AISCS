@@ -17,6 +17,10 @@ class StartJobRequest(BaseModel):
 
     @model_validator(mode="after")
     def _ensure_source(self) -> "StartJobRequest":
+        if self.type == ServiceType.SIMULATION:
+            raise ValueError(
+                "Simulation runs use /api/simulations/v1/runs and its scientific configuration"
+            )
         if not self.file_id and not getattr(self, "dataset_id", None):
             raise ValueError("Either dataset_id or file_id must be provided")
         return self

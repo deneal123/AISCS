@@ -3,7 +3,9 @@ import logging.config
 
 from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
+from service._version import VERSION
 from service.composition.models import AppContainer
 from service.services.admin.presentation.routers.admin_api import admin_router
 from service.services.analytics.presentation.routers.analytics_api.analytics_api import (
@@ -16,6 +18,11 @@ from service.services.chat.presentation.http.files_overview_api import files_ove
 from service.services.chat.presentation.http.graph_api import graph_router
 from service.services.chat.presentation.routers.chat_api.chat_api import chat_router
 from service.services.chat.presentation.routers.chat_ws import router as chat_ws_router
+from service.services.chat.presentation.routers.harness import router as harness_router
+from service.services.chat.presentation.routers.ide_coordination import (
+    router as ide_coordination_router,
+)
+from service.services.chat.presentation.routers.video_stt import router as video_stt_router
 from service.services.chat.presentation.routers.workspace_coordination import (
     router as workspace_coordination_router,
 )
@@ -28,9 +35,11 @@ from service.services.notifications.presentation.user_events_ws import (
 )
 from service.services.profile.presentation.routers.auth_api.auth_api import auth_router
 from service.services.profile.presentation.routers.profile_api.profile_api import profile_router
+from service.services.simulations.api import router as simulations_router
 from service.settings import LOGGING, config, redact_config_for_logging
 from service.shared.presentation.handlers.exceptions_handlers import setup_exception_handlers
 from service.shared.presentation.routers.debug_api import router as debug_router
+from service.shared.security.origins import allowed_cors_origins
 from service.utils.app_lifespan import lifespan
 
 logging.config.dictConfig(LOGGING)
@@ -123,6 +132,7 @@ def create_app(container_override: AppContainer | None = None) -> FastAPI:
     service_title = (getattr(config.service, "name", "") or "").strip() or "GPTHub API"
     app = FastAPI(
         title=service_title,
+        version=VERSION,
         lifespan=lifespan,
         docs_url="/api/docs",
         openapi_url="/api/openapi.json",
@@ -132,8 +142,23 @@ def create_app(container_override: AppContainer | None = None) -> FastAPI:
     if container_override is not None:
         app.state.container = container_override
 
-    cors_config = getattr(config, "cors", None)
-    allow_origins = getattr(cors_config, "allow_origins", []) if cors_config else []
+    @app.get("/api/application-profile")
+    async def application_profile():
+        profile = config.service.application_profile
+        return {"profile": profile, "home": "/simulator" if profile == "simulation" else "/chat",
+                "capabilities": {"simulation": True, "gpthub": profile == "gpthub"}}
+
+    if config.service.application_profile == "simulation":
+        @app.middleware("http")
+        async def simulation_profile_policy(request, call_next):
+            allowed = ("/api/auth", "/api/profile", "/api/simulations/",
+                       "/api/application-profile", "/api/health", "/api/docs", "/api/openapi.json")
+            if not any(request.url.path == p.rstrip("/") or request.url.path.startswith(p)
+                       for p in allowed):
+                return JSONResponse({"detail": "Operation unavailable in simulation profile"}, 404)
+            return await call_next(request)
+
+    allow_origins = allowed_cors_origins(config)
     auth_mode = str(getattr(getattr(config, "auth", None), "auth_mode", "prod")).strip().lower()
     is_dev_mode = auth_mode == "dev"
 
@@ -141,19 +166,6 @@ def create_app(container_override: AppContainer | None = None) -> FastAPI:
         app.add_middleware(
             CORSMiddleware,
             allow_origins=allow_origins,
-            allow_credentials=True,
-            allow_methods=["*"],
-            allow_headers=["*"],
-        )
-    elif is_dev_mode:
-        app.add_middleware(
-            CORSMiddleware,
-            allow_origins=[
-                "http://localhost:3000",
-                "http://localhost:3001",
-                "http://127.0.0.1:3000",
-                "http://127.0.0.1:3001",
-            ],
             allow_credentials=True,
             allow_methods=["*"],
             allow_headers=["*"],
@@ -167,6 +179,7 @@ def create_app(container_override: AppContainer | None = None) -> FastAPI:
     app.include_router(jobs_router, tags=["Jobs-API"])
     app.include_router(files_router, tags=["Files-API"])
     app.include_router(profile_router, tags=["Profile-API"])
+    app.include_router(simulations_router)
     app.include_router(chat_ws_router, tags=["Chat-WS"])
     app.include_router(jobs_ws_router, tags=["Jobs-WS"])
     app.include_router(user_events_ws_router, tags=["User-Events-WS"])
@@ -176,6 +189,9 @@ def create_app(container_override: AppContainer | None = None) -> FastAPI:
     # The workspace sidecar is intentionally outside the user-facing chat
     # prefix.  Its signed coordinator contract is service-to-service only.
     app.include_router(workspace_coordination_router, tags=["Workspace-Coordination"])
+    app.include_router(ide_coordination_router)
+    app.include_router(video_stt_router)
+    app.include_router(harness_router)
     app.include_router(memory_router, tags=["Memory-API"])
     app.include_router(graph_router, tags=["Graph-API"])
     # Обзор файлов аккаунта — ОТДЕЛЬНОЕ окно от рабочего каталога треда: тот временный и

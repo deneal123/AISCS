@@ -91,6 +91,8 @@ class ChatOrchestrationPort(Protocol):
         watch_video: bool = False,
         confirm_expensive_run: bool = False,
         confirmed_offer_id: str | None = None,
+        confirmation_decision: str = "accept",
+        confirmation_cancelled: bool = False,
         # usage LLM-роутера, посчитанный в веб-процессе: воркер тарифицирует его
         # отдельным billing_event. Пропажа поля = недобилл, поэтому оно в контракте.
         routing_usage: dict | None = None,

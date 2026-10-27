@@ -64,7 +64,7 @@ async def test_compaction_runs_even_if_memory_extraction_explodes(calls, monkeyp
             raise RuntimeError("MemOS недоступен")
 
     monkeypatch.setattr(
-        "service.services.analytics.application.memory_service.MemoryService", lambda: _Boom()
+        "service.services.analytics.application.memory.service.MemoryService", lambda: _Boom()
     )
 
     await _run()
@@ -106,7 +106,9 @@ def test_the_two_steps_live_in_separate_try_blocks():
     import ast
     import inspect
 
-    from service.services.chat.infrastructure.chat_worker import memory_maintenance
+    from service.services.chat.infrastructure.chat_worker.context import (
+        memory as memory_maintenance,
+    )
 
     tree = ast.parse(inspect.getsource(memory_maintenance.extract_and_charge_memory).strip())
     tries = [node for node in ast.walk(tree) if isinstance(node, ast.Try)]

@@ -23,6 +23,7 @@ class ChatRequestContext:
     web_search: bool = False
     deep_research: bool = False
     file_context: str = ""
+    document_context: dict | None = None
     route_override: str | None = None
     attachments: list | None = None
     # 🔴 ЭТИ ДВА ПОЛЯ ОБЪЯВЛЕНЫ В СХЕМЕ HTTP-РУЧКИ И ДО СИХ ПОР НИКУДА НЕ ЕХАЛИ. Замер
@@ -36,6 +37,8 @@ class ChatRequestContext:
     watch_video: bool = False
     confirm_expensive_run: bool = False
     confirmed_offer_id: str | None = None
+    confirmation_decision: str = "accept"
+    confirmation_cancelled: bool = False
     confirmed_resolved_category: str | None = None
 
 

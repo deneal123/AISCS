@@ -27,6 +27,8 @@ async def build_engine_env(
     files: list[dict] | None = None,
     session_data: dict[str, Any] | None = None,
     agent_run_id: str | None = None,
+    pg_connector: Any = None,
+    existing_document_binding: dict | None = None,
 ) -> dict[str, Any]:
     """Собрать окружение прогона для тела `/run`.
 
@@ -68,13 +70,42 @@ async def build_engine_env(
     # 🔴 СОГЛАСИЕ НА ДОРОГОЕ — ИЗ ЭТОГО СООБЩЕНИЯ, а не из настройки треда. Просмотр ролика
     # это сотня кадров, переезжающих в контекст каждого следующего сообщения; «включил
     # один раз — смотрит всегда» означало бы, что человек согласился один раз, а платит за
-    # каждый ход. Признак ставится нажатием кнопки и живёт ровно один прогон.
-    env["video_tool_enabled"] = bool((session_data or {}).get("watch_video"))
+    # каждый ход. Признак живёт ровно один прогон: явная кнопка в Чате либо отправка
+    # из PDF-студии с предупреждением и повторно проверенным owned document context.
+    from service.services.chat.application.documents.context import document_tools_auto_approved
+
+    document_approved = document_tools_auto_approved(
+        (session_data or {}).get("_document_context"),
+        (session_data or {}).get("confirmation_decision"),
+    )
+    env["video_tool_enabled"] = bool((session_data or {}).get("watch_video")) or document_approved
+
+    ide_context = (session_data or {}).get("_ide_context")
+    if ide_context is not None:
+        from service.composition.ide import build_ide_runtime
+        from service.services.chat.application.ide.agent_context import build_ide_run_ref
+        from service.services.chat.domain.ide.edits import IdeEditError
+
+        if pg_connector is None or (session_data or {}).get("_document_context") is not None:
+            raise IdeEditError("ide_agent_context_invalid")
+        env["workspace_ref"] = await build_ide_run_ref(
+            build_ide_runtime(pg_connector),
+            redis_client,
+            thread_id=str(thread_id or ""),
+            user_id=str(user_id or ""),
+            raw=ide_context,
+            run_id=str(agent_run_id or ""),
+        )
+        return _question_capability(env)  # No legacy allocation or imports.
 
     try:
         from service.infrastructure.workspace_client import ensure_workspace, import_files
 
-        ref = await ensure_workspace(redis_client, thread_id, user_id)
+        ref = (
+            dict(existing_document_binding)
+            if existing_document_binding is not None
+            else await ensure_workspace(redis_client, thread_id, user_id)
+        )
         if ref:
             # The opaque agent capability travels only as execution context.  It
             # is not copied into prompts, trace events, or persisted metadata.
@@ -101,6 +132,22 @@ async def build_engine_env(
                     extra={"component": "workspace", "failure_code": "capability"},
                 )
             env["workspace_ref"] = ref
+            target = (session_data or {}).get("_document_context")
+            if isinstance(target, dict):
+                # Kept inside the private capability, never projected to prompts.
+                ref["document_context"] = dict(target)
+            from service.services.chat.infrastructure.chat_worker.billing.video_grant import (
+                attach_video_stt_grant,
+            )
+
+            await attach_video_stt_grant(
+                redis_client,
+                ref,
+                user_id=user_id,
+                thread_id=thread_id,
+                task_id=agent_run_id,
+                confirmed=env["video_tool_enabled"],
+            )
             if agent_run_id and ref.get("coordination_capability"):
                 # The room owns this short-lived mapping in Redis. It lets a
                 # user cancel the active agent through the existing cooperative
@@ -126,12 +173,27 @@ async def build_engine_env(
             # табличного инструмента: второе представление тех же данных однажды разошлось бы.
             await import_files(ref, files)
     except Exception:
+        if existing_document_binding is not None:
+            raise
         # Песочницы просто не будет — инструменты отсеются гейтом. Ронять чат нельзя.
         logger.warning(
             "песочница треду не выдана",
             extra={"component": "workspace", "failure_code": "unavailable"},
         )
 
+    return _question_capability(env)
+
+
+def _question_capability(env: dict[str, Any]) -> dict[str, Any]:
+    """Only authenticated project runs may offer a resumable question, never chat."""
+    from service.settings import config
+
+    ref = env.get("workspace_ref")
+    if isinstance(ref, dict) and config.human_questions.enabled is True:
+        ide = isinstance(ref.get("ide_context"), dict)
+        document = isinstance(ref.get("document_context"), dict)
+        if ide != document:
+            ref["human_questions_enabled"] = True
     return env
 
 
@@ -140,7 +202,9 @@ async def clear_workspace_active_run(
 ) -> None:
     """Remove the private active-run mapping once worker finalization finishes."""
     ref = (env or {}).get("workspace_ref") if isinstance(env, dict) else None
-    if not isinstance(ref, dict) or not ref.get("coordination_capability") or not agent_run_id:
+    # This is a backend-local compare-and-clear, not a sidecar mutation. A
+    # recovered checkpoint has opaque binding facts but intentionally no capability.
+    if not isinstance(ref, dict) or not ref.get("workspace_id") or not agent_run_id:
         return
     try:
         from service.services.chat.application.workspace_collaboration import (

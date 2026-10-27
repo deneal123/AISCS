@@ -5,7 +5,6 @@ from typing import Any
 from uuid import UUID
 
 from service.infrastructure.agents_client.ports import ANON_USER_UUID, resolve_user_uuid
-from service.settings import config
 
 logger = logging.getLogger(__name__)
 
@@ -21,62 +20,24 @@ _PPTX_MIME = "application/vnd.openxmlformats-officedocument.presentationml.prese
 
 
 def _collect_candidate_user_uuids(user_id: str | int | UUID | None) -> list[UUID]:
-    """Build ordered list of user UUID candidates for artifact persistence.
-
-    Priority:
-    1) explicit user_id (or anon placeholder if invalid/missing)
-    2) configured admin IDs as fallback for guest/invalid users
-    """
-
-    candidates: list[UUID] = []
-    seen: set[UUID] = set()
-
-    primary = resolve_user_uuid(user_id, anonymous_fallback=True)
-
-    admin_candidates: list[UUID] = []
-    admin_seen: set[UUID] = set()
-    for raw_admin_id in config.service.admin_user_ids_set:
-        try:
-            admin_uuid = UUID(str(raw_admin_id))
-        except Exception:
-            continue
-        if admin_uuid in admin_seen:
-            continue
-        admin_candidates.append(admin_uuid)
-        admin_seen.add(admin_uuid)
-
-    # For anonymous/invalid users prefer configured admin owners to avoid noisy FK failures
-    # when ANON placeholder row is absent in DB.
-    if primary == ANON_USER_UUID and admin_candidates:
-        for admin_uuid in admin_candidates:
-            if admin_uuid not in seen:
-                candidates.append(admin_uuid)
-                seen.add(admin_uuid)
-        return candidates
-
-    if primary is not None and primary not in seen:
-        candidates.append(primary)
-        seen.add(primary)
-
-    for admin_uuid in admin_candidates:
-        if admin_uuid in seen:
-            continue
-        candidates.append(admin_uuid)
-        seen.add(admin_uuid)
-
-    return candidates
+    """Compatibility projection: Library artifacts require one real owner."""
+    owner = resolve_user_uuid(user_id, anonymous_fallback=False)
+    return [owner] if owner is not None and owner != ANON_USER_UUID else []
 
 
 async def _save_with_fallback(
     *, file_service, user_uuid_candidates, user_id, filename: str, content: bytes, label: str
 ):
-    """Сохранить байты, перебирая кандидатов-владельцев (аноним→admin). → saved | raise."""
+    """Compatibility signature; alternate owners are never admitted."""
     # Персист — забота BACKEND'а (worker-side), не движка: ServiceType (модель БД) и
     # RepositoryIntegrityError (repo-слой) тянут service.* — импортим ЛЕНИВО, чтобы
-    # модуль оставался module-level переносимым в сайдкар. Поведение идентично.
+    # модуль оставался module-level переносимым в сайдкар.
     from service.models.key_value import ServiceType
     from service.shared.repositories.exceptions import RepositoryIntegrityError
 
+    user_uuid_candidates = _collect_candidate_user_uuids(user_id)
+    if not user_uuid_candidates:
+        raise RepositoryIntegrityError("Artifact owner unavailable")
     saved = None
     for candidate_user_uuid in user_uuid_candidates:
         try:
@@ -86,25 +47,15 @@ async def _save_with_fallback(
                 file_name=filename,
                 file_content=content,
             )
-            if candidate_user_uuid != user_uuid_candidates[0]:
-                logger.warning(
-                    "Persisted %s artifact via fallback user_id=%s for original user_id=%s",
-                    label,
-                    candidate_user_uuid,
-                    user_id,
-                )
             break
         except RepositoryIntegrityError:
             logger.warning(
-                "Integrity error while saving %s for user_id=%s "
-                "(candidate=%s); trying next fallback",
-                label,
-                user_id,
-                candidate_user_uuid,
+                "artifact ownership persistence unavailable",
+                extra={"component": "artifact", "failure_code": "persistence"},
             )
             continue
     if saved is None:
-        raise RepositoryIntegrityError(f"No valid user candidate for {label} artifact persistence")
+        raise RepositoryIntegrityError("Artifact persistence unavailable")
     return saved
 
 
@@ -126,14 +77,19 @@ async def _persist_one_artifact(
                 raise ValueError("invalid_pdf_artifact")
             if lowered.endswith((".zip", ".pptx")) and not content.startswith(b"PK\x03\x04"):
                 raise ValueError("invalid_zip_artifact")
-            saved = await _save_with_fallback(
-                file_service=file_service,
-                user_uuid_candidates=user_uuid_candidates,
-                user_id=user_id,
-                filename=filename,
-                content=content,
-                label="FILE",
-            )
+            if art.get("required"):
+                from service.infrastructure.agents_client.required_artifacts import save_required
+
+                saved = await save_required(file_service, user_id, job_id, filename, content)
+            else:
+                saved = await _save_with_fallback(
+                    file_service=file_service,
+                    user_uuid_candidates=user_uuid_candidates,
+                    user_id=user_id,
+                    filename=filename,
+                    content=content,
+                    label="FILE",
+                )
             return {
                 "kind": "file",
                 "file_id": str(saved.file_id),
@@ -242,8 +198,6 @@ async def persist_generated_artifacts(
         return None, metadata or {}
 
     user_uuid_candidates = _collect_candidate_user_uuids(user_id)
-    if not user_uuid_candidates:
-        return None, metadata
 
     out = dict(metadata)
 
@@ -261,7 +215,7 @@ async def persist_generated_artifacts(
         )
 
     generated_files: list[dict[str, Any]] = []
-    for idx, art in enumerate(artifacts):
+    for idx, art in enumerate(artifacts if user_uuid_candidates else []):
         entry = await _persist_one_artifact(
             art,
             file_service=file_service,

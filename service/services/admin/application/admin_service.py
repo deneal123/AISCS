@@ -9,7 +9,7 @@ from datetime import UTC, datetime, timedelta
 from typing import Any
 
 from service.services.admin.application.runtime_settings import runtime_settings
-from service.services.admin.application.settings_registry import all_specs, coerce_strict, get_spec
+from service.services.admin.application.settings.registry import all_specs, coerce_strict, get_spec
 from service.settings import config
 
 logger = logging.getLogger(__name__)
@@ -258,7 +258,10 @@ class AdminService:
             if email:
                 await self._profile_cache.invalidate(PROFILE_BY_EMAIL_NAMESPACE, str(email).lower())
         except Exception:  # noqa: BLE001
-            logger.debug("profile cache invalidate failed", exc_info=True)
+            logger.debug(
+                "profile cache invalidate failed",
+                extra={"component": "admin_profile", "failure_code": "unavailable"},
+            )
 
     # --- роль -------------------------------------------------------------- #
     def _ttl(self) -> float:
@@ -285,7 +288,10 @@ class AdminService:
             try:
                 flag = await self._admin_repo.fetch_is_admin(user_id=uid)
             except Exception:
-                logger.debug("is_admin DB lookup failed; fallback", exc_info=True)
+                logger.debug(
+                    "is_admin DB lookup failed; fallback",
+                    extra={"component": "admin_role", "failure_code": "unavailable"},
+                )
                 flag = bool(cached[0]) if cached else False
             self._cache[uid] = (flag, time.monotonic() + self._ttl())
             return flag
@@ -305,7 +311,10 @@ class AdminService:
         try:
             stored = await self._settings_repo.get_all()
         except Exception:
-            logger.debug("settings get_all failed", exc_info=True)
+            logger.debug(
+                "settings get_all failed",
+                extra={"component": "admin_settings", "failure_code": "unavailable"},
+            )
             stored = {}
         items = []
         for spec in all_specs():
@@ -605,11 +614,10 @@ class AdminService:
         return data
 
     async def _cascade_memos_embedder(self, blocked: set[str]) -> None:
-        """Провайдер эмбеддера MemOS заблокирован → переключить на первый рабочий фолбэк + вайп.
+        """Обновить предпочтение эмбеддера без удаления графа или коллекций.
 
-        Полностью авто (по требованию): стабильность важнее сохранности памяти. Ограничение:
-        memos читает эмбеддер на СТАРТЕ (нет hot-reload) — новый применится после рестарта
-        контейнера memos; до этого память пуста/fail-open.
+        Реальный допуск и автоматическое переключение принадлежат общему шлюзу;
+        MemOS изолирует пространства моделей, в том числе одинаковой размерности.
         """
         from service.infrastructure import provider_policy_store as provider_policy
 
@@ -625,7 +633,9 @@ class AdminService:
             )
             or []
         )
-        unavailable = await provider_policy.unavailable_providers()
+        unavailable = (
+            await provider_policy.blocked_providers() | provider_policy.disabled_providers()
+        )
         for cand in fallback:
             if not isinstance(cand, dict) or not cand.get("model"):
                 continue
@@ -634,23 +644,22 @@ class AdminService:
                 continue
             try:
                 await self.set_setting(
-                    "agents.memos_embedder_model", cand["model"], updated_by="cascade"
+                    key="agents.memos_embedder_model", value=cand["model"], updated_by="cascade"
                 )
                 await self.set_setting(
-                    "agents.memos_embedder_dim", int(cand.get("dim") or 1536), updated_by="cascade"
+                    key="agents.memos_embedder_dim",
+                    value=int(cand.get("dim") or 1536),
+                    updated_by="cascade",
                 )
-                from service.infrastructure.memory.memos import wipe_memos_memory
-
-                wipe = await wipe_memos_memory()
                 logger.warning(
-                    "MemOS-эмбеддер переключён на %s (провайдер '%s' заблокирован); память стёрта "
-                    "(%s), требуется рестарт memos для применения",
-                    cand["model"],
-                    provider,
-                    wipe,
+                    "memory embedder preference changed; index spaces remain isolated",
+                    extra={"component": "memory_embedder"},
                 )
             except Exception:  # noqa: BLE001
-                logger.exception("Каскад смены эмбеддера MemOS не удался")
+                logger.warning(
+                    "memory embedder cascade unavailable",
+                    extra={"component": "memory_embedder", "failure_code": "unavailable"},
+                )
             return
 
     async def recheck_blocked_providers(self) -> dict[str, Any]:
@@ -667,7 +676,9 @@ class AdminService:
         from service.infrastructure import provider_policy_store as provider_policy
         from service.settings import config as _config
 
-        blocked = sorted(await provider_policy.blocked_providers())
+        blocked = sorted(
+            set(await provider_policy.blocked_providers()) - provider_policy.disabled_providers()
+        )
         if not blocked:
             return {"checked": [], "cleared": []}
 
@@ -723,4 +734,7 @@ class AdminService:
             data = self._apply_disabled_overlay(await self._compute_provider_health())
             _HEALTH_CACHE.update(ts=time.monotonic(), data=data)
         except Exception:  # noqa: BLE001
-            logger.debug("provider health prime failed", exc_info=True)
+            logger.debug(
+                "provider health prime failed",
+                extra={"component": "provider_health", "failure_code": "unavailable"},
+            )

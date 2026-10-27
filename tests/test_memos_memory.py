@@ -27,7 +27,7 @@ def _capturing_handler(captured, *, search_payload=None, status=200):
             return httpx.Response(status)
         if request.url.path == "/product/search":
             return httpx.Response(200, json=search_payload or {"data": []})
-        return httpx.Response(200, json={"status": "ok"})
+        return httpx.Response(200, json={"code": 200, "data": [{"id": "saved", "indexed": True}]})
 
     return _h
 
@@ -38,6 +38,14 @@ def _capturing_handler(captured, *, search_payload=None, status=200):
 def test_available_requires_base_url():
     assert MemOSMemoryIntegration(base_url="").available is False
     assert MemOSMemoryIntegration(base_url="http://x").available is True
+
+
+@pytest.mark.asyncio
+async def test_connect_deadline_is_short_without_cutting_memory_read_budget():
+    adapter = MemOSMemoryIntegration(base_url="http://memos.local", timeout=15)
+    async with adapter._client() as client:
+        assert client.timeout.connect == 2.0
+        assert client.timeout.read == 15.0
 
 
 # --------------------------------------------------------------------------- #
@@ -101,7 +109,7 @@ async def test_save_messages_posts_add_with_cube_and_mode():
     assert body["mem_cube_id"] == "gpthub-42"
     assert body["messages"] == [{"role": "user", "content": "привет"}]  # пустое отброшено
     assert body["async_mode"] == "sync"
-    assert body["metadata"] == {"thread_id": "t1"}
+    assert body["info"] == {"thread_id": "t1"}
     assert add["headers"].get("authorization") == "Bearer secret"
 
 

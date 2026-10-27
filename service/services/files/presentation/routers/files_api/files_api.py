@@ -9,6 +9,7 @@ from service.composition.state import get_file_saver_service
 from service.models.auth_models import AuthProfile
 from service.models.key_value import ServiceType
 from service.services.files.application.file_saver_service import FileSaverService
+from service.services.files.presentation.routers.files_api.private_route import PrivateFileRoute
 from service.services.files.presentation.routers.files_api.schemas import (
     CallbackRequest,
     FetchModesResponse,
@@ -23,7 +24,7 @@ from service.settings import config
 from service.shared.security.auth_checker import check_auth
 
 logger = logging.getLogger(__name__)
-files_router = APIRouter(prefix="/api/service")
+files_router = APIRouter(prefix="/api/service", route_class=PrivateFileRoute)
 
 
 @files_router.get(
@@ -74,13 +75,12 @@ async def upload_handler(
                     f"{config.file.settings.allowed_extensions} allowed."
                 ),
             )
-        content = await file.read()
-        if len(content) > config.file.settings.max_file_size_byte:
+        max_bytes = config.file.settings.max_file_size_byte
+        content = await file.read(max(0, max_bytes) + 1)
+        if len(content) > max_bytes:
             raise HTTPException(
                 status.HTTP_400_BAD_REQUEST,
-                detail=(
-                    f"File too large. Max size: {config.file.settings.max_file_size_byte} bytes."
-                ),
+                detail=(f"File too large. Max size: {max_bytes} bytes."),
             )
         return await service.save(
             user_id=profile.user_id,
@@ -121,7 +121,7 @@ async def presign_upload(
         file_id=res["file_id"],
         file_key=res["file_key"],
         upload_url=res["upload_url"],
-        expires_in=payload.expiry_sec,
+        expires_in=res.get("expires_in", payload.expiry_sec),
     )
 
 
@@ -159,6 +159,11 @@ async def get_file(
         meta = await service.fetch_file_metadata(profile.user_id, file_id)
     except ValueError as exc:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="File not found") from exc
+    except Exception:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="File is temporarily unavailable",
+        ) from None
     download = await service.get_presigned_url_by_key(file_key=meta.file_key)
     return FileDetailResponse(file_id=meta.file_id, file_url=meta.file_url, download_url=download)
 
@@ -179,10 +184,14 @@ async def download_file(
     """
 
     try:
-        meta = await service.fetch_file_metadata(profile.user_id, file_id)
-        download = await service.get_presigned_url_by_key(file_key=meta.file_key)
+        download = await service.get_owned_download_url(profile.user_id, file_id)
     except ValueError as exc:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="File not found") from exc
+    except Exception:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="File is temporarily unavailable",
+        ) from None
     if not download:
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,

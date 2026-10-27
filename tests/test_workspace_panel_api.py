@@ -15,7 +15,7 @@ import inspect
 import pytest
 from fastapi import HTTPException
 
-from service.services.chat.presentation.routers.chat_api import workspace_api as api
+from service.services.chat.presentation.routers.chat_api.workspace import router as api
 
 REF = {
     "workspace_id": "ws1",
@@ -263,9 +263,9 @@ def test_snapshot_is_taken_after_every_turn():
     вовсе — а именно её и нельзя было бы восстановить. «Нечего фиксировать» отличает сам
     сайдкар.
     """
-    from service.services.chat.infrastructure.chat_worker import artifacts, run_execution
+    from service.services.chat.infrastructure.chat_worker.results import artifacts, preparation
 
-    finalization = inspect.getsource(run_execution._finalize_success)
+    finalization = inspect.getsource(preparation.prepare_turn_content)
     assert "persist_all_artifacts(" in finalization and "request.text" in finalization, (
         "запрос человека не доезжает до снимка — история станет «commit 1, commit 2»"
     )

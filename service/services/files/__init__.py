@@ -7,7 +7,7 @@ def __getattr__(name: str):
 
         return FileSaverService
     if name == "BasicFileScanner":
-        from service.services.files.application.file_scanner_service import BasicFileScanner
+        from service.services.files.application.scanning.service import BasicFileScanner
 
         return BasicFileScanner
     raise AttributeError(name)

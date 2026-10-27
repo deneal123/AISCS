@@ -11,8 +11,13 @@ from service.composition.state import (
 from service.settings import config
 
 
+class _FakeChatPersistence:
+    async def get_thread_owner(self, thread_id):
+        return "u1"
+
+
 class _FakeChatSvc:
-    pass
+    persistence_service = _FakeChatPersistence()
 
 
 class _FakeAppSvc:

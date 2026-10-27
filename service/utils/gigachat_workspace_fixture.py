@@ -13,7 +13,7 @@ import secrets
 import sys
 from typing import Any
 
-from service.infrastructure.cache.redis_manager import RedisManager
+from service.infrastructure.cache.manager import RedisManager
 from service.infrastructure.workspace_client import ensure_workspace_explicit, release_workspace
 from service.services.chat.application.workspace_collaboration import mint_capability
 from service.settings import config

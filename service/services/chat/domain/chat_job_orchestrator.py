@@ -31,13 +31,18 @@ class ChatJobOrchestrator:
         watch_video: bool = False,
         confirm_expensive_run: bool = False,
         confirmed_offer_id: str | None = None,
+        confirmation_decision: str = "accept",
+        confirmation_cancelled: bool = False,
         routing_usage: dict | None = None,
         resolved_category: str | None = None,
+        document_context: dict | None = None,
     ) -> ChatReplyResult:
         # usage LLM-роутера (посчитан в веб-процессе) везём в воркер внутри session_data
         # — она и так проходит web→worker как есть, без изменения сигнатур celery-задачи.
         # Воркер затарифицирует его отдельным billing_event (аудит A2).
         session_data: dict = {"session_id": thread_id}
+        if document_context:
+            session_data["_document_context"] = document_context
         if routing_usage and int(routing_usage.get("total") or 0) > 0:
             session_data["_router_usage"] = dict(routing_usage)
         # Тем же каналом и по той же причине — готовый ответ авто-роутера. Без него
@@ -56,6 +61,8 @@ class ChatJobOrchestrator:
             session_data["confirm_expensive_run"] = True
         if confirmed_offer_id:
             session_data["confirmed_offer_id"] = str(confirmed_offer_id)
+            session_data["confirmation_decision"] = confirmation_decision
+            session_data["confirmation_cancelled"] = confirmation_cancelled
         command = ProcessChatMessageCommand(
             thread_id=thread_id,
             user_id=user_id,

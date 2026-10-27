@@ -121,7 +121,7 @@ def test_the_turn_passes_its_files_to_the_rule():
     import ast
     import inspect
 
-    from service.services.chat.infrastructure.chat_worker import turn_context
+    from service.services.chat.infrastructure.chat_worker.context import turn as turn_context
 
     tree = ast.parse(inspect.getsource(turn_context.collect_engine_inputs).strip())
     passed = [

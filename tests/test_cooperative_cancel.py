@@ -3,17 +3,22 @@
 _run_with_cancel параллельно опрашивает chat:cancel:{task_id}; при флаге отменяет
 исполнение и поднимает CancelledByUser → штатная очистка воркера (release резерва +
 FAILURE + персист частичного ответа). Fail-open: нет redis / сбой опроса → не
-отменяем. Флаг ставит JobApplicationService.cancel_task (+ revoke без хард-килла).
+отменяем. Worker-owned chat отменяется только подтверждённым Redis-флагом;
+revoke сохранён лишь для legacy non-thread job, без хард-килла.
 
 NB: E2E-поведение (реальный cancel-кнопкой прерывает стрим и чистит состояние)
 проверяется на живом стеке; здесь — логика watcher'а и установки флага.
 """
 
 import asyncio
+from types import SimpleNamespace
+from unittest.mock import AsyncMock
+from uuid import uuid4
 
 import pytest
 
 import service.services.chat.infrastructure.chat_worker_tasks as cwt
+from service.models.key_value import ProcessingStatus, ServiceType
 from service.services.jobs.application.job_application_service import _CANCEL_FLAG_TTL_SEC
 
 
@@ -102,6 +107,7 @@ async def test_cancel_task_sets_flag_and_revokes() -> None:
     from service.services.jobs.application.job_application_service import JobApplicationService
 
     calls: dict = {}
+    owner = uuid4()
 
     class _Queue:
         def cancel_task(self, task_id):
@@ -110,13 +116,23 @@ async def test_cancel_task_sets_flag_and_revokes() -> None:
 
     class _JobService:
         job_queue = _Queue()
+        repository = SimpleNamespace(
+            fetch_job_by_task_id=AsyncMock(
+                return_value=SimpleNamespace(
+                    user_id=owner,
+                    type=ServiceType.CHAT,
+                    status=ProcessingStatus.PROCESSING,
+                    payload={},
+                )
+            )
+        )
 
     class _RedisSetter:
         async def set(self, key, val, ex=None):
             calls["flag"] = (key, val, ex)
 
     svc = JobApplicationService(job_service=_JobService(), redis_client=_RedisSetter())
-    res = await svc.cancel_task("task-9")
+    res = await svc.cancel_task("task-9", user_id=owner)
 
     assert res == {"task_id": "task-9", "cancelled": True}
     assert calls["revoked"] == "task-9"
@@ -130,6 +146,7 @@ async def test_cancel_task_without_redis_still_revokes() -> None:
     from service.services.jobs.application.job_application_service import JobApplicationService
 
     calls: dict = {}
+    owner = uuid4()
 
     class _Queue:
         def cancel_task(self, task_id):
@@ -138,9 +155,19 @@ async def test_cancel_task_without_redis_still_revokes() -> None:
 
     class _JobService:
         job_queue = _Queue()
+        repository = SimpleNamespace(
+            fetch_job_by_task_id=AsyncMock(
+                return_value=SimpleNamespace(
+                    user_id=owner,
+                    type=ServiceType.CHAT,
+                    status=ProcessingStatus.PROCESSING,
+                    payload={},
+                )
+            )
+        )
 
     svc = JobApplicationService(job_service=_JobService(), redis_client=None)
-    res = await svc.cancel_task("task-9")
+    res = await svc.cancel_task("task-9", user_id=owner)
 
     assert res["cancelled"] is True
     assert calls["revoked"] == "task-9"  # без redis отмена всё равно доходит до revoke
