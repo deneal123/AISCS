@@ -248,3 +248,6 @@ openspecs/
 # Вывод `make graph GRAPH_TARGET=memos` — дев-артефакты, не код форка.
 # Корневой .gitignore сюда НЕ достаёт: для суперпроекта сабмодуль это гитлинк.
 graphify-out/
+
+# Local execution and validation artifacts
+.work/

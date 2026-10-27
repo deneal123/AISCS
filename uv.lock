@@ -2069,7 +2069,7 @@ wheels = [
 
 [[package]]
 name = "memoryos"
-version = "2.0.23"
+version = "2.0.23+aiscs.1"
 source = { editable = "." }
 dependencies = [
     { name = "concurrent-log-handler" },
