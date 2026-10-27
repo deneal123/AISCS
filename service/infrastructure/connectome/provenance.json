@@ -1,0 +1,14 @@
+{
+  "source": "https://github.com/artem-x-meta/fly-arena",
+  "commit": "12f48c702ed170b5bdc4643afa7ce65e952b353d",
+  "source_file": "fly_arena/brain.py",
+  "source_sha256": "f8a8888ef88018a4d5b711ce9e65e2e83c4d11257d97d54f04c8e022a8520e7f",
+  "license": "MIT",
+  "license_sha256": "149627250cdaaa7b8a43bb892e5d5088ed6bd4653e8776768ab2d311d31654f3",
+  "extracted_functions": [
+    "advance",
+    "signed_weights"
+  ],
+  "function_bodies_changed": false,
+  "scope": "LIF kernel only. No motor policy, body engine or download helper copied."
+}

@@ -1,0 +1,22 @@
+{
+  "id": "male-cns-recognition-v1",
+  "preset": "male-cns-hybrid-v1",
+  "design_seed": 2026102703,
+  "seed_base": 20000,
+  "regions": ["head", "thorax", "front_left", "front_right", "middle_left", "middle_right", "hind_left", "hind_right"],
+  "classes": ["none", "weak", "strong"],
+  "groups_per_region": 20,
+  "split_groups_per_region": {"train": 12, "validation": 4, "test": 4},
+  "ranges": {"excitability": [0.9, 1.1], "adaptation": [0.1, 0.5], "noise_uv": [0.025, 0.075], "electrode_x_um": [-15.0, 15.0], "electrode_y_um": [55.0, 100.0], "electrode_z_um": [20.0, 60.0]},
+  "fixed": {"duration_ms": 200.0, "dt_ms": 0.025, "conductivity_s_m": 0.3, "reference_um": [300.0, 250.0, 100.0]},
+  "features_version": "male-cns-signal-summaries-v1",
+  "primary": "Region-conditioned bank of standardized multinomial logistic regressions; region selects a model and is never a signal feature",
+  "comparison": "Pooled signal-only logistic regression without region input",
+  "regularization_C": [0.1, 1.0, 10.0],
+  "selection": "Fit scaler and model on train only; choose C using validation balanced accuracy; ties prefer first C; freeze before test signals are generated",
+  "grouping": "All three conditions of a seed and nuisance configuration remain in one partition; seeds and groups are unique across regions",
+  "baselines": ["constant prediction", "20 independently shuffled training-label fits"],
+  "bootstrap": {"unit": "whole test configuration with all three labels", "replicates": 1000, "seed": 2026102704},
+  "scope": "Synthetic model stimulus conditions, not subjective pain, clinical outcomes or biological validation",
+  "test_access": "Test signals are generated only after candidate.json is frozen; no retuning after viewing held-out results"
+}

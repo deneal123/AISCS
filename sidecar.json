@@ -1,0 +1,15 @@
+{
+  "name": "aspa-generator",
+  "version": "0.1.0",
+  "contract_version": "1.0",
+  "entrypoint": "service.main:create_app",
+  "cli": "generatorctl",
+  "internal_port": 8090,
+  "health": "/health",
+  "readiness": "/ready",
+  "authentication_env": "GENERATOR_TOKEN",
+  "configuration": "service/contracts.py",
+  "source_roots": ["service"],
+  "snapshot_paths": ["service", "tests", "docker", "validation", "README.md", "TODO.md", "SKILL.md", "sidecar.json", "pyproject.toml", "uv.lock"],
+  "scientific_scope": "synthetic compartmental neural dynamics and extracellular recording; no validated pain inference"
+}

@@ -1,0 +1,3 @@
+* text=auto eol=lf
+# Preserve the pinned upstream compiler byte-for-byte, including its final blank line.
+tools/connectome/upstream_data.py whitespace=-blank-at-eof

@@ -1,0 +1,20 @@
+{
+  "mesh_asset_id": "flygym-38c8ec61-neutral-v1",
+  "mesh_sha256": "23b1c725b2956e2aa0e47eef5d0c371831d6080bbda1e774265c7771b66b126b",
+  "source_commit": "38c8ec61034cd59bc5ba0de20688d4a3c0000d60",
+  "region_id": "thoracic-local-v1",
+  "mesh_part": "c_thorax",
+  "mesh_triangle_count": 2000,
+  "origin_mm": [
+    0.004449993371963501,
+    0.0,
+    1.2043000161647797
+  ],
+  "mesh_units": "mm",
+  "model_units": "um",
+  "um_to_mm": 0.001,
+  "bridge_kind": "author-defined rigid embedding, not a reconstructed neural mapping",
+  "attachment": "body-attached-static-v1",
+  "contact_shape": "ideal-point",
+  "operator_version": "lfpy-pointsource-e1-minus-ref-v1"
+}

@@ -1,0 +1,408 @@
+{
+  "test_balanced_accuracy": 0.71875,
+  "classes": [
+    "none",
+    "strong",
+    "weak"
+  ],
+  "confusion_matrix": [
+    [
+      25,
+      6,
+      1
+    ],
+    [
+      3,
+      27,
+      2
+    ],
+    [
+      7,
+      8,
+      17
+    ]
+  ],
+  "test_realizations": 96,
+  "test_groups": 32,
+  "recall_by_class": {
+    "none": 0.78125,
+    "strong": 0.84375,
+    "weak": 0.53125
+  },
+  "majority_baseline_balanced_accuracy": 0.3333333333333333,
+  "scope": "Synthetic model stimulus conditions, not subjective pain, clinical outcomes or biological validation",
+  "regions": {
+    "head": {
+      "test_balanced_accuracy": 0.75,
+      "classes": [
+        "none",
+        "strong",
+        "weak"
+      ],
+      "confusion_matrix": [
+        [
+          4,
+          0,
+          0
+        ],
+        [
+          1,
+          3,
+          0
+        ],
+        [
+          2,
+          0,
+          2
+        ]
+      ],
+      "test_realizations": 12,
+      "test_groups": 4,
+      "recall_by_class": {
+        "none": 1.0,
+        "strong": 0.75,
+        "weak": 0.5
+      },
+      "majority_baseline_balanced_accuracy": 0.3333333333333333
+    },
+    "thorax": {
+      "test_balanced_accuracy": 0.6666666666666666,
+      "classes": [
+        "none",
+        "strong",
+        "weak"
+      ],
+      "confusion_matrix": [
+        [
+          4,
+          0,
+          0
+        ],
+        [
+          2,
+          2,
+          0
+        ],
+        [
+          2,
+          0,
+          2
+        ]
+      ],
+      "test_realizations": 12,
+      "test_groups": 4,
+      "recall_by_class": {
+        "none": 1.0,
+        "strong": 0.5,
+        "weak": 0.5
+      },
+      "majority_baseline_balanced_accuracy": 0.3333333333333333
+    },
+    "front_left": {
+      "test_balanced_accuracy": 0.4166666666666667,
+      "classes": [
+        "none",
+        "strong",
+        "weak"
+      ],
+      "confusion_matrix": [
+        [
+          1,
+          3,
+          0
+        ],
+        [
+          0,
+          4,
+          0
+        ],
+        [
+          1,
+          3,
+          0
+        ]
+      ],
+      "test_realizations": 12,
+      "test_groups": 4,
+      "recall_by_class": {
+        "none": 0.25,
+        "strong": 1.0,
+        "weak": 0.0
+      },
+      "majority_baseline_balanced_accuracy": 0.3333333333333333
+    },
+    "front_right": {
+      "test_balanced_accuracy": 0.4166666666666667,
+      "classes": [
+        "none",
+        "strong",
+        "weak"
+      ],
+      "confusion_matrix": [
+        [
+          1,
+          2,
+          1
+        ],
+        [
+          0,
+          4,
+          0
+        ],
+        [
+          0,
+          4,
+          0
+        ]
+      ],
+      "test_realizations": 12,
+      "test_groups": 4,
+      "recall_by_class": {
+        "none": 0.25,
+        "strong": 1.0,
+        "weak": 0.0
+      },
+      "majority_baseline_balanced_accuracy": 0.3333333333333333
+    },
+    "middle_left": {
+      "test_balanced_accuracy": 0.8333333333333334,
+      "classes": [
+        "none",
+        "strong",
+        "weak"
+      ],
+      "confusion_matrix": [
+        [
+          4,
+          0,
+          0
+        ],
+        [
+          0,
+          3,
+          1
+        ],
+        [
+          1,
+          0,
+          3
+        ]
+      ],
+      "test_realizations": 12,
+      "test_groups": 4,
+      "recall_by_class": {
+        "none": 1.0,
+        "strong": 0.75,
+        "weak": 0.75
+      },
+      "majority_baseline_balanced_accuracy": 0.3333333333333333
+    },
+    "middle_right": {
+      "test_balanced_accuracy": 1.0,
+      "classes": [
+        "none",
+        "strong",
+        "weak"
+      ],
+      "confusion_matrix": [
+        [
+          4,
+          0,
+          0
+        ],
+        [
+          0,
+          4,
+          0
+        ],
+        [
+          0,
+          0,
+          4
+        ]
+      ],
+      "test_realizations": 12,
+      "test_groups": 4,
+      "recall_by_class": {
+        "none": 1.0,
+        "strong": 1.0,
+        "weak": 1.0
+      },
+      "majority_baseline_balanced_accuracy": 0.3333333333333333
+    },
+    "hind_left": {
+      "test_balanced_accuracy": 0.6666666666666666,
+      "classes": [
+        "none",
+        "strong",
+        "weak"
+      ],
+      "confusion_matrix": [
+        [
+          3,
+          1,
+          0
+        ],
+        [
+          0,
+          3,
+          1
+        ],
+        [
+          1,
+          1,
+          2
+        ]
+      ],
+      "test_realizations": 12,
+      "test_groups": 4,
+      "recall_by_class": {
+        "none": 0.75,
+        "strong": 0.75,
+        "weak": 0.5
+      },
+      "majority_baseline_balanced_accuracy": 0.3333333333333333
+    },
+    "hind_right": {
+      "test_balanced_accuracy": 1.0,
+      "classes": [
+        "none",
+        "strong",
+        "weak"
+      ],
+      "confusion_matrix": [
+        [
+          4,
+          0,
+          0
+        ],
+        [
+          0,
+          4,
+          0
+        ],
+        [
+          0,
+          0,
+          4
+        ]
+      ],
+      "test_realizations": 12,
+      "test_groups": 4,
+      "recall_by_class": {
+        "none": 1.0,
+        "strong": 1.0,
+        "weak": 1.0
+      },
+      "majority_baseline_balanced_accuracy": 0.3333333333333333
+    }
+  },
+  "binding": {
+    "protocol_sha256": "716d5beb406260edad1f65bd3181cee809a41ae46d8912899fe214cc21c9c0cf",
+    "numerical_identity": {
+      "preset": "male-cns-hybrid-v1",
+      "graph_manifest_sha256": "742ee0b22040d6831cb96479d468cd57f1a60d96e2004e3beb421a8d3ac936a2",
+      "sources": {
+        "connectome/dataset.py": "631a2b616ed52c080e72c26eb2853d36f241f114322cd8e4edc49286a57eceff",
+        "connectome/network.py": "b619bd63b40446d4e984201681e12ce65e7d00010d95eb03a8977a7fe9d85801",
+        "connectome/kernel.py": "758021a78ccdc51eae5b83c8db10fd09989bb263ae66b46f6b76f8af2f2131e5",
+        "connectome/solver.py": "483ed7c9a9d73f4517f98bf9d291ef0fb47abccacd3ac4681806a9013d06f201",
+        "neuron/solver.py": "b4bfd26bd0e4bb3aee378fabbaee1953718f226faa55cc71bb9e2a5f5f91a82d",
+        "lfpy/recording.py": "02473122ec4df14d72940f2b8eac13b0af58d3b0f8c138bbc843af6ed51ad7fd",
+        "domain/geometry.py": "f66c94164b213d9e621d2a6dc82c7f552a026a6212295e7ae470f02f39b39bfb",
+        "domain/connectome_signals.py": "bdec43d179b6a445301451bf7a9398e1f5cebb909dc569e875b01d234f2f8622",
+        "domain/recording_noise.py": "81377acdd4a9ef914be5ee26f509e48e93f4f574c0a854520f74ae3ea28300b1"
+      },
+      "versions": {
+        "NEURON": "9.0.1",
+        "LFPy": "2.3.6",
+        "lfpykit": "0.6.2",
+        "numpy": "2.2.6",
+        "numba": "0.67.0",
+        "llvmlite": "0.49.0"
+      },
+      "sha256": "6d46c702f375897a48190b8c3a5307bde4a5d7e2895ab940634fd70e442fcd52"
+    }
+  },
+  "candidate_sha256": "7336a6f87a57d02fcd6c52fdf03f50eea18e4c371a56269e74806c328501682b",
+  "features": [
+    "pre_rms_uv",
+    "active_rms_uv",
+    "post_rms_uv",
+    "active_peak_to_peak_uv",
+    "active_mean_abs_difference_uv",
+    "active_power_0_500hz_fraction",
+    "active_early_to_late_rms_ratio"
+  ],
+  "grouping": "All three conditions of a seed and nuisance configuration remain in one partition; seeds and groups are unique across regions",
+  "sizes": {
+    "train": 288,
+    "validation": 96,
+    "test": 96
+  },
+  "limitations": [
+    "Synthetic engineering model only; no biological or clinical validation.",
+    "Four test configurations per region and class; paired conditions are not independent participants.",
+    "Region is known; this is not an unknown-location recognition result.",
+    "No probability calibration or validation outside protocol ranges."
+  ],
+  "pooled_signal_only": {
+    "test_balanced_accuracy": 0.7291666666666666,
+    "classes": [
+      "none",
+      "strong",
+      "weak"
+    ],
+    "confusion_matrix": [
+      [
+        32,
+        0,
+        0
+      ],
+      [
+        6,
+        19,
+        7
+      ],
+      [
+        12,
+        1,
+        19
+      ]
+    ],
+    "test_realizations": 96,
+    "test_groups": 32,
+    "recall_by_class": {
+      "none": 1.0,
+      "strong": 0.59375,
+      "weak": 0.59375
+    },
+    "majority_baseline_balanced_accuracy": 0.3333333333333333
+  },
+  "group_bootstrap_95_interval": [
+    0.6145833333333334,
+    0.8125
+  ],
+  "shuffled_labels_balanced_accuracy": [
+    0.4270833333333333,
+    0.3958333333333333,
+    0.3541666666666667,
+    0.3541666666666667,
+    0.28125,
+    0.3333333333333333,
+    0.4479166666666667,
+    0.3125,
+    0.3645833333333333,
+    0.3229166666666667,
+    0.2708333333333333,
+    0.3333333333333333,
+    0.3333333333333333,
+    0.3854166666666667,
+    0.21875,
+    0.28125,
+    0.2604166666666667,
+    0.3229166666666667,
+    0.3125,
+    0.3020833333333333
+  ]
+}

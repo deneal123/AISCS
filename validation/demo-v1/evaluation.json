@@ -1,0 +1,52 @@
+{
+  "scope": "Synthetic author-defined model only; no biological/clinical validation",
+  "features": [
+    "rms_uv",
+    "peak_to_peak_uv",
+    "mean_square_uv2"
+  ],
+  "grouping": "same seed and configuration kept together",
+  "sizes": {
+    "train": 54,
+    "validation": 18,
+    "test": 18
+  },
+  "groups": {
+    "train": 18,
+    "validation": 6,
+    "test": 6
+  },
+  "validation_balanced_accuracy": 0.7222222222222222,
+  "test_balanced_accuracy": 0.6666666666666666,
+  "majority_baseline_balanced_accuracy": 0.3333333333333333,
+  "shuffled_labels_balanced_accuracy": 0.38888888888888884,
+  "classes": [
+    "none",
+    "strong",
+    "weak"
+  ],
+  "confusion_matrix": [
+    [
+      5,
+      0,
+      1
+    ],
+    [
+      0,
+      6,
+      0
+    ],
+    [
+      5,
+      0,
+      1
+    ]
+  ],
+  "test_realizations": 18,
+  "selected_C_on_validation": 1.0,
+  "limitations": [
+    "Small test set: 6 independent configurations per class.",
+    "No probability calibration or human data.",
+    "Electrode displacement/noise-domain generalization requires separate validation."
+  ]
+}

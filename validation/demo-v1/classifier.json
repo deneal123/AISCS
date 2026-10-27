@@ -1,0 +1,96 @@
+{
+  "feature_names": [
+    "rms_uv",
+    "peak_to_peak_uv",
+    "mean_square_uv2"
+  ],
+  "classes": [
+    "none",
+    "strong",
+    "weak"
+  ],
+  "mean": [
+    0.051482063728424746,
+    0.39986557444563725,
+    0.0026555481462452284
+  ],
+  "scale": [
+    0.0022683166682898313,
+    0.04057648891130971,
+    0.00023764814775843737
+  ],
+  "coefficients": [
+    [
+      -0.5625735039147807,
+      -0.3584778018022289,
+      -0.556172052741978
+    ],
+    [
+      1.0721323540122445,
+      0.7368869866807105,
+      1.0645774279823887
+    ],
+    [
+      -0.5095588500974629,
+      -0.37840918487848096,
+      -0.5084053752404103
+    ]
+  ],
+  "intercepts": [
+    0.19253307897119373,
+    -0.4399710607498801,
+    0.2474379817786868
+  ],
+  "evaluation": {
+    "scope": "Synthetic author-defined model only; no biological/clinical validation",
+    "features": [
+      "rms_uv",
+      "peak_to_peak_uv",
+      "mean_square_uv2"
+    ],
+    "grouping": "same seed and configuration kept together",
+    "sizes": {
+      "train": 54,
+      "validation": 18,
+      "test": 18
+    },
+    "groups": {
+      "train": 18,
+      "validation": 6,
+      "test": 6
+    },
+    "validation_balanced_accuracy": 0.7222222222222222,
+    "test_balanced_accuracy": 0.6666666666666666,
+    "majority_baseline_balanced_accuracy": 0.3333333333333333,
+    "shuffled_labels_balanced_accuracy": 0.38888888888888884,
+    "classes": [
+      "none",
+      "strong",
+      "weak"
+    ],
+    "confusion_matrix": [
+      [
+        5,
+        0,
+        1
+      ],
+      [
+        0,
+        6,
+        0
+      ],
+      [
+        5,
+        0,
+        1
+      ]
+    ],
+    "test_realizations": 18,
+    "selected_C_on_validation": 1.0,
+    "limitations": [
+      "Small test set: 6 independent configurations per class.",
+      "No probability calibration or human data.",
+      "Electrode displacement/noise-domain generalization requires separate validation."
+    ]
+  }
+}

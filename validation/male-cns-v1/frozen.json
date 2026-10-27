@@ -1,0 +1,30 @@
+{
+  "candidate_sha256": "7336a6f87a57d02fcd6c52fdf03f50eea18e4c371a56269e74806c328501682b",
+  "binding": {
+    "protocol_sha256": "716d5beb406260edad1f65bd3181cee809a41ae46d8912899fe214cc21c9c0cf",
+    "numerical_identity": {
+      "preset": "male-cns-hybrid-v1",
+      "graph_manifest_sha256": "742ee0b22040d6831cb96479d468cd57f1a60d96e2004e3beb421a8d3ac936a2",
+      "sources": {
+        "connectome/dataset.py": "631a2b616ed52c080e72c26eb2853d36f241f114322cd8e4edc49286a57eceff",
+        "connectome/network.py": "b619bd63b40446d4e984201681e12ce65e7d00010d95eb03a8977a7fe9d85801",
+        "connectome/kernel.py": "758021a78ccdc51eae5b83c8db10fd09989bb263ae66b46f6b76f8af2f2131e5",
+        "connectome/solver.py": "483ed7c9a9d73f4517f98bf9d291ef0fb47abccacd3ac4681806a9013d06f201",
+        "neuron/solver.py": "b4bfd26bd0e4bb3aee378fabbaee1953718f226faa55cc71bb9e2a5f5f91a82d",
+        "lfpy/recording.py": "02473122ec4df14d72940f2b8eac13b0af58d3b0f8c138bbc843af6ed51ad7fd",
+        "domain/geometry.py": "f66c94164b213d9e621d2a6dc82c7f552a026a6212295e7ae470f02f39b39bfb",
+        "domain/connectome_signals.py": "bdec43d179b6a445301451bf7a9398e1f5cebb909dc569e875b01d234f2f8622",
+        "domain/recording_noise.py": "81377acdd4a9ef914be5ee26f509e48e93f4f574c0a854520f74ae3ea28300b1"
+      },
+      "versions": {
+        "NEURON": "9.0.1",
+        "LFPy": "2.3.6",
+        "lfpykit": "0.6.2",
+        "numpy": "2.2.6",
+        "numba": "0.67.0",
+        "llvmlite": "0.49.0"
+      },
+      "sha256": "6d46c702f375897a48190b8c3a5307bde4a5d7e2895ab940634fd70e442fcd52"
+    }
+  }
+}

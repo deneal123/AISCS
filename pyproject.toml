@@ -1,0 +1,52 @@
+[project]
+name = "aspa-generator"
+version = "0.1.0"
+description = "Reproducible compartmental neural simulation and extracellular recording sidecar"
+requires-python = ">=3.12,<3.13"
+license = "MIT"
+dependencies = [
+  "fastapi==0.116.1",
+  "uvicorn==0.35.0",
+  "pydantic==2.11.7",
+  "numpy==2.2.6",
+  "scipy==1.15.3",
+  "NEURON==9.0.1",
+  "LFPy==2.3.6",
+  "pyarrow==19.0.1",
+  "matplotlib==3.10.3",
+  "scikit-learn==1.6.1",
+  "numba==0.67.0",
+]
+
+[dependency-groups]
+dev = ["pytest==8.3.5", "httpx==0.28.1", "ruff==0.11.13"]
+
+[project.scripts]
+generatorctl = "service.presentation.cli.main:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["service"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"validation" = "service/_bundled/validation"
+
+[tool.uv]
+environments = ["sys_platform == 'linux'"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+
+[tool.ruff.lint.per-file-ignores]
+# Preserve the pinned upstream kernel text for exact provenance checks.
+"service/infrastructure/connectome/kernel.py" = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

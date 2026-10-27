@@ -1,0 +1,5 @@
+# Exact serializer/compiler versions used for the registered SIM-001 graph.
+numpy==2.5.3
+pyarrow==25.0.1
+numba==0.67.0
+llvmlite==0.49.0
