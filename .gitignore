@@ -19,3 +19,6 @@ __pycache__/
 # Граф знаний (`make graph GRAPH_TARGET=workspace`) — дев-артефакты.
 # Корневой .gitignore сюда НЕ достаёт: для суперпроекта сабмодуль это гитлинк.
 graphify-out/
+
+# Local execution and validation artifacts
+.work/
