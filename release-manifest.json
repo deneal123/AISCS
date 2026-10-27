@@ -64,5 +64,32 @@
     "scope": "Synthetic engineering demonstration; not biological or clinical validation"
   },
   "production_verified": false,
-  "protected_scientific_materials_changed": false
+  "protected_scientific_materials_changed": false,
+  "verification": {
+    "backend_pytest": {
+      "passed": 5071,
+      "skipped": 216,
+      "coverage_percent": 79.99
+    },
+    "agents_pytest": {
+      "passed": 4392,
+      "skipped": 26
+    },
+    "frontend_jest": {
+      "passed": 1262,
+      "suites": 185,
+      "snapshots": 1
+    },
+    "generator_pytest": {
+      "standalone_passed": 32,
+      "registered_data_passed": 3
+    },
+    "full_cns_and_recognition_live_browser_checks": 12,
+    "independent_remote_components": 13,
+    "installed_wheel": "passed",
+    "numerical_sources_exact": 9,
+    "protected_files_unchanged": 2760,
+    "production_live": "not_checked"
+  },
+  "tag": "aiscs-v0.1.0"
 }
