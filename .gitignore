@@ -13,3 +13,6 @@ htmlcov/
 *.gguf
 *.part
 graphify-out/
+
+# Local execution and validation artifacts
+.work/
