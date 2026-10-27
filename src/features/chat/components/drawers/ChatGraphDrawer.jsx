@@ -138,14 +138,16 @@ export default function ChatGraphDrawer({ isOpen, onClose, loadSummary, onSearch
             </Text>
           ) : empty ? (
             <VStack align="start" spacing={2} py={6}>
+                <Icon as={FiShare2} boxSize={6} color={colors.fg[3]} aria-hidden="true" />
               <Text fontSize="sm" color={colors.fg[3]}>
                 Граф пока пуст.
               </Text>
-              <Text fontSize="xs" color={colors.fg[4]} lineHeight="1.6">
+              <Text fontSize="xs" color={colors.fg[3]} lineHeight="1.6">
                 Загрузите документ — он попадёт сюда автоматически и будет доступен во всех
                 диалогах, а не только в текущем. Архив с кодом (zip) превратится в карту
                 архитектуры.
               </Text>
+                <Button size="document" variant="workbenchSecondary" onClick={onClose}>Вернуться к работе</Button>
             </VStack>
           ) : (
             <VStack align="stretch" spacing={5}>

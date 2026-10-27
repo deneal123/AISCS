@@ -18,7 +18,7 @@ const bloomDrift = keyframes`
  */
 function ChatBackdrop() {
   return (
-    <Box position="absolute" inset={0} pointerEvents="none" zIndex={0} overflow="hidden">
+    <Box data-testid="chat-backdrop" aria-hidden="true" position="absolute" inset={0} pointerEvents="none" zIndex={0} overflow="hidden">
       {/* Статичный iris/cyan/magenta mesh дизайн-системы (приглушён, верхний акцент). */}
       <Box
         position="absolute"

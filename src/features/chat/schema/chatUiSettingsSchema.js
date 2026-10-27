@@ -1,4 +1,5 @@
 import { defaultChatUiSettings } from '../constants/chatUiSettings';
+import { currentLocalModel } from '../utils/modelSelector';
 
 const toBoolean = (value, fallback) => (typeof value === 'boolean' ? value : fallback);
 const toStringValue = (value, fallback) => (typeof value === 'string' ? value : fallback);
@@ -18,8 +19,8 @@ export const normalizeChatUiSettings = (raw) => {
       ? source.personaIds.filter((x) => typeof x === 'string' && x).slice(0, 2)
       : defaultChatUiSettings.personaIds,
     memoryEnabled: toBoolean(source.memoryEnabled, defaultChatUiSettings.memoryEnabled),
-    preferredModel: toStringValue(source.preferredModel, defaultChatUiSettings.preferredModel),
-    ldrModel: toStringValue(source.ldrModel, defaultChatUiSettings.ldrModel),
+    preferredModel: currentLocalModel(toStringValue(source.preferredModel, defaultChatUiSettings.preferredModel)),
+    ldrModel: currentLocalModel(toStringValue(source.ldrModel, defaultChatUiSettings.ldrModel)),
     ldrStrategy: toStringValue(source.ldrStrategy, defaultChatUiSettings.ldrStrategy),
     transcriptionMode: toStringValue(source.transcriptionMode, defaultChatUiSettings.transcriptionMode),
     transcriptionModel: toStringValue(source.transcriptionModel, defaultChatUiSettings.transcriptionModel),

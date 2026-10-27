@@ -133,6 +133,7 @@ export const colors = {
     section: "#030409",
     card: "#0A0C12",
     card2: "#0E1119",
+    menu: "#0A0C12",
     overlay: "rgba(8, 10, 16, 0.72)",
     // Тёмные подложки инпутов/хрома — единый источник (INPUT_BASE, чат-сайдбар/шапка/липкий композер).
     input: "rgba(8, 10, 20, 0.55)",
@@ -201,7 +202,6 @@ colors.border.focus = colors.blue[300];
 // Раньше каждый писал свой почти-чёрный литерал (rgba(9,9,9,.96), (10,10,10,.97),
 // (11,11,11,.98), (14,14,14,1)) — все НЕЙТРАЛЬНО-серые, вне холодной ink-рампы:
 // рядом с синеватыми дроверами это было видно глазом. Значение = ink-рампа.
-colors.bg.menu = "rgba(9, 12, 22, 0.97)";
 colors.border.card = "rgba(102, 133, 255, 0.18)";
 colors.border.icon = "rgba(45, 91, 255, 0.25)";
 // Полу-прозрачная «волосяная» линия (коннекторы трейса) — 0.09 ≈ 0.08, сводим к subtle.
@@ -237,7 +237,7 @@ colors.surface = {
 export const typography = {
   fontFamily: {
     // InCellCorp: Inter — UI + display; JetBrains Mono — eyebrows/metrics/labels/code.
-    // Оба шрифта уже подключены в public/index.html.
+    // Versioned local font subsets are loaded by public/index.html.
     primary: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
     mono: "'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace",
     fallback: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif",
@@ -370,6 +370,7 @@ export const spacing = Object.assign([...spacingScale], {
 });
 
 export const borderRadius = {
+  control: "6px",
   sm: "10px",
   md: "15px",
   lg: "20px",
@@ -476,6 +477,12 @@ export const breakpoints = {
   wide: "1280px",
 };
 
+// Compact document controls, separate from fixed sidebar rows and touch composer targets.
+export const documentControls = { mobile: 30, desktop: 34, mobileFont: '12px', desktopFont: '12.5px' };
+
+// Скрепка, микрофон и отправка: компактная подложка внутри стабильной области нажатия.
+export const composerActionControl = { target: '44px', surface: '32px', glyph: '16px' };
+
 export const dimensions = {
   iconButton: {
     width: "40px",
@@ -496,6 +503,7 @@ export const layers = {
   backdrop: 520,
   dialog: 620,
   drawer: 720,
+  tooltip: 760,
   command: 820,
   toast: 920,
 };

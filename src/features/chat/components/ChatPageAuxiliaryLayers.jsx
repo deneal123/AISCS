@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useEffect, useState } from 'react';
+import React, { lazy, memo, Suspense, useEffect, useState } from 'react';
 import {
   AlertDialog,
   AlertDialogBody,
@@ -17,12 +17,14 @@ import { DRAWER_CLOSE_BUTTON_PROPS, DRAWER_CONTENT_BG, DRAWER_OVERLAY_PROPS } fr
 import { CHAT_THEME } from '../constants/theme';
 import ChatCommandPalette from './ChatCommandPalette';
 
-const ChatMemoryDrawer = lazy(() => import('./drawers/ChatMemoryDrawer'));
-const ChatGraphDrawer = lazy(() => import('./drawers/ChatGraphDrawer'));
-const ChatSettingsDrawer = lazy(() => import('./drawers/ChatSettingsDrawer'));
-const ProfileDrawer = lazy(() => import('@features/profile').then((module) => ({
+// Preserve local form state/close motion without replaying a drawer render for
+// unrelated streaming, heartbeat, voice timer or trace updates in the parent.
+const ChatMemoryDrawer = memo(lazy(() => import('./drawers/ChatMemoryDrawer')));
+const ChatGraphDrawer = memo(lazy(() => import('./drawers/ChatGraphDrawer')));
+const ChatSettingsDrawer = memo(lazy(() => import('./drawers/ChatSettingsDrawer')));
+const ProfileDrawer = memo(lazy(() => import('@features/profile').then((module) => ({
   default: module.ProfileDrawer,
-})));
+}))));
 
 function useHasOpened(isOpen) {
   const [opened, setOpened] = useState(false);
@@ -91,6 +93,7 @@ export default function ChatPageAuxiliaryLayers({
         isOpen={Boolean(surface.pending)}
         leastDestructiveRef={surface.cancelRef}
         onClose={surface.onCancel}
+        finalFocusRef={surface.finalFocusRef}
       >
         <AlertDialogOverlay>
           <AlertDialogContent

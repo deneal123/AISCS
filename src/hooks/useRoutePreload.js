@@ -25,24 +25,28 @@ export const preloadRoute = (path) => {
 
 export const preloadCriticalRoutes = () => {
   if (typeof window === 'undefined') return;
+  const currentPath = window.location.pathname;
+  if (!idleRoutes.includes(currentPath)) return;
+  let cancelled = false;
   const runner = () => {
+    if (cancelled || window.location.pathname !== currentPath) return;
     idleRoutes.forEach((path) => {
+      if (path !== currentPath) return;
       const loader = idlePreloadByPath[path];
       if (!loader || loaded.has(path)) return;
       loader().then(() => loaded.add(path)).catch(() => undefined);
     });
   };
-  if ('requestIdleCallback' in window) {
-    window.requestIdleCallback(runner, { timeout: 3000 });
-    return;
+  if (typeof window.requestIdleCallback === 'function') {
+    const ticket = window.requestIdleCallback(runner, { timeout: 3000 });
+    return () => { cancelled = true; window.cancelIdleCallback?.(ticket); };
   }
-  setTimeout(runner, 1200);
+  const ticket = setTimeout(runner, 1200);
+  return () => { cancelled = true; clearTimeout(ticket); };
 };
 
 export const useRoutePreload = () => {
-  useEffect(() => {
-    preloadCriticalRoutes();
-  }, []);
+  useEffect(() => preloadCriticalRoutes(), []);
 
   return { preloadRoute };
 };

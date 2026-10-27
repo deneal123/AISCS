@@ -5,10 +5,11 @@
  *   <Box {...GLASS_CARD_BASE} _after={CARD_TOP_LINE} _hover={CARD_HOVER_STATE} />
  *
  * Иридесцентное стекло = полупрозрачная заливка (glass.bg) + iris-бордер +
- * backdrop-blur (с -webkit-) + мягкая тень; на hover — подъём, ярче бордер/фон,
+ * backdrop-blur (с -webkit-) + мягкая тень; на hover — ярче бордер/фон,
  * глубже тень + iris-bloom и выезжающая радужная top-line.
  *
- * Лестница hover-глубины: микро-элементы −1px, малые карты −2px, карты −4px.
+ * Интерактивная поверхность не двигается: иначе у края курсор выходит из
+ * hit target, сбрасывает hover и запускает бесконечное дрожание.
  *
  * Лежит в theme/ (а не shared/ui/), чтобы фичи могли импортировать через
  * @theme/glass — ESLint запрещает фичам тянуть пути с сегментом ui.
@@ -18,7 +19,7 @@ import { colors, shadows, gradients, motion, borderRadius } from "./tokens";
 const { glass, aura, fg, blue } = colors;
 
 export const CARD_TRANSITION =
-  `transform 200ms ${motion.easeOut}, border-color 200ms ${motion.easeOut}, ` +
+  `border-color 200ms ${motion.easeOut}, ` +
   `background 200ms ${motion.easeOut}, box-shadow 200ms ${motion.easeOut}`;
 
 // Примечание: `backdropFilter` как Chakra-проп автопрефиксится emotion/stylis
@@ -70,18 +71,16 @@ export const CARD_TOP_LINE = {
   pointerEvents: "none",
 };
 
-/** Состояние hover карты (−4px + микро-scale, ярче бордер/фон, lift-тень, выезд top-line). */
+/** Hover без изменения геометрии: ярче бордер/фон, lift-тень, выезд top-line. */
 export const CARD_HOVER_STATE = {
-  transform: "translateY(-4px) scale(1.008)",
   borderColor: glass.borderHi,
   background: `${aura.iris}, ${glass.bg2}`,
   boxShadow: shadows.glassLift,
   _after: { opacity: 1, left: "12px", right: "12px" },
 };
 
-/** Лёгкий hover для малых карт/строк (−2px). */
+/** Лёгкий неподвижный hover для малых карт/строк. */
 export const CARD_HOVER_SOFT = {
-  transform: "translateY(-2px)",
   borderColor: glass.borderHi,
   background: `${aura.iris}, ${glass.bg2}`,
   boxShadow: shadows.glassCard,

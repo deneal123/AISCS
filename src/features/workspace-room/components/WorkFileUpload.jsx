@@ -1,18 +1,8 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { Box, Button, HStack, Icon, Progress, Text, Tooltip, VStack } from '@chakra-ui/react';
 import { FiCloud, FiFileText, FiPlus, FiX } from '@shared/icons';
 import { borderRadius, colors } from '@theme/tokens';
-
-function uploadIntentId() {
-  if (globalThis.crypto?.randomUUID) return globalThis.crypto.randomUUID();
-  const bytes = new Uint8Array(16);
-  if (globalThis.crypto?.getRandomValues) globalThis.crypto.getRandomValues(bytes);
-  else bytes.forEach((_value, index) => { bytes[index] = Math.floor(Math.random() * 256); });
-  bytes[6] = (bytes[6] & 0x0f) | 0x40;
-  bytes[8] = (bytes[8] & 0x3f) | 0x80;
-  const value = Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0')).join('');
-  return `${value.slice(0, 8)}-${value.slice(8, 12)}-${value.slice(12, 16)}-${value.slice(16, 20)}-${value.slice(20)}`;
-}
+import { useWorkUploadSelection } from '../model/useWorkUploadSelection';
 
 function formatFileSize(value) {
   const bytes = Number(value || 0);
@@ -32,81 +22,32 @@ const UPLOAD_STATUS = {
   complete: 'Файл добавлен',
 };
 
-export function WorkFileUpload({
+export function WorkFileUpload(props) {
+  if (props.session) return <WorkFileUploadView {...props} />;
+  return <StandaloneWorkFileUpload {...props} />;
+}
+
+function StandaloneWorkFileUpload(props) {
+  const session = useWorkUploadSelection(props);
+  return <WorkFileUploadView {...props} session={session} />;
+}
+
+function WorkFileUploadView({
   disabled = false,
   busy = false,
-  onUpload,
-  onPartial,
+  session,
   compact = false,
+  libraryOnly = false,
 }) {
   const inputRef = useRef(null);
-  const controllerRef = useRef(null);
-  const resetTimerRef = useRef(null);
-  const mountedRef = useRef(false);
-  const [selected, setSelected] = useState(null);
-  const [state, setState] = useState('idle');
-  const [progress, setProgress] = useState(0);
+  const { selected, state, progress, start, cancel } = session;
   const [dragging, setDragging] = useState(false);
-
-  // The model hook owns request lifetime. This visual control can legitimately
-  // be replaced when an absent workspace becomes ready while its upload is
-  // still returning; aborting from the old control would turn a committed
-  // upload into a browser-side ERR_ABORTED result.
-  useEffect(() => {
-    mountedRef.current = true;
-    return () => {
-      mountedRef.current = false;
-      if (resetTimerRef.current) window.clearTimeout(resetTimerRef.current);
-    };
-  }, []);
-
-  const start = useCallback(async (candidate, intentId = uploadIntentId()) => {
-    if (!candidate || disabled || busy) return;
-    if (resetTimerRef.current) {
-      window.clearTimeout(resetTimerRef.current);
-      resetTimerRef.current = null;
-    }
-    const controller = new AbortController();
-    controllerRef.current = controller;
-    setSelected({ file: candidate, intentId });
-    setProgress(0);
-    setState('uploading');
-    const result = await onUpload?.(candidate, {
-      signal: controller.signal,
-      uploadIntentId: intentId,
-      onProgress: (value) => {
-        if (mountedRef.current) setProgress(Number.isFinite(value) ? value : 0);
-      },
-    });
-    if (!mountedRef.current) return;
-    if (controller.signal.aborted || result?.cancelled) {
-      setState('cancelled');
-    } else if (result === true || result?.ok) {
-      if (result?.outcome === 'library_saved') {
-        setState('partial');
-        onPartial?.(result);
-      } else {
-        setState(result?.outcome === 'kept' ? 'kept' : 'complete');
-        setProgress(100);
-        resetTimerRef.current = window.setTimeout(() => {
-          if (!mountedRef.current) return;
-          setSelected(null);
-          setState('idle');
-          setProgress(0);
-          resetTimerRef.current = null;
-        }, 1200);
-      }
-    } else {
-      setState(result?.status === 409 ? 'conflict' : 'error');
-    }
-    if (controllerRef.current === controller) controllerRef.current = null;
-  }, [busy, disabled, onPartial, onUpload]);
 
   const choose = useCallback((event) => {
     const candidate = event.target.files?.[0];
     event.target.value = '';
-    if (candidate) start(candidate);
-  }, [start]);
+    if (candidate && !disabled && !busy && state !== 'uploading') start(candidate);
+  }, [busy, disabled, start, state]);
 
   const drop = useCallback((event) => {
     event.preventDefault();
@@ -116,7 +57,6 @@ export function WorkFileUpload({
     if (candidate) start(candidate);
   }, [busy, disabled, start, state]);
 
-  const cancel = useCallback(() => controllerRef.current?.abort(), []);
   const label = compact ? 'Добавить файл' : 'Выбрать файл';
   const control = (
     <Button
@@ -133,7 +73,8 @@ export function WorkFileUpload({
 
   return (
     <VStack align="stretch" spacing={2} minW={0} w={compact ? 'auto' : 'full'}>
-      <input data-testid="work-upload-input" ref={inputRef} type="file" hidden onChange={choose} />
+      <input data-testid="work-upload-input" ref={inputRef} type="file" hidden
+        disabled={disabled || busy || state === 'uploading'} onChange={choose} />
       {compact ? (
         disabled
           ? <Tooltip label="Выберите чат, чтобы добавить файл в его рабочее место">{control}</Tooltip>
@@ -144,7 +85,7 @@ export function WorkFileUpload({
           type="button"
           disabled={disabled || busy || state === 'uploading'}
           aria-disabled={disabled || busy || state === 'uploading'}
-          aria-label="Добавить файл в библиотеку и рабочее место"
+          aria-label={libraryOnly ? 'Добавить файл в библиотеку' : 'Добавить файл в библиотеку и рабочее место'}
           onClick={() => !disabled && inputRef.current?.click()}
           onDragEnter={(event) => { event.preventDefault(); if (!disabled) setDragging(true); }}
           onDragOver={(event) => event.preventDefault()}
@@ -166,7 +107,7 @@ export function WorkFileUpload({
             </Box>
             <Box minW={0}>
               <Text fontSize="12.5px" fontWeight="600" color={colors.fg[2]}>Перетащите файл сюда</Text>
-              <Text fontSize="11px" color={colors.fg[4]}>или нажмите, чтобы выбрать · агент не запускается</Text>
+              <Text fontSize="11px" color={colors.fg[3]}>или нажмите, чтобы выбрать · агент не запускается</Text>
             </Box>
           </HStack>
         </Box>
@@ -188,12 +129,15 @@ export function WorkFileUpload({
             <Text flexShrink={0} fontSize="10px" color={colors.fg[4]}>
               {formatFileSize(selected.file.size)}
             </Text>
-            {state === 'uploading' && (
-              <Button size="xs" variant="ghost" leftIcon={<FiX />} onClick={cancel}>Отменить</Button>
-            )}
-            {['error', 'cancelled'].includes(state) && (
-              <Button size="xs" variant="outline" onClick={() => start(selected.file, selected.intentId)}>
-                Проверить и повторить
+            {['uploading', 'error', 'cancelled'].includes(state) && (
+              <Button size="xs" variant={state === 'uploading' ? 'ghost' : 'outline'}
+                leftIcon={state === 'uploading' ? <FiX /> : undefined}
+                isDisabled={state !== 'uploading' && (disabled || busy)}
+                onClick={() => {
+                  if (state === 'uploading') cancel();
+                  else if (!disabled && !busy) start(selected.file, selected.intentId, selected.options);
+                }}>
+                {state === 'uploading' ? 'Отменить' : 'Проверить и повторить'}
               </Button>
             )}
           </HStack>
@@ -208,11 +152,11 @@ export function WorkFileUpload({
             />
           )}
           <Text mt={1.5} fontSize="11px" color={colors.fg[4]} role="status" aria-live="polite">
-            {UPLOAD_STATUS[state] || ''}
+            {state === 'complete' && selected.options?.libraryOnly ? 'Файл сохранён в библиотеке' : UPLOAD_STATUS[state] || ''}
           </Text>
-          {state === 'cancelled' && <Text mt={1.5} fontSize="11px" color={colors.fg[4]}>Загрузка отменена; библиотека перечитана.</Text>}
-          {state === 'error' && <Text mt={1.5} fontSize="11px" color={colors.error}>Статус не подтверждён. Безопасный повтор использует тот же upload intent.</Text>}
-          {state === 'conflict' && <Text mt={1.5} fontSize="11px" color={colors.error}>Этот upload intent уже относится к другому содержимому. Выберите файл заново.</Text>}
+          {state === 'cancelled' && <Text mt={1.5} fontSize="11px" color={colors.fg[4]}>Загрузка отменена. Проверьте библиотеку перед повтором.</Text>}
+          {state === 'error' && <Text mt={1.5} fontSize="11px" color={colors.error}>Статус не подтверждён. Проверьте библиотеку перед повтором. Повтор относится к той же загрузке.</Text>}
+          {state === 'conflict' && <Text mt={1.5} fontSize="11px" color={colors.error}>Содержимое файла отличается от предыдущей попытки. Выберите файл заново.</Text>}
           {state === 'partial' && <Text mt={1.5} fontSize="11px" color={colors.warning}>Источник сохранён в библиотеке. Рабочую копию можно добавить позже.</Text>}
           {state === 'kept' && <Text mt={1.5} fontSize="11px" color={colors.fg[4]}>Источник сохранён; существующая рабочая копия не перезаписана.</Text>}
         </Box>

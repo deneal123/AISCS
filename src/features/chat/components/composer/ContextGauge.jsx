@@ -46,14 +46,20 @@ export default function ContextGauge({
   threshold = 85,
   onCompact,
   busy = false,
+  compact = false,
 }) {
+  // Mobile visuals stay compact; the transparent hit area remains 44px.
   const size = 30;
-  const stroke = 3;
+  const stroke = 2;
   const r = (size - stroke) / 2;
   const circ = 2 * Math.PI * r;
   const clamped = Math.max(0, Math.min(100, Number(pct) || 0));
   const dash = (clamped / 100) * circ;
   const high = clamped >= threshold;
+  const [hintOpen, setHintOpen] = useState(false);
+  const hintDismissedRef = useRef(false);
+  const dismissHint = () => { hintDismissedRef.current = true; setHintOpen(false); };
+  useEffect(() => { if (busy) dismissHint(); }, [busy]);
 
   // Заполнение упало (сжатие сработало) → короткая вспышка «контекст освободился».
   const prevPct = useRef(clamped);
@@ -100,6 +106,11 @@ export default function ContextGauge({
 
   return (
     <Tooltip
+      isOpen={hintOpen && !busy}
+      isDisabled={busy}
+      onOpen={() => { if (!hintDismissedRef.current && !busy) setHintOpen(true); }}
+      onClose={() => setHintOpen(false)}
+      closeOnPointerDown
       label={tip}
       placement="top"
       hasArrow
@@ -116,18 +127,30 @@ export default function ContextGauge({
       <Box
         as="button"
         type="button"
-        onClick={onCompact}
+        onClick={() => { dismissHint(); onCompact?.(); }}
+        onPointerDown={dismissHint}
+        onPointerEnter={(event) => { if (event.pointerType !== 'touch') hintDismissedRef.current = false; }}
+        onFocus={() => { hintDismissedRef.current = false; }}
         disabled={busy}
+        aria-busy={busy}
         aria-label={`Контекст заполнен на ${Math.round(clamped)}%. Сжать в долговременную память`}
+        title={`Контекст: ${Math.round(clamped)}%`}
         position="relative"
-        w={`${size}px`}
-        h={`${size}px`}
+        w={compact ? '44px' : { base: '44px', md: '34px' }}
+        h={compact ? '44px' : { base: '44px', md: '34px' }}
         flexShrink={0}
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        p={0}
+        bg="transparent"
+        border={0}
+        cursor={busy ? 'not-allowed' : 'pointer'}
         borderRadius="full"
-        transition="transform 160ms cubic-bezier(0.16, 1, 0.3, 1)"
-        _hover={{ transform: busy ? 'none' : 'scale(1.1)' }}
-        _active={{ transform: busy ? 'none' : 'scale(0.88)' }}
-        _focusVisible={{ outline: `2px solid ${GOLD}`, outlineOffset: '2px' }}
+        transition="background-color 160ms ease, border-color 160ms ease"
+        _hover={{ '& svg': { bg: colors.surface.tint3 } }}
+        _active={{ '& svg': { bg: colors.glass.active } }}
+        _focusVisible={{ outline: 'none', '& svg': { outline: `2px solid ${colors.border.focus}`, outlineOffset: '2px' } }}
         sx={
           busy
             ? { animation: 'ctx-gauge-busy 1.1s ease-in-out infinite' }
@@ -135,8 +158,11 @@ export default function ContextGauge({
         }
         className={busy ? 'ctx-gauge-busy' : undefined}
       >
-        <Box as="svg" width={size} height={size} sx={{ transform: 'rotate(-90deg)', display: 'block' }}>
-          <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={CHAT_THEME.panelBorder} strokeWidth={stroke} />
+        <Box as="svg" viewBox={`0 0 ${size} ${size}`} aria-hidden="true" focusable="false"
+          w={compact ? '30px' : { base: '30px', md: '34px' }} h={compact ? '30px' : { base: '30px', md: '34px' }}
+          bg={colors.bg.input} borderRadius="full"
+          sx={{ transform: 'rotate(-90deg)', display: 'block' }}>
+          <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={colors.border.medium} strokeWidth={1} />
           <Box
             as="circle"
             className="ctx-gauge-ring"
@@ -147,6 +173,7 @@ export default function ContextGauge({
             stroke={high ? GOLD_PEAK : GOLD}
             strokeWidth={stroke}
             strokeLinecap="round"
+            opacity={clamped > 0 ? 1 : 0}
             strokeDasharray={`${dash} ${circ}`}
             sx={{
               transformOrigin: 'center',
@@ -159,11 +186,12 @@ export default function ContextGauge({
           />
         </Box>
         <Text
+          aria-hidden="true"
           position="absolute"
           top="50%"
           left="50%"
           transform="translate(-50%, -50%)"
-          fontSize="8.5px"
+          fontSize="12px"
           fontWeight="700"
           fontFamily="mono"
           color={high ? GOLD_PEAK : CHAT_THEME.textSecondary}

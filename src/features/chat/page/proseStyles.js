@@ -21,7 +21,9 @@ export const PROSE_SX = {
     margin: '1.2em 0 0.5em',
     color: CHAT_THEME.textPrimary,
   },
-  '& h1:first-child, & h2:first-child, & h3:first-child': { marginTop: 0 },
+  // Ignore Emotion's inserted <style> siblings without changing later headings.
+  '& h1, & h2, & h3': { marginTop: '0px' },
+  '& :not(style) ~ h1, & :not(style) ~ h2, & :not(style) ~ h3': { marginTop: '1.2em' },
   '& h1': { fontSize: '1.45em' },
   '& h2': { fontSize: '1.25em' },
   '& h3': { fontSize: '1.1em' },

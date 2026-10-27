@@ -29,6 +29,7 @@ const SIZES = {
  * @param {'sm'|'md'} [size]
  * @param {'tabs'|'group'} [as]  семантика: вкладки (по умолчанию) или группа кнопок
  * @param {string} [ariaLabel]  имя набора вкладок для скринридера
+ * @param {boolean} [wrap]  перенос длинной навигации без скрытых destinations
  */
 export default function SegmentedControl({
   options = [],
@@ -38,6 +39,7 @@ export default function SegmentedControl({
   size = 'sm',
   as = 'tabs',
   ariaLabel,
+  wrap = false,
   ...rest
 }) {
   const s = SIZES[size] || SIZES.sm;
@@ -66,7 +68,9 @@ export default function SegmentedControl({
   return (
     <HStack
       ref={listRef}
-      spacing={1}
+      spacing={wrap ? 0 : 1}
+      gap={wrap ? 1 : undefined}
+      flexWrap={wrap ? 'wrap' : undefined}
       p={1}
       bg={PANEL_HOVER}
       borderRadius="full"
@@ -86,6 +90,7 @@ export default function SegmentedControl({
             px={s.px}
             h={s.h}
             minW="auto"
+            flexShrink={wrap ? 0 : undefined}
             borderRadius="full"
             fontSize={s.fontSize}
             fontWeight="600"

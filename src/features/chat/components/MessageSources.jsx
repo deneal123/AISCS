@@ -3,6 +3,7 @@ import { Icon, Link, Text, Wrap, WrapItem } from '@chakra-ui/react';
 import { FiExternalLink, FiGlobe } from '@shared/icons';
 import { colors, typography } from '@theme/tokens';
 import { CHAT_THEME } from '../constants/theme';
+import { isYoutubeSource } from '../model/videoProgress';
 
 function domainOf(url) {
   try {
@@ -26,7 +27,7 @@ export default function MessageSources({ sources }) {
           letterSpacing="0.06em"
           fontFamily={typography.fontFamily.mono}
         >
-          Прочитано
+          {sources.some((source) => isYoutubeSource(source.url)) ? 'Ссылки на видео' : sources.some((source) => source.ok) ? 'Прочитано' : 'Ссылки'}
         </Text>
       </WrapItem>
       {sources.map((s, i) => (

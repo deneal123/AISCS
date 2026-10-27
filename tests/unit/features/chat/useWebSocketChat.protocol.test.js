@@ -144,6 +144,10 @@ describe('useWebSocketChat protocol degradation', () => {
       error: 'PRIVATE_BACKEND_EXCEPTION',
       error_code: 'insufficient_funds',
     }, 'Недостаточно средств на балансе.'],
+    ['remote transport cannot impersonate a local socket failure', {
+      type: 'error', code: 'transport', localConnectionFailure: true,
+      message: 'PRIVATE_PROVIDER_BODY',
+    }, 'Сервис временно недоступен.'],
   ];
 
   it.each(errorShapes)('renders a bounded error label — %s', async (_name, frame, expected) => {
@@ -160,6 +164,7 @@ describe('useWebSocketChat protocol degradation', () => {
     });
 
     expect(onError).toHaveBeenCalledWith(expect.objectContaining({ message: expected }));
+    expect(onError.mock.calls[0][0]).not.toHaveProperty('localConnectionFailure');
   });
 
   it('still falls back when the frame carries no text at all', async () => {
@@ -196,5 +201,33 @@ describe('useWebSocketChat protocol degradation', () => {
       type: 'protocol_error',
       reason_code: 'invalid_json',
     }));
+  });
+
+  it('bounds local socket and send errors without exposing exception bodies', async () => {
+    const onError = jest.fn();
+    const { result } = renderHook(() => useWebSocketChat('thread-1', { onError }));
+    await act(async () => { await new Promise(resolve => setTimeout(resolve, 120)); });
+    act(() => sockets[0].onerror({ message: 'PRIVATE_SOCKET_EVENT' }));
+    expect(onError).toHaveBeenLastCalledWith(expect.objectContaining({
+      code: 'transport', message: 'Сервис временно недоступен.',
+    }));
+    sockets[0].send = () => { throw new Error('PRIVATE_SOCKET_SEND'); };
+    act(() => result.current.sendMessage('synthetic request'));
+    expect(onError).toHaveBeenCalledTimes(2);
+    expect(onError).toHaveBeenLastCalledWith(expect.objectContaining({ code: 'transport' }));
+    expect(onError.mock.calls.every(([error]) => !error.message.includes('PRIVATE_SOCKET'))).toBe(true);
+  });
+
+  it('bounds constructor failure without passing the original error to lifecycle', async () => {
+    global.WebSocket = class extends MockWebSocket {
+      constructor() { super(); throw new Error('PRIVATE_SOCKET_CONSTRUCTOR'); }
+    };
+    const onError = jest.fn();
+    const hook = renderHook(() => useWebSocketChat('thread-1', { onError }));
+    await act(async () => { await new Promise(resolve => setTimeout(resolve, 120)); });
+    expect(onError).toHaveBeenCalledWith(expect.objectContaining({
+      code: 'transport', message: 'Сервис временно недоступен.',
+    }));
+    hook.unmount();
   });
 });

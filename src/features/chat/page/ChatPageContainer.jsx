@@ -13,6 +13,8 @@ import { useChatWorkSurface } from '../hooks/orchestration/useChatWorkSurface';
 import { CHAT_UI_CONFIG } from '../config/uiConfig';
 import { useTraceSessions } from '../hooks/useTraceSessions';
 import { useChatDomainState } from '../hooks/useChatDomainState';
+import { useDocumentMessages } from '../hooks/useDocumentMessages';
+import { useIdeAgentSubmit } from '../hooks/useIdeAgentSubmit';
 import { useMessageActions } from '../hooks/useMessageActions';
 import { useRecentThreads } from '../hooks/useRecentThreads';
 import { useChatUiSettings } from '../hooks/useChatUiSettings';
@@ -35,6 +37,7 @@ import ChatBackdrop from '../components/ChatBackdrop';
 import useDocumentTitle from '@shared/hooks/useDocumentTitle';
 import { useChatMessagePresentation } from '../hooks/orchestration/useChatMessagePresentation';
 import { useChatThreadCommands } from '../hooks/orchestration/useChatThreadCommands';
+import { useWorkbenchRunActions } from '../hooks/orchestration/useWorkbenchRunActions';
 
 /** Composes chat domain state; focused hooks and shells own feature lifecycles. */
 function ChatPageContainer() {
@@ -50,12 +53,12 @@ function ChatPageContainer() {
   const { threadId, initialMessage, initialManualModel, initialInputType, initialWebSearch, initialDeepResearch, initialFileContext, selectedModelOverride } = init.state;
   const { setSelectedModelOverride, startFreshThread } = init.actions;
   const navigate = useNavigate();
-  useChatThreadRouting({
+  const { actions: { handleUnavailableThread } } = useChatThreadRouting({
     routeThreadId,
     initialMessage,
     threadId,
     search: location.search,
-    navigate,
+    navigate, startFreshThread,
   });
   const sideEffects = useChatSideEffects({ navigate });
 
@@ -70,49 +73,39 @@ function ChatPageContainer() {
   const { pinnedIds, togglePin } = usePinnedThreads();
   const {
     activeSurface,
-    workMounted,
+    workMounted, library,
     navigationPending,
     cancelSurfaceRef,
+    navigationFinalFocusRef,
     changeSurface,
-    openWorkSurface,
+    openPdfSurface,
     setWorkspaceDirty,
     requestGuardedAction,
     registerWorkspaceLifecycle,
     cancelSurfaceChange,
     confirmSurfaceChange,
-  } = useChatWorkSurface({ location, navigate });
-  useDocumentTitle(activeSurface === 'work' ? 'Работа' : 'Чат');
-
-  // Open profile drawer when navigated with ?profile=open — снимаем ТОЛЬКО query,
-  // сохраняя текущий путь (тред /chat/:id не сбрасывается в новый чат).
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    if (params.get('profile') === 'open') {
-      profileDisclosure.onOpen();
-      params.delete('profile');
-      const search = params.toString();
-      navigate(`${location.pathname}${search ? `?${search}` : ''}`, { replace: true });
-    }
-  }, [location.search, location.pathname, navigate, profileDisclosure]);
-
+  } = useChatWorkSurface({ location, navigate, sidebar: sidebarDisclosure, profileDisclosure });
+  useDocumentTitle(activeSurface === 'pdf' ? 'PDF-студия' : activeSurface === 'work' ? 'IDE' : 'Чат');
+  const [documentContext, setDocumentContext] = useState(null);
+  const [ideContext, setIdeContext] = useState(null);
+  useEffect(() => { setDocumentContext(null); setIdeContext(null); }, [threadId]);
 
   const [hasInitialized, setHasInitialized] = useState(false);
   const { state: domainState, actions: domainActions } = useChatDomainState();
   const { messages, loading: isLoading, error, currentJob } = domainState;
   const { setLoading: setIsLoading, setError, clearError, addMessage, clearMessages, clearThread, replaceMessages, loadHistory, setCurrentJob, clearCurrentJob } = domainActions;
   const [forcedRoute, setForcedRoute] = useState(null);
-  const { availableModels, modelCatalog, personas, transcriptionConfig } = useChatCapabilities({
-    selectedModel: selectedModelOverride,
-    onInvalidModel: setSelectedModelOverride,
-  });
+  const { availableModels, modelCatalog, modelsStatus, modelCatalogStatus, refreshModels, personas, transcriptionConfig } = useChatCapabilities();
   // Распознанный голос держим как аккуратное превью над композером (а не сырым
   // текстом в textarea); на отправке он подмешивается в сообщение.
   const [voiceText, setVoiceText] = useState('');
   const composerRef = useRef(null);
 
-  const clearInput = useCallback(() => composerRef.current?.clearInput(), []);
 
   const { settings: chatUiSettings, setSettings: setChatUiSettings, resetUiSettings: resetPersistedUiSettings } = useChatUiSettings({ initialWebSearch, initialDeepResearch });
+  const handlePreferredModelChange = useCallback((id) => setChatUiSettings(
+    (previous) => ({ ...previous, preferredModel: id }),
+  ), [setChatUiSettings]);
   const { multiIntentEnabled, planningEnabled, personaIds, memoryEnabled, ldrModel, ldrStrategy, showTracePanel, transcriptionMode, transcriptionModel } = chatUiSettings;
   // 🔴 Выводим из режима, а не храним: тоггл и режим резолвились в одну категорию, то
   // есть были двумя способами включить одно. Хранить флаг дальше нельзя — сохранённое
@@ -170,7 +163,7 @@ function ChatPageContainer() {
   const { sidebarSearch, setSidebarSearch, isSidebarCollapsed, setIsSidebarCollapsed, filteredRecentThreads } = useSidebarState({ recentThreads });
 
   const { attachments, isUploading: isFileUploading, removeAttachment, clearAttachments, consumeUserDetached, fileInputRef, handleFileUpload } = useFileAttachment({ appendTraceEvent, sideEffects, transcriptionMode, transcriptionModel });
-  const { isRecording, isTranscribing: isVoiceTranscribing, elapsedSec: recordElapsedSec, toggleRecording } = useVoiceRecorder({ onTranscript: (text) => setVoiceText(text), appendTraceEvent, sideEffects, transcriptionMode, transcriptionModel });
+  const { isRecording, isRequestingPermission, isTranscribing: isVoiceTranscribing, elapsedSec: recordElapsedSec, toggleRecording } = useVoiceRecorder({ scopeKey: threadId, onTranscript: (text) => setVoiceText(text), appendTraceEvent, sideEffects, transcriptionMode, transcriptionModel });
 
 
   // WebSocket carries only a bounded room invalidation.  The drawer re-fetches
@@ -208,7 +201,6 @@ function ChatPageContainer() {
     finalizeStreamWithContent: domainActions.finalizeStreamWithContent,
     setCurrentJob,
     clearCurrentJob,
-    setInputValue: clearInput,
     onContextCompacted: handleContextCompacted,
     onWorkspaceInvalidated: handleWorkspaceInvalidated,
   });
@@ -223,30 +215,10 @@ function ChatPageContainer() {
   } = useChatTransport({ threadId, callbacks: wsCallbacks });
   sendControlRef.current = wsSendControl;
 
-  // 🔴 СТОП ГАСИТ ИНТЕРФЕЙС СРАЗУ, СЕТЬ — ПОТОМ. Прежний порядок ждал ответа ручки
-  // отмены (потолок 30 с) и только в `finally` снимал спиннер: на мёртвом прогоне
-  // кнопка выглядела не нажатой. Человек жмёт «стоп» именно тогда, когда исполнителя
-  // может уже не быть, — и ждать подтверждения от него как раз нельзя.
-  //
-  // ⚠️ Трейс ЗАКРЫВАЕТСЯ здесь же. Без этого панель оставалась в «Готовлю ответ…»
-  // навсегда: спиннер композера гасился, а сессия трейса никем не финализировалась —
-  // ровно то, что видел владелец («стоп не останавливает»).
-  const handleCancelJob = useCallback(async (celeryTaskId) => {
-    setIsLoading(false);
-    clearCurrentJob();
-    appendTraceEvent({ kind: 'error', title: 'Остановлено пользователем', detail: 'Работа прервана кнопкой «стоп»' });
-    finalizeTraceSession('error');
-    try {
-      await cancelJob(celeryTaskId);
-    } catch {
-      sideEffects.notify({
-        title: 'Ошибка отмены',
-        description: 'Не удалось отменить задачу. Попробуйте ещё раз.',
-        status: 'warning',
-        duration: 3000,
-      });
-    }
-  }, [appendTraceEvent, cancelJob, clearCurrentJob, finalizeTraceSession, setIsLoading, sideEffects]);
+  const { handleQuestionAccepted, handleQuestionSettled, handleCancelJob } = useWorkbenchRunActions({
+    messages, currentJob, wsCallbacks, startTraceSession, appendTraceEvent, finalizeTraceSession,
+    clearCurrentJob, setIsLoading, reloadHistory, cancelJob, notify: sideEffects.notify,
+  });
 
   const {
     handleScroll: handleMessagesScroll,
@@ -269,14 +241,19 @@ function ChatPageContainer() {
   });
 
   const handleSendMessageRef = useRef(null);
+  const { documentMessages, documentProposalId } = useDocumentMessages(visibleMessages, documentContext?.project_id);
   const handleSendMessageStable = useCallback((...args) => handleSendMessageRef.current?.(...args), []);
+  const ideAgent = useIdeAgentSubmit({ threadId, active: activeSurface === 'work', context: ideContext,
+    send: handleSendMessageStable, onStop: () => handleStopStreaming(), setError });
   const { copyMessage, regenerateMessage, editMessage } = useMessageActions({ messages, replaceMessages, handleSendMessageRef });
 
   const { handleSendMessage } = useChatMessageSender({
+    documentContext: activeSurface === 'pdf' ? documentContext : null,
+    requireDocumentContext: activeSurface === 'pdf',
     addMessage,
     appendTraceEvent,
     attachments,
-    isFileUploading: isFileUploading || isRecording || isVoiceTranscribing,
+    isFileUploading: isFileUploading || isRequestingPermission || isRecording || isVoiceTranscribing,
     voiceText,
     onVoiceConsumed: () => setVoiceText(''),
     clearError,
@@ -378,9 +355,9 @@ function ChatPageContainer() {
       traceSessionId,
     };
     if (options.confirmOfferId) {
-      handleSendMessageRef.current?.('', options);
-      return;
+      return handleSendMessageRef.current?.('', options);
     }
+    if (offer.decision === 'decline') return;
     if (text) handleSendMessageRef.current?.(text, options);
   }, []);
 
@@ -490,7 +467,7 @@ function ChatPageContainer() {
       pinnedIds={pinnedIds}
       onTogglePin={togglePin}
       onNewChat={closeAfter ? handleNewChatAndClose : startNewChat}
-      onOpenMemory={openMemoryPanel}
+      onOpenMemory={openMemoryPanel} onOpenLibrary={library.open}
       onOpenGraph={openGraphPanel}
       onOpenSettings={settingsDisclosure.onOpen}
     />
@@ -498,7 +475,7 @@ function ChatPageContainer() {
 
   return (
     <ChatPageLayout>
-      <ChatBackdrop />
+      {activeSurface === 'chat' && <ChatBackdrop />}
       <ChatPageSurfaceShell
         sidebar={{ render: renderSidebar, collapsed: isSidebarCollapsed }}
         header={{
@@ -512,18 +489,31 @@ function ChatPageContainer() {
         }}
         work={{
           mounted: workMounted,
-          active: activeSurface === 'work',
+          active: activeSurface !== 'chat',
           props: {
             threadId,
+            ...library.workProps,
             invalidationVersion: workspaceInvalidationVersion,
             notify: sideEffects.notify,
             onCancelRun: () => handleCancelJob(currentJob?.celeryTaskId),
             onDirtyChange: setWorkspaceDirty,
             onRequestNavigation: requestGuardedAction,
             onRegisterDraftLifecycle: registerWorkspaceLifecycle,
+            onDocumentContextChange: setDocumentContext,
+            onIdeContextChange: setIdeContext, onThreadUnavailable: handleUnavailableThread,
+            ideLibraryTarget: activeSurface === 'work' && ideContext?.thread_id === threadId ? ideContext : null,
+            ideLibraryPreferred: activeSurface === 'work',
+            assistantRunning: isLoading,
+            documentProposalId,
           },
         }}
         chat={{
+          threadId, documentContext, accountId: resolveSessionUserId(),
+          onQuestionAccepted: handleQuestionAccepted, onQuestionSettled: handleQuestionSettled,
+          onOpenChat: () => changeSurface('chat'),
+          ideContext,
+          idePreparing: ideAgent.preparing,
+          onCancelIdePreparation: ideAgent.cancelPreparation,
           composerRef,
           messages: {
             scrollRef: messagesScrollRef,
@@ -535,7 +525,8 @@ function ChatPageContainer() {
             error,
             providerStatus,
             connectionState,
-            visibleMessages,
+            visibleMessages: activeSurface === 'pdf' ? documentMessages : activeSurface === 'work'
+              ? visibleMessages.filter(message => message.metadata?.ide_repository === ideContext?.repository_id) : visibleMessages,
             isHistoryLoading,
             historyError,
             onRetryHistory: reloadHistory,
@@ -561,13 +552,15 @@ function ChatPageContainer() {
             personaIds,
             onPersonaIdsChange,
             onboarding,
-            onOpenWork: openWorkSurface,
+            onOpenLibrary: library.open,
+            onOpenPdf: openPdfSurface,
           },
           composer: {
-            onSubmit: handleSendMessageStable,
-            onStop: handleStopStreaming,
+            onSubmit: activeSurface === 'work' ? ideAgent.submit : handleSendMessageStable,
+            onStop: activeSurface === 'work' ? ideAgent.stop : handleStopStreaming,
             isStreaming: isLoading,
-            disabled: isLoading || compacting,
+            disabled: isLoading || compacting || ideAgent.preparing || (activeSurface === 'pdf' && !documentContext?.project_id)
+              || (activeSurface === 'work' && (!ideContext?.generation || ideContext.blocked)),
             multiIntentEnabled,
             planningEnabled,
             onToggleMultiIntent,
@@ -580,6 +573,8 @@ function ChatPageContainer() {
             selectedModel: selectedModelOverride,
             availableModels,
             modelCatalog,
+            modelStatus: modelsStatus,
+            onRetryModels: refreshModels,
             onModelChange: setSelectedModelOverride,
             contextInfo,
             onCompactContext: handleCompactContext,
@@ -589,10 +584,11 @@ function ChatPageContainer() {
             attachments,
             onRemoveAttachment: removeAttachment,
             onFileUpload: handleFileUpload,
-            onOpenWork: openWorkSurface,
+            onOpenLibrary: library.open,
             isFileUploading,
             onVoiceToggle: toggleRecording,
             isRecording,
+            isRequestingPermission,
             isVoiceTranscribing,
             recordElapsedSec,
             voiceText,
@@ -624,6 +620,7 @@ function ChatPageContainer() {
         surface={{
           pending: navigationPending,
           cancelRef: cancelSurfaceRef,
+          finalFocusRef: navigationFinalFocusRef,
           onCancel: cancelSurfaceChange,
           onConfirm: confirmSurfaceChange,
         }}
@@ -653,6 +650,8 @@ function ChatPageContainer() {
             ldrModel,
             ldrStrategy,
             modelCatalog,
+            modelCatalogStatus,
+            onRetryModels: refreshModels,
             transcriptionConfig,
             transcriptionMode,
             transcriptionModel,
@@ -673,9 +672,7 @@ function ChatPageContainer() {
             availableModels,
             modelCatalog,
             preferredModel: chatUiSettings.preferredModel,
-            onPreferredModelChange: (id) => setChatUiSettings(
-              (previous) => ({ ...previous, preferredModel: id }),
-            ),
+            onPreferredModelChange: handlePreferredModelChange,
             onOpenSettings: settingsDisclosure.onOpen,
             onLogout: logout,
           },

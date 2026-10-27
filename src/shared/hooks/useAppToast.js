@@ -26,13 +26,13 @@ const DESKTOP_TOAST_CONTAINER_STYLE = {
   ...TOAST_BASE_CONTAINER_STYLE,
   // Keep confirmations above the persistent composer/editor action shelf.
   // The toast remains transient and never owns recovery instructions.
-  margin: '0 16px 88px',
+  margin: '0 16px max(88px, calc(var(--app-toast-action-inset, 0px) + env(safe-area-inset-bottom, 0px)))',
 };
 const MOBILE_TOAST_CONTAINER_STYLE = {
   ...TOAST_BASE_CONTAINER_STYLE,
   // Clear the mobile editor/composer action shelf, the toast entrance motion,
   // and the device safe area so feedback never hides the available actions.
-  margin: '0 16px calc(112px + env(safe-area-inset-bottom, 0px))',
+  margin: '0 16px calc(max(112px, var(--app-toast-action-inset, 0px)) + env(safe-area-inset-bottom, 0px))',
 };
 
 function resolveToastLayout() {
@@ -154,7 +154,8 @@ export function useAppToast() {
     };
 
     recentRef.current.set(id, now);
-    if (previous && now - previous <= TOAST_DEDUP_WINDOW_MS && toast.isActive?.(id)) {
+    if (toast.isActive?.(id)
+      && (operationId || (previous && now - previous <= TOAST_DEDUP_WINDOW_MS))) {
       toast.update?.(id, payload);
       return id;
     }

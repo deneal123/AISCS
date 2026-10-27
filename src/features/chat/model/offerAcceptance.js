@@ -28,12 +28,14 @@ export function offerSendOptions(offerOrMode, kind) {
   const offer = offerOrMode && typeof offerOrMode === 'object' ? offerOrMode : null;
   const name = String(offer?.mode || offerOrMode || '');
   const offerKind = offer?.offer_kind || kind;
-  if (name === 'expensive_run' && offer?.offer_id) {
+  if (offer?.offer_id) {
     return {
       confirmOfferId: String(offer.offer_id),
+      ...(offer.decision === 'decline' ? { confirmationDecision: 'decline' } : {}),
       skipUserAppend: true,
     };
   }
+  if (offer?.decision === 'decline') return {};
   if (offerKind !== 'tool') return { routeOverride: name };
   const flag = TOOL_CONSENT[name];
   // ⚠️ Незнакомый инструмент — ПУСТЫЕ опции, а не «отправим маршрутом на всякий случай»:

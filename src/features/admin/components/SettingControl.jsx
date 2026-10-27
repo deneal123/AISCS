@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import {
   Box,
   Button,
@@ -11,6 +11,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import AppTextarea from '@shared/controls/AppTextarea';
+import { getErrorMessage } from '@shared/lib/error';
 import { CHAT_THEME } from '../../chat/constants/theme';
 import { colors, borderRadius } from '@theme/tokens';
 import { GLASS_SURFACE, INPUT_BASE } from '@theme/glass';
@@ -25,8 +26,25 @@ export default function SettingControl({ spec, onSave, onReset }) {
   );
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState(null);
+  const errorId = useId();
+  const operationRef = useRef(false);
+  const jsonInputRef = useRef(null);
+  const dirtyRef = useRef(false);
+  const applyValue = (next) => {
+    setValue(next);
+    if (isJson) setJsonText(JSON.stringify(next, null, 2));
+  };
+  useEffect(() => {
+    if (!dirtyRef.current && !operationRef.current) {
+      setValue(spec.value);
+      if (isJson) setJsonText(JSON.stringify(spec.value, null, 2));
+    }
+  }, [spec.value, isJson]);
+  const editValue = (next) => { dirtyRef.current = true; setValue(next); };
+  const errorProps = { 'aria-label': spec.label, 'aria-describedby': err ? errorId : undefined };
 
   const save = async () => {
+    if (operationRef.current) return;
     setErr(null);
     let payload = value;
     if (isJson) {
@@ -34,24 +52,39 @@ export default function SettingControl({ spec, onSave, onReset }) {
         payload = JSON.parse(jsonText);
       } catch {
         setErr('Невалидный JSON');
+        jsonInputRef.current?.focus();
         return;
       }
     }
+    operationRef.current = true;
     setBusy(true);
     try {
-      await onSave(spec.key, payload);
+      const result = await onSave(spec.key, payload);
+      dirtyRef.current = false;
+      applyValue(result && Object.hasOwn(result, 'value') ? result.value : payload);
     } catch (e) {
-      setErr(e?.response?.data?.detail || 'Ошибка сохранения');
+      setErr(getErrorMessage(e, { fallbackMessage: 'Не удалось сохранить настройку. Повторите позже.' }));
     } finally {
+      operationRef.current = false;
       setBusy(false);
     }
   };
 
   const reset = async () => {
+    if (operationRef.current) return;
+    operationRef.current = true;
+    setErr(null);
     setBusy(true);
     try {
-      await onReset(spec.key);
+      const result = await onReset(spec.key);
+      if (result && Object.hasOwn(result, 'value')) {
+        dirtyRef.current = false;
+        applyValue(result.value);
+      }
+    } catch (e) {
+      setErr(getErrorMessage(e, { fallbackMessage: 'Не удалось сбросить настройку. Повторите позже.' }));
     } finally {
+      operationRef.current = false;
       setBusy(false);
     }
   };
@@ -97,7 +130,7 @@ export default function SettingControl({ spec, onSave, onReset }) {
 
         <Box flexShrink={0} w={{ base: '100%', sm: 'auto' }}>
           {spec.type === 'bool' && (
-            <Switch isChecked={Boolean(value)} onChange={(e) => setValue(e.target.checked)} />
+            <Switch {...errorProps} isDisabled={busy} isChecked={Boolean(value)} onChange={(e) => editValue(e.target.checked)} />
           )}
           {(spec.type === 'int' || spec.type === 'float') && (
             <NumberInput
@@ -106,9 +139,10 @@ export default function SettingControl({ spec, onSave, onReset }) {
               value={value}
               min={spec.minimum ?? undefined}
               max={spec.maximum ?? undefined}
-              onChange={(_, n) => setValue(Number.isNaN(n) ? 0 : n)}
+              isDisabled={busy}
+              onChange={(_, n) => editValue(Number.isNaN(n) ? 0 : n)}
             >
-              <NumberInputField {...INPUT_BASE} />
+              <NumberInputField {...INPUT_BASE} {...errorProps} />
             </NumberInput>
           )}
           {spec.type === 'str' && (
@@ -116,8 +150,10 @@ export default function SettingControl({ spec, onSave, onReset }) {
               size="sm"
               w={{ base: '100%', sm: '220px' }}
               value={value ?? ''}
-              onChange={(e) => setValue(e.target.value)}
+              isDisabled={busy}
+              onChange={(e) => editValue(e.target.value)}
               {...INPUT_BASE}
+              {...errorProps}
             />
           )}
         </Box>
@@ -125,19 +161,23 @@ export default function SettingControl({ spec, onSave, onReset }) {
 
       {isJson && (
         <AppTextarea
+          ref={jsonInputRef}
           mt={2}
           fontFamily="mono"
           fontSize="12px"
           rows={5}
           value={jsonText}
-          onChange={(e) => setJsonText(e.target.value)}
+          isDisabled={busy}
+          onChange={(e) => { dirtyRef.current = true; setJsonText(e.target.value); }}
           resize="none"
           {...INPUT_BASE}
+          {...errorProps}
+          isInvalid={err === 'Невалидный JSON'}
         />
       )}
 
       {err && (
-        <Text mt={1} fontSize="11px" color={colors.error}>
+        <Text id={errorId} role="alert" mt={1} fontSize="11px" color={colors.error}>
           {err}
         </Text>
       )}

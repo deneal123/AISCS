@@ -1,11 +1,18 @@
 import React from 'react';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { ChakraProvider } from '@chakra-ui/react';
-import WorkHub from '../../../src/features/workspace-room/components/WorkHub';
+import WorkHubComponent from '../../../src/features/workspace-room/components/WorkHub';
+
+// The sidebar owns opening; this harness supplies that controlled-owner seam.
+function WorkHub(props) {
+  const [libraryOpen, setLibraryOpen] = React.useState(false);
+  return <><button onClick={() => setLibraryOpen(true)}>Библиотека</button>
+    <WorkHubComponent {...props} libraryOpen={libraryOpen} onLibraryClose={() => setLibraryOpen(false)} /></>;
+}
 
 const fail = (status) => Object.assign(new Error('unavailable'), { status });
 
-function mockApi({ work, library = { items: [] }, overrides = {} }) {
+function mockApi({ work, library = work?.library || { items: [] }, overrides = {} }) {
   jest.doMock('@api/chat', () => ({
     getWorkHub: jest.fn(() => (work instanceof Error ? Promise.reject(work) : Promise.resolve(work))),
     getAccountWorkLibrary: jest.fn(() => Promise.resolve(library)),
@@ -18,6 +25,58 @@ function mockApi({ work, library = { items: [] }, overrides = {} }) {
 describe('WorkHub', () => {
   beforeEach(() => jest.resetModules());
 
+  it('сбрасывает вкладку контекста при смене треда, но не при обновлении', async () => {
+    mockApi({ work: {
+      workspace: { state: 'ready', entries: [], revision: 'r1' },
+      room: {}, library: { state: 'ready', items: [] },
+    } });
+    let view;
+    await act(async () => {
+      view = render(<ChakraProvider><WorkHub threadId="t-1" /></ChakraProvider>);
+    });
+    fireEvent.click(screen.getByRole('tab', { name: 'Контекст', exact: true }));
+    fireEvent.click(screen.getByRole('tab', { name: 'История', exact: true }));
+    await act(async () => view.rerender(
+      <ChakraProvider><WorkHub threadId="t-1" invalidationVersion={1} /></ChakraProvider>,
+    ));
+    expect(screen.getByRole('tab', { name: 'История', exact: true }))
+      .toHaveAttribute('aria-selected', 'true');
+    await act(async () => view.rerender(
+      <ChakraProvider><WorkHub threadId="t-2" /></ChakraProvider>,
+    ));
+    expect(screen.getByRole('tab', { name: 'Задачи', exact: true }))
+      .toHaveAttribute('aria-selected', 'true');
+  });
+
+  it('сохраняет выбранный файл и retry intent при смене панели', async () => {
+    const uploadFileToWorkspace = jest.fn()
+      .mockRejectedValueOnce(fail(503))
+      .mockResolvedValue({ outcome: 'library_saved', file: { file_id: 'source-1' } });
+    mockApi({
+      work: {
+        workspace: { state: 'absent', entries: [], revision: '' },
+        room: {}, library: { state: 'ready', items: [] },
+      },
+      overrides: { uploadFileToWorkspace },
+    });
+    let view;
+    await act(async () => {
+      view = render(<ChakraProvider><WorkHub threadId="t-1" /></ChakraProvider>);
+    });
+    const file = new File(['body'], 'retry-source.txt');
+    await act(async () => fireEvent.change(view.container.querySelector('input[type="file"]'), {
+      target: { files: [file] },
+    }));
+    await screen.findByRole('button', { name: 'Проверить и повторить' });
+    fireEvent.click(screen.getByRole('button', { name: 'Библиотека', exact: true }));
+    expect(screen.getByText('retry-source.txt')).toBeInTheDocument();
+    await act(async () => fireEvent.click(screen.getByRole('button', { name: 'Проверить и повторить' })));
+    expect(uploadFileToWorkspace).toHaveBeenCalledTimes(2);
+    expect(uploadFileToWorkspace.mock.calls[1][1]).toBe(file);
+    expect(uploadFileToWorkspace.mock.calls[1][5].uploadIntentId)
+      .toBe(uploadFileToWorkspace.mock.calls[0][5].uploadIntentId);
+  });
+
   it('называет истёкшую sandbox истёкшей, а не пустым каталогом', async () => {
     mockApi({ work: fail(410) });
     await act(async () => render(<ChakraProvider><WorkHub threadId="t-1" /></ChakraProvider>));
@@ -28,7 +87,7 @@ describe('WorkHub', () => {
   it('показывает библиотеку без URL и storage key', async () => {
     mockApi({ work: { workspace: { state: 'absent', entries: [], revision: '' }, room: {}, library: { items: [{ file_id: 'opaque-id', name: 'contract.docx', availability: 'ready' }] } } });
     await act(async () => render(<ChakraProvider><WorkHub threadId="t-1" /></ChakraProvider>));
-    fireEvent.click(screen.getByTestId('work-library-nav'));
+    fireEvent.click(screen.getByRole('button', { name: 'Библиотека', exact: true }));
     await waitFor(() => expect(screen.getByText('contract.docx')).toBeInTheDocument());
     expect(document.body.textContent).not.toContain('https://');
     expect(screen.getByRole('button', { name: /Создать и добавить/i })).toBeEnabled();
@@ -40,18 +99,21 @@ describe('WorkHub', () => {
       library: { items: [{ file_id: 'opaque-id', name: 'library-only.pdf', availability: 'ready' }] },
     });
     await act(async () => render(<ChakraProvider><WorkHub threadId="draft-thread" /></ChakraProvider>));
+    fireEvent.click(screen.getByRole('button', { name: 'Библиотека', exact: true }));
     await waitFor(() => expect(screen.getByText('library-only.pdf')).toBeInTheDocument());
-    expect(screen.getByText(/Библиотека постоянна/i)).toBeInTheDocument();
+    expect(screen.getByText('Загрузка только в Библиотеку. Добавление в проект — отдельно.')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Создать и добавить/i })).toBeDisabled();
   });
 
-  it('добавляет cursor-страницу, не теряя уже показанную библиотеку', async () => {
-    const getAccountWorkLibrary = jest.fn(() => Promise.resolve({
+  it('переключает серверную страницу без накопления файлов', async () => {
+    const getAccountWorkLibrary = jest.fn().mockResolvedValueOnce({
+      items: [{ file_id: 'file-1', name: 'newer.txt', availability: 'ready' }], next_offset: 10,
+    }).mockResolvedValue({
       state: 'ready',
       items: [{ file_id: 'file-2', name: 'older.txt', availability: 'ready' }],
       next_cursor: null,
       next_offset: null,
-    }));
+    });
     mockApi({
       work: {
         workspace: { state: 'absent', entries: [], revision: '' },
@@ -67,17 +129,19 @@ describe('WorkHub', () => {
     });
 
     await act(async () => render(<ChakraProvider><WorkHub threadId="t-1" /></ChakraProvider>));
-    fireEvent.click(screen.getByTestId('work-library-nav'));
-    fireEvent.click(await screen.findByRole('button', { name: /Показать ещё/i }));
+    fireEvent.click(screen.getByRole('button', { name: 'Библиотека', exact: true }));
+    await screen.findByText('newer.txt');
+    fireEvent.click(await screen.findByRole('button', { name: 'Следующая страница', exact: true }));
 
     await waitFor(() => expect(getAccountWorkLibrary).toHaveBeenCalledWith({
-      params: { cursor: 'cursor-1' },
+      params: { limit: 10, offset: 10, q: '' },
+      signal: expect.any(AbortSignal),
     }));
-    expect(screen.getByText('newer.txt')).toBeInTheDocument();
     expect(await screen.findByText('older.txt')).toBeInTheDocument();
+    expect(screen.queryByText('newer.txt')).not.toBeInTheDocument();
   });
 
-  it('сохраняет загруженные cursor-страницы при фоновом snapshot refresh', async () => {
+  it('обновляет текущую страницу при фоновом snapshot refresh', async () => {
     const base = {
       workspace: { state: 'absent', entries: [], revision: '' },
       room: {},
@@ -103,11 +167,13 @@ describe('WorkHub', () => {
       work: base,
       overrides: {
         getWorkHub,
-        getAccountWorkLibrary: jest.fn(() => Promise.resolve({
+        getAccountWorkLibrary: jest.fn().mockResolvedValueOnce({
+          items: [{ file_id: 'file-1', name: 'newer.txt' }], next_offset: 10,
+        }).mockResolvedValue({
           state: 'ready',
           items: [{ file_id: 'file-2', name: 'older.txt', availability: 'ready' }],
           next_cursor: null,
-        })),
+        }),
       },
     });
 
@@ -115,14 +181,14 @@ describe('WorkHub', () => {
     await act(async () => {
       view = render(<ChakraProvider><WorkHub threadId="t-1" invalidationVersion={0} /></ChakraProvider>);
     });
-    fireEvent.click(screen.getByTestId('work-library-nav'));
-    fireEvent.click(await screen.findByRole('button', { name: /Показать ещё/i }));
+    fireEvent.click(screen.getByRole('button', { name: 'Библиотека', exact: true }));
+    await screen.findByText('newer.txt');
+    fireEvent.click(await screen.findByRole('button', { name: 'Следующая страница', exact: true }));
     await screen.findByText('older.txt');
 
     view.rerender(<ChakraProvider><WorkHub threadId="t-1" invalidationVersion={1} /></ChakraProvider>);
-    expect(await screen.findByText('fresh.txt')).toBeInTheDocument();
-    expect(screen.getByText('newer.txt')).toBeInTheDocument();
-    expect(screen.getByText('older.txt')).toBeInTheDocument();
+    expect(await screen.findByText('older.txt')).toBeInTheDocument();
+    expect(screen.queryByText('newer.txt')).not.toBeInTheDocument();
   });
 
   it('оставляет bounded copy outcome рядом с занятым library-файлом', async () => {
@@ -141,7 +207,7 @@ describe('WorkHub', () => {
     });
 
     await act(async () => render(<ChakraProvider><WorkHub threadId="t-1" /></ChakraProvider>));
-    fireEvent.click(screen.getByTestId('work-library-nav'));
+    fireEvent.click(screen.getByRole('button', { name: 'Библиотека', exact: true }));
     fireEvent.click(await screen.findByRole('button', { name: /Добавить в рабочее место/i }));
 
     expect(await screen.findByText('занято агентом')).toBeInTheDocument();
@@ -154,6 +220,26 @@ describe('WorkHub', () => {
 
     expect(screen.getByTestId('work-mobile-tabs')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Повторить проверку/i })).toBeInTheDocument();
+  });
+
+  it('связывает мобильные вкладки с настоящими сохраняемыми панелями', async () => {
+    mockApi({ work: fail(503) });
+    await act(async () => render(<ChakraProvider><WorkHub threadId="t-1" /></ChakraProvider>));
+    const tablist = screen.getByRole('tablist', { name: 'Разделы работы' });
+    const tabs = [...tablist.querySelectorAll('[role="tab"]')];
+    expect(tabs).toHaveLength(2);
+    const panels = tabs.map((tab) => document.getElementById(tab.getAttribute('aria-controls')));
+    panels.forEach((panel, index) => {
+      expect(panel).toHaveAttribute('role', 'tabpanel');
+      expect(panel).toHaveAttribute('aria-labelledby', tabs[index].id);
+    });
+    expect(panels[0]).toBeVisible();
+    fireEvent.click(tabs[1]);
+    expect(panels[0]).not.toBeVisible();
+    expect(panels[1]).toBeVisible();
+    fireEvent.click(tabs[0]);
+    expect(panels[0]).toBeVisible();
+    panels.forEach((panel) => expect(panel).toBeInTheDocument());
   });
 
   it('при занятой lease читает файл без права перезаписи', async () => {
@@ -299,6 +385,35 @@ describe('WorkHub', () => {
     expect(screen.getByTestId('work-status-rail')).toHaveTextContent('Версия');
   });
 
+  it('копирует Library с подтверждённой revision редактора при запаздывающем snapshot', async () => {
+    const copyLibraryFileToWorkspace = jest.fn(() => Promise.resolve({ outcome: 'kept', revision: 'r2' }));
+    mockApi({
+      work: {
+        workspace: { state: 'ready', entries: [{ type: 'file', path: 'note.txt' }], history: [], revision: 'r1' },
+        room: { state: 'ready', control: { state: 'running' } },
+        library: { state: 'ready', items: [{ file_id: 'owned-zip', name: 'source.zip', availability: 'ready' }] },
+      },
+      overrides: {
+        acquireWorkspaceLease: jest.fn(() => Promise.resolve({ fence: 7 })),
+        releaseWorkspaceLease: jest.fn(() => Promise.resolve({ released: true })),
+        getWorkspaceFile: jest.fn(() => Promise.resolve({ content: 'old', revision: 'r1' })),
+        writeWorkspaceFile: jest.fn(() => Promise.resolve({ revision: 'r2', fence: 7 })),
+        copyLibraryFileToWorkspace,
+      },
+    });
+    await act(async () => render(<ChakraProvider><WorkHub threadId="t-1" /></ChakraProvider>));
+    fireEvent.click(await screen.findByRole('button', { name: /note.txt/i }));
+    fireEvent.change(await screen.findByLabelText(/Содержимое note.txt/i), { target: { value: 'new' } });
+    fireEvent.click(screen.getByRole('button', { name: /^Сохранить$/i }));
+    await screen.findByText('Сохранено.');
+    fireEvent.click(screen.getByRole('button', { name: 'Библиотека', exact: true }));
+    fireEvent.click(await screen.findByRole('button', { name: 'Добавить в рабочее место' }));
+    await waitFor(() => expect(copyLibraryFileToWorkspace).toHaveBeenCalledWith(
+      't-1', 'owned-zip', 'r2', 7, { actorSession: expect.any(String) },
+    ));
+    expect(screen.getByLabelText(/Содержимое note.txt/i)).toHaveValue('new');
+  });
+
   it('использует revision последней записи редактора при откате', async () => {
     const revertWorkspace = jest.fn(() => Promise.resolve({ reverted: true, revision: 'r3' }));
     mockApi({
@@ -358,11 +473,11 @@ describe('WorkHub', () => {
         room: { state: 'absent' },
         library: { state: 'ready', items: [{ file_id: 'new-id', name: 'new.txt' }] },
       }));
-    mockApi({ work: {}, overrides: { getWorkHub } });
+    mockApi({ work: {}, library: { items: [{ file_id: 'new-id', name: 'new.txt' }] }, overrides: { getWorkHub } });
     const rendered = render(<ChakraProvider><WorkHub threadId="old-thread" /></ChakraProvider>);
 
     await act(async () => rendered.rerender(<ChakraProvider><WorkHub threadId="new-thread" /></ChakraProvider>));
-    fireEvent.click(await screen.findByTestId('work-library-nav'));
+    fireEvent.click(await screen.findByRole('button', { name: 'Библиотека', exact: true }));
     expect(await screen.findByText('new.txt')).toBeInTheDocument();
     await act(async () => resolveOld({
       workspace: { state: 'absent', entries: [], history: [], revision: '' },

@@ -1,9 +1,11 @@
 import React from 'react';
-import { Box, Button, Flex, HStack, IconButton, Text, Tooltip } from '@chakra-ui/react';
+import { Box, Button, Grid, HStack, IconButton, Text, Tooltip } from '@chakra-ui/react';
 import { FiMenu, FiSettings } from '@shared/icons';
 import { borderRadius, colors } from '@theme/tokens';
 import { CreditsPill, useBillingContext } from '@features/billing';
 import { CHAT_FONT_FAMILY, CHAT_THEME } from '../constants/theme';
+import ProviderAvailability from './ProviderAvailability';
+import { useResponsive } from '@hooks/useResponsive';
 
 const CONNECTION_META = {
   connected: { color: colors.success, label: 'На связи' },
@@ -23,6 +25,7 @@ export default function ChatHeaderBar({
   surface = 'chat',
   onSurfaceChange,
 }) {
+  const { isMobile } = useResponsive();
   const iconBtnProps = {
     variant: 'ghost',
     size: 'sm',
@@ -36,19 +39,28 @@ export default function ChatHeaderBar({
 
   const conn = CONNECTION_META[connectionState] || CONNECTION_META.disconnected;
   const { balance } = useBillingContext();
+  const separator = {
+    content: '""', position: 'absolute', left: 0, top: '50%', transform: 'translateY(-50%)',
+    h: '20px', borderLeft: `1px solid ${CHAT_THEME.panelBorder}`,
+    display: { base: 'none', md: 'block' },
+  };
 
   return (
-    <Flex
+    <Grid
       as="header"
-      align="center"
-      gap={2}
+      alignItems="center"
+      templateAreas={{ base: '"identity account"', md: '"identity navigation account"' }}
+      templateColumns={{ base: 'minmax(0, 1fr) auto', md: 'minmax(80px, 1fr) auto auto' }}
+      columnGap="12px"
+      rowGap={1}
       px={{ base: 3, md: 5 }}
-      h={{ base: '64px', md: '56px' }}
+      h="56px"
       flexShrink={0}
       borderBottom={`1px solid ${CHAT_THEME.panelBorder}`}
       bg={CHAT_THEME.headerBg}
       backdropFilter="blur(22px)"
     >
+      <HStack gridArea="identity" spacing={1} minW={0}>
       <HStack spacing={1} flexShrink={0}>
         <IconButton aria-label="Меню" icon={<FiMenu />} display={{ base: 'inline-flex', lg: 'none' }}
           onClick={onOpenMobileSidebar} {...iconBtnProps} />
@@ -81,15 +93,31 @@ export default function ChatHeaderBar({
           {threadTitle || 'Новый чат'}
         </Text>
       </HStack>
-
-      <HStack spacing={1} flexShrink={0} p="2px" borderRadius={borderRadius.sm} bg={CHAT_THEME.inputBg}>
-        <Button size="xs" h="28px" px={3} variant={surface === 'chat' ? 'solid' : 'ghost'} colorScheme={surface === 'chat' ? 'blue' : undefined}
-          onClick={() => onSurfaceChange?.('chat')}>Чат</Button>
-        <Button size="xs" h="28px" px={3} variant={surface === 'work' ? 'solid' : 'ghost'} colorScheme={surface === 'work' ? 'blue' : undefined}
-          onClick={() => onSurfaceChange?.('work')}>Работа</Button>
       </HStack>
 
-      <HStack spacing={2} flexShrink={0} justify="flex-end">
+      {!isMobile && <HStack gridArea="navigation" justifySelf="start" spacing="8px">
+        <HStack role="group" aria-label="Разделы треда" spacing="4px">
+          {[['chat', 'Чат'], ['work', 'IDE'], ['pdf', 'PDF']].map(([value, label]) => (
+            <Button key={value} size="document" h="30px" minH="30px" px="12px"
+              variant="ghost" borderRadius={borderRadius.control}
+              data-thread-surface={value} data-action-hint={surface !== value ? 'hover' : undefined}
+              bg="transparent" border="1px solid" overflow="visible"
+              borderColor={surface === value ? colors.glass.borderHi : 'transparent'}
+              _hover={{ bg: CHAT_THEME.panelHover, color: colors.fg[1] }}
+              _active={{ bg: CHAT_THEME.panelActive }}
+              color={surface === value ? colors.fg[1] : colors.fg[2]}
+              aria-pressed={surface === value} onClick={() => onSurfaceChange?.(value)}>{label}</Button>
+          ))}
+        </HStack>
+        <Box display="flex" alignItems="center" h="30px" position="relative"
+          pl={{ base: 0, md: '12px' }} _before={separator}>
+          <ProviderAvailability />
+        </Box>
+      </HStack>}
+
+      <HStack gridArea="account" role="group" aria-label="Баланс и настройки" spacing={2}
+        justify="flex-end" h={{ base: '44px', md: '30px' }} position="relative"
+        pl={{ base: 0, md: '12px' }} _before={separator}>
         <Box display={{ base: 'none', sm: 'block' }}>
           <CreditsPill total={balance?.total} />
         </Box>
@@ -101,6 +129,6 @@ export default function ChatHeaderBar({
           borderRadius="full"
         />
       </HStack>
-    </Flex>
+    </Grid>
   );
 }

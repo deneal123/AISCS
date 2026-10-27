@@ -17,6 +17,15 @@ function renderUi(node) {
 }
 
 describe('canonical shared controls', () => {
+  it('supports an inline modal-owned listbox without a body portal', () => {
+    const view = renderUi(<AppSelect ariaLabel="Назначение" menuPortalTarget={null}
+      options={[{ value: 'workspace', label: 'Рабочее место' }, { value: 'pdf', label: 'PDF' }]} />);
+    const control = screen.getByRole('combobox', { name: 'Назначение' });
+    fireEvent.focus(control); fireEvent.keyDown(control, { key: 'ArrowDown' });
+    expect(view.container).toContainElement(screen.getByRole('listbox'));
+    fireEvent.keyDown(control, { key: 'Escape' });
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+  });
   it('keeps navigation as a semantic link with button styling', () => {
     renderUi(<ActionLink to="/chat/thread?surface=work">Открыть работу</ActionLink>);
 
@@ -31,6 +40,20 @@ describe('canonical shared controls', () => {
     const textarea = screen.getByRole('textbox', { name: 'Описание' });
     expect(textarea).toHaveClass('resize-none');
     expect(textarea).toHaveStyle({ resize: 'none' });
+  });
+
+  it('auto-grows document prose with a bounded inner scroller and a stable DOM ref', () => {
+    const inputRef = React.createRef();
+    const view = renderUi(<AppTextarea ref={inputRef} autoGrow maxAutoHeight={200} aria-label="Абзац" value="Текст" readOnly />);
+    const input = screen.getByRole('textbox', { name: 'Абзац' });
+    Object.defineProperty(input, 'scrollHeight', { configurable: true, value: 400 });
+    fireEvent.input(input);
+    expect(input).toHaveStyle({ height: '200px', overflowY: 'auto', resize: 'none' });
+    Object.defineProperty(input, 'scrollHeight', { configurable: true, value: 50 });
+    fireEvent.input(input);
+    expect(input).toHaveStyle({ height: '50px', overflowY: 'hidden' });
+    expect(inputRef.current).toBe(input);
+    view.unmount();
   });
 
   it('exposes an authored keyboard listbox and returns the option value', () => {

@@ -16,6 +16,10 @@ CMD ["npm", "start"]
 
 FROM base AS builder
 
+# Application policy is compiled into the bundle; API/WS URLs stay same-origin.
+ARG REACT_APP_APPLICATION_PROFILE=gpthub
+ENV REACT_APP_APPLICATION_PROFILE=${REACT_APP_APPLICATION_PROFILE}
+
 # ⚠️ ЗДЕСЬ НАМЕРЕННО НЕТ REACT_APP_*_BASE_URL, И ДОБАВЛЯТЬ ИХ НЕЛЬЗЯ.
 #
 # Раньше стояло `ENV REACT_APP_API_BASE_URL=${SERVICE__REACT_APP_API_BASE_URL}`.

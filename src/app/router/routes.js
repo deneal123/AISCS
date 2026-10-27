@@ -1,7 +1,10 @@
 import { lazy } from 'react';
+import routeLoader from './routeLoader';
+import { APPLICATION_HOME, SIMULATION_PROFILE } from '@shared/config/applicationProfile';
 
 export const APP_ROUTES = {
   ROOT: '/',
+  SIMULATOR: '/simulator',
   CHAT: '/chat',
   LOGIN: '/login',
   SIGNUP: '/signup',
@@ -44,38 +47,37 @@ const loadBillingSuccessPage = () =>
 const loadLegalPage = () => import(/* webpackChunkName: "route-legal" */ '@pages/legal');
 const loadContactsPage = () => import(/* webpackChunkName: "route-contacts" */ '@pages/contacts');
 const loadAdminPage = () => import(/* webpackChunkName: "route-admin" */ '@pages/admin');
+const loadSimulatorPage = () => import(/* webpackChunkName: "route-simulator" */ '@features/simulator/SimulatorPage');
 
-export const ROUTE_LOADERS = {
-  landing: loadLandingPage,
-  platform: loadPlatformPage,
-  pricing: loadPricingPage,
-  chat: loadChatPage,
-  login: loadLoginPage,
-  signup: loadSignUpPage,
-  notfound: loadNotFoundPage,
-  billing: loadBillingPage,
-  billingSuccess: loadBillingSuccessPage,
-  legal: loadLegalPage,
-  contacts: loadContactsPage,
-  admin: loadAdminPage,
-};
+// Route imports and preloads share the same bounded failure boundary.
+const safeLoaders = Object.fromEntries(Object.entries({
+  landing: loadLandingPage, platform: loadPlatformPage, pricing: loadPricingPage,
+  chat: loadChatPage, login: loadLoginPage, signup: loadSignUpPage,
+  notfound: loadNotFoundPage, billing: loadBillingPage, billingSuccess: loadBillingSuccessPage,
+  legal: loadLegalPage, contacts: loadContactsPage, admin: loadAdminPage,
+  simulator: loadSimulatorPage,
+}).map(([name, load]) => [name, routeLoader(load)]));
+
+export const ROUTE_LOADERS = safeLoaders;
 
 export const RoutePages = {
-  LandingPage: lazy(loadLandingPage),
-  PlatformPage: lazy(loadPlatformPage),
-  PricingPage: lazy(loadPricingPage),
-  ChatPage: lazy(loadChatPage),
-  LoginPage: lazy(loadLoginPage),
-  SignUpPage: lazy(loadSignUpPage),
-  NotFoundPage: lazy(loadNotFoundPage),
-  BillingPage: lazy(loadBillingPage),
-  BillingSuccessPage: lazy(loadBillingSuccessPage),
-  LegalPage: lazy(loadLegalPage),
-  ContactsPage: lazy(loadContactsPage),
-  AdminPage: lazy(loadAdminPage),
+  SimulatorPage: lazy(safeLoaders.simulator),
+  LandingPage: lazy(safeLoaders.landing),
+  PlatformPage: lazy(safeLoaders.platform),
+  PricingPage: lazy(safeLoaders.pricing),
+  ChatPage: lazy(safeLoaders.chat),
+  LoginPage: lazy(safeLoaders.login),
+  SignUpPage: lazy(safeLoaders.signup),
+  NotFoundPage: lazy(safeLoaders.notfound),
+  BillingPage: lazy(safeLoaders.billing),
+  BillingSuccessPage: lazy(safeLoaders.billingSuccess),
+  LegalPage: lazy(safeLoaders.legal),
+  ContactsPage: lazy(safeLoaders.contacts),
+  AdminPage: lazy(safeLoaders.admin),
 };
 
-export const ROUTE_CONFIG = [
+const PLATFORM_ROUTE_CONFIG = [
+  { path: APP_ROUTES.SIMULATOR, title: 'Симулятор', page: 'SimulatorPage', guard: ROUTE_GUARDS.AUTH_ONLY, layout: ROUTE_LAYOUTS.PROTECTED, preload: false },
   { path: APP_ROUTES.ROOT, title: 'Главная', page: 'LandingPage', guard: ROUTE_GUARDS.PUBLIC, layout: ROUTE_LAYOUTS.PUBLIC, preload: 'idle' },
   { path: APP_ROUTES.PLATFORM, title: 'Платформа', page: 'PlatformPage', guard: ROUTE_GUARDS.PUBLIC, layout: ROUTE_LAYOUTS.PUBLIC, preload: false },
   { path: APP_ROUTES.PRICING, title: 'Тарифы', page: 'PricingPage', guard: ROUTE_GUARDS.PUBLIC, layout: ROUTE_LAYOUTS.PUBLIC, preload: false },
@@ -100,13 +102,18 @@ export const FALLBACK_ROUTE = {
 
 const AUTH_ROUTES = new Set([APP_ROUTES.LOGIN, APP_ROUTES.SIGNUP, APP_ROUTES.REGISTER]);
 
+export const ROUTE_CONFIG = SIMULATION_PROFILE ? [
+  { path: APP_ROUTES.ROOT, title: 'Симулятор', redirectTo: APPLICATION_HOME, guard: ROUTE_GUARDS.PUBLIC, layout: ROUTE_LAYOUTS.PROTECTED, preload: false },
+  ...PLATFORM_ROUTE_CONFIG.filter((route) => AUTH_ROUTES.has(route.path) || route.path === APP_ROUTES.SIMULATOR),
+] : PLATFORM_ROUTE_CONFIG;
+
 export const isAuthRoute = (pathname = '') => AUTH_ROUTES.has(pathname);
 
 export const isLandingRoute = (pathname = '') => pathname === APP_ROUTES.ROOT;
 
 export const isPlatformRoute = (pathname = '') => pathname === APP_ROUTES.PLATFORM;
 
-export const isChatRoute = (pathname = '') => pathname === APP_ROUTES.CHAT || pathname.startsWith('/chat/');
+export const isChatRoute = (pathname = '') => pathname === APP_ROUTES.CHAT || pathname.startsWith('/chat/') || pathname === APP_ROUTES.SIMULATOR;
 
 export const shouldUseFullWidthLayout = (pathname = '') =>
   isChatRoute(pathname) || isLandingRoute(pathname) || isAuthRoute(pathname) ||

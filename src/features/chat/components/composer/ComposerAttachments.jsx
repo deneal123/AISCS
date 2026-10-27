@@ -12,7 +12,7 @@ const ICON_BY_TYPE = {
   json: FiDatabase,
 };
 
-function ComposerAttachments({ attachments, onRemove, onOpenWork }) {
+function ComposerAttachments({ attachments, onRemove, onOpenLibrary }) {
   const list = Array.isArray(attachments) ? attachments : attachments ? [attachments] : [];
   if (list.length === 0) {
     return null;
@@ -41,19 +41,19 @@ function ComposerAttachments({ attachments, onRemove, onOpenWork }) {
           </WrapItem>
         ))}
       </Wrap>
-      {onOpenWork && (
+      {onOpenLibrary && (
         <Button
           size="xs"
           variant="ghost"
           minW="auto"
           px={1.5}
           leftIcon={<FiFolder />}
-          color={colors.blue[200]}
+          color={colors.blue[100]}
           _hover={{ bg: colors.accent.hoverSoft, color: 'white' }}
-          onClick={onOpenWork}
-          aria-label={`Открыть работу с вложениями: ${list.length}`}
+          onClick={onOpenLibrary}
+          aria-label={`Открыть библиотеку вложений: ${list.length}`}
         >
-          Открыть работу
+          Открыть библиотеку
         </Button>
       )}
     </VStack>

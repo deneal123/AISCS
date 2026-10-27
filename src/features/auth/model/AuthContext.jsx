@@ -5,6 +5,7 @@ import { fetchProfile, logoutLocal } from "@api";
 import extractErrorInfo from "@utils/errorHandler";
 import { registerUnauthorizedHandler } from "@api/httpClient";
 import { APP_ROUTES } from "@app/router";
+import { APPLICATION_HOME } from '@shared/config/applicationProfile';
 
 const AuthSessionContext = createContext(null);
 const AuthActionsContext = createContext(null);
@@ -76,7 +77,7 @@ export function AuthProvider({ children }) {
       if (guardType === "guest-only" && isAuthenticated) {
         // Авторизованный на лендинге/логине/регистрации → сразу в рабочее пространство.
         return {
-          to: APP_ROUTES.CHAT,
+          to: APPLICATION_HOME,
         };
       }
       if (guardType === "admin-only") {
@@ -84,12 +85,12 @@ export function AuthProvider({ children }) {
           return { to: APP_ROUTES.LOGIN, state: { from: location } };
         }
         if (!user?.permissions?.includes("admin")) {
-          return { to: APP_ROUTES.CHAT };
+          return { to: APPLICATION_HOME };
         }
       }
       if (guardType === "feature-flag") {
         return {
-          to: APP_ROUTES.CHAT,
+          to: APPLICATION_HOME,
         };
       }
       return null;

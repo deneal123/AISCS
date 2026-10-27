@@ -1,0 +1,32 @@
+import { act, renderHook } from '@testing-library/react';
+import { useWorkbenchLibraryNavigation } from '@features/chat/hooks/orchestration/useWorkbenchLibraryNavigation';
+
+it('mounts the shared owner without navigation and keeps the panel through same-URL hydration', () => {
+  const ensureWorkMounted = jest.fn();
+  const sidebar = { isOpen: false, onClose: jest.fn() };
+  const initial = { pathname: '/chat/first', ensureWorkMounted, sidebar };
+  const view = renderHook((props) => useWorkbenchLibraryNavigation(props), { initialProps: initial });
+  expect(view.result.current.workProps.libraryOpen).toBe(false);
+  const trigger = document.createElement('button');
+  act(() => view.result.current.open({ currentTarget: trigger }));
+  expect(ensureWorkMounted).toHaveBeenCalledTimes(1);
+  expect(view.result.current.workProps.libraryOpen).toBe(true);
+  expect(view.result.current.workProps.libraryReturnFocus.current).toBe(trigger);
+  view.rerender({ ...initial });
+  expect(view.result.current.workProps.libraryOpen).toBe(true);
+  const previousOpen = view.result.current.open;
+  const previousClose = view.result.current.workProps.onLibraryClose;
+  view.rerender({ ...initial, pathname: '/chat/second' });
+  expect(view.result.current.workProps.libraryOpen).toBe(false);
+  act(() => previousOpen({ currentTarget: trigger }));
+  expect(ensureWorkMounted).toHaveBeenCalledTimes(1);
+  act(() => view.result.current.open({ currentTarget: trigger }));
+  act(() => previousClose());
+  expect(view.result.current.workProps.libraryOpen).toBe(true);
+  act(() => view.result.current.workProps.onLibraryClose());
+  expect(view.result.current.workProps.libraryOpen).toBe(false);
+  const afterUnmount = view.result.current.open;
+  view.unmount();
+  act(() => afterUnmount({ currentTarget: trigger }));
+  expect(ensureWorkMounted).toHaveBeenCalledTimes(2);
+});

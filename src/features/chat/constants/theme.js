@@ -1,4 +1,4 @@
-import { colors, gradients } from '@theme/tokens';
+import { colors, gradients, typography } from '@theme/tokens';
 import { INPUT_BASE } from '@theme/glass';
 
 /**
@@ -10,7 +10,7 @@ import { INPUT_BASE } from '@theme/glass';
  * из @theme/glass (GLASS_SURFACE / GLASS_CARD_BASE / INPUT_BASE) прямо в
  * компонентах; здесь — только плоские семантические значения.
  */
-export const CHAT_FONT_FAMILY = "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+export const CHAT_FONT_FAMILY = typography.fontFamily.primary;
 
 const { glass, accent, fg, ink, bg } = colors;
 

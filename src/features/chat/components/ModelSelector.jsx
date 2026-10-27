@@ -1,275 +1,108 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import {
-  Box,
-  Button,
-  Flex,
-  HStack,
-  Icon,
-  Input,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  Portal,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
-import { FiCheck, FiChevronDown, FiEye, FiHeadphones, FiImage, FiPaperclip, FiSearch, FiTool } from "@shared/icons";
-import { borderRadius, chat, colors, typography } from "@theme/tokens";
-import { useResponsive } from "@hooks/useResponsive";
-import { AUTO_MODE_LABEL, parseModelMeta, resolveModelTriggerLabel, sortModelsByProvider } from "../utils/modelSelector";
+import React, { useMemo, useState } from 'react';
+import { Box, Button, HStack, Icon, Text, VStack } from '@chakra-ui/react';
+import { FiCheck, FiCpu, FiInfo } from '@shared/icons';
+import AppSelect from '@shared/controls/AppSelect';
+import ChoicePanel from '@shared/controls/ChoicePanel';
+import AppLoading from '@shared/controls/AppLoading';
+import { colors } from '@theme/tokens';
+import { parseModelMeta, resolveModelTriggerLabel, sortModelsByProvider } from '../utils/modelSelector';
+import ModelOptionBadges, { modelBadges } from './ModelOptionBadges';
 
-const CAP_ICON = { vision: FiEye, audio: FiHeadphones, files: FiPaperclip, image_out: FiImage, tools: FiTool };
-// tools — критично: только такие модели МОГУТ сами позвать инструмент (напр. поиск по
-// базе знаний). Остальные получают то же самое, но подмешанным в контекст автоматически.
-const CAP_LABEL = { vision: "vision", audio: "audio", files: "files", image_out: "image", tools: "инструменты" };
-// Рендерим не весь каталог (300+ моделей) — иначе меню лагает на открытии и
-// прокрутке. Показываем первые N, остальное отсекаем поиском.
-const MAX_RENDERED = 60;
+const BATCH = 60;
+const CAP_LABELS = { vision: 'Изображения на входе', audio: 'Аудио', files: 'Файлы', image_out: 'Создание изображений', tools: 'Инструменты' };
 
-function formatContext(n) {
-  if (!n || n <= 0) return "";
-  if (n >= 1000000) return `${(n / 1000000).toFixed(n % 1000000 ? 1 : 0)}M`;
-  return `${Math.round(n / 1000)}K`;
+function contextLabel(info) {
+  if (!Number.isFinite(info?.context_window) || info.context_window <= 0) return '';
+  const tokens = new Intl.NumberFormat('ru-RU', { notation: 'compact' }).format(info.context_window);
+  return `${info.context_estimated ? '≈ ' : ''}${tokens} токенов${info.context_estimated ? ' · оценка' : ''}`;
 }
 
-function ModelSelector({ selectedModel, availableModels, catalog, onChange, size = "default", placement }) {
-  const { isMobile } = useResponsive();
-  const isAuto = !selectedModel;
-  const label = resolveModelTriggerLabel(selectedModel);
-  const isCompact = size === "compact";
-  const [query, setQuery] = useState("");
-  const searchRef = useRef(null);
-
-  // Chakra Menu при смене состава MenuItem (фильтрация по вводу) уводит DOM-фокус
-  // на пункт списка → поле поиска теряло фокус после КАЖДОЙ буквы (юзер жаловался).
-  // Возвращаем фокус на поле после ре-рендера фильтра (rAF — уже после фокус-
-  // менеджмента меню), курсор в конец. Гейт по activeElement — без лишних дёрганий.
-  useEffect(() => {
-    if (!query) return undefined;
-    const id = requestAnimationFrame(() => {
-      const el = searchRef.current;
-      if (el && document.activeElement !== el) {
-        el.focus();
-        const len = el.value.length;
-        try { el.setSelectionRange(len, len); } catch { /* noop */ }
-      }
-    });
-    return () => cancelAnimationFrame(id);
-  }, [query]);
-
+export default function ModelSelector({ selectedModel, availableModels = [], catalog = {}, onChange,
+  modelStatus = 'ready', onRetry, mobileIconOnly = false }) {
+  const [query, setQuery] = useState('');
+  const [limit, setLimit] = useState(BATCH);
+  const [details, setDetails] = useState(false);
+  const [keyboardHints, setKeyboardHints] = useState(false);
   const models = useMemo(() => sortModelsByProvider(availableModels), [availableModels]);
-  const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (!q) return models;
-    return models.filter((m) => {
-      const meta = parseModelMeta(m);
-      return (
-        m.toLowerCase().includes(q) ||
-        (meta.providerLabel || "").toLowerCase().includes(q) ||
-        (meta.label || "").toLowerCase().includes(q)
-      );
+  const filtered = useMemo(() => models.filter((id) => {
+    const meta = parseModelMeta(id);
+    return `${id} ${meta.providerLabel || ''} ${meta.label}`.toLocaleLowerCase('ru-RU').includes(query.trim().toLocaleLowerCase('ru-RU'));
+  }), [models, query]);
+  const unavailable = modelStatus === 'ready' && selectedModel && !models.includes(selectedModel);
+  const options = useMemo(() => {
+    const groups = new Map();
+    filtered.slice(0, limit).forEach((id) => {
+      const meta = parseModelMeta(id);
+      const provider = meta.providerLabel || 'Другие модели';
+      if (!groups.has(provider)) groups.set(provider, { label: provider, options: [] });
+      groups.get(provider).options.push({ value: id, label: meta.label, info: catalog[id],
+        hint: catalog[id]?.is_free === true ? 'Без списания кредитов за токены. Платные инструменты учитываются отдельно.' : undefined,
+        invitation: meta.provider === 'local' && catalog[id]?.is_free === true });
     });
-  }, [models, query]);
-
-  const shown = filtered.slice(0, MAX_RENDERED);
-  const hiddenCount = filtered.length - shown.length;
-
-  const renderItem = (modelId) => {
-    const isSelected = selectedModel === modelId;
-    const meta = parseModelMeta(modelId);
-    const info = catalog ? catalog[modelId] : null;
-    const ctx = info ? formatContext(info.context_window) : "";
-    // Окно не подтверждено провайдером (proxy-модели) → показываем «~», а не как
-    // реальное значение (жалоба «у всех 33K»).
-    const ctxEstimated = !!info?.context_estimated;
-    // Тир дороговизны: 0 эконом · 1 стандарт · 2 дорого. Флагаем крайние —
-    // предупреждаем о дорогих (жалоба: pro слила все кредиты).
-    const tier = info?.cost_tier;
-    const caps = info && Array.isArray(info.capabilities) ? info.capabilities : [];
-    const hasMeta = !!ctx || caps.length > 0 || tier === 0 || tier === 2;
-    return (
-      <MenuItem
-        key={modelId}
-        onClick={() => onChange(modelId)}
-        bg={isSelected ? chat.modelSelector.itemSelectedBg : "transparent"}
-        color={isSelected ? chat.modelSelector.activeText : colors.text.primary}
-        _hover={{ bg: chat.modelSelector.itemHover }}
-      >
-        <VStack align="stretch" spacing={0.5} w="100%">
-          <Flex justify="space-between" w="100%" gap={3} align="center">
-            <HStack minW={0} spacing={2}>
-              {meta.providerLabel && (
-                <Box
-                  as="span"
-                  flexShrink={0}
-                  fontSize="9.5px"
-                  fontWeight="700"
-                  letterSpacing="0.02em"
-                  textTransform="uppercase"
-                  px={1.5}
-                  py="1px"
-                  borderRadius="full"
-                  color={colors.blue[300]}
-                  bg={colors.accent.subtle}
-                  border={`1px solid ${colors.accent.subtleBorder}`}
-                  fontFamily={typography.fontFamily.mono}
-                >
-                  {meta.providerLabel}
-                </Box>
-              )}
-              <Text noOfLines={1}>{meta.label}</Text>
-            </HStack>
-            {isSelected && <Icon as={FiCheck} flexShrink={0} />}
-          </Flex>
-          {hasMeta && (
-            <HStack spacing={2} color={colors.text.tertiary} pl="1px">
-              {ctx && (
-                <Text
-                  fontSize="10px"
-                  fontFamily={typography.fontFamily.mono}
-                  title={ctxEstimated ? "Окно не подтверждено провайдером — оценка" : undefined}
-                >
-                  {ctxEstimated ? "~" : ""}{ctx} ctx
-                </Text>
-              )}
-              {tier === 2 && (
-                <Text
-                  fontSize="10px"
-                  fontWeight="700"
-                  fontFamily={typography.fontFamily.mono}
-                  color={colors.warning}
-                  title="Дорогая модель — быстро расходует кредиты"
-                >
-                  дорого
-                </Text>
-              )}
-              {tier === 0 && (
-                <Text fontSize="10px" fontFamily={typography.fontFamily.mono} color={colors.success} title="Экономная модель">
-                  эконом
-                </Text>
-              )}
-              {caps.map((cap) => {
-                const CapIcon = CAP_ICON[cap];
-                // Без per-item Tooltip — на 300+ моделях это сотни инстансов и лаг;
-                // смысл иконки в title (нативная подсказка, нулевая цена).
-                return CapIcon ? (
-                  <Icon key={cap} as={CapIcon} boxSize="11px" title={CAP_LABEL[cap] || cap} />
-                ) : null;
-              })}
-            </HStack>
-          )}
-        </VStack>
-      </MenuItem>
-    );
-  };
+    const local = groups.get('Локальная модель');
+    groups.delete('Локальная модель');
+    return [...(local ? [local] : []), { label: 'Автоматический выбор', options: [{ value: '', label: 'Авто', hint: 'Система выбирает модель под задачу.' }] }, ...groups.values()];
+  }, [filtered, limit, catalog]);
 
   return (
-    <Menu matchWidth={!isCompact} placement={placement} autoSelect={false} isLazy onClose={() => setQuery("")}>
-      <MenuButton
-        as={Button}
-        variant={isCompact ? "unstyled" : undefined}
-        w={isCompact ? "auto" : isMobile ? "100%" : "320px"}
-        minW={0}
-        maxW={isCompact ? "220px" : undefined}
-        h={isCompact ? "28px" : undefined}
-        display={isCompact ? "inline-flex" : undefined}
-        alignItems={isCompact ? "center" : undefined}
-        size={isCompact ? "xs" : "sm"}
-        borderRadius={isCompact ? borderRadius.full : borderRadius.md}
-        borderWidth="1px"
-        borderColor={isAuto ? chat.modelSelector.triggerBorder : chat.modelSelector.triggerBorderActive}
-        bg={isAuto ? chat.modelSelector.triggerBg : chat.modelSelector.activeBg}
-        color={isAuto ? chat.modelSelector.triggerText : chat.modelSelector.activeText}
-        fontFamily={typography.fontFamily.primary}
-        fontSize={isCompact ? "12px" : "13px"}
-        fontWeight="600"
-        px={3}
-        overflow="visible"
-        _hover={{ bg: isAuto ? chat.modelSelector.triggerBgHover : chat.modelSelector.activeBgHover }}
-        _active={{ bg: isAuto ? chat.modelSelector.triggerBgHover : chat.modelSelector.activeBgHover }}
-        _focusVisible={isCompact ? { boxShadow: `0 0 0 2px ${colors.border.focus}`, outline: "none" } : undefined}
-      >
-        <HStack
-          align="center"
-          spacing={isCompact ? 1.5 : 2}
-          minW={0}
-          w={isCompact ? undefined : "100%"}
-          justify={isCompact ? undefined : "center"}
-        >
-          {!isAuto && <Icon as={FiCheck} boxSize="12px" color={chat.modelSelector.activeText} flexShrink={0} />}
-          <Text noOfLines={1} minW={0} flex="0 1 auto" textAlign={isCompact ? undefined : "center"}>
-            {isCompact ? (isAuto ? 'Модель: Auto' : label) : label}
-          </Text>
-          <Icon as={FiChevronDown} boxSize="12px" color="currentColor" flexShrink={0} />
-        </HStack>
-      </MenuButton>
-      <Portal>
-        <MenuList
-          bg={chat.modelSelector.menuBg}
-          border="1px solid"
-          borderColor={chat.modelSelector.menuBorder}
-          borderRadius={borderRadius.md}
-          py={0}
-          maxH="360px"
-          minW={isCompact ? "260px" : undefined}
-          overflowY="auto"
-          zIndex={1600}
-          sx={{ backdropFilter: "blur(12px)" }}
-        >
-          {/* Липкий поиск — навигация по каталогу без бесконечной прокрутки. */}
-          <Box position="sticky" top={0} zIndex={1} bg={chat.modelSelector.menuBg} px={2} pt={2} pb={2} borderBottom="1px solid" borderColor={chat.modelSelector.menuBorder}>
-            <HStack
-              spacing={2}
-              px={2.5}
-              h="30px"
-              borderRadius={borderRadius.sm}
-              bg={colors.border.faint}
-              border="1px solid"
-              borderColor={chat.modelSelector.menuBorder}
-            >
-              <Icon as={FiSearch} boxSize="13px" color={colors.text.tertiary} flexShrink={0} />
-              <Input
-                ref={searchRef}
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                onKeyDown={(e) => e.stopPropagation()}
-                placeholder="Поиск модели…"
-                aria-label="Поиск модели"
-                variant="unstyled"
-                fontSize="13px"
-                color={colors.text.primary}
-                autoFocus
-                _placeholder={{ color: colors.text.tertiary }}
-              />
-            </HStack>
+    <ChoicePanel label={`Модель: ${selectedModel ? resolveModelTriggerLabel(selectedModel) : 'Авто'}`}
+      title="Модель ответа" mobileIcon={FiCpu} mobileIconOnly={mobileIconOnly}
+      selected={!!selectedModel} width={384} compactWidth={details ? 320 : 256} placement="top-end"
+      variant="model-palette" mobileWidth={details || !mobileIconOnly ? 320 : 280}
+      headerAction={<Button size="document" variant="ghost" px={1} minW="32px" h="32px" aria-label={details ? 'Скрыть описания моделей' : 'Показать описания моделей'} aria-pressed={details}
+        onClick={() => setDetails(shown => !shown)}><Icon as={FiInfo} boxSize={3.5} /></Button>}>
+      {({ close, isMobile, compact, inputId }) => (
+        <>
+          {selectedModel && !compact && <Text px={2} mb={2} fontSize="12px" color={colors.fg[3]}>Выбрана: {resolveModelTriggerLabel(selectedModel)}</Text>}
+          {modelStatus === 'loading' && <AppLoading label="Загружаю модели…" />}
+          {modelStatus === 'error' && <Box px={2} mb={2}><Text fontSize="12px">Каталог временно недоступен. Ваш выбор сохранён.</Text>
+            {onRetry && <Button size="sm" mt={2} onClick={onRetry}>Повторить загрузку</Button>}</Box>}
+          {modelStatus === 'ready' && !models.length && <Text px={2} mb={2} fontSize="12px">Нет доступных моделей.</Text>}
+          {unavailable && <Text px={2} mb={2} fontSize="12px" color={colors.warning}>Выбранная модель недоступна. Выберите другую или Авто.</Text>}
+          <Box onKeyDownCapture={event => { if (['ArrowUp', 'ArrowDown', 'Home', 'End'].includes(event.key)) setKeyboardHints(true); }}
+            onPointerMoveCapture={() => setKeyboardHints(false)} onBlurCapture={() => setKeyboardHints(false)}>
+          <AppSelect presentation={compact ? 'composer-compact' : 'composer'} inputId={inputId} ariaLabel="Поиск модели" value={selectedModel || ''}
+            options={options} isSearchable placeholder={compact ? 'Найти модель…' : 'Поиск модели или провайдера…'}
+            showOptionHints={compact && !details && keyboardHints}
+            getOptionHint={option => compact && !details && option ? [option.hint, ...modelBadges(option.info, contextLabel(option.info)).map(badge => badge.label)].filter(Boolean).join(' · ') : null}
+            autoFocus={!isMobile} size={isMobile ? 'touch' : 'sm'} onClose={close} inputValue={query}
+            onInputChange={(next, action) => {
+              if (action.action === 'input-change') { setQuery(next); setLimit(BATCH); }
+            }}
+            noOptionsMessage="Ничего не найдено"
+            onChange={(next) => { onChange?.(next); setQuery(''); setLimit(BATCH); close(); }}
+            formatOptionLabel={(option) => compact && !details ? (
+              <HStack spacing={2} w="100%" minW={0} align="center">
+                <Text flex={1} minW={0} fontWeight={600} fontSize="12px" noOfLines={1} title={option.label}>{option.label}</Text>
+                <ModelOptionBadges badges={modelBadges(option.info, contextLabel(option.info))} />
+                <Box w={3} flexShrink={0}>{option.value === (selectedModel || '') && <Icon as={FiCheck} boxSize={3} color={colors.blue[100]} />}</Box>
+              </HStack>
+            ) : (
+              <HStack align="start" spacing={3} w="100%">
+                <VStack flex={1} minW={0} align="stretch" spacing={1}>
+                  <Text fontWeight={600} fontSize={compact ? '12px' : '13px'} overflowWrap="anywhere">{option.label}</Text>
+                  {option.hint && (!compact || details) && <Text fontSize="12px" color={colors.fg[3]}>{option.hint}</Text>}
+                  {option.info && <>
+                    <HStack flexWrap="wrap" spacing={2} fontSize="11px">
+                      {contextLabel(option.info) && (!compact || details) && <Text color={colors.fg[3]}>{contextLabel(option.info)}</Text>}
+                      {option.info.is_free === true && <Text color={colors.success}>Бесплатно</Text>}
+                      {option.info.is_free !== true && option.info.cost_tier === 0 && <Text color={colors.success}>Экономная</Text>}
+                      {option.info.cost_tier === 2 && <Text color={colors.warning}>Повышенная стоимость</Text>}
+                    </HStack>
+                    {Array.isArray(option.info.capabilities) && (!compact || details) && <Text fontSize="11px" color={colors.fg[3]}>
+                      {option.info.capabilities.filter((capability) => typeof capability === 'string' && Object.hasOwn(CAP_LABELS, capability)).map((capability) => CAP_LABELS[capability]).join(' · ')}
+                    </Text>}
+                  </>}
+                </VStack>
+                {option.value === (selectedModel || '') && <Icon as={FiCheck} mt={1} color={colors.blue[100]} />}
+              </HStack>
+            )} />
           </Box>
-
-          <Box py={1}>
-            {!query && (
-              <MenuItem onClick={() => onChange("")} bg="transparent" _hover={{ bg: chat.modelSelector.itemHover }}>
-                <HStack justify="space-between" w="100%">
-                  <Text>{AUTO_MODE_LABEL}</Text>
-                  {isAuto && <FiCheck />}
-                </HStack>
-              </MenuItem>
-            )}
-            {shown.map(renderItem)}
-            {hiddenCount > 0 && (
-              <Box px={3} py={2} fontSize="11px" color={colors.text.tertiary} fontFamily={typography.fontFamily.mono}>
-                …ещё {hiddenCount} — уточните поиск
-              </Box>
-            )}
-            {filtered.length === 0 && (
-              <Box px={3} py={3} fontSize="12px" color={colors.text.tertiary}>
-                Ничего не найдено
-              </Box>
-            )}
-          </Box>
-        </MenuList>
-      </Portal>
-    </Menu>
+          {filtered.length > limit && <Button size="sm" variant="ghost" w="100%" mt={2}
+            onClick={() => setLimit((previous) => previous + BATCH)}>Показать ещё · {filtered.length - limit}</Button>}
+          {query && !filtered.length && <Text px={2} fontSize="12px" color={colors.fg[3]} mt={2}>Ничего не найдено. Измените или очистите поиск.</Text>}
+        </>
+      )}
+    </ChoicePanel>
   );
 }
-
-export default ModelSelector;

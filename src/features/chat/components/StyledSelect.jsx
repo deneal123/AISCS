@@ -5,7 +5,7 @@ import AppSelect from '@shared/controls/AppSelect';
  * нативному браузерному select, который рендерит OS-дропдаун. Единый вид с
  * остальными меню (ComposerModeSelector, ModelSelector). options: [{ value, label }].
  */
-export default function StyledSelect({ value, options = [], onChange, placeholder = 'Выбрать…', size = 'sm' }) {
+export default function StyledSelect({ value, options = [], onChange, placeholder = 'Выбрать…', size = 'sm', ariaLabel, menuPortalTarget }) {
   return (
     <AppSelect
       value={value}
@@ -13,7 +13,8 @@ export default function StyledSelect({ value, options = [], onChange, placeholde
       onChange={onChange}
       placeholder={placeholder}
       size={size}
-      ariaLabel={placeholder}
+      menuPortalTarget={menuPortalTarget}
+      ariaLabel={ariaLabel || placeholder}
     />
   );
 }

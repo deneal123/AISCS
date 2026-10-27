@@ -17,7 +17,7 @@ import fs from 'fs';
 import path from 'path';
 
 const SOURCE = fs.readFileSync(
-  path.join(__dirname, '../../src/features/chat/page/ChatPageContainer.jsx'),
+  path.join(__dirname, '../../src/features/chat/hooks/orchestration/useWorkbenchRunActions.js'),
   'utf8'
 );
 

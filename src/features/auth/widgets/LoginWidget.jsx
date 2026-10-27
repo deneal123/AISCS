@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { APPLICATION_HOME } from '@shared/config/applicationProfile';
 import { Button, Divider, HStack, Icon, Link, Text, VStack } from "@chakra-ui/react";
 import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
 import { EmailIcon } from "@chakra-ui/icons";
@@ -27,7 +28,7 @@ export default function LoginWidget() {
   const [error, setError] = useState(null);
   const [step, setStep] = useState("form"); // 'form' | 'verify'
 
-  const from = location.state?.from?.pathname || "/chat";
+  const from = location.state?.from?.pathname || APPLICATION_HOME;
   const emailInvalid = email.length > 0 && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   // Autofocus первого поля при монтировании.

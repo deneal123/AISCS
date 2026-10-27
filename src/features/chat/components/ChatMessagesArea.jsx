@@ -1,7 +1,7 @@
 import React, { Suspense, lazy } from 'react';
 import { Box, Button, HStack, Icon, IconButton, Text, VStack, keyframes } from '@chakra-ui/react';
 import { FiArchive, FiArrowDown, FiChevronDown, FiChevronUp, FiRefreshCw } from '@shared/icons';
-import { colors, borderRadius, motion } from '@theme/tokens';
+import { colors, borderRadius, motion, spacing } from '@theme/tokens';
 import ChatMessageItem from './ChatMessageItem';
 import ChatEmptyState from './ChatEmptyState';
 import StatusBanner from './StatusBanner';
@@ -10,6 +10,13 @@ import { CHAT_SCROLLBAR_SX, CHAT_THEME } from '../constants/theme';
 import { getDateLabel, isSameDay } from '../utils/messageGrouping';
 
 const TracePanel = lazy(() => import('./trace/TracePanel'));
+
+// Numeric Chakra spacing follows this project's scale: 3 is 6px, not 12px.
+// One owner protects prose, user bubbles, traces and overlaid status messages.
+const READING_GUTTERS = {
+  pl: { base: `max(${spacing.md}, env(safe-area-inset-left, 0px))`, md: 6, lg: 8 },
+  pr: { base: `max(${spacing.md}, env(safe-area-inset-right, 0px))`, md: 6, lg: 8 },
+};
 
 // «Живое» кольцо кнопки «к последнему»: пока идёт генерация, а пользователь
 // отмотал ленту вверх, пульс подсказывает, что НИЖЕ прибывает новый ответ
@@ -198,13 +205,16 @@ function ChatMessagesArea({
   personaIds,
   onPersonaIdsChange,
   onboarding,
-  onOpenWork,
+  onOpenLibrary,
+  onOpenPdf,
+  documentMode = false,
 }) {
   // Скролл-поведение (прилипание/кнопка) целиком управляется хуком
   // useChatAutoScroll в контейнере — здесь только потребляем пропсы.
   const showScrollBtn = !atBottom && visibleMessages.length > 0;
   // Генерация идёт, а лента отмотана вверх → под кнопкой копится новый ответ.
   const liveBelow = showScrollBtn && isLoading;
+  const lastUserId = [...visibleMessages].reverse().find((message) => message.type === 'user')?.id;
 
   return (
     <Box position="relative" flex="1" minH="0" display="flex" flexDirection="column">
@@ -217,7 +227,7 @@ function ChatMessagesArea({
           left={0}
           right={0}
           zIndex={3}
-          px={{ base: 3, md: 6, lg: 8 }}
+          {...READING_GUTTERS}
           pt={2}
           pointerEvents="none"
         >
@@ -236,12 +246,13 @@ function ChatMessagesArea({
         </Box>
       )}
       <Box
+        data-chat-scroll
         ref={scrollRef}
         onScroll={handleScroll}
         flex="1"
         minH="0"
         overflowY="auto"
-        px={{ base: 3, md: 6, lg: 8 }}
+        {...READING_GUTTERS}
         pt={{ base: 5, md: 8 }}
         pb={{ base: 6, md: 8 }}
         sx={CHAT_SCROLLBAR_SX}
@@ -271,17 +282,20 @@ function ChatMessagesArea({
             </Button>
           </VStack>
         ) : visibleMessages.length === 0 ? (
-          <ChatEmptyState personas={personas} personaIds={personaIds} onPersonaIdsChange={onPersonaIdsChange} onboarding={onboarding} />
+          !documentMode && <ChatEmptyState personas={personas} personaIds={personaIds} onPersonaIdsChange={onPersonaIdsChange} onboarding={onboarding} />
         ) : (
           <VStack ref={registerContentRef} spacing={0} align="stretch" w="100%" maxW="860px" mx="auto">
             {visibleMessages.map((message, idx) => {
+              if (message.type !== 'user' && message.metadata?.awaiting_confirmation) return null;
               const prev = visibleMessages[idx - 1];
               const isLast = idx === visibleMessages.length - 1;
               // Первое сообщение в «серии» (сменился отправитель) — показываем шапку
               // ассистента; внутри серии — схлопываем и уплотняем вертикальный ритм.
               const isFirstInGroup = !prev || prev.type !== message.type;
               const showDate = !prev || !isSameDay(prev.timestamp, message.timestamp);
-              const topGap = idx === 0 ? 0 : (isFirstInGroup ? 6 : 2);
+              const followsTrace = prev?.type === 'user' && traceSessionByAnchor.has(prev.id)
+                && (showTracePanel || traceSessionByAnchor.get(prev.id)?.status === 'awaiting_confirmation');
+              const topGap = idx === 0 ? 0 : followsTrace ? '16px' : (isFirstInGroup ? 6 : 2);
               // Граница сжатия: всё, что ВЫШЕ, модель больше не видит целиком — оно
               // свёрнуто в резюме. Отметку ставим перед первым сообщением после сжатия.
               const showCompacted = Boolean(prev) && compactedAfterId != null
@@ -301,15 +315,16 @@ function ChatMessagesArea({
                       regenerateMessage={regenerateMessage}
                       editMessage={editMessage}
                       onFeedback={onFeedback}
-                      onOpenWork={onOpenWork}
+                      onOpenLibrary={onOpenLibrary}
+                      onOpenPdf={onOpenPdf}
                       // isLoading нужен только действиям ПОСЛЕДНЕГО сообщения —
                       // не транслируем смену loading во все memo-элементы списка.
                       isLoading={isLast ? isLoading : false}
                     />
                   </Box>
-                  {showTracePanel && message.type === 'user' && traceSessionByAnchor.get(message.id)
+                  {(showTracePanel || traceSessionByAnchor.get(message.id)?.status === 'awaiting_confirmation') && message.type === 'user' && traceSessionByAnchor.get(message.id)
                     ? (
-                      <Box mt={3}>
+                      <Box mt="16px">
                         <Suspense fallback={<Box h="24px" />}>
                           <TracePanel
                             sessions={[traceSessionByAnchor.get(message.id)]}
@@ -330,6 +345,12 @@ function ChatMessagesArea({
                       </Box>
                     )
                     : null}
+                  {message.type === 'user' && currentJob?.status === 'processing'
+                    && (message.id === activeTraceSession?.anchorMessageId
+                      || (!activeTraceSession?.anchorMessageId && message.id === lastUserId)) && (
+                      <AgentActivityStrip session={activeTraceSession}
+                        onCancel={() => onCancelJob(currentJob?.celeryTaskId)} />
+                  )}
                 </React.Fragment>
               );
             })}
@@ -343,12 +364,6 @@ function ChatMessagesArea({
               && String(visibleMessages[visibleMessages.length - 1].id) === String(compactedAfterId)
               && <CompactSeparator summary={compactedSummary} />}
 
-            {currentJob?.status === 'processing' && (
-              <AgentActivityStrip
-                session={activeTraceSession}
-                onCancel={() => onCancelJob(currentJob?.celeryTaskId)}
-              />
-            )}
             <Box ref={endRef} />
           </VStack>
         )}

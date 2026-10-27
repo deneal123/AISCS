@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Box, Button, Icon, Stack, Text } from '@chakra-ui/react';
 import { FiZap } from '@shared/icons';
 import { colors, borderRadius } from '@theme/tokens';
@@ -24,7 +24,7 @@ import { autoModeReasonLabel } from '../utils/autoModeReason';
  */
 const DEFAULT_TTL_SEC = 30;
 
-function secondsLeftOf(offer, now) {
+export function secondsLeftOf(offer, now) {
   const startedAt = Date.parse(offer?.offered_at || '');
   // Без серверной метки живым не считаем: иначе «бессрочная кнопка» вернулась бы через
   // любую запись без срока.
@@ -35,19 +35,36 @@ function secondsLeftOf(offer, now) {
 
 function ModeOffer({ offer, onRun, disabled }) {
   const expiredByServer = Boolean(offer?.expired);
-  const [submittedLocally, setSubmittedLocally] = useState(false);
+  const [submittedLocally, setSubmittedLocally] = useState(null);
+  const submittedOfferRef = useRef(null);
+  const offerIdentity = offer?.offer_id || `${offer?.mode}:${offer?.offered_at}`;
   const [left, setLeft] = useState(() => (expiredByServer ? 0 : secondsLeftOf(offer, Date.now())));
   const accepted = offer?.status === 'accepted';
+  const declined = offer?.status === 'declined';
 
   useEffect(() => {
-    if (expiredByServer || accepted || submittedLocally) {
+    submittedOfferRef.current = null;
+    setSubmittedLocally(null);
+  }, [offerIdentity]);
+
+  const submitDecision = (decision) => {
+    if (disabled || !onRun || expiredByServer || accepted || declined || left <= 0
+        || submittedOfferRef.current === offerIdentity) return;
+    // State alone cannot guard two clicks in the same browser event batch.
+    submittedOfferRef.current = offerIdentity;
+    setSubmittedLocally(decision);
+    onRun(decision === 'decline' ? { ...offer, decision } : offer);
+  };
+
+  useEffect(() => {
+    if (expiredByServer || accepted || declined || submittedLocally) {
       setLeft(0);
       return undefined;
     }
     setLeft(secondsLeftOf(offer, Date.now()));
     const timer = setInterval(() => setLeft(secondsLeftOf(offer, Date.now())), 1000);
     return () => clearInterval(timer);
-  }, [offer, expiredByServer, accepted, submittedLocally]);
+  }, [offer, expiredByServer, accepted, declined, submittedLocally]);
 
   if (!offer?.mode) return null;
 
@@ -61,6 +78,9 @@ function ModeOffer({ offer, onRun, disabled }) {
   // не режим, и ответ без него дан не «обычным путём», а просто без просмотра ролика.
   // Формулировка, не совпадающая с тем, что произошло, читается как поломка.
   const isTool = offer.offer_kind === 'tool';
+  if (declined) {
+    return <Text fontSize="11.5px" color={colors.text.secondary} mt={1}>Платная возможность отклонена.</Text>;
+  }
   if (accepted) {
     return (
       <Text fontSize="11.5px" color={colors.text.secondary} mt={1}>
@@ -71,14 +91,14 @@ function ModeOffer({ offer, onRun, disabled }) {
   if (submittedLocally) {
     return (
       <Text fontSize="11.5px" color={colors.text.secondary} mt={1}>
-        Подтверждение отправлено. Ожидаю запуск.
+        {submittedLocally === 'decline' ? 'Отказ отправлен. Ожидаю продолжение.' : 'Подтверждение отправлено. Ожидаю запуск.'}
       </Text>
     );
   }
   if (expiredByServer || left <= 0) {
     return (
       <Text fontSize="11.5px" color={colors.text.tertiary} mt={1}>
-        {offer.mode === 'expensive_run'
+        {offer.blocking || offer.mode === 'expensive_run'
           ? 'Срок подтверждения истёк, запуск не выполнялся.'
           : isTool
             ? `«${label}» отклонён по таймауту — ответ дан без него.`
@@ -100,7 +120,7 @@ function ModeOffer({ offer, onRun, disabled }) {
         <Icon as={FiZap} boxSize="14px" color={colors.iris[300]} mt="2px" flexShrink={0} />
         <Box flex="1" minW={0}>
           <Text fontSize="12.5px" fontWeight="600" color={colors.text.primary}>
-            {isTool ? `Могу включить: ${label}` : `Подошёл бы режим «${label}»`}
+            {offer.blocking ? `Нужно ваше решение: ${label}` : isTool ? `Могу включить: ${label}` : `Подошёл бы режим «${label}»`}
           </Text>
           {offer.reason_code && (
             <Text fontSize="11.5px" color={colors.text.tertiary} mt={0.5} lineHeight="1.4">
@@ -114,7 +134,9 @@ function ModeOffer({ offer, onRun, disabled }) {
                 ? `Это платная операция, заметно дороже обычного ответа. На решение — ${left} с.`
                 : `Это платный режим, заметно дороже обычного ответа. На решение — ${left} с.`}
           </Text>
+          {offer.blocking && <Text fontSize="11px" color={colors.text.secondary} mt={1}>Ответ не формируется до вашего решения. По таймауту платный запуск не начинается.</Text>}
         </Box>
+        <Stack direction={{ base: 'column', sm: 'row' }} w={{ base: '100%', sm: 'auto' }}>
         <Button
           size="sm"
           flexShrink={0}
@@ -124,13 +146,15 @@ function ModeOffer({ offer, onRun, disabled }) {
           color="white"
           _hover={{ bg: CHAT_THEME.accentHover }}
           isDisabled={disabled || !onRun}
-          onClick={() => {
-            setSubmittedLocally(true);
-            onRun?.(offer);
-          }}
+          onClick={() => submitDecision('accept')}
         >
-          {hasExactEstimate ? `Запустить за ~${formattedEstimate}` : `Запустить (${left})`}
+          {hasExactEstimate ? `Запустить за ~${formattedEstimate}` : offer.blocking ? 'Использовать' : `Запустить (${left})`}
         </Button>
+        <Button size="sm" minH="44px" variant="outline" isDisabled={disabled || !onRun}
+          onClick={() => submitDecision('decline')}>
+          {offer.mode === 'expensive_run' ? 'Не запускать' : 'Продолжить без этого'}
+        </Button>
+        </Stack>
       </Stack>
     </Box>
   );

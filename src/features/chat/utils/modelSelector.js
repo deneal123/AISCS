@@ -1,4 +1,7 @@
-export const AUTO_MODE_LABEL = "Автоматический режим (Auto)";
+export const AUTO_MODE_LABEL = "Автоматический режим (Авто)";
+
+// Только будущий выбор в интерфейсе; история заданий и receipt ID не переписываются.
+export const currentLocalModel = id => id === 'lfm2.5-1.2b-instruct' ? 'qwen2.5-1.5b-instruct' : id;
 
 export const normalizeModelList = (models) => {
   if (!Array.isArray(models)) return [];
@@ -48,6 +51,7 @@ const PROVIDER_LABELS = {
   perplexity: "Perplexity",
   mws: "MWS",
   gigachat: "GigaChat",
+  local: "Локальная модель",
   yandexgpt: "YandexGPT",
 };
 
@@ -64,6 +68,12 @@ const prettifyProvider = (provider) => {
  */
 export const parseModelMeta = (modelId) => {
   const id = String(modelId || "").trim();
+  if (id === 'qwen2.5-1.5b-instruct') {
+    return { id, provider: 'local', providerLabel: PROVIDER_LABELS.local, label: 'Qwen2.5 · 1.5B' };
+  }
+  if (id === 'lfm2.5-1.2b-instruct') {
+    return { id, provider: 'local', providerLabel: PROVIDER_LABELS.local, label: 'LFM2.5 · 1.2B' };
+  }
   const slash = id.indexOf("/");
   if (slash > 0) {
     const provider = id.slice(0, slash);
@@ -83,7 +93,7 @@ export const parseModelMeta = (modelId) => {
 
 // Домашние/первично-значимые провайдеры показываем первыми — иначе среди 400+
 // моделей их (напр. GigaChat, MWS) не видно в усечённом до N списке без поиска.
-const PROVIDER_PRIORITY = ["gigachat", "mws", "yandexgpt"];
+const PROVIDER_PRIORITY = ["local", "gigachat", "mws", "yandexgpt"];
 
 const providerRank = (meta) => {
   const i = PROVIDER_PRIORITY.indexOf(String(meta.provider || "").toLowerCase());

@@ -10,7 +10,10 @@ export function useWorkspaceLease({ threadId, active = true, notify }) {
   const generationRef = useRef(0);
   const actorSessionRef = useRef(getWorkspaceActorSession());
   const currentThreadRef = useRef(threadId);
+  const activeRef = useRef(active);
+  const mountedRef = useRef(true);
   currentThreadRef.current = threadId;
+  activeRef.current = active;
 
   const remember = useCallback((next) => {
     leaseRef.current = next;
@@ -46,6 +49,10 @@ export function useWorkspaceLease({ threadId, active = true, notify }) {
 
   const acquire = useCallback(async (path) => {
     const normalizedPath = String(path || '');
+    const stale = () => ({
+      threadId, path: normalizedPath, fence: 0, status: 'stale', reason: 'thread_changed',
+    });
+    if (!mountedRef.current || currentThreadRef.current !== threadId || activeRef.current !== active) return stale();
     if (!threadId || !normalizedPath || !active) {
       return remember({
         threadId: threadId || '', path: normalizedPath, fence: 0, status: 'readonly', reason: 'inactive',
@@ -53,22 +60,24 @@ export function useWorkspaceLease({ threadId, active = true, notify }) {
     }
     const previous = leaseRef.current;
     const generation = ++generationRef.current;
+    const isCurrent = () => mountedRef.current && activeRef.current
+      && generation === generationRef.current && currentThreadRef.current === threadId;
     if (previous.fence && (previous.threadId !== threadId || previous.path !== normalizedPath)) {
       await releaseTarget(previous);
     }
+    if (!isCurrent()) return stale();
     remember({
       threadId, path: normalizedPath, fence: 0, status: 'acquiring', reason: '',
     });
     try {
       const { acquireWorkspaceLease } = await import('@api/chat');
+      if (!isCurrent()) return stale();
       const result = await acquireWorkspaceLease(threadId, normalizedPath, {
         actorSession: actorSessionRef.current,
       });
-      if (generation !== generationRef.current || currentThreadRef.current !== threadId) {
+      if (!isCurrent()) {
         await releaseTarget({ threadId, path: normalizedPath, fence: Number(result?.fence || 0) });
-        return {
-          threadId, path: normalizedPath, fence: 0, status: 'stale', reason: 'thread_changed',
-        };
+        return stale();
       }
       return remember({
         threadId,
@@ -78,11 +87,7 @@ export function useWorkspaceLease({ threadId, active = true, notify }) {
         reason: Number(result?.fence || 0) ? '' : 'unavailable',
       });
     } catch (error) {
-      if (generation !== generationRef.current || currentThreadRef.current !== threadId) {
-        return {
-          threadId, path: normalizedPath, fence: 0, status: 'stale', reason: 'thread_changed',
-        };
-      }
+      if (!isCurrent()) return stale();
       const status = statusOf(error);
       return remember({
         threadId,
@@ -105,23 +110,35 @@ export function useWorkspaceLease({ threadId, active = true, notify }) {
   }, [releaseTarget, remember, threadId]);
 
   useEffect(() => {
-    if (active || !leaseRef.current.fence) return;
+    if (active || !leaseRef.current.path) return;
     release({ reason: 'inactive' });
   }, [active, release]);
 
   useEffect(() => {
     if (!active || !lease.threadId || !lease.path || !lease.fence) return undefined;
+    let pending = false;
+    let cancelled = false;
     const timer = window.setInterval(async () => {
+      if (pending || cancelled) return;
       const target = leaseRef.current;
+      const generation = generationRef.current;
+      const isCurrent = () => !cancelled && mountedRef.current && activeRef.current
+        && generation === generationRef.current
+        && currentThreadRef.current === target.threadId
+        && leaseRef.current.threadId === target.threadId
+        && leaseRef.current.path === target.path && leaseRef.current.fence === target.fence;
+      if (!target.fence || !isCurrent()) return;
+      pending = true;
       try {
         const { renewWorkspaceLease } = await import('@api/chat');
+        if (!isCurrent()) return;
         const result = await renewWorkspaceLease(target.threadId, target.path, target.fence, {
           actorSession: actorSessionRef.current,
         });
-        if (leaseRef.current.threadId !== target.threadId || leaseRef.current.path !== target.path) return;
+        if (!isCurrent()) return;
         remember({ ...target, fence: Number(result?.fence || target.fence), status: 'editing' });
       } catch {
-        if (leaseRef.current.threadId !== target.threadId || leaseRef.current.path !== target.path) return;
+        if (!isCurrent()) return;
         remember({ ...target, fence: 0, status: 'lost', reason: 'expired' });
         notify?.({
           title: 'Право на правку истекло',
@@ -129,14 +146,20 @@ export function useWorkspaceLease({ threadId, active = true, notify }) {
           status: 'warning',
           duration: 4500,
         });
+      } finally {
+        pending = false;
       }
     }, 20_000);
-    return () => window.clearInterval(timer);
+    return () => { cancelled = true; window.clearInterval(timer); };
   }, [active, lease.fence, lease.path, lease.threadId, notify, remember]);
 
-  useEffect(() => () => {
-    generationRef.current += 1;
-    releaseTarget(leaseRef.current);
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+      generationRef.current += 1;
+      releaseTarget(leaseRef.current);
+    };
   }, [releaseTarget]);
 
   return {

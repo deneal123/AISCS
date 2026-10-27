@@ -39,7 +39,7 @@ describe('useAppToast responsive portal geometry', () => {
         width: 'min(360px, calc(100vw - 32px))',
         minWidth: 0,
         maxWidth: 'calc(100vw - 32px)',
-        margin: '0 16px calc(112px + env(safe-area-inset-bottom, 0px))',
+        margin: '0 16px calc(max(112px, var(--app-toast-action-inset, 0px)) + env(safe-area-inset-bottom, 0px))',
       },
     }));
   });
@@ -53,13 +53,13 @@ describe('useAppToast responsive portal geometry', () => {
     expect(mockToast).toHaveBeenCalledWith(expect.objectContaining({
       position: 'bottom-right',
       containerStyle: expect.objectContaining({
-        margin: '0 16px 88px',
+        margin: '0 16px max(88px, calc(var(--app-toast-action-inset, 0px) + env(safe-area-inset-bottom, 0px)))',
       }),
     }));
   });
 
   it('updates one operation toast instead of stacking a duplicate', () => {
-    mockToast.isActive.mockReturnValue(true);
+    mockToast.isActive.mockReturnValue(false);
     const { result } = renderHook(() => useAppToast());
 
     act(() => result.current({
@@ -67,6 +67,7 @@ describe('useAppToast responsive portal geometry', () => {
       title: 'Сохраняю',
       status: 'info',
     }));
+    mockToast.isActive.mockReturnValue(true);
     act(() => result.current({
       operationId: 'workspace-save',
       title: 'Сохранено',
@@ -78,5 +79,18 @@ describe('useAppToast responsive portal geometry', () => {
       'operation:workspace-save',
       expect.objectContaining({ id: 'operation:workspace-save' }),
     );
+  });
+
+  it('обновляет активную операцию и после окна дедупликации', () => {
+    jest.useFakeTimers();
+    try {
+      const { result } = renderHook(() => useAppToast());
+      act(() => result.current({ operationId: 'context-compaction', title: 'Сжимаю' }));
+      mockToast.isActive.mockReturnValue(true);
+      act(() => jest.advanceTimersByTime(5000));
+      act(() => result.current({ operationId: 'context-compaction', title: 'Контекст сжат' }));
+      expect(mockToast).toHaveBeenCalledTimes(1);
+      expect(mockToast.update).toHaveBeenCalledTimes(1);
+    } finally { jest.useRealTimers(); }
   });
 });

@@ -1,14 +1,18 @@
 import React, { Suspense } from 'react';
 import { Navigate, createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { Center, Spinner } from '@chakra-ui/react';
+import { Center } from '@chakra-ui/react';
 import { ErrorBoundary } from '@shared/ui/molecules';
+import AppLoading from '@shared/controls/AppLoading';
 import { useRoutePreload } from './hooks/useRoutePreload';
 import { APP_ROUTES, FALLBACK_ROUTE, ROUTE_CONFIG, RoutePages } from './app/router';
 import { AdminOnlyRoute, AuthOnlyRoute, FeatureFlagRoute, GuestOnlyRoute, PublicRoute, ROUTE_GUARDS, ROUTE_LAYOUTS, layoutMap } from './app/router';
 import useDocumentTitle from '@shared/hooks/useDocumentTitle';
+import useToastActionProtection from '@shared/hooks/useToastActionProtection';
+import useVisualViewportCss from '@shared/hooks/useVisualViewportCss';
+import RouteErrorBoundary from './app/router/RouteErrorBoundary';
 
 function RouteSuspenseBoundary({ children }) {
-  return <Suspense fallback={<Center h="100vh"><Spinner size="lg" /></Center>}>{children}</Suspense>;
+  return <Suspense fallback={<Center h="100vh"><AppLoading /></Center>}>{children}</Suspense>;
 }
 
 function RouteDocumentTitle({ title, children }) {
@@ -41,6 +45,7 @@ const childRoutesByLayout = ROUTE_CONFIG.reduce((acc, route) => {
   acc[route.layout].push({
     ...(route.path === APP_ROUTES.ROOT ? { index: true } : { path: route.path.replace(/^\//, '') }),
     element: routeElement,
+    errorElement: <RouteErrorBoundary />,
   });
   return acc;
 }, emptyBuckets);
@@ -51,6 +56,7 @@ const FallbackGuard = guardMap[FALLBACK_ROUTE.guard] ?? React.Fragment;
 // страницей — единый бренд-шелл. Catch-all '*' в детях public-лейаута.
 childRoutesByLayout[ROUTE_LAYOUTS.PUBLIC].push({
   path: '*',
+  errorElement: <RouteErrorBoundary />,
   element: <FallbackGuard><RouteDocumentTitle title={FALLBACK_ROUTE.title}><RouteSuspenseBoundary><FallbackPage /></RouteSuspenseBoundary></RouteDocumentTitle></FallbackGuard>,
 });
 
@@ -59,6 +65,7 @@ childRoutesByLayout[ROUTE_LAYOUTS.PUBLIC].push({
 const layoutRoutes = Object.values(ROUTE_LAYOUTS).map((layout) => ({
   path: '/',
   element: layoutMap[layout],
+  errorElement: <RouteErrorBoundary />,
   children: childRoutesByLayout[layout],
 }));
 
@@ -66,7 +73,9 @@ const router = createBrowserRouter(layoutRoutes);
 
 function App() {
   useRoutePreload();
-  return <ErrorBoundary level="page"><RouterProvider router={router} /></ErrorBoundary>;
+  useToastActionProtection();
+  useVisualViewportCss();
+  return <ErrorBoundary level="page"><RouterProvider router={router} future={{ v7_startTransition: true }} /></ErrorBoundary>;
 }
 
 export default App;

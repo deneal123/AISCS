@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { createThreadId } from '../../utils/chatThread';
 import { readChatUiSettings } from '../../adapters/chatUiSettingsStorage';
 import { normalizeChatUiSettings } from '../../schema/chatUiSettingsSchema';
+import { currentLocalModel } from '../../utils/modelSelector';
 
 // Сохранённая локально предпочтительная модель ('' = Auto). Читается синхронно
 // на маунте — URL-параметр ?model= всё равно имеет приоритет (см. ниже).
@@ -18,12 +19,12 @@ export function useChatInitialization(routeThreadId) {
   const [fallbackThreadId, setFallbackThreadId] = useState(() => createThreadId());
   const [searchParams] = useSearchParams();
   const [selectedModelOverride, setSelectedModelOverride] = useState(
-    () => searchParams.get('model') || readPersistedPreferredModel(),
+    () => currentLocalModel(searchParams.get('model') || readPersistedPreferredModel()),
   );
 
   const params = useMemo(() => ({
     initialMessage: searchParams.get('initial'),
-    initialManualModel: searchParams.get('model') || '',
+    initialManualModel: currentLocalModel(searchParams.get('model') || ''),
     initialInputType: searchParams.get('input_type') || '',
     initialWebSearch: searchParams.get('web_search') === 'true',
     initialDeepResearch: searchParams.get('deep_research') === 'true',

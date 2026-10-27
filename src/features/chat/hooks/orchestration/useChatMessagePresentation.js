@@ -66,7 +66,7 @@ export function useChatMessagePresentation({
   useEffect(() => {
     const latestSession = activeOrLatestTraceSession;
     if (!showTracePanel || !traceSessions.length || !latestSession) return undefined;
-    if (latestSession.status === 'running') return undefined;
+    if (['running', 'awaiting_confirmation'].includes(latestSession.status)) return undefined;
     const collapseTimer = window.setTimeout(() => {
       setTracePanelsExpanded((previous) => ({
         ...previous,

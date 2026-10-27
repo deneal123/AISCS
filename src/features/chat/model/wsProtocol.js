@@ -107,12 +107,18 @@ export function protocolError(eventType = '', reason = 'invalid_frame') {
   };
 }
 
-export function safeErrorMessage(frame) {
+export function safeErrorCode(frame) {
   const metadata = isRecord(frame?.metadata) ? frame.metadata : {};
   const rawCode = metadata.failure_code || frame?.error_code || frame?.code || 'internal';
   const code = typeof rawCode === 'string' ? rawCode : 'internal';
-  if (ERROR_CODES.has(code)) return SAFE_ERROR_MESSAGES[code] || SAFE_ERROR_MESSAGES.internal;
-  return SAFE_LEGACY_CODES[code] || SAFE_ERROR_MESSAGES.internal;
+  return ERROR_CODES.has(code) || Object.hasOwn(SAFE_LEGACY_CODES, code) ? code : 'internal';
+}
+
+export function safeErrorMessage(frame) {
+  const code = safeErrorCode(frame);
+  return Object.hasOwn(SAFE_ERROR_MESSAGES, code) ? SAFE_ERROR_MESSAGES[code]
+    : Object.hasOwn(SAFE_LEGACY_CODES, code) ? SAFE_LEGACY_CODES[code]
+      : SAFE_ERROR_MESSAGES.internal;
 }
 
 export { protocolManifest };

@@ -4,6 +4,8 @@ import {
   Flex,
   Tab,
   TabList,
+  TabPanel,
+  TabPanels,
   Tabs,
   VStack,
 } from '@chakra-ui/react';
@@ -11,38 +13,21 @@ import { colors } from '@theme/tokens';
 import { WORK_HUB_THEME } from '../model/theme';
 import { useWorkHub } from '../model/useWorkHub';
 import { useWorkbenchLayout } from '../model/useWorkbenchLayout';
-import { LibraryPane } from './LibraryPane';
+import { useWorkUploadSelection } from '../model/useWorkUploadSelection';
+import { useWorkContextSelection } from '../model/useWorkContextSelection';
+import { WorkbenchLibraryDrawer } from './WorkbenchLibraryDrawer';
 import { WorkContextDrawer } from './WorkContextDrawer';
 import { WorkContextPanel } from './WorkContextPanel';
 import { WorkFileUpload } from './WorkFileUpload';
 import { WorkLanding } from './WorkLanding';
 import { WorkSourceRail } from './WorkSourceRail';
 import { WorkStatusRail } from './WorkStatusRail';
-import { WorkspaceEditor } from './WorkspaceEditor';
+import { WorkFileEditor } from './WorkFileEditor';
 import { WorkspaceTree } from './WorkspaceTree';
+import { PdfStudio } from './PdfStudio';
 
-const SECTIONS = ['workspace', 'library', 'context'];
-
-function Editor({ work, editorRef }) {
-  return (
-    <WorkspaceEditor
-      file={work.file}
-      dirty={work.dirty}
-      busy={work.busy}
-      conflict={work.conflict}
-      revert={work.revert}
-      onChange={(content) => work.setFile((old) => ({ ...old, content }))}
-      onSave={work.save}
-      onDiscard={work.discard}
-      onReacquire={work.reacquireLease}
-      onCopyDraft={work.copyDraft}
-      onLoadActual={work.loadActual}
-      onCloseRevert={() => work.setRevert(null)}
-      onApplyRevert={work.applyRevert}
-      editorRef={editorRef}
-    />
-  );
-}
+const SECTIONS = ['workspace', 'context'];
+const LIBRARY_UPLOAD_OPTIONS = { libraryOnly: true };
 
 export default function WorkHub({
   threadId,
@@ -51,113 +36,137 @@ export default function WorkHub({
   onCancelRun,
   onDirtyChange,
   onRequestNavigation,
+  onThreadUnavailable,
   onRegisterDraftLifecycle,
   active = true,
+  surface = 'work',
+  assistantRef,
+  onDocumentContextChange,
+  documentProposalId,
+  assistantRunning,
+  assistantExpanded = false,
+  libraryOpen = false,
+  onLibraryClose,
+  libraryReturnFocus,
+  ideLibraryTarget,
+  ideLibraryPreferred = false,
 }) {
+  const [semanticDirty, setSemanticDirty] = useState(false);
+  const semanticLifecycle = useRef(null);
+  const registerSemantic = useCallback((value) => { semanticLifecycle.current = value; }, []);
+  const [pdfMounted, setPdfMounted] = useState(surface === 'pdf');
+  useEffect(() => { if (surface === 'pdf') setPdfMounted(true); }, [surface]);
   const work = useWorkHub({
     threadId,
+    assistantRunning,
     invalidationVersion,
     notify,
     onCancelRun,
-    onDirtyChange,
+    onThreadUnavailable,
     active,
+    pdfActive: active && surface === 'pdf',
+    libraryActive: libraryOpen,
   });
+  useEffect(() => { onDirtyChange?.(work.dirty || semanticDirty); }, [onDirtyChange, work.dirty, semanticDirty]);
   const [section, setSection] = useState('workspace');
-  const [contextOpen, setContextOpen] = useState(false);
+  const uploadSelection = useWorkUploadSelection({
+    scope: threadId,
+    disabled: !threadId,
+    busy: Boolean(work.busy),
+    onUpload: work.uploadToWorkspace,
+    uploadOptions: libraryOpen ? LIBRARY_UPLOAD_OPTIONS : undefined,
+  });
+  const { open: contextOpen, setOpen: setContextOpen, ...contextSelection } = useWorkContextSelection(threadId);
   const contextButtonRef = useRef(null);
   const editorRef = useRef(null);
   const layout = useWorkbenchLayout();
   const { hub } = work;
   const workspace = hub.workspace || {};
-  const libraryState = hub.library || {};
   const ready = workspace.state === 'ready';
   const hasSelectedThread = Boolean(threadId) && workspace.state !== 'unselected';
 
   useEffect(() => {
-    if (!threadId || workspace.state === 'unselected') setSection('library');
+    if (!threadId || workspace.state === 'unselected') setSection('workspace');
   }, [threadId, workspace.state]);
 
   const focusEditor = useCallback(() => {
     queueMicrotask(() => editorRef.current?.focus?.());
   }, []);
+  const abandonDraft = work.abandonDraft;
 
   useEffect(() => onRegisterDraftLifecycle?.({
-    abandon: work.abandonDraft,
-    focusEditor,
-  }), [focusEditor, onRegisterDraftLifecycle, work.abandonDraft]);
+    abandon: async () => {
+      if (await abandonDraft() === false) return false;
+      return semanticLifecycle.current?.abandon?.() ?? true;
+    },
+    editorRef,
+  }), [onRegisterDraftLifecycle, abandonDraft]);
 
-  const openWorkspaceFile = useCallback((path) => {
-    if (path === work.file.path && !work.file.error) {
+  const openWorkspaceFile = useCallback((path, options = {}) => {
+    if (path === work.file.path && !work.file.error && !options.onOpened) {
       focusEditor();
       return true;
     }
     const action = async () => {
       const opened = await work.openFile(path);
-      if (opened) focusEditor();
+      if (opened) { focusEditor(); options.onOpened?.(); }
+      else options.onFailed?.();
       return opened;
     };
     if (onRequestNavigation) {
       return onRequestNavigation(action, { returnFocus: document.activeElement });
     }
-    if (work.dirty) return false;
-    action();
-    return true;
-  }, [focusEditor, onRequestNavigation, work]);
+    if (work.dirty || semanticDirty) return false;
+    return action();
+  }, [focusEditor, onRequestNavigation, semanticDirty, work]);
 
-  const uploadControl = (
-    <WorkFileUpload
-      disabled={!threadId}
-      busy={work.busy === 'upload'}
-      onUpload={work.uploadToWorkspace}
-      onPartial={() => setSection('library')}
-    />
-  );
-  const compactUpload = (
-    <WorkFileUpload
-      disabled={!threadId}
-      busy={Boolean(work.busy)}
-      onUpload={work.uploadToWorkspace}
-      onPartial={() => setSection('library')}
-      compact
-    />
-  );
-  const context = (
+  const uploadProps = {
+    disabled: !threadId,
+    busy: Boolean(work.busy),
+    session: uploadSelection,
+  };
+  const uploadControl = !libraryOpen && <WorkFileUpload {...uploadProps} />;
+  const compactUpload = !libraryOpen && <WorkFileUpload {...uploadProps} compact />;
+  const context = () => (
     <WorkContextPanel
       room={hub.room}
       history={hub.history}
       file={work.file}
       busy={work.busy}
       onCreateIssue={work.createIssue}
+      issueDraft={work.issueDraft}
       onUpdateIssue={work.updateIssue}
       onPreviewRevert={work.previewRevert}
       onControl={work.controlAgent}
-      document={work.document}
+      selectedTab={contextSelection.tab}
+      onTabChange={contextSelection.selectTab}
     />
   );
-  const library = (
-    <LibraryPane
-      items={libraryState.items || []}
-      state={libraryState.state}
-      workspaceReady={ready}
-      hasThread={hasSelectedThread}
-      busy={work.busy}
-      onCopy={work.copyFromLibrary}
-      onLoadMore={work.loadMoreLibrary}
-      hasMore={libraryState.next_cursor != null || libraryState.next_offset != null}
-      uploadControl={layout === 'mobile' && section === 'library' ? uploadControl : null}
-      outcomes={work.libraryOutcomes}
-    />
-  );
-
   return (
-    <Flex
+    <>
+    <WorkbenchLibraryDrawer work={{ ...work, threadId }} uploadSession={uploadSelection}
+      ideTarget={ideLibraryTarget} preferIde={ideLibraryPreferred}
+      isOpen={libraryOpen} onClose={onLibraryClose} finalFocusRef={libraryReturnFocus}
+      blocked={Boolean(work.dirty || semanticDirty || assistantRunning || work.document.busy)} />
+    {pdfMounted && <Box display={surface === 'pdf' ? 'flex' : 'none'} flex="1" minH={0} minW={0}>
+      <PdfStudio work={{ ...work, threadId }} active={active && surface === 'pdf'} assistantRef={assistantRef}
+        onOpenFile={openWorkspaceFile} onContextChange={onDocumentContextChange}
+        onDirtyChange={setSemanticDirty} onRegister={registerSemantic} proposalId={documentProposalId}
+        assistantRunning={assistantRunning} assistantExpanded={assistantExpanded} />
+    </Box>}
+    <Tabs
+      display={surface === 'work' ? 'flex' : 'none'}
+      index={layout === 'mobile' ? SECTIONS.indexOf(section) : 0}
+      onChange={(index) => setSection(SECTIONS[index])}
+      isFitted
+      colorScheme="blue"
       data-testid="work-hub"
       data-workspace-state={workspace.state || 'unknown'}
       h="100%"
       flex="1"
       minH={0}
       minW={0}
-      direction="column"
+      flexDirection="column"
       overflow="hidden"
       bg={WORK_HUB_THEME.pageBg}
     >
@@ -174,29 +183,18 @@ export default function WorkHub({
         onOpenContext={() => setContextOpen(true)}
       />
 
-      {layout === 'mobile' && (
-        <Box
-          data-testid="work-mobile-tabs"
-          flexShrink={0}
-          bg={WORK_HUB_THEME.headerBg}
-          borderBottom={`1px solid ${colors.border.subtle}`}
-        >
-          <Tabs
-            index={SECTIONS.indexOf(section)}
-            onChange={(index) => setSection(SECTIONS[index])}
-            isFitted
-            colorScheme="blue"
-          >
-            <TabList overflow="hidden">
-              <Tab minW={0} fontSize="12px">Файлы</Tab>
-              <Tab data-testid="work-library-nav" minW={0} fontSize="12px">
-                Библиотека
-              </Tab>
-              <Tab minW={0} fontSize="12px">Контекст</Tab>
-            </TabList>
-          </Tabs>
-        </Box>
-      )}
+      <Box
+        data-testid={layout === 'mobile' ? 'work-mobile-tabs' : undefined}
+        display={layout === 'mobile' ? 'block' : 'none'}
+        flexShrink={0}
+        bg={WORK_HUB_THEME.headerBg}
+        borderBottom={`1px solid ${colors.border.subtle}`}
+      >
+        <TabList overflow="hidden" aria-label="Разделы работы">
+          <Tab minW={0} fontSize="12px">Файлы</Tab>
+          <Tab minW={0} fontSize="12px">Контекст</Tab>
+        </TabList>
+      </Box>
 
       <Flex flex="1" minH={0} minW={0} align="stretch">
           {layout !== 'mobile' && <Box
@@ -208,22 +206,14 @@ export default function WorkHub({
             overflow="hidden"
           >
             <WorkSourceRail
-              section={section === 'context' ? 'workspace' : section}
-              onSectionChange={setSection}
               workspace={workspace}
-              library={libraryState}
               file={{ ...work.file, onSelect: openWorkspaceFile }}
-              busy={work.busy}
-              hasThread={hasSelectedThread}
               compactUpload={compactUpload}
-              outcomes={work.libraryOutcomes}
-              onCopy={work.copyFromLibrary}
-              onLoadMore={work.loadMoreLibrary}
             />
           </Box>}
 
-          <Box key="work-main" flex="1" minW={0} minH={0} overflow="hidden">
-            <Box display={layout !== 'mobile' || section === 'workspace' ? 'block' : 'none'} h="full">
+          <TabPanels key="work-main" flex="1" minW={0} minH={0} overflow="hidden">
+            <TabPanel p={0} h="full">
               {ready ? (
                 <Flex h="full" direction="column" minH={0}>
                   {layout === 'mobile' && <Box
@@ -249,7 +239,7 @@ export default function WorkHub({
                     minW={0}
                     minH={0}
                   >
-                    <Editor work={work} editorRef={editorRef} />
+                    <WorkFileEditor work={work} editorRef={editorRef} />
                   </Box>
                 </Flex>
               ) : (
@@ -260,26 +250,18 @@ export default function WorkHub({
                   loading={hub.loading || hub.refreshing}
                   onActivate={work.activateWorkspace}
                   onRetry={() => work.load()}
-                  uploadControl={section === 'library' ? null : uploadControl}
+                  uploadControl={uploadControl}
                 />
               )}
-            </Box>
-            <Box
-              display={layout === 'mobile' && section === 'library' ? 'block' : 'none'}
-              h="full"
-              minW={0}
-              p={3}
-            >
-              {library}
-            </Box>
-            <Box
-              display={layout === 'mobile' && section === 'context' ? 'block' : 'none'}
+            </TabPanel>
+            <TabPanel
+              p={0}
               h="full"
               minW={0}
             >
-              {context}
-            </Box>
-          </Box>
+              {context()}
+            </TabPanel>
+          </TabPanels>
 
           {ready && layout === 'wide' && (
             <Box
@@ -290,20 +272,21 @@ export default function WorkHub({
               borderLeft={`1px solid ${WORK_HUB_THEME.panelBorder}`}
               overflow="hidden"
             >
-              {context}
+              {context()}
             </Box>
           )}
       </Flex>
 
       {layout === 'medium' && (
         <WorkContextDrawer
-          isOpen={contextOpen}
+          isOpen={contextOpen && active && surface === 'work'}
           onClose={() => setContextOpen(false)}
           finalFocusRef={contextButtonRef}
         >
-          {context}
+          {context()}
         </WorkContextDrawer>
       )}
-    </Flex>
+    </Tabs>
+    </>
   );
 }

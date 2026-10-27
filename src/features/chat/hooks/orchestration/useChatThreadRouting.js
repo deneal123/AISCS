@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 export function useChatThreadRouting({
   routeThreadId,
@@ -6,7 +6,16 @@ export function useChatThreadRouting({
   threadId,
   search = '',
   navigate,
+  startFreshThread,
 }) {
+  const unavailableRef = useRef('');
+  const handleUnavailableThread = useCallback((unavailableId) => {
+    if (!startFreshThread || unavailableId !== threadId || unavailableRef.current === unavailableId) return;
+    unavailableRef.current = unavailableId;
+    const surface = new URLSearchParams(search).get('surface');
+    const nextSearch = ['pdf', 'work'].includes(surface) ? `?surface=${surface}` : '';
+    navigate(`/chat/${startFreshThread()}${nextSearch}`, { replace: true });
+  }, [threadId, search, navigate, startFreshThread]);
   useEffect(() => {
     if (!routeThreadId && !initialMessage && threadId) {
       navigate(`/chat/${threadId}${search}`, { replace: true });
@@ -17,6 +26,6 @@ export function useChatThreadRouting({
     state: {
       hasRouteThreadId: Boolean(routeThreadId),
     },
-    actions: {},
+    actions: { handleUnavailableThread },
   };
 }

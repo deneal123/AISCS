@@ -20,10 +20,15 @@ export function useChatContextCompaction({ messages, isLoading, notify, sendCont
   const compactedAtMessageRef = useRef(null);
   const autoCompactedRef = useRef(false);
   const busyTimerRef = useRef(null);
+  const compactingRef = useRef(false);
+  const notifyCompaction = useCallback((options) => notify({
+    ...options, operationId: 'context-compaction',
+  }), [notify]);
 
   useEffect(() => () => window.clearTimeout(busyTimerRef.current), []);
 
   const onCompacted = useCallback((event, ok) => {
+    compactingRef.current = false;
     setCompacting(false);
     window.clearTimeout(busyTimerRef.current);
     if (ok) {
@@ -31,7 +36,7 @@ export function useChatContextCompaction({ messages, isLoading, notify, sendCont
       compactedAtMessageRef.current = lastMessageIdRef.current;
       setCompactedOverride(true);
       setCompactedSummary(String(event?.summary || ''));
-      notify({
+      notifyCompaction({
         title: 'Контекст сжат',
         description: 'Диалог свёрнут в резюме — над последним сообщением появился разделитель.',
         status: 'success',
@@ -39,13 +44,16 @@ export function useChatContextCompaction({ messages, isLoading, notify, sendCont
       });
       return;
     }
-    notify({
-      title: 'Сжимать нечего',
-      description: 'Диалог слишком короткий для сжатия.',
-      status: 'info',
+    const empty = event?.reason === 'empty';
+    notifyCompaction({
+      title: empty ? 'Сжимать нечего' : 'Контекст не сжат',
+      description: empty
+        ? 'Нет истории для сжатия.'
+        : 'Не удалось подготовить резюме. Текущая история сохранена.',
+      status: empty ? 'info' : 'warning',
       duration: 2500,
     });
-  }, [notify]);
+  }, [notifyCompaction]);
 
   const contextInfo = useMemo(() => {
     const list = messages || [];
@@ -79,19 +87,37 @@ export function useChatContextCompaction({ messages, isLoading, notify, sendCont
   }, [compactedOverride, messages]);
 
   const compact = useCallback(() => {
-    if (compacting || isLoading) return;
+    if (compactingRef.current || isLoading) return;
+    compactingRef.current = true;
     if (sendControlRef.current?.('compact_context')) {
       setCompacting(true);
-      notify({
+      notifyCompaction({
         title: 'Сжимаю контекст…',
-        description: 'Диалог сворачивается в долговременную память',
+        description: 'Подготавливаю резюме диалога.',
         status: 'info',
-        duration: 2000,
+        duration: 20000,
       });
       window.clearTimeout(busyTimerRef.current);
-      busyTimerRef.current = window.setTimeout(() => setCompacting(false), 15000);
+      busyTimerRef.current = window.setTimeout(() => {
+        compactingRef.current = false;
+        setCompacting(false);
+        notifyCompaction({
+          title: 'Результат сжатия пока неизвестен',
+          description: 'Сервер не подтвердил завершение. Текущая история сохранена.',
+          status: 'warning',
+          duration: 5000,
+        });
+      }, 15000);
+    } else {
+      compactingRef.current = false;
+      notifyCompaction({
+        title: 'Сжатие не запущено',
+        description: 'Нет соединения с сервером. Дождитесь восстановления связи.',
+        status: 'warning',
+        duration: 3500,
+      });
     }
-  }, [compacting, isLoading, notify, sendControlRef]);
+  }, [isLoading, notifyCompaction, sendControlRef]);
 
   useEffect(() => {
     if (!contextInfo.hasWindow || isLoading) return;

@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { Box, Button, HStack, Icon, IconButton, Skeleton, Spinner, Text, VStack } from '@chakra-ui/react';
-import { FiCpu, FiEdit2, FiMessageSquare, FiPlus, FiRefreshCw, FiSettings, FiShare2, FiStar, FiX } from '@shared/icons';
+import { FiBookOpen, FiCpu, FiEdit2, FiMessageSquare, FiPlus, FiRefreshCw, FiSettings, FiShare2, FiStar, FiX } from '@shared/icons';
 import { colors, borderRadius, motion } from '@theme/tokens';
 import { CHAT_FONT_FAMILY, CHAT_SCROLLBAR_SX, CHAT_THEME } from '../constants/theme';
 import { ChatSidebar } from './index';
@@ -26,6 +26,7 @@ function ChatSidebarPanel({
   onTogglePin,
   onNewChat,
   onOpenMemory,
+  onOpenLibrary,
   onOpenGraph,
   onOpenSettings,
   inDrawer = false,
@@ -51,7 +52,7 @@ function ChatSidebarPanel({
     if (next && onRenameThread) onRenameThread(tid, next);
   }, [editValue, onRenameThread]);
   const sidebar = (
-    <VStack h="full" align="stretch" spacing={0} p={4}>
+    <VStack h="full" align="stretch" spacing={0} p={4} pb={0}>
       <Box mb={5} px={1}>
         <Text
           fontSize="11px"
@@ -200,13 +201,18 @@ function ChatSidebarPanel({
         </VStack>
       </Box>
 
-      <VStack spacing={1} align="stretch" mt={4} pt={4} borderTop={`1px solid ${CHAT_THEME.panelBorder}`}>
+      <VStack data-chat-sidebar-footer={inDrawer ? undefined : ''} spacing={1} align="stretch" mt={4}
+        mx={-4} px={4} pt={4} pb={4} flexShrink={0} overflowY="auto"
+        minH="max-content"
+        >
+        <VStack data-chat-sidebar-actions={inDrawer ? undefined : ''} spacing={1} align="stretch" mt="auto" flexShrink={0}>
         {[
+          { icon: <FiBookOpen />, label: 'Библиотека', onClick: onOpenLibrary },
           { icon: <FiCpu />, label: 'Память и контекст', onClick: onOpenMemory },
           { icon: <FiShare2 />, label: 'Граф знаний', onClick: onOpenGraph },
           { icon: <FiSettings />, label: 'Настройки', onClick: onOpenSettings },
         ].map(({ icon, label, onClick }) => (
-          <Button key={label} size="sm" h="34px" justifyContent="flex-start"
+          <Button key={label} size="sm" h="34px" minH="34px" flexShrink={0} justifyContent="flex-start"
             leftIcon={<Box w="16px" h="16px" display="flex" alignItems="center" justifyContent="center" flexShrink={0}>
               {icon}
             </Box>}
@@ -217,6 +223,7 @@ function ChatSidebarPanel({
             {label}
           </Button>
         ))}
+        </VStack>
       </VStack>
     </VStack>
   );

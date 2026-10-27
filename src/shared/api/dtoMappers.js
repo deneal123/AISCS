@@ -1,5 +1,7 @@
 const DEFAULT_FALLBACK_MESSAGE = 'Не удалось выполнить действие. Попробуйте ещё раз.';
 const NETWORK_MESSAGE = 'Нет соединения с сервером. Проверьте интернет или повторите позже.';
+const NETWORK_CODES = new Set(['ERR_NETWORK', 'ECONNABORTED', 'ETIMEDOUT']);
+const DETAIL_LIMIT = 2048;
 
 const STATUS_MESSAGES = {
   400: 'Некорректные данные. Проверьте введённую информацию и попробуйте снова.',
@@ -36,40 +38,57 @@ const CODE_MESSAGES = {
   validation_error: 'Проверьте правильность заполнения полей и попробуйте снова.',
 };
 
-const isLikelyErrorCode = (value) => typeof value === 'string' && /^[A-Z0-9_]+$/.test(value.trim());
+const isLikelyErrorCode = (value) => typeof value === 'string'
+  && /^(?:[A-Z0-9_]+|ide_[a-z0-9_]+)$/.test(value.trim());
 
-const normalizeDetail = (detail) => {
-  if (!detail && detail !== 0) return '';
-  if (typeof detail === 'string') return detail;
-  if (Array.isArray(detail)) return detail.map((item) => normalizeDetail(item?.msg || item?.message || item?.detail || item)).filter(Boolean).join('; ');
-  if (typeof detail === 'object') {
-    if (detail.message) return normalizeDetail(detail.message);
-    if (detail.detail) return normalizeDetail(detail.detail);
-    if (detail.msg) return normalizeDetail(detail.msg);
-    const nested = Object.values(detail).map((value) => normalizeDetail(value)).filter(Boolean).join('; ');
-    if (nested) return nested;
-    return JSON.stringify(detail);
+const normalizeDetail = (detail, state = { seen: new WeakSet(), nodes: 128 }, depth = 0) => {
+  if (state.nodes-- <= 0 || depth > 6 || detail == null) return '';
+  if (typeof detail === 'string') return detail.slice(0, DETAIL_LIMIT);
+  if (typeof detail === 'boolean' || (typeof detail === 'number' && Number.isFinite(detail))) return String(detail);
+  if (typeof detail !== 'object' || state.seen.has(detail)) return '';
+  state.seen.add(detail);
+  try {
+    const descriptors = Object.getOwnPropertyDescriptors(detail);
+    const preferred = ['message', 'detail', 'msg'].map((key) => descriptors[key]?.value)
+      .find((value) => value != null && value !== '');
+    if (preferred != null) return normalizeDetail(preferred, state, depth + 1);
+    const values = Array.isArray(detail) ? detail.slice(0, 32)
+      : Object.values(descriptors).filter((item) => Object.hasOwn(item, 'value')).slice(0, 32).map((item) => item.value);
+    let result = '';
+    for (const value of values) {
+      if (state.nodes <= 0 || result.length >= DETAIL_LIMIT) break;
+      const text = normalizeDetail(value, state, depth + 1);
+      if (text) result += `${result ? '; ' : ''}${text}`;
+    }
+    return result.slice(0, DETAIL_LIMIT);
+  } catch {
+    return '';
   }
-  return String(detail);
 };
 
 export const mapIdentity = (data) => data;
 
 export const mapApiError = (error, options = {}) => {
-  const status = error?.response?.status ?? error?.status ?? null;
+  const mapped = error?.type === 'DomainError';
+  const statusValue = error?.response?.status ?? error?.status;
+  const status = Number.isInteger(statusValue) && statusValue >= 100 && statusValue <= 599 ? statusValue : null;
   const data = error?.response?.data ?? error?.details ?? null;
-  const rawDetail = data?.detail ?? data?.message ?? data?.error ?? data ?? error?.message;
+  const rawDetail = mapped ? error?.details : data?.detail ?? data?.message ?? data?.error ?? data ?? error?.message;
   // Код из ТЕЛА ответа приоритетнее axios-кода транспорта (ERR_BAD_REQUEST и т.п.):
   // иначе бэкендовый code (у нас — data.error.code) всегда затирается и сообщение
   // падает на общий STATUS_MESSAGES вместо понятного текста.
-  const bodyCode =
+  const bodyCode = mapped ? null : (
     data?.code ??
     (rawDetail && typeof rawDetail === 'object' ? rawDetail.code : null) ??
-    (typeof rawDetail === 'string' && isLikelyErrorCode(rawDetail) ? rawDetail.trim() : null);
-  const code = options.kind === 'canceled' ? 'REQUEST_CANCELED' : (bodyCode ?? error?.code ?? null);
+    (typeof rawDetail === 'string' && isLikelyErrorCode(rawDetail) ? rawDetail.trim() : null));
+  const codeValue = options.kind === 'canceled' ? 'REQUEST_CANCELED' : (bodyCode ?? error?.code ?? null);
+  const code = typeof codeValue === 'string' && /^[A-Za-z0-9_]{1,128}$/.test(codeValue) ? codeValue : null;
 
   const details = normalizeDetail(rawDetail) || null;
-  const message = CODE_MESSAGES[code] || STATUS_MESSAGES[status] || (!status ? NETWORK_MESSAGE : (options.fallbackMessage || DEFAULT_FALLBACK_MESSAGE));
+  const fallback = typeof options.fallbackMessage === 'string' && options.fallbackMessage ? options.fallbackMessage : DEFAULT_FALLBACK_MESSAGE;
+  const message = (Object.hasOwn(CODE_MESSAGES, code) ? CODE_MESSAGES[code] : null)
+    || (Object.hasOwn(STATUS_MESSAGES, status) ? STATUS_MESSAGES[status] : null)
+    || (!status && NETWORK_CODES.has(code) ? NETWORK_MESSAGE : fallback);
 
   return {
     type: 'DomainError',
@@ -77,9 +96,9 @@ export const mapApiError = (error, options = {}) => {
     message,
     details,
     status,
-    isRetryable: !status || status >= 500 || status === 429,
+    isRetryable: code !== 'REQUEST_CANCELED' && (!status || status >= 500 || status === 429),
     isCanceled: code === 'REQUEST_CANCELED',
-    raw: error,
+    raw: mapped ? error.raw ?? null : error,
   };
 };
 

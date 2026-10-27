@@ -19,9 +19,11 @@ export const sendChatMessage = (threadId, message, userId = null, model = null, 
       ...(fileContext && { file_context: fileContext }),
       ...(Array.isArray(fileIds) && fileIds.length && { file_ids: fileIds }),
       ...(routeOverride && { route_override: routeOverride }),
+      ...(params.documentContext && { document_context: params.documentContext }),
       ...(Array.isArray(attachments) && attachments.length && { attachments }),
       ...(confirmExpensiveRun && { confirm_expensive_run: true }),
       ...(confirmOfferId && { confirm_offer_id: confirmOfferId }),
+      ...(confirmOfferId && { confirmation_decision: params.confirmationDecision || 'accept' }),
     },
     ...options,
   });
@@ -35,6 +37,9 @@ export const getChatModelsCatalog = (options = {}) =>
 export const getChatPersonas = (options = {}) =>
   request({ method: 'get', url: '/api/chats/personas', ...options });
 
+export const getChatProviderStatus = (options = {}) =>
+  request({ method: 'get', url: '/api/chats/providers/status', ...options });
+
 export const getChatModels = (options = {}) =>
   request({ method: 'get', url: '/api/chats/models', ...options }, mapModelsResponse);
 
@@ -45,24 +50,31 @@ export const getChatModels = (options = {}) =>
 let catalogPromise = null;
 let modelsPromise = null;
 
-const cacheOnce = (run, reset) =>
-  run().catch((err) => {
-    reset();
-    throw err;
-  });
-
 export const getChatModelsCatalogCached = () => {
-  catalogPromise ??= cacheOnce(getChatModelsCatalog, () => {
-    catalogPromise = null;
-  });
+  if (!catalogPromise) {
+    const pending = getChatModelsCatalog().catch((error) => {
+      if (catalogPromise === pending) catalogPromise = null;
+      throw error;
+    });
+    catalogPromise = pending;
+  }
   return catalogPromise;
 };
 
 export const getChatModelsCached = () => {
-  modelsPromise ??= cacheOnce(getChatModels, () => {
-    modelsPromise = null;
-  });
+  if (!modelsPromise) {
+    const pending = getChatModels().catch((error) => {
+      if (modelsPromise === pending) modelsPromise = null;
+      throw error;
+    });
+    modelsPromise = pending;
+  }
   return modelsPromise;
+};
+
+export const resetChatModelsCache = () => {
+  catalogPromise = null;
+  modelsPromise = null;
 };
 
 export const getChatHistory = (threadId, limit = 50, options = {}) =>
@@ -200,6 +212,9 @@ export const getAccountWorkLibrary = (options = {}) =>
 export const activateWorkHub = (threadId, options = {}) =>
   request({ method: 'post', url: `/api/chats/${threadId}/work/activate`, ...options });
 
+export const preparePdfWorkspace = (threadId, { retry = false } = {}) =>
+  request({ method: 'post', url: `/api/chats/${threadId}/work/pdf/prepare`, data: retry ? { retry: true } : {} });
+
 export const acquireWorkspaceLease = (threadId, path, options = {}) =>
   request({ method: 'post', url: `/api/chats/${threadId}/workspace/leases/acquire`, data: { path }, ...workspaceMutationOptions(options) });
 
@@ -212,20 +227,26 @@ export const releaseWorkspaceLease = (threadId, path, fence, options = {}) =>
 export const writeWorkspaceFile = (threadId, path, content, expectedRevision, fence, options = {}) =>
   request({ method: 'post', url: `/api/chats/${threadId}/workspace/write`, data: { path, content, expected_revision: expectedRevision, fence }, ...workspaceMutationOptions(options) });
 
-export const copyLibraryFileToWorkspace = (threadId, fileId, expectedRevision, fence, options = {}) =>
-  request({ method: 'post', url: `/api/chats/${threadId}/work/library/${fileId}/copy`, data: { expected_revision: expectedRevision, fence }, ...workspaceMutationOptions(options) });
+export const copyLibraryFileToWorkspace = (threadId, fileId, expectedRevision, fence, options = {}) => {
+  const { documentPath, ...mutationOptions } = options;
+  return request({ method: 'post', url: `/api/chats/${threadId}/work/library/${fileId}/copy`,
+    data: { expected_revision: expectedRevision, fence, ...(documentPath ? { document_path: documentPath } : {}) },
+    ...workspaceMutationOptions(mutationOptions) });
+};
 
 export const uploadFileToWorkspace = (threadId, file, expectedRevision, fence, onProgress, options = {}) => {
-  const { uploadIntentId, ...mutationOptions } = options;
+  const { uploadIntentId, libraryOnly = false, ...mutationOptions } = options;
   const { headers, ...requestOptions } = workspaceMutationOptions(mutationOptions);
   const formData = new FormData();
   formData.append('file', file);
-  formData.append('expected_revision', expectedRevision);
-  formData.append('fence', String(fence));
+  if (!libraryOnly) {
+    formData.append('expected_revision', expectedRevision);
+    formData.append('fence', String(fence));
+  }
   if (uploadIntentId) formData.append('upload_intent_id', uploadIntentId);
   return request({
     method: 'post',
-    url: `/api/chats/${threadId}/work/upload`,
+    url: `/api/chats/${threadId}/work/${libraryOnly ? 'library/upload' : 'upload'}`,
     data: formData,
     headers: { 'Content-Type': 'multipart/form-data', ...headers },
     onUploadProgress: (event) => onProgress?.(event.total ? Math.round((event.loaded * 100) / event.total) : null),
@@ -233,6 +254,9 @@ export const uploadFileToWorkspace = (threadId, file, expectedRevision, fence, o
     ...requestOptions,
   });
 };
+
+export const uploadFileToLibrary = (threadId, file, onProgress, options = {}) =>
+  uploadFileToWorkspace(threadId, file, '', 0, onProgress, { ...options, libraryOnly: true });
 
 export const getWorkspaceIssues = (threadId, options = {}) =>
   request({ method: 'get', url: `/api/chats/${threadId}/workspace/issues`, ...options });
@@ -263,11 +287,24 @@ export const getDocumentProject = (threadId, path, options = {}) => request({
   ...options,
 });
 
+export const saveDocumentDraft = (threadId, payload, options = {}) => request({
+  method: 'post', url: `/api/chats/${threadId}/workspace/documents/authoring/edit`, data: payload,
+  ...workspaceMutationOptions(options),
+});
+
+export const getDocumentProposal = (threadId, proposalId, options = {}) => request({
+  method: 'get', url: `/api/chats/${threadId}/workspace/documents/proposals/${proposalId}`, ...options,
+});
+
 export const getDocumentAuthoringState = (threadId, path, options = {}) => request({
   method: 'post',
   url: `/api/chats/${threadId}/workspace/documents/authoring`,
   data: { path },
   ...options,
+});
+
+export const getDocumentSources = (threadId, path, options = {}) => request({
+  method: 'post', url: `/api/chats/${threadId}/workspace/documents/sources`, data: { path }, ...options,
 });
 
 export const applyDocumentProfile = (threadId, payload, options = {}) => request({

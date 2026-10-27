@@ -3,7 +3,6 @@ import { Box, Flex, HStack, IconButton, Link, useDisclosure } from "@chakra-ui/r
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { APP_ROUTES, isLandingRoute } from "@app/router";
-import { FiCreditCard, FiMessageSquare, FiShield } from "@shared/icons";
 import { useAuth } from "@app/providers";
 import { borderRadius, colors, transitions, typography } from "@theme/tokens";
 import { PROJECT_VERSION } from "@constants";
@@ -17,12 +16,8 @@ import { HEADER_THEME } from "./headerTheme";
 import { useHeaderScroll } from "./useHeaderScroll";
 import HeaderUserMenu from "./HeaderUserMenu";
 import HeaderMobileMenu from "./HeaderMobileMenu";
-
-// Базовые пункты для авторизованных; «Админ» добавляется ниже только админам.
-const BASE_NAV = [
-  { label: "Чат", to: APP_ROUTES.CHAT, icon: FiMessageSquare },
-  { label: "Тарифы", to: APP_ROUTES.BILLING, icon: FiCreditCard },
-];
+import { getHeaderNavigation } from "./headerNavigation";
+import { SIMULATION_PROFILE } from '@shared/config/applicationProfile';
 
 const LANDING_SECTION_IDS = LANDING_NAV.links.map((l) => l.id);
 
@@ -49,10 +44,7 @@ function Header() {
   const scrolled = useHeaderScroll();
   const userLabel = user?.first_name || user?.email || "Профиль";
   const activeSection = useActiveSection(LANDING_SECTION_IDS, { enabled: isLanding });
-  // Админам добавляем «Админ»; список идёт и в десктоп-навигацию, и в мобильное меню.
-  const authedNav = isAdmin
-    ? [...BASE_NAV, { label: "Админ", to: APP_ROUTES.ADMIN, icon: FiShield }]
-    : BASE_NAV;
+  const authedNav = SIMULATION_PROFILE ? [] : getHeaderNavigation(location, isAdmin);
 
   const scrollToSection = (id) => (e) => {
     e.preventDefault();
@@ -104,6 +96,7 @@ function Header() {
         align="center"
         gap="18px"
         h="var(--app-header-h)"
+        flexShrink={0}
         px={{ base: "16px", md: "28px" }}
         py="12px"
         borderBottom="1px solid"
@@ -123,12 +116,12 @@ function Header() {
           fontSize="15px"
           fontWeight={700}
           whiteSpace="nowrap"
-          aria-label={`${PROJECT_NAME} — на главную`}
+          aria-label={SIMULATION_PROFILE ? 'Симулятор — на главную' : `${PROJECT_NAME} — на главную`}
           _hover={{ textDecoration: "none" }}
           _focusVisible={{ boxShadow: FOCUS_RING, outline: "none", borderRadius: borderRadius.sm }}
         >
           <Logo boxSize="22px" />
-          <Box as="span">{PROJECT_NAME}</Box>
+          {!SIMULATION_PROFILE && <Box as="span">{PROJECT_NAME}</Box>}
         </Link>
 
         {isLanding && (

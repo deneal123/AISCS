@@ -4,6 +4,8 @@ const cancelled = (error) => error?.name === 'CanceledError'
   || error?.name === 'AbortError'
   || error?.code === 'ERR_CANCELED';
 
+const hasSnapshot = (state) => state.status === 'ready' || state.status === 'stale';
+
 /**
  * Loads issue content through its protected endpoint. Work snapshot carries
  * only aggregate room state, so an issue failure must never downgrade the
@@ -14,9 +16,14 @@ export function useWorkIssues({ threadId, workspaceState }) {
   const generationRef = useRef(0);
   const threadRef = useRef(threadId);
   const controllerRef = useRef(null);
+  const activeRef = useRef(false);
+  const loadRef = useRef(null);
   threadRef.current = threadId;
 
-  const load = useCallback(async () => {
+  const load = useCallback(async function loadIssues() {
+    // A completed mutation may retain this callback after navigation. Reject it
+    // before it can abort a newer request or reset another context's content.
+    if (!activeRef.current || loadRef.current !== loadIssues) return false;
     const expectedThread = threadId;
     if (!expectedThread || workspaceState !== 'ready') {
       controllerRef.current?.abort();
@@ -30,20 +37,24 @@ export function useWorkIssues({ threadId, workspaceState }) {
     controllerRef.current = controller;
     setState((old) => ({
       ...old,
-      status: old.items.length ? old.status : 'loading',
+      status: hasSnapshot(old) ? old.status : 'loading',
     }));
     try {
       const { getWorkspaceIssues } = await import('@api/chat');
+      if (controller.signal.aborted || !activeRef.current
+        || loadRef.current !== loadIssues) return false;
       const result = await getWorkspaceIssues(expectedThread, { signal: controller.signal });
-      if (generation !== generationRef.current || threadRef.current !== expectedThread) return false;
+      if (controller.signal.aborted || generation !== generationRef.current
+        || threadRef.current !== expectedThread) return false;
       setState({ status: 'ready', items: [...(result?.issues || [])] });
       return true;
     } catch (error) {
-      if (cancelled(error) || generation !== generationRef.current || threadRef.current !== expectedThread) {
+      if (controller.signal.aborted || cancelled(error)
+        || generation !== generationRef.current || threadRef.current !== expectedThread) {
         return false;
       }
       setState((old) => ({
-        status: old.items.length ? 'stale' : 'unavailable',
+        status: hasSnapshot(old) ? 'stale' : 'unavailable',
         items: old.items,
       }));
       return false;
@@ -51,13 +62,19 @@ export function useWorkIssues({ threadId, workspaceState }) {
       if (controllerRef.current === controller) controllerRef.current = null;
     }
   }, [threadId, workspaceState]);
+  loadRef.current = load;
 
   useEffect(() => {
+    activeRef.current = true;
     generationRef.current += 1;
     controllerRef.current?.abort();
     setState({ status: 'idle', items: [] });
     load();
-    return () => controllerRef.current?.abort();
+    return () => {
+      activeRef.current = false;
+      generationRef.current += 1;
+      controllerRef.current?.abort();
+    };
   }, [load, threadId]);
 
   return {

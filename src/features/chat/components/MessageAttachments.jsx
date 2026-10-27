@@ -17,7 +17,7 @@ const ICON_BY_TYPE = {
  * Read-only чипы вложений в пузыре пользователя (без кнопки удаления) — тот же
  * стиль, что и превью в композере, но презентационный: только иконка + имя файла.
  */
-function MessageAttachments({ attachments, onOpenWork }) {
+function MessageAttachments({ attachments, onOpenLibrary }) {
   const list = Array.isArray(attachments) ? attachments : [];
   if (list.length === 0) {
     return null;
@@ -37,17 +37,17 @@ function MessageAttachments({ attachments, onOpenWork }) {
           </WrapItem>
         ))}
       </Wrap>
-      {onOpenWork && (
+      {onOpenLibrary && (
         <Button
           size="xs"
           variant="ghost"
           leftIcon={<FiFolder />}
-          onClick={onOpenWork}
-          aria-label={`Открыть работу с вложениями: ${list.length}`}
-          color={colors.blue[200]}
+          onClick={onOpenLibrary}
+          aria-label={`Открыть библиотеку вложений: ${list.length}`}
+          color={colors.blue[100]}
           _hover={{ bg: colors.accent.hoverSoft, color: 'white' }}
         >
-          Открыть работу
+          Открыть библиотеку
         </Button>
       )}
     </VStack>

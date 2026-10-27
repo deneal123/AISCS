@@ -49,29 +49,36 @@ export default function AdminPage() {
         </Reveal>
 
         <VStack align="stretch" spacing={6}>
-          <Box overflowX="auto" role="region" aria-label="Разделы админ-панели" tabIndex={0} sx={{ '&::-webkit-scrollbar': { display: 'none' } }}>
-            <SegmentedControl size="md" options={TABS} value={tab} onChange={setTab} w="max-content" ariaLabel="Разделы админки" />
-          </Box>
+          <SegmentedControl
+            size="md"
+            options={TABS}
+            value={tab}
+            onChange={setTab}
+            wrap
+            w="fit-content"
+            maxW="100%"
+            ariaLabel="Разделы админки"
+          />
 
           {tab === 'analytics' && (
-            <Reveal key="analytics" variant="soft">
+            <Box key="analytics" data-testid="admin-active-panel">
               <AnalyticsPanel />
-            </Reveal>
+            </Box>
           )}
           {tab === 'settings' && (
-            <Reveal key="settings" variant="soft">
+            <Box key="settings" data-testid="admin-active-panel">
               <SettingsPanel />
-            </Reveal>
+            </Box>
           )}
           {tab === 'pricing' && (
-            <Reveal key="pricing" variant="soft">
+            <Box key="pricing" data-testid="admin-active-panel">
               <PricingPanel />
-            </Reveal>
+            </Box>
           )}
           {tab === 'users' && (
-            <Reveal key="users" variant="soft">
+            <Box key="users" data-testid="admin-active-panel">
               <UsersPanel />
-            </Reveal>
+            </Box>
           )}
         </VStack>
       </Box>

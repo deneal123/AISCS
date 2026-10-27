@@ -1,0 +1,33 @@
+{
+  "profile": "product-admin",
+  "sourceRoots": ["src"],
+  "locale": "ru-RU",
+  "canonicalMap": "DESIGN.md",
+  "requiredCapabilities": [
+    "Select/Listbox",
+    "Form",
+    "Scrollbar",
+    "Toast",
+    "CRUD"
+  ],
+  "ownership": {
+    "Select/Listbox": "authored",
+    "Form": "shared-control",
+    "Scrollbar": "global-theme",
+    "Toast": "shared-hook",
+    "CRUD": "feature-service"
+  },
+  "requiredCommands": ["unit", "lint", "build", "accessibility", "e2e", "premium"],
+  "commands": {
+    "unit": "npm test -- --runInBand",
+    "lint": "npm run lint",
+    "build": "npm run build",
+    "accessibility": "npm run test:a11y",
+    "e2e": "npm run test:e2e:work",
+    "premium": "uv run --project ../agents --frozen python ../scripts/check_frontend_ui_contract.py"
+  },
+  "evidence": {
+    "crudFullFlow": "tests/e2e/ide-studio.spec.js",
+    "failurePaths": "tests/unit/components/IdeStudio.test.jsx"
+  }
+}

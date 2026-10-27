@@ -1,25 +1,13 @@
 import React from 'react';
 import { Box, Center, Grid, HStack, Icon, Text, VStack } from '@chakra-ui/react';
-import { FiActivity, FiBarChart2, FiCheck, FiCompass, FiSearch, FiTool, FiUser, FiUsers, FiZap } from '@shared/icons';
+import { FiCheck, FiZap } from '@shared/icons';
 import { colors, borderRadius, gradients, shadows, typography } from '@theme/tokens';
 import { GLASS_CARD_BASE, CARD_TOP_LINE, CARD_HOVER_STATE } from '@theme/glass';
 import Eyebrow from '@shared/brand/Eyebrow';
-import { Reveal } from '@shared/motion/Reveal';
 import { CHAT_FONT_FAMILY, CHAT_THEME } from '../constants/theme';
 import { MAX_PERSONAS } from './composer/ComposerPersonaSelector';
 import ChatOnboarding from './ChatOnboarding';
-
-// Иконка по id личности: реестр редактируется в админке и иконок не знает (и не должен —
-// это визуальный слой). Незнакомый id получает нейтральную, поэтому новая личность
-// появляется в интерфейсе сразу после правки JSON, без выката фронта.
-const PERSONA_ICONS = {
-  analyst: FiBarChart2,
-  engineer: FiTool,
-  psychologist: FiUsers,
-  financier: FiActivity,
-  scientist: FiSearch,
-  tarot: FiCompass,
-};
+import { getPersonaIcon } from '../constants/personaIcons';
 
 /** Пустое состояние чата: выбор личности + онбординг.
  *
@@ -48,9 +36,9 @@ export default function ChatEmptyState({
   };
 
   return (
-    <Center minH="60vh">
-      <VStack spacing={7} align="center" maxW="820px" w="100%" textAlign="center">
-        <Reveal variant="soft">
+    <Center py={{ base: 4, md: 7 }}>
+      <VStack spacing={{ base: 4, md: 7 }} align="center" maxW="820px" w="100%" textAlign="center">
+        <Box>
           <VStack spacing={5} align="center">
             {/* Брендовая плитка-иконка: стеклянная поверхность + iris-свечение. */}
             <Center
@@ -81,22 +69,19 @@ export default function ChatEmptyState({
               >
                 {personas.length ? 'Кем мне быть?' : 'Чем могу помочь?'}
               </Text>
-              <Text color={CHAT_THEME.textSecondary} fontSize="14px" lineHeight="1.6" maxW="540px">
-                {personas.length
-                  ? `Выберите специализацию — она меняет не только тон, но и то, что агент замечает в файлах, поиске и данных. Совместить можно не больше ${MAX_PERSONAS}.`
-                  : 'Опишите задачу — или приложите файл.'}
-              </Text>
+              {!personas.length && <Text color={CHAT_THEME.textSecondary} fontSize="14px" lineHeight="1.6" maxW="540px">
+                Опишите задачу — или приложите файл.
+              </Text>}
             </VStack>
           </VStack>
-        </Reveal>
+        </Box>
 
         {personas.length > 0 && (
-          <Reveal
-            className="stagger-children"
-            as={Grid}
-            templateColumns={{ base: '1fr', sm: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' }}
-            gap={3}
-            w="100%"
+          <Grid
+            templateColumns={{ base: 'repeat(3, 56px)', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' }}
+            gap={{ base: '12px', md: 3 }}
+            w={{ base: 'auto', md: '100%' }}
+            aria-label="Личности ассистента"
           >
             {personas.map(({ id, label, hint }) => {
               const isOn = selected.includes(id);
@@ -110,11 +95,15 @@ export default function ChatEmptyState({
                   type="button"
                   onClick={() => toggle(id)}
                   aria-pressed={isOn}
+                  aria-label={label}
+                  title={`${label}${hint ? ` — ${hint}` : ''}`}
                   disabled={muted}
-                  className="gold-edge-hover"
-                  align="flex-start"
+                  data-action-hint={!isOn && !muted ? 'hover' : undefined}
+                  align={{ base: 'center', md: 'flex-start' }}
+                  justify={{ base: 'center', md: 'flex-start' }}
                   spacing={3}
-                  p={4}
+                  p={{ base: 0, md: 4 }}
+                  minH={{ base: '56px', md: 'auto' }}
                   {...GLASS_CARD_BASE}
                   borderRadius={borderRadius.md}
                   textAlign="left"
@@ -130,12 +119,15 @@ export default function ChatEmptyState({
                     boxSize="34px"
                     flexShrink={0}
                     borderRadius={borderRadius.sm}
-                    bg={CHAT_THEME.accentSoft}
-                    border={`1px solid ${colors.accent.subtleBorder}`}
+                    bg={{ base: 'transparent', md: CHAT_THEME.accentSoft }}
+                    border={{ base: 'none', md: `1px solid ${colors.accent.subtleBorder}` }}
                   >
-                    <Icon as={PERSONA_ICONS[id] || FiUser} boxSize="15px" color={colors.blue[300]} />
+                    <Icon as={getPersonaIcon(id)} boxSize={{ base: '22px', md: '15px' }} color={colors.blue[300]} aria-hidden="true" />
                   </Center>
-                  <Box minW="0" flex="1">
+                  {isOn && <Text as="span" display={{ base: 'block', md: 'none' }}
+                    position="absolute" top="2px" right="5px" fontSize="11px" fontWeight="700"
+                    color={colors.blue[100]} aria-hidden="true">{selected.indexOf(id) + 1}</Text>}
+                  <Box minW="0" flex="1" display={{ base: 'none', md: 'block' }}>
                     <HStack spacing={1.5} align="center">
                       <Text fontSize="13.5px" fontWeight="600" color={CHAT_THEME.textPrimary} noOfLines={1}>
                         {label}
@@ -147,26 +139,27 @@ export default function ChatEmptyState({
                         <Text fontSize="10.5px" color={CHAT_THEME.textTertiary}>ведущая</Text>
                       )}
                     </HStack>
-                    <Text fontSize="12px" color={CHAT_THEME.textTertiary} lineHeight="1.5" noOfLines={2} mt={0.5}>
+                    <Text fontSize="12px" color={CHAT_THEME.textSecondary} lineHeight="1.5" noOfLines={2} mt={0.5}>
                       {hint || 'Специализация из реестра админки.'}
                     </Text>
                   </Box>
                 </HStack>
               );
             })}
-          </Reveal>
+          </Grid>
         )}
 
         {personas.length > 0 && (
           <Text
             fontSize="11.5px"
-            color={CHAT_THEME.textTertiary}
+            color={CHAT_THEME.textSecondary}
             fontFamily={typography.fontFamily.mono}
             letterSpacing="0.02em"
           >
-            {selected.length
+            <Box as="span" display={{ base: 'block', md: 'none' }}>Выбрано {selected.length} из {MAX_PERSONAS}</Box>
+            <Box as="span" display={{ base: 'none', md: 'inline' }}>{selected.length
               ? `Выбрано ${selected.length} из ${MAX_PERSONAS} — сменить можно в любой момент под полем ввода`
-              : 'Можно не выбирать — тогда отвечает обычный ассистент'}
+              : 'Можно не выбирать — тогда отвечает обычный ассистент'}</Box>
           </Text>
         )}
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { act, render, screen, fireEvent } from '@testing-library/react';
 import { ChakraProvider } from '@chakra-ui/react';
 import ModeOffer from '../../../src/features/chat/components/ModeOffer';
 
@@ -34,6 +34,22 @@ const renderOffer = (offer, props = {}) =>
 const runButton = () => screen.getByRole('button', { name: /Запустить/ });
 
 describe('Предложение дорогого режима', () => {
+  it('offers an explicit refusal for every blocked costly operation', () => {
+    const onRunMode = jest.fn();
+    renderOffer({ ...OFFER, blocking: true, offer_id: 'owned-anchor' }, { onRunMode });
+    fireEvent.click(screen.getByRole('button', { name: 'Продолжить без этого' }));
+    expect(onRunMode).toHaveBeenCalledTimes(1);
+    expect(onRunMode).toHaveBeenCalledWith(expect.objectContaining({ decision: 'decline', offer_id: 'owned-anchor' }));
+    expect(screen.getByText('Отказ отправлен. Ожидаю продолжение.')).toBeInTheDocument();
+  });
+
+  it('never accepts or generates an answer automatically after a blocked offer expires', () => {
+    const onRunMode = jest.fn();
+    renderOffer({ ...OFFER, blocking: true, offered_at: new Date(Date.now() - 60000).toISOString() }, { onRunMode });
+    expect(screen.getByText('Срок подтверждения истёк, запуск не выполнялся.')).toBeInTheDocument();
+    expect(screen.queryByRole('button')).not.toBeInTheDocument();
+    expect(onRunMode).not.toHaveBeenCalled();
+  });
   it('🔴 передаёт только opaque режим; текст даёт trace anchor', () => {
     const onRunMode = jest.fn();
     renderOffer(OFFER, { onRunMode });
@@ -203,10 +219,19 @@ describe('ModeOffer — предложение ИНСТРУМЕНТА, а не �
       </ChakraProvider>
     );
 
-    fireEvent.click(screen.getByRole('button'));
+    fireEvent.click(screen.getByRole('button', { name: /Запустить/ }));
 
     expect(screen.getByText(/Подтверждение отправлено/)).toBeInTheDocument();
     expect(screen.queryByText(/Подтверждено, запуск начат/)).not.toBeInTheDocument();
     expect(screen.queryByText(/отклонён по таймауту/)).not.toBeInTheDocument();
+  });
+
+  it('отбрасывает повторное решение до rerender по тому же offer', () => {
+    const onRun = jest.fn();
+    render(<ChakraProvider><ModeOffer offer={{ ...toolOffer, blocking: true,
+      offer_id: 'owned-offer' }} onRun={onRun} /></ChakraProvider>);
+    const button = screen.getByRole('button', { name: 'Использовать' });
+    act(() => { button.click(); button.click(); });
+    expect(onRun).toHaveBeenCalledTimes(1);
   });
 });

@@ -4,6 +4,7 @@ import { Box, Button, HStack, Icon, Text } from '@chakra-ui/react';
 import { FiActivity, FiCpu, FiGitBranch, FiSearch, FiTool } from '@shared/icons';
 import { colors, borderRadius, motion } from '@theme/tokens';
 import { CHAT_THEME } from '../constants/theme';
+import { useTraceActivity } from '../hooks/useTraceActivity';
 
 const iconPulse = keyframes`0%, 100% { opacity: 0.55; transform: scale(0.92); } 50% { opacity: 1; transform: scale(1); }`;
 const sweep = keyframes`0% { transform: translateX(-100%); } 100% { transform: translateX(320%); }`;
@@ -26,8 +27,11 @@ function pickIcon(title = '') {
 export default function AgentActivityStrip({ session, onCancel }) {
   const events = session?.events || [];
   const latest = events.length ? events[events.length - 1] : null;
-  const title = latest?.title || 'Обработка запроса…';
-  const detail = latest?.detail || '';
+  const activity = useTraceActivity(session || { status: 'running', events: [] });
+  const title = activity.label;
+  const detail = activity.stale
+    ? `Нет новых статусов ${activity.silence}. Прогресс сейчас не подтверждён.`
+    : latest?.detail || '';
   const IconCmp = pickIcon(title);
 
   return (
@@ -78,21 +82,19 @@ export default function AgentActivityStrip({ session, onCancel }) {
       </Box>
 
       <Box minW={0} flex="1">
-        <Text fontSize="13px" fontWeight="600" color={CHAT_THEME.textPrimary} noOfLines={1}>
+        <Text fontSize="13px" fontWeight="600" color={CHAT_THEME.textPrimary} overflowWrap="anywhere">
           {title}
         </Text>
         {detail ? (
-          <Text fontSize="11px" color={CHAT_THEME.textTertiary} noOfLines={1}>
+          <Text fontSize="11px" color={activity.stale ? colors.warning : CHAT_THEME.textTertiary} overflowWrap="anywhere">
             {detail}
           </Text>
         ) : null}
       </Box>
 
-      {events.length > 1 && (
-        <Text fontSize="11px" color={CHAT_THEME.textTertiary} fontFamily="'JetBrains Mono', monospace" flexShrink={0}>
-          {events.length} шаг.
-        </Text>
-      )}
+      <Text fontSize="11px" color={CHAT_THEME.textTertiary} flexShrink={0} aria-hidden="true" whiteSpace="nowrap">
+        {activity.elapsed}
+      </Text>
       {onCancel && (
         <Button size="xs" variant="ghost" color={colors.iris[300]} flexShrink={0}
           _hover={{ bg: CHAT_THEME.panelHover }} onClick={onCancel}>

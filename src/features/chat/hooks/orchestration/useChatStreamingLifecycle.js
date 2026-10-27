@@ -4,14 +4,26 @@ import { autoModeReasonLabel } from '../../utils/autoModeReason';
 import { parseThinking } from '../../utils/thinking';
 import { notifyBillingRefresh } from '../../../billing/context/BillingContext';
 import { presentDocumentStatus } from '../../model/documentStatus';
+import { presentVideoProgress } from '../../model/videoProgress';
+import { safeErrorMessage } from '../../model/wsProtocol';
+import { presentTaskResult } from '../../model/taskResult';
 
-export function useChatStreamingLifecycle({ isLoading, setIsLoading, setError, appendTraceEvent, updateTraceProgress, markConfirmationAccepted, finalizeTraceSession, addMessage, appendStreamChunk, completeLastAgentMessage, finalizeStreamWithContent, setCurrentJob, clearCurrentJob, setInputValue, onContextCompacted, onWorkspaceInvalidated }) {
+export function useChatStreamingLifecycle({ isLoading, setIsLoading, setError, appendTraceEvent, updateTraceProgress, markConfirmationAccepted, finalizeTraceSession, addMessage, appendStreamChunk, completeLastAgentMessage, finalizeStreamWithContent, setCurrentJob, clearCurrentJob, onContextCompacted, onWorkspaceInvalidated }) {
   const isLoadingRef = useRef(false);
   const activeWsJobIdRef = useRef('');
+  const documentProjectRef = useRef('');
   const lastWsReplyFingerprintRef = useRef('');
+  const videoStageRef = useRef('');
+  const awaitingDecisionRef = useRef(false);
+  const acceptedRunRef = useRef(false);
+  const connectionWarningRef = useRef(false);
+  // Acknowledgements can be replayed after completion or during a newer job.
+  // Keep a bounded, private latch; a replay must not reopen loading or consent.
+  const acknowledgedJobsRef = useRef(new Map());
 
   useEffect(() => {
     isLoadingRef.current = isLoading;
+    if (isLoading === false) acceptedRunRef.current = false;
   }, [isLoading]);
 
   const resolveWsEventJobId = useCallback((payload) => String(payload?.job_id || payload?.metadata?.job_id || '').trim(), []);
@@ -29,28 +41,52 @@ export function useChatStreamingLifecycle({ isLoading, setIsLoading, setError, a
 
   const onJobCreated = useCallback((data) => {
     const incomingJobId = resolveWsEventJobId(data);
+    const knownJob = acknowledgedJobsRef.current.get(incomingJobId);
+    if (knownJob) {
+      // The initial acknowledgement may omit the cancellation task identifier.
+      // Enrich only the still-running job, never a completed or parked one.
+      if (activeWsJobIdRef.current === incomingJobId && acceptedRunRef.current
+        && isLoadingRef.current && !knownJob.celeryTaskId && data?.celery_task_id) {
+        const enrichedJob = { ...knownJob, celeryTaskId: data.celery_task_id };
+        acknowledgedJobsRef.current.set(incomingJobId, enrichedJob);
+        setCurrentJob(enrichedJob);
+      }
+      return;
+    }
+    const job = incomingJobId
+      ? { id: incomingJobId, celeryTaskId: data?.celery_task_id || null, status: 'processing', progress: 0 }
+      : null;
+    if (job) {
+      acknowledgedJobsRef.current.set(incomingJobId, job);
+      if (acknowledgedJobsRef.current.size > 64) {
+        acknowledgedJobsRef.current.delete(acknowledgedJobsRef.current.keys().next().value);
+      }
+    }
     if (incomingJobId) {
+      documentProjectRef.current = data?.document_project || '';
       activeWsJobIdRef.current = incomingJobId;
       lastWsReplyFingerprintRef.current = '';
+      videoStageRef.current = '';
+      awaitingDecisionRef.current = false;
     }
     // Гейт onStreamChunk читает isLoadingRef СИНХРОННО. Эффект [isLoading] обновляет
     // ref только после коммита — если первый stream_chunk приходит в том же тике, что
     // job_created, ref ещё false и токен теряется. Ставим ref здесь же, до чанков.
     isLoadingRef.current = true;
+    acceptedRunRef.current = true;
+    connectionWarningRef.current = false;
     // celeryTaskId кладём В reducer-job — единый источник для отмены (cancelJob),
     // чтобы не держать вторую копию currentJob в WS-транспорте.
-    setCurrentJob(
-      incomingJobId
-        ? { id: incomingJobId, celeryTaskId: data?.celery_task_id || null, status: 'processing', progress: 0 }
-        : null,
-    );
-    if (data?.confirmation_status === 'accepted') {
-      markConfirmationAccepted?.();
+    setCurrentJob(job);
+    if (['accepted', 'declined'].includes(data?.confirmation_status)) {
+      markConfirmationAccepted?.(data.confirmation_offer_id || null, data.confirmation_status);
     }
     setIsLoading(true);
-  }, [markConfirmationAccepted, resolveWsEventJobId, setCurrentJob, setIsLoading]);
+    appendTraceEvent({ kind: 'info', title: 'Запуск поставлен в очередь', detail: 'Сервер принял запрос. Ожидаю начала обработки.' });
+  }, [appendTraceEvent, markConfirmationAccepted, resolveWsEventJobId, setCurrentJob, setIsLoading]);
 
-  const onComplete = useCallback(() => { clearCurrentJob(); setIsLoading(false); notifyBillingRefresh(); }, [clearCurrentJob, setIsLoading]);
+  // Agent-stage completion is not the authoritative result of the server job.
+  const onComplete = useCallback(() => { notifyBillingRefresh(); }, []);
 
   // The socket closes intentionally (code 1000) on thread switch / unmount without a
   // reconnect, so if a job was still in flight the composer would otherwise stay
@@ -66,27 +102,37 @@ export function useChatStreamingLifecycle({ isLoading, setIsLoading, setError, a
     if (isLoadingRef.current) {
       clearCurrentJob();
       setIsLoading(false);
+      acceptedRunRef.current = false;
+      isLoadingRef.current = false;
       // 🔴 ПАНЕЛЬ ЗАКРЫВАЕТСЯ ВМЕСТЕ СО СПИННЕРОМ. Терминальное событие `agent_reply`
       // приходит ПОСЛЕДНИМ — уже после `agent_complete` и `stream_complete` (замерено на
       // живом стеке). Разорвись канал в этом промежутке — ответ на экране есть (он собран
       // из чанков), а «Ход работы» навсегда оставался в «Готовлю ответ…». Гасить спиннер и
       // оставлять панель бегущей — значит показывать два противоположных состояния разом.
-      finalizeTraceSession('done');
+      appendTraceEvent({ kind: 'error', title: 'Соединение не восстановлено', detail: 'Итог выполнения пока неизвестен. Обновите чат, чтобы проверить результат. Запрос повторно не отправлялся.' });
+      finalizeTraceSession('error');
     }
-  }, [clearCurrentJob, finalizeTraceSession, setIsLoading]);
+  }, [appendTraceEvent, clearCurrentJob, finalizeTraceSession, setIsLoading]);
 
   const onError = useCallback((err) => {
-    const rawMessage = String(err?.message || '').trim();
-    appendTraceEvent({ kind: 'error', title: 'Ошибка канала обработки', detail: rawMessage || 'Ошибка соединения с чатом' });
-    if (/403|401|permission|forbidden|unauthorized/i.test(rawMessage)) {
-      finalizeTraceSession('error');
-      setError('Модель недоступна для текущего ключа API. Попробуйте другой профиль/модель.');
-      clearCurrentJob();
-      setIsLoading(false);
+    if (err?.localConnectionFailure === true && !isLoadingRef.current && lastWsReplyFingerprintRef.current) {
+      setError(safeErrorMessage(err));
       return;
     }
+    if (err?.localConnectionFailure === true && (
+      (acceptedRunRef.current && isLoadingRef.current && !awaitingDecisionRef.current)
+      || (awaitingDecisionRef.current && !isLoadingRef.current)
+    )) {
+      if (!connectionWarningRef.current) appendTraceEvent({ kind: 'info', title: 'Восстанавливаю связь с чатом', detail: 'Состояние выполнения пока не подтверждено. Запрос повторно не отправляется.' });
+      connectionWarningRef.current = true;
+      return;
+    }
+    acceptedRunRef.current = false;
+    isLoadingRef.current = false;
+    const message = safeErrorMessage(err);
+    appendTraceEvent({ kind: 'error', title: 'Ошибка канала обработки', detail: message });
     finalizeTraceSession('error');
-    setError(rawMessage ? `Ошибка чата: ${rawMessage}` : 'Ошибка соединения с чатом. Переключились на резервный режим.');
+    setError(message);
     clearCurrentJob();
     setIsLoading(false);
   }, [appendTraceEvent, clearCurrentJob, finalizeTraceSession, setError, setIsLoading]);
@@ -95,13 +141,27 @@ export function useChatStreamingLifecycle({ isLoading, setIsLoading, setError, a
     // Отбрасываем только полностью пустые чанки; whitespace/'\n' значимы для markdown
     // (переносы строк, разделители абзацев) — их терять нельзя.
     const chunk = data?.data;
-    if (!isLoadingRef.current || shouldIgnoreWsEvent(data) || chunk == null || chunk === '') return;
-    const chunkMeta = data.metadata || {};
+    if (!isLoadingRef.current || awaitingDecisionRef.current || shouldIgnoreWsEvent(data) || chunk == null || chunk === '') return;
+    const chunkMeta = { ...(data.metadata || {}),
+      ...(documentProjectRef.current ? { document_project: documentProjectRef.current } : {}),
+    };
+    connectionWarningRef.current = false;
     appendStreamChunk(chunk, chunkMeta);
   }, [appendStreamChunk, shouldIgnoreWsEvent]);
 
   const onAgentReply = useCallback((data) => {
     if (shouldIgnoreWsEvent(data)) return;
+    acceptedRunRef.current = false;
+    connectionWarningRef.current = false;
+    isLoadingRef.current = false;
+    if (data.metadata?.awaiting_confirmation) {
+      awaitingDecisionRef.current = true;
+      isLoadingRef.current = false;
+      clearCurrentJob();
+      setIsLoading(false);
+      finalizeTraceSession('awaiting_confirmation');
+      return;
+    }
     if (!data.reply || !data.reply.trim()) {
       finalizeTraceSession('error');
       clearCurrentJob();
@@ -113,13 +173,18 @@ export function useChatStreamingLifecycle({ isLoading, setIsLoading, setError, a
       || (data?.metadata?.provider_unavailable ? 'failed'
         : data?.metadata?.deadline_exceeded ? 'timed_out'
           : data?.metadata?.partial_failure ? 'partial' : 'completed');
-    const responseTrace = executionStatus === 'failed'
+    const taskResult = presentTaskResult(data?.metadata?.task_result);
+    const responseTrace = taskResult
+      ? { kind: taskResult.kind, title: taskResult.title, detail: taskResult.detail }
+      : executionStatus === 'failed'
       ? { kind: 'error', title: 'Ответ сформирован в деградированном режиме', detail: 'Не удалось получить полный ответ от провайдера.' }
       : executionStatus === 'timed_out'
         ? { kind: 'info', title: 'Ответ подготовлен частично', detail: 'Время выполнения истекло — показан результат, который агент успел подготовить.' }
         : executionStatus === 'partial'
           ? { kind: 'info', title: 'Ответ подготовлен частично', detail: 'Часть шагов не завершилась; доступный результат сохранён.' }
-          : { kind: 'done', title: 'Ответ сформирован', detail: '' };
+          : executionStatus === 'waiting_user'
+            ? { kind: 'info', title: 'Нужен ваш ответ', detail: 'Работа приостановлена до ответа на вопрос агента.' }
+            : { kind: 'done', title: 'Ответ сформирован', detail: '' };
     const incomingJobId = resolveWsEventJobId(data) || String(activeWsJobIdRef.current || '').trim() || 'unknown_job';
     const replyFingerprint = `${incomingJobId}::${incomingReply}`;
     if (lastWsReplyFingerprintRef.current === replyFingerprint) {
@@ -134,6 +199,7 @@ export function useChatStreamingLifecycle({ isLoading, setIsLoading, setError, a
       return;
     }
     lastWsReplyFingerprintRef.current = replyFingerprint;
+    notifyBillingRefresh();
     // Рассуждения модели (<think>...</think>) выносим отдельным шагом в trace,
     // чтобы они не «протекали» в тело ответа, но оставались видимы в «Ходе рассуждения».
     const { reasoning } = parseThinking(incomingReply);
@@ -151,12 +217,12 @@ export function useChatStreamingLifecycle({ isLoading, setIsLoading, setError, a
     // Ответ получен — задача завершена: гасим индикатор обработки и спиннер.
     clearCurrentJob();
     setIsLoading(false);
-    setInputValue('');
     finalizeTraceSession(executionStatus === 'failed' ? 'error' : 'done');
-  }, [addMessage, appendTraceEvent, clearCurrentJob, finalizeStreamWithContent, finalizeTraceSession, resolveWsEventJobId, setInputValue, setIsLoading, shouldIgnoreWsEvent]);
+  }, [addMessage, appendTraceEvent, clearCurrentJob, finalizeStreamWithContent, finalizeTraceSession, resolveWsEventJobId, setIsLoading, shouldIgnoreWsEvent]);
 
   const onAgentComplete = useCallback((data) => {
     if (shouldIgnoreWsEvent(data)) return;
+    if (acceptedRunRef.current) return;
     completeLastAgentMessage();
   }, [completeLastAgentMessage, shouldIgnoreWsEvent]);
 
@@ -166,6 +232,16 @@ export function useChatStreamingLifecycle({ isLoading, setIsLoading, setError, a
     // token_usage отдельным STATUS_UPDATE (иначе billing недосчитывал под-агентские
     // вызовы). Для пользователя это шум — в трейс не выводим.
     if (event.metadata?.kind === 'multi_intent_usage') return;
+    if (event.type === 'status_update' && event.metadata?.kind === 'video_progress') {
+      const progress = presentVideoProgress(event.metadata.video_progress);
+      if (!progress) return;
+      updateTraceProgress?.(null, progress.label);
+      if (!progress.heartbeat && videoStageRef.current !== progress.label) {
+        appendTraceEvent({ kind: 'info', title: progress.label, timestamp: event.timestamp });
+      }
+      videoStageRef.current = progress.label;
+      return;
+    }
     if (event.type === 'status_update' && event.metadata?.kind === 'workspace_invalidation') {
       // Stream carries only an invalidation code; file and issue content always
       // stays behind the authenticated workspace REST endpoints.
@@ -201,11 +277,13 @@ export function useChatStreamingLifecycle({ isLoading, setIsLoading, setError, a
       const omissions = Array.isArray(availability.omissions) ? availability.omissions : [];
       const confirmation = omissions.filter((item) => item?.reason === 'needs_confirmation');
       appendTraceEvent({
-        kind: confirmation.length ? 'offer' : 'info',
-        title: confirmation.length ? 'Нужно согласие на инструменты' : 'Инструменты подготовлены',
+        // Availability describes policy, not an anchored confirmation offer.
+        // Only a real offer may claim that the run is waiting for a decision.
+        kind: 'info',
+        title: 'Инструменты подготовлены',
         detail: [
           offered.length ? `Доступно: ${offered.map((tool) => getTraceName(tool)).join(', ')}` : null,
-          confirmation.length ? `Ожидают согласия: ${confirmation.map((item) => getTraceName(item.tool)).join(', ')}` : null,
+          confirmation.length ? `Доступны только с разрешением: ${confirmation.map((item) => getTraceName(item.tool)).join(', ')}` : null,
           omissions.length && !confirmation.length
             ? `Недоступно: ${omissions.map((item) => `${getTraceName(item.tool)} — ${getOmissionReason(item.reason)}`).join(', ')}`
             : null,
@@ -323,7 +401,7 @@ export function useChatStreamingLifecycle({ isLoading, setIsLoading, setError, a
       appendTraceEvent({
         kind: 'done',
         title: event.message || 'Режим выбран',
-        detail: [autoModeReasonLabel(auto.reason_code), free ? 'решено без вызова модели' : null].filter(Boolean).join(' · '),
+        detail: [autoModeReasonLabel(auto.reason_code), free ? 'Выбор режима — без вызова модели' : null].filter(Boolean).join(' · '),
         agent: event.agent_name,
         timestamp: event.timestamp,
       });
@@ -335,6 +413,7 @@ export function useChatStreamingLifecycle({ isLoading, setIsLoading, setError, a
     // имеет смысл — по ходу работы, — и живёт ровно отведённый сервером срок.
     if (event.type === 'status_update' && event.metadata?.kind === 'mode_offer') {
       const offer = event.metadata.mode_offer || {};
+      if (offer.blocking) awaitingDecisionRef.current = true;
       appendTraceEvent({
         kind: 'offer',
         title: event.message || `Предложен режим: ${offer.label || offer.mode}`,

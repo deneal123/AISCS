@@ -47,6 +47,149 @@ const baseDocument = {
 };
 
 describe('DocumentForgePanel', () => {
+  it('shows formatting without project creation, authoring, build or delivery controls', () => {
+    render(<ChakraProvider><DocumentForgePanel section="formatting" document={{
+      ...baseDocument, previewUrl: 'blob:owned-preview',
+      build: { state: 'preview_ready', artifacts: [{ artifact_id: 'pdf-1', role: 'pdf' }] },
+    }} /></ChakraProvider>);
+    expect(screen.getByText('Параметры документа')).toBeInTheDocument();
+    expect(screen.queryByLabelText('Параметры выбранного профиля')).not.toBeInTheDocument();
+    expect(screen.getByLabelText('Профиль PDF-документа')).toBeInTheDocument();
+    expect(screen.getByText('Шаблон издателя')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Применить настройки', exact: true })).toBeDisabled();
+    fireEvent.click(screen.getByText('Шаблон издателя'));
+    expect(screen.getByRole('button', { name: 'Добавить в проект' })).toBeInTheDocument();
+    expect(screen.queryByText('Document Forge')).not.toBeInTheDocument();
+    expect(screen.queryByText('Структурированный документ')).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Создать проект', exact: true })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Собрать черновик' })).not.toBeInTheDocument();
+    expect(screen.queryByLabelText('Этапы подготовки документа')).not.toBeInTheDocument();
+    expect(screen.queryByTitle('Предпросмотр PDF')).not.toBeInTheDocument();
+  });
+
+  it('does not repeat project creation inside formatting before a project exists', () => {
+    render(<ChakraProvider><DocumentForgePanel section="formatting" document={{
+      ...baseDocument, project: null, createProject: jest.fn(),
+    }} /></ChakraProvider>);
+    expect(screen.getByText(/Сначала создайте или выберите PDF-проект/)).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Создать проект', exact: true })).not.toBeInTheDocument();
+    expect(screen.queryByRole('combobox')).not.toBeInTheDocument();
+  });
+
+  it('keeps explicit settings application and blocks a second application while busy', () => {
+    const applyProfile = jest.fn();
+    const document = { ...baseDocument, selectedMode: 'submission', applyProfile };
+    const view = render(<ChakraProvider><DocumentForgePanel section="formatting" document={document} /></ChakraProvider>);
+    fireEvent.click(screen.getByRole('button', { name: 'Применить настройки', exact: true }));
+    expect(applyProfile).toHaveBeenCalledTimes(1);
+    view.rerender(<ChakraProvider><DocumentForgePanel section="formatting" document={{ ...document, busy: 'profile' }} /></ChakraProvider>);
+    expect(screen.getByRole('button', { name: /Применить настройки/ })).toBeDisabled();
+  });
+
+  it('keeps project creation in its dedicated empty editor state', () => {
+    const createProject = jest.fn();
+    render(<ChakraProvider><DocumentForgePanel section="create" document={{
+      ...baseDocument, project: null, createProject,
+    }} /></ChakraProvider>);
+    expect(screen.getByText('Новый PDF-проект')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Создать проект', exact: true }));
+    expect(createProject).toHaveBeenCalledTimes(1);
+    expect(screen.queryByText('Document Forge')).not.toBeInTheDocument();
+    expect(screen.queryByLabelText('Этапы подготовки документа')).not.toBeInTheDocument();
+  });
+
+  it('offers a read-only status retry and blocks uncertain publication', () => {
+    const checkPublication = jest.fn();
+    const publish = jest.fn();
+    render(<ChakraProvider><DocumentForgePanel document={{
+      ...baseDocument, publicationError: true, checkPublication, publish,
+      build: {
+        build_id: 'build-1', state: 'ready', final: true,
+        artifacts: [{ artifact_id: 'pdf-1', role: 'pdf' }],
+      },
+    }} /></ChakraProvider>);
+    expect(screen.getByLabelText('Состояние сохранения документа'))
+      .toHaveTextContent('Оно могло завершиться');
+    const check = screen.getByRole('button', { name: 'Проверить сохранение' });
+    expect(check).toHaveAttribute('data-toast-protected-actions');
+    expect(screen.getByRole('button', { name: 'Собрать черновик' }).parentElement)
+      .toHaveAttribute('data-toast-protected-actions');
+    expect(screen.getByRole('button', { name: 'Сохранить в Библиотеку' }).parentElement)
+      .toHaveAttribute('data-toast-protected-actions');
+    fireEvent.click(check);
+    expect(checkPublication).toHaveBeenCalledTimes(1);
+    expect(screen.getByRole('button', { name: 'Сохранить в Библиотеку' })).toBeDisabled();
+    expect(publish).not.toHaveBeenCalled();
+  });
+
+  it('keeps status recovery available while checking without changing its label', () => {
+    render(<ChakraProvider><DocumentForgePanel document={{
+      ...baseDocument, publicationChecking: true, checkPublication: jest.fn(),
+    }} /></ChakraProvider>);
+    expect(screen.getByRole('status')).toHaveTextContent('Редактор остаётся доступен');
+    expect(screen.getByRole('button', { name: 'Проверить сохранение' })).toBeDisabled();
+  });
+
+  it.each(['terminal', 'delivered'])('does not offer a repeated mutation for %s', (state) => {
+    render(<ChakraProvider><DocumentForgePanel document={{
+      ...baseDocument,
+      build: { state: 'ready', final: true, publication_state: state,
+        artifacts: [{ artifact_id: 'pdf-1', role: 'pdf' }] },
+    }} /></ChakraProvider>);
+    expect(screen.getByRole('button', { name: 'Сохранить в Библиотеку' })).toBeDisabled();
+    if (state === 'terminal') {
+      expect(screen.getByLabelText('Состояние сохранения документа'))
+        .toHaveTextContent('Финал не удалось сохранить');
+      expect(screen.getByLabelText('Состояние сохранения документа'))
+        .toHaveTextContent('Библиотеку в левой панели');
+    }
+    expect(screen.queryByRole('button', { name: 'Проверить сохранение' })).not.toBeInTheDocument();
+  });
+
+  it('keeps the panel mounted but removes an inactive preview without reopening it', () => {
+    const documentState = { ...baseDocument, previewUrl: 'blob:owned-preview' };
+    const view = render(<ChakraProvider><DocumentForgePanel document={documentState} /></ChakraProvider>);
+    expect(screen.getByTitle('Предпросмотр PDF')).toHaveAttribute('src', 'blob:owned-preview');
+    view.rerender(<ChakraProvider><DocumentForgePanel document={documentState} previewVisible={false} /></ChakraProvider>);
+    expect(screen.queryByTitle('Предпросмотр PDF')).not.toBeInTheDocument();
+    expect(screen.getByText('Научная статья · Черновик')).toBeInTheDocument();
+    view.rerender(<ChakraProvider><DocumentForgePanel document={documentState} /></ChakraProvider>);
+    expect(screen.getByTitle('Предпросмотр PDF')).toHaveAttribute('src', 'blob:owned-preview');
+    expect(documentState.openPreview).not.toHaveBeenCalled();
+  });
+
+  it.each([
+    ['queued', 'ожидает запуска', 'не запускался'],
+    ['preparing', 'ожидает запуска', 'не запускался'],
+    ['building', 'выполняется', 'не запускался'],
+    ['deterministic_audit', 'завершена', 'выполняется'],
+    ['preview_ready', 'завершена', 'пройден'],
+    ['visual_pending', 'завершена', 'пройден'],
+    ['failed', 'состояние уточняется', 'состояние уточняется'],
+    ['cancelled', 'состояние уточняется', 'состояние уточняется'],
+    ['private_unknown_state', 'состояние уточняется', 'состояние уточняется'],
+  ])('does not invent stage success for %s', (state, compilation, audit) => {
+    render(<ChakraProvider><DocumentForgePanel document={{
+      ...baseDocument, build: { state },
+    }} /></ChakraProvider>);
+    const pipeline = screen.getByLabelText('Этапы подготовки документа');
+    expect(pipeline).toHaveTextContent(`Сборка${compilation}`);
+    expect(pipeline).toHaveTextContent(`Технический аудит${audit}`);
+    expect(document.body).not.toHaveTextContent('private_unknown_state');
+  });
+
+  it.each([
+    ['draft', 'Черновик'], ['submission', 'Подача'], ['camera_ready', 'Финальная версия'],
+    ['private_mode_marker', 'Режим уточняется'], [undefined, 'Режим уточняется'],
+    ['toString', 'Режим уточняется'],
+  ])('shows only a safe project mode for %s', (mode, label) => {
+    render(<ChakraProvider><DocumentForgePanel document={{
+      ...baseDocument, project: { ...baseDocument.project, mode },
+    }} /></ChakraProvider>);
+    expect(screen.getByText(`Научная статья · ${label}`)).toBeInTheDocument();
+    expect(document.body).not.toHaveTextContent('private_mode_marker');
+  });
+
   it('renders bounded failure and diagnostic labels without raw codes', () => {
     render(
       <ChakraProvider>
@@ -69,7 +212,10 @@ describe('DocumentForgePanel', () => {
     expect(document.body).not.toHaveTextContent('private_raw_code');
   });
 
-  it('opens a source diagnostic through the document lifecycle', () => {
+  it.each([
+    ['compile_failed', 'LaTeX не удалось собрать'],
+    ['unsupported_character', 'Шрифт или кодировка не поддерживает символ. Проверьте язык документа'],
+  ])('opens a %s source diagnostic through the document lifecycle', (code, label) => {
     const openDiagnostic = jest.fn();
     render(
       <ChakraProvider>
@@ -81,7 +227,7 @@ describe('DocumentForgePanel', () => {
               state: 'failed',
               failure_code: 'audit_failed',
               diagnostics: [
-                { severity: 'error', code: 'compile_failed', path: 'main.tex', line: 14 },
+                { severity: 'error', code, path: 'main.tex', line: 14 },
               ],
             },
           }}
@@ -89,7 +235,9 @@ describe('DocumentForgePanel', () => {
       </ChakraProvider>,
     );
 
-    fireEvent.click(screen.getByRole('button', { name: /main\.tex:14/i }));
+    const diagnostic = screen.getByRole('button', { name: /main\.tex:14/i });
+    expect(diagnostic).toHaveTextContent(label);
+    fireEvent.click(diagnostic);
 
     expect(openDiagnostic).toHaveBeenCalledWith(
       expect.objectContaining({ path: 'main.tex', line: 14 }),

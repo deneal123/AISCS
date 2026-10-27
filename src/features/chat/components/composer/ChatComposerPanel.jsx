@@ -1,21 +1,26 @@
-import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
-import { Box, HStack, IconButton, Text } from '@chakra-ui/react';
-import { FiPaperclip, FiSend } from '@shared/icons';
-import { colors, borderRadius, motion, shadows } from '@theme/tokens';
+import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useLayoutEffect, useRef, useState } from 'react';
+import { Box, HStack, Text } from '@chakra-ui/react';
+import { FiPaperclip } from '@shared/icons';
+import { colors } from '@theme/tokens';
 import { CHAT_FONT_FAMILY, CHAT_THEME } from '../../constants/theme';
 import { COMPOSER_MAX_HEIGHT_PX, COMPOSER_MIN_HEIGHT_PX } from '../../constants/limits';
 import ComposerShell from './ComposerShell';
 import ComposerVoicePreview from './ComposerVoicePreview';
 import ComposerVoiceControl from './ComposerVoiceControl';
+import ComposerSubmitControl from './ComposerSubmitControl';
+import ComposerActionControl from './ComposerActionControl';
 import ComposerAttachments from './ComposerAttachments';
 import ComposerModeSelector from './ComposerModeSelector';
 import ComposerPersonaSelector from './ComposerPersonaSelector';
 import ContextGauge from './ContextGauge';
 import ModelSelector from '../ModelSelector';
+import ProviderAvailability from '../ProviderAvailability';
+import { ChoicePanelGroup } from '@shared/controls/ChoicePanel';
 import { MAX_ATTACHMENTS } from '../../hooks/useFileAttachment';
+import { useResponsive } from '@hooks/useResponsive';
+import { observeResizeFrame } from '@shared/utils/observeResizeFrame';
 
 const IRIS = colors.iris[300]; // активный акцент-текст (было #9FB0FF литералом)
-const EASE = motion.easeOut;
 
 // Isolated, uncontrolled composer — typing never re-renders ChatPageContainer
 const ChatComposerPanel = forwardRef(function ChatComposerPanel(
@@ -36,6 +41,8 @@ const ChatComposerPanel = forwardRef(function ChatComposerPanel(
     selectedModel,
     availableModels,
     modelCatalog,
+    modelStatus = 'ready',
+    onRetryModels,
     onModelChange,
     contextInfo,
     onCompactContext,
@@ -45,25 +52,50 @@ const ChatComposerPanel = forwardRef(function ChatComposerPanel(
     attachments,
     onRemoveAttachment,
     onFileUpload,
-    onOpenWork,
+    onOpenLibrary,
     isFileUploading,
     onVoiceToggle,
     isRecording,
+    isRequestingPermission,
     isVoiceTranscribing,
     recordElapsedSec,
     voiceText,
     onDiscardVoice,
     onEditVoice,
     fileInputRef,
+    documentMode = false,
+    workbenchMode = false,
+    visible = true,
+    hintPaused = false,
   },
   ref,
 ) {
   // Есть распознанное голосовое, ожидающее отправки (превью над вводом) — тогда
   // Send активен даже при пустом textarea (голос подмешается в сообщение).
   const hasPendingVoice = !!(voiceText && voiceText.trim());
+  const { isMobile } = useResponsive();
   const inputRef = useRef(null);
   const [height, setHeight] = useState(COMPOSER_MIN_HEIGHT_PX);
   const [hasText, setHasText] = useState(false);
+  const [pickerOpen, setPickerOpen] = useState(false);
+  const containerRef = useRef(null);
+  const [compactControls, setCompactControls] = useState(false);
+  const refreshLayout = useCallback(() => {
+    const element = containerRef.current;
+    if (!element || !element.getClientRects().length) return;
+    const style = getComputedStyle(element);
+    const width = element.clientWidth - parseFloat(style.paddingLeft || 0) - parseFloat(style.paddingRight || 0);
+    if (width > 0) setCompactControls(width < 600);
+  }, []);
+  useLayoutEffect(() => { if (visible) refreshLayout(); }, [visible, refreshLayout]);
+  useEffect(() => {
+    const element = containerRef.current;
+    if (!element || typeof ResizeObserver === 'undefined') return undefined;
+    // Read the current host, not an entry queued before a peer-surface move.
+    return observeResizeFrame(element, refreshLayout);
+  }, [refreshLayout]);
+  const unavailableModel = modelStatus === 'ready' && selectedModel && Array.isArray(availableModels)
+    && !availableModels.includes(selectedModel);
   const frameRef = useRef(0);
   const onSubmitRef = useRef(onSubmit);
   onSubmitRef.current = onSubmit;
@@ -71,6 +103,7 @@ const ChatComposerPanel = forwardRef(function ChatComposerPanel(
   onStopRef.current = onStop;
 
   useImperativeHandle(ref, () => ({
+    refreshLayout,
     clearInput() {
       if (inputRef.current) {
         inputRef.current.value = '';
@@ -112,10 +145,10 @@ const ChatComposerPanel = forwardRef(function ChatComposerPanel(
   // слушаем на уровне окна только пока идёт стрим.
   useEffect(() => {
     if (!isStreaming) return undefined;
-    const onKey = (e) => { if (e.key === 'Escape') onStopRef.current?.(); };
+    const onKey = (e) => { if (e.key === 'Escape' && !e.defaultPrevented && !pickerOpen) onStopRef.current?.(); };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [isStreaming]);
+  }, [isStreaming, pickerOpen]);
 
   const recalcHeight = useCallback(() => {
     if (frameRef.current) cancelAnimationFrame(frameRef.current);
@@ -137,25 +170,29 @@ const ChatComposerPanel = forwardRef(function ChatComposerPanel(
   const handleSubmit = useCallback(() => {
     // Файл ещё загружается — не отправляем (иначе file_context уйдёт пустым);
     // отправка разблокируется, как только загрузка завершится.
-    if (disabled || isFileUploading) return;
+    if (disabled || isFileUploading || unavailableModel) return;
     const val = inputRef.current?.value.trim() ?? '';
     // Разрешаем отправку с пустым полем, если есть распознанное голосовое в
     // превью — оно подмешается в сообщение на стороне отправителя.
     if (!val && !hasPendingVoice) return;
     onSubmitRef.current(val);
-  }, [disabled, isFileUploading, hasPendingVoice]);
+  }, [disabled, isFileUploading, hasPendingVoice, unavailableModel]);
 
   const handleKeyDown = useCallback((e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent?.isComposing && e.keyCode !== 229) {
       e.preventDefault();
       handleSubmit();
     }
   }, [handleSubmit]);
 
-  const canSend = (hasText || hasPendingVoice) && !disabled && !isFileUploading;
+  const canSend = (hasText || hasPendingVoice) && !disabled && !isFileUploading && !unavailableModel;
+  // Parent loading covers admission/dispatch as well as streaming; IDE preparation
+  // disables the same composer before its asynchronous repository check begins.
+  const inputReady = visible && !isStreaming && !disabled && !isFileUploading && !unavailableModel;
 
   return (
-    <Box flexShrink={0} px={{ base: 3, md: 6, lg: 8 }} pt={3} pb={{ base: 'calc(16px + env(safe-area-inset-bottom))', md: 4 }}
+    <Box ref={containerRef} data-composer-container data-toast-protected-actions flexShrink={0}
+      px={workbenchMode ? 3 : { base: 3, md: 6, lg: 8 }} pt={3} pb={{ base: 'calc(12px + var(--app-safe-bottom, 0px))', md: 'calc(8px + var(--app-safe-bottom, 0px))' }}
       borderTop={`1px solid ${CHAT_THEME.panelBorder}`}
       bg={CHAT_THEME.inputStickyBg} backdropFilter="blur(22px)">
       <Box maxW="960px" mx="auto">
@@ -164,8 +201,8 @@ const ChatComposerPanel = forwardRef(function ChatComposerPanel(
         <ComposerVoicePreview text={voiceText} onDiscard={onDiscardVoice} onEdit={onEditVoice} />
         {/* Прикреплённые файлы — НАД полем ввода (рядом с голосовым превью), а не
             между вводом и кнопками режимов (там было тесно и неопрятно). */}
-        <ComposerAttachments attachments={attachments} onRemove={onRemoveAttachment} onOpenWork={onOpenWork} />
-        <ComposerShell busy={isStreaming}>
+        <ComposerAttachments attachments={attachments} onRemove={onRemoveAttachment} onOpenLibrary={onOpenLibrary} />
+        <ComposerShell ready={inputReady && !hintPaused && !pickerOpen && !isRecording && !isRequestingPermission && !isVoiceTranscribing && !compacting}>
           {/* multiple: до 8 файлов за раз. Форматы расширены — сайдкары научились
               читать таблицы (xlsx/ods), презентации (pptx) и архивы с кодом (zip →
               карта репозитория). */}
@@ -179,9 +216,8 @@ const ChatComposerPanel = forwardRef(function ChatComposerPanel(
             accept=".txt,.md,.pdf,.doc,.docx,.odt,.rtf,.xls,.xlsx,.ods,.ppt,.pptx,.odp,.csv,.json,.zip,.png,.jpg,.jpeg,.gif,.webp,.mp3,.wav,.ogg,.m4a,.webm,.py,.js,.jsx,.ts,.tsx,.java,.go,.rs,.cpp,.cc,.c,.h,.hpp,.cs,.rb,.php,.sql,.sh,.bash,.kt,.swift,.scala,.yaml,.yml,.toml,.ini"
             onChange={onFileUpload} />
 
-          <IconButton aria-label="Прикрепить файл" icon={<FiPaperclip />} size="sm" variant="ghost"
-            position="absolute" left={{ base: 1.5, md: 2.5 }} top={{ base: '6px', md: '10px' }} zIndex={2}
-            boxSize={{ base: '44px', md: '32px' }} minW={{ base: '44px', md: '32px' }}
+          <ComposerActionControl aria-label="Прикрепить файл" icon={FiPaperclip}
+            position="absolute" left={{ base: 1.5, md: 2.5 }} top="6px" zIndex={2}
             isLoading={isFileUploading}
             isDisabled={(attachments?.length || 0) >= MAX_ATTACHMENTS}
             title={
@@ -190,16 +226,17 @@ const ChatComposerPanel = forwardRef(function ChatComposerPanel(
                 : 'Прикрепить файл'
             }
             color={attachments?.length ? IRIS : CHAT_THEME.textTertiary}
-            _hover={{ color: CHAT_THEME.textPrimary, bg: CHAT_THEME.panelHover }}
-            borderRadius={borderRadius.sm} onClick={() => fileInputRef.current?.click()} />
+            onClick={() => fileInputRef.current?.click()} />
 
           <Box
             as="textarea"
+            rows={1}
             aria-label="Сообщение"
             ref={inputRef}
             onInput={handleInput}
             onKeyDown={handleKeyDown}
-            placeholder="Напишите сообщение..."
+            onFocus={(event) => event.currentTarget.scrollIntoView?.({ block: 'nearest', inline: 'nearest' })}
+            placeholder={isMobile || compactControls ? 'Сообщение…' : 'Напишите сообщение...'}
             disabled={disabled}
             style={{ height: `${height}px` }}
             sx={{
@@ -217,8 +254,8 @@ const ChatComposerPanel = forwardRef(function ChatComposerPanel(
               outline: 'none',
               border: 'none',
               background: 'transparent',
-              paddingLeft: '56px',
-              paddingRight: '112px',
+              paddingLeft: isMobile || compactControls ? '48px' : '64px',
+              paddingRight: isMobile || compactControls ? '96px' : '116px',
               paddingTop: '15px',
               paddingBottom: '15px',
               boxSizing: 'border-box',
@@ -227,70 +264,62 @@ const ChatComposerPanel = forwardRef(function ChatComposerPanel(
             }}
           />
 
-          <HStack position="absolute" right={{ base: 1.5, md: 2.5 }} bottom={{ base: '6px', md: '10px' }} spacing={1} zIndex={2} align="center">
-            <ComposerVoiceControl recordingState={isRecording ? 'recording' : 'idle'} isTranscribing={isVoiceTranscribing} elapsedSec={recordElapsedSec} onToggle={onVoiceToggle} />
-            {isStreaming ? (
-              <IconButton aria-label="Остановить генерацию" title="Остановить (Esc)"
-                icon={<Box boxSize="11px" bg="currentColor" borderRadius="3px" />}
-                size="sm" boxSize={{ base: '44px', md: '32px' }} minW={{ base: '44px', md: '32px' }}
-                bg={CHAT_THEME.panelActive} color={CHAT_THEME.textPrimary}
-                borderRadius={borderRadius.sm}
-                border={`1px solid ${CHAT_THEME.panelBorderStrong}`}
-                _hover={{ bg: 'rgba(140,160,255,0.20)' }}
-                transition={`all 160ms ${EASE}`}
-                onClick={() => onStopRef.current?.()} />
-            ) : (
-              <IconButton aria-label="Отправить" icon={<FiSend />} size="sm" boxSize={{ base: '44px', md: '32px' }} minW={{ base: '44px', md: '32px' }}
-                title={isFileUploading ? 'Дождитесь загрузки файла' : canSend ? 'Отправить (Enter)' : 'Введите сообщение'}
-                bg={canSend ? CHAT_THEME.accent : 'rgba(255,255,255,0.08)'} color="white"
-                borderRadius={borderRadius.sm}
-                boxShadow={canSend ? shadows.sendGlow : 'none'}
-                _hover={{ bg: canSend ? CHAT_THEME.accentHover : 'rgba(255,255,255,0.12)' }}
-                _disabled={{ opacity: 0.4, cursor: 'not-allowed' }}
-                transition={`all 160ms ${EASE}`}
-                isDisabled={!canSend} onClick={handleSubmit} />
-            )}
+          <HStack position="absolute" right={{ base: 1.5, md: 2.5 }} bottom="6px" spacing={1} zIndex={2} align="center">
+            <ComposerVoiceControl recordingState={isRequestingPermission ? 'requesting' : isRecording ? 'recording' : 'idle'} isTranscribing={isVoiceTranscribing} elapsedSec={recordElapsedSec} onToggle={onVoiceToggle} />
+            <ComposerSubmitControl streaming={isStreaming} canSend={canSend} uploading={isFileUploading}
+              onSend={handleSubmit} onStop={() => onStopRef.current?.()} />
           </HStack>
         </ComposerShell>
 
-        <HStack mt={2.5} spacing={2} justify="space-between" flexWrap="wrap" align="center">
-          <HStack spacing={1.5} flexWrap="wrap">
-            <ComposerModeSelector value={forcedRoute} onChange={onForcedRouteChange}
-              multiIntentEnabled={multiIntentEnabled} onToggleMultiIntent={onToggleMultiIntent}
-              planningEnabled={planningEnabled} onTogglePlanning={onTogglePlanning} />
-            {/* Третья ось выбора: режим — ЧТО делать, модель — ЧЕМ думать, личность — КАК
-                думать. Оси ортогональны, поэтому селектор отдельный и виден в любом режиме. */}
-            <ComposerPersonaSelector personas={personas} value={personaIds} onChange={onPersonaIdsChange} />
-          </HStack>
-
-          <HStack spacing={2.5} align="center">
-            {contextInfo?.hasWindow && (
-              <ContextGauge
-                pct={contextInfo.pct}
-                tokens={contextInfo.tokens}
-                windowTokens={contextInfo.windowTokens}
-                modelWindow={contextInfo.modelWindow}
-                bySection={contextInfo.bySection}
-                threshold={contextInfo.threshold}
-                onCompact={onCompactContext}
-                busy={compacting}
-              />
-            )}
-            <ModelSelector
-              size="compact"
-              placement="top-end"
-              selectedModel={selectedModel}
-              availableModels={availableModels}
-              catalog={modelCatalog}
-              onChange={onModelChange}
-            />
-            {!isAuthenticated && (
-              <Text fontSize="12px" color={CHAT_THEME.textTertiary} whiteSpace="nowrap">
-                {remainingRequests} запросов
-              </Text>
-            )}
-          </HStack>
-        </HStack>
+        <ChoicePanelGroup onOpenChange={setPickerOpen} compact={compactControls} enabled={visible}>
+          <Box data-composer-settings role="group" aria-label="Настройки сообщения" display="flex"
+            mt="4px" gap={compactControls ? '6px' : { base: 1.5, md: 2.5 }} justifyContent={compactControls ? 'center' : { base: 'center', md: 'flex-start' }}
+            flexWrap="nowrap" alignItems="center" minW={0}>
+              <Box flex="0 0 auto" minW={0}>
+                <ComposerModeSelector value={forcedRoute} onChange={onForcedRouteChange} mobileIconOnly documentMode={documentMode}
+                  multiIntentEnabled={multiIntentEnabled} onToggleMultiIntent={onToggleMultiIntent}
+                  planningEnabled={planningEnabled} onTogglePlanning={onTogglePlanning} />
+              </Box>
+              {/* Третья ось выбора: режим — ЧТО делать, модель — ЧЕМ думать, личность — КАК
+                  думать. Оси ортогональны, поэтому селектор отдельный и виден в любом режиме. */}
+              {personas.length > 0 && <Box flex={{ base: '0 0 auto', md: '0 1 auto' }} minW={0}>
+                <ComposerPersonaSelector personas={personas} value={personaIds} onChange={onPersonaIdsChange} mobileIconOnly />
+              </Box>}
+              <Box minW={0} flex="0 1 auto" display="flex" maxW="100%" marginInlineStart={compactControls ? 0 : { base: 0, md: 'auto' }}>
+                <ModelSelector
+                  mobileIconOnly
+                  selectedModel={selectedModel}
+                  availableModels={availableModels}
+                  catalog={modelCatalog}
+                  modelStatus={modelStatus}
+                  onRetry={onRetryModels}
+                  onChange={onModelChange}
+                />
+              </Box>
+              {contextInfo?.hasWindow && (
+                <Box data-composer-context flex="0 0 auto" display="flex" alignItems="center">
+                  <ContextGauge
+                    compact={compactControls}
+                    pct={contextInfo.pct}
+                    tokens={contextInfo.tokens}
+                    windowTokens={contextInfo.windowTokens}
+                    modelWindow={contextInfo.modelWindow}
+                    bySection={contextInfo.bySection}
+                    threshold={contextInfo.threshold}
+                    onCompact={onCompactContext}
+                    busy={compacting}
+                  />
+                </Box>
+              )}
+              {isMobile && <ProviderAvailability compact />}
+              {!isAuthenticated && (
+                <Text fontSize="12px" color={CHAT_THEME.textTertiary} whiteSpace="nowrap">
+                  {remainingRequests} запросов
+                </Text>
+              )}
+          </Box>
+        </ChoicePanelGroup>
+        {unavailableModel && <Text fontSize="12px" color={colors.warning} mt={2}>Выбранная модель недоступна. Выберите другую или Авто, чтобы отправить сообщение.</Text>}
       </Box>
     </Box>
   );

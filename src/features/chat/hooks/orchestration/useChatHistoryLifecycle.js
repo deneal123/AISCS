@@ -22,11 +22,27 @@ function mapHistoryRows(rows) {
 
 function restoreAnchoredTrace(mappedMessages, traceData, restoreSessions) {
   const traceByContent = traceData?.traces || {};
-  if (!Object.keys(traceByContent).length) return;
   const restored = mappedMessages.flatMap((message) => {
     if (message.type !== 'user') return [];
     const session = traceByContent[feedbackKey(message.content)];
     return session ? [{ ...session, anchorMessageId: message.id }] : [];
+  });
+  let anchor = null;
+  mappedMessages.forEach((message) => {
+    if (message.type === 'user') anchor = message;
+    const offer = message.metadata?.mode_offer;
+    if (!anchor || !message.metadata?.awaiting_confirmation || !offer?.offer_id) return;
+    const index = restored.findIndex((session) => session.anchorMessageId === anchor.id);
+    const previous = index >= 0 ? restored[index] : {
+      id: `confirmation_${offer.offer_id}`, anchorMessageId: anchor.id,
+      query: anchor.content, startedAt: message.timestamp, events: [],
+    };
+    const events = (previous.events || []).filter((event) => !event.offer);
+    events.push({ id: `offer_${offer.offer_id}`, kind: 'offer', title: 'Нужно ваше решение', offer });
+    const session = { ...previous, events, status: offer.status === 'pending' && !offer.expired
+      ? 'awaiting_confirmation' : 'done' };
+    if (index >= 0) restored[index] = session;
+    else restored.push(session);
   });
   if (restored.length) restoreSessions(restored);
 }

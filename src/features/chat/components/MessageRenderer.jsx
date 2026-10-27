@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, memo, useEffect, useMemo, useRef, useState } from 'react';
+import React, { Suspense, lazy, memo, useEffect, useId, useMemo, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks';
@@ -9,6 +9,7 @@ import 'katex/dist/katex.min.css';
 
 import { colors, borderRadius } from '@theme/tokens';
 import { stripThinking, stripToolCallTags } from '../utils/thinking';
+import repositoryHeadings from '../utils/repositoryHeadings';
 
 // Ленивый код-блок: тяжёлый Prism грузится отдельным чанком только при появлении кода.
 const CodeBlock = lazy(() => import('./CodeBlock'));
@@ -143,7 +144,11 @@ function CodeFallback({ value }) {
   );
 }
 
-function MessageRendererComponent({ content, isTyping }) {
+function MessageRendererComponent({ content, isTyping, variant = 'message', components }) {
+  const anchorId = useId();
+  const rehypePlugins = useMemo(() => variant === 'repository'
+    ? [[repositoryHeadings, { prefix: `repository-${anchorId}-` }], rehypeKatex]
+    : [rehypeKatex], [variant, anchorId]);
   const markdownComponents = useMemo(() => ({
     // ⚠️ Код-блок С ЯЗЫКОМ рисует CodeBlock (своя рамка/фон/заголовок). react-markdown
     // при этом всё равно оборачивает его в <pre>, а PROSE-стили дают <pre> ещё одну
@@ -189,9 +194,10 @@ function MessageRendererComponent({ content, isTyping }) {
   // затем нормализуем мат-делимитеры (\[ \] / \( \) -> $$ / $, т.к. remark-math
   // понимает только $), и лишь потом чиним возможный неполный markdown стрима.
   const safeContent = useMemo(
-    () => completeMarkdown(normalizeMath(stripToolCallTags(stripThinking(throttled)))),
-    [throttled],
+    () => variant === 'repository' ? throttled : completeMarkdown(normalizeMath(stripToolCallTags(stripThinking(throttled)))),
+    [throttled, variant],
   );
+  const resolvedComponents = useMemo(() => ({ ...markdownComponents, ...components }), [markdownComponents, components]);
 
   // Мемоизируем сам вывод по safeContent: пока троттлированный контент не менялся,
   // ReactMarkdown/KaTeX НЕ перепарсиваются (даже если родитель ре-рендерит на токен).
@@ -199,9 +205,9 @@ function MessageRendererComponent({ content, isTyping }) {
     try {
       return (
         <ReactMarkdown
-          components={markdownComponents}
-          remarkPlugins={[remarkGfm, remarkBreaks, remarkMath]}
-          rehypePlugins={[rehypeKatex]}
+          components={resolvedComponents}
+          remarkPlugins={variant === 'repository' ? [remarkGfm, remarkMath] : [remarkGfm, remarkBreaks, remarkMath]}
+          rehypePlugins={rehypePlugins}
         >
           {safeContent}
         </ReactMarkdown>
@@ -214,7 +220,7 @@ function MessageRendererComponent({ content, isTyping }) {
         </Text>
       );
     }
-  }, [safeContent, markdownComponents]);
+  }, [safeContent, resolvedComponents, variant, rehypePlugins]);
 }
 
 const MessageRenderer = memo(MessageRendererComponent);

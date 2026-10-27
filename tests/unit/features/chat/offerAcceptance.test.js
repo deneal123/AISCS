@@ -8,6 +8,11 @@ import { offerSendOptions } from '../../../../src/features/chat/model/offerAccep
  * работает, без единого объяснения.
  */
 describe('принятие предложения', () => {
+  it.each(['watch_video', 'deep_research', 'image_gen'])('anchors both decisions for %s without resending text', (mode) => {
+    const offer = { mode, offer_id: 'server-anchor', decision: 'decline' };
+    expect(offerSendOptions(offer)).toEqual({ confirmOfferId: 'server-anchor', confirmationDecision: 'decline', skipUserAppend: true });
+    expect(offerSendOptions({ ...offer, decision: 'accept' })).toEqual({ confirmOfferId: 'server-anchor', skipUserAppend: true });
+  });
   it('🔴 инструмент отправляется ПРИЗНАКОМ СОГЛАСИЯ, а не маршрутом', () => {
     expect(offerSendOptions('watch_video', 'tool')).toEqual({ watchVideo: true });
   });

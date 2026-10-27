@@ -1,0 +1,30 @@
+.ide-toolbar-file-label,
+.ide-toolbar-clone-label,
+.ide-toolbar-project-label {
+  display: none;
+}
+
+@container ide-toolbar (max-width: 679px) {
+  .ide-toolbar-branch { display: none; }
+}
+
+@container ide-toolbar (min-width: 680px) {
+  .ide-toolbar-project-label {
+    display: inline;
+    margin-inline-start: 0.5rem;
+  }
+}
+
+@container ide-toolbar (min-width: 920px) {
+  .ide-toolbar-clone-label {
+    display: inline;
+    margin-inline-start: 0.5rem;
+  }
+}
+
+@container ide-toolbar (min-width: 1500px) {
+  .ide-toolbar-file-label {
+    display: inline;
+    margin-inline-start: 0.5rem;
+  }
+}

@@ -135,6 +135,18 @@ module.exports = {
     // иначе отбивается WDS host-check → «Invalid Host header»). На прод-сборку
     // (craco build) не влияет.
     devServerConfig.allowedHosts = "all";
+    // Only our bounded, eagerly handled route failure belongs to the app UI.
+    // Compiler errors and all other runtime defects retain the developer overlay.
+    devServerConfig.client = devServerConfig.client || {};
+    // Docker's internal port is not necessarily the browser-facing port.
+    // WDS treats 0 as location.port; preserve explicitly configured proxy URLs.
+    const socketURL = devServerConfig.client.webSocketURL || {};
+    devServerConfig.client.webSocketURL = { ...socketURL, port: socketURL.port || '0' };
+    const overlay = devServerConfig.client.overlay;
+    devServerConfig.client.overlay = {
+      ...(typeof overlay === 'object' && overlay ? overlay : { errors: true, warnings: false }),
+      runtimeErrors: (error) => error?.name !== 'AppRouteLoadError',
+    };
     return devServerConfig;
   },
 

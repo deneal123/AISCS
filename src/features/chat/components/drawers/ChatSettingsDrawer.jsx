@@ -20,6 +20,7 @@ import { colors, borderRadius, shadows } from '@theme/tokens';
 import { DRAWER_CLOSE_BUTTON_PROPS, DRAWER_OVERLAY_PROPS, DRAWER_RADIAL_BG, DRAWER_CONTENT_BG } from '@theme/drawer';
 import { CHAT_SCROLLBAR_SX, CHAT_THEME } from '../../constants/theme';
 import StyledSelect from '../StyledSelect';
+import ResearchModelSection from './settings/ResearchModelSection';
 
 const IRIS = colors.iris[300];
 
@@ -99,7 +100,7 @@ function SettingsSection({ icon, title, rows }) {
  * «Локально» отключается, когда сервер не поддерживает on-device whisper
  * (config.local_enabled === false) — тогда эффективный режим всегда «провайдер».
  */
-function TranscriptionSection({ config, mode, model, onModeChange, onModelChange }) {
+function TranscriptionSection({ config, mode, model, onModeChange, onModelChange, menuOwner }) {
   const localEnabled = !!config?.local_enabled;
   const models = Array.isArray(config?.models) ? config.models : [];
   const defaultModel = config?.default_model || '';
@@ -177,6 +178,8 @@ function TranscriptionSection({ config, mode, model, onModeChange, onModelChange
               Модель whisper
             </Text>
             <StyledSelect
+              ariaLabel="Модель whisper"
+              menuPortalTarget={menuOwner}
               value={model}
               onChange={onModelChange}
               placeholder={`По умолчанию${defaultModel ? ` — ${defaultModel}` : ''}`}
@@ -187,41 +190,6 @@ function TranscriptionSection({ config, mode, model, onModeChange, onModelChange
             />
           </Box>
         )}
-      </Box>
-    </VStack>
-  );
-}
-
-/** Секция «Модель глубокого ресёрча (LDR)»: выбор модели, отдельной от чат-модели.
- * Только tool-совместимые модели — агентная стратегия LDR требует function-calling. */
-function LdrModelSection({ ldrModel, modelCatalog, onChange }) {
-  // modelCatalog — это карта {id: {id, label, capabilities}}, не массив.
-  const toolModels = Object.values(modelCatalog || {})
-    .filter((m) => Array.isArray(m?.capabilities) && m.capabilities.includes('tools'))
-    .sort((a, b) => (a.label || a.id).localeCompare(b.label || b.id));
-  return (
-    <VStack align="stretch" spacing={2.5}>
-      <HStack spacing={2} px={1}>
-        <Icon as={FiSearch} boxSize={3.5} color={CHAT_THEME.textTertiary} />
-        <Text fontSize="10.5px" fontWeight="700" color={CHAT_THEME.textTertiary} textTransform="uppercase" letterSpacing="0.09em">
-          Модель глубокого ресёрча
-        </Text>
-      </HStack>
-      <Box borderRadius={borderRadius.md} bg={colors.surface.tint2} border={`1px solid ${CHAT_THEME.panelBorder}`} overflow="hidden">
-        <Box px={4} py={3.5}>
-          <Text fontSize="11px" color={CHAT_THEME.textTertiary} fontWeight="500" mb={2.5} lineHeight="1.45">
-            Отдельная от чат-модели. Только модели с поддержкой инструментов (function-calling).
-          </Text>
-          <StyledSelect
-            value={ldrModel || ''}
-            onChange={onChange}
-            placeholder="По умолчанию"
-            options={[
-              { value: '', label: 'По умолчанию' },
-              ...toolModels.map((m) => ({ value: m.id, label: m.label || m.id })),
-            ]}
-          />
-        </Box>
       </Box>
     </VStack>
   );
@@ -240,7 +208,7 @@ const LDR_STRATEGIES = [
 
 /** Секция «Стратегия глубокого ресёрча»: как LDR ведёт поиск. Влияет и на глубину,
  * и на цену прогона, поэтому вынесена пользователю, а не спрятана в админке. */
-function LdrStrategySection({ ldrStrategy, onChange }) {
+function LdrStrategySection({ ldrStrategy, onChange, menuOwner }) {
   return (
     <VStack align="stretch" spacing={2.5}>
       <HStack spacing={2} px={1}>
@@ -255,6 +223,7 @@ function LdrStrategySection({ ldrStrategy, onChange }) {
             Агентная идёт глубже и сама выбирает источники — дольше и дороже. По источникам — короче и дешевле.
           </Text>
           <StyledSelect
+            menuPortalTarget={menuOwner}
             value={ldrStrategy || ''}
             onChange={onChange}
             placeholder="По умолчанию"
@@ -321,12 +290,15 @@ export default function ChatSettingsDrawer({
   ldrModel,
   ldrStrategy,
   modelCatalog,
+  modelCatalogStatus,
+  onRetryModels,
   transcriptionConfig,
   transcriptionMode,
   transcriptionModel,
   setChatUiSettings,
   onReset,
 }) {
+  const [menuOwner, setMenuOwner] = useState(null);
   const handleTranscriptionModeChange = (nextMode) =>
     setChatUiSettings((p) => ({ ...p, transcriptionMode: nextMode }));
   const handleTranscriptionModelChange = (nextModel) =>
@@ -397,11 +369,14 @@ export default function ChatSettingsDrawer({
     >
       <DrawerOverlay {...DRAWER_OVERLAY_PROPS} />
       <DrawerContent
+        ref={setMenuOwner}
+        // An identity transform still rebases fixed, dialog-owned select portals.
+        // Remove it at rest; Chakra/Framer retain the actual enter/exit transform.
+        motionProps={{ transformTemplate: ({ x = 0, y = 0 }, generated) => parseFloat(x) === 0 && parseFloat(y) === 0 ? 'none' : generated }}
         bg={DRAWER_CONTENT_BG}
         borderLeft={`1px solid ${CHAT_THEME.panelBorder}`}
         boxShadow={shadows.drawer}
         sx={{
-          willChange: 'transform',
           backgroundImage: DRAWER_RADIAL_BG,
         }}
       >
@@ -445,18 +420,23 @@ export default function ChatSettingsDrawer({
             <SettingsSection icon={FiDatabase} title="Память" rows={memoryRows} />
             <SettingsSection icon={FiZap} title="Инструменты по умолчанию" rows={toolRows} />
             <TranscriptionSection
+              menuOwner={menuOwner}
               config={transcriptionConfig}
               mode={transcriptionMode}
               model={transcriptionModel}
               onModeChange={handleTranscriptionModeChange}
               onModelChange={handleTranscriptionModelChange}
             />
-            <LdrModelSection
+            <ResearchModelSection
+              menuOwner={menuOwner}
               ldrModel={ldrModel}
               modelCatalog={modelCatalog}
+              status={modelCatalogStatus}
+              onRetry={onRetryModels}
               onChange={(id) => setChatUiSettings((p) => ({ ...p, ldrModel: id }))}
             />
             <LdrStrategySection
+              menuOwner={menuOwner}
               ldrStrategy={ldrStrategy}
               onChange={(id) => setChatUiSettings((p) => ({ ...p, ldrStrategy: id }))}
             />

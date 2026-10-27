@@ -1,12 +1,16 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useAppToast } from '@shared/hooks/useAppToast';
-import { protocolError, safeErrorMessage, validateWsFrame } from './wsProtocol';
+import { protocolError, safeErrorCode, safeErrorMessage, validateWsFrame } from './wsProtocol';
 
 const MAX_RECONNECT_ATTEMPTS = 5;
 const INITIAL_RECONNECT_DELAY_MS = 1000;
 const MAX_RECONNECT_DELAY_MS = 30000;
 const HEARTBEAT_TIMEOUT_MS = 30000;
 const HEARTBEAT_CHECK_INTERVAL_MS = 10000;
+
+function transportError(localConnectionFailure = false) {
+  return Object.assign(new Error(safeErrorMessage({ code: 'transport' })), { code: 'transport', localConnectionFailure });
+}
 
 function buildWsUrl(threadId, lastId) {
   const rawBase =
@@ -125,7 +129,7 @@ export function useWebSocketChat(threadId, callbacks = {}) {
         // («превышено время ожидания», «слишком много запросов») доезжал до браузера и
         // молча выбрасывался.
         const errorText = safeErrorMessage(data);
-        onError?.(new Error(errorText));
+        onError?.(Object.assign(new Error(errorText), { code: safeErrorCode(data) }));
         toast({ title: 'Ошибка', description: errorText, status: 'error', duration: 5000 });
         break;
       }
@@ -154,21 +158,26 @@ export function useWebSocketChat(threadId, callbacks = {}) {
         wsUrl = buildWsUrl(threadId, lastIdRef.current);
         const ws = new WebSocket(wsUrl);
         wsRef.current = ws;
+        const ownsConnection = () => wsRef.current === ws && currentThreadIdRef.current === capturedThreadId;
 
         ws.onopen = () => {
+          if (!ownsConnection()) return;
           setIsConnected(true);
           setConnectionState('connected');
           reconnectAttemptsRef.current = 0;
           reconnectDelayRef.current = INITIAL_RECONNECT_DELAY_MS;
           connectingRef.current = false;
           onConnect?.(threadId);
-          messageQueueRef.current.forEach((msg) => {
-            try { ws.send(JSON.stringify(msg)); } catch (_) {}
-          });
+          const pending = messageQueueRef.current;
           messageQueueRef.current = [];
+          for (const msg of pending) {
+            try { ws.send(JSON.stringify(msg)); }
+            catch { onError?.(transportError()); break; }
+          }
         };
 
         ws.onmessage = (event) => {
+          if (!ownsConnection()) return;
           try {
             const decoded = JSON.parse(event.data);
             const validation = validateWsFrame(decoded);
@@ -185,6 +194,7 @@ export function useWebSocketChat(threadId, callbacks = {}) {
         };
 
         ws.onclose = (event) => {
+          if (!ownsConnection()) return;
           setIsConnected(false);
           setConnectionState('disconnected');
           setLastHeartbeat(null);
@@ -192,6 +202,19 @@ export function useWebSocketChat(threadId, callbacks = {}) {
           if (heartbeatCheckRef.current) {
             clearInterval(heartbeatCheckRef.current);
             heartbeatCheckRef.current = null;
+          }
+          if (event.code === 1008) {
+            // Сервер уже отказал в доступе: холодный reconnect не меняет права.
+            // accept перед owner-check не должен сбрасывать бюджет в бесконечный цикл.
+            messageQueueRef.current = [];
+            if (reconnectTimeoutRef.current) clearTimeout(reconnectTimeoutRef.current);
+            reconnectTimeoutRef.current = null;
+            setConnectionState('error');
+            onDisconnect?.(event, false);
+            onError?.(Object.assign(new Error(safeErrorMessage({ code: 'unauthorized' })), {
+              code: 'unauthorized',
+            }));
+            return;
           }
           // Восстановимый разрыв (код != 1000 и попытки не исчерпаны) → сейчас
           // переподключимся: сообщаем это onDisconnect, чтобы он НЕ гасил live-job
@@ -206,14 +229,20 @@ export function useWebSocketChat(threadId, callbacks = {}) {
         };
 
         ws.onerror = () => {
+          if (!ownsConnection()) return;
+          messageQueueRef.current = [];
           setConnectionState('error');
           connectingRef.current = false;
-          onError?.(new Error('WebSocket connection error'));
+          onError?.(transportError(true));
         };
-      } catch (err) {
+      } catch {
+        messageQueueRef.current = [];
         setConnectionState('error');
         connectingRef.current = false;
-        onError?.(err);
+        onError?.(transportError(true));
+        const willReconnect = reconnectAttemptsRef.current < MAX_RECONNECT_ATTEMPTS;
+        onDisconnect?.({ code: 1006 }, willReconnect);
+        if (willReconnect) scheduleReconnect();
       }
     }, 50);
   }, [threadId, handleIncomingMessage, onConnect, onDisconnect, onError, onAgentEvent, scheduleReconnect]);
@@ -243,17 +272,20 @@ export function useWebSocketChat(threadId, callbacks = {}) {
       ...(options.fileContext && { file_context: options.fileContext }),
       ...(Array.isArray(options.fileIds) && options.fileIds.length && { file_ids: options.fileIds }),
       ...(options.routeOverride && { route_override: options.routeOverride }),
+      ...(options.documentContext && { document_context: options.documentContext }),
+      ...(options.ideTargetId && { ide_target_id: options.ideTargetId }),
       ...(Array.isArray(options.attachments) && options.attachments.length && { attachments: options.attachments }),
       ...(options.detachFiles && { detach_files: true }),
       // Согласие на дорогой просмотр — признак ЭТОГО сообщения, как detach_files.
       ...(options.watchVideo && { watch_video: true }),
       ...(options.confirmExpensiveRun && { confirm_expensive_run: true }),
       ...(options.confirmOfferId && { confirm_offer_id: options.confirmOfferId }),
+      ...(options.confirmOfferId && { confirmation_decision: options.confirmationDecision || 'accept' }),
     };
 
     if (wsRef.current?.readyState === WebSocket.OPEN) {
       try { wsRef.current.send(JSON.stringify(payload)); }
-      catch (err) { messageQueueRef.current.push(payload); onError?.(err); }
+      catch { messageQueueRef.current = []; onError?.(transportError()); }
     } else {
       messageQueueRef.current.push(payload);
     }
@@ -272,6 +304,8 @@ export function useWebSocketChat(threadId, callbacks = {}) {
   }, []);
 
   const cancelJob = useCallback(async (celeryTaskId) => {
+    // Stop also withdraws requests/consent queued before server acknowledgement.
+    messageQueueRef.current = [];
     // Отменяем по celery-task-id (тот же ключ, которым воркер опрашивает
     // chat:cancel:{id}). Локальный job-стейт гасит вызывающий (reducer) — здесь
     // только сетевой вызов, без второй копии состояния.
@@ -289,6 +323,9 @@ export function useWebSocketChat(threadId, callbacks = {}) {
     const threadChanged = prevThreadIdRef.current !== threadId;
     if (threadId && threadChanged) {
       currentThreadIdRef.current = threadId;
+      lastIdRef.current = null;
+      reconnectAttemptsRef.current = 0;
+      reconnectDelayRef.current = INITIAL_RECONNECT_DELAY_MS;
       messageQueueRef.current = [];
       connectingRef.current = false;
       setConnectionState('disconnected');
@@ -298,9 +335,12 @@ export function useWebSocketChat(threadId, callbacks = {}) {
     prevThreadIdRef.current = threadId;
 
     return () => {
-      wsRef.current?.close(1000, 'Thread ID changed');
+      const retired = wsRef.current;
       wsRef.current = null;
       connectingRef.current = false;
+      if (reconnectTimeoutRef.current) clearTimeout(reconnectTimeoutRef.current);
+      reconnectTimeoutRef.current = null;
+      retired?.close(1000, 'Thread ID changed');
       setConnectionState('disconnected');
       setIsConnected(false);
       setLastHeartbeat(null);
@@ -310,14 +350,22 @@ export function useWebSocketChat(threadId, callbacks = {}) {
   // Heartbeat monitoring
   useEffect(() => {
     if (connectionState !== 'connected' || !lastHeartbeat) return;
+    const watchedSocket = wsRef.current;
     heartbeatCheckRef.current = setInterval(() => {
+      if (!watchedSocket || wsRef.current !== watchedSocket) return;
       if (Date.now() - lastHeartbeat > HEARTBEAT_TIMEOUT_MS) {
         setConnectionState('error');
         // The socket may still report readyState OPEN even though the peer/proxy
         // silently dropped it (zombie connection) — close it first so connect()'s
         // OPEN-state guard doesn't turn scheduleReconnect() into a permanent no-op.
-        wsRef.current?.close(4000, 'Heartbeat timeout');
         wsRef.current = null;
+        connectingRef.current = false;
+        setIsConnected(false);
+        setLastHeartbeat(null);
+        clearInterval(heartbeatCheckRef.current);
+        heartbeatCheckRef.current = null;
+        watchedSocket.close(4000, 'Heartbeat timeout');
+        onDisconnect?.({ code: 4000 }, reconnectAttemptsRef.current < MAX_RECONNECT_ATTEMPTS);
         scheduleReconnect();
       }
     }, HEARTBEAT_CHECK_INTERVAL_MS);
@@ -325,7 +373,7 @@ export function useWebSocketChat(threadId, callbacks = {}) {
       clearInterval(heartbeatCheckRef.current);
       heartbeatCheckRef.current = null;
     };
-  }, [connectionState, lastHeartbeat, scheduleReconnect]);
+  }, [connectionState, lastHeartbeat, onDisconnect, scheduleReconnect]);
 
   // Cleanup on unmount
   useEffect(() => {

@@ -293,6 +293,15 @@ export const FiCreditCard = (p) => (
 export const FiCopy = (p) => (
   <Ico {...p}><rect x="8.5" y="8.5" width="12" height="12" rx="2" /><path d="M4.5 15.5H4a.5.5 0 0 1-.5-.5V4a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 .5.5v.5" /></Ico>
 );
+export const FiSave = (p) => (
+  <Ico {...p}><path d="M4 3.5h13l3.5 3.5v13.5h-17v-17Z" /><path d="M8 3.5v6h8v-6M8 20.5v-7h9v7" /></Ico>
+);
+export const FiTerminal = (p) => (
+  <Ico {...p}><rect x="3" y="4" width="18" height="16" rx="2" /><path d="m6.5 8 4 4-4 4M13 16h4" /></Ico>
+);
+export const FiPlay = (p) => (
+  <Ico {...p}><path d="m8 4 12 8-12 8V4Z" /></Ico>
+);
 export const FiEdit2 = (p) => (
   <Ico {...p}><path d="M16.5 4.5 19.5 7.5 8 19l-4 1 1-4L16.5 4.5Z" /></Ico>
 );

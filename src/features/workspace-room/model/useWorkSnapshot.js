@@ -65,43 +65,76 @@ function mergeLibraryPage(current, incoming) {
   };
 }
 
-export function useWorkSnapshot({ threadId, invalidationVersion = 0, notify }) {
-  const [hub, setHub] = useState(() => normalizeSnapshot(null, Boolean(threadId)));
+const pendingSnapshot = (hasThread) => ({ ...normalizeSnapshot(null, hasThread), loading: true });
+
+function retainWorkspace(previous, incoming) {
+  if (['unavailable', 'expired', 'absent'].includes(incoming.state)
+    && ['ready', 'unavailable', 'expired'].includes(previous.state) && previous.revision) {
+    return { ...previous, state: previous.state === 'expired' ? 'expired'
+      : incoming.state === 'absent' ? 'unavailable' : incoming.state, stale: true };
+  }
+  return incoming;
+}
+
+export function useWorkSnapshot({ threadId, invalidationVersion = 0, onThreadUnavailable }) {
+  const unavailableRef = useRef(onThreadUnavailable);
+  unavailableRef.current = onThreadUnavailable;
+  const [hub, setHub] = useState(() => pendingSnapshot(Boolean(threadId)));
+  const hubThreadRef = useRef(threadId);
   const [libraryBusy, setLibraryBusy] = useState(false);
+  const [libraryPageError, setLibraryPageError] = useState(false);
   const generationRef = useRef(0);
   const threadRef = useRef(threadId);
   const controllerRef = useRef(null);
+  const pageRef = useRef(null);
+  const activeRef = useRef(false);
+  const pageLoadRef = useRef(null);
+  const observedInvalidation = useRef({ threadId, version: invalidationVersion });
   threadRef.current = threadId;
+
+  const invalidateRequests = useCallback(() => {
+    generationRef.current += 1;
+    controllerRef.current?.abort();
+    controllerRef.current = null;
+    pageRef.current?.controller.abort();
+    pageRef.current = null;
+    setLibraryBusy(false);
+  }, []);
 
   const applySnapshot = useCallback((
     snapshot,
     expectedThread = threadRef.current,
-    { preserveLibrary = false } = {},
+    { preserveLibrary = false, requestGeneration = null } = {},
   ) => {
     if (threadRef.current !== expectedThread) return null;
+    if (requestGeneration == null) invalidateRequests();
+    else if (requestGeneration !== generationRef.current) return null;
     const normalized = normalizeSnapshot(snapshot, Boolean(expectedThread));
-    setHub((old) => ({
-      ...normalized,
-      library: preserveLibrary
-        ? mergeLibraryPage(old.library, normalized.library)
-        : normalized.library,
-    }));
+    setHub((old) => {
+      const workspace = retainWorkspace(old.workspace, normalized.workspace);
+      return { ...normalized, workspace, history: workspace.history,
+        library: preserveLibrary ? mergeLibraryPage(old.library, normalized.library) : normalized.library };
+    });
     return normalized.workspace;
-  }, []);
+  }, [invalidateRequests]);
 
   const load = useCallback(async ({ background = false } = {}) => {
     const expectedThread = threadId;
-    const generation = ++generationRef.current;
-    controllerRef.current?.abort();
+    if (threadRef.current !== expectedThread) return null;
+    invalidateRequests();
+    const generation = generationRef.current;
     const controller = new AbortController();
     controllerRef.current = controller;
     setHub((old) => ({
       ...old,
-      loading: !background && old.library.items.length === 0 && old.workspace.entries.length === 0,
-      refreshing: background || old.library.items.length > 0 || old.workspace.entries.length > 0,
+      // An unresolved read cannot become a confirmed empty workspace merely
+      // because an invalidation requests a background refresh before it ends.
+      loading: old.loading || (!background && old.library.items.length === 0 && old.workspace.entries.length === 0),
+      refreshing: !old.loading && (background || old.library.items.length > 0 || old.workspace.entries.length > 0),
     }));
     try {
       const api = await import('@api/chat');
+      if (controller.signal.aborted) return null;
       const snapshot = expectedThread
         ? await api.getWorkHub(expectedThread, { signal: controller.signal })
         : {
@@ -111,9 +144,17 @@ export function useWorkSnapshot({ threadId, invalidationVersion = 0, notify }) {
           library: await api.getAccountWorkLibrary({ signal: controller.signal }),
         };
       if (generation !== generationRef.current || threadRef.current !== expectedThread) return null;
-      return applySnapshot(snapshot, expectedThread, { preserveLibrary: background });
+      return applySnapshot(snapshot, expectedThread, {
+        preserveLibrary: background,
+        requestGeneration: generation,
+      });
     } catch (error) {
       if (cancelled(error) || generation !== generationRef.current || threadRef.current !== expectedThread) return null;
+      if (statusOf(error) === 404 && unavailableRef.current) {
+        setHub(pendingSnapshot(Boolean(expectedThread)));
+        unavailableRef.current(expectedThread);
+        return null;
+      }
       let library = null;
       try {
         const api = await import('@api/chat');
@@ -129,9 +170,7 @@ export function useWorkSnapshot({ threadId, invalidationVersion = 0, notify }) {
         ...old,
         loading: false,
         refreshing: false,
-        workspace: old.workspace.state === 'ready' && status !== 410
-          ? { ...old.workspace, state: 'unavailable' }
-          : emptyWorkspace(state),
+        workspace: retainWorkspace(old.workspace, emptyWorkspace(state)),
         room: emptyRoom(state),
         library: library
           ? mergeLibraryPage(old.library, {
@@ -145,32 +184,56 @@ export function useWorkSnapshot({ threadId, invalidationVersion = 0, notify }) {
     } finally {
       if (controllerRef.current === controller) controllerRef.current = null;
     }
-  }, [applySnapshot, threadId]);
+  }, [applySnapshot, invalidateRequests, threadId]);
 
   useEffect(() => {
-    generationRef.current += 1;
-    controllerRef.current?.abort();
-    setHub(normalizeSnapshot(null, Boolean(threadId)));
+    activeRef.current = true;
+    hubThreadRef.current = threadId;
+    invalidateRequests();
+    setLibraryPageError(false);
+    setHub(pendingSnapshot(Boolean(threadId)));
     load();
-    return () => controllerRef.current?.abort();
-  }, [load, threadId]);
+    return () => {
+      activeRef.current = false;
+      invalidateRequests();
+    };
+  }, [invalidateRequests, load, threadId]);
 
   useEffect(() => {
-    if (invalidationVersion > 0) load({ background: true });
-  }, [invalidationVersion, load]);
+    const previous = observedInvalidation.current;
+    observedInvalidation.current = { threadId, version: invalidationVersion };
+    // Mount/thread entry already owns its initial read. Only a newly observed
+    // same-thread invalidation can retire that read and request fresher facts.
+    if (previous.threadId === threadId && previous.version !== invalidationVersion
+      && invalidationVersion > 0) load({ background: true });
+  }, [invalidationVersion, load, threadId]);
 
-  const loadMoreLibrary = useCallback(async () => {
+  const loadMoreLibrary = useCallback(async function loadLibraryPage() {
+    // A retained control/continuation callback must not replay a previous
+    // cursor or start a request in another thread or after unmount.
+    if (!activeRef.current || pageLoadRef.current !== loadLibraryPage
+      || threadRef.current !== threadId) return;
     const cursor = hub.library?.next_cursor;
     const offset = hub.library?.next_offset;
-    if (libraryBusy || (cursor == null && offset == null)) return;
+    if (pageRef.current || (cursor == null && offset == null)) return;
     const expectedThread = threadRef.current;
     const generation = generationRef.current;
+    const operation = { controller: new AbortController() };
+    pageRef.current = operation;
+    const ownsRequest = () => activeRef.current
+      && pageLoadRef.current === loadLibraryPage
+      && pageRef.current === operation
+      && !operation.controller.signal.aborted
+      && generation === generationRef.current
+      && threadRef.current === expectedThread;
     setLibraryBusy(true);
     try {
       const { getAccountWorkLibrary } = await import('@api/chat');
+      if (!ownsRequest()) return;
       const params = cursor ? { cursor } : { offset };
-      const page = await getAccountWorkLibrary({ params });
-      if (generation !== generationRef.current || threadRef.current !== expectedThread) return;
+      const page = await getAccountWorkLibrary({ params, signal: operation.controller.signal });
+      if (!ownsRequest()) return;
+      setLibraryPageError(false);
       setHub((old) => {
         const known = new Set((old.library.items || []).map((item) => item.file_id));
         const additions = (page?.items || []).filter((item) => !known.has(item.file_id));
@@ -184,23 +247,25 @@ export function useWorkSnapshot({ threadId, invalidationVersion = 0, notify }) {
           },
         };
       });
-    } catch {
-      notify?.({
-        title: 'Не удалось загрузить следующие файлы',
-        status: 'warning',
-        duration: 3000,
-      });
+    } catch (error) {
+      if (!ownsRequest() || cancelled(error)) return;
+      setLibraryPageError(true);
     } finally {
-      if (generation === generationRef.current) setLibraryBusy(false);
+      if (pageRef.current === operation) {
+        pageRef.current = null;
+        setLibraryBusy(false);
+      }
     }
-  }, [hub.library?.next_cursor, hub.library?.next_offset, libraryBusy, notify]);
+  }, [hub.library?.next_cursor, hub.library?.next_offset, threadId]);
+  pageLoadRef.current = loadMoreLibrary;
 
   return {
-    hub,
+    hub: hubThreadRef.current === threadId ? hub : pendingSnapshot(Boolean(threadId)),
     setHub,
     applySnapshot,
     load,
     loadMoreLibrary,
     libraryBusy,
+    libraryPageError,
   };
 }

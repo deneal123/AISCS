@@ -16,7 +16,6 @@ import {
 import { colors } from '@theme/tokens';
 import { WORK_SCROLLBAR_SX } from '../model/theme';
 import { AgentActivityPanel } from './AgentActivityPanel';
-import { DocumentForgePanel } from './DocumentForgePanel';
 import { WorkHistoryPanel } from './WorkHistoryPanel';
 import { WorkIssuesPanel } from './WorkIssuesPanel';
 
@@ -26,12 +25,17 @@ export function WorkContextPanel({
   file,
   busy,
   onCreateIssue,
+  issueDraft,
   onUpdateIssue,
   onPreviewRevert,
   onControl,
-  document,
+  selectedTab,
+  onTabChange,
 }) {
   const [confirmCancel, setConfirmCancel] = useState(false);
+  const [localTab, setLocalTab] = useState(0);
+  const tab = selectedTab ?? localTab;
+  const setTab = onTabChange ?? setLocalTab;
   const cancelRef = useRef(null);
 
   const confirmStop = async () => {
@@ -42,6 +46,8 @@ export function WorkContextPanel({
   return (
     <>
       <Tabs
+        index={tab}
+        onChange={setTab}
         h="full"
         display="flex"
         flexDirection="column"
@@ -49,10 +55,9 @@ export function WorkContextPanel({
         colorScheme="blue"
       >
         <TabList px={2} py={2} flexShrink={0} aria-label="Контекст работы">
-          <Tab fontSize="12px">Задачи</Tab>
-          <Tab fontSize="12px">История</Tab>
-          <Tab fontSize="12px">Агент</Tab>
-          <Tab fontSize="12px">PDF</Tab>
+          <Tab fontSize="12px" color={colors.fg[2]}>Задачи</Tab>
+          <Tab fontSize="12px" color={colors.fg[2]}>История</Tab>
+          <Tab fontSize="12px" color={colors.fg[2]}>Агент</Tab>
         </TabList>
         <TabPanels flex="1" minH={0} overflow="hidden">
           <TabPanel h="full" overflow="auto" sx={WORK_SCROLLBAR_SX} px={3}>
@@ -61,6 +66,7 @@ export function WorkContextPanel({
               file={file}
               busy={busy}
               onCreateIssue={onCreateIssue}
+              draft={issueDraft}
               onUpdateIssue={onUpdateIssue}
             />
           </TabPanel>
@@ -78,9 +84,6 @@ export function WorkContextPanel({
               onControl={onControl}
               onRequestCancel={() => setConfirmCancel(true)}
             />
-          </TabPanel>
-          <TabPanel h="full" overflow="auto" sx={WORK_SCROLLBAR_SX} px={3}>
-            <DocumentForgePanel document={document} />
           </TabPanel>
         </TabPanels>
       </Tabs>

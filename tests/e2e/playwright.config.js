@@ -7,6 +7,10 @@ if (!Number.isInteger(standalonePort) || standalonePort < 1 || standalonePort > 
   throw new Error(`E2E_PORT must be a valid TCP port, got: ${process.env.E2E_PORT}`);
 }
 const baseURL = externalBaseUrl || `http://localhost:${standalonePort}`;
+// The default headless shell has no PDF viewer. Real Document Forge acceptance
+// needs full Chromium; keep mocked suites and other browser engines unchanged.
+const liveWorkEnabled = process.env.E2E_LIVE_WORK_HUB === '1';
+const liveChromiumChannel = liveWorkEnabled ? 'chromium' : undefined;
 const webServer = externalBaseUrl
   ? undefined
   : {
@@ -24,6 +28,10 @@ module.exports = defineConfig({
   use: {
     headless: true,
     baseURL,
+    // Compiled mocked suites must own all network interception. A service
+    // worker can bypass page.route (notably WebKit's lazy admin requests).
+    // External authenticated runs retain the real application's SW behavior.
+    serviceWorkers: externalBaseUrl ? 'allow' : 'block',
     // Save full trace and screenshots for each run to aid debugging in CI/artifacts
     trace: 'on',
     screenshot: 'on',
@@ -42,7 +50,11 @@ module.exports = defineConfig({
     // Desktop браузеры
     {
       name: "chromium",
-      use: { ...devices["Desktop Chrome"] },
+      use: {
+        ...devices["Desktop Chrome"],
+        channel: liveChromiumChannel,
+        ...(liveWorkEnabled ? { viewport: { width: 1440, height: 900 } } : {}),
+      },
     },
     {
       name: "firefox",
@@ -55,7 +67,13 @@ module.exports = defineConfig({
     // Мобильные устройства
     {
       name: "mobile-chrome",
-      use: { ...devices["Pixel 5"] },
+      use: {
+        ...devices["Pixel 5"],
+        channel: liveChromiumChannel,
+        // Pixel 5's screen is 393x851, but its default content viewport is
+        // 393x727. Acceptance must measure the requested CSS viewport.
+        ...(liveWorkEnabled ? { viewport: { width: 393, height: 851 } } : {}),
+      },
     },
     {
       name: "mobile-safari",

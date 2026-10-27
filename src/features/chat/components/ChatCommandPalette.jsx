@@ -23,7 +23,7 @@ export default function ChatCommandPalette({ isOpen, onClose, actions = {}, rece
       { id: 'export', label: 'Экспорт в Markdown', sub: 'Скачать этот чат файлом .md', icon: FiDownload, run: actions.exportChat },
       { id: 'settings', label: 'Настройки чата', sub: 'Трейс, инструменты', icon: FiSettings, run: actions.openSettings },
       { id: 'memory', label: 'Память', sub: 'Факты об этом пользователе', icon: FiDatabase, run: actions.openMemory },
-      { id: 'model_auto', label: 'Модель: Auto', sub: 'Автовыбор роутером', icon: FiCpu, run: () => actions.selectModel?.('') },
+      { id: 'model_auto', label: 'Модель: Авто', sub: 'Автовыбор роутером', icon: FiCpu, run: () => actions.selectModel?.('') },
     ];
     const modelItems = (models || []).map((m) => ({
       id: `model_${m}`, label: `Модель: ${m}`, sub: 'Зафиксировать модель', icon: FiCpu, run: () => actions.selectModel?.(m),

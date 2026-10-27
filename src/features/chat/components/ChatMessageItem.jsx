@@ -190,7 +190,7 @@ function UsageChip({ usage }) {
 }
 
 /** Одно сообщение чата (пользователь или агент) со служебными действиями. */
-function ChatMessageItem({ message, isLastMessage, isFirstInGroup = true, lastUsedModel, availableModels, copyMessage, regenerateMessage, editMessage, onFeedback, isLoading, onOpenWork }) {
+function ChatMessageItem({ message, isLastMessage, isFirstInGroup = true, lastUsedModel, availableModels, copyMessage, regenerateMessage, editMessage, onFeedback, isLoading, onOpenLibrary, onOpenPdf }) {
   const isUser = message.type === 'user';
   // Видимая часть (без <think>): пока стримятся только рассуждения, тело пустое —
   // в этом случае показываем «печатает», а не пустой пузырь.
@@ -200,7 +200,7 @@ function ChatMessageItem({ message, isLastMessage, isFirstInGroup = true, lastUs
   const agentName = message.metadata?.agent_name;
   const _ts = message.timestamp ? new Date(message.timestamp) : null;
   const timeStr = _ts && !Number.isNaN(_ts.getTime())
-    ? _ts.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    ? _ts.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit', hour12: false })
     : '';
 
   // Фидбэк 👍/👎 — инициализируем из message.feedback (восстановлено из истории).
@@ -368,7 +368,7 @@ function ChatMessageItem({ message, isLastMessage, isFirstInGroup = true, lastUs
             {isUser ? (
               <>
                 {message.attachments?.length ? (
-                  <MessageAttachments attachments={message.attachments} onOpenWork={onOpenWork} />
+                  <MessageAttachments attachments={message.attachments} onOpenLibrary={onOpenLibrary} />
                 ) : null}
                 <Text
                   color={colors.text.primary}
@@ -448,12 +448,13 @@ function ChatMessageItem({ message, isLastMessage, isFirstInGroup = true, lastUs
                       leftIcon={<Icon as={FiFolder} />}
                       borderColor={CHAT_THEME.panelBorder}
                       color={CHAT_THEME.textPrimary}
-                      onClick={onOpenWork}
-                      isDisabled={!onOpenWork}
+                      onClick={onOpenPdf}
+                      data-action-hint={isLastMessage && !isLoading && onOpenPdf ? 'idle' : undefined}
+                      isDisabled={!onOpenPdf}
                     >
                       {message.metadata?.document_failure_code === 'evidence_incomplete'
-                        ? 'Добавить источники в Работе'
-                        : 'Открыть в Работе'}
+                        ? 'Добавить источники в PDF'
+                        : 'Открыть в PDF'}
                     </Button>
                     {message.metadata?.document_failure_code === 'evidence_incomplete' && (
                       <Button

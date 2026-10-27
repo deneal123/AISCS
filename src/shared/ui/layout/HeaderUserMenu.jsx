@@ -15,10 +15,10 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { useLocation } from "react-router-dom";
+import { Link as RouterLink, useLocation } from "react-router-dom";
 import { ChevronRightIcon, TriangleDownIcon } from "@chakra-ui/icons";
 import { FaSignOutAlt, FaUser } from "@shared/icons";
-import { borderRadius, colors, shadows } from "@theme/tokens";
+import { borderRadius, colors, layers, shadows } from "@theme/tokens";
 import { HEADER_THEME } from "./headerTheme";
 
 const HEADER_MENU_MAX_WIDTH = "calc(100vw - 32px)";
@@ -27,10 +27,17 @@ const HEADER_MENU_STYLE = {
   minWidth: 0,
   maxWidth: HEADER_MENU_MAX_WIDTH,
 };
+// Fast Escape/reopen must not inherit a delayed exit visibility transition.
+const HEADER_MENU_MOTION = {
+  variants: {
+    enter: { visibility: 'visible', opacity: 1, scale: 1, transition: { duration: 0 } },
+    exit: { visibility: 'hidden', opacity: 0, scale: 1, transition: { duration: 0 } },
+  },
+};
 
 /**
  * Аватар + меню аккаунта — ЕДИНЫЙ вход в навигацию для авторизованных.
- * Разделы приложения (Чат / Тарифы / Админ) живут здесь, а не отдельными
+ * Разделы приложения (Чат / IDE / PDF / Тарифы / Админ) живут здесь, а не отдельными
  * ссылками в шапке: раньше они дублировались и в шапке, и в бургере, а на
  * мобильном рядом стояли сразу две кнопки-меню (аватар и бургер).
  */
@@ -39,14 +46,18 @@ export default function HeaderUserMenu({ userLabel, user, navigate, logout, navI
   // Открываем профиль, СОХРАНЯЯ текущий тред чата: если мы уже на /chat/:id —
   // добавляем ?profile=open к текущему пути, а не уводим на новый /chat.
   const openProfile = () => {
-    const onChat = location.pathname.startsWith('/chat');
-    navigate(`${onChat ? location.pathname : '/chat'}?profile=open`);
+    const onChat = /^\/chat(?:\/|$)/.test(location.pathname);
+    const params = new URLSearchParams(onChat ? location.search : '');
+    params.set('profile', 'open');
+    navigate(`${onChat ? location.pathname : '/chat'}?${params}`);
   };
 
   const menuItemStyles = {
-    py: 3,
+    h: '34px',
+    minH: '34px',
+    py: 0,
     px: 3,
-    fontSize: "sm",
+    fontSize: "13px",
     borderRadius: borderRadius.md,
     bg: "transparent",
     color: HEADER_THEME.text,
@@ -62,9 +73,9 @@ export default function HeaderUserMenu({ userLabel, user, navigate, logout, navI
         size="sm"
         px={2}
         py={1}
-        minH={{ base: "44px", md: "auto" }}
-        minW={{ base: "44px", md: "auto" }}
-        maxW={{ base: "44px", md: "300px" }}
+        minH={{ base: "34px", md: "auto" }}
+        minW={{ base: "34px", md: "auto" }}
+        maxW={{ base: "34px", md: "300px" }}
         borderRadius={borderRadius.full}
         overflow="visible"
         aria-label="Меню аккаунта"
@@ -111,23 +122,27 @@ export default function HeaderUserMenu({ userLabel, user, navigate, logout, navI
         <MenuList
           data-testid="header-user-menu"
           style={HEADER_MENU_STYLE}
-          bg={colors.bg.menu}
+          bg={colors.ink[900]}
+          motionProps={HEADER_MENU_MOTION}
           border="1px solid"
           borderColor={HEADER_THEME.border}
           borderRadius={borderRadius.lg}
           boxShadow={shadows.menu}
           py={0}
           px={0}
-          overflow="hidden"
-          zIndex={9999}
+          maxH="calc(100dvh - 80px)"
+          overflowX="hidden"
+          overflowY="auto"
+          zIndex={layers.dropdown}
         >
           <Box position="absolute" top={0} left={0} right={0} h="2px" bg={`linear-gradient(90deg, transparent, ${colors.accent.base}, transparent)`} />
 
-          <Box px={4} py={4} bg={colors.surface.tint1} borderBottom={`1px solid ${colors.surface.tint3}`}>
+          <Box px={3} py={3} bg={colors.surface.tint1} borderBottom={`1px solid ${colors.surface.tint3}`}>
             <HStack spacing={3} minW={0}>
               <Avatar
+                aria-hidden="true"
                 name={userLabel}
-                size="md"
+                size="sm"
                 bg={colors.bg.menu}
                 color={colors.text.primary}
                 fontWeight="bold"
@@ -147,15 +162,18 @@ export default function HeaderUserMenu({ userLabel, user, navigate, logout, navI
           <Box p={2}>
             {/* Разделы приложения — единственное место, где они теперь живут. */}
             {navItems.map((item) => {
-              const isActive =
-                location.pathname === item.to || location.pathname.startsWith(`${item.to}/`);
+              const isActive = item.isActive ?? (
+                location.pathname === item.to || location.pathname.startsWith(`${item.to}/`)
+              );
               return (
                 <MenuItem
                   key={item.to}
-                  onClick={() => navigate(item.to)}
+                  as={RouterLink}
+                  to={item.to}
+                  aria-current={isActive ? 'page' : undefined}
                   {...menuItemStyles}
                   bg={isActive ? colors.accent.subtle : "transparent"}
-                  color={isActive ? HEADER_THEME.accent : HEADER_THEME.text}
+                  color={isActive ? colors.blue[100] : HEADER_THEME.text}
                   icon={
                     <Icon
                       as={item.icon}
@@ -191,7 +209,7 @@ export default function HeaderUserMenu({ userLabel, user, navigate, logout, navI
             <MenuItem
               onClick={logout}
               {...menuItemStyles}
-              color={HEADER_THEME.accent}
+              color={colors.blue[100]}
               icon={<Icon as={FaSignOutAlt} boxSize={4} color={HEADER_THEME.accent} />}
               _hover={{ bg: colors.accent.soft }}
               _focus={{ bg: colors.accent.soft }}

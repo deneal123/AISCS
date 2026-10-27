@@ -2,7 +2,23 @@ import {
   parseModelMeta,
   resolveMessageModelLabel,
   sortModelsByProvider,
+  currentLocalModel,
 } from '@features/chat/utils/modelSelector';
+import { normalizeChatUiSettings } from '@features/chat/schema/chatUiSettingsSchema';
+
+it('обновляет будущий локальный выбор, не меняя облачные ID и историю расхода', () => {
+  expect(currentLocalModel('lfm2.5-1.2b-instruct')).toBe('qwen2.5-1.5b-instruct');
+  expect(currentLocalModel('liquid/lfm2.5-1.2b-instruct')).toBe('liquid/lfm2.5-1.2b-instruct');
+  expect(currentLocalModel('')).toBe('');
+  const saved = { preferredModel: 'lfm2.5-1.2b-instruct', ldrModel: 'openai/gpt-4o' };
+  const updated = normalizeChatUiSettings(saved);
+  expect(updated.preferredModel).toBe('qwen2.5-1.5b-instruct');
+  expect(updated.ldrModel).toBe('openai/gpt-4o');
+  expect(saved.preferredModel).toBe('lfm2.5-1.2b-instruct');
+  expect(resolveMessageModelLabel({ metadata: { usage: { actual_model: 'lfm2.5-1.2b-instruct' } } }))
+    .toBe('lfm2.5-1.2b-instruct');
+  expect(parseModelMeta(updated.preferredModel).label).toBe('Qwen2.5 · 1.5B');
+});
 
 describe('parseModelMeta — provider detection', () => {
   it('splits "provider/model" ids', () => {
@@ -58,6 +74,12 @@ describe('resolveMessageModelLabel', () => {
 });
 
 describe('sortModelsByProvider — domestic providers first', () => {
+  it('puts the local model before all cloud models without inventing other local aliases', () => {
+    expect(sortModelsByProvider(['GigaChat-2', 'openai/gpt-4o', 'qwen2.5-1.5b-instruct'])[0])
+      .toBe('qwen2.5-1.5b-instruct');
+    expect(parseModelMeta('qwen2.5-1.5b-instruct').providerLabel).toBe('Локальная модель');
+    expect(parseModelMeta('liquid/lfm2.5-1.2b-instruct').provider).not.toBe('local');
+  });
   it('surfaces GigaChat/MWS ahead of foreign providers regardless of alphabet', () => {
     const sorted = sortModelsByProvider([
       'anthropic/claude-3',

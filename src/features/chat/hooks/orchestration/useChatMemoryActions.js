@@ -32,17 +32,23 @@ export function useChatMemoryActions({
   const addMemoryFact = useCallback(async (value) => {
     const text = typeof value === 'string' ? value.trim() : '';
     const userId = resolveSessionUserId();
-    if (!text || !userId) return;
+    if (!text || !userId) return false;
     try {
       const { addMemoryFact: persistFact, getUserMemory } = await import('@api/chat');
       const key = text.toLowerCase().replace(/\s+/g, '_').slice(0, 40) || 'note';
       await persistFact(userId, 'note', key, text);
-      const data = await getUserMemory(userId);
-      const facts = Array.isArray(data?.facts) ? data.facts : [];
-      setMemoryFacts(facts);
-      setProfileMemoryCount(facts.length);
+      try {
+        const data = await getUserMemory(userId);
+        const facts = Array.isArray(data?.facts) ? data.facts : [];
+        setMemoryFacts(facts);
+        setProfileMemoryCount(facts.length);
+      } catch {
+        notify({ title: 'Факт сохранён, но список не обновлён',
+          description: 'Откройте память заново, чтобы обновить список.', status: 'warning', duration: 3500 });
+      }
+      return true;
     } catch {
-      notify({ title: 'Не удалось добавить факт', status: 'warning', duration: 2500 });
+      return false;
     }
   }, [notify, resolveSessionUserId, setMemoryFacts, setProfileMemoryCount]);
 

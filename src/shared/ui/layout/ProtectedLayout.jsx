@@ -27,7 +27,15 @@ function ProtectedLayout() {
 
   return (
     <LayoutProvider state={{ variant: effectiveVariant, isFooterVisible: effectiveFooter }} actions={{ setVariant: setLayoutVariant, setFooterVisible }}>
-      <Box position="relative" bg={colors.background.darkPrimary} w="100%" minH="100vh" display="flex" flexDirection="column">
+      <Box
+        data-product-viewport={isChat ? '' : undefined}
+        position={isChat ? 'fixed' : 'relative'}
+        top={isChat ? 'var(--app-visual-top, 0px)' : undefined}
+        h={isChat ? 'var(--app-visual-height, 100dvh)' : undefined}
+        minH={isChat ? 0 : '100vh'}
+        overflow={isChat ? 'hidden' : undefined}
+        bg={colors.background.darkPrimary} w="100%" display="flex" flexDirection="column"
+      >
         <ScrollToTop />
 
         {/* Background layers - pointer-events: none is critical! */}
@@ -69,7 +77,9 @@ function ProtectedLayout() {
           minH={0}
           display="flex"
           flexDirection="column"
-          animation={`${fadeIn} 0.25s ease-out forwards`}
+          // В рабочем месте нет transform-containing-block: Safari не должен
+          // перемещать шапку/порталы при панорамировании экранной клавиатуры.
+          animation={isChat ? 'none' : `${fadeIn} 0.25s ease-out forwards`}
           sx={{ "@media (prefers-reduced-motion: reduce)": { animation: "none" } }}
         >
           {effectiveVariant === "full" ? (

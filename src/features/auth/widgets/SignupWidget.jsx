@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { APPLICATION_HOME } from '@shared/config/applicationProfile';
 import { Box, Button, Checkbox, Divider, HStack, Icon, Link, Text, VStack } from "@chakra-ui/react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { EmailIcon } from "@chakra-ui/icons";
@@ -91,7 +92,7 @@ export default function SignupWidget() {
     } catch {
       setAuthenticated(true);
     }
-    navigate("/chat", { replace: true });
+    navigate(APPLICATION_HOME, { replace: true });
   };
 
   if (step === "verify") {

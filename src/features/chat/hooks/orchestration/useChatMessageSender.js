@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef } from 'react';
 import { sendChatMessage } from '@api/chat';
 import { extractUrlCandidates } from '@utils/urlParser';
 import { clampTraceDetail } from '../../utils/trace';
+import { isYoutubeSource } from '../../model/videoProgress';
 
 /**
  * Оркестрация отправки сообщения: REST-fallback, выбор WS/REST транспорта,
@@ -97,6 +98,8 @@ export function useChatMessageSender({
   ldrModel = '',
   ldrStrategy = '',
   wsSendMessage,
+  documentContext = null,
+  requireDocumentContext = false,
 }) {
   // Отложенная отправка: если пользователь нажал «отправить», пока идёт захват
   // вложения (загрузка файла / запись/распознавание голоса), запоминаем намерение
@@ -120,6 +123,7 @@ export function useChatMessageSender({
         type: 'user',
         content: message,
         timestamp: new Date().toISOString(),
+        ...(documentContext?.project_id ? { metadata: { document_project: documentContext.project_id } } : {}),
         ...((attachments || []).length
           ? { attachments: (attachments || []).map((a) => ({ filename: a.filename, file_type: a.file_type })) }
           : {}),
@@ -137,6 +141,12 @@ export function useChatMessageSender({
     );
     if (response?.reply) {
       const responseMeta = response?.metadata || {};
+      if (responseMeta.awaiting_confirmation && responseMeta.mode_offer) {
+        appendTraceEvent({ kind: 'offer', title: 'Нужно ваше решение', offer: responseMeta.mode_offer }, options.traceSessionId);
+        finalizeTraceSession('awaiting_confirmation', options.traceSessionId);
+        setIsLoading(false);
+        return;
+      }
       const selectedModel = responseMeta?.selected_model || responseMeta?.model_routing?.selected_model || '';
       if (selectedModel) {
         appendTraceEvent({
@@ -198,7 +208,7 @@ export function useChatMessageSender({
       finalizeTraceSession('error', options.traceSessionId);
     }
     setIsLoading(false);
-  }, [addMessage, appendTraceEvent, attachments, finalizeTraceSession, incrementRequests, isAuthenticated, resolveSessionUserId, setIsLoading, threadId]);
+  }, [addMessage, appendTraceEvent, attachments, documentContext, finalizeTraceSession, incrementRequests, isAuthenticated, resolveSessionUserId, setIsLoading, threadId]);
 
   const handleSendMessage = useCallback(async (message, sendOptions = {}) => {
     const skipUserAppend = !!sendOptions.skipUserAppend;
@@ -212,20 +222,22 @@ export function useChatMessageSender({
     const confirmOfferId = String(sendOptions.confirmOfferId || '').trim();
     if (confirmOfferId && !trimmed) {
       if (!ensureGuestLimit()) return;
-      const traceSessionId = startTraceSession('Подтверждённый запуск', anchorMessageId);
+      const traceSessionId = startTraceSession('Продолжение запроса', anchorMessageId, sendOptions.traceSessionId);
       setIsLoading(true);
       clearError();
       appendTraceEvent({
         kind: 'done',
-        title: 'Подтверждено, запуск начат',
+        title: sendOptions.confirmationDecision === 'decline'
+          ? 'Отправляю решение: без платной возможности' : 'Отправляю подтверждение',
         detail: '',
       }, traceSessionId);
       try {
         if (useWebSocket || connectionState === 'connecting' || connectionState === 'connected') {
-          wsSendMessage('', null, null, { confirmOfferId });
+          wsSendMessage('', null, null, { confirmOfferId, confirmationDecision: sendOptions.confirmationDecision });
         } else {
           await sendViaRest('', null, null, {
             confirmOfferId,
+            confirmationDecision: sendOptions.confirmationDecision,
             skipUserAppend: true,
             traceSessionId,
           });
@@ -270,6 +282,14 @@ export function useChatMessageSender({
       return;
     }
 
+    if (requireDocumentContext && !documentContext?.project_id) {
+      setError('Сначала выберите или создайте PDF-проект. Запрос не отправлен.');
+      return;
+    }
+    if (sendOptions.ideTargetId && !(useWebSocket || connectionState === 'connecting' || connectionState === 'connected')) {
+      setError('Соединение с агентом IDE недоступно. Текст сохранён; дождитесь подключения и повторите отправку.');
+      return;
+    }
     composerRef.current?.clearInput();
     // Сообщение зафиксировано — убираем превью голосового (его текст уже в trimmed).
     onVoiceConsumed?.();
@@ -373,7 +393,11 @@ export function useChatMessageSender({
           ...(a.content_sha256 ? { digest: a.content_sha256 } : {}),
         })) }
         : {}),
-      ...(sources?.length ? { metadata: { sources } } : {}),
+      metadata: {
+        ...(sendOptions.ideRepository ? { ide_repository: sendOptions.ideRepository } : {}),
+        ...(sources?.length ? { sources } : {}),
+        ...(documentContext?.project_id ? { document_project: documentContext.project_id } : {}),
+      },
     });
     const showsUserMessage =
       !skipUserAppend
@@ -386,7 +410,7 @@ export function useChatMessageSender({
     let urlContext = (!isMultimodal ? primaryAttachment?.extracted_text : '') || initialFileContext || '';
     let parsedSources = [];
     try {
-      const foundUrls = extractUrlCandidates(trimmed, 2);
+      const foundUrls = sendOptions.ideTargetId ? [] : extractUrlCandidates(trimmed, 2);
       if (foundUrls.length > 0) {
         sideEffects.notify({ title: foundUrls.length > 1 ? 'Читаю ссылки…' : 'Читаю ссылку…', status: 'info', duration: 2000, isClosable: true });
         const { parseUrl: apiParseUrl } = await import('@api/chat');
@@ -406,16 +430,19 @@ export function useChatMessageSender({
         });
         const parsed = parsedBlocks.length ? `# __URL_CONTEXT__\n${parsedBlocks.join('\n\n---\n\n')}` : '';
         const okCount = results.filter((r) => r.status === 'fulfilled' && r.value?.content).length;
+        const onlyVideoLinks = foundUrls.every(isYoutubeSource);
         if (parsed) {
           urlContext = urlContext ? `${urlContext}\n\n${parsed}` : parsed;
           appendTraceEvent({
             kind: okCount > 0 ? 'done' : 'error',
-            title: okCount > 0 ? 'Ссылки проанализированы' : 'Ссылки недоступны',
-            detail: `Обработано URL: ${okCount}/${foundUrls.length} (${foundUrls.join(', ')})`,
+            title: onlyVideoLinks ? 'Ссылка на видео подготовлена' : okCount > 0 ? 'Ссылки проанализированы' : 'Ссылки недоступны',
+            detail: onlyVideoLinks
+              ? 'Это сведения о странице, не расшифровка видео. Субтитры и кадры получает отдельный этап обработки.'
+              : `Обработано URL: ${okCount}/${foundUrls.length} (${foundUrls.join(', ')})`,
           }, traceSessionId);
-          if (okCount > 0) {
+          if (okCount > 0 && !onlyVideoLinks) {
             sideEffects.notify({ title: okCount > 1 ? 'Ссылки прочитаны' : 'Ссылка прочитана', status: 'success', duration: 2000 });
-          } else {
+          } else if (!onlyVideoLinks) {
             sideEffects.notify({ title: 'Не удалось прочитать ссылку', status: 'warning', duration: 2500 });
           }
         }
@@ -436,6 +463,8 @@ export function useChatMessageSender({
           addMessage(buildUserMessage(parsedSources));
         }
         const wsOptions = {
+          ...(sendOptions.ideTargetId ? { ideTargetId: sendOptions.ideTargetId } : {}),
+          ...(documentContext ? { documentContext: Object.fromEntries(Object.entries(documentContext).filter(([key]) => key !== 'project_id')) } : {}),
           ...(webSearchEnabled && { webSearch: true }),
           ...(deepResearchEnabled && { deepResearch: true }),
           ...(multiIntentEnabled && { multiIntent: true }),
@@ -467,12 +496,14 @@ export function useChatMessageSender({
           ...(sendOptions.watchVideo && { watchVideo: true }),
           ...(sendOptions.confirmExpensiveRun && { confirmExpensiveRun: true }),
         };
+        appendTraceEvent({ kind: 'info', title: 'Отправляю запрос на обработку', detail: 'Ожидаю подтверждения запуска от сервера.' }, traceSessionId);
         wsSendMessage(trimmed, modelForRequest, inputTypeForRequest, wsOptions);
         clearAttachments();
       } else {
         await sendViaRest(trimmed, modelForRequest, inputTypeForRequest, {
           webSearch: webSearchEnabled,
           deepResearch: deepResearchEnabled,
+          ...(documentContext ? { documentContext: Object.fromEntries(Object.entries(documentContext).filter(([key]) => key !== 'project_id')) } : {}),
           fileContext: urlContext || '',
           routeOverride: routeOverrideForRequest,
           confirmExpensiveRun: !!sendOptions.confirmExpensiveRun,
@@ -501,7 +532,7 @@ export function useChatMessageSender({
       finalizeTraceSession('error', traceSessionId);
       setIsLoading(false);
     }
-  }, [addMessage, appendTraceEvent, attachments, isFileUploading, clearError, clearAttachments, composerRef, connectionState, deepResearchEnabled, ensureGuestLimit, finalizeTraceSession, forcedRoute, initialFileContext, initialInputType, initialManualModel, selectedModelOverride, sendViaRest, setError, setIsLoading, setSidebarSearch, showAuthModal, startTraceSession, threadId, sideEffects, upsertRecentThread, useWebSocket, voiceText, onVoiceConsumed, consumeUserDetached, webSearchEnabled, multiIntentEnabled, planningEnabled, personaIds, memoryEnabled, ldrModel, ldrStrategy, wsSendMessage]);
+  }, [addMessage, appendTraceEvent, attachments, isFileUploading, clearError, clearAttachments, composerRef, connectionState, deepResearchEnabled, documentContext, requireDocumentContext, ensureGuestLimit, finalizeTraceSession, forcedRoute, initialFileContext, initialInputType, initialManualModel, selectedModelOverride, sendViaRest, setError, setIsLoading, setSidebarSearch, showAuthModal, startTraceSession, threadId, sideEffects, upsertRecentThread, useWebSocket, voiceText, onVoiceConsumed, consumeUserDetached, webSearchEnabled, multiIntentEnabled, planningEnabled, personaIds, memoryEnabled, ldrModel, ldrStrategy, wsSendMessage]);
 
   // Авто-отправка отложенного сообщения: как только захват вложения завершился
   // (isFileUploading true→false) и есть запомненное намерение — отправляем его

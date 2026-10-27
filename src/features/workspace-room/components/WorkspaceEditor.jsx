@@ -13,6 +13,7 @@ export function WorkspaceEditor({
   file,
   dirty,
   busy,
+  writeBlocked = false,
   conflict,
   revert,
   onChange,
@@ -20,15 +21,22 @@ export function WorkspaceEditor({
   onDiscard,
   onReacquire,
   onCopyDraft,
+  onInspect,
+  canInspect = true,
+  canReacquire = true,
   onLoadActual,
   onCloseRevert,
   onApplyRevert,
   editorRef,
+  variant = 'workspace',
 }) {
+  const ide = variant === 'ide';
+  const controlSize = ide ? 'document' : 'xs';
+  const recoveryTransition = ide ? 'background-color, border-color, box-shadow' : undefined;
   const [previewSource, setPreviewSource] = useState(false);
   const supportsHighlight = LATEX_SOURCE.test(file.path || '');
   useEffect(() => setPreviewSource(false), [file.path]);
-  const canSave = Boolean(dirty && file.fence && !file.truncated && busy !== 'save');
+  const canSave = Boolean(dirty && file.fence && !file.truncated && !writeBlocked && (ide ? !busy : busy !== 'save'));
   const handleEditorKeyDown = (event) => {
     if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 's') {
       event.preventDefault();
@@ -43,11 +51,11 @@ export function WorkspaceEditor({
     </VStack>;
   }
   return (
-    <VStack align="stretch" h="full" spacing={0} minW={0}>
-      <HStack px={4} h="44px" flexShrink={0} borderBottom={`1px solid ${colors.border.subtle}`} justify="space-between">
+    <VStack align="stretch" h="full" spacing={0} minW={0} minH={0} overflowY={ide && conflict ? 'auto' : undefined}>
+      <HStack px={4} minH={ide ? '34px' : '44px'} flexShrink={0} borderBottom={`1px solid ${colors.border.subtle}`} justify="space-between" flexWrap="wrap">
         <Text minW={0} flex="1" noOfLines={1} fontSize="12.5px" color={colors.fg[2]}>{file.path}</Text>
         {supportsHighlight && (
-          <Button size="xs" variant="ghost" onClick={() => setPreviewSource((value) => !value)}>
+          <Button size={controlSize} variant="ghost" onClick={() => setPreviewSource((value) => !value)}>
             {previewSource ? 'Редактировать' : 'Подсветка LaTeX'}
           </Button>
         )}
@@ -58,36 +66,51 @@ export function WorkspaceEditor({
       {file.loading && <HStack px={4} py={3}><Spinner size="sm" color={colors.iris[300]} /><Text fontSize="12px" color={colors.fg[4]}>Загружаю файл…</Text></HStack>}
       {file.error && <Text px={4} py={3} fontSize="12px" color={colors.fg[4]}>Не удалось прочитать файл.</Text>}
       {!file.loading && !file.error && <>
-        {!file.fence && !file.truncated && (
-          <HStack px={4} py={2.5} justify="space-between" bg={colors.warningSoft} borderBottom={`1px solid ${colors.warningBorder}`}>
+        {!file.fence && !file.truncated && (!ide || !conflict) && (
+          <HStack data-toast-protected-actions px={4} py={2.5} flexShrink={0} flexWrap="wrap" justify="space-between" bg={colors.warningSoft} borderBottom={`1px solid ${colors.warningBorder}`}>
             <Text fontSize="11.5px" color={colors.fg[3]}>
               {LEASE_REASON_LABELS[file.leaseReason]
-                || 'Право на правку потеряно. Текст редактора сохранён.'}
+                || (ide ? 'Текст остаётся в этом окне. Запись недоступна до проверки среды и файла.' : 'Право на правку потеряно. Текст редактора сохранён.')}
             </Text>
-            <Button size="xs" variant="outline" onClick={onReacquire} leftIcon={<FiRefreshCw />}>
+            <Button size={controlSize} variant="outline" transitionProperty={recoveryTransition} onClick={onReacquire} isDisabled={ide && (Boolean(busy) || !canReacquire)} leftIcon={<FiRefreshCw />}>
               Получить право
             </Button>
+            {ide && !conflict && <HStack flexWrap="wrap">
+              <Button size={controlSize} variant="outline" transitionProperty={recoveryTransition} onClick={onCopyDraft} isDisabled={Boolean(busy)}>Скопировать черновик</Button>
+              <Button size={controlSize} variant="outline" transitionProperty={recoveryTransition} onClick={onInspect} isDisabled={Boolean(busy) || !canInspect}>Сверить с файлом</Button>
+            </HStack>}
           </HStack>
         )}
         {conflict && (
-          <Box mx={3} mt={3} p={3} borderRadius={borderRadius.md} bg={colors.warningSoft} border={`1px solid ${colors.warningBorder}`}>
-            <Text fontSize="12px" fontWeight="600" color={colors.fg[2]}>Версия файла изменилась</Text>
+          <Box data-toast-protected-actions mx={3} mt={3} p={3} borderRadius={borderRadius.md} bg={colors.warningSoft} border={`1px solid ${colors.warningBorder}`}
+            role={ide ? 'region' : undefined} aria-label={ide ? 'Сверка файла' : undefined} aria-busy={ide && Boolean(busy)}
+            display={ide ? 'flex' : undefined} flexDirection={ide ? 'column' : undefined}
+            maxH={ide ? 'min(240px, 32dvh)' : undefined} minH={ide ? '148px' : undefined} flexShrink={ide ? 0 : undefined}>
+            <HStack justify="space-between" flexShrink={0}>
+              <Text as={ide ? 'h3' : undefined} fontSize="12px" fontWeight="600" color={colors.fg[2]}>{ide ? 'Сверка файла' : 'Версия файла изменилась'}</Text>
+              {ide && <HStack spacing={1}>
+                <Button size={controlSize} variant="workbenchSecondary" transitionProperty={recoveryTransition} onClick={onReacquire}
+                  isDisabled={Boolean(busy) || !canReacquire}>Получить право</Button>
+                <Button size={controlSize} variant="ghost" transitionProperty={recoveryTransition} onClick={onInspect} isDisabled={Boolean(busy) || !canInspect}
+                  aria-label="Сверить с файлом" title="Сверить с файлом" px={2}><FiRefreshCw /></Button>
+              </HStack>}
+            </HStack>
             <Text mt={1} fontSize="11px" color={colors.fg[3]}>
-              Ваши изменения не перезаписаны. Скопируйте их или явно загрузите актуальную версию.
+              {ide ? conflict.notice : 'Ваши изменения не перезаписаны. Скопируйте их или явно загрузите актуальную версию.'}
             </Text>
-            {conflict.diff && (
-              <Text as="pre" mt={2} maxH="110px" overflow="auto" whiteSpace="pre-wrap" fontSize="10.5px" sx={WORK_SCROLLBAR_SX}>
-                {conflict.diff}
-              </Text>
-            )}
-            <HStack mt={3} wrap="wrap">
-              <Button size="xs" variant="outline" leftIcon={<FiCopy />} onClick={onCopyDraft}>
-                Скопировать мои изменения
+            {ide && busy === 'inspect' && <Text mt={1} fontSize="xs" role="status">Сверяю файл…</Text>}
+            {!ide && conflict.diff && <Text as="pre" mt={2} maxH="110px" overflow="auto" whiteSpace="pre-wrap" fontSize="10.5px" sx={WORK_SCROLLBAR_SX}>{conflict.diff}</Text>}
+            <HStack mt={3} wrap="wrap" flexShrink={0}>
+              <Button size={controlSize} variant="outline" transitionProperty={recoveryTransition} leftIcon={<FiCopy />} onClick={onCopyDraft} isDisabled={ide && Boolean(busy)}>
+                {ide ? 'Скопировать черновик' : 'Скопировать мои изменения'}
               </Button>
-              <Button size="xs" colorScheme="orange" leftIcon={<FiRefreshCw />} onClick={onLoadActual} isDisabled={conflict.actualContent == null}>
-                Загрузить актуальную
+              <Button size={controlSize} variant={ide ? 'workbenchSecondary' : undefined} colorScheme={ide ? undefined : 'orange'} transitionProperty={recoveryTransition}
+                leftIcon={<FiRefreshCw />} onClick={onLoadActual} isDisabled={conflict.actualContent == null || (ide && (Boolean(busy) || !canInspect))}>
+                {ide ? 'Загрузить версию' : 'Загрузить актуальную'}
               </Button>
             </HStack>
+            {ide && conflict.diff && <Text as="pre" mt={2} flex="1" minH="32px" maxH="110px" overflow="auto" whiteSpace="pre-wrap" overflowWrap="anywhere"
+              fontSize="10.5px" sx={WORK_SCROLLBAR_SX} role="region" aria-label="Сравнение версий файла" tabIndex={0}>{conflict.diff}</Text>}
           </Box>
         )}
         <Text
@@ -100,9 +123,11 @@ export function WorkspaceEditor({
         >
           {file.truncated
             ? 'Файл показан не полностью и защищён от перезаписи.'
+            : ide && file.detached ? 'Текст из прежней среды остаётся в этом окне. Скопируйте его перед уходом.'
+            : ide && writeBlocked ? 'Команда агента использует файлы среды. Текст можно менять; запись временно недоступна.'
             : dirty
               ? file.stale ? 'Есть несохранённые изменения; рабочая версия обновилась.' : 'Есть несохранённые изменения.'
-              : 'Сохранено.'}
+              : ide ? 'Копия во временной среде. Git-коммит автоматически не создаётся.' : 'Сохранено.'}
         </Text>
         {previewSource ? (
           <LatexSourcePreview
@@ -112,13 +137,14 @@ export function WorkspaceEditor({
         ) : <AppTextarea
           ref={editorRef}
           aria-label={`Содержимое ${file.path}`}
-          aria-readonly={file.truncated || !file.fence}
+          aria-readonly={file.truncated || !file.fence || Boolean(ide && busy)}
           value={file.content}
           onChange={(event) => onChange(event.target.value)}
           onKeyDown={handleEditorKeyDown}
-          isReadOnly={file.truncated || !file.fence}
+          isReadOnly={file.truncated || !file.fence || Boolean(ide && busy)}
           flex="1"
-          minH={0}
+          minH={ide && conflict ? '80px' : 0}
+          flexShrink={ide && conflict ? 0 : undefined}
           borderRadius={0}
           border="0"
           bg={WORK_HUB_THEME.inputBg}
@@ -132,6 +158,7 @@ export function WorkspaceEditor({
         />}
         <HStack
           data-testid="workspace-editor-actions"
+          data-toast-protected-actions
           px={3}
           pt={3}
           pb="calc(12px + env(safe-area-inset-bottom, 0px))"
@@ -142,17 +169,17 @@ export function WorkspaceEditor({
           position="sticky"
           bottom={0}
         >
-          <Button size="sm" variant="ghost" onClick={onDiscard} isDisabled={!dirty || busy === 'save'}>Отменить</Button>
+          <Button size={ide ? 'document' : 'sm'} variant="ghost" onClick={onDiscard} isDisabled={ide ? Boolean(busy) : !dirty || busy === 'save'}>Отменить</Button>
           <Button
-            aria-label="Сохранить"
-            size="sm"
-            colorScheme="blue"
+            aria-label={ide ? 'Записать в среду' : 'Сохранить'}
+            size={ide ? 'document' : 'sm'}
+            variant="workbenchPrimary"
             onClick={onSave}
             isLoading={busy === 'save'}
             isDisabled={!canSave}
           >
-            Сохранить
-            <Text as="span" ml={2} fontSize="10px" color="inherit" opacity={0.72}>
+            {ide ? 'Записать в среду' : 'Сохранить'}
+            <Text as="span" ml={2} fontSize="10px" color="inherit">
               Ctrl+S
             </Text>
           </Button>

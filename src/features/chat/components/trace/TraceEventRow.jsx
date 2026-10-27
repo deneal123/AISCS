@@ -55,19 +55,19 @@ function TraceEventRowComponent({ event, isLast = false, onRunMode, isLoading = 
 
   const _ts = event.timestamp ? new Date(event.timestamp) : null;
   const time = _ts && !Number.isNaN(_ts.getTime())
-    ? _ts.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    ? _ts.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit', hour12: false })
     : '';
 
   return (
     <HStack align="stretch" spacing={2.5} position="relative" minW={0}>
       {/* Таймлайн: узел (иконка по типу события или точка) + соединительная линия */}
-      <Box position="relative" flexShrink={0} w="14px" alignSelf="stretch">
+      <Box position="relative" flexShrink={0} w="18px" alignSelf="stretch">
         {NodeIcon ? (
           <Box
             position="absolute"
-            left="-1px"
-            top="2px"
-            boxSize="15px"
+            left="0"
+            top="0"
+            boxSize="18px"
             borderRadius="full"
             bg={`${dotColor}1f`}
             border={`1px solid ${dotColor}66`}
@@ -75,12 +75,12 @@ function TraceEventRowComponent({ event, isLast = false, onRunMode, isLoading = 
             alignItems="center"
             justifyContent="center"
           >
-            <Icon as={NodeIcon} boxSize="9px" color={dotColor} />
+            <Icon as={NodeIcon} boxSize="12px" color={dotColor} />
           </Box>
         ) : (
           <Box
             position="absolute"
-            left="3px"
+            left="5px"
             top="6px"
             w="8px"
             h="8px"
@@ -90,7 +90,7 @@ function TraceEventRowComponent({ event, isLast = false, onRunMode, isLoading = 
           />
         )}
         {!isLast && (
-          <Box position="absolute" left="6.5px" top="19px" bottom="-3px" w="1.5px" bg={colors.border.hairline} />
+          <Box position="absolute" left="8.5px" top="19px" bottom="-3px" w="1.5px" bg={colors.border.hairline} />
         )}
       </Box>
 
@@ -108,7 +108,7 @@ function TraceEventRowComponent({ event, isLast = false, onRunMode, isLoading = 
             fontSize="13px"
             fontWeight="600"
             color={isError ? colors.error : colors.text.primary}
-            noOfLines={2}
+            noOfLines={isError ? undefined : 2}
             flex="1"
             minW={0}
             lineHeight="1.35"
@@ -182,11 +182,11 @@ function TraceEventRowComponent({ event, isLast = false, onRunMode, isLoading = 
             <Text
               mt={0.5}
               fontSize="11.5px"
-              color={colors.text.tertiary}
+              color={isError ? colors.text.secondary : colors.text.tertiary}
               lineHeight="1.35"
               whiteSpace="pre-wrap"
               overflowWrap="anywhere"
-              noOfLines={3}
+              noOfLines={isError ? undefined : 3}
             >
               {detail}
             </Text>

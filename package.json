@@ -1,7 +1,7 @@
 {
   "name": "gpthub-frontend",
   "homepage": "/",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "sideEffects": [
     "*.css",
@@ -41,6 +41,7 @@
     "build": "craco build",
     "build:analyze": "GENERATE_SOURCEMAP=true craco build && npx source-map-explorer 'build/static/js/*.js' --html analyze-report.html",
     "test": "jest",
+    "test:serial:low-memory": "node --expose-gc node_modules/jest/bin/jest.js --runInBand --logHeapUsage",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "test:unit": "jest tests/unit",
@@ -56,7 +57,8 @@
     "e2e:desktop": "npx playwright test --project=chromium --project=firefox --project=webkit --config=tests/e2e/playwright.config.js",
     "e2e:mobile": "npx playwright test --project=mobile-chrome --project=mobile-safari --config=tests/e2e/playwright.config.js",
     "test:a11y": "npx playwright test tests/e2e/ui-contract.spec.js --config=tests/e2e/playwright.config.js --project=chromium",
-    "test:e2e:work": "npx playwright test tests/e2e/work-hub.spec.js --config=tests/e2e/playwright.config.js --project=chromium --project=tablet --project=mobile-chrome",
+    "test:e2e:work": "npx playwright test tests/e2e/ide-studio.spec.js tests/e2e/pdf-studio.spec.js tests/e2e/pdf-delivery.spec.js tests/e2e/composer.spec.js tests/e2e/workbench-library.spec.js tests/e2e/workbench-help.spec.js tests/e2e/library-upload.spec.js tests/e2e/mobile-viewport-regressions.spec.js --config=tests/e2e/playwright.config.js --project=chromium --project=tablet --project=mobile-chrome",
+    "test:e2e:work:legacy": "npx playwright test tests/e2e/work-hub.spec.js --config=tests/e2e/playwright.config.js --project=chromium --project=tablet --project=mobile-chrome",
     "verify:premium": "uv run --project ../agents --frozen python ../scripts/check_frontend_ui_contract.py",
     "test:all": "npm run test:unit && npm run test:integration && npm run e2e:run"
   },

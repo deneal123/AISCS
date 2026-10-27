@@ -1,4 +1,6 @@
 import { extendTheme } from "@chakra-ui/react";
+import { MOBILE_INTERACTION_STYLES } from "./theme/mobileInteraction";
+import { drawerViewportTheme, modalViewportTheme } from "./theme/overlays";
 import {
   colors,
   typography,
@@ -8,6 +10,7 @@ import {
   transitions,
   gradients,
   layers,
+  documentControls,
 } from "./theme/tokens";
 
 const brandPalette = {
@@ -37,6 +40,7 @@ const theme = extendTheme({
   fonts: {
     body: typography.fontFamily.primary,
     heading: typography.fontFamily.primary,
+    mono: typography.fontFamily.mono,
   },
   radii: {
     none: 0,
@@ -146,6 +150,8 @@ const theme = extendTheme({
   },
   styles: {
     global: () => ({
+      ...MOBILE_INTERACTION_STYLES,
+      ':root': { '--app-safe-bottom': 'env(safe-area-inset-bottom, 0px)' },
       body: {
         bg: colors.background.darkPrimary,
         color: colors.text.primary,
@@ -218,9 +224,11 @@ const theme = extendTheme({
     }),
   },
   components: {
+    Modal: modalViewportTheme,
+    Drawer: drawerViewportTheme,
     Tooltip: {
       baseStyle: {
-        background: colors.blur.dark,
+        bg: colors.bg.menu,
         color: colors.text.primary,
         borderRadius: borderRadius.sm,
         px: spacing.sm,
@@ -229,15 +237,50 @@ const theme = extendTheme({
       },
     },
     Button: {
+      sizes: {
+        document: {
+          h: { base: `${documentControls.mobile}px`, md: `${documentControls.desktop}px` },
+          minH: { base: `${documentControls.mobile}px`, md: `${documentControls.desktop}px` },
+          minW: { base: `${documentControls.mobile}px`, md: `${documentControls.desktop}px` },
+          px: { base: 2, md: 3 },
+          fontSize: { base: documentControls.mobileFont, md: documentControls.desktopFont },
+          lineHeight: 1.2, letterSpacing: 0, borderRadius: borderRadius.control,
+          '& svg': { width: '14px', height: '14px', flexShrink: 0 },
+        },
+        workbench: {
+          h: '34px', minH: '34px', minW: '34px',
+          px: 3, fontSize: '12.5px', lineHeight: 1.2, letterSpacing: 0,
+          borderRadius: borderRadius.control,
+          '& svg': { width: '14px', height: '14px', flexShrink: 0 },
+        },
+      },
       baseStyle: {
         fontWeight: 500,
         borderRadius: borderRadius.sm,
-        transition: transitions.smooth,
+        // Геометрия и прозрачность меняются сразу: enabled-кнопка уже должна быть читаема.
+        transition: ['background-color', 'border-color', 'color', 'box-shadow']
+          .map(property => `${property} ${transitions.smooth}`).join(', '),
         position: "relative",
         overflow: "hidden",
         letterSpacing: "0.02em",
       },
       variants: {
+        workbenchPrimary: {
+          bg: colors.blue[500], color: colors.fg[1], border: '1px solid',
+          borderColor: colors.blue[500], borderRadius: borderRadius.control,
+          fontWeight: 600, boxShadow: 'none',
+          _hover: { bg: colors.blue[600], borderColor: colors.blue[600] },
+          _active: { bg: colors.blue[700] },
+          _disabled: { opacity: 0.45, cursor: 'not-allowed' },
+        },
+        workbenchSecondary: {
+          bg: colors.bg.input, color: colors.fg[2], border: '1px solid',
+          borderColor: colors.border.medium, borderRadius: borderRadius.control,
+          fontWeight: 500, boxShadow: 'none',
+          _hover: { bg: colors.surface.tint3, borderColor: colors.border.strong },
+          _active: { bg: colors.glass.active },
+          _disabled: { opacity: 0.45, cursor: 'not-allowed' },
+        },
         // Оба варианта — pill (999px) и вес 700, как ВСЕ кнопки эталона.
         // Радиус/вес заданы на варианте, а не в baseStyle: иначе задело бы
         // ghost/solid и иконочные кнопки чата и админки.
@@ -264,11 +307,10 @@ const theme = extendTheme({
             pointerEvents: "none",
           },
           _hover: {
-            transform: "translateY(-1px)",
             borderColor: "rgba(125,240,218,0.5)",
             boxShadow: `${shadows.buttonPrimary}, ${shadows.glowIris}`,
           },
-          _active: { transform: "translateY(0)", boxShadow: shadows.buttonPrimary },
+          _active: { boxShadow: shadows.buttonPrimary },
           _disabled: {
             bg: colors.background.buttonDisabled,
             color: colors.text.quaternary,
@@ -287,12 +329,10 @@ const theme = extendTheme({
           fontWeight: 700,
           lineHeight: 1,
           _hover: {
-            transform: "translateY(-1px)",
             borderColor: "rgba(102,133,255,0.38)",
             background: "rgba(255,255,255,0.06)",
             boxShadow: "0 0 20px rgba(45,91,255,0.10)",
           },
-          _active: { transform: "translateY(0)" },
           _disabled: {
             color: colors.text.quaternary,
             borderColor: colors.border.light,

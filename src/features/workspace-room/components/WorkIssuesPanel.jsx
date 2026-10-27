@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import {
   Badge,
   Box,
@@ -14,6 +14,7 @@ import {
 import AppTextarea from '@shared/controls/AppTextarea';
 import { borderRadius, colors } from '@theme/tokens';
 import { ISSUE_STATUS_LABELS } from '../model/constants';
+import { useWorkIssueDraft } from '../model/useWorkIssueDraft';
 
 const issueTone = (status) => ({
   resolved: 'green',
@@ -21,11 +22,10 @@ const issueTone = (status) => ({
   open: 'blue',
 }[status] || 'gray');
 
-const EMPTY_FORM = { title: '', body: '', start: '1', end: '1' };
-
-export function WorkIssuesPanel({ room, file, busy, onCreateIssue, onUpdateIssue }) {
-  const [form, setForm] = useState(EMPTY_FORM);
-  const [errors, setErrors] = useState({});
+export function WorkIssuesPanel({ room, file, busy, onCreateIssue, onUpdateIssue, draft }) {
+  const localDraft = useWorkIssueDraft(null, file.path);
+  const owner = draft ?? localDraft;
+  const { form, setForm, errors, setErrors } = owner;
   const titleRef = useRef(null);
   const startRef = useRef(null);
   const endRef = useRef(null);
@@ -59,8 +59,7 @@ export function WorkIssuesPanel({ room, file, busy, onCreateIssue, onUpdateIssue
       endLine: form.end,
     });
     if (saved) {
-      setForm(EMPTY_FORM);
-      setErrors({});
+      owner.clearSubmitted(form);
     }
   };
 

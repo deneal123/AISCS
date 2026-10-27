@@ -1,5 +1,8 @@
 import { act, renderHook } from '@testing-library/react';
 import { normalizeAttachmentReferences, useChatMessageSender } from '../../../../src/features/chat/hooks/orchestration/useChatMessageSender';
+import { sendChatMessage } from '@api/chat';
+
+jest.mock('@api/chat', () => ({ sendChatMessage: jest.fn() }));
 
 
 function createProps() {
@@ -42,6 +45,28 @@ function createProps() {
 
 
 describe('useChatMessageSender confirmation anchor', () => {
+  it.each([null, { path: 'documents/paper', expected_revision: 'r1' }])('does not send a PDF request without its validated project identity: %j', async (documentContext) => {
+    const props = { ...createProps(), documentContext, requireDocumentContext: true };
+    const { result } = renderHook(() => useChatMessageSender(props));
+    await act(async () => { await result.current.handleSendMessage('Уточни текст'); });
+    expect(props.wsSendMessage).not.toHaveBeenCalled();
+    expect(props.addMessage).not.toHaveBeenCalled();
+    expect(props.startTraceSession).not.toHaveBeenCalled();
+    expect(props.composerRef.current.clearInput).not.toHaveBeenCalled();
+    expect(props.setError).toHaveBeenCalledWith(expect.stringContaining('Запрос не отправлен'));
+  });
+  it('preserves the PDF project anchor for the REST transport as well as WebSocket', async () => {
+    sendChatMessage.mockResolvedValue({ reply: 'Готово', metadata: { document_project: 'owned-project' } });
+    const props = { ...createProps(), attachments: [], useWebSocket: false, connectionState: 'disconnected',
+      documentContext: { project_id: 'owned-project', path: 'documents/paper', expected_revision: 'r1' } };
+    const { result } = renderHook(() => useChatMessageSender(props));
+    await act(async () => { await result.current.handleSendMessage('Уточни текст'); });
+    const users = props.addMessage.mock.calls.map(([message]) => message).filter((message) => message.type === 'user');
+    expect(users).toHaveLength(1);
+    expect(users[0].metadata).toEqual({ document_project: 'owned-project' });
+    expect(sendChatMessage).toHaveBeenCalledTimes(1);
+    expect(props.wsSendMessage).not.toHaveBeenCalled();
+  });
   it('restores safe persisted attachment identities without inventing content', () => {
     expect(normalizeAttachmentReferences([{
       filename: 'materials.md',
@@ -75,7 +100,7 @@ describe('useChatMessageSender confirmation anchor', () => {
       '',
       null,
       null,
-      { confirmOfferId: 'opaque-offer-id' },
+      { confirmOfferId: 'opaque-offer-id', confirmationDecision: undefined },
     );
     expect(props.addMessage).not.toHaveBeenCalled();
     expect(props.clearAttachments).not.toHaveBeenCalled();

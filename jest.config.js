@@ -15,6 +15,12 @@ module.exports = {
     '<rootDir>/tests/integration/**/*.test.{js,jsx,ts,tsx}'
   ],
   moduleNameMapper: {
+    // Jest 27 does not resolve refractor 5's package export subpaths.
+    // Mirror the installed exports without substituting a mocked highlighter.
+    '^refractor/core$': '<rootDir>/node_modules/refractor/lib/core.js',
+    '^refractor/([^/]+)$': '<rootDir>/node_modules/refractor/lang/$1.js',
+    '^unist-util-visit-parents/do-not-use-color$': '<rootDir>/node_modules/unist-util-visit-parents/lib/color.js',
+    '^#min(path|proc|url)$': '<rootDir>/node_modules/vfile/lib/min$1.browser.js',
     // Стили и статика — должны идти раньше alias-паттернов
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
     '\\.(jpg|jpeg|png|gif|svg)$': '<rootDir>/tests/__mocks__/fileMock.js',
@@ -27,7 +33,7 @@ module.exports = {
     '^.+\\.(js|jsx|ts|tsx)$': ['babel-jest', { presets: [['react-app', { runtime: 'automatic' }]] }],
   },
   transformIgnorePatterns: [
-    'node_modules/(?!(axios|react-markdown|vfile|vfile-message|unist-.*|unified|bail|is-plain-obj|trough|remark-.*|mdast-.*|micromark.*|decode-named-character-reference|character-entities|property-information|hast-util-.*|hastscript|space-separated-tokens|comma-separated-tokens|web-namespaces|zwitch|html-void-elements|@chakra-ui)/)',
+    'node_modules/(?!(axios|react-syntax-highlighter|refractor|parse-entities|character-entities.*|character-reference-invalid|is-alphanumerical|is-alphabetical|is-decimal|is-hexadecimal|react-markdown|vfile.*|unist-.*|unified|bail|is-plain-obj|trough|remark-.*|rehype-.*|devlop|estree-util-.*|mdast-.*|micromark.*|decode-named-character-reference|property-information|hast-util-.*|hastscript|space-separated-tokens|comma-separated-tokens|web-namespaces|zwitch|html-void-elements|html-url-attributes|@ungap/structured-clone|longest-streak|ccount|stringify-entities|trim-lines|markdown-table|escape-string-regexp|@chakra-ui)/)',
   ],
   collectCoverageFrom: [
     'src/**/*.{js,jsx,ts,tsx}',

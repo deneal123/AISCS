@@ -2,7 +2,7 @@
 <html lang="ru">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#050505" />
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
@@ -41,12 +41,8 @@
     />
     <meta name="twitter:image" content="%PUBLIC_URL%/og-cover.png" />
 
-    <!-- Preconnect для ускорения загрузки шрифтов -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
-    <!-- DNS prefetch как fallback -->
-    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+    <!-- Локальные шрифты: CSS доступен сразу, наборы символов загружаются по необходимости. -->
+    <link rel="stylesheet" href="%PUBLIC_URL%/static/fonts/fontsource-5.3.0/fonts.css" />
 
     <!-- Иконки: SVG (совр. браузеры) + PNG/ICO-фолбэки + apple-touch-icon. -->
     <link rel="icon" type="image/svg+xml" href="%PUBLIC_URL%/favicon-gpthub.svg?v=3" />
@@ -57,19 +53,6 @@
     <link rel="apple-touch-icon" sizes="180x180" href="%PUBLIC_URL%/apple-touch-icon.png?v=3" />
     <meta name="apple-mobile-web-app-title" content="GPTHub" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!-- Оптимизированная загрузка шрифтов: только нужные веса, display=swap для FOUT вместо FOIT -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap&subset=cyrillic,latin"
-      rel="stylesheet"
-      media="print"
-      onload="this.media='all'"
-    />
-    <noscript>
-      <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap&subset=cyrillic,latin"
-        rel="stylesheet"
-      />
-    </noscript>
     <title>GPTHub — единое рабочее пространство с ИИ</title>
     <script type="application/ld+json">
       {

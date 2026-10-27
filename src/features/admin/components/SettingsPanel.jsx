@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Text, VStack } from '@chakra-ui/react';
 import { useAppToast } from '@shared/hooks/useAppToast';
 import { CHAT_THEME } from '../../chat/constants/theme';
@@ -12,27 +12,45 @@ export default function SettingsPanel() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const toast = useAppToast();
+  const requestRef = useRef(0);
+  const controllerRef = useRef(null);
+  const mountedRef = useRef(false);
 
   const load = useCallback(async () => {
+    const generation = ++requestRef.current;
+    controllerRef.current?.abort();
+    const controller = new AbortController();
+    controllerRef.current = controller;
     setLoading(true);
     setError(false);
     const { getAdminSettings } = await import('@api/admin');
-    const data = await getAdminSettings().catch(() => null);
-    setSettings(data?.settings || []);
+    const data = await getAdminSettings({ signal: controller.signal }).catch(() => null);
+    if (controller.signal.aborted || generation !== requestRef.current) return;
+    if (data) setSettings(data.settings || []);
     setError(!data);
     setLoading(false);
   }, []);
 
   useEffect(() => {
+    mountedRef.current = true;
     load();
+    return () => {
+      mountedRef.current = false;
+      requestRef.current += 1;
+      controllerRef.current?.abort();
+    };
   }, [load]);
 
   const onSave = useCallback(
     async (key, value) => {
       const { putAdminSetting } = await import('@api/admin');
-      await putAdminSetting(key, value);
+      const result = await putAdminSetting(key, value);
+      const effective = result && Object.hasOwn(result, 'value') ? result.value : value;
+      if (!mountedRef.current) return { value: effective };
+      setSettings((current) => current?.map((spec) => spec.key === key ? { ...spec, value: effective, overridden: true } : spec));
       toast({ title: 'Сохранено', status: 'success', duration: 1500 });
       await load();
+      return { value: effective };
     },
     [load, toast],
   );
@@ -41,13 +59,17 @@ export default function SettingsPanel() {
     async (key) => {
       const { resetAdminSetting } = await import('@api/admin');
       await resetAdminSetting(key);
+      const effective = settings?.find((spec) => spec.key === key)?.default;
+      if (!mountedRef.current) return { value: effective };
+      setSettings((current) => current?.map((spec) => spec.key === key ? { ...spec, value: effective, overridden: false } : spec));
       toast({ title: 'Сброшено к дефолту', status: 'info', duration: 1500 });
       await load();
+      return { value: effective };
     },
-    [load, toast],
+    [load, settings, toast],
   );
 
-  if (loading) {
+  if (loading && settings === null) {
     return (
       <VStack align="stretch" spacing={2} aria-busy="true">
         {[0, 1, 2].map((i) => (
@@ -57,7 +79,7 @@ export default function SettingsPanel() {
     );
   }
 
-  if (error) {
+  if (error && settings === null) {
     return <StateCard variant="error" message="Не удалось загрузить настройки" onRetry={load} />;
   }
 
@@ -71,7 +93,9 @@ export default function SettingsPanel() {
   }, {});
 
   return (
-    <Accordion allowMultiple defaultIndex={[0]}>
+    <Box aria-busy={loading}>
+      {error && <StateCard variant="error" message="Не удалось обновить настройки. Показаны последние доступные значения." onRetry={load} />}
+      <Accordion allowMultiple defaultIndex={[0]}>
       {Object.entries(groups).map(([group, specs]) => (
         <AccordionItem key={group} border="none" mb={2}>
           <AccordionButton
@@ -96,6 +120,7 @@ export default function SettingsPanel() {
           </AccordionPanel>
         </AccordionItem>
       ))}
-    </Accordion>
+      </Accordion>
+    </Box>
   );
 }

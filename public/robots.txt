@@ -1,3 +1,11 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Disallow:
+Allow: /
+Disallow: /chat
+Disallow: /login
+Disallow: /signup
+Disallow: /register
+Disallow: /billing
+Disallow: /admin
+
+# Роботам запрещена индексация пользовательских и служебных разделов.

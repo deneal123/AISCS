@@ -1,7 +1,9 @@
 import React, { Component } from "react";
-import { Box, VStack, Text, Button, Icon, Code } from "@chakra-ui/react";
+import { Box, VStack, Text, Heading, Button, Icon } from "@chakra-ui/react";
 import { WarningTwoIcon } from "@chakra-ui/icons";
 import { colors, borderRadius } from "@theme/tokens";
+import ActionLink from '@shared/controls/ActionLink';
+import useDocumentTitle from '@shared/hooks/useDocumentTitle';
 
 /**
  * Error Boundary для перехвата ошибок в дереве компонентов
@@ -12,32 +14,23 @@ class ErrorBoundary extends Component {
     super(props);
     this.state = {
       hasError: false,
-      error: null,
-      errorInfo: null,
     };
     // Привязка методов к this
     this.handleReset = this.handleReset.bind(this);
     this.handleReload = this.handleReload.bind(this);
   }
 
-  static getDerivedStateFromError(error) {
-    return { hasError: true, error };
+  static getDerivedStateFromError() {
+    return { hasError: true };
   }
 
-  componentDidCatch(error, errorInfo) {
-    this.setState({ errorInfo });
-
-    // Логирование ошибки
-    console.error("ErrorBoundary caught an error:", error, errorInfo);
-
-    // Отправка на сервер аналитики в production
-    if (process.env.NODE_ENV === "production" && this.props.onError) {
-      this.props.onError(error, errorInfo);
-    }
+  componentDidCatch() {
+    // App-owned diagnostics never receive component stacks or exception bodies.
+    this.props.onError?.({ component: 'render_boundary', code: 'internal' });
   }
 
   handleReset() {
-    this.setState({ hasError: false, error: null, errorInfo: null });
+    this.setState({ hasError: false });
 
     // Вызов callback при сбросе
     if (this.props.onReset) {
@@ -50,12 +43,11 @@ class ErrorBoundary extends Component {
   }
 
   render() {
-    const { hasError, error, errorInfo } = this.state;
+    const { hasError } = this.state;
     const {
       children,
       fallback,
       fallbackRender,
-      showDetails = process.env.NODE_ENV === "development",
       level = "page", // "page" | "section" | "component"
     } = this.props;
 
@@ -63,8 +55,8 @@ class ErrorBoundary extends Component {
       // Кастомный fallback через render prop
       if (fallbackRender) {
         return fallbackRender({
-          error,
-          errorInfo,
+          error: { code: 'internal' },
+          errorInfo: null,
           reset: this.handleReset,
           reload: this.handleReload,
         });
@@ -78,10 +70,7 @@ class ErrorBoundary extends Component {
       // Дефолтный UI в зависимости от уровня
       return (
         <ErrorFallback
-          error={error}
-          errorInfo={errorInfo}
           level={level}
-          showDetails={showDetails}
           onReset={this.handleReset}
           onReload={this.handleReload}
         />
@@ -95,7 +84,12 @@ class ErrorBoundary extends Component {
 /**
  * Fallback UI компонент
  */
-function ErrorFallback({ error, errorInfo, level, showDetails, onReset, onReload }) {
+function ErrorPageTitle() {
+  useDocumentTitle('Ошибка страницы');
+  return null;
+}
+
+export function ErrorFallback({ level = 'page', onReset, onReload, title, description }) {
   const isPage = level === "page";
   const isSection = level === "section";
 
@@ -121,56 +115,38 @@ function ErrorFallback({ error, errorInfo, level, showDetails, onReset, onReload
 
   return (
     <Box {...containerStyles[level]} role="alert" aria-live="assertive">
+      {isPage && <ErrorPageTitle />}
       <VStack spacing={4} align="center" justify="center" h="full">
         <Icon as={WarningTwoIcon} boxSize={isPage ? 16 : isSection ? 12 : 8} color={colors.error} />
 
         <VStack spacing={2} textAlign="center">
-          <Text
+          <Heading
+            as={isPage ? 'h1' : 'h2'}
             fontSize={isPage ? "2xl" : isSection ? "xl" : "lg"}
             fontWeight="bold"
             color={colors.text.primary}
           >
-            {isPage ? "Что-то пошло не так" : "Ошибка компонента"}
-          </Text>
+            {title || (isPage ? "Не удалось открыть страницу" : "Ошибка компонента")}
+          </Heading>
 
           <Text fontSize={isPage ? "md" : "sm"} color={colors.text.secondary} maxW="400px">
-            {isPage
+            {description || (isPage
               ? "Произошла непредвиденная ошибка. Попробуйте обновить страницу."
-              : "Этот компонент временно недоступен."}
+              : "Этот компонент временно недоступен.")}
           </Text>
         </VStack>
 
-        {showDetails && error && (
-          <Box
-            maxW="600px"
-            w="full"
-            p={4}
-            bg="rgba(0,0,0,0.3)"
-            borderRadius={borderRadius.md}
-            overflow="auto"
-          >
-            <Code colorScheme="red" display="block" whiteSpace="pre-wrap" fontSize="xs" p={2}>
-              {error.toString()}
-              {errorInfo?.componentStack && (
-                <>
-                  {"\n\nComponent Stack:"}
-                  {errorInfo.componentStack}
-                </>
-              )}
-            </Code>
-          </Box>
-        )}
-
         <VStack spacing={2}>
-          <Button variant="primary" size={isPage ? "lg" : "md"} onClick={onReset}>
+          {onReset && <Button variant="primary" size={isPage ? "lg" : "md"} onClick={onReset}>
             Попробовать снова
-          </Button>
+          </Button>}
 
-          {isPage && (
-            <Button variant="ghost" size="md" onClick={onReload}>
-              Перезагрузить страницу
+          {isPage && onReload && (
+            <Button variant={onReset ? 'ghost' : 'primary'} h="44px" onClick={onReload}>
+              Обновить страницу
             </Button>
           )}
+          {isPage && <ActionLink href="/" variant="ghost" h="44px">На главную</ActionLink>}
         </VStack>
       </VStack>
     </Box>

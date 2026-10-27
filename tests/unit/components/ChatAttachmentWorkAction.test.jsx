@@ -9,16 +9,17 @@ const attachments = [
   { file_id: 'file-2', filename: 'two.txt', file_type: 'text' },
 ];
 
-describe('attachment Work action', () => {
+describe('attachment Library action', () => {
   it.each([
-    ['saved message', <MessageAttachments attachments={attachments} onOpenWork={jest.fn()} />],
-    ['composer', <ComposerAttachments attachments={attachments} onOpenWork={jest.fn()} onRemove={jest.fn()} />],
+    ['saved message', <MessageAttachments attachments={attachments} onOpenLibrary={jest.fn()} />],
+    ['composer', <ComposerAttachments attachments={attachments} onOpenLibrary={jest.fn()} onRemove={jest.fn()} />],
   ])('renders one honest group action for a %s', (_name, component) => {
     render(<ChakraProvider>{component}</ChakraProvider>);
 
-    const action = screen.getByRole('button', { name: 'Открыть работу с вложениями: 2' });
+    const action = screen.getByRole('button', { name: 'Открыть библиотеку вложений: 2' });
     expect(action).toBeInTheDocument();
-    expect(screen.getAllByText('Открыть работу')).toHaveLength(1);
+    expect(screen.getAllByText('Открыть библиотеку')).toHaveLength(1);
     fireEvent.click(action);
+    expect(component.props.onOpenLibrary).toHaveBeenCalledTimes(1);
   });
 });

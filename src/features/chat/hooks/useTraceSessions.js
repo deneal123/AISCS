@@ -55,8 +55,13 @@ export function useTraceSessions({ showTracePanel }) {
     return createTraceSession(fallbackTitle, anchorMessageId);
   }, [createTraceSession]);
 
-  const startTraceSession = useCallback((queryText, anchorMessageId = null) => {
-    const sessionId = ensureTraceSession("Подготовка запроса", anchorMessageId);
+  const startTraceSession = useCallback((queryText, anchorMessageId = null, resumeSessionId = null) => {
+    const resumable = traceSessionsRef.current.find((session) => session.id === resumeSessionId
+      && session.status === "awaiting_confirmation" && session.anchorMessageId === anchorMessageId);
+    const sessionId = resumable ? resumable.id : ensureTraceSession("Подготовка запроса", anchorMessageId);
+    if (resumable) traceSessionsRef.current = traceSessionsRef.current.map((session) => (
+      session.id === sessionId ? { ...session, status: "running", finishedAt: null } : session
+    ));
     setTraceSessions((prev) => prev.map((session) => (
       session.id === sessionId
         ? {
@@ -86,6 +91,7 @@ export function useTraceSessions({ showTracePanel }) {
     const normalizedEvent = {
       id: nextTraceId('trace'),
       timestamp: event.timestamp || new Date().toISOString(),
+      observedAt: new Date().toISOString(),
       kind: event.kind || "info",
       title: String(event.title),
       // Рассуждения показываем развёрнуто (длиннее, с переносами); прочие
@@ -119,13 +125,13 @@ export function useTraceSessions({ showTracePanel }) {
       if (session.id !== sessionId) return session;
       const pct = typeof percent === "number" && Number.isFinite(percent)
         ? Math.max(0, Math.min(100, Math.round(percent)))
-        : (session.progress?.percent ?? null);
+        : null;
       const nextLabel = clampTraceDetail(label, 120) || session.progress?.label || "Идёт исследование";
-      return { ...session, progress: { percent: pct, label: nextLabel } };
+      return { ...session, progress: { percent: pct, label: nextLabel, updatedAt: new Date().toISOString() } };
     }));
   }, [ensureTraceSession]);
 
-  const markConfirmationAccepted = useCallback(() => {
+  const markConfirmationAccepted = useCallback((offerId = null, status = "accepted") => {
     setTraceSessions((previous) => {
       let updated = false;
       const next = [...previous];
@@ -134,12 +140,13 @@ export function useTraceSessions({ showTracePanel }) {
         const events = [...(session.events || [])];
         for (let eventIndex = events.length - 1; eventIndex >= 0; eventIndex -= 1) {
           const event = events[eventIndex];
-          if (event?.offer?.mode !== "expensive_run" || event.offer.status === "accepted") {
+          if (!event?.offer || (offerId ? event.offer.offer_id !== offerId
+            : event.offer.mode !== "expensive_run") || event.offer.status === status) {
             continue;
           }
           events[eventIndex] = {
             ...event,
-            offer: { ...event.offer, status: "accepted", expired: false },
+            offer: { ...event.offer, status, expired: false },
           };
           next[sessionIndex] = { ...session, events };
           updated = true;

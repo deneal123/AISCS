@@ -5,8 +5,8 @@ import { prefersReducedMotion } from '@utils/motion';
  * Авто-прокрутка ленты чата — единый источник правды (заменил instant-эффект
  * контейнера и локальное состояние скролла в ленте).
  *
- * Прилипает ко дну во время стрима, но ПРЕРЫВАЕТСЯ жестом пользователя и сам
- * возобновляется через RESUME_AFTER_IDLE_MS бездействия. До-пинивается при
+ * Прилипает ко дну во время стрима, но ПРЕРЫВАЕТСЯ жестом пользователя.
+ * Возобновляется только при возврате ко дну или явном действии. До-пинивается при
  * асинхронном росте высоты (ленивые кодоблоки, картинки) и уважает
  * prefers-reduced-motion.
  *
@@ -17,8 +17,6 @@ import { prefersReducedMotion } from '@utils/motion';
 
 // Единый порог «прилипания» ко дну (px): в этой зоне лента следует за стримом.
 const STICK_THRESHOLD = 110;
-// Сколько мс без жеста пользователя ждать, прежде чем возобновить авто-скролл.
-const RESUME_AFTER_IDLE_MS = 2500;
 
 export function useChatAutoScroll({ scrollRef, contentSignal, isStreaming }) {
   // Намерение пользователя «держаться дна». По умолчанию — да
@@ -33,9 +31,6 @@ export function useChatAutoScroll({ scrollRef, contentSignal, isStreaming }) {
   const guardTimerRef = useRef(0);
   const idleTimerRef = useRef(0);
   const rafRef = useRef(0);
-  // Актуальное isStreaming для слушателей (замыкание не устаревает).
-  const isStreamingRef = useRef(isStreaming);
-  isStreamingRef.current = isStreaming;
   // Состояние нужно ТОЛЬКО кнопке «вниз»; сет дёргаем лишь на флипе значения.
   const [atBottom, setAtBottom] = useState(true);
 
@@ -87,15 +82,20 @@ export function useChatAutoScroll({ scrollRef, contentSignal, isStreaming }) {
     el.scrollTo({ top: el.scrollHeight, behavior });
   }, [scrollRef, setAtBottomIfChanged, clearGuard]);
 
-  // Жест пользователя (колесо/тач): ставим авто-скролл на паузу и заводим таймер
-  // возобновления. Только во время стрима — вне стрима прерывать нечего.
+  // Чтение, раскрытие трейса и выбор кнопки прекращают follow без таймера возврата.
   const onUserGesture = useCallback(() => {
-    if (!isStreamingRef.current) return;
+    const wasProgrammatic = programmaticRef.current;
+    clearGuard();
     userPausedRef.current = true;
     stickRef.current = false;
     window.clearTimeout(idleTimerRef.current);
-    idleTimerRef.current = window.setTimeout(resumeFollow, RESUME_AFTER_IDLE_MS);
-  }, [resumeFollow]);
+    // A reader owns the viewport even between stream rounds or while an offer
+    // waits. Stop an earlier smooth animation, not only its bookkeeping guard.
+    const el = scrollRef.current;
+    if (wasProgrammatic && typeof el?.scrollTo === 'function') {
+      el.scrollTo({ top: el.scrollTop, behavior: 'instant' });
+    }
+  }, [clearGuard, scrollRef]);
 
   // Подписка на wheel/touchmove контейнера (passive) — распознаём именно ЖЕСТ,
   // в отличие от onScroll, который срабатывает и на наш программный пин.
@@ -104,9 +104,13 @@ export function useChatAutoScroll({ scrollRef, contentSignal, isStreaming }) {
     if (!el) return undefined;
     el.addEventListener('wheel', onUserGesture, { passive: true });
     el.addEventListener('touchmove', onUserGesture, { passive: true });
+    el.addEventListener('pointerdown', onUserGesture, { passive: true });
+    el.addEventListener('keydown', onUserGesture);
     return () => {
       el.removeEventListener('wheel', onUserGesture);
       el.removeEventListener('touchmove', onUserGesture);
+      el.removeEventListener('pointerdown', onUserGesture);
+      el.removeEventListener('keydown', onUserGesture);
     };
   }, [scrollRef, onUserGesture]);
 

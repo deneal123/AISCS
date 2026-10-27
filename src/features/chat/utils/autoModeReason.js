@@ -1,7 +1,7 @@
 const REASON_LABELS = {
   shortcut_empty: 'Пустой запрос обработан обычным режимом.',
-  shortcut_smalltalk: 'Короткое сообщение обработано без вызова модели.',
-  shortcut_continue: 'Продолжение прошлого ответа обработано без вызова модели.',
+  shortcut_smalltalk: 'Для короткой реплики выбран обычный режим.',
+  shortcut_continue: 'Сохранён режим предыдущего ответа.',
   model_classification: 'Режим определён по типу задачи.',
   confirmation_required: 'Дорогой режим ждёт подтверждения.',
   video_confirmation_required: 'Просмотр видео ждёт подтверждения.',
@@ -15,5 +15,7 @@ const REASON_LABELS = {
 };
 
 export function autoModeReasonLabel(reasonCode) {
-  return REASON_LABELS[reasonCode] || 'Решение принято по правилам авто-режима.';
+  return Object.prototype.hasOwnProperty.call(REASON_LABELS, reasonCode)
+    ? REASON_LABELS[reasonCode]
+    : 'Решение принято по правилам авто-режима.';
 }

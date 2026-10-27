@@ -26,9 +26,12 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react';
-import { FiAlertCircle, FiArchive, FiChevronDown, FiChevronUp, FiCircle, FiCpu, FiLayers, FiPlus, FiSearch, FiStar, FiTrash2, FiUser, FiX } from '@shared/icons';
+import { FiAlertCircle, FiChevronDown, FiChevronUp, FiCircle, FiCpu, FiLayers, FiPlus, FiSearch, FiStar, FiTrash2, FiUser, FiX } from '@shared/icons';
+import MemosSection from './MemosSection';
+import { extractMemosMemories } from './memoryPresentation';
 import { colors, borderRadius, typography } from '@theme/tokens';
-import { DRAWER_CLOSE_BUTTON_PROPS, DRAWER_OVERLAY_PROPS, DRAWER_RADIAL_BG, DRAWER_CONTENT_BG } from '@theme/drawer';
+import { DRAWER_CLOSE_BUTTON_PROPS, DRAWER_OVERLAY_PROPS, DRAWER_CONTENT_BG } from '@theme/drawer';
+import AppTextarea from '@shared/controls/AppTextarea';
 import { GLASS_SURFACE_STRONG } from '@theme/glass';
 import { CHAT_SCROLLBAR_SX, CHAT_THEME } from '../../constants/theme';
 
@@ -141,93 +144,28 @@ function MemoryOverview({ facts, dashboard }) {
   );
 }
 
-/** Достать тексты воспоминаний MemOS из ответа дашборда (группы text/pref/tool/skill). */
-function extractMemosMemories(dashboard) {
-  if (!dashboard || typeof dashboard !== 'object') return [];
-  const out = [];
-  for (const group of ['text_mem', 'pref_mem', 'tool_mem', 'skill_mem']) {
-    const cubes = dashboard[group];
-    if (!Array.isArray(cubes)) continue;
-    for (const cube of cubes) {
-      for (const m of cube?.memories || []) {
-        const text = typeof m === 'string' ? m : (m?.memory || m?.text || m?.content || m?.summary || '');
-        if (text && String(text).trim()) out.push(String(text).trim());
-      }
-    }
-  }
-  return out;
-}
-
-/**
- * Раскрывающаяся секция семантической памяти MemOS: последние воспоминания
- * (саммери диалогов и извлечённые факты). По умолчанию показывает 5 последних,
- * можно раскрыть все. Скрыта, если MemOS пуст.
- */
-function MemosSection({ dashboard }) {
-  const [expanded, setExpanded] = useState(false);
-  const memories = useMemo(() => extractMemosMemories(dashboard), [dashboard]);
-  if (!memories.length) return null;
-  const ordered = [...memories].reverse(); // свежие сверху
-  const shown = expanded ? ordered : ordered.slice(0, 5);
-  return (
-    <Box mb={4} borderRadius={borderRadius.md} bg={CHAT_THEME.panelBg} border={`1px solid ${CHAT_THEME.panelBorder}`} overflow="hidden">
-      <HStack
-        as="button"
-        w="100%"
-        px={3}
-        py={2.5}
-        spacing={2}
-        onClick={() => setExpanded((v) => !v)}
-        _hover={{ bg: CHAT_THEME.panelHover }}
-        transition="background 0.15s"
-      >
-        <Icon as={FiArchive} boxSize="13px" color={colors.spectral.amber} />
-        <Text fontSize="12px" fontWeight="700" color={colors.text.primary}>
-          Семантическая память MemOS
-        </Text>
-        <Text as="span" fontSize="11px" fontWeight="700" fontFamily={typography.fontFamily.mono} color={colors.spectral.amber}>
-          {memories.length}
-        </Text>
-        <Icon as={expanded ? FiChevronUp : FiChevronDown} boxSize="14px" color={colors.text.tertiary} ml="auto" />
-      </HStack>
-      <VStack align="stretch" spacing={0} px={3} pb={2.5}>
-        {shown.map((text, i) => (
-          <Text
-            key={i}
-            fontSize="12.5px"
-            color={colors.text.secondary}
-            lineHeight="1.5"
-            py={2}
-            borderTop={`1px solid ${colors.border.faint}`}
-          >
-            {text}
-          </Text>
-        ))}
-        {!expanded && ordered.length > 5 && (
-          <Text fontSize="11px" color={colors.text.tertiary} pt={2} textAlign="center">
-            …ещё {ordered.length - 5}, нажмите чтобы раскрыть
-          </Text>
-        )}
-      </VStack>
-    </Box>
-  );
-}
-
 /**
  * Drawer долговременной памяти пользователя: список извлечённых фактов с
  * поиском и удалением. Источник — provider-agnostic API `/api/memory`
  * (работает одинаково поверх mem0 или MemOS).
  */
-export default function ChatMemoryDrawer({ isOpen, onClose, memoryFacts, memoryDashboard, onSearch, onDeleteFact, onAddFact, onClearAll }) {
+export default function ChatMemoryDrawer({ isOpen, onClose, memoryFacts = [], memoryDashboard, onSearch, onDeleteFact, onAddFact, onClearAll }) {
   const [query, setQuery] = useState('');
   const [busy, setBusy] = useState(false);
   const [deletingId, setDeletingId] = useState(null);
   const [addValue, setAddValue] = useState('');
   const [adding, setAdding] = useState(false);
+  const [addOpen, setAddOpen] = useState(false);
+  const [addError, setAddError] = useState(false);
   const [clearing, setClearing] = useState(false);
   const [factsExpanded, setFactsExpanded] = useState(false);
   const clearDialog = useDisclosure();
   const cancelClearRef = useRef(null);
+  const addInputRef = useRef(null);
+  const addButtonRef = useRef(null);
+  const searchInputRef = useRef(null);
+  const addingRef = useRef(false);
+  const previousAddOpenRef = useRef(false);
   const debounceRef = useRef(0);
 
   // Сколько записей в семантической памяти — нужно и для текста подтверждения, и для
@@ -264,15 +202,31 @@ export default function ChatMemoryDrawer({ isOpen, onClose, memoryFacts, memoryD
 
   const handleAdd = useCallback(async () => {
     const text = addValue.trim();
-    if (!text || !onAddFact) return;
+    if (!text || !onAddFact || addingRef.current) return;
+    addingRef.current = true;
+    setAddError(false);
     setAdding(true);
     try {
-      await onAddFact(text);
+      if (await onAddFact(text) === false) { setAddError(true); return; }
       setAddValue('');
+      setAddOpen(false);
+    } catch {
+      setAddError(true);
     } finally {
+      addingRef.current = false;
       setAdding(false);
     }
   }, [addValue, onAddFact]);
+
+  useEffect(() => {
+    let frame;
+    if (addOpen && isOpen) addInputRef.current?.focus();
+    else if (previousAddOpenRef.current && isOpen) {
+      frame = requestAnimationFrame(() => addButtonRef.current?.focus());
+    }
+    previousAddOpenRef.current = addOpen;
+    return () => { if (frame != null) cancelAnimationFrame(frame); };
+  }, [addOpen, isOpen]);
 
   const handleClearAll = useCallback(async () => {
     if (!onClearAll) return;
@@ -317,6 +271,7 @@ export default function ChatMemoryDrawer({ isOpen, onClose, memoryFacts, memoryD
     setQuery('');
     if (debounceRef.current) clearTimeout(debounceRef.current);
     runSearch('');
+    searchInputRef.current?.focus();
   }, [runSearch]);
 
   const handleDelete = useCallback(async (factId) => {
@@ -332,32 +287,39 @@ export default function ChatMemoryDrawer({ isOpen, onClose, memoryFacts, memoryD
   return (
     <Drawer isOpen={isOpen} placement="right" onClose={onClose} size="md">
       <DrawerOverlay {...DRAWER_OVERLAY_PROPS} />
-      <DrawerContent bg={DRAWER_CONTENT_BG} borderLeft={`1px solid ${CHAT_THEME.panelBorder}`} sx={{ willChange: 'transform', backgroundImage: DRAWER_RADIAL_BG }}>
+      <DrawerContent bg={DRAWER_CONTENT_BG} borderLeft={`1px solid ${CHAT_THEME.panelBorder}`} data-testid="memory-drawer">
         <DrawerCloseButton aria-label="Закрыть память и контекст" mt={2} {...DRAWER_CLOSE_BUTTON_PROPS} />
-        <DrawerHeader borderBottomWidth="1px" borderColor={colors.border.subtle} display="flex" alignItems="center" gap={2}>
+        <DrawerHeader pr="64px" fontSize={{ base: '18px', md: '20px' }} lineHeight="1.3" borderBottomWidth="1px" borderColor={colors.border.subtle} display="flex" alignItems="center" gap={2}>
           <Icon as={FiCpu} boxSize="18px" color={colors.iris[300]} />
           Долговременная память
         </DrawerHeader>
-        <DrawerBody pt={4} sx={CHAT_SCROLLBAR_SX}>
-          <Text fontSize="xs" color={colors.text.tertiary} mb={3}>
-            Здесь сохраняются устойчивые факты: предпочтения, контекст проектов и важные договоренности.
-            Память общая для всех ваших диалогов — не привязана к конкретному чату.
+        <DrawerBody pt={4} pb="max(20px, env(safe-area-inset-bottom))" sx={CHAT_SCROLLBAR_SX}>
+          <Text fontSize="sm" color={colors.text.secondary} mb={5} lineHeight="1.5">
+            Предпочтения и важные сведения для всех ваших диалогов.
           </Text>
 
-          {!query.trim() && (
-            <MemoryOverview facts={memoryFacts} dashboard={memoryDashboard} />
-          )}
-
-          {!query.trim() && <MemosSection dashboard={memoryDashboard} />}
-
           {onAddFact && (
-            <HStack mb={3} spacing={2}>
-              <Input
+            <Box mb={4}>
+              <Button ref={addButtonRef} size="sm" minH="44px" variant="outline" leftIcon={<FiPlus />}
+                aria-expanded={addOpen} aria-controls="memory-add-form" isDisabled={adding}
+                onClick={() => setAddOpen(value => !value)}>
+                Добавить факт
+              </Button>
+              {addOpen && <Box as="form" noValidate id="memory-add-form" mt={3} p={4}
+                border="1px solid" borderColor={colors.border.subtle} borderRadius={borderRadius.md}
+                bg={CHAT_THEME.panelBg} onSubmit={event => { event.preventDefault(); handleAdd(); }}>
+              <Text as="label" htmlFor="memory-new-fact" display="block" fontSize="sm" fontWeight="600" mb={2}>Добавить факт вручную</Text>
+              <AppTextarea
+                id="memory-new-fact"
+                ref={addInputRef}
+                rows={3}
                 size="sm"
+                isReadOnly={adding}
+                isInvalid={addError}
+                aria-describedby={addError ? 'memory-add-error' : undefined}
                 value={addValue}
                 onChange={(e) => setAddValue(e.target.value)}
-                onKeyDown={(e) => { if (e.key === 'Enter') handleAdd(); }}
-                placeholder="Добавить факт вручную…"
+                placeholder="Например: предпочитаю короткие ответы"
                 aria-label="Добавить факт вручную"
                 bg={CHAT_THEME.inputBg}
                 border={`1px solid ${CHAT_THEME.inputBorder}`}
@@ -366,24 +328,25 @@ export default function ChatMemoryDrawer({ isOpen, onClose, memoryFacts, memoryD
                 _placeholder={{ color: colors.text.tertiary }}
                 _focus={{ borderColor: CHAT_THEME.inputBorderFocus, boxShadow: 'none' }}
               />
-              <IconButton
-                aria-label="Добавить факт"
-                icon={adding ? <Spinner size="xs" /> : <FiPlus />}
-                size="sm"
-                flexShrink={0}
-                bg={CHAT_THEME.accent}
-                color="white"
-                borderRadius={borderRadius.sm}
-                _hover={{ bg: CHAT_THEME.accentHover }}
-                isDisabled={!addValue.trim() || adding}
-                onClick={handleAdd}
-              />
-            </HStack>
+              {addError && <Text id="memory-add-error" role="alert" fontSize="sm" mt={2} color={colors.warning}>
+                Не удалось сохранить факт. Текст оставлен для повторной попытки.
+              </Text>}
+              <HStack mt={3} spacing={3} justify="flex-end" flexWrap="wrap">
+                <Button size="sm" minH="44px" variant="ghost" isDisabled={adding}
+                  onClick={() => { setAddOpen(false); addButtonRef.current?.focus(); }}>Отмена</Button>
+                <Button type="submit" size="sm" minH="44px" isDisabled={!addValue.trim() || adding}
+                  isLoading={adding} loadingText="Сохраняю…">Сохранить факт</Button>
+              </HStack>
+              </Box>}
+            </Box>
           )}
 
           {onSearch && (
-            <InputGroup size="sm" mb={4}>
+            <InputGroup size="sm" mb={5}>
               <Input
+                ref={searchInputRef}
+                h="44px"
+                pr="48px"
                 value={query}
                 onChange={handleQueryChange}
                 placeholder="Поиск по памяти…"
@@ -395,11 +358,11 @@ export default function ChatMemoryDrawer({ isOpen, onClose, memoryFacts, memoryD
                 _placeholder={{ color: colors.text.tertiary }}
                 _focus={{ borderColor: CHAT_THEME.inputBorderFocus, boxShadow: 'none' }}
               />
-              <InputRightElement>
+              <InputRightElement h="44px" w="44px">
                 {busy ? (
                   <Spinner size="xs" color={colors.blue[300]} />
                 ) : query ? (
-                  <IconButton aria-label="Очистить поиск" icon={<FiX />} size="xs" variant="ghost"
+                  <IconButton aria-label="Очистить поиск" icon={<FiX />} size="sm" w="44px" h="44px" variant="ghost"
                     color={colors.text.tertiary} onClick={handleClearQuery} />
                 ) : (
                   <Box color={colors.text.tertiary}><FiSearch /></Box>
@@ -408,10 +371,13 @@ export default function ChatMemoryDrawer({ isOpen, onClose, memoryFacts, memoryD
             </InputGroup>
           )}
 
+          {!query.trim() && <MemoryOverview facts={memoryFacts} dashboard={memoryDashboard} />}
+
           {memoryFacts.length === 0 ? (
-            <VStack spacing={3} py={10} px={4} textAlign="center">
+            <HStack spacing={3} p={4} align="start" border="1px solid" borderColor={colors.border.subtle} borderRadius={borderRadius.md}>
               <Box
-                boxSize="46px"
+                boxSize="36px"
+                flexShrink={0}
                 borderRadius={borderRadius.md}
                 bg={CHAT_THEME.accentSoft}
                 border={`1px solid ${colors.accent.subtleBorder}`}
@@ -419,14 +385,17 @@ export default function ChatMemoryDrawer({ isOpen, onClose, memoryFacts, memoryD
                 alignItems="center"
                 justifyContent="center"
               >
-                <Icon as={FiCpu} boxSize="22px" color={colors.blue[300]} />
+                <Icon as={FiCpu} boxSize="18px" color={colors.blue[300]} />
               </Box>
-              <Text color={colors.text.secondary} maxW="300px" lineHeight="1.5">
-                {query
-                  ? 'По запросу ничего не найдено.'
-                  : 'Память пуста. Факты будут автоматически извлекаться из ваших разговоров.'}
-              </Text>
-            </VStack>
+              <Box minW={0}>
+                <Text fontSize="sm" fontWeight="600" mb={1}>{query ? 'Ничего не найдено' : 'Пока нет фактов'}</Text>
+                <Text color={colors.text.secondary} fontSize="sm" lineHeight="1.5">
+                  {query ? 'Измените запрос или очистите поиск.'
+                    : memosCount ? 'Резюме разговоров доступны ниже.'
+                      : 'Добавьте важное вручную. Сохранённые сведения появятся здесь.'}
+                </Text>
+              </Box>
+            </HStack>
           ) : (
             <VStack spacing={3} align="stretch">
               {/* Строка счёта заодно и переключатель: отдельная кнопка «свернуть» рядом
@@ -460,7 +429,7 @@ export default function ChatMemoryDrawer({ isOpen, onClose, memoryFacts, memoryD
                     role="group"
                     opacity={fact.superseded ? 0.55 : 1}
                   >
-                    <Box mb={2} pr={6}>
+                    <Box mb={2} pr={12} minH={onDeleteFact ? '44px' : undefined}>
                       <TypeBadge meta={meta} />
                       {/* Есть более свежий факт с тем же ключом — этот в промпт НЕ идёт.
                           Не прячем: расхождение видно, только когда оба значения рядом,
@@ -472,10 +441,10 @@ export default function ChatMemoryDrawer({ isOpen, onClose, memoryFacts, memoryD
                         </Text>
                       )}
                     </Box>
-                    <Text fontSize="sm" fontWeight="600" color={colors.text.primary} noOfLines={2}>
+                    <Text fontSize="sm" fontWeight="600" color={colors.text.primary} overflowWrap="anywhere">
                       {fact.fact_key}
                     </Text>
-                    <Text fontSize="sm" color={colors.text.secondary} mt={1} lineHeight="1.5">
+                    <Text fontSize="sm" color={colors.text.secondary} mt={1} lineHeight="1.5" overflowWrap="anywhere">
                       {fact.fact_value}
                     </Text>
                     {fact.updated_at && (
@@ -487,14 +456,15 @@ export default function ChatMemoryDrawer({ isOpen, onClose, memoryFacts, memoryD
                       <IconButton
                         aria-label="Удалить факт"
                         icon={deletingId === fact.id ? <Spinner size="xs" /> : <FiTrash2 />}
-                        size="xs"
+                        size="sm"
+                        w="44px"
+                        h="44px"
                         variant="ghost"
                         position="absolute"
                         top={2}
                         right={2}
                         color={colors.text.tertiary}
-                        opacity={0}
-                        _groupHover={{ opacity: 1 }}
+                        opacity={1}
                         _hover={{ color: colors.blue[300], bg: colors.accent.soft }}
                         isDisabled={deletingId === fact.id}
                         onClick={() => handleDelete(fact.id)}
@@ -518,6 +488,8 @@ export default function ChatMemoryDrawer({ isOpen, onClose, memoryFacts, memoryD
               )}
             </VStack>
           )}
+
+          {!query.trim() && <Box mt={4}><MemosSection dashboard={memoryDashboard} /></Box>}
 
           {/* Полная очистка — внизу и только когда есть что стирать. Удалять по одному
               можно было и раньше, но при десятках записей это занятие, а не операция.

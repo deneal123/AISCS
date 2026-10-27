@@ -1,0 +1,10 @@
+.ide-move-file-label {
+  display: none;
+}
+
+@container ide-file-pane (min-width: 360px) {
+  .ide-move-file-label {
+    display: inline;
+    margin-inline-start: 0.5rem;
+  }
+}

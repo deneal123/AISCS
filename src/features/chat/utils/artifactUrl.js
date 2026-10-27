@@ -1,4 +1,5 @@
 import httpClient from '@api/httpClient';
+import { ownedFileDownloadUrl } from '@api/fileDownload';
 
 
 // Durable generated files are referenced by opaque UserFile IDs. Legacy
@@ -6,7 +7,7 @@ import httpClient from '@api/httpClient';
 export function resolveArtifactUrl(url, filename, fileId) {
   const base = (httpClient?.defaults?.baseURL || '').replace(/\/$/, '');
   if (fileId) {
-    return `${base}/api/service/files/v1/${encodeURIComponent(fileId)}/download`;
+    return ownedFileDownloadUrl(fileId);
   }
   if (!url || /^(https?:|data:|blob:)/i.test(url)) return url;
   const params = new URLSearchParams({ file_key: url });

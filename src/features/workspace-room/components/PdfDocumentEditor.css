@@ -1,0 +1,24 @@
+.pdf-editor-toolbar [data-pdf-save-action] {
+  min-width: 112px;
+}
+
+@container pdf-editor (max-width: 520px) {
+  .pdf-editor-toolbar [data-pdf-save-action] {
+    min-width: 34px;
+  }
+
+  .pdf-editor-toolbar [data-pdf-editor-action] {
+    padding-inline: 8px;
+  }
+
+  .pdf-editor-toolbar [data-pdf-editor-action] [data-action-label] {
+    display: none;
+  }
+
+  .pdf-editor-toolbar [data-pdf-editor-status] {
+    flex-basis: 100%;
+    order: 2;
+    margin-inline-start: 0;
+    text-align: right;
+  }
+}
