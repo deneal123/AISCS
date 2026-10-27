@@ -110,3 +110,39 @@
 [submodule "simulation/SIM-029"]
 	path = simulations/sidecars/snedea--flybrain
 	url = https://github.com/snedea/flybrain.git
+[submodule "workspace"]
+	path = workspace
+	url = https://github.com/deneal123/AISCS.git
+	branch = workspace
+[submodule "duckdb"]
+	path = duckdb
+	url = https://github.com/deneal123/AISCS.git
+	branch = duckdb
+[submodule "opendataloader"]
+	path = opendataloader
+	url = https://github.com/deneal123/AISCS.git
+	branch = opendataloader
+[submodule "local_llm"]
+	path = local_llm
+	url = https://github.com/deneal123/AISCS.git
+	branch = local_llm
+[submodule "memos"]
+	path = memos
+	url = https://github.com/deneal123/AISCS.git
+	branch = memos
+[submodule "backend"]
+	path = backend
+	url = https://github.com/deneal123/AISCS.git
+	branch = backend
+[submodule "frontend"]
+	path = frontend
+	url = https://github.com/deneal123/AISCS.git
+	branch = frontend
+[submodule "agents"]
+	path = agents
+	url = https://github.com/deneal123/AISCS.git
+	branch = agents
+[submodule "generator"]
+	path = generator
+	url = https://github.com/deneal123/AISCS.git
+	branch = generator

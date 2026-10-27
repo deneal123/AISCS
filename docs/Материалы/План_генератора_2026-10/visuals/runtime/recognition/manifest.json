@@ -1,0 +1,17 @@
+{
+  "date": "2026-10-28",
+  "kind": "actual authenticated runtime screenshots, not image concepts",
+  "classifier": "male-cns-recognition-v1",
+  "files": [
+    {
+      "name": "recognition-preserved-error.png",
+      "bytes": 273891,
+      "sha256": "4d1731c5845e3c64bf74e7099629d94bc6a82f7869ee54509d74a035f92ed32f"
+    },
+    {
+      "name": "recognition-outside-domain.png",
+      "bytes": 221562,
+      "sha256": "c612615a149e2607c9c06f943873caeb7e58beef722d4abc45b58152e06b0455"
+    }
+  ]
+}

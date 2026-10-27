@@ -1,0 +1,62 @@
+{
+  "date": "2026-10-27",
+  "kind": "actual authenticated runtime screenshots; not generated concepts",
+  "source": "http://localhost:8095/simulator",
+  "dataset": "male-cns:v1.0-annotated-nonglial",
+  "graph_manifest_sha256": "742ee0b22040d6831cb96479d468cd57f1a60d96e2004e3beb421a8d3ac936a2",
+  "visual_checks": [
+    {
+      "name": "all_neurons_and_calculated_propagation",
+      "passed": true,
+      "active": 2221,
+      "events": 12380
+    },
+    {
+      "name": "rewind_and_paused_idle",
+      "passed": true
+    },
+    {
+      "name": "quiet_control_no_fake_wave",
+      "passed": true
+    }
+  ],
+  "performance": {
+    "samples": 120,
+    "mean_fps": 35.873367014439026,
+    "p95_ms": 36.5,
+    "heap_bytes": 89117198
+  },
+  "performance_scope": "Actual authenticated full-CNS saved records, headless Edge 1920x1080; not a biological or GPU benchmark.",
+  "files": [
+    {
+      "name": "whole-body-60ms.png",
+      "bytes": 557112,
+      "sha256": "053e7917e15578359e694b642b516f314f330999285347469066bf4d3f8a8031"
+    },
+    {
+      "name": "whole-body-settings.png",
+      "bytes": 589720,
+      "sha256": "f740c73f07f309bb71a6583ba0ee4e9e8bbb8f2ed8b565dde026221cbd49028a"
+    },
+    {
+      "name": "whole-body-quiet.png",
+      "bytes": 585164,
+      "sha256": "e7747c65dc5136643056361d85f17a92ddd65aa3203c2cd421920a346a360500"
+    },
+    {
+      "name": "whole-body-head.png",
+      "bytes": 585473,
+      "sha256": "5b30ee679ed1cc85b303b8ae7984320f775e907a4551df12efa53f55a0ddc068"
+    },
+    {
+      "name": "whole-body-laptop.png",
+      "bytes": 316681,
+      "sha256": "5d9966e88ff40881ab966485c66aafa8f51563d35391a843a9483a0b894b5e50"
+    },
+    {
+      "name": "whole-body-pair.png",
+      "bytes": 238959,
+      "sha256": "6f3ee7534daeeb2af80c835189f22a22874df3d3605e2b03660b2a065247b0cc"
+    }
+  ]
+}

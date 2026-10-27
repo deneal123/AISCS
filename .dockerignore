@@ -1,0 +1,18 @@
+# The root build context is used only by backend/docker/Dockerfile*.
+# Research texts, SIM sidecars, other projects and private environments never
+# need to be sent to the Docker daemon for that image.
+**
+!backend/
+!backend/**
+backend/.git
+backend/.venv/
+backend/.work/
+backend/.env
+backend/.env.*
+backend/**/__pycache__/
+backend/**/.pytest_cache/
+backend/**/.ruff_cache/
+backend/**/node_modules/
+backend/**/htmlcov/
+backend/.coverage*
+backend/test-results/

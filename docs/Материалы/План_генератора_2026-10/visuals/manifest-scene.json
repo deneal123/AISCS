@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-27",
+  "tool": "imagegen",
+  "kind": "concept-not-results",
+  "shell": "existing GPTHub components; wordmark removed; logo icon retained",
+  "references": [
+    "four user screenshots attached to initial generation",
+    "../../../../simulations/artifacts/SIM-003/browser-inspector.png"
+  ],
+  "images": [
+    {
+      "file": "04-scene-focus.png",
+      "original": "exec-3cc7f655-c4e3-4ff3-a4ea-f387521f3cb6.png",
+      "width": 1668,
+      "height": 943,
+      "bytes": 1590771,
+      "sha256": "58fe68fae7b2148a826642805abdf44cdd41ced3bda770b24fef9249efdafbec"
+    },
+    {
+      "file": "05-electrode-placement.png",
+      "original": "exec-28e710c5-d186-4034-a00e-6d14a6bfc7d2.png",
+      "width": 1666,
+      "height": 944,
+      "bytes": 1634451,
+      "sha256": "14e15b8f753b78d8befab29065e1bf3a8130690688e1121f0dad66cfad86cfb0"
+    }
+  ]
+}

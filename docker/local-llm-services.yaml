@@ -1,0 +1,53 @@
+# Общий шаблон для dev/prod Compose. Подготовка модели — отдельная явная операция.
+services:
+  local-llm:
+    image: gpthub-local-llm:b11846-qwen2.5
+    build:
+      context: ../local_llm
+      dockerfile: docker/Dockerfile
+    init: true
+    profiles: ["local-llm"]
+    environment:
+      LOCAL_LLM_API_KEY: "${LOCAL_LLM_API_KEY:-}"
+      LOCAL_LLM_HOST: "0.0.0.0"
+      LOCAL_LLM_THREADS: "${LOCAL_LLM_THREADS:-2}"
+      LOCAL_LLM_CONTEXT_SIZE: "${LOCAL_LLM_CONTEXT_SIZE:-8192}"
+      LOCAL_LLM_TIMEOUT_SEC: "${AGENTS__LOCAL_TIMEOUT_SEC:-330}"
+    networks:
+      - internal
+    volumes:
+      - local_llm_models:/models:ro
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=32m
+    cap_drop: ["ALL"]
+    security_opt: ["no-new-privileges:true"]
+    pids_limit: 64
+    cpus: "${LOCAL_LLM_CPUS:-2}"
+    mem_limit: "${LOCAL_LLM_MEMORY_LIMIT:-1536m}"
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "--silent", "http://127.0.0.1:8080/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 120s
+    restart: unless-stopped
+
+  local-llm-model:
+    image: gpthub-local-llm:b11846-qwen2.5
+    build:
+      context: ../local_llm
+      dockerfile: docker/Dockerfile
+    profiles: ["local-llm-setup"]
+    command: ["python3", "-m", "local_llm.scripts.provision_model"]
+    networks:
+      - default
+    volumes:
+      - local_llm_models:/models
+    read_only: true
+    cap_drop: ["ALL"]
+    security_opt: ["no-new-privileges:true"]
+    pids_limit: 16
+    cpus: "1"
+    mem_limit: 128m
+    restart: "no"

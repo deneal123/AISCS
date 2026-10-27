@@ -1,0 +1,97 @@
+# AISCS application profile. The original GPTHub production definitions remain
+# in docker-compose.yaml; only the selected services are extended here.
+name: aspa-prod
+
+x-scientific-environment: &scientific-environment
+  SERVICE__APPLICATION_PROFILE: simulation
+  GENERATOR_URL: http://generator:8090
+  GENERATOR_TOKEN: ${GENERATOR_TOKEN:?Set executor credential in ignored .env.prod}
+
+services:
+  frontend:
+    extends: {file: docker-compose.yaml, service: frontend}
+    image: aspa-prod-frontend:latest
+    build:
+      args:
+        REACT_APP_APPLICATION_PROFILE: simulation
+  backend:
+    extends: {file: docker-compose.yaml, service: backend}
+    image: aspa-prod-backend:latest
+    environment: *scientific-environment
+    volumes: !override ["simulation_storage:/var/lib/app/storage"]
+    depends_on:
+      generator: {condition: service_healthy}
+  postgres:
+    extends: {file: docker-compose.yaml, service: postgres}
+  redis:
+    extends: {file: docker-compose.yaml, service: redis}
+  nginx:
+    extends: {file: docker-compose.yaml, service: nginx}
+    environment:
+      APP_DOMAIN: ${APP_DOMAIN:-aiscs.incellcorp.ru}
+      PUBLIC_HTTPS_PORT: ${PUBLIC_HTTPS_PORT:-443}
+      # Do not envsubst nginx's own $host, $scheme, or WebSocket variables.
+      NGINX_ENVSUBST_FILTER: "^(APP_DOMAIN|PUBLIC_HTTPS_PORT)$"
+    volumes: !override
+      - ../infra/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ../infra/nginx/templates:/etc/nginx/templates:ro
+      - type: bind
+        source: ../infra/nginx/certs/aiscs
+        target: /etc/nginx/certs
+        read_only: true
+        bind: {create_host_path: false}
+      - ../infra/nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf:ro
+    ports: !override ["${NGINX_PUBLISH_HTTPS:-127.0.0.1:8447}:443"]
+  celery-worker-agents:
+    extends: {file: docker-compose.yaml, service: celery-worker-agents}
+    profiles: !override [assistant]
+    image: aspa-prod-backend:latest
+    environment: *scientific-environment
+    volumes: !override ["simulation_storage:/var/lib/app/storage"]
+  celery-worker-maintenance:
+    extends: {file: docker-compose.yaml, service: celery-worker-maintenance}
+    image: aspa-prod-backend:latest
+    environment: *scientific-environment
+    volumes: !override ["simulation_storage:/var/lib/app/storage"]
+  celery-worker-simulation:
+    extends: {file: docker-compose.yaml, service: celery-worker-maintenance}
+    image: aspa-prod-backend:latest
+    environment: *scientific-environment
+    command: celery -A service.infrastructure.messaging.celery_app worker --loglevel=info --concurrency=1 --queues=simulation --hostname=simulation-worker@%h
+    volumes: !override ["simulation_storage:/var/lib/app/storage"]
+    depends_on:
+      generator: {condition: service_healthy}
+  celery-beat:
+    extends: {file: docker-compose.yaml, service: celery-beat}
+    image: aspa-prod-backend:latest
+    environment: *scientific-environment
+    command: celery -A service.infrastructure.messaging.celery_app beat --loglevel=info --schedule=/tmp/simulation-celerybeat
+  generator:
+    profiles: [prod, generator]
+    image: aspa-generator:prod
+    build: {context: ../generator, dockerfile: docker/Dockerfile}
+    environment:
+      GENERATOR_TOKEN: ${GENERATOR_TOKEN}
+      GENERATOR_WORK_DIR: /work
+    volumes: ["generator_scratch:/work"]
+    networks: [internal]
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8090/health', timeout=5)"]
+      interval: 10s
+      timeout: 7s
+      retries: 10
+    restart: unless-stopped
+    stop_grace_period: 30s
+
+# External S3 is configured by MINIO__*. No local S3 replacement is started.
+# Optional GPTHub/assistant services are preserved in the upstream definition.
+# aspa-research will be attached after its existing volumes and generation have
+# been inventoried; see plan 12. No duplicate Neo4j/Qdrant volumes are created here.
+volumes:
+  pg_data_volume:
+  redis_data_volume:
+  simulation_storage:
+  generator_scratch:
+networks:
+  default: {driver: bridge}
+  internal: {driver: bridge, internal: true}

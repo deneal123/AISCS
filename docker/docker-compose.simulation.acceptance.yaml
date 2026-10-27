@@ -1,0 +1,13 @@
+# Disposable integration project; always pass -p aspa-acceptance[-suffix].
+# Never apply this overlay to aspa-dev. It owns fresh project-scoped volumes.
+services:
+  frontend:
+    profiles: !override [manual-ui]
+  backend:
+    ports: !override ["127.0.0.1:8096:8000"]
+  postgres:
+    ports: !reset []
+  minio:
+    ports: !override ["127.0.0.1:9098:9000"]
+  mailpit:
+    ports: !override ["127.0.0.1:8028:8025"]

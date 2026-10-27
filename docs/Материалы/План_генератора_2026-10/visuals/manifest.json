@@ -1,0 +1,33 @@
+{
+  "date": "2026-10-27",
+  "tool": "imagegen",
+  "kind": "concept-not-results",
+  "brand": "GPTHub",
+  "reference": "../../../../simulations/artifacts/SIM-003/browser-scene.png",
+  "images": [
+    {
+      "file": "01-workbench.png",
+      "original": "exec-678132fd-2fcc-45f3-965f-81ee85b63645.png",
+      "width": 1586,
+      "height": 992,
+      "bytes": 1597141,
+      "sha256": "bc0cd20891bc391353142d5f9fc7cd92229c286713a26e5f3ac7078a2db50b55"
+    },
+    {
+      "file": "02-stimulation.png",
+      "original": "exec-6632b020-4c93-49d7-b768-04769ef1dbf7.png",
+      "width": 1586,
+      "height": 992,
+      "bytes": 1509570,
+      "sha256": "2a40189eb7f9a75f930fd42780327a85be0c45f983aad98df9bb3d0e85923272"
+    },
+    {
+      "file": "03-comparison.png",
+      "original": "exec-fc5a7e85-da2c-49e5-88a8-7e15254ab033.png",
+      "width": 1586,
+      "height": 992,
+      "bytes": 1602442,
+      "sha256": "ac678a48a7d2f26f0591b834a5560d05cdb75c459e86c80ef2902ee9d15e8141"
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "captured_on": "2026-10-27",
+  "kind": "actual-runtime-browser-captures",
+  "browser": "Microsoft Edge 156.0.4314.42, headless",
+  "application": "http://localhost:8095/simulator",
+  "account": "disposable acceptance account, no credentials included",
+  "asset_id": "flybody-sim003-fdbbd866-rest-v1",
+  "mesh_metadata_sha256": "8eb70a265a179e811c902fda4334aa83bc34f54a58d400db0c3a6f98ccbd62dd",
+  "source_commit": "fdbbd866b203a709a164970b0a8996108edd57a5",
+  "scope": "Body is FlyBody. Signals are saved calculations from an author-defined six-cell model; leg response is conditional visualization, not biological validation.",
+  "files": [
+    {
+      "path": "body.png",
+      "bytes": 458354,
+      "sha256": "c701efaa2d4fb3cc0a974c1747b1d155b554aa9b299f90a75b0859295da0219e",
+      "width": 1920,
+      "height": 1080,
+      "source": ".work/generator-implementation/ui-tests/scene.live-FlyBody-replay--c36ef-nd-invalid-contact-recovery-desktop/flybody-rest.png"
+    },
+    {
+      "path": "single-window.png",
+      "bytes": 454326,
+      "sha256": "c4145d7297256f4e96ffeda4dd5f0ceb8da14589f865d955f891cba9ecfd84b2",
+      "width": 1920,
+      "height": 1080,
+      "source": ".work/generator-implementation/runtime-single-window.png"
+    },
+    {
+      "path": "comparison.png",
+      "bytes": 442101,
+      "sha256": "21dbc2b461533e953c0683ac61da4bd0a7d7f8ac9fdfbfc3cb10532bd7ff7361",
+      "width": 1920,
+      "height": 1080,
+      "source": ".work/generator-implementation/runtime-comparison.png"
+    },
+    {
+      "path": "comparison-local.png",
+      "bytes": 700799,
+      "sha256": "7a7a5dd9043f225fa101b3db396245af077612c2d09da2d7fe7f1eabb936e5bf",
+      "width": 1920,
+      "height": 1080,
+      "source": ".work/generator-implementation/runtime-comparison-local.png"
+    },
+    {
+      "path": "presentation-mode.png",
+      "bytes": 958886,
+      "sha256": "c74069a2c7a86504ebdd64d9210701b6d32be0bef2d0d4fc7f90df30b9694a19",
+      "width": 1920,
+      "height": 1080,
+      "source": ".work/generator-implementation/ui-tests/workflow.live-placement-na-3a691-preserves-playback-controls-desktop/presentation-mode.png"
+    }
+  ]
+}

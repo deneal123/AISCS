@@ -1,0 +1,68 @@
+{
+  "version": "0.1.0",
+  "date": "2026-10-28",
+  "application": "AISCS",
+  "branch": "dev",
+  "components": {
+    "backend": {
+      "version": "1.5.0",
+      "branch": "backend",
+      "commit": "3d20a1c6dc1963d29c57f87b91d284630907959b"
+    },
+    "frontend": {
+      "version": "1.1.0",
+      "branch": "frontend",
+      "commit": "cddc5e089b9b503b2c06e239c11e10fbb0b44ee1"
+    },
+    "agents": {
+      "version": "0.2.0",
+      "branch": "agents",
+      "commit": "560ab7f1fdd8ed66d9c0fd16afc164024cecdd7f"
+    },
+    "generator": {
+      "version": "0.1.0",
+      "branch": "generator",
+      "commit": "d227de7cf134a8da52d25304df8bb72df638ede7"
+    },
+    "workspace": {
+      "version": "0.1.6",
+      "branch": "workspace",
+      "commit": "d4074b270f45a8ef94dc72b0e024d31f7ebc0aa5"
+    },
+    "duckdb": {
+      "version": "0.1.0",
+      "branch": "duckdb",
+      "commit": "bd687985919275d09472649f43bc6a92fc1861d1"
+    },
+    "opendataloader": {
+      "version": "0.1.0",
+      "branch": "opendataloader",
+      "commit": "5c80435de1ce2e6b891bfa872942d750db57f167"
+    },
+    "local_llm": {
+      "version": "0.1.6",
+      "branch": "local_llm",
+      "commit": "594328d5c2d21b3a0658dd9843eba2dbd6577bb3"
+    },
+    "memos": {
+      "version": "2.0.23+aiscs.1",
+      "branch": "memos",
+      "commit": "c045e98f421400955008f9f8f06c30318a4144c0"
+    }
+  },
+  "scientific_preset": {
+    "id": "male-cns-hybrid-v1",
+    "dataset": "male-cns:v1.0-annotated-nonglial",
+    "neurons": 166700,
+    "edges": 25582938,
+    "graph_manifest_sha256": "742ee0b22040d6831cb96479d468cd57f1a60d96e2004e3beb421a8d3ac936a2",
+    "classifier": "male-cns-recognition-v1",
+    "classifier_sha256": "da7317343a01e251ceafe82a2d90f7dcd1793ddca0ebc85714767851cb5517dd",
+    "heldout_balanced_accuracy": 0.71875,
+    "heldout_records": 96,
+    "heldout_groups": 32,
+    "scope": "Synthetic engineering demonstration; not biological or clinical validation"
+  },
+  "production_verified": false,
+  "protected_scientific_materials_changed": false
+}

@@ -1,0 +1,6 @@
+source=https://gu-st.ru/content/lending/russian_trusted_root_ca_pem.crt
+source_documentation=https://developers.sber.ru/docs/ru/gigachat/certificates
+retrieved=2026-09-01
+sha256=aa800ef345422d6158c6fafe1c06c429dbda21c3df4bb1ccb45a920ec1111399
+subject=Russian Trusted Root CA
+not_after=2032-02-27T21:04:15Z

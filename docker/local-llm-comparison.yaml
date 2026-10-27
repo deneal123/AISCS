@@ -1,0 +1,20 @@
+# Только временное последовательное сравнение на gpthub-dev. Не подключать к prod.
+# Образ, gateway, runtime, сеть и alias прежние; веса вне Git и образа.
+services:
+  local-llm:
+    command: ["python3", "-m", "local_llm.scripts.acceptance.candidate_runtime", "serve", "${COMPARISON_CANDIDATE:?Укажите кандидата}"]
+    environment:
+      GPTHUB_MODEL_COMPARISON: dev-only
+      GPTHUB_COMPARISON_PROJECT: "${COMPOSE_PROJECT_NAME:?Укажите dev project}"
+      GPTHUB_COMPARISON_CANDIDATE: "${COMPARISON_CANDIDATE:?Укажите кандидата}"
+    volumes:
+      - ../local_llm:/opt/gpthub/local_llm:ro
+
+  local-llm-model:
+    command: ["python3", "-m", "local_llm.scripts.acceptance.candidate_runtime", "prepare", "${COMPARISON_CANDIDATE:?Укажите кандидата}"]
+    environment:
+      GPTHUB_MODEL_COMPARISON: dev-only
+      GPTHUB_COMPARISON_PROJECT: "${COMPOSE_PROJECT_NAME:?Укажите dev project}"
+      GPTHUB_COMPARISON_CANDIDATE: "${COMPARISON_CANDIDATE:?Укажите кандидата}"
+    volumes:
+      - ../local_llm:/opt/gpthub/local_llm:ro

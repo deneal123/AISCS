@@ -1,0 +1,30 @@
+# Test-only transport faults. Use only with the disposable acceptance overlay.
+services:
+  generator-fault-proxy:
+    profiles: [dev]
+    image: aspa-dev-backend:latest
+    entrypoint: [python, /checks/simulation_fault_proxy.py]
+    command: []
+    volumes:
+      - ../scripts/simulation_fault_proxy.py:/checks/simulation_fault_proxy.py:ro
+      - simulation_fault_control:/control
+    networks: [internal]
+    depends_on:
+      generator: {condition: service_healthy}
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8091/health')"]
+      interval: 2s
+      timeout: 2s
+      retries: 10
+  backend:
+    environment: {GENERATOR_URL: "http://generator-fault-proxy:8091"}
+    depends_on:
+      generator-fault-proxy: {condition: service_healthy}
+  celery-worker-simulation:
+    environment: {GENERATOR_URL: "http://generator-fault-proxy:8091"}
+  celery-worker-maintenance:
+    environment: {GENERATOR_URL: "http://generator-fault-proxy:8091"}
+  celery-beat:
+    environment: {GENERATOR_URL: "http://generator-fault-proxy:8091"}
+volumes:
+  simulation_fault_control:

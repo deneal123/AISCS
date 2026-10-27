@@ -1,0 +1,10 @@
+# Use after the acceptance overlay, in a separate project with empty volumes.
+services:
+  backend:
+    environment: {STORAGE__BACKEND: local}
+  celery-worker-simulation:
+    environment: {STORAGE__BACKEND: local}
+  celery-worker-maintenance:
+    environment: {STORAGE__BACKEND: local}
+  celery-beat:
+    environment: {STORAGE__BACKEND: local}
