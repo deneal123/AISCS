@@ -4,6 +4,7 @@
 # ///
 """Build an anonymous Word manuscript and XeLaTeX source from Markdown."""
 
+import argparse
 import hashlib
 import html
 import json
@@ -19,11 +20,69 @@ from docx.oxml.ns import qn
 from docx.shared import Mm, Pt, RGBColor
 
 ROOT = Path(__file__).resolve().parent
-OUT = ROOT / "build"
+parser = argparse.ArgumentParser()
+parser.add_argument("--tools", action="store_true", help="Build the new tools-review draft")
+args = parser.parse_args()
+OUT = ROOT / "build" / ("tools" if args.tools else "")
 OUT.mkdir(exist_ok=True)
 META = json.loads((ROOT / "metadata.json").read_text("utf-8"))
-EVIDENCE = json.loads((ROOT / "evidence.json").read_text("utf-8"))
-TEXT = (ROOT / "manuscript.md").read_text("utf-8")
+if args.tools:
+    provenance = json.loads((ROOT / "figures/tool-check-counts.provenance.json").read_text("utf-8"))
+    input_digest = hashlib.sha256(
+        (ROOT / "simulator-receipts-manifest.json").read_bytes()
+    ).hexdigest()
+    if input_digest != provenance["input_sha256"]:
+        raise ValueError("Tools-review figure is stale; rebuild it from the receipt manifest")
+    for name, expected in provenance["output_sha256"].items():
+        if hashlib.sha256((ROOT / "figures" / name).read_bytes()).hexdigest() != expected:
+            raise ValueError("Tools-review figure does not match its provenance: " + name)
+    EVIDENCE = json.loads((ROOT / "tools-sources.json").read_text("utf-8"))
+    TEXT = (ROOT / "manuscript-tools-draft.md").read_text("utf-8")
+    TEXT = re.sub(r"^\*\*Рабочая редакция\.\*\*[^\n]*\n\n", "", TEXT, flags=re.M)
+    TEXT = TEXT.split("\n## Литература: предварительный перечень", 1)[0] + "\n"
+    citation_body = TEXT.split("## Extended abstract", 1)[0]
+    cited = []
+    for group in re.findall(r"\[([\d, ]+)\]", citation_body):
+        for number in re.findall(r"\d+", group):
+            number = int(number)
+            if number not in cited:
+                cited.append(number)
+    expected = list(range(1, len(EVIDENCE["sources"]) + 1))
+    if cited != expected:
+        raise ValueError(f"References must follow first citation order: {cited}")
+    if [item["number"] for item in EVIDENCE["sources"]] != expected:
+        raise ValueError("Bibliography numbers must be consecutive and in order")
+    extended = TEXT.split("## Extended abstract\n\n", 1)[1].split("**Keywords:**", 1)[0]
+    extended = re.sub(r"^### .*\n", "", extended, flags=re.M)
+    extended = re.sub(r"\*\*[^*]+\*\*", "", extended)
+    extended_words = len(re.findall(r"\b\w+(?:[-’]\w+)*\b", extended))
+    if extended_words < 350:
+        raise ValueError(
+            f"Extended abstract contains {extended_words} words; at least 350 required"
+        )
+    META.update({
+        "title_ru": TEXT.splitlines()[0].removeprefix("# "),
+        "figure_path": "figures/tool-check-counts.png",
+        "figure_caption_en": (
+            "Figure 1. Passed checks registered for 32 repositories. "
+            "Criteria overlap; repeatability concerns the available scenario."
+        ),
+        "table_captions_en": {
+            "1": "Examples of tools and evaluated scenarios.",
+            "2": "Requirements for comparing results across tools.",
+        },
+        "table_column_weights": {"1": [0.2, 0.42, 0.38], "2": [0.22, 0.39, 0.39]},
+    })
+    for item in EVIDENCE["sources"]:
+        if "authors_crossref" in item:
+            item["authors_full"] = [
+                {"literal": author["name"]} if "name" in author else author
+                for author in item.get("authors_citation", item["authors_crossref"])
+            ]
+        item["accessed_at"] = "2026-11-05"
+else:
+    EVIDENCE = json.loads((ROOT / "evidence.json").read_text("utf-8"))
+    TEXT = (ROOT / "manuscript.md").read_text("utf-8")
 
 
 def clean(value):
@@ -76,8 +135,10 @@ def reference(item):
 
 
 references = [reference(s) for s in EVIDENCE["sources"]]
-assert all(s.get("metadata_verified") and s.get("authors_full") for s in EVIDENCE["sources"])
-if META.get("figure_caption_en"):
+assert all(s.get("authors_full") for s in EVIDENCE["sources"])
+if not args.tools:
+    assert all(s.get("metadata_verified") for s in EVIDENCE["sources"])
+if META.get("figure_caption_en") and not args.tools:
     figure = ROOT / META["figure_path"]
     figure.parent.mkdir(exist_ok=True)
     # Editable drawing and vector PDF; Word uses a 400 dpi PNG.
@@ -214,7 +275,7 @@ tex = [
     r"\usepackage{fontspec,unicode-math}",
     r"\usepackage[main=russian,english]{babel}",
     r"\usepackage[top=20mm,bottom=25mm,left=30mm,right=10mm]{geometry}",
-    r"\usepackage{setspace,graphicx,array,longtable,ragged2e,xurl,titlesec}",
+    r"\usepackage{setspace,graphicx,array,longtable,ragged2e,xurl,titlesec,needspace}",
     r"\titleformat{\section}{\fontsize{14}{17}\selectfont\bfseries\raggedright\hyphenpenalty=10000}{}{0em}{}",
     r"\titleformat{\subsection}{\fontsize{12}{15}\selectfont\bfseries\raggedright\hyphenpenalty=10000}{}{0em}{}",
     r"\setmainfont{Times New Roman}\setmathfont{TeX Gyre Termes Math}",
@@ -307,8 +368,11 @@ while index < len(lines):
                 p.paragraph_format.first_line_indent = Mm(0)
                 p.paragraph_format.line_spacing = 2
                 p.paragraph_format.space_after = Pt(0)
-                # A multipage table must not form one indivisible paragraph chain.
-                p.paragraph_format.keep_with_next = row_index == 0
+                # The short first tools table fits on one page; keep it together.
+                # Other tables remain splittable with a repeated header.
+                p.paragraph_format.keep_with_next = (
+                    row_index < len(rows) - 1 if args.tools and tables == 0 else row_index == 0
+                )
                 run = p.add_run(plain(cell_text))
                 run.font.name, run.font.size, run.bold = "Times New Roman", Pt(12), row_index == 0
         specs = [
@@ -322,6 +386,8 @@ while index < len(lines):
         captions = tex[-2:]
         assert captions[0].startswith("Таблица ")
         del tex[-2:]
+        if args.tools and tables == 0:
+            tex.append(r"\Needspace{0.72\textheight}")
         tex.append(r"\begin{longtable}{|" + "|".join(specs) + "|}")
         tex.append(r"\multicolumn{" + str(columns) + r"}{@{}p{\linewidth}@{}}{" + captions[0]
                    + " " + captions[1] + r"} \\ \hline")
@@ -334,7 +400,12 @@ while index < len(lines):
             rendered = [
                 r"\textbf{" + latex(cell) + "}" if row_index == 0 else latex(cell) for cell in cells
             ]
-            ending = r" \\ \hline" if row_index < len(rows) - 1 else r" \\"
+            if args.tools and tables == 0 and row_index == len(rows) - 2:
+                # Avoid leaving the last row of the short comparison table alone
+                # on the next page; retain longtable breaks for other rows.
+                ending = r" \\* \hline"
+            else:
+                ending = r" \\ \hline" if row_index < len(rows) - 1 else r" \\"
             tex.append(" & ".join(rendered) + ending)
         tex.append(r"\end{longtable}\par\smallskip")
         doc.add_paragraph()
@@ -344,9 +415,11 @@ while index < len(lines):
         match = re.match(r"^(Таблица|Рисунок) (\d+)\.", line)
         paragraph(line, caption=bool(match))
         if line.startswith(("**Ключевые слова:**", "**Keywords:**")):
-            tex.append(
-                r"\noindent\begin{minipage}{\linewidth}" + latex(line) + r"\end{minipage}\par"
+            start = (
+                r"\par\addvspace{0.75\baselineskip}\noindent\begin{minipage}[t]{\linewidth}"
+                if args.tools else r"\noindent\begin{minipage}{\linewidth}"
             )
+            tex.append(start + latex(line) + r"\end{minipage}\par")
         else:
             tex.append(latex(line) + r"\par")
         if match:
@@ -363,7 +436,9 @@ while index < len(lines):
     index += 1
 tex.append(r"\end{document}")
 doc.save(OUT / "article.docx")
-(ROOT / "main.tex").write_text("\n".join(tex) + "\n", encoding="utf-8", newline="\n")
+(OUT / "main.tex" if args.tools else ROOT / "main.tex").write_text(
+    "\n".join(tex) + "\n", encoding="utf-8", newline="\n"
+)
 abstract = TEXT.split("## Аннотация\n\n", 1)[1].split("\n\n**", 1)[0]
 report = {
     "source_sha256": hashlib.sha256(TEXT.encode()).hexdigest(),
@@ -371,11 +446,24 @@ report = {
     "russian_abstract_words": len(abstract.split()),
     "tables": tables,
     "figures": figures,
+    "bibliography_verification": "pending" if args.tools else "registered_evidence",
     "font": "Times New Roman",
     "font_size_pt": 12,
     "line_spacing": 2,
     "margins_mm": {"top": 20, "bottom": 25, "left": 30, "right": 10},
 }
+if args.tools:
+    # The rendered text excludes the preliminary bibliography in Markdown;
+    # the generated bibliography comes from a separate evidence file.
+    report["input_sha256"] = {
+        name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest()
+        for name in (
+            "manuscript-tools-draft.md",
+            "tools-sources.json",
+            "figures/tool-check-counts.provenance.json",
+        )
+    }
+    report["english_extended_abstract_words"] = extended_words
 assert 200 <= report["russian_abstract_words"] <= 250
 (OUT / "build-report.json").write_text(
     json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n"

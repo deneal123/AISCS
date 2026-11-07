@@ -1,9 +1,12 @@
+[CmdletBinding()]
+param([switch]$Tools)
 $ErrorActionPreference = 'Stop'
 $publicationRoot = $PSScriptRoot
-$publicationDocx = [IO.Path]::GetFullPath((Join-Path $publicationRoot 'build/article.docx'))
-$publicationDoc = [IO.Path]::GetFullPath((Join-Path $publicationRoot 'build/article.doc'))
-$publicationPdf = [IO.Path]::GetFullPath((Join-Path $publicationRoot 'build/article.pdf'))
-$roundtripPdf = [IO.Path]::GetFullPath((Join-Path $publicationRoot 'build/article-doc.pdf'))
+$publicationOutput = Join-Path $publicationRoot $(if ($Tools) { 'build/tools' } else { 'build' })
+$publicationDocx = [IO.Path]::GetFullPath((Join-Path $publicationOutput 'article.docx'))
+$publicationDoc = [IO.Path]::GetFullPath((Join-Path $publicationOutput 'article.doc'))
+$publicationPdf = [IO.Path]::GetFullPath((Join-Path $publicationOutput 'article.pdf'))
+$roundtripPdf = [IO.Path]::GetFullPath((Join-Path $publicationOutput 'article-doc.pdf'))
 $publicationWord = New-Object -ComObject Word.Application
 $publicationWord.Visible = $false
 $publicationWord.DisplayAlerts = 0
@@ -59,7 +62,7 @@ try {
             }
         }
         $json = ($report | ConvertTo-Json -Depth 4) -replace "`r`n", "`n"
-        [IO.File]::WriteAllText((Join-Path $publicationRoot 'build/doc-roundtrip.json'), $json + "`n", [Text.UTF8Encoding]::new($false))
+        [IO.File]::WriteAllText((Join-Path $publicationOutput 'doc-roundtrip.json'), $json + "`n", [Text.UTF8Encoding]::new($false))
         if (-not $report.same_text -or -not $report.same_tables -or -not $report.same_pictures -or $report.docx_pages -ne $report.doc_pages) { throw 'Word 97-2003 roundtrip mismatch.' }
     }
     finally { $legacyDocument.Close(0) }

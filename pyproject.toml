@@ -1,6 +1,6 @@
 [project]
 name = "aspa-publications-sidecar"
-version = "1.2.1"
+version = "1.2.2"
 description = "Manuscript and poster sources, immutable submissions and guarded publication workflows"
 readme = "README.md"
 requires-python = ">=3.12,<3.14"

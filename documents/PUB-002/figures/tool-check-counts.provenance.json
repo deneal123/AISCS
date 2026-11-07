@@ -1,0 +1,16 @@
+{
+  "input_sha256": "b625a8ed2061fa3c5eae09e0f046c760c6bbde3d98b2c6242a5835c7aadaf7ca",
+  "output_sha256": {
+    "tool-check-counts.pdf": "7eb8725596d10c8c795111318d50fe292baf1280029302ace7d4c7367e37da0b",
+    "tool-check-counts.svg": "251e38092920e046fe5374797d57f1a24f6a12857a17150a3368d9e5c300f52a",
+    "tool-check-counts.png": "199fe6b936ec45b335eaddde6404f5668ab43d4168840076108358c30f6b55b8"
+  },
+  "counts": {
+    "environment": 31,
+    "software": 27,
+    "smoke": 30,
+    "functional": 24,
+    "reproducibility": 31
+  },
+  "candidate_count": 32
+}
