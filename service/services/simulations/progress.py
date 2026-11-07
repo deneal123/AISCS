@@ -19,5 +19,5 @@ def valid_progress(progress):
         return 0 <= done <= total <= 166700 and total > 0
     if phase == 'field_verification':
         return done == total == 0
-    return (done == total == 0 if phase == 'network'
+    return ((done == total == 0 or 0 <= done <= total <= 1000 and total > 0) if phase == 'network'
             else phase in ('geometry', 'cells') and 0 < done <= total <= 256)

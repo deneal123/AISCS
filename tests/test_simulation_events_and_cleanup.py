@@ -142,12 +142,86 @@ async def test_cleanup_confirmation_clears_only_its_terminal_attempt(same_attemp
 
     infra = SimpleNamespace(pg_connector=SimpleNamespace(get_session_context=context))
     response = httpx.Response(
-        200, json={}, request=httpx.Request("POST", "http://executor/discard")
+        200, json={'execution_id': str(attempt), 'configuration_sha256': 'a' * 64,
+                   'status': 'cancelled', 'discarded': True},
+        request=httpx.Request("POST", "http://executor/discard")
     )
     client = SimpleNamespace(post=AsyncMock(return_value=response))
     await tasks.confirm_discard(infra, client, uuid4(), attempt, "a" * 64)
     assert run.result["executor_discard_pending"] is not same_attempt
     assert session.commit.await_count == int(same_attempt)
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize('status,payload', [
+    (200, {}), (200, {'status': 'running', 'discarded': True}),
+    (200, {'status': 'cancelled', 'discarded': False}), (404, {'detail': 'Not Found'}),
+    (503, {'detail': 'Cancellation not confirmed'}),
+])
+async def test_discard_does_not_accept_unconfirmed_cleanup(status, payload):
+    response = httpx.Response(status, json=payload, request=httpx.Request('POST', 'http://executor'))
+    client = SimpleNamespace(post=AsyncMock(return_value=response))
+    with pytest.raises((RuntimeError, httpx.HTTPStatusError)):
+        await tasks.discard_unpublished(client, uuid4(), 'a' * 64)
+
+
+@pytest.mark.asyncio
+async def test_missing_attempt_is_accepted_only_from_explicit_executor_response():
+    response = httpx.Response(404, json={'detail': 'Execution not found'},
+                              request=httpx.Request('POST', 'http://executor'))
+    client = SimpleNamespace(post=AsyncMock(return_value=response))
+    await tasks.discard_unpublished(client, uuid4(), 'a' * 64)
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize('mismatch', ['execution_id', 'configuration_sha256'])
+async def test_discard_receipt_must_belong_to_requested_attempt_and_configuration(mismatch):
+    attempt = uuid4()
+    receipt = {'execution_id': str(attempt), 'configuration_sha256': 'a' * 64,
+               'status': 'cancelled', 'discarded': True}
+    receipt[mismatch] = str(uuid4()) if mismatch == 'execution_id' else 'b' * 64
+    response = httpx.Response(200, json=receipt, request=httpx.Request('POST', 'http://executor'))
+    client = SimpleNamespace(post=AsyncMock(return_value=response))
+    with pytest.raises(RuntimeError, match='did not confirm discard'):
+        await tasks.discard_unpublished(client, attempt, 'a' * 64)
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize('variant', [
+    'valid', 'other_attempt', 'other_configuration', 'missing', 'stale_run',
+])
+async def test_acknowledgement_is_recorded_only_for_confirmed_current_result(variant):
+    attempt = uuid4()
+    digest = 'a' * 64
+    receipt = {'execution_id': str(attempt), 'configuration_sha256': digest,
+               'status': 'completed', 'acknowledged': True}
+    if variant == 'other_attempt':
+        receipt['execution_id'] = str(uuid4())
+    elif variant == 'other_configuration':
+        receipt['configuration_sha256'] = 'b' * 64
+    elif variant == 'missing':
+        receipt.pop('acknowledged')
+    run = SimpleNamespace(state='completed', attempt_id=attempt,
+                          configuration_sha256='b' * 64 if variant == 'stale_run' else digest,
+                          result={'executor_acknowledged': False})
+    session = SimpleNamespace(
+        execute=AsyncMock(return_value=SimpleNamespace(scalar_one=lambda: run)), commit=AsyncMock(),
+    )
+
+    @asynccontextmanager
+    async def context():
+        yield session
+
+    infra = SimpleNamespace(pg_connector=SimpleNamespace(get_session_context=context))
+    response = httpx.Response(200, json=receipt, request=httpx.Request('POST', 'http://executor'))
+    client = SimpleNamespace(post=AsyncMock(return_value=response))
+    if variant in ('other_attempt', 'other_configuration', 'missing'):
+        with pytest.raises(RuntimeError, match='did not confirm acknowledgement'):
+            await tasks.acknowledge_result(infra, client, uuid4(), attempt, digest)
+    else:
+        await tasks.acknowledge_result(infra, client, uuid4(), attempt, digest)
+    assert run.result['executor_acknowledged'] is (variant == 'valid')
+    assert session.commit.await_count == int(variant == 'valid')
 
 
 @pytest.mark.asyncio

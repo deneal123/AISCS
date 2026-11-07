@@ -17,6 +17,11 @@ from service.services.simulations.progress import valid_progress
     ({'phase': 'field', 'done': True, 'total': 10}, False),
     ({'phase': 'field_verification', 'done': 0, 'total': 0}, True),
     ({'phase': 'field_verification', 'done': 1, 'total': 1}, False),
+    ({'phase': 'network', 'done': 0, 'total': 0}, True),
+    ({'phase': 'network', 'done': 0, 'total': 1000}, True),
+    ({'phase': 'network', 'done': 25, 'total': 100}, True),
+    ({'phase': 'network', 'done': 101, 'total': 100}, False),
+    ({'phase': 'network', 'done': 1, 'total': 1001}, False),
 ])
 def test_feedback_progress_is_bounded(progress, expected):
     assert valid_progress(progress) is expected

@@ -135,8 +135,23 @@ async def discard_unpublished(client, attempt_id, digest):
     response = await client.post(
         f"/v1/executions/{attempt_id}/discard", json={"configuration_sha256": digest}
     )
-    if response.status_code != 404:
-        response.raise_for_status()
+    if response.status_code == 404:
+        try:
+            missing = response.json()
+        except ValueError as exc:
+            raise RuntimeError("Executor did not confirm missing attempt") from exc
+        if missing == {"detail": "Execution not found"}:
+            return
+        raise RuntimeError("Executor did not confirm missing attempt")
+    response.raise_for_status()
+    try:
+        receipt = response.json()
+    except ValueError as exc:
+        raise RuntimeError("Executor did not confirm discard") from exc
+    if (not isinstance(receipt, dict) or receipt.get("execution_id") != str(attempt_id)
+            or receipt.get("configuration_sha256") != digest or receipt.get("status") != "cancelled"
+            or receipt.get("discarded") is not True):
+        raise RuntimeError("Executor did not confirm discard")
 
 
 async def discard_staged_target(client, attempt_id, payload):
@@ -203,14 +218,23 @@ async def acknowledge_result(infra, client, run_id, attempt_id, digest):
         f"/v1/executions/{attempt_id}/ack", json={"configuration_sha256": digest}
     )
     response.raise_for_status()
+    try:
+        receipt = response.json()
+    except ValueError as exc:
+        raise RuntimeError("Executor did not confirm acknowledgement") from exc
+    if (not isinstance(receipt, dict) or receipt.get("execution_id") != str(attempt_id)
+            or receipt.get("configuration_sha256") != digest or receipt.get("status") != "completed"
+            or receipt.get("acknowledged") is not True):
+        raise RuntimeError("Executor did not confirm acknowledgement")
     async with infra.pg_connector.get_session_context() as session:
         run = (
             await session.execute(
                 select(SimulationRun).where(SimulationRun.id == run_id).with_for_update()
             )
         ).scalar_one()
-        if run.state == "completed" and run.attempt_id == attempt_id:
-            run.result = {**run.result, "executor_acknowledged": True}
+        if (run.state == "completed" and run.attempt_id == attempt_id
+                and run.configuration_sha256 == digest):
+            run.result = {**(run.result or {}), "executor_acknowledged": True}
             await session.commit()
 
 

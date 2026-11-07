@@ -46,7 +46,8 @@ async def test_field_proxy_worker_publishes_only_verified_model_events(
     infra = SimpleNamespace(pg_connector=SimpleNamespace(get_session_context=session_context,
         close=AsyncMock()), redis_client=None, storage=object())
     monkeypatch.setattr(tasks, 'build_infra', lambda _config: infra)
-    monkeypatch.setattr(tasks, 'emit', AsyncMock())
+    emit = AsyncMock()
+    monkeypatch.setattr(tasks, 'emit', emit)
     ack, reject = AsyncMock(), AsyncMock()
     monkeypatch.setattr(tasks, 'acknowledge_result', ack)
     monkeypatch.setattr(tasks, 'reject_result', reject)
@@ -80,7 +81,8 @@ async def test_field_proxy_worker_publishes_only_verified_model_events(
             assert json.loads(request.content)['config'] == config
             return httpx.Response(200, json={'status': 'running'})
         if request.url.path.endswith(str(attempt)):
-            return httpx.Response(200, json={'status': 'completed', 'manifest': manifest})
+            return httpx.Response(200, json={'status': 'completed', 'manifest': manifest,
+                'progress': {'phase': 'network', 'done': 2, 'total': 2}})
         return httpx.Response(200, content=files[request.url.path.rsplit('/', 1)[-1]])
 
     @asynccontextmanager
@@ -100,6 +102,8 @@ async def test_field_proxy_worker_publishes_only_verified_model_events(
 
     monkeypatch.setattr(tasks, 'file_service', lambda _infra: SimpleNamespace(save_stream=save))
     await tasks.execute(run_id)
+    assert any(call.kwargs.get('progress') == {'phase': 'network', 'done': 2, 'total': 2}
+               and call.args[1] == run_id for call in emit.await_args_list)
     if corrupt_preview:
         assert not publications
         ack.assert_not_awaited()

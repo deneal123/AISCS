@@ -17,9 +17,11 @@ async def test_direct_proxy_requires_owned_scene_and_preserves_stimulus(monkeypa
     graph, scene_id, owner_id = 'a' * 64, uuid4(), uuid4()
     simulation = {'source_um': [0, 0, 0], 'return_um': [20, 0, 0], 'current_na': -300,
                   'conductivity_s_m': .3, 'clearance_um': 1,
-                  'coordinate_frame': 'male-cns-v1.0-native-um', 'duration_ms': 2}
+                  'coordinate_frame': 'male-cns-v1.0-native-um', 'duration_ms': 4,
+                  'pulse_start_ms': 1.1, 'pulse_end_ms': 1.9, 'rise_time_ms': .1,
+                  'interphase_gap_ms': 0, 'pulse_shape': 'monophasic'}
     derived = {key: value for key, value in simulation.items() if key != 'duration_ms'}
-    derived.update(graph_manifest_sha256=graph, seed=1, gain=2., waveform=[0., 1.],
+    derived.update(graph_manifest_sha256=graph, seed=1, gain=2., waveform=[0., .7, 0., 0.],
                    allow_partial_geometry=True, allow_missing_curvature=False,
                    allow_contact_exclusion=False)
     digest = hashlib.sha256(json.dumps(derived, sort_keys=True, separators=(',', ':'),
@@ -49,11 +51,22 @@ async def test_direct_proxy_requires_owned_scene_and_preserves_stimulus(monkeypa
     payload = api.FieldProxyFromSimulationRequest(request_id=uuid4(), simulation=simulation,
         graph_manifest_sha256=graph, seed=1, gain=2., allow_partial_geometry=True,
         allow_missing_curvature=False, allow_contact_exclusion=False)
-    result = await api.create_field_proxy_direct(scene_id, payload, SimpleNamespace(user_id=owner_id))
+    result = await api.create_field_proxy_direct(
+        scene_id, payload, SimpleNamespace(user_id=owner_id))
     assert result == {'id': 'queued'}
     assert create.await_args.args[0].parent_run_id == scene_id
     assert create.await_args.args[0].configuration == derived
     lookup.assert_awaited_once_with(lookup.await_args.args[0], scene_id, owner_id)
+    invalid = {**derived, 'waveform': [0., 1., 0., 0.]}
+    invalid_digest = hashlib.sha256(json.dumps(invalid, sort_keys=True, separators=(',', ':'),
+                                                allow_nan=False).encode()).hexdigest()
+    client.post.return_value = httpx.Response(
+        200, json={'configuration': invalid, 'configuration_sha256': invalid_digest},
+        request=httpx.Request('POST', 'http://generator/derive'))
+    with pytest.raises(HTTPException) as mismatch:
+        await api.create_field_proxy_direct(scene_id, payload, SimpleNamespace(user_id=owner_id))
+    assert mismatch.value.status_code == 503
+    assert create.await_count == 1
     scene.result['preview']['connectome']['manifest_sha256'] = 'b' * 64
     with pytest.raises(HTTPException) as error:
         await api.create_field_proxy_direct(scene_id, payload, SimpleNamespace(user_id=owner_id))
@@ -107,11 +120,13 @@ async def test_derived_proxy_preserves_owned_physical_stimulus(monkeypatch):
     graph, source_id, owner_id = 'a' * 64, uuid4(), uuid4()
     simulation = {'source_um': [0, 0, 0], 'return_um': [20, 0, 0], 'current_na': -300,
                   'conductivity_s_m': .3, 'clearance_um': 1,
-                  'coordinate_frame': 'male-cns-v1.0-native-um', 'duration_ms': 2}
+                  'coordinate_frame': 'male-cns-v1.0-native-um', 'duration_ms': 4,
+                  'pulse_start_ms': 1.1, 'pulse_end_ms': 1.9, 'rise_time_ms': .1,
+                  'interphase_gap_ms': 0, 'pulse_shape': 'monophasic'}
     source = SimpleNamespace(configuration={'graph_manifest_sha256': graph, 'seed': 1,
                                              'simulation': simulation})
     derived = {key: value for key, value in simulation.items() if key != 'duration_ms'}
-    derived.update(graph_manifest_sha256=graph, seed=1, gain=2., waveform=[0., 1.],
+    derived.update(graph_manifest_sha256=graph, seed=1, gain=2., waveform=[0., .7, 0., 0.],
                    allow_partial_geometry=True, allow_missing_curvature=False,
                    allow_contact_exclusion=False)
     digest = hashlib.sha256(json.dumps(derived, sort_keys=True, separators=(',', ':'),
@@ -146,6 +161,17 @@ async def test_derived_proxy_preserves_owned_physical_stimulus(monkeypatch):
     assert create.await_args.args[0].parent_run_id == source_id
     assert create.await_args.args[0].configuration == derived
     lookup.assert_awaited_once_with(lookup.await_args.args[0], owner_id, source_id, graph)
+    invalid = {**derived, 'waveform': [0., .6, 0., 0.]}
+    invalid_digest = hashlib.sha256(json.dumps(invalid, sort_keys=True, separators=(',', ':'),
+                                                allow_nan=False).encode()).hexdigest()
+    client.post.return_value = httpx.Response(
+        200, json={'configuration': invalid, 'configuration_sha256': invalid_digest},
+        request=httpx.Request('POST', 'http://generator/derive'))
+    with pytest.raises(HTTPException) as mismatch:
+        await api.create_field_proxy_from_fragment(source_id, request,
+                                                    SimpleNamespace(user_id=owner_id))
+    assert mismatch.value.status_code == 503
+    assert create.await_count == 1
     derived['source_um'] = [9, 9, 9]
     tampered = httpx.Response(200, json={'configuration': derived, 'configuration_sha256': digest},
                              request=httpx.Request('POST', 'http://generator/derive'))

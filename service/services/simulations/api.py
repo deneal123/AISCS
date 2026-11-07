@@ -33,6 +33,7 @@ from service.services.simulations.inputs.fragment_source import (
 from service.services.simulations.inputs.fragment_target_candidates import (
     fragment_target_candidates,
 )
+from service.services.simulations.inputs.pulse_waveform import validate_projected_waveform
 from service.services.simulations.inputs.replay_source import (
     ReplaySourceUnavailable,
     owned_replay_source,
@@ -318,6 +319,7 @@ async def create_field_proxy_direct(
                 or not isinstance(derived.get('waveform'), list)
                 or len(derived['waveform']) != payload.simulation.get('duration_ms')):
             raise ValueError('field_proxy_source_mismatch')
+        validate_projected_waveform(payload.simulation, derived['waveform'])
     except (httpx.HTTPError, RuntimeError, KeyError, TypeError, ValueError) as exc:
         raise HTTPException(503, 'Не удалось проверить параметры модели сети') from exc
     request = RunCreate(request_id=payload.request_id, parent_run_id=run_id,
@@ -410,6 +412,7 @@ async def create_field_proxy_from_fragment(
                 or not isinstance(derived.get('waveform'), list)
                 or len(derived['waveform']) != simulation['duration_ms']):
             raise ValueError('field_proxy_source_mismatch')
+        validate_projected_waveform(simulation, derived['waveform'])
     except (httpx.HTTPError, RuntimeError, KeyError, TypeError, ValueError) as exc:
         raise HTTPException(503, 'Не удалось проверить параметры модели сети') from exc
     request = RunCreate(request_id=payload.request_id, parent_run_id=run_id,

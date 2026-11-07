@@ -70,7 +70,8 @@ async def test_feedback_worker_publishes_only_verified_result(monkeypatch, outco
         nonlocal preview_calls
         if request.method == 'POST':
             if request.url.path.endswith('/discard'):
-                return httpx.Response(200, json={})
+                return httpx.Response(200, json={'execution_id': str(attempt),
+                    'configuration_sha256': 'd' * 64, 'status': 'cancelled', 'discarded': True})
             assert request.url.path == '/v1/population-feedback-executions'
             return httpx.Response(200, json={'status': 'running'})
         if request.url.path.endswith(str(attempt)):
