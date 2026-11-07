@@ -1,6 +1,6 @@
 import { act, renderHook, waitFor } from '@testing-library/react';
 import useSimulationHistory from '../../../src/features/simulator/useSimulationHistory';
-import useSimulationArtifacts from '../../../src/features/simulator/useSimulationArtifacts';
+import useSimulationArtifacts from '../../../src/features/simulator/recording/useSimulationArtifacts';
 import useSimulationFullscreen from '../../../src/features/simulator/useSimulationFullscreen';
 import { simulationApi } from '../../../src/features/simulator/api';
 

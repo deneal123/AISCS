@@ -1,7 +1,22 @@
-import { placementIssue, reactionAtTime, comparisonIssue, inputEventsAtTime, responseSeries } from '../../../src/features/simulator/sceneModel';
+import { placementIssue, reactionAtTime, comparisonIssue, inputEventsAtTime, responseSeries, updateContactPosition } from '../../../src/features/simulator/scene/sceneModel';
 
 const contact = (x, y, z) => ({ x_um: x, y_um: y, z_um: z });
 const geometry = { starts_um: [[0, 0, -1]], ends_um: [[0, 0, 1]], diameters_um: [2] };
+
+test('manual contact changes invalidate the previous surface anchor without mutating the original', () => {
+  const original = { electrode: contact(10, 0, 0), reference: contact(20, 0, 0),
+    registration: { mesh_part: 'thorax', surface_anchor: { triangle: 12 } } };
+  for (const key of ['electrode', 'reference']) {
+    const updated = updateContactPosition(original, key, contact(30, 0, 0));
+    expect(updated.registration.surface_anchor).toBeNull();
+    expect(updated[key]).toEqual(contact(30, 0, 0));
+    expect(original.registration.surface_anchor).toEqual({ triangle: 12 });
+  }
+  expect(updateContactPosition({ electrode: contact(1, 0, 0) }, 'electrode', contact(2, 0, 0))).not.toHaveProperty('registration');
+  const paired = { ...original, registration: { surface_anchors: { electrode: { triangle: 1 }, reference: { triangle: 2 } } } };
+  expect(updateContactPosition(paired, 'electrode', contact(30, 0, 0)).registration.surface_anchors)
+    .toEqual({ electrode: null, reference: { triangle: 2 } });
+});
 
 test('placement rejects source intersection, coincident reference and invalid drafts', () => {
   const placement = { electrode: contact(10, 0, 0), reference: contact(20, 0, 0) };
@@ -19,6 +34,14 @@ test('reaction follows recorded neural events, never the stimulus class', () => 
   expect(reactionAtTime({ ...preview, stimulus: 'none' }, 25)).toBe(reactionAtTime({ ...preview, stimulus: 'strong' }, 25));
   expect(reactionAtTime(preview, 60)).toBe(0);
   expect(reactionAtTime(null, 25)).toBe(0);
+});
+
+test('whole-CNS segment cues do not move every leg from one proxy cell spike', () => {
+  const preview = { spikes: [{ cell_id: 0, time_ms: 25 }, { cell_id: 4, time_ms: 30 }],
+    visualization: { reaction: { window_ms: 24, decay_ms: 8, normalization: 3, max_angle_rad: .25 } } };
+  expect(reactionAtTime(preview, 26, null, 0)).toBeGreaterThan(0);
+  for (const cell of [1, 2, 3, 4, 5]) expect(reactionAtTime(preview, 26, null, cell)).toBe(0);
+  expect(reactionAtTime(preview, 30, null, 4)).toBeGreaterThan(0);
 });
 
 test('comparison permits electrode changes but rejects incompatible time grids', () => {

@@ -30,6 +30,12 @@ local neural chain is author-defined; embedding it in FlyBody does not make it
 a reconstructed fly connectome. Old FlyGym registrations remain available for
 replaying older records without rewriting their provenance.
 
+The source FlyBody external anatomy was constructed from microscopy of an adult
+female, according to [Janelia's description](https://www.janelia.org/news/artificial-intelligence-brings-a-virtual-fly-to-life).
+The MaleCNS connectome is a different, adult male specimen. Their display overlay
+is not a measured anatomical registration or a basis for physical electrode
+placement; sex and individual differences remain unresolved.
+
 Re-export from the superproject root with an isolated environment:
 
 ```powershell
@@ -42,3 +48,34 @@ Copy the generated registration to `generator/service/domain/flybody-scene-conte
 only when deliberately publishing a new registered asset. Rebuild the generator
 and run its contract tests before switching the running catalog. Never edit an
 existing run's registration to match a newer visual asset.
+
+## Source joint hierarchy
+
+`rig.json` exports all 68 source body frames (67 bodies plus the world reference),
+102 hinges and the body binding of all
+85 baked meshes. The free body root remains at the registered rest pose. Angles
+are radians, positions millimetres; matrices are row-major 4×4 transforms of
+column vectors. The mesh and its registration are unchanged.
+
+The exporter reads the same pinned XML and MuJoCo 3.3.7. Its SHA-256 is
+`35541d5312f71e7c96156c345cd90918867513a2b3dafbb07b8684ee59b6f4dc`.
+The canonical UTF-8/LF rig is 56,739 bytes, SHA-256
+`848804eae147fbfd30af36f1c5f406446b3850bda7f13f4ed81783f7c4cbd5ea`.
+This derivative retains the Apache-2.0 source-model license.
+
+```powershell
+.work/flybody-export/.venv/Scripts/python.exe frontend/scripts/export-simulator-rig.py --source-xml .work/flybody-export/input/fruitfly.xml --asset-root frontend/public/assets/simulator/flybody --output frontend/public/assets/simulator/flybody/rig.json --references frontend/tests/fixtures/simulator/flybody-kinematics-reference.json
+```
+
+`flyKinematics` computes the complete forward hierarchy and per-part transforms
+relative to the baked rest pose. Independent MuJoCo fixtures cover the neutral
+pose, three head axes, and simultaneous changes of every hinge for seeds 1–3.
+Every body frame and joint anchor is checked. The numerical tolerance is a
+software comparison, not an anatomical accuracy claim. A repeat export in the
+same pinned environment is byte-identical; cross-OS floating-point identity has
+not been claimed.
+
+The scene's **Суставы** control displays this source structure and follows the
+existing conditional leg poses. Eye meshes belong to the head; no independent
+eye joint is introduced. A complete motor/muscle controller, joint loads and
+proprioceptive feedback remain separate requirements.

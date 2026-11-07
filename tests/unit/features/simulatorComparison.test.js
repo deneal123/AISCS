@@ -1,5 +1,5 @@
-import { createCameraLink } from '../../../src/features/simulator/sceneCamera';
-import { comparisonIssue, comparisonSceneIssue, comparisonReference } from '../../../src/features/simulator/sceneModel';
+import { createCameraLink } from '../../../src/features/simulator/scene/sceneCamera';
+import { comparisonIssue, comparisonSceneIssue, comparisonReference } from '../../../src/features/simulator/scene/sceneModel';
 
 const configuration = { model_id: 'local', duration_ms: 200, dt_ms: .025, placement: { registration: {
   mesh_asset_id: 'flybody', mesh_sha256: 'a'.repeat(64), region_id: 'thorax', origin_mm: [0, 0, 0],

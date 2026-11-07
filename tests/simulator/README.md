@@ -71,3 +71,57 @@ containing owned `head` and `outside` completed run IDs. The tests preserve the
 known head-example error, show regional versus overall test sizes, restore after
 reload, and reject fabricated predictions outside checked conditions. These
 runtime examples are separate from the held-out accuracy estimate.
+
+`simulatorConnectomeRoutes.test.js` checks that peripheral routes pass through
+limb bends, pulse and line vertices/pose weights match, measured CNS coordinates
+stay fixed, and the immutable source buffer is preserved. The live full-CNS
+suite checks the routing version, hidden local geometry before and after buffer
+loading, electrode focus, and the disabled abdominal-input explanation. Two
+scene assets use the same explicit 30-second cold-readiness allowance as their
+buffers; this timeout is not a latency benchmark or a claimed performance bound.
+
+The causal checks read the actual owned event binary: the first events must
+belong to the declared sensory input; response outside it must follow the
+registered synaptic delay. Limb cues start at actual events of the 319 registered
+leg motor cells, and remain zero at earlier HH proxy spikes. The pose and its
+trace share that motor readout. Soma-side grouping is a display convention,
+not a validated peripheral muscle map.
+Thoracic skin must never silently select the pooled six-leg population.
+
+Alt-hover inspection checks exact neuron IDs, coordinate provenance and saved
+spike counts. The optional source-arbor check exercises an unavailable asset,
+read-only recovery and unchanged event counts. Arbors are reconstructed central
+SWC segments; they do not supply intracellular conduction or membrane currents
+to the LIF solver. None of these tests submits a new calculation.
+
+The native-view case preserves events and time, hides body/contacts/schematic
+connections, and returns to body view before placement. Exterior-default checks
+distinguish new outside positions from saved internal ones. A separate real
+WebSocket assertion requires an authorized saved-run snapshot.
+`SIMULATION_E2E_FULL_CNS_FRONT_LEFT` optionally points to the owned completed
+single-leg smoke record: input at 30 ms, response at 33 ms and first motor event
+at 50 ms. It checks that only the recorded front-left motor group moves in this
+particular scenario; this is not a universal biological response assertion.
+
+Peripheral checks keep all measured CNS positions, toggle eight schematic body
+paths, and require the exact 10,446-cell source registry. Single-leg input lights
+only its sensory channel; abdominal motor activity follows the saved events;
+quiet records have no activity. Missing registry data retains neutral paths and
+offers read-only recovery without submitting calculations. WebGL shader errors
+are checked explicitly. Native EM mode hides the peripheral schematic layer.
+
+Joint-layer checks load all 102 hinges and 68 source frames, including world,
+without changing saved
+events, hide the body hierarchy in native EM mode, and exercise unavailable
+asset/retry without submitting a calculation. `simulatorKinematics.test.js`
+independently compares every body matrix and hinge anchor with pinned MuJoCo
+3.3.7 fixtures, including all-joint seeds 1–3. Those fixtures are kinematic
+references, not animal recordings or a fitted motor response.
+
+The injected SWC/motor-outage cases block service workers so a controlled 503
+cannot be bypassed by the application's static cache. Other live cases retain
+the normal service-worker lifecycle. The passive-contact case checks a real
+source-mesh pick, outside offset, normal alignment, unchanged saved sensory
+region and cancellation; it never treats E1 as a stimulation input.
+Missing motor annotations freeze the pose, keep the event journal readable and
+offer read-only recovery. Falling back to the HH recorder cells is forbidden.

@@ -8,7 +8,7 @@ const summary = configuration => `${stimulus[configuration.stimulus]} · seed ${
 const position = contact => ['x_um', 'y_um', 'z_um'].map(axis => Number(contact[axis]).toFixed(0)).join(', ');
 
 export default function SimulationComparison({ reference, run, issue, sceneIssue, catalog,
-  timeMs, opacity, neurons, localWindow, cameraLink, resetCamera, focusLocal }) {
+  timeMs, opacity, neurons, localWindow, cameraLink, resetCamera, focusLocal, onMotorReadout }) {
   const different = reference?.run_id !== run?.id;
   const second = different && run?.state === 'completed' && run.result?.preview;
   const models = [
@@ -34,6 +34,8 @@ export default function SimulationComparison({ reference, run, issue, sceneIssue
       <Box flex={1} minH={0} position="relative">
         {preview && !issue && !sceneIssue ? <SimulatorScene sceneLabel={`Синхронная сцена ${id}`} preview={preview} timeMs={timeMs}
           runId={id === 'A' ? reference.run_id : run.id}
+          onMotorReadout={id === 'B' ? onMotorReadout : undefined}
+          fullConnectome={configuration.model_id === 'male-cns-hybrid-v1'}
           opacity={opacity} neurons={neurons} localWindow={localWindow} placing={false} placement={configuration.placement}
           modelGeometry={catalog.models[0].geometry} modelVisualization={catalog.models[0].visualization}
           sceneContext={configuration.placement.registration} cameraLink={cameraLink} synchronizeCamera

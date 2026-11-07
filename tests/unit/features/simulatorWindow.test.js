@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { createLocalWindow } from '../../../src/features/simulator/sceneWindow';
+import { createLocalWindow } from '../../../src/features/simulator/scene/sceneWindow';
 
 function viewer(ratio = 1) {
   const container = document.createElement('div');

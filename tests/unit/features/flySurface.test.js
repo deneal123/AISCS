@@ -1,4 +1,4 @@
-import { smoothFlySurface } from '../../../src/features/simulator/flySurface';
+import { smoothFlySurface } from '../../../src/features/simulator/scene/flySurface';
 
 test('display subdivision preserves its input and produces a finite surface inside its source bounds', () => {
   const triangle = [0, 0, 0, 1, 0, 0, 0, 1, 0], original = [...triangle];

@@ -1,0 +1,27 @@
+{
+  "annotations_sha256": "d27d8ed9294b57d28a7c376b0a958fc9074b93ae4ea2ce77441c1c18c1570bee",
+  "dataset_id": "male-cns:v1.0-annotated-nonglial",
+  "license": "CC-BY-4.0",
+  "output_units": "um",
+  "source": "https://storage.googleapis.com/flyem-male-cns/v1.0/segmentation/skeletons-malecns/skeletons-swc/",
+  "source_frame": "MaleCNS native unmirrored EM",
+  "source_page": "https://male-cns.janelia.org/download/",
+  "source_units": "8 nm",
+  "inventory_sha256": "48a0dc7a592df5df66074f3f1c3f3591b8063297396d1323f6083ee10d3477ac",
+  "count": 26062,
+  "method": "nearest-swc-vertex-to-cable-centroid-v1",
+  "semantics": "An actual neurite vertex, not an estimated soma or electrical source",
+  "display_embedding": "male-cns-flybody-view-only-v2",
+  "binary": {
+    "file": "landmarks.bin",
+    "record_bytes": 24,
+    "layout": "little-endian uint64 bodyId, float32 x/y/z um, uint32 SWC vertex",
+    "bytes": 625488,
+    "sha256": "78e1e2b2ac493110f17763e6ddd77022a48de41ce3696f226ee50d059046d45f"
+  },
+  "receipts": {
+    "file": "landmarks.sources.jsonl.gz",
+    "bytes": 3388108,
+    "sha256": "bfcf3053710bdecf2164276a4097ff511db7ffb550438969238395134ad45470"
+  }
+}

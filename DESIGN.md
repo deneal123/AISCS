@@ -31,12 +31,135 @@ components:
 
 ## Simulator profile (27 October 2026)
 
+The main completed-CNS scene now opens with four labelled surface-projected
+contacts: STIM+ and STIM− for stimulation, E1 and REF for differential recording.
+Their placement is a proposed draft in the approximate body/EM overlay. The main
+automatic snap chooses the nearest loaded neuropil surface using distances in
+the original MaleCNS coordinate metric; the body-view stretch does not decide
+which surface is physically nearest. This is not a validated tissue boundary.
+The main
+run control submits the electrical model when its selected source cells and
+coordinates are valid; otherwise it opens the parameters needed to resolve them.
+Previous sensory recordings remain explicitly labelled while the draft is edited.
+The electrode toolbar edits all four contacts, and the settings control owns the
+current and calculation settings. Moving contacts never reuses a spatially
+selected population without an explicit new selection. Neuron regions load
+automatically as all available simplified surfaces. Schematic peripheral nerve
+bundles are not displayed or loaded in this scene.
+
 The current default is the registered MaleCNS whole-CNS preset when its dataset
 is installed. All 166,700 neurons are drawn; only display connections use LOD.
+For an inspected neuron, verified source SWCs of the current page of connected
+cells load in bounded batches and are drawn in subdued blue; the selected cell remains
+distinct. The panel reports page coverage, failed loads and the rendering budget.
+Straight adjacency indicators are hidden; verified predicted synapse locations
+are shown separately when available.
+The optional «Области ЦНС» layer streams the verified, simplified MaleCNS
+neuropil meshes, preserves the current EM/body view transform and never enters
+the numerical field calculation. The fit to the body is illustrative, not a
+validated anatomical registration or an electrical tissue boundary.
+The shared searchable select isolates one source-labelled region and the focus
+action moves the camera to its visual bounds; it does not change the saved run.
+The full-CNS overview streams up to eight original SWC edges per cell; it is a
+sample, not complete neuronal morphology. Event highlights are tied to saved
+spike times and do not imply measured propagation along these segments.
+The body view's current longitudinal fit is checked by
+`node scripts/audit-connectome-fit.cjs`; the ray-parity result is a visual
+containment diagnostic, not an anatomical registration or an electrode frame.
+With an opaque body, source neuropil meshes and neural overlays respect body
+depth; the transparent and hidden-body views show the same layers in X-ray
+mode. Contact controls and saved calculations are unaffected by this display
+choice.
 The source graph and event journal own activity, never stimulus sliders. Raw EM
 coordinates, the view-only body embedding and schematic peripheral routes remain
 distinct. Peripheral paths follow the rest-pose FlyBody limbs and its conditional
 display pose. The old local preset remains independently replayable.
+
+Signal plots use a symmetric scale based on the actual maximum across displayed
+traces, with scientific notation for small amplitudes. A zero-only recording uses
+an explicit fallback scale; scaling changes display only, not stored values.
+The recording view may also show an independently replayed cell from the same
+source run. Label the separate trace and its uncalibrated one-way scope; expose
+its native EM contact coordinates without implying that they match the scene.
+If the newest replay failed or is still running, identify any older trace as such.
+The experimental electrical field-graph result is a separate recording with its own
+playback cursor; it must not be presented as the current scene's activity. Show
+the selected-cell neural component and the acquisition validity intervals on the
+actual time scale. Saturation and invalid intervals remain visibly distinct; the
+model is uncalibrated and its native contacts are not registered to the body.
+The separate graph-event histogram, validity mask and electrical trace share the
+same horizontal time extent. They describe the saved hybrid calculation only.
+The electrical graph view separates events in forced input cells from those in
+other cells; events outside the input alone do not establish causal propagation.
+An optional, separately verified state-contrast layer displays the difference
+from a same-seed no-input LIF control with a fixed run-wide scale. Positive and
+negative differences use different colours; the layer is not labelled as spikes
+or as an experimentally measured potential. Missing morphology coordinates are
+not rendered and sampled coverage is reported.
+The recording can be rerun from its saved configuration with explicitly edited
+native STIM and recording-contact coordinates; it never moves the scene contacts.
+The native contact editor's «Показать все» action reframes the verified neurites
+and current contact coordinates without changing those coordinates or the draft.
+An uncertain submission retains its request ID for a safe retry. A definite
+validation error keeps the draft and requires a correction before retrying.
+
+Whole-CNS limb cues use the exact-ID registry of 319 annotated leg motor cells
+and their saved LIF events, never the six HH recorder proxies. The pose and its
+trace share this readout; unavailable annotations freeze the pose with explicit
+recovery. Laterality follows soma-side grouping and is not a verified muscle
+map. E1/REF remain passive; selecting a sensory population is not spatial STIM.
+
+New full-CNS drafts use exterior recording contacts from the source dorsal mesh;
+old saved internal contacts remain unchanged and carry an explicit warning.
+Exterior placement does not inherit the frozen internal-domain classifier score.
+The native EM view removes the anisotropic display embedding, hides the body,
+contacts and schematic connections, and preserves saved event time. Body/input/
+contact actions return to body view. Missing motor data never triggers HH motion.
+
+Body nerve corridors have their own toggle and remain legible with pixel-width
+ribbons. Their source-ID registry separates sensory and motor activity across
+six legs, head and abdomen. Neutral dashed paths are schematic anatomy; orange/
+green highlights show actual recorded events over a 6 ms window. No travelling
+peripheral wave, conduction velocity or muscle movement is inferred. Missing
+registry data retains neutral paths with explicit read-only recovery. Native EM
+mode excludes all such corridors. CNS source coordinates are never moved back
+onto a limb merely to make its peripheral path appear populated.
+
+The optional **Суставы** layer loads the immutable FlyBody hinge hierarchy
+independently of neural data. It represents 68 source frames (including world)
+and 102 hinges;
+its anchors follow the same current leg transforms as the visible limb meshes.
+Load failure leaves the body, nerve layer and signal available with read-only
+retry. Native EM mode hides the source body structure. Forward kinematics is
+verified against MuJoCo; this does not declare a muscle controller, head motor
+mapping, proprioceptive loop or whole-body locomotion policy implemented.
+
+Whole-CNS connections follow view-only body corridors instead of soma-to-soma
+chords across empty space. `connectomeRoutes` owns one sampled path shared by
+drawn segments and transmission cues, including body-to-leg pose blending.
+Measured CNS landmarks remain unchanged. Unmeasured peripheral glyphs may be
+fitted to their schematic centre-lines; this never edits the saved source buffer.
+Exact-ID native MaleCNS SWC landmarks now replace all 26,062 missing-position
+fallbacks. A landmark is an actual neurite vertex, not a recovered soma. The
+original 140,638 positions and saved event buffers remain untouched. Coverage
+and failures are explicit; a constant-X fallback plane must never look anatomical.
+Full neurite geometry and body registration remain separate work. A delay cue
+is not a measured axonal conduction velocity.
+The automatically loaded sensory-arbor layer preserves every source SWC segment for the
+3,610 supported input neurons. It lights whole cells from their recorded events;
+there is no invented within-neurite conduction. Source coordinates and hashes
+remain inspectable. The compact scene legend keeps the view-only registration
+label visible; detailed coverage is available on request.
+Alt-hover reads an exact neuron ID, coordinate provenance and saved spikes. It
+does not inspect a schematic peripheral point as though it were a measured soma.
+The selected neuron's current adjacency page draws straight graph links to
+available points and event-driven directional pulses; these lines are not axon
+traces. Playback offers slower speeds. Detailed provenance remains behind a
+disclosure, keeping the scene clear.
+Connection cues use the saved solver delay; incompatible event grids are rejected.
+The six-cell recording geometry and its aperture are hidden in whole-CNS scenes,
+including loading and failure states. Electrode focus remains available. The
+legacy local preset retains its diagnostic aperture for replay of old records.
 
 `connectomeData` owns typed-buffer validation and `useConnectomeData` owns the
 authenticated, run-scoped read, cancellation and retry. A missing or corrupt
@@ -45,6 +168,16 @@ spike events drive the point cloud and graph-delay transmission cues. Idle
 scenes stay still and rewind clears the event clock. The whole-CNS preset starts
 with transparent body, a closed local aperture and a compact recording strip.
 Input-region picking and local E1/REF placement are mutually exclusive modes.
+Clicking thorax/wing skin must never select the legacy pooled-six-leg input.
+Passive contact placement uses source-surface picking and an outward 25 µm
+centre offset in the registered local frame. Nearby outside contacts orient
+along the source normal; free-space/interior points do not acquire a fake surface
+attachment. Unsupported coordinates are rejected, never clamped. Cancel restores
+the draft, and moving a contact never changes saved sensory events.
+Only annotation-supported head/individual-leg regions can be selected by surface
+picking. Legacy pooled runs remain readable and are explicitly labelled. Orange
+input cells and mint downstream cells follow recorded events. A leg's conditional
+pose uses its corresponding projection cell, never a global angle for all legs.
 Preset and input selection use the canonical AppSelect, with no screen-local
 dropdown. Unsupported abdominal input remains disabled with an explicit reason.
 The local classifier's accuracy is never shown as whole-CNS accuracy.
@@ -73,7 +206,7 @@ recording cursor and a clearly labelled conditional leg reaction. Heat maps,
 external stimulating contacts and free locomotion must not appear as calculated
 results before their numerical adapters exist. E1/REF are recording contacts.
 
-The local window is a view-only aperture with a faint thorax outline; it does
+In the legacy local preset, the window is a view-only aperture with a faint thorax outline; it does
 not remove tissue from the operator or change the registered picking mesh.
 The local-focus and reset-camera controls work in both single and paired views.
 Paused unchanged scenes do not redraw the GPU; files/record-only views release
@@ -1692,7 +1825,21 @@ remain a separate acceptance item in PROJECT_TODO.
 Compiled mocked browser suites block service-worker registration so their network
 handlers remain authoritative. External live suites preserve application service
 workers; a mocked pass never certifies the production offline/cache lifecycle.
+In the simulator recording view, the primary experiment and the independent
+electrical calculation retain separate clocks. Label the primary plot and its
+playback controls so the two traces cannot be mistaken for one synchronized run.
+When the electrical event journal is shown on the body scene, the optional signed
+state difference is independently switchable and identified as a model contrast,
+not a spike or measured potential; the body registration remains approximate.
+Contact placement on that body edits a draft in the approximate display frame.
+Pause the old playback, keep its signal labelled as the previous calculation,
+and transfer the draft to the matching saved electrical run for explicit review.
 Composer and queue/reconnect fixtures explicitly exercise system-font fallback
 by blocking font bytes. Their screenshots verify fallback geometry, not loaded
 webfont typography. The dedicated native-font case permits real local font bytes;
 Chromium CDP verifies actual Inter glyph use, not only computed font-family.
+
+For refined coupled recordings, the existing recording-details panel reports
+the count and maximum shift of endpoint relocations and states that numerical
+convergence remains unconfirmed. Older or malformed records retain the original
+endpoint warning. The main scene remains free of additional explanatory text.
