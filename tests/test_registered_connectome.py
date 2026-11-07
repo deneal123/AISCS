@@ -10,6 +10,7 @@ import pytest
 from service.contracts import SimulationConfig
 from service.infrastructure.connectome.dataset import load_registered_graph
 from service.infrastructure.connectome.network import run_network
+from service.infrastructure.connectome.notum import NotumGraph
 from service.main import build_generation
 
 pytestmark = pytest.mark.skipif(
@@ -37,6 +38,10 @@ def test_registered_regions_and_source_identity(graph):
     }
     for region, count in expected.items():
         assert len(graph.stimulus_indices(region)) == count
+    notum_graph = NotumGraph(graph, Path(os.environ["GENERATOR_TEST_CONNECTOME"]))
+    notum = notum_graph.stimulus_indices("notum")
+    assert not set(notum).intersection(graph.stimulus_indices("thorax"))
+    assert {graph.annotations["rootSide"][i] for i in notum} == {"L", "R"}
     with pytest.raises(ValueError, match="No registered"):
         graph.stimulus_indices("abdomen")
 

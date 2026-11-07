@@ -9,6 +9,7 @@ from time import perf_counter
 
 from service.contracts import SimulationConfig
 from service.infrastructure.connectome.dataset import MANIFEST_SHA256, load_registered_graph
+from service.infrastructure.connectome.notum import NotumGraph
 from service.infrastructure.connectome.scene import scene_arrays
 from service.infrastructure.connectome.solver import simulate_hybrid
 from service.infrastructure.neuron.solver import NeuronEngine, simulate
@@ -25,7 +26,14 @@ class RegisteredEngine:
             return simulate(config)
         started = perf_counter()
         graph = load_registered_graph(dataset_directory())
-        dynamics, network = simulate_hybrid(config, graph)
+        input_graph = (
+            NotumGraph(graph, dataset_directory()) if config.stimulus_region == "notum" else graph
+        )
+        dynamics, network = simulate_hybrid(config, input_graph)
+        if config.stimulus_region == "notum":
+            network.metadata["input_population"] = (
+                "vnc_sensory / mechanosensory_tactile / notum / PDMN"
+            )
         arrays, scene = scene_arrays(graph, network.counts)
         dynamics.connectome = {
             "arrays": {
@@ -52,6 +60,7 @@ class RegisteredEngine:
             "scene.py",
             "engine.py",
             "body-routes.json",
+            "notum.py",
         ]
         directory = Path(__file__).parent
         return {
@@ -75,6 +84,11 @@ class RecordingEvaluationEngine:
 
     def simulate(self, config: SimulationConfig):
         started = perf_counter()
-        dynamics, _ = simulate_hybrid(config, self.graph)
+        input_graph = (
+            NotumGraph(self.graph, dataset_directory())
+            if config.stimulus_region == "notum"
+            else self.graph
+        )
+        dynamics, _ = simulate_hybrid(config, input_graph)
         dynamics.seconds = perf_counter() - started
         return dynamics

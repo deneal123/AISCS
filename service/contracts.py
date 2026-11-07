@@ -24,6 +24,7 @@ class SurfaceAnchor(Contract):
     mesh_part: str = Field(max_length=100)
     triangle: int = Field(strict=True, ge=0)
     barycentric: tuple[Finite, Finite, Finite]
+    contact: Literal["electrode", "reference"] | None = None
 
     @model_validator(mode="after")
     def inside_triangle(self):
@@ -31,6 +32,19 @@ class SurfaceAnchor(Contract):
             value < -1e-6 or value > 1 + 1e-6 for value in self.barycentric
         ):
             raise ValueError("Anchor must lie inside the selected mesh triangle")
+        return self
+
+
+class SurfaceAnchors(Contract):
+    electrode: SurfaceAnchor | None = None
+    reference: SurfaceAnchor | None = None
+
+    @model_validator(mode="after")
+    def match_contact(self):
+        for name in ("electrode", "reference"):
+            anchor = getattr(self, name)
+            if anchor and anchor.contact != name:
+                raise ValueError("Surface anchor contact does not match its key")
         return self
 
 
@@ -50,19 +64,28 @@ class RegistrationContext(Contract):
     contact_shape: str
     operator_version: str
     surface_anchor: SurfaceAnchor | None = None
+    surface_anchors: SurfaceAnchors | None = None
 
     @model_validator(mode="after")
     def registered_transform(self):
         from service.domain.scene_context import registered_scene_contexts
 
         registered = registered_scene_contexts()
-        if self.model_dump(mode="json", exclude={"surface_anchor"}) not in registered:
-            raise ValueError("Unregistered anatomical context or physical transform")
-        if self.surface_anchor and (
-            self.surface_anchor.mesh_part != self.mesh_part
-            or self.surface_anchor.triangle >= self.mesh_triangle_count
+        if (
+            self.model_dump(mode="json", exclude={"surface_anchor", "surface_anchors"})
+            not in registered
         ):
-            raise ValueError("Unregistered surface anchor")
+            raise ValueError("Unregistered anatomical context or physical transform")
+        if self.surface_anchor and self.surface_anchors:
+            raise ValueError("Ambiguous legacy and per-contact surface anchors")
+        anchors = [self.surface_anchor]
+        if self.surface_anchors:
+            anchors.extend([self.surface_anchors.electrode, self.surface_anchors.reference])
+        for anchor in anchors:
+            if anchor and (
+                anchor.mesh_part != self.mesh_part or anchor.triangle >= self.mesh_triangle_count
+            ):
+                raise ValueError("Unregistered surface anchor")
         return self
 
 
@@ -102,6 +125,7 @@ class SimulationConfig(Contract):
         Literal[
             "head",
             "thorax",
+            "notum",
             "abdomen",
             "front_left",
             "front_right",

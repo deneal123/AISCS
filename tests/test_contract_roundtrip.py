@@ -41,6 +41,62 @@ def test_unregistered_mesh_and_outside_triangle_are_rejected():
         SimulationConfig.model_validate(payload)
 
 
+def test_surface_anchor_names_contact_and_legacy_anchor_hash_remains_stable():
+    payload = catalog()["models"][0]["defaults"]
+    context = payload["placement"]["registration"]
+    context["surface_anchor"] = {
+        "mesh_part": context["mesh_part"],
+        "triangle": 1,
+        "barycentric": [0.2, 0.3, 0.5],
+    }
+    legacy = SimulationConfig.model_validate(payload)
+    assert "contact" not in legacy.model_dump()["placement"]["registration"]["surface_anchor"]
+    assert (
+        SimulationConfig.model_validate_json(legacy.model_dump_json()).digest() == legacy.digest()
+    )
+    for name in ("electrode", "reference"):
+        context["surface_anchor"]["contact"] = name
+        actual = SimulationConfig.model_validate(payload)
+        assert actual.placement.registration.surface_anchor.contact == name
+        assert (
+            SimulationConfig.model_validate_json(actual.model_dump_json()).digest()
+            == actual.digest()
+        )
+    context["surface_anchor"]["contact"] = "stimulus"
+    with pytest.raises(ValueError):
+        SimulationConfig.model_validate(payload)
+
+
+def test_per_contact_anchors_remain_distinct_and_reject_ambiguous_provenance():
+    payload = catalog()["models"][0]["defaults"]
+    context = payload["placement"]["registration"]
+
+    def anchor(contact, triangle):
+        return {
+            "contact": contact,
+            "mesh_part": context["mesh_part"],
+            "triangle": triangle,
+            "barycentric": [0.2, 0.3, 0.5],
+        }
+
+    context["surface_anchors"] = {
+        "electrode": anchor("electrode", 1),
+        "reference": anchor("reference", 2),
+    }
+    actual = SimulationConfig.model_validate(payload)
+    assert actual.placement.registration.surface_anchors.reference.triangle == 2
+    assert (
+        SimulationConfig.model_validate_json(actual.model_dump_json()).digest() == actual.digest()
+    )
+    context["surface_anchors"]["reference"]["contact"] = "electrode"
+    with pytest.raises(ValueError, match="does not match"):
+        SimulationConfig.model_validate(payload)
+    context["surface_anchors"]["reference"]["contact"] = "reference"
+    context["surface_anchor"] = anchor("electrode", 1)
+    with pytest.raises(ValueError, match="Ambiguous"):
+        SimulationConfig.model_validate(payload)
+
+
 def test_new_flybody_and_legacy_flygym_contexts_remain_independently_replayable():
     contexts = registered_scene_contexts()
     assert contexts[0]["mesh_asset_id"].startswith("flybody-")

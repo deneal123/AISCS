@@ -30,6 +30,19 @@ def connectome_directory() -> Path:
     return Path(os.environ.get("GENERATOR_CONNECTOME_DIR", str(default)))
 
 
+def morphology_directories() -> list[Path]:
+    value = os.environ.get("GENERATOR_MORPHOLOGY_DIRS", "")
+    return [Path(item) for item in value.split(os.pathsep) if item]
+
+
+def feedback_cache_bytes() -> int:
+    """Default to a modest run-local cache; zero explicitly disables it."""
+    value = os.environ.get('GENERATOR_FEEDBACK_CACHE_BYTES', '67108864')
+    if not value.isascii() or not value.isdecimal():
+        raise ValueError('GENERATOR_FEEDBACK_CACHE_BYTES must be a nonnegative integer')
+    return int(value)
+
+
 def connectome_model_path() -> Path:
     bundled = Path(__file__).resolve().parents[2] / "validation/male-cns-v1/classifier.json"
     if not bundled.is_file():

@@ -1,4 +1,7 @@
-from service.contracts import Placement, RegistrationContext, SimulationConfig
+import json
+from pathlib import Path
+
+from service.contracts import Contact, Placement, RegistrationContext, SimulationConfig
 from service.domain.geometry import local_geometry
 from service.domain.scene_context import scene_context
 from service.domain.visualization import VISUALIZATION
@@ -37,8 +40,23 @@ def catalog(*, connectome_available: bool = False) -> dict:
         "limitations": LIMITATIONS,
     }
     available = connectome_available
+    exterior = json.loads(
+        Path(__file__).with_name("flybody-external-contacts.json").read_text(encoding="utf-8")
+    )
+    if (
+        exterior["mesh_sha256"] != context["mesh_sha256"]
+        or exterior["origin_mm"] != context["origin_mm"]
+    ):
+        raise ValueError("Exterior contact defaults do not match the registered body")
+    external_placement = defaults.placement.model_copy(
+        update={key: Contact(**value["position_um"]) for key, value in exterior["contacts"].items()}
+    )
     full_defaults = defaults.model_copy(
-        update={"model_id": "male-cns-hybrid-v1", "stimulus_region": "thorax"}
+        update={
+            "model_id": "male-cns-hybrid-v1",
+            "stimulus_region": "front_left",
+            "placement": external_placement,
+        }
     )
     full = {
         **local,
@@ -50,11 +68,13 @@ def catalog(*, connectome_available: bool = False) -> dict:
         "defaults": full_defaults.model_dump(mode="json"),
         "neurons": 166700,
         "edges": 25582938,
+        "exterior_contact_defaults": exterior,
         "input_regions": [
             {"id": key, "name": name, "available": key != "abdomen"}
             for key, name in [
                 ("head", "Голова"),
-                ("thorax", "Грудь · все ноги"),
+                ("thorax", "Объединённый сенсорный вход шести ног"),
+                ("notum", "Спинная поверхность груди · тактильный вход"),
                 ("abdomen", "Брюшко"),
                 ("front_left", "Передняя левая нога"),
                 ("front_right", "Передняя правая нога"),
@@ -67,9 +87,12 @@ def catalog(*, connectome_available: bool = False) -> dict:
         "limitations": [
             "All registered CNS neurons are calculated; display edges use LOD.",
             "Tactile input is a model drive, not calibrated noxious stimulation.",
+            "Notum input selects the entire annotated population, not a surface point or field.",
             "Peripheral paths are schematic; missing soma positions are not reconstructed.",
             "Local E1−REF is from six HH proxy cells; not a full-CNS voltage solution.",
             "Spikes and body animation do not establish subjective pain.",
+            "Exterior defaults are outside the old recognition protocol; "
+            "its accuracy does not apply.",
         ],
     }
     return {

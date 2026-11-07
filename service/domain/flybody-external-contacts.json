@@ -1,0 +1,64 @@
+{
+  "method": "dorsal-source-triangle-outside-normal-offset-v1",
+  "mesh_asset_id": "flybody-sim003-fdbbd866-rest-v1",
+  "mesh_sha256": "8eb70a265a179e811c902fda4334aa83bc34f54a58d400db0c3a6f98ccbd62dd",
+  "source_commit": "fdbbd866b203a709a164970b0a8996108edd57a5",
+  "binary_sha256": "263eaa17551e807e541937a6e9f9267b9f9836a89f6b15300fff06f332f71782",
+  "mesh_part": "thorax",
+  "origin_mm": [
+    -0.012035995721817017,
+    4.0084123611450195e-06,
+    -0.04453502595424652
+  ],
+  "offset_um": 25,
+  "units": "um",
+  "contacts": {
+    "electrode": {
+      "position_um": {
+        "x_um": 258.643,
+        "y_um": 94.023,
+        "z_um": 484.86
+      },
+      "triangle": 4611,
+      "barycentric": [
+        0.047858832050448386,
+        0.5088901884779905,
+        0.4432509794715611
+      ],
+      "surface_mm": [
+        0.23796400427818298,
+        0.09000400841236114,
+        0.4172139092323426
+      ],
+      "normal": [
+        0.3457198627468641,
+        0.16091818244478837,
+        0.9244366474025979
+      ]
+    },
+    "reference": {
+      "position_um": {
+        "x_um": 311.142,
+        "y_um": 262.729,
+        "z_um": 396.792
+      },
+      "triangle": 7,
+      "barycentric": [
+        0.35578319683671267,
+        0.024673011286109086,
+        0.6195437918771782
+      ],
+      "surface_mm": [
+        0.287964004278183,
+        0.25000400841236115,
+        0.3338493529116118
+      ],
+      "normal": [
+        0.4456735217608203,
+        0.5091452092080364,
+        0.7363058250087476
+      ]
+    }
+  },
+  "scope": "Exterior point contacts on the display body mesh. This does not validate body/CNS registration, cuticle conductivity, a finite-area electrode or recognition at these positions."
+}

@@ -56,7 +56,10 @@ def scene_arrays(graph: SparseGraph, counts: np.ndarray) -> tuple[dict, dict]:
         segment = info["somaNeuromere"][i] or ""
         nerve = info["entryNerve"][i] or info["exitNerve"][i] or ""
         side = info["rootSide"][i] or info["somaSide"][i] or ""
-        region = "thorax" if superclass.startswith("vnc") else "brain"
+        # Ascending neurons may have a VNC soma despite a non-vnc superclass.
+        # The segment annotation describes the landmark, not the full arbor.
+        in_thorax = superclass.startswith("vnc") or segment.startswith(("T1", "T2", "T3"))
+        region = "thorax" if in_thorax else "brain"
         if segment.startswith("A") or nerve.startswith("AbN"):
             region = "abdomen"
         elif nerve in nerves and side in ("L", "R"):

@@ -37,3 +37,42 @@ def test_zero_drive_and_timestep_convergence():
     a = forward_recording(cfg, first)
     b = np.interp(first.time_ms, finer.time_ms, forward_recording(cfg, finer))
     assert np.sqrt(np.mean((a - b) ** 2)) < max(0.5, np.sqrt(np.mean(a**2)) * 0.35)
+
+
+def test_transmembrane_current_balance_for_each_closed_cell():
+    # The present model has synaptic membrane currents but no intracellular
+    # current clamp. Axial currents cancel over all segments of each cell.
+    dynamics = simulate(SimulationConfig(duration_ms=100, stimulus="strong", noise_uv=0))
+    assert np.max(np.abs(dynamics.membrane_current_na)) > 0.01
+    for cell in range(6):
+        total = dynamics.membrane_current_na[dynamics.cell_ids == cell].sum(axis=0)
+        assert np.max(np.abs(total)) < 1e-8
+
+
+def test_local_signal_spatial_refinement_for_one_prescribed_scenario(monkeypatch):
+    import service.infrastructure.neuron.solver as solver
+
+    config = SimulationConfig(duration_ms=100, stimulus="strong", noise_uv=0, adaptation=0)
+    original = solver.sections_for_cell
+    signals = []
+    for factor in (1, 3, 5):
+
+        def refined(cell, factor=factor):
+            return [
+                (name, first, last, diameter, count * factor)
+                for name, first, last, diameter, count in original(cell)
+            ]
+
+        monkeypatch.setattr(solver, "sections_for_cell", refined)
+        dynamics = solver.simulate(config)
+        signals.append(forward_recording(config, dynamics))
+    # Refined soma indices are not exported by this local test; only compare
+    # currents and the resulting voltage, never its spike journal.
+    reference_rms = np.sqrt(np.mean(signals[-1] ** 2))
+    assert reference_rms > 0
+
+    def error(signal):
+        return np.sqrt(np.mean((signal - signals[-1]) ** 2)) / reference_rms
+
+    assert error(signals[0]) < 0.01
+    assert error(signals[1]) < 0.002

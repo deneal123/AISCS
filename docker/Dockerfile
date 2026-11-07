@@ -20,6 +20,7 @@ EXPOSE 8090
 FROM base AS test
 RUN uv sync --no-cache --frozen
 COPY tests ./tests
+COPY scripts ./scripts
 USER generator
 CMD ["pytest", "-q", "-p", "no:cacheprovider"]
 
@@ -32,3 +33,18 @@ RUN cd /tmp && PYTHONPATH=/tmp/isolated python /tmp/check_wheel.py
 FROM base AS runtime
 USER generator
 CMD ["uvicorn", "service.main:create_app", "--factory", "--host", "0.0.0.0", "--port", "8090"]
+
+# Optional field kernel only; NEURON and network replay remain CPU workloads.
+FROM base AS gpu-runtime
+RUN uv pip install --no-cache --target /opt/cuda-pip \
+      nvidia-cuda-nvcc-cu12==12.9.86 nvidia-cuda-runtime-cu12==12.9.79 \
+    && mkdir -p /opt/cuda/lib64 \
+    && ln -s /opt/cuda-pip/nvidia/cuda_nvcc/nvvm /opt/cuda/nvvm \
+    && ln -s /opt/cuda-pip/nvidia/cuda_nvcc/bin /opt/cuda/bin \
+    && ln -s /opt/cuda-pip/nvidia/cuda_runtime/lib/libcudart.so.12 /opt/cuda/lib64/libcudart.so
+ENV CUDA_HOME=/opt/cuda LD_LIBRARY_PATH=/opt/cuda/lib64:/opt/cuda/nvvm/lib64
+USER generator
+CMD ["uvicorn", "service.main:create_app", "--factory", "--host", "0.0.0.0", "--port", "8090"]
+
+# Preserve the normal CPU image when no build target is specified.
+FROM runtime AS default-runtime
