@@ -1,18 +1,18 @@
 {
-  "version": "0.1.1",
-  "date": "2026-11-07",
+  "version": "0.1.2",
+  "date": "2026-11-08",
   "application": "AISCS",
   "branch": "dev",
   "components": {
     "backend": {
-      "version": "1.5.1",
+      "version": "1.5.2",
       "branch": "backend",
-      "commit": "06536cb5a9c63dbf7d24f3c0466f948f401596a9"
+      "commit": "20fab8cf1e7f8696f417a8ee4afb99063ba40e06"
     },
     "frontend": {
-      "version": "1.1.1",
+      "version": "1.1.2",
       "branch": "frontend",
-      "commit": "548ae73fe5fd197bc52f8ef7dbab6743fba7683a"
+      "commit": "c90706914f26ce3c854bacaa88f4d5564e908442"
     },
     "agents": {
       "version": "0.2.0",
@@ -20,9 +20,9 @@
       "commit": "560ab7f1fdd8ed66d9c0fd16afc164024cecdd7f"
     },
     "generator": {
-      "version": "0.1.1",
+      "version": "0.1.2",
       "branch": "generator",
-      "commit": "7d2b2062c62e53fbf7f06f1f94f0b3bf9637fdee"
+      "commit": "e90004a8acefb85984ec3ce58761800a8a70a770"
     },
     "workspace": {
       "version": "0.1.6",
@@ -74,25 +74,22 @@
     "scope": "Synthetic engineering demonstration; not biological or clinical validation"
   },
   "production_verified": false,
-  "protected_scientific_materials_changed": true,
+  "protected_scientific_materials_changed": false,
   "verification": {
     "backend_simulation_pytest": {
-      "passed": 220,
-      "skipped": 1,
-      "scope": "selected simulation tests; coverage disabled"
+      "passed": 68,
+      "scope": "selected simulation tests; coverage disabled; no live stack"
     },
     "frontend_simulator_jest": {
-      "passed": 234,
-      "suites": 59
+      "passed": 166,
+      "suites": 15,
+      "scope": "selected simulator unit tests; React act warnings"
     },
-    "research_pytest": {
-      "passed": 190
+    "generator_focused_pytest": {
+      "passed": 99,
+      "scope": "selected Windows tests including local CUDA; not full CNS"
     },
-    "publications_pytest": {
-      "passed": 25
-    },
-    "pub002_local_receipts_sha256": 778,
-    "generator_linux_tests": "not run: Docker daemon unavailable and lockfile is Linux-only",
-    "production_live": "not checked"
+    "generator_linux_tests": "not run; stack startup excluded",
+    "production_live": "not checked; stack startup excluded"
   }
 }
