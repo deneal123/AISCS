@@ -11,6 +11,15 @@ from service.services.files.persistence.file_repository import FileRepository
 from service.settings import config
 
 
+def simulation_queue() -> str:
+    """Keep isolated deployments on their configured queue; preserve the default."""
+    name = os.environ.get("SIMULATION_QUEUE", "simulation")
+    if not name or len(name) > 100 or not all(ch.isascii() and (ch.isalnum() or ch in "-_")
+                                              for ch in name):
+        raise RuntimeError("simulation_queue_invalid")
+    return name
+
+
 def generator_client() -> httpx.AsyncClient:
     token = os.environ.get("GENERATOR_TOKEN", "")
     if len(token) < 24:

@@ -15,9 +15,48 @@ from service.composition.infra import build_infra
 from service.infrastructure.messaging.celery_app import celery_app
 from service.models.db.db_models import UserLaunch
 from service.models.key_value import ProcessingStatus, ServiceType
-from service.services.simulations.manifest import InvalidManifest, validate_manifest
+from service.services.simulations.failure_codes import (
+    executor_failure_code,
+    feedback_failure_diagnostics,
+)
+from service.services.simulations.inputs.fragment_package import stage_fragment_package
+from service.services.simulations.inputs.fragment_source import owned_fragment_source
+from service.services.simulations.inputs.replay_source import owned_replay_source
+from service.services.simulations.inputs.replay_transfer import stage_replay_input
+from service.services.simulations.manifests.field_graph_manifest import (
+    InvalidFieldGraphManifest,
+    validate_field_graph_manifest,
+    validate_field_graph_preview,
+)
+from service.services.simulations.manifests.field_proxy_manifest import (
+    InvalidFieldProxyManifest,
+    validate_field_proxy_manifest,
+    validate_field_proxy_preview,
+)
+from service.services.simulations.manifests.fragment_population_manifest import (
+    InvalidFragmentPopulationManifest,
+    validate_fragment_population_manifest,
+    validate_fragment_population_preview,
+)
+from service.services.simulations.manifests.manifest import InvalidManifest, validate_manifest
+from service.services.simulations.manifests.population_feedback_manifest import (
+    InvalidPopulationFeedbackManifest,
+    validate_population_feedback_manifest,
+    validate_population_feedback_preview,
+)
+from service.services.simulations.manifests.population_target_manifest import (
+    InvalidPopulationTargetManifest,
+    validate_population_target_manifest,
+    validate_population_target_preview,
+)
+from service.services.simulations.manifests.replay_manifest import (
+    InvalidReplayManifest,
+    validate_replay_manifest,
+    validate_replay_preview,
+)
 from service.services.simulations.models import SimulationArtifact, SimulationAttempt, SimulationRun
-from service.services.simulations.runtime import file_service, generator_client
+from service.services.simulations.progress import valid_progress
+from service.services.simulations.runtime import file_service, generator_client, simulation_queue
 from service.settings import config
 
 logger = logging.getLogger(__name__)
@@ -28,7 +67,7 @@ class LostClaim(Exception):
     pass
 
 
-async def emit(infra, run_id, state):
+async def emit(infra, run_id, state, progress=None):
     if infra.redis_client:
         try:
             async with asyncio.timeout(1):
@@ -40,6 +79,7 @@ async def emit(infra, run_id, state):
                                 "run_id": str(run_id),
                                 "state": state,
                                 "time": datetime.now(UTC).isoformat(),
+                                **({"progress": progress} if progress is not None else {}),
                             }
                         )
                     },
@@ -97,6 +137,65 @@ async def discard_unpublished(client, attempt_id, digest):
     )
     if response.status_code != 404:
         response.raise_for_status()
+
+
+async def discard_staged_target(client, attempt_id, payload):
+    if 'source_package_sha256' not in payload:
+        return
+    response = await client.delete(f'/v1/replay-inputs/{attempt_id}',
+        headers={'X-Content-SHA256': payload['source_package_sha256']})
+    if response.status_code != 404:
+        response.raise_for_status()
+
+
+async def stage_target_with_lease(infra, client, run_id, token, attempt_id, source, payload):
+    async def heartbeat():
+        while True:
+            await asyncio.sleep(10)
+            await touch(infra, run_id, token)
+    task = asyncio.create_task(heartbeat())
+    try:
+        return await stage_fragment_package(infra.storage, client, attempt_id, source,
+            expected_package_sha=payload['source_package_sha256'],
+            expected_manifest_sha=payload['source_manifest_sha256'])
+    finally:
+        task.cancel()
+        results = await asyncio.gather(task, return_exceptions=True)
+        if results and isinstance(results[0], Exception):
+            raise results[0]
+
+
+async def read_verified_preview(client, attempt_id, name, item):
+    """Read a manifest-bounded preview without trusting the response body size."""
+    data = bytearray()
+    async with client.stream("GET", f"/v1/executions/{attempt_id}/artifacts/{name}") as stream:
+        if stream.status_code == 404:
+            raise InvalidManifest("artifact_missing")
+        stream.raise_for_status()
+        async for chunk in stream.aiter_bytes():
+            if len(data) + len(chunk) > item["bytes"]:
+                raise InvalidManifest("preview_integrity")
+            data.extend(chunk)
+    if len(data) != item["bytes"] or hashlib.sha256(data).hexdigest() != item["sha256"]:
+        raise InvalidManifest("preview_integrity")
+    try:
+        return json.loads(data)
+    except (UnicodeDecodeError, ValueError) as exc:
+        raise InvalidManifest("preview_invalid") from exc
+
+
+async def discard_staged_replay(infra, client, attempt_id, owner, payload):
+    """Remove an upload that may have preceded creation of an executor receipt."""
+    if "source_run_id" not in payload:
+        return
+    async with infra.pg_connector.get_session_context() as session:
+        source = await owned_replay_source(
+            session, owner, UUID(payload["source_run_id"]), payload["graph_manifest_sha256"]
+        )
+    response = await client.delete(
+        f"/v1/replay-inputs/{attempt_id}", headers={"X-Content-SHA256": source.sha256}
+    )
+    response.raise_for_status()
 
 
 async def acknowledge_result(infra, client, run_id, attempt_id, digest):
@@ -192,6 +291,9 @@ async def execute(run_id: UUID):
             ).scalar_one_or_none()
             if run is None or run.state in TERMINAL:
                 return
+            if run.execution_queue != simulation_queue():
+                logger.warning("simulation_wrong_execution_queue", extra={"run_id": str(run_id)})
+                return
             if run.lease_until and run.lease_until > datetime.now(UTC):
                 return
             run.claim_token, run.lease_until = token, datetime.now(UTC) + timedelta(seconds=30)
@@ -206,11 +308,12 @@ async def execute(run_id: UUID):
                         executor="generator-primary",
                     )
                 )
-            attempt_id, owner, payload, digest = (
+            attempt_id, owner, payload, digest, parent_id = (
                 run.attempt_id,
                 run.user_id,
                 run.configuration,
                 run.configuration_sha256,
+                getattr(run, 'parent_run_id', None),
             )
             if run.state != "cancelling":
                 run.state = "preparing"
@@ -223,13 +326,97 @@ async def execute(run_id: UUID):
             if await touch(infra, run_id, token):
                 # A redelivered task may find an already running remote attempt.
                 await discard_unpublished(client, attempt_id, digest)
+                await discard_staged_replay(infra, client, attempt_id, owner, payload)
+                await discard_staged_target(client, attempt_id, payload)
                 await touch(infra, run_id, token, "cancelled")
                 return
-            response = await client.post(
-                "/v1/executions", json={"execution_id": str(attempt_id), "config": payload}
-            )
-            response.raise_for_status()
+            replay = "source_run_id" in payload
+            field_graph = "source_cells" in payload and "replay_ids" in payload
+            field_proxy = ('gain' in payload and 'waveform' in payload
+                           and payload.get('coordinate_frame') == 'male-cns-v1.0-native-um')
+            fragment_population = "source_ids" in payload and "max_distance_um" in payload
+            population_target = 'source_package_sha256' in payload and 'target_id' in payload
+            population_feedback = ('source_package_sha256' in payload
+                                   and 'excitatory' in payload and 'inhibitory' in payload)
+            source_configuration = None
+            if replay:
+                async with infra.pg_connector.get_session_context() as session:
+                    source = await owned_replay_source(
+                        session, owner, UUID(payload["source_run_id"]),
+                        payload["graph_manifest_sha256"],
+                    )
+                await stage_replay_input(infra.storage, client, attempt_id, source)
+                if await touch(infra, run_id, token):
+                    await discard_unpublished(client, attempt_id, digest)
+                    await discard_staged_replay(infra, client, attempt_id, owner, payload)
+                    await touch(infra, run_id, token, "cancelled")
+                    return
+                response = await client.post("/v1/replay-executions", json={
+                    "execution_id": str(attempt_id), "config": payload,
+                    "source_sha256": source.sha256, "source_description": source.description,
+                })
+            elif population_target or population_feedback:
+                if parent_id is None:
+                    raise InvalidManifest('target_source_missing')
+                async with infra.pg_connector.get_session_context() as session:
+                    target_source = await owned_fragment_source(
+                        session, owner, parent_id, payload['graph_manifest_sha256'])
+                source_configuration = target_source.configuration
+                await stage_target_with_lease(infra, client, run_id, token, attempt_id,
+                                              target_source, payload)
+                if await touch(infra, run_id, token):
+                    await discard_unpublished(client, attempt_id, digest)
+                    await discard_staged_target(client, attempt_id, payload)
+                    await touch(infra, run_id, token, 'cancelled')
+                    return
+                endpoint = ('/v1/population-feedback-executions' if population_feedback
+                            else '/v1/population-target-executions')
+                response = await client.post(endpoint,
+                    json={'execution_id': str(attempt_id), 'config': payload})
+            elif field_proxy:
+                response = await client.post(
+                    '/v1/field-proxy-executions',
+                    json={'execution_id': str(attempt_id), 'config': payload},
+                )
+            elif field_graph:
+                response = await client.post(
+                    "/v1/field-graph-executions",
+                    json={"execution_id": str(attempt_id), "config": payload},
+                )
+            elif fragment_population:
+                response = await client.post(
+                    '/v1/fragment-population-executions',
+                    json={'execution_id': str(attempt_id), 'config': payload},
+                )
+            else:
+                response = await client.post(
+                    "/v1/executions", json={"execution_id": str(attempt_id), "config": payload}
+                )
+            if response.status_code in {404, 422}:
+                # A previous delivery may already have created this attempt.
+                # Check that receipt before treating a validation rejection as final.
+                existing = await client.get(f"/v1/executions/{attempt_id}")
+                if existing.status_code == 404:
+                    await discard_staged_replay(infra, client, attempt_id, owner, payload)
+                    await discard_staged_target(client, attempt_id, payload)
+                    reason = ("executor_endpoint_missing" if response.status_code == 404
+                              else "executor_contract_rejected")
+                    if await touch(infra, run_id, token, "failed",
+                                   error=reason):
+                        await touch(infra, run_id, token, "cancelled")
+                    return
+                existing.raise_for_status()
+                receipt = existing.json()
+                if (not isinstance(receipt, dict)
+                        or receipt.get("configuration_sha256") != digest):
+                    if await touch(infra, run_id, token, "failed",
+                                   error="executor_attempt_identity"):
+                        await touch(infra, run_id, token, "cancelled")
+                    return
+            else:
+                response.raise_for_status()
             await touch(infra, run_id, token, "running")
+            last_progress = None
             while True:
                 if await touch(infra, run_id, token):
                     await discard_unpublished(client, attempt_id, digest)
@@ -238,6 +425,10 @@ async def execute(run_id: UUID):
                 response = await client.get(f"/v1/executions/{attempt_id}")
                 response.raise_for_status()
                 status = response.json()
+                progress = status.get('progress')
+                if valid_progress(progress) and progress != last_progress:
+                    await emit(infra, run_id, 'running', progress=progress)
+                    last_progress = progress.copy()
                 if status["status"] == "completed":
                     break
                 if status["status"] in {"failed", "cancelled", "interrupted"}:
@@ -246,9 +437,12 @@ async def execute(run_id: UUID):
                         infra, run_id, token
                     ):
                         return
-                    await touch(
-                        infra, run_id, token, "failed", error="executor_" + status["status"]
+                    diagnostic = (
+                        feedback_failure_diagnostics(status, payload)
+                        if population_feedback else None
                     )
+                    await touch(infra, run_id, token, "failed", error=executor_failure_code(status),
+                                result={'feedback_failure': diagnostic} if diagnostic else None)
                     return
                 await asyncio.sleep(0.5)
             if await touch(infra, run_id, token, "publishing"):
@@ -256,7 +450,49 @@ async def execute(run_id: UUID):
                 await touch(infra, run_id, token, "cancelled")
                 return
             manifest = status["manifest"]
-            validate_manifest(manifest, payload, digest)
+            if replay:
+                try:
+                    validate_replay_manifest(
+                        manifest, configuration_sha256=digest,
+                        source_run_id=UUID(payload["source_run_id"]),
+                    )
+                except InvalidReplayManifest as exc:
+                    raise InvalidManifest(str(exc)) from exc
+            elif population_feedback:
+                try:
+                    validate_population_feedback_manifest(manifest, configuration_sha256=digest,
+                                                          configuration=payload)
+                except InvalidPopulationFeedbackManifest as exc:
+                    raise InvalidManifest('feedback_manifest') from exc
+            elif population_target:
+                try:
+                    validate_population_target_manifest(manifest, configuration_sha256=digest)
+                except InvalidPopulationTargetManifest as exc:
+                    raise InvalidManifest('target_manifest') from exc
+            elif field_proxy:
+                try:
+                    validate_field_proxy_manifest(manifest, configuration_sha256=digest)
+                except InvalidFieldProxyManifest as exc:
+                    raise InvalidManifest('field_proxy_manifest') from exc
+            elif field_graph:
+                try:
+                    validate_field_graph_manifest(
+                        manifest, configuration_sha256=digest,
+                        retain_currents=payload.get("retain_currents") is True,
+                        retain_state_contrast=payload.get("retain_state_contrast") is True,
+                    )
+                except InvalidFieldGraphManifest as exc:
+                    raise InvalidManifest(str(exc)) from exc
+            elif fragment_population:
+                try:
+                    validate_fragment_population_manifest(
+                        manifest, configuration_sha256=digest,
+                        graph_sha256=payload['graph_manifest_sha256'],
+                    )
+                except (InvalidFragmentPopulationManifest, KeyError) as exc:
+                    raise InvalidManifest('fragment_manifest') from exc
+            else:
+                validate_manifest(manifest, payload, digest)
             saver = file_service(infra)
             for item in manifest["files"]:
                 name = item["name"]
@@ -321,18 +557,35 @@ async def execute(run_id: UUID):
                     )
                     await session.commit()
             # Preview is consumed only after its independently hashed file was saved.
-            preview_response = await client.get(
-                f"/v1/executions/{attempt_id}/artifacts/preview.json"
-            )
-            if preview_response.status_code == 404:
-                raise InvalidManifest("artifact_missing")
-            preview_response.raise_for_status()
-            preview_info = next(x for x in manifest["files"] if x["name"] == "preview.json")
-            if hashlib.sha256(preview_response.content).hexdigest() != preview_info["sha256"]:
-                raise InvalidManifest("preview_integrity")
+            preview_name = ("replay-preview.json" if replay else
+                            'coupled-preview.json' if population_feedback else
+                            'target-preview.json' if population_target else
+                            'field-proxy-preview.json' if field_proxy else
+                            "field-graph-preview.json" if field_graph else
+                            'fragment-population-preview.json' if fragment_population else
+                            "preview.json")
+            preview_info = next(x for x in manifest["files"] if x["name"] == preview_name)
+            preview = await read_verified_preview(client, attempt_id, preview_name, preview_info)
+            try:
+                if replay:
+                    validate_replay_preview(preview, payload)
+                elif population_feedback:
+                    validate_population_feedback_preview(preview, payload, source_configuration)
+                elif population_target:
+                    validate_population_target_preview(preview, payload, source_configuration)
+                elif field_proxy:
+                    validate_field_proxy_preview(preview, payload)
+                elif field_graph:
+                    validate_field_graph_preview(preview, payload)
+                elif fragment_population:
+                    validate_fragment_population_preview(preview, payload)
+            except (ValueError, InvalidReplayManifest, InvalidFieldGraphManifest,
+                    InvalidFragmentPopulationManifest, InvalidPopulationTargetManifest,
+                    InvalidPopulationFeedbackManifest, InvalidFieldProxyManifest) as exc:
+                raise InvalidManifest("preview_invalid") from exc
             result = {
                 "manifest": manifest,
-                "preview": preview_response.json(),
+                "preview": preview,
                 "executor_acknowledged": False,
             }
             if await touch(infra, run_id, token, "completed", result=result):
@@ -380,6 +633,7 @@ async def recover():
                     await session.execute(
                         select(SimulationRun)
                         .where(
+                            SimulationRun.execution_queue == simulation_queue(),
                             SimulationRun.state.not_in(TERMINAL),
                             or_(
                                 SimulationRun.lease_until.is_(None),
@@ -400,7 +654,7 @@ async def recover():
             )
             for run in rows:
                 await asyncio.to_thread(
-                    execute_run.apply_async, args=[str(run.id)], queue="simulation"
+                    execute_run.apply_async, args=[str(run.id)], queue=simulation_queue()
                 )
                 run.dispatched_at = datetime.now(UTC)
             await session.commit()
@@ -415,6 +669,7 @@ async def recover():
                         SimulationRun.configuration_sha256,
                     )
                     .where(
+                        SimulationRun.execution_queue == simulation_queue(),
                         SimulationRun.state == "completed",
                         SimulationRun.result["executor_acknowledged"].as_boolean().is_not(True),
                     )
@@ -436,6 +691,7 @@ async def recover():
                         SimulationRun.configuration_sha256,
                     )
                     .where(
+                        SimulationRun.execution_queue == simulation_queue(),
                         SimulationRun.state.in_({"failed", "cancelled"}),
                         SimulationRun.result["executor_discard_pending"].as_boolean().is_(True),
                     )

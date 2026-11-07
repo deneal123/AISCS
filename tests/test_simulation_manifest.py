@@ -2,7 +2,7 @@ from copy import deepcopy
 
 import pytest
 
-from service.services.simulations.manifest import REQUIRED_FILES, InvalidManifest, validate_manifest
+from service.services.simulations.manifests.manifest import REQUIRED_FILES, InvalidManifest, validate_manifest
 
 
 def example():

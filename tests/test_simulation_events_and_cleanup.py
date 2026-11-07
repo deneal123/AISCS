@@ -1,4 +1,5 @@
 import asyncio
+import json
 from contextlib import asynccontextmanager
 from types import SimpleNamespace
 from unittest.mock import AsyncMock, Mock
@@ -79,6 +80,19 @@ async def test_unresponsive_event_cache_does_not_hold_the_scientific_worker(monk
     await asyncio.wait_for(tasks.emit(SimpleNamespace(redis_client=redis), uuid4(), "running"), 2)
     redis.expire.assert_not_awaited()
     redis.setex.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+async def test_progress_event_is_published_with_run_identity():
+    redis = SimpleNamespace(xadd=AsyncMock(), expire=AsyncMock(), setex=AsyncMock())
+    run_id = uuid4()
+    progress = {'phase': 'cells', 'done': 3, 'total': 10}
+    await tasks.emit(SimpleNamespace(redis_client=redis), run_id, 'running', progress=progress)
+    stream, payload = redis.xadd.await_args.args
+    event = json.loads(payload['data'])
+    assert stream == f'simulation:{run_id}:events'
+    assert event['run_id'] == str(run_id) and event['state'] == 'running'
+    assert event['progress'] == progress
 
 
 @pytest.mark.asyncio

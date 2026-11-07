@@ -3,7 +3,7 @@ from __future__ import annotations
 import uuid
 from datetime import datetime
 
-from sqlalchemy import DateTime, ForeignKey, Integer, String, UniqueConstraint
+from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, String, UniqueConstraint, false
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -25,6 +25,9 @@ class SimulationRun(Base):
     )
     title: Mapped[str] = mapped_column(String(120))
     state: Mapped[str] = mapped_column(String(24), default="queued", index=True)
+    execution_queue: Mapped[str] = mapped_column(
+        String(100), nullable=False, server_default="simulation", index=True
+    )
     configuration: Mapped[dict] = mapped_column(JSONB)
     configuration_sha256: Mapped[str] = mapped_column(String(64))
     attempt_id: Mapped[uuid.UUID | None] = mapped_column(UUID, nullable=True)
@@ -33,6 +36,9 @@ class SimulationRun(Base):
     dispatched_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     result: Mapped[dict | None] = mapped_column(JSONB, nullable=True)
     error: Mapped[str | None] = mapped_column(String(500), nullable=True)
+    hidden_from_history: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, server_default=false()
+    )
 
 
 class SimulationAttempt(Base):
