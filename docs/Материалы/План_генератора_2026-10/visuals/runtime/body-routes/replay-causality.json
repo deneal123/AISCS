@@ -1,0 +1,102 @@
+{
+  "scope": "Compiled current UI; actual archived numerical artifacts; API transport stubbed. Not live backend/queue acceptance.",
+  "checks": [
+    {
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "all_nodes_visible": 166700,
+      "recovered_swc_landmarks": 26062,
+      "input_before_response": true,
+      "motor_outage_freezes_and_recovers": true,
+      "first_motor_ms": 38,
+      "first_motor_only_corresponding_legs": {
+        "coxa_T1_left": 0,
+        "coxa_T1_right": 0,
+        "coxa_T2_left": 0,
+        "coxa_T2_right": 0,
+        "coxa_T3_left": 0.083333,
+        "coxa_T3_right": 0.166667
+      },
+      "no_fake_quiet_response": true,
+      "source_arbors": {
+        "neurons": 1877,
+        "vertices": 545155,
+        "events_unchanged": true
+      },
+      "surface_contact": {
+        "contact": "electrode",
+        "triangle": 11568,
+        "position_um": {
+          "x_um": -21.511,
+          "y_um": -433.039,
+          "z_um": 231.185
+        },
+        "offset_um": 25,
+        "surface_mm": [
+          -0.02930105197939903,
+          -0.41196409350323293,
+          0.17388404031775373
+        ],
+        "normal": [
+          -0.16984190252365028,
+          -0.8428425709875073,
+          0.510656566273573
+        ],
+        "cancel_restores": true
+      },
+      "neuron_inspection": "MaleCNS · 817015\n\nНейрон сети\n\nСома из исходной аннотации\n\nСпайков к 38.00 мс: 0 · всего: 0\n\nПервый: не зарегистрирован\n\nПоложение в сцене — обзорное совмещение; это не электродный источник.",
+      "submitted_runs": 0
+    },
+    {
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "all_nodes_visible": 166700,
+      "recovered_swc_landmarks": 26062,
+      "input_before_response": true,
+      "motor_outage_freezes_and_recovers": true,
+      "first_motor_ms": 38,
+      "first_motor_only_corresponding_legs": {
+        "coxa_T1_left": 0,
+        "coxa_T1_right": 0,
+        "coxa_T2_left": 0,
+        "coxa_T2_right": 0,
+        "coxa_T3_left": 0.083333,
+        "coxa_T3_right": 0.166667
+      },
+      "no_fake_quiet_response": true,
+      "source_arbors": {
+        "neurons": 1877,
+        "vertices": 545155,
+        "events_unchanged": true
+      },
+      "surface_contact": {
+        "contact": "electrode",
+        "triangle": 10751,
+        "position_um": {
+          "x_um": 14.403,
+          "y_um": -432.611,
+          "z_um": 235.567
+        },
+        "offset_um": 25,
+        "surface_mm": [
+          0.003824848689620408,
+          -0.409390859074134,
+          0.1818734725370249
+        ],
+        "normal": [
+          -0.058298050812240126,
+          -0.9286601689100822,
+          0.3663217546793953
+        ],
+        "cancel_restores": true
+      },
+      "neuron_inspection": "MaleCNS · 24432\n\nНейрон сети\n\nСома из исходной аннотации\n\nСпайков к 38.00 мс: 0 · всего: 0\n\nПервый: не зарегистрирован\n\nПоложение в сцене — обзорное совмещение; это не электродный источник.",
+      "submitted_runs": 0
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,6 @@
+{
+  "scope": "Identical registered annotations exported on Windows and Linux, canonical UTF-8/LF; byte-for-byte equality.",
+  "equal": true,
+  "bytes": 56797,
+  "sha256": "622e95da2d5af6c87d34fa6bb4b6c2c52e5a119c8d5f0c84f4535cca6572997f"
+}

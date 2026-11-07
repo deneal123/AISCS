@@ -1,0 +1,79 @@
+{
+  "scope": "Existing numerical artifacts only; no new experiments. E1/REF passive.",
+  "results": [
+    {
+      "fixture": "front_left",
+      "stimulus_region": "front_left",
+      "input_neurons": 151,
+      "first_spike_ms": 30.0,
+      "first_spike_count": 151,
+      "first_spikes_in_input": 151,
+      "first_spike_regions": {
+        "front_left": 151
+      },
+      "first_outside_input_ms": 33.0,
+      "event_sha256": "6f5dc13236fae1cc54a8f081bcf2a4df125bb3875cbb5b4af9a2d5f691d7961e"
+    },
+    {
+      "fixture": "head",
+      "stimulus_region": "head",
+      "input_neurons": 1733,
+      "first_spike_ms": 30.0,
+      "first_spike_count": 1733,
+      "first_spikes_in_input": 1733,
+      "first_spike_regions": {
+        "brain": 1733
+      },
+      "first_outside_input_ms": 32.0,
+      "event_sha256": "4e4e4de706aca88d59c0f255d4f1bfb5d50e7453d71f06d55c212e33c1c0f40e"
+    },
+    {
+      "fixture": "moved",
+      "stimulus_region": "thorax",
+      "input_neurons": 1877,
+      "first_spike_ms": 30.0,
+      "first_spike_count": 1877,
+      "first_spikes_in_input": 1877,
+      "first_spike_regions": {
+        "middle_right": 428,
+        "hind_left": 394,
+        "middle_left": 378,
+        "hind_right": 411,
+        "front_left": 151,
+        "front_right": 115
+      },
+      "first_outside_input_ms": 32.0,
+      "event_sha256": "bf4105902d64b9c27670d1bc220e5701dd823176c3600a8cc8611b715007217d"
+    },
+    {
+      "fixture": "none",
+      "stimulus_region": "thorax",
+      "input_neurons": 1877,
+      "first_spike_ms": null,
+      "first_spike_count": 0,
+      "first_spikes_in_input": 0,
+      "first_spike_regions": {},
+      "first_outside_input_ms": null,
+      "event_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "fixture": "thorax",
+      "stimulus_region": "thorax",
+      "input_neurons": 1877,
+      "first_spike_ms": 30.0,
+      "first_spike_count": 1877,
+      "first_spikes_in_input": 1877,
+      "first_spike_regions": {
+        "middle_right": 428,
+        "hind_left": 394,
+        "middle_left": 378,
+        "hind_right": 411,
+        "front_left": 151,
+        "front_right": 115
+      },
+      "first_outside_input_ms": 32.0,
+      "event_sha256": "bf4105902d64b9c27670d1bc220e5701dd823176c3600a8cc8611b715007217d"
+    }
+  ],
+  "passive_contact_invariance": true
+}

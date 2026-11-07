@@ -39,3 +39,4 @@ Thumbs.db
 .vscode/
 *.swp
 .work/
+.data/

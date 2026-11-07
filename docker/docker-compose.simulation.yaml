@@ -102,8 +102,28 @@ services:
     environment:
       GENERATOR_TOKEN: ${GENERATOR_TOKEN}
       GENERATOR_WORK_DIR: /work
+      GENERATOR_MORPHOLOGY_DIRS: /morphologies/existing:/morphologies/full
+      GENERATOR_MORPHOLOGY_BOUNDS_DB: /morphology-index/verified-bounds-v2.sqlite
+      GENERATOR_MORPHOLOGY_BOUNDS_AUDIT: /morphology-index/verified-bounds-v2.audit.json
+      GENERATOR_MORPHOLOGY_RADIUS_DB: /morphology-index/verified-radii-v1.sqlite
+      GENERATOR_MORPHOLOGY_RADIUS_AUDIT: /morphology-index/verified-radii-v1.audit.json
+      GENERATOR_MORPHOLOGY_SEGMENT_DB: /morphology-index/verified-segments-v1.sqlite
+      GENERATOR_MORPHOLOGY_SEGMENT_AUDIT: /morphology-index/verified-segments-v1.audit.json
+      # Verified content-addressed copy avoids rereading the large Windows bind mount.
+      GENERATOR_SEGMENT_SNAPSHOT_DIR: /work/verified-index-snapshots
+      GENERATOR_MORPHOLOGY_SPATIAL_WORKERS: ${GENERATOR_MORPHOLOGY_SPATIAL_WORKERS:-4}
+      GENERATOR_FIELD_WORKERS: ${GENERATOR_FIELD_WORKERS:-2}
+      GENERATOR_CNS_OVERVIEW_DIR: /morphologies/overview
+      GENERATOR_SYNAPSE_DIR: /synapses
+      GENERATOR_NEUROPIL_DIR: /neuropil
     volumes:
       - generator_scratch:/work
+      - ${GENERATOR_MORPHOLOGY_EXISTING_PATH:-../.data/male-cns/morphology}:/morphologies/existing:ro
+      - ${GENERATOR_MORPHOLOGY_FULL_PATH:-../.data/male-cns/full-morphology}:/morphologies/full:ro
+      - ${GENERATOR_MORPHOLOGY_INDEX_PATH:-../.data/male-cns/morphology-index}:/morphology-index:ro
+      - ${GENERATOR_CNS_OVERVIEW_PATH:-../.data/male-cns/overview-v1}:/morphologies/overview:ro
+      - ${GENERATOR_SYNAPSE_PATH:-../.data/male-cns/synapses}:/synapses:ro
+      - ${GENERATOR_NEUROPIL_PATH:-../.data/male-cns/neuropil-lod-v1}:/neuropil:ro
     networks: [internal]
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8090/health')"]

@@ -1,0 +1,171 @@
+{
+  "scope": "Necessary event causality against the complete registered CSR graph. Every non-input spike has an earlier recorded excitatory presynaptic event on an actual edge, with at least the saved delay. This is not a replay of membrane thresholds or biological validation.",
+  "graph_manifest_sha256": "742ee0b22040d6831cb96479d468cd57f1a60d96e2004e3beb421a8d3ac936a2",
+  "runs": [
+    {
+      "fixture": "current-v2",
+      "input": "thorax",
+      "spikes": 52473,
+      "checked_non_input_events": 18675,
+      "missing_prior_excitatory_edge": 0,
+      "minimum_prior_source_to_response_ms": 2.0,
+      "examples": [
+        {
+          "source": "803761",
+          "target": "10592",
+          "source_ms": 30.0,
+          "target_ms": 32.0,
+          "contacts": 6
+        },
+        {
+          "source": "804120",
+          "target": "12457",
+          "source_ms": 30.0,
+          "target_ms": 32.0,
+          "contacts": 4
+        },
+        {
+          "source": "803964",
+          "target": "12781",
+          "source_ms": 30.0,
+          "target_ms": 32.0,
+          "contacts": 4
+        },
+        {
+          "source": "803761",
+          "target": "13041",
+          "source_ms": 30.0,
+          "target_ms": 32.0,
+          "contacts": 2
+        },
+        {
+          "source": "804120",
+          "target": "13181",
+          "source_ms": 30.0,
+          "target_ms": 32.0,
+          "contacts": 70
+        },
+        {
+          "source": "803555",
+          "target": "13381",
+          "source_ms": 30.0,
+          "target_ms": 32.0,
+          "contacts": 7
+        }
+      ]
+    },
+    {
+      "fixture": "current-v2-head",
+      "input": "head",
+      "spikes": 50389,
+      "checked_non_input_events": 17869,
+      "missing_prior_excitatory_edge": 0,
+      "minimum_prior_source_to_response_ms": 2.0,
+      "examples": [
+        {
+          "source": "10438",
+          "target": "10141",
+          "source_ms": 30.0,
+          "target_ms": 32.0,
+          "contacts": 9
+        },
+        {
+          "source": "10438",
+          "target": "10218",
+          "source_ms": 30.0,
+          "target_ms": 32.0,
+          "contacts": 7
+        },
+        {
+          "source": "33970",
+          "target": "10446",
+          "source_ms": 30.0,
+          "target_ms": 32.0,
+          "contacts": 68
+        },
+        {
+          "source": "10438",
+          "target": "10482",
+          "source_ms": 30.0,
+          "target_ms": 32.0,
+          "contacts": 12
+        },
+        {
+          "source": "25582",
+          "target": "10506",
+          "source_ms": 30.0,
+          "target_ms": 32.0,
+          "contacts": 37
+        },
+        {
+          "source": "25108",
+          "target": "10536",
+          "source_ms": 30.0,
+          "target_ms": 32.0,
+          "contacts": 33
+        }
+      ]
+    },
+    {
+      "fixture": "current-v2-none",
+      "input": "thorax",
+      "spikes": 0,
+      "checked_non_input_events": 0,
+      "missing_prior_excitatory_edge": 0,
+      "minimum_prior_source_to_response_ms": null,
+      "examples": []
+    },
+    {
+      "fixture": "new-exterior",
+      "input": "front_left",
+      "spikes": 3350,
+      "checked_non_input_events": 488,
+      "missing_prior_excitatory_edge": 0,
+      "minimum_prior_source_to_response_ms": 3.0,
+      "examples": [
+        {
+          "source": "807971",
+          "target": "800537",
+          "source_ms": 30.0,
+          "target_ms": 33.0,
+          "contacts": 70
+        },
+        {
+          "source": "807971",
+          "target": "801490",
+          "source_ms": 30.0,
+          "target_ms": 33.0,
+          "contacts": 23
+        },
+        {
+          "source": "807971",
+          "target": "800268",
+          "source_ms": 30.0,
+          "target_ms": 35.0,
+          "contacts": 25
+        },
+        {
+          "source": "808998",
+          "target": "802056",
+          "source_ms": 30.0,
+          "target_ms": 37.0,
+          "contacts": 26
+        },
+        {
+          "source": "808998",
+          "target": "16458",
+          "source_ms": 30.0,
+          "target_ms": 39.0,
+          "contacts": 4
+        },
+        {
+          "source": "807971",
+          "target": "17513",
+          "source_ms": 30.0,
+          "target_ms": 39.0,
+          "contacts": 9
+        }
+      ]
+    }
+  ]
+}

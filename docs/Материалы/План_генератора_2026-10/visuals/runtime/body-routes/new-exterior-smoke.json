@@ -1,0 +1,60 @@
+{
+  "scope": "One new technical smoke run through the actual backend, Celery worker, generator and storage; no scientific performance estimate.",
+  "origin": "http://localhost:8095",
+  "run_id": "1512e1e4-c4e8-4701-aa6c-8caca5b9945b",
+  "state": "completed",
+  "observed_states": [
+    "queued",
+    "preparing",
+    "running",
+    "publishing",
+    "completed"
+  ],
+  "elapsed_ms": 58936,
+  "stimulus_region": "front_left",
+  "input_neurons": 151,
+  "neurons": 166700,
+  "edges": 25582938,
+  "recording_contacts": {
+    "region_id": "thoracic-local-v1",
+    "electrode": {
+      "x_um": 258.643,
+      "y_um": 94.023,
+      "z_um": 484.86
+    },
+    "reference": {
+      "x_um": 311.142,
+      "y_um": 262.729,
+      "z_um": 396.792
+    },
+    "mesh_asset_id": "flybody-sim003-fdbbd866-rest-v1",
+    "transform_version": "thoracic-rigid-v1",
+    "registration": {
+      "mesh_asset_id": "flybody-sim003-fdbbd866-rest-v1",
+      "mesh_sha256": "8eb70a265a179e811c902fda4334aa83bc34f54a58d400db0c3a6f98ccbd62dd",
+      "source_commit": "fdbbd866b203a709a164970b0a8996108edd57a5",
+      "region_id": "thoracic-local-v1",
+      "mesh_part": "thorax",
+      "mesh_triangle_count": 18312,
+      "origin_mm": [
+        -0.012035995721817017,
+        4.0084123611450195e-06,
+        -0.04453502595424652
+      ],
+      "mesh_units": "mm",
+      "model_units": "um",
+      "um_to_mm": 0.001,
+      "bridge_kind": "author-defined rigid embedding, not a reconstructed neural mapping",
+      "attachment": "body-attached-static-v1",
+      "contact_shape": "ideal-point",
+      "operator_version": "lfpy-pointsource-e1-minus-ref-v1"
+    }
+  },
+  "prediction_status": "outside_checked_domain",
+  "artifact": {
+    "name": "connectome.bin",
+    "bytes": 4577612,
+    "sha256": "07597aba54a69e418372f9387ab727f22ad15f06f85390bfbd28e8d98b63eba1"
+  },
+  "finite_signal": true
+}

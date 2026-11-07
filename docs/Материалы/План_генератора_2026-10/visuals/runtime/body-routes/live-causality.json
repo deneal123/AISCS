@@ -1,0 +1,365 @@
+{
+  "scope": "Owned completed runs through the actual authorized API. No new calculation. Injected SWC/motor outages block service workers. Raw transport logs are excluded.",
+  "captured_utc": "2026-10-28T18:49:58.735839+00:00",
+  "origin": "http://localhost:8095",
+  "transport": "Compiled host preview, actual backend HTTP and authorized WebSocket. Docker dev frontend still OOMKilled.",
+  "stats": {
+    "startTime": "2026-10-28T18:38:02.107Z",
+    "duration": 124578.30099999999,
+    "expected": 32,
+    "skipped": 2,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "tests": [
+    {
+      "title": "full graph, calculated propagation, rewind and quiet control",
+      "viewport": "laptop",
+      "results": [
+        {
+          "status": "passed",
+          "duration_ms": 6145
+        }
+      ]
+    },
+    {
+      "title": "compiled demo receives an authorized saved-run snapshot through the real WebSocket",
+      "viewport": "laptop",
+      "results": [
+        {
+          "status": "passed",
+          "duration_ms": 3176
+        }
+      ]
+    },
+    {
+      "title": "source mesh selects the head input; electrode mode exits input picking",
+      "viewport": "laptop",
+      "results": [
+        {
+          "status": "passed",
+          "duration_ms": 3733
+        }
+      ]
+    },
+    {
+      "title": "native EM view preserves events, hides schematic anatomy and returns for contact placement",
+      "viewport": "laptop",
+      "results": [
+        {
+          "status": "passed",
+          "duration_ms": 3652
+        }
+      ]
+    },
+    {
+      "title": "thorax skin cannot silently choose the pooled six-leg sensory input",
+      "viewport": "laptop",
+      "results": [
+        {
+          "status": "passed",
+          "duration_ms": 3264
+        }
+      ]
+    },
+    {
+      "title": "body nerve layer preserves CNS positions and shows recorded abdominal and single-leg events",
+      "viewport": "laptop",
+      "results": [
+        {
+          "status": "passed",
+          "duration_ms": 7181
+        }
+      ]
+    },
+    {
+      "title": "new demos use exterior recording contacts without rewriting the old internal record",
+      "viewport": "laptop",
+      "results": [
+        {
+          "status": "passed",
+          "duration_ms": 3902
+        }
+      ]
+    },
+    {
+      "title": "passive contact snaps outside the registered surface and cancellation restores its coordinates",
+      "viewport": "laptop",
+      "results": [
+        {
+          "status": "passed",
+          "duration_ms": 3071
+        }
+      ]
+    },
+    {
+      "title": "neuron inspection reads exact IDs and events without submitting a calculation",
+      "viewport": "laptop",
+      "results": [
+        {
+          "status": "passed",
+          "duration_ms": 3434
+        }
+      ]
+    },
+    {
+      "title": "calculated input precedes network response and limb cues start at registered motor events",
+      "viewport": "laptop",
+      "results": [
+        {
+          "status": "passed",
+          "duration_ms": 4117
+        }
+      ]
+    },
+    {
+      "title": "single-leg input keeps other limbs quiet in the recorded front-left scenario",
+      "viewport": "laptop",
+      "results": [
+        {
+          "status": "passed",
+          "duration_ms": 2699
+        }
+      ]
+    },
+    {
+      "title": "unavailable full-network buffer has read-only recovery without another calculation",
+      "viewport": "laptop",
+      "results": [
+        {
+          "status": "passed",
+          "duration_ms": 3635
+        }
+      ]
+    },
+    {
+      "title": "abdominal cells are distinguished from an unavailable tactile input",
+      "viewport": "laptop",
+      "results": [
+        {
+          "status": "passed",
+          "duration_ms": 2565
+        }
+      ]
+    },
+    {
+      "title": "both full-network scenes restore from the URL with the same clock",
+      "viewport": "laptop",
+      "results": [
+        {
+          "status": "skipped",
+          "duration_ms": 265
+        }
+      ]
+    },
+    {
+      "title": "full graph, calculated propagation, rewind and quiet control",
+      "viewport": "desktop",
+      "results": [
+        {
+          "status": "passed",
+          "duration_ms": 6384
+        }
+      ]
+    },
+    {
+      "title": "compiled demo receives an authorized saved-run snapshot through the real WebSocket",
+      "viewport": "desktop",
+      "results": [
+        {
+          "status": "passed",
+          "duration_ms": 3122
+        }
+      ]
+    },
+    {
+      "title": "source mesh selects the head input; electrode mode exits input picking",
+      "viewport": "desktop",
+      "results": [
+        {
+          "status": "passed",
+          "duration_ms": 2939
+        }
+      ]
+    },
+    {
+      "title": "native EM view preserves events, hides schematic anatomy and returns for contact placement",
+      "viewport": "desktop",
+      "results": [
+        {
+          "status": "passed",
+          "duration_ms": 3996
+        }
+      ]
+    },
+    {
+      "title": "thorax skin cannot silently choose the pooled six-leg sensory input",
+      "viewport": "desktop",
+      "results": [
+        {
+          "status": "passed",
+          "duration_ms": 2642
+        }
+      ]
+    },
+    {
+      "title": "body nerve layer preserves CNS positions and shows recorded abdominal and single-leg events",
+      "viewport": "desktop",
+      "results": [
+        {
+          "status": "passed",
+          "duration_ms": 6810
+        }
+      ]
+    },
+    {
+      "title": "new demos use exterior recording contacts without rewriting the old internal record",
+      "viewport": "desktop",
+      "results": [
+        {
+          "status": "passed",
+          "duration_ms": 3477
+        }
+      ]
+    },
+    {
+      "title": "passive contact snaps outside the registered surface and cancellation restores its coordinates",
+      "viewport": "desktop",
+      "results": [
+        {
+          "status": "passed",
+          "duration_ms": 3019
+        }
+      ]
+    },
+    {
+      "title": "neuron inspection reads exact IDs and events without submitting a calculation",
+      "viewport": "desktop",
+      "results": [
+        {
+          "status": "passed",
+          "duration_ms": 3455
+        }
+      ]
+    },
+    {
+      "title": "calculated input precedes network response and limb cues start at registered motor events",
+      "viewport": "desktop",
+      "results": [
+        {
+          "status": "passed",
+          "duration_ms": 4309
+        }
+      ]
+    },
+    {
+      "title": "single-leg input keeps other limbs quiet in the recorded front-left scenario",
+      "viewport": "desktop",
+      "results": [
+        {
+          "status": "passed",
+          "duration_ms": 2537
+        }
+      ]
+    },
+    {
+      "title": "unavailable full-network buffer has read-only recovery without another calculation",
+      "viewport": "desktop",
+      "results": [
+        {
+          "status": "passed",
+          "duration_ms": 3971
+        }
+      ]
+    },
+    {
+      "title": "abdominal cells are distinguished from an unavailable tactile input",
+      "viewport": "desktop",
+      "results": [
+        {
+          "status": "passed",
+          "duration_ms": 2801
+        }
+      ]
+    },
+    {
+      "title": "both full-network scenes restore from the URL with the same clock",
+      "viewport": "desktop",
+      "results": [
+        {
+          "status": "skipped",
+          "duration_ms": 280
+        }
+      ]
+    },
+    {
+      "title": "missing peripheral registry keeps the schematic paths without invented activity and recovers read-only",
+      "viewport": "laptop",
+      "results": [
+        {
+          "status": "passed",
+          "duration_ms": 2615
+        }
+      ]
+    },
+    {
+      "title": "source sensory arbors recover independently without altering the saved network events",
+      "viewport": "laptop",
+      "results": [
+        {
+          "status": "passed",
+          "duration_ms": 3452
+        }
+      ]
+    },
+    {
+      "title": "missing motor annotations freeze the pose without an HH fallback and recover read-only",
+      "viewport": "laptop",
+      "results": [
+        {
+          "status": "passed",
+          "duration_ms": 3114
+        }
+      ]
+    },
+    {
+      "title": "missing peripheral registry keeps the schematic paths without invented activity and recovers read-only",
+      "viewport": "desktop",
+      "results": [
+        {
+          "status": "passed",
+          "duration_ms": 2983
+        }
+      ]
+    },
+    {
+      "title": "source sensory arbors recover independently without altering the saved network events",
+      "viewport": "desktop",
+      "results": [
+        {
+          "status": "passed",
+          "duration_ms": 2976
+        }
+      ]
+    },
+    {
+      "title": "missing motor annotations freeze the pose without an HH fallback and recover read-only",
+      "viewport": "desktop",
+      "results": [
+        {
+          "status": "passed",
+          "duration_ms": 3449
+        }
+      ]
+    }
+  ],
+  "earlier_slice": "An initial cold page did not become ready in 30 seconds. A later run timed out waiting for the real artifact download; it is recorded below. The final whole suite is an explicit rerun, not an automatic hidden retry.",
+  "earlier_interrupted_download_stats": {
+    "startTime": "2026-10-28T17:22:08.255Z",
+    "duration": 74508.568,
+    "expected": 8,
+    "skipped": 21,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

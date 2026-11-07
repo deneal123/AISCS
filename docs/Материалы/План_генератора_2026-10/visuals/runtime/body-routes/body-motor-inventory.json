@@ -1,0 +1,192 @@
+{
+  "scope": "Actual source annotations, source FlyBody joint definitions and saved event binaries. No muscle mapping or new body controller inferred. Four VNC cells alone do not represent the complete cervical output.",
+  "annotations_sha256": "d27d8ed9294b57d28a7c376b0a958fc9074b93ae4ea2ce77441c1c18c1570bee",
+  "selected_counts": {
+    "other_head_motor": 87,
+    "neck": 24,
+    "abdomen": 238
+  },
+  "neck_superclasses": {
+    "cb_motor": 20,
+    "vnc_motor": 4
+  },
+  "source_xml_sha256": "35541d5312f71e7c96156c345cd90918867513a2b3dafbb07b8684ee59b6f4dc",
+  "joints": {
+    "head": [
+      {
+        "name": "head_abduct",
+        "axis": "0 0 1",
+        "range": "-0.2 0.2"
+      },
+      {
+        "name": "head_twist",
+        "axis": "0 1 0",
+        "range": "-3 3"
+      },
+      {
+        "name": "head",
+        "axis": "1 0 0",
+        "range": "-0.5 0.3"
+      }
+    ],
+    "antenna_left": [
+      {
+        "name": "antenna_abduct_left",
+        "class": "antenna_abduct"
+      },
+      {
+        "name": "antenna_twist_left",
+        "class": "antenna_twist"
+      },
+      {
+        "name": "antenna_left",
+        "class": "antenna_extend"
+      }
+    ],
+    "antenna_right": [
+      {
+        "name": "antenna_abduct_right",
+        "class": "antenna_abduct"
+      },
+      {
+        "name": "antenna_twist_right",
+        "class": "antenna_twist"
+      },
+      {
+        "name": "antenna_right",
+        "class": "antenna_extend"
+      }
+    ],
+    "wing_left": [
+      {
+        "name": "wing_yaw_left",
+        "class": "yaw"
+      },
+      {
+        "name": "wing_roll_left",
+        "class": "roll"
+      },
+      {
+        "name": "wing_pitch_left",
+        "class": "pitch"
+      }
+    ],
+    "wing_right": [
+      {
+        "name": "wing_yaw_right",
+        "class": "yaw"
+      },
+      {
+        "name": "wing_roll_right",
+        "class": "roll"
+      },
+      {
+        "name": "wing_pitch_right",
+        "class": "pitch"
+      }
+    ],
+    "abdomen": [
+      {
+        "name": "abdomen_abduct",
+        "class": "abduct_abdomen"
+      },
+      {
+        "name": "abdomen",
+        "class": "extend_abdomen"
+      }
+    ],
+    "abdomen_2": [
+      {
+        "name": "abdomen_abduct_2",
+        "class": "abduct_abdomen"
+      },
+      {
+        "name": "abdomen_2",
+        "class": "extend_abdomen"
+      }
+    ],
+    "abdomen_3": [
+      {
+        "name": "abdomen_abduct_3",
+        "class": "abduct_abdomen"
+      },
+      {
+        "name": "abdomen_3",
+        "class": "extend_abdomen"
+      }
+    ],
+    "abdomen_4": [
+      {
+        "name": "abdomen_abduct_4",
+        "class": "abduct_abdomen"
+      },
+      {
+        "name": "abdomen_4",
+        "class": "extend_abdomen"
+      }
+    ],
+    "abdomen_5": [
+      {
+        "name": "abdomen_abduct_5",
+        "class": "abduct_abdomen"
+      },
+      {
+        "name": "abdomen_5",
+        "class": "extend_abdomen"
+      }
+    ],
+    "abdomen_6": [
+      {
+        "name": "abdomen_abduct_6",
+        "class": "abduct_abdomen"
+      },
+      {
+        "name": "abdomen_6",
+        "class": "extend_abdomen"
+      }
+    ],
+    "abdomen_7": [
+      {
+        "name": "abdomen_abduct_7",
+        "class": "abduct_abdomen"
+      },
+      {
+        "name": "abdomen_7",
+        "class": "extend_abdomen"
+      }
+    ]
+  },
+  "runs": [
+    {
+      "fixture": "current-v2",
+      "events": {
+        "abdomen": 658,
+        "other_head_motor": 27,
+        "neck": 14
+      },
+      "first_ms": {
+        "abdomen": 43.0,
+        "other_head_motor": 47.0,
+        "neck": 57.0
+      }
+    },
+    {
+      "fixture": "current-v2-head",
+      "events": {
+        "other_head_motor": 195,
+        "neck": 164,
+        "abdomen": 66
+      },
+      "first_ms": {
+        "other_head_motor": 39.0,
+        "neck": 42.0,
+        "abdomen": 64.0
+      }
+    },
+    {
+      "fixture": "new-exterior",
+      "events": {},
+      "first_ms": {}
+    }
+  ]
+}

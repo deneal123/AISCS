@@ -1,0 +1,73 @@
+{
+  "source": "registered MaleCNS annotation file + existing immutable event exports",
+  "motor_cells": 319,
+  "regions": {
+    "hind_right": 60,
+    "hind_left": 62,
+    "middle_right": 58,
+    "middle_left": 58,
+    "front_left": 41,
+    "front_right": 40
+  },
+  "interpretation": "Groups use exit nerve, neuromere and soma side. Soma side alone does not prove the side of every peripheral muscle target. No mechanical map or excitation model inferred.",
+  "results": [
+    {
+      "fixture": "strong",
+      "recorded_input": "thorax",
+      "motor_spikes": {
+        "hind_left": 128,
+        "hind_right": 96,
+        "middle_right": 121,
+        "middle_left": 90,
+        "front_left": 7
+      },
+      "first_motor_ms": {
+        "hind_left": 38.0,
+        "hind_right": 38.0,
+        "middle_right": 41.0,
+        "middle_left": 41.0,
+        "front_left": 55.0
+      },
+      "active_motor_neurons": 38
+    },
+    {
+      "fixture": "head",
+      "recorded_input": "head",
+      "motor_spikes": {
+        "middle_left": 18,
+        "middle_right": 8,
+        "front_left": 49,
+        "front_right": 34,
+        "hind_right": 10,
+        "hind_left": 4
+      },
+      "first_motor_ms": {
+        "middle_left": 42.0,
+        "middle_right": 47.0,
+        "front_left": 49.0,
+        "front_right": 56.0,
+        "hind_right": 59.0,
+        "hind_left": 107.0
+      },
+      "active_motor_neurons": 19
+    },
+    {
+      "fixture": "none",
+      "recorded_input": "thorax",
+      "motor_spikes": {},
+      "first_motor_ms": {},
+      "active_motor_neurons": 0
+    },
+    {
+      "fixture": "new_exterior_front_left",
+      "recorded_input": "front_left",
+      "motor_spikes": {
+        "front_left": 13
+      },
+      "first_motor_ms": {
+        "front_left": 50.0
+      },
+      "active_motor_neurons": 2
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "scope": "Source annotation inventory only. No dorsal stimulation adapter implemented; not an electrical field or pain claim.",
+  "source_annotations_sha256": "d27d8ed9294b57d28a7c376b0a958fc9074b93ae4ea2ce77441c1c18c1570bee",
+  "cells": 214,
+  "entry_nerve": {
+    "PDMN": 214
+  },
+  "types": {
+    "SNta10": 2,
+    "SNta02,SNta09": 212
+  },
+  "root_side": {
+    "L": 101,
+    "R": 113
+  }
+}

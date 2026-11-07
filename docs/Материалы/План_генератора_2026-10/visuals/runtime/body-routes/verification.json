@@ -1,0 +1,112 @@
+{
+  "scientific_scope": "LIF event playback and engineering HH projection; not a validated motor map, full-CNS extracellular solver, spatial STIM model or subjective pain measurement.",
+  "simulator_jest": {
+    "passed": 70,
+    "suites": 18
+  },
+  "full_jest": {
+    "historical_run_before_peripheral_layer": true,
+    "passed": 1285,
+    "failed": 2,
+    "passed_suites": 189,
+    "failed_suites": 2,
+    "failures": [
+      "ComposerChoices: mobile sheet remains mounted",
+      "WorkHub: 5000 ms timeout"
+    ]
+  },
+  "linux_pytest": {
+    "passed": 56,
+    "skipped": 3,
+    "scope": "Fresh image built from current service/tests/scripts; registered external-data integration cases skipped"
+  },
+  "independent_wheel": {
+    "passed": true,
+    "scope": "Installed outside source cwd; both frozen models, exterior JSON and out-of-domain prediction refusal"
+  },
+  "lint": {
+    "simulator_eslint": true,
+    "live_browser_eslint": true,
+    "generator_ruff": true
+  },
+  "numerical_sources_unchanged": 9,
+  "protected_files_unchanged": 2760,
+  "runtime": {
+    "origin": "http://localhost:8095/simulator",
+    "actual_api_and_ws": true,
+    "docker_dev_frontend_recovered": false,
+    "generator_image_config_sha256": "9e3327ce8c3fd2ed8c29135dfae459ffaa20330609f9467af8977ba54c8b741a"
+  },
+  "derived_assets": [
+    {
+      "name": "arbors-front_left.bin.gz",
+      "bytes": 204788,
+      "sha256": "754ef1e3b3694d40af06eb55305e7786c1b967fef9c9d310732578cd3a176b8f"
+    },
+    {
+      "name": "arbors-front_right.bin.gz",
+      "bytes": 169495,
+      "sha256": "ab0792f1643d1ea7e6c64f070f4bbf681c789f2a7ee845b4b42f02796836f83a"
+    },
+    {
+      "name": "arbors-head.bin.gz",
+      "bytes": 3301015,
+      "sha256": "ae162d7e8b62623c6fa0a36532f1a451318186946f1ed9d5ce2e1b8a60a66fa4"
+    },
+    {
+      "name": "arbors-hind_left.bin.gz",
+      "bytes": 655239,
+      "sha256": "1b38c2638474e305034a9948e5f7ddfae5ce2a515b3953162a3c3b1ce2ea4785"
+    },
+    {
+      "name": "arbors-hind_right.bin.gz",
+      "bytes": 692715,
+      "sha256": "c120504e2ffb58abe37cd8bca05d97da7be6df7c4a29e8cff4ec081db174c480"
+    },
+    {
+      "name": "arbors-middle_left.bin.gz",
+      "bytes": 658034,
+      "sha256": "6737a8a9744f9387b28d98244bca63163b8da901ff9984c41412fe2a199a5162"
+    },
+    {
+      "name": "arbors-middle_right.bin.gz",
+      "bytes": 805677,
+      "sha256": "aac38b8f3faa265daae8e30d4dff95d321c7dad3bd5b90079c577b916f529da8"
+    },
+    {
+      "name": "arbors.json",
+      "bytes": 456362,
+      "sha256": "65046cce8d70a1659bd81a3eeb3e71728846126dc7729788e3f3512f9886c35e"
+    },
+    {
+      "name": "landmarks.bin",
+      "bytes": 625488,
+      "sha256": "78e1e2b2ac493110f17763e6ddd77022a48de41ce3696f226ee50d059046d45f"
+    },
+    {
+      "name": "landmarks.json",
+      "bytes": 1172,
+      "sha256": "4f4ca03b249918d758ae842af265f01e63bbd2a325d9a8852442b9bb8b8808c9"
+    },
+    {
+      "name": "landmarks.sources.jsonl.gz",
+      "bytes": 3388108,
+      "sha256": "bfcf3053710bdecf2164276a4097ff511db7ffb550438969238395134ad45470"
+    },
+    {
+      "name": "motor.json",
+      "bytes": 56797,
+      "sha256": "622e95da2d5af6c87d34fa6bb4b6c2c52e5a119c8d5f0c84f4535cca6572997f"
+    },
+    {
+      "name": "peripheral.json",
+      "bytes": 619524,
+      "sha256": "5e40a6a229a3b6dd19546d6b8c3306145f5a1605a01ef092b32780cf6dacbc21"
+    },
+    {
+      "name": "README.md",
+      "bytes": 8675,
+      "sha256": "75ed5e5410d53fc10da25d6a38aaef1d6c57c551a9ed740492b438cc39b875ed"
+    }
+  ]
+}
