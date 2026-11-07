@@ -1,5 +1,5 @@
-import { clearPendingFeedback, readPendingFeedback, readSelectedFeedbackSource,
-  writePendingFeedback, writeSelectedFeedbackSource } from '../../../src/features/simulator/recording/pendingFeedbackStorage';
+import { clearPendingFeedback, readFeedbackRetryDraft, readPendingFeedback, readSelectedFeedbackSource,
+  writeFeedbackRetryDraft, writePendingFeedback, writeSelectedFeedbackSource } from '../../../src/features/simulator/recording/pendingFeedbackStorage';
 
 const scene = '93a6be54-9021-4b67-b00b-b799240f7fce';
 const source = 'd382a20d-0d63-45a6-9f3c-8295763491c5';
@@ -41,4 +41,14 @@ test('persists only the selected source for its scene and tolerates blocked stor
   const blocked = { getItem: () => { throw Error('disabled'); }, setItem: () => { throw Error('disabled'); } };
   expect(readSelectedFeedbackSource(blocked, scene)).toBeNull();
   expect(writeSelectedFeedbackSource(blocked, scene, source)).toBe(false);
+});
+
+test('persists a bounded retry draft for its scene only', () => {
+  const draft = { sourceId: source, signature: '["same draft"]' };
+  expect(writeFeedbackRetryDraft(sessionStorage, scene, draft)).toBe(true);
+  expect(readFeedbackRetryDraft(sessionStorage, scene)).toEqual(draft);
+  expect(readFeedbackRetryDraft(sessionStorage, request)).toBeNull();
+  expect(writeFeedbackRetryDraft(sessionStorage, scene, { ...draft, signature: 'x'.repeat(10001) })).toBe(false);
+  sessionStorage.setItem(`simulation:feedback-retry-draft:${scene}`, '{broken');
+  expect(readFeedbackRetryDraft(sessionStorage, scene)).toBeNull();
 });

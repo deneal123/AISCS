@@ -11,28 +11,83 @@ import useWholeNetworkProxy from './useWholeNetworkProxy';
 import useDirectNetworkProxy from './useDirectNetworkProxy';
 import AppSelect from '@shared/controls/AppSelect';
 import { validFeedbackDuration } from '../feedbackDuration';
-import { clearPendingFeedback, readPendingFeedback, readSelectedFeedbackSource,
-  writePendingFeedback, writeSelectedFeedbackSource } from './pendingFeedbackStorage';
+import { clearPendingFeedback, readFeedbackRetryDraft, readPendingFeedback, readSelectedFeedbackSource,
+  writeFeedbackRetryDraft, writePendingFeedback, writeSelectedFeedbackSource } from './pendingFeedbackStorage';
 
 const active = new Set(['queued', 'preparing', 'running', 'publishing', 'cancelling']);
 const contacts = [['source_um', 'STIM+'], ['return_um', 'STIM−'], ['electrode_um', 'E1'], ['reference_um', 'REF']];
 const tabStorage = () => { try { return window.sessionStorage; } catch { return null; } };
 
-export default function FragmentPopulationRecording({ sceneRunId, sceneManifest, onShowOnBody, canRestore, incomingContacts, onConsumeContacts, onAdjustContact, formRef, onPrimaryStatus, onClearanceNotice, onFailure }) {
+function canonicalJson(value) {
+  if (Array.isArray(value)) return `[${value.map(canonicalJson).join(',')}]`;
+  if (value && typeof value === 'object') return `{${Object.keys(value).sort()
+    .map(key => `${JSON.stringify(key)}:${canonicalJson(value[key])}`).join(',')}}`;
+  return JSON.stringify(value);
+}
+
+function recoveredDraft(receipt, source, sceneId, sceneManifest) {
+  if (!receipt || receipt.sourceId !== source?.id || !['completed', 'failed', 'cancelled'].includes(source.state)
+      || source.parent_run_id !== sceneId || source.configuration?.graph_manifest_sha256 !== sceneManifest) return null;
+  try {
+    const [scene, graph, positions, current, duration, ids, radius] = JSON.parse(receipt.signature);
+    const simulation = source.configuration.simulation;
+    if (scene !== sceneId || graph !== sceneManifest || !simulation || typeof ids !== 'string'
+        || typeof radius !== 'string' || !radius.trim() || !Number.isFinite(Number(radius)) || Number(radius) < 0
+        || !Array.isArray(source.configuration.source_ids)
+        || canonicalJson(source.configuration.source_ids) !== canonicalJson(ids.split(',').map(value => Number(value.trim())))
+        || Number(current) !== simulation.current_na || Number(duration) !== simulation.duration_ms
+        || !contacts.every(([key]) => Array.isArray(positions?.[key]) && positions[key].length === 3
+          && positions[key].every(Number.isFinite)
+          && canonicalJson(positions[key]) === canonicalJson(simulation[key]))) return null;
+    return { configuration: source.configuration, simulation, positions, ids, radius };
+  } catch { return null; }
+}
+
+function unresolvedGeometryCount(code) {
+  if (typeof code !== 'string') return null;
+  const match = /^executor_synapse_geometries:([1-9]\d{0,18}:[1-9]\d{0,8}:[1-9]\d{0,8}(?:,[1-9]\d{0,18}:[1-9]\d{0,8}:[1-9]\d{0,8}){1,255});omitted:(\d{1,3})$/.exec(code);
+  if (!match) return null;
+  const rows = match[1].split(',').map(row => row.split(':'));
+  const omitted = Number(match[2]);
+  if (rows.length + omitted > 256 || new Set(rows.map(row => row[0])).size !== rows.length
+      || rows.some(([id, count, total]) => BigInt(id) >= 2n ** 63n || Number(count) > Number(total))) return null;
+  return rows.length + omitted;
+}
+
+function unresolvedGeometrySingle(code) {
+  if (typeof code !== 'string') return null;
+  const match = /^executor_synapse_geometry:([1-9]\d{0,18}):([1-9]\d{0,8}):([1-9]\d{0,8})$/.exec(code);
+  return match && BigInt(match[1]) < 2n ** 63n && Number(match[2]) <= Number(match[3])
+    ? match : null;
+}
+
+export default function FragmentPopulationRecording({ sceneRunId, sceneManifest, onShowOnBody, canRestore, incomingContacts, onConsumeContacts, onAdjustContact, onAdjustParameters, onSourceForFiles, formRef, onPrimaryStatus, onClearanceNotice, onFailure }) {
   const preset = fieldDemoPreset(sceneManifest);
   const [ids, setIds] = useState('174827, 176609');
   const [excludedIds, setExcludedIds] = useState([]);
   const [searchRadius, setSearchRadius] = useState('10');
   const [calculationMode, setCalculationMode] = useState('detailed');
+  const operatorContactSignature = useRef(null);
+  const launchedDirect = useRef(null);
   const direct = useDirectNetworkProxy((run, simulation) => {
-    if (simulation) onShowOnBody?.(run, { direct: true, simulation });
-  }, sceneRunId);
+    if (!simulation) return;
+    const launched = launchedDirect.current;
+    if (launched && (launched.sceneId !== sceneRunId
+        || launched.signature !== operatorContactSignature.current)) return;
+    if (!launched && canRestore && !canRestore()) return;
+    onShowOnBody?.(run, { direct: true, simulation });
+  }, sceneRunId, canRestore);
   const [, setSelectionBasis] = useState(null);
   const [coordinates, setCoordinates] = useState({
     source_um: [429.056, 387.68, 228.352], return_um: [929.056, 327.68, 228.352],
     electrode_um: [419.328, 379.488, 359.92], reference_um: [919.328, 319.488, 359.92],
   });
   const [state, setState] = useState({ items: [], selected: null, loading: true, error: false });
+  useEffect(() => {
+    const source = state.selected;
+    onSourceForFiles?.(source?.state === 'completed' && source.parent_run_id === sceneRunId
+      && source.configuration?.graph_manifest_sha256 === sceneManifest ? { sceneRunId, source } : null);
+  }, [state.selected, sceneRunId, sceneManifest, onSourceForFiles]);
   const [retry, setRetry] = useState(0);
   const [sending, setSending] = useState(false);
   const [preparationStage, setPreparationStage] = useState(null);
@@ -52,6 +107,12 @@ export default function FragmentPopulationRecording({ sceneRunId, sceneManifest,
   const preparationRequest = useRef(null);
   const selectedRunId = useRef(null);
   const autoShowRunId = useRef(null);
+  const currentScene = useRef(null); currentScene.current = [sceneRunId, sceneManifest];
+  const supersededSourceId = useRef(null);
+  const launchedContactSignature = useRef(null);
+  const launchedRetryDraft = useRef(null);
+  const restoredRetryDraft = useRef(null);
+  const draftEdited = useRef(false);
   const restoredScene = useRef(null);
   const onShowOnBodyRef = useRef(onShowOnBody); onShowOnBodyRef.current = onShowOnBody;
   const reportedFeedbackFailure = useRef(null);
@@ -75,10 +136,13 @@ export default function FragmentPopulationRecording({ sceneRunId, sceneManifest,
   useEffect(() => {
     if (feedback.status !== 'completed' || !feedback.run || !state.selected
         || (state.selected.id === pendingFeedback && ['idle', 'loading', ...active].includes(proxy.status))) return;
+    if (state.selected.id === supersededSourceId.current) return;
+    if (state.selected.id === launchedContactSignature.current?.sourceId
+        && operatorContactSignature.current !== launchedContactSignature.current.signature) return;
     const shownKey = `${feedback.run.id}:${proxy.status === 'completed' ? proxy.run?.id : 'coupled'}`;
     if (shownFeedback.current === shownKey) return;
     const restore = state.selected.id !== pendingFeedback && state.selected.id !== autoShowRunId.current;
-    if (restore && canRestore && !canRestore()) return;
+    if (restore && (draftEdited.current || (canRestore && !canRestore()))) return;
     const configuration = state.selected.configuration, simulation = configuration?.simulation;
     if (configuration?.graph_manifest_sha256 !== sceneManifest || !Array.isArray(configuration.source_ids)
         || !contacts.every(([key]) => Array.isArray(simulation?.[key]) && simulation[key].length === 3
@@ -95,6 +159,36 @@ export default function FragmentPopulationRecording({ sceneRunId, sceneManifest,
     if (!restore) autoShowRunId.current = null;
   }, [feedback.status, feedback.run, state.selected, pendingFeedback, sceneRunId, sceneManifest, canRestore, proxy.status, proxy.run]);
   useEffect(() => {
+    const source = state.selected;
+    if (feedback.status !== 'failed' || feedback.sourceId !== source?.id || pendingFeedback
+        || draftEdited.current || incomingContacts || (canRestore && !canRestore())
+        || restoredRetryDraft.current === source.id) return;
+    const draft = recoveredDraft(launchedRetryDraft.current, source, sceneRunId, sceneManifest);
+    if (!draft) return;
+    restoredRetryDraft.current = source.id;
+    setBaseConfiguration(draft.configuration);
+    setCoordinates(draft.positions);
+    setIds(draft.ids); setSearchRadius(draft.radius); setExcludedIds([]);
+    setSelectionBasis(contactBasis(sceneRunId, sceneManifest, draft.simulation));
+    onAdjustContact?.({ kind: 'fragments', configuration: draft.configuration,
+      simulation: draft.simulation }, null);
+  }, [feedback.status, feedback.sourceId, state.selected, pendingFeedback, sceneRunId, sceneManifest,
+    canRestore, incomingContacts, onAdjustContact]);
+  useEffect(() => {
+    const source = state.items.find(item => item.id === launchedRetryDraft.current?.sourceId);
+    if (!source || !['failed', 'cancelled'].includes(source.state) || pendingFeedback
+        || draftEdited.current || incomingContacts || (canRestore && !canRestore())
+        || restoredRetryDraft.current === source.id) return;
+    const draft = recoveredDraft(launchedRetryDraft.current, source, sceneRunId, sceneManifest);
+    if (!draft) return;
+    restoredRetryDraft.current = source.id;
+    setBaseConfiguration(draft.configuration); setCoordinates(draft.positions);
+    setIds(draft.ids); setSearchRadius(draft.radius); setExcludedIds([]);
+    setSelectionBasis(contactBasis(sceneRunId, sceneManifest, draft.simulation));
+    onAdjustContact?.({ kind: 'fragments', configuration: draft.configuration,
+      simulation: draft.simulation }, null);
+  }, [state.items, pendingFeedback, sceneRunId, sceneManifest, canRestore, incomingContacts, onAdjustContact]);
+  useEffect(() => {
     const sourceId = state.selected?.id;
     if (!sourceId || sourceId !== pendingFeedback || feedback.status !== 'completed'
         || !['error', 'failed', 'cancelled', 'unavailable'].includes(proxy.status)
@@ -105,8 +199,15 @@ export default function FragmentPopulationRecording({ sceneRunId, sceneManifest,
   useEffect(() => { setBaseConfiguration(null); }, [sceneManifest]);
   useEffect(() => {
     const receipt = readPendingFeedback(tabStorage(), sceneRunId);
+    launchedDirect.current = null;
+    launchedRetryDraft.current = readFeedbackRetryDraft(tabStorage(), sceneRunId);
+    restoredRetryDraft.current = null;
+    draftEdited.current = false;
     restoredScene.current = null;
-    selectedRunId.current = receipt?.sourceId || readSelectedFeedbackSource(tabStorage(), sceneRunId);
+    supersededSourceId.current = null;
+    launchedContactSignature.current = null;
+    selectedRunId.current = receipt?.sourceId || readSelectedFeedbackSource(tabStorage(), sceneRunId)
+      || launchedRetryDraft.current?.sourceId;
     autoShowRunId.current = receipt?.sourceId || null;
     setPendingFeedback(receipt?.sourceId || null); setFeedbackRequestId(receipt?.requestId || null);
     setFeedbackRetryReceipt(receipt?.retry === true);
@@ -121,6 +222,7 @@ export default function FragmentPopulationRecording({ sceneRunId, sceneManifest,
   }, [feedback.sourceId, feedback.status, proxy.status, pendingFeedback, sceneRunId]);
   useEffect(() => {
     if (!incomingContacts || incomingContacts.kind !== 'fragments') return;
+    if (!canRestore || !canRestore()) draftEdited.current = true;
     const config = incomingContacts.configuration, simulation = incomingContacts.simulation;
     if (config?.graph_manifest_sha256 !== sceneManifest || !Array.isArray(config.source_ids)
         || !contacts.every(([key]) => Array.isArray(simulation?.[key]) && simulation[key].length === 3
@@ -136,7 +238,7 @@ export default function FragmentPopulationRecording({ sceneRunId, sceneManifest,
     setSelectionBasis(incomingContacts.fieldRunId ? contactBasis(sceneRunId, sceneManifest, config.simulation) : 'unverified');
     setCoordinates(Object.fromEntries(contacts.map(([key]) => [key, [...simulation[key]]])));
     requestId.current = null; setSubmitError(''); onConsumeContacts?.();
-  }, [incomingContacts, onConsumeContacts, sceneManifest, sceneRunId]);
+  }, [incomingContacts, onConsumeContacts, sceneManifest, sceneRunId, canRestore]);
   useEffect(() => {
     const controller = new AbortController();
     let timer;
@@ -189,7 +291,8 @@ export default function FragmentPopulationRecording({ sceneRunId, sceneManifest,
             const progress = payload.event.progress;
             if (progress && ['geometry', 'cells', 'network'].includes(progress.phase)
                 && Number.isInteger(progress.done) && Number.isInteger(progress.total)
-                && ((progress.phase === 'network' && progress.done === 0 && progress.total === 0)
+                && ((progress.phase === 'network' && (progress.done === 0 && progress.total === 0
+                  || progress.total > 0 && progress.total <= 1000 && progress.done >= 0 && progress.done <= progress.total))
                   || (progress.phase !== 'network' && progress.done > 0 && progress.done <= progress.total && progress.total <= 256))) {
               setSourceProgress({ ...progress, runId: activeSourceId });
             } else setRetry(value => value + 1);
@@ -205,6 +308,7 @@ export default function FragmentPopulationRecording({ sceneRunId, sceneManifest,
   const validIds = idsList.length > 0 && idsList.length <= 256 && idsList.every(value => /^[1-9]\d*$/.test(value) && Number.isSafeInteger(Number(value))) && new Set(idsList).size === idsList.length;
   const validCoordinates = contacts.every(([key]) => coordinates[key].every(value => String(value).trim() !== '' && Number.isFinite(Number(value))));
   const stimulusCurrent = baseConfiguration?.simulation?.current_na ?? preset?.simulation?.current_na ?? '';
+  operatorContactSignature.current = JSON.stringify([contacts.map(([key]) => coordinates[key].map(Number)), Number(stimulusCurrent)]);
   const simulationSettings = baseConfiguration?.simulation || preset?.simulation;
   const duration = simulationSettings?.duration_ms ?? '';
   const validCurrent = String(stimulusCurrent).trim() !== '' && Number.isFinite(Number(stimulusCurrent));
@@ -229,9 +333,10 @@ export default function FragmentPopulationRecording({ sceneRunId, sceneManifest,
         canCancel: !cancelling && (Boolean(direct.run?.id && direct.running) || (sending && !submitting) || Boolean(state.items.find(item => item.id === pendingFeedback && active.has(item.state))) || Boolean(feedback.run && active.has(feedback.status)) || Boolean(proxy.run && active.has(proxy.status))),
         progress: running && sourceProgress?.runId === pendingFeedback ? sourceProgress
           : feedbackRunning ? feedback.progress : proxyRunning ? proxy.progress : direct.running ? direct.progress : null,
-        connectionLost: Boolean((feedbackRunning && feedback.connectionLost) || (proxyRunning && proxy.connectionLost)),
+        connectionLost: Boolean((feedbackRunning && feedback.connectionLost) || (proxyRunning && proxy.connectionLost)
+          || (direct.running && direct.connectionLost)),
         cancel: cancelAction } : {}) });
-  }, [onPrimaryStatus, primaryReady, running, sending, preparationStage, submitting, feedbackRunning, feedback.status, feedback.run, feedback.progress, feedback.connectionLost, proxyRunning, proxy.status, proxy.run, proxy.progress, proxy.connectionLost, direct.running, direct.progress, direct.run?.id, state.items, pendingFeedback, cancelling, cancelAction, sourceProgress]);
+  }, [onPrimaryStatus, primaryReady, running, sending, preparationStage, submitting, feedbackRunning, feedback.status, feedback.run, feedback.progress, feedback.connectionLost, proxyRunning, proxy.status, proxy.run, proxy.progress, proxy.connectionLost, direct.running, direct.progress, direct.connectionLost, direct.run?.id, state.items, pendingFeedback, cancelling, cancelAction, sourceProgress]);
   const submit = async event => {
     event.preventDefault();
     if (!preset || (calculationMode !== 'fast' && !validIds) || !validCoordinates || !validCurrent || !validDuration || (calculationMode !== 'fast' && !validSearchRadius) || sending || running || feedbackRunning || proxyRunning || direct.running || state.loading || state.error) return;
@@ -239,9 +344,70 @@ export default function FragmentPopulationRecording({ sceneRunId, sceneManifest,
       simulation: preset.simulation, threshold_mv: -20, max_distance_um: 2 };
     const simulation = { ...original.simulation, ...Object.fromEntries(contacts.map(([key]) => [key, coordinates[key].map(Number)])), allow_disconnected: true };
     if (calculationMode === 'fast') {
-      await direct.start(sceneRunId, { request_id: crypto.randomUUID(), simulation,
-        graph_manifest_sha256: sceneManifest, seed: original.seed, gain: 1000000,
-        allow_partial_geometry: true, allow_missing_curvature: true, allow_contact_exclusion: false });
+      const preparation = new AbortController(); preparationRequest.current = preparation;
+      setPreparationStage('Проверка контактов'); setSending(true); setSubmitError('');
+      try {
+        // E1 and REF do not contribute to the fast network-only calculation.
+        const screen = await simulationApi.contactPositions(sceneRunId, {
+          positions_um: [simulation.source_um, simulation.return_um], clearance_um: simulation.clearance_um,
+        }, preparation.signal);
+        if (preparation.signal.aborted) return;
+        if (latestDraft.current !== draftSignature) {
+          setSubmitError('Положение или параметры изменились во время проверки. Запустите расчёт снова.'); onFailure?.(); return;
+        }
+        if (!Array.isArray(screen?.potential_intersections)
+            || screen.potential_intersections.some(row => !Array.isArray(row?.contact_indices)
+              || !row.contact_indices.length || new Set(row.contact_indices).size !== row.contact_indices.length
+              || row.contact_indices.some(index => !Number.isInteger(index) || index < 0 || index > 1)))
+          throw new Error('invalid_contact_screen');
+        const affected = [...new Set(screen.potential_intersections.flatMap(row => row.contact_indices))].sort();
+        if (affected.length) {
+          setSubmitError(`Возможное пересечение контактов ${affected.map(index => contacts[index][1]).join(', ')} с отростками. Переместите их и повторите запуск.`);
+          onFailure?.(); return;
+        }
+        preparationRequest.current = null; setSending(false); setPreparationStage(null);
+        launchedDirect.current = { sceneId: sceneRunId, signature: operatorContactSignature.current };
+        await direct.start(sceneRunId, { request_id: crypto.randomUUID(), simulation,
+          graph_manifest_sha256: sceneManifest, seed: original.seed, gain: 1000000,
+          allow_partial_geometry: true, allow_missing_curvature: true, allow_contact_exclusion: false });
+      } catch (error) {
+        if (preparation.signal.aborted) return;
+        const status = error?.status ?? error?.response?.status;
+        setSubmitError(status === 429 ? 'Проверка контактов занята другим запросом. Повторите запуск позже.'
+          : 'Не удалось проверить контакты. Повторите запуск.');
+        onFailure?.();
+      } finally {
+        if (preparationRequest.current === preparation) preparationRequest.current = null;
+        setSending(false); setPreparationStage(null);
+      }
+      return;
+    }
+    const reusableSource = state.selected?.id && feedback.sourceId === state.selected.id
+        && state.selected.state === 'completed' && state.selected.parent_run_id === sceneRunId
+        && state.selected.configuration?.graph_manifest_sha256 === sceneManifest
+        && launchedRetryDraft.current?.sourceId === state.selected.id
+        && launchedRetryDraft.current.signature === draftSignature
+        && canonicalJson(state.selected.configuration.simulation) === canonicalJson(simulation)
+        && canonicalJson(state.selected.configuration.source_ids) === canonicalJson(idsList.map(Number))
+        && state.selected.configuration.seed === original.seed
+        && state.selected.configuration.threshold_mv === original.threshold_mv
+        && state.selected.configuration.max_distance_um === original.max_distance_um
+        && supersededSourceId.current !== state.selected.id;
+    if (reusableSource && ['failed', 'error'].includes(feedback.status)) {
+      setSubmitError('');
+      feedback.retry();
+      return;
+    }
+    if (reusableSource && feedback.status === 'completed'
+        && ['failed', 'error', 'cancelled', 'unavailable'].includes(proxy.status)
+        && typeof proxy.retry === 'function') {
+      setSubmitError(''); reportedProxyFailure.current = null;
+      if (pendingFeedback !== state.selected.id) {
+        const resumeId = crypto.randomUUID();
+        writePendingFeedback(tabStorage(), sceneRunId, { version: 1, sourceId: state.selected.id, requestId: resumeId });
+        setFeedbackRequestId(resumeId); setFeedbackRetryReceipt(false); setPendingFeedback(state.selected.id);
+      }
+      proxy.retry();
       return;
     }
     let submitted = false;
@@ -300,6 +466,10 @@ export default function FragmentPopulationRecording({ sceneRunId, sceneManifest,
             : 'Слишком много подходящих клеток даже после уменьшения радиуса поиска.'); onFailure?.(); return;
         }
         sourceIds = eligible.map(row => row.body_id);
+        if (new Set(sourceIds).size !== sourceIds.length) {
+          setSubmitError('Поиск вернул повторяющиеся нейроны. Расчёт остановлен; повторите запрос.');
+          onFailure?.(); return;
+        }
         selectionRadius = radius;
       }
       requestId.current ||= crypto.randomUUID();
@@ -314,12 +484,29 @@ export default function FragmentPopulationRecording({ sceneRunId, sceneManifest,
       const created = await simulationApi.createFragmentPopulation({ request_id: requestId.current, parent_run_id: sceneRunId || null, title, configuration: submittedConfiguration });
       const resumeRequest = crypto.randomUUID();
       writePendingFeedback(tabStorage(), sceneRunId, { version: 1, sourceId: created.id, requestId: resumeRequest });
+      if (currentScene.current[0] !== sceneRunId || currentScene.current[1] !== sceneManifest) {
+        requestId.current = null;
+        return;
+      }
+      launchedContactSignature.current = { sourceId: created.id,
+        signature: JSON.stringify([contacts.map(([key]) => simulation[key]), Number(simulation.current_na)]) };
       if (latestDraft.current !== draftSignature) {
+        supersededSourceId.current = created.id;
         setState(previous => ({ ...previous, items: [created, ...previous.items.filter(item => item.id !== created.id)] }));
+        selectedRunId.current = created.id;
+        setFeedbackRequestId(resumeRequest); setFeedbackRetryReceipt(false); setPendingFeedback(created.id);
         requestId.current = null; setRetry(value => value + 1);
         setSubmitError('Расчёт запущен с прежними параметрами; изменённое положение сохранено как черновик.');
         onFailure?.(); return;
       }
+      supersededSourceId.current = null;
+      launchedRetryDraft.current = { sourceId: created.id,
+        signature: JSON.stringify([sceneRunId, sceneManifest,
+          Object.fromEntries(contacts.map(([key]) => [key, [...simulation[key]]])),
+          stimulusCurrent, duration, sourceIds.join(', '),
+          selectionRadius === null ? searchRadius : String(selectionRadius)]) };
+      writeFeedbackRetryDraft(tabStorage(), sceneRunId, launchedRetryDraft.current);
+      writeSelectedFeedbackSource(tabStorage(), sceneRunId, created.id);
       if (selectionRadius !== null) {
         setSearchRadius(String(selectionRadius)); setIds(sourceIds.join(', ')); setExcludedIds([]);
         setSelectionBasis(contactBasis(sceneRunId, sceneManifest, simulation));
@@ -341,7 +528,8 @@ export default function FragmentPopulationRecording({ sceneRunId, sceneManifest,
       onFailure?.();
     } finally { if (preparationRequest.current === preparation) preparationRequest.current = null; if (!submitted) setClearanceNotice(''); setSubmitting(false); setSending(false); setPreparationStage(null); }
   };
-  const newest = state.items[0];
+  const newest = state.items.find(item => item.id === pendingFeedback)
+    || state.items.find(item => item.id === selectedRunId.current) || state.items[0];
   const reportedSourceFailure = useRef(null);
   useEffect(() => {
     if (newest?.state !== 'failed' || newest.id !== pendingFeedback
@@ -355,8 +543,8 @@ export default function FragmentPopulationRecording({ sceneRunId, sceneManifest,
     clearPendingFeedback(tabStorage(), sceneRunId, pendingFeedback);
     setPendingFeedback(null); setFeedbackRequestId(null); setFeedbackRetryReceipt(false);
   }, [pendingFeedback, sceneRunId, state.items]);
-  const geometryFailure = /^executor_synapse_geometry:([1-9]\d*):([1-9]\d*):([1-9]\d*)$/.exec(newest?.error || '');
-  const geometryFailures = /^executor_synapse_geometries:([\d:,]+);omitted:(\d+)$/.exec(newest?.error || '');
+  const geometryFailure = unresolvedGeometrySingle(newest?.error);
+  const geometryFailureCount = unresolvedGeometryCount(newest?.error);
   const cancel = async () => {
     if (direct.running) { await direct.cancel(); return; }
     if (sending && preparationRequest.current) { preparationRequest.current.abort(); return; }
@@ -385,18 +573,23 @@ export default function FragmentPopulationRecording({ sceneRunId, sceneManifest,
         <FormLabel fontSize="12px">Ток STIM, нА</FormLabel>
         <Input size="sm" type="number" isDisabled={!preset || running || sending || feedbackRunning} value={stimulusCurrent} onChange={event => {
           const value = event.target.value;
-          setBaseConfiguration(previous => {
-            const original = previous || { graph_manifest_sha256: sceneManifest, source_ids: [], seed: 1,
-              simulation: preset.simulation, threshold_mv: -20, max_distance_um: 2 };
-            return { ...original, simulation: { ...original.simulation, current_na: value === '' ? '' : Number(value) } };
-          });
+          const current = value === '' ? '' : Number(value);
+          if (current === stimulusCurrent) return;
+          draftEdited.current = true;
+          const original = baseConfiguration || { graph_manifest_sha256: sceneManifest, source_ids: [], seed: 1,
+            simulation: preset.simulation, threshold_mv: -20, max_distance_um: 2 };
+          const simulation = { ...original.simulation,
+            ...Object.fromEntries(contacts.map(([key]) => [key, [...coordinates[key]]])), current_na: current };
+          const configuration = { ...original, simulation };
+          setBaseConfiguration(configuration);
+          onAdjustParameters?.({ kind: 'fragments', configuration, simulation });
           requestId.current = null;
         }} />
         {validCurrent && Number(stimulusCurrent) === 0 && <Text fontSize="11px" color={SIMULATION_THEME.textSecondary} mt={1}>Контроль без электрического воздействия; остальные параметры сохраняются.</Text>}
       </FormControl>
       {calculationMode === 'detailed' && <FormControl maxW="200px" mt={3} isInvalid={!validSearchRadius}>
         <FormLabel fontSize="12px">Радиус поиска, мкм</FormLabel>
-        <Input size="sm" type="number" min={0} isDisabled={running || sending || feedbackRunning} value={searchRadius} onChange={event => { setSearchRadius(event.target.value); setSelectionBasis('radius-changed'); requestId.current = null; }} />
+        <Input size="sm" type="number" min={0} isDisabled={running || sending || feedbackRunning} value={searchRadius} onChange={event => { draftEdited.current = true; setSearchRadius(event.target.value); setSelectionBasis('radius-changed'); requestId.current = null; }} />
       </FormControl>}
     </Box>
     {submitError && <Text role="alert" fontSize="12px" color="orange.200" mt={2}>{submitError}</Text>}
@@ -406,6 +599,6 @@ export default function FragmentPopulationRecording({ sceneRunId, sceneManifest,
     {feedback.status === 'completed' && state.selected?.id === pendingFeedback && ['error', 'failed', 'cancelled', 'unavailable'].includes(proxy.status) && <Text role="alert" fontSize="12px" color="orange.200" mt={2}>Расчёт всей сети не завершён. Доступна запись выбранных клеток.</Text>}
     {feedback.status === 'failed' && Array.isArray(feedback.run?.result?.feedback_failure?.history) && <Text fontSize="12px" mt={1}>Завершено итераций: {feedback.run.result.feedback_failure.history.length}.</Text>}
     {state.error && <Text role="alert" fontSize="12px" color="orange.200" mt={2}>Не удалось загрузить расчёты.</Text>}
-    {newest?.state === 'failed' && <Text role="alert" fontSize="12px" color="orange.200">{executorStartError(newest.error) || (newest.error === 'executor_contact_clearance' ? 'Контакт слишком близок к восстановленному отростку.' : newest.error === 'executor_contact_screen_unavailable' ? 'Индексы проверки контактов недоступны.' : geometryFailures ? 'Предварительная проверка выявила несколько расхождений.' : geometryFailure ? `Нейрон ${geometryFailure[1]}: не удалось сопоставить ${geometryFailure[2]} из ${geometryFailure[3]} синапсов в заданном допуске.` : newest.error === 'executor_synapse_geometry' ? 'Не все синапсы удалось сопоставить с отростками в заданном допуске.' : 'Расчёт не завершён. Проверьте параметры и состояние сервиса.')}</Text>}
+    {newest?.state === 'failed' && <Text role="alert" fontSize="12px" color="orange.200">{executorStartError(newest.error) || (newest.error === 'executor_contact_clearance' ? 'Контакт слишком близок к восстановленному отростку.' : newest.error === 'executor_contact_screen_unavailable' ? 'Индексы проверки контактов недоступны.' : geometryFailureCount ? `Не удалось сопоставить синапсы для ${geometryFailureCount} нейронов; расчёт остановлен.` : geometryFailure ? `Нейрон ${geometryFailure[1]}: не удалось сопоставить ${geometryFailure[2]} из ${geometryFailure[3]} синапсов в заданном допуске.` : newest.error === 'executor_synapse_geometry' ? 'Не все синапсы удалось сопоставить с отростками в заданном допуске.' : 'Расчёт не завершён. Проверьте параметры и состояние сервиса.')}</Text>}
   </Box>;
 }

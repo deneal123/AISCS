@@ -6,6 +6,7 @@ import { simulationApi } from '../../../src/features/simulator/api';
 
 jest.mock('../../../src/features/simulator/api', () => ({ simulationApi: { list: jest.fn(), artifacts: jest.fn() } }));
 const deferred = () => { let resolve; const promise = new Promise(done => { resolve = done; }); return { promise, resolve }; };
+const file = id => ({ id, name: `${id}.csv`, bytes: 2, sha256: 'a'.repeat(64) });
 beforeEach(() => jest.clearAllMocks());
 
 test('history appends older records without duplicates and retries the failed page', async () => {
@@ -51,20 +52,45 @@ test('switching saved records cannot display delayed artifacts from the previous
   const signal = simulationApi.artifacts.mock.calls[0][1];
   hook.rerender({ id: 'b' });
   expect(signal.aborted).toBe(true);
-  await act(async () => { second.resolve({ items: [{ id: 'b-file' }] }); });
-  await act(async () => { first.resolve({ items: [{ id: 'a-file' }] }); });
-  expect(hook.result.current.files).toEqual([{ id: 'b-file' }]);
+  await act(async () => { second.resolve({ items: [file('b-file')] }); });
+  await act(async () => { first.resolve({ items: [file('a-file')] }); });
+  expect(hook.result.current.files).toEqual([file('b-file')]);
+});
+
+test('switching a completed record never exposes the previous files even for one render', async () => {
+  const second = deferred(), observed = [];
+  simulationApi.artifacts.mockResolvedValueOnce({ items: [file('a-file')] }).mockReturnValueOnce(second.promise);
+  const hook = renderHook(({ id }) => {
+    const value = useSimulationArtifacts(id, 'completed', true);
+    observed.push({ id, names: value.files.map(item => item.name) });
+    return value;
+  }, { initialProps: { id: 'a' } });
+  await waitFor(() => expect(hook.result.current.files).toEqual([file('a-file')]));
+  observed.length = 0;
+  hook.rerender({ id: 'b' });
+  expect(observed.filter(value => value.id === 'b').every(value => !value.names.includes('a-file.csv'))).toBe(true);
+  await act(async () => { second.resolve({ items: [file('b-file')] }); });
+  expect(hook.result.current.files).toEqual([file('b-file')]);
 });
 
 test('artifact read failure has an explicit read-only retry and closes on leaving files', async () => {
-  simulationApi.artifacts.mockRejectedValueOnce(new Error('private path')).mockResolvedValueOnce({ items: [{ id: 'file' }] });
+  simulationApi.artifacts.mockRejectedValueOnce(new Error('private path')).mockResolvedValueOnce({ items: [file('file')] });
   const hook = renderHook(({ enabled }) => useSimulationArtifacts('a', 'completed', enabled), { initialProps: { enabled: true } });
   await waitFor(() => expect(hook.result.current.error).toContain('Не удалось'));
   expect(hook.result.current.error).not.toContain('private');
   act(() => hook.result.current.retry());
-  await waitFor(() => expect(hook.result.current.files).toEqual([{ id: 'file' }]));
+  await waitFor(() => expect(hook.result.current.files).toEqual([file('file')]));
   hook.rerender({ enabled: false });
   expect(hook.result.current.files).toEqual([]);
+});
+
+test('malformed artifact records are rejected rather than breaking file rendering', async () => {
+  simulationApi.artifacts.mockResolvedValueOnce({ items: [null] }).mockResolvedValueOnce({ items: [file('valid')] });
+  const hook = renderHook(() => useSimulationArtifacts('a', 'completed', true));
+  await waitFor(() => expect(hook.result.current.error).toContain('Не удалось'));
+  expect(hook.result.current.files).toEqual([]);
+  act(() => hook.result.current.retry());
+  await waitFor(() => expect(hook.result.current.files).toEqual([file('valid')]));
 });
 
 test('unsupported fullscreen preserves the application and reports a bounded error', async () => {

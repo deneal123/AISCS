@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { simulationApi } from '../api';
 import { verifyConnectome } from './connectomeData';
 import { applyBodyViewCorrection, loadMorphologyLandmarks } from './connectomeMorphology';
@@ -6,19 +6,44 @@ import { verifyFieldGraphEvents } from '../field/fieldGraphEvents';
 import { verifyFieldProxyEvents } from '../field/fieldProxyEvents';
 import { verifyCoupledEvents, verifyCoupledSourceEvents, verifyFragmentEvents } from '../recording/fragmentEvents';
 
+// The base scene can contain events from its original run. Never display those
+// as the response of another calculation if that response cannot be verified.
+function withoutResponse(data) {
+  return { ...data, spike_neurons: new Int32Array(), spike_times_ms: new Float32Array(),
+    input_indices: new Int32Array(), counts: new Int32Array(data.node_ids.length),
+    control_spike_neurons: new Int32Array(), control_spike_times_ms: new Float32Array(),
+    physical_source_indices: new Uint32Array(), physical_source_times_ms: new Uint32Array(),
+    description: { ...data.description, spikes: 0, active_neurons: 0, input_neurons: 0,
+      spikes_outside_input_population: 0, response_unavailable: true } };
+}
+
 export default function useConnectomeData(runId, description, fieldGraph = null) {
   const [result, setResult] = useState({ data: null, error: '', loading: false });
   const [attempt, setAttempt] = useState(0);
+  // Cache only the independently verified, fully located base scene. Different
+  // responses still go through their own verification and never mutate it.
+  const baseCache = useRef(null);
   useEffect(() => {
     const controller = new AbortController();
     setResult({ runId, description, fieldGraph, data: null, error: '', loading: Boolean(runId && description) });
     if (runId && description) (async () => {
+      let verifiedBase = null;
+      let morphologyError = '';
       try {
-        const files = await simulationApi.artifacts(runId, controller.signal);
-        const artifact = files.items.find(file => file.name === 'connectome.bin');
-        if (!artifact) throw new Error('missing');
-        const buffer = await simulationApi.readArtifact(runId, artifact.id, controller.signal);
-        let data = applyBodyViewCorrection(await verifyConnectome(buffer, artifact, description));
+        let base = baseCache.current;
+        if (!base || base.runId !== runId || base.description !== description) {
+          const files = await simulationApi.artifacts(runId, controller.signal);
+          const artifact = files.items.find(file => file.name === 'connectome.bin');
+          if (!artifact) throw new Error('missing');
+          const buffer = await simulationApi.readArtifact(runId, artifact.id, controller.signal);
+          let data = applyBodyViewCorrection(await verifyConnectome(buffer, artifact, description));
+          try { data = await loadMorphologyLandmarks(data, controller.signal); }
+          catch { morphologyError = 'Не удалось восстановить положения нейронов без координат. Повторите загрузку морфологии.'; }
+          base = { runId, description, data };
+          if (!controller.signal.aborted && !morphologyError) baseCache.current = base;
+        }
+        let data = base.data;
+        verifiedBase = data;
         if (fieldGraph) {
           const fieldFiles = await simulationApi.artifacts(fieldGraph.id, controller.signal);
           const coupled = fieldGraph.result?.manifest?.kind === 'experimental-coupled-population';
@@ -59,16 +84,18 @@ export default function useConnectomeData(runId, description, fieldGraph = null)
             data = await (fragment ? verifyFragmentEvents : verifyFieldGraphEvents)(data, graph, graphFile, meta, metaFile, fieldGraph.configuration);
           }
         }
-        let morphologyError = '';
-        try { data = await loadMorphologyLandmarks(data, controller.signal); }
-        catch { morphologyError = 'Не удалось восстановить положения нейронов без координат. Повторите загрузку морфологии.'; }
         if (!controller.signal.aborted) setResult({ runId, description, fieldGraph, data, loading: false, error: '', morphologyError });
       } catch {
-        if (!controller.signal.aborted) setResult({ runId, description, fieldGraph, data: null, loading: false, error: 'Не удалось проверить коннектом и события этого опыта. Запись и файлы остаются доступны.' });
+        if (!controller.signal.aborted) setResult({ runId, description, fieldGraph,
+          data: fieldGraph && verifiedBase ? withoutResponse(verifiedBase) : null,
+          morphologyError, loading: false,
+          error: fieldGraph && verifiedBase
+            ? 'Не удалось проверить события расчёта. Показана только структура ЦНС; повторите загрузку.'
+            : 'Не удалось проверить коннектом и события этого опыта. Запись и файлы остаются доступны.' });
       }
     })();
     return () => controller.abort();
   }, [runId, description, fieldGraph, attempt]);
   const current = result.runId === runId && result.description === description && result.fieldGraph === fieldGraph;
-  return { ...(current ? result : { data: null, error: '', morphologyError: '', loading: Boolean(runId && description) }), retry: () => setAttempt(value => value + 1) };
+  return { ...(current ? result : { data: null, error: '', morphologyError: '', loading: Boolean(runId && description) }), retry: () => { baseCache.current = null; setAttempt(value => value + 1); } };
 }

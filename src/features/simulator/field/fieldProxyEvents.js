@@ -37,6 +37,22 @@ export async function verifyFieldProxyEvents(base, buffer, artifact, metadataBuf
       || desc.binary?.byte_order !== 'little' || desc.binary?.bytes !== buffer.byteLength) {
     throw new Error('field_proxy_identity');
   }
+  const missing = metadata.field?.excluded_from_direct_field;
+  const contacts = metadata.field?.excluded_contact_intersections;
+  if (!Array.isArray(missing) || !Array.isArray(contacts)
+      || preview.direct_field_exclusions !== missing.length || preview.contact_exclusions !== contacts.length
+      || missing.length + contacts.length > n) throw new Error('field_proxy_exclusions');
+  const excluded = new Set();
+  for (const id of [...missing, ...contacts]) {
+    if (typeof id !== 'string' || !/^[1-9]\d{0,18}$/.test(id) || BigInt(id) >= 2n ** 63n
+        || excluded.has(id)) throw new Error('field_proxy_exclusions');
+    excluded.add(id);
+  }
+  if (excluded.size) for (const id of base.node_ids) {
+    excluded.delete(id.toString());
+    if (!excluded.size) break;
+  }
+  if (excluded.size) throw new Error('field_proxy_exclusions');
   let offset = 0;
   for (const [key, dtype, width] of [['node_ids', '<u8', 8], ['spike_neurons', '<i4', 4], ['spike_times_ms', '<f4', 4]]) {
     const item = layout?.[key];

@@ -3,7 +3,7 @@ import {
   Alert, AlertIcon, Box, Button, ButtonGroup, CloseButton, Flex, FormControl, FormLabel,
   HStack, IconButton, Input, Stack, Text, Tooltip, useBreakpointValue, usePrefersReducedMotion,
 } from '@chakra-ui/react';
-import { FiActivity, FiCrosshair, FiDownload, FiFile, FiMaximize, FiMenu, FiMinimize, FiPause, FiPlay, FiRepeat, FiSettings, FiSquare, FiZoomIn } from 'react-icons/fi';
+import { FiActivity, FiCrosshair, FiMaximize, FiMenu, FiMinimize, FiPause, FiPlay, FiRepeat, FiSettings, FiSquare, FiZoomIn } from 'react-icons/fi';
 import { useSearchParams } from 'react-router-dom';
 import { SIMULATION_THEME as CHAT_THEME, SIMULATION_FONT_FAMILY as CHAT_FONT_FAMILY, SIMULATION_TRACES } from './theme';
 import { simulationApi } from './api';
@@ -19,19 +19,18 @@ import SimulatorScene from './SimulatorScene';
 import SimulationComparison from './SimulationComparison';
 import { createCameraLink } from './scene/sceneCamera';
 import useSimulationHistory from './useSimulationHistory';
-import useSimulationArtifacts from './recording/useSimulationArtifacts';
+import SimulationFiles from './recording/SimulationFiles';
 import useSimulationFullscreen from './useSimulationFullscreen';
 import { placementIssue, comparisonIssue, comparisonSceneIssue, comparisonReference, updateContactPosition } from './scene/sceneModel';
-import { useAppToast } from '@shared/hooks/useAppToast';
 import { prefersReducedMotion } from '../../utils/motion';
 import AppSelect from '@shared/controls/AppSelect';
 import { sensoryInputName } from './scene/stimulusRegions';
 import { executorStartError } from './executorStartError';
-import { sceneSpikeHistogram } from './recording/electricalTimeline';
 import { preventSimulatorPageZoom } from './pageZoomGuard';
-import { stimulusSeries, targetTimeline } from './recording/targetTimeline';
-import { fieldRecordingScope } from './recording/recordingScope';
-import { playableTimeline } from './recording/playableTimeline';
+import { targetTimeline } from './recording/targetTimeline';
+import { contactNormalsForSimulation, directFieldMatchesScene, fieldExclusionNotice, fieldProxyActivityNotice, fieldProxyExplanation, fieldResultDescription, fieldResultHeading } from './recording/recordingScope';
+import { scenePlayback } from './recording/scenePlayback';
+import { verifiedHistogramForScene } from './recording/electricalTimeline';
 import DiscretizationNotice from './recording/DiscretizationNotice';
 
 const labels = { none: 'Нет воздействия', weak: 'Слабое воздействие', strong: 'Сильное воздействие' };
@@ -67,6 +66,7 @@ export default function SimulatorPage() {
   const [catalog, setCatalog] = useState(null), [config, setConfig] = useState(null);
   const [run, setRun] = useState(null);
   const [fieldPlayback, setFieldPlayback] = useState(null);
+  const [fieldSourceForFiles, setFieldSourceForFiles] = useState(null);
   const [fieldContactDraft, setFieldContactDraft] = useState(null);
   const [fieldDisplayNormals, setFieldDisplayNormals] = useState(null);
   const [fieldContactPick, setFieldContactPick] = useState(null);
@@ -81,6 +81,8 @@ export default function SimulatorPage() {
   const consumeFieldContacts = useCallback(() => setFieldContactDraft(previous => previous && ({ ...previous, delivered: true })), []);
   const [motorState, setMotorState] = useState(null);
   const receiveMotorReadout = useCallback(value => setMotorState(value), []);
+  const [fieldEventsState, setFieldEventsState] = useState(null);
+  const receiveFieldEvents = useCallback(value => setFieldEventsState(value), []);
   const history = useSimulationHistory(), { runs, replace: replaceHistory, refresh: refreshRuns } = history;
   const [tab, setTab] = useState('scene'), [sidebarChoice, setSidebarChoice] = useState(null);
   const isCompact = useBreakpointValue({ base: true, md: false });
@@ -110,7 +112,7 @@ export default function SimulatorPage() {
   const [loop, setLoop] = useState(true);
   const [showResponse, setShowResponse] = useState(true);
   const [comparison, setComparison] = useState(null), [profileReady, setProfileReady] = useState(false);
-  const toast = useAppToast(), draftPlacement = useRef(null), fieldEditOriginal = useRef(null), pendingRequest = useRef(null), settingsButton = useRef(null);
+  const draftPlacement = useRef(null), fieldEditOriginal = useRef(null), pendingRequest = useRef(null), settingsButton = useRef(null);
   const selectionSequence = useRef(0), placementInvoker = useRef(null);
   const selectionRequest = useRef(null);
   const reducedMotion = usePrefersReducedMotion();
@@ -119,27 +121,15 @@ export default function SimulatorPage() {
   const busy = busyStates.has(run?.state), preview = run?.result?.preview;
   const activeField = tab === 'scene' && !fieldContactDraft && fieldPlayback && fieldPlayback.sceneRunId === run?.id ? fieldPlayback.run : null;
   const sceneField = activeField && fieldPlayback?.proxy ? fieldPlayback.proxy : activeField;
+  const verifiedProxyHistogram = verifiedHistogramForScene(fieldEventsState, run?.id, sceneField, preview?.connectome);
   const activeFieldConfig = activeField ? (fieldPlayback.source?.configuration || activeField.configuration) : null;
   const activeFieldPreview = activeField?.result?.preview?.timeline || activeField?.result?.preview;
   const activeTarget = targetTimeline(activeField, targetPlayback);
   const motorReadout = motorState?.runId === run?.id && motorState?.fieldRunId === (sceneField?.id || null) ? motorState?.data : null;
-  const playbackPreview = useMemo(() => {
-    const networkOnly = Boolean(fieldPlayback?.direct && activeField);
-    const candidate = activeField ? {
-    time_ms: networkOnly ? Array.from({ length: activeFieldPreview.duration_ms + 1 }, (_, i) => i) : activeTarget?.time_ms || activeFieldPreview?.time_ms,
-    signal_uv: networkOnly ? null : activeTarget?.neural_uv || activeFieldPreview?.neural_uv,
-    networkOnly,
-    stimulus_fraction: networkOnly ? activeField.configuration.waveform : activeTarget ? stimulusSeries(activeFieldPreview)?.values : activeFieldPreview?.stimulus_fraction,
-    stimulus_time_ms: networkOnly ? activeField.configuration.waveform.map((_, i) => i + .5) : activeTarget ? stimulusSeries(activeFieldPreview)?.time_ms : undefined,
-    stimulus_current_na: activeFieldConfig?.simulation?.current_na,
-    electrical: true,
-    connectome: {
-      kind: sceneField?.result?.manifest?.kind,
-      spikes_by_ms: sceneSpikeHistogram(sceneField, activeFieldPreview?.network_spikes_by_ms, motorReadout, activeFieldConfig?.simulation?.duration_ms),
-    },
-  } : fieldContactDraft ? null : preview;
-    return playableTimeline(candidate) ? candidate : null;
-  }, [activeField, activeFieldConfig, activeFieldPreview, activeTarget, fieldContactDraft, fieldPlayback?.direct, motorReadout, preview, sceneField]);
+  const playbackPreview = useMemo(() => scenePlayback({ activeField, activeFieldConfig, activeFieldPreview,
+    activeTarget, fieldContactDraft, direct: fieldPlayback?.direct, motorReadout, preview, sceneField, verifiedProxyHistogram }),
+  [activeField, activeFieldConfig, activeFieldPreview, activeTarget, fieldContactDraft, fieldPlayback?.direct,
+    motorReadout, preview, sceneField, verifiedProxyHistogram]);
   const model = catalog?.models.find(item => item.id === config?.model_id) || catalog?.models[0];
   const displayedModel = preview ? catalog?.models.find(item => item.id === run?.configuration.model_id) || model : model;
   const fullCns = config?.model_id === 'male-cns-hybrid-v1';
@@ -160,7 +150,6 @@ export default function SimulatorPage() {
     setFieldSnapRequest(value => value + 1);
   }, [run?.id, preview?.connectome?.manifest_sha256]);
   useEffect(() => { setNativeView(false); }, [run?.id, tab, config?.model_id]);
-  const artifacts = useSimulationArtifacts(run?.id, run?.state, tab === 'files'), { files } = artifacts;
   const showView = (mode, id = run?.id, reference = comparison) => {
     setTab(mode);
     setSearchParams({ ...(id ? { run: id } : {}), ...(reference ? { compare: reference.run_id } : {}),
@@ -482,7 +471,7 @@ export default function SimulatorPage() {
         {tab === 'comparison' && comparison ? <SimulationComparison reference={comparison} run={run} issue={compareError} sceneIssue={sceneCompareError}
           catalog={catalog} timeMs={timeMs} opacity={opacity} neurons={neurons} localWindow={localWindow}
           cameraLink={cameraLink} resetCamera={resetCamera} focusLocal={focusLocal} onMotorReadout={receiveMotorReadout} />
-          : tab === 'scene' ? <SimulatorScene nativeView={nativeView} onNativeView={value => { setNativeView(value); if (value) setNeurons(true); }} onMotorReadout={receiveMotorReadout} targetProbe={activeTarget} onShowTarget={target => { if (targetTimeline(activeField, target)) { setTargetPlayback(target); setTimeMs(0); setPlaying(false); } }} fullConnectome={displayedFullCns} opacity={opacity} neurons={neurons} placement={scenePlacement} onPlacement={position} placing={placing && !busy} preview={preview} fieldRun={sceneField} fieldSourceConfiguration={activeFieldConfig} fieldContactDraft={fieldContactDraft && fieldContactDraft.sceneRunId === run?.id ? fieldContactDraft.simulation : null} fieldContactNormals={fieldContactDraft?.normals || fieldDisplayNormals} fieldSnapRequest={fieldSnapRequest} onFieldContactsSnap={snapped => !fieldUserEdited.current && setFieldContactDraft(previous => previous && ({ ...previous, simulation: { ...previous.simulation, ...Object.fromEntries(Object.entries(snapped).map(([key, value]) => [key, value.coordinates])) }, normals: Object.fromEntries(Object.entries(snapped).map(([key, value]) => [key, value.normal])), changed: true, delivered: false }))} fieldContactPick={fieldContactPick} sceneControls={sceneControls} bodyVisible={bodyVisible} regionsVisible={regionsVisible} onFieldContactSelect={key => {
+          : tab === 'scene' ? <SimulatorScene nativeView={nativeView} onNativeView={value => { setNativeView(value); if (value) setNeurons(true); }} onMotorReadout={receiveMotorReadout} onFieldEventsVerified={receiveFieldEvents} targetProbe={activeTarget} onShowTarget={target => { if (targetTimeline(activeField, target)) { setTargetPlayback(target); setTimeMs(0); setPlaying(false); } }} fullConnectome={displayedFullCns} opacity={opacity} neurons={neurons} placement={scenePlacement} onPlacement={position} placing={placing && !busy} preview={preview} fieldRun={sceneField} fieldSourceConfiguration={activeFieldConfig} fieldContactDraft={fieldContactDraft && fieldContactDraft.sceneRunId === run?.id ? fieldContactDraft.simulation : null} fieldContactNormals={fieldContactDraft?.normals || fieldDisplayNormals} fieldSnapRequest={fieldSnapRequest} onFieldContactsSnap={snapped => !fieldUserEdited.current && setFieldContactDraft(previous => previous && ({ ...previous, simulation: { ...previous.simulation, ...Object.fromEntries(Object.entries(snapped).map(([key, value]) => [key, value.coordinates])) }, normals: Object.fromEntries(Object.entries(snapped).map(([key, value]) => [key, value.normal])), changed: true, delivered: false }))} fieldContactPick={fieldContactPick} sceneControls={sceneControls} bodyVisible={bodyVisible} regionsVisible={regionsVisible} onFieldContactSelect={key => {
             if (!electricalPrimary || busy || primaryStimStatus.running) return;
             fieldUserEdited.current = true;
             fieldEditOriginal.current = fieldContactDraft ? clone(fieldContactDraft) : null;
@@ -515,7 +504,9 @@ export default function SimulatorPage() {
               <Text>Для разреженно сохранённых отсчётов показывается предыдущее значение; краткие изменения могут быть пропущены.</Text></>}
           </Stack>
           {activeField && <Stack spacing={2} mb={4} fontSize="12px" color="orange.200">
-            {sceneField?.result?.manifest?.kind === 'experimental-field-proxy' && <Text>На сцене показаны события упрощённой модели всей сети, включая фоновую активность. Запись E1–REF рассчитана отдельно для выбранных клеток; модели не образуют единую биофизическую систему. Коэффициент сетевого ответа не откалиброван.</Text>}
+            {sceneField?.result?.manifest?.kind === 'experimental-field-proxy' && <Text>{fieldProxyExplanation(fieldPlayback?.direct)}</Text>}
+            {sceneField?.result?.manifest?.kind === 'experimental-field-proxy' && fieldProxyActivityNotice(sceneField, verifiedProxyHistogram) && <Text>{fieldProxyActivityNotice(sceneField, verifiedProxyHistogram)}</Text>}
+            {sceneField?.result?.manifest?.kind === 'experimental-field-proxy' && fieldExclusionNotice(sceneField.result.preview) && <Text>{fieldExclusionNotice(sceneField.result.preview)}</Text>}
             <Text>Модель не откалибрована; совмещение ЦНС и контактов с телом приблизительное. Движение условное.</Text>
             {activeField.result?.preview?.unresolved_candidates > 0 && <Text>Не сопоставлены синаптические позиции: {activeField.result.preview.unresolved_candidates}. Они не учтены.</Text>}
             {activeField.result?.preview?.kind === 'experimental-coupled-population' && <DiscretizationNotice geometry={activeField.result.preview.geometry_discretization} />}
@@ -529,12 +520,17 @@ export default function SimulatorPage() {
         </Box>}
         <Box as="section" aria-label="Электрическая стимуляция" display={stimPanel && tab === 'scene' ? 'block' : 'none'} position="absolute" zIndex={3} right={3} top="58px" bottom={3} w={{ base: 'min(90vw, 400px)', lg: '420px' }} bg="rgba(10,14,28,.98)" border="1px solid" borderColor={CHAT_THEME.panelBorder} borderRadius="8px" overflowY="auto" p={4}>
           <HStack mb={3}><Text flex={1} fontWeight="600">Электрическая стимуляция</Text><CloseButton aria-label="Закрыть STIM" onClick={() => setStimPanel(false)} /></HStack>
-          <FieldRecordingModes formRef={primaryStimForm} onPrimaryStatus={updatePrimaryStimStatus} onClearanceNotice={setFieldClearanceNotice} onFailure={() => setStimPanel(true)} canRestore={() => !fieldUserEdited.current && !freshExperiment.current} sceneRunId={preview?.connectome ? run?.id : null} sceneManifest={preview?.connectome?.manifest_sha256} sceneDescription={preview?.connectome} incomingContacts={fieldContactDraft && fieldContactDraft.sceneRunId === run?.id && !fieldContactDraft.delivered && !fieldContactPick ? fieldContactDraft : null} onConsumeContacts={consumeFieldContacts} onAdjustContact={(draft, key) => {
+          <FieldRecordingModes formRef={primaryStimForm} onPrimaryStatus={updatePrimaryStimStatus} onClearanceNotice={setFieldClearanceNotice} onSourceForFiles={setFieldSourceForFiles} onFailure={() => setStimPanel(true)} canRestore={() => !fieldUserEdited.current && !freshExperiment.current} sceneRunId={preview?.connectome ? run?.id : null} sceneManifest={preview?.connectome?.manifest_sha256} sceneDescription={preview?.connectome} incomingContacts={fieldContactDraft && fieldContactDraft.sceneRunId === run?.id && !fieldContactDraft.delivered && !fieldContactPick ? fieldContactDraft : null} onConsumeContacts={consumeFieldContacts} onAdjustContact={(draft, key) => {
             fieldUserEdited.current = true;
             setFieldContactDraft(previous => {
               const normals = key ? { ...(previous?.normals || fieldDisplayNormals || {}) } : {}; if (key) delete normals[key];
               return { ...draft, sceneRunId: run.id, normals, changed: true, delivered: true };
             });
+            setFieldContactPick(null); setPlaying(false); setTimeMs(0);
+          }} onAdjustParameters={draft => {
+            fieldUserEdited.current = true;
+            setFieldContactDraft(previous => ({ ...draft, sceneRunId: run.id,
+              normals: previous?.normals || fieldDisplayNormals, changed: true, delivered: true }));
             setFieldContactPick(null); setPlaying(false); setTimeMs(0);
           }} onPlaceContacts={draft => {
             fieldEditOriginal.current = fieldContactDraft ? clone(fieldContactDraft) : null;
@@ -542,15 +538,11 @@ export default function SimulatorPage() {
           }} onShowOnBody={(field, options) => {
             if (options?.restore && fieldUserEdited.current) return;
             if (options?.direct) {
-              const simulation = options.simulation, result = field.result?.preview;
-              const keys = ['source_um', 'return_um', 'current_na', 'conductivity_s_m', 'clearance_um', 'coordinate_frame'];
-              if (field.state !== 'completed' || field.parent_run_id !== run.id
-                  || field.result?.manifest?.kind !== 'experimental-field-proxy' || result?.recording !== null
-                  || field.configuration?.graph_manifest_sha256 !== preview?.connectome?.manifest_sha256
-                  || result.duration_ms !== simulation.duration_ms
-                  || keys.some(key => JSON.stringify(field.configuration?.[key]) !== JSON.stringify(simulation[key]))) {
+              const simulation = options.simulation;
+              if (!directFieldMatchesScene(field, simulation, run.id, preview?.connectome?.manifest_sha256)) {
                 setError('Сетевой результат не соответствует параметрам опыта.'); return;
               }
+              setFieldDisplayNormals(contactNormalsForSimulation(fieldContactDraft, simulation));
               setFieldContactDraft(null); setFieldContactPick(null);
               setFieldPlayback({ sceneRunId: run.id, run: field, direct: true,
                 source: { configuration: { simulation, graph_manifest_sha256: field.configuration.graph_manifest_sha256 } } });
@@ -563,7 +555,6 @@ export default function SimulatorPage() {
                 || field.configuration?.graph_manifest_sha256 !== preview?.connectome?.manifest_sha256
                 || sourceConfig?.graph_manifest_sha256 !== field.configuration?.graph_manifest_sha256
                 || !fieldData?.time_ms?.length || !Array.isArray(fieldData.neural_uv) || !sourceConfig?.simulation) return;
-            const keys = ['source_um', 'return_um', 'electrode_um', 'reference_um'];
             const candidateProxy = options?.proxy;
             const stimulusKeys = ['source_um', 'return_um', 'current_na', 'conductivity_s_m', 'clearance_um', 'coordinate_frame'];
             const validProxy = candidateProxy?.state === 'completed' && candidateProxy.parent_run_id === source?.id
@@ -572,9 +563,8 @@ export default function SimulatorPage() {
               && candidateProxy.configuration?.graph_manifest_sha256 === sourceConfig.graph_manifest_sha256
               && candidateProxy.result?.preview?.duration_ms === sourceConfig.simulation.duration_ms
               && stimulusKeys.every(key => JSON.stringify(candidateProxy.configuration?.[key]) === JSON.stringify(sourceConfig.simulation[key]));
-            const sameContacts = fieldContactDraft && keys.every(key => JSON.stringify(fieldContactDraft.simulation[key]) === JSON.stringify(sourceConfig.simulation[key]));
             if (!options?.restore) freshExperiment.current = false;
-            setFieldDisplayNormals(sameContacts ? fieldContactDraft.normals || null : null);
+            setFieldDisplayNormals(contactNormalsForSimulation(fieldContactDraft, sourceConfig.simulation));
             setFieldContactDraft(null); setFieldContactPick(null); setFieldPlayback({ sceneRunId: run.id, run: field, source, proxy: validProxy ? candidateProxy : null }); setTimeMs(0); setPlaying(!options?.restore && !prefersReducedMotion()); setShowResponse(true); setComparison(null); setDrawer(false); setStimPanel(false); setNeurons(true); setOpacity(.18); showView('scene', run.id, null);
             if (candidateProxy && !validProxy) setError('Сетевой результат не соответствует параметрам записи и не показан.');
           }} />
@@ -608,21 +598,11 @@ export default function SimulatorPage() {
           </Stack>}
         </Box>}
       </Box>
-      {tab === 'files' && <Box as="section" aria-labelledby="simulation-files-title" flex={1} overflowY="auto" p={6}>
-        <HStack justify="space-between" mb={4}><Text id="simulation-files-title" fontWeight="600">Файлы выбранного опыта</Text>
-          <Button size="sm" variant="outline" leftIcon={<FiDownload />} isDisabled={run?.state !== 'completed'} onClick={async () => { try { await simulationApi.downloadManifest(run.id); } catch { toast({ status: 'error', title: 'Манифест недоступен. Повторите скачивание.' }); } }}>Манифест</Button>
-        </HStack>
-        {!run && <Text color={CHAT_THEME.textSecondary}>Выберите опыт в списке слева.</Text>}
-        {run && run.state !== 'completed' && <Text color={CHAT_THEME.textSecondary}>{busy ? 'Расчёт ещё не сохранён. Файлы появятся после завершения.' : 'У этого опыта нет опубликованных результатов.'}</Text>}
-        {artifacts.loading && <Text role="status">Загрузка файлов опыта…</Text>}
-        {artifacts.error && <Stack><Text role="alert">{artifacts.error}</Text><Button alignSelf="start" variant="outline" size="sm" onClick={artifacts.retry}>Повторить загрузку файлов</Button></Stack>}
-        {run?.state === 'completed' && !artifacts.loading && !artifacts.error && !files.length && <Text color={CHAT_THEME.textSecondary}>Для этого опыта файлы не зарегистрированы.</Text>}
-        {files.map(file => <HStack key={file.id} borderBottom="1px solid" borderColor={CHAT_THEME.panelBorder} py={3}><FiFile /><Box flex={1}><Text fontSize="13px">{file.name}</Text><Text fontSize="11px" color={CHAT_THEME.textSecondary}>{Math.ceil(file.bytes / 1024)} КБ · SHA-256 {file.sha256.slice(0, 12)}…</Text></Box><IconButton size="sm" aria-label={`Скачать ${file.name}`} icon={<FiDownload />} onClick={async () => { try { await simulationApi.download(run.id, file); } catch { toast({ status: 'error', title: 'Файл недоступен. Повторите скачивание.' }); } }} /></HStack>)}
-      </Box>}
+      {tab === 'files' && <SimulationFiles scene={run} playback={fieldPlayback} target={targetPlayback} sourceForFiles={fieldSourceForFiles} busy={busy} />}
       {electricalPrimary && primaryStimStatus.running && tab === 'scene' ? <SimulationProgress stage={primaryStimStatus.stage} phase={primaryStimStatus.phase} progress={primaryStimStatus.progress} connectionLost={primaryStimStatus.connectionLost} reducedMotion={reducedMotion} onCancel={primaryStimStatus.cancel} canCancel={primaryStimStatus.canCancel} /> : electricalPrimary && fieldContactDraft && !activeField && tab === 'scene' ? <Box as="section" aria-label="Ожидание расчёта" borderTop="1px solid" borderColor={CHAT_THEME.panelBorder} px={4} py={3} bg="rgba(6,9,18,.98)"><Text fontSize="13px" fontWeight="600">Запись появится после расчёта</Text><Text fontSize="12px" color={CHAT_THEME.textSecondary} mt={1}>Разместите электроды и запустите опыт.</Text></Box> : <Box as="section" aria-label={activeField ? 'Воспроизведение электрического расчёта' : 'Воспроизведение основного опыта'} borderTop="1px solid" borderColor={CHAT_THEME.panelBorder} px={3} pt={2} pb={2} bg="rgba(6,9,18,.98)">
-        <HStack justify="space-between" fontSize="12px" mb={1}><HStack><FiActivity /><Text fontWeight="600">{activeTarget ? `E1 − REF · ${activeTarget.source_cells} клеток + цель ${activeTarget.target_id}` : activeField ? (fieldPlayback?.direct ? '????????? ?????????? ???' : fieldRecordingScope(activeField)) : fieldContactDraft ? 'E1 − REF · ожидание расчёта' : displayedFullCns ? "E1 − REF · 6 локальных моделей" : "Запись E1 − REF"}</Text>{activeTarget && <Button size="xs" variant="ghost" onClick={() => setTargetPlayback(null)}>Исходная запись</Button>}{!activeField && !fieldContactDraft && <Button size="xs" variant="ghost" display={fullscreen.active ? 'none' : 'inline-flex'} aria-pressed={showResponse} onClick={() => setShowResponse(value => !value)}>Вход и ответ</Button>}</HStack><Text fontSize="11px" noOfLines={1} color={!activeField && recordingChanged ? 'orange.200' : CHAT_THEME.textSecondary}>{activeTarget ? (activeTarget.timing_mode === 'upper_bound' ? 'Запись: верхняя граница интервала · анимация сети: модель LIF' : activeTarget.timing_mode === 'lower_bound' ? 'Запись: нижняя граница интервала · анимация сети: модель LIF' : 'Запись: односторонний физический повтор · анимация сети: модель LIF') : activeField ? `${activeField.title || 'STIM'} · запись выбранных клеток, без артефакта` : fieldContactDraft ? 'Результат для текущего положения контактов ещё не рассчитан' : recordingChanged ? 'Черновик параметров · запись сохранённого расчёта' : preview ? `Воспроизведение сохранённого расчёта${playing && loop ? ' · повтор' : ''}` : 'Ожидание записи'}</Text></HStack>
+        <HStack justify="space-between" fontSize="12px" mb={1}><HStack><FiActivity /><Text fontWeight="600">{activeTarget ? `E1 − REF · ${activeTarget.source_cells} клеток + цель ${activeTarget.target_id}` : activeField ? fieldResultHeading(activeField, fieldPlayback?.direct) : fieldContactDraft ? 'E1 − REF · ожидание расчёта' : displayedFullCns ? "E1 − REF · 6 локальных моделей" : "Запись E1 − REF"}</Text>{activeTarget && <Button size="xs" variant="ghost" onClick={() => setTargetPlayback(null)}>Исходная запись</Button>}{!activeField && !fieldContactDraft && <Button size="xs" variant="ghost" display={fullscreen.active ? 'none' : 'inline-flex'} aria-pressed={showResponse} onClick={() => setShowResponse(value => !value)}>Вход и ответ</Button>}</HStack><Text fontSize="11px" noOfLines={1} color={!activeField && recordingChanged ? 'orange.200' : CHAT_THEME.textSecondary}>{activeTarget ? (activeTarget.timing_mode === 'upper_bound' ? 'Запись: верхняя граница интервала · анимация сети: модель LIF' : activeTarget.timing_mode === 'lower_bound' ? 'Запись: нижняя граница интервала · анимация сети: модель LIF' : 'Запись: односторонний физический повтор · анимация сети: модель LIF') : activeField ? fieldResultDescription(activeField, fieldPlayback?.direct) : fieldContactDraft ? 'Результат для текущего положения контактов ещё не рассчитан' : recordingChanged ? 'Черновик параметров · запись сохранённого расчёта' : preview ? `Воспроизведение сохранённого расчёта${playing && loop ? ' · повтор' : ''}` : 'Ожидание записи'}</Text></HStack>
         {comparison && !compareError && <HStack fontSize="11px" spacing={4}><Text color={SIMULATION_TRACES.reference}>A · закреплённая запись</Text>{compatibleComparison && <><Text color={SIMULATION_TRACES.current}>B · выбранный опыт</Text>{showResponse && !fullscreen.active && <Text color={CHAT_THEME.textSecondary}>Вход, спайки и движение — B</Text>}</>}</HStack>}
-        {activeField && <HStack spacing={3} mb={1}>{sceneField?.result?.manifest?.kind === 'experimental-field-proxy' && <Text fontSize="11px" color={CHAT_THEME.textSecondary}>{fieldPlayback?.direct ? 'Упрощённая сеть · запись E1–REF не рассчитана' : 'Сеть: упрощённая модель · запись: выбранные клетки'}</Text>}{(sceneField?.result?.preview?.spike_count ?? activeField.result?.preview?.network_spikes) === 0 && <Text fontSize="11px" color={CHAT_THEME.textSecondary}>Сетевых спайков: 0</Text>}<Button size="xs" variant="ghost" color="orange.200" onClick={() => { setStimPanel(false); setDrawer(false); setNociceptionOpen(false); setRecordingDetails(true); }}>Ограничения модели</Button></HStack>}
+        {activeField && <HStack spacing={3} mb={1}>{sceneField?.result?.manifest?.kind === 'experimental-field-proxy' && <Text fontSize="11px" color={CHAT_THEME.textSecondary}>{fieldPlayback?.direct ? 'Упрощённая сеть · запись E1–REF не рассчитана' : 'Сеть: упрощённая модель · запись: выбранные клетки'}</Text>}{(sceneField?.result?.manifest?.kind === 'experimental-field-proxy' ? verifiedProxyHistogram?.every(value => value === 0) : activeField.result?.preview?.network_spikes === 0) && <Text fontSize="11px" color={CHAT_THEME.textSecondary}>Сетевых спайков: 0</Text>}<Button size="xs" variant="ghost" color="orange.200" onClick={() => { setStimPanel(false); setDrawer(false); setNociceptionOpen(false); setRecordingDetails(true); }}>Ограничения модели</Button></HStack>}
         <SignalPlot motorReadout={fieldContactDraft ? null : motorReadout} preview={playbackPreview} timeMs={timeMs} onTime={value => { setPlaying(false); setTimeMs(value); }} comparison={activeField || fieldContactDraft ? null : compatibleComparison} showResponse={!fieldContactDraft && showResponse && !fullscreen.active} modelVisualization={displayedModel.visualization} primaryColor={primaryTraceColor} />
         {compareError && <Text fontSize="11px" color="orange.200">{compareError}</Text>}
         <HStack spacing={3} fontSize="11px"><IconButton aria-label={playing ? 'Пауза записи' : 'Воспроизвести запись'} size="xs" icon={playing ? <FiPause /> : <FiPlay />} isDisabled={!playbackPreview || Boolean(fieldContactPick)} onClick={() => { if (timeMs >= playbackPreview?.time_ms.at(-1)) setTimeMs(0); setPlaying(value => !value); }} /><Text minW="65px">{timeMs.toFixed(1)} мс</Text><input aria-label="Время воспроизведения" disabled={Boolean(fieldContactPick)} type="range" min={0} max={playbackPreview?.time_ms.at(-1) || 200} step={0.025} value={timeMs} onChange={e => { setPlaying(false); setTimeMs(Number(e.target.value)); }} style={{ flex: 1, accentColor: '#2D5BFF' }} />

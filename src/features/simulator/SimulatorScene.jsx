@@ -9,6 +9,7 @@ import { smoothFlySurface } from './scene/flySurface';
 import { loadSceneAsset } from './scene/sceneAsset';
 import { createLocalWindow } from './scene/sceneWindow';
 import useConnectomeData from './connectome/useConnectomeData';
+import { electricalSpikeHistogram } from './recording/electricalTimeline';
 import useStateContrast from './useStateContrast';
 import { createStateContrastLayer } from './stateContrastLayer';
 import { createFieldContactLayer } from './field/fieldContacts';
@@ -41,7 +42,7 @@ export default function SimulatorScene({ opacity, neurons, placement, onPlacemen
   preview, timeMs, selectedContact = 'electrode', onRegion, resetCamera,
   modelGeometry, sceneContext, onAnchor, focusLocal, invalidPlacement, modelVisualization, localWindow = false,
   cameraLink, synchronizeCamera = false, runId, pickingStimulus = false, onStimulusRegion,
-  sceneLabel, fullConnectome = false, onMotorReadout, nativeView = false, fieldRun = null,
+  sceneLabel, fullConnectome = false, onMotorReadout, onFieldEventsVerified, nativeView = false, fieldRun = null,
   fieldSourceConfiguration = null,
   fieldContactDraft = null, fieldContactNormals = null, fieldSnapRequest = 0, onFieldContactsSnap,
   fieldContactPick = null, onFieldContactPick, onFieldContactSelect, onShowTarget, targetProbe = null, sceneControls, bodyVisible = true, regionsVisible = true }) {
@@ -78,6 +79,16 @@ export default function SimulatorScene({ opacity, neurons, placement, onPlacemen
   const [showJoints, setShowJoints] = useState(false);
   const kinematics = useFlyKinematics(sceneContext?.mesh_asset_id, showJoints);
   useEffect(() => { onMotorReadout?.({ runId, fieldRunId: fieldRun?.id || null, data: motor.data }); }, [onMotorReadout, runId, fieldRun?.id, motor.data]);
+  useEffect(() => {
+    if (!onFieldEventsVerified) return;
+    const isProxy = fieldRun?.result?.manifest?.kind === 'experimental-field-proxy';
+    const verified = isProxy && connectome.data && !connectome.error
+      && !connectome.data.description?.response_unavailable;
+    const histogram = verified ? electricalSpikeHistogram(
+      { source: connectome.data }, fieldRun.configuration?.waveform?.length,
+    ) : null;
+    onFieldEventsVerified({ runId, fieldRun, description: preview?.connectome, histogram });
+  }, [onFieldEventsVerified, runId, fieldRun, preview?.connectome, connectome.data, connectome.error]);
   const [showFieldContacts, setShowFieldContacts] = useState(true);
   const showNeuropil = regionsVisible;
   const neuropilRegion = 'all';

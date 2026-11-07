@@ -6,7 +6,7 @@ beforeEach(() => {
   global.crypto = { subtle: { digest: jest.fn().mockResolvedValue(new Uint8Array(32).buffer) } };
 });
 
-function fixture() {
+function fixture(missing = [], contacts = []) {
   const hash = '0'.repeat(64), ids = new BigUint64Array([1n, 2n]);
   const base = { node_ids: ids, description: { manifest_sha256: hash } };
   const buffer = new ArrayBuffer(32);
@@ -18,7 +18,8 @@ function fixture() {
     conductivity_s_m: .3, clearance_um: 1 };
   const config = { graph_manifest_sha256: hash, seed: 1, gain: 3, waveform: [0, 1], ...field };
   const metadata = { graph_sha256: hash, event_sha256: hash, seed: 1, gain: 3, waveform: [0, 1],
-    field: { field_audit: { configuration: field } },
+    field: { field_audit: { configuration: field }, excluded_from_direct_field: missing,
+      excluded_contact_intersections: contacts },
     event_description: { manifest_sha256: hash, duration_ms: 2, binary: { byte_order: 'little', bytes: 32,
       arrays: { node_ids: { dtype: '<u8', offset: 0, count: 2, shape: [2] },
         spike_neurons: { dtype: '<i4', offset: 16, count: 2, shape: [2] },
@@ -32,7 +33,8 @@ function fixture() {
   const controlArtifact = { name: 'network-control-events.bin', bytes: buffer.byteLength, sha256: hash };
   const run = { configuration: config, result: { manifest: { kind: 'experimental-field-proxy', files: [artifact, metaArtifact, controlArtifact] },
     preview: { duration_ms: 2, neurons: 2, spike_count: 2, active_neurons: 2,
-      spikes_by_ms: [0, 1, 1], control_spikes_by_ms: [0, 1, 1], recording: null } } };
+      spikes_by_ms: [0, 1, 1], control_spikes_by_ms: [0, 1, 1], recording: null,
+      direct_field_exclusions: missing.length, contact_exclusions: contacts.length } } };
   return { base, buffer, artifact, meta, metaArtifact, run, control: buffer.slice(0), controlArtifact };
 }
 
@@ -43,6 +45,18 @@ test('shows only verified network events and never claims electrode recording', 
   expect([...result.input_indices]).toEqual([]);
   expect([...result.control_spike_neurons]).toEqual([0, 1]);
   expect(result.description.interpretation).toContain('no physical recording');
+});
+
+test('checks that direct-field exclusions match the preview and belong to the graph', async () => {
+  const verify = value => verifyFieldProxyEvents(value.base, value.buffer, value.artifact, value.meta,
+    value.metaArtifact, value.run, value.control, value.controlArtifact);
+  await expect(verify(fixture(['1'], ['2']))).resolves.toBeDefined();
+  const wrongCount = fixture(['1']);
+  wrongCount.run.result.preview.direct_field_exclusions = 0;
+  await expect(verify(wrongCount)).rejects.toThrow('field_proxy_exclusions');
+  await expect(verify(fixture(['9']))).rejects.toThrow('field_proxy_exclusions');
+  await expect(verify(fixture(['1'], ['1']))).rejects.toThrow('field_proxy_exclusions');
+  await expect(verify(fixture(['01']))).rejects.toThrow('field_proxy_exclusions');
 });
 
 test('rejects mismatched graph events and invented recordings', async () => {

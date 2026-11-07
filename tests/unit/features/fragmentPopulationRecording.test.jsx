@@ -76,6 +76,18 @@ test('rejects an out-of-page source belonging to another scene', async () => {
   expect(simulationApi.feedbackRuns).not.toHaveBeenCalled();
 });
 
+test('exposes completed source files only when the source belongs to the current scene and graph', async () => {
+  const source = { id: 'source', parent_run_id: 'scene', state: 'completed',
+    configuration: { graph_manifest_sha256: graph, source_ids: [1] } };
+  const report = jest.fn();
+  simulationApi.fragmentPopulationRuns.mockResolvedValue({ items: [{ id: source.id, state: 'completed' }] });
+  simulationApi.get.mockResolvedValue(source);
+  const view = render(<Recording sceneRunId="scene" sceneManifest={graph} onSourceForFiles={report} />);
+  await waitFor(() => expect(report).toHaveBeenLastCalledWith({ sceneRunId: 'scene', source }));
+  view.rerender(<Recording sceneRunId="other" sceneManifest={graph} onSourceForFiles={report} />);
+  await waitFor(() => expect(report).toHaveBeenLastCalledWith(null));
+});
+
 test('exposes only current and search radius in the stimulation settings', async () => {
   render(<Recording sceneRunId="scene" sceneManifest={graph} />);
   await act(async () => {});
@@ -267,50 +279,6 @@ test('retains the resume receipt until the whole-network stage has ended', async
   await waitFor(() => expect(sessionStorage.getItem(key)).toBeNull());
 });
 
-test('retries failed network feedback without rerunning the saved physical source', async () => {
-  const source = { id: 'saved', parent_run_id: 'scene', state: 'completed',
-    configuration: { graph_manifest_sha256: graph, source_ids: [1], simulation: fieldDemoPreset(graph).simulation },
-    result: { preview: { source_cells: 1, edge_event_count: 0, time_ms: [0, 1], neural_uv: [0, 0], limitations: [] } } };
-  simulationApi.fragmentPopulationRuns.mockResolvedValue({ items: [{ id: 'saved', state: 'completed' }] });
-  simulationApi.feedbackRuns.mockResolvedValue({ items: [{ id: 'failed', state: 'failed' }] });
-  simulationApi.get.mockImplementation(async id => id === 'saved' ? source
-    : id === 'failed' ? { id, state: 'failed' } : { id, state: 'running' });
-  simulationApi.feedbackSource.mockResolvedValue({ graph_manifest_sha256: graph,
-    sha256: 'a'.repeat(64), manifest_sha256: 'b'.repeat(64) });
-  simulationApi.createFeedback.mockResolvedValue({ id: 'retry', state: 'queued' });
-  render(<FragmentPopulationRecording sceneRunId="scene" sceneManifest={graph} />);
-  fireEvent.click(await screen.findByRole('button', { name: 'Повторить расчёт сети' }));
-  await waitFor(() => expect(simulationApi.createFeedback).toHaveBeenCalledTimes(1));
-  expect(simulationApi.createFeedback.mock.calls[0][0].parent_run_id).toBe('saved');
-  expect(simulationApi.createFragmentPopulation).not.toHaveBeenCalled();
-});
-
-test('reuses retry identity after an interrupted feedback submission', async () => {
-  const uuid = jest.fn().mockReturnValueOnce('fba50b24-f408-4d70-bd9b-3f0e18f76412')
-    .mockReturnValue('fba50b24-f408-4d70-bd9b-3f0e18f76413');
-  global.crypto = { randomUUID: uuid };
-  const source = { id: 'saved', parent_run_id: 'scene', state: 'completed',
-    configuration: { graph_manifest_sha256: graph, source_ids: [1], simulation: fieldDemoPreset(graph).simulation },
-    result: { preview: { source_cells: 1, edge_event_count: 0, time_ms: [0, 1], neural_uv: [0, 0], limitations: [] } } };
-  simulationApi.fragmentPopulationRuns.mockResolvedValue({ items: [{ id: 'saved', state: 'completed' }] });
-  simulationApi.feedbackRuns.mockResolvedValue({ items: [{ id: 'failed', state: 'failed' }] });
-  simulationApi.get.mockImplementation(async id => id === 'saved' ? source
-    : id === 'failed' ? { id, state: 'failed' } : { id, state: 'running' });
-  simulationApi.feedbackSource.mockResolvedValue({ graph_manifest_sha256: graph,
-    sha256: 'a'.repeat(64), manifest_sha256: 'b'.repeat(64) });
-  simulationApi.createFeedback.mockRejectedValueOnce(new Error('connection interrupted'))
-    .mockResolvedValueOnce({ id: 'retry', state: 'queued' });
-  render(<FragmentPopulationRecording sceneRunId="scene" sceneManifest={graph} />);
-  fireEvent.click(await screen.findByRole('button', { name: 'Повторить расчёт сети' }));
-  await waitFor(() => expect(simulationApi.createFeedback).toHaveBeenCalledTimes(1));
-  fireEvent.click(await screen.findByRole('button', { name: 'Повторить расчёт сети' }));
-  await waitFor(() => expect(simulationApi.createFeedback).toHaveBeenCalledTimes(2));
-  expect(simulationApi.createFeedback.mock.calls[0][0].request_id)
-    .toBe(simulationApi.createFeedback.mock.calls[1][0].request_id);
-  expect(uuid).toHaveBeenCalledTimes(1);
-  expect(simulationApi.createFragmentPopulation).not.toHaveBeenCalled();
-});
-
 test('restores an interrupted retry even when an older failed run exists', async () => {
   const sceneId = '93a6be54-9021-4b67-b00b-b799240f7fce';
   const sourceId = 'd382a20d-0d63-45a6-9f3c-8295763491c5';
@@ -335,45 +303,179 @@ test('restores an interrupted retry even when an older failed run exists', async
 test('retains a real retry request across component reload before submission returns', async () => {
   const sceneId = '93a6be54-9021-4b67-b00b-b799240f7fce';
   const sourceId = 'd382a20d-0d63-45a6-9f3c-8295763491c5';
-  const source = { id: sourceId, parent_run_id: sceneId, state: 'completed',
-    configuration: { graph_manifest_sha256: graph, source_ids: [1], simulation: fieldDemoPreset(graph).simulation },
-    result: { preview: { source_cells: 1, edge_event_count: 0, time_ms: [0, 1], neural_uv: [0, 0], limitations: [] } } };
-  simulationApi.fragmentPopulationRuns.mockResolvedValue({ items: [{ id: sourceId, state: 'completed' }] });
-  simulationApi.feedbackRuns.mockResolvedValue({ items: [{ id: 'older', state: 'failed' }] });
-  simulationApi.get.mockImplementation(async id => id === sourceId ? source : { id, state: 'failed' });
+  let sourceConfiguration, requestSequence = 0;
+  const onFailure = jest.fn();
+  global.crypto = { randomUUID: () => `e3ab7f7a-2d15-4fd1-93a3-${String(++requestSequence).padStart(12, '0')}` };
+  simulationApi.fragmentPopulationRuns.mockResolvedValueOnce({ items: [] })
+    .mockResolvedValue({ items: [{ id: sourceId, state: 'completed' }] });
+  simulationApi.createFragmentPopulation.mockImplementation(async payload => {
+    sourceConfiguration = payload.configuration;
+    return { id: sourceId, state: 'queued' };
+  });
+  simulationApi.feedbackRuns.mockResolvedValueOnce({ items: [] })
+    .mockResolvedValue({ items: [{ id: 'older', state: 'failed' }] });
+  simulationApi.get.mockImplementation(async id => id === sourceId
+    ? { id, parent_run_id: sceneId, state: 'completed', configuration: sourceConfiguration }
+    : { id, state: 'failed' });
   simulationApi.feedbackSource.mockResolvedValue({ graph_manifest_sha256: graph,
     sha256: 'a'.repeat(64), manifest_sha256: 'b'.repeat(64) });
-  simulationApi.createFeedback.mockImplementation(() => new Promise(() => {}));
-  const first = render(<FragmentPopulationRecording sceneRunId={sceneId} sceneManifest={graph} />);
-  fireEvent.click(await screen.findByRole('button', { name: 'Повторить расчёт сети' }));
-  await waitFor(() => expect(simulationApi.createFeedback).toHaveBeenCalledTimes(1));
+  simulationApi.createFeedback.mockResolvedValueOnce({ id: 'older', state: 'queued' })
+    .mockImplementation(() => new Promise(() => {}));
+  const first = render(<FragmentPopulationRecording sceneRunId={sceneId} sceneManifest={graph} onFailure={onFailure} />);
+  await waitFor(() => expect(screen.getByRole('button', { name: 'Рассчитать' })).toBeEnabled());
+  fireEvent.click(screen.getByRole('button', { name: 'Рассчитать' }));
+  await waitFor(() => expect(onFailure).toHaveBeenCalledTimes(1));
+  await waitFor(() => expect(screen.getByRole('button', { name: 'Рассчитать' })).toBeEnabled());
+  fireEvent.click(screen.getByRole('button', { name: 'Рассчитать' }));
+  await waitFor(() => expect(simulationApi.createFeedback).toHaveBeenCalledTimes(2));
   const saved = JSON.parse(sessionStorage.getItem(`simulation:pending-feedback:${sceneId}`));
   expect(saved.retry).toBe(true);
   first.unmount();
   render(<FragmentPopulationRecording sceneRunId={sceneId} sceneManifest={graph} />);
-  await waitFor(() => expect(simulationApi.createFeedback).toHaveBeenCalledTimes(2));
-  expect(simulationApi.createFeedback.mock.calls.map(call => call[0].request_id)).toEqual([saved.requestId, saved.requestId]);
+  await waitFor(() => expect(simulationApi.createFeedback).toHaveBeenCalledTimes(3));
+  expect(simulationApi.createFeedback.mock.calls.slice(1).map(call => call[0].request_id))
+    .toEqual([saved.requestId, saved.requestId]);
+  expect(simulationApi.createFragmentPopulation).toHaveBeenCalledTimes(1);
+});
+
+test.each(['unchanged', 'current', 'pulse'])('after reload checks the whole draft before network retry: %s', async edited => {
+  const sceneId = '93a6be54-9021-4b67-b00b-b799240f7fce';
+  const sourceId = 'd382a20d-0d63-45a6-9f3c-8295763491c5';
+  let sourceConfiguration, requestSequence = 0;
+  const onFailure = jest.fn();
+  global.crypto = { randomUUID: () => `e3ab7f7a-2d15-4fd1-93a3-${String(++requestSequence).padStart(12, '0')}` };
+  simulationApi.fragmentPopulationRuns.mockResolvedValueOnce({ items: [] })
+    .mockResolvedValue({ items: [{ id: sourceId, state: 'completed' }] });
+  simulationApi.createFragmentPopulation.mockImplementation(async payload => {
+    sourceConfiguration = payload.configuration;
+    return { id: sourceId, state: 'queued' };
+  });
+  simulationApi.feedbackRuns.mockResolvedValueOnce({ items: [] })
+    .mockResolvedValue({ items: [{ id: 'failed-feedback', state: 'failed' }] });
+  simulationApi.get.mockImplementation(async id => id === sourceId
+    ? { id, parent_run_id: sceneId, state: 'completed', configuration: sourceConfiguration }
+    : { id, state: 'failed' });
+  simulationApi.feedbackSource.mockResolvedValue({ graph_manifest_sha256: graph,
+    sha256: 'a'.repeat(64), manifest_sha256: 'b'.repeat(64) });
+  simulationApi.createFeedback.mockResolvedValueOnce({ id: 'failed-feedback', state: 'queued' })
+    .mockResolvedValueOnce({ id: 'new-feedback', state: 'queued' });
+  const first = render(<FragmentPopulationRecording sceneRunId={sceneId} sceneManifest={graph} onFailure={onFailure} />);
+  await waitFor(() => expect(screen.getByRole('button', { name: 'Рассчитать' })).toBeEnabled());
+  fireEvent.change(screen.getByLabelText('Ток STIM, нА'), { target: { value: '-265' } });
+  fireEvent.change(screen.getByLabelText('Радиус поиска, мкм'), { target: { value: '15' } });
+  fireEvent.click(screen.getByRole('button', { name: 'Рассчитать' }));
+  await waitFor(() => expect(onFailure).toHaveBeenCalledTimes(1));
+  first.unmount();
+  const restoredConfiguration = JSON.parse(JSON.stringify(sourceConfiguration));
+  if (edited === 'pulse') restoredConfiguration.simulation.pulse_start_ms += .1;
+  const incomingContacts = { kind: 'fragments', configuration: restoredConfiguration,
+    simulation: restoredConfiguration.simulation, fieldRunId: sourceId };
+  const adjust = jest.fn();
+  render(<FragmentPopulationRecording sceneRunId={sceneId} sceneManifest={graph}
+    incomingContacts={edited === 'pulse' ? incomingContacts : undefined} onAdjustContact={adjust} />);
+  await waitFor(() => expect(screen.getByRole('button', { name: 'Рассчитать' })).toBeEnabled());
+  await waitFor(() => expect(simulationApi.feedbackRuns).toHaveBeenCalledTimes(2));
+  if (edited !== 'pulse') {
+    await waitFor(() => expect(screen.getByLabelText('Ток STIM, нА')).toHaveValue(-265));
+    expect(screen.getByLabelText('Радиус поиска, мкм')).toHaveValue(15);
+    expect(adjust).toHaveBeenCalledWith(expect.objectContaining({ simulation: sourceConfiguration.simulation }), null);
+  } else fireEvent.change(screen.getByLabelText('Радиус поиска, мкм'), { target: { value: '15' } });
+  if (edited === 'current') fireEvent.change(screen.getByLabelText('Ток STIM, нА'), { target: { value: '-250' } });
+  fireEvent.click(screen.getByRole('button', { name: 'Рассчитать' }));
+  if (edited !== 'unchanged') {
+    await waitFor(() => expect(simulationApi.createFragmentPopulation).toHaveBeenCalledTimes(2));
+    if (edited === 'current') expect(simulationApi.createFragmentPopulation.mock.calls[1][0].configuration.simulation.current_na).toBe(-250);
+  } else {
+    await waitFor(() => expect(simulationApi.createFeedback).toHaveBeenCalledTimes(2));
+    expect(simulationApi.createFragmentPopulation).toHaveBeenCalledTimes(1);
+  }
+});
+
+test('does not replace a new operator edit while a failed source is being restored', async () => {
+  const sceneId = '93a6be54-9021-4b67-b00b-b799240f7fce';
+  const sourceId = 'd382a20d-0d63-45a6-9f3c-8295763491c5';
+  const simulation = { ...fieldDemoPreset(graph).simulation, current_na: -265 };
+  const configuration = { graph_manifest_sha256: graph, source_ids: [1, 2], seed: 1,
+    threshold_mv: -20, max_distance_um: 2, simulation };
+  const positions = Object.fromEntries(['source_um', 'return_um', 'electrode_um', 'reference_um']
+    .map(key => [key, simulation[key]]));
+  sessionStorage.setItem(`simulation:feedback-retry-draft:${sceneId}`, JSON.stringify({ version: 1, sourceId,
+    signature: JSON.stringify([sceneId, graph, positions, -265, simulation.duration_ms, '1, 2', '15']) }));
+  simulationApi.fragmentPopulationRuns.mockResolvedValue({ items: [{ id: sourceId, state: 'completed' }] });
+  simulationApi.get.mockImplementation(async id => id === sourceId
+    ? { id, parent_run_id: sceneId, state: 'completed', configuration }
+    : { id, state: 'failed' });
+  let finishList;
+  simulationApi.feedbackRuns.mockReturnValue(new Promise(resolve => { finishList = resolve; }));
+  const adjust = jest.fn();
+  render(<FragmentPopulationRecording sceneRunId={sceneId} sceneManifest={graph} onAdjustContact={adjust} />);
+  await waitFor(() => expect(simulationApi.feedbackRuns).toHaveBeenCalled());
+  fireEvent.change(screen.getByLabelText('Ток STIM, нА'), { target: { value: '-200' } });
+  await act(async () => finishList({ items: [{ id: 'failed-feedback', state: 'failed' }] }));
+  await waitFor(() => expect(screen.getByRole('button', { name: 'Рассчитать' })).toBeEnabled());
+  expect(screen.getByLabelText('Ток STIM, нА')).toHaveValue(-200);
+  expect(adjust).not.toHaveBeenCalled();
+});
+
+test('allows restoring a failed draft after the scene delivers its untouched preset', async () => {
+  const sceneId = '93a6be54-9021-4b67-b00b-b799240f7fce';
+  const sourceId = 'd382a20d-0d63-45a6-9f3c-8295763491c5';
+  const simulation = { ...fieldDemoPreset(graph).simulation, current_na: -265 };
+  const configuration = { graph_manifest_sha256: graph, source_ids: [1, 2], seed: 1,
+    threshold_mv: -20, max_distance_um: 2, simulation };
+  const positions = Object.fromEntries(['source_um', 'return_um', 'electrode_um', 'reference_um']
+    .map(key => [key, simulation[key]]));
+  sessionStorage.setItem(`simulation:feedback-retry-draft:${sceneId}`, JSON.stringify({ version: 1, sourceId,
+    signature: JSON.stringify([sceneId, graph, positions, -265, simulation.duration_ms, '1, 2', '15']) }));
+  simulationApi.fragmentPopulationRuns.mockResolvedValue({ items: [{ id: sourceId, state: 'completed' }] });
+  simulationApi.get.mockImplementation(async id => id === sourceId
+    ? { id, parent_run_id: sceneId, state: 'completed', configuration }
+    : { id, state: 'failed' });
+  simulationApi.feedbackRuns.mockResolvedValue({ items: [{ id: 'failed-feedback', state: 'failed' }] });
+  const preset = fieldDemoPreset(graph), adjust = jest.fn(), consume = jest.fn();
+  const incoming = { kind: 'fragments', configuration: { ...configuration, simulation: preset.simulation },
+    simulation: preset.simulation, changed: false };
+  const view = render(<FragmentPopulationRecording sceneRunId={sceneId} sceneManifest={graph}
+    canRestore={() => true} onAdjustContact={adjust} onConsumeContacts={consume} incomingContacts={incoming} />);
+  await waitFor(() => expect(consume).toHaveBeenCalled());
+  view.rerender(<FragmentPopulationRecording sceneRunId={sceneId} sceneManifest={graph}
+    canRestore={() => true} onAdjustContact={adjust} onConsumeContacts={consume} />);
+  await waitFor(() => expect(screen.getByLabelText('Ток STIM, нА')).toHaveValue(-265));
+  expect(screen.getByLabelText('Радиус поиска, мкм')).toHaveValue(15);
+  expect(adjust).toHaveBeenCalledWith(expect.objectContaining({ simulation }), null);
 });
 
 test('reports a second failed feedback attempt to the parent', async () => {
   const sceneId = '93a6be54-9021-4b67-b00b-b799240f7fce';
   const sourceId = 'd382a20d-0d63-45a6-9f3c-8295763491c5';
-  sessionStorage.setItem(`simulation:pending-feedback:${sceneId}`, JSON.stringify({ version: 1, sourceId,
-    requestId: 'e3ab7f7a-2d15-4fd1-93a3-dc354d6a5c0e' }));
-  const source = { id: sourceId, parent_run_id: sceneId, state: 'completed',
-    configuration: { graph_manifest_sha256: graph, source_ids: [1], simulation: fieldDemoPreset(graph).simulation },
-    result: { preview: { source_cells: 1, edge_event_count: 0, time_ms: [0, 1], neural_uv: [0, 0], limitations: [] } } };
-  const onFailure = jest.fn();
-  simulationApi.fragmentPopulationRuns.mockResolvedValue({ items: [{ id: sourceId, state: 'completed' }] });
-  simulationApi.feedbackRuns.mockResolvedValue({ items: [{ id: 'older', state: 'failed' }] });
-  simulationApi.get.mockImplementation(async id => id === sourceId ? source : { id, state: 'failed' });
+  let sourceConfiguration, requestSequence = 0;
+  const onFailure = jest.fn(), show = jest.fn();
+  global.crypto = { randomUUID: () => `e3ab7f7a-2d15-4fd1-93a3-${String(++requestSequence).padStart(12, '0')}` };
+  simulationApi.fragmentPopulationRuns.mockResolvedValueOnce({ items: [] })
+    .mockResolvedValue({ items: [{ id: sourceId, state: 'completed' }] });
+  simulationApi.createFragmentPopulation.mockImplementation(async payload => {
+    sourceConfiguration = payload.configuration;
+    return { id: sourceId, state: 'queued' };
+  });
+  simulationApi.feedbackRuns.mockResolvedValueOnce({ items: [] })
+    .mockResolvedValue({ items: [{ id: 'older', state: 'failed' }] });
+  simulationApi.get.mockImplementation(async id => id === sourceId
+    ? { id, parent_run_id: sceneId, state: 'completed', configuration: sourceConfiguration }
+    : { id, state: 'failed' });
   simulationApi.feedbackSource.mockResolvedValue({ graph_manifest_sha256: graph,
     sha256: 'a'.repeat(64), manifest_sha256: 'b'.repeat(64) });
-  simulationApi.createFeedback.mockResolvedValue({ id: 'again', state: 'queued' });
-  render(<FragmentPopulationRecording sceneRunId={sceneId} sceneManifest={graph} onFailure={onFailure} />);
+  simulationApi.createFeedback.mockResolvedValueOnce({ id: 'older', state: 'queued' })
+    .mockResolvedValueOnce({ id: 'again', state: 'queued' });
+  render(<FragmentPopulationRecording sceneRunId={sceneId} sceneManifest={graph}
+    onFailure={onFailure} onShowOnBody={show} />);
+  await waitFor(() => expect(screen.getByRole('button', { name: 'Рассчитать' })).toBeEnabled());
+  fireEvent.click(screen.getByRole('button', { name: 'Рассчитать' }));
   await waitFor(() => expect(onFailure).toHaveBeenCalledTimes(1));
-  fireEvent.click(await screen.findByRole('button', { name: 'Повторить расчёт сети' }));
+  await waitFor(() => expect(screen.getByRole('button', { name: 'Рассчитать' })).toBeEnabled());
+  fireEvent.click(screen.getByRole('button', { name: 'Рассчитать' }));
   await waitFor(() => expect(onFailure).toHaveBeenCalledTimes(2));
+  expect(simulationApi.createFragmentPopulation).toHaveBeenCalledTimes(1);
+  expect(show).not.toHaveBeenCalled();
 });
 
 test('reuses the same feedback request identity after an interrupted submission', async () => {
@@ -434,7 +536,7 @@ test.each([
   expect(show).not.toHaveBeenCalled();
 });
 
-test('restores an earlier verified result only after explicit selection following failure', async () => {
+test('does not display a previous result after the latest calculation failed', async () => {
   const show = jest.fn();
   const source = { id: 'saved', parent_run_id: 'scene', state: 'completed',
     configuration: { graph_manifest_sha256: graph, source_ids: [1], simulation: fieldDemoPreset(graph).simulation },
@@ -447,20 +549,23 @@ test('restores an earlier verified result only after explicit selection followin
     ? { id, state: 'failed', error: 'executor_feedback_iteration_limit' }
     : id === 'coupled' ? completed : source);
   render(<FragmentPopulationRecording sceneRunId="scene" sceneManifest={graph} onShowOnBody={show} />);
-  const open = await screen.findByRole('button', { name: 'Открыть предыдущий результат' });
+  expect(await screen.findByText(/не сошёлся за заданное число итераций/)).toBeInTheDocument();
   expect(show).not.toHaveBeenCalled();
-  fireEvent.click(open);
-  await waitFor(() => expect(show).toHaveBeenCalledWith(completed, { source, restore: true }));
+  expect(screen.queryByRole('button', { name: 'Открыть предыдущий результат' })).not.toBeInTheDocument();
 });
 
 test('checks all contacts before searching or submitting a calculation', async () => {
   const onFailure = jest.fn();
   simulationApi.contactScreen.mockResolvedValue({ potential_intersections: [{ contact_indices: [0, 2] }] });
-  simulationApi.contactPositions.mockImplementation(async (_id, request) => ({ potential_intersections: [{ contact_indices: request.positions_um.map((_, index) => index) }] }));
   render(<FragmentPopulationRecording sceneRunId="scene" sceneManifest={graph} onFailure={onFailure} />);
   await act(async () => {});
   await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Рассчитать' })); });
-  expect(await screen.findByRole('alert')).toHaveTextContent('не найдены допустимые положения контактов');
+  expect(await screen.findByRole('alert')).toHaveTextContent('Контакты STIM+, E1 слишком близко к отросткам');
+  expect(simulationApi.contactScreen).toHaveBeenCalledWith('scene', expect.objectContaining({
+    source_um: expect.any(Array), return_um: expect.any(Array),
+    electrode_um: expect.any(Array), reference_um: expect.any(Array),
+  }), expect.any(AbortSignal));
+  expect(simulationApi.contactPositions).not.toHaveBeenCalled();
   expect(simulationApi.spatialCandidates).not.toHaveBeenCalled();
   expect(simulationApi.createFragmentPopulation).not.toHaveBeenCalled();
   expect(onFailure).toHaveBeenCalled();
@@ -469,9 +574,10 @@ test('checks all contacts before searching or submitting a calculation', async (
 test('preserves a newer contact draft if a previous submission finishes late', async () => {
   let finishCreate;
   const adjust = jest.fn();
+  const report = jest.fn();
   simulationApi.createFragmentPopulation.mockReturnValue(new Promise(resolve => { finishCreate = resolve; }));
   const { rerender } = render(<FragmentPopulationRecording sceneRunId="scene" sceneManifest={graph}
-    onAdjustContact={adjust} />);
+    onAdjustContact={adjust} onPrimaryStatus={report} />);
   await act(async () => {});
   fireEvent.click(screen.getByRole('button', { name: 'Рассчитать' }));
   await waitFor(() => expect(simulationApi.createFragmentPopulation).toHaveBeenCalledTimes(1));
@@ -479,13 +585,99 @@ test('preserves a newer contact draft if a previous submission finishes late', a
   const incoming = { kind: 'fragments', fieldRunId: 'other', simulation,
     configuration: { graph_manifest_sha256: graph, source_ids: [1], simulation } };
   rerender(<FragmentPopulationRecording sceneRunId="scene" sceneManifest={graph}
-    onAdjustContact={adjust} incomingContacts={incoming} />);
+    onAdjustContact={adjust} onPrimaryStatus={report} incomingContacts={incoming} />);
   await act(async () => {});
+  simulationApi.fragmentPopulationRuns.mockResolvedValue({ items: [{ id: 'old-submission', state: 'queued' }] });
   await act(async () => { finishCreate({ id: 'old-submission', state: 'queued' }); });
   expect(await screen.findByRole('alert')).toHaveTextContent('изменённое положение сохранено как черновик');
   expect(adjust).not.toHaveBeenCalled();
-  fireEvent.click(screen.getByText('Контакты и клетки'));
-  expect(screen.getByLabelText('STIM+ X')).toHaveValue('5');
+  await waitFor(() => expect(report).toHaveBeenLastCalledWith(expect.objectContaining({ running: true, canCancel: true })));
+  await act(async () => { await report.mock.lastCall[0].cancel(); });
+  expect(simulationApi.cancel).toHaveBeenCalledWith('old-submission');
+});
+
+test('does not attach a late submission to a different scene', async () => {
+  const oldScene = '93a6be54-9021-4b67-b00b-b799240f7fce';
+  const newScene = '71852bf2-a4cf-430e-ab0a-ff5866d1c300';
+  const sourceId = 'd382a20d-0d63-45a6-9f3c-8295763491c5';
+  let finishCreate;
+  const show = jest.fn(), status = jest.fn();
+  simulationApi.createFragmentPopulation.mockReturnValue(new Promise(resolve => { finishCreate = resolve; }));
+  const view = render(<FragmentPopulationRecording sceneRunId={oldScene} sceneManifest={graph}
+    onShowOnBody={show} onPrimaryStatus={status} />);
+  await waitFor(() => expect(screen.getByRole('button', { name: 'Рассчитать' })).toBeEnabled());
+  fireEvent.click(screen.getByRole('button', { name: 'Рассчитать' }));
+  await waitFor(() => expect(simulationApi.createFragmentPopulation).toHaveBeenCalledTimes(1));
+  view.rerender(<FragmentPopulationRecording sceneRunId={newScene} sceneManifest={graph}
+    onShowOnBody={show} onPrimaryStatus={status} />);
+  await act(async () => { finishCreate({ id: sourceId, state: 'queued' }); });
+  expect(status).toHaveBeenLastCalledWith({ ready: true, running: false });
+  expect(show).not.toHaveBeenCalled();
+  expect(sessionStorage.getItem(`simulation:pending-feedback:${oldScene}`)).toContain(sourceId);
+  expect(sessionStorage.getItem(`simulation:pending-feedback:${newScene}`)).toBeNull();
+});
+
+test('does not replace an edited contact draft when its earlier calculation completes', async () => {
+  let finishCreate;
+  const show = jest.fn(), adjust = jest.fn();
+  simulationApi.createFragmentPopulation.mockReturnValue(new Promise(resolve => { finishCreate = resolve; }));
+  const oldSimulation = fieldDemoPreset(graph).simulation;
+  const source = { id: 'older', parent_run_id: 'scene', state: 'completed',
+    configuration: { graph_manifest_sha256: graph, source_ids: [1, 2], simulation: oldSimulation },
+    result: { preview: { source_cells: 2, edge_event_count: 0, time_ms: [0, 1], neural_uv: [0, 0], limitations: [] } } };
+  const coupled = coupledRun('older');
+  simulationApi.feedbackSource.mockResolvedValue({ graph_manifest_sha256: graph,
+    sha256: 'a'.repeat(64), manifest_sha256: 'b'.repeat(64) });
+  simulationApi.createFeedback.mockResolvedValue({ id: 'coupled', state: 'queued' });
+  simulationApi.get.mockImplementation(async id => id === 'coupled' ? coupled : source);
+  const view = render(<FragmentPopulationRecording sceneRunId="scene" sceneManifest={graph}
+    onShowOnBody={show} onAdjustContact={adjust} />);
+  await waitFor(() => expect(screen.getByRole('button', { name: 'Рассчитать' })).toBeEnabled());
+  fireEvent.click(screen.getByRole('button', { name: 'Рассчитать' }));
+  await waitFor(() => expect(simulationApi.createFragmentPopulation).toHaveBeenCalledTimes(1));
+  const simulation = { ...oldSimulation, source_um: [5, 6, 7] };
+  view.rerender(<FragmentPopulationRecording sceneRunId="scene" sceneManifest={graph}
+    onShowOnBody={show} onAdjustContact={adjust} incomingContacts={{ kind: 'fragments', simulation,
+      configuration: { graph_manifest_sha256: graph, source_ids: [1], simulation } }} />);
+  simulationApi.fragmentPopulationRuns.mockResolvedValue({ items: [{ id: 'older', state: 'completed' }] });
+  await act(async () => { finishCreate({ id: 'older', state: 'queued' }); });
+  await waitFor(() => expect(simulationApi.get).toHaveBeenCalledWith('coupled', expect.anything()));
+  expect(show).not.toHaveBeenCalled();
+  expect(adjust).not.toHaveBeenCalled();
+});
+
+test('keeps a contact edited after launch when the calculation later completes', async () => {
+  const originalSocket = global.WebSocket;
+  let socket;
+  global.WebSocket = class { constructor() { socket = this; } close() {} };
+  simulationApi.eventsUrl = jest.fn(() => 'ws://localhost/test');
+  const show = jest.fn();
+  const oldSimulation = fieldDemoPreset(graph).simulation;
+  const source = { id: 'new', parent_run_id: 'scene', state: 'completed',
+    configuration: { graph_manifest_sha256: graph, source_ids: [1, 2], simulation: oldSimulation },
+    result: { preview: { source_cells: 2, edge_event_count: 0, time_ms: [0, 1], neural_uv: [0, 0], limitations: [] } } };
+  const coupled = coupledRun('new');
+  simulationApi.fragmentPopulationRuns.mockResolvedValueOnce({ items: [] })
+    .mockResolvedValue({ items: [{ id: 'new', state: 'running' }] });
+  simulationApi.createFragmentPopulation.mockResolvedValue({ id: 'new', state: 'queued' });
+  simulationApi.feedbackSource.mockResolvedValue({ graph_manifest_sha256: graph,
+    sha256: 'a'.repeat(64), manifest_sha256: 'b'.repeat(64) });
+  simulationApi.createFeedback.mockResolvedValue({ id: 'coupled', state: 'queued' });
+  simulationApi.get.mockImplementation(async id => id === 'coupled' ? coupled : source);
+  try {
+    const view = render(<FragmentPopulationRecording sceneRunId="scene" sceneManifest={graph} onShowOnBody={show} />);
+    await waitFor(() => expect(screen.getByRole('button', { name: 'Рассчитать' })).toBeEnabled());
+    fireEvent.click(screen.getByRole('button', { name: 'Рассчитать' }));
+    await waitFor(() => expect(socket?.onmessage).toBeDefined());
+    const simulation = { ...oldSimulation, source_um: [5, 6, 7] };
+    view.rerender(<FragmentPopulationRecording sceneRunId="scene" sceneManifest={graph} onShowOnBody={show}
+      incomingContacts={{ kind: 'fragments', simulation,
+        configuration: { graph_manifest_sha256: graph, source_ids: [1], simulation } }} />);
+    simulationApi.fragmentPopulationRuns.mockResolvedValue({ items: [{ id: 'new', state: 'completed' }] });
+    act(() => socket.onmessage({ data: JSON.stringify({ type: 'snapshot', run: { id: 'new', state: 'completed' } }) }));
+    await waitFor(() => expect(simulationApi.get).toHaveBeenCalledWith('coupled', expect.anything()));
+    expect(show).not.toHaveBeenCalled();
+  } finally { global.WebSocket = originalSocket; }
 });
 
 test('reports a busy geometry service without creating a calculation', async () => {
@@ -497,89 +689,58 @@ test('reports a busy geometry service without creating a calculation', async () 
   expect(simulationApi.createFragmentPopulation).not.toHaveBeenCalled();
 });
 
-test('excludes listed cells only on explicit confirmation and preserves the remaining population', async () => {
-  const simulation = fieldDemoPreset(graph).simulation;
-  const incoming = { kind: 'fragments', fieldRunId: 'old', configuration: { graph_manifest_sha256: graph, source_ids: [1, 2, 3], simulation }, simulation };
-  simulationApi.fragmentPopulationRuns.mockResolvedValue({ items: [{ id: 'bad', state: 'failed', error: 'executor_synapse_geometries:1:2:100,2:1:100;omitted:0' }] });
-  render(<FragmentPopulationRecording sceneRunId="scene" sceneManifest={graph} incomingContacts={incoming} />);
-  await act(async () => {});
-  expect(screen.getByLabelText('ID клеток через запятую')).toHaveValue('1, 2, 3');
-  fireEvent.click(screen.getByRole('button', { name: 'Исключить перечисленные клетки' }));
-  expect(screen.getByLabelText('ID клеток через запятую')).toHaveValue('3');
-  expect(screen.getByText(/Исключены из следующего расчёта: 1, 2/)).toBeInTheDocument();
-});
-
-test('records the reduced population size and explicit exclusions in the new run title', async () => {
-  const simulation = fieldDemoPreset(graph).simulation;
-  const incoming = { kind: 'fragments', fieldRunId: 'old', configuration: { graph_manifest_sha256: graph, source_ids: [1, 2, 3], simulation }, simulation };
-  simulationApi.fragmentPopulationRuns.mockResolvedValue({ items: [{ id: 'bad', state: 'failed', error: 'executor_synapse_geometries:1:2:100,2:1:100;omitted:0' }] });
-  simulationApi.createFragmentPopulation.mockResolvedValue({ id: 'new', state: 'queued' });
-  render(<FragmentPopulationRecording sceneRunId="scene" sceneManifest={graph} incomingContacts={incoming} />);
-  await act(async () => {});
-  fireEvent.click(screen.getByRole('button', { name: 'Исключить перечисленные клетки' }));
-  await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Рассчитать' })); });
-  expect(simulationApi.createFragmentPopulation).toHaveBeenCalledWith(expect.objectContaining({ title: 'STIM: выбранные клетки (1), исключено 2', configuration: expect.objectContaining({ source_ids: [3] }) }));
-});
-
-test('restores the failed run configuration and its contacts for explicit correction', async () => {
+test('restores the failed source contacts for correction without reviving manual cell controls', async () => {
+  const sceneId = '93a6be54-9021-4b67-b00b-b799240f7fce';
+  const sourceId = 'd382a20d-0d63-45a6-9f3c-8295763491c5';
   const simulation = { ...fieldDemoPreset(graph).simulation, source_um: [12, 13, 14] };
   const configuration = { graph_manifest_sha256: graph, source_ids: [1, 2, 3], simulation };
   const adjust = jest.fn();
-  simulationApi.fragmentPopulationRuns.mockResolvedValue({ items: [{ id: 'bad', state: 'failed', configuration,
+  const positions = Object.fromEntries(['source_um', 'return_um', 'electrode_um', 'reference_um']
+    .map(key => [key, simulation[key]]));
+  sessionStorage.setItem(`simulation:feedback-retry-draft:${sceneId}`, JSON.stringify({ version: 1, sourceId,
+    signature: JSON.stringify([sceneId, graph, positions, simulation.current_na, simulation.duration_ms, '1, 2, 3', '15']) }));
+  simulationApi.fragmentPopulationRuns.mockResolvedValue({ items: [{ id: sourceId, parent_run_id: sceneId,
+    state: 'failed', configuration,
     error: 'executor_synapse_geometries:1:2:100,2:1:100;omitted:0' }] });
-  render(<FragmentPopulationRecording sceneRunId="scene" sceneManifest={graph} onAdjustContact={adjust} />);
-  await act(async () => {});
-  fireEvent.click(screen.getByRole('button', { name: 'Загрузить параметры неудачного расчёта' }));
-  expect(screen.getByLabelText('ID клеток через запятую')).toHaveValue('1, 2, 3');
-  expect(screen.getByLabelText('STIM+ X')).toHaveValue('12');
-  expect(adjust).toHaveBeenCalledWith({ kind: 'fragments', configuration, simulation }, null);
-  fireEvent.click(screen.getByRole('button', { name: 'Исключить перечисленные клетки' }));
-  expect(screen.getByLabelText('ID клеток через запятую')).toHaveValue('3');
+  render(<FragmentPopulationRecording sceneRunId={sceneId} sceneManifest={graph} onAdjustContact={adjust} />);
+  await waitFor(() => expect(adjust).toHaveBeenCalledWith({ kind: 'fragments', configuration, simulation }, null));
+  expect(screen.getByLabelText('Радиус поиска, мкм')).toHaveValue(15);
+  expect(screen.queryByLabelText('ID клеток через запятую')).not.toBeInTheDocument();
+  expect(screen.getByRole('alert')).toHaveTextContent('2 нейронов');
 });
 
-test('an explicitly selected checked contact is passed to the scene and invalidates the source selection', async () => {
-  const adjust = jest.fn();
-  simulationApi.contactScreen.mockResolvedValue({ potential_intersections: [{ contact_indices: [0] }] });
-  simulationApi.contactPositions.mockResolvedValue({ potential_intersections: [{ contact_indices: [0, 2, 3, 4, 5] }] });
-  render(<FragmentPopulationRecording sceneRunId="scene" sceneManifest={graph} onAdjustContact={adjust} />);
-  await act(async () => {});
-  fireEvent.click(screen.getByText('Контакты и клетки'));
-  fireEvent.click(screen.getByRole('button', { name: 'Проверить контакты' }));
-  fireEvent.click(await screen.findByRole('button', { name: 'Проверить соседние точки' }));
-  await screen.findByText('Без пересечений в проверенном снимке:');
-  const positions = simulationApi.contactPositions.mock.calls[0][1].positions_um;
-  const point = positions[1];
-  fireEvent.click(screen.getByRole('button', { name: point.map(value => Number(value.toFixed(2))).join(' / ') }));
-  expect(adjust).toHaveBeenCalledWith(expect.objectContaining({ simulation: expect.objectContaining({ source_um: point }) }), 'source_um');
-  expect(screen.getByText(/При запуске будут найдены/)).toBeInTheDocument();
-});
-
-test('manual contact edits update the scene only after a valid blur and require reselection', async () => {
-  const adjust = jest.fn();
-  render(<FragmentPopulationRecording sceneRunId="scene" sceneManifest={graph} onAdjustContact={adjust} />);
-  await act(async () => {});
-  fireEvent.click(screen.getByText('Контакты и клетки'));
-  const input = screen.getByLabelText('STIM+ X');
-  fireEvent.focus(input); fireEvent.blur(input);
-  expect(adjust).not.toHaveBeenCalled();
-  fireEvent.change(input, { target: { value: '' } });
-  fireEvent.blur(input);
-  expect(adjust).not.toHaveBeenCalled();
-  fireEvent.change(input, { target: { value: '430' } });
-  fireEvent.blur(input);
-  expect(adjust).toHaveBeenCalledWith(expect.objectContaining({ simulation: expect.objectContaining({ source_um: expect.arrayContaining([430]) }) }), 'source_um');
-  expect(screen.getByText(/При запуске будут найдены/)).toBeInTheDocument();
-});
+test.each(['edited', 'wrong-scene', 'mismatched-contact'])(
+  'does not restore a failed source when its saved draft is unsafe: %s', async reason => {
+    const sceneId = '93a6be54-9021-4b67-b00b-b799240f7fce';
+    const sourceId = 'd382a20d-0d63-45a6-9f3c-8295763491c5';
+    const simulation = { ...fieldDemoPreset(graph).simulation, source_um: [12, 13, 14] };
+    const configuration = { graph_manifest_sha256: graph, source_ids: [1, 2, 3], simulation };
+    const positions = Object.fromEntries(['source_um', 'return_um', 'electrode_um', 'reference_um']
+      .map(key => [key, simulation[key]]));
+    if (reason === 'mismatched-contact') positions.source_um = [15, 16, 17];
+    sessionStorage.setItem(`simulation:feedback-retry-draft:${sceneId}`, JSON.stringify({ version: 1, sourceId,
+      signature: JSON.stringify([sceneId, graph, positions, simulation.current_na, simulation.duration_ms, '1, 2, 3', '15']) }));
+    simulationApi.fragmentPopulationRuns.mockResolvedValue({ items: [{ id: sourceId,
+      parent_run_id: reason === 'wrong-scene' ? 'other' : sceneId, state: 'failed', configuration,
+      error: 'executor_synapse_geometries:1:2:100,2:1:100;omitted:0' }] });
+    const adjust = jest.fn();
+    render(<FragmentPopulationRecording sceneRunId={sceneId} sceneManifest={graph} onAdjustContact={adjust}
+      canRestore={() => reason !== 'edited'} />);
+    await waitFor(() => expect(screen.getByRole('alert')).toHaveTextContent('2 нейронов'));
+    expect(adjust).not.toHaveBeenCalled();
+  });
 
 test('discards contact screening if the draft changes during the check', async () => {
   let resolveScreen;
   simulationApi.contactScreen.mockReturnValue(new Promise(resolve => { resolveScreen = resolve; }));
-  render(<FragmentPopulationRecording sceneRunId="scene" sceneManifest={graph} />);
+  const view = render(<FragmentPopulationRecording sceneRunId="scene" sceneManifest={graph} />);
   await act(async () => {});
   fireEvent.click(screen.getByRole('button', { name: 'Рассчитать' }));
   await waitFor(() => expect(simulationApi.contactScreen).toHaveBeenCalled());
-  fireEvent.click(screen.getByText('Контакты и клетки'));
-  fireEvent.change(screen.getByLabelText('STIM+ X'), { target: { value: '431' } });
+  const simulation = { ...fieldDemoPreset(graph).simulation, source_um: [431, 387, 228] };
+  view.rerender(<FragmentPopulationRecording sceneRunId="scene" sceneManifest={graph}
+    incomingContacts={{ kind: 'fragments', simulation,
+      configuration: { graph_manifest_sha256: graph, source_ids: [1], simulation } }} />);
   await act(async () => { resolveScreen({ potential_intersections: [] }); });
   expect(await screen.findByRole('alert')).toHaveTextContent('изменились во время проверки');
   expect(simulationApi.spatialCandidates).not.toHaveBeenCalled();
@@ -653,6 +814,32 @@ test('opens the verified whole-network result with the physical recording', asyn
   await waitFor(() => expect(show).toHaveBeenCalledWith(coupled, { source: complete, restore: false, proxy }));
 });
 
+test('forwards real whole-network progress and cancellation to the main panel', async () => {
+  const report = jest.fn();
+  const complete = { id: 'new', state: 'completed', configuration: { graph_manifest_sha256: graph,
+    source_ids: [1, 2], simulation: fieldDemoPreset(graph).simulation }, result: { preview: {
+    source_cells: 2, edge_event_count: 0, time_ms: [0, 1], neural_uv: [0, 0], limitations: [],
+  } } };
+  const progress = { phase: 'network', done: 20, total: 100, runId: 'proxy' };
+  useWholeNetworkProxy.mockReturnValue({ status: 'running', run: { id: 'proxy' }, progress });
+  simulationApi.fragmentPopulationRuns.mockResolvedValueOnce({ items: [] })
+    .mockResolvedValue({ items: [{ id: 'new', state: 'completed' }] });
+  simulationApi.createFragmentPopulation.mockResolvedValue({ id: 'new', state: 'queued' });
+  simulationApi.feedbackSource.mockResolvedValue({ graph_manifest_sha256: graph,
+    sha256: 'a'.repeat(64), manifest_sha256: 'b'.repeat(64) });
+  simulationApi.createFeedback.mockResolvedValue({ id: 'coupled', state: 'queued' });
+  const coupled = coupledRun('new');
+  simulationApi.get.mockImplementation(async id => id === 'coupled' ? coupled : complete);
+  render(<FragmentPopulationRecording sceneRunId="scene" sceneManifest={graph} onPrimaryStatus={report} />);
+  await waitFor(() => expect(screen.getByRole('button', { name: 'Рассчитать' })).toBeEnabled());
+  fireEvent.click(screen.getByRole('button', { name: 'Рассчитать' }));
+  await waitFor(() => expect(report).toHaveBeenLastCalledWith(expect.objectContaining({
+    stage: 'Модель всей сети ЦНС', running: true, canCancel: true, progress,
+  })));
+  await act(async () => { await report.mock.lastCall[0].cancel(); });
+  expect(simulationApi.cancel).toHaveBeenCalledWith('proxy');
+});
+
 test('does not overwrite an edited draft when an older coupled calculation loads', async () => {
   const show = jest.fn();
   const source = { id: 'saved', parent_run_id: 'scene', state: 'completed',
@@ -662,7 +849,7 @@ test('does not overwrite an edited draft when an older coupled calculation loads
   simulationApi.feedbackRuns.mockResolvedValue({ items: [{ id: 'coupled', state: 'completed' }] });
   simulationApi.get.mockImplementation(async id => id === 'coupled' ? coupledRun('saved') : source);
   render(<FragmentPopulationRecording sceneRunId="scene" sceneManifest={graph} canRestore={() => false} onShowOnBody={show} />);
-  await screen.findByRole('button', { name: 'Показать ответ ЦНС' });
+  await waitFor(() => expect(simulationApi.get).toHaveBeenCalledWith('coupled', expect.anything()));
   expect(show).not.toHaveBeenCalled();
 });
 
@@ -689,6 +876,117 @@ test('does not display the source as a coupled result when feedback fails', asyn
   expect(failure).toHaveBeenCalledTimes(1);
 });
 
+test.each([false, true])('main launch handles failed network stage with changed current: %s', async changed => {
+  const failure = jest.fn(), show = jest.fn();
+  let sourceConfiguration, sourceCount = 0, requestSequence = 0;
+  global.crypto = { randomUUID: () => `e3ab7f7a-2d15-4fd1-93a3-${String(++requestSequence).padStart(12, '0')}` };
+  simulationApi.fragmentPopulationRuns.mockResolvedValueOnce({ items: [] })
+    .mockResolvedValue({ items: [{ id: 'new', state: 'completed' }] });
+  simulationApi.createFragmentPopulation.mockImplementation(async payload => {
+    sourceCount += 1; sourceConfiguration = payload.configuration;
+    return { id: sourceCount === 1 ? 'new' : 'next', state: 'queued' };
+  });
+  simulationApi.feedbackRuns.mockResolvedValueOnce({ items: [] })
+    .mockResolvedValue({ items: [{ id: 'failed-feedback', state: 'failed' }] });
+  simulationApi.feedbackSource.mockResolvedValue({ graph_manifest_sha256: graph,
+    sha256: 'a'.repeat(64), manifest_sha256: 'b'.repeat(64) });
+  simulationApi.createFeedback.mockResolvedValueOnce({ id: 'failed-feedback', state: 'queued' })
+    .mockResolvedValue({ id: 'coupled', state: 'queued' });
+  simulationApi.get.mockImplementation(async id => {
+    if (id === 'failed-feedback') return { id, state: 'failed' };
+    if (id === 'coupled') return coupledRun('new');
+    return { id, state: 'completed', parent_run_id: 'scene', configuration: sourceConfiguration,
+      result: { preview: { source_cells: 2, time_ms: [0, 1], neural_uv: [0, 0] } } };
+  });
+  render(<FragmentPopulationRecording sceneRunId="scene" sceneManifest={graph}
+    onFailure={failure} onShowOnBody={show} />);
+  await waitFor(() => expect(screen.getByRole('button', { name: 'Рассчитать' })).toBeEnabled());
+  fireEvent.click(screen.getByRole('button', { name: 'Рассчитать' }));
+  await waitFor(() => expect(failure).toHaveBeenCalledTimes(1));
+  await waitFor(() => expect(screen.getByRole('button', { name: 'Рассчитать' })).toBeEnabled());
+  if (changed) fireEvent.change(screen.getByLabelText('Ток STIM, нА'), { target: { value: '-200' } });
+  fireEvent.click(screen.getByRole('button', { name: 'Рассчитать' }));
+  if (changed) {
+    await waitFor(() => expect(simulationApi.createFragmentPopulation).toHaveBeenCalledTimes(2));
+    expect(simulationApi.createFragmentPopulation.mock.calls[1][0].configuration.simulation.current_na).toBe(-200);
+  } else {
+    await waitFor(() => expect(simulationApi.createFeedback).toHaveBeenCalledTimes(2));
+    expect(simulationApi.createFragmentPopulation).toHaveBeenCalledTimes(1);
+    expect(simulationApi.createFeedback.mock.calls[1][0].parent_run_id).toBe('new');
+    expect(simulationApi.createFeedback.mock.calls[1][0].request_id)
+      .not.toBe(simulationApi.createFeedback.mock.calls[0][0].request_id);
+  }
+});
+
+test.each([false, true])('main launch retries failed full-network proxy only for unchanged source: %s', async changed => {
+  const failure = jest.fn(), retry = jest.fn();
+  let sourceConfiguration;
+  useWholeNetworkProxy.mockReturnValue({ status: 'failed', run: { id: 'proxy' }, retry });
+  simulationApi.fragmentPopulationRuns.mockResolvedValueOnce({ items: [] })
+    .mockResolvedValue({ items: [{ id: 'new', state: 'completed' }] });
+  simulationApi.createFragmentPopulation.mockImplementation(async payload => {
+    sourceConfiguration = payload.configuration; return { id: 'new', state: 'queued' };
+  });
+  simulationApi.feedbackSource.mockResolvedValue({ graph_manifest_sha256: graph,
+    sha256: 'a'.repeat(64), manifest_sha256: 'b'.repeat(64) });
+  simulationApi.createFeedback.mockResolvedValue({ id: 'coupled', state: 'queued' });
+  simulationApi.get.mockImplementation(async id => id === 'coupled' ? coupledRun('new')
+    : { id, state: 'completed', parent_run_id: 'scene', configuration: sourceConfiguration });
+  render(<FragmentPopulationRecording sceneRunId="scene" sceneManifest={graph} onFailure={failure} />);
+  await waitFor(() => expect(screen.getByRole('button', { name: 'Рассчитать' })).toBeEnabled());
+  fireEvent.click(screen.getByRole('button', { name: 'Рассчитать' }));
+  await waitFor(() => expect(failure).toHaveBeenCalled());
+  await waitFor(() => expect(screen.getByRole('button', { name: 'Рассчитать' })).toBeEnabled());
+  if (changed) fireEvent.change(screen.getByLabelText('Ток STIM, нА'), { target: { value: '-200' } });
+  fireEvent.click(screen.getByRole('button', { name: 'Рассчитать' }));
+  if (changed) {
+    await waitFor(() => expect(simulationApi.createFragmentPopulation).toHaveBeenCalledTimes(2));
+    expect(retry).not.toHaveBeenCalled();
+  } else {
+    expect(retry).toHaveBeenCalledTimes(1);
+    expect(simulationApi.createFragmentPopulation).toHaveBeenCalledTimes(1);
+    expect(simulationApi.createFeedback).toHaveBeenCalledTimes(1);
+  }
+});
+
+test('main launch reuses the same network retry request after a lost submission response', async () => {
+  const failure = jest.fn();
+  let sourceConfiguration, requestSequence = 0;
+  global.crypto = { randomUUID: () => `e3ab7f7a-2d15-4fd1-93a3-${String(++requestSequence).padStart(12, '0')}` };
+  simulationApi.fragmentPopulationRuns.mockResolvedValueOnce({ items: [] })
+    .mockResolvedValue({ items: [{ id: 'new', state: 'completed' }] });
+  simulationApi.createFragmentPopulation.mockImplementation(async payload => {
+    sourceConfiguration = payload.configuration;
+    return { id: 'new', state: 'queued' };
+  });
+  simulationApi.feedbackRuns.mockResolvedValueOnce({ items: [] })
+    .mockResolvedValue({ items: [{ id: 'failed-feedback', state: 'failed' }] });
+  simulationApi.feedbackSource.mockResolvedValue({ graph_manifest_sha256: graph,
+    sha256: 'a'.repeat(64), manifest_sha256: 'b'.repeat(64) });
+  simulationApi.createFeedback.mockResolvedValueOnce({ id: 'failed-feedback', state: 'queued' })
+    .mockRejectedValueOnce(new Error('connection interrupted'))
+    .mockResolvedValueOnce({ id: 'coupled', state: 'queued' });
+  simulationApi.get.mockImplementation(async id => {
+    if (id === 'failed-feedback') return { id, state: 'failed' };
+    if (id === 'coupled') return coupledRun('new');
+    return { id, state: 'completed', parent_run_id: 'scene', configuration: sourceConfiguration,
+      result: { preview: { source_cells: 2, time_ms: [0, 1], neural_uv: [0, 0] } } };
+  });
+  render(<FragmentPopulationRecording sceneRunId="scene" sceneManifest={graph} onFailure={failure} />);
+  await waitFor(() => expect(screen.getByRole('button', { name: 'Рассчитать' })).toBeEnabled());
+  fireEvent.click(screen.getByRole('button', { name: 'Рассчитать' }));
+  await waitFor(() => expect(failure).toHaveBeenCalledTimes(1));
+  await waitFor(() => expect(screen.getByRole('button', { name: 'Рассчитать' })).toBeEnabled());
+  fireEvent.click(screen.getByRole('button', { name: 'Рассчитать' }));
+  await waitFor(() => expect(failure).toHaveBeenCalledTimes(2));
+  await waitFor(() => expect(screen.getByRole('button', { name: 'Рассчитать' })).toBeEnabled());
+  fireEvent.click(screen.getByRole('button', { name: 'Рассчитать' }));
+  await waitFor(() => expect(simulationApi.createFeedback).toHaveBeenCalledTimes(3));
+  expect(simulationApi.createFragmentPopulation).toHaveBeenCalledTimes(1);
+  expect(simulationApi.createFeedback.mock.calls[1][0].request_id)
+    .toBe(simulationApi.createFeedback.mock.calls[2][0].request_id);
+});
+
 test('zero current is submitted explicitly for a control run', async () => {
   const status = jest.fn();
   simulationApi.createFragmentPopulation.mockResolvedValue({ id: 'new', state: 'queued' });
@@ -707,26 +1005,39 @@ test('reports the physical calculation stage to the main screen', async () => {
   await waitFor(() => expect(status).toHaveBeenLastCalledWith(expect.objectContaining({ ready: false, running: true, stage: 'Расчёт нейронов', phase: 1 })));
 });
 
-test('submits the chosen observation duration and rejects a window shorter than the pulse', async () => {
+test('preserves the scene observation duration and rejects a window shorter than the pulse', async () => {
   simulationApi.createFragmentPopulation.mockResolvedValue({ id: 'new', state: 'queued' });
-  render(<FragmentPopulationRecording sceneRunId="scene" sceneManifest={graph} />);
+  const makeDraft = duration => {
+    const simulation = { ...fieldDemoPreset(graph).simulation, duration_ms: duration };
+    return { kind: 'fragments', simulation,
+      configuration: { graph_manifest_sha256: graph, source_ids: [1], simulation } };
+  };
+  const view = render(<FragmentPopulationRecording sceneRunId="scene" sceneManifest={graph}
+    incomingContacts={makeDraft(3)} />);
   await act(async () => {});
-  const input = screen.getByLabelText('Длительность, мс');
-  fireEvent.change(input, { target: { value: '3' } });
   expect(screen.getByRole('button', { name: 'Рассчитать' })).toBeDisabled();
-  fireEvent.change(input, { target: { value: '50' } });
+  expect(screen.queryByLabelText('Длительность, мс')).not.toBeInTheDocument();
+  view.rerender(<FragmentPopulationRecording sceneRunId="scene" sceneManifest={graph}
+    incomingContacts={makeDraft(50)} />);
+  await waitFor(() => expect(screen.getByRole('button', { name: 'Рассчитать' })).toBeEnabled());
   await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Рассчитать' })); });
   expect(simulationApi.createFragmentPopulation.mock.calls[0][0].configuration.simulation.duration_ms).toBe(50);
 });
 
-test('submits explicit cells and the edited physical contact without claiming whole-network coverage', async () => {
+test('submits spatially selected cells and the contact placed in the scene', async () => {
   simulationApi.createFragmentPopulation.mockResolvedValue({ id: 'new', state: 'queued' });
-  render(<FragmentPopulationRecording sceneManifest={graph} />);
+  const candidate = body_id => ({ body_id, child_node_id: 1, edge_fraction: .5,
+    isolated_root: false, conservative_clearance_um: [2, 2], recording_clearance_um: [2, 2],
+    geometry: { components: 1, isolated_roots: 0, zero_length_edges: 0, nonpositive_radius_edges: 0 } });
+  simulationApi.spatialCandidates.mockResolvedValue({ candidates: [candidate(174827), candidate(176609)] });
+  const simulation = { ...fieldDemoPreset(graph).simulation, source_um: [429.056, 388.5, 228.352] };
+  const incoming = { kind: 'fragments', simulation,
+    configuration: { graph_manifest_sha256: graph, source_ids: [1], simulation } };
+  render(<FragmentPopulationRecording sceneRunId="scene" sceneManifest={graph} incomingContacts={incoming} />);
   await act(async () => {});
-  expect(screen.getByText(/Запись рассчитана для выбранных клеток/)).toBeInTheDocument();
-  fireEvent.click(screen.getByText('Контакты и клетки'));
-  fireEvent.change(screen.getByLabelText('STIM+ Y'), { target: { value: '388.5' } });
-  fireEvent.change(screen.getByLabelText('ID клеток через запятую'), { target: { value: '174827, 176609' } });
+  expect(screen.queryByLabelText('STIM+ Y')).not.toBeInTheDocument();
+  expect(screen.queryByLabelText('ID клеток через запятую')).not.toBeInTheDocument();
+  await waitFor(() => expect(screen.getByRole('button', { name: 'Рассчитать' })).toBeEnabled());
   await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Рассчитать' })); });
   await waitFor(() => expect(simulationApi.createFragmentPopulation).toHaveBeenCalledTimes(1));
   const payload = simulationApi.createFragmentPopulation.mock.calls[0][0];
@@ -736,48 +1047,36 @@ test('submits explicit cells and the edited physical contact without claiming wh
 });
 
 test('does not submit unsupported graph or repeated cells', async () => {
-  render(<FragmentPopulationRecording sceneManifest="unknown" />);
+  const view = render(<FragmentPopulationRecording sceneRunId="scene" sceneManifest="unknown" />);
   await act(async () => {});
-  fireEvent.click(screen.getByText('Контакты и клетки'));
   expect(screen.getByRole('button', { name: 'Рассчитать' })).toBeDisabled();
-  fireEvent.change(screen.getByLabelText('ID клеток через запятую'), { target: { value: '1, 1' } });
-  expect(screen.getByRole('button', { name: 'Рассчитать' })).toBeDisabled();
-});
-
-test('displays actual saved signal and limitations', async () => {
-  simulationApi.fragmentPopulationRuns.mockResolvedValue({ items: [{ id: 'one', state: 'completed' }] });
-  simulationApi.get.mockResolvedValue({ id: 'one', result: { preview: {
-    source_cells: 2, edge_event_count: 0, time_ms: [0, 1], neural_uv: [0, 0.1], limitations: ['Нет обратной связи.'],
-  } } });
-  render(<FragmentPopulationRecording sceneManifest={graph} />);
-  expect(await screen.findByText(/событий на выходах: 0/)).toBeInTheDocument();
-  expect(screen.getByText('Сигнал: 2')).toBeInTheDocument();
-  expect(screen.getByText('Нет обратной связи.')).toBeInTheDocument();
-});
-
-test('loads and downloads artifacts from the selected run', async () => {
-  simulationApi.fragmentPopulationRuns.mockResolvedValue({ items: [{ id: 'one', state: 'completed' }] });
-  simulationApi.get.mockResolvedValue({ id: 'one', state: 'completed', result: { preview: {
-    source_cells: 1, edge_event_count: 0, time_ms: [0, 1], neural_uv: [0, 0], limitations: [],
-  } } });
-  simulationApi.artifacts.mockResolvedValue({ items: [{ id: 'file', name: 'signals.npz' }] });
-  simulationApi.download.mockResolvedValue();
-  render(<FragmentPopulationRecording sceneManifest={graph} />);
-  fireEvent.click(await screen.findByRole('button', { name: 'Файлы результата' }));
-  fireEvent.click(await screen.findByRole('button', { name: 'signals.npz' }));
-  expect(simulationApi.download).toHaveBeenCalledWith('one', { id: 'file', name: 'signals.npz' });
+  const candidate = { body_id: 1, child_node_id: 1, edge_fraction: 0.5, isolated_root: false,
+    conservative_clearance_um: [2, 2], recording_clearance_um: [2, 2],
+    geometry: { components: 1, isolated_roots: 0, zero_length_edges: 0, nonpositive_radius_edges: 0 } };
+  simulationApi.spatialCandidates.mockResolvedValue({ candidates: [candidate, candidate] });
+  view.rerender(<FragmentPopulationRecording sceneRunId="scene" sceneManifest={graph} />);
+  await waitFor(() => expect(screen.getByRole('button', { name: 'Рассчитать' })).toBeEnabled());
+  fireEvent.click(screen.getByRole('button', { name: 'Рассчитать' }));
+  expect(await screen.findByRole('alert')).toHaveTextContent('повторяющиеся нейроны');
+  expect(simulationApi.createFragmentPopulation).not.toHaveBeenCalled();
 });
 
 test('stops an active calculation', async () => {
-  simulationApi.fragmentPopulationRuns.mockResolvedValue({ items: [{ id: 'busy', state: 'running' }] });
+  const sceneId = '93a6be54-9021-4b67-b00b-b799240f7fce';
+  const sourceId = 'd382a20d-0d63-45a6-9f3c-8295763491c5';
+  sessionStorage.setItem(`simulation:pending-feedback:${sceneId}`, JSON.stringify({
+    version: 1, sourceId, requestId: 'e3ab7f7a-2d15-4fd1-93a3-dc354d6a5c0e',
+  }));
+  simulationApi.fragmentPopulationRuns.mockResolvedValue({ items: [{ id: sourceId, state: 'running' }] });
   simulationApi.cancel.mockResolvedValue({});
-  render(<FragmentPopulationRecording sceneManifest={graph} />);
-  const button = await screen.findByRole('button', { name: 'Остановить' });
-  await act(async () => { fireEvent.click(button); });
-  expect(simulationApi.cancel).toHaveBeenCalledWith('busy');
+  const report = jest.fn();
+  render(<FragmentPopulationRecording sceneRunId={sceneId} sceneManifest={graph} onPrimaryStatus={report} />);
+  await waitFor(() => expect(report).toHaveBeenLastCalledWith(expect.objectContaining({ running: true, canCancel: true })));
+  await act(async () => { await report.mock.lastCall[0].cancel(); });
+  expect(simulationApi.cancel).toHaveBeenCalledWith(sourceId);
 });
 
-test('offers scene playback only for a matching graph and saved event journal', async () => {
+test('automatically shows matching scene playback and requires saved event journals', async () => {
   const show = jest.fn();
   const run = { id: 'one', state: 'completed', configuration: { graph_manifest_sha256: graph,
     source_ids: [1], simulation: fieldDemoPreset(graph).simulation },
@@ -788,9 +1087,18 @@ test('offers scene playback only for a matching graph and saved event journal', 
   const coupled = coupledRun('one');
   simulationApi.feedbackRuns.mockResolvedValue({ items: [{ id: 'coupled', state: 'completed' }] });
   simulationApi.get.mockImplementation(async id => id === 'coupled' ? coupled : run);
-  render(<FragmentPopulationRecording sceneManifest={graph} onShowOnBody={show} />);
-  fireEvent.click(await screen.findByRole('button', { name: 'Показать ответ ЦНС' }));
-  expect(show).toHaveBeenCalledWith(coupled, { source: run });
+  const view = render(<FragmentPopulationRecording sceneRunId="scene" sceneManifest={graph} onShowOnBody={show} />);
+  await waitFor(() => expect(show).toHaveBeenCalledWith(coupled, { source: run, restore: true }));
+  expect(screen.queryByRole('button', { name: 'Показать ответ ЦНС' })).not.toBeInTheDocument();
+  view.unmount(); show.mockClear();
+  const incomplete = coupledRun('one');
+  incomplete.result.manifest.files = [{ name: 'coupled-events.bin' }];
+  simulationApi.get.mockImplementation(async id => id === 'coupled' ? incomplete : run);
+  simulationApi.get.mockClear();
+  render(<FragmentPopulationRecording sceneRunId="scene" sceneManifest={graph} onShowOnBody={show} />);
+  await waitFor(() => expect(simulationApi.get).toHaveBeenCalledWith('coupled', expect.anything()));
+  await act(async () => {});
+  expect(show).not.toHaveBeenCalled();
 });
 
 test('uses scene contact edits while preserving the original calculation settings', async () => {
@@ -805,14 +1113,15 @@ test('uses scene contact edits while preserving the original calculation setting
     source_cells: 1, edge_event_count: 0, time_ms: [0, 1], neural_uv: [0, 0], limitations: [],
   } } });
   simulationApi.createFragmentPopulation.mockResolvedValue({ id: 'new', state: 'queued' });
-  render(<FragmentPopulationRecording sceneManifest={graph} incomingContacts={incoming} onConsumeContacts={consume} />);
+  simulationApi.spatialCandidates.mockResolvedValue({ candidates: [{ body_id: 16827, child_node_id: 1,
+    edge_fraction: 0.5, isolated_root: false, conservative_clearance_um: [2, 2],
+    recording_clearance_um: [2, 2], geometry: { components: 1, isolated_roots: 0,
+      zero_length_edges: 0, nonpositive_radius_edges: 0 } }] });
+  render(<FragmentPopulationRecording sceneRunId="scene" sceneManifest={graph}
+    incomingContacts={incoming} onConsumeContacts={consume} />);
   await act(async () => {});
   expect(consume).toHaveBeenCalledTimes(1);
-  expect(await screen.findByText(/Показана запись сохранённого расчёта/)).toBeInTheDocument();
-  expect(screen.getByText(/При запуске будут найдены/)).toBeInTheDocument();
-  fireEvent.click(screen.getByText('Контакты и клетки'));
-  fireEvent.change(screen.getByLabelText('ID клеток через запятую'), { target: { value: '16827, 1' } });
-  fireEvent.change(screen.getByLabelText('ID клеток через запятую'), { target: { value: '16827' } });
+  await waitFor(() => expect(screen.getByRole('button', { name: 'Рассчитать' })).toBeEnabled());
   await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Рассчитать' })); });
   const sent = simulationApi.createFragmentPopulation.mock.calls[0][0].configuration;
   expect(sent.source_ids).toEqual([16827]);
@@ -833,7 +1142,7 @@ test('rejects scene coordinates from another graph', async () => {
   expect(consume).toHaveBeenCalledTimes(1);
 });
 
-test('uses the complete eligible geometric selection and does not claim excitation', async () => {
+test('uses the complete eligible geometric selection', async () => {
   const candidate = { body_id: 16827, child_node_id: 4, distance_um: 7.85, contact: 0,
     isolated_root: false, edge_fraction: 0.5, conservative_clearance_um: [7, 100],
     recording_clearance_um: [20, 100],
@@ -842,12 +1151,6 @@ test('uses the complete eligible geometric selection and does not claim excitati
   simulationApi.createFragmentPopulation.mockResolvedValue({ id: 'new', state: 'queued' });
   render(<FragmentPopulationRecording sceneRunId="scene" sceneManifest={graph} />);
   await act(async () => {});
-  fireEvent.click(screen.getByText('Контакты и клетки'));
-  fireEvent.click(screen.getByText('Поиск отростков рядом со STIM'));
-  fireEvent.click(screen.getByRole('button', { name: 'Найти' }));
-  expect(await screen.findByText(/не подтверждение возбуждения/)).toBeInTheDocument();
-  fireEvent.click(screen.getByRole('button', { name: 'Заменить источники найденными (1)' }));
-  expect(screen.getByLabelText('ID клеток через запятую')).toHaveValue('16827');
   await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Рассчитать' })); });
   expect(simulationApi.createFragmentPopulation.mock.calls[0][0].configuration.source_ids).toEqual([16827]);
 });
@@ -859,17 +1162,16 @@ test('moving a contact reselects geometry before starting the calculation', asyn
     geometry: { components: 1, isolated_roots: 0, zero_length_edges: 0, nonpositive_radius_edges: 0 } };
   simulationApi.spatialCandidates.mockResolvedValue({ candidates: [candidate] });
   simulationApi.createFragmentPopulation.mockResolvedValue({ id: 'new', state: 'queued' });
-  render(<FragmentPopulationRecording sceneRunId="scene" sceneManifest={graph} />);
+  const view = render(<FragmentPopulationRecording sceneRunId="scene" sceneManifest={graph} />);
   await act(async () => {});
-  fireEvent.click(screen.getByText('Контакты и клетки'));
-  fireEvent.click(screen.getByText('Поиск отростков рядом со STIM'));
-  fireEvent.click(screen.getByRole('button', { name: 'Найти' }));
-  fireEvent.click(await screen.findByRole('button', { name: 'Заменить источники найденными (1)' }));
   expect(screen.getByRole('button', { name: 'Рассчитать' })).toBeEnabled();
-  fireEvent.change(screen.getByLabelText('STIM+ X'), { target: { value: '430' } });
-  expect(screen.getByText(/При запуске будут найдены/)).toBeInTheDocument();
+  const simulation = { ...fieldDemoPreset(graph).simulation, source_um: [430, 387, 228] };
+  view.rerender(<FragmentPopulationRecording sceneRunId="scene" sceneManifest={graph}
+    incomingContacts={{ kind: 'fragments', simulation,
+      configuration: { graph_manifest_sha256: graph, source_ids: [1], simulation } }} />);
   await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Рассчитать' })); });
-  expect(simulationApi.spatialCandidates).toHaveBeenCalledTimes(2);
+  expect(simulationApi.spatialCandidates).toHaveBeenCalledTimes(1);
+  expect(simulationApi.spatialCandidates.mock.calls[0][1].source_um).toEqual([430, 387, 228]);
   expect(simulationApi.createFragmentPopulation.mock.calls[0][0].configuration.source_ids).toEqual([16827]);
   expect(simulationApi.createFragmentPopulation.mock.calls[0][0].configuration.simulation.source_um[0]).toBe(430);
 });
@@ -903,8 +1205,7 @@ test('automatic selection uses the explicitly chosen search radius', async () =>
   simulationApi.spatialCandidates.mockResolvedValue({ candidates: [] });
   render(<FragmentPopulationRecording sceneRunId="scene" sceneManifest={graph} incomingContacts={incoming} />);
   await act(async () => {});
-  fireEvent.click(screen.getByText('Контакты и клетки'));
-  fireEvent.change(screen.getByLabelText('Радиус автоматического поиска, мкм'), { target: { value: '6' } });
+  fireEvent.change(screen.getByLabelText('Радиус поиска, мкм'), { target: { value: '6' } });
   await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Рассчитать' })); });
   expect(simulationApi.spatialCandidates.mock.calls[0][1].radius_um).toBe(6);
   expect(simulationApi.createFragmentPopulation).not.toHaveBeenCalled();
@@ -950,12 +1251,14 @@ test('discard automatic selection when contacts change during the search', async
     simulation: { ...simulation, source_um: [430, ...simulation.source_um.slice(1)] } };
   let resolveSearch;
   simulationApi.spatialCandidates.mockReturnValue(new Promise(resolve => { resolveSearch = resolve; }));
-  render(<FragmentPopulationRecording sceneRunId="scene" sceneManifest={graph} incomingContacts={incoming} />);
+  const view = render(<FragmentPopulationRecording sceneRunId="scene" sceneManifest={graph} incomingContacts={incoming} />);
   await act(async () => {});
   fireEvent.click(screen.getByRole('button', { name: 'Рассчитать' }));
   await waitFor(() => expect(simulationApi.spatialCandidates).toHaveBeenCalled());
-  fireEvent.click(screen.getByText('Контакты и клетки'));
-  fireEvent.change(screen.getByLabelText('STIM+ X'), { target: { value: '431' } });
+  const moved = { ...simulation, source_um: [431, ...simulation.source_um.slice(1)] };
+  view.rerender(<FragmentPopulationRecording sceneRunId="scene" sceneManifest={graph}
+    incomingContacts={{ kind: 'fragments', simulation: moved,
+      configuration: { graph_manifest_sha256: graph, source_ids: [1], simulation: moved } }} />);
   await act(async () => { resolveSearch({ candidates: [] }); });
   expect(await screen.findByRole('alert')).toHaveTextContent('изменились во время поиска');
   expect(simulationApi.createFragmentPopulation).not.toHaveBeenCalled();
@@ -969,33 +1272,15 @@ test('does not silently truncate more than 256 geometric candidates', async () =
   simulationApi.spatialCandidates.mockResolvedValue({ candidates: rows });
   render(<FragmentPopulationRecording sceneRunId="scene" sceneManifest={graph} />);
   await act(async () => {});
-  fireEvent.click(screen.getByText('Контакты и клетки'));
-  fireEvent.click(screen.getByText('Поиск отростков рядом со STIM'));
-  fireEvent.click(screen.getByRole('button', { name: 'Найти' }));
-  expect(await screen.findByRole('button', { name: 'Заменить источники найденными (257)' })).toBeDisabled();
-  expect(screen.getByText(/Состав не помещается в запрос/)).toBeInTheDocument();
+  fireEvent.click(screen.getByRole('button', { name: 'Рассчитать' }));
+  expect(await screen.findByRole('alert')).toHaveTextContent(/Слишком много подходящих клеток|не найдены подходящие реконструкции/);
+  expect(simulationApi.createFragmentPopulation).not.toHaveBeenCalled();
 });
 
 test('explains unresolved synapse geometry', async () => {
   simulationApi.fragmentPopulationRuns.mockResolvedValue({ items: [{ id: 'failed', state: 'failed', error: 'executor_synapse_geometry' }] });
   render(<FragmentPopulationRecording sceneManifest={graph} />);
   expect(await screen.findByRole('alert')).toHaveTextContent('Не все синапсы удалось сопоставить');
-});
-
-test('opens an explicitly selected earlier completed STIM calculation', async () => {
-  simulationApi.fragmentPopulationRuns.mockResolvedValue({ items: [
-    { id: 'newer', state: 'completed', title: 'Новый' },
-    { id: 'older', state: 'completed', title: 'Ранее' },
-  ] });
-  simulationApi.get.mockImplementation(async id => ({ id, state: 'completed', configuration: {
-    source_ids: [174827, 176609], simulation: fieldDemoPreset(graph).simulation,
-  }, result: { preview: { time_ms: [0, 1], neural_uv: [0, 0], limitations: [] } } }));
-  render(<FragmentPopulationRecording sceneManifest={graph} />);
-  const select = await screen.findByLabelText('Завершённый STIM-расчёт');
-  await waitFor(() => expect(select).toHaveValue('newer'));
-  fireEvent.change(select, { target: { value: 'older' } });
-  await waitFor(() => expect(select).toHaveValue('older'));
-  expect(simulationApi.get).toHaveBeenCalledWith('older', expect.anything());
 });
 
 test('explains an incompatible generator version', async () => {
@@ -1011,25 +1296,38 @@ test('identifies the source and count for unresolved synapse geometry', async ()
   expect(await screen.findByRole('alert')).toHaveTextContent('Нейрон 512731: не удалось сопоставить 2 из 1199 синапсов');
 });
 
-test('shows multiple unresolved cells and explicitly reports additional failures', async () => {
+test('reports the number of affected cells including omitted geometry failures', async () => {
   simulationApi.fragmentPopulationRuns.mockResolvedValue({ items: [{ id: 'failed', state: 'failed',
     error: 'executor_synapse_geometries:174827:2:1199,176609:22:2772;omitted:3' }] });
   render(<FragmentPopulationRecording sceneManifest={graph} />);
-  expect(await screen.findByText('Нейрон 174827: 2 из 1199.')).toBeInTheDocument();
-  expect(screen.getByText('Нейрон 176609: 22 из 2772.')).toBeInTheDocument();
-  expect(screen.getByText('Ещё клеток с расхождениями: 3.')).toBeInTheDocument();
-  fireEvent.click(screen.getByRole('button', { name: 'Исключить 174827' }));
-  expect(screen.getByText('Исключены из следующего расчёта: 174827.')).toBeInTheDocument();
+  expect(await screen.findByRole('alert')).toHaveTextContent('для 5 нейронов; расчёт остановлен');
+  expect(screen.queryByRole('button', { name: /Исключить/ })).not.toBeInTheDocument();
 });
 
-test('requires explicit exclusion and marks the reduced source coverage', async () => {
-  simulationApi.fragmentPopulationRuns.mockResolvedValue({ items: [{ id: 'failed', state: 'failed', error: 'executor_synapse_geometry:174827:2:1199' }] });
+test.each([
+  'executor_synapse_geometries:174827:2:1199,174827:1:4;omitted:0',
+  'executor_synapse_geometries:174827:3:2,176609:1:4;omitted:0',
+  'executor_synapse_geometries:174827:1:2,176609:1:4;omitted:999',
+  'executor_synapse_geometries:9223372036854775808:1:2,176609:1:4;omitted:0',
+  'executor_synapse_geometry:174827:3:2',
+  'executor_synapse_geometry:9223372036854775808:1:2',
+])('does not present a count from malformed geometry diagnostics', async error => {
+  simulationApi.fragmentPopulationRuns.mockResolvedValue({ items: [{ id: 'failed', state: 'failed', error }] });
   render(<FragmentPopulationRecording sceneManifest={graph} />);
-  const button = await screen.findByRole('button', { name: 'Исключить нейрон 174827' });
-  expect(screen.getByText(/не будет включать исключённую клетку/)).toBeInTheDocument();
-  fireEvent.click(button);
-  expect(screen.getByText('Исключены из следующего расчёта: 174827.')).toBeInTheDocument();
-  fireEvent.click(screen.getByText('Контакты и клетки'));
-  expect(screen.getByLabelText('ID клеток через запятую')).toHaveValue('176609');
-  expect(screen.queryByRole('button', { name: 'Исключить нейрон 174827' })).not.toBeInTheDocument();
+  expect(await screen.findByRole('alert')).toHaveTextContent('Расчёт не завершён');
+});
+
+test('does not silently exclude a failed cell from a new spatial selection', async () => {
+  simulationApi.fragmentPopulationRuns.mockResolvedValue({ items: [{ id: 'failed', state: 'failed', error: 'executor_synapse_geometry:174827:2:1199' }] });
+  const candidate = body_id => ({ body_id, child_node_id: 1, edge_fraction: 0.5, isolated_root: false,
+    conservative_clearance_um: [2, 2], recording_clearance_um: [2, 2],
+    geometry: { components: 1, isolated_roots: 0, zero_length_edges: 0, nonpositive_radius_edges: 0 } });
+  simulationApi.spatialCandidates.mockResolvedValue({ candidates: [candidate(174827), candidate(176609)] });
+  simulationApi.createFragmentPopulation.mockResolvedValue({ id: 'new', state: 'queued' });
+  render(<FragmentPopulationRecording sceneRunId="scene" sceneManifest={graph} />);
+  expect(await screen.findByRole('alert')).toHaveTextContent('Нейрон 174827');
+  await waitFor(() => expect(screen.getByRole('button', { name: 'Рассчитать' })).toBeEnabled());
+  fireEvent.click(screen.getByRole('button', { name: 'Рассчитать' }));
+  await waitFor(() => expect(simulationApi.createFragmentPopulation).toHaveBeenCalledWith(
+    expect.objectContaining({ configuration: expect.objectContaining({ source_ids: [174827, 176609] }) })));
 });

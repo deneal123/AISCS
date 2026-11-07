@@ -31,6 +31,12 @@ components:
 
 ## Simulator profile (27 October 2026)
 
+The Files view keeps artifacts attached to their owning calculations: the
+currently displayed coupled recording, its network proxy, physical source
+and compatible additional recording, followed by the scene. A direct network calculation is listed with
+the scene without presenting it as an E1–REF recording. Scene and graph
+identity must agree before child files are offered.
+
 The main completed-CNS scene now opens with four labelled surface-projected
 contacts: STIM+ and STIM− for stimulation, E1 and REF for differential recording.
 Their placement is a proposed draft in the approximate body/EM overlay. The main

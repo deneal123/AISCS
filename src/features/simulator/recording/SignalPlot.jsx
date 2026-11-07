@@ -2,6 +2,7 @@ import React, { useEffect, useId, useMemo, useRef } from 'react';
 import { VisuallyHidden } from '@chakra-ui/react';
 import { responseSeries } from '../scene/sceneModel';
 import { signalAxisLabel, signalHalfRange } from './signalScale';
+import { stimulusDisplay } from './stimulusDisplay';
 import { SIMULATION_TRACES } from '../theme';
 
 // Trace geometry is cached; playback redraws only the shared time cursor.
@@ -10,6 +11,8 @@ export default function SignalPlot({ preview, timeMs, onTime, comparison, showRe
   const descriptionId = useId();
   currentTime.current = timeMs;
   const series = useMemo(() => responseSeries(preview, modelVisualization, motorReadout), [preview, modelVisualization, motorReadout]);
+  const stimulus = useMemo(() => stimulusDisplay(preview), [preview]);
+  const hasStimulus = Boolean(stimulus);
   const heightPx = showResponse ? 184 : 104, left = showResponse ? 110 : 58;
 
   useEffect(() => {
@@ -48,13 +51,8 @@ export default function SignalPlot({ preview, timeMs, onTime, comparison, showRe
       if (showResponse) {
         label(preview?.electrical ? 'STIM' : preview?.connectome ? 'Проекция Δg' : comparison ? 'Вход B Δg' : 'Вход Δg', 3, 12); label(preview?.electrical ? 'нА' : 'мкСм', 3, 25); horizontal(28);
         if (preview?.electrical) {
-          const current = Number(preview.stimulus_current_na);
-          const fractions = preview.stimulus_fraction;
-          const stimulusTimes = preview.stimulus_time_ms || times;
-          if (Number.isFinite(current) && Array.isArray(fractions) && Array.isArray(stimulusTimes)
-              && fractions.length === stimulusTimes.length && fractions.every(Number.isFinite)
-              && stimulusTimes.every((value, index) => Number.isFinite(value)
-                && (index === 0 || value > stimulusTimes[index - 1]))) {
+          if (hasStimulus) {
+            const { current, times: stimulusTimes, fractions } = stimulus;
             const scale = Math.max(Math.abs(current), 1e-12);
             label(signalAxisLabel(current), 65, 12);
             trace(stimulusTimes, fractions.map(value => value * current + scale), '#EAA064', 5, 28, scale * 2);
@@ -76,7 +74,7 @@ export default function SignalPlot({ preview, timeMs, onTime, comparison, showRe
           ctx.beginPath(); ctx.moveTo(xAt(event.time_ms), y - 1.3); ctx.lineTo(xAt(event.time_ms), y + 1.3); ctx.stroke();
         });
         const histogram = preview?.connectome?.spikes_by_ms;
-        if (preview?.connectome && !histogram) label('Журнал ЦНС — в файле опыта', left + 4, 48);
+        if (preview?.connectome && !histogram) label('События ЦНС пока недоступны', left + 4, 48);
         if (histogram) {
           const maximum = Math.max(1, ...histogram);
           histogram.forEach((count, time) => {
@@ -122,7 +120,7 @@ export default function SignalPlot({ preview, timeMs, onTime, comparison, showRe
     };
     const observer = new ResizeObserver(draw); observer.observe(canvas); draw();
     return () => { observer.disconnect(); drawCursor.current = null; };
-  }, [preview, comparison, series, showResponse, left, primaryColor]);
+  }, [preview, comparison, series, showResponse, left, primaryColor, hasStimulus, stimulus]);
   useEffect(() => { drawCursor.current?.(timeMs); }, [timeMs]);
 
   return <><canvas ref={ref} role="img" style={{ width: '100%', height: `${heightPx}px`, display: 'block' }}
@@ -130,10 +128,10 @@ export default function SignalPlot({ preview, timeMs, onTime, comparison, showRe
     data-reference-run={comparison?.run_id || ''} data-current-samples={preview?.time_ms?.length || 0}
     data-motion-source={preview?.connectome ? (motorReadout?.version || 'unavailable') : 'local-hh-display'}
     aria-describedby={showResponse || preview?.connectome ? descriptionId : undefined}
-    aria-label={showResponse ? `Общая временная шкала: ${preview?.electrical ? 'ток STIM' : 'синаптический вход'}, спайки, условное движение лапок и запись E1 относительно REF` : 'Запись разности потенциалов E1 относительно REF, микровольты'}
+    aria-label={preview?.networkOnly ? (showResponse ? 'Модельные события; запись E1 относительно REF не рассчитана' : 'Запись E1 относительно REF не рассчитана') : showResponse ? `Общая временная шкала: ${preview?.electrical ? 'ток STIM' : 'синаптический вход'}, спайки, условное движение лапок и запись E1 относительно REF` : 'Запись разности потенциалов E1 относительно REF, микровольты'}
     onPointerDown={event => {
       const box = event.currentTarget.getBoundingClientRect();
       const fraction = Math.max(0, Math.min(1, (event.clientX - box.left - left) / (box.width - left - 14)));
       onTime(fraction * (preview?.time_ms?.at(-1) || 200));
-    }} />{(showResponse || preview?.connectome) && <VisuallyHidden id={descriptionId}>{showResponse && <>{preview?.electrical ? 'Показан ток воздействия в наноамперах. Движение лапок — условная визуализация.' : 'События входа заданы в микросименсах; движение лапок — условная визуализация.'}{comparison ? ' Вход, спайки и движение относятся к выбранному опыту B; записи E1−REF A и B показаны на общей шкале.' : ''}{!preview?.electrical && series.inputEvents === null ? ' Журнал входа этого опыта не сохранён.' : ''}</>}{preview?.connectome && (preview.electrical ? ' Запись рассчитана по выбранным клеткам, а не по всей ЦНС.' : ' Запись рассчитана по шести локальным моделям, а не по всей ЦНС.')}</VisuallyHidden>}</>;
+    }} />{(showResponse || preview?.connectome) && <VisuallyHidden id={descriptionId}>{showResponse && <>{preview?.electrical ? `${hasStimulus ? (preview.networkOnly ? 'Показан усреднённый за 1 мс ток воздействия в наноамперах.' : 'Показан ток воздействия в наноамперах.') : 'Ток воздействия недоступен.'} Движение лапок — условная визуализация.` : 'События входа заданы в микросименсах; движение лапок — условная визуализация.'}{comparison ? ' Вход, спайки и движение относятся к выбранному опыту B; записи E1−REF A и B показаны на общей шкале.' : ''}{!preview?.electrical && series.inputEvents === null ? ' Журнал входа этого опыта не сохранён.' : ''}</>}{preview?.connectome && (preview.networkOnly ? ' Запись E1−REF в этом режиме не рассчитана.' : preview.electrical ? ' Запись рассчитана по выбранным клеткам, а не по всей ЦНС.' : ' Запись рассчитана по шести локальным моделям, а не по всей ЦНС.')}</VisuallyHidden>}</>;
 }

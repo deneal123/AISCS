@@ -64,3 +64,16 @@ test('shows field preparation at zero percent and its verification stage', () =>
     progress={{ phase: 'field_verification', done: 0, total: 0, runId: 'job' }} />);
   expect(screen.getByText(/Проверка рассчитанного поля/)).toBeInTheDocument();
 });
+
+test('reports completed network ticks as model time and estimates only this stage', () => {
+  jest.useFakeTimers();
+  try {
+    const { rerender } = render(<SimulationProgress stage="Расчёт сети" phase={2} reducedMotion
+      progress={{ phase: 'network', done: 0, total: 100, runId: 'job' }} />);
+    expect(screen.getByText(/Расчёт сети · модельное время · 0 \/ 100 мс · 0%/)).toBeInTheDocument();
+    act(() => { jest.advanceTimersByTime(4000); });
+    rerender(<SimulationProgress stage="Расчёт сети" phase={2} reducedMotion
+      progress={{ phase: 'network', done: 20, total: 100, runId: 'job' }} />);
+    expect(screen.getByText(/20 \/ 100 мс · 20% · до конца этапа примерно 16 с/)).toBeInTheDocument();
+  } finally { jest.useRealTimers(); }
+});

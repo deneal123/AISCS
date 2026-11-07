@@ -12,9 +12,17 @@ export function electricalSpikeHistogram(readout, durationMs) {
 }
 
 // The scene and its histogram must describe the same network calculation.
-export function sceneSpikeHistogram(sceneField, coupledHistogram, readout, durationMs) {
+export function sceneSpikeHistogram(sceneField, coupledHistogram, readout, durationMs, verifiedProxyHistogram = null) {
   if (sceneField?.result?.manifest?.kind === 'experimental-field-proxy') {
-    return sceneField.result.preview?.spikes_by_ms ?? null;
+    return verifiedProxyHistogram;
   }
   return coupledHistogram ?? electricalSpikeHistogram(readout, durationMs);
+}
+
+// Object identity prevents a previous verification from approving a refreshed
+// result or graph which happens to have the same persistent run ID.
+export function verifiedHistogramForScene(state, runId, fieldRun, description) {
+  if (!state || !fieldRun || state.runId !== runId || state.fieldRun !== fieldRun
+      || state.description !== description) return null;
+  return state.histogram;
 }
