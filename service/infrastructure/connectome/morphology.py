@@ -10,7 +10,7 @@ from __future__ import annotations
 import math
 
 
-def neurite_landmark(text: str) -> dict:
+def _validated_nodes(text: str, *, include_radii: bool = False) -> dict:
     nodes = {}
     for line in text.splitlines():
         line = line.strip()
@@ -30,23 +30,17 @@ def neurite_landmark(text: str) -> dict:
             or radius < 0
         ):
             raise ValueError("Invalid SWC vertex")
-        nodes[index] = (xyz, parent, kind)
+        nodes[index] = (xyz, parent, kind, radius) if include_radii else (xyz, parent, kind)
     if not nodes:
         raise ValueError("Empty SWC")
-    total, sums = 0.0, [0.0, 0.0, 0.0]
     roots = 0
     visited = set()
-    for index, (xyz, parent, _) in nodes.items():
+    for index, node in nodes.items():
+        parent = node[1]
         if parent == -1:
             roots += 1
         elif parent not in nodes:
             raise ValueError("Unresolved SWC parent")
-        else:
-            other = nodes[parent][0]
-            length = math.dist(xyz, other)
-            total += length
-            for axis in range(3):
-                sums[axis] += length * (xyz[axis] + other[axis]) / 2
         path = set()
         current = index
         while current != -1 and current not in visited:
@@ -57,6 +51,26 @@ def neurite_landmark(text: str) -> dict:
         visited.update(path)
     if not roots:
         raise ValueError("SWC has no root")
+    return nodes
+
+
+def validate_swc_topology(text: str) -> None:
+    """Check syntax, geometry and topology without calculating display landmarks."""
+    _validated_nodes(text)
+
+
+def neurite_landmark(text: str) -> dict:
+    nodes = _validated_nodes(text)
+    total, sums, roots = 0.0, [0.0, 0.0, 0.0], 0
+    for xyz, parent, _ in nodes.values():
+        if parent == -1:
+            roots += 1
+        else:
+            other = nodes[parent][0]
+            length = math.dist(xyz, other)
+            total += length
+            for axis in range(3):
+                sums[axis] += length * (xyz[axis] + other[axis]) / 2
     centroid = (
         tuple(value / total for value in sums)
         if total

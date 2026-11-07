@@ -34,8 +34,6 @@ from service.domain.contracts.fragment_population_contract import (
     FragmentPopulationConfig,
     FragmentPopulationExecutionRequest,
 )
-from service.domain.geometry import local_geometry
-from service.domain.placement import validate_contacts
 from service.domain.contracts.population_feedback_contract import (
     PopulationFeedbackConfig,
     PopulationFeedbackExecutionRequest,
@@ -44,8 +42,13 @@ from service.domain.contracts.population_target_contract import (
     PopulationTargetConfig,
     PopulationTargetExecutionRequest,
 )
-from service.domain.contracts.replay_contract import ReplayExecutionRequest, ReplayRunConfig
-from service.domain.contracts.replay_contract import ReplaySimulation
+from service.domain.contracts.replay_contract import (
+    ReplayExecutionRequest,
+    ReplayRunConfig,
+    ReplaySimulation,
+)
+from service.domain.geometry import local_geometry
+from service.domain.placement import validate_contacts
 from service.domain.surface_anchors import validate_surface_anchors
 from service.infrastructure.execution.process import Executions
 from service.infrastructure.execution.replay_input import ReplayInputStore
@@ -727,7 +730,10 @@ def build_app(manager: Executions, secret: str, readiness, catalog_factory=catal
     @app.post("/v1/executions/{execution_id}/cancel", dependencies=protected)
     def cancel(execution_id: UUID):
         read(execution_id)
-        return manager.cancel(str(execution_id))
+        try:
+            return manager.cancel(str(execution_id))
+        except RuntimeError as exc:
+            raise HTTPException(503, str(exc)) from exc
 
     @app.get("/v1/executions/{execution_id}/manifest", dependencies=protected)
     def manifest(execution_id: UUID):
@@ -763,5 +769,7 @@ def build_app(manager: Executions, secret: str, readiness, catalog_factory=catal
             return manager.discard(str(execution_id), payload.configuration_sha256)
         except ValueError as exc:
             raise HTTPException(409, str(exc)) from exc
+        except RuntimeError as exc:
+            raise HTTPException(503, str(exc)) from exc
 
     return app

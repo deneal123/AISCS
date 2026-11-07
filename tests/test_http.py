@@ -44,6 +44,47 @@ def test_service_auth_and_unknown_execution(tmp_path):
     )
 
 
+def test_unconfirmed_cancel_returns_service_unavailable(tmp_path, monkeypatch):
+    from uuid import uuid4
+
+    from service.infrastructure.execution.process import Executions
+    from service.presentation.http import build_app
+
+    manager, execution = Executions(tmp_path), str(uuid4())
+    monkeypatch.setattr(manager, 'status', lambda _: {'status': 'running'})
+
+    def fail_cancel(_):
+        raise RuntimeError('Solver did not stop; cancellation is not confirmed')
+
+    monkeypatch.setattr(manager, 'cancel', fail_cancel)
+    client = TestClient(build_app(manager, 'a' * 32, lambda: True))
+    response = client.post(f'/v1/executions/{execution}/cancel',
+                           headers={'Authorization': 'Bearer ' + 'a' * 32})
+    assert response.status_code == 503
+    assert 'not confirmed' in response.json()['detail']
+
+
+def test_unconfirmed_discard_returns_service_unavailable(tmp_path, monkeypatch):
+    from uuid import uuid4
+
+    from service.infrastructure.execution.process import Executions
+    from service.presentation.http import build_app
+
+    manager, execution = Executions(tmp_path), str(uuid4())
+    monkeypatch.setattr(manager, 'status', lambda _: {'status': 'running'})
+
+    def fail_discard(_, __):
+        raise RuntimeError('Solver did not stop; cancellation is not confirmed')
+
+    monkeypatch.setattr(manager, 'discard', fail_discard)
+    client = TestClient(build_app(manager, 'a' * 32, lambda: True))
+    response = client.post(f'/v1/executions/{execution}/discard',
+                           headers={'Authorization': 'Bearer ' + 'a' * 32},
+                           json={'configuration_sha256': 'b' * 64})
+    assert response.status_code == 503
+    assert 'not confirmed' in response.json()['detail']
+
+
 def test_replay_input_upload_requires_service_auth_and_checked_hash(tmp_path):
     import hashlib
     from uuid import uuid4

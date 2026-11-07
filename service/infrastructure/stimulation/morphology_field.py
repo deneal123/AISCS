@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import numpy as np
 
-from service.infrastructure.connectome.morphology import neurite_landmark
+from service.infrastructure.connectome.morphology import validate_swc_topology
 from service.infrastructure.connectome.morphology_repository import read_skeleton
 from service.infrastructure.stimulation.isolated_roots import validate_isolated_root_arrays
 from service.infrastructure.stimulation.point_field import (
@@ -24,7 +24,7 @@ def evaluate_swc_field(
     allow_degenerate=False, field_backend="cpu",
 ):
     """Return field values and interior-vertex curvature without inferring spikes."""
-    neurite_landmark(swc)  # Validates topology, coordinates and SWC syntax.
+    validate_swc_topology(swc)
     return _evaluate_validated_swc_field(
         swc, source_um, return_um, current_na, conductivity_s_m, clearance_um=clearance_um,
         allow_degenerate=allow_degenerate, field_backend=field_backend,
@@ -42,6 +42,15 @@ def _parse_swc_geometry(swc):
     points = np.asarray([[float(value) * 0.008 for value in row[2:5]] for row in rows])
     parents = np.asarray([index[int(row[6])] if int(row[6]) != -1 else -1 for row in rows])
     radii = np.asarray([float(row[5]) * 0.008 for row in rows])
+    return ids, points, parents, radii
+
+
+def _geometry_from_validated_nodes(nodes):
+    ids = list(nodes)
+    index = {value: position for position, value in enumerate(ids)}
+    points = np.asarray([node[0] for node in nodes.values()])
+    parents = np.asarray([index[node[1]] if node[1] != -1 else -1 for node in nodes.values()])
+    radii = np.asarray([node[3] for node in nodes.values()])
     return ids, points, parents, radii
 
 
@@ -109,7 +118,8 @@ def evaluate_registered_neuron_field(
     Contacts are in native MaleCNS micrometres, not body display coordinates.
     No activation, tissue boundaries or anatomical registration are inferred.
     """
-    skeleton = read_skeleton(body_id, directories)
+    skeleton = read_skeleton(body_id, directories, topology_only=True, include_validated_nodes=True)
+    geometry = _geometry_from_validated_nodes(skeleton.pop('validated_nodes'))
     values = _evaluate_validated_swc_field(
         skeleton["swc"],
         source_um,
@@ -119,6 +129,7 @@ def evaluate_registered_neuron_field(
         clearance_um=clearance_um,
         allow_degenerate=allow_degenerate,
         field_backend=field_backend,
+        geometry_override=geometry,
     )
     return {
         **values,

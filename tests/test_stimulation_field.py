@@ -63,10 +63,22 @@ def test_field_rejects_numeric_overflow():
             field([[1e308, 0, 0]])
         with pytest.raises(ValueError, match='Potential overflow'):
             field([[10, 0, 0]], current=1e308, sigma=1e-300)
+        with pytest.raises(ValueError, match='distance overflow'):
+            field(np.empty((0, 3)), source=(1e308, 0, 0), ret=(-1e308, 0, 0))
+        with pytest.raises(ValueError, match='Potential overflow'):
+            field(np.empty((0, 3)), current=1e308, sigma=1e-300)
     with pytest.raises(ValueError, match='curvature overflow'):
         cable_curvature_mv_per_um2([1e308, -1e308, 1e308], 1.0)
     with pytest.raises(ValueError, match='curvature overflow'):
         cable_curvature_mv_per_um2([1.0, 2.0, 3.0], 1e-300)
+
+
+def test_invalid_gpu_field_is_rejected_before_cuda_is_required():
+    from service.infrastructure.stimulation.point_field_gpu import bipolar_potential_mv_gpu
+
+    with pytest.raises(ValueError, match='Potential overflow'):
+        bipolar_potential_mv_gpu(np.empty((0, 3)), [0, 0, 0], [100, 0, 0],
+                                 1e308, 1e-300, clearance_um=1)
 
 
 def test_neurite_curvature_uses_actual_unequal_spacing_and_excludes_branches():

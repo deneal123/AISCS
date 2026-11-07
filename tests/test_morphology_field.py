@@ -4,13 +4,26 @@ import json
 import numpy as np
 import pytest
 
+from service.infrastructure.connectome.morphology import _validated_nodes
 from service.infrastructure.connectome.morphology_repository import BASE
 from service.infrastructure.stimulation.morphology_field import (
+    _geometry_from_validated_nodes,
+    _parse_swc_geometry,
     evaluate_registered_neuron_field,
     evaluate_swc_field,
 )
 
 SWC = "1 1 0 0 0 1 -1\n2 3 125 0 0 1 1\n3 3 375 0 0 1 2\n4 3 750 0 0 1 3\n"
+
+
+@pytest.mark.parametrize('swc', [SWC,
+    '# comment\n10 3 -9.1 3e2 0 2.75 20\n20 1 2 -0.0 8 0 -1\n30 1 2 3 4 .01 -1\n'])
+def test_validated_geometry_matches_original_parse_exactly(swc):
+    original = _parse_swc_geometry(swc)
+    actual = _geometry_from_validated_nodes(_validated_nodes(swc, include_radii=True))
+    assert actual[0] == original[0]
+    for expected, converted in zip(original[1:], actual[1:], strict=True):
+        np.testing.assert_array_equal(converted, expected)
 
 
 def evaluate(source, current=10):
@@ -33,6 +46,12 @@ def test_malformed_swc_and_contact_intersection_are_rejected():
         evaluate_swc_field("not swc", [0, 10, 0], [50, 10, 0], 1, 0.3, clearance_um=1)
     with pytest.raises(ValueError, match="intersects"):
         evaluate([0, 0, 0])
+
+
+def test_field_still_rejects_cyclic_topology_before_fast_curvature():
+    swc = "1 1 0 0 0 1 -1\n2 3 125 0 0 1 3\n3 3 250 0 0 1 2\n"
+    with pytest.raises(ValueError, match='Cyclic'):
+        evaluate_swc_field(swc, [0, 10, 0], [50, 10, 0], 10, .3, clearance_um=1)
 
 
 def test_contact_near_segment_interior_is_rejected_even_when_vertices_are_clear():

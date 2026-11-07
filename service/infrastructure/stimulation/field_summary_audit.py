@@ -24,7 +24,10 @@ def failure_category(status, reason):
     return "other_geometry_or_field"
 
 
-def audit(path: Path, ids, *, graph_hash: str, allow_partial: bool = False):
+def audit(path: Path, ids, *, graph_hash: str, allow_partial: bool = False, on_row=None):
+    """Audit a stream; callback rows remain provisional until this function returns."""
+    if on_row is not None and not callable(on_row):
+        raise ValueError("Invalid field row callback")
     count = 0
     statuses = Counter()
     failures = Counter()
@@ -34,10 +37,14 @@ def audit(path: Path, ids, *, graph_hash: str, allow_partial: bool = False):
         if not first.endswith("\n"):
             raise ValueError("Missing or incomplete header")
         header = json.loads(first)
-        if (header.get("kind") != "header" or header.get("format") != "malecns-field-summary-v1"
+        if (not isinstance(header, dict) or header.get("kind") != "header"
+                or header.get("format") != "malecns-field-summary-v1"
                 or header.get("graph_sha256") != graph_hash or header.get("neurons") != len(ids)
                 or header.get("coordinate_frame") != "male-cns-v1.0-native-um"
                 or header.get("medium") != "infinite-homogeneous-isotropic"
+                or header.get("interpretation") != (
+                    "field-only; no excitation or anatomical registration"
+                )
                 or not isinstance(header.get("configuration"), dict)):
             raise ValueError("Invalid field provenance")
         algorithm = header.get("algorithm_sha256")
@@ -45,6 +52,11 @@ def audit(path: Path, ids, *, graph_hash: str, allow_partial: bool = False):
         if (not isinstance(backend, str) or backend not in {"cpu", "gpu"}
                 or (backend == "cpu" and device is not None)):
             raise ValueError("Invalid field backend provenance")
+        if "geometry_cache_manifest_sha256" in header:
+            identity = header["geometry_cache_manifest_sha256"]
+            if (backend != "gpu" or not isinstance(identity, str)
+                    or not re.fullmatch(r"[a-f0-9]{64}", identity)):
+                raise ValueError("Invalid geometry cache provenance")
         if backend == "gpu" and (
             not isinstance(device, dict) or set(device) != {
                 "numba_version", "cuda_runtime", "device", "compute_capability"
@@ -94,6 +106,8 @@ def audit(path: Path, ids, *, graph_hash: str, allow_partial: bool = False):
             if chain != provided:
                 raise ValueError("Field record checksum mismatch")
             status = row.get("status")
+            if not isinstance(status, str):
+                raise ValueError("Unknown field status")
             if status in {"ok", "partial_geometry"}:
                 curvature = row.get("max_abs_curvature_signed_mv_per_um2")
                 source_sha = row.get("source_sha256")
@@ -128,6 +142,8 @@ def audit(path: Path, ids, *, graph_hash: str, allow_partial: bool = False):
             if category is not None:
                 failures[category] += 1
             statuses[status] += 1
+            if on_row is not None:
+                on_row(count, row)
             count += 1
     complete = bool(footer is not None and count == len(ids)
                     and footer.get("neurons") == count and footer.get("chain_sha256") == chain)

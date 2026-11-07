@@ -45,6 +45,42 @@ def test_cancel_kills_owned_solver_and_preserves_terminal_state(tmp_path):
     manager.close()
 
 
+def test_unconfirmed_cancel_keeps_execution_and_work_for_retry(tmp_path):
+    class StubbornProcess:
+        pid = None
+        alive = True
+        allow_kill = False
+
+        def is_alive(self):
+            return self.alive
+
+        def terminate(self):
+            pass
+
+        def kill(self):
+            if self.allow_kill:
+                self.alive = False
+
+        def join(self, timeout=None):
+            pass
+
+    manager, execution = Executions(tmp_path), str(uuid4())
+    process = StubbornProcess()
+    manager.processes[execution] = process
+    manager.save({'execution_id': execution, 'kind': 'experimental-field-proxy',
+                  'status': 'running', 'configuration_sha256': 'a' * 64})
+    work = tmp_path / execution / 'field-proxy-work'
+    work.mkdir()
+    (work / 'partial').write_text('work')
+    with pytest.raises(RuntimeError, match='cancellation is not confirmed'):
+        manager.cancel(execution)
+    assert manager.status(execution)['status'] == 'running'
+    assert (work / 'partial').read_text() == 'work'
+    process.allow_kill = True
+    assert manager.cancel(execution)['status'] == 'cancelled'
+    assert not work.exists()
+
+
 def test_executor_shutdown_is_interruption_not_user_cancellation(tmp_path):
     manager = Executions(tmp_path)
     request = ExecutionRequest(execution_id=str(uuid4()), config=SimulationConfig(duration_ms=1000))

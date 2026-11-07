@@ -1,9 +1,8 @@
 """Verify field-summary identity and load explicit per-neuron descriptors."""
 
-import json
+import numpy as np
 
 from service.infrastructure.connectome.dataset import digest
-from service.infrastructure.connectome.field_proxy import descriptor_from_rows
 from service.infrastructure.stimulation.field_summary_audit import audit, failure_category
 
 
@@ -11,43 +10,51 @@ def verified_descriptors(path, ids, graph_hash, *, allow_partial_geometry=False,
                          allow_missing_curvature=False, allow_contact_exclusion=False,
                          expected_configuration=None):
     """Check the full chain, ordered identities and file stability before use."""
+    if any(type(value) is not bool for value in (
+        allow_partial_geometry, allow_missing_curvature, allow_contact_exclusion,
+    )):
+        raise ValueError('Invalid exclusion policy')
     before = digest(path)
-    report = audit(path, ids, graph_hash=graph_hash)
+    descriptors = np.empty(len(ids), dtype=np.float64)
+    excluded = []
+    contact_excluded = []
+    invalid = False
+
+    def collect(index, row):
+        nonlocal invalid
+        status = row['status']
+        if status == 'invalid_geometry_or_field':
+            if (allow_contact_exclusion
+                    and failure_category(status, row.get('reason')) == 'contact_exclusion'):
+                contact_excluded.append(row['body_id'])
+            else:
+                invalid = True
+            # Unknown direct field is explicitly excluded, not a biological estimate.
+            descriptors[index] = 0.0
+            return
+        if (status == 'source_missing'
+                or (status == 'partial_geometry' and not allow_partial_geometry)):
+            invalid = True
+            descriptors[index] = 0.0
+            return
+        value = row.get('max_abs_curvature_signed_mv_per_um2')
+        if value is None:
+            if allow_missing_curvature:
+                excluded.append(row['body_id'])
+            else:
+                invalid = True
+            descriptors[index] = 0.0
+        else:
+            descriptors[index] = value
+
+    report = audit(path, ids, graph_hash=graph_hash, on_row=collect)
     if expected_configuration is not None and report['configuration'] != expected_configuration:
         raise ValueError('Field configuration does not match requested contacts or current')
     allowed = {'ok', 'partial_geometry'} if allow_partial_geometry else {'ok'}
     if allow_contact_exclusion:
         allowed.add('invalid_geometry_or_field')
-    if not report['complete'] or set(report['statuses']) - allowed:
+    if not report['complete'] or set(report['statuses']) - allowed or invalid:
         raise ValueError('Field summary is incomplete or contains failed geometry')
-    if type(allow_missing_curvature) is not bool or type(allow_contact_exclusion) is not bool:
-        raise ValueError('Invalid exclusion policy')
-    excluded = []
-    contact_excluded = []
-    with path.open(encoding='utf-8') as stream:
-        next(stream)
-        rows = (json.loads(line) for line in stream)
-
-        def eligible():
-            for row in rows:
-                if row.get('kind') == 'footer':
-                    continue
-                if row.get('status') == 'invalid_geometry_or_field':
-                    if (not allow_contact_exclusion
-                            or failure_category(row['status'], row.get('reason'))
-                            != 'contact_exclusion'):
-                        raise ValueError('Field row has an unsupported geometry failure')
-                    contact_excluded.append(row['body_id'])
-                    # The model is undefined at the contact; omit direct input explicitly.
-                    row = {**row, 'status': 'ok', 'max_abs_curvature_signed_mv_per_um2': 0.0}
-                if row.get('max_abs_curvature_signed_mv_per_um2') is None and allow_missing_curvature:
-                    excluded.append(row.get('body_id'))
-                    # Exclude direct stimulation; this is not an estimate of coupling.
-                    row = {**row, 'max_abs_curvature_signed_mv_per_um2': 0.0}
-                yield row
-
-        descriptors = descriptor_from_rows(ids, eligible(),
-                                           allow_partial_geometry=allow_partial_geometry)
     if digest(path) != before:
         raise ValueError('Field summary changed while reading')
     return descriptors, {'file_sha256': before, 'field_audit': report,

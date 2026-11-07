@@ -14,6 +14,7 @@ import multiprocessing
 import re
 import sqlite3
 from concurrent.futures import ProcessPoolExecutor
+from contextlib import closing
 from pathlib import Path
 
 import numpy as np
@@ -198,7 +199,7 @@ def spatial_candidates(database: Path, graph_ids, graph_sha: str, directories: l
 
     if index_digest() != report["index_sha256"]:
         raise ValueError("Index changed since independent audit")
-    with sqlite3.connect(database.resolve().as_uri() + "?mode=ro", uri=True) as db:
+    with closing(sqlite3.connect(database.resolve().as_uri() + "?mode=ro", uri=True)) as db:
         metadata = dict(db.execute("SELECT key, value FROM metadata"))
         if (metadata.get("format") != "malecns-verified-bounds-v1"
                 or metadata.get("graph_sha256") != graph_sha

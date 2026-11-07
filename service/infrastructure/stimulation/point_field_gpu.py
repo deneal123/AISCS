@@ -47,19 +47,15 @@ def _kernel():
     return cuda, evaluate
 
 
-def bipolar_potential_mv_gpu(points_um, source_um, return_um, current_na, conductivity_s_m,
-                             *, clearance_um):
-    """Return checked mV values using native micrometres and nanoamperes.
-
-    A device or compilation failure is reported, never silently replaced by a
-    CPU calculation. All points must be outside both excluded contact spheres.
-    """
+def _potential_and_status(points_um, source_um, return_um, current_na, conductivity_s_m,
+                          *, clearance_um):
+    """Evaluate one batch and retain per-point status for group isolation."""
     points = np.ascontiguousarray(_points(points_um, "points_um"))
     bipolar_potential_mv(np.empty((0, 3)), source_um, return_um, current_na, conductivity_s_m,
                          clearance_um=clearance_um)
     cuda, evaluate = _kernel()
     if len(points) == 0:
-        return np.empty(0, dtype=np.float64)
+        return np.empty(0, dtype=np.float64), np.empty(0, dtype=np.int8)
     source = np.asarray(source_um, dtype=np.float64)
     target = np.asarray(return_um, dtype=np.float64)
     values = cuda.device_array(len(points), dtype=np.float64)
@@ -68,24 +64,35 @@ def bipolar_potential_mv_gpu(points_um, source_um, return_um, current_na, conduc
         cuda.to_device(points), cuda.to_device(source), cuda.to_device(target),
         float(current_na), float(conductivity_s_m), float(clearance_um), values, invalid,
     )
-    statuses = invalid.copy_to_host()
+    return values.copy_to_host(), invalid.copy_to_host()
+
+
+def _checked_group(result, statuses):
     if np.any(statuses == 1):
         raise ValueError("Observation point intersects a contact exclusion sphere")
     if np.any(statuses != 0):
         raise ValueError("Contact distance or potential overflow")
-    result = values.copy_to_host()
     if not np.isfinite(result).all():
         raise ValueError("Potential overflow")
     return result
 
 
+def bipolar_potential_mv_gpu(points_um, source_um, return_um, current_na, conductivity_s_m,
+                             *, clearance_um):
+    """Return checked mV values; failures never fall back silently to CPU."""
+    values, statuses = _potential_and_status(points_um, source_um, return_um, current_na,
+                                              conductivity_s_m, clearance_um=clearance_um)
+    return _checked_group(values, statuses)
+
+
 def bipolar_potential_groups_gpu(groups, source_um, return_um, current_na, conductivity_s_m,
-                                 *, clearance_um, max_points=1_000_000):
+                                 *, clearance_um, max_points=1_000_000, isolate_invalid=False):
     """Evaluate bounded groups together and return one ordered array per neuron.
 
-    A failed group rejects the batch; callers must not treat it as a zero field.
+    A failed group rejects the batch by default. With isolate_invalid=True,
+    a ValueError replaces each invalid group without discarding valid peers.
     """
-    if type(max_points) is not int or max_points < 1:
+    if type(max_points) is not int or max_points < 1 or type(isolate_invalid) is not bool:
         raise ValueError('max_points must be a positive integer')
     arrays = (np.ascontiguousarray(_points(group, 'points_um')) for group in groups)
     result, pending, count = [], [], 0
@@ -94,11 +101,23 @@ def bipolar_potential_groups_gpu(groups, source_um, return_um, current_na, condu
         if not pending:
             return
         lengths = [len(group) for group in pending]
-        values = bipolar_potential_mv_gpu(np.concatenate(pending), source_um, return_um,
-                                           current_na, conductivity_s_m,
-                                           clearance_um=clearance_um)
+        combined = np.concatenate(pending)
         offsets = np.cumsum([0, *lengths])
-        result.extend(values[offsets[i]:offsets[i + 1]] for i in range(len(lengths)))
+        if not isolate_invalid:
+            values = bipolar_potential_mv_gpu(combined, source_um, return_um,
+                                               current_na, conductivity_s_m,
+                                               clearance_um=clearance_um)
+            result.extend(values[offsets[i]:offsets[i + 1]] for i in range(len(lengths)))
+            return
+        values, statuses = _potential_and_status(combined, source_um, return_um,
+                                                  current_na, conductivity_s_m,
+                                                  clearance_um=clearance_um)
+        for i in range(len(lengths)):
+            start, end = offsets[i:i + 2]
+            try:
+                result.append(_checked_group(values[start:end], statuses[start:end]))
+            except ValueError as exc:
+                result.append(exc)
 
     for points in arrays:
         if len(points) > max_points:

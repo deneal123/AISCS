@@ -87,6 +87,8 @@ def select_recorded_spikes(graph_ids, spike_indices, spike_times_ms, partner_ids
             or any(type(value) is not int or value <= 0 for value in partner_ids)
             or len(set(partner_ids)) != len(partner_ids)):
         raise ValueError("Invalid replay partner IDs")
+    if not partner_ids:
+        return {}
     positions = np.searchsorted(ids, partner_ids)
     if any(pos >= len(ids) or int(ids[pos]) != body
            for pos, body in zip(positions, partner_ids, strict=True)):

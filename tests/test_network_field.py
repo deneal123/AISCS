@@ -69,6 +69,9 @@ def test_grouped_field_isolates_invalid_neuron_and_keeps_valid_neighbors(tmp_pat
                    conductivity_s_m=.3, clearance_um=1)
     cpu = list(registered_field_summaries(graph, [tmp_path], **options))
     batched = list(registered_field_summaries(graph, [tmp_path], **options, field_backend='gpu'))
+    parallel = list(registered_field_summaries(graph, [tmp_path], **options, field_backend='gpu',
+                                               field_workers=2))
+    assert parallel == batched
     assert [row['status'] for row in batched] == [
         'ok', 'invalid_geometry_or_field', 'ok', 'source_missing']
     assert [row['body_id'] for row in batched] == ['1', '2', '3', '4']

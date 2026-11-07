@@ -22,6 +22,48 @@ def test_read_requires_source_receipt_and_matching_content(tmp_path):
         read_skeleton(43, [tmp_path])
 
 
+@pytest.mark.parametrize('raw, valid', [
+    (b'1 0 0 0 0 1 -1\n2 0 10 0 0 1 1\n', True),
+    (b'1 0 0 0 0 1 -1\n2 0 10 0 0 1 3\n', False),
+    (b'1 0 0 0 0 1 -1\n2 0 10 0 0 1 3\n3 0 20 0 0 1 2\n', False),
+    (b'1 0 0 0 0 1 -1\n2 0 nan 0 0 1 1\n', False),
+    (b'1 0 0 0 0 1 -1\n1 0 10 0 0 1 1\n', False),
+])
+def test_topology_only_uses_same_validation_and_receipt(tmp_path, raw, valid):
+    (tmp_path / 'raw').mkdir()
+    (tmp_path / 'receipts').mkdir()
+    (tmp_path / 'raw/42.swc').write_bytes(raw)
+    receipt = {'body_id': 42, 'url': BASE + '42.swc', 'sha256': hashlib.sha256(raw).hexdigest()}
+    (tmp_path / 'receipts/42.json').write_text(json.dumps(receipt))
+    if valid:
+        full = read_skeleton(42, [tmp_path])
+        fast = read_skeleton(42, [tmp_path], topology_only=True)
+        assert all(fast[key] == full[key] for key in fast)
+        parsed = read_skeleton(42, [tmp_path], topology_only=True, include_validated_nodes=True)
+        assert parsed['validated_nodes'][1][3] == pytest.approx(.008)
+        assert all(parsed[key] == fast[key] for key in fast)
+    else:
+        for options in ({}, {'topology_only': True},
+                        {'topology_only': True, 'include_validated_nodes': True}):
+            with pytest.raises(ValueError, match='failed validation'):
+                read_skeleton(42, [tmp_path], **options)
+    (tmp_path / 'raw/42.swc').write_bytes(raw + b'tampered')
+    with pytest.raises(ValueError, match='failed validation'):
+        read_skeleton(42, [tmp_path], topology_only=True)
+    with pytest.raises(ValueError, match='failed validation'):
+        read_skeleton(42, [tmp_path], topology_only=True, include_validated_nodes=True)
+
+
+@pytest.mark.parametrize('kwargs', [
+    {'include_validated_nodes': True},
+    {'topology_only': True, 'include_validated_nodes': True, 'expected_sha256': '0' * 64},
+    {'topology_only': True, 'include_validated_nodes': 'true'},
+])
+def test_validated_node_request_rejects_unsafe_modes_before_read(tmp_path, kwargs):
+    with pytest.raises(ValueError, match='Invalid validated node request'):
+        read_skeleton(42, [tmp_path], **kwargs)
+
+
 def test_audited_snapshot_read_still_checks_receipt_and_exact_digest(tmp_path, monkeypatch):
     (tmp_path / "raw").mkdir()
     (tmp_path / "receipts").mkdir()

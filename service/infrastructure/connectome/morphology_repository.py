@@ -6,7 +6,11 @@ import hashlib
 import json
 from pathlib import Path
 
-from service.infrastructure.connectome.morphology import neurite_landmark
+from service.infrastructure.connectome.morphology import (
+    _validated_nodes,
+    neurite_landmark,
+    validate_swc_topology,
+)
 
 BASE = "https://storage.googleapis.com/flyem-male-cns/v1.0/segmentation/skeletons-malecns/skeletons-swc/"
 MAX_BYTES = 8 * 1024 * 1024
@@ -14,6 +18,7 @@ MAX_BYTES = 8 * 1024 * 1024
 
 def read_skeleton(
     body_id: int, directories: list[Path], *, expected_sha256: str | None = None,
+    topology_only: bool = False, include_validated_nodes: bool = False,
 ) -> dict:
     """Read a skeleton; an independently audited digest permits skipping re-parsing.
 
@@ -22,6 +27,11 @@ def read_skeleton(
     """
     if type(body_id) is not int or not 0 < body_id < 2**63:
         raise ValueError("Invalid neuron ID")
+    if type(topology_only) is not bool:
+        raise ValueError("Invalid topology validation mode")
+    if type(include_validated_nodes) is not bool or (include_validated_nodes and
+            (not topology_only or expected_sha256 is not None)):
+        raise ValueError("Invalid validated node request")
     corrupt = False
     for directory in directories:
         path = directory / "raw" / f"{body_id}.swc"
@@ -44,6 +54,14 @@ def read_skeleton(
             if expected_sha256 is not None:
                 return {"body_id": str(body_id), "sha256": sha, "source": metadata["url"],
                         "source_units": "8 nm", "swc": text}
+            if topology_only:
+                result = {"body_id": str(body_id), "sha256": sha, "source": metadata["url"],
+                          "source_units": "8 nm", "swc": text}
+                if include_validated_nodes:
+                    result["validated_nodes"] = _validated_nodes(text, include_radii=True)
+                else:
+                    validate_swc_topology(text)
+                return result
             verified = neurite_landmark(text)
             return {"body_id": str(body_id), "sha256": sha, "source": metadata["url"],
                     "source_units": "8 nm", "vertices": verified["vertices"],

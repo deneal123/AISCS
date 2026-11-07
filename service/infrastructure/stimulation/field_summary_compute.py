@@ -7,6 +7,7 @@ import json
 import multiprocessing as mp
 import os
 from concurrent.futures import ProcessPoolExecutor
+from itertools import chain as itertools_chain
 from itertools import islice
 from pathlib import Path
 from types import SimpleNamespace
@@ -23,6 +24,19 @@ from service.infrastructure.stimulation import (
 from service.infrastructure.stimulation.network_field import registered_field_summaries
 from service.infrastructure.stimulation.point_field import bipolar_potential_mv
 
+_ROW_STATUSES = frozenset({
+    "ok", "partial_geometry", "source_missing", "invalid_geometry_or_field",
+})
+
+
+def _check_ordered_row(row, ids, completed):
+    """Reject missing, unexpected or out-of-order results before publishing them."""
+    if (not isinstance(row, dict) or completed >= len(ids)
+            or row.get("body_id") != str(ids[completed])
+            or not isinstance(row.get("status"), str)
+            or row["status"] not in _ROW_STATUSES):
+        raise ValueError("Field records do not match the graph")
+
 
 def _field_batch(arguments):
     ids, directories, config, allow_degenerate, field_backend = arguments
@@ -32,6 +46,11 @@ def _field_batch(arguments):
 
 
 def _field_rows(ids, directories, config, allow_degenerate, workers, field_backend):
+    if field_backend == 'gpu':
+        yield from registered_field_summaries(SimpleNamespace(ids=ids), directories, **config,
+                                               allow_degenerate=allow_degenerate,
+                                               field_backend=field_backend, field_workers=workers)
+        return
     if workers == 1:
         yield from registered_field_summaries(SimpleNamespace(ids=ids), directories, **config,
                                                allow_degenerate=allow_degenerate,
@@ -48,7 +67,8 @@ def _field_rows(ids, directories, config, allow_degenerate, workers, field_backe
 
 
 def compute(ids, directories, output: Path, config: dict, *, graph_hash: str, progress=None,
-            allow_degenerate=False, workers=1, field_backend="cpu", check_row=None):
+            allow_degenerate=False, workers=1, field_backend="cpu", check_row=None,
+            geometry_cache=None):
     """Append verified, ordered records; incomplete or incompatible files fail closed."""
     if type(workers) is not int or not 1 <= workers <= 8:
         raise ValueError("workers must be an integer between 1 and 8")
@@ -56,12 +76,28 @@ def compute(ids, directories, output: Path, config: dict, *, graph_hash: str, pr
         raise ValueError('check_row must be callable')
     if not isinstance(field_backend, str) or field_backend not in {"cpu", "gpu"}:
         raise ValueError("Unknown field backend")
-    if field_backend == "gpu" and workers != 1:
-        raise ValueError("GPU field execution requires one process")
+    cached_chunks = None
+    if geometry_cache is not None:
+        from service.infrastructure.stimulation.geometry_cache import cache, chunk, index
+
+        if (field_backend != 'gpu' or not isinstance(geometry_cache, dict)
+                or set(geometry_cache) != {'directory', 'expected_manifest_sha256',
+                                           'source_index', 'source_audit'}
+                or any(not isinstance(geometry_cache[key], Path)
+                       for key in ('directory', 'source_index', 'source_audit'))):
+            raise ValueError('Invalid GPU geometry cache configuration')
+        cached_chunks = cache.iter_cache(**geometry_cache, graph_ids=ids, graph_sha256=graph_hash)
+        try:
+            first_chunk = next(cached_chunks)
+        except StopIteration as exc:
+            raise ValueError('Geometry cache is empty') from exc
+        cached_chunks = itertools_chain([first_chunk], cached_chunks)
     bipolar_potential_mv(np.empty((0, 3)), **config)
     algorithm = hashlib.sha256()
     modules = [morphology, morphology_repository, morphology_field, network_field,
                point_field, isolated_roots]
+    if geometry_cache is not None:
+        modules.extend([cache, chunk, index])
     device_info = None
     if field_backend == "gpu":
         import numba
@@ -84,6 +120,8 @@ def compute(ids, directories, output: Path, config: dict, *, graph_hash: str, pr
               "algorithm_sha256": algorithm.hexdigest(), "numpy_version": np.__version__,
               "field_backend": field_backend, "device_info": device_info,
               "interpretation": "field-only; no excitation or anatomical registration"}
+    if geometry_cache is not None:
+        header['geometry_cache_manifest_sha256'] = geometry_cache['expected_manifest_sha256']
     def advance(previous, row):
         canonical = json.dumps(row, allow_nan=False, sort_keys=True, separators=(",", ":")).encode()
         return hashlib.sha256(bytes.fromhex(previous) + canonical).hexdigest()
@@ -107,12 +145,7 @@ def compute(ids, directories, output: Path, config: dict, *, graph_hash: str, pr
                                 or row.get("chain_sha256") != chain or existing.read(1)):
                             raise ValueError("Invalid completion footer")
                         return completed
-                    if (completed >= len(ids) or row.get("body_id") != str(ids[completed])
-                            or row.get("status") not in {
-                                "ok", "partial_geometry", "source_missing",
-                                "invalid_geometry_or_field",
-                            }):
-                        raise ValueError("Existing field records do not match the graph")
+                    _check_ordered_row(row, ids, completed)
                     if check_row is not None:
                         check_row(row)
                     previous = row.pop("chain_sha256", None)
@@ -128,8 +161,12 @@ def compute(ids, directories, output: Path, config: dict, *, graph_hash: str, pr
         if mode == "x":
             stream.write(json.dumps(header, allow_nan=False, sort_keys=True) + "\n")
             stream.flush()
-        for row in _field_rows(ids[completed:], directories, config, allow_degenerate, workers,
-                               field_backend):
+        rows = (_field_rows(ids[completed:], directories, config, allow_degenerate, workers,
+                            field_backend) if cached_chunks is None else
+                network_field.cached_field_summaries(cached_chunks, **config,
+                    allow_degenerate=allow_degenerate, skip=completed))
+        for row in rows:
+            _check_ordered_row(row, ids, completed)
             if check_row is not None:
                 check_row(row)
             chain = advance(chain, row)
@@ -141,8 +178,12 @@ def compute(ids, directories, output: Path, config: dict, *, graph_hash: str, pr
                 os.fsync(stream.fileno())
                 if progress:
                     progress(completed, len(ids))
+        if completed != len(ids):
+            raise ValueError("Field calculation ended before all graph records were produced")
         footer = {"kind": "footer", "neurons": completed, "chain_sha256": chain}
         stream.write(json.dumps(footer) + "\n")
         stream.flush()
         os.fsync(stream.fileno())
+        if progress and completed % 1000:
+            progress(completed, len(ids))
     return completed

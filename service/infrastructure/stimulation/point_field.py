@@ -43,7 +43,14 @@ def bipolar_potential_mv(
         raise ValueError("Scalar parameters must be finite")
     if conductivity_s_m <= 0 or clearance_um <= 0:
         raise ValueError("Conductivity and clearance must be positive")
-    if np.linalg.norm(contacts[0] - contacts[1]) <= 2 * clearance_um:
+    with np.errstate(over="ignore", invalid="ignore", divide="ignore"):
+        contact_distance = np.linalg.norm(contacts[0] - contacts[1])
+        field_factor = np.float64(current_na) / (4 * np.pi * np.float64(conductivity_s_m))
+    if not np.isfinite(contact_distance):
+        raise ValueError("Contact distance overflow")
+    if not np.isfinite(field_factor):
+        raise ValueError("Potential overflow")
+    if contact_distance <= 2 * clearance_um:
         raise ValueError("Contact exclusion spheres must not intersect")
     first = np.linalg.norm(points - contacts[0], axis=1)
     second = np.linalg.norm(points - contacts[1], axis=1)
@@ -52,7 +59,7 @@ def bipolar_potential_mv(
     if (first <= clearance_um).any() or (second <= clearance_um).any():
         raise ValueError("Observation point intersects a contact exclusion sphere")
     with np.errstate(over="ignore", invalid="ignore", divide="ignore"):
-        result = current_na / (4 * np.pi * conductivity_s_m) * (1 / first - 1 / second)
+        result = field_factor * (1 / first - 1 / second)
     if not np.isfinite(result).all():
         raise ValueError("Potential overflow")
     return result

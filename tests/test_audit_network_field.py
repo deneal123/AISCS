@@ -28,11 +28,63 @@ def test_audit_independently_checks_completion_chain_and_order(tmp_path):
         audit(path, [1, 2], graph_hash='test', allow_partial=True)
 
 
+def test_stream_callback_receives_only_validated_rows_in_graph_order(tmp_path):
+    path = tmp_path / 'field.jsonl'
+    compute([1, 2], [], path, CONFIG, graph_hash='test')
+    observed = []
+    audit(path, [1, 2], graph_hash='test',
+          on_row=lambda index, row: observed.append((index, row['body_id'])))
+    assert observed == [(0, '1'), (1, '2')]
+    lines = path.read_bytes().splitlines(keepends=True)
+    row = json.loads(lines[2])
+    row['body_id'] = '999'
+    path.write_bytes(lines[0] + lines[1] + (json.dumps(row) + '\n').encode())
+    observed.clear()
+    with pytest.raises(ValueError, match='graph IDs'):
+        audit(path, [1, 2], graph_hash='test', on_row=lambda i, row: observed.append(i))
+    assert observed == [0]
+
+
 def test_audit_rejects_wrong_graph_identity(tmp_path):
     path = tmp_path / 'field.jsonl'
     compute([1], [], path, CONFIG, graph_hash='test')
     with pytest.raises(ValueError, match='provenance'):
         audit(path, [1], graph_hash='other')
+
+
+@pytest.mark.parametrize('interpretation', [None, 'validated excitation'])
+def test_audit_rejects_missing_or_misleading_field_interpretation(tmp_path, interpretation):
+    path = tmp_path / 'field.jsonl'
+    compute([], [], path, CONFIG, graph_hash='test')
+    header = json.loads(path.read_text(encoding='utf-8').splitlines()[0])
+    if interpretation is None:
+        del header['interpretation']
+    else:
+        header['interpretation'] = interpretation
+    # Recompute the empty stream's footer chain: the rejection must come from
+    # the semantic provenance check, not merely the checksum.
+    chain = hashlib.sha256(json.dumps(header, sort_keys=True).encode()).hexdigest()
+    footer = {'kind': 'footer', 'neurons': 0, 'chain_sha256': chain}
+    path.write_text(json.dumps(header) + '\n' + json.dumps(footer) + '\n', encoding='utf-8')
+    with pytest.raises(ValueError, match='provenance'):
+        audit(path, [], graph_hash='test')
+
+
+def test_audit_rejects_malformed_header_and_status_as_invalid_records(tmp_path):
+    path = tmp_path / 'field.jsonl'
+    path.write_text('[]\n', encoding='utf-8')
+    with pytest.raises(ValueError, match='provenance'):
+        audit(path, [1], graph_hash='test', allow_partial=True)
+    path.unlink()
+    compute([1], [], path, CONFIG, graph_hash='test')
+    header = json.loads(path.read_text(encoding='utf-8').splitlines()[0])
+    row = {'body_id': '1', 'status': []}
+    chain = hashlib.sha256(json.dumps(header, sort_keys=True).encode()).hexdigest()
+    canonical = json.dumps(row, allow_nan=False, sort_keys=True, separators=(',', ':')).encode()
+    row['chain_sha256'] = hashlib.sha256(bytes.fromhex(chain) + canonical).hexdigest()
+    path.write_text(json.dumps(header) + '\n' + json.dumps(row) + '\n', encoding='utf-8')
+    with pytest.raises(ValueError, match='status'):
+        audit(path, [1], graph_hash='test', allow_partial=True)
 
 
 def test_partial_geometry_is_explicit_and_policy_is_part_of_resume_identity(tmp_path):

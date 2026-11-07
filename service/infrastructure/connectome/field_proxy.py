@@ -35,7 +35,20 @@ def descriptor_from_rows(ids, rows, *, allow_partial_geometry=False):
     return values
 
 
-def run_field_proxy(graph, *, descriptor, waveform, gain, seed, capture_sparse_delta=False):
+def validate_parameters(waveform, gain, seed, capture_sparse_delta=False, progress=None):
+    """Reject invalid network inputs before an expensive field calculation."""
+    wave = np.asarray(waveform, dtype=np.float64)
+    if (wave.ndim != 1 or not 1 <= wave.size <= 1000 or not np.isfinite(wave).all()
+            or isinstance(gain, bool) or not isinstance(gain, int | float)
+            or not np.isfinite(gain) or type(seed) is not int or not 0 <= seed <= 2**31 - 1
+            or type(capture_sparse_delta) is not bool
+            or (progress is not None and not callable(progress))):
+        raise ValueError('Invalid or incomplete experimental field input')
+    return wave
+
+
+def run_field_proxy(graph, *, descriptor, waveform, gain, seed, capture_sparse_delta=False,
+                    progress=None):
     """Propagate a signed per-cell descriptor with an explicit empirical gain.
 
     ``descriptor`` is in mV/um² for the declared reference current and
@@ -45,16 +58,14 @@ def run_field_proxy(graph, *, descriptor, waveform, gain, seed, capture_sparse_d
     with invented values: incomplete/nonfinite descriptors are rejected.
     """
     desc = np.asarray(descriptor, dtype=np.float64)
-    wave = np.asarray(waveform, dtype=np.float64)
-    if (desc.shape != (graph.size,) or wave.ndim != 1 or not 1 <= wave.size <= 1000
-            or not np.isfinite(desc).all() or not np.isfinite(wave).all()
-            or isinstance(gain, bool) or not isinstance(gain, int | float)
-            or not np.isfinite(gain) or type(seed) is not int or not 0 <= seed <= 2**31 - 1
-            or type(capture_sparse_delta) is not bool):
+    wave = validate_parameters(waveform, gain, seed, capture_sparse_delta, progress)
+    if desc.shape != (graph.size,) or not np.isfinite(desc).all():
         raise ValueError('Invalid or incomplete experimental field input')
     drive_reference = desc * float(gain)
     if not np.isfinite(drive_reference).all():
         raise ValueError('Non-finite field drive')
+    if progress is not None:
+        progress(0, wave.size)
     voltage = np.random.default_rng(seed).uniform(0, 2, graph.size).astype(np.float32)
     current = np.zeros(graph.size, np.float32)
     refractory = np.zeros(graph.size, np.int16)
@@ -119,6 +130,9 @@ def run_field_proxy(graph, *, descriptor, waveform, gain, seed, capture_sparse_d
         counts += fired
         if not np.isfinite(voltage).all() or not np.isfinite(current).all():
             raise ValueError('Non-finite network state')
+        if progress is not None and ((clock + 1) % max(1, (wave.size + 19) // 20) == 0
+                                     or clock + 1 == wave.size):
+            progress(clock + 1, wave.size)
     result = {'spike_neurons': np.concatenate(spike_neurons) if spike_neurons
             else np.empty(0, np.int32),
             'spike_times_ms': np.concatenate(spike_times) if spike_times

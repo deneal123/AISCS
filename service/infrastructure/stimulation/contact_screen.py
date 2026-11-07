@@ -9,6 +9,7 @@ import multiprocessing
 import re
 import sqlite3
 from concurrent.futures import ProcessPoolExecutor
+from contextlib import closing
 from pathlib import Path
 
 import numpy as np
@@ -126,11 +127,11 @@ def _screen_positions(bounds, bounds_audit, radii, radii_audit, graph_ids, graph
         raise ValueError("Audit reports do not match graph")
     if _sha(bounds) != bproof["index_sha256"] or _sha(radii) != rproof["index_sha256"]:
         raise ValueError("Index changed since independent audit")
-    with sqlite3.connect(bounds.resolve().as_uri() + "?mode=ro", uri=True) as db:
+    with closing(sqlite3.connect(bounds.resolve().as_uri() + "?mode=ro", uri=True)) as db:
         bm = dict(db.execute("SELECT key, value FROM metadata"))
         brows = db.execute("SELECT body_id,status,sha256,min_x,max_x,min_y,max_y,min_z,max_z "
                            "FROM bounds ORDER BY body_id").fetchall()
-    with sqlite3.connect(radii.resolve().as_uri() + "?mode=ro", uri=True) as db:
+    with closing(sqlite3.connect(radii.resolve().as_uri() + "?mode=ro", uri=True)) as db:
         rm = dict(db.execute("SELECT key, value FROM metadata"))
         rrows = db.execute("SELECT ordinal,body_id,sha256,radius_um FROM radii ORDER BY ordinal")
         rrows = rrows.fetchall()

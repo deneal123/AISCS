@@ -70,6 +70,19 @@ def test_contact_screen_rejects_changed_or_incomplete_audit(tmp_path, monkeypatc
         screen_contacts(*args)
 
 
+def test_contact_screen_releases_index_handles_after_query(tmp_path, monkeypatch):
+    import gc
+
+    bounds, bproof, radii, rproof = fixture_indexes(tmp_path, monkeypatch)
+    # The index-building fixture has its own independent SQLite connections.
+    gc.collect()
+    screen_contacts(bounds, bproof, radii, rproof, [1, 2], 'graph', [], [[0, 20, 0]] * 4, 1.)
+    for index in (bounds, radii):
+        renamed = index.with_suffix('.moved')
+        index.replace(renamed)
+        renamed.replace(index)
+
+
 def test_screen_matches_independent_segment_distance_at_random_contacts(tmp_path, monkeypatch):
     indexes = fixture_indexes(tmp_path, monkeypatch)
     rng = np.random.default_rng(4951)

@@ -6,8 +6,8 @@ import hashlib
 import json
 import multiprocessing as mp
 import os
-import signal
 import shutil
+import signal
 import tempfile
 import threading
 from pathlib import Path
@@ -62,7 +62,7 @@ def _valid_progress(progress):
         return set(progress) == {'phase', 'done', 'total'} and done == total == 0
     if set(progress) != {'phase', 'done', 'total'}:
         return False
-    return (done == total == 0 if phase == 'network'
+    return ((done == total == 0 or 0 <= done <= total <= 1000 and total > 0) if phase == 'network'
             else phase in ('geometry', 'cells') and 0 < done <= total <= 256)
 
 
@@ -99,6 +99,9 @@ def run_field_proxy_child(payload: dict, directory: str) -> None:
             raise ValueError('Invalid field worker count') from exc
         if not 1 <= field_workers <= 8:
             raise ValueError('Invalid field worker count')
+        field_backend = os.environ.get('GENERATOR_FIELD_BACKEND', 'cpu')
+        if field_backend not in {'cpu', 'gpu'}:
+            raise ValueError('Invalid field backend')
         # multiprocessing daemon workers cannot create child processes. Keep
         # cancellation semantics intact and use the verified sequential path.
         if mp.current_process().daemon:
@@ -110,7 +113,7 @@ def run_field_proxy_child(payload: dict, directory: str) -> None:
             allow_partial_geometry=config.allow_partial_geometry,
             allow_missing_curvature=config.allow_missing_curvature,
             allow_contact_exclusion=config.allow_contact_exclusion, capture_delta=True,
-            field_workers=field_workers,
+            field_workers=field_workers, field_backend=field_backend,
             progress=lambda value: _write_progress(target.parent, value))
         files = []
         for path in sorted(target.iterdir()):
@@ -747,8 +750,12 @@ class Executions:
                             pass
                     elif process.is_alive():
                         process.kill()
+                    # Reap even when kill completed before the next is_alive().
+                    process.join(timeout=5)
                     if process.is_alive():
-                        process.join(timeout=5)
+                        # Keep the receipt running and leave working files intact:
+                        # neither cancellation nor cleanup has been confirmed.
+                        raise RuntimeError("Solver did not stop; cancellation is not confirmed")
                 record.update(status="cancelled", finished_at=time())
                 work = self.receipt(execution_id).parent / "current-archive-work"
                 if work.exists():

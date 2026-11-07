@@ -13,6 +13,69 @@ from service.infrastructure.connectome.morphology_repository import BASE
 from service.infrastructure.stimulation.fragment_sparse_delta import decode_sparse_delta
 
 
+@pytest.mark.parametrize('key', ['allow_partial_geometry', 'allow_missing_curvature',
+                                'allow_contact_exclusion'])
+@pytest.mark.parametrize('value', ['false', 1, None])
+def test_exclusion_policies_must_be_explicit_booleans(tmp_path, key, value):
+    field = tmp_path / 'not-created.jsonl'
+    with pytest.raises(ValueError, match='exclusion policy'):
+        verified_descriptors(field, [], 'test', **{key: value})
+    assert not field.exists()
+
+
+@pytest.mark.parametrize('key', ['compute_field', 'allow_partial_geometry',
+                                'allow_missing_curvature', 'allow_contact_exclusion'])
+def test_execution_rejects_non_boolean_policy_before_computation(tmp_path, key):
+    field, output = tmp_path / 'field.jsonl', tmp_path / 'output'
+    with pytest.raises(ValueError, match='execution policy'):
+        runner.execute_field_proxy(None, [], field_path=field, output=output, configuration={},
+                                   gain=1, seed=1, waveform=[0], **{key: 'false'})
+    assert not field.exists() and not output.exists()
+
+
+@pytest.mark.parametrize('invalid', [
+    {'waveform': []}, {'waveform': [float('inf')]}, {'waveform': [[0.]]},
+    {'gain': float('nan')}, {'gain': True}, {'seed': -1}, {'capture_delta': 'false'},
+])
+def test_execution_rejects_invalid_network_input_before_field(tmp_path, monkeypatch, invalid):
+    from service.application.field import field_proxy_execution
+
+    monkeypatch.setattr(field_proxy_execution, 'compute',
+                        lambda *args, **kwargs: pytest.fail('field calculation started'))
+    args = dict(field_path=tmp_path / 'field.jsonl', output=tmp_path / 'output',
+                configuration={}, gain=1., seed=1, waveform=[0.], compute_field=True)
+    with pytest.raises(ValueError, match='experimental field input'):
+        runner.execute_field_proxy(SimpleNamespace(provenance={'manifest_sha256': 'test'}),
+                                   [], **{**args, **invalid})
+    assert not args['field_path'].exists() and not args['output'].exists()
+
+
+def test_gpu_backend_forwarding_and_invalid_modes(tmp_path, monkeypatch):
+    from service.application.field import field_proxy_execution
+
+    calls = []
+
+    def compute_stub(*args, **kwargs):
+        calls.append(kwargs)
+        raise RuntimeError('stopped before device execution')
+
+    monkeypatch.setattr(field_proxy_execution, 'compute', compute_stub)
+    graph = SimpleNamespace(ids=np.array([42]), size=1, provenance={'manifest_sha256': 'test'})
+    args = dict(field_path=tmp_path / 'field.jsonl', output=tmp_path / 'output',
+                configuration={}, gain=1., seed=1, waveform=[0.], compute_field=True)
+    with pytest.raises(RuntimeError, match='stopped before device'):
+        runner.execute_field_proxy(graph, [], **args, field_backend='gpu')
+    assert calls[0]['field_backend'] == 'gpu' and calls[0]['workers'] == 1
+    with pytest.raises(RuntimeError, match='stopped before device'):
+        runner.execute_field_proxy(graph, [], **args, field_backend='gpu', field_workers=2)
+    assert calls[1]['field_backend'] == 'gpu' and calls[1]['workers'] == 2
+    for changes in ({'field_backend': 'unknown'}, {'field_backend': 'gpu', 'field_workers': 0},
+                    {'field_backend': 'gpu', 'compute_field': False}):
+        with pytest.raises(ValueError):
+            runner.execute_field_proxy(graph, [], **{**args, **changes})
+    assert len(calls) == 2 and not args['field_path'].exists() and not args['output'].exists()
+
+
 def test_verified_descriptors_rejects_tampering_and_missing_cells(tmp_path):
     (tmp_path / 'raw').mkdir()
     (tmp_path / 'receipts').mkdir()
@@ -55,6 +118,18 @@ def test_missing_curvature_requires_explicit_exclusion(tmp_path):
     values, provenance = verified_descriptors(field, [42], 'test', allow_missing_curvature=True)
     assert values.tolist() == [0.]
     assert provenance['excluded_from_direct_field'] == ['42']
+
+
+def test_verified_descriptors_rejects_file_changed_during_stream(tmp_path, monkeypatch):
+    from service.infrastructure.stimulation import field_summary_verified
+
+    field = tmp_path / 'field.jsonl'
+    compute([], [], field, dict(source_um=[0, 10, 0], return_um=[50, 10, 0], current_na=10,
+                               conductivity_s_m=.3, clearance_um=1), graph_hash='test')
+    hashes = iter(['a' * 64, 'b' * 64])
+    monkeypatch.setattr(field_summary_verified, 'digest', lambda _path: next(hashes))
+    with pytest.raises(ValueError, match='changed while reading'):
+        verified_descriptors(field, [], 'test')
 
 
 def test_contact_intersection_requires_explicit_recorded_exclusion(tmp_path):
@@ -103,6 +178,10 @@ def test_cli_computes_field_and_rejects_moved_contact(tmp_path, monkeypatch):
     assert metadata['field']['field_audit']['configuration']['source_um'] == [0, 10, 0]
     assert len(metadata['kernel_source_sha256']) == 64
     assert metadata['time_step_ms'] == 1.0 and metadata['network_weight_gain'] == .075
+    assert metadata['field_execution'] == {
+        'computation_requested': True, 'requested_backend': 'cpu',
+        'requested_preparation_workers': 1,
+    }
     binary = (tmp_path / 'result/network-events.bin').read_bytes()
     assert hashlib.sha256(binary).hexdigest() == metadata['event_sha256']
     assert metadata['event_description']['binary']['bytes'] == len(binary)
@@ -113,16 +192,21 @@ def test_cli_computes_field_and_rejects_moved_contact(tmp_path, monkeypatch):
     assert (tmp_path / 'result/state-response.bin').read_bytes().startswith(b'FRS2')
     assert len(metadata['state_delta']['sampled_sha256']) == 64
     progress = []
-    runner.execute_field_proxy(graph, [tmp_path], field_path=tmp_path / 'field.jsonl',
+    reused = runner.execute_field_proxy(graph, [tmp_path], field_path=tmp_path / 'field.jsonl',
         output=tmp_path / 'second', configuration=metadata['field']['field_audit']['configuration'],
         gain=1., seed=1, waveform=[0, 1, 0], progress=progress.append)
-    assert [item['phase'] for item in progress] == ['field_verification', 'network']
+    assert reused['field_execution'] == {'computation_requested': False, 'requested_backend': None,
+                                         'requested_preparation_workers': None}
+    assert progress[0]['phase'] == 'field_verification'
+    assert [item['done'] for item in progress[1:]] == [0, 1, 2, 3]
+    assert all(item['phase'] == 'network' and item['total'] == 3 for item in progress[1:])
     progress.clear()
     runner.execute_field_proxy(graph, [tmp_path], field_path=tmp_path / 'new-field.jsonl',
         output=tmp_path / 'third', configuration=metadata['field']['field_audit']['configuration'],
         gain=1., seed=1, waveform=[0, 1, 0], compute_field=True, progress=progress.append)
     assert progress[0] == {'phase': 'field', 'done': 0, 'total': 1}
-    assert [item['phase'] for item in progress][-2:] == ['field_verification', 'network']
+    verified = next(i for i, item in enumerate(progress) if item['phase'] == 'field_verification')
+    assert [item['done'] for item in progress[verified + 1:]] == [0, 1, 2, 3]
     moved = args.copy()
     moved[moved.index('--output') + 1] = str(tmp_path / 'moved')
     moved[moved.index('--source-um') + 1] = '1'

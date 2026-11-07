@@ -23,6 +23,21 @@ def test_field_proxy_uses_signed_drive_and_seeded_control():
     assert active['final_voltage_relative_mv'][1] < control['final_voltage_relative_mv'][1]
 
 
+def test_progress_counts_completed_model_ticks_without_changing_results():
+    kwargs = dict(descriptor=[1., -1.], waveform=[1.] * 101, gain=20., seed=7)
+    events = []
+    tracked = run_field_proxy(graph(), **kwargs,
+                              progress=lambda done, total: events.append((done, total)))
+    reference = run_field_proxy(graph(), **kwargs)
+    np.testing.assert_array_equal(tracked['spike_neurons'], reference['spike_neurons'])
+    np.testing.assert_array_equal(tracked['spike_times_ms'], reference['spike_times_ms'])
+    np.testing.assert_array_equal(tracked['final_voltage_relative_mv'],
+                                  reference['final_voltage_relative_mv'])
+    assert events[0] == (0, 101) and events[-1] == (101, 101)
+    assert len(events) <= 22 and all(total == 101 for _, total in events)
+    assert all(a[0] < b[0] for a, b in zip(events, events[1:], strict=False))
+
+
 @pytest.mark.parametrize('changes', [
     {'descriptor': [float('nan'), 0.]}, {'descriptor': [1.]},
     {'waveform': [float('inf')]}, {'gain': float('nan')}, {'seed': True},

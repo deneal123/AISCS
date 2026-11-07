@@ -2,7 +2,7 @@ import math
 
 import pytest
 
-from service.infrastructure.connectome.morphology import neurite_landmark
+from service.infrastructure.connectome.morphology import neurite_landmark, validate_swc_topology
 
 
 def test_landmark_is_an_actual_vertex_nearest_cable_centroid_not_a_soma_estimate():
@@ -48,3 +48,14 @@ def test_fragmented_and_single_point_reconstructions_remain_explicit():
     result = neurite_landmark("1 0 0 0 0 1 -1\n2 0 0 100 0 1 -1")
     assert result["components"] == 2 and result["cable_length_um"] == 0
     assert result["anchor_um"] == [0, 0, 0]
+
+
+def test_topology_check_handles_out_of_order_branches_and_cycles_with_a_separate_root():
+    rows = ["1 0 0 0 0 1 -1", "2 0 1 0 0 1 1", "3 0 2 0 0 1 2",
+            "4 0 3 0 0 1 2", "5 0 4 0 0 1 4"]
+    for ordering in (rows, list(reversed(rows)), [rows[i] for i in (2, 4, 1, 0, 3)]):
+        validate_swc_topology('\n'.join(ordering))
+    invalid = rows + ["6 0 0 0 0 1 7", "7 0 0 0 0 1 6"]
+    for ordering in (invalid, list(reversed(invalid))):
+        with pytest.raises(ValueError, match='Cyclic SWC'):
+            validate_swc_topology('\n'.join(ordering))
