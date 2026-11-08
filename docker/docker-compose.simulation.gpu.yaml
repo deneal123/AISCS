@@ -7,7 +7,7 @@ services:
       target: gpu-runtime
     gpus: all
     environment:
-      GENERATOR_FIELD_BACKEND: gpu
+      GENERATOR_FIELD_BACKEND: ${GENERATOR_FIELD_BACKEND:-gpu}
       GENERATOR_GEOMETRY_CACHE_DIR: /geometry-cache
       GENERATOR_GEOMETRY_CACHE_MANIFEST_SHA256: ${GENERATOR_GEOMETRY_CACHE_MANIFEST_SHA256:?Set the independently retained cache manifest SHA-256}
       GENERATOR_GEOMETRY_SOURCE_INDEX: /morphology-index/verified-bounds-v2.sqlite

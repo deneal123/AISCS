@@ -1,5 +1,5 @@
 {
-  "version": "0.1.3",
+  "version": "0.1.4",
   "date": "2026-11-08",
   "application": "AISCS",
   "branch": "dev",
@@ -20,9 +20,9 @@
       "commit": "560ab7f1fdd8ed66d9c0fd16afc164024cecdd7f"
     },
     "generator": {
-      "version": "0.1.3",
+      "version": "0.1.4",
       "branch": "generator",
-      "commit": "110c56aec1160c8112b05f4646e1e1762f0fb00c"
+      "commit": "8dce9a81e88bf38c650bc3c69aa57286cd4538b9"
     },
     "workspace": {
       "version": "0.1.6",
@@ -77,19 +77,17 @@
   "protected_scientific_materials_changed": false,
   "verification": {
     "generator_focused_pytest": {
-      "passed": 93,
-      "skipped": 8,
-      "scope": "focused offline Windows tests; skip conditions include GPU-specific tests"
-    },
-    "generator_cuda_pytest": {
-      "passed": 18,
-      "scope": "focused local CUDA tests; warnings for small GPU grids"
+      "passed": 87,
+      "skipped": 5,
+      "scope": "focused offline Windows tests for geometry screening and field execution; not a full test suite"
     },
     "full_graph_gpu_field_comparison": {
       "neurons": 166700,
       "mismatches": 0,
-      "scope": "one near-contact configuration comparing baseline and fused GPU field summaries; CPU reference unavailable; not an end-to-end simulation"
+      "scope": "one contact configuration comparing fused GPU field summaries with independent CPU reference; not an end-to-end simulation"
     },
+    "contact_screen_comparison": "37 positions; per-cell contact decisions agree with original SWC implementation for 518 flagged cells; not tissue validation",
+    "standalone_field_proxy": "one screened configuration completed in 126.88 s using gpu-fused; partial geometry accepted and three cells without curvature excluded; not a live-stack or biological validation",
     "compose_config": "validated with placeholder environment variables; no services started",
     "generator_linux_tests": "not run; stack startup excluded",
     "production_live": "not checked; stack startup excluded"
