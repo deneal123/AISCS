@@ -1,5 +1,5 @@
 {
-  "version": "0.1.2",
+  "version": "0.1.3",
   "date": "2026-11-08",
   "application": "AISCS",
   "branch": "dev",
@@ -20,9 +20,9 @@
       "commit": "560ab7f1fdd8ed66d9c0fd16afc164024cecdd7f"
     },
     "generator": {
-      "version": "0.1.2",
+      "version": "0.1.3",
       "branch": "generator",
-      "commit": "e90004a8acefb85984ec3ce58761800a8a70a770"
+      "commit": "110c56aec1160c8112b05f4646e1e1762f0fb00c"
     },
     "workspace": {
       "version": "0.1.6",
@@ -76,19 +76,21 @@
   "production_verified": false,
   "protected_scientific_materials_changed": false,
   "verification": {
-    "backend_simulation_pytest": {
-      "passed": 68,
-      "scope": "selected simulation tests; coverage disabled; no live stack"
-    },
-    "frontend_simulator_jest": {
-      "passed": 166,
-      "suites": 15,
-      "scope": "selected simulator unit tests; React act warnings"
-    },
     "generator_focused_pytest": {
-      "passed": 99,
-      "scope": "selected Windows tests including local CUDA; not full CNS"
+      "passed": 93,
+      "skipped": 8,
+      "scope": "focused offline Windows tests; skip conditions include GPU-specific tests"
     },
+    "generator_cuda_pytest": {
+      "passed": 18,
+      "scope": "focused local CUDA tests; warnings for small GPU grids"
+    },
+    "full_graph_gpu_field_comparison": {
+      "neurons": 166700,
+      "mismatches": 0,
+      "scope": "one near-contact configuration comparing baseline and fused GPU field summaries; CPU reference unavailable; not an end-to-end simulation"
+    },
+    "compose_config": "validated with placeholder environment variables; no services started",
     "generator_linux_tests": "not run; stack startup excluded",
     "production_live": "not checked; stack startup excluded"
   }

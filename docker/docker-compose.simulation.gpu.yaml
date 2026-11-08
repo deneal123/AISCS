@@ -1,0 +1,21 @@
+# Explicit opt-in override. It does not build the cache or start any service.
+# Use only with a completed, independently pinned geometry snapshot.
+services:
+  generator:
+    image: aspa-generator:gpu
+    build:
+      target: gpu-runtime
+    gpus: all
+    environment:
+      GENERATOR_FIELD_BACKEND: gpu
+      GENERATOR_GEOMETRY_CACHE_DIR: /geometry-cache
+      GENERATOR_GEOMETRY_CACHE_MANIFEST_SHA256: ${GENERATOR_GEOMETRY_CACHE_MANIFEST_SHA256:?Set the independently retained cache manifest SHA-256}
+      GENERATOR_GEOMETRY_SOURCE_INDEX: /morphology-index/verified-bounds-v2.sqlite
+      GENERATOR_GEOMETRY_SOURCE_AUDIT: /morphology-index/verified-bounds-v2.audit.json
+    volumes:
+      - type: bind
+        source: ${GENERATOR_GEOMETRY_CACHE_HOST_PATH:?Set the completed geometry cache directory}
+        target: /geometry-cache
+        read_only: true
+        bind:
+          create_host_path: false
