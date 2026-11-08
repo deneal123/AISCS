@@ -15,8 +15,11 @@ from pathlib import Path
 import numpy as np
 
 from service.infrastructure.connectome.morphology_repository import read_skeleton
+from service.infrastructure.stimulation.contact_clearances import (
+    contact_clearances,
+    packed_contact_clearances,
+)
 from service.infrastructure.stimulation.segment_lookup import segment_ordinals
-from service.infrastructure.stimulation.spatial_candidates import closest_swc_segment
 
 
 def _sha(path: Path) -> str:
@@ -28,15 +31,8 @@ def _sha(path: Path) -> str:
 
 
 def _contact_clearances(swc, points, *, probe_indices=None, probe_clearance_um=None):
-    # The underlying geometry routine accepts two pairs and optional extra points.
-    padded = points[:4] + [points[-1]] * max(0, 4 - len(points))
-    result = closest_swc_segment(swc, padded[:2], recording_contacts=padded[2:4],
-                                 extra_contacts=points[4:] or None,
-                                 probe_indices=probe_indices, probe_clearance_um=probe_clearance_um)
-    if result is None:
-        return None
-    return (result['conservative_clearance_um'] + result['recording_clearance_um']
-            + result.get('extra_clearance_um', []))[:len(points)]
+    return contact_clearances(swc, points, probe_indices=probe_indices,
+                              probe_clearance_um=probe_clearance_um)
 
 
 def _check_screen_candidate(arguments):
@@ -61,7 +57,7 @@ def _check_screen_candidate(arguments):
 def screen_contacts(bounds: Path, bounds_audit: Path, radii: Path, radii_audit: Path,
                     graph_ids, graph_sha: str, directories: list[Path], contacts, clearance_um,
                     *, segment_index: Path | None = None, segment_audit: Path | None = None,
-                    workers: int = 1):
+                    workers: int = 1, geometry_cache: dict | None = None):
     """Report potential intersections without inferring excitation or tissue anatomy.
 
     All four contacts and every indexed morphology are screened. The filter
@@ -73,13 +69,14 @@ def screen_contacts(bounds: Path, bounds_audit: Path, radii: Path, radii_audit: 
     return _screen_positions(bounds, bounds_audit, radii, radii_audit, graph_ids,
                              graph_sha, directories, contacts, clearance_um,
                              segment_index=segment_index, segment_audit=segment_audit,
-                             workers=workers, expected_four=True)
+                             workers=workers, expected_four=True, geometry_cache=geometry_cache)
 
 
 def screen_contact_positions(bounds: Path, bounds_audit: Path, radii: Path, radii_audit: Path,
                              graph_ids, graph_sha: str, directories: list[Path], contacts,
                              clearance_um, *, segment_index: Path | None = None,
-                             segment_audit: Path | None = None, workers: int = 1):
+                             segment_audit: Path | None = None, workers: int = 1,
+                             geometry_cache: dict | None = None):
     """Screen up to 64 proposed positions against one audited snapshot.
 
     This checks each point independently. It does not validate electrode pairs,
@@ -88,12 +85,12 @@ def screen_contact_positions(bounds: Path, bounds_audit: Path, radii: Path, radi
     return _screen_positions(bounds, bounds_audit, radii, radii_audit, graph_ids,
                              graph_sha, directories, contacts, clearance_um,
                              segment_index=segment_index, segment_audit=segment_audit,
-                             workers=workers, expected_four=False)
+                             workers=workers, expected_four=False, geometry_cache=geometry_cache)
 
 
 def _screen_positions(bounds, bounds_audit, radii, radii_audit, graph_ids, graph_sha,
                       directories, contacts, clearance_um, *, segment_index, segment_audit,
-                      workers, expected_four):
+                      workers, expected_four, geometry_cache):
     points = np.asarray(contacts, dtype=float)
     if (points.ndim != 2 or points.shape[1:] != (3,)
             or (len(points) != 4 if expected_four else not 1 <= len(points) <= 64)
@@ -183,7 +180,38 @@ def _screen_positions(bounds, bounds_audit, radii, radii_audit, graph_ids, graph
             continue
         matches.append((body, bound[2], directories, points_list, clearance_um, candidate_indices))
     flagged = []
-    if workers > 1 and len(matches) > 1:
+    if geometry_cache is not None:
+        from service.infrastructure.stimulation.geometry_cache.selected import iter_selected_cache
+        from service.infrastructure.stimulation.geometry_prefetch import prefetch
+
+        if (not isinstance(geometry_cache, dict)
+                or set(geometry_cache) != {'directory', 'expected_manifest_sha256',
+                                           'source_index', 'source_audit'}
+                or any(not isinstance(geometry_cache[key], Path)
+                       for key in ('directory', 'source_index', 'source_audit'))
+                or geometry_cache['source_index'].resolve() != bounds.resolve()
+                or geometry_cache['source_audit'].resolve() != bounds_audit.resolve()):
+            raise ValueError('Invalid screening geometry cache configuration')
+        expected = {item[0]: item for item in matches}
+        entries = prefetch(iter_selected_cache(**geometry_cache, graph_ids=ids,
+                                              graph_sha256=graph_sha,
+                                              selected_ids=list(expected)))
+        try:
+            for entry in entries:
+                body = int(entry['skeleton']['body_id'])
+                _, digest, _, positions, distance, probes = expected[body]
+                if entry['skeleton']['sha256'] != digest:
+                    raise ValueError('Candidate source differs from indexed snapshot')
+                values = packed_contact_clearances(entry['geometry'], positions,
+                    probe_indices=probes, probe_clearance_um=distance)
+                if values is not None:
+                    flagged.append({'body_id': body, 'source_sha256': digest,
+                                    'contact_indices': [i for i, value in enumerate(values)
+                                                        if value <= distance],
+                                    'conservative_clearance_um': values})
+        finally:
+            entries.close()
+    elif workers > 1 and len(matches) > 1:
         with ProcessPoolExecutor(max_workers=workers,
                                  mp_context=multiprocessing.get_context('spawn')) as executor:
             for start in range(0, len(matches), 128):

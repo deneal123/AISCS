@@ -50,8 +50,11 @@ def _field_geometry_cache(field_backend: str):
              'GENERATOR_GEOMETRY_SOURCE_INDEX', 'GENERATOR_GEOMETRY_SOURCE_AUDIT')
     values = [os.environ.get(name) for name in names]
     if all(value is None for value in values):
+        if field_backend == 'gpu-fused':
+            raise ValueError('Fused GPU requires field geometry cache configuration')
         return None
-    if (field_backend != 'gpu' or any(not value or value != value.strip() for value in values)
+    if (field_backend not in {'gpu', 'gpu-fused'}
+            or any(not value or value != value.strip() for value in values)
             or not re.fullmatch(r'[a-f0-9]{64}', values[1])):
         raise ValueError('Invalid field geometry cache configuration')
     directory, source_index, source_audit = (Path(values[index]) for index in (0, 2, 3))
@@ -120,7 +123,7 @@ def run_field_proxy_child(payload: dict, directory: str) -> None:
         if not 1 <= field_workers <= 8:
             raise ValueError('Invalid field worker count')
         field_backend = os.environ.get('GENERATOR_FIELD_BACKEND', 'cpu')
-        if field_backend not in {'cpu', 'gpu'}:
+        if field_backend not in {'cpu', 'gpu', 'gpu-fused'}:
             raise ValueError('Invalid field backend')
         geometry_cache = _field_geometry_cache(field_backend)
         # multiprocessing daemon workers cannot create child processes. Keep

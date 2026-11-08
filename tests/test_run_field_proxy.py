@@ -73,12 +73,33 @@ def test_gpu_backend_forwarding_and_invalid_modes(tmp_path, monkeypatch):
     with pytest.raises(RuntimeError, match='stopped before device'):
         runner.execute_field_proxy(graph, [], **args, field_backend='gpu', geometry_cache=cache)
     assert calls[2]['geometry_cache'] is cache
+    with pytest.raises(RuntimeError, match='stopped before device'):
+        runner.execute_field_proxy(graph, [], **args, field_backend='gpu-fused',
+                                   geometry_cache=cache)
+    assert calls[3]['field_backend'] == 'gpu-fused' and calls[3]['geometry_cache'] is cache
     for changes in ({'field_backend': 'unknown'}, {'field_backend': 'gpu', 'field_workers': 0},
                     {'field_backend': 'gpu', 'compute_field': False}, {'geometry_cache': cache},
+                    {'field_backend': 'gpu-fused'},
+                    {'field_backend': 'gpu-fused', 'compute_field': False, 'geometry_cache': cache},
                     {'field_backend': 'gpu', 'compute_field': False, 'geometry_cache': cache}):
         with pytest.raises(ValueError):
             runner.execute_field_proxy(graph, [], **{**args, **changes})
-    assert len(calls) == 3 and not args['field_path'].exists() and not args['output'].exists()
+    assert len(calls) == 4 and not args['field_path'].exists() and not args['output'].exists()
+
+
+def test_cli_fused_requires_all_cache_inputs_before_graph_loading(tmp_path, monkeypatch):
+    monkeypatch.setattr(runner, 'registered_graph', lambda: pytest.fail('graph was loaded'))
+    monkeypatch.setattr(sys, 'argv', [
+        'run_field_proxy.py', '--field', str(tmp_path / 'field'), '--output', str(tmp_path / 'out'),
+        '--gain', '1', '--seed', '1', '--waveform', str(tmp_path / 'waveform.json'),
+        '--field-backend', 'gpu-fused', '--compute-field',
+        '--source-um', '0', '0', '0', '--return-um', '10', '0', '0',
+        '--current-na', '1', '--conductivity-s-m', '.3', '--clearance-um', '1',
+    ])
+    with pytest.raises(SystemExit) as error:
+        runner.main()
+    assert error.value.code == 2
+    assert not (tmp_path / 'out').exists()
 
 
 def test_verified_descriptors_rejects_tampering_and_missing_cells(tmp_path):

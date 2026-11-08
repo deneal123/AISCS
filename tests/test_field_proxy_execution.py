@@ -220,6 +220,8 @@ def test_child_accepts_only_complete_administrator_pinned_cache(tmp_path, monkey
     for name in names:
         monkeypatch.delenv(name, raising=False)
     assert _field_geometry_cache('gpu') is None
+    with pytest.raises(ValueError, match='requires field geometry cache'):
+        _field_geometry_cache('gpu-fused')
     cache = tmp_path / 'cache'
     cache.mkdir()
     (cache / 'manifest.json').write_text('{}')
@@ -233,6 +235,7 @@ def test_child_accepts_only_complete_administrator_pinned_cache(tmp_path, monkey
         'directory': cache, 'expected_manifest_sha256': 'a' * 64,
         'source_index': index, 'source_audit': audit,
     }
+    assert _field_geometry_cache('gpu-fused') == _field_geometry_cache('gpu')
     with pytest.raises(ValueError, match='cache configuration'):
         _field_geometry_cache('cpu')
     monkeypatch.setenv(names[1], 'invalid')
@@ -243,7 +246,8 @@ def test_child_accepts_only_complete_administrator_pinned_cache(tmp_path, monkey
         _field_geometry_cache('gpu')
 
 
-def test_child_forwards_cache_without_accepting_request_paths(tmp_path, monkeypatch):
+@pytest.mark.parametrize('backend', ['gpu', 'gpu-fused'])
+def test_child_forwards_cache_without_accepting_request_paths(tmp_path, monkeypatch, backend):
     observed = []
     monkeypatch.setattr('service.infrastructure.connectome.neighbors.registered_graph',
                         lambda: SimpleNamespace(provenance={'manifest_sha256': 'a' * 64}))
@@ -251,15 +255,15 @@ def test_child_forwards_cache_without_accepting_request_paths(tmp_path, monkeypa
     expected = {'trusted': 'administrator configuration'}
     monkeypatch.setattr('service.infrastructure.execution.process._field_geometry_cache',
                         lambda _backend: expected)
-    def execute(_graph, _dirs, *, output, geometry_cache, **_options):
-        observed.append(geometry_cache)
+    def execute(_graph, _dirs, *, output, geometry_cache, field_backend, **_options):
+        observed.append((geometry_cache, field_backend))
         output.mkdir()
         (output / 'metadata.json').write_text('{}')
     monkeypatch.setattr('service.application.field.field_proxy_execution.execute_field_proxy',
                         execute)
-    monkeypatch.setenv('GENERATOR_FIELD_BACKEND', 'gpu')
+    monkeypatch.setenv('GENERATOR_FIELD_BACKEND', backend)
     run_field_proxy_child(payload(), str(tmp_path / 'output'))
-    assert observed == [expected]
+    assert observed == [(expected, backend)]
 
 
 def test_child_owns_work_files_and_exports_manifest(tmp_path, monkeypatch):

@@ -154,16 +154,16 @@ def test_batched_screen_limits_distance_work_without_changing_full_result(tmp_pa
     indexes = fixture_indexes(tmp_path, monkeypatch)
     from service.infrastructure.stimulation import contact_screen
 
-    original = contact_screen.closest_swc_segment
+    original = contact_screen.contact_clearances
     call_sizes = []
     parsed_sources = []
 
     def record(swc, contacts, **kwargs):
-        call_sizes.append(4 + len(kwargs.get('extra_contacts') or []))
+        call_sizes.append(len(contacts))
         parsed_sources.append(swc)
         return original(swc, contacts, **kwargs)
 
-    monkeypatch.setattr(contact_screen, 'closest_swc_segment', record)
+    monkeypatch.setattr(contact_screen, 'contact_clearances', record)
     points = [[5, 11, 0], [5, 12, 0]] + [[100 + 20 * i, 0, 0] for i in range(46)]
     result = screen_contact_positions(*indexes, [1, 2], 'graph', [], points, 1.)
     row = next(row for row in result['potential_intersections'] if row['body_id'] == 1)
@@ -184,3 +184,87 @@ def test_screen_probe_short_circuits_only_when_all_candidates_are_clear():
     assert closest_swc_segment(swc, contacts, probe_indices=[0], probe_clearance_um=1) is None
     screened = closest_swc_segment(swc, contacts, probe_indices=[1], probe_clearance_um=1)
     assert screened == closest_swc_segment(swc, contacts)
+
+
+@pytest.mark.parametrize('swc', [
+    '1 1 0 0 0 125 -1\n2 3 1250 0 0 250 1\n3 3 1250 500 0 60 2\n',
+    '1 1 0 0 0 125 -1\n2 3 0 0 0 250 1\n3 1 1000 0 0 10 -1\n',
+    '1 1 0 0 0 125 -1\n',
+])
+def test_fast_clearances_match_previous_geometry_for_all_probes(swc):
+    from service.infrastructure.stimulation.contact_clearances import contact_clearances
+    from service.infrastructure.stimulation.spatial_candidates import closest_swc_segment
+
+    rng = np.random.default_rng(921)
+    points = rng.uniform(-15, 15, (16, 3)).tolist()
+    points[:4] = [[0., 0., 0.], [0., 2., 0.], [10., 0., 0.], [11., 0., 0.]]
+    reference = closest_swc_segment(swc, points[:2], recording_contacts=points[2:4],
+                                    extra_contacts=points[4:])
+    values = (reference['conservative_clearance_um'] + reference['recording_clearance_um']
+              + reference['extra_clearance_um'])
+    assert contact_clearances(swc, points) == pytest.approx(values, abs=1e-12)
+    for probe in ([0], [1, 2, 3], [7, 12]):
+        actual = contact_clearances(swc, points, probe_indices=probe, probe_clearance_um=1.)
+        if all(values[index] > 1. for index in probe):
+            assert actual is None
+        else:
+            assert actual == pytest.approx(values, abs=1e-12)
+            assert [i for i, value in enumerate(actual) if value <= 1.] == [
+                i for i, value in enumerate(values) if value <= 1.
+            ]
+
+
+@pytest.mark.parametrize('swc', [
+    '', '1 1 0 0 0 1 -1\n1 1 0 0 0 1 -1\n', '1 1 0 0 0 -1 -1\n',
+    '1 1 0 0 0 1 7\n', '1 1 nan 0 0 1 -1\n', '1 1 0 0\n',
+])
+def test_fast_clearances_reject_invalid_sources(swc):
+    from service.infrastructure.stimulation.contact_clearances import contact_clearances
+
+    with pytest.raises(ValueError):
+        contact_clearances(swc, [[0., 0., 0.]])
+
+
+def test_fast_clearances_preserve_randomized_topologies_and_contact_decisions():
+    from service.infrastructure.stimulation.contact_clearances import (
+        contact_clearances,
+        packed_contact_clearances,
+    )
+    from service.infrastructure.stimulation.morphology_field import _parse_swc_geometry
+    from service.infrastructure.stimulation.spatial_candidates import closest_swc_segment
+
+    rng = np.random.default_rng(19071)
+    for _ in range(80):
+        count = int(rng.integers(1, 18))
+        lines = []
+        for node in range(1, count + 1):
+            parent = -1 if node == 1 or rng.random() < .15 else int(rng.integers(1, node))
+            x, y, z = rng.integers(-1000, 1001, size=3)
+            radius = int(rng.integers(0, 300))
+            lines.append(f'{node} 3 {x} {y} {z} {radius} {parent}')
+        swc = '\n'.join(lines) + '\n'
+        points = rng.uniform(-10., 10., (8, 3)).tolist()
+        old = closest_swc_segment(swc, points[:2], recording_contacts=points[2:4],
+                                  extra_contacts=points[4:])
+        expected = (old['conservative_clearance_um'] + old['recording_clearance_um']
+                    + old['extra_clearance_um'])
+        new = contact_clearances(swc, points)
+        assert new == pytest.approx(expected, abs=1e-12)
+        packed = packed_contact_clearances(_parse_swc_geometry(swc), points)
+        assert packed == pytest.approx(expected, abs=1e-12)
+        assert [i for i, value in enumerate(new) if value <= 1.] == [
+            i for i, value in enumerate(expected) if value <= 1.
+        ]
+
+
+def test_packed_contact_clearances_reject_invalid_geometry():
+    from service.infrastructure.stimulation.contact_clearances import packed_contact_clearances
+
+    point = [[0., 0., 0.]]
+    for geometry in [([], [], [], []), ([1], [[0., 0., 0.]], [4], [1.]),
+                     ([1], [[0., float('nan'), 0.]], [-1], [1.]),
+                     ([1], [[0., 0., 0.]], [-1], [-1.]),
+                     ([1], np.zeros((1, 3), np.float32), [-1], [1.]),
+                     (['1'], [[0., 0., 0.]], [-1], [1.])]:
+        with pytest.raises(ValueError, match='Invalid packed geometry'):
+            packed_contact_clearances(geometry, point)

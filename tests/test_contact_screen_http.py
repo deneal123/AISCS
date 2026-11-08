@@ -57,3 +57,17 @@ def test_contact_screen_requires_all_verified_indexes_and_auth(tmp_path, monkeyp
         response = client.post('/v1/connectome/contact-positions',
                                json={**positions, 'positions_um': invalid}, headers=auth)
         assert response.status_code == 422
+
+    expected_cache = {'trusted': 'administrator configuration'}
+    monkeypatch.setattr('service.infrastructure.execution.process._field_geometry_cache',
+                        lambda _backend: expected_cache)
+    response = client.post('/v1/connectome/contact-positions', json=positions, headers=auth)
+    assert response.status_code == 200
+    assert received[-1][1]['geometry_cache'] == expected_cache
+
+    def invalid_cache(_backend):
+        raise ValueError('cache invalid')
+    monkeypatch.setattr('service.infrastructure.execution.process._field_geometry_cache',
+                        invalid_cache)
+    assert client.post('/v1/connectome/contact-positions', json=positions,
+                       headers=auth).status_code == 503

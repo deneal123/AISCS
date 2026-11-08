@@ -434,6 +434,7 @@ def build_app(manager: Executions, secret: str, readiness, catalog_factory=catal
         import sqlite3
 
         from service.infrastructure.connectome.neighbors import registered_graph
+        from service.infrastructure.execution.process import _field_geometry_cache
         from service.infrastructure.stimulation.contact_screen import (
             screen_contact_positions,
             screen_contacts,
@@ -452,6 +453,8 @@ def build_app(manager: Executions, secret: str, readiness, catalog_factory=catal
             raise HTTPException(429, "Another spatial search is still running")
         try:
             graph = registered_graph()
+            cache = _field_geometry_cache(os.environ.get('GENERATOR_FIELD_BACKEND', 'cpu'))
+            cache_options = {} if cache is None else {'geometry_cache': cache}
             result = (screen_contact_positions if positions else screen_contacts)(
                 *(Path(path) for path in paths), graph.ids, graph.provenance["manifest_sha256"],
                 morphology_directories(),
@@ -463,6 +466,7 @@ def build_app(manager: Executions, secret: str, readiness, catalog_factory=catal
                 segment_index=Path(segment_path) if segment_path else None,
                 segment_audit=Path(segment_audit) if segment_audit else None,
                 workers=int(os.environ.get("GENERATOR_MORPHOLOGY_SPATIAL_WORKERS", "1")),
+                **cache_options,
             )
         except (OSError, ValueError, sqlite3.Error) as exc:
             raise HTTPException(503, "Contact-screen index is incomplete or invalid") from exc

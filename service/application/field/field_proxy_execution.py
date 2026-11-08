@@ -36,14 +36,18 @@ def execute_field_proxy(graph, directories, *, field_path, output, configuration
         raise ValueError('Output already exists')
     if progress is not None and not callable(progress):
         raise ValueError('Invalid progress callback')
-    if not isinstance(field_backend, str) or field_backend not in {'cpu', 'gpu'}:
+    if not isinstance(field_backend, str) or field_backend not in {'cpu', 'gpu', 'gpu-fused'}:
         raise ValueError('Unknown field backend')
     if type(field_workers) is not int or not 1 <= field_workers <= 8:
         raise ValueError('Invalid field worker count')
-    if field_backend == 'gpu' and not compute_field:
+    if field_backend in {'gpu', 'gpu-fused'} and not compute_field:
         raise ValueError('GPU field execution requires field computation')
-    if geometry_cache is not None and (not compute_field or field_backend != 'gpu'):
+    if geometry_cache is not None and (
+        not compute_field or field_backend not in {'gpu', 'gpu-fused'}
+    ):
         raise ValueError('Geometry cache requires GPU field computation')
+    if field_backend == 'gpu-fused' and geometry_cache is None:
+        raise ValueError('Experimental fused GPU requires an authenticated geometry cache')
     field_proxy.validate_parameters(waveform, gain, seed, capture_delta)
     graph_hash = graph.provenance['manifest_sha256']
     if compute_field:

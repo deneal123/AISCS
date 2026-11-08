@@ -1,6 +1,6 @@
 {
   "name": "aspa-generator",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "contract_version": "1.0",
   "entrypoint": "service.main:create_app",
   "cli": "generatorctl",

@@ -79,7 +79,10 @@ def test_real_gpu_cache_matches_direct_and_resume(geometry_case, tmp_path):  # n
     assert all(row.get('kind') != 'footer' for row in records(partial))
 
 
-def test_cached_gpu_field_feeds_proxy_and_records_its_source(geometry_case, tmp_path):  # noqa: F811
+@pytest.mark.parametrize('field_backend', ['gpu', 'gpu-fused'])
+def test_cached_gpu_field_feeds_proxy_and_records_its_source(
+    geometry_case, tmp_path, field_backend,  # noqa: F811
+):
     cuda = pytest.importorskip('numba.cuda')
     if not cuda.is_available():
         pytest.skip('CUDA toolkit and device are not available')
@@ -90,13 +93,14 @@ def test_cached_gpu_field_feeds_proxy_and_records_its_source(geometry_case, tmp_
     field_path, output = tmp_path / 'field.jsonl', tmp_path / 'result'
     execute_field_proxy(graph, [], field_path=field_path, output=output, configuration=CONFIG,
                         gain=1., seed=1, waveform=[0., 1., 0.], compute_field=True,
-                        allow_missing_curvature=True, field_backend='gpu',
+                        allow_missing_curvature=True, field_backend=field_backend,
                         geometry_cache=cache_options(geometry_case, manifest))
     header = json.loads(field_path.read_text().splitlines()[0])
     assert header['geometry_cache_manifest_sha256'] == manifest
     assert (output / 'metadata.json').is_file()
     metadata = json.loads((output / 'metadata.json').read_text())
     assert metadata['field']['field_audit']['geometry_cache_manifest_sha256'] == manifest
+    assert metadata['field_execution']['requested_backend'] == field_backend
     assert json.loads((output / 'field-proxy-preview.json').read_text())['recording'] is None
 
 
@@ -147,6 +151,28 @@ def test_fused_backend_groups_cached_entries_and_resumes(
     assert compute([10, 20], [], output, CONFIG, **args) == 2
     assert batches == [['20']]
     assert output.read_bytes() == original
+
+
+def test_fused_gpu_complete_cache_matches_cpu_and_resumes(geometry_case, tmp_path):  # noqa: F811
+    from service.infrastructure.stimulation.field_summary_compare import compare
+
+    cuda = pytest.importorskip('numba.cuda')
+    if not cuda.is_available():
+        pytest.skip('CUDA toolkit and device are not available')
+    manifest = build(geometry_case)
+    ids = [10, 20]
+    reference, candidate = tmp_path / 'cpu.jsonl', tmp_path / 'fused.jsonl'
+    assert compute(ids, [geometry_case['source']], reference, CONFIG,
+                   graph_hash=geometry_case['graph']) == 2
+    options = {'graph_hash': geometry_case['graph'], 'field_backend': 'gpu-fused',
+               'geometry_cache': cache_options(geometry_case, manifest)}
+    assert compute(ids, [], candidate, CONFIG, **options) == 2
+    comparison = compare(reference, candidate, ids, graph_hash=geometry_case['graph'])
+    assert comparison['equal_within_tolerance']
+    original = candidate.read_bytes()
+    candidate.write_bytes(b''.join(original.splitlines(keepends=True)[:2]))
+    assert compute(ids, [], candidate, CONFIG, **options) == 2
+    assert candidate.read_bytes() == original
 
 
 def test_fused_gpu_failure_does_not_publish_success(

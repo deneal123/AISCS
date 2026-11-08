@@ -34,7 +34,7 @@ def main():
     parser.add_argument('--capture-delta', action='store_true',
                         help='Capture per-cell differences against a matched no-field control')
     parser.add_argument('--field-workers', type=int, default=1)
-    parser.add_argument('--field-backend', choices=('cpu', 'gpu'), default='cpu',
+    parser.add_argument('--field-backend', choices=('cpu', 'gpu', 'gpu-fused'), default='cpu',
                         help='Field operator only; GPU requires --compute-field')
     parser.add_argument('--geometry-cache', type=Path)
     parser.add_argument('--geometry-cache-sha256')
@@ -49,10 +49,13 @@ def main():
     cache_values = (args.geometry_cache, args.geometry_cache_sha256,
                     args.source_index, args.source_audit)
     if any(value is not None for value in cache_values) and (
-        any(value is None for value in cache_values) or args.field_backend != 'gpu'
+        any(value is None for value in cache_values)
+        or args.field_backend not in ('gpu', 'gpu-fused')
         or not args.compute_field
     ):
         parser.error('Geometry cache requires GPU computation and all four cache arguments')
+    if args.field_backend == 'gpu-fused' and not all(value is not None for value in cache_values):
+        parser.error('Experimental fused GPU requires all four cache arguments')
     geometry_cache = (None if args.geometry_cache is None else {
         'directory': args.geometry_cache,
         'expected_manifest_sha256': args.geometry_cache_sha256,
