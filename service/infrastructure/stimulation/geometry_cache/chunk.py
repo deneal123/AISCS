@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import hashlib
 import re
+import zlib
 from pathlib import Path
 
 import numpy as np
@@ -57,14 +58,15 @@ def _checked_entry(entry, audited_sources):
     return body, source, ids, points, parents, radii
 
 
-def write_chunk(path: Path, entries, *, audited_sources: dict):
+def write_chunk(path: Path, entries, *, audited_sources: dict, compression='none'):
     """Write verified-prepared entries in order, never replacing an existing file.
 
     `audited_sources` must come from the independently verified source index.
     The returned descriptor must be bound to a trusted graph and manifest by
     the caller before future reuse.
     """
-    if (not isinstance(audited_sources, dict) or not isinstance(entries, (list, tuple))
+    if (compression not in ('none', 'zlib-1')
+            or not isinstance(audited_sources, dict) or not isinstance(entries, (list, tuple))
             or not entries):
         raise ValueError('Invalid packed geometry chunk input')
     checked, seen, total = [], set(), 0
@@ -78,7 +80,8 @@ def write_chunk(path: Path, entries, *, audited_sources: dict):
         if total > _MAX_VERTICES:
             raise ValueError('Packed geometry chunk exceeds vertex limit')
         checked.append(item)
-    metadata, digest, offset = [], hashlib.sha256(), 0
+    metadata, digest, offset, stored = [], hashlib.sha256(), 0, 0
+    compressor = zlib.compressobj(level=1) if compression == 'zlib-1' else None
     stream = path.open('xb')
     try:
         with stream:
@@ -88,17 +91,29 @@ def write_chunk(path: Path, entries, *, audited_sources: dict):
                     rows[name] = points[:, axis]
                 rows['radius'], rows['parent'], rows['id'] = radii, parents, ids
                 view = memoryview(rows).cast('B')
-                if stream.write(view) != len(view):
+                payload = compressor.compress(view) if compressor is not None else view
+                if stream.write(payload) != len(payload):
                     raise OSError('Incomplete packed geometry write')
-                digest.update(view)
+                digest.update(payload)
+                stored += len(payload)
                 metadata.append({'body_id': body, 'source_sha256': source,
                                  'offset': offset, 'count': len(ids)})
                 offset += len(ids)
+            if compressor is not None:
+                payload = compressor.flush()
+                if stream.write(payload) != len(payload):
+                    raise OSError('Incomplete packed geometry write')
+                digest.update(payload)
+                stored += len(payload)
     except BaseException:
         path.unlink(missing_ok=True)
         raise
-    return {'format': 'malecns-packed-geometry-chunk-v1', 'vertices': total,
-            'bytes': total * _RECORD.itemsize, 'sha256': digest.hexdigest(), 'neurons': metadata}
+    descriptor = {'format': 'malecns-packed-geometry-chunk-v1', 'vertices': total,
+                  'bytes': stored, 'sha256': digest.hexdigest(), 'neurons': metadata}
+    if compressor is not None:
+        descriptor.update({'compression': compression,
+                           'uncompressed_bytes': total * _RECORD.itemsize})
+    return descriptor
 
 
 def read_chunk(path: Path, descriptor: dict, *, audited_sources: dict):
@@ -107,11 +122,18 @@ def read_chunk(path: Path, descriptor: dict, *, audited_sources: dict):
             or descriptor.get('format') != 'malecns-packed-geometry-chunk-v1'
             or type(descriptor.get('vertices')) is not int
             or not 1 <= descriptor['vertices'] <= _MAX_VERTICES
-            or descriptor.get('bytes') != descriptor['vertices'] * _RECORD.itemsize
+            or type(descriptor.get('bytes')) is not int or descriptor['bytes'] <= 0
             or not isinstance(descriptor.get('sha256'), str)
             or not re.fullmatch(r'[0-9a-f]{64}', descriptor['sha256'])
             or not isinstance(descriptor.get('neurons'), list) or not descriptor['neurons']):
         raise ValueError('Invalid packed geometry descriptor')
+    raw_size = descriptor['vertices'] * _RECORD.itemsize
+    compression = descriptor.get('compression', 'none')
+    if ((compression == 'none' and descriptor['bytes'] != raw_size)
+            or (compression == 'zlib-1' and (descriptor.get('uncompressed_bytes') != raw_size
+                                             or descriptor['bytes'] > raw_size + 65536))
+            or compression not in ('none', 'zlib-1')):
+        raise ValueError('Invalid packed geometry compression')
     offset, seen = 0, set()
     for item in descriptor['neurons']:
         if (not isinstance(item, dict) or type(item.get('offset')) is not int
@@ -130,6 +152,16 @@ def read_chunk(path: Path, descriptor: dict, *, audited_sources: dict):
         raw = stream.read(descriptor['bytes'] + 1)
     if len(raw) != descriptor['bytes'] or hashlib.sha256(raw).hexdigest() != descriptor['sha256']:
         raise ValueError('Packed geometry checksum mismatch')
+    if compression == 'zlib-1':
+        try:
+            decoder = zlib.decompressobj()
+            decoded = decoder.decompress(raw, raw_size + 1)
+        except zlib.error as exc:
+            raise ValueError('Invalid compressed geometry') from exc
+        if (len(decoded) != raw_size or not decoder.eof or decoder.unused_data
+                or decoder.unconsumed_tail):
+            raise ValueError('Invalid compressed geometry')
+        raw = decoded
     rows = np.frombuffer(raw, dtype=_RECORD)
     result = []
     for item in descriptor['neurons']:

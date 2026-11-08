@@ -49,15 +49,17 @@ def audit(path: Path, ids, *, graph_hash: str, allow_partial: bool = False, on_r
             raise ValueError("Invalid field provenance")
         algorithm = header.get("algorithm_sha256")
         backend, device = header.get("field_backend", "cpu"), header.get("device_info")
-        if (not isinstance(backend, str) or backend not in {"cpu", "gpu"}
+        if (not isinstance(backend, str) or backend not in {"cpu", "gpu", "gpu-fused"}
                 or (backend == "cpu" and device is not None)):
             raise ValueError("Invalid field backend provenance")
         if "geometry_cache_manifest_sha256" in header:
             identity = header["geometry_cache_manifest_sha256"]
-            if (backend != "gpu" or not isinstance(identity, str)
+            if (backend not in ("gpu", "gpu-fused") or not isinstance(identity, str)
                     or not re.fullmatch(r"[a-f0-9]{64}", identity)):
                 raise ValueError("Invalid geometry cache provenance")
-        if backend == "gpu" and (
+        elif backend == "gpu-fused":
+            raise ValueError("Fused GPU field lacks geometry cache provenance")
+        if backend in ("gpu", "gpu-fused") and (
             not isinstance(device, dict) or set(device) != {
                 "numba_version", "cuda_runtime", "device", "compute_capability"
             } or not all(isinstance(device.get(key), str) and device[key]
@@ -151,9 +153,12 @@ def audit(path: Path, ids, *, graph_hash: str, allow_partial: bool = False, on_r
         raise ValueError("Invalid completion footer")
     if not complete and not allow_partial:
         raise ValueError("Field computation is incomplete")
-    return {"complete": complete, "processed": count, "expected": len(ids),
+    report = {"complete": complete, "processed": count, "expected": len(ids),
             "statuses": dict(statuses), "chain_sha256": chain,
             "failure_categories": dict(failures),
             "algorithm_recorded": algorithm is not None,
             "field_backend": backend, "device_info": device,
             "configuration": header["configuration"], "interpretation": header["interpretation"]}
+    if "geometry_cache_manifest_sha256" in header:
+        report["geometry_cache_manifest_sha256"] = header["geometry_cache_manifest_sha256"]
+    return report

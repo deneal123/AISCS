@@ -126,6 +126,13 @@ def test_invalid_backend_does_not_create_output(tmp_path):
     assert not output.exists()
 
 
+def test_fused_backend_requires_authenticated_cache_before_output(tmp_path):
+    output = tmp_path / 'field.jsonl'
+    with pytest.raises(ValueError, match='requires an authenticated geometry cache'):
+        compute([1], [], output, CONFIG, graph_hash='graph', field_backend='gpu-fused')
+    assert not output.exists()
+
+
 def test_unavailable_gpu_does_not_fall_back_or_create_output(tmp_path, monkeypatch):
     def unavailable():
         raise RuntimeError('CUDA field backend is unavailable')

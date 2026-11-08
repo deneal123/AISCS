@@ -66,6 +66,19 @@ def _field_rows(ids, directories, config, allow_degenerate, workers, field_backe
                 yield from rows
 
 
+def _fused_field_rows(chunks, config, allow_degenerate, skip):
+    """Regroup verified entries for the opt-in experimental fused operator."""
+    from service.infrastructure.stimulation.experimental_fused_gpu import experimental_summaries
+    from service.infrastructure.stimulation.geometry_batching import batch_geometry
+
+    entries = itertools_chain.from_iterable(chunks)
+    remaining = islice(entries, skip, None)
+    for group in batch_geometry([remaining], max_neurons=384, max_vertices=1_000_000):
+        rows, _fallbacks = experimental_summaries(group, **config,
+                                                   allow_degenerate=allow_degenerate)
+        yield from rows
+
+
 def compute(ids, directories, output: Path, config: dict, *, graph_hash: str, progress=None,
             allow_degenerate=False, workers=1, field_backend="cpu", check_row=None,
             geometry_cache=None):
@@ -74,13 +87,16 @@ def compute(ids, directories, output: Path, config: dict, *, graph_hash: str, pr
         raise ValueError("workers must be an integer between 1 and 8")
     if check_row is not None and not callable(check_row):
         raise ValueError('check_row must be callable')
-    if not isinstance(field_backend, str) or field_backend not in {"cpu", "gpu"}:
+    if not isinstance(field_backend, str) or field_backend not in {"cpu", "gpu", "gpu-fused"}:
         raise ValueError("Unknown field backend")
+    if field_backend == 'gpu-fused' and geometry_cache is None:
+        raise ValueError('Experimental fused GPU requires an authenticated geometry cache')
     cached_chunks = None
     if geometry_cache is not None:
+        from service.infrastructure.stimulation import geometry_prefetch
         from service.infrastructure.stimulation.geometry_cache import cache, chunk, index
 
-        if (field_backend != 'gpu' or not isinstance(geometry_cache, dict)
+        if (field_backend not in ('gpu', 'gpu-fused') or not isinstance(geometry_cache, dict)
                 or set(geometry_cache) != {'directory', 'expected_manifest_sha256',
                                            'source_index', 'source_audit'}
                 or any(not isinstance(geometry_cache[key], Path)
@@ -91,15 +107,19 @@ def compute(ids, directories, output: Path, config: dict, *, graph_hash: str, pr
             first_chunk = next(cached_chunks)
         except StopIteration as exc:
             raise ValueError('Geometry cache is empty') from exc
-        cached_chunks = itertools_chain([first_chunk], cached_chunks)
+        cached_chunks = geometry_prefetch.prefetch(itertools_chain([first_chunk], cached_chunks))
     bipolar_potential_mv(np.empty((0, 3)), **config)
     algorithm = hashlib.sha256()
     modules = [morphology, morphology_repository, morphology_field, network_field,
                point_field, isolated_roots]
     if geometry_cache is not None:
-        modules.extend([cache, chunk, index])
+        modules.extend([cache, chunk, index, geometry_prefetch])
+    if field_backend == 'gpu-fused':
+        from service.infrastructure.stimulation import experimental_fused_gpu, geometry_batching
+
+        modules.extend([experimental_fused_gpu, geometry_batching])
     device_info = None
-    if field_backend == "gpu":
+    if field_backend in ("gpu", "gpu-fused"):
         import numba
 
         from service.infrastructure.stimulation import point_field_gpu
@@ -161,23 +181,34 @@ def compute(ids, directories, output: Path, config: dict, *, graph_hash: str, pr
         if mode == "x":
             stream.write(json.dumps(header, allow_nan=False, sort_keys=True) + "\n")
             stream.flush()
-        rows = (_field_rows(ids[completed:], directories, config, allow_degenerate, workers,
-                            field_backend) if cached_chunks is None else
-                network_field.cached_field_summaries(cached_chunks, **config,
-                    allow_degenerate=allow_degenerate, skip=completed))
-        for row in rows:
-            _check_ordered_row(row, ids, completed)
-            if check_row is not None:
-                check_row(row)
-            chain = advance(chain, row)
-            row["chain_sha256"] = chain
-            stream.write(json.dumps(row, allow_nan=False, sort_keys=True) + "\n")
-            completed += 1
-            if completed % 1000 == 0:
-                stream.flush()
-                os.fsync(stream.fileno())
-                if progress:
-                    progress(completed, len(ids))
+        if cached_chunks is None:
+            rows = _field_rows(ids[completed:], directories, config, allow_degenerate, workers,
+                               field_backend)
+        elif field_backend == 'gpu-fused':
+            rows = _fused_field_rows(cached_chunks, config, allow_degenerate, completed)
+        else:
+            rows = network_field.cached_field_summaries(cached_chunks, **config,
+                allow_degenerate=allow_degenerate, skip=completed)
+        try:
+            for row in rows:
+                _check_ordered_row(row, ids, completed)
+                if check_row is not None:
+                    check_row(row)
+                chain = advance(chain, row)
+                row["chain_sha256"] = chain
+                stream.write(json.dumps(row, allow_nan=False, sort_keys=True) + "\n")
+                completed += 1
+                if completed % 1000 == 0:
+                    stream.flush()
+                    os.fsync(stream.fileno())
+                    if progress:
+                        progress(completed, len(ids))
+        finally:
+            close_rows = getattr(rows, 'close', None)
+            if callable(close_rows):
+                close_rows()
+            if cached_chunks is not None:
+                cached_chunks.close()
         if completed != len(ids):
             raise ValueError("Field calculation ended before all graph records were produced")
         footer = {"kind": "footer", "neurons": completed, "chain_sha256": chain}

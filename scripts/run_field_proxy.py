@@ -36,12 +36,28 @@ def main():
     parser.add_argument('--field-workers', type=int, default=1)
     parser.add_argument('--field-backend', choices=('cpu', 'gpu'), default='cpu',
                         help='Field operator only; GPU requires --compute-field')
+    parser.add_argument('--geometry-cache', type=Path)
+    parser.add_argument('--geometry-cache-sha256')
+    parser.add_argument('--source-index', type=Path)
+    parser.add_argument('--source-audit', type=Path)
     parser.add_argument('--source-um', type=float, nargs=3, required=True)
     parser.add_argument('--return-um', type=float, nargs=3, required=True)
     parser.add_argument('--current-na', type=float, required=True)
     parser.add_argument('--conductivity-s-m', type=float, required=True)
     parser.add_argument('--clearance-um', type=float, required=True)
     args = parser.parse_args()
+    cache_values = (args.geometry_cache, args.geometry_cache_sha256,
+                    args.source_index, args.source_audit)
+    if any(value is not None for value in cache_values) and (
+        any(value is None for value in cache_values) or args.field_backend != 'gpu'
+        or not args.compute_field
+    ):
+        parser.error('Geometry cache requires GPU computation and all four cache arguments')
+    geometry_cache = (None if args.geometry_cache is None else {
+        'directory': args.geometry_cache,
+        'expected_manifest_sha256': args.geometry_cache_sha256,
+        'source_index': args.source_index, 'source_audit': args.source_audit,
+    })
     if args.output.exists():
         raise ValueError('Output already exists')
     graph = registered_graph()
@@ -54,7 +70,8 @@ def main():
         compute_field=args.compute_field, allow_partial_geometry=args.allow_partial_geometry,
         allow_missing_curvature=args.allow_missing_curvature,
         allow_contact_exclusion=args.allow_contact_exclusion, capture_delta=args.capture_delta,
-        field_workers=args.field_workers, field_backend=args.field_backend)
+        field_workers=args.field_workers, field_backend=args.field_backend,
+        geometry_cache=geometry_cache)
 
 if __name__ == '__main__':
     main()

@@ -25,7 +25,7 @@ def main():
     parser.add_argument("--allow-degenerate", action="store_true")
     parser.add_argument("--workers", type=int, default=1,
                         help="Parallel processes (1–8); output order remains deterministic")
-    parser.add_argument("--field-backend", choices=("cpu", "gpu"), default="cpu")
+    parser.add_argument("--field-backend", choices=("cpu", "gpu", "gpu-fused"), default="cpu")
     parser.add_argument("--geometry-cache", type=Path,
                         help="Explicit audited geometry cache (GPU only)")
     parser.add_argument("--geometry-cache-sha256",
@@ -35,9 +35,11 @@ def main():
     args = parser.parse_args()
     values = (args.geometry_cache, args.geometry_cache_sha256, args.source_index, args.source_audit)
     if any(value is not None for value in values) and (
-        any(value is None for value in values) or args.field_backend != 'gpu'
+        any(value is None for value in values) or args.field_backend not in ('gpu', 'gpu-fused')
     ):
         parser.error('Geometry cache requires GPU and all four cache arguments')
+    if args.field_backend == 'gpu-fused' and args.geometry_cache is None:
+        parser.error('Experimental fused GPU requires an authenticated geometry cache')
     geometry_cache = (None if args.geometry_cache is None else {
         'directory': args.geometry_cache,
         'expected_manifest_sha256': args.geometry_cache_sha256,

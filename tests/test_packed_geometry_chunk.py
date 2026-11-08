@@ -1,6 +1,7 @@
 import copy
 import hashlib
 import json
+import zlib
 
 import numpy as np
 import pytest
@@ -41,6 +42,43 @@ def test_checked_geometry_round_trip_is_lossless(sources, tmp_path):
         for expected, actual in zip(original['geometry'], loaded['geometry'], strict=True):
             np.testing.assert_array_equal(expected, actual)
     assert restored[0]['points'][0, 0] == 100.5 * .008
+
+
+def test_compressed_geometry_round_trip_is_lossless(sources, tmp_path):
+    entries, audited = sources
+    path = tmp_path / 'compressed.bin'
+    description = packed_geometry_chunk.write_chunk(path, entries, audited_sources=audited,
+                                                     compression='zlib-1')
+    assert description['uncompressed_bytes'] == 240
+    assert description['bytes'] == path.stat().st_size
+    restored = packed_geometry_chunk.read_chunk(path, description, audited_sources=audited)
+    for before, after in zip(entries, restored, strict=True):
+        for expected, actual in zip(before['geometry'], after['geometry'], strict=True):
+            np.testing.assert_array_equal(expected, actual)
+
+
+@pytest.mark.parametrize('variant', ['trailing', 'truncated', 'oversize', 'invalid'])
+def test_compressed_geometry_rejects_malformed_streams_even_with_matching_hash(
+    sources, tmp_path, variant,
+):
+    entries, audited = sources
+    path = tmp_path / 'compressed.bin'
+    description = packed_geometry_chunk.write_chunk(path, entries, audited_sources=audited,
+                                                     compression='zlib-1')
+    data = path.read_bytes()
+    if variant == 'trailing':
+        data += b'junk'
+    elif variant == 'truncated':
+        data = data[:-1]
+    elif variant == 'oversize':
+        data = zlib.compress(b'0' * 241)
+    else:
+        data = b'invalid'
+    path.write_bytes(data)
+    description['bytes'] = len(data)
+    description['sha256'] = hashlib.sha256(data).hexdigest()
+    with pytest.raises(ValueError, match='compressed geometry'):
+        packed_geometry_chunk.read_chunk(path, description, audited_sources=audited)
 
 
 def test_rejects_changed_bytes_and_untrusted_or_wrong_source(sources, tmp_path):

@@ -1,7 +1,11 @@
 import json
+import threading
+from types import SimpleNamespace
 
+import numpy as np
 import pytest
 
+from service.application.field.field_proxy_execution import execute_field_proxy
 from service.infrastructure.stimulation.field_summary_audit import audit
 from service.infrastructure.stimulation.field_summary_compute import compute
 from tests.test_packed_geometry_cache import build
@@ -73,3 +77,96 @@ def test_real_gpu_cache_matches_direct_and_resume(geometry_case, tmp_path):  # n
     with pytest.raises(ValueError, match='geometry checksum'):
         compute([10, 20], [], partial, CONFIG, geometry_cache=options, **args)
     assert all(row.get('kind') != 'footer' for row in records(partial))
+
+
+def test_cached_gpu_field_feeds_proxy_and_records_its_source(geometry_case, tmp_path):  # noqa: F811
+    cuda = pytest.importorskip('numba.cuda')
+    if not cuda.is_available():
+        pytest.skip('CUDA toolkit and device are not available')
+    manifest = build(geometry_case)
+    graph = SimpleNamespace(ids=np.array([10, 20]), size=2, ptr=np.array([0, 0, 0]),
+        posts=np.array([], np.int32), counts=np.array([], np.int32),
+        signs=np.array([1, 1], np.int8), provenance={'manifest_sha256': geometry_case['graph']})
+    field_path, output = tmp_path / 'field.jsonl', tmp_path / 'result'
+    execute_field_proxy(graph, [], field_path=field_path, output=output, configuration=CONFIG,
+                        gain=1., seed=1, waveform=[0., 1., 0.], compute_field=True,
+                        allow_missing_curvature=True, field_backend='gpu',
+                        geometry_cache=cache_options(geometry_case, manifest))
+    header = json.loads(field_path.read_text().splitlines()[0])
+    assert header['geometry_cache_manifest_sha256'] == manifest
+    assert (output / 'metadata.json').is_file()
+    metadata = json.loads((output / 'metadata.json').read_text())
+    assert metadata['field']['field_audit']['geometry_cache_manifest_sha256'] == manifest
+    assert json.loads((output / 'field-proxy-preview.json').read_text())['recording'] is None
+
+
+def test_cached_field_failure_closes_background_reader(geometry_case, tmp_path):  # noqa: F811
+    cuda = pytest.importorskip('numba.cuda')
+    if not cuda.is_available():
+        pytest.skip('CUDA toolkit and device are not available')
+    manifest = build(geometry_case)
+    output = tmp_path / 'partial.jsonl'
+    def reject(_row):
+        raise ValueError('row rejected')
+    with pytest.raises(ValueError, match='row rejected'):
+        compute([10, 20], [], output, CONFIG, graph_hash=geometry_case['graph'],
+                field_backend='gpu', geometry_cache=cache_options(geometry_case, manifest),
+                check_row=reject)
+    assert all(not thread.name.startswith('geometry-read') for thread in threading.enumerate())
+    assert all(json.loads(line).get('kind') != 'footer' for line in output.read_text().splitlines())
+
+
+def test_fused_backend_groups_cached_entries_and_resumes(
+    geometry_case, tmp_path, monkeypatch,  # noqa: F811
+):
+    from types import SimpleNamespace
+
+    from service.infrastructure.stimulation import experimental_fused_gpu, point_field_gpu
+
+    manifest = build(geometry_case)
+    device = SimpleNamespace(name=b'test-device', compute_capability=(8, 6))
+    cuda = SimpleNamespace(get_current_device=lambda: device,
+                           runtime=SimpleNamespace(get_version=lambda: (12, 9)))
+    monkeypatch.setattr(point_field_gpu, '_kernel', lambda: (cuda, None))
+    batches = []
+    def summaries(entries, **_kwargs):
+        batches.append([entry['skeleton']['body_id'] for entry in entries])
+        return [{'body_id': entry['skeleton']['body_id'], 'status': 'source_missing'}
+                for entry in entries], 0
+    monkeypatch.setattr(experimental_fused_gpu, 'experimental_summaries', summaries)
+    output = tmp_path / 'fused.jsonl'
+    args = {'graph_hash': geometry_case['graph'], 'field_backend': 'gpu-fused',
+            'geometry_cache': cache_options(geometry_case, manifest)}
+    assert compute([10, 20], [], output, CONFIG, **args) == 2
+    assert batches == [['10', '20']]
+    original = output.read_bytes()
+    assert json.loads(original.splitlines()[0])['field_backend'] == 'gpu-fused'
+    assert audit(output, [10, 20], graph_hash=geometry_case['graph'])['complete']
+    output.write_bytes(b''.join(original.splitlines(keepends=True)[:2]))
+    batches.clear()
+    assert compute([10, 20], [], output, CONFIG, **args) == 2
+    assert batches == [['20']]
+    assert output.read_bytes() == original
+
+
+def test_fused_gpu_failure_does_not_publish_success(
+    geometry_case, tmp_path, monkeypatch,  # noqa: F811
+):
+    from types import SimpleNamespace
+
+    from service.infrastructure.stimulation import experimental_fused_gpu, point_field_gpu
+
+    manifest = build(geometry_case)
+    device = SimpleNamespace(name=b'test-device', compute_capability=(8, 6))
+    cuda = SimpleNamespace(get_current_device=lambda: device,
+                           runtime=SimpleNamespace(get_version=lambda: (12, 9)))
+    monkeypatch.setattr(point_field_gpu, '_kernel', lambda: (cuda, None))
+    def fail(*_args, **_kwargs):
+        raise RuntimeError('GPU calculation failed')
+    monkeypatch.setattr(experimental_fused_gpu, 'experimental_summaries', fail)
+    output = tmp_path / 'failed.jsonl'
+    with pytest.raises(RuntimeError, match='GPU calculation failed'):
+        compute([10, 20], [], output, CONFIG, graph_hash=geometry_case['graph'],
+                field_backend='gpu-fused', geometry_cache=cache_options(geometry_case, manifest))
+    assert all(json.loads(line).get('kind') != 'footer' for line in output.read_text().splitlines())
+    assert all(not t.name.startswith('geometry-read') for t in threading.enumerate())

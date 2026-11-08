@@ -31,7 +31,8 @@ def _producer_sha256():
 
 
 def build_cache(directory: Path, *, graph_ids, graph_sha256: str, source_index: Path,
-                source_audit: Path, morphology_directories, chunk_neurons=64, progress=None):
+                source_audit: Path, morphology_directories, chunk_neurons=64, progress=None,
+                compression='zlib-1'):
     """Build one complete cache explicitly; return its independently storable hash.
 
     No pre-existing directory is modified. The manifest appears only after all
@@ -41,6 +42,8 @@ def build_cache(directory: Path, *, graph_ids, graph_sha256: str, source_index: 
         raise ValueError('Invalid cache chunk size')
     if progress is not None and not callable(progress):
         raise ValueError('Invalid cache progress callback')
+    if compression not in ('none', 'zlib-1'):
+        raise ValueError('Invalid cache compression')
     raw_ids = list(graph_ids)
     ids = [int(value) for value in raw_ids]
     sources, source_sha = index.audited_geometry_sources(source_index, source_audit,
@@ -55,7 +58,8 @@ def build_cache(directory: Path, *, graph_ids, graph_sha256: str, source_index: 
             return
         name = f'chunk-{len(descriptors):06d}.bin'
         path = directory / name
-        metadata = chunk.write_chunk(path, pending, audited_sources=sources)
+        metadata = chunk.write_chunk(path, pending, audited_sources=sources,
+                                     compression=compression)
         owned.append(path)
         descriptors.append({'name': name, **metadata})
         pending, pending_vertices = [], 0

@@ -69,11 +69,16 @@ def test_gpu_backend_forwarding_and_invalid_modes(tmp_path, monkeypatch):
     with pytest.raises(RuntimeError, match='stopped before device'):
         runner.execute_field_proxy(graph, [], **args, field_backend='gpu', field_workers=2)
     assert calls[1]['field_backend'] == 'gpu' and calls[1]['workers'] == 2
+    cache = {'trusted': 'passed through to the field validator'}
+    with pytest.raises(RuntimeError, match='stopped before device'):
+        runner.execute_field_proxy(graph, [], **args, field_backend='gpu', geometry_cache=cache)
+    assert calls[2]['geometry_cache'] is cache
     for changes in ({'field_backend': 'unknown'}, {'field_backend': 'gpu', 'field_workers': 0},
-                    {'field_backend': 'gpu', 'compute_field': False}):
+                    {'field_backend': 'gpu', 'compute_field': False}, {'geometry_cache': cache},
+                    {'field_backend': 'gpu', 'compute_field': False, 'geometry_cache': cache}):
         with pytest.raises(ValueError):
             runner.execute_field_proxy(graph, [], **{**args, **changes})
-    assert len(calls) == 2 and not args['field_path'].exists() and not args['output'].exists()
+    assert len(calls) == 3 and not args['field_path'].exists() and not args['output'].exists()
 
 
 def test_verified_descriptors_rejects_tampering_and_missing_cells(tmp_path):

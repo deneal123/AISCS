@@ -26,7 +26,7 @@ def execute_field_proxy(graph, directories, *, field_path, output, configuration
                         waveform, compute_field=False, allow_partial_geometry=False,
                         allow_missing_curvature=False, allow_contact_exclusion=False,
                         capture_delta=False, field_workers=1, field_backend='cpu',
-                        progress=None):
+                        progress=None, geometry_cache=None):
     """Compute or verify one field and persist a labelled, reproducible LIF response."""
     if any(type(value) is not bool for value in (
         compute_field, allow_partial_geometry, allow_missing_curvature, allow_contact_exclusion,
@@ -42,6 +42,8 @@ def execute_field_proxy(graph, directories, *, field_path, output, configuration
         raise ValueError('Invalid field worker count')
     if field_backend == 'gpu' and not compute_field:
         raise ValueError('GPU field execution requires field computation')
+    if geometry_cache is not None and (not compute_field or field_backend != 'gpu'):
+        raise ValueError('Geometry cache requires GPU field computation')
     field_proxy.validate_parameters(waveform, gain, seed, capture_delta)
     graph_hash = graph.provenance['manifest_sha256']
     if compute_field:
@@ -65,9 +67,10 @@ def execute_field_proxy(graph, directories, *, field_path, output, configuration
 
         if progress is not None:
             progress({'phase': 'field', 'done': 0, 'total': graph.size})
+        cache_options = {} if geometry_cache is None else {'geometry_cache': geometry_cache}
         compute(graph.ids, directories, field_path, configuration, graph_hash=graph_hash,
                 allow_degenerate=allow_partial_geometry, workers=field_workers,
-                field_backend=field_backend, check_row=check_row,
+                field_backend=field_backend, check_row=check_row, **cache_options,
                 progress=(None if progress is None else
                           lambda done, total: progress({'phase': 'field', 'done': done,
                                                         'total': total})))

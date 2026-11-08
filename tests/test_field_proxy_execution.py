@@ -212,6 +212,56 @@ def test_executor_forwards_explicit_field_backend_without_silent_fallback(tmp_pa
     assert observed == [(1, 'gpu'), (2, 'gpu')]
 
 
+def test_child_accepts_only_complete_administrator_pinned_cache(tmp_path, monkeypatch):
+    from service.infrastructure.execution.process import _field_geometry_cache
+
+    names = ('GENERATOR_GEOMETRY_CACHE_DIR', 'GENERATOR_GEOMETRY_CACHE_MANIFEST_SHA256',
+             'GENERATOR_GEOMETRY_SOURCE_INDEX', 'GENERATOR_GEOMETRY_SOURCE_AUDIT')
+    for name in names:
+        monkeypatch.delenv(name, raising=False)
+    assert _field_geometry_cache('gpu') is None
+    cache = tmp_path / 'cache'
+    cache.mkdir()
+    (cache / 'manifest.json').write_text('{}')
+    index, audit = tmp_path / 'index', tmp_path / 'audit'
+    index.write_text('index')
+    audit.write_text('audit')
+    values = (str(cache), 'a' * 64, str(index), str(audit))
+    for name, value in zip(names, values, strict=True):
+        monkeypatch.setenv(name, value)
+    assert _field_geometry_cache('gpu') == {
+        'directory': cache, 'expected_manifest_sha256': 'a' * 64,
+        'source_index': index, 'source_audit': audit,
+    }
+    with pytest.raises(ValueError, match='cache configuration'):
+        _field_geometry_cache('cpu')
+    monkeypatch.setenv(names[1], 'invalid')
+    with pytest.raises(ValueError, match='cache configuration'):
+        _field_geometry_cache('gpu')
+    monkeypatch.delenv(names[1])
+    with pytest.raises(ValueError, match='cache configuration'):
+        _field_geometry_cache('gpu')
+
+
+def test_child_forwards_cache_without_accepting_request_paths(tmp_path, monkeypatch):
+    observed = []
+    monkeypatch.setattr('service.infrastructure.connectome.neighbors.registered_graph',
+                        lambda: SimpleNamespace(provenance={'manifest_sha256': 'a' * 64}))
+    monkeypatch.setattr('service.settings.morphology_directories', lambda: [])
+    expected = {'trusted': 'administrator configuration'}
+    monkeypatch.setattr('service.infrastructure.execution.process._field_geometry_cache',
+                        lambda _backend: expected)
+    def execute(_graph, _dirs, *, output, geometry_cache, **_options):
+        observed.append(geometry_cache)
+        output.mkdir()
+        (output / 'metadata.json').write_text('{}')
+    monkeypatch.setattr('service.application.field.field_proxy_execution.execute_field_proxy',
+                        execute)
+    monkeypatch.setenv('GENERATOR_FIELD_BACKEND', 'gpu')
+    run_field_proxy_child(payload(), str(tmp_path / 'output'))
+    assert observed == [expected]
+
+
 def test_child_owns_work_files_and_exports_manifest(tmp_path, monkeypatch):
     monkeypatch.setattr('service.infrastructure.connectome.neighbors.registered_graph',
                         lambda: SimpleNamespace(provenance={'manifest_sha256': 'a' * 64}))

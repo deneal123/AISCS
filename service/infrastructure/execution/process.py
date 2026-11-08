@@ -6,6 +6,7 @@ import hashlib
 import json
 import multiprocessing as mp
 import os
+import re
 import shutil
 import signal
 import tempfile
@@ -41,6 +42,25 @@ def _file_sha256(path: Path) -> str:
     """Hash artifacts incrementally without loading a full result into memory."""
     with path.open('rb') as stream:
         return hashlib.file_digest(stream, 'sha256').hexdigest()
+
+
+def _field_geometry_cache(field_backend: str):
+    """Read only administrator-configured cache identity, never request paths."""
+    names = ('GENERATOR_GEOMETRY_CACHE_DIR', 'GENERATOR_GEOMETRY_CACHE_MANIFEST_SHA256',
+             'GENERATOR_GEOMETRY_SOURCE_INDEX', 'GENERATOR_GEOMETRY_SOURCE_AUDIT')
+    values = [os.environ.get(name) for name in names]
+    if all(value is None for value in values):
+        return None
+    if (field_backend != 'gpu' or any(not value or value != value.strip() for value in values)
+            or not re.fullmatch(r'[a-f0-9]{64}', values[1])):
+        raise ValueError('Invalid field geometry cache configuration')
+    directory, source_index, source_audit = (Path(values[index]) for index in (0, 2, 3))
+    if (not all(path.is_absolute() for path in (directory, source_index, source_audit))
+            or not directory.is_dir() or not (directory / 'manifest.json').is_file()
+            or not source_index.is_file() or not source_audit.is_file()):
+        raise ValueError('Field geometry cache files unavailable')
+    return {'directory': directory, 'expected_manifest_sha256': values[1],
+            'source_index': source_index, 'source_audit': source_audit}
 
 
 def _valid_progress(progress):
@@ -102,18 +122,20 @@ def run_field_proxy_child(payload: dict, directory: str) -> None:
         field_backend = os.environ.get('GENERATOR_FIELD_BACKEND', 'cpu')
         if field_backend not in {'cpu', 'gpu'}:
             raise ValueError('Invalid field backend')
+        geometry_cache = _field_geometry_cache(field_backend)
         # multiprocessing daemon workers cannot create child processes. Keep
         # cancellation semantics intact and use the verified sequential path.
         if mp.current_process().daemon:
             field_workers = 1
         work.mkdir(parents=True, exist_ok=False)
+        cache_options = {} if geometry_cache is None else {'geometry_cache': geometry_cache}
         execute_field_proxy(graph, morphology_directories(), field_path=work / 'field.jsonl',
             output=target, configuration=config.field_configuration(), gain=config.gain,
             seed=config.seed, waveform=config.waveform, compute_field=True,
             allow_partial_geometry=config.allow_partial_geometry,
             allow_missing_curvature=config.allow_missing_curvature,
             allow_contact_exclusion=config.allow_contact_exclusion, capture_delta=True,
-            field_workers=field_workers, field_backend=field_backend,
+            field_workers=field_workers, field_backend=field_backend, **cache_options,
             progress=lambda value: _write_progress(target.parent, value))
         files = []
         for path in sorted(target.iterdir()):
