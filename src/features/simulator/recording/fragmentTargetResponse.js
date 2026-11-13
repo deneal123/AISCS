@@ -15,11 +15,18 @@ export async function verifyFragmentTargetResponse(buffer, artifact, run, graph)
       || graph?.description?.manifest_sha256 !== graphHash || buffer.byteLength < 76) throw new Error('response_identity');
   const digest = hex(new Uint8Array(await crypto.subtle.digest('SHA-256', buffer)));
   if (digest !== artifact.sha256) throw new Error('response_checksum');
+  return decodeTargetResponse(buffer, graph, { graphHash, configHash,
+    duration: run.configuration.simulation.duration_ms, sources: run.configuration.source_ids });
+}
+
+// Shared binary format; callers must authenticate the file and its provenance.
+export function decodeTargetResponse(buffer, graph, { graphHash, configHash, duration, sources: sourceIds }) {
+  if (!(buffer instanceof ArrayBuffer) || buffer.byteLength < 76 || !sha(graphHash) || !sha(configHash)
+      || !Array.isArray(sourceIds) || !graph?.node_ids) throw new Error('response_identity');
   const view = new DataView(buffer), bytes = new Uint8Array(buffer);
   const cells = view.getUint32(4, true), samples = view.getUint32(8, true);
   const format = String.fromCharCode(...bytes.subarray(0, 4));
   const decimated = format === 'FRS3', offset = 76 + (decimated ? samples * 4 : 0);
-  const duration = run.configuration.simulation.duration_ms;
   if (!['FRS1', 'FRS2', 'FRS3'].includes(format)
       || hex(bytes.subarray(12, 44)) !== graphHash || hex(bytes.subarray(44, 76)) !== configHash
       || cells < 1 || cells > graph.node_ids.length || cells * samples > 4000000
@@ -28,7 +35,8 @@ export async function verifyFragmentTargetResponse(buffer, artifact, run, graph)
       || samples < 2 || samples > 1001 || buffer.byteLength !== offset + cells * 8 + cells * samples * 4)
     throw new Error('response_contract');
   const indices = new Int32Array(cells), nodes = graph.node_ids;
-  const sources = new Set(run.configuration.source_ids.map(value => String(value)));
+  const sources = new Set(sourceIds.map(value => String(value)));
+  if (sources.size !== sourceIds.length) throw new Error('response_ids');
   if (format !== 'FRS1' && cells !== nodes.length - sources.size) throw new Error('response_coverage');
   let sampleTimes = null;
   if (decimated) {

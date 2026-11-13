@@ -45,7 +45,7 @@ export default function SimulatorScene({ opacity, neurons, placement, onPlacemen
   sceneLabel, fullConnectome = false, onMotorReadout, onFieldEventsVerified, nativeView = false, fieldRun = null,
   fieldSourceConfiguration = null,
   fieldContactDraft = null, fieldContactNormals = null, fieldSnapRequest = 0, onFieldContactsSnap,
-  fieldContactPick = null, onFieldContactPick, onFieldContactSelect, onShowTarget, targetProbe = null, sceneControls, bodyVisible = true, regionsVisible = true }) {
+  fieldContactPick = null, onFieldContactPick, onFieldContactSelect, onShowTarget, targetProbe = null, sceneControls, bodyVisible = true, regionsVisible = true, showNociceptionCandidates = false }) {
   const canvasLabel = sceneLabel || (fullConnectome || preview?.connectome
     ? 'Трёхмерная сцена мухи и полного коннектома'
     : 'Трёхмерная сцена мухи и локальной модели');
@@ -105,7 +105,7 @@ export default function SimulatorScene({ opacity, neurons, placement, onPlacemen
     onFieldContactSelect, bodyVisible, modelGeometry, sceneContext, onAnchor, invalidPlacement, modelVisualization, localWindow, focusLocal,
     connectomeData: sceneConnectome, contrastData: contrast.data, fieldContactsValid, showFieldContacts, motorReadout: motor.data, peripheralReadout: null, showPeripheral: false,
     kinematics: kinematics.data, showJoints, showNeuropil, neuropilRegion,
-    nativeView: nativeView && Boolean(sceneConnectome), pickingStimulus, onStimulusRegion, fullConnectome };
+    nativeView: nativeView && Boolean(sceneConnectome), pickingStimulus, onStimulusRegion, fullConnectome, showNociceptionCandidates };
   const [error, setError] = useState('');
   const [loaded, setLoaded] = useState(false);
   const [graphicsAttempt, setGraphicsAttempt] = useState(0);
@@ -581,7 +581,7 @@ export default function SimulatorScene({ opacity, neurons, placement, onPlacemen
       const signature = [view.timeMs, view.preview, view.modelGeometry, view.placement, view.opacity,
         view.neurons, view.bodyVisible, view.localWindow, view.placing, view.selectedContact, view.invalidPlacement, view.modelVisualization,
         view.connectomeData, view.contrastData, view.showFieldContacts, view.motorReadout, view.peripheralReadout, view.showPeripheral, view.kinematics, view.showJoints,
-        view.nativeView, view.focusLocal, view.pickingStimulus, view.fullConnectome, view.showNeuropil, view.neuropilRegion, view.fieldRun, view.fieldSimulation, view.fieldContactNormals, view.fieldSnapRequest, view.fieldContactPick, view.targetProbe, selectedNodeRef.current, selectedEdgesRef.current, selectedMorphologyRef.current, neighborMorphologyRef.current, synapsePointsRef.current, overviewRef.current, neuropilRef.current];
+        view.nativeView, view.focusLocal, view.pickingStimulus, view.fullConnectome, view.showNeuropil, view.neuropilRegion, view.showNociceptionCandidates, view.fieldRun, view.fieldSimulation, view.fieldContactNormals, view.fieldSnapRequest, view.fieldContactPick, view.targetProbe, selectedNodeRef.current, selectedEdgesRef.current, selectedMorphologyRef.current, neighborMorphologyRef.current, synapsePointsRef.current, overviewRef.current, neuropilRef.current];
       const cameraChanged = controls.update();
       if (!dirty && !cameraChanged && !dragging && signature.every((value, index) => value === lastView[index])) {
         frame = requestAnimationFrame(draw); return;
@@ -730,6 +730,8 @@ export default function SimulatorScene({ opacity, neurons, placement, onPlacemen
       renderer.domElement.dataset.schematicConnectionsVisible = String(!view.nativeView);
       let inputActive = 0;
       if (connectomeLayer) {
+        connectomeLayer.showNociceptionCandidates(view.showNociceptionCandidates);
+        renderer.domElement.dataset.nociceptionCandidates = String(view.showNociceptionCandidates ? connectomeLayer.candidateCount : 0);
         renderer.domElement.dataset.selectedNeuronIndex = String(connectomeLayer.selectNode(selectedNodeRef.current));
         renderer.domElement.dataset.selectedNeuronId = selectedNodeRef.current || '';
         const status = connectomeLayer.update(view.timeMs, view.nativeView || view.opacity < .5, view.neurons, legRigs,

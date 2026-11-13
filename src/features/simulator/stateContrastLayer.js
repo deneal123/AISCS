@@ -17,18 +17,19 @@ export function createStateContrastLayer(graph, state) {
     vertexShader: `attribute float change; uniform float scale; varying float intensity; varying float polarity;
       void main(){ intensity=clamp(abs(change)/scale,0.0,1.0); polarity=sign(change);
       gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);
-      gl_PointSize=intensity>0.001 ? 4.0+8.0*pow(intensity,0.25) : 0.0; }`,
+      gl_PointSize=intensity>0.001 ? 2.4+5.1*sqrt(intensity) : 0.0; }`,
     fragmentShader: `varying float intensity; varying float polarity;
       void main(){ float r=length(gl_PointCoord-vec2(0.5)); if(r>0.5 || intensity<=0.001) discard;
       vec3 color=polarity>0.0 ? vec3(1.0,0.57,0.12) : vec3(0.16,0.78,1.0);
-      gl_FragColor=vec4(color,(0.55+0.4*pow(intensity,0.25))*(1.0-smoothstep(0.18,0.5,r))); }`,
+      gl_FragColor=vec4(color,(0.30+0.65*sqrt(intensity))*(1.0-smoothstep(0.18,0.5,r))); }`,
   });
   const points = new THREE.Points(geometry, material);
   const nativeMatrix = new THREE.Matrix4().set(...NATIVE_VIEW_MATRIX);
   points.matrixAutoUpdate = false;
   points.matrix.copy(nativeMatrix);
   points.matrixWorldNeedsUpdate = true;
-  points.renderOrder = 6;
+  // Keep discrete model events visible above the denser state background.
+  points.renderOrder = 4;
   let previous = -1, active = 0, previousChanged = [];
   return {
     points, visibleCells: visible.length,

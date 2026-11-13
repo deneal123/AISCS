@@ -3,6 +3,7 @@ import { buildConnectomeRoutes, hasDisplayPosition, LEG_REGIONS, ROUTING_VERSION
 import { inspectConnectomeNode } from './connectomeInspection';
 import { NATIVE_VIEW_MATRIX } from './connectomeMorphology';
 import { createPeripheralLayer } from '../scene/peripheralLayer';
+import { nociceptionAscendingIndices, nociceptionCandidateIndices } from './nociceptionCandidates';
 
 // The event journal alone drives the activity. Input controls never animate it.
 export function createConnectomeLayer(data) {
@@ -50,6 +51,26 @@ export function createConnectomeLayer(data) {
       gl_FragColor=vec4(color,(selected>0.5 ? 1.0 : .1+.08*(pointScale-1.3)+.7*pulse)*(1.0-smoothstep(.18,.5,radius))); }`,
   });
   const points = new THREE.Points(geometry, somaMaterial); points.renderOrder = 5; group.add(points);
+  const candidateGeometry = new THREE.BufferGeometry();
+  candidateGeometry.setAttribute('position', geometry.getAttribute('position'));
+  candidateGeometry.setAttribute('firedAt', geometry.getAttribute('firedAt'));
+  const sensoryIndices = nociceptionCandidateIndices(data), ascendingIndices = nociceptionAscendingIndices(data);
+  const candidateIndices = [...sensoryIndices, ...ascendingIndices];
+  const candidateType = new Float32Array(n);
+  ascendingIndices.forEach(index => { candidateType[index] = 1; });
+  candidateGeometry.setAttribute('candidateType', new THREE.BufferAttribute(candidateType, 1));
+  candidateGeometry.setIndex(candidateIndices);
+  const candidateMaterial = new THREE.ShaderMaterial({ transparent: true, depthTest: false, depthWrite: false, uniforms,
+    vertexShader: `attribute float firedAt; attribute float candidateType; uniform float clock; varying float eventGlow; varying float candidateClass;
+      void main(){float age=clock-firedAt; eventGlow=age>=0.0 && age<6.0 ? exp(-age/2.5) : 0.0;
+      candidateClass=candidateType;
+      gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); gl_PointSize=8.0+4.0*eventGlow;}`,
+    fragmentShader: `varying float eventGlow; varying float candidateClass; void main(){float d=length(gl_PointCoord-vec2(.5));
+      if(d>.5||d<.28)discard; vec3 base=mix(vec3(1.0,.65,.20),vec3(.35,.9,1.0),candidateClass);
+      gl_FragColor=vec4(mix(base,vec3(1.0),eventGlow),.9);}`,
+  });
+  const candidates = new THREE.Points(candidateGeometry, candidateMaterial);
+  candidates.visible = false; candidates.frustumCulled = false; candidates.renderOrder = 7; group.add(candidates);
   const nativeIndices = routing.visibleNodes.filter(index => data.coordinate_kind?.[index] > 0);
   const nativeMatrix = new THREE.Matrix4().set(...NATIVE_VIEW_MATRIX), nativeBounds = new THREE.Box3();
   for (const index of nativeIndices) nativeBounds.expandByPoint(new THREE.Vector3().fromArray(routing.positions, index * 3).applyMatrix4(nativeMatrix));
@@ -116,6 +137,8 @@ export function createConnectomeLayer(data) {
   };
   return { group,
     nativeBounds,
+    candidateCount: candidateIndices.length,
+    showNociceptionCandidates(visible) { candidates.visible = Boolean(visible); },
     setOverview(chunks) {
       if (overviewChunks === chunks) return;
       if (chunks.length < overviewChunks.length || chunks.some((chunk, i) => i < overviewChunks.length && chunk !== overviewChunks[i])) {

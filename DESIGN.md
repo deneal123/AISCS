@@ -101,7 +101,10 @@ An optional, separately verified state-contrast layer displays the difference
 from a same-seed no-input LIF control with a fixed run-wide scale. Positive and
 negative differences use different colours; the layer is not labelled as spikes
 or as an experimentally measured potential. Missing morphology coordinates are
-not rendered and sampled coverage is reported.
+not rendered and sampled coverage is reported. Visible points keep a minimum
+display size and opacity above the existing 0.1% threshold, while size and
+opacity continue to increase monotonically with the run-wide normalized change.
+This improves contrast without adding events or changing the stored values.
 The recording can be rerun from its saved configuration with explicitly edited
 native STIM and recording-contact coordinates; it never moves the scene contacts.
 The native contact editor's «Показать все» action reframes the verified neurites
