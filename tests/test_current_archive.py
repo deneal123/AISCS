@@ -3,13 +3,13 @@ import pytest
 
 pytest.importorskip("neuron")
 
-from service.infrastructure.stimulation.current_archive import (  # noqa: E402
+from service.infrastructure.stimulation.network_recording import (
+    record_independent_cells,  # noqa: E402
+)
+from service.infrastructure.stimulation.recording.current_archive import (  # noqa: E402
     CurrentArchiveWriter,
     rerecord_current_archive,
     write_current_archive,
-)
-from service.infrastructure.stimulation.network_recording import (
-    record_independent_cells,  # noqa: E402
 )
 from tests.test_forced_network import graph  # noqa: E402
 from tests.test_network_recording import pair  # noqa: E402
@@ -48,7 +48,7 @@ def test_archive_rejects_duplicates_and_mismatched_manifest(tmp_path):
 
 
 def test_archive_detects_change_during_read(tmp_path, monkeypatch):
-    from service.infrastructure.stimulation import current_archive
+    from service.infrastructure.stimulation.recording import current_archive as current_archive
 
     e1, ref = [0, 200, 0], [200, 200, 0]
     archive = tmp_path / "source"
@@ -67,11 +67,11 @@ def test_archive_detects_change_during_read(tmp_path, monkeypatch):
 
 
 def test_field_graph_streams_source_and_replay_currents_into_one_archive(tmp_path, monkeypatch):
-    from service.application.field.field_graph_replay import run_field_graph_replay
+    from service.application.field.graph_replay import run_field_graph_replay
 
     cells = {10: pair(10), 20: pair(20, 1250)}
     monkeypatch.setattr(
-        "service.application.field.field_driven_network.simulate_registered_swc_reference",
+        "service.application.field.driven_network.simulate_registered_swc_reference",
         lambda body, *_args, **_kwargs: cells[body],
     )
 
@@ -116,8 +116,8 @@ def test_writer_refuses_to_finalize_after_failed_cell(tmp_path):
 
 
 def test_execution_opt_in_checks_archive_against_result_before_publication(tmp_path, monkeypatch):
-    from service.application.field.field_graph_execution import FieldGraphExecution
-    from service.domain.contracts.field_graph_contract import FieldGraphConfig
+    from service.application.field.graph_execution import FieldGraphExecution
+    from service.domain.contracts.field.graph import FieldGraphConfig
     from tests.test_field_graph_contract import payload
 
     cells = [pair(10), pair(20, 1250)]
@@ -140,13 +140,13 @@ def test_execution_opt_in_checks_archive_against_result_before_publication(tmp_p
             kwargs["solution_sink"](solution, provenance)
         return {"recording": recording, "interpretation": "one-way"}
 
-    monkeypatch.setattr("service.application.field.field_graph_execution.run_field_graph_replay", run)
+    monkeypatch.setattr("service.application.field.graph_execution.run_field_graph_replay", run)
     monkeypatch.setattr(
-        "service.application.field.field_graph_execution.export_field_graph_replay",
+        "service.application.field.graph_execution.export_field_graph_replay",
         lambda *_args, **_kwargs: {"files": []},
     )
     monkeypatch.setattr(
-        "service.application.field.field_graph_execution.load_verified_field_graph_replay",
+        "service.application.field.graph_execution.load_verified_field_graph_replay",
         lambda *_args: None,
     )
     execution = FieldGraphExecution(model, None, [])

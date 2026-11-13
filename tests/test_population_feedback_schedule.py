@@ -5,8 +5,11 @@ from types import SimpleNamespace
 
 import pytest
 
-from service.application.feedback.population_feedback_schedule import population_feedback_schedule
-from service.infrastructure.stimulation.fragment_pair_mapping import match_fragment_inputs
+from service.application.feedback.schedule import population_feedback_schedule
+from service.infrastructure.stimulation.population.pair_mapping import match_fragment_inputs
+from service.infrastructure.stimulation.experimental_gpu.events import (
+    feedback_midpoint_events, feedback_refined_events,
+)
 
 
 def inputs():
@@ -31,6 +34,30 @@ def test_routes_all_targets_with_explicit_delay_and_outside_window():
     assert result['events_by_target'][20][0]['time_ms'] == 3
     assert result['events_by_target'][20][0]['reversal_mv'] == -80
     assert result['provenance_by_target'][20][0]['source_id'] == 10
+
+
+def test_experimental_gpu_mapping_preserves_schedule_and_rejects_identity_mismatch():
+    result = population_feedback_schedule(**inputs())
+    gpu_events = feedback_midpoint_events(result, 20, 'b' * 64, [3, 9], duration_ms=6, nseg_per_edge=1)
+    assert gpu_events[0]['segment_index'] == 1
+    assert gpu_events[0]['time_ms'] == 3
+    assert gpu_events[0]['reversal_mv'] == -80
+    with pytest.raises(ValueError, match='mismatch'):
+        feedback_midpoint_events(result, 20, 'c' * 64, [3, 9], duration_ms=6, nseg_per_edge=1)
+    result['unresolved'].append({'source_id': 10})
+    with pytest.raises(ValueError, match='Incomplete'):
+        feedback_midpoint_events(result, 20, 'b' * 64, [3, 9], duration_ms=6, nseg_per_edge=1)
+
+
+def test_experimental_gpu_feedback_maps_to_refined_segment():
+    value = inputs()
+    value['mappings'][0]['candidates'][0]['target_fraction'] = .9
+    result = population_feedback_schedule(**value)
+    segments = [(9, 0, 3), (9, 1, 3), (9, 2, 3)]
+    mapped = feedback_refined_events(result, 20, 'b' * 64, segments, duration_ms=6)
+    assert mapped[0]['segment_index'] == 2
+    assert mapped[0]['position'] == .9
+    assert mapped[0]['time_ms'] == 3
 
 
 def test_schedule_preserves_target_observation_for_each_event():
@@ -148,7 +175,7 @@ def test_partial_source_mapping_and_feedback_schedule_agree(monkeypatch):
             {**common, 'source_position_8nm': [2, 2, 3], 'centerline_distance_um': 2.1,
              'status': 'geometry_unresolved', 'stimulated_ticks_ms': None,
              'control_ticks_ms': None}]}
-    module = 'service.infrastructure.stimulation.fragment_pair_mapping.'
+    module = 'service.infrastructure.stimulation.population.pair_mapping.'
     monkeypatch.setattr(module + 'outgoing', lambda *_a: {
         'next_offset': None, 'items': [{'target_id': '20', 'synapse_count': 2}]})
     monkeypatch.setattr(module + 'read_skeleton',

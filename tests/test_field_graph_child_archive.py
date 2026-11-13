@@ -2,7 +2,7 @@ import json
 
 import pytest
 
-from service.domain.contracts.field_graph_contract import FieldGraphConfig
+from service.domain.contracts.field.graph import FieldGraphConfig
 from service.infrastructure.execution.process import run_field_graph_child
 from tests.test_field_graph_contract import payload
 
@@ -11,10 +11,11 @@ from tests.test_field_graph_contract import payload
 @pytest.mark.parametrize("retain_state", [False, True])
 def test_child_publishes_requested_archive_and_cleans_work(monkeypatch, tmp_path, retain,
                                                           retain_state):
-    from service.application.field import field_state_artifacts
-    from service.application.field.field_graph_execution import FieldGraphExecution
+    from service.application.field import state_artifacts as field_state_artifacts
+    from service.application.field.graph_execution import FieldGraphExecution
     from service.infrastructure.connectome import neighbors, synapse_repository
-    from service.infrastructure.stimulation import current_transport, field_graph_preview
+    from service.infrastructure.stimulation.field import graph_preview as field_graph_preview
+    from service.infrastructure.stimulation.recording import current_transport
 
     raw = payload()
     if retain:

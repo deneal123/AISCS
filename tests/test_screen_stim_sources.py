@@ -8,7 +8,7 @@ from scripts.screen_stim_sources import (
     graph_config_from_screen,
     verified_source_cells,
 )
-from service.domain.contracts.field_graph_contract import FieldGraphConfig
+from service.domain.contracts.field.graph import FieldGraphConfig
 
 
 def test_interrupted_screen_resumes_and_verifies_record_chain(tmp_path, monkeypatch):

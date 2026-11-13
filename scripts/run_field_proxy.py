@@ -10,9 +10,9 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from service.application.field.field_proxy_execution import execute_field_proxy  # noqa: E402
+from service.application.field.proxy_execution import execute_field_proxy  # noqa: E402
 from service.infrastructure.connectome.neighbors import registered_graph  # noqa: E402
-from service.infrastructure.stimulation.field_summary_verified import (
+from service.infrastructure.stimulation.field.summary_verified import (
     verified_descriptors,  # noqa: E402,F401
 )
 from service.settings import morphology_directories  # noqa: E402

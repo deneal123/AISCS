@@ -54,6 +54,20 @@ def test_resume_rejects_changed_configuration_without_mutation(tmp_path):
     assert output.read_bytes() == original
 
 
+def test_resume_rejects_changed_pool_lifecycle_provenance(tmp_path, monkeypatch):
+    from service.infrastructure.execution import pool_lifecycle
+
+    output = tmp_path / 'field.jsonl'
+    compute([1], [], output, CONFIG, graph_hash='graph')
+    original = output.read_bytes()
+    modified = tmp_path / 'other_pool_lifecycle.py'
+    modified.write_text('different lifecycle implementation\n', encoding='utf8')
+    monkeypatch.setattr(pool_lifecycle, '__file__', str(modified))
+    with pytest.raises(ValueError, match='provenance or configuration'):
+        compute([1], [], output, CONFIG, graph_hash='graph')
+    assert output.read_bytes() == original
+
+
 def test_parallel_results_match_serial_and_resume_across_worker_counts(tmp_path):
     source = tmp_path / 'source'
     (source / 'raw').mkdir(parents=True)
@@ -152,7 +166,7 @@ def test_unavailable_gpu_does_not_fall_back_or_create_output(tmp_path, monkeypat
       {'body_id': '3', 'status': 'source_missing'}], 'do not match'),
 ])
 def test_generated_rows_are_checked_before_completion(tmp_path, monkeypatch, rows, error):
-    from service.infrastructure.stimulation import field_summary_compute
+    from service.infrastructure.stimulation.field import summary_compute as field_summary_compute
 
     monkeypatch.setattr(field_summary_compute, '_field_rows', lambda *args: iter(rows))
     output = tmp_path / 'field.jsonl'

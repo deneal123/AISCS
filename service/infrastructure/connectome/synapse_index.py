@@ -94,6 +94,10 @@ def build_batch_index(
     return manifest
 
 
+class PairQueryLimitExceeded(ValueError):
+    """A bounded multi-pair query should fall back to smaller index queries."""
+
+
 class SynapseBatchIndex:
     """Verify once at open, then query selected source batches without rescanning."""
 
@@ -101,9 +105,10 @@ class SynapseBatchIndex:
         self.source_path = source_path
         self.ids_path = ids_path
         self.bitmap_path = directory / "batches.npy"
+        self.manifest_path = directory / "manifest.json"
         initial_fingerprint = self._fingerprint()
         initial_index_fingerprints = self._index_fingerprints()
-        self.manifest = json.loads((directory / "manifest.json").read_text(encoding="utf-8"))
+        self.manifest = json.loads(self.manifest_path.read_text(encoding="utf-8"))
         info = self.manifest
         if (info.get("format") != "malecns-synapse-batches-v1"
                 or info.get("source_md5") != expected_md5
@@ -136,7 +141,65 @@ class SynapseBatchIndex:
         return stat.st_dev, stat.st_ino, stat.st_size, stat.st_mtime_ns, stat.st_ctime_ns
 
     def _index_fingerprints(self):
-        return tuple(self._stat_identity(path) for path in (self.ids_path, self.bitmap_path))
+        return tuple(self._stat_identity(path) for path in
+                     (self.ids_path, self.bitmap_path, self.manifest_path))
+
+    def assert_unchanged(self):
+        """Recheck the same file identities used by indexed queries."""
+        if self._fingerprint() != self.source_fingerprint:
+            raise ValueError("Synapse source changed after verification")
+        if self._index_fingerprints() != self.index_fingerprints:
+            raise ValueError("Synapse index changed after verification")
+
+    def query_exact_pairs(self, pairs, *, max_rows=100_000):
+        """Read complete observations for bounded graph pairs in source order.
+
+        A bitmap intersection selects candidate batches for each pair. Each
+        returned row still matches an exact requested pair; a row cap prevents
+        this optional optimization from consuming unbounded result memory.
+        """
+        if (not isinstance(pairs, list) or not 1 <= len(pairs) <= 128
+                or any(not isinstance(pair, tuple) or len(pair) != 2
+                       or any(type(value) is not int or not 0 < value < 2**63 for value in pair)
+                       for pair in pairs)
+                or len(set(pairs)) != len(pairs)
+                or type(max_rows) is not int or max_rows < 1):
+            raise ValueError('Invalid exact synapse pair query')
+        self.assert_unchanged()
+        mask = np.zeros(self.bits.shape[2], dtype=np.uint8)
+        for source, target in pairs:
+            positions = np.searchsorted(self.ids, [source, target])
+            if any(pos >= len(self.ids) or int(self.ids[pos]) != body
+                   for pos, body in zip(positions, (source, target), strict=True)):
+                raise ValueError('Neuron is not in registered graph')
+            mask |= self.bits[0, positions[0]] & self.bits[1, positions[1]]
+        batches = np.flatnonzero(np.unpackbits(mask, bitorder='little')[:self.manifest['batches']])
+        sources = pa.array(sorted({source for source, _ in pairs}), type=pa.int64())
+        targets = pa.array(sorted({target for _, target in pairs}), type=pa.int64())
+        result = {pair: [] for pair in pairs}
+        row_count = 0
+        with pa.memory_map(str(self.source_path), 'r') as source_file:
+            reader = ipc.open_file(source_file)
+            if reader.num_record_batches != self.manifest['batches']:
+                raise ValueError('Synapse source batch count changed')
+            for number in batches:
+                batch = reader.get_batch(int(number)).select(FIELDS)
+                matches = batch.filter(pc.and_(
+                    pc.is_in(batch.column('body_pre'), value_set=sources),
+                    pc.is_in(batch.column('body_post'), value_set=targets)))
+                for offset in range(0, matches.num_rows, 4096):
+                    for row in matches.slice(offset, 4096).to_pylist():
+                        pair = (row['body_pre'], row['body_post'])
+                        if pair in result:
+                            if any(type(row[field]) is not int for field in FIELDS):
+                                raise ValueError('Invalid or missing synapse coordinate')
+                            row_count += 1
+                            if row_count > max_rows:
+                                raise PairQueryLimitExceeded(
+                                    'Exact synapse pair result exceeds limit')
+                            result[pair].append(row)
+        self.assert_unchanged()
+        return result
 
     def scan_incoming(self, body_id: int, graph_partners: list[int], active_partners: set[int]):
         """Count graph pairs in one pass and retain only active-partner coordinates."""

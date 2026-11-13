@@ -4,8 +4,8 @@ from types import SimpleNamespace
 import numpy as np
 import pytest
 
-from service.application.feedback.population_feedback_loop import iterate_population_feedback
-from service.application.feedback.population_feedback_validation import validate_population_feedback
+from service.application.feedback.loop import iterate_population_feedback
+from service.application.feedback.validation import validate_population_feedback
 from tests.test_forced_network import graph
 from tests.test_fragment_population_contract import example
 
@@ -13,7 +13,7 @@ from tests.test_fragment_population_contract import example
 def test_partial_source_geometry_is_not_misrepresented_as_coupled_feedback(monkeypatch):
     metadata = {'configuration': {**example(), 'allow_partial_geometry': True},
                 'schedules': [{'edge_events': [], 'unresolved_geometry': [{'candidate_index': 0}]}]}
-    monkeypatch.setattr('service.application.feedback.population_feedback_loop.load_verified_fragment_population',
+    monkeypatch.setattr('service.application.feedback.loop.load_verified_fragment_population',
                         lambda *_: {'metadata': metadata})
     with pytest.raises(ValueError, match='Partial source geometry'):
         iterate_population_feedback('archive', graph(), SimpleNamespace(), [], parameters={},
@@ -32,7 +32,7 @@ def test_partial_source_convergence_remains_explicit_and_omits_unknown_events(mo
         {'body_id': '20', 'morphology_sha256': 'b' * 64, 'candidates': []}],
         'schedules': [{'edge_events': [], 'unresolved_geometry': [{'candidate_index': 0}]},
                       {'edge_events': [], 'unresolved_geometry': []}]}
-    module = 'service.application.feedback.population_feedback_loop.'
+    module = 'service.application.feedback.loop.'
     monkeypatch.setattr(module + 'load_verified_fragment_population',
                         lambda *_: {'metadata': metadata, 'manifest': {'fake': 'source'}})
     monkeypatch.setattr(module + 'run_edge_forced_network', lambda *_a, **_k: {
@@ -62,7 +62,7 @@ def test_no_input_converges_without_fabricating_feedback(monkeypatch):
         {'body_id': str(body), 'morphology_sha256': 'b' * 64, 'candidates': []}
         for body in config['source_ids']],
         'schedules': [{'edge_events': []}, {'edge_events': []}]}
-    module = 'service.application.feedback.population_feedback_loop.'
+    module = 'service.application.feedback.loop.'
     monkeypatch.setattr(module + 'load_verified_fragment_population',
                         lambda *_: {'metadata': metadata, 'manifest': {'fake': 'source'}})
     monkeypatch.setattr(module + 'run_edge_forced_network', lambda *_a, **_k: {
@@ -98,7 +98,7 @@ def test_opt_in_discretization_receipts_follow_the_iterated_result(monkeypatch, 
     metadata = {'configuration': config, 'diagnostics': [
         {'body_id': str(body), 'morphology_sha256': 'b' * 64, 'candidates': []}
         for body in config['source_ids']], 'schedules': [{'edge_events': []}, {'edge_events': []}]}
-    module = 'service.application.feedback.population_feedback_loop.'
+    module = 'service.application.feedback.loop.'
     monkeypatch.setattr(module + 'load_verified_fragment_population',
                         lambda *_: {'metadata': metadata})
     monkeypatch.setattr(module + 'run_edge_forced_network', lambda *_a, **_k: {
@@ -139,7 +139,7 @@ def test_iteration_limit_is_not_reported_as_convergence(monkeypatch):
     metadata = {'configuration': config, 'diagnostics': [
         {'body_id': str(body), 'morphology_sha256': 'b' * 64, 'candidates': []}
         for body in config['source_ids']], 'schedules': [{'edge_events': []}, {'edge_events': []}]}
-    module = 'service.application.feedback.population_feedback_loop.'
+    module = 'service.application.feedback.loop.'
     monkeypatch.setattr(module + 'load_verified_fragment_population',
                         lambda *_: {'metadata': metadata})
     calls = []
@@ -171,7 +171,7 @@ def test_experimental_cache_is_opt_in_and_scoped_to_each_run(monkeypatch):
     metadata = {'configuration': config, 'diagnostics': [
         {'body_id': str(body), 'morphology_sha256': 'b' * 64, 'candidates': []}
         for body in config['source_ids']], 'schedules': [{'edge_events': []}, {'edge_events': []}]}
-    module = 'service.application.feedback.population_feedback_loop.'
+    module = 'service.application.feedback.loop.'
     monkeypatch.setattr(module + 'load_verified_fragment_population',
                         lambda *_: {'metadata': metadata})
     monkeypatch.setattr(module + 'run_edge_forced_network', lambda *_a, **_k: {
@@ -198,6 +198,95 @@ def test_experimental_cache_is_opt_in_and_scoped_to_each_run(monkeypatch):
                                     experimental_cache_bytes=True)
 
 
+def test_experimental_solver_cannot_be_checkpointed_or_published(monkeypatch, tmp_path):
+    config = example()
+    fake_graph = graph()
+    fake_graph.provenance = {'manifest_sha256': 'a' * 64}
+    metadata = {'configuration': config, 'diagnostics': [
+        {'body_id': str(body), 'morphology_sha256': 'b' * 64, 'candidates': []}
+        for body in config['source_ids']], 'schedules': [{'edge_events': []}, {'edge_events': []}]}
+    module = 'service.application.feedback.loop.'
+    monkeypatch.setattr(module + 'load_verified_fragment_population',
+                        lambda *_: {'metadata': metadata})
+    monkeypatch.setattr(module + 'run_edge_forced_network', lambda *_a, **_k: {
+        'spike_neurons': np.array([], dtype=int), 'spike_times_ms': np.array([])})
+    monkeypatch.setattr(module + 'feedback_output_events', lambda *_a, **_k: {
+        'edge_events': [], 'candidates': []})
+    received = []
+
+    def replay(config, _directories, _schedule, _hashes, *, solution_sink,
+               experimental_solver_backend, **kwargs):
+        received.append((experimental_solver_backend,
+                         kwargs.get('experimental_gpu_output_budget_bytes')))
+        for body in config.source_ids:
+            solution_sink(body, {}, {})
+        return {'recording': {'cells': len(config.source_ids)},
+                'experimental_gpu_table_clamped_cell_ids': []}
+
+    monkeypatch.setattr(module + 'replay_population_feedback', replay)
+    result = iterate_population_feedback(
+        'archive', fake_graph, SimpleNamespace(), [], parameters={}, max_iterations=3,
+        experimental_solver_backend='experimental_coreneuron')
+    assert result['status'] == 'converged'
+    assert result['experimental_solver_backend'] == 'experimental_coreneuron'
+    assert received == [('experimental_coreneuron', None)]
+    cuda = iterate_population_feedback(
+        'archive', fake_graph, SimpleNamespace(), [], parameters={}, max_iterations=3,
+        experimental_solver_backend='experimental_cuda', experimental_gpu_output_budget_bytes=1000)
+    assert cuda['experimental_solver_backend'] == 'experimental_cuda'
+    assert received[-1] == ('experimental_cuda', 1000)
+    with pytest.raises(ValueError, match='cannot be published'):
+        validate_population_feedback(cuda, fake_graph, {}, parameters={},
+                                     allow_partial_geometry=False)
+    with pytest.raises(ValueError, match='output budget'):
+        iterate_population_feedback('archive', fake_graph, SimpleNamespace(), [], parameters={},
+                                    max_iterations=1,
+                                    experimental_solver_backend='experimental_cuda')
+    with pytest.raises(ValueError, match='cannot be published'):
+        validate_population_feedback(result, fake_graph, {}, parameters={},
+                                     allow_partial_geometry=False)
+    with pytest.raises(ValueError, match='not supported by feedback checkpoints'):
+        iterate_population_feedback('archive', fake_graph, SimpleNamespace(), [], parameters={},
+            max_iterations=3, checkpoint_dir=tmp_path,
+            experimental_solver_backend='experimental_coreneuron')
+
+
+def test_experimental_workers_are_propagated_but_not_published(monkeypatch, tmp_path):
+    config = example()
+    fake_graph = graph()
+    fake_graph.provenance = {'manifest_sha256': 'a' * 64}
+    metadata = {'configuration': config, 'diagnostics': [
+        {'body_id': str(body), 'morphology_sha256': 'b' * 64, 'candidates': []}
+        for body in config['source_ids']], 'schedules': [{'edge_events': []}, {'edge_events': []}]}
+    module = 'service.application.feedback.loop.'
+    monkeypatch.setattr(module + 'load_verified_fragment_population',
+                        lambda *_: {'metadata': metadata})
+    monkeypatch.setattr(module + 'run_edge_forced_network', lambda *_a, **_k: {
+        'spike_neurons': np.array([], dtype=int), 'spike_times_ms': np.array([])})
+    monkeypatch.setattr(module + 'feedback_output_events', lambda *_a, **_k: {
+        'edge_events': [], 'candidates': []})
+    received = []
+
+    def replay(config, _directories, _schedule, _hashes, *, solution_sink,
+               experimental_cell_workers, **_kwargs):
+        received.append(experimental_cell_workers)
+        for body in config.source_ids:
+            solution_sink(body, {}, {})
+        return {'recording': {'cells': len(config.source_ids)}}
+
+    monkeypatch.setattr(module + 'replay_population_feedback', replay)
+    result = iterate_population_feedback('archive', fake_graph, SimpleNamespace(), [],
+        parameters={}, max_iterations=3, experimental_cell_workers=2)
+    assert result['status'] == 'converged' and result['experimental_cell_workers'] == 2
+    assert received == [2]
+    with pytest.raises(ValueError, match='cannot be published'):
+        validate_population_feedback(result, fake_graph, {}, parameters={},
+                                     allow_partial_geometry=False)
+    with pytest.raises(ValueError, match='not supported by feedback checkpoints'):
+        iterate_population_feedback('archive', fake_graph, SimpleNamespace(), [], parameters={},
+            max_iterations=3, checkpoint_dir=tmp_path, experimental_cell_workers=2)
+
+
 def test_latest_physical_events_are_exported_with_the_network(monkeypatch):
     config = example()
     fake_graph = graph()
@@ -205,7 +294,7 @@ def test_latest_physical_events_are_exported_with_the_network(monkeypatch):
     metadata = {'configuration': config, 'diagnostics': [
         {'body_id': str(body), 'morphology_sha256': 'b' * 64, 'candidates': []}
         for body in config['source_ids']], 'schedules': [{'edge_events': []}, {'edge_events': []}]}
-    module = 'service.application.feedback.population_feedback_loop.'
+    module = 'service.application.feedback.loop.'
     monkeypatch.setattr(module + 'load_verified_fragment_population',
                         lambda *_: {'metadata': metadata})
     seen = []
@@ -243,7 +332,7 @@ def test_network_spike_is_routed_back_into_population_replay(monkeypatch):
     metadata = {'configuration': config, 'diagnostics': [
         {'body_id': str(body), 'morphology_sha256': 'b' * 64, 'candidates': []}
         for body in config['source_ids']], 'schedules': [{'edge_events': []}, {'edge_events': []}]}
-    module = 'service.application.feedback.population_feedback_loop.'
+    module = 'service.application.feedback.loop.'
     monkeypatch.setattr(module + 'load_verified_fragment_population',
                         lambda *_: {'metadata': metadata})
     monkeypatch.setattr(module + 'run_edge_forced_network', lambda *_a, **_k: {
@@ -277,7 +366,7 @@ def test_iteration_persists_a_verified_snapshot(tmp_path, monkeypatch):
                    for body in config['source_ids']]
     metadata = {'configuration': config, 'diagnostics': diagnostics,
                 'schedules': [{'edge_events': []}, {'edge_events': []}]}
-    module = 'service.application.feedback.population_feedback_loop.'
+    module = 'service.application.feedback.loop.'
     monkeypatch.setattr(module + 'load_verified_fragment_population',
                         lambda *_: {'metadata': metadata, 'manifest': {'fake': 'source'}})
     monkeypatch.setattr(module + 'run_edge_forced_network', lambda *_a, **_k: {

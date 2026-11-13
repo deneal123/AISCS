@@ -32,7 +32,8 @@ def test_contact_screen_requires_all_verified_indexes_and_auth(tmp_path, monkeyp
         received.append((args, kwargs))
         return {'potential_intersections': [], 'examined': 0, 'indexed': 1}
 
-    monkeypatch.setattr('service.infrastructure.stimulation.contact_screen.screen_contacts', screen)
+    monkeypatch.setattr('service.infrastructure.stimulation.contacts.screen.screen_contacts',
+                        screen)
     response = client.post('/v1/connectome/contact-screen', json=body, headers=auth)
     assert response.status_code == 200 and response.json()['indexed'] == 1
     assert [list(point) for point in received[0][0][-2]] == [body[key] for key in (
@@ -48,7 +49,7 @@ def test_contact_screen_requires_all_verified_indexes_and_auth(tmp_path, monkeyp
     positions = {'positions_um': [[1, 2, 3], [4, 5, 6], [7, 8, 9]], 'clearance_um': 1}
     assert client.post('/v1/connectome/contact-positions', json=positions).status_code == 401
     monkeypatch.setattr(
-        'service.infrastructure.stimulation.contact_screen.screen_contact_positions', screen
+        'service.infrastructure.stimulation.contacts.screen.screen_contact_positions', screen
     )
     response = client.post('/v1/connectome/contact-positions', json=positions, headers=auth)
     assert response.status_code == 200
@@ -64,6 +65,7 @@ def test_contact_screen_requires_all_verified_indexes_and_auth(tmp_path, monkeyp
     response = client.post('/v1/connectome/contact-positions', json=positions, headers=auth)
     assert response.status_code == 200
     assert received[-1][1]['geometry_cache'] == expected_cache
+    assert received[-1][1]['workers'] == 2
 
     def invalid_cache(_backend):
         raise ValueError('cache invalid')

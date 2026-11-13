@@ -5,7 +5,7 @@ from uuid import uuid4
 import pytest
 from fastapi.testclient import TestClient
 
-from service.domain.contracts.fragment_population_contract import FragmentPopulationExecutionRequest
+from service.domain.contracts.population.fragment import FragmentPopulationExecutionRequest
 from service.infrastructure.execution.process import Executions
 from service.presentation.http import build_app
 from tests.test_forced_network import graph

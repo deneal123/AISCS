@@ -8,11 +8,11 @@ import pytest
 pytest.importorskip("neuron")
 
 from service.application.replay.rerecord_preview import rerecord_preview  # noqa: E402
-from service.infrastructure.stimulation.current_archive import (  # noqa: E402
+from service.infrastructure.stimulation.recording.current_archive import (  # noqa: E402
     rerecord_current_archive,
     write_current_archive,
 )
-from service.infrastructure.stimulation.current_transport import (  # noqa: E402
+from service.infrastructure.stimulation.recording.current_transport import (  # noqa: E402
     pack_current_archive,
     unpack_current_archive,
 )

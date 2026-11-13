@@ -2,9 +2,9 @@ from copy import deepcopy
 
 import pytest
 
-from service.application.feedback.cell_solution_cache import CellSolutionCache
-from service.application.feedback.population_feedback_replay import replay_population_feedback
-from service.domain.contracts.fragment_population_contract import FragmentPopulationConfig
+from service.application.feedback.cell_cache import CellSolutionCache
+from service.application.feedback.replay import replay_population_feedback
+from service.domain.contracts.population.fragment import FragmentPopulationConfig
 from tests.test_fragment_population_contract import example
 
 
@@ -28,7 +28,7 @@ def test_replays_complete_population_and_supplies_only_each_targets_events(monke
     def record(records, *_args, **_kwargs):
         return {'cells': len(list(records))}
 
-    module = 'service.application.feedback.population_feedback_replay.'
+    module = 'service.application.feedback.replay.'
     monkeypatch.setattr(module + 'simulate_registered_swc_reference', simulate)
     monkeypatch.setattr(module + 'record_independent_cells', record)
     result = replay_population_feedback(config, [], schedule, hashes, omitted_pairs=[(10, 20)])
@@ -61,7 +61,7 @@ def test_rejects_endpoint_before_running_any_population_cell(monkeypatch, positi
     def unexpected(*_args, **_kwargs):
         raise AssertionError('A physical cell was started before endpoint validation')
 
-    monkeypatch.setattr('service.application.feedback.population_feedback_replay.'
+    monkeypatch.setattr('service.application.feedback.replay.'
                         'simulate_registered_swc_reference', unexpected)
     with pytest.raises(ValueError, match='zero-area section endpoint'):
         replay_population_feedback(config, [], schedule, hashes, omitted_pairs=[])
@@ -74,7 +74,7 @@ def test_explicit_verified_discretization_reaches_solver_and_is_returned(monkeyp
                                   'nseg_by_edge': {'7': 5}, 'sha256': 'd' * 64}},
                 'observation_audit': {'verified_events': 1}}
     seen = []
-    module = 'service.application.feedback.population_feedback_replay.'
+    module = 'service.application.feedback.replay.'
     monkeypatch.setattr(module + 'prepare_feedback_discretization', lambda *_a, **_k: prepared)
     def simulate(body, _directories, *, expected_morphology_sha256, synaptic_events, **settings):
         seen.append((body, synaptic_events, settings.get('nseg_by_edge')))
@@ -101,7 +101,7 @@ def test_discretization_policy_requires_index_and_explicit_bounds():
 def test_run_local_cache_reuses_only_unchanged_cell_inputs(monkeypatch):
     config, hashes, schedule = setup()
     calls = []
-    module = 'service.application.feedback.population_feedback_replay.'
+    module = 'service.application.feedback.replay.'
 
     def simulate(body, _directories, *, expected_morphology_sha256, **_settings):
         calls.append(body)
@@ -124,3 +124,35 @@ def test_run_local_cache_reuses_only_unchanged_cell_inputs(monkeypatch):
                         lambda *_a, **_k: {'source': 'changed-source'})
     with pytest.raises(ValueError, match='provenance mismatch'):
         replay_population_feedback(config, [], changed, hashes, omitted_pairs=[], cell_cache=cache)
+
+
+def test_experimental_solver_is_explicit_and_isolated_in_cache(monkeypatch):
+    config, hashes, schedule = setup()
+    calls = []
+    module = 'service.application.feedback.replay.'
+
+    def simulate(body, _directories, *, expected_morphology_sha256, **settings):
+        calls.append((body, settings.get('solver_backend'), settings.get('field_coupling')))
+        return {'result': [body]}, {'body_id': str(body),
+                                   'morphology_sha256': expected_morphology_sha256,
+                                   'morphology_source': 'verified-source'}
+
+    monkeypatch.setattr(module + 'simulate_registered_swc_reference', simulate)
+    monkeypatch.setattr(module + 'record_independent_cells',
+                        lambda records, *_a, **_k: {'cells': len(list(records))})
+    monkeypatch.setattr(module + 'read_skeleton',
+                        lambda *_a, **_k: {'source': 'verified-source'})
+    cache = CellSolutionCache(100_000)
+    ordinary = replay_population_feedback(config, [], schedule, hashes, omitted_pairs=[],
+                                          cell_cache=cache)
+    experimental = replay_population_feedback(
+        config, [], schedule, hashes, omitted_pairs=[], cell_cache=cache,
+        experimental_solver_backend='experimental_coreneuron')
+    assert 'experimental_solver_backend' not in ordinary
+    assert experimental['experimental_solver_backend'] == 'experimental_coreneuron'
+    assert calls == [(10, None, None), (20, None, None),
+                     (10, 'experimental_coreneuron', 'experimental_virtual_current'),
+                     (20, 'experimental_coreneuron', 'experimental_virtual_current')]
+    with pytest.raises(ValueError, match='experimental solver backend'):
+        replay_population_feedback(config, [], schedule, hashes, omitted_pairs=[],
+                                   experimental_solver_backend=True)

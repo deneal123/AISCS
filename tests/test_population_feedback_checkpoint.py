@@ -4,8 +4,8 @@ from concurrent.futures import ThreadPoolExecutor
 
 import pytest
 
-from service.domain.contracts.fragment_population_contract import FragmentPopulationConfig
-from service.infrastructure.stimulation.population_feedback_checkpoint import (
+from service.domain.contracts.population.fragment import FragmentPopulationConfig
+from service.infrastructure.stimulation.feedback.checkpoint import (
     checkpoint_run_identity,
     read_checkpoint,
     validate_checkpoint,
@@ -84,7 +84,7 @@ def test_failed_publication_does_not_leave_partial_checkpoint(tmp_path, monkeypa
     path = tmp_path / 'iteration.json'
     def fail_link(*_args):
         raise OSError('simulated publication interruption')
-    monkeypatch.setattr('service.infrastructure.stimulation.population_feedback_checkpoint.os.link',
+    monkeypatch.setattr('service.infrastructure.stimulation.feedback.checkpoint.os.link',
                         fail_link)
     with pytest.raises(OSError, match='simulated publication interruption'):
         write_checkpoint(path, state)

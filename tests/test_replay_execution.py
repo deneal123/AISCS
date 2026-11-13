@@ -6,7 +6,7 @@ from uuid import uuid4
 import pytest
 from fastapi.testclient import TestClient
 
-from service.domain.contracts.replay_contract import ReplayExecutionRequest
+from service.domain.contracts.replay import ReplayExecutionRequest
 from service.infrastructure.execution.process import Executions
 from service.infrastructure.execution.replay_input import ReplayInputStore
 from service.presentation.http import build_app

@@ -9,7 +9,7 @@ import re
 
 import numpy as np
 
-from service.infrastructure.stimulation.fragment_pair_mapping import (
+from service.infrastructure.stimulation.population.pair_mapping import (
     match_fragment_inputs,
     schedule_matched_fragment_events,
     schedule_population_fragment_events,

@@ -4,8 +4,8 @@ from uuid import uuid4
 import numpy as np
 import pytest
 
-from service.application.population.fragment_contact_preflight import check_fragment_contacts
-from service.domain.contracts.fragment_population_contract import FragmentPopulationConfig
+from service.application.population.contact_preflight import check_fragment_contacts
+from service.domain.contracts.population.fragment import FragmentPopulationConfig
 from service.infrastructure.execution.process import run_fragment_population_child
 from tests.test_fragment_population_contract import example
 
@@ -41,7 +41,7 @@ def test_preflight_requires_audited_indexes_and_rejects_intersections(tmp_path, 
             "potential_intersections": [{"body_id": 10, "contact_indices": [0, 2]}],
         }
 
-    monkeypatch.setattr("service.application.population.fragment_contact_preflight.screen_contacts", screen)
+    monkeypatch.setattr("service.application.population.contact_preflight.screen_contacts", screen)
     with pytest.raises(ValueError, match="1 potential SWC intersections.*STIM\\+=1, E1=1"):
         check_fragment_contacts(config, graph, [])
     assert captured["contacts"] == [
@@ -52,13 +52,13 @@ def test_preflight_requires_audited_indexes_and_rejects_intersections(tmp_path, 
     ]
     assert captured["clearance"] == config.simulation.clearance_um
     monkeypatch.setattr(
-        "service.application.population.fragment_contact_preflight.screen_contacts",
+        "service.application.population.contact_preflight.screen_contacts",
         lambda *args, **kwargs: {"indexed": 1, "potential_intersections": []},
     )
     with pytest.raises(ValueError, match="Incomplete contact-screen"):
         check_fragment_contacts(config, graph, [])
     monkeypatch.setattr(
-        "service.application.population.fragment_contact_preflight.screen_contacts",
+        "service.application.population.contact_preflight.screen_contacts",
         lambda *args, **kwargs: {"indexed": 2, "potential_intersections": []},
     )
     assert check_fragment_contacts(config, graph, [])["indexed"] == 2
@@ -81,7 +81,7 @@ def test_child_stops_before_loading_synapses_if_contact_screen_rejects(tmp_path,
         raise AssertionError("Synapses loaded before contact screening")
 
     monkeypatch.setattr(
-        "service.application.population.fragment_contact_preflight.check_fragment_contacts", reject
+        "service.application.population.contact_preflight.check_fragment_contacts", reject
     )
     monkeypatch.setattr(
         "service.infrastructure.connectome.synapse_repository.registered_index", unexpected

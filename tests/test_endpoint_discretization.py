@@ -2,7 +2,7 @@ from copy import deepcopy
 
 import pytest
 
-from service.infrastructure.stimulation.endpoint_discretization import (
+from service.infrastructure.stimulation.feedback.endpoint_discretization import (
     audit_effective_positions,
     choose_endpoint_resolutions,
     discretize_endpoints,

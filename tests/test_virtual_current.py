@@ -22,6 +22,17 @@ def test_chain_current_is_equal_and_opposite_and_handles_disconnected_terminals(
     np.testing.assert_allclose(junction_currents([3., 7., 100.], junctions), [.4, -.4, 0.])
 
 
+def test_pair_junction_matches_numpy_reduction_with_unequal_resistances():
+    field = np.array([1.325, -0.987])
+    resistances = np.array([0.0031, 874.])
+    conductance = 1. / resistances
+    voltage = np.dot(field, conductance) / conductance.sum()
+    expected = conductance * (voltage - field)
+    actual = junction_currents(field, [[(0, 1.)], [(0, resistances[0]),
+                                                   (1, resistances[1])], [(1, 1.)]])
+    np.testing.assert_allclose(actual, expected, rtol=1e-14, atol=1e-14)
+
+
 @pytest.mark.parametrize('field,junctions', [
     ([1], [[(0, 1.)]]),
     ([1], [[(0, 1.), (0, 1.)]]),

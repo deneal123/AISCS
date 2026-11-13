@@ -5,9 +5,9 @@ from types import SimpleNamespace
 import numpy as np
 import pytest
 
-from service.application.field.field_proxy_execution import execute_field_proxy
-from service.infrastructure.stimulation.field_summary_audit import audit
-from service.infrastructure.stimulation.field_summary_compute import compute
+from service.application.field.proxy_execution import execute_field_proxy
+from service.infrastructure.stimulation.field.summary_audit import audit
+from service.infrastructure.stimulation.field.summary_compute import compute
 from tests.test_packed_geometry_cache import build
 from tests.test_packed_geometry_cache import fixture as geometry_case  # noqa: F401
 from tests.test_packed_geometry_chunk import sources  # noqa: F401
@@ -154,7 +154,7 @@ def test_fused_backend_groups_cached_entries_and_resumes(
 
 
 def test_fused_gpu_complete_cache_matches_cpu_and_resumes(geometry_case, tmp_path):  # noqa: F811
-    from service.infrastructure.stimulation.field_summary_compare import compare
+    from service.infrastructure.stimulation.field.summary_compare import compare
 
     cuda = pytest.importorskip('numba.cuda')
     if not cuda.is_available():

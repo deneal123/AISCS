@@ -1,7 +1,7 @@
 import pytest
 
 from scripts.audit_replay import audit
-from service.infrastructure.stimulation.replay_export import export_reference_replay
+from service.infrastructure.stimulation.recording.replay_export import export_reference_replay
 
 
 def example():

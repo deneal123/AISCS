@@ -52,6 +52,20 @@ def test_voltage_only_recording_preserves_voltage_and_stimulus():
         simulate_swc_reference(SWC, **options, record_membrane_current=1)
 
 
+@pytest.mark.parametrize('with_event', [False, True])
+def test_zero_stimulus_matches_negligible_driven_control(with_event):
+    events = ([{'child_node_id': 3, 'position': .5, 'time_ms': 5., 'weight_us': .001,
+                'tau1_ms': .2, 'tau2_ms': 2., 'reversal_mv': 0.}] if with_event else [])
+    options = dict(source_um=[0, 20, 0], return_um=[150, 20, 0],
+                   conductivity_s_m=.3, clearance_um=2, synaptic_events=events)
+    zero = simulate_swc_reference(SWC, current_na=0., **options)
+    negligible = simulate_swc_reference(SWC, current_na=1e-200, **options)
+    for key in ('time_ms', 'stimulus_fraction'):
+        np.testing.assert_array_equal(zero[key], negligible[key])
+    for key in ('voltage_mv', 'membrane_current_na'):
+        np.testing.assert_allclose(zero[key], negligible[key], rtol=0, atol=1e-12)
+
+
 def test_experimental_second_order_is_explicit_and_does_not_leak_between_calls():
     options = dict(source_um=[0, 20, 0], return_um=[150, 20, 0], current_na=-300,
                    conductivity_s_m=.3, clearance_um=2)
@@ -83,7 +97,9 @@ def test_per_edge_resolution_preserves_uniform_solution_and_geometry():
 
 
 def test_adaptive_endpoint_relocation_preserves_current_balance():
-    from service.infrastructure.stimulation.endpoint_discretization import discretize_endpoints
+    from service.infrastructure.stimulation.feedback.endpoint_discretization import (
+        discretize_endpoints,
+    )
 
     event = {'child_node_id': 3, 'position': 1., 'time_ms': 5., 'weight_us': .001,
              'tau1_ms': .2, 'tau2_ms': 2., 'reversal_mv': 0.}
@@ -131,6 +147,93 @@ def test_virtual_current_is_not_enabled_for_unvalidated_recordings_or_resolution
             synaptic_events=[{'child_node_id': 2, 'position': 1., 'time_ms': 5.,
                               'weight_us': .001, 'tau1_ms': .2, 'tau2_ms': 2.,
                               'reversal_mv': 0.}])
+
+
+@pytest.mark.parametrize('current', [-300., 0., 300.])
+@pytest.mark.parametrize('with_event', [False, True])
+@pytest.mark.parametrize('disconnected', [False, True])
+def test_experimental_adaptive_virtual_current_matches_reference(current, with_event, disconnected):
+    events = ([{'child_node_id': 3, 'position': .9, 'time_ms': 5., 'weight_us': .001,
+                'tau1_ms': .2, 'tau2_ms': 2., 'reversal_mv': 0.}] if with_event else [])
+    options = dict(source_um=[0, 20, 20], return_um=[150, 20, 20], current_na=current,
+                   conductivity_s_m=.3, clearance_um=2, dt_ms=.05, duration_ms=10.,
+                   pulse_start_ms=2., pulse_end_ms=3., synaptic_events=events,
+                   nseg_per_edge=3, nseg_by_edge={3: 5}, allow_disconnected=disconnected)
+    morphology = (SWC + '7 1 0 5000 0 62.5 -1\n8 3 3125 5000 0 75 7\n'
+                  if disconnected else SWC)
+    reference = simulate_swc_reference(morphology, **options)
+    accelerated = simulate_swc_reference(morphology, field_coupling='experimental_virtual_current',
+                                          **options)
+    for key in ('time_ms', 'edge_node_ids', 'field_mv', 'stimulus_fraction'):
+        np.testing.assert_array_equal(accelerated[key], reference[key])
+    np.testing.assert_allclose(accelerated['voltage_mv'], reference['voltage_mv'],
+                               rtol=0, atol=1e-6)
+    np.testing.assert_allclose(accelerated['membrane_current_na'],
+                               reference['membrane_current_na'], rtol=0, atol=1e-8)
+    points = ([0, 50, 10], [100, 50, 10])
+    recorded = record_swc_reference(reference, *points, .3, clearance_um=2)
+    candidate = record_swc_reference(accelerated, *points, .3, clearance_um=2)
+    np.testing.assert_allclose(candidate, recorded, rtol=0, atol=1e-8)
+    for row in (reference['voltage_mv'], accelerated['voltage_mv']):
+        assert np.isfinite(row).all()
+    expected = (reference['voltage_mv'][:, :-1] < -20) & (reference['voltage_mv'][:, 1:] >= -20)
+    actual = (accelerated['voltage_mv'][:, :-1] < -20) & (accelerated['voltage_mv'][:, 1:] >= -20)
+    np.testing.assert_array_equal(actual, expected)
+
+
+@pytest.mark.parametrize('shape', ['monophasic', 'biphasic'])
+@pytest.mark.parametrize('rise', [0., .2])
+def test_experimental_coreneuron_matches_reference_and_restores_neuron(shape, rise):
+    from neuron import coreneuron, h
+
+    event = {'child_node_id': 3, 'position': .9, 'time_ms': 5., 'weight_us': .001,
+             'tau1_ms': .2, 'tau2_ms': 2., 'reversal_mv': 0.}
+    options = dict(source_um=[0, 20, 20], return_um=[150, 20, 20], current_na=-300.,
+                   conductivity_s_m=.3, clearance_um=2, dt_ms=.05, duration_ms=10.,
+                   pulse_start_ms=2., pulse_end_ms=3., rise_time_ms=rise, pulse_shape=shape,
+                   synaptic_events=[event], nseg_by_edge={3: 5})
+    reference = simulate_swc_reference(SWC, **options)
+    previous_cache = h.CVode().cache_efficient()
+    accelerated = simulate_swc_reference(
+        SWC, **options, field_coupling='experimental_virtual_current',
+        solver_backend='experimental_coreneuron')
+    assert not coreneuron.enable and h.CVode().cache_efficient() == previous_cache
+    for key in ('time_ms', 'field_mv', 'stimulus_fraction'):
+        np.testing.assert_allclose(accelerated[key], reference[key], rtol=0, atol=1e-9)
+    np.testing.assert_allclose(accelerated['voltage_mv'], reference['voltage_mv'],
+                               rtol=0, atol=1e-6)
+    np.testing.assert_allclose(accelerated['membrane_current_na'],
+                               reference['membrane_current_na'], rtol=0, atol=1e-8)
+    after = simulate_swc_reference(SWC, **options)
+    np.testing.assert_array_equal(after['voltage_mv'], reference['voltage_mv'])
+
+
+def test_experimental_coreneuron_requires_explicit_compatible_mode():
+    options = dict(source_um=[0, 20, 0], return_um=[150, 20, 0], current_na=-300.,
+                   conductivity_s_m=.3, clearance_um=2)
+    with pytest.raises(ValueError, match='CoreNEURON requires'):
+        simulate_swc_reference(SWC, **options, solver_backend='experimental_coreneuron')
+    with pytest.raises(ValueError, match='CoreNEURON requires'):
+        simulate_swc_reference(SWC, **options, field_coupling='experimental_virtual_current',
+                               solver_backend='experimental_coreneuron', integration_order=2)
+
+
+def test_experimental_coreneuron_rejects_gpu_and_releases_sections():
+    from neuron import coreneuron, h
+
+    options = dict(source_um=[0, 20, 0], return_um=[150, 20, 0], current_na=-300.,
+                   conductivity_s_m=.3, clearance_um=2,
+                   field_coupling='experimental_virtual_current',
+                   solver_backend='experimental_coreneuron')
+    try:
+        coreneuron.gpu = True
+        with pytest.raises(RuntimeError, match='configured for CPU'):
+            simulate_swc_reference(SWC, **options)
+        assert not list(h.allsec()) and not coreneuron.enable
+    finally:
+        coreneuron.gpu = False
+    result = simulate_swc_reference(SWC, **options)
+    assert np.isfinite(result['voltage_mv']).all()
 
 
 @pytest.mark.parametrize('position', [0., 1.])
@@ -187,6 +290,68 @@ def test_integration_mode_does_not_depend_on_previous_neuron_global_state():
     assert h.secondorder == 0
     np.testing.assert_array_equal(baseline['voltage_mv'], repeat['voltage_mv'])
     np.testing.assert_array_equal(baseline['membrane_current_na'], repeat['membrane_current_na'])
+
+
+def test_hh_kinetics_are_explicit_and_restore_the_caller_global_setting():
+    from neuron import h
+
+    options = dict(source_um=[0, 20, 0], return_um=[150, 20, 0], current_na=1000,
+                   conductivity_s_m=.3, clearance_um=2)
+    previous = h.usetable_hh
+    try:
+        h.usetable_hh = 1
+        tabulated = simulate_swc_reference(SWC, **options)
+        h.usetable_hh = 0
+        repeated = simulate_swc_reference(SWC, **options)
+        assert h.usetable_hh == 0
+        np.testing.assert_array_equal(tabulated['voltage_mv'], repeated['voltage_mv'])
+        np.testing.assert_array_equal(tabulated['membrane_current_na'],
+                                      repeated['membrane_current_na'])
+
+        direct = simulate_swc_reference(SWC, **options, experimental_hh_direct=True)
+        assert h.usetable_hh == 0
+        h.usetable_hh = 1
+        direct_repeat = simulate_swc_reference(SWC, **options, experimental_hh_direct=True)
+        assert h.usetable_hh == 1
+        np.testing.assert_array_equal(direct['voltage_mv'], direct_repeat['voltage_mv'])
+        assert not np.array_equal(tabulated['voltage_mv'], direct['voltage_mv'])
+        with pytest.raises(ValueError, match='experimental_hh_direct'):
+            simulate_swc_reference(SWC, **options, experimental_hh_direct=1)
+        with pytest.raises(ValueError, match='CoreNEURON'):
+            simulate_swc_reference(SWC, **options, experimental_hh_direct=True,
+                                   field_coupling='experimental_virtual_current',
+                                   solver_backend='experimental_coreneuron')
+    finally:
+        h.usetable_hh = previous
+
+
+def test_hh_kinetics_restore_the_caller_setting_when_the_solver_fails(monkeypatch):
+    import neuron
+
+    actual = neuron.h
+    previous = actual.usetable_hh
+
+    class FailingHoc:
+        def __getattr__(self, name):
+            if name == 'continuerun':
+                def fail(_duration):
+                    raise RuntimeError('solver failed')
+                return fail
+            return getattr(actual, name)
+
+        def __setattr__(self, name, value):
+            setattr(actual, name, value)
+
+    options = dict(source_um=[0, 20, 0], return_um=[150, 20, 0], current_na=1000,
+                   conductivity_s_m=.3, clearance_um=2)
+    try:
+        actual.usetable_hh = 1
+        monkeypatch.setattr(neuron, 'h', FailingHoc())
+        with pytest.raises(RuntimeError, match='solver failed'):
+            simulate_swc_reference(SWC, **options, experimental_hh_direct=True)
+        assert actual.usetable_hh == 1
+    finally:
+        actual.usetable_hh = previous
 
 
 def test_degenerate_source_geometry_is_not_simulated():
@@ -436,10 +601,32 @@ def test_registered_reference_binds_result_to_verified_source(tmp_path):
     assert "not Drosophila calibrated" in provenance["membrane_model"]
     assert provenance["configuration"]["source_um"] == options["source_um"]
     assert provenance["configuration"]["nseg_per_edge"] == 1
+    assert 'experimental_hh_direct' not in provenance['configuration']
+    assert provenance['fixed_parameters']['hh_kinetics'] == 'tabulated'
+    _, direct_provenance = simulate_registered_swc_reference(
+        42, [tmp_path], experimental_hh_direct=True, **options)
+    assert direct_provenance['configuration']['experimental_hh_direct'] is True
+    assert direct_provenance['fixed_parameters']['hh_kinetics'] == 'direct'
     adaptive, adaptive_provenance = simulate_registered_swc_reference(
         42, [tmp_path], nseg_by_edge={3: 3}, **options)
     persisted = json.loads(json.dumps(adaptive_provenance['configuration']))
     assert persisted['nseg_by_edge'] == {'3': 3}
+    experimental, experimental_provenance = simulate_registered_swc_reference(
+        42, [tmp_path], nseg_by_edge={3: 3},
+        field_coupling='experimental_virtual_current', **options)
+    assert experimental_provenance['configuration']['field_coupling'] == (
+        'experimental_virtual_current')
+    recording = record_swc_with_stimulus_artifact(
+        experimental, experimental_provenance, [0, 40, 0], [150, 40, 0])
+    assert np.isfinite(recording['neural_uv']).all()
+    core_result, core_provenance = simulate_registered_swc_reference(
+        42, [tmp_path], nseg_by_edge={3: 3}, field_coupling='experimental_virtual_current',
+        solver_backend='experimental_coreneuron', **options)
+    assert core_provenance['configuration']['solver_backend'] == 'experimental_coreneuron'
+    core_recording = record_swc_with_stimulus_artifact(
+        core_result, core_provenance, [0, 40, 0], [150, 40, 0])
+    np.testing.assert_allclose(core_recording['neural_uv'], recording['neural_uv'],
+                               rtol=0, atol=1e-8)
     restored, _ = simulate_registered_swc_reference(42, [tmp_path], **persisted)
     np.testing.assert_array_equal(adaptive['voltage_mv'], restored['voltage_mv'])
     assert 'record_membrane_current' not in provenance['configuration']
@@ -447,6 +634,7 @@ def test_registered_reference_binds_result_to_verified_source(tmp_path):
     _, second_order_provenance = simulate_registered_swc_reference(
         42, [tmp_path], integration_order=2, **options)
     assert second_order_provenance['configuration']['integration_order'] == 2
+    assert second_order_provenance['fixed_parameters']['integration'].endswith('secondorder=2')
     voltage_only, voltage_provenance = simulate_registered_swc_reference(
         42, [tmp_path], record_membrane_current=False, **options)
     assert voltage_provenance['configuration']['record_membrane_current'] is False

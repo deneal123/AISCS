@@ -14,7 +14,9 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from service.infrastructure.connectome.dataset import load_registered_graph  # noqa: E402
 from service.infrastructure.connectome.synapse_index import SynapseBatchIndex  # noqa: E402
-from service.infrastructure.stimulation.replay_export import export_reference_replay  # noqa: E402
+from service.infrastructure.stimulation.recording.replay_export import (
+    export_reference_replay,  # noqa: E402
+)
 from service.infrastructure.stimulation.synaptic_replay import (
     execute_all_incoming_replay,  # noqa: E402
 )

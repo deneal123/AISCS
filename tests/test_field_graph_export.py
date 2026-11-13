@@ -7,7 +7,7 @@ import pytest
 from service.infrastructure.connectome.forced_export import encode_forced_spikes
 from service.infrastructure.connectome.forced_network import run_forced_network
 from service.infrastructure.stimulation.acquisition import acquire_channel
-from service.infrastructure.stimulation.field_graph_export import (
+from service.infrastructure.stimulation.field.graph_export import (
     export_field_graph_replay,
     load_verified_field_graph_replay,
 )
@@ -165,7 +165,7 @@ def test_optional_compartment_crossings_are_verified_and_round_trip(tmp_path):
     assert verified['metadata']['source_cells'][0]['compartment_crossings']['events'] == 2
     np.testing.assert_array_equal(verified['arrays']['source_0_crossing_sample_indices'], [1, 2])
     np.testing.assert_array_equal(verified['arrays']['source_0_crossing_midpoints_um'], positions)
-    from service.infrastructure.stimulation.field_graph_preview import field_graph_preview
+    from service.infrastructure.stimulation.field.graph_preview import field_graph_preview
 
     preview = field_graph_preview(target, model)
     assert preview['compartment_events']['total'] == 2

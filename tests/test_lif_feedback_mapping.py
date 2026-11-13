@@ -2,8 +2,8 @@ from types import SimpleNamespace
 
 import pytest
 
-from service.application.feedback.lif_feedback_mapping import map_lif_feedback
-from service.application.feedback.population_feedback_schedule import population_feedback_schedule
+from service.application.feedback.lif_mapping import map_lif_feedback
+from service.application.feedback.schedule import population_feedback_schedule
 
 
 def test_lif_spikes_map_to_registered_target_candidates(monkeypatch):
@@ -22,7 +22,7 @@ def test_lif_spikes_map_to_registered_target_candidates(monkeypatch):
                      'presynaptic_position_8nm': [4, 5, child],
                      'centerline_distance_um': distance}
                     for child, distance in ((9, 1.), (10, 3.))]}
-    module = 'service.application.feedback.lif_feedback_mapping.'
+    module = 'service.application.feedback.lif_mapping.'
     monkeypatch.setattr(module + 'registered_incoming_candidates_single_pass', incoming)
     with pytest.raises(ValueError, match='Unresolved'):
         map_lif_feedback(graph, None, [], feedback, [10, 20], max_distance_um=2)
@@ -55,7 +55,7 @@ def test_geometry_cache_does_not_cache_spike_times_or_partner_sets(monkeypatch):
                     'segment_fraction': .5, 'source_position_8nm': [1, 2, partner],
                     'centerline_distance_um': 1.} for partner in candidate_partner_ids]}
 
-    monkeypatch.setattr('service.application.feedback.lif_feedback_mapping.'
+    monkeypatch.setattr('service.application.feedback.lif_mapping.'
                         'registered_incoming_candidates_single_pass', incoming)
     feedback = {'graph_sha256': 'a' * 64, 'events': [
         {'kind': 'lif-network-spike', 'source_id': 30, 'target_id': 20,
@@ -87,7 +87,7 @@ def test_geometry_cache_reuses_superset_without_reusing_event_times(monkeypatch)
                     'segment_fraction': .5, 'source_position_8nm': [1, 2, partner],
                     'centerline_distance_um': 1.} for partner in sorted(candidate_partner_ids)]}
 
-    monkeypatch.setattr('service.application.feedback.lif_feedback_mapping.'
+    monkeypatch.setattr('service.application.feedback.lif_mapping.'
                         'registered_incoming_candidates_single_pass', incoming)
     def event(source, tick):
         return {'kind': 'lif-network-spike', 'source_id': source, 'target_id': 20,

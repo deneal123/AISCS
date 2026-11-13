@@ -49,6 +49,35 @@ def test_cached_query_rejects_replaced_source_with_original_size_and_mtime(tmp_p
         index.query(1, "outgoing")
 
 
+def test_repository_rechecks_cached_index_and_manifest(tmp_path, monkeypatch):
+    from service.infrastructure.connectome import synapse_repository
+
+    source = tmp_path / 'source.arrow'
+    table = pa.table({'body_pre': [1], 'body_post': [2], **{
+        key: [10] for key in ('x_pre', 'y_pre', 'z_pre', 'x_post', 'y_post', 'z_post')}})
+    with pa.OSFile(str(source), 'wb') as sink:
+        with ipc.new_file(sink, table.schema) as writer:
+            writer.write_table(table)
+    digest = hashlib.md5(source.read_bytes(), usedforsecurity=False).hexdigest()
+    ids = tmp_path / 'ids.npy'
+    np.save(ids, np.array([1, 2], dtype=np.int64))
+    build_batch_index(source, ids, tmp_path / 'index-v1', digest)
+    monkeypatch.setattr(synapse_repository, 'SOURCE_NAME', source.name)
+    monkeypatch.setattr(synapse_repository, 'SOURCE_MD5', digest)
+    synapse_repository._open_index.cache_clear()
+    try:
+        first = synapse_repository.registered_index(tmp_path, ids)
+        assert synapse_repository.registered_index(tmp_path, ids) is first
+        manifest = tmp_path / 'index-v1' / 'manifest.json'
+        replacement = tmp_path / 'replacement.json'
+        replacement.write_bytes(manifest.read_bytes())
+        os.replace(replacement, manifest)
+        with pytest.raises(ValueError, match='index changed'):
+            synapse_repository.registered_index(tmp_path, ids)
+    finally:
+        synapse_repository._open_index.cache_clear()
+
+
 def test_index_directions_batches_and_integrity(tmp_path, monkeypatch):
     source = tmp_path / 'source.arrow'
     table = pa.table({'body_pre': [1, 2, 1, 9], 'body_post': [2, 1, 9, 1],

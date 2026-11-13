@@ -62,6 +62,8 @@ def simulate_swc_reference(
     record_membrane_current=True,
     field_coupling="extracellular",
     integration_order=0,
+    solver_backend="neuron",
+    experimental_hh_direct=False,
 ):
     """Calculate membrane currents for each SWC edge; no network coupling is inferred.
 
@@ -75,10 +77,18 @@ def simulate_swc_reference(
         raise ValueError("allow_disconnected must be boolean")
     if type(record_membrane_current) is not bool:
         raise ValueError("record_membrane_current must be boolean")
+    if type(experimental_hh_direct) is not bool:
+        raise ValueError("experimental_hh_direct must be boolean")
     if type(integration_order) is not int or integration_order not in (0, 2):
         raise ValueError("Unsupported NEURON integration order")
-    if field_coupling not in ("extracellular", "virtual_current"):
+    if field_coupling not in ("extracellular", "virtual_current", "experimental_virtual_current"):
         raise ValueError("Unsupported field coupling")
+    if solver_backend not in ("neuron", "experimental_coreneuron"):
+        raise ValueError("Unsupported solver backend")
+    if solver_backend == "experimental_coreneuron" and (
+            field_coupling != "experimental_virtual_current" or integration_order != 0
+            or experimental_hh_direct):
+        raise ValueError("CoreNEURON requires experimental virtual current and fixed integration")
     if field_coupling == "virtual_current" and (record_membrane_current
             or nseg_per_edge != 1 or nseg_by_edge not in (None, {})
             or synaptic_events not in (None, [])):
@@ -228,6 +238,9 @@ def simulate_swc_reference(
     h.CVode().use_fast_imem(1)
     sections, vectors, synapses, event_connections, clamps = {}, [], [], [], []
     voltage, current, recorded_time, recorded_stimulus = [], None, None, None
+    core = parallel_context = detector = None
+    previous_cache_efficient = None
+    previous_hh_usetable = None
     try:
         for node, parent in edges:
             section = h.Section(name=f"aiscs_swc_{node}")
@@ -259,15 +272,15 @@ def simulate_swc_reference(
             event_connections.append(connection)
         times = h.Vector(pulse_times)
         segments = [segment for node, _ in edges for segment in sections[node]]
-        if field_coupling == "virtual_current":
-            from service.infrastructure.stimulation.virtual_current import junction_currents
+        if field_coupling in ("virtual_current", "experimental_virtual_current"):
+            from service.infrastructure.stimulation.virtual_current import (
+                adaptive_junctions,
+                junction_currents,
+            )
 
             h.define_shape()
-            junctions = {}
-            for index, (node, parent) in enumerate(edges):
-                junctions.setdefault(parent, []).append((index, segments[index].ri()))
-                junctions.setdefault(node, []).append((index, sections[node](1).ri()))
-            coupling_values = junction_currents(field, list(junctions.values()))
+            junctions = adaptive_junctions(edges, counts, sections, segments)
+            coupling_values = junction_currents(field, junctions)
             for segment, value in zip(segments, coupling_values, strict=True):
                 clamp = h.IClamp(segment)
                 clamp.delay, clamp.dur = 0, duration_ms + 1
@@ -275,22 +288,47 @@ def simulate_swc_reference(
                 waveform.play(clamp._ref_amp, times, 1)
                 vectors.append(waveform)
                 clamps.append(clamp)
-        else:
+        elif np.any(field):
             for segment, value in zip(segments, field, strict=True):
                 waveform = h.Vector([value * fraction for fraction in pulse_fractions])
                 waveform.play(segment._ref_e_extracellular, times, 1)
                 vectors.append(waveform)
+        else:
+            # A zero-current control has no time-varying extracellular drive.
+            # Avoid thousands of identical play vectors, but set the potential
+            # explicitly so a previous NEURON run cannot affect this control.
+            for segment in segments:
+                segment.e_extracellular = 0.0
         recorded_time = h.Vector().record(h._ref_t)
         voltage = [h.Vector().record(segment._ref_v) for segment in segments]
         current = ([h.Vector().record(segment._ref_i_membrane_) for segment in segments]
                    if record_membrane_current else None)
-        stimulus_reference = h.ref(0.0)
-        stimulus_waveform = h.Vector(pulse_fractions)
-        stimulus_waveform.play(stimulus_reference, times, 1)
-        vectors.append(stimulus_waveform)
-        recorded_stimulus = h.Vector().record(stimulus_reference)
+        if solver_backend == "neuron":
+            stimulus_reference = h.ref(0.0)
+            stimulus_waveform = h.Vector(pulse_fractions)
+            stimulus_waveform.play(stimulus_reference, times, 1)
+            vectors.append(stimulus_waveform)
+            recorded_stimulus = h.Vector().record(stimulus_reference)
+        else:
+            from neuron import coreneuron
+
+            if coreneuron.enable or coreneuron.gpu:
+                raise RuntimeError("CoreNEURON must be disabled and configured for CPU")
+            parallel_context = h.ParallelContext()
+            if parallel_context.nhost() != 1 or parallel_context.gid_exists(0):
+                raise RuntimeError("CoreNEURON requires an isolated single-process context")
+            parallel_context.set_gid2node(0, parallel_context.id())
+            anchor = next(iter(sections.values()))
+            detector = h.NetCon(anchor(0.5)._ref_v, None, sec=anchor)
+            parallel_context.cell(0, detector)
+            previous_cache_efficient = h.CVode().cache_efficient()
+            h.CVode().cache_efficient(1)
+            core = coreneuron
+            core.enable = True
         # NEURON integration settings are process-global and may survive a
         # previous independent cell; fix the documented numerical mode explicitly.
+        previous_hh_usetable = float(h.usetable_hh)
+        h.usetable_hh = 0 if experimental_hh_direct else 1
         h.secondorder = integration_order
         h.dt, h.steps_per_ms, h.celsius = dt_ms, 1 / dt_ms, temperature_c
         h.finitialize(initial_voltage_mv)
@@ -298,7 +336,10 @@ def simulate_swc_reference(
             connection.event(event["time_ms"])
         # Keep fixed-step integration in NEURON instead of crossing the
         # Python/HOC boundary for each individual step.
-        h.continuerun(duration_ms)
+        if core is None:
+            h.continuerun(duration_ms)
+        else:
+            parallel_context.psolve(duration_ms)
         result = {
             "time_ms": np.asarray(recorded_time).copy(),
             "edge_node_ids": np.asarray([node for node, _ in edges for _ in range(counts[node])]),
@@ -314,7 +355,9 @@ def simulate_swc_reference(
                  1 if pulse_shape == "biphasic" else 0,
                  *([pulse_count, pulse_interval_ms] if pulse_count > 1 else [])], dtype=float
             ),
-            "stimulus_fraction": np.asarray(recorded_stimulus).copy(),
+            "stimulus_fraction": (np.asarray(recorded_stimulus).copy() if core is None else
+                                  np.interp(np.asarray(recorded_time), pulse_times,
+                                            pulse_fractions)),
             "synaptic_events_sha256": _event_digest(synaptic_events),
             "voltage_mv": np.asarray([np.asarray(row).copy() for row in voltage]),
         }
@@ -324,6 +367,12 @@ def simulate_swc_reference(
             raise ValueError("Non-finite reference solution")
         return result
     finally:
+        if core is not None:
+            core.enable = False
+        if previous_cache_efficient is not None:
+            h.CVode().cache_efficient(previous_cache_efficient)
+        if previous_hh_usetable is not None:
+            h.usetable_hh = previous_hh_usetable
         # Each play_remove searches NEURON's play/record registry. Release
         # recording vectors first so the search does not repeatedly traverse
         # thousands of finished recorders. Result arrays above are copied.
@@ -514,6 +563,10 @@ def simulate_registered_swc_reference(body_id: int, directories: list, *,
         config.pop('field_coupling')
     if config['integration_order'] == 0:
         config.pop('integration_order')
+    if config['solver_backend'] == 'neuron':
+        config.pop('solver_backend')
+    if config['experimental_hh_direct'] is False:
+        config.pop('experimental_hh_direct')
     if config['pulse_count'] == 1:
         config.pop('pulse_count')
         config.pop('pulse_interval_ms')
@@ -525,6 +578,7 @@ def simulate_registered_swc_reference(body_id: int, directories: list, *,
                  "membrane_capacitance_uf_cm2", "temperature_c", "initial_voltage_mv"):
         config[name] = float(config[name])
     components = neurite_landmark(source["swc"])["components"]
+    numerical_order = config.get('integration_order', 0)
     return result, {
         "body_id": source["body_id"],
         "morphology_sha256": source["sha256"],
@@ -536,7 +590,9 @@ def simulate_registered_swc_reference(body_id: int, directories: list, *,
         "coordinate_frame": "MaleCNS native EM, micrometres",
         "configuration": config,
         "fixed_parameters": {"channel_parameters": "NEURON hh built-in defaults",
-                             "integration": "fixed step, NEURON secondorder=0"},
+                             "hh_kinetics": ("direct" if parameters.get('experimental_hh_direct')
+                                             else "tabulated"),
+                             "integration": f"fixed step, NEURON secondorder={numerical_order}"},
         "components": components,
         "fragment_interpretation": (
             "disconnected fragments remain electrically independent; connectivity is unknown"

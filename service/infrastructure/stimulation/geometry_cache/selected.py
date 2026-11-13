@@ -6,16 +6,22 @@ import hashlib
 import json
 import re
 
-from service.infrastructure.stimulation.geometry_cache import cache, chunk, index
+from service.infrastructure.stimulation.geometry_cache import cache, index, selected_chunk
+from service.infrastructure.stimulation.geometry_cache.producer_compatibility import (
+    producer_is_compatible,
+)
+from service.infrastructure.stimulation.geometry_cache.selected_parallel import iter_decoded_chunks
 
 
 def iter_selected_cache(directory, *, expected_manifest_sha256, graph_ids, graph_sha256,
-                        source_index, source_audit, selected_ids):
+                        source_index, source_audit, selected_ids, workers=1):
     """Authenticate the snapshot and every used chunk; leave unused chunks unread.
 
     Selection must come from a separately verified conservative spatial filter.
     This verifies snapshot identity, not whether its source SWCs have since changed.
     """
+    if type(workers) is not int or not 1 <= workers <= 8:
+        raise ValueError('Invalid selected geometry workers')
     if (not isinstance(expected_manifest_sha256, str)
             or not re.fullmatch(r'[a-f0-9]{64}', expected_manifest_sha256)):
         raise ValueError('Invalid geometry cache manifest identity')
@@ -38,7 +44,8 @@ def iter_selected_cache(directory, *, expected_manifest_sha256, graph_ids, graph
             or metadata.get('format') != 'malecns-packed-geometry-cache-v1'
             or metadata.get('graph_sha256') != graph_sha256
             or metadata.get('source_index_sha256') != source_sha
-            or metadata.get('producer_sha256') != cache._producer_sha256()
+            or not producer_is_compatible(
+                expected_manifest_sha256, metadata.get('producer_sha256'), cache._producer_sha256())
             or type(metadata.get('neurons')) is not int or metadata['neurons'] != len(ids)
             or type(metadata.get('vertices')) is not int or metadata['vertices'] < 1
             or not isinstance(metadata.get('chunks'), list) or not metadata['chunks']):
@@ -62,9 +69,9 @@ def iter_selected_cache(directory, *, expected_manifest_sha256, graph_ids, graph
     if ordered != ids or vertices != metadata['vertices']:
         raise ValueError('Geometry cache is incomplete or out of order')
     found = 0
-    for descriptor in relevant:
-        entries = chunk.read_chunk(directory / descriptor['name'], descriptor,
-                                   audited_sources=sources)
+    use_selective_reader = selected_chunk.supports_reader()
+    for entries in iter_decoded_chunks(directory, relevant, sources=sources, wanted=wanted,
+                                       selective=use_selective_reader, workers=workers):
         for entry in entries:
             if int(entry['skeleton']['body_id']) in wanted:
                 found += 1

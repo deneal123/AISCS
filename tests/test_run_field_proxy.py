@@ -10,7 +10,7 @@ from scripts import run_field_proxy as runner
 from scripts.compute_network_field import compute
 from scripts.run_field_proxy import verified_descriptors
 from service.infrastructure.connectome.morphology_repository import BASE
-from service.infrastructure.stimulation.fragment_sparse_delta import decode_sparse_delta
+from service.infrastructure.stimulation.population.sparse_delta import decode_sparse_delta
 
 
 @pytest.mark.parametrize('key', ['allow_partial_geometry', 'allow_missing_curvature',
@@ -38,7 +38,7 @@ def test_execution_rejects_non_boolean_policy_before_computation(tmp_path, key):
     {'gain': float('nan')}, {'gain': True}, {'seed': -1}, {'capture_delta': 'false'},
 ])
 def test_execution_rejects_invalid_network_input_before_field(tmp_path, monkeypatch, invalid):
-    from service.application.field import field_proxy_execution
+    from service.application.field import proxy_execution as field_proxy_execution
 
     monkeypatch.setattr(field_proxy_execution, 'compute',
                         lambda *args, **kwargs: pytest.fail('field calculation started'))
@@ -51,7 +51,7 @@ def test_execution_rejects_invalid_network_input_before_field(tmp_path, monkeypa
 
 
 def test_gpu_backend_forwarding_and_invalid_modes(tmp_path, monkeypatch):
-    from service.application.field import field_proxy_execution
+    from service.application.field import proxy_execution as field_proxy_execution
 
     calls = []
 
@@ -147,7 +147,7 @@ def test_missing_curvature_requires_explicit_exclusion(tmp_path):
 
 
 def test_verified_descriptors_rejects_file_changed_during_stream(tmp_path, monkeypatch):
-    from service.infrastructure.stimulation import field_summary_verified
+    from service.infrastructure.stimulation.field import summary_verified as field_summary_verified
 
     field = tmp_path / 'field.jsonl'
     compute([], [], field, dict(source_um=[0, 10, 0], return_um=[50, 10, 0], current_na=10,

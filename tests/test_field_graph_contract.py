@@ -3,7 +3,7 @@ import copy
 import pytest
 from pydantic import ValidationError
 
-from service.domain.contracts.field_graph_contract import FieldGraphConfig
+from service.domain.contracts.field.graph import FieldGraphConfig
 
 
 def payload():

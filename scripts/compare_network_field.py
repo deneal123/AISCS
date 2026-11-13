@@ -7,7 +7,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from scripts.prepare_full_morphology import MANIFEST_SHA256, registered_ids  # noqa: E402
-from service.infrastructure.stimulation.field_summary_compare import compare  # noqa: E402
+from service.infrastructure.stimulation.field.summary_compare import compare  # noqa: E402
 
 
 def main():

@@ -2,14 +2,14 @@ from copy import deepcopy
 
 import pytest
 
-from service.infrastructure.stimulation.feedback_discretization import (
+from service.infrastructure.stimulation.feedback.discretization import (
     prepare_feedback_discretization,
     verify_feedback_discretization,
 )
 
 
 def test_prepares_verified_feedback_without_modifying_schedule(monkeypatch):
-    module = 'service.infrastructure.stimulation.feedback_discretization.'
+    module = 'service.infrastructure.stimulation.feedback.discretization.'
     monkeypatch.setattr(module + 'audit_feedback_observations',
                         lambda *_a, **_k: {'verified_events': 1})
     monkeypatch.setattr(module + 'read_skeleton', lambda *_a, **_k: {
@@ -29,7 +29,7 @@ def test_prepares_verified_feedback_without_modifying_schedule(monkeypatch):
 
 
 def test_refuses_legacy_events_without_source_coordinates(monkeypatch):
-    module = 'service.infrastructure.stimulation.feedback_discretization.'
+    module = 'service.infrastructure.stimulation.feedback.discretization.'
     monkeypatch.setattr(module + 'audit_feedback_observations', lambda *_a, **_k: {})
     schedule = {'events_by_target': {10: [{'child_node_id': 2, 'position': 1.}]},
                 'provenance_by_target': {10: [{'target_position_8nm': [750, 0, 0]}]}}
@@ -39,7 +39,7 @@ def test_refuses_legacy_events_without_source_coordinates(monkeypatch):
 
 
 def test_receipt_is_rebuilt_from_source_and_explicit_policy(monkeypatch):
-    module = 'service.infrastructure.stimulation.feedback_discretization.'
+    module = 'service.infrastructure.stimulation.feedback.discretization.'
     monkeypatch.setattr(module + 'audit_feedback_observations',
                         lambda *_a, **_k: {'verified_events': 1})
     monkeypatch.setattr(module + 'read_skeleton', lambda *_a, **_k: {

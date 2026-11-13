@@ -1,6 +1,6 @@
 import numpy as np
 
-from service.infrastructure.stimulation.fragment_population_preview import (
+from service.infrastructure.stimulation.population.preview import (
     fragment_population_preview,
 )
 

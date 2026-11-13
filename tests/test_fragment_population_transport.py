@@ -4,7 +4,7 @@ import zipfile
 
 import pytest
 
-from service.infrastructure.stimulation.fragment_population_transport import (
+from service.infrastructure.stimulation.population.transport import (
     LEGACY_FILES,
     pack_fragment_population,
     unpack_fragment_population,
@@ -27,7 +27,7 @@ def test_population_transport_round_trip_and_digest_guard(tmp_path, monkeypatch)
     source = tmp_path / 'source'
     manifest = source_archive(source)
     monkeypatch.setattr(
-        'service.infrastructure.stimulation.fragment_population_transport.'
+        'service.infrastructure.stimulation.population.transport.'
         'load_verified_fragment_population', lambda *_: {'manifest': manifest})
     package = tmp_path / 'archive.zip'
     receipt = pack_fragment_population(source, None, package)
@@ -50,7 +50,7 @@ def test_population_transport_rejects_unexpected_paths(tmp_path, monkeypatch):
     source = tmp_path / 'source'
     manifest = source_archive(source)
     monkeypatch.setattr(
-        'service.infrastructure.stimulation.fragment_population_transport.'
+        'service.infrastructure.stimulation.population.transport.'
         'load_verified_fragment_population', lambda *_: {'manifest': manifest})
     package = tmp_path / 'archive.zip'
     receipt = pack_fragment_population(source, None, package)

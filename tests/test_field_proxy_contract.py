@@ -1,10 +1,12 @@
 import pytest
 from pydantic import ValidationError
 
-from service.domain.contracts.field_proxy_contract import (
-    FieldProxyConfig, from_fragment_population, from_simulation,
+from service.domain.contracts.field.proxy import (
+    FieldProxyConfig,
+    from_fragment_population,
+    from_simulation,
 )
-from service.domain.contracts.fragment_population_contract import FragmentPopulationConfig
+from service.domain.contracts.population.fragment import FragmentPopulationConfig
 from tests.test_fragment_population_contract import example
 
 
@@ -55,8 +57,9 @@ def test_proxy_rejects_biphasic_pulse_that_cancels_inside_a_network_tick():
                                  allow_missing_curvature=True, allow_contact_exclusion=False)
     data['simulation']['current_na'] = 0.
     control = FragmentPopulationConfig.model_validate(data)
-    assert from_fragment_population(control, gain=1., allow_partial_geometry=True,
-        allow_missing_curvature=True, allow_contact_exclusion=False).waveform == pytest.approx([0.] * 10)
+    projected = from_fragment_population(control, gain=1., allow_partial_geometry=True,
+        allow_missing_curvature=True, allow_contact_exclusion=False)
+    assert projected.waveform == pytest.approx([0.] * 10)
 
 
 @pytest.mark.parametrize('change', [

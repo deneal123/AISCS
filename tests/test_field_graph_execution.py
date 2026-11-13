@@ -1,7 +1,7 @@
 import pytest
 
-from service.application.field.field_graph_execution import FieldGraphExecution
-from service.domain.contracts.field_graph_contract import FieldGraphConfig
+from service.application.field.graph_execution import FieldGraphExecution
+from service.domain.contracts.field.graph import FieldGraphConfig
 from tests.test_field_graph_contract import payload
 from tests.test_forced_network import graph
 
@@ -22,15 +22,15 @@ def test_execution_verifies_export_before_return(monkeypatch, tmp_path):
     config = FieldGraphConfig.model_validate(raw)
     calls = []
     monkeypatch.setattr(
-        "service.application.field.field_graph_execution.run_field_graph_replay",
+        "service.application.field.graph_execution.run_field_graph_replay",
         lambda *_args, **_kwargs: {"interpretation": "one-way"},
     )
     monkeypatch.setattr(
-        "service.application.field.field_graph_execution.export_field_graph_replay",
+        "service.application.field.graph_execution.export_field_graph_replay",
         lambda *_args, **_kwargs: calls.append("export") or {"files": []},
     )
     monkeypatch.setattr(
-        "service.application.field.field_graph_execution.load_verified_field_graph_replay",
+        "service.application.field.graph_execution.load_verified_field_graph_replay",
         lambda *_args: calls.append("verify"),
     )
     result = FieldGraphExecution(model, None, []).execute(config, tmp_path / "output")

@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from service.application.field.field_graph_replay import run_field_graph_replay
+from service.application.field.graph_replay import run_field_graph_replay
 from tests.test_forced_network import graph
 
 
@@ -28,15 +28,15 @@ def setup(monkeypatch):
     first = channel(np.ones(101), artifact)
     second = channel(np.full(101, 2.0), artifact)
     monkeypatch.setattr(
-        "service.application.field.field_graph_replay.run_field_driven_network",
+        "service.application.field.graph_replay.run_field_driven_network",
         lambda *_args, **_kwargs: {"recording": first, "network": {}},
     )
     monkeypatch.setattr(
-        "service.application.field.field_graph_replay.encode_forced_spikes",
+        "service.application.field.graph_replay.encode_forced_spikes",
         lambda *_args: (b"binary", {"manifest_sha256": "test"}, "b" * 64),
     )
     monkeypatch.setattr(
-        "service.application.field.field_graph_replay.replay_independent_population",
+        "service.application.field.graph_replay.replay_independent_population",
         lambda *_args, **_kwargs: second,
     )
     return first, second

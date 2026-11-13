@@ -19,30 +19,30 @@ from pydantic import BaseModel, Field, ValidationError, model_validator
 from service import __version__
 from service.contracts import Contract, ExecutionRequest, Finite, SimulationConfig
 from service.domain.catalog import catalog
-from service.domain.contracts.field_graph_contract import (
+from service.domain.contracts.field.graph import (
     FieldGraphAcquisition,
     FieldGraphConfig,
     FieldGraphExecutionRequest,
 )
-from service.domain.contracts.field_proxy_contract import (
+from service.domain.contracts.field.proxy import (
     FieldProxyConfig,
     FieldProxyExecutionRequest,
     from_fragment_population,
     from_simulation,
 )
-from service.domain.contracts.fragment_population_contract import (
-    FragmentPopulationConfig,
-    FragmentPopulationExecutionRequest,
-)
-from service.domain.contracts.population_feedback_contract import (
+from service.domain.contracts.population.feedback import (
     PopulationFeedbackConfig,
     PopulationFeedbackExecutionRequest,
 )
-from service.domain.contracts.population_target_contract import (
+from service.domain.contracts.population.fragment import (
+    FragmentPopulationConfig,
+    FragmentPopulationExecutionRequest,
+)
+from service.domain.contracts.population.target import (
     PopulationTargetConfig,
     PopulationTargetExecutionRequest,
 )
-from service.domain.contracts.replay_contract import (
+from service.domain.contracts.replay import (
     ReplayExecutionRequest,
     ReplayRunConfig,
     ReplaySimulation,
@@ -435,7 +435,7 @@ def build_app(manager: Executions, secret: str, readiness, catalog_factory=catal
 
         from service.infrastructure.connectome.neighbors import registered_graph
         from service.infrastructure.execution.process import _field_geometry_cache
-        from service.infrastructure.stimulation.contact_screen import (
+        from service.infrastructure.stimulation.contacts.screen import (
             screen_contact_positions,
             screen_contacts,
         )
@@ -465,7 +465,8 @@ def build_app(manager: Executions, secret: str, readiness, catalog_factory=catal
                 request.clearance_um,
                 segment_index=Path(segment_path) if segment_path else None,
                 segment_audit=Path(segment_audit) if segment_audit else None,
-                workers=int(os.environ.get("GENERATOR_MORPHOLOGY_SPATIAL_WORKERS", "1")),
+                workers=int(os.environ.get(
+                    "GENERATOR_MORPHOLOGY_SPATIAL_WORKERS", "2" if cache else "1")),
                 **cache_options,
             )
         except (OSError, ValueError, sqlite3.Error) as exc:

@@ -3,7 +3,7 @@ import hashlib
 import numpy as np
 import pytest
 
-from service.application.field import field_state_artifacts
+from service.application.field import state_artifacts as field_state_artifacts
 from service.infrastructure.connectome.forced_network import contrast_forced_network
 from tests.test_forced_network import graph
 

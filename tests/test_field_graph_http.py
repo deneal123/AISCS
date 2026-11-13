@@ -5,7 +5,7 @@ from uuid import uuid4
 import pytest
 from fastapi.testclient import TestClient
 
-from service.domain.contracts.field_graph_contract import FieldGraphExecutionRequest
+from service.domain.contracts.field.graph import FieldGraphExecutionRequest
 from service.infrastructure.execution.process import Executions
 from service.presentation.http import build_app
 from tests.test_field_graph_contract import payload

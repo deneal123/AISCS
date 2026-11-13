@@ -217,7 +217,7 @@ def test_network_response_captures_downstream_cells_without_claiming_physiology(
     schedule = {'source_id': 10, 'graph_sha256': 'a' * 64, 'simulation_sha256': 'c' * 64,
                 'threshold_mv': -20.0, 'edge_events': [
                     {'source_id': 10, 'target_id': 20, 'tick': 1, 'count': 3000}]}
-    monkeypatch.setattr('service.infrastructure.stimulation.fragment_output_diagnostics.'
+    monkeypatch.setattr('service.infrastructure.stimulation.population.diagnostics.'
                         'fragment_edge_schedule', lambda *args, **kwargs: schedule)
     result = run_fragment_population_network(
         model, [{}], seed=1, duration_ms=6, max_distance_um=0.2,
@@ -238,7 +238,7 @@ def test_network_snapshots_use_explicit_bounded_times(monkeypatch):
     schedule = {'source_id': 10, 'graph_sha256': 'a' * 64, 'simulation_sha256': 'c' * 64,
                 'threshold_mv': -20.0, 'edge_events': [
                     {'source_id': 10, 'target_id': 20, 'tick': 1, 'count': 3000}]}
-    monkeypatch.setattr('service.infrastructure.stimulation.fragment_output_diagnostics.'
+    monkeypatch.setattr('service.infrastructure.stimulation.population.diagnostics.'
                         'fragment_edge_schedule', lambda *args, **kwargs: schedule)
     result = run_fragment_population_network(
         model, [{}], seed=1, duration_ms=6, max_distance_um=0.2,

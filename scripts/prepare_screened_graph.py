@@ -10,7 +10,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from scripts.prepare_full_morphology import MANIFEST_SHA256, registered_ids  # noqa: E402
 from scripts.screen_stim_sources import graph_config_from_screen  # noqa: E402
-from service.domain.contracts.field_graph_contract import FieldGraphConfig  # noqa: E402
+from service.domain.contracts.field.graph import FieldGraphConfig  # noqa: E402
 
 
 def main():

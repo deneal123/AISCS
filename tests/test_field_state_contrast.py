@@ -4,8 +4,8 @@ import json
 import numpy as np
 import pytest
 
-from service.application.field.field_state_contrast import contrast_verified_field_run
-from service.infrastructure.stimulation.field_graph_export import export_field_graph_replay
+from service.application.field.state_contrast import contrast_verified_field_run
+from service.infrastructure.stimulation.field.graph_export import export_field_graph_replay
 from tests.test_field_graph_export import example
 
 

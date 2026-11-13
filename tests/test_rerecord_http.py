@@ -8,8 +8,12 @@ from fastapi.testclient import TestClient
 
 pytest.importorskip("neuron")
 
-from service.infrastructure.stimulation.current_archive import write_current_archive  # noqa: E402
-from service.infrastructure.stimulation.current_transport import pack_current_archive  # noqa: E402
+from service.infrastructure.stimulation.recording.current_archive import (
+    write_current_archive,  # noqa: E402
+)
+from service.infrastructure.stimulation.recording.current_transport import (
+    pack_current_archive,  # noqa: E402
+)
 from service.main import create_app  # noqa: E402
 from tests.test_network_recording import pair  # noqa: E402
 

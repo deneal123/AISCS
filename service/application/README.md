@@ -6,6 +6,12 @@
 - `replay/` replays recorded inputs and produces derived recordings.
 - `screening/` selects candidate sources for subsequent physical checks.
 
+Within each package, module names describe the responsibility without repeating
+the package name: for example, `field/proxy_execution.py`,
+`population/contact_preflight.py`, and `feedback/schedule.py`. These are internal
+Python modules; HTTP, CLI and persisted artifact formats remain the integration
+contracts.
+
 Model contracts live in `service/domain/contracts/`; numerical kernels and
 storage adapters remain in `service/infrastructure/`. The feedback calculation
 is experimental and its physical recording covers selected cells only.

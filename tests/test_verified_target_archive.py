@@ -4,10 +4,10 @@ import json
 import numpy as np
 import pytest
 
-from service.infrastructure.stimulation.fragment_pair_mapping import (
+from service.infrastructure.stimulation.population.pair_mapping import (
     schedule_population_fragment_events,
 )
-from service.infrastructure.stimulation.verified_target_archive import (
+from service.infrastructure.stimulation.recording.verified_target_archive import (
     read_target_replay,
     write_target_replay,
 )

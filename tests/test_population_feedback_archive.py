@@ -7,8 +7,8 @@ from types import SimpleNamespace
 import numpy as np
 import pytest
 
-from service.domain.contracts.fragment_population_contract import FragmentPopulationConfig
-from service.infrastructure.stimulation.population_feedback_archive import (
+from service.domain.contracts.population.fragment import FragmentPopulationConfig
+from service.infrastructure.stimulation.feedback.archive import (
     read_population_feedback,
     write_population_feedback,
 )
@@ -18,7 +18,7 @@ from tests.test_population_feedback_validation import example_result
 def test_archive_round_trip_and_provenance(tmp_path, monkeypatch):
     result, graph, source = example_result()
     result['schedule']['provenance_by_target'] = {10: [], 20: []}
-    monkeypatch.setattr('service.infrastructure.stimulation.population_feedback_archive.'
+    monkeypatch.setattr('service.infrastructure.stimulation.feedback.archive.'
                         'load_verified_fragment_population', lambda *_: source)
     path = tmp_path / 'result.zip'
     args = {'source_directory': tmp_path, 'graph': graph,
@@ -52,7 +52,7 @@ def test_partial_source_geometry_survives_coupled_archive_round_trip(tmp_path, m
     physical['candidate_events_by_source'][20] = []
     result['status'] = 'converged_partial'
     result['schedule']['provenance_by_target'] = {10: [], 20: []}
-    monkeypatch.setattr('service.infrastructure.stimulation.population_feedback_archive.'
+    monkeypatch.setattr('service.infrastructure.stimulation.feedback.archive.'
                         'load_verified_fragment_population', lambda *_: source)
     path = tmp_path / 'partial.zip'
     args = {'source_directory': tmp_path, 'graph': graph,
@@ -66,7 +66,7 @@ def test_partial_source_geometry_survives_coupled_archive_round_trip(tmp_path, m
 
 def test_archive_rejects_tampered_payload(tmp_path, monkeypatch):
     result, graph, source = example_result()
-    monkeypatch.setattr('service.infrastructure.stimulation.population_feedback_archive.'
+    monkeypatch.setattr('service.infrastructure.stimulation.feedback.archive.'
                         'load_verified_fragment_population', lambda *_: source)
     path = tmp_path / 'result.zip'
     args = {'source_directory': tmp_path, 'graph': graph,
@@ -84,7 +84,7 @@ def test_archive_rejects_tampered_payload(tmp_path, monkeypatch):
 
 def test_legacy_archive_cannot_silently_ignore_refinement_fields(tmp_path, monkeypatch):
     result, graph, source = example_result()
-    monkeypatch.setattr('service.infrastructure.stimulation.population_feedback_archive.'
+    monkeypatch.setattr('service.infrastructure.stimulation.feedback.archive.'
                         'load_verified_fragment_population', lambda *_: source)
     path = tmp_path / 'result.zip'
     args = {'source_directory': tmp_path, 'graph': graph,
@@ -108,7 +108,7 @@ def test_legacy_archive_cannot_silently_ignore_refinement_fields(tmp_path, monke
 
 def test_writer_rejects_uncompressed_arrays_above_limit(tmp_path, monkeypatch):
     result, graph, source = example_result()
-    module = 'service.infrastructure.stimulation.population_feedback_archive.'
+    module = 'service.infrastructure.stimulation.feedback.archive.'
     monkeypatch.setattr(module + 'load_verified_fragment_population', lambda *_: source)
     monkeypatch.setattr(module + 'MAX_BYTES', 1024)
     path = tmp_path / 'result.zip'
@@ -127,7 +127,7 @@ def test_refined_archive_requires_explicit_context_and_revalidates_on_read(tmp_p
     result['discretization_receipts'] = [{'targets': {10: {'checked': True}}}]
     index = SimpleNamespace(manifest={'ids_sha256': 'b' * 64, 'source_md5': 'c' * 32})
     context = {'index': index, 'directories': [], 'policy': {'expected_source_md5': 'c' * 32}}
-    module = 'service.infrastructure.stimulation.population_feedback_archive.'
+    module = 'service.infrastructure.stimulation.feedback.archive.'
     monkeypatch.setattr(module + 'load_verified_fragment_population', lambda *_: source)
     checked = []
     def verify(schedule, receipt, actual_index, directories, *, policy):
@@ -137,7 +137,7 @@ def test_refined_archive_requires_explicit_context_and_revalidates_on_read(tmp_p
             raise ValueError('Modified receipt')
         checked.append(deepcopy(receipt))
         return receipt
-    monkeypatch.setattr('service.application.feedback.population_feedback_validation.'
+    monkeypatch.setattr('service.application.feedback.validation.'
                         'verify_feedback_discretization', verify)
     args = {'source_directory': tmp_path, 'graph': graph,
             'parameters': {1: {'weight_us': .001}}, 'allow_partial_geometry': False}

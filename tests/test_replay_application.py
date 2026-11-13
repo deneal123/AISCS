@@ -4,8 +4,10 @@ from uuid import UUID
 import pytest
 
 from service.application.replay.replay import ReplayRecordedCell
-from service.domain.contracts.replay_contract import ReplayRunConfig
-from service.infrastructure.stimulation.replay_export import load_verified_reference_replay
+from service.domain.contracts.replay import ReplayRunConfig
+from service.infrastructure.stimulation.recording.replay_export import (
+    load_verified_reference_replay,
+)
 from tests.test_replay_contract import valid
 from tests.test_replay_export import replay
 

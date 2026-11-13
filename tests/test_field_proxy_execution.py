@@ -4,7 +4,7 @@ from types import SimpleNamespace
 import numpy as np
 import pytest
 
-from service.application.field.field_proxy_preview import field_proxy_preview
+from service.application.field.proxy_preview import field_proxy_preview
 from service.infrastructure.execution.process import (
     _file_sha256,
     _valid_progress,
@@ -65,7 +65,7 @@ def test_preview_rejects_an_incomplete_control_triplet():
 
 
 def test_preview_checks_event_order_across_chunk_boundaries(monkeypatch):
-    monkeypatch.setattr('service.application.field.field_proxy_preview._EVENT_CHECK_BLOCK', 2)
+    monkeypatch.setattr('service.application.field.proxy_preview._EVENT_CHECK_BLOCK', 2)
     run = {'spike_times_ms': np.array([1, 2, 2]), 'spike_neurons': np.array([0, 2, 1]),
            'counts': np.array([1, 1, 1])}
     with pytest.raises(ValueError, match='event order'):
@@ -73,12 +73,12 @@ def test_preview_checks_event_order_across_chunk_boundaries(monkeypatch):
 
 
 def test_invalid_network_counts_are_rejected_before_artifact_creation(tmp_path, monkeypatch):
-    from service.application.field.field_proxy_execution import execute_field_proxy
+    from service.application.field.proxy_execution import execute_field_proxy
 
     graph = SimpleNamespace(size=2, ids=np.array([1, 2]),
                             provenance={'manifest_sha256': 'a' * 64})
     provenance = {'excluded_from_direct_field': [], 'excluded_contact_intersections': []}
-    monkeypatch.setattr('service.application.field.field_proxy_execution.verified_descriptors',
+    monkeypatch.setattr('service.application.field.proxy_execution.verified_descriptors',
                         lambda *_args, **_kwargs: (np.zeros(2), provenance))
     monkeypatch.setattr('service.infrastructure.connectome.field_proxy.run_field_proxy',
                         lambda *_args, **_kwargs: {'spike_neurons': np.array([0]),
@@ -91,7 +91,7 @@ def test_invalid_network_counts_are_rejected_before_artifact_creation(tmp_path, 
 
 
 def test_disagreeing_sparse_and_sampled_network_states_are_rejected(tmp_path, monkeypatch):
-    from service.application.field.field_proxy_execution import execute_field_proxy
+    from service.application.field.proxy_execution import execute_field_proxy
     from service.infrastructure.connectome import field_proxy
     from tests.test_field_proxy import graph as make_graph
 
@@ -99,7 +99,7 @@ def test_disagreeing_sparse_and_sampled_network_states_are_rejected(tmp_path, mo
     graph.provenance = {'manifest_sha256': 'a' * 64}
     provenance = {'excluded_from_direct_field': [], 'excluded_contact_intersections': [],
                   'file_sha256': 'b' * 64}
-    monkeypatch.setattr('service.application.field.field_proxy_execution.verified_descriptors',
+    monkeypatch.setattr('service.application.field.proxy_execution.verified_descriptors',
                         lambda *_args, **_kwargs: (np.array([1., -1.]), provenance))
     original = field_proxy.run_field_proxy
 
@@ -119,7 +119,7 @@ def test_disagreeing_sparse_and_sampled_network_states_are_rejected(tmp_path, mo
 
 
 def test_unknown_sparse_status_cannot_be_published_as_success(tmp_path, monkeypatch):
-    from service.application.field.field_proxy_execution import execute_field_proxy
+    from service.application.field.proxy_execution import execute_field_proxy
     from service.infrastructure.connectome import field_proxy
     from tests.test_field_proxy import graph as make_graph
 
@@ -127,7 +127,7 @@ def test_unknown_sparse_status_cannot_be_published_as_success(tmp_path, monkeypa
     graph.provenance = {'manifest_sha256': 'a' * 64}
     provenance = {'excluded_from_direct_field': [], 'excluded_contact_intersections': [],
                   'file_sha256': 'b' * 64}
-    monkeypatch.setattr('service.application.field.field_proxy_execution.verified_descriptors',
+    monkeypatch.setattr('service.application.field.proxy_execution.verified_descriptors',
                         lambda *_args, **_kwargs: (np.array([1., -1.]), provenance))
     original = field_proxy.run_field_proxy
 
@@ -166,7 +166,7 @@ def test_executor_uses_bounded_configured_field_workers(tmp_path, monkeypatch):
         output.mkdir()
         (output / 'metadata.json').write_text('{}')
 
-    monkeypatch.setitem(sys.modules, 'service.application.field.field_proxy_execution',
+    monkeypatch.setitem(sys.modules, 'service.application.field.proxy_execution',
                         SimpleNamespace(execute_field_proxy=execute))
     monkeypatch.setitem(sys.modules, 'service.infrastructure.connectome.neighbors',
                         SimpleNamespace(registered_graph=lambda: SimpleNamespace(
@@ -197,7 +197,7 @@ def test_executor_forwards_explicit_field_backend_without_silent_fallback(tmp_pa
     monkeypatch.setattr('service.infrastructure.connectome.neighbors.registered_graph',
                         lambda: SimpleNamespace(provenance={'manifest_sha256': 'a' * 64}))
     monkeypatch.setattr('service.settings.morphology_directories', lambda: [])
-    monkeypatch.setattr('service.application.field.field_proxy_execution.execute_field_proxy',
+    monkeypatch.setattr('service.application.field.proxy_execution.execute_field_proxy',
                         execute)
     monkeypatch.setenv('GENERATOR_FIELD_WORKERS', '1')
     monkeypatch.setenv('GENERATOR_FIELD_BACKEND', 'gpu')
@@ -259,7 +259,7 @@ def test_child_forwards_cache_without_accepting_request_paths(tmp_path, monkeypa
         observed.append((geometry_cache, field_backend))
         output.mkdir()
         (output / 'metadata.json').write_text('{}')
-    monkeypatch.setattr('service.application.field.field_proxy_execution.execute_field_proxy',
+    monkeypatch.setattr('service.application.field.proxy_execution.execute_field_proxy',
                         execute)
     monkeypatch.setenv('GENERATOR_FIELD_BACKEND', backend)
     run_field_proxy_child(payload(), str(tmp_path / 'output'))
@@ -276,7 +276,7 @@ def test_child_owns_work_files_and_exports_manifest(tmp_path, monkeypatch):
         output.mkdir()
         (output / 'metadata.json').write_text('{}')
         (output / 'network.npz').write_bytes(b'example')
-    monkeypatch.setattr('service.application.field.field_proxy_execution.execute_field_proxy',
+    monkeypatch.setattr('service.application.field.proxy_execution.execute_field_proxy',
                         execute)
     run_field_proxy_child(payload(), str(tmp_path / 'output'))
     manifest = json.loads((tmp_path / 'output/manifest.json').read_text())
@@ -305,7 +305,7 @@ def test_child_failure_records_error_and_removes_work(tmp_path, monkeypatch):
     def fail(_graph, _dirs, *, field_path, **_options):
         field_path.write_text('partial')
         raise ValueError('invalid geometry')
-    monkeypatch.setattr('service.application.field.field_proxy_execution.execute_field_proxy', fail)
+    monkeypatch.setattr('service.application.field.proxy_execution.execute_field_proxy', fail)
     with pytest.raises(ValueError, match='invalid geometry'):
         run_field_proxy_child(payload(), str(tmp_path / 'output'))
     assert not (tmp_path / 'field-proxy-work').exists()

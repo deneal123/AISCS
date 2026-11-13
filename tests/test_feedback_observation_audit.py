@@ -2,13 +2,13 @@ from copy import deepcopy
 
 import pytest
 
-from service.infrastructure.stimulation.feedback_observation_audit import (
+from service.infrastructure.stimulation.feedback.observation_audit import (
     audit_feedback_observations,
 )
 
 
 def example(monkeypatch):
-    module = 'service.infrastructure.stimulation.feedback_observation_audit.'
+    module = 'service.infrastructure.stimulation.feedback.observation_audit.'
     monkeypatch.setattr(module + 'read_skeleton', lambda *_a, **_k: {
         'body_id': '20', 'sha256': 'a' * 64, 'swc': 'verified'})
     monkeypatch.setattr(module + 'map_fragment_candidates', lambda _swc, points: {
@@ -68,7 +68,7 @@ def test_one_verified_morphology_snapshot_is_reused_for_same_target(monkeypatch)
     schedule['events_by_target'][20].append(schedule['events_by_target'][20][0].copy())
     schedule['provenance_by_target'][20].append({**first, 'source_id': 11})
     reads = []
-    monkeypatch.setattr('service.infrastructure.stimulation.feedback_observation_audit.read_skeleton',
+    monkeypatch.setattr('service.infrastructure.stimulation.feedback.observation_audit.read_skeleton',
                         lambda body, _dirs, **_kw: reads.append(body) or {
                             'body_id': '20', 'sha256': 'a' * 64, 'swc': 'verified'})
 
@@ -83,6 +83,39 @@ def test_one_verified_morphology_snapshot_is_reused_for_same_target(monkeypatch)
     result = audit_feedback_observations(schedule, Index(), [], expected_source_md5='b' * 32)
     assert result['verified_events'] == 2
     assert reads == [20]
+
+
+def test_projection_is_batched_by_target_without_losing_pair_checks(monkeypatch):
+    schedule, _ = example(monkeypatch)
+    origin = schedule['provenance_by_target'][20][0]
+    schedule['events_by_target'][20].append({'child_node_id': 8, 'position': .5})
+    schedule['provenance_by_target'][20].append({**origin, 'source_id': 11,
+                                                 'target_position_8nm': [200, 200, 300],
+                                                 'target_distance_um': .15})
+    calls = []
+
+    def map_once(_swc, points):
+        calls.append(points)
+        return {'child_node_ids': [7, 8], 'segment_fractions': [1., .5],
+                'centerline_distances_um': [.075, .15]}
+
+    class Index:
+        def query(self, _target, _direction, *, limit, partner_ids):
+            assert limit is None and partner_ids == [10, 11]
+            rows = [{'body_pre': source, 'body_post': 20, 'x_post': x,
+                     'y_post': 200, 'z_post': 300} for source, x in [(10, 100), (11, 200)]]
+            return {'truncated': False, 'source_md5': 'b' * 32, 'total': 2, 'returned': 2,
+                    'pairs': rows}
+
+    monkeypatch.setattr('service.infrastructure.stimulation.feedback.observation_audit.'
+                        'map_fragment_candidates', map_once)
+    assert audit_feedback_observations(schedule, Index(), [], expected_source_md5='b' * 32)[
+        'verified_events'] == 2
+    assert calls == [[[.8, 1.6, 2.4], [1.6, 1.6, 2.4]]]
+    bad = deepcopy(schedule)
+    bad['events_by_target'][20][1]['child_node_id'] = 7
+    with pytest.raises(ValueError, match='projection mismatch'):
+        audit_feedback_observations(bad, Index(), [], expected_source_md5='b' * 32)
 
 
 def test_source_queries_are_bounded_and_reject_unrequested_pairs(monkeypatch):

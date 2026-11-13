@@ -184,7 +184,7 @@ def run_edge_forced_network(graph, *, seed, duration_ms, forced_cell_ids, edge_e
 
 def run_fragment_edge_network(graph, diagnostics, *, seed, duration_ms, max_distance_um):
     """Apply an explicitly constrained fragment schedule to its matching graph."""
-    from service.infrastructure.stimulation.fragment_output_diagnostics import (
+    from service.infrastructure.stimulation.population.diagnostics import (
         fragment_edge_schedule,
     )
 
@@ -212,7 +212,7 @@ def run_fragment_population_network(graph, diagnostics, *, seed, duration_ms, ma
                                     capture_target_response=False, response_scope='direct-targets',
                                     allow_partial_geometry=False):
     """Couple a bounded set of independent sources without asserting full coverage."""
-    from service.infrastructure.stimulation.fragment_output_diagnostics import (
+    from service.infrastructure.stimulation.population.diagnostics import (
         fragment_edge_schedule,
     )
 

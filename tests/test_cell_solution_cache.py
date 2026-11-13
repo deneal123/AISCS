@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from service.application.feedback.cell_solution_cache import CellSolutionCache, _size
+from service.application.feedback.cell_cache import CellSolutionCache, _size
 
 
 def test_keys_include_every_numerical_input():

@@ -3,10 +3,10 @@ from copy import deepcopy
 
 import pytest
 
-from service.infrastructure.stimulation.feedback_discretization import (
+from service.infrastructure.stimulation.feedback.discretization import (
     prepare_feedback_discretization,
 )
-from service.infrastructure.stimulation.feedback_discretization_archive import (
+from service.infrastructure.stimulation.feedback.discretization_archive import (
     _canonical,
     read_discretization_receipt,
     write_discretization_receipt,
@@ -14,7 +14,7 @@ from service.infrastructure.stimulation.feedback_discretization_archive import (
 
 
 def test_roundtrip_rechecks_inputs_and_rejects_mutation(tmp_path, monkeypatch):
-    module = 'service.infrastructure.stimulation.feedback_discretization.'
+    module = 'service.infrastructure.stimulation.feedback.discretization.'
     monkeypatch.setattr(module + 'audit_feedback_observations',
                         lambda *_a, **_k: {'verified_events': 1})
     monkeypatch.setattr(module + 'read_skeleton', lambda *_a, **_k: {

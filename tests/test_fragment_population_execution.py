@@ -5,14 +5,25 @@ from types import SimpleNamespace
 import numpy as np
 import pytest
 
-from service.application.population.fragment_contact_preflight import fragment_contact_receipt
-from service.application.population.fragment_population_execution import FragmentPopulationExecution
-from service.domain.contracts.fragment_population_contract import FragmentPopulationConfig
-from service.infrastructure.stimulation.fragment_output_diagnostics import fragment_edge_schedule
-from service.infrastructure.stimulation.fragment_population_archive import (
+from service.application.population.contact_preflight import fragment_contact_receipt
+from service.application.population.execution import FragmentPopulationExecution
+from service.domain.contracts.population.fragment import FragmentPopulationConfig
+from service.infrastructure.stimulation.population.archive import (
     load_verified_fragment_population,
 )
+from service.infrastructure.stimulation.population.diagnostics import fragment_edge_schedule
 from tests.test_fragment_population_contract import example
+
+
+def test_experimental_solver_result_cannot_be_exported(tmp_path, monkeypatch):
+    config = FragmentPopulationConfig.model_validate(example())
+    graph = SimpleNamespace(provenance={'manifest_sha256': config.graph_manifest_sha256})
+    monkeypatch.setattr('service.application.population.execution.run_fragment_population',
+                        lambda *_a, **_k: {'experimental_solver_backend':
+                                           'experimental_coreneuron'})
+    with pytest.raises(ValueError, match='cannot be published'):
+        FragmentPopulationExecution(graph, None, []).execute(config, tmp_path)
+    assert not (tmp_path / 'manifest.json').exists()
 
 
 @pytest.mark.parametrize('partial', [False, True])
@@ -104,7 +115,7 @@ def test_experimental_execution_exports_complete_checked_subset(tmp_path, monkey
         }
 
     monkeypatch.setattr(
-        "service.application.population.fragment_population_execution.run_fragment_population", run
+        "service.application.population.execution.run_fragment_population", run
     )
     receipt = fragment_contact_receipt(
         config,
@@ -170,7 +181,7 @@ def test_experimental_execution_exports_complete_checked_subset(tmp_path, monkey
         return result
 
     monkeypatch.setattr(
-        'service.application.population.fragment_population_execution.run_fragment_population', run_network
+        'service.application.population.execution.run_fragment_population', run_network
     )
     network_path = tmp_path / 'network'
     network_manifest = FragmentPopulationExecution(graph, None, []).execute(

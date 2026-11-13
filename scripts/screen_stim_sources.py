@@ -21,7 +21,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from scripts.prepare_full_morphology import MANIFEST_SHA256, registered_ids  # noqa: E402
 from service.application.screening import source_screening  # noqa: E402
 from service.domain import pulse_train  # noqa: E402
-from service.domain.contracts.field_graph_contract import FieldGraphConfig  # noqa: E402
+from service.domain.contracts.field.graph import FieldGraphConfig  # noqa: E402
 from service.infrastructure.connectome import (  # noqa: E402
     forced_network,
     kernel,

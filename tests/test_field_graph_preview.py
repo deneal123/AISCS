@@ -4,8 +4,8 @@ import numpy as np
 import pytest
 
 from service.infrastructure.stimulation.acquisition import acquire_channel
-from service.infrastructure.stimulation.field_graph_export import export_field_graph_replay
-from service.infrastructure.stimulation.field_graph_preview import field_graph_preview
+from service.infrastructure.stimulation.field.graph_export import export_field_graph_replay
+from service.infrastructure.stimulation.field.graph_preview import field_graph_preview
 from tests.test_field_graph_export import example
 
 
@@ -31,9 +31,9 @@ def test_preview_flags_possible_missed_threshold_without_claiming_spike(monkeypa
                          "selected_crossings": 1, "selected_first_crossing_sample_ms": 1.,
                          "earliest_crossing_sample_ms": 1., "initial_at_or_above_threshold": 0}},
                 ]}
-    monkeypatch.setattr("service.infrastructure.stimulation.field_graph_preview.load_verified_field_graph_replay",
+    monkeypatch.setattr("service.infrastructure.stimulation.field.graph_preview.load_verified_field_graph_replay",
                         lambda *_: {"arrays": arrays, "metadata": metadata, "graph_binary": b""})
-    monkeypatch.setattr("service.infrastructure.stimulation.field_graph_preview._read_verified_spike_arrays",
+    monkeypatch.setattr("service.infrastructure.stimulation.field.graph_preview._read_verified_spike_arrays",
                         lambda *_: (np.array([], dtype=int), np.array([], dtype=float)))
     graph = SimpleNamespace(ids=np.array([1, 2, 3]), provenance={"manifest_sha256": "sha"})
     preview = field_graph_preview(None, graph)
@@ -58,9 +58,9 @@ def test_preview_retains_stimulus_even_without_recording_response(monkeypatch):
                            "source_0_voltage_mv": np.array([-65., -65., -65., -17000., -65.,
                                                             -65., -65., -65., -65., -65.])},
                 "metadata": metadata, "graph_binary": b""}
-    monkeypatch.setattr("service.infrastructure.stimulation.field_graph_preview.load_verified_field_graph_replay",
+    monkeypatch.setattr("service.infrastructure.stimulation.field.graph_preview.load_verified_field_graph_replay",
                         lambda *_: verified)
-    monkeypatch.setattr("service.infrastructure.stimulation.field_graph_preview._read_verified_spike_arrays",
+    monkeypatch.setattr("service.infrastructure.stimulation.field.graph_preview._read_verified_spike_arrays",
                         lambda *_: (np.array([], dtype=int), np.array([], dtype=float)))
     graph = SimpleNamespace(ids=np.array([1, 2]), provenance={"manifest_sha256": "sha"})
     preview = field_graph_preview(None, graph, bins=1)
@@ -82,9 +82,9 @@ def test_preview_with_all_extrema_respects_backend_sample_limit(monkeypatch):
     metadata = {"graph_description": {"duration_ms": 1000}, "graph_sha256": "sha",
                 "acquisition_settings": {}, "source_cells": [1],
                 "configuration": {"replay_ids": [2]}}
-    monkeypatch.setattr("service.infrastructure.stimulation.field_graph_preview.load_verified_field_graph_replay",
+    monkeypatch.setattr("service.infrastructure.stimulation.field.graph_preview.load_verified_field_graph_replay",
                         lambda *_: {"arrays": arrays, "metadata": metadata, "graph_binary": b""})
-    monkeypatch.setattr("service.infrastructure.stimulation.field_graph_preview._read_verified_spike_arrays",
+    monkeypatch.setattr("service.infrastructure.stimulation.field.graph_preview._read_verified_spike_arrays",
                         lambda *_: (np.array([], dtype=int), np.array([], dtype=float)))
     graph = SimpleNamespace(ids=np.array([1, 2]), provenance={"manifest_sha256": "sha"})
     preview = field_graph_preview(None, graph)
@@ -99,12 +99,12 @@ def test_short_pulse_keeps_inactive_samples_on_both_sides(monkeypatch):
     metadata = {"graph_description": {"duration_ms": 100}, "graph_sha256": "sha",
                 "acquisition_settings": None, "source_cells": [1],
                 "configuration": {"replay_ids": [2]}}
-    monkeypatch.setattr("service.infrastructure.stimulation.field_graph_preview.load_verified_field_graph_replay",
+    monkeypatch.setattr("service.infrastructure.stimulation.field.graph_preview.load_verified_field_graph_replay",
                         lambda *_: {"arrays": {"time_ms": time, "neural_uv": np.zeros(len(time)),
                                                "total_uv": np.zeros(len(time)),
                                                "stimulus_fraction": stimulus},
                                     "metadata": metadata, "graph_binary": b""})
-    monkeypatch.setattr("service.infrastructure.stimulation.field_graph_preview._read_verified_spike_arrays",
+    monkeypatch.setattr("service.infrastructure.stimulation.field.graph_preview._read_verified_spike_arrays",
                         lambda *_: (np.array([], dtype=int), np.array([], dtype=float)))
     graph = SimpleNamespace(ids=np.array([1, 2]), provenance={"manifest_sha256": "sha"})
     preview = field_graph_preview(None, graph, bins=1)
@@ -119,12 +119,12 @@ def test_preview_preserves_ramp_and_plateau_not_just_peak(monkeypatch):
     metadata = {"graph_description": {"duration_ms": 100}, "graph_sha256": "sha",
                 "acquisition_settings": None, "source_cells": [1],
                 "configuration": {"replay_ids": [2]}}
-    monkeypatch.setattr("service.infrastructure.stimulation.field_graph_preview.load_verified_field_graph_replay",
+    monkeypatch.setattr("service.infrastructure.stimulation.field.graph_preview.load_verified_field_graph_replay",
                         lambda *_: {"arrays": {"time_ms": time, "neural_uv": np.zeros(len(time)),
                                                "total_uv": np.zeros(len(time)),
                                                "stimulus_fraction": stimulus},
                                     "metadata": metadata, "graph_binary": b""})
-    monkeypatch.setattr("service.infrastructure.stimulation.field_graph_preview._read_verified_spike_arrays",
+    monkeypatch.setattr("service.infrastructure.stimulation.field.graph_preview._read_verified_spike_arrays",
                         lambda *_: (np.array([], dtype=int), np.array([], dtype=float)))
     graph = SimpleNamespace(ids=np.array([1, 2]), provenance={"manifest_sha256": "sha"})
     preview = field_graph_preview(None, graph, bins=1)
@@ -139,9 +139,9 @@ def test_high_frequency_stimulus_keeps_preview_bounded(monkeypatch):
     metadata = {"graph_description": {"duration_ms": size - 1}, "graph_sha256": "sha",
                 "acquisition_settings": None, "source_cells": [1],
                 "configuration": {"replay_ids": [2]}}
-    monkeypatch.setattr("service.infrastructure.stimulation.field_graph_preview.load_verified_field_graph_replay",
+    monkeypatch.setattr("service.infrastructure.stimulation.field.graph_preview.load_verified_field_graph_replay",
                         lambda *_: {"arrays": arrays, "metadata": metadata, "graph_binary": b""})
-    monkeypatch.setattr("service.infrastructure.stimulation.field_graph_preview._read_verified_spike_arrays",
+    monkeypatch.setattr("service.infrastructure.stimulation.field.graph_preview._read_verified_spike_arrays",
                         lambda *_: (np.array([], dtype=int), np.array([], dtype=float)))
     graph = SimpleNamespace(ids=np.array([1, 2]), provenance={"manifest_sha256": "sha"})
     preview = field_graph_preview(None, graph)

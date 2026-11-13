@@ -5,8 +5,8 @@ import json
 import numpy as np
 import pytest
 
-from service.application.feedback.population_feedback_validation import validate_population_feedback
-from service.domain.contracts.fragment_population_contract import FragmentPopulationConfig
+from service.application.feedback.validation import validate_population_feedback
+from service.domain.contracts.population.fragment import FragmentPopulationConfig
 from tests.test_forced_network import graph
 from tests.test_population_feedback_checkpoint import sample
 

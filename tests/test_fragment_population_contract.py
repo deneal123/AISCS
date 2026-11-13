@@ -3,7 +3,7 @@ from copy import deepcopy
 import pytest
 from pydantic import ValidationError
 
-from service.domain.contracts.fragment_population_contract import FragmentPopulationConfig
+from service.domain.contracts.population.fragment import FragmentPopulationConfig
 from tests.test_field_graph_contract import payload
 
 

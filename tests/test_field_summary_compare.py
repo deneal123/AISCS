@@ -4,8 +4,8 @@ import json
 import pytest
 
 from service.infrastructure.connectome.morphology_repository import BASE
-from service.infrastructure.stimulation.field_summary_compare import compare
-from service.infrastructure.stimulation.field_summary_compute import compute
+from service.infrastructure.stimulation.field.summary_compare import compare
+from service.infrastructure.stimulation.field.summary_compute import compute
 
 CONFIG = dict(source_um=[0, 10, 0], return_um=[50, 10, 0], current_na=10,
               conductivity_s_m=.3, clearance_um=1)
@@ -64,7 +64,7 @@ def test_compare_requires_complete_matching_configuration_and_integrity(fields):
 
 
 def test_compare_rejects_a_file_changed_while_reading(fields, monkeypatch):
-    from service.infrastructure.stimulation import field_summary_compare
+    from service.infrastructure.stimulation.field import summary_compare as field_summary_compare
 
     first, second = fields
     actual = field_summary_compare._sha256

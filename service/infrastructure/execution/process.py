@@ -16,12 +16,12 @@ from time import time
 from uuid import UUID
 
 from service.contracts import ExecutionRequest, SimulationConfig
-from service.domain.contracts.field_graph_contract import FieldGraphExecutionRequest
-from service.domain.contracts.field_proxy_contract import FieldProxyExecutionRequest
-from service.domain.contracts.fragment_population_contract import FragmentPopulationExecutionRequest
-from service.domain.contracts.population_feedback_contract import PopulationFeedbackExecutionRequest
-from service.domain.contracts.population_target_contract import PopulationTargetExecutionRequest
-from service.domain.contracts.replay_contract import ReplayExecutionRequest
+from service.domain.contracts.field.graph import FieldGraphExecutionRequest
+from service.domain.contracts.field.proxy import FieldProxyExecutionRequest
+from service.domain.contracts.population.feedback import PopulationFeedbackExecutionRequest
+from service.domain.contracts.population.fragment import FragmentPopulationExecutionRequest
+from service.domain.contracts.population.target import PopulationTargetExecutionRequest
+from service.domain.contracts.replay import ReplayExecutionRequest
 from service.infrastructure.execution.replay_input import ReplayInputStore
 from service.shared.json_io import write_json
 
@@ -104,7 +104,7 @@ def run_child(payload: dict, directory: str) -> None:
 
 def run_field_proxy_child(payload: dict, directory: str) -> None:
     """Isolate one uncalibrated field-proxy execution in its own process."""
-    from service.application.field.field_proxy_execution import execute_field_proxy
+    from service.application.field.proxy_execution import execute_field_proxy
     from service.infrastructure.connectome.neighbors import registered_graph
     from service.settings import morphology_directories
 
@@ -168,7 +168,7 @@ def run_replay_child(payload: dict, directory: str, root: str) -> None:
     from service.application.replay.replay import ReplayRecordedCell
     from service.infrastructure.connectome.neighbors import registered_graph
     from service.infrastructure.connectome.synapse_repository import registered_index
-    from service.infrastructure.stimulation.replay_preview import export_replay_preview
+    from service.infrastructure.stimulation.recording.replay_preview import export_replay_preview
     from service.settings import connectome_directory, morphology_directories
 
     target = Path(directory)
@@ -199,12 +199,12 @@ def run_replay_child(payload: dict, directory: str, root: str) -> None:
 
 
 def run_field_graph_child(payload: dict, directory: str) -> None:
-    from service.application.field.field_graph_execution import FieldGraphExecution
-    from service.application.field.field_state_artifacts import bundle_field_state_contrast
+    from service.application.field.graph_execution import FieldGraphExecution
+    from service.application.field.state_artifacts import bundle_field_state_contrast
     from service.infrastructure.connectome.neighbors import registered_graph
     from service.infrastructure.connectome.synapse_repository import registered_index
-    from service.infrastructure.stimulation.current_transport import pack_current_archive
-    from service.infrastructure.stimulation.field_graph_preview import export_field_graph_preview
+    from service.infrastructure.stimulation.field.graph_preview import export_field_graph_preview
+    from service.infrastructure.stimulation.recording.current_transport import pack_current_archive
     from service.settings import connectome_directory, morphology_directories
 
     target = Path(directory)
@@ -248,11 +248,11 @@ def run_field_graph_child(payload: dict, directory: str) -> None:
 
 
 def run_fragment_population_child(payload: dict, directory: str) -> None:
-    from service.application.population.fragment_contact_preflight import (
+    from service.application.population.contact_preflight import (
         check_fragment_contacts,
         fragment_contact_receipt,
     )
-    from service.application.population.fragment_population_execution import (
+    from service.application.population.execution import (
         FragmentPopulationExecution,
     )
     from service.infrastructure.connectome.neighbors import registered_graph
@@ -284,22 +284,22 @@ def run_population_feedback_child(payload: dict, directory: str, input_root: str
     """Run a coupled population from a verified, privately restored source package."""
     import tempfile
 
-    from service.application.feedback.population_feedback_loop import iterate_population_feedback
-    from service.application.feedback.population_feedback_preview import population_feedback_preview
-    from service.domain.contracts.fragment_population_contract import FragmentPopulationConfig
+    from service.application.feedback.loop import iterate_population_feedback
+    from service.application.feedback.preview import population_feedback_preview
+    from service.domain.contracts.population.fragment import FragmentPopulationConfig
     from service.infrastructure.connectome.forced_export import encode_forced_spikes
     from service.infrastructure.connectome.neighbors import registered_graph
     from service.infrastructure.connectome.synapse_repository import SOURCE_MD5, registered_index
-    from service.infrastructure.stimulation.fragment_population_transport import (
-        unpack_fragment_population,
-    )
-    from service.infrastructure.stimulation.fragment_sparse_delta import encode_sparse_delta
-    from service.infrastructure.stimulation.population_feedback_archive import (
+    from service.infrastructure.stimulation.feedback.archive import (
         read_population_feedback,
         write_population_feedback,
     )
-    from service.infrastructure.stimulation.population_source_events import (
+    from service.infrastructure.stimulation.population.source_events import (
         encode_population_source_events,
+    )
+    from service.infrastructure.stimulation.population.sparse_delta import encode_sparse_delta
+    from service.infrastructure.stimulation.population.transport import (
+        unpack_fragment_population,
     )
     from service.settings import connectome_directory, morphology_directories
 
@@ -408,14 +408,14 @@ def run_population_target_child(payload: dict, directory: str, input_root: str) 
     from service.application.replay.verified_population_target import (
         replay_verified_population_target,
     )
-    from service.domain.contracts.fragment_population_contract import FragmentPopulationConfig
-    from service.domain.contracts.population_target_contract import PopulationTargetExecutionRequest
+    from service.domain.contracts.population.fragment import FragmentPopulationConfig
+    from service.domain.contracts.population.target import PopulationTargetExecutionRequest
     from service.infrastructure.connectome.neighbors import registered_graph
     from service.infrastructure.connectome.synapse_repository import registered_index
-    from service.infrastructure.stimulation.fragment_population_transport import (
+    from service.infrastructure.stimulation.population.transport import (
         unpack_fragment_population,
     )
-    from service.infrastructure.stimulation.verified_target_archive import (
+    from service.infrastructure.stimulation.recording.verified_target_archive import (
         read_target_replay,
         write_target_replay,
     )

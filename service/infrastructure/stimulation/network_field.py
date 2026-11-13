@@ -3,12 +3,14 @@
 from __future__ import annotations
 
 import multiprocessing as mp
+import os
 from concurrent.futures import ProcessPoolExecutor
 from itertools import islice
 
 import numpy as np
 
 from service.infrastructure.connectome.morphology_repository import read_skeleton
+from service.infrastructure.execution.pool_lifecycle import guard_pool_owner
 from service.infrastructure.stimulation.morphology_field import (
     _evaluate_validated_swc_field,
     _geometry_from_validated_nodes,
@@ -107,7 +109,8 @@ def _gpu_prepared_skeletons(ids, directories, workers):
         return
     # Workers prepare bounded chunks only; CUDA remains in the owning process.
     iterator = iter(ids)
-    with ProcessPoolExecutor(max_workers=workers, mp_context=mp.get_context('spawn')) as pool:
+    with ProcessPoolExecutor(max_workers=workers, mp_context=mp.get_context('spawn'),
+                             initializer=guard_pool_owner, initargs=(os.getpid(),)) as pool:
         while batch := list(islice(iterator, 64)):
             yield from pool.map(_prepare_gpu_skeleton,
                                 ((raw_id, directories) for raw_id in batch), chunksize=4)

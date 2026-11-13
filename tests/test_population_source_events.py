@@ -6,7 +6,7 @@ from uuid import uuid4
 import numpy as np
 import pytest
 
-from service.infrastructure.stimulation.population_source_events import (
+from service.infrastructure.stimulation.population.source_events import (
     HEADER,
     encode_population_source_events,
 )
@@ -76,15 +76,15 @@ def test_executor_publishes_source_markers_from_verified_feedback(tmp_path, monk
                         lambda *_: object())
     monkeypatch.setattr('service.settings.connectome_directory', lambda: tmp_path)
     monkeypatch.setattr('service.settings.morphology_directories', lambda: [])
-    monkeypatch.setattr('service.infrastructure.stimulation.fragment_population_transport.'
+    monkeypatch.setattr('service.infrastructure.stimulation.population.transport.'
                         'unpack_fragment_population', lambda *_: source)
     calls = []
     def iterate(*_args, **kwargs):
         calls.append(kwargs)
         return result
-    monkeypatch.setattr('service.application.feedback.population_feedback_loop.iterate_population_feedback',
+    monkeypatch.setattr('service.application.feedback.loop.iterate_population_feedback',
                         iterate)
-    monkeypatch.setattr('service.application.feedback.population_feedback_preview.population_feedback_preview',
+    monkeypatch.setattr('service.application.feedback.preview.population_feedback_preview',
                         lambda *_: {'kind': 'test'})
     archive_contexts = []
     def write_archive(_result, path, **kwargs):
@@ -94,11 +94,11 @@ def test_executor_publishes_source_markers_from_verified_feedback(tmp_path, monk
     def read_archive(*_args, **kwargs):
         archive_contexts.append(kwargs['discretization_context'])
         return result
-    monkeypatch.setattr('service.infrastructure.stimulation.population_feedback_archive.'
+    monkeypatch.setattr('service.infrastructure.stimulation.feedback.archive.'
                         'write_population_feedback', write_archive)
-    monkeypatch.setattr('service.infrastructure.stimulation.population_feedback_archive.'
+    monkeypatch.setattr('service.infrastructure.stimulation.feedback.archive.'
                         'read_population_feedback', read_archive)
-    monkeypatch.setattr('service.infrastructure.stimulation.fragment_sparse_delta.encode_sparse_delta',
+    monkeypatch.setattr('service.infrastructure.stimulation.population.sparse_delta.encode_sparse_delta',
                         lambda *_, **_kw: b'delta')
     monkeypatch.setattr('service.infrastructure.connectome.forced_export.encode_forced_spikes',
                         lambda *_: (b'events', None, 'f' * 64))

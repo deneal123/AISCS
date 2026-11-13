@@ -12,8 +12,8 @@ from service.application.replay.fragment_target_replay import (
     combine_fragment_target_recording,
     replay_fragment_target_population,
 )
-from service.domain.contracts.fragment_population_contract import FragmentPopulationConfig
-from service.infrastructure.stimulation.fragment_population_archive import (
+from service.domain.contracts.population.fragment import FragmentPopulationConfig
+from service.infrastructure.stimulation.population.archive import (
     load_verified_fragment_population,
 )
 

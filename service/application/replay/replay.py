@@ -6,8 +6,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from uuid import UUID
 
-from service.domain.contracts.replay_contract import ReplayRunConfig
-from service.infrastructure.stimulation.replay_export import export_reference_replay
+from service.domain.contracts.replay import ReplayRunConfig
+from service.infrastructure.stimulation.recording.replay_export import export_reference_replay
 from service.infrastructure.stimulation.synaptic_replay import execute_all_incoming_replay
 
 

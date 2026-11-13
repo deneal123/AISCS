@@ -18,6 +18,9 @@ import numpy as np
 from service.infrastructure.connectome import morphology, morphology_repository
 from service.infrastructure.stimulation import morphology_field, network_field
 from service.infrastructure.stimulation.geometry_cache import chunk, index
+from service.infrastructure.stimulation.geometry_cache.producer_compatibility import (
+    producer_is_compatible,
+)
 from service.infrastructure.stimulation.network_field import _prepare_gpu_skeleton
 
 
@@ -125,7 +128,8 @@ def iter_cache(directory: Path, *, expected_manifest_sha256: str, graph_ids,
             or metadata.get('format') != 'malecns-packed-geometry-cache-v1'
             or metadata.get('graph_sha256') != graph_sha256
             or metadata.get('source_index_sha256') != source_sha
-            or metadata.get('producer_sha256') != _producer_sha256()
+            or not producer_is_compatible(
+                expected_manifest_sha256, metadata.get('producer_sha256'), _producer_sha256())
             or type(metadata.get('neurons')) is not int or metadata['neurons'] != len(ids)
             or type(metadata.get('vertices')) is not int or metadata['vertices'] < 1
             or not isinstance(metadata.get('chunks'), list) or not metadata['chunks']):

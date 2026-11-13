@@ -1,7 +1,7 @@
 import pytest
 from pydantic import ValidationError
 
-from service.domain.contracts.population_target_contract import PopulationTargetConfig
+from service.domain.contracts.population.target import PopulationTargetConfig
 
 
 def valid():

@@ -1,7 +1,7 @@
 import pytest
 from pydantic import ValidationError
 
-from service.domain.contracts.replay_contract import ReplayRunConfig
+from service.domain.contracts.replay import ReplayRunConfig
 
 
 def valid():

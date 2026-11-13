@@ -19,4 +19,8 @@ def _open_index(root: Path, ids: Path):
 def registered_index(root: Path, ids: Path):
     # lru_cache alone permits concurrent duplicate initialization on cache misses.
     with _lock:
-        return _open_index(root, ids)
+        index = _open_index(root, ids)
+        # A cached object is only valid while every verified backing file has
+        # retained its identity. Do not silently reopen or bypass verification.
+        index.assert_unchanged()
+        return index

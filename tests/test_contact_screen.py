@@ -8,7 +8,7 @@ import pytest
 from scripts.audit_morphology_radii import audit as audit_radii
 from scripts.build_morphology_bounds import build_index
 from scripts.build_morphology_radii import build as build_radii
-from service.infrastructure.stimulation.contact_screen import (
+from service.infrastructure.stimulation.contacts.screen import (
     screen_contact_positions,
     screen_contacts,
 )
@@ -30,7 +30,7 @@ def fixture_indexes(tmp_path, monkeypatch):
 
     for name in ('scripts.build_morphology_bounds', 'scripts.build_morphology_radii',
                  'scripts.audit_morphology_radii',
-                 'service.infrastructure.stimulation.contact_screen'):
+                 'service.infrastructure.stimulation.contacts.screen'):
         monkeypatch.setattr(name + '.read_skeleton', read)
     bounds, bproof = tmp_path / 'bounds.db', tmp_path / 'bounds.audit.json'
     radii, rproof = tmp_path / 'radii.db', tmp_path / 'radii.audit.json'
@@ -115,7 +115,7 @@ def test_segment_filter_uses_all_contacts_and_maximum_audited_radius(tmp_path, m
         seen.update(kwargs)
         return {0}, 'c' * 64
 
-    monkeypatch.setattr('service.infrastructure.stimulation.contact_screen.segment_ordinals',
+    monkeypatch.setattr('service.infrastructure.stimulation.contacts.screen.segment_ordinals',
                         segment_filter)
     result = screen_contacts(*args, segment_index=tmp_path / 'segments',
                              segment_audit=tmp_path / 'audit')
@@ -152,7 +152,7 @@ def test_position_screen_matches_individual_four_contact_queries(tmp_path, monke
 
 def test_batched_screen_limits_distance_work_without_changing_full_result(tmp_path, monkeypatch):
     indexes = fixture_indexes(tmp_path, monkeypatch)
-    from service.infrastructure.stimulation import contact_screen
+    from service.infrastructure.stimulation.contacts import screen as contact_screen
 
     original = contact_screen.contact_clearances
     call_sizes = []
@@ -192,7 +192,7 @@ def test_screen_probe_short_circuits_only_when_all_candidates_are_clear():
     '1 1 0 0 0 125 -1\n',
 ])
 def test_fast_clearances_match_previous_geometry_for_all_probes(swc):
-    from service.infrastructure.stimulation.contact_clearances import contact_clearances
+    from service.infrastructure.stimulation.contacts.clearances import contact_clearances
     from service.infrastructure.stimulation.spatial_candidates import closest_swc_segment
 
     rng = np.random.default_rng(921)
@@ -219,14 +219,14 @@ def test_fast_clearances_match_previous_geometry_for_all_probes(swc):
     '1 1 0 0 0 1 7\n', '1 1 nan 0 0 1 -1\n', '1 1 0 0\n',
 ])
 def test_fast_clearances_reject_invalid_sources(swc):
-    from service.infrastructure.stimulation.contact_clearances import contact_clearances
+    from service.infrastructure.stimulation.contacts.clearances import contact_clearances
 
     with pytest.raises(ValueError):
         contact_clearances(swc, [[0., 0., 0.]])
 
 
 def test_fast_clearances_preserve_randomized_topologies_and_contact_decisions():
-    from service.infrastructure.stimulation.contact_clearances import (
+    from service.infrastructure.stimulation.contacts.clearances import (
         contact_clearances,
         packed_contact_clearances,
     )
@@ -258,7 +258,7 @@ def test_fast_clearances_preserve_randomized_topologies_and_contact_decisions():
 
 
 def test_packed_contact_clearances_reject_invalid_geometry():
-    from service.infrastructure.stimulation.contact_clearances import packed_contact_clearances
+    from service.infrastructure.stimulation.contacts.clearances import packed_contact_clearances
 
     point = [[0., 0., 0.]]
     for geometry in [([], [], [], []), ([1], [[0., 0., 0.]], [4], [1.]),

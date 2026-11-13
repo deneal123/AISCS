@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from service.application.field.field_driven_network import run_field_driven_network
+from service.application.field.driven_network import run_field_driven_network
 from tests.test_forced_network import graph
 
 
@@ -14,7 +14,7 @@ def test_selected_cell_trace_drives_graph_and_preserves_evidence(monkeypatch):
                  'voltage_mv': np.array([trace])},
                 {'body_id': str(body), 'morphology_sha256': 'a' * 64, 'components': 1})
 
-    monkeypatch.setattr('service.application.field.field_driven_network.simulate_registered_swc_reference',
+    monkeypatch.setattr('service.application.field.driven_network.simulate_registered_swc_reference',
                         simulate)
     args = dict(cells=[{'body_id': 10, 'child_node_id': 2, 'threshold_mv': -20}], seed=1)
     active = run_field_driven_network(graph(), [], simulation_parameters={
@@ -37,7 +37,7 @@ def test_optional_spatial_crossings_use_same_solution_without_changing_network(m
                                          [-65, -10, -65, -65, -65, -65, -65]])},
                 {'body_id': str(body), 'components': 1})
 
-    monkeypatch.setattr('service.application.field.field_driven_network.simulate_registered_swc_reference',
+    monkeypatch.setattr('service.application.field.driven_network.simulate_registered_swc_reference',
                         simulate)
     args = dict(cells=[{'body_id': 10, 'child_node_id': 2, 'threshold_mv': -20}], seed=1,
                 simulation_parameters={'duration_ms': 6})
@@ -50,7 +50,7 @@ def test_optional_spatial_crossings_use_same_solution_without_changing_network(m
 
 
 def test_source_compartment_must_be_explicit_and_unique(monkeypatch):
-    monkeypatch.setattr('service.application.field.field_driven_network.simulate_registered_swc_reference',
+    monkeypatch.setattr('service.application.field.driven_network.simulate_registered_swc_reference',
                         lambda *_args, **_kwargs: ({'time_ms': np.arange(7.),
                             'edge_node_ids': np.array([2, 2]),
                             'voltage_mv': np.full((2, 7), -65.)},
@@ -66,7 +66,7 @@ def test_fragmented_or_unverified_source_cannot_drive_graph(monkeypatch, compone
     provenance = {'body_id': '10'}
     if components is not None:
         provenance['components'] = components
-    monkeypatch.setattr('service.application.field.field_driven_network.simulate_registered_swc_reference',
+    monkeypatch.setattr('service.application.field.driven_network.simulate_registered_swc_reference',
                         lambda *_args, **_kwargs: ({'time_ms': np.arange(7.),
                             'edge_node_ids': np.array([2]),
                             'voltage_mv': np.full((1, 7), -65.)}, provenance))
@@ -84,7 +84,7 @@ def test_candidate_morphology_identity_is_bound_to_solver_input(monkeypatch):
                 {'body_id': str(body), 'morphology_sha256': 'b' * 64, 'components': 1})
 
     monkeypatch.setattr(
-        'service.application.field.field_driven_network.simulate_registered_swc_reference', simulate
+        'service.application.field.driven_network.simulate_registered_swc_reference', simulate
     )
     with pytest.raises(ValueError, match='digest mismatch'):
         run_field_driven_network(graph(), [], cells=[{'body_id': 10, 'child_node_id': 2,
@@ -99,7 +99,7 @@ def test_source_time_grids_must_match(monkeypatch):
                  'voltage_mv': np.full((1, len(time)), -65.)},
                 {'body_id': str(body), 'components': 1})
 
-    monkeypatch.setattr('service.application.field.field_driven_network.simulate_registered_swc_reference',
+    monkeypatch.setattr('service.application.field.driven_network.simulate_registered_swc_reference',
                         simulate)
     cells = [{'body_id': body, 'child_node_id': 2, 'threshold_mv': -20} for body in [10, 20]]
     with pytest.raises(ValueError, match='time grids'):
@@ -113,7 +113,7 @@ def test_spatial_refinement_uses_the_same_edge_midpoint(monkeypatch):
                  'voltage_mv': np.array([[-500] * 7, [-65, -60, -10, -60, -65, -65, -65],
                                          [-65] * 7])}, {'body_id': str(body), 'components': 1})
 
-    monkeypatch.setattr('service.application.field.field_driven_network.simulate_registered_swc_reference',
+    monkeypatch.setattr('service.application.field.driven_network.simulate_registered_swc_reference',
                         simulate)
     result = run_field_driven_network(graph(), [], cells=[{
         'body_id': 10, 'child_node_id': 2, 'threshold_mv': -20}], seed=1,
@@ -131,7 +131,7 @@ def test_nonfinite_voltage_in_unselected_compartment_is_rejected(monkeypatch):
         return ({'time_ms': np.arange(7.), 'edge_node_ids': np.array([2, 2, 2]),
                  'voltage_mv': voltage}, {'body_id': str(body), 'components': 1})
 
-    monkeypatch.setattr('service.application.field.field_driven_network.simulate_registered_swc_reference',
+    monkeypatch.setattr('service.application.field.driven_network.simulate_registered_swc_reference',
                         simulate)
     with pytest.raises(ValueError, match='voltage dimensions'):
         run_field_driven_network(graph(), [], cells=[{
@@ -146,7 +146,7 @@ def test_requested_fraction_uses_and_records_nearest_segment_centre(monkeypatch)
                                          [-65, -60, -10, -60, -65, -65, -65]])},
                 {'body_id': str(body), 'components': 1})
 
-    monkeypatch.setattr('service.application.field.field_driven_network.simulate_registered_swc_reference',
+    monkeypatch.setattr('service.application.field.driven_network.simulate_registered_swc_reference',
                         simulate)
     result = run_field_driven_network(graph(), [], cells=[{
         'body_id': 10, 'child_node_id': 2, 'threshold_mv': -20, 'sampling_fraction': .9}], seed=1,
@@ -169,7 +169,7 @@ def test_recording_uses_same_solutions_as_events_and_adds_artifact_once(monkeypa
         calls.append(body)
         return solutions[body]
 
-    monkeypatch.setattr('service.application.field.field_driven_network.simulate_registered_swc_reference',
+    monkeypatch.setattr('service.application.field.driven_network.simulate_registered_swc_reference',
                         simulate)
     e1, ref = [0, 200, 0], [200, 200, 0]
     result = run_field_driven_network(graph(), [], cells=[

@@ -7,9 +7,9 @@ from tempfile import TemporaryDirectory
 
 import numpy as np
 
-from service.infrastructure.stimulation.current_archive import rerecord_current_archive
-from service.infrastructure.stimulation.current_transport import unpack_current_archive
 from service.infrastructure.stimulation.network_recording import acquire_independent_cells
+from service.infrastructure.stimulation.recording.current_archive import rerecord_current_archive
+from service.infrastructure.stimulation.recording.current_transport import unpack_current_archive
 
 
 def rerecord_preview(

@@ -4,7 +4,7 @@ from types import SimpleNamespace
 import numpy as np
 import pytest
 
-from service.infrastructure.stimulation.fragment_output_diagnostics import (
+from service.infrastructure.stimulation.population.diagnostics import (
     fragment_edge_schedule,
     fragment_output_diagnostics,
     preflight_outgoing_fragment_geometry,
@@ -24,7 +24,7 @@ def test_geometry_preflight_checks_all_graph_pairs_before_solving(monkeypatch):
         manifest={"ids_sha256": "ids"},
         query=lambda *_a, **_kw: {"total": 2, "returned": 2, "truncated": False, "pairs": rows},
     )
-    module = "service.infrastructure.stimulation.fragment_output_diagnostics."
+    module = "service.infrastructure.stimulation.population.diagnostics."
     monkeypatch.setattr(
         module + "read_skeleton", lambda *_a, **_kw: {"swc": SWC, "sha256": "d" * 64}
     )
@@ -243,11 +243,11 @@ def test_registered_outgoing_requires_complete_consistent_graph(monkeypatch):
     page = {"total": 2, "returned": 2, "truncated": False, "pairs": rows, "source_md5": "src"}
     index = SimpleNamespace(manifest={"ids_sha256": "ids"}, query=lambda *_a, **_kw: page)
     monkeypatch.setattr(
-        "service.infrastructure.stimulation.fragment_output_diagnostics.read_skeleton",
+        "service.infrastructure.stimulation.population.diagnostics.read_skeleton",
         lambda *_a, **_kw: {"swc": SWC, "sha256": provenance["morphology_sha256"]},
     )
     monkeypatch.setattr(
-        "service.infrastructure.stimulation.fragment_output_diagnostics.outgoing",
+        "service.infrastructure.stimulation.population.diagnostics.outgoing",
         lambda *_a: {"next_offset": None, "items": [{"target_id": "5", "synapse_count": 1}]},
     )
     result = registered_outgoing_fragment_diagnostics(
@@ -306,15 +306,15 @@ def test_registered_outgoing_covers_more_than_ten_thousand_synapses(monkeypatch)
 
     index = SimpleNamespace(manifest={"ids_sha256": "ids"}, query=query)
     monkeypatch.setattr(
-        "service.infrastructure.stimulation.fragment_output_diagnostics.read_skeleton",
+        "service.infrastructure.stimulation.population.diagnostics.read_skeleton",
         lambda *_a, **_kw: {"swc": SWC, "sha256": provenance["morphology_sha256"]},
     )
     monkeypatch.setattr(
-        "service.infrastructure.stimulation.fragment_output_diagnostics.outgoing",
+        "service.infrastructure.stimulation.population.diagnostics.outgoing",
         lambda *_a: {"next_offset": None, "items": [{"target_id": "5", "synapse_count": count}]},
     )
     monkeypatch.setattr(
-        "service.infrastructure.stimulation.fragment_output_diagnostics.fragment_output_diagnostics",
+        "service.infrastructure.stimulation.population.diagnostics.fragment_output_diagnostics",
         lambda *_a, **_kw: {"candidates": [{} for _ in range(count)]},
     )
     result = registered_outgoing_fragment_diagnostics(

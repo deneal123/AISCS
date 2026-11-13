@@ -1,7 +1,11 @@
 import numpy as np
 import pytest
 
-from service.application.feedback.population_feedback_outputs import feedback_output_events
+from service.application.feedback.outputs import (
+    feedback_output_events,
+    feedback_output_segment_indices,
+    feedback_selected_output_events,
+)
 
 
 def test_uses_each_verified_outgoing_compartment_and_aggregates_by_edge():
@@ -14,6 +18,8 @@ def test_uses_each_verified_outgoing_compartment_and_aggregates_by_edge():
                                {'included_in_graph': True, 'result_segment_index': 0,
                                 'child_node_id': 7, 'partner_id': '20'}]}
     events = feedback_output_events(10, solution, proof, original, threshold_mv=-20., duration_ms=2)
+    assert feedback_output_segment_indices(10, solution['edge_node_ids'], proof, original,
+                                           threshold_mv=-20., duration_ms=2) == [0]
     assert events == [{'source_id': 10, 'target_id': 20, 'tick': 1, 'count': 2}]
     with pytest.raises(ValueError, match='source coordinate'):
         feedback_output_events(10, solution, proof, original, threshold_mv=-20., duration_ms=2,
@@ -57,6 +63,14 @@ def test_remeshed_output_uses_verified_position_instead_of_old_segment_index():
     original = {'body_id': '10', 'morphology_sha256': 'a', 'threshold_mv': -20., 'duration_ms': 2,
                 'candidates': [candidate]}
     events = feedback_output_events(10, solution, proof, original, threshold_mv=-20., duration_ms=2)
+    assert feedback_output_segment_indices(10, solution['edge_node_ids'], proof, original,
+                                           threshold_mv=-20., duration_ms=2) == [2]
+    selected = feedback_selected_output_events(10, solution['time_ms'], solution['edge_node_ids'],
+        {2: solution['voltage_mv'][2]}, proof, original, threshold_mv=-20., duration_ms=2)
+    assert selected == events
+    with pytest.raises(ValueError, match='Missing selected'):
+        feedback_selected_output_events(10, solution['time_ms'], solution['edge_node_ids'], {},
+                                        proof, original, threshold_mv=-20., duration_ms=2)
     assert events == [{'source_id': 10, 'target_id': 20, 'tick': 1, 'count': 1}]
     del candidate['segment_fraction']
     with pytest.raises(ValueError, match='verified output position'):

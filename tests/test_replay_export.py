@@ -4,7 +4,7 @@ import json
 import numpy as np
 import pytest
 
-from service.infrastructure.stimulation.replay_export import (
+from service.infrastructure.stimulation.recording.replay_export import (
     export_reference_replay,
     load_verified_reference_replay,
 )

@@ -2,11 +2,56 @@ from types import SimpleNamespace
 
 import pytest
 
-from service.infrastructure.stimulation.fragment_pair_mapping import (
+from service.infrastructure.stimulation.population.pair_mapping import (
     match_fragment_inputs,
+    match_fragment_inputs_batch,
     schedule_matched_fragment_events,
     schedule_population_fragment_events,
 )
+
+
+def test_batched_pairs_match_single_reads_and_reject_wrong_partners(monkeypatch):
+    graph = SimpleNamespace(posts=[0], provenance={'manifest_sha256': 'a' * 64})
+    pairs = [(source, 50) for source in range(1, 22)]
+    diagnostics = {source: {'source_id': source, 'source_md5': 'verified', 'candidates': [{
+        'included_in_graph': True, 'partner_id': '50', 'source_position_8nm': [source, 2, 3],
+        'stimulated_ticks_ms': [1], 'centerline_distance_um': .1}]}
+        for source, _target in pairs}
+
+    class Index:
+        calls = []
+        bad = False
+
+        def query(self, target, direction, *, limit, partner_ids):
+            assert target == 50 and direction == 'incoming' and limit is None
+            self.calls.append(partner_ids.copy())
+            rows = [{'body_pre': source, 'body_post': 50, 'x_pre': source, 'y_pre': 2,
+                     'z_pre': 3, 'x_post': 4, 'y_post': 5, 'z_post': 6}
+                    for source in partner_ids]
+            if self.bad:
+                rows[0]['body_pre'] = 999
+            return {'pairs': rows, 'truncated': False, 'source_md5': 'verified',
+                    'total': len(rows), 'returned': len(rows)}
+
+    module = 'service.infrastructure.stimulation.population.pair_mapping.'
+    monkeypatch.setattr(module + 'fragment_edge_schedule', lambda diag, **_k: {
+        'source_id': diag['source_id'], 'graph_sha256': 'a' * 64})
+    monkeypatch.setattr(module + 'outgoing', lambda *_a: {
+        'next_offset': None, 'items': [{'target_id': '50', 'synapse_count': 1}]})
+    monkeypatch.setattr(module + 'read_skeleton',
+                        lambda *_a: {'swc': 'verified', 'sha256': 'b' * 64, 'body_id': '50'})
+    monkeypatch.setattr(module + 'map_fragment_candidates', lambda *_a: {
+        'child_node_ids': [9], 'segment_fractions': [.5], 'centerline_distances_um': [.1]})
+    options = dict(max_source_distance_um=2, max_target_distance_um=2, duration_ms=3)
+    index = Index()
+    single = [match_fragment_inputs(diagnostics[source], index, graph, target, [], **options)
+              for source, target in pairs]
+    index.calls.clear()
+    batched = match_fragment_inputs_batch(pairs, diagnostics, index, graph, [], **options)
+    assert batched == single and [len(partners) for partners in index.calls] == [20, 1]
+    index.bad = True
+    with pytest.raises(ValueError, match='pair mismatch'):
+        match_fragment_inputs_batch(pairs, diagnostics, index, graph, [], **options)
 
 
 def test_matching_requires_exact_unique_indexed_pairs_and_target_geometry(monkeypatch):
@@ -18,7 +63,7 @@ def test_matching_requires_exact_unique_indexed_pairs_and_target_geometry(monkey
     graph = SimpleNamespace(posts=[0], provenance={'manifest_sha256': 'a' * 64})
     index = SimpleNamespace(query=lambda *_a, **_kw: {
         'pairs': [row], 'truncated': False, 'source_md5': 'verified', 'total': 1, 'returned': 1})
-    module = 'service.infrastructure.stimulation.fragment_pair_mapping.'
+    module = 'service.infrastructure.stimulation.population.pair_mapping.'
     monkeypatch.setattr(module + 'fragment_edge_schedule', lambda *_a, **_kw: {
         'source_id': 10, 'graph_sha256': 'a' * 64})
     monkeypatch.setattr(module + 'outgoing', lambda *_a: {
@@ -77,7 +122,7 @@ def test_matching_preserves_synapses_with_identical_presynaptic_coordinates(monk
     graph = SimpleNamespace(posts=[0], provenance={'manifest_sha256': 'a' * 64})
     index = SimpleNamespace(query=lambda *_a, **_k: {
         'pairs': rows, 'truncated': False, 'source_md5': 'verified', 'total': 2, 'returned': 2})
-    module = 'service.infrastructure.stimulation.fragment_pair_mapping.'
+    module = 'service.infrastructure.stimulation.population.pair_mapping.'
     monkeypatch.setattr(module + 'outgoing', lambda *_a: {
         'next_offset': None, 'items': [{'target_id': '20', 'synapse_count': 2}]})
     monkeypatch.setattr(module + 'read_skeleton',

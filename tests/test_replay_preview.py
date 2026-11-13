@@ -4,8 +4,11 @@ import json
 import numpy as np
 import pytest
 
-from service.infrastructure.stimulation.replay_export import export_reference_replay
-from service.infrastructure.stimulation.replay_preview import export_replay_preview, replay_preview
+from service.infrastructure.stimulation.recording.replay_export import export_reference_replay
+from service.infrastructure.stimulation.recording.replay_preview import (
+    export_replay_preview,
+    replay_preview,
+)
 from tests.test_replay_export import replay
 
 

@@ -1,7 +1,7 @@
 import numpy as np
 
-from service.application.feedback.population_feedback_preview import population_feedback_preview
-from service.domain.contracts.fragment_population_contract import FragmentPopulationConfig
+from service.application.feedback.preview import population_feedback_preview
+from service.domain.contracts.population.fragment import FragmentPopulationConfig
 from tests.test_fragment_population_contract import example
 from tests.test_population_feedback_validation import example_result
 

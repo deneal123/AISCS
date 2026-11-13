@@ -5,7 +5,7 @@ import numpy as np
 import pytest
 
 from service.domain.target_response_limits import can_capture_targets
-from service.infrastructure.stimulation.fragment_target_response import (
+from service.infrastructure.stimulation.population.target_response import (
     decode_target_response,
     encode_target_response,
     encode_target_response_binary,

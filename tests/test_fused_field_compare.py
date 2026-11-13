@@ -4,8 +4,8 @@ import json
 import pytest
 
 from service.infrastructure.connectome.morphology_repository import BASE
-from service.infrastructure.stimulation import fused_field_compare
-from service.infrastructure.stimulation.field_summary_compute import compute
+from service.infrastructure.stimulation.field import fused_compare as fused_field_compare
+from service.infrastructure.stimulation.field.summary_compute import compute
 from tests.test_cached_field_execution import cache_options
 from tests.test_packed_geometry_cache import build
 from tests.test_packed_geometry_cache import fixture as geometry_case  # noqa: F401

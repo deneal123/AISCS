@@ -9,7 +9,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from service.infrastructure.stimulation.replay_export import (  # noqa: E402
+from service.infrastructure.stimulation.recording.replay_export import (  # noqa: E402
     load_verified_reference_replay,
 )
 
