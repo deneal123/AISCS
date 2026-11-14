@@ -58,6 +58,11 @@ export default function useConnectomeData(runId, description, fieldGraph = null)
               simulationApi.readArtifact(fieldGraph.id, controlFile.id, controller.signal),
             ]);
             data = await verifyFieldProxyEvents(data, graph, graphFile, meta, metaFile, fieldGraph, control, controlFile);
+          } else if (fieldGraph.result?.manifest?.kind === 'experimental-full-population-feedback') {
+            const sourceFile = fieldFiles.items.find(file => file.name === 'coupled-source-events.bin');
+            if (!sourceFile) throw new Error('missing_source_events');
+            const sourceEvents = await simulationApi.readArtifact(fieldGraph.id, sourceFile.id, controller.signal);
+            data = await verifyCoupledSourceEvents(withoutResponse(data), sourceEvents, sourceFile, fieldGraph);
           } else if (coupled) {
             const graphFile = fieldFiles.items.find(file => file.name === 'coupled-events.bin');
             const expectedBytes = 8 * (data.node_ids.length + fieldGraph.result.preview.network_spikes);

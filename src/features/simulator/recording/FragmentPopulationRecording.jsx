@@ -9,6 +9,7 @@ import { SIMULATION_THEME } from '../theme';
 import usePopulationFeedback from './usePopulationFeedback';
 import useWholeNetworkProxy from './useWholeNetworkProxy';
 import useDirectNetworkProxy from './useDirectNetworkProxy';
+import useFullPopulationFeedback from './useFullPopulationFeedback';
 import AppSelect from '@shared/controls/AppSelect';
 import { validFeedbackDuration } from '../feedbackDuration';
 import { clearPendingFeedback, readFeedbackRetryDraft, readPendingFeedback, readSelectedFeedbackSource,
@@ -69,6 +70,32 @@ export default function FragmentPopulationRecording({ sceneRunId, sceneManifest,
   const [calculationMode, setCalculationMode] = useState('detailed');
   const operatorContactSignature = useRef(null);
   const launchedDirect = useRef(null);
+  const launchedFull = useRef(null);
+  const full = useFullPopulationFeedback(result => {
+    if (launchedFull.current?.sceneId !== sceneRunId
+        || launchedFull.current?.signature !== operatorContactSignature.current
+        || result.configuration?.graph_manifest_sha256 !== sceneManifest) return;
+    onShowOnBody?.(result, {});
+  }, sceneRunId, {
+    canResume: receipt => (!canRestore || canRestore()) && receipt.graph === sceneManifest,
+    validateResume: (receipt, restored) => {
+      const simulation = restored.configuration?.simulation;
+      return (!canRestore || canRestore()) && restored.configuration?.graph_manifest_sha256 === sceneManifest
+        && contacts.every(([key]) => Array.isArray(simulation?.[key])
+          && simulation[key].length === 3 && simulation[key].every(Number.isFinite))
+        && Number.isFinite(simulation.current_na)
+        && JSON.stringify([contacts.map(([key]) => simulation[key]), simulation.current_na]) === receipt.signature;
+    },
+    onResume: (receipt, restored) => {
+      const simulation = restored.configuration.simulation;
+      launchedFull.current = { sceneId: sceneRunId, signature: receipt.signature };
+      operatorContactSignature.current = receipt.signature;
+      setCoordinates(Object.fromEntries(contacts.map(([key]) => [key, [...simulation[key]]])));
+      setBaseConfiguration(restored.configuration);
+      setCalculationMode('full');
+      onAdjustContact?.({ kind: 'fragments', configuration: restored.configuration, simulation }, null);
+    },
+  });
   const direct = useDirectNetworkProxy((run, simulation) => {
     if (!simulation) return;
     const launched = launchedDirect.current;
@@ -127,6 +154,9 @@ export default function FragmentPopulationRecording({ sceneRunId, sceneManifest,
   const shownFeedback = useRef(null);
   const reportedProxyFailure = useRef(null);
   const onFailureRef = useRef(onFailure); onFailureRef.current = onFailure;
+  useEffect(() => {
+    if (['error', 'failed', 'interrupted'].includes(full.status)) onFailureRef.current?.();
+  }, [full.status]);
   useEffect(() => {
     if (!['error', 'failed'].includes(feedback.status) || !pendingFeedback
         || feedback.sourceId !== pendingFeedback || reportedFeedbackFailure.current === pendingFeedback) return;
@@ -317,32 +347,70 @@ export default function FragmentPopulationRecording({ sceneRunId, sceneManifest,
   const draftSignature = JSON.stringify([sceneRunId, sceneManifest, coordinates, stimulusCurrent, duration, ids, searchRadius]);
   const latestDraft = useRef(draftSignature); latestDraft.current = draftSignature;
   const running = state.items.some(item => active.has(item.state));
-  const primaryReady = Boolean(preset && sceneRunId && (calculationMode === 'fast' || validIds) && validCoordinates && validCurrent && validDuration && (calculationMode === 'fast' || validSearchRadius) && !sending && !running && !state.loading && !state.error);
+  const primaryReady = Boolean(preset && sceneRunId && (calculationMode !== 'detailed' || validIds) && validCoordinates && validCurrent && validDuration && (calculationMode !== 'detailed' || validSearchRadius) && !sending && !running && !state.loading && !state.error);
   const feedbackRunning = ['loading', 'queued', 'preparing', 'running', 'publishing', 'cancelling'].includes(feedback.status);
   const proxyRunning = feedback.status === 'completed' && state.selected?.id === pendingFeedback
     && ['idle', 'loading', 'queued', 'preparing', 'running', 'publishing', 'cancelling'].includes(proxy.status);
   useEffect(() => {
-    const inProgress = running || sending || feedbackRunning || proxyRunning || direct.running;
+    const inProgress = running || sending || feedbackRunning || proxyRunning || direct.running || full.running;
     const sourceState = state.items.find(item => item.id === pendingFeedback)?.state;
     const stage = sending ? (preparationStage || 'Проверка контактов') : running
       ? ({ queued: 'Ожидание запуска', preparing: 'Подготовка модели', running: 'Расчёт нейронов', publishing: 'Сохранение записи', cancelling: 'Остановка' }[sourceState] || 'Расчёт нейронов')
       : feedbackRunning ? ({ queued: 'Ожидание расчёта сети', preparing: 'Подготовка сети', running: 'Расчёт сети', publishing: 'Сохранение ответа', cancelling: 'Остановка' }[feedback.status] || 'Подготовка сети')
-      : proxyRunning || direct.running ? 'Модель всей сети ЦНС' : null;
-    onPrimaryStatus?.({ ready: primaryReady && !feedbackRunning && !proxyRunning && !direct.running, running: inProgress,
-      ...(stage ? { stage, phase: sending ? 0 : running ? 1 : 2,
-        canCancel: !cancelling && (Boolean(direct.run?.id && direct.running) || (sending && !submitting) || Boolean(state.items.find(item => item.id === pendingFeedback && active.has(item.state))) || Boolean(feedback.run && active.has(feedback.status)) || Boolean(proxy.run && active.has(proxy.status))),
+      : full.running ? 'Связанный расчёт ЦНС' : proxyRunning || direct.running ? 'Модель всей сети ЦНС' : null;
+    onPrimaryStatus?.({ ready: primaryReady && !feedbackRunning && !proxyRunning && !direct.running && !full.running, running: inProgress,
+      ...(stage ? { stage, phase: full.running
+        ? (full.progress?.phase === 'full_feedback' ? 2 : ['full_control', 'full_control_feedback'].includes(full.progress?.phase) ? 1 : 0)
+        : sending ? 0 : running ? 1 : 2,
+        canCancel: !cancelling && (Boolean(full.run?.id && full.running) || Boolean(direct.run?.id && direct.running) || (sending && !submitting) || Boolean(state.items.find(item => item.id === pendingFeedback && active.has(item.state))) || Boolean(feedback.run && active.has(feedback.status)) || Boolean(proxy.run && active.has(proxy.status))),
         progress: running && sourceProgress?.runId === pendingFeedback ? sourceProgress
-          : feedbackRunning ? feedback.progress : proxyRunning ? proxy.progress : direct.running ? direct.progress : null,
+          : feedbackRunning ? feedback.progress : full.running ? full.progress : proxyRunning ? proxy.progress : direct.running ? direct.progress : null,
         connectionLost: Boolean((feedbackRunning && feedback.connectionLost) || (proxyRunning && proxy.connectionLost)
-          || (direct.running && direct.connectionLost)),
+          || (direct.running && direct.connectionLost) || (full.running && full.connectionLost)),
         cancel: cancelAction } : {}) });
-  }, [onPrimaryStatus, primaryReady, running, sending, preparationStage, submitting, feedbackRunning, feedback.status, feedback.run, feedback.progress, feedback.connectionLost, proxyRunning, proxy.status, proxy.run, proxy.progress, proxy.connectionLost, direct.running, direct.progress, direct.connectionLost, direct.run?.id, state.items, pendingFeedback, cancelling, cancelAction, sourceProgress]);
+  }, [onPrimaryStatus, primaryReady, running, sending, preparationStage, submitting, feedbackRunning, feedback.status, feedback.run, feedback.progress, feedback.connectionLost, proxyRunning, proxy.status, proxy.run, proxy.progress, proxy.connectionLost, direct.running, direct.progress, direct.connectionLost, direct.run?.id, full.running, full.run?.id, full.progress, full.connectionLost, state.items, pendingFeedback, cancelling, cancelAction, sourceProgress]);
   const submit = async event => {
     event.preventDefault();
-    if (!preset || (calculationMode !== 'fast' && !validIds) || !validCoordinates || !validCurrent || !validDuration || (calculationMode !== 'fast' && !validSearchRadius) || sending || running || feedbackRunning || proxyRunning || direct.running || state.loading || state.error) return;
+    if (!preset || (calculationMode === 'detailed' && !validIds) || !validCoordinates || !validCurrent || !validDuration || (calculationMode === 'detailed' && !validSearchRadius) || sending || running || feedbackRunning || proxyRunning || direct.running || full.running || state.loading || state.error) return;
     const original = baseConfiguration || { graph_manifest_sha256: sceneManifest, source_ids: [], seed: 1,
       simulation: preset.simulation, threshold_mv: -20, max_distance_um: 2 };
     const simulation = { ...original.simulation, ...Object.fromEntries(contacts.map(([key]) => [key, coordinates[key].map(Number)])), allow_disconnected: true };
+    if (calculationMode === 'full') {
+      const preparation = new AbortController(); preparationRequest.current = preparation;
+      setPreparationStage('Проверка контактов'); setSending(true); setSubmitError('');
+      try {
+        const screen = await simulationApi.contactPositions(sceneRunId, {
+          positions_um: contacts.map(([key]) => simulation[key]), clearance_um: simulation.clearance_um,
+        }, preparation.signal);
+        if (preparation.signal.aborted) return;
+        if (latestDraft.current !== draftSignature) throw new Error('changed_contacts');
+        if (!Array.isArray(screen?.potential_intersections)
+            || screen.potential_intersections.some(row => !Array.isArray(row?.contact_indices)
+              || !row.contact_indices.length || row.contact_indices.some(index => !Number.isInteger(index)
+                || index < 0 || index >= contacts.length))) throw new Error('invalid_contact_screen');
+        if (screen.potential_intersections.length) {
+          setSubmitError('Контакты слишком близко к отросткам. Переместите их и повторите запуск.');
+          onFailure?.(); return;
+        }
+        const synapse = { weight_us: .001, tau1_ms: .2, tau2_ms: 2, reversal_mv: 0 };
+        launchedFull.current = { sceneId: sceneRunId, signature: operatorContactSignature.current };
+        await full.start({ graph_manifest_sha256: sceneManifest,
+          simulation: { ...simulation, pulse_count: simulation.pulse_count ?? null,
+            pulse_interval_ms: simulation.pulse_interval_ms ?? null },
+          excitatory: synapse, inhibitory: { ...synapse, reversal_mv: -80 }, threshold_mv: -20,
+          max_source_distance_um: 2, max_target_distance_um: 2, max_iterations: 16,
+          max_events: 1000000, allow_known_geometry_repair: true },
+        { signature: operatorContactSignature.current });
+      } catch {
+        if (!preparation.signal.aborted) {
+          setSubmitError('Не удалось проверить контакты. Повторите запуск.'); onFailure?.();
+        }
+      } finally {
+        if (preparationRequest.current === preparation) preparationRequest.current = null;
+        setSending(false); setPreparationStage(null);
+      }
+      return;
+    }
     if (calculationMode === 'fast') {
       const preparation = new AbortController(); preparationRequest.current = preparation;
       setPreparationStage('Проверка контактов'); setSending(true); setSubmitError('');
@@ -546,6 +614,7 @@ export default function FragmentPopulationRecording({ sceneRunId, sceneManifest,
   const geometryFailure = unresolvedGeometrySingle(newest?.error);
   const geometryFailureCount = unresolvedGeometryCount(newest?.error);
   const cancel = async () => {
+    if (full.running) { await full.cancel(); return; }
     if (direct.running) { await direct.cancel(); return; }
     if (sending && preparationRequest.current) { preparationRequest.current.abort(); return; }
     const target = proxy.run && active.has(proxy.status) ? proxy.run
@@ -565,13 +634,14 @@ export default function FragmentPopulationRecording({ sceneRunId, sceneManifest,
       <FormControl maxW="200px" mb={3}>
         <FormLabel fontSize="12px">Режим расчёта</FormLabel>
         <AppSelect ariaLabel="Режим расчёта" value={calculationMode} onChange={setCalculationMode}
-          isDisabled={running || sending || feedbackRunning || proxyRunning || direct.running}
-          options={[{ value: 'detailed', label: 'Подробный' }, { value: 'fast', label: 'Быстрый' }]} />
+          isDisabled={running || sending || feedbackRunning || proxyRunning || direct.running || full.running}
+          options={[{ value: 'detailed', label: 'Подробный' }, { value: 'fast', label: 'Быстрый' }, { value: 'full', label: 'Полная ЦНС · экспериментальный' }]} />
         {calculationMode === 'fast' && <Text fontSize="11px" color={SIMULATION_THEME.textSecondary}>Упрощённая сеть; запись E1–REF не рассчитывается.</Text>}
+        {calculationMode === 'full' && <Text fontSize="11px" color={SIMULATION_THEME.textSecondary}>Экспериментальная модель: параметры синапсов не откалиброваны. При неполной геометрии расчёт остановится.</Text>}
       </FormControl>
       <FormControl maxW="200px" isInvalid={!validCurrent}>
         <FormLabel fontSize="12px">Ток STIM, нА</FormLabel>
-        <Input size="sm" type="number" isDisabled={!preset || running || sending || feedbackRunning} value={stimulusCurrent} onChange={event => {
+        <Input size="sm" type="number" isDisabled={!preset || running || sending || feedbackRunning || full.running} value={stimulusCurrent} onChange={event => {
           const value = event.target.value;
           const current = value === '' ? '' : Number(value);
           if (current === stimulusCurrent) return;
@@ -593,6 +663,7 @@ export default function FragmentPopulationRecording({ sceneRunId, sceneManifest,
       </FormControl>}
     </Box>
     {submitError && <Text role="alert" fontSize="12px" color="orange.200" mt={2}>{submitError}</Text>}
+    {['error', 'failed', 'cancelled', 'interrupted'].includes(full.status) && <Text role="alert" fontSize="12px" color="orange.200" mt={2}>{full.run?.error === 'executor_synapse_geometry' ? 'Не все синапсы удалось сопоставить с морфологией. Полный расчёт остановлен.' : 'Полный связанный расчёт не завершён. Проверьте состояние сервиса.'}</Text>}
     {['error', 'failed'].includes(direct.status) && <Text role="alert" fontSize="12px" color="orange.200" mt={2}>{executorStartError(direct.run?.error) || 'Быстрый расчёт не завершён. Проверьте параметры и состояние сервиса.'}</Text>}
     {clearanceNotice && <Text role="status" fontSize="12px" color={SIMULATION_THEME.textSecondary} mt={2}>{clearanceNotice}</Text>}
     {['error', 'failed', 'cancelled'].includes(feedback.status) && <Text role="alert" fontSize="12px" color="orange.200" mt={2}>{feedback.run?.error === 'executor_feedback_iteration_limit' ? 'Связанный расчёт не сошёлся за заданное число итераций; ответ сети не показан.' : feedback.run?.error === 'executor_feedback_cycle' ? 'Расчёт обнаружил повторяющееся расписание обратной связи; ответ сети не показан.' : feedback.run?.error === 'executor_synapse_endpoint' ? 'Синапс находится на конце секции; корректная передача в этой точке пока не подтверждена. Расчёт остановлен.' : 'Связанный расчёт не завершён; ответ сети на сцене не показан.'}</Text>}

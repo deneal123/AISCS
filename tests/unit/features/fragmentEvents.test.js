@@ -86,3 +86,23 @@ test('verifies source-segment crossings separately from network spikes', async (
   await expect(verifyCoupledSourceEvents({ ...base, input_indices: Int32Array.of(0) }, altered,
     artifact, run)).rejects.toThrow('source_events_checksum');
 });
+
+test('verifies full population markers against numerical and request identities', async () => {
+  global.crypto = webcrypto;
+  const data = new ArrayBuffer(88), bytes = new Uint8Array(data), view = new DataView(data);
+  bytes.set([83, 82, 67, 49]); view.setUint32(4, 3, true); view.setUint32(8, 10, true);
+  view.setUint32(12, 1, true); bytes.set(Buffer.from(graph, 'hex'), 16);
+  bytes.set(Buffer.from('c'.repeat(64), 'hex'), 48);
+  new Uint32Array(data, 80, 1).set([2]); new Uint32Array(data, 84, 1).set([3]);
+  const artifact = { name: 'coupled-source-events.bin', bytes: data.byteLength,
+    sha256: createHash('sha256').update(Buffer.from(data)).digest('hex') };
+  const run = { configuration_sha256: 'b'.repeat(64), configuration: { graph_manifest_sha256: graph },
+    result: { manifest: { kind: 'experimental-full-population-feedback', graph_sha256: graph,
+      configuration_sha256: 'c'.repeat(64), configuration: { request_sha256: 'b'.repeat(64) },
+      files: [artifact] }, preview: { status: 'converged', graph_cells: 3, source_cells: 3,
+      duration_ms: 10, candidate_cell_time_markers: 1 } } };
+  const result = await verifyCoupledSourceEvents({ ...base, input_indices: new Int32Array() }, data, artifact, run);
+  expect(Array.from(result.physical_source_indices)).toEqual([2]);
+  await expect(verifyCoupledSourceEvents(base, data, artifact, { ...run, configuration_sha256: 'd'.repeat(64) }))
+    .rejects.toThrow('source_events_header');
+});

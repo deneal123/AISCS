@@ -13,6 +13,8 @@ export function electricalSpikeHistogram(readout, durationMs) {
 
 // The scene and its histogram must describe the same network calculation.
 export function sceneSpikeHistogram(sceneField, coupledHistogram, readout, durationMs, verifiedProxyHistogram = null) {
+  // Segment threshold markers are not whole-cell spikes.
+  if (sceneField?.result?.manifest?.kind === 'experimental-full-population-feedback') return null;
   if (sceneField?.result?.manifest?.kind === 'experimental-field-proxy') {
     return verifiedProxyHistogram;
   }

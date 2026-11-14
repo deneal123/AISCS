@@ -1,5 +1,10 @@
 import { contactNormalsForSimulation, directFieldMatchesScene, directFieldTimeline, fieldExclusionNotice, fieldProxyActivityNotice, fieldProxyExplanation, fieldRecordingScope, fieldResultDescription, fieldResultHeading } from '../../../src/features/simulator/recording/recordingScope';
 
+test('describes full-population recording without calling it a selected subset', () => {
+  const run = { result: { manifest: { kind: 'experimental-full-population-feedback' } } };
+  expect(fieldResultDescription(run, false)).toContain('всех клеток');
+});
+
 test('shows the physically recorded cell count only when it is explicitly available', () => {
   expect(fieldRecordingScope({ result: { preview: { source_cells: 46 } } }))
     .toBe('E1 − REF · клеток: 46');

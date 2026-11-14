@@ -34,6 +34,7 @@ export const simulationApi = {
   feedbackRuns: async (id, signal) => (await httpClient.get(`${root}/runs/${id}/population-feedback-runs`, { signal })).data,
   feedbackSource: async (id, signal) => (await httpClient.post(`${root}/runs/${id}/population-feedback-source`, {}, { signal, timeout: 150000 })).data,
   createFeedback: async (payload, signal) => (await httpClient.post(`${root}/population-feedback-runs`, payload, { signal, timeout: 150000 })).data,
+  createFullFeedback: async (payload, signal) => (await httpClient.post(`${root}/full-population-feedback-runs`, payload, { signal, timeout: 150000 })).data,
   populationTargetCandidates: async (runId, node, signal) => (await httpClient.get(`${root}/runs/${runId}/population-target-candidates/${node}`, { signal, timeout: 150000 })).data,
   populationTargetRuns: async (runId, node, signal) => (await httpClient.get(`${root}/runs/${runId}/population-target-runs/${node}`, { signal })).data,
   preparePopulationTarget: async (runId, signal) => (await httpClient.post(`${root}/runs/${runId}/population-target-source`, {}, { signal, timeout: 150000 })).data,

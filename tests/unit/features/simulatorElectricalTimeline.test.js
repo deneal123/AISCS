@@ -1,5 +1,10 @@
 import { electricalSpikeHistogram, sceneSpikeHistogram, verifiedHistogramForScene } from '../../../src/features/simulator/recording/electricalTimeline';
 
+test('does not describe full-population segment markers as cell spikes', () => {
+  const run = { result: { manifest: { kind: 'experimental-full-population-feedback' } } };
+  expect(sceneSpikeHistogram(run, [0, 3], { source: { spike_times_ms: [1] } }, 1)).toBeNull();
+});
+
 test('bins verified events on the same millisecond time base, including the final endpoint', () => {
   const readout = { source: { spike_times_ms: Float32Array.from([1, 1, 3, 10]) } };
   expect(electricalSpikeHistogram(readout, 10)).toEqual([0, 2, 0, 1, 0, 0, 0, 0, 0, 0, 1]);

@@ -65,6 +65,15 @@ test('shows field preparation at zero percent and its verification stage', () =>
   expect(screen.getByText(/Проверка рассчитанного поля/)).toBeInTheDocument();
 });
 
+test('labels full-population passes without presenting the independent pass as the entire run', () => {
+  render(<SimulationProgress stage="Связанный расчёт" phase={1} reducedMotion
+    progress={{ phase: 'full_control', done: 20, total: 100, runId: 'job' }} />);
+  expect(screen.getByText('Воздействие', { exact: false })).toBeInTheDocument();
+  expect(screen.getByText('Контроль')).toBeInTheDocument();
+  expect(screen.getByText('Обратная связь')).toBeInTheDocument();
+  expect(screen.getByText(/Контрольный расчёт · 20 \/ 100 · 20%/)).toBeInTheDocument();
+});
+
 test('reports completed network ticks as model time and estimates only this stage', () => {
   jest.useFakeTimers();
   try {

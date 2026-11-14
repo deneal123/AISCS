@@ -12,6 +12,9 @@ export function fieldResultHeading(run, direct) {
 }
 
 export function fieldResultDescription(run, direct) {
+  if (run?.result?.manifest?.kind === 'experimental-full-population-feedback') {
+    return 'Модельная запись всех клеток · без артефакта стимуляции';
+  }
   return direct
     ? 'Упрощённая сеть · запись E1–REF не рассчитана'
     : `${run?.title || 'STIM'} · запись выбранных клеток, без артефакта`;

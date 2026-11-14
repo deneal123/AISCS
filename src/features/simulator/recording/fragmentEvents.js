@@ -77,6 +77,7 @@ export async function verifyCoupledEvents(base, buffer, artifact, run) {
 // not a whole-neuron spike and must not drive the network edge animation.
 export async function verifyCoupledSourceEvents(base, buffer, artifact, run) {
   const manifest = run?.result?.manifest, preview = run?.result?.preview;
+  const full = manifest?.kind === 'experimental-full-population-feedback';
   const entry = manifest?.files?.find(file => file.name === 'coupled-source-events.bin');
   if (!(buffer instanceof ArrayBuffer) || artifact?.name !== 'coupled-source-events.bin'
       || buffer.byteLength !== artifact.bytes || entry?.bytes !== artifact.bytes
@@ -91,12 +92,18 @@ export async function verifyCoupledSourceEvents(base, buffer, artifact, run) {
   if (String.fromCharCode(...bytes.subarray(0, 4)) !== 'SRC1'
       || nodes !== base.node_ids.length || nodes !== preview?.graph_cells
       || duration !== preview?.duration_ms || hex(16, 48) !== manifest.graph_sha256
-      || hex(48, 80) !== manifest.configuration_sha256 || manifest.configuration_sha256 !== run.configuration_sha256
+      || hex(48, 80) !== manifest.configuration_sha256
+      || (full ? manifest.configuration?.request_sha256 !== run.configuration_sha256
+        : manifest.configuration_sha256 !== run.configuration_sha256)
+      || (full && (preview?.status !== 'converged' || preview?.source_cells !== nodes
+        || preview?.candidate_cell_time_markers !== count
+        || manifest.graph_sha256 !== base?.description?.manifest_sha256
+        || manifest.graph_sha256 !== run?.configuration?.graph_manifest_sha256))
       || count > preview.source_cells * duration || buffer.byteLength !== 80 + count * 8) throw new Error('source_events_header');
   const indices = new Uint32Array(buffer, 80, count), times = new Uint32Array(buffer, 80 + count * 4, count);
   const sourceIndices = new Set(base.input_indices);
   indices.forEach((index, i) => {
-    if (!sourceIndices.has(index) || times[i] < 1 || times[i] > duration
+    if ((full ? index >= nodes : !sourceIndices.has(index)) || times[i] < 1 || times[i] > duration
         || (i > 0 && (times[i] < times[i - 1] || (times[i] === times[i - 1] && index <= indices[i - 1])))) {
       throw new Error('source_events_order');
     }
