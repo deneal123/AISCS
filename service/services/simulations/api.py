@@ -155,15 +155,27 @@ async def catalog(owner: Owner):
 async def create_run(payload: RunCreate, owner: Owner):
     if len(json.dumps(payload.configuration)) > 20000:
         raise HTTPException(422, "Слишком большая конфигурация")
+    independent = set(payload.configuration) == {'graph_manifest_sha256', 'simulation'}
     try:
         async with generator_client() as client:
-            response = await client.post("/v1/validate", json=payload.configuration)
-        if response.status_code == 422:
+            endpoint = ('/v1/independent-population-validate' if independent else '/v1/validate')
+            response = await client.post(endpoint, json=payload.configuration)
+        if response.status_code in {409, 422}:
             raise HTTPException(422, "Недопустимые параметры модели")
         response.raise_for_status()
         checked = response.json()
     except (httpx.HTTPError, RuntimeError) as exc:
         raise HTTPException(503, "Не удалось проверить конфигурацию") from exc
+    if independent:
+        try:
+            normalized = checked['configuration']
+            digest = hashlib.sha256(json.dumps(normalized, sort_keys=True, separators=(',', ':'),
+                                               allow_nan=False).encode('utf8')).hexdigest()
+            if (not isinstance(normalized, dict) or normalized != payload.configuration
+                    or checked['configuration_sha256'] != digest):
+                raise ValueError('independent_configuration_mismatch')
+        except (KeyError, TypeError, ValueError) as exc:
+            raise HTTPException(503, 'Некорректный ответ вычислительного сервиса') from exc
     return await create_checked_run(payload, owner, checked)
 
 
@@ -534,6 +546,30 @@ async def create_population_feedback_run(payload: RunCreate, owner: Owner):
             raise ValueError('feedback_configuration_mismatch')
     except (httpx.HTTPError, RuntimeError, KeyError, TypeError, ValueError) as exc:
         raise HTTPException(503, 'Feedback configuration validation is unavailable') from exc
+    return await create_checked_run(payload, owner, checked)
+
+
+@router.post('/full-population-feedback-runs', status_code=201)
+async def create_full_population_feedback_run(payload: RunCreate, owner: Owner):
+    if payload.parent_run_id is not None or len(json.dumps(payload.configuration)) > 50000:
+        raise HTTPException(422, 'Invalid full feedback configuration')
+    try:
+        async with generator_client() as client:
+            response = await client.post('/v1/full-population-feedback-validate',
+                                         json=payload.configuration)
+        if response.status_code in {404, 409, 422}:
+            raise HTTPException(422, 'Invalid full feedback configuration')
+        response.raise_for_status()
+        checked = response.json()
+        normalized = checked['configuration']
+        digest = hashlib.sha256(json.dumps(normalized, sort_keys=True, separators=(',', ':'),
+                                           allow_nan=False).encode('utf8')).hexdigest()
+        if (normalized != payload.configuration or checked['configuration_sha256'] != digest
+                or type(checked.get('graph_cells')) is not int
+                or not 1 <= checked['graph_cells'] <= 5_000_000):
+            raise ValueError('full_feedback_configuration_mismatch')
+    except (httpx.HTTPError, RuntimeError, KeyError, TypeError, ValueError) as exc:
+        raise HTTPException(503, 'Full feedback validation is unavailable') from exc
     return await create_checked_run(payload, owner, checked)
 
 

@@ -48,6 +48,16 @@ def executor_failure_code(status: dict) -> str:
     if (state == "failed" and isinstance(detail, dict) and detail.get("type") == "ValueError"
             and detail.get("message") == "Synapse at zero-area section endpoint is unsupported"):
         return "executor_synapse_endpoint"
+    if (state == 'failed' and isinstance(detail, dict) and detail.get('type') == 'ValueError'
+            and isinstance(detail.get('message'), str)
+            and detail['message'].startswith('Unresolved feedback endpoint in target cell ')):
+        return 'executor_synapse_endpoint'
+    if (state == 'failed' and isinstance(detail, dict) and detail.get('type') == 'ValueError'
+            and isinstance(detail.get('message'), str)
+            and (detail['message'] == 'Unresolved source geometry prevents complete feedback'
+                 or detail['message'].startswith(
+                     'Unresolved source geometry prevents complete feedback: cell '))):
+        return 'executor_synapse_geometry'
     if (state == "failed" and isinstance(detail, dict) and detail.get("type") == "ValueError"
             and isinstance(detail.get("message"), str) and detail["message"] in {
                 "Coupled feedback did not converge: iteration_limit",

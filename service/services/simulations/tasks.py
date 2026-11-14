@@ -38,6 +38,15 @@ from service.services.simulations.manifests.fragment_population_manifest import 
     validate_fragment_population_manifest,
     validate_fragment_population_preview,
 )
+from service.services.simulations.manifests.full_feedback_manifest import (
+    InvalidFullFeedbackManifest,
+    validate_full_feedback_manifest,
+    validate_full_feedback_preview,
+)
+from service.services.simulations.manifests.independent_population import (
+    validate_independent_manifest,
+    validate_independent_preview,
+)
 from service.services.simulations.manifests.manifest import InvalidManifest, validate_manifest
 from service.services.simulations.manifests.population_feedback_manifest import (
     InvalidPopulationFeedbackManifest,
@@ -303,6 +312,21 @@ async def retry_interrupted(infra, run_id, token):
     return True
 
 
+async def validate_full_feedback_for_publication(client, payload, digest, manifest):
+    checked_response = await client.post('/v1/full-population-feedback-validate', json=payload)
+    checked_response.raise_for_status()
+    checked = checked_response.json()
+    try:
+        if checked.get('configuration_sha256') != digest:
+            raise InvalidFullFeedbackManifest('full_feedback_request')
+        validate_full_feedback_manifest(manifest,
+            configuration_sha256=manifest.get('configuration_sha256'),
+            graph_sha256=payload['graph_manifest_sha256'], graph_cells=checked.get('graph_cells'),
+            request_sha256=digest, request_configuration=payload)
+    except (InvalidFullFeedbackManifest, KeyError, AttributeError) as exc:
+        raise InvalidManifest('full_feedback_manifest') from exc
+
+
 async def execute(run_id: UUID):
     infra = build_infra(config)
     token = uuid4()
@@ -359,6 +383,10 @@ async def execute(run_id: UUID):
             field_proxy = ('gain' in payload and 'waveform' in payload
                            and payload.get('coordinate_frame') == 'male-cns-v1.0-native-um')
             fragment_population = "source_ids" in payload and "max_distance_um" in payload
+            independent_population = set(payload) == {'graph_manifest_sha256', 'simulation'}
+            full_feedback = ('simulation' in payload and 'excitatory' in payload
+                             and 'inhibitory' in payload and 'max_source_distance_um' in payload
+                             and 'source_package_sha256' not in payload)
             population_target = 'source_package_sha256' in payload and 'target_id' in payload
             population_feedback = ('source_package_sha256' in payload
                                    and 'excitatory' in payload and 'inhibitory' in payload)
@@ -396,6 +424,12 @@ async def execute(run_id: UUID):
                 endpoint = ('/v1/population-feedback-executions' if population_feedback
                             else '/v1/population-target-executions')
                 response = await client.post(endpoint,
+                    json={'execution_id': str(attempt_id), 'config': payload})
+            elif full_feedback:
+                response = await client.post('/v1/full-population-feedback-executions',
+                    json={'execution_id': str(attempt_id), 'config': payload})
+            elif independent_population:
+                response = await client.post('/v1/independent-population-executions',
                     json={'execution_id': str(attempt_id), 'config': payload})
             elif field_proxy:
                 response = await client.post(
@@ -493,6 +527,13 @@ async def execute(run_id: UUID):
                     validate_population_target_manifest(manifest, configuration_sha256=digest)
                 except InvalidPopulationTargetManifest as exc:
                     raise InvalidManifest('target_manifest') from exc
+            elif full_feedback:
+                await validate_full_feedback_for_publication(client, payload, digest, manifest)
+            elif independent_population:
+                try:
+                    validate_independent_manifest(manifest, configuration_sha256=digest)
+                except ValueError as exc:
+                    raise InvalidManifest('independent_manifest') from exc
             elif field_proxy:
                 try:
                     validate_field_proxy_manifest(manifest, configuration_sha256=digest)
@@ -597,6 +638,10 @@ async def execute(run_id: UUID):
                     validate_population_feedback_preview(preview, payload, source_configuration)
                 elif population_target:
                     validate_population_target_preview(preview, payload, source_configuration)
+                elif full_feedback:
+                    validate_full_feedback_preview(preview, manifest=manifest)
+                elif independent_population:
+                    validate_independent_preview(preview, payload)
                 elif field_proxy:
                     validate_field_proxy_preview(preview, payload)
                 elif field_graph:
@@ -605,7 +650,8 @@ async def execute(run_id: UUID):
                     validate_fragment_population_preview(preview, payload)
             except (ValueError, InvalidReplayManifest, InvalidFieldGraphManifest,
                     InvalidFragmentPopulationManifest, InvalidPopulationTargetManifest,
-                    InvalidPopulationFeedbackManifest, InvalidFieldProxyManifest) as exc:
+                    InvalidPopulationFeedbackManifest, InvalidFieldProxyManifest,
+                    InvalidFullFeedbackManifest) as exc:
                 raise InvalidManifest("preview_invalid") from exc
             result = {
                 "manifest": manifest,

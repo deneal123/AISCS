@@ -3,6 +3,21 @@ import pytest
 from service.services.simulations.progress import valid_progress
 
 
+def test_full_feedback_progress_is_bounded_and_identifies_iteration():
+    assert valid_progress({'phase': 'full_active', 'done': 0, 'total': 166700})
+    assert valid_progress({'phase': 'full_control', 'done': 12, 'total': 166700})
+    assert valid_progress({'phase': 'full_feedback', 'iteration': 2, 'done': 12, 'total': 166700})
+    assert not valid_progress({'phase': 'full_feedback', 'done': 12, 'total': 166700})
+    assert not valid_progress({'phase': 'full_active', 'done': 166701, 'total': 166700})
+
+
+def test_independent_population_progress_is_bounded():
+    assert valid_progress({'phase': 'independent_cells', 'done': 0, 'total': 166700})
+    assert valid_progress({'phase': 'independent_cells', 'done': 166700, 'total': 166700})
+    assert not valid_progress({'phase': 'independent_cells', 'done': 166701, 'total': 166700})
+    assert not valid_progress({'phase': 'independent_cells', 'done': True, 'total': 166700})
+
+
 @pytest.mark.parametrize(('progress', 'expected'), [
     ({'phase': 'feedback_network', 'iteration': 1, 'done': 0, 'total': 0}, True),
     ({'phase': 'feedback_cells', 'iteration': 2, 'done': 3, 'total': 46}, True),
