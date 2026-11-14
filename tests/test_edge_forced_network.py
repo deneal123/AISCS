@@ -68,6 +68,14 @@ def test_duplicate_edge_ticks_are_rejected():
         )
 
 
+def test_repeated_edge_still_checks_each_event_count():
+    events = [{'source_id': 10, 'target_id': 20, 'tick': 1, 'count': 1},
+              {'source_id': 10, 'target_id': 20, 'tick': 2, 'count': 3001}]
+    with pytest.raises(ValueError, match='exceeds'):
+        run_edge_forced_network(graph(), seed=1, duration_ms=6, forced_cell_ids=[10],
+                                edge_events=events)
+
+
 def test_sampled_response_exposes_inhibition_without_inventing_spikes():
     event = {"source_id": 10, "target_id": 20, "tick": 1, "count": 10}
     kwargs = dict(seed=1, duration_ms=6, forced_cell_ids=[10], sample_cell_ids=[20])

@@ -62,9 +62,9 @@ def _solve_cell_major(cells, geometries, stimulus, table, *, steps, dt_ms, cell_
     811 203 segments: 112.7e6 vs 54.7e6 live segment-steps/s).
 
     An optional reduced window sink receives a differential recording and
-    selected segment voltages. The current implementation launches the Hines
-    and observation kernels once per step; it is experimental and its speed
-    has not been established. Full segment traces are not produced.
+    selected segment voltages. Warp and large-cell block implementations fuse
+    observation into the Hines window. Both remain experimental. Full segment
+    traces are not produced.
     """
     from numba import cuda
 
@@ -162,6 +162,11 @@ def _solve_cell_major(cells, geometries, stimulus, table, *, steps, dt_ms, cell_
     use_block = widest > block_cell_segments
     if use_block:
         blocks, threads = batch, block_cell_threads
+        # The fused recording kernel needs more registers than the unrecorded
+        # kernel. On the supported RTX 3060, 512 threads exceed its launch
+        # resources; keep the reduction block power-of-two and use at most 256.
+        if device_window_sink is not None:
+            threads = min(threads, 256)
     else:
         blocks = (batch + cell_warps - 1) // cell_warps
         threads = 32 * cell_warps
@@ -172,13 +177,16 @@ def _solve_cell_major(cells, geometries, stimulus, table, *, steps, dt_ms, cell_
 
     kernel = block_cell if use_block else warp_batched
 
-    def launch(start, end):
-        kernel[blocks, threads](
+    def kernel_arguments(start, end):
+        return (
             d_table, d_drive, d_stimulus, d_conductance, d_segment_node, d_area, d_field,
             initial_voltage, d_initial_gates, d_lengths, d_nodes, d_level_bounds,
             d_group_parents, d_group_offsets, d_group_children, d_level_counts, d_fixed,
             d_diagonal, d_rhs, d_voltage, d_gates, d_flags, d_inverses,
             *event_devices, d_event_counts, dt_ms, start if start else 0, end)
+
+    def launch(start, end):
+        kernel[blocks, threads](*kernel_arguments(start, end))
 
     if device_window_sink is None:
         execute_windows(total_steps=steps - 1, window_steps=steps - 1, launch=launch,
@@ -187,9 +195,10 @@ def _solve_cell_major(cells, geometries, stimulus, table, *, steps, dt_ms, cell_
                         check_cancelled=check_cancelled,
                         allow_table_clamp=allow_table_clamp)
     else:
-        from .observation_kernel import record_node_projection
+        from .fused_observation_kernel import block_cell_recorded, warp_batched_recorded
         from .observation_projection import nodal_recording_projection
 
+        recording_start = time.perf_counter()
         ids = [cell['id'] for cell in cells]
         if (not isinstance(recording_coefficients, dict) or not isinstance(selected_indices, dict)
                 or list(recording_coefficients) != ids or list(selected_indices) != ids):
@@ -226,13 +235,15 @@ def _solve_cell_major(cells, geometries, stimulus, table, *, steps, dt_ms, cell_
         d_signal = device(np.zeros((samples, batch), dtype=np.float64))
         d_selected = device(np.full((samples, max_selected, batch), initial_voltage,
                                     dtype=np.float64))
+        if timing_sink is not None:
+            cuda.synchronize()
+            timing_sink('recording_projection_and_transfer', time.perf_counter() - recording_start)
 
         def launch_recorded(start, end):
-            for step in range(start + 1, end + 1):
-                launch(step - 1, step)
-                record_node_projection[batch, 128](
-                    d_voltage, d_weights, d_nodes, d_factors, stimulus[step],
-                    d_selected_nodes, d_selected_counts, step - start, d_signal, d_selected)
+            fused_kernel = block_cell_recorded if use_block else warp_batched_recorded
+            fused_kernel[blocks, threads](
+                *kernel_arguments(start, end), d_weights, d_factors, d_selected_nodes,
+                d_selected_counts, d_signal, d_selected)
 
         def deliver(end, total):
             start = ((end - 1) // window_steps) * window_steps
@@ -250,10 +261,35 @@ def _solve_cell_major(cells, geometries, stimulus, table, *, steps, dt_ms, cell_
             if progress is not None:
                 progress(end, total)
 
+        recording_start = time.perf_counter()
+        profile_times = {'gpu_windows': 0.0, 'recording_callbacks': 0.0}
+        window_started = None
+
+        def profiled_launch(start, end):
+            nonlocal window_started
+            window_started = time.perf_counter()
+            launch_recorded(start, end)
+
+        def profiled_synchronize():
+            cuda.synchronize()
+            profile_times['gpu_windows'] += time.perf_counter() - window_started
+
+        def profiled_deliver(end, total):
+            started = time.perf_counter()
+            deliver(end, total)
+            profile_times['recording_callbacks'] += time.perf_counter() - started
+
         execute_windows(total_steps=steps - 1, window_steps=window_steps,
-                        launch=launch_recorded, synchronize=cuda.synchronize,
-                        read_flags=d_flags.copy_to_host, cell_ids=ids, progress=deliver,
+                        launch=profiled_launch if timing_sink is not None else launch_recorded,
+                        synchronize=(profiled_synchronize if timing_sink is not None
+                                     else cuda.synchronize),
+                        read_flags=d_flags.copy_to_host, cell_ids=ids,
+                        progress=profiled_deliver if timing_sink is not None else deliver,
                         check_cancelled=check_cancelled, allow_table_clamp=allow_table_clamp)
+        if timing_sink is not None:
+            timing_sink('recorded_windows', time.perf_counter() - recording_start)
+            for name, seconds in profile_times.items():
+                timing_sink(name, seconds)
     if timing_sink is not None:
         timing_sink('solve_cell_major', time.perf_counter() - stage_start)
         stage_start = time.perf_counter()
@@ -295,6 +331,7 @@ def solve_prepared_batch(
     block_cell_segments=40000,
     cell_major_packed=None,
     cell_major_block_threads=512,
+    require_cell_major=False,
 ):
     """Solve independent cells under one common pulse at the selected fixed step.
 
@@ -333,6 +370,8 @@ def solve_prepared_batch(
         or type(record_traces) is not bool
         or (not record_traces and (window_sink is not None or device_window_sink is not None))
         or type(cell_major) is not bool
+        or type(require_cell_major) is not bool
+        or (require_cell_major and not cell_major)
         or type(cell_warps) is not int or cell_warps not in (1, 2, 4, 8)
         or type(block_cell_segments) is not int or block_cell_segments < 1
         or type(cell_major_block_threads) is not int
@@ -381,6 +420,8 @@ def solve_prepared_batch(
             window_steps=window_steps, progress=progress)
         if solved is not None:
             return solved
+        if require_cell_major:
+            raise ValueError('Cell-major solver required but initial states are incompatible')
     trees = [(g["parents"], g["conductances"], g["segment_nodes"]) for g in geometries]
     packed = pack_trees(trees) if packing_cache is None else packing_cache.get_or_pack(trees)
     if timing_sink is not None:

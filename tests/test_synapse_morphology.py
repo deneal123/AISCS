@@ -4,6 +4,7 @@ import pytest
 from service.infrastructure.connectome.synapse_morphology import (
     merge_candidate_pages,
     nearest_swc_segments,
+    prepare_cached_morphology,
     prepare_registered_morphology,
     registered_page_candidates,
 )
@@ -98,6 +99,8 @@ def test_registered_page_uses_corresponding_side(monkeypatch, direction, expecte
     monkeypatch.setattr("service.infrastructure.connectome.morphology_repository.read_skeleton",
                         lambda *args: {"body_id": "11", "swc": SWC, "sha256": "skeleton"})
     result = registered_page_candidates(None, None, 11, direction, 0, 20, [])
+    assert registered_page_candidates(None, None, 11, direction, 0, 20, [],
+                                      use_spatial_index=True) == result
     assert result["candidates"][0]["partner_id"] == expected_partner
     assert result["candidates"][0]["child_node_id"] == expected_child
     assert result["morphology_sha256"] == "skeleton"
@@ -137,6 +140,27 @@ def test_prepared_morphology_produces_identical_pages_without_reloading(monkeypa
     assert len(calls) == 2
     with pytest.raises(ValueError, match='does not match'):
         registered_page_candidates(None, None, 23, 'incoming', 0, 20, [], prepared=prepared)
+
+
+def test_cache_entry_can_drive_verified_synapse_page_without_raw_swc(monkeypatch):
+    page = {'truncated': False, 'counts_match': True, 'graph_next_offset': None,
+            'source_md5': 'source', 'graph_manifest_sha256': 'graph', 'coordinate_frame': '8nm',
+            'pairs': [{'body_pre': 11, 'body_post': 22, 'x_post': 125, 'y_post': 63,
+                       'z_post': 0}]}
+    monkeypatch.setattr('service.infrastructure.connectome.synapse_index.registered_page_pairs',
+                        lambda *args, **kwargs: page)
+    monkeypatch.setattr('service.infrastructure.connectome.morphology_repository.read_skeleton',
+                        lambda *args: {'body_id': '22', 'swc': SWC, 'sha256': 'a' * 64})
+    expected = registered_page_candidates(None, None, 22, 'incoming', 0, 20, [])
+    entry = {'skeleton': {'body_id': '22', 'sha256': 'a' * 64},
+             'geometry': (np.array([1, 2, 3]), np.array([[0., 0., 0.], [1., 0., 0.],
+                         [1., 1., 0.]]), np.array([-1, 0, 1]), np.array([.008, .008, .008]))}
+    prepared = prepare_cached_morphology(entry)
+    assert registered_page_candidates(None, None, 22, 'incoming', 0, 20, [],
+                                      prepared=prepared) == expected
+    entry['geometry'] = (np.array([2**32 + 1, 2, 3]), *entry['geometry'][1:])
+    with pytest.raises(ValueError, match='Invalid cached morphology entry'):
+        prepare_cached_morphology(entry)
 
 
 def test_merge_pages_requires_coverage_and_stable_provenance():

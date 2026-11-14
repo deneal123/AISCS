@@ -2,12 +2,89 @@
 
 from __future__ import annotations
 
+import copy
 import math
 from collections import Counter
 
 import numpy as np
 
 from service.infrastructure.connectome.forced_network import threshold_crossing_ticks
+
+
+def merge_archived_source_events(original, archived, *, control=None):
+    """Attach archived crossing ticks to independently verified source diagnostics.
+
+    This preserves the geometry and provenance required by pair mapping. The
+    caller must authenticate all inputs and ensure a control uses the same
+    geometry, time grid and parameters with the stimulus disabled.
+    """
+    if (not isinstance(original, dict) or not isinstance(original.get('candidates'), list)
+            or type(original.get('duration_ms')) is not int or original['duration_ms'] < 1
+            or not isinstance(archived, dict) or not isinstance(archived.get('candidates'), list)
+            or not isinstance(archived.get('edge_events'), list)):
+        raise ValueError('Invalid archived source diagnostics')
+    by_key = {}
+    for row in archived['candidates']:
+        if (not isinstance(row, dict) or set(row) != {
+                'source_position_8nm', 'partner_id', 'stimulated_ticks_ms'}
+                or not isinstance(row['source_position_8nm'], list)
+                or len(row['source_position_8nm']) != 3
+                or any(type(v) is not int for v in row['source_position_8nm'])
+                or not isinstance(row['partner_id'], str) or not row['partner_id'].isascii()
+                or not row['partner_id'].isdigit() or row['partner_id'].startswith('0')
+                or not isinstance(row['stimulated_ticks_ms'], list)
+                or any(type(tick) is not int or not 1 <= tick <= original.get('duration_ms', 0)
+                       for tick in row['stimulated_ticks_ms'])
+                or row['stimulated_ticks_ms'] != sorted(set(row['stimulated_ticks_ms']))):
+            raise ValueError('Invalid archived source candidate')
+        key = (row['partner_id'], *row['source_position_8nm'])
+        if key in by_key and by_key[key][0] != row['stimulated_ticks_ms']:
+            raise ValueError('Conflicting archived source candidate')
+        by_key.setdefault(key, []).append(row['stimulated_ticks_ms'])
+    updated = copy.deepcopy(original)
+    expected = Counter()
+    for row in updated['candidates']:
+        if row.get('included_in_graph') is not True:
+            continue
+        key = (row.get('partner_id'), *row.get('source_position_8nm', []))
+        if key not in by_key or not by_key[key]:
+            raise ValueError('Missing archived source candidate')
+        ticks = by_key[key].pop()
+        if row.get('status') == 'geometry_unresolved' and ticks:
+            raise ValueError('Unresolved source geometry cannot have observed events')
+        unresolved = row.get('status') == 'geometry_unresolved'
+        row['stimulated_ticks_ms'] = None if unresolved else ticks.copy()
+        # The archived replay has no paired control. Old control values and
+        # classifications belong to another replay and must not be reused.
+        row['control_ticks_ms'] = None
+        row['status'] = 'geometry_unresolved' if unresolved else 'timing_or_trace_ambiguous'
+        row.pop('stimulated_crossing_intervals', None)
+        row.pop('control_crossing_intervals', None)
+        for field in ('max_stimulated_mv', 'max_control_mv', 'max_abs_delta_mv'):
+            row.pop(field, None)
+        for tick in ticks:
+            expected[(int(row['partner_id']), tick)] += 1
+    if any(rows for rows in by_key.values()):
+        raise ValueError('Unexpected archived source candidate')
+    body = original.get('body_id')
+    try:
+        expected_events = [{'source_id': int(body), 'target_id': target, 'tick': tick,
+                            'count': count}
+                           for (target, tick), count in sorted(expected.items())]
+    except (ValueError, TypeError) as exc:
+        raise ValueError('Invalid archived source identity') from exc
+    if archived['edge_events'] != expected_events:
+        raise ValueError('Archived edge events do not match candidates')
+    if control is not None:
+        control_rows = merge_archived_source_events(original, control)['candidates']
+        for row, quiet in zip(updated['candidates'], control_rows, strict=True):
+            if row.get('included_in_graph') is not True or row['status'] == 'geometry_unresolved':
+                continue
+            ticks, control_ticks = row['stimulated_ticks_ms'], quiet['stimulated_ticks_ms']
+            row['control_ticks_ms'] = control_ticks
+            row['status'] = ('control_crossing' if control_ticks else
+                             'stimulus_only_crossing' if ticks else 'no_crossing')
+    return updated
 
 
 def feedback_output_events(body, solution, provenance, original, *, threshold_mv, duration_ms,
@@ -44,9 +121,21 @@ def feedback_selected_output_events(body, time_ms, edge_node_ids, traces, proven
         indices_only=False, selected_traces=traces)
 
 
+def feedback_selected_output_ticks(body, edge_node_ids, ticks, provenance, original, *,
+                                   threshold_mv, duration_ms, include_candidates=False,
+                                   include_unresolved_candidates=False,
+                                   max_source_distance_um=None):
+    """Map already validated streaming crossings to verified candidate edges."""
+    return _feedback_output_events(body, {'edge_node_ids': edge_node_ids}, provenance, original,
+        threshold_mv=threshold_mv, duration_ms=duration_ms, include_candidates=include_candidates,
+        max_source_distance_um=max_source_distance_um, indices_only=False, selected_traces=None,
+        selected_ticks=ticks, include_unresolved_candidates=include_unresolved_candidates)
+
+
 def _feedback_output_events(body, solution, provenance, original, *, threshold_mv, duration_ms,
                             include_candidates, max_source_distance_um, indices_only,
-                            selected_traces):
+                            selected_traces, selected_ticks=None,
+                            include_unresolved_candidates=False):
     if (type(body) is not int or body <= 0 or not isinstance(original, dict)
             or original.get('body_id') != str(body) or provenance.get('body_id') != str(body)
             or provenance.get('morphology_sha256') != original.get('morphology_sha256')
@@ -54,6 +143,8 @@ def _feedback_output_events(body, solution, provenance, original, *, threshold_m
             or original.get('duration_ms') != duration_ms
             or not isinstance(original.get('candidates'), list)
             or type(include_candidates) is not bool
+            or type(include_unresolved_candidates) is not bool
+            or (include_unresolved_candidates and not include_candidates)
             or (max_source_distance_um is not None
                 and (type(max_source_distance_um) not in (int, float)
                      or not math.isfinite(max_source_distance_um)
@@ -62,7 +153,15 @@ def _feedback_output_events(body, solution, provenance, original, *, threshold_m
     ids = np.asarray(solution.get('edge_node_ids'))
     if ids.ndim != 1 or ids.dtype.kind not in 'iu':
         raise ValueError('Invalid feedback output solution')
-    if not indices_only:
+    if selected_ticks is not None:
+        if (not isinstance(selected_ticks, dict)
+                or any(type(index) is not int or not 0 <= index < len(ids)
+                       or not isinstance(ticks, list)
+                       or any(type(tick) is not int or not 1 <= tick <= duration_ms
+                              for tick in ticks)
+                       or ticks != sorted(set(ticks)) for index, ticks in selected_ticks.items())):
+            raise ValueError('Invalid selected feedback ticks')
+    elif not indices_only:
         times = np.asarray(solution.get('time_ms'), dtype=float)
         if times.ndim != 1 or len(times) < 2:
             raise ValueError('Invalid feedback output solution')
@@ -112,11 +211,29 @@ def _feedback_output_events(body, solution, provenance, original, *, threshold_m
     for candidate in original['candidates']:
         if candidate.get('included_in_graph') is not True:
             continue
+        if (include_unresolved_candidates and candidate.get('status') == 'geometry_unresolved'
+                and (max_source_distance_um is None
+                     or type(candidate.get('centerline_distance_um')) not in (int, float)
+                     or candidate['centerline_distance_um'] <= max_source_distance_um)):
+            raise ValueError('Unresolved source candidate requires matching distance cutoff')
         if max_source_distance_um is not None:
             distance = candidate.get('centerline_distance_um')
             if (type(distance) not in (int, float) or not math.isfinite(distance) or distance < 0):
                 raise ValueError('Invalid verified source geometry')
             if distance > max_source_distance_um:
+                if include_unresolved_candidates:
+                    point = candidate.get('source_position_8nm')
+                    partner = candidate.get('partner_id')
+                    if (candidate.get('status') != 'geometry_unresolved'
+                            or not isinstance(point, list) or len(point) != 3
+                            or any(type(value) is not int or value < 0 for value in point)
+                            or not isinstance(partner, str) or not partner.isascii()
+                            or not partner.isdigit() or partner.startswith('0')):
+                        raise ValueError('Invalid unresolved source candidate')
+                    # Placeholder only: the original geometry_unresolved status
+                    # prevents treating this as an observed negative crossing.
+                    local_events.append({'source_position_8nm': point.copy(),
+                                         'partner_id': partner, 'stimulated_ticks_ms': []})
                 continue
         index = candidate.get('result_segment_index')
         child = candidate.get('child_node_id')
@@ -136,9 +253,14 @@ def _feedback_output_events(body, solution, provenance, original, *, threshold_m
         if index not in positions:
             if selected_traces is not None and index not in selected_traces:
                 raise ValueError('Missing selected feedback trace')
-            positions[index] = ([] if indices_only else threshold_crossing_ticks(
-                times, voltage[index] if selected_traces is None else selected_traces[index],
-                threshold_mv=threshold_mv, duration_ms=duration_ms))
+            if selected_ticks is not None:
+                if index not in selected_ticks:
+                    raise ValueError('Missing selected feedback ticks')
+                positions[index] = selected_ticks[index]
+            else:
+                positions[index] = ([] if indices_only else threshold_crossing_ticks(
+                    times, voltage[index] if selected_traces is None else selected_traces[index],
+                    threshold_mv=threshold_mv, duration_ms=duration_ms))
         if include_candidates:
             point = candidate.get('source_position_8nm')
             if (not isinstance(point, list) or len(point) != 3
@@ -158,6 +280,8 @@ def _feedback_output_events(body, solution, provenance, original, *, threshold_m
         return list(positions)
     if selected_traces is not None and set(selected_traces) != set(positions):
         raise ValueError('Unexpected selected feedback trace')
+    if selected_ticks is not None and set(selected_ticks) != set(positions):
+        raise ValueError('Unexpected selected feedback ticks')
     edge_events = [{'source_id': body, 'target_id': target, 'tick': tick, 'count': count}
                    for (target, tick), count in sorted(events.items())]
     if include_candidates:

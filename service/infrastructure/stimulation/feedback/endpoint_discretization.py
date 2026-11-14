@@ -239,3 +239,101 @@ def validate_prepared_events(prepared, original_events, edges_um, observations_u
     if prepared != expected:
         raise ValueError('Prepared discretization does not match verified inputs')
     return expected
+
+
+def prepare_shared_discretization(conditions, edges_um, *, max_shift_um,
+                                  max_observation_distance_um, max_nseg):
+    """Prepare one grid from every condition, preserving each event's origin.
+
+    The caller authenticates the event observations and chooses the limits.
+    A shared grid avoids comparing signals from independently remeshed cells;
+    it does not establish numerical convergence or biological validity.
+    """
+    if (not isinstance(conditions, dict) or not conditions
+            or any(not isinstance(key, str) or not key for key in conditions)):
+        raise ValueError('Invalid shared discretization conditions')
+    events, observations, slices = [], [], {}
+    for name in sorted(conditions):
+        condition = conditions[name]
+        if (not isinstance(condition, dict) or set(condition) != {'events', 'observations_um'}
+                or not isinstance(condition['events'], list)
+                or not isinstance(condition['observations_um'], list)
+                or len(condition['events']) != len(condition['observations_um'])):
+            raise ValueError('Invalid shared discretization condition')
+        start = len(events)
+        events.extend(condition['events'])
+        observations.extend(condition['observations_um'])
+        slices[name] = (start, len(events))
+    prepared = prepare_discretized_events(events, edges_um, observations,
+        max_shift_um=max_shift_um, max_observation_distance_um=max_observation_distance_um,
+        max_nseg=max_nseg)
+    return {'shared': prepared, 'conditions': {
+        name: {'effective_events': prepared['effective_events'][start:end],
+               'evidence': prepared['evidence'][start:end]}
+        for name, (start, end) in slices.items()},
+        'interpretation': 'shared bounded geometric approximation; not validated dynamics'}
+
+
+def merge_shared_grid_requirements(previous, proposed, *, max_nseg):
+    """Merge verified grid requirements without silently coarsening an edge.
+
+    A changed grid invalidates both conditions' old traces; callers must replay
+    both before drawing a comparison. Merging counts does not itself validate
+    positions on the resulting grid; every observation must be audited again.
+    """
+    if (not isinstance(previous, dict) or not isinstance(proposed, dict)
+            or type(max_nseg) is not int or max_nseg < 1 or max_nseg % 2 != 1):
+        raise ValueError('Invalid shared grid requirements')
+    for grid in (previous, proposed):
+        if any(not isinstance(key, str) or not key.isascii() or not key.isdigit()
+               or key.startswith('0') or type(value) is not int or value < 1
+               or value > max_nseg or value % 2 != 1 for key, value in grid.items()):
+            raise ValueError('Invalid shared grid requirement')
+    canonical_previous = {child: nseg for child, nseg in previous.items() if nseg > 1}
+    merged = canonical_previous.copy()
+    for child, nseg in proposed.items():
+        if nseg > 1:
+            merged[child] = max(merged.get(child, 1), nseg)
+    return {'nseg_by_edge': merged, 'restart_required': merged != canonical_previous,
+            'requires_observation_reaudit': True,
+            'interpretation': 'grid plan only; both conditions require replay after changes'}
+
+
+def apply_shared_grid(conditions, edges_um, grid, *, max_shift_um,
+                      max_observation_distance_um, max_nseg):
+    """Recheck every event on an explicitly fixed grid shared across conditions.
+
+    Input observations and morphology must be independently authenticated.
+    This is a geometric check, not an estimate of numerical or biological error.
+    """
+    checked_grid = merge_shared_grid_requirements({}, grid, max_nseg=max_nseg)['nseg_by_edge']
+    if (not isinstance(conditions, dict) or not conditions
+            or any(not isinstance(name, str) or not name for name in conditions)
+            or type(max_shift_um) not in (int, float) or not math.isfinite(max_shift_um)
+            or max_shift_um < 0 or type(max_observation_distance_um) not in (int, float)
+            or not math.isfinite(max_observation_distance_um) or max_observation_distance_um < 0):
+        raise ValueError('Invalid shared grid audit')
+    output = {}
+    for name, condition in conditions.items():
+        if (not isinstance(condition, dict) or set(condition) != {'events', 'observations_um'}
+                or not isinstance(condition['events'], list)
+                or not isinstance(condition['observations_um'], list)
+                or len(condition['events']) != len(condition['observations_um'])):
+            raise ValueError('Invalid shared grid condition')
+        events, observations = condition['events'], condition['observations_um']
+        counts = {event['child_node_id']: checked_grid.get(str(event['child_node_id']), 1)
+                  for event in events if isinstance(event, dict) and 'child_node_id' in event}
+        evidence = audit_effective_positions(events, edges_um, observations, counts)
+        if any(row['observation_distance_um'] > max_observation_distance_um
+               or (row['requires_endpoint_relocation'] and row['shift_um'] > max_shift_um)
+               for row in evidence):
+            raise ValueError('Shared grid exceeds explicit geometry limits')
+        effective = []
+        for event, row in zip(events, evidence, strict=True):
+            copy = event.copy()
+            if row['requires_endpoint_relocation']:
+                copy['position'] = row['effective_position']
+            effective.append(copy)
+        output[name] = {'effective_events': effective, 'evidence': evidence}
+    return {'nseg_by_edge': checked_grid, 'conditions': output,
+            'interpretation': 'fixed shared grid geometrically audited; not validated dynamics'}

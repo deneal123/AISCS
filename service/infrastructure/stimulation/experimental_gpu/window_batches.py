@@ -1,7 +1,7 @@
 """Execute explicitly prepared independent cells in bounded output windows."""
 
 from .batch_solver import solve_prepared_batch
-from .batching import plan_window_batches
+from .batching import plan_cell_major_window_batches, plan_window_batches
 
 
 def solve_windowed_groups(cells, stimulus_midpoint, rate_table, *, max_cells,
@@ -10,7 +10,7 @@ def solve_windowed_groups(cells, stimulus_midpoint, rate_table, *, max_cells,
                           check_cancelled=None, progress=None, packing_cache=None,
                           device_window_factory=None, timing_sink=None,
                           cell_major=False, cell_major_block_threads=512,
-                          block_cell_segments=40000):
+                          block_cell_segments=40000, cell_major_selection_counts=None):
     """Emit windows per size-sorted group and return metadata in input order.
 
     ``window_sink`` receives (original indices, start, end, rows). Results may
@@ -27,6 +27,7 @@ def solve_windowed_groups(cells, stimulus_midpoint, rate_table, *, max_cells,
             or (progress is not None and not callable(progress))
             or type(cell_major) is not bool
             or (cell_major and device_window_factory is None)
+            or (not cell_major and cell_major_selection_counts is not None)
             or any(not isinstance(cell, dict) or not isinstance(cell.get('geometry'), dict)
                    or not isinstance(cell['geometry'].get('grid'), list) for cell in cells)):
         raise ValueError('Invalid window group request')
@@ -34,9 +35,26 @@ def solve_windowed_groups(cells, stimulus_midpoint, rate_table, *, max_cells,
     if any(type(body) is not int or body <= 0 for body in ids) or len(set(ids)) != len(ids):
         raise ValueError('Cell IDs must be unique positive integers')
     counts = [len(cell['geometry']['grid']) for cell in cells]
-    groups = plan_window_batches(counts, max_cells=max_cells, samples=len(stimulus_midpoint),
-                                 window_steps=window_steps, output_budget_bytes=output_budget_bytes,
-                                 max_padding_ratio=max_padding_ratio)
+    if cell_major:
+        try:
+            node_counts = [len(cell['geometry']['parents']) for cell in cells]
+        except (KeyError, TypeError) as exc:
+            raise ValueError('Invalid cell-major window geometry') from exc
+        selection_counts = (counts if cell_major_selection_counts is None
+                            else cell_major_selection_counts)
+        # The cell-major solver falls back to the generic kernel for unequal
+        # initial states, which requires larger raw trace buffers.
+        states = {(cell.get('initial_voltage_mv'), tuple(cell.get('initial_gates', ())))
+                  for cell in cells}
+        groups = plan_cell_major_window_batches(node_counts, counts, selection_counts,
+            max_cells=max_cells, samples=len(stimulus_midpoint), window_steps=window_steps,
+            output_budget_bytes=output_budget_bytes, max_padding_ratio=max_padding_ratio,
+            generic_fallback=len(states) > 1)
+    else:
+        groups = plan_window_batches(counts, max_cells=max_cells, samples=len(stimulus_midpoint),
+                                     window_steps=window_steps,
+                                     output_budget_bytes=output_budget_bytes,
+                                     max_padding_ratio=max_padding_ratio)
     outputs = [None] * len(cells)
     clamped = set()
     time_ms = None
@@ -59,6 +77,15 @@ def solve_windowed_groups(cells, stimulus_midpoint, rate_table, *, max_cells,
                     {'recording_coefficients', 'selected_indices', 'sink'}
                     or not callable(device['sink'])):
                 raise ValueError('Invalid GPU device window configuration')
+            if cell_major:
+                actual = device['selected_indices']
+                if (not isinstance(actual, dict)
+                        or any(ids[index] not in actual or not isinstance(actual[ids[index]], list)
+                               or len(actual[ids[index]]) > selection_counts[index]
+                               or (cell_major_selection_counts is not None
+                                   and len(actual[ids[index]]) != selection_counts[index])
+                               for index in indices)):
+                    raise ValueError('Cell-major selection count mismatch')
             def accept_device(start, end, rows, *, expected=tuple(cell['id'] for cell in group),
                               sink=device['sink']):
                 if tuple(row.get('id') for row in rows) != expected:

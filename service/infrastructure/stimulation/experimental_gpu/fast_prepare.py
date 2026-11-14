@@ -153,7 +153,8 @@ def _decode(path, compression, descriptor):
 
 
 def iter_prepared_chunks(metadata, *, audited_sources, params, workers=4,
-                         limit=None, progress=None, on_invalid=None, order=None):
+                         limit=None, progress=None, on_invalid=None, order=None,
+                         store_bounds=False, replacement_factory=None, on_replacement=None):
     """Yield (bodies, cells, chunk) for each authenticated cache chunk.
 
     Decoding (read, SHA-256, inflate) runs in a bounded thread pool because all
@@ -166,13 +167,22 @@ def iter_prepared_chunks(metadata, *, audited_sources, params, workers=4,
     descriptor it was validated against.
     ``limit`` is a number of cache chunks, not a number of neurons. A chunk
     may contain many cells, so it must not be used as a cell-count bound.
+    Replacement callbacks are experimental; their receipts are provisional
+    until the entire consumer calculation and its provenance checks succeed.
     """
+    if type(store_bounds) is not bool:
+        raise FastPrepareError('Invalid recording bounds option')
     if type(workers) is not int or not 1 <= workers <= 32:
         raise FastPrepareError("Invalid decode worker count")
     if limit is not None and (type(limit) is not int or limit < 1):
         raise FastPrepareError("Invalid cache chunk limit")
     if on_invalid is not None and not callable(on_invalid):
         raise FastPrepareError("Invalid rejected-cell callback")
+    if ((replacement_factory is None) != (on_replacement is None)
+            or (replacement_factory is not None and
+                (not callable(replacement_factory) or not callable(on_replacement)
+                 or on_invalid is not None))):
+        raise FastPrepareError('Replacement requires its own provenance callback')
     directory = metadata["directory"]
     chunks = metadata["chunks"]
     # Per-chunk hashes alone do not detect missing, repeated or substituted
@@ -228,12 +238,31 @@ def iter_prepared_chunks(metadata, *, audited_sources, params, workers=4,
             for index, (_body, _source, first, count) in enumerate(rows_of):
                 starts[index] = first
                 counts[index] = count
-            chunk = prepare_chunk(rows, starts, counts, params, strict=False, bodies=bodies)
-            kept = _usable(chunk, bodies, on_invalid=on_invalid)
+            chunk = prepare_chunk(rows, starts, counts, params, strict=False, bodies=bodies,
+                                  store_bounds=store_bounds)
+            rejected = []
+            invalid_handler = ((lambda body, code, result=rejected: result.append((body, code)))
+                               if replacement_factory is not None else on_invalid)
+            kept = _usable(chunk, bodies, on_invalid=invalid_handler)
             cells = cells_from_chunk(chunk, sources=sources, selected=kept)
+            if rejected:
+                for body, code in rejected:
+                    replacement, receipt = replacement_factory(body, code, sources[body])
+                    if (not isinstance(replacement, dict) or replacement.get('id') != body
+                            or not isinstance(receipt, dict)
+                            or receipt.get('source_sha256') != sources[body]
+                            or not isinstance(receipt.get('derived_sha256'), str)
+                            or len(receipt['derived_sha256']) != 64
+                            or any(c not in '0123456789abcdef' for c in receipt['derived_sha256'])
+                            or replacement.get('morphology_sha256') != receipt['derived_sha256']):
+                        raise FastPrepareError('Invalid replacement identity')
+                    on_replacement(body, code, receipt)
+                    cells.append(replacement)
+                by_id = {cell['id']: cell for cell in cells}
+                cells = [by_id[body] for body in bodies]
             if progress is not None:
                 progress(descriptor["name"], len(cells), len(rows))
-            yield [bodies[index] for index in kept], cells, chunk
+            yield [cell['id'] for cell in cells], cells, chunk
 
 
 def prepare_descriptor_chunk(directory, descriptor, *, position, audited_sources, params):
@@ -292,7 +321,9 @@ def cells_from_chunk(chunk, *, sources=None, selected=None):
                 "starts_um": chunk.starts_um[s0:s1],
                 "ends_um": chunk.ends_um[s0:s1],
                 "midpoints_um": chunk.midpoints_um[s0:s1],
+                "endpoint_radii_um": chunk.endpoint_radii_um[s0:s1],
                 "edge_node_ids": chunk.segment_ids[s0:s1],
+                "segment_index": chunk.segment_index[s0:s1],
                 "grid": None,
             },
             "field_current_na": chunk.field_current_na[s0:s1],

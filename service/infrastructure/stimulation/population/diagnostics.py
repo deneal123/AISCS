@@ -312,7 +312,7 @@ def registered_outgoing_fragment_diagnostics(
 
 
 def fragment_edge_schedule(diagnostics, *, max_distance_um, duration_ms,
-                           allow_partial_geometry=False):
+                           allow_partial_geometry=False, include_control_crossings=False):
     """Summarize local graph-pair events; this remains an unvalidated hypothesis.
 
     By default every graph pair must be within the explicit cutoff. With
@@ -321,7 +321,8 @@ def fragment_edge_schedule(diagnostics, *, max_distance_um, duration_ms,
     the schedule.
     """
     if (
-        not isinstance(diagnostics, dict)
+        type(include_control_crossings) is not bool
+        or not isinstance(diagnostics, dict)
         or not isinstance(diagnostics.get("candidates"), list)
         or type(duration_ms) is not int
         or duration_ms < 1
@@ -434,12 +435,16 @@ def fragment_edge_schedule(diagnostics, *, max_distance_um, duration_ms,
             continue
         ticks, control = row.get("stimulated_ticks_ms"), row.get("control_ticks_ms")
         if (
-            status not in {"no_crossing", "stimulus_only_crossing"}
-            or control != []
+            status not in {"no_crossing", "stimulus_only_crossing", "control_crossing"}
+            or (not include_control_crossings and control != [])
+            or not isinstance(control, list)
+            or any(type(tick) is not int or not 1 <= tick <= duration_ms for tick in control)
+            or any(a >= b for a, b in zip(control, control[1:], strict=False))
             or not isinstance(ticks, list)
             or any(type(tick) is not int or not 1 <= tick <= duration_ms for tick in ticks)
             or any(a >= b for a, b in zip(ticks, ticks[1:], strict=False))
-            or bool(ticks) != (status == "stimulus_only_crossing")
+            or (status == 'control_crossing') != bool(control)
+            or (not control and bool(ticks) != (status == "stimulus_only_crossing"))
         ):
             raise ValueError("Unresolved local threshold result")
         interval_keys = {'stimulated_crossing_intervals', 'control_crossing_intervals'}

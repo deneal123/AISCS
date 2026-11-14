@@ -10,6 +10,53 @@ from service.infrastructure.stimulation.population.pair_mapping import (
 )
 
 
+def test_pair_batch_reuses_verified_cache_and_rechecks_index(monkeypatch):
+    from service.infrastructure.connectome.pair_cache import VerifiedSynapsePairs
+    from service.infrastructure.connectome.synapse_index import SynapseBatchIndex
+
+    index = object.__new__(SynapseBatchIndex)
+    index.manifest = {'source_md5': 'verified'}
+    cache = object.__new__(VerifiedSynapsePairs)
+    calls = []
+    cache.verify = lambda current, md5: calls.append((current, md5))
+    cache.get = lambda source, target: [{'body_pre': source, 'body_post': target}]
+    cache.remember_many = lambda current, rows, md5: cache.verify(current, md5)
+    index.query_exact_pairs = lambda _: pytest.fail('cached pairs should not scan index')
+    module = 'service.infrastructure.stimulation.population.pair_mapping.'
+    monkeypatch.setattr(module + 'match_fragment_inputs', lambda diag, index, graph, target,
+        directories, *, _prefetched_page, **options: {
+            'source': _prefetched_page['pairs'][0]['body_pre'], 'target': target})
+    pairs = [(10, 20), (11, 20)]
+    result = match_fragment_inputs_batch(pairs, {10: {}, 11: {}}, index, None, [],
+                                         _pair_cache=cache)
+    assert result == [{'source': 10, 'target': 20}, {'source': 11, 'target': 20}]
+    assert calls == [(index, 'verified'), (index, 'verified')]
+    def reject_changed_index(current, md5):
+        calls.append((current, md5))
+        if len(calls) % 2 == 0:
+            raise ValueError('index changed')
+    calls.clear()
+    cache.verify = reject_changed_index
+    with pytest.raises(ValueError, match='index changed'):
+        match_fragment_inputs_batch(pairs, {10: {}, 11: {}}, index, None, [], _pair_cache=cache)
+
+
+def test_cache_batch_rolls_back_when_final_index_verification_fails():
+    from service.infrastructure.connectome.pair_cache import VerifiedSynapsePairs
+
+    cache = object.__new__(VerifiedSynapsePairs)
+    cache._pairs, cache._row_count, cache._max_rows = {}, 0, 100
+    calls = []
+    def verify(_index, _md5):
+        calls.append(1)
+        if len(calls) == 2:
+            raise ValueError('index changed')
+    cache.verify = verify
+    with pytest.raises(ValueError, match='index changed'):
+        cache.remember_many(None, [(10, 20, [{'body_pre': 10, 'body_post': 20}])], 'verified')
+    assert cache._pairs == {} and cache._row_count == 0
+
+
 def test_batched_pairs_match_single_reads_and_reject_wrong_partners(monkeypatch):
     graph = SimpleNamespace(posts=[0], provenance={'manifest_sha256': 'a' * 64})
     pairs = [(source, 50) for source in range(1, 22)]
@@ -49,6 +96,22 @@ def test_batched_pairs_match_single_reads_and_reject_wrong_partners(monkeypatch)
     index.calls.clear()
     batched = match_fragment_inputs_batch(pairs, diagnostics, index, graph, [], **options)
     assert batched == single and [len(partners) for partners in index.calls] == [20, 1]
+    monkeypatch.setattr('service.infrastructure.connectome.synapse_morphology.'
+                        '_nearest_prepared_segments', lambda *_a: {
+                            'child_node_ids': [9], 'segment_fractions': [.5],
+                            'centerline_distances_um': [.1]})
+    monkeypatch.setattr(module + 'read_skeleton', lambda *_a: pytest.fail('raw SWC used'))
+    target_calls = []
+    def prepared_target(target):
+        target_calls.append(target)
+        return {'body_id': str(target), 'sha256': 'b' * 64}, 'geometry'
+    cached = match_fragment_inputs_batch(pairs, diagnostics, index, graph, [],
+        _target_provider=prepared_target, **options)
+    assert cached == single
+    assert target_calls == [50]
+    with pytest.raises(ValueError, match='Missing prepared target'):
+        match_fragment_inputs_batch(pairs, diagnostics, index, graph, [],
+                                    _target_provider=lambda _: None, **options)
     index.bad = True
     with pytest.raises(ValueError, match='pair mismatch'):
         match_fragment_inputs_batch(pairs, diagnostics, index, graph, [], **options)
@@ -82,6 +145,22 @@ def test_matching_requires_exact_unique_indexed_pairs_and_target_geometry(monkey
                                                 tau1_ms=.2, tau2_ms=2, reversal_mv=0, max_events=10)
     assert scheduled['evidence'][0]['source_position_8nm'] == [1, 2, 3]
     assert scheduled['evidence'][0]['target_position_8nm'] == [4, 5, 6]
+    # A registered self-edge still has independently checked pre/post coordinates.
+    row['body_post'] = 10
+    source['partner_id'] = '10'
+    monkeypatch.setattr(module + 'outgoing', lambda *_a: {
+        'next_offset': None, 'items': [{'target_id': '10', 'synapse_count': 1}]})
+    monkeypatch.setattr(module + 'read_skeleton',
+                        lambda *_a: {'swc': 'verified', 'sha256': 'b' * 64, 'body_id': '10'})
+    self_mapping = match_fragment_inputs_batch([(10, 10)], {10: diagnostic}, index, graph, [],
+        max_source_distance_um=2, max_target_distance_um=2, duration_ms=3)[0]
+    assert self_mapping['target_id'] == self_mapping['source_id'] == 10
+    row['body_post'] = 20
+    source['partner_id'] = '20'
+    monkeypatch.setattr(module + 'outgoing', lambda *_a: {
+        'next_offset': None, 'items': [{'target_id': '20', 'synapse_count': 1}]})
+    monkeypatch.setattr(module + 'read_skeleton',
+                        lambda *_a: {'swc': 'verified', 'sha256': 'b' * 64, 'body_id': '20'})
     row['x_pre'] = 9
     with pytest.raises(ValueError, match='Ambiguous source coordinates'):
         match()

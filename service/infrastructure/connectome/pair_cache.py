@@ -32,8 +32,31 @@ class VerifiedSynapsePairs:
 
     def remember(self, index, source, target, rows, source_md5):
         self.verify(index, source_md5)
+        self._remember(source, target, rows)
+
+    def remember_many(self, index, observations, source_md5):
+        """Cache a verified batch with identity checks around the whole batch."""
+        self.verify(index, source_md5)
+        if not isinstance(observations, list):
+            raise ValueError('Invalid verified pair observations')
+        added, old_count = [], self._row_count
+        try:
+            for source, target, rows in observations:
+                key = (source, target)
+                existed = key in self._pairs
+                self._remember(source, target, rows)
+                if not existed and key in self._pairs:
+                    added.append(key)
+            self.verify(index, source_md5)
+        except Exception:
+            for key in added:
+                del self._pairs[key]
+            self._row_count = old_count
+            raise
+
+    def _remember(self, source, target, rows):
         if (type(source) is not int or source <= 0 or type(target) is not int or target <= 0
-                or source == target or not isinstance(rows, list) or not rows
+                or not isinstance(rows, list) or not rows
                 or any(not isinstance(row, dict) or row.get('body_pre') != source
                        or row.get('body_post') != target for row in rows)):
             raise ValueError('Invalid verified pair observations')

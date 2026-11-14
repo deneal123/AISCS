@@ -20,14 +20,15 @@ def suppressed_source_inputs(graph, source_ids, edge_events, network, *, duratio
     if any(pos >= graph.size or int(graph.ids[pos]) != body
            for pos, body in zip(source_positions, source_ids, strict=True)):
         raise ValueError('Unknown source')
-    positions = set(map(int, source_positions))
+    selected_positions = np.zeros(graph.size, dtype=np.bool_)
+    selected_positions[source_positions] = True
     selected_ids = set(source_ids)
     neurons = np.asarray(network.get('spike_neurons'))
     times = np.asarray(network.get('spike_times_ms'))
     if (neurons.ndim != 1 or neurons.dtype.kind not in 'iu' or times.shape != neurons.shape
             or not np.isfinite(times).all() or np.any(neurons < 0) or np.any(neurons >= graph.size)
             or np.any(times < 1) or np.any(times > duration_ms)
-            or np.any(times != np.floor(times)) or np.isin(neurons, source_positions).any()):
+            or np.any(times != np.floor(times)) or selected_positions[neurons].any()):
         raise ValueError('Invalid graph events')
     incoming = []
 
@@ -41,6 +42,7 @@ def suppressed_source_inputs(graph, source_ids, edge_events, network, *, duratio
         if len(incoming) > 1_000_000:
             raise ValueError('Source feedback exceeds event limit')
 
+    verified_edges = {}
     for event in edge_events:
         if not isinstance(event, dict) or set(event) != {'source_id', 'target_id', 'tick', 'count'}:
             raise ValueError('Invalid source edge event')
@@ -48,24 +50,31 @@ def suppressed_source_inputs(graph, source_ids, edge_events, network, *, duratio
             raise ValueError('Invalid source edge event')
         if event['target_id'] not in selected_ids:
             continue
-        pre = int(np.searchsorted(graph.ids, event['source_id']))
-        post = int(np.searchsorted(graph.ids, event['target_id']))
-        if (pre >= graph.size or int(graph.ids[pre]) != event['source_id']
-                or event['source_id'] not in selected_ids
+        if (event['source_id'] not in selected_ids
                 or not 1 <= event['tick'] <= duration_ms or event['count'] <= 0):
             raise ValueError('Invalid source edge event')
-        candidates = np.flatnonzero(graph.posts[graph.ptr[pre]:graph.ptr[pre + 1]] == post)
-        if (len(candidates) != 1
-                or event['count'] > int(graph.counts[graph.ptr[pre] + candidates[0]])):
+        pair = (event['source_id'], event['target_id'])
+        verified = verified_edges.get(pair)
+        if verified is None:
+            pre = int(np.searchsorted(graph.ids, pair[0]))
+            post = int(np.searchsorted(graph.ids, pair[1]))
+            candidates = np.flatnonzero(graph.posts[graph.ptr[pre]:graph.ptr[pre + 1]] == post)
+            if len(candidates) != 1:
+                raise ValueError('Source edge is not registered')
+            verified = (pre, post, int(graph.counts[graph.ptr[pre] + candidates[0]]))
+            verified_edges[pair] = verified
+        pre, post, max_count = verified
+        if event['count'] > max_count:
             raise ValueError('Source edge is not registered')
         append(pre, post, event['tick'], event['count'], 'physical-source-edge')
 
     for pre, tick in zip(neurons, times, strict=True):
         pre = int(pre)
-        for edge in range(int(graph.ptr[pre]), int(graph.ptr[pre + 1])):
-            post = int(graph.posts[edge])
-            if post in positions:
-                append(pre, post, int(tick), int(graph.counts[edge]), 'lif-network-spike')
+        start, end = int(graph.ptr[pre]), int(graph.ptr[pre + 1])
+        for relative in np.flatnonzero(selected_positions[graph.posts[start:end]]):
+            edge = start + int(relative)
+            append(pre, int(graph.posts[edge]), int(tick), int(graph.counts[edge]),
+                   'lif-network-spike')
     incoming.sort(key=lambda item: (item['delivery_tick_ms'], item['source_id'],
                                     item['target_id'], item['kind']))
     return {'events': incoming, 'delivery_delay_ms': 2,

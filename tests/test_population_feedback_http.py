@@ -1,9 +1,12 @@
 import hashlib
+import os
+import signal
 from types import SimpleNamespace
 from uuid import uuid4
 
 from fastapi.testclient import TestClient
 
+from service.infrastructure.execution import process as execution_process
 from service.infrastructure.execution.process import Executions
 from service.presentation.http import build_app
 from tests.test_replay_execution import FakeProcess
@@ -95,3 +98,52 @@ def test_acknowledging_feedback_removes_private_source(tmp_path):
                   'source_sha256': hashlib.sha256(data).hexdigest(), 'acknowledged': False})
     assert manager.acknowledge(str(eid), 'd' * 64)['acknowledged']
     assert not source.exists()
+
+
+def test_feedback_manager_uses_owned_group_and_cancels_it(tmp_path, monkeypatch):
+    class GroupProcess(FakeProcess):
+        pid = 123456
+
+    monkeypatch.setattr(execution_process, '_feedback_group_supported', lambda: True)
+    monkeypatch.setattr(execution_process, '_group_cancellation_supported', lambda _: True)
+    monkeypatch.setattr(execution_process.mp, 'get_context',
+                        lambda _: SimpleNamespace(Process=GroupProcess))
+    manager, eid, data = Executions(tmp_path), uuid4(), b'private source'
+    source = tmp_path / str(eid) / 'replay-input.bin'
+    source.parent.mkdir(parents=True)
+    source.write_bytes(data)
+    config = {**configuration(), 'source_package_sha256': hashlib.sha256(data).hexdigest()}
+    request = execution_process.PopulationFeedbackExecutionRequest.model_validate(
+        {'execution_id': str(eid), 'config': config})
+    manager.start_population_feedback(request)
+    child = manager.processes[str(eid)]
+    assert child.kwargs['target'] is execution_process.run_population_feedback_group
+    assert child.kwargs['daemon'] is False
+    assert child.kwargs['args'][-1] == os.getpid()
+    signals = []
+
+    def kill_group(pid, sig):
+        signals.append((pid, sig))
+        child.alive = False
+
+    monkeypatch.setattr(execution_process.os, 'getpgid', lambda pid: pid, raising=False)
+    monkeypatch.setattr(execution_process.os, 'killpg', kill_group, raising=False)
+    monkeypatch.setattr(signal, 'SIGKILL', 9, raising=False)
+    result = manager.cancel(str(eid))
+    assert result['status'] == 'cancelled'
+    assert signals == [(child.pid, signal.SIGTERM), (child.pid, signal.SIGKILL)]
+    assert source.exists()
+
+
+def test_feedback_group_checks_owner_before_creating_session(monkeypatch):
+    from service.infrastructure.execution import pool_lifecycle
+
+    calls = []
+    monkeypatch.setattr(pool_lifecycle, 'guard_pool_owner',
+                        lambda pid: calls.append(('guard', pid)))
+    monkeypatch.setattr(execution_process.os, 'setsid', lambda: calls.append(('setsid',)),
+                        raising=False)
+    monkeypatch.setattr(execution_process, 'run_population_feedback_child',
+                        lambda *args: calls.append(('run', *args)))
+    execution_process.run_population_feedback_group({'id': 1}, 'out', 'root', 123)
+    assert calls == [('guard', 123), ('setsid',), ('run', {'id': 1}, 'out', 'root')]

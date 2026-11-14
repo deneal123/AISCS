@@ -21,6 +21,7 @@ class WindowedPointRecorder:
         self.coefficients = {}
         self.signal = np.zeros(samples, dtype=np.float64)
         self.next_sample = 0
+        parts = []
         for body, geometry in geometries.items():
             if not isinstance(geometry, dict):
                 raise ValueError('Invalid recording geometry')
@@ -28,14 +29,24 @@ class WindowedPointRecorder:
             ends = np.asarray(geometry['ends_um'], dtype=float)
             radii = np.asarray(geometry['endpoint_radii_um'], dtype=float)
             midpoints = np.asarray(geometry['midpoints_um'], dtype=float)
-            validate_segment_clearance(starts, ends, [electrode_um, reference_um], clearance_um,
-                                       radii)
-            if (midpoints.shape != starts.shape or not np.isfinite(midpoints).all()
-                    or not np.allclose(midpoints, (starts + ends) / 2, rtol=1e-12, atol=1e-12)):
+            if (starts.ndim != 2 or starts.shape[1:] != (3,) or ends.shape != starts.shape
+                    or radii.shape != (len(starts), 2) or midpoints.shape != starts.shape):
                 raise ValueError('Invalid recording midpoints')
-            self.coefficients[body] = 1000 * bipolar_potential_mv(
-                midpoints, electrode_um, reference_um, 1., conductivity_s_m,
-                clearance_um=clearance_um)
+            parts.append((body, starts, ends, radii, midpoints))
+        starts, ends, radii, midpoints = (np.concatenate([row[i] for row in parts], axis=0)
+                                          for i in range(1, 5))
+        validate_segment_clearance(starts, ends, [electrode_um, reference_um], clearance_um,
+                                   radii)
+        if (not np.isfinite(midpoints).all()
+                or not np.allclose(midpoints, (starts + ends) / 2, rtol=1e-12, atol=1e-12)):
+            raise ValueError('Invalid recording midpoints')
+        coefficients = 1000 * bipolar_potential_mv(midpoints, electrode_um, reference_um, 1.,
+                                                    conductivity_s_m, clearance_um=clearance_um)
+        offset = 0
+        for body, start, *_ in parts:
+            end = offset + len(start)
+            self.coefficients[body] = coefficients[offset:end]
+            offset = end
 
     def accept(self, start, end, rows):
         if (type(start) is not int or type(end) is not int or start != self.next_sample

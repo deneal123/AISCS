@@ -5,11 +5,15 @@ from types import SimpleNamespace
 
 import pytest
 
-from service.application.feedback.schedule import population_feedback_schedule
-from service.infrastructure.stimulation.population.pair_mapping import match_fragment_inputs
-from service.infrastructure.stimulation.experimental_gpu.events import (
-    feedback_midpoint_events, feedback_refined_events,
+from service.application.feedback.schedule import (
+    combine_partial_feedback_schedules,
+    population_feedback_schedule,
 )
+from service.infrastructure.stimulation.experimental_gpu.events import (
+    feedback_midpoint_events,
+    feedback_refined_events,
+)
+from service.infrastructure.stimulation.population.pair_mapping import match_fragment_inputs
 
 
 def inputs():
@@ -36,9 +40,37 @@ def test_routes_all_targets_with_explicit_delay_and_outside_window():
     assert result['provenance_by_target'][20][0]['source_id'] == 10
 
 
+def test_partial_feedback_merge_is_independent_of_batch_order():
+    value = inputs()
+    first = population_feedback_schedule(**value, output_targets=[20])
+    second_value = deepcopy(value)
+    second_value['mappings'][0]['source_id'] = 30
+    for event in second_value['feedback']['events']:
+        event['source_id'] = 30
+    second = population_feedback_schedule(**second_value, output_targets=[20])
+    left = combine_partial_feedback_schedules([10, 20, 30], 'a' * 64, [first, second],
+                                              max_events=10)
+    right = combine_partial_feedback_schedules([10, 20, 30], 'a' * 64, [second, first],
+                                               max_events=10)
+    assert left == right
+    assert len(left['events_by_target'][20]) == 2
+    assert {row['source_id'] for row in left['provenance_by_target'][20]} == {10, 30}
+
+
+def test_registered_self_edge_routes_back_to_same_physical_cell():
+    value = inputs()
+    value['mappings'][0]['target_id'] = 10
+    for event in value['feedback']['events']:
+        event['target_id'] = 10
+    result = population_feedback_schedule(**value)
+    assert result['events_by_target'][10][0]['time_ms'] == 3
+    assert result['provenance_by_target'][10][0]['source_id'] == 10
+
+
 def test_experimental_gpu_mapping_preserves_schedule_and_rejects_identity_mismatch():
     result = population_feedback_schedule(**inputs())
-    gpu_events = feedback_midpoint_events(result, 20, 'b' * 64, [3, 9], duration_ms=6, nseg_per_edge=1)
+    gpu_events = feedback_midpoint_events(result, 20, 'b' * 64, [3, 9],
+                                          duration_ms=6, nseg_per_edge=1)
     assert gpu_events[0]['segment_index'] == 1
     assert gpu_events[0]['time_ms'] == 3
     assert gpu_events[0]['reversal_mv'] == -80

@@ -6,7 +6,7 @@ This is a geometric correspondence, not validated synaptic transmission.
 from __future__ import annotations
 
 import math
-from collections import Counter, defaultdict
+from collections import Counter, OrderedDict, defaultdict
 
 from service.infrastructure.connectome.forced_network import validate_crossing_intervals
 from service.infrastructure.connectome.fragment_mapping import map_fragment_candidates
@@ -22,7 +22,8 @@ from service.infrastructure.stimulation.population.diagnostics import fragment_e
 
 def match_fragment_inputs(diagnostics, index, graph, target_id, directories, *,
                           max_source_distance_um, max_target_distance_um, duration_ms,
-                          allow_partial=False, allow_partial_source=False, _prefetched_page=None):
+                          allow_partial=False, allow_partial_source=False, _prefetched_page=None,
+                          _prepared_target=None, include_control_crossings=False):
     """Match all pairs on one edge without inventing individual synapse identities."""
     if (type(target_id) is not int or target_id <= 0 or type(allow_partial) is not bool
             or type(allow_partial_source) is not bool):
@@ -31,11 +32,13 @@ def match_fragment_inputs(diagnostics, index, graph, target_id, directories, *,
             or not isinstance(max_target_distance_um, int | float)
             or not 0 <= max_target_distance_um < float('inf')):
         raise ValueError('Invalid target tolerance')
+    control_options = {'include_control_crossings': True} if include_control_crossings else {}
     schedule = fragment_edge_schedule(diagnostics, max_distance_um=max_source_distance_um,
                                       duration_ms=duration_ms,
-                                      allow_partial_geometry=allow_partial_source)
+                                      allow_partial_geometry=allow_partial_source,
+                                      **control_options)
     source_id = schedule['source_id']
-    if source_id == target_id or schedule['graph_sha256'] != graph.provenance['manifest_sha256']:
+    if schedule['graph_sha256'] != graph.provenance['manifest_sha256']:
         raise ValueError('Incompatible graph or source')
     edges = outgoing(graph, source_id, 0, len(graph.posts))
     if edges['next_offset'] is not None:
@@ -72,10 +75,16 @@ def match_fragment_inputs(diagnostics, index, graph, target_id, directories, *,
             raise ValueError('Conflicting duplicate source geometry or events')
         source_by_position[key] = source
     points = [[row[f'{axis}_post'] * .008 for axis in 'xyz'] for row in rows]
-    skeleton = read_skeleton(target_id, directories)
+    if _prepared_target is None:
+        skeleton = read_skeleton(target_id, directories)
+        mapping = map_fragment_candidates(skeleton['swc'], points)
+    else:
+        from service.infrastructure.connectome.synapse_morphology import _nearest_prepared_segments
+
+        skeleton, geometry = _prepared_target
+        mapping = _nearest_prepared_segments(geometry, points)
     if skeleton.get('body_id') != str(target_id):
         raise ValueError('Target morphology identity mismatch')
-    mapping = map_fragment_candidates(skeleton['swc'], points)
     candidates, unresolved, unresolved_source = [], [], []
     for row, child, fraction, distance in zip(
             rows, mapping['child_node_ids'], mapping['segment_fractions'],
@@ -122,7 +131,7 @@ def match_fragment_inputs(diagnostics, index, graph, target_id, directories, *,
 
 
 def match_fragment_inputs_batch(pairs, diagnostics, index, graph, directories, *,
-                                _pair_cache=None, **options):
+                                _pair_cache=None, _target_provider=None, **options):
     """Match requested pairs using bounded per-target index reads.
 
     Each pair is still checked independently against its graph edge, source
@@ -131,20 +140,52 @@ def match_fragment_inputs_batch(pairs, diagnostics, index, graph, directories, *
     """
     if (_pair_cache is not None and not isinstance(_pair_cache, VerifiedSynapsePairs)):
         raise ValueError('Invalid verified pair cache')
+    if _target_provider is not None and not callable(_target_provider):
+        raise ValueError('Invalid prepared target provider')
+
+    prepared_targets = OrderedDict()
+
+    def target_options(target):
+        if _target_provider is None:
+            return {}
+        if target not in prepared_targets:
+            prepared = _target_provider(target)
+            if prepared is None:
+                raise ValueError('Missing prepared target geometry')
+            prepared_targets[target] = prepared
+            if len(prepared_targets) > 16:
+                prepared_targets.popitem(last=False)
+        else:
+            prepared_targets.move_to_end(target)
+        return {'_prepared_target': prepared_targets[target]}
     if (not isinstance(pairs, list)
             or any(not isinstance(pair, tuple) or len(pair) != 2
                    or any(type(value) is not int or value <= 0 for value in pair)
-                   or pair[0] == pair[1] for pair in pairs)
+                   for pair in pairs)
             or len(set(pairs)) != len(pairs)
             or not isinstance(diagnostics, dict)
             or any(source not in diagnostics for source, _target in pairs)):
         raise ValueError('Invalid fragment pair batch')
     matched = {}
-    remaining = pairs
-    if isinstance(index, SynapseBatchIndex) and pairs:
+    remaining = []
+    observations = []
+    if _pair_cache is not None:
+        _pair_cache.verify(index, index.manifest['source_md5'])
+    for source, target in pairs:
+        rows = _pair_cache.get(source, target) if _pair_cache is not None else None
+        if rows is None:
+            remaining.append((source, target))
+            continue
+        page = {'pairs': rows, 'truncated': False, 'source_md5': index.manifest['source_md5'],
+                'total': len(rows), 'returned': len(rows)}
+        matched[(source, target)] = match_fragment_inputs(
+            diagnostics[source], index, graph, target, directories, _prefetched_page=page,
+            **target_options(target), **options)
+    if isinstance(index, SynapseBatchIndex) and remaining:
+        uncached = remaining
         remaining = []
-        for start in range(0, len(pairs), 128):
-            chunk = pairs[start:start + 128]
+        for start in range(0, len(uncached), 128):
+            chunk = uncached[start:start + 128]
             try:
                 indexed = index.query_exact_pairs(chunk)
             except PairQueryLimitExceeded:
@@ -157,9 +198,9 @@ def match_fragment_inputs_batch(pairs, diagnostics, index, graph, directories, *
                         'total': len(rows), 'returned': len(rows)}
                 matched[(source, target)] = match_fragment_inputs(
                     diagnostics[source], index, graph, target, directories,
-                    _prefetched_page=page, **options)
+                    _prefetched_page=page, **target_options(target), **options)
                 if _pair_cache is not None:
-                    _pair_cache.remember(index, source, target, rows, page['source_md5'])
+                    observations.append((source, target, rows))
     by_target = defaultdict(list)
     for source, target in remaining:
         by_target[target].append(source)
@@ -188,9 +229,11 @@ def match_fragment_inputs_batch(pairs, diagnostics, index, graph, directories, *
                           'total': len(rows), 'returned': len(rows)}
                 matched[(source, target)] = match_fragment_inputs(
                     diagnostics[source], index, graph, target, directories,
-                    _prefetched_page=single, **options)
+                    _prefetched_page=single, **target_options(target), **options)
                 if _pair_cache is not None:
-                    _pair_cache.remember(index, source, target, rows, page.get('source_md5'))
+                    observations.append((source, target, rows))
+    if _pair_cache is not None:
+        _pair_cache.remember_many(index, observations, index.manifest['source_md5'])
     return [matched[pair] for pair in pairs]
 
 

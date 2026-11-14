@@ -69,3 +69,35 @@ def incoming(graph, body_id: int, offset: int, limit: int) -> dict:
         ],
         "limitations": "Sign is derived from predicted transmitter, without receptor context.",
     }
+
+
+def incoming_edge_indices_many(graph, body_ids, *, block_size=1_000_000):
+    """Locate incoming CSR edge indices for several targets in one graph scan.
+
+    Indices are candidates into the registered graph, not synapse coordinates.
+    Results preserve source CSR order, matching ``incoming``. Callers should
+    bound the target set and account for the returned edge-array memory.
+    """
+    if (not isinstance(body_ids, (list, tuple)) or not body_ids
+            or any(type(body) is not int or body <= 0 for body in body_ids)
+            or len(set(body_ids)) != len(body_ids)
+            or type(block_size) is not int or block_size < 1):
+        raise ValueError('Invalid incoming target batch')
+    positions = np.searchsorted(graph.ids, body_ids)
+    if any(pos >= len(graph.ids) or int(graph.ids[pos]) != body
+           for pos, body in zip(positions, body_ids, strict=True)):
+        raise KeyError('Neuron is not in the registered graph')
+    selected = np.zeros(len(graph.ids), dtype=np.bool_)
+    selected[positions] = True
+    chunks = {body: [] for body in body_ids}
+    by_position = {int(pos): body for pos, body in zip(positions, body_ids, strict=True)}
+    for start in range(0, len(graph.posts), block_size):
+        posts = graph.posts[start:start + block_size]
+        matches = np.flatnonzero(selected[posts])
+        if not len(matches):
+            continue
+        targets = posts[matches]
+        for target in np.unique(targets):
+            chunks[by_position[int(target)]].append(matches[targets == target] + start)
+    return {body: (np.concatenate(parts) if parts else np.empty(0, dtype=np.int64))
+            for body, parts in chunks.items()}

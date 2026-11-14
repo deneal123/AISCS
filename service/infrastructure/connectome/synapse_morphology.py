@@ -34,6 +34,71 @@ def _prepare_segments(swc: str):
     return child_ids, starts, radii, vector, length2
 
 
+def prepare_cached_segments(records):
+    """Prepare native-frame cable candidates from an authenticated cache cell.
+
+    The caller must authenticate the cache manifest, source inventory and chunk.
+    A geometric match is not proof of a functional synapse.
+    """
+    from service.infrastructure.stimulation.geometry_cache.chunk import _RECORD
+
+    if (not isinstance(records, np.ndarray) or records.dtype != _RECORD
+            or records.ndim != 1 or not len(records)):
+        raise ValueError('Invalid cached morphology records')
+    ids, parents = records['id'], records['parent']
+    points = np.column_stack([records[axis] for axis in ('x', 'y', 'z')])
+    radii = records['radius']
+    if (np.any(ids <= 0) or len(np.unique(ids)) != len(ids)
+            or np.any(parents < -1) or np.any(parents >= len(ids))
+            or not np.isfinite(points).all() or not np.isfinite(radii).all()
+            or np.any(radii <= 0)):
+        raise ValueError('Invalid cached morphology geometry')
+    children = np.flatnonzero(parents >= 0)
+    if not len(children) or np.any(parents[children] == children):
+        raise ValueError('Invalid cached morphology segments')
+    children = children[np.argsort(ids[children])]
+    parent_rows = parents[children]
+    starts = points[parent_rows]
+    vectors = points[children] - starts
+    lengths2 = np.einsum('ij,ij->i', vectors, vectors)
+    if not np.isfinite(lengths2).all() or np.any(lengths2 <= 0):
+        raise ValueError('Cached morphology contains zero-length segments')
+    return (ids[children].astype(int).tolist(), starts,
+            np.column_stack((radii[parent_rows], radii[children])), vectors, lengths2)
+
+
+def prepare_cached_morphology(entry):
+    """Adapt an authenticated cache entry to registered synapse-page mapping.
+
+    The entry must come from the verified cache reader; this function does not
+    independently authenticate its source snapshot or chunk.
+    """
+    import re
+
+    from service.infrastructure.stimulation.geometry_cache.chunk import _RECORD
+
+    try:
+        skeleton = entry['skeleton']
+        ids, points, parents, radii = (np.asarray(value) for value in entry['geometry'])
+        body, source = skeleton['body_id'], skeleton['sha256']
+    except (KeyError, TypeError, ValueError) as exc:
+        raise ValueError('Invalid cached morphology entry') from exc
+    if (not isinstance(body, str) or not re.fullmatch(r'[1-9][0-9]*', body)
+            or not isinstance(source, str) or not re.fullmatch(r'[a-f0-9]{64}', source)
+            or ids.ndim != 1 or ids.dtype.kind not in 'iu'
+            or parents.shape != ids.shape or parents.dtype.kind != 'i'
+            or points.shape != (len(ids), 3) or radii.shape != ids.shape
+            or points.dtype != np.float64 or radii.dtype != np.float64
+            or np.any(ids <= 0) or np.any(ids > np.iinfo(np.int32).max)
+            or np.any(parents < -1) or np.any(parents > np.iinfo(np.int32).max)):
+        raise ValueError('Invalid cached morphology entry')
+    records = np.empty(len(ids), dtype=_RECORD)
+    for axis, name in enumerate(('x', 'y', 'z')):
+        records[name] = points[:, axis]
+    records['id'], records['parent'], records['radius'] = ids, parents, radii
+    return {'body_id': body, 'sha256': source}, prepare_cached_segments(records)
+
+
 def _nearest_prepared_segments(prepared, points_um, *, point_batch_size=16):
     if type(point_batch_size) is not int or not 1 <= point_batch_size <= 128:
         raise ValueError("Invalid point batch size")
@@ -104,7 +169,7 @@ def prepare_registered_morphology(body_id, directories):
 
 def registered_page_candidates(
     index, graph, body_id, direction, offset, limit, directories, *, candidate_partner_ids=None,
-    prepared=None,
+    prepared=None, use_spatial_index=False,
 ):
     """Map one fully checked page of graph synapses to a verified source skeleton.
 
@@ -114,6 +179,8 @@ def registered_page_candidates(
     """
     from service.infrastructure.connectome.synapse_index import registered_page_pairs
 
+    if type(use_spatial_index) is not bool:
+        raise ValueError('Invalid spatial index option')
     page = registered_page_pairs(index, graph, body_id, direction, offset, limit, all_pairs=True)
     if page["truncated"] or not page["counts_match"]:
         raise ValueError("Synapse page is truncated or inconsistent with registered graph")
@@ -137,7 +204,12 @@ def registered_page_candidates(
         [row[f"{axis}_{suffix}"] for axis in "xyz"] for row in selected_rows
     ]
     points = np.asarray(source_coordinates, dtype=float).reshape(-1, 3) * .008
-    mapping = _nearest_prepared_segments(geometry, points)
+    if use_spatial_index:
+        from service.infrastructure.connectome.cable_spatial_index import CableSpatialIndex
+
+        mapping = CableSpatialIndex(geometry).query(points)
+    else:
+        mapping = _nearest_prepared_segments(geometry, points)
     candidates = [
         {"partner_id": str(row[partner_key]), "source_position_8nm": position,
          **({"presynaptic_position_8nm": [row[f"{axis}_pre"] for axis in "xyz"]}
@@ -206,21 +278,40 @@ def merge_candidate_pages(pages, *, require_complete=True):
 
 def registered_incoming_candidates_single_pass(
     index, graph, body_id, directories, *, candidate_partner_ids, progress=None,
+    use_spatial_index=False, prepared=None, _incoming_edges=None, _incoming_scan=None,
 ):
     """Verify all incoming edge counts in one source scan and map active pairs."""
     from service.infrastructure.connectome.neighbors import incoming
 
-    if (not isinstance(candidate_partner_ids, set)
+    if (type(use_spatial_index) is not bool or not isinstance(candidate_partner_ids, set)
             or any(type(value) is not int or value <= 0 for value in candidate_partner_ids)):
         raise ValueError("Invalid candidate partner selection")
     if index.manifest["ids_sha256"] != graph.provenance["array_sha256"]["ids.npy"]:
         raise ValueError("Synapse index and graph neuron IDs differ")
-    edges = incoming(graph, body_id, 0, len(graph.posts))["items"]
+    if _incoming_edges is None:
+        edges = incoming(graph, body_id, 0, len(graph.posts))["items"]
+    else:
+        # Internal result of a single verified graph scan in the caller.
+        edge_indices = np.asarray(_incoming_edges)
+        if (edge_indices.ndim != 1 or edge_indices.dtype.kind not in 'iu'
+                or np.any(edge_indices < 0) or np.any(edge_indices >= len(graph.posts))
+                or np.any(edge_indices[1:] <= edge_indices[:-1])):
+            raise ValueError('Invalid incoming edge indices')
+        target = int(np.searchsorted(graph.ids, body_id))
+        if (target >= len(graph.ids) or int(graph.ids[target]) != body_id
+                or np.any(graph.posts[edge_indices] != target)):
+            raise ValueError('Incoming edge target mismatch')
+        source_indices = np.searchsorted(graph.ptr, edge_indices, side='right') - 1
+        edges = [{'source_id': str(int(graph.ids[source])),
+                  'synapse_count': int(graph.counts[edge])}
+                 for source, edge in zip(source_indices, edge_indices, strict=True)]
     partners = [int(item["source_id"]) for item in edges]
-    scan = index.scan_incoming(body_id, partners, candidate_partner_ids)
+    scan = (index.scan_incoming(body_id, partners, candidate_partner_ids)
+            if _incoming_scan is None else _incoming_scan)
     if any(scan["counts"][int(edge["source_id"])] != edge["synapse_count"] for edge in edges):
         raise ValueError("Synapse page is truncated or inconsistent with registered graph")
-    skeleton, geometry = prepare_registered_morphology(body_id, directories)
+    skeleton, geometry = (prepared if prepared is not None
+                          else prepare_registered_morphology(body_id, directories))
     if skeleton["body_id"] != str(body_id):
         raise ValueError("Prepared morphology does not match neuron")
     page_count = max(1, (len(edges) + 19) // 20)
@@ -231,7 +322,14 @@ def registered_incoming_candidates_single_pass(
     rows = [row for bucket in buckets for row in bucket]
     positions = [[row[f"{axis}_post"] for axis in "xyz"] for row in rows]
     points = np.asarray(positions, dtype=float).reshape(-1, 3) * .008
-    mapped = _nearest_prepared_segments(geometry, points)
+    # Small morphologies are faster with the vectorised exhaustive search;
+    # avoid building a tree when its fixed query overhead dominates.
+    if use_spatial_index and len(points) and len(geometry[0]) >= 2000:
+        from .cable_spatial_index import CableSpatialIndex
+
+        mapped = CableSpatialIndex(geometry).query(points)
+    else:
+        mapped = _nearest_prepared_segments(geometry, points)
     candidates = [
         {"partner_id": str(row["body_pre"]), "source_position_8nm": position,
          **({"presynaptic_position_8nm": [row[f"{axis}_pre"] for axis in "xyz"]}

@@ -17,7 +17,7 @@ def replay_windowed_sources(requests, directories, simulation, diagnostics, *,
                             window_steps, max_padding_ratio=2., allow_table_clamp=False,
                             progress=None, packing_cache=None, geometry_cache=None,
                             device_reduction=False, timing_sink=None, preparation_workers=1,
-                            preparation_executor=None):
+                            preparation_executor=None, cell_major=False):
     """Replay groups against a fixed schedule; the caller verifies graph identity.
 
     Retains only each group's output and final time series. The cell count and
@@ -29,6 +29,7 @@ def replay_windowed_sources(requests, directories, simulation, diagnostics, *,
             or (progress is not None and not callable(progress))
             or (timing_sink is not None and not callable(timing_sink))
             or type(device_reduction) is not bool
+            or type(cell_major) is not bool or (cell_major and not device_reduction)
             or type(preparation_workers) is not int or not 1 <= preparation_workers <= 8
             or (preparation_workers > 1 and geometry_cache is not None)
             or (preparation_executor is not None and preparation_workers == 1)
@@ -52,7 +53,7 @@ def replay_windowed_sources(requests, directories, simulation, diagnostics, *,
                 allow_table_clamp=allow_table_clamp, progress=progress, packing_cache=packing_cache,
                 geometry_cache=geometry_cache, device_reduction=device_reduction,
                 timing_sink=timing_sink, preparation_workers=preparation_workers,
-                preparation_executor=pool)
+                preparation_executor=pool, cell_major=cell_major)
     dt = simulation.get('dt_ms')
     if (type(dt) not in (int, float) or dt not in (.025, .05)
             or type(duration_ms) not in (int, float) or duration_ms <= 0
@@ -98,7 +99,8 @@ def replay_windowed_sources(requests, directories, simulation, diagnostics, *,
             max_cells=max_cells, output_budget_bytes=output_budget_bytes, window_steps=window_steps,
             max_padding_ratio=max_padding_ratio, dt_ms=dt, allow_table_clamp=allow_table_clamp,
             max_source_distance_um=max_source_distance_um, packing_cache=packing_cache,
-            device_reduction=device_reduction, timing_sink=timing_sink)
+            device_reduction=device_reduction, timing_sink=timing_sink,
+            **({'cell_major': True} if cell_major else {}))
         if list(result['sources']) != group_ids:
             raise ValueError('Incomplete or reordered window replay group')
         if recording is None:

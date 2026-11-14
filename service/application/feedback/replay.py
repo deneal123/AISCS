@@ -40,7 +40,8 @@ def replay_population_feedback(config, directories, schedule, morphology_hashes,
                                experimental_gpu_window_steps=None, windowed_diagnostics=None,
                                windowed_output_sink=None, gpu_packing_cache=None,
                                experimental_gpu_device_reduction=False,
-                               experimental_gpu_preparation_workers=1):
+                               experimental_gpu_preparation_workers=1,
+                               experimental_gpu_cell_major=False):
     if not isinstance(config, FragmentPopulationConfig):
         raise ValueError('Validated population configuration required')
     if cell_progress is not None and not callable(cell_progress):
@@ -68,7 +69,9 @@ def replay_population_feedback(config, directories, schedule, morphology_hashes,
     elif (experimental_gpu_output_budget_bytes is not None or experimental_gpu_allow_table_clamp
           or experimental_gpu_stream_cells is not None):
         raise ValueError('GPU output budget requires CUDA replay')
-    if type(experimental_gpu_device_reduction) is not bool:
+    if (type(experimental_gpu_device_reduction) is not bool
+            or type(experimental_gpu_cell_major) is not bool
+            or (experimental_gpu_cell_major and not experimental_gpu_device_reduction)):
         raise ValueError('Invalid GPU reduction option')
     if (type(experimental_gpu_preparation_workers) is not int
             or not 1 <= experimental_gpu_preparation_workers <= 8
@@ -202,7 +205,8 @@ def replay_population_feedback(config, directories, schedule, morphology_hashes,
             allow_table_clamp=experimental_gpu_allow_table_clamp,
             progress=cell_progress, packing_cache=gpu_packing_cache,
             geometry_cache=gpu_geometry_cache, device_reduction=experimental_gpu_device_reduction,
-            preparation_workers=experimental_gpu_preparation_workers)
+            preparation_workers=experimental_gpu_preparation_workers,
+            **({'cell_major': True} if experimental_gpu_cell_major else {}))
         if list(windowed['sources']) != ids:
             raise ValueError('Incomplete windowed source output')
         if windowed_output_sink is not None:

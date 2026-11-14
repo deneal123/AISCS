@@ -311,6 +311,7 @@ def _prepare_kernel(
     starts_out,
     ends_out,
     mid_out,
+    radii_out,
     field_out,
     fcur_out,
     parents_out,
@@ -529,6 +530,8 @@ def _prepare_kernel(
                 segindex_out[out] = segment
                 segid_out[out] = idcol[row]
                 if store_bounds != 0:
+                    radii_out[out, 0] = radius0
+                    radii_out[out, 1] = radius1
                     starts_out[out, 0] = sx
                     starts_out[out, 1] = sy
                     starts_out[out, 2] = sz
@@ -866,6 +869,7 @@ class PreparedChunk:
     starts_um: np.ndarray
     ends_um: np.ndarray
     midpoints_um: np.ndarray
+    endpoint_radii_um: np.ndarray
     junction_segments: np.ndarray
     junction_conductances: np.ndarray
     junction_voltage_mv: np.ndarray
@@ -1099,6 +1103,7 @@ def _allocate(total_segments, total_nodes, total_junctions, ncell, store_bounds)
         np.zeros((total_segments, 3), dtype=np.float64) if store_bounds else np.zeros((0, 3)),
         np.zeros((total_segments, 3), dtype=np.float64) if store_bounds else np.zeros((0, 3)),
         np.zeros((total_segments, 3), dtype=np.float64),      # midpoints
+        np.zeros((total_segments, 2), dtype=np.float64) if store_bounds else np.zeros((0, 2)),
         np.zeros(total_segments, dtype=np.float64),           # field_mv
         np.zeros(total_segments, dtype=np.float64),           # field_current_na
         np.zeros(total_nodes, dtype=np.int64),                # parents
@@ -1127,7 +1132,7 @@ def _allocate(total_segments, total_nodes, total_junctions, ncell, store_bounds)
         "cell_arrays": cell_arrays,
         "cell_out": np.zeros(ncell, dtype=np.int64),
         "names": (
-            "area starts ends midpoints field_mv field_current_na parents conductances "
+            "area starts ends midpoints radii field_mv field_current_na parents conductances "
             "segment_nodes segment_ids segment_index parent_resistance child_resistance "
             "edge_rows junction_offsets junction_segments junction_conductances "
             "junction_voltage_mv"
@@ -1177,6 +1182,7 @@ def _assemble(rows, starts, counts, seg_base, node_base, junc_base, err, block, 
         starts_um=arrays["starts"],
         ends_um=arrays["ends"],
         midpoints_um=arrays["midpoints"],
+        endpoint_radii_um=arrays["radii"],
         junction_segments=arrays["junction_segments"],
         junction_conductances=arrays["junction_conductances"],
         junction_voltage_mv=arrays["junction_voltage_mv"],

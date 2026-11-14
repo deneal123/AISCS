@@ -46,8 +46,25 @@ def test_common_mode_voltage_does_not_contribute():
     assert abs(weights @ np.full(4, -65.0)) < 1e-12
 
 
-@pytest.mark.skipif(os.environ.get('NUMBA_ENABLE_CUDASIM') != '1',
-                    reason='Explicit CPU CUDA-simulator check')
+def test_centered_projection_matches_direct_currents_with_large_common_voltage():
+    parent = np.array([-1, 0, 0, 1, 1, 3])
+    conductance = np.array([0., .2, .4, .1, .3, .8])
+    segments = np.array([1, 2, 4, 5])
+    coefficients = np.array([.8, -1.1, .2, 1.4])
+    field = np.array([.01, -.02, .03, .04])
+    voltage = np.array([-65., -64.99, -65.03, -65.01, -65.04, -64.98])
+    weights, factor = nodal_recording_projection(parent, conductance, segments,
+                                                 coefficients, field)
+    for stimulus in (0., 1.):
+        reference = _direct(parent, conductance, segments, coefficients, field,
+                            voltage, stimulus)
+        centered = weights @ (voltage - voltage[0]) + factor * stimulus
+        np.testing.assert_allclose(centered, reference, atol=1e-14, rtol=1e-12)
+
+
+@pytest.mark.skipif(os.environ.get('NUMBA_ENABLE_CUDASIM') != '1'
+                    and os.environ.get('AISCS_TEST_CUDA') != '1',
+                    reason='Explicit CUDA or CPU CUDA-simulator check')
 def test_projection_matches_recorded_currents_in_cuda_simulator():
     from service.infrastructure.stimulation.experimental_gpu.batch_solver import (
         solve_prepared_batch,
@@ -77,8 +94,9 @@ def test_projection_matches_recorded_currents_in_cuda_simulator():
                                atol=1e-12, rtol=1e-10)
 
 
-@pytest.mark.skipif(os.environ.get('NUMBA_ENABLE_CUDASIM') != '1',
-                    reason='Explicit CPU CUDA-simulator check')
+@pytest.mark.skipif(os.environ.get('NUMBA_ENABLE_CUDASIM') != '1'
+                    and os.environ.get('AISCS_TEST_CUDA') != '1',
+                    reason='Explicit CUDA or CPU CUDA-simulator check')
 def test_device_projection_and_selected_nodes_in_cuda_simulator():
     from numba import cuda
 
@@ -109,9 +127,14 @@ def test_device_projection_and_selected_nodes_in_cuda_simulator():
     assert np.isnan(selected[1, 1, 0])
 
 
-@pytest.mark.skipif(os.environ.get('NUMBA_ENABLE_CUDASIM') != '1',
-                    reason='Explicit CPU CUDA-simulator check')
-def test_cell_major_reduced_windows_match_generic_in_cuda_simulator():
+@pytest.mark.skipif(os.environ.get('NUMBA_ENABLE_CUDASIM') != '1'
+                    and os.environ.get('AISCS_TEST_CUDA') != '1',
+                    reason='Explicit CUDA or CPU CUDA-simulator check')
+@pytest.mark.parametrize('with_events', [False, True])
+@pytest.mark.parametrize('kernel', ['block', 'warp'])
+def test_cell_major_reduced_windows_match_generic_in_cuda_simulator(with_events, kernel):
+    if kernel == 'warp' and os.environ.get('NUMBA_ENABLE_CUDASIM') == '1':
+        pytest.skip('CUDA simulator does not implement warp synchronization')
     from service.infrastructure.stimulation.experimental_gpu.batch_solver import (
         solve_prepared_batch,
     )
@@ -121,6 +144,13 @@ def test_cell_major_reduced_windows_match_generic_in_cuda_simulator():
             'grid': [(1, 0, 1), (2, 0, 1)]}, 'field_current_na': [0.012, -0.008],
             'events': [], 'initial_voltage_mv': -65., 'initial_gates': [0.5, 0.5, 0.5]}
     other = dict(cell, id=2, field_current_na=[-0.004, 0.006])
+    if with_events:
+        cell['events'] = [{'child_node_id': 1, 'position': 0.5, 'time_ms': .025,
+                           'weight_us': .01, 'tau1_ms': .1, 'tau2_ms': 1.,
+                           'reversal_mv': 0.}]
+        other['events'] = [{'child_node_id': 2, 'position': 0.5, 'time_ms': .05,
+                            'weight_us': .02, 'tau1_ms': .1, 'tau2_ms': 1.,
+                            'reversal_mv': -80.}]
     table = np.tile([0.5, 1., 0.5, 1., 0.5, 1.], (201, 1))
     stimulus = [0., 1., 0.5, 0., 0.]
     coeff = {1: [1.7, -0.9], 2: [-0.3, 0.2]}
@@ -137,7 +167,8 @@ def test_cell_major_reduced_windows_match_generic_in_cuda_simulator():
                   recording_coefficients=coeff, selected_indices=selection)
     reference = solve_prepared_batch(**common, device_window_sink=sink(standard))
     actual = solve_prepared_batch(**common, device_window_sink=sink(accelerated),
-                                  cell_major=True, block_cell_segments=1,
+                                  cell_major=True,
+                                  block_cell_segments=1 if kernel == 'block' else 10,
                                   cell_major_block_threads=32)
     assert [(a, b) for a, b, _ in standard] == [(0, 3), (3, 5)]
     assert [(a, b) for a, b, _ in accelerated] == [(0, 3), (3, 5)]
@@ -149,6 +180,44 @@ def test_cell_major_reduced_windows_match_generic_in_cuda_simulator():
                                        atol=1e-11)
     for left, right in zip(reference['final_voltage_mv'], actual['final_voltage_mv'], strict=True):
         np.testing.assert_allclose(right, left, atol=1e-11)
+
+
+@pytest.mark.skipif(os.environ.get('AISCS_TEST_CUDA') != '1',
+                    reason='Explicit physical CUDA check')
+@pytest.mark.parametrize('warps', [2, 4, 8])
+def test_fused_recording_handles_partial_multiwarp_blocks_on_gpu(warps):
+    from service.infrastructure.stimulation.experimental_gpu.batch_solver import (
+        solve_prepared_batch,
+    )
+
+    geometry = {'parents': [-1, 0, 0], 'conductances': [0., .5, .8],
+                'segment_nodes': [1, 2], 'area': [1., 1.], 'grid': [(1, 0, 1), (2, 0, 1)]}
+    cells = [{'id': body, 'geometry': geometry, 'field_current_na': [.001 * body, -.002],
+              'events': [], 'initial_voltage_mv': -65., 'initial_gates': [.5, .5, .5]}
+             for body in range(1, 6)]
+    coeff = {body: [0.2 * body, -0.3] for body in range(1, 6)}
+    selection = {body: [1, 0] if body % 2 else [0] for body in range(1, 6)}
+    standard, fused = [], []
+
+    def sink(target):
+        def accept(start, end, rows):
+            target.append((start, end, rows))
+        return accept
+
+    common = dict(cells=cells, stimulus_midpoint=[0., 1., .5, 0., 0.],
+                  rate_table=np.tile([.5, 1., .5, 1., .5, 1.], (201, 1)),
+                  output_budget_bytes=1024 * 1024, window_steps=2,
+                  recording_coefficients=coeff, selected_indices=selection)
+    solve_prepared_batch(**common, device_window_sink=sink(standard))
+    solve_prepared_batch(**common, device_window_sink=sink(fused), cell_major=True,
+                         cell_warps=warps)
+    assert [(start, end) for start, end, _ in fused] == [(0, 3), (3, 5)]
+    for (_, _, expected), (_, _, actual) in zip(standard, fused, strict=True):
+        assert [row['id'] for row in actual] == list(range(1, 6))
+        for left, right in zip(expected, actual, strict=True):
+            np.testing.assert_allclose(right['neural_uv'], left['neural_uv'], atol=1e-11)
+            np.testing.assert_allclose(right['selected_voltage_mv'], left['selected_voltage_mv'],
+                                       atol=1e-11)
 
 
 @pytest.mark.parametrize('parents,conductance,segments,coefficient,field', [

@@ -36,3 +36,19 @@ def test_window_rejects_invalid_current_without_advancing():
     with pytest.raises(ValueError, match='currents'):
         recorder.accept(0, 1, [{'id': 1, 'membrane_current_na': [[float('nan')]]}])
     assert recorder.next_sample == 0
+
+
+def test_batched_coefficients_match_individual_and_validate_every_cell():
+    geometries = {1: geometry(0.), 2: geometry(2.), 3: geometry(4.)}
+    e1, ref = [10., 0., 0.], [20., 0., 0.]
+    recorder = WindowedPointRecorder(geometries, e1, ref, .3, clearance_um=1., samples=2)
+    for body, g in geometries.items():
+        expected = 1000 * bipolar_potential_mv(g['midpoints_um'], e1, ref, 1., .3,
+                                                clearance_um=1.)
+        np.testing.assert_array_equal(recorder.coefficients[body], expected)
+    geometries[2] = geometry(0.)
+    geometries[2]['starts_um'][0] = [9., 0., 0.]
+    geometries[2]['ends_um'][0] = [11., 0., 0.]
+    geometries[2]['midpoints_um'][0] = [10., 0., 0.]
+    with pytest.raises(ValueError, match='intersects'):
+        WindowedPointRecorder(geometries, e1, ref, .3, clearance_um=1., samples=2)

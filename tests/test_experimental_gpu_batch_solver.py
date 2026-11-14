@@ -110,6 +110,15 @@ def test_mixed_initial_states_fall_back_to_generic_packing(inputs, monkeypatch,
         solve_prepared_batch(**inputs, cell_major=True, record_traces=False, **options)
 
 
+def test_required_cell_major_rejects_mixed_states_before_generic_allocation(inputs, monkeypatch):
+    inputs['cells'].append(dict(inputs['cells'][0], id=2, initial_voltage_mv=-60.0))
+    monkeypatch.setattr(batch_solver, 'pack_trees',
+                        lambda *_: pytest.fail('generic fallback must not be reached'))
+    with pytest.raises(ValueError, match='Cell-major solver required'):
+        solve_prepared_batch(**inputs, cell_major=True, record_traces=False,
+                             require_cell_major=True)
+
+
 @pytest.mark.skipif(os.environ.get('NUMBA_ENABLE_CUDASIM') != '1',
                     reason='Explicit CPU CUDA-simulator check')
 def test_mixed_initial_states_match_generic_solver_in_cuda_simulator(inputs):

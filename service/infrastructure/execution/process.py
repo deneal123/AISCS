@@ -9,6 +9,7 @@ import os
 import re
 import shutil
 import signal
+import sys
 import tempfile
 import threading
 from pathlib import Path
@@ -18,6 +19,7 @@ from uuid import UUID
 from service.contracts import ExecutionRequest, SimulationConfig
 from service.domain.contracts.field.graph import FieldGraphExecutionRequest
 from service.domain.contracts.field.proxy import FieldProxyExecutionRequest
+from service.domain.contracts.population.bulk_recording import BulkRecordingExecutionRequest
 from service.domain.contracts.population.feedback import PopulationFeedbackExecutionRequest
 from service.domain.contracts.population.fragment import FragmentPopulationExecutionRequest
 from service.domain.contracts.population.target import PopulationTargetExecutionRequest
@@ -72,13 +74,20 @@ def _valid_progress(progress):
     phase, done, total = progress.get('phase'), progress.get('done'), progress.get('total')
     if type(done) is not int or type(total) is not int:
         return False
+    if phase in ('full_active', 'full_control', 'full_feedback', 'full_control_feedback'):
+        keys = {'phase', 'done', 'total'}
+        if phase in ('full_feedback', 'full_control_feedback'):
+            keys.add('iteration')
+            if type(progress.get('iteration')) is not int or not 1 <= progress['iteration'] <= 100:
+                return False
+        return set(progress) == keys and 0 <= done <= total <= 166700 and total > 0
     if phase in ('feedback_network', 'feedback_cells'):
         if (set(progress) != {'phase', 'iteration', 'done', 'total'}
                 or type(progress['iteration']) is not int or not 1 <= progress['iteration'] <= 100):
             return False
         return (done == total == 0 if phase == 'feedback_network'
                 else 0 < done <= total <= 256)
-    if phase == 'field':
+    if phase in ('field', 'independent_cells'):
         return (set(progress) == {'phase', 'done', 'total'}
                 and 0 <= done <= total <= 166700 and total > 0)
     if phase == 'field_verification':
@@ -87,6 +96,16 @@ def _valid_progress(progress):
         return False
     return ((done == total == 0 or 0 <= done <= total <= 1000 and total > 0) if phase == 'network'
             else phase in ('geometry', 'cells') and 0 < done <= total <= 256)
+
+
+def _population_progress_writer(directory: Path):
+    """Adapt validated bulk-solver progress to the existing process receipt."""
+    def report(phase, done, total):
+        value = {'phase': phase, 'done': done, 'total': total}
+        if phase != 'independent_cells' or not _valid_progress(value):
+            raise ValueError('Invalid independent population progress')
+        _write_progress(directory, value)
+    return report
 
 
 def run_child(payload: dict, directory: str) -> None:
@@ -280,6 +299,99 @@ def run_fragment_population_child(payload: dict, directory: str) -> None:
         raise
 
 
+def run_bulk_recording_child(payload: dict, directory: str) -> None:
+    """Isolate an independent detailed-cell GPU recording, without network feedback."""
+    from service.application.population.bulk_experiment import execute_bulk_experiment
+    from service.application.population.bulk_recording_export import read_bulk_recording
+    from service.domain.contracts.population.bulk_recording import BulkRecordingExecutionRequest
+    from service.infrastructure.connectome.neighbors import registered_graph
+    from service.infrastructure.execution.gpu_batch_settings import independent_batch_settings
+
+    target = Path(directory)
+    try:
+        request = BulkRecordingExecutionRequest.model_validate(payload)
+        graph = registered_graph()
+        if graph.provenance.get('manifest_sha256') != request.config.graph_manifest_sha256:
+            raise ValueError('Independent recording graph mismatch')
+        cache = _field_geometry_cache('gpu-fused')
+        repair_policy = os.environ.get('GENERATOR_GPU_ZERO_EDGE_REPAIR', 'disabled')
+        if repair_policy not in ('disabled', 'verified-842998'):
+            raise ValueError('Invalid GPU geometry repair policy')
+        batch_settings = independent_batch_settings()
+        replacement_builder = None
+        if repair_policy == 'verified-842998':
+            from service.infrastructure.stimulation.experimental_gpu.known_geometry_repair import (
+                known_zero_edge_replacement,
+            )
+            from service.settings import morphology_directories
+
+            directories = morphology_directories()
+            def replacement_builder(params):
+                return known_zero_edge_replacement(directories, params)
+        target.mkdir(parents=True, exist_ok=False)
+        output = target / 'recording.npz'
+        result = execute_bulk_experiment(graph, request.config.simulation, geometry_cache=cache,
+            output_path=output, progress=_population_progress_writer(target.parent),
+            replacement_builder=replacement_builder,
+            solver_options=batch_settings)
+        if result['configuration_sha256'] != request.config.digest():
+            raise ValueError('Independent recording configuration mismatch')
+        read_bulk_recording(output, sha256=result['artifact']['sha256'],
+            graph_sha256=request.config.graph_manifest_sha256,
+            configuration_sha256=request.config.digest())
+        write_json(target / 'preview.json', result['preview'])
+        files = [{'name': path.name, 'bytes': path.stat().st_size, 'sha256': _file_sha256(path)}
+                 for path in (output, target / 'preview.json')]
+        write_json(target / 'manifest.json', {'format': 'independent-gpu-recording-v1',
+            'kind': 'experimental-independent-population',
+            'configuration_sha256': request.config.digest(), 'files': files,
+            'geometry_cache_manifest_sha256': result['geometry_cache_manifest_sha256'],
+            'source_index_sha256': result['source_index_sha256'],
+            'geometry_repair_policy': repair_policy,
+            'batch_settings': batch_settings,
+            'interpretation': 'independent detailed cells; no network feedback; '
+                              'model parameters are not biologically validated'})
+    except Exception as exc:
+        target.mkdir(parents=True, exist_ok=True)
+        write_json(target / 'error.json', {'type': type(exc).__name__, 'message': str(exc)[:1000]})
+        raise
+
+
+def run_full_feedback_child(payload: dict, directory: str) -> None:
+    """Run experimental full detailed-cell feedback in an isolated process."""
+    from service.application.population.full_feedback_experiment import (
+        execute_full_feedback_request,
+    )
+    from service.domain.contracts.population.full_feedback import FullFeedbackExecutionRequest
+    from service.infrastructure.connectome.neighbors import registered_graph
+    from service.infrastructure.connectome.synapse_repository import registered_index
+    from service.infrastructure.execution.gpu_batch_settings import independent_batch_settings
+    from service.settings import connectome_directory, morphology_directories
+
+    target = Path(directory)
+    try:
+        request = FullFeedbackExecutionRequest.model_validate(payload)
+        synapse_root = os.environ.get('GENERATOR_SYNAPSE_DIR', '')
+        if not synapse_root:
+            raise ValueError('Synapse source is not configured')
+        graph = registered_graph()
+        index = registered_index(Path(synapse_root), connectome_directory() / 'ids.npy')
+        result = execute_full_feedback_request(graph, index, request.config,
+            geometry_cache=_field_geometry_cache('gpu-fused'), output_directory=target,
+            directories=morphology_directories(), solver_options=independent_batch_settings(),
+            progress=lambda value: _write_progress(target.parent, value))
+        if result.get('status') != 'converged':
+            raise ValueError(f"Full feedback did not converge: {result.get('status')}")
+        manifest = json.loads((target / 'manifest.json').read_text(encoding='utf8'))
+        if (manifest.get('configuration', {}).get('request_sha256') != request.config.digest()
+                or _file_sha256(target / 'manifest.json') != result.get('manifest_sha256')):
+            raise ValueError('Full feedback result identity mismatch')
+    except Exception as exc:
+        target.mkdir(parents=True, exist_ok=True)
+        write_json(target / 'error.json', {'type': type(exc).__name__, 'message': str(exc)[:1000]})
+        raise
+
+
 def run_population_feedback_child(payload: dict, directory: str, input_root: str) -> None:
     """Run a coupled population from a verified, privately restored source package."""
     import tempfile
@@ -399,6 +511,26 @@ def run_population_feedback_child(payload: dict, directory: str, input_root: str
             error['feedback_diagnostics'] = feedback_diagnostics
         write_json(target / 'error.json', error)
         raise
+
+
+def run_population_feedback_group(payload: dict, directory: str, input_root: str,
+                                  owner_pid: int) -> None:
+    """Isolate feedback and its worker pool, and stop if the manager dies."""
+    from service.infrastructure.execution.pool_lifecycle import guard_pool_owner
+
+    guard_pool_owner(owner_pid)
+    os.setsid()
+    run_population_feedback_child(payload, directory, input_root)
+
+
+def _feedback_group_supported() -> bool:
+    return sys.platform.startswith('linux')
+
+
+def _group_cancellation_supported(kind: str | None) -> bool:
+    return os.name == 'posix' and kind in {
+        'experimental-field-proxy', 'experimental-coupled-population',
+    }
 
 
 def run_population_target_child(payload: dict, directory: str, input_root: str) -> None:
@@ -682,6 +814,67 @@ class Executions:
             self.processes[execution_id] = process
             return record
 
+    def start_bulk_recording(self, request: BulkRecordingExecutionRequest) -> dict:
+        """Start one independent recording with the shared lifecycle and cancellation."""
+        execution_id = str(request.execution_id)
+        with self.lock:
+            if self.receipt(execution_id).exists():
+                previous = self.status(execution_id)
+                if (previous.get('kind') != 'experimental-independent-population'
+                        or previous['configuration_sha256'] != request.config.digest()):
+                    raise ValueError('Execution ID already belongs to another configuration')
+                return previous
+            for active in list(self.processes):
+                if self.status(active)['status'] == 'running':
+                    raise RuntimeError('Executor busy')
+            output = self.root / execution_id / 'output'
+            record = {'execution_id': execution_id, 'kind': 'experimental-independent-population',
+                      'status': 'running', 'configuration_sha256': request.config.digest(),
+                      'started_at': time(), 'acknowledged': False}
+            process = mp.get_context('spawn').Process(target=run_bulk_recording_child,
+                args=(request.model_dump(mode='json'), str(output)), daemon=True)
+            self.save(record)
+            try:
+                process.start()
+            except Exception:
+                record.update(status='failed', error='Could not start solver')
+                self.save(record)
+                raise
+            self.processes[execution_id] = process
+            return record
+
+    def start_full_feedback(self, request) -> dict:
+        """Start one isolated, idempotent full detailed-cell calculation."""
+        from service.domain.contracts.population.full_feedback import FullFeedbackExecutionRequest
+
+        request = FullFeedbackExecutionRequest.model_validate(request)
+        execution_id = str(request.execution_id)
+        with self.lock:
+            if self.receipt(execution_id).exists():
+                previous = self.status(execution_id)
+                if (previous.get('kind') != 'experimental-full-population-feedback'
+                        or previous['configuration_sha256'] != request.config.digest()):
+                    raise ValueError('Execution ID already belongs to another configuration')
+                return previous
+            for active in list(self.processes):
+                if self.status(active)['status'] == 'running':
+                    raise RuntimeError('Executor busy')
+            output = self.root / execution_id / 'output'
+            record = {'execution_id': execution_id, 'kind': 'experimental-full-population-feedback',
+                      'status': 'running', 'configuration_sha256': request.config.digest(),
+                      'started_at': time(), 'acknowledged': False}
+            process = mp.get_context('spawn').Process(target=run_full_feedback_child,
+                args=(request.model_dump(mode='json'), str(output)), daemon=True)
+            self.save(record)
+            try:
+                process.start()
+            except Exception:
+                record.update(status='failed', error='Could not start solver')
+                self.save(record)
+                raise
+            self.processes[execution_id] = process
+            return record
+
     def start_population_feedback(self, request: PopulationFeedbackExecutionRequest) -> dict:
         execution_id = str(request.execution_id)
         with self.lock:
@@ -703,9 +896,13 @@ class Executions:
                       'status': 'running', 'configuration_sha256': request.config.digest(),
                       'source_sha256': request.config.source_package_sha256,
                       'started_at': time(), 'acknowledged': False}
+            grouped = _feedback_group_supported()
+            arguments = (request.model_dump(mode='json'), str(output), str(self.root))
+            if grouped:
+                arguments += (os.getpid(),)
             process = mp.get_context('spawn').Process(
-                target=run_population_feedback_child,
-                args=(request.model_dump(mode='json'), str(output), str(self.root)), daemon=True)
+                target=run_population_feedback_group if grouped else run_population_feedback_child,
+                args=arguments, daemon=not grouped)
             self.save(record)
             try:
                 process.start()
@@ -757,7 +954,7 @@ class Executions:
                 process = self.processes.get(execution_id)
                 if process and process.is_alive():
                     grouped = False
-                    if (os.name == 'posix' and record.get('kind') == 'experimental-field-proxy'
+                    if (_group_cancellation_supported(record.get('kind'))
                             and process.pid is not None):
                         try:
                             grouped = os.getpgid(process.pid) == process.pid
@@ -797,6 +994,11 @@ class Executions:
                     for work in self.receipt(execution_id).parent.glob('feedback-replay-*'):
                         if work.is_dir() and not work.is_symlink():
                             shutil.rmtree(work)
+                if record.get('kind') == 'experimental-full-population-feedback':
+                    for pattern in ('.feedback-sources-*', '.full-population-*'):
+                        for work in self.receipt(execution_id).parent.glob(pattern):
+                            if work.is_dir() and not work.is_symlink():
+                                shutil.rmtree(work)
                 self.save(record)
             return record
 

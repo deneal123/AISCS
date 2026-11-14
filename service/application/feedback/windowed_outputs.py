@@ -22,7 +22,7 @@ class WindowedFeedbackOutputs:
 
     def __init__(self, geometries, provenance, diagnostics, *, threshold_mv, duration_ms,
                  samples, electrode_um, reference_um, conductivity_s_m, clearance_um,
-                 max_source_distance_um=None):
+                 max_source_distance_um=None, resolved_indices=None):
         if (not isinstance(geometries, dict) or not geometries
                 or not isinstance(provenance, dict) or not isinstance(diagnostics, dict)
                 or list(geometries) != list(provenance) or list(geometries) != list(diagnostics)):
@@ -37,10 +37,16 @@ class WindowedFeedbackOutputs:
         self.failed = False
         self.mode = None
         self.reduced_signal = np.zeros(samples, dtype=float)
-        indices = {body: feedback_output_segment_indices(
-            body, geometries[body]['edge_node_ids'], provenance[body], diagnostics[body],
-            threshold_mv=threshold_mv, duration_ms=duration_ms,
-            max_source_distance_um=max_source_distance_um) for body in self.ids}
+        if resolved_indices is None:
+            indices = {body: feedback_output_segment_indices(
+                body, geometries[body]['edge_node_ids'], provenance[body], diagnostics[body],
+                threshold_mv=threshold_mv, duration_ms=duration_ms,
+                max_source_distance_um=max_source_distance_um) for body in self.ids}
+        else:
+            if (not isinstance(resolved_indices, dict)
+                    or list(resolved_indices) != self.ids):
+                raise ValueError('Inconsistent resolved output identities')
+            indices = {body: resolved_indices[body].copy() for body in self.ids}
         self.indices = indices
         self.traces = WindowedTraceSelector(
             {body: len(geometries[body]['edge_node_ids']) for body in self.ids}, indices,
@@ -136,6 +142,12 @@ def solve_windowed_feedback(cells, provenance, diagnostics, stimulus, table, *, 
                       != cells[index]['morphology_sha256'] for index, body in enumerate(ids))):
         raise ValueError('Window feedback source identity mismatch')
     collectors = {}
+    resolved_indices = None
+    if cell_major:
+        resolved_indices = {body: feedback_output_segment_indices(
+            body, cells[index]['geometry']['edge_node_ids'], provenance[body], diagnostics[body],
+            threshold_mv=threshold_mv, duration_ms=duration_ms,
+            max_source_distance_um=max_source_distance_um) for index, body in enumerate(ids)}
 
     def get_collector(indices):
         if indices not in collectors:
@@ -146,7 +158,9 @@ def solve_windowed_feedback(cells, provenance, diagnostics, stimulus, table, *, 
                 {body: diagnostics[body] for body in group_ids}, threshold_mv=threshold_mv,
                 duration_ms=duration_ms, samples=len(stimulus), electrode_um=electrode_um,
                 reference_um=reference_um, conductivity_s_m=conductivity_s_m,
-                clearance_um=clearance_um, max_source_distance_um=max_source_distance_um)
+                clearance_um=clearance_um, max_source_distance_um=max_source_distance_um,
+                resolved_indices=({body: resolved_indices[body] for body in group_ids}
+                                  if resolved_indices is not None else None))
         return collectors[indices]
 
     def accept(indices, start, end, rows):
@@ -157,12 +171,16 @@ def solve_windowed_feedback(cells, provenance, diagnostics, stimulus, table, *, 
         return {'recording_coefficients': collector.recording.coefficients,
                 'selected_indices': collector.indices, 'sink': collector.accept_reduced}
 
+    selection_counts = None
+    if cell_major:
+        selection_counts = [len(resolved_indices[body]) for body in ids]
     solved = solve_windowed_groups(cells, stimulus, table, max_cells=max_cells,
         output_budget_bytes=output_budget_bytes, window_steps=window_steps,
         max_padding_ratio=max_padding_ratio,
         **({'device_window_factory': device_factory} if device_reduction
            else {'window_sink': accept}),
-        dt_ms=dt_ms, **({'cell_major': True} if cell_major else {}),
+        dt_ms=dt_ms, **({'cell_major': True, 'cell_major_selection_counts': selection_counts}
+                       if cell_major else {}),
         allow_table_clamp=allow_table_clamp, packing_cache=packing_cache, timing_sink=timing_sink)
     collected_indices = [index for group in collectors for index in group]
     if (len(collected_indices) != len(ids)

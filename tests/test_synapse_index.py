@@ -15,6 +15,7 @@ from service.infrastructure.connectome.synapse_index import (
 )
 from service.infrastructure.connectome.synapse_morphology import (
     merge_candidate_pages,
+    prepare_cached_morphology,
     registered_incoming_candidates_single_pass,
     registered_page_candidates,
 )
@@ -36,6 +37,7 @@ def test_cached_query_rejects_replaced_source_with_original_size_and_mtime(tmp_p
     build_batch_index(source, ids, tmp_path / "index", digest)
     index = SynapseBatchIndex(source, ids, tmp_path / "index", digest)
     assert index.query(1, "outgoing")["total"] == 1
+    assert index.scan_incoming_many({2: ([1], {1})})[2]['counts'] == {1: 1}
     original = source.stat()
     replacement = tmp_path / "replacement.arrow"
     content = bytearray(source.read_bytes())
@@ -47,6 +49,8 @@ def test_cached_query_rejects_replaced_source_with_original_size_and_mtime(tmp_p
     assert source.stat().st_mtime_ns == original.st_mtime_ns
     with pytest.raises(ValueError, match="source changed"):
         index.query(1, "outgoing")
+    with pytest.raises(ValueError, match="source changed"):
+        index.scan_incoming_many({2: ([1], {1})})
 
 
 def test_repository_rechecks_cached_index_and_manifest(tmp_path, monkeypatch):
@@ -97,6 +101,12 @@ def test_index_directions_batches_and_integrity(tmp_path, monkeypatch):
     actual = hashlib.sha256((tmp_path / 'index' / 'batches.npy').read_bytes()).hexdigest()
     assert result['bitmap_sha256'] == actual
     index = SynapseBatchIndex(source, ids, tmp_path / 'index', digest)
+    many = index.scan_incoming_many({1: ([2], {2}), 2: ([1], {1})})
+    assert many[1] == index.scan_incoming(1, [2], {2})
+    assert many[2] == index.scan_incoming(2, [1], {1})
+    assert index.scan_incoming_many({1: ([2], set())})[1]['pairs'] == []
+    with pytest.raises(ValueError, match='registered graph'):
+        index.scan_incoming_many({1: ([999], {999})})
     for direction in ('incoming', 'outgoing'):
         assert index.query(1, direction, limit=1) == extract_pairs(
             source, 1, digest, direction=direction, limit=1
@@ -119,6 +129,29 @@ def test_index_directions_batches_and_integrity(tmp_path, monkeypatch):
     actual = registered_incoming_candidates_single_pass(
         index, graph, 1, [], candidate_partner_ids={2})
     assert actual == expected
+    cached = prepare_cached_morphology({'skeleton': {'body_id': '1', 'sha256': 'f' * 64},
+        'geometry': (np.array([1, 2, 3]), np.array([[0., 0., 0.], [1., 0., 0.], [1., 1., 0.]]),
+                     np.array([-1, 0, 1]), np.array([.008, .008, .008]))})
+    assert registered_incoming_candidates_single_pass(
+        index, graph, 1, [], candidate_partner_ids={2}, prepared=cached) == expected
+    with pytest.raises(ValueError, match='does not match'):
+        registered_incoming_candidates_single_pass(index, graph, 1, [],
+            candidate_partner_ids={2}, prepared=({'body_id': '2'}, cached[1]))
+    indexed = registered_incoming_candidates_single_pass(
+        index, graph, 1, [], candidate_partner_ids={2}, use_spatial_index=True)
+    assert indexed == expected
+    from service.infrastructure.connectome.neighbors import incoming_edge_indices_many
+    edges = incoming_edge_indices_many(graph, [1, 2])
+    batched = registered_incoming_candidates_single_pass(
+        index, graph, 1, [], candidate_partner_ids={2}, _incoming_edges=edges[1])
+    assert batched == expected
+    with pytest.raises(ValueError, match='target mismatch'):
+        registered_incoming_candidates_single_pass(
+            index, graph, 1, [], candidate_partner_ids={2}, _incoming_edges=edges[2])
+    with pytest.raises(ValueError, match='Invalid incoming edge indices'):
+        registered_incoming_candidates_single_pass(
+            index, graph, 1, [], candidate_partner_ids={2},
+            _incoming_edges=np.array([1, 0], dtype=np.uint32))
     no_events = registered_incoming_candidates_single_pass(
         index, graph, 1, [], candidate_partner_ids=set())
     assert no_events['candidates'] == [] and no_events['complete_graph_edge_coverage']

@@ -104,6 +104,8 @@ def test_windowed_feedback_uses_integer_graph_duration_and_ordered_sources(monke
         assert type(kwargs['duration_ms']) is int
         assert list(provided) == [10, 20]
         assert kwargs['preparation_workers'] == 2
+        assert kwargs['cell_major'] is True
+        assert kwargs['device_reduction'] is True
         return {'sources': {10: {'edge_events': []}, 20: {'edge_events': []}},
                 'table_clamped_cell_ids': [], 'recording': {}}
 
@@ -113,6 +115,7 @@ def test_windowed_feedback_uses_integer_graph_duration_and_ordered_sources(monke
         experimental_solver_backend='experimental_cuda', experimental_gpu_output_budget_bytes=1000,
         experimental_gpu_stream_cells=2, experimental_gpu_window_steps=5,
         experimental_gpu_preparation_workers=2,
+        experimental_gpu_device_reduction=True, experimental_gpu_cell_major=True,
         windowed_diagnostics=diagnostics,
         windowed_output_sink=lambda body, events: received.append(body))
     assert received == [10, 20]

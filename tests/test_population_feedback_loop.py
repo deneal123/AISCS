@@ -91,6 +91,33 @@ def test_no_input_converges_without_fabricating_feedback(monkeypatch):
                       {'phase': 'feedback_network', 'iteration': 2, 'done': 0, 'total': 0}]
 
 
+def test_cached_target_identity_is_checked_before_pair_mapping(monkeypatch):
+    config = example()
+    fake_graph = graph()
+    fake_graph.provenance = {'manifest_sha256': 'a' * 64}
+    metadata = {'configuration': config, 'diagnostics': [
+        {'body_id': str(body), 'morphology_sha256': 'b' * 64, 'candidates': []}
+        for body in config['source_ids']], 'schedules': [{'edge_events': []}, {'edge_events': []}]}
+    module = 'service.application.feedback.loop.'
+    monkeypatch.setattr(module + 'load_verified_fragment_population',
+                        lambda *_: {'metadata': metadata})
+    monkeypatch.setattr(module + 'run_edge_forced_network', lambda *_a, **_k: {})
+    monkeypatch.setattr(module + 'suppressed_source_inputs', lambda *_a, **_k: {
+        'events': [{'kind': 'physical-source-edge', 'source_id': 10, 'target_id': 20}]})
+    monkeypatch.setattr(module + 'map_lif_feedback', lambda *_a, **_k: [])
+
+    def match(*_args, _target_provider, **_kwargs):
+        _target_provider(20)
+        raise AssertionError('wrong morphology accepted')
+
+    monkeypatch.setattr(module + 'match_fragment_inputs_batch', match)
+    with pytest.raises(ValueError, match='morphology identity mismatch'):
+        iterate_population_feedback('archive', fake_graph, SimpleNamespace(), [], parameters={},
+            max_iterations=1, experimental_solver_backend='experimental_cuda',
+            experimental_gpu_output_budget_bytes=1000,
+            _target_provider=lambda _: ({'body_id': '20', 'sha256': 'c' * 64}, 'geometry'))
+
+
 def test_opt_in_discretization_receipts_follow_the_iterated_result(monkeypatch, tmp_path):
     config = example()
     fake_graph = graph()
@@ -287,6 +314,44 @@ def test_experimental_workers_are_propagated_but_not_published(monkeypatch, tmp_
             max_iterations=3, checkpoint_dir=tmp_path, experimental_cell_workers=2)
 
 
+def test_cell_major_option_reaches_windowed_feedback_and_is_not_published(monkeypatch):
+    config = example()
+    fake_graph = graph()
+    fake_graph.provenance = {'manifest_sha256': 'a' * 64}
+    metadata = {'configuration': config, 'diagnostics': [
+        {'body_id': str(body), 'morphology_sha256': 'b' * 64, 'candidates': []}
+        for body in config['source_ids']], 'schedules': [{'edge_events': []}, {'edge_events': []}]}
+    module = 'service.application.feedback.loop.'
+    monkeypatch.setattr(module + 'load_verified_fragment_population',
+                        lambda *_: {'metadata': metadata})
+    monkeypatch.setattr(module + 'run_edge_forced_network', lambda *_a, **_k: {
+        'spike_neurons': np.array([], dtype=int), 'spike_times_ms': np.array([])})
+    received = []
+
+    def replay(config, _directories, _schedule, _hashes, *, windowed_output_sink, **kwargs):
+        received.append(kwargs)
+        for body in config.source_ids:
+            windowed_output_sink(body, {'edge_events': [], 'candidates': []})
+        return {'recording': {'cells': len(config.source_ids)},
+                'experimental_gpu_table_clamped_cell_ids': []}
+
+    monkeypatch.setattr(module + 'replay_population_feedback', replay)
+    options = dict(parameters={}, max_iterations=3, experimental_solver_backend='experimental_cuda',
+                   experimental_gpu_output_budget_bytes=1000, experimental_gpu_stream_cells=2,
+                   experimental_gpu_window_steps=5, experimental_gpu_device_reduction=True,
+                   experimental_gpu_cell_major=True)
+    result = iterate_population_feedback('archive', fake_graph, SimpleNamespace(), [], **options)
+    assert result['status'] == 'converged'
+    assert result['experimental_gpu_cell_major'] is True
+    assert received and received[0]['experimental_gpu_cell_major'] is True
+    with pytest.raises(ValueError, match='cannot be published'):
+        validate_population_feedback(result, fake_graph, {}, parameters={},
+                                     allow_partial_geometry=False)
+    with pytest.raises(ValueError, match='device reduction'):
+        iterate_population_feedback('archive', fake_graph, SimpleNamespace(), [],
+            **{**options, 'experimental_gpu_device_reduction': False})
+
+
 def test_latest_physical_events_are_exported_with_the_network(monkeypatch):
     config = example()
     fake_graph = graph()
@@ -337,11 +402,14 @@ def test_network_spike_is_routed_back_into_population_replay(monkeypatch):
                         lambda *_: {'metadata': metadata})
     monkeypatch.setattr(module + 'run_edge_forced_network', lambda *_a, **_k: {
         'spike_neurons': np.array([2]), 'spike_times_ms': np.array([3.])})
-    monkeypatch.setattr(module + 'map_lif_feedback', lambda *_a, **_k: [{
-        'source_id': 30, 'target_id': 20, 'input_kind': 'lif-network-spike',
-        'graph_sha256': 'a' * 64, 'target_morphology_sha256': 'b' * 64,
-        'candidates': [{'target_child_node_id': child, 'target_fraction': .5,
-                        'stimulated_ticks_ms': [3]} for child in (7, 8)]}])
+    mapping_options = []
+    def map_feedback(*_args, **kwargs):
+        mapping_options.append(kwargs.get('experimental_spatial_index', False))
+        return [{'source_id': 30, 'target_id': 20, 'input_kind': 'lif-network-spike',
+                 'graph_sha256': 'a' * 64, 'target_morphology_sha256': 'b' * 64,
+                 'candidates': [{'target_child_node_id': child, 'target_fraction': .5,
+                                 'stimulated_ticks_ms': [3]} for child in (7, 8)]}]
+    monkeypatch.setattr(module + 'map_lif_feedback', map_feedback)
     monkeypatch.setattr(module + 'feedback_output_events', lambda *_a, **_k: {
         'edge_events': [], 'candidates': []})
     submitted = []
@@ -353,8 +421,9 @@ def test_network_spike_is_routed_back_into_population_replay(monkeypatch):
     monkeypatch.setattr(module + 'replay_population_feedback', replay)
     result = iterate_population_feedback('archive', fake_graph, SimpleNamespace(), [],
         parameters={1: {'weight_us': .001, 'tau1_ms': .2, 'tau2_ms': 2., 'reversal_mv': 0.}},
-        max_iterations=3)
+        max_iterations=3, experimental_spatial_index=True)
     assert result['status'] == 'converged'
+    assert mapping_options and all(mapping_options)
     assert len(submitted) == 2 and {event['time_ms'] for event in submitted} == {5}
 
 

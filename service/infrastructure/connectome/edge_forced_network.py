@@ -58,6 +58,7 @@ def run_edge_forced_network(graph, *, seed, duration_ms, forced_cell_ids, edge_e
     source_positions = dict(zip(forced_cell_ids, map(int, positions), strict=True))
     schedule = [[] for _ in range(duration_ms)]
     seen = set()
+    verified_edges = {}
     for item in edge_events:
         if (
             not isinstance(item, dict)
@@ -70,13 +71,21 @@ def run_edge_forced_network(graph, *, seed, duration_ms, forced_cell_ids, edge_e
         )
         if source not in source_positions or not 1 <= tick <= duration_ms or count <= 0:
             raise ValueError("Invalid edge event")
-        target_pos = int(np.searchsorted(graph.ids, target))
-        if target_pos >= graph.size or int(graph.ids[target_pos]) != target:
-            raise ValueError("Edge target is not registered")
         pos = source_positions[source]
-        start, end = int(graph.ptr[pos]), int(graph.ptr[pos + 1])
-        matches = np.flatnonzero(graph.posts[start:end] == target_pos)
-        if len(matches) != 1 or count > int(graph.counts[start + matches[0]]):
+        pair = (source, target)
+        verified = verified_edges.get(pair)
+        if verified is None:
+            target_pos = int(np.searchsorted(graph.ids, target))
+            if target_pos >= graph.size or int(graph.ids[target_pos]) != target:
+                raise ValueError("Edge target is not registered")
+            start, end = int(graph.ptr[pos]), int(graph.ptr[pos + 1])
+            matches = np.flatnonzero(graph.posts[start:end] == target_pos)
+            if len(matches) != 1:
+                raise ValueError("Edge is missing, ambiguous or exceeds registered synapses")
+            verified = (target_pos, int(graph.counts[start + matches[0]]))
+            verified_edges[pair] = verified
+        target_pos, max_count = verified
+        if count > max_count:
             raise ValueError("Edge is missing, ambiguous or exceeds registered synapses")
         key = (source, target, tick)
         if key in seen:

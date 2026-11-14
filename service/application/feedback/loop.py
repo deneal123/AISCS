@@ -45,7 +45,9 @@ def iterate_population_feedback(path, graph, index, directories, *, parameters,
                                 experimental_gpu_stream_cells=None,
                                 experimental_gpu_window_steps=None,
                                 experimental_gpu_device_reduction=False,
-                                experimental_gpu_preparation_workers=1):
+                                experimental_gpu_preparation_workers=1,
+                                experimental_gpu_cell_major=False,
+                                experimental_spatial_index=False, _target_provider=None):
     """Iterate a single verified batch, refusing unsupported network feedback.
 
     The result is explicitly partial when any candidate geometry is unresolved.
@@ -56,15 +58,23 @@ def iterate_population_feedback(path, graph, index, directories, *, parameters,
             or type(experimental_cell_workers) is not int
             or not 1 <= experimental_cell_workers <= 8
             or type(allow_partial_geometry) is not bool
+            or type(experimental_spatial_index) is not bool
+            or (_target_provider is not None and not callable(_target_provider))
             or (progress is not None and not callable(progress))
             or (stage_progress is not None and not callable(stage_progress))
             or (checkpoint_dir is not None
                 and (not isinstance(checkpoint_dir, Path) or not checkpoint_dir.is_dir()))
             or (resume_from is not None and not isinstance(resume_from, Path))):
         raise ValueError('Invalid feedback iteration settings')
+    if _target_provider is not None and (checkpoint_dir is not None or resume_from is not None):
+        raise ValueError('Cached target geometry is not supported by feedback checkpoints')
+    if _target_provider is not None and experimental_solver_backend != 'experimental_cuda':
+        raise ValueError('Cached target geometry requires experimental CUDA feedback')
     if experimental_solver_backend not in (None, 'experimental_coreneuron', 'experimental_cuda'):
         raise ValueError('Invalid experimental solver backend')
     if (type(experimental_gpu_device_reduction) is not bool
+            or type(experimental_gpu_cell_major) is not bool
+            or (experimental_gpu_cell_major and not experimental_gpu_device_reduction)
             or (experimental_gpu_device_reduction and experimental_gpu_window_steps is None)):
         raise ValueError('GPU device reduction requires windowed CUDA')
     if (type(experimental_gpu_preparation_workers) is not int
@@ -137,6 +147,15 @@ def iterate_population_feedback(path, graph, index, directories, *, parameters,
     ids = config.source_ids
     diagnostics = {int(row['body_id']): row for row in metadata['diagnostics']}
     hashes = {body: diagnostics[body]['morphology_sha256'] for body in ids}
+
+    def checked_target(body):
+        prepared = _target_provider(body)
+        if (not isinstance(prepared, tuple) or len(prepared) != 2
+                or not isinstance(prepared[0], dict)
+                or prepared[0].get('body_id') != str(body)
+                or prepared[0].get('sha256') != hashes.get(body)):
+            raise ValueError('Cached target morphology identity mismatch')
+        return prepared
     local = {body: [{'source_position_8nm': row['source_position_8nm'],
                      'partner_id': row['partner_id'],
                      'stimulated_ticks_ms': row['stimulated_ticks_ms']}
@@ -165,6 +184,8 @@ def iterate_population_feedback(path, graph, index, directories, *, parameters,
             result['experimental_gpu_window_steps'] = experimental_gpu_window_steps
         if experimental_gpu_device_reduction:
             result['experimental_gpu_device_reduction'] = True
+        if experimental_gpu_cell_major:
+            result['experimental_gpu_cell_major'] = True
         if experimental_cell_workers != 1:
             result['experimental_cell_workers'] = experimental_cell_workers
         return result
@@ -214,12 +235,16 @@ def iterate_population_feedback(path, graph, index, directories, *, parameters,
         feedback = suppressed_source_inputs(graph, ids, edges, network, duration_ms=duration)
         pairs = sorted({(row['source_id'], row['target_id']) for row in feedback['events']
                         if row['kind'] == 'physical-source-edge'})
+        spatial_options = ({'experimental_spatial_index': True}
+                           if experimental_spatial_index else {})
         mappings = map_lif_feedback(graph, index, directories, feedback, ids,
             max_distance_um=config.max_distance_um, allow_partial=allow_partial_geometry,
-            _geometry_cache=lif_geometry_cache)
+            _geometry_cache=lif_geometry_cache, **spatial_options)
         pending_pairs = [pair for pair in pairs if pair not in cache]
         if pending_pairs:
             pair_cache_options = {'_pair_cache': pair_cache} if pair_cache is not None else {}
+            if _target_provider is not None:
+                pair_cache_options['_target_provider'] = checked_target
             matched = match_fragment_inputs_batch(
                 pending_pairs, diagnostics, index, graph, directories,
                 max_source_distance_um=config.max_distance_um,
@@ -227,11 +252,17 @@ def iterate_population_feedback(path, graph, index, directories, *, parameters,
                 allow_partial=allow_partial_geometry,
                 allow_partial_source=config.allow_partial_geometry is True, **pair_cache_options)
             cache.update(zip(pending_pairs, matched, strict=True))
+        # One source may have many active targets. Build its position lookup
+        # once per iteration instead of rescanning every source candidate per pair.
+        tick_lookups = {}
         for source, target in pairs:
             pair = (source, target)
             mapping = copy.deepcopy(cache[pair])
-            ticks = {(row['partner_id'], *row['source_position_8nm']): row['stimulated_ticks_ms']
-                     for row in local[source]}
+            if source not in tick_lookups:
+                tick_lookups[source] = {
+                    (row['partner_id'], *row['source_position_8nm']): row['stimulated_ticks_ms']
+                    for row in local[source]}
+            ticks = tick_lookups[source]
             for candidate in mapping['candidates'] + mapping.get('unresolved_target_geometry', []):
                 key = (str(target), *candidate['source_position_8nm'])
                 if key not in ticks:
@@ -298,6 +329,8 @@ def iterate_population_feedback(path, graph, index, directories, *, parameters,
             replay_options['windowed_diagnostics'] = diagnostics
             if experimental_gpu_device_reduction:
                 replay_options['experimental_gpu_device_reduction'] = True
+            if experimental_gpu_cell_major:
+                replay_options['experimental_gpu_cell_major'] = True
             if experimental_gpu_preparation_workers != 1:
                 replay_options['experimental_gpu_preparation_workers'] = (
                     experimental_gpu_preparation_workers)

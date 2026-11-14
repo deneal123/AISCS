@@ -201,6 +201,72 @@ class SynapseBatchIndex:
         self.assert_unchanged()
         return result
 
+    def scan_incoming_many(self, requests):
+        """Count incoming source pairs for several targets in one source pass.
+
+        Requests map each target to (all registered partners, active partners).
+        Returned coordinates are limited to the active partners. The caller must
+        still compare every count with the independently registered graph.
+        """
+        if not isinstance(requests, dict) or not requests:
+            raise ValueError('Invalid incoming scan requests')
+        positions = {}
+        for body, selection in requests.items():
+            if (type(body) is not int or not 0 < body < 2**63
+                    or not isinstance(selection, tuple) or len(selection) != 2):
+                raise ValueError('Invalid incoming scan request')
+            partners, active = selection
+            if (not isinstance(partners, list) or len(set(partners)) != len(partners)
+                    or any(type(value) is not int or not 0 < value < 2**63 for value in partners)
+                    or not isinstance(active, set)
+                    or any(type(value) is not int or not 0 < value < 2**63 for value in active)):
+                raise ValueError('Invalid partner selection')
+            pos = int(np.searchsorted(self.ids, body))
+            if pos >= len(self.ids) or int(self.ids[pos]) != body:
+                raise ValueError('Neuron is not in registered graph')
+            partner_positions = np.searchsorted(self.ids, partners)
+            if any(position >= len(self.ids) or int(self.ids[position]) != value
+                   for position, value in zip(partner_positions, partners, strict=True)):
+                raise ValueError('Partner is not in registered graph')
+            positions[body] = pos
+        self.assert_unchanged()
+        sets = {body: (pa.array(partners, type=pa.int64()),
+                       pa.array(sorted(active.intersection(partners)), type=pa.int64()))
+                for body, (partners, active) in requests.items()}
+        results = {body: {'counts': dict.fromkeys(partners, 0), 'pairs': [],
+                          'source_md5': self.manifest['source_md5'],
+                          'coordinate_frame': 'male-cns-v1.0-native-8nm'}
+                   for body, (partners, _) in requests.items()}
+        masks = {body: np.unpackbits(self.bits[1, pos], bitorder='little')[
+                     :self.manifest['batches']]
+                 for body, pos in positions.items()}
+        union = np.bitwise_or.reduce(list(masks.values()))
+        with pa.memory_map(str(self.source_path), 'r') as source:
+            reader = ipc.open_file(source)
+            if reader.num_record_batches != self.manifest['batches']:
+                raise ValueError('Synapse source batch count changed')
+            for batch_number in np.flatnonzero(union):
+                batch = reader.get_batch(int(batch_number)).select(FIELDS)
+                for body, mask in masks.items():
+                    if not mask[batch_number]:
+                        continue
+                    graph_set, active_set = sets[body]
+                    matching = batch.filter(pc.equal(batch.column('body_post'), body))
+                    matching = matching.filter(pc.is_in(matching.column('body_pre'),
+                                                        value_set=graph_set))
+                    if any(column.null_count or not pa.types.is_integer(column.type)
+                           for column in matching.columns):
+                        raise ValueError('Invalid or missing synapse coordinate')
+                    values, totals = np.unique(matching.column('body_pre').to_numpy(
+                        zero_copy_only=False), return_counts=True)
+                    for value, count in zip(values, totals, strict=True):
+                        results[body]['counts'][int(value)] += int(count)
+                    selected = matching.filter(pc.is_in(matching.column('body_pre'),
+                                                         value_set=active_set))
+                    results[body]['pairs'].extend(selected.to_pylist())
+        self.assert_unchanged()
+        return results
+
     def scan_incoming(self, body_id: int, graph_partners: list[int], active_partners: set[int]):
         """Count graph pairs in one pass and retain only active-partner coordinates."""
         if type(body_id) is not int or not 0 < body_id < 2**63:
@@ -299,6 +365,8 @@ class SynapseBatchIndex:
             selected_bits = np.bitwise_and(selected_bits, other_bits)
         batch_mask = np.unpackbits(selected_bits, bitorder="little")
         batch_indices = np.flatnonzero(batch_mask[:self.manifest["batches"]])
+        partner_set = (pa.array(partner_ids, type=pa.int64())
+                       if partner_ids is not None else None)
         rows, total, partner_counts = [], 0, {}
         with pa.memory_map(str(self.source_path), "r") as source:
             reader = ipc.open_file(source)
@@ -312,7 +380,7 @@ class SynapseBatchIndex:
                 if partner_ids is not None:
                     matching = matching.filter(pc.is_in(
                         matching.column(partner_field),
-                        value_set=pa.array(partner_ids, type=pa.int64()),
+                        value_set=partner_set,
                     ))
                     values, counts = np.unique(
                         matching.column(partner_field).to_numpy(zero_copy_only=False),

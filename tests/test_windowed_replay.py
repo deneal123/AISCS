@@ -13,7 +13,10 @@ def test_windowed_replay_aggregates_neural_and_artifact_once(monkeypatch):
     monkeypatch.setattr('service.application.feedback.windowed_replay.prepare_windowed_sources',
         lambda group, *args, **kwargs: {'cells': group, 'provenance': {}, 'hh_table': None})
 
+    observed = []
+
     def solve(cells, *args, **kwargs):
+        observed.append(kwargs)
         body = cells[0]['id']
         return {'time_ms': np.arange(5) * .025, 'neural_uv': np.full(5, body),
                 'stimulus_fraction': np.zeros(5), 'stimulus_artifact_uv': np.ones(5),
@@ -28,6 +31,12 @@ def test_windowed_replay_aggregates_neural_and_artifact_once(monkeypatch):
     np.testing.assert_array_equal(result['recording']['neural_uv'], np.full(5, 3))
     np.testing.assert_array_equal(result['recording']['total_uv'], np.full(5, 4))
     assert list(result['sources']) == [1, 2]
+    replay_windowed_sources(requests, [], simulation, {1: {}, 2: {}},
+                            device_reduction=True, cell_major=True, **options)
+    assert all(item['cell_major'] is True for item in observed[2:])
+    with pytest.raises(ValueError, match='window replay request'):
+        replay_windowed_sources(requests, [], simulation, {1: {}, 2: {}},
+                                cell_major=True, **options)
     with pytest.raises(ValueError, match='pulse train'):
         replay_windowed_sources(requests, [], {**simulation, 'pulse_count': 0},
                                 {1: {}, 2: {}}, **options)

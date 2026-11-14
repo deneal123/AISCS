@@ -24,6 +24,23 @@ def test_rejected_cells_are_not_silently_omitted():
     assert rejected == [(20, 3)]
 
 
+def test_fast_preparation_exposes_interpolated_endpoint_radii():
+    from service.infrastructure.stimulation.experimental_gpu.fast_cable import Params, prepare_chunk
+    from service.infrastructure.stimulation.experimental_gpu.fast_prepare import cells_from_chunk
+
+    rows = np.array([(0., 0., 0., 2., -1, 1), (10., 0., 0., 1., 0, 2)],
+                    dtype=CACHE_RECORD)
+    params = Params(source_um=(100., 100., 100.), return_um=(200., 100., 100.),
+                    current_na=1., conductivity_s_m=.3, clearance_um=.1, nseg=3)
+    chunk = prepare_chunk(rows, np.array([0]), np.array([2]), params,
+                          bodies=[10], store_bounds=True)
+    geometry = cells_from_chunk(chunk)[0]['geometry']
+    np.testing.assert_allclose(geometry['endpoint_radii_um'],
+                               [[2., 5 / 3], [5 / 3, 4 / 3], [4 / 3, 1.]])
+    np.testing.assert_allclose(geometry['midpoints_um'],
+                               (geometry['starts_um'] + geometry['ends_um']) / 2)
+
+
 def test_rejected_codes_must_match_population():
     with pytest.raises(FastPrepareError, match='error codes'):
         _usable(SimpleNamespace(error_codes=np.array([0])), [10, 20])

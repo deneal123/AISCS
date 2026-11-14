@@ -30,6 +30,10 @@ from service.domain.contracts.field.proxy import (
     from_fragment_population,
     from_simulation,
 )
+from service.domain.contracts.population.bulk_recording import (
+    BulkRecordingConfig,
+    BulkRecordingExecutionRequest,
+)
 from service.domain.contracts.population.feedback import (
     PopulationFeedbackConfig,
     PopulationFeedbackExecutionRequest,
@@ -37,6 +41,10 @@ from service.domain.contracts.population.feedback import (
 from service.domain.contracts.population.fragment import (
     FragmentPopulationConfig,
     FragmentPopulationExecutionRequest,
+)
+from service.domain.contracts.population.full_feedback import (
+    FullFeedbackConfig,
+    FullFeedbackExecutionRequest,
 )
 from service.domain.contracts.population.target import (
     PopulationTargetConfig,
@@ -580,6 +588,23 @@ def build_app(manager: Executions, secret: str, readiness, catalog_factory=catal
             raise HTTPException(422, 'Cannot derive a compatible field stimulus') from exc
         return validate_field_proxy(config)
 
+    @app.post('/v1/independent-population-validate', dependencies=protected)
+    def validate_independent_population(config: BulkRecordingConfig):
+        from service.application.population.bulk_simulation_inputs import bulk_simulation_inputs
+        from service.infrastructure.connectome.neighbors import registered_graph
+
+        try:
+            graph = registered_graph()
+            if graph.provenance.get('manifest_sha256') != config.graph_manifest_sha256:
+                raise HTTPException(409, 'Independent recording graph mismatch')
+            bulk_simulation_inputs(config.simulation)
+        except OSError as exc:
+            raise HTTPException(503, 'Registered graph unavailable') from exc
+        except ValueError as exc:
+            raise HTTPException(422, 'Unsupported independent recording configuration') from exc
+        return {'configuration': config.model_dump(mode='json'),
+                'configuration_sha256': config.digest()}
+
     @app.post('/v1/fragment-population-validate', dependencies=protected)
     def validate_fragment_population(config: FragmentPopulationConfig):
         import numpy as np
@@ -598,6 +623,22 @@ def build_app(manager: Executions, secret: str, readiness, catalog_factory=catal
             raise HTTPException(503, 'Registered graph unavailable') from exc
         return {'configuration': config.model_dump(mode='json'),
                 'configuration_sha256': config.digest()}
+
+    @app.post('/v1/full-population-feedback-validate', dependencies=protected)
+    def validate_full_population_feedback(config: FullFeedbackConfig):
+        from service.infrastructure.connectome.neighbors import registered_graph
+
+        try:
+            graph = registered_graph()
+            if graph.provenance.get('manifest_sha256') != config.graph_manifest_sha256:
+                raise HTTPException(409, 'Full feedback graph mismatch')
+            cells = len(graph.ids)
+            if not 1 <= cells <= 5_000_000:
+                raise ValueError('Invalid registered population')
+        except (OSError, ValueError) as exc:
+            raise HTTPException(503, 'Registered graph unavailable') from exc
+        return {'configuration': config.model_dump(mode='json'),
+                'configuration_sha256': config.digest(), 'graph_cells': cells}
 
     @app.post('/v1/population-feedback-validate', dependencies=protected)
     def validate_population_feedback(config: PopulationFeedbackConfig):
@@ -710,10 +751,28 @@ def build_app(manager: Executions, secret: str, readiness, catalog_factory=catal
         except RuntimeError as exc:
             raise HTTPException(503, str(exc)) from exc
 
+    @app.post('/v1/independent-population-executions', dependencies=protected)
+    def start_independent_population(request: BulkRecordingExecutionRequest):
+        try:
+            return manager.start_bulk_recording(request)
+        except ValueError as exc:
+            raise HTTPException(409, str(exc)) from exc
+        except RuntimeError as exc:
+            raise HTTPException(503, str(exc)) from exc
+
     @app.post('/v1/population-feedback-executions', dependencies=protected)
     def start_population_feedback(request: PopulationFeedbackExecutionRequest):
         try:
             return manager.start_population_feedback(request)
+        except ValueError as exc:
+            raise HTTPException(409, str(exc)) from exc
+        except RuntimeError as exc:
+            raise HTTPException(503, str(exc)) from exc
+
+    @app.post('/v1/full-population-feedback-executions', dependencies=protected)
+    def start_full_population_feedback(request: FullFeedbackExecutionRequest):
+        try:
+            return manager.start_full_feedback(request)
         except ValueError as exc:
             raise HTTPException(409, str(exc)) from exc
         except RuntimeError as exc:

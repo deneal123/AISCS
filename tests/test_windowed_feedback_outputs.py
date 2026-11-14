@@ -1,3 +1,5 @@
+import os
+
 import numpy as np
 import pytest
 
@@ -93,6 +95,41 @@ def test_experimental_replay_collects_a_complete_group(monkeypatch):
             output_budget_bytes=1000, window_steps=2, max_padding_ratio=2, dt_ms=.5)
 
 
+def test_cell_major_resolves_output_segments_once(monkeypatch):
+    import service.application.feedback.windowed_outputs as outputs
+
+    example = collector()
+    digest = 'a' * 64
+    example.provenance[10]['morphology_sha256'] = digest
+    example.diagnostics[10]['morphology_sha256'] = digest
+    cells = [{'id': 10, 'geometry': example.geometries[10], 'morphology_sha256': digest}]
+    original = outputs.feedback_output_segment_indices
+    calls = []
+
+    def resolve(*args, **kwargs):
+        calls.append(args[0])
+        return original(*args, **kwargs)
+
+    def solve(group, stimulus, table, *, device_window_factory, **kwargs):
+        device = device_window_factory((0,))
+        assert device['selected_indices'] == {10: [0]}
+        device['sink'](0, 5, [{'id': 10, 'selected_voltage_mv': [[-65., -65., -10., -65., -65.]],
+                               'neural_uv': [1., 2., 3., 4., 5.]}])
+        return {'time_ms': np.array([0., .5, 1., 1.5, 2.]), 'table_clamped_cell_ids': []}
+
+    monkeypatch.setattr(outputs, 'feedback_output_segment_indices', resolve)
+    monkeypatch.setattr('service.infrastructure.stimulation.experimental_gpu.window_batches.'
+                        'solve_windowed_groups', solve)
+    result = solve_windowed_feedback(cells, example.provenance, example.diagnostics,
+        [0.] * 5, None, threshold_mv=-20., duration_ms=2, electrode_um=[10., 0., 0.],
+        reference_um=[20., 0., 0.], conductivity_s_m=.3, clearance_um=1., max_cells=2,
+        output_budget_bytes=1000, window_steps=2, max_padding_ratio=2, dt_ms=.5,
+        device_reduction=True, cell_major=True)
+    assert calls == [10]
+    assert result['sources'][10]['edge_events'][0]['target_id'] == 20
+    np.testing.assert_array_equal(result['neural_uv'], [1., 2., 3., 4., 5.])
+
+
 def test_checked_replay_rejects_stimulus_provenance_before_solving(monkeypatch):
     from service.domain.pulse_train import pulse_train
     from service.infrastructure.stimulation.experimental_gpu import recording_adapter
@@ -134,3 +171,66 @@ def test_checked_replay_rejects_stimulus_provenance_before_solving(monkeypatch):
         solve_checked_windowed_feedback([cell], proof, {}, stimulus, None,
                                         stimulation_config=config, **kwargs)
     assert len(calls) == 1
+
+
+@pytest.mark.skipif(os.environ.get('AISCS_TEST_CUDA') != '1',
+                    reason='Explicit physical CUDA check')
+def test_cell_major_feedback_recording_matches_generic_on_gpu():
+    example = collector()
+    digest = 'a' * 64
+    geometry = example.geometries[10]
+    geometry.update(parents=[-1, 0], conductances=[0., .5], segment_nodes=[1],
+                    area=[1.], grid=[(7, 0, 1)])
+    example.provenance[10]['morphology_sha256'] = digest
+    example.diagnostics[10]['morphology_sha256'] = digest
+    example.diagnostics[10]['duration_ms'] = 1
+    cells = [{'id': 10, 'geometry': geometry, 'morphology_sha256': digest,
+              'field_current_na': [.012], 'events': [], 'initial_voltage_mv': -65.,
+              'initial_gates': [.5, .5, .5]}]
+    table = np.tile([.5, 1., .5, 1., .5, 1.], (201, 1))
+    common = dict(threshold_mv=-20., duration_ms=1, electrode_um=[10., 0., 0.],
+                  reference_um=[20., 0., 0.], conductivity_s_m=.3, clearance_um=1.,
+                  max_cells=2, output_budget_bytes=1024 * 1024, window_steps=2,
+                  max_padding_ratio=2., dt_ms=.025, device_reduction=True)
+    args = (cells, example.provenance, example.diagnostics, [0., 1., .5, 0.] + [0.] * 37, table)
+    reference = solve_windowed_feedback(*args, **common)
+    result = solve_windowed_feedback(*args, **common, cell_major=True)
+    np.testing.assert_allclose(result['neural_uv'], reference['neural_uv'], atol=1e-10)
+    np.testing.assert_array_equal(result['time_ms'], reference['time_ms'])
+    assert result['sources'] == reference['sources']
+    assert result['table_clamped_cell_ids'] == reference['table_clamped_cell_ids']
+
+
+@pytest.mark.skipif(os.environ.get('AISCS_TEST_CUDA') != '1',
+                    reason='Explicit physical CUDA check')
+def test_cell_major_feedback_multiple_groups_matches_generic_on_gpu():
+    import copy
+
+    example = collector()
+    digest = 'a' * 64
+    geometry = example.geometries[10]
+    geometry.update(parents=[-1, 0], conductances=[0., .5], segment_nodes=[1],
+                    area=[1.], grid=[(7, 0, 1)])
+    cells, provenance, diagnostics = [], {}, {}
+    for body in (10, 11):
+        proof = copy.deepcopy(example.provenance[10])
+        diagnostic = copy.deepcopy(example.diagnostics[10])
+        proof.update(body_id=str(body), morphology_sha256=digest)
+        diagnostic.update(body_id=str(body), morphology_sha256=digest, duration_ms=1)
+        provenance[body], diagnostics[body] = proof, diagnostic
+        cells.append({'id': body, 'geometry': copy.deepcopy(geometry),
+                      'morphology_sha256': digest, 'field_current_na': [.012 * (body - 9)],
+                      'events': [], 'initial_voltage_mv': -65., 'initial_gates': [.5, .5, .5]})
+    table = np.tile([.5, 1., .5, 1., .5, 1.], (201, 1))
+    common = dict(threshold_mv=-20., duration_ms=1, electrode_um=[10., 0., 0.],
+                  reference_um=[20., 0., 0.], conductivity_s_m=.3, clearance_um=1.,
+                  max_cells=1, output_budget_bytes=1024 * 1024, window_steps=2,
+                  max_padding_ratio=2., dt_ms=.025, device_reduction=True)
+    args = (cells, provenance, diagnostics, [0., 1., .5, 0.] + [0.] * 37, table)
+    reference = solve_windowed_feedback(*args, **common)
+    actual = solve_windowed_feedback(*args, **common, cell_major=True)
+    np.testing.assert_allclose(actual['neural_uv'], reference['neural_uv'], atol=1e-10)
+    np.testing.assert_array_equal(actual['time_ms'], reference['time_ms'])
+    assert list(actual['sources']) == [10, 11]
+    assert actual['sources'] == reference['sources']
+    assert actual['table_clamped_cell_ids'] == reference['table_clamped_cell_ids']

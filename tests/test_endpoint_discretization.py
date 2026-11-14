@@ -3,12 +3,61 @@ from copy import deepcopy
 import pytest
 
 from service.infrastructure.stimulation.feedback.endpoint_discretization import (
+    apply_shared_grid,
     audit_effective_positions,
     choose_endpoint_resolutions,
     discretize_endpoints,
+    merge_shared_grid_requirements,
     prepare_discretized_events,
+    prepare_shared_discretization,
     validate_prepared_events,
 )
+
+
+def test_fixed_shared_grid_reaudits_all_conditions():
+    edges = {7: [[0., 0., 0.], [1., 0., 0.]]}
+    conditions = {
+        'control': {'events': [{'child_node_id': 7, 'position': .21}],
+                    'observations_um': [[.21, 0., 0.]]},
+        'stimulated': {'events': [{'child_node_id': 7, 'position': 1.}],
+                       'observations_um': [[.95, 0., 0.]]},
+    }
+    with pytest.raises(ValueError, match='geometry limits'):
+        apply_shared_grid(conditions, edges, {'7': 5}, max_shift_um=.11,
+                          max_observation_distance_um=.08, max_nseg=9)
+    result = apply_shared_grid(conditions, edges, {'7': 5}, max_shift_um=.11,
+                               max_observation_distance_um=.1, max_nseg=9)
+    assert result['conditions']['stimulated']['effective_events'][0]['position'] == .9
+    assert conditions['stimulated']['events'][0]['position'] == 1.
+
+
+def test_shared_grid_changes_force_restart_and_do_not_coarsen():
+    first = {'7': 5}
+    result = merge_shared_grid_requirements(first, {'7': 3, '8': 7}, max_nseg=9)
+    assert result['nseg_by_edge'] == {'7': 5, '8': 7}
+    assert result['restart_required'] and result['requires_observation_reaudit']
+    assert first == {'7': 5}
+    assert not merge_shared_grid_requirements(result['nseg_by_edge'], {'7': 3},
+                                               max_nseg=9)['restart_required']
+    assert not merge_shared_grid_requirements({}, {'7': 1}, max_nseg=9)['restart_required']
+    with pytest.raises(ValueError, match='requirement'):
+        merge_shared_grid_requirements({}, {'7': 4}, max_nseg=9)
+
+
+def test_shared_grid_covers_both_conditions_without_mutation():
+    conditions = {'control': {'events': [{'child_node_id': 7, 'position': .5}],
+                              'observations_um': [[.5, 0., 0.]]},
+                  'stimulated': {'events': [{'child_node_id': 7, 'position': 1.}],
+                                 'observations_um': [[1., 0., 0.]]}}
+    result = prepare_shared_discretization(conditions, {7: [[0., 0., 0.], [1., 0., 0.]]},
+        max_shift_um=.1, max_observation_distance_um=.2, max_nseg=9)
+    assert result['shared']['nseg_by_edge'] == {'7': 5}
+    assert result['conditions']['stimulated']['effective_events'][0]['position'] == .9
+    assert result['conditions']['control']['effective_events'][0]['position'] == .5
+    assert conditions['stimulated']['events'][0]['position'] == 1.
+    with pytest.raises(ValueError, match='No endpoint resolution'):
+        prepare_shared_discretization(conditions, {7: [[0., 0., 0.], [1., 0., 0.]]},
+            max_shift_um=.01, max_observation_distance_um=.2, max_nseg=9)
 
 
 def test_effective_position_audits_interior_events_after_remeshing():
@@ -24,6 +73,21 @@ def test_effective_position_audits_interior_events_after_remeshing():
     assert fine[1]['effective_position'] == .9
     assert fine[1]['requires_endpoint_relocation'] is True
     assert fine[1]['shift_um'] == pytest.approx(1.)
+
+
+def test_real_endpoint_sensitivity_does_not_override_distance_limit():
+    # MaleCNS 10002 edge 119, coordinates converted from 8 nm units.
+    edges = {119: [[44262.4 * .008, 31296 * .008, 37619.2 * .008],
+                   [44172.8 * .008, 31296 * .008, 37798.4 * .008]]}
+    observations = [[44409 * .008, 31355 * .008, 37921 * .008]]
+    events = [{'child_node_id': 119, 'position': 1.}]
+    with pytest.raises(ValueError, match='No endpoint resolution'):
+        prepare_discretized_events(events, edges, observations, max_shift_um=.1,
+                                  max_observation_distance_um=2., max_nseg=51)
+    result = prepare_discretized_events(events, edges, observations, max_shift_um=.1,
+                                       max_observation_distance_um=2.2, max_nseg=51)
+    assert result['evidence'][0]['nseg'] == 9
+    assert result['evidence'][0]['observation_distance_um'] == pytest.approx(2.1838049929)
 
 
 @pytest.mark.parametrize('resolution', [0, 2, True, -1])

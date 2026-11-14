@@ -110,6 +110,26 @@ def test_partial_geometry_retains_unresolved_pairs_without_fabricating_events():
                                allow_partial_geometry=True)
 
 
+def test_explicit_control_crossings_route_actual_active_ticks_without_subtraction():
+    row = {'included_in_graph': True, 'partner_id': '5', 'centerline_distance_um': .1,
+           'status': 'control_crossing', 'stimulated_ticks_ms': [1, 2],
+           'control_ticks_ms': [1]}
+    result = {'body_id': '1', 'graph_sha256': 'a' * 64, 'simulation_sha256': 'c' * 64,
+              'threshold_mv': -20., 'candidates': [row], 'source_pairs': 1,
+              'duration_ms': 2, 'graph_pairs': 1}
+    with pytest.raises(ValueError, match='threshold'):
+        fragment_edge_schedule(result, max_distance_um=2, duration_ms=2)
+    schedule = fragment_edge_schedule(result, max_distance_um=2, duration_ms=2,
+                                      include_control_crossings=True)
+    assert schedule['edge_events'] == [
+        {'source_id': 1, 'target_id': 5, 'tick': 1, 'count': 1},
+        {'source_id': 1, 'target_id': 5, 'tick': 2, 'count': 1}]
+    bad = {**result, 'candidates': [{**row, 'control_ticks_ms': [2, 1]}]}
+    with pytest.raises(ValueError, match='threshold'):
+        fragment_edge_schedule(bad, max_distance_um=2, duration_ms=2,
+                               include_control_crossings=True)
+
+
 def inputs():
     time = np.array([0.0, 0.5, 1.0, 1.5, 2.0])
     active = {
