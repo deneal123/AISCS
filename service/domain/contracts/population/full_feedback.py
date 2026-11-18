@@ -22,6 +22,7 @@ class FullFeedbackConfig(Contract):
     max_iterations: int = Field(strict=True, ge=1, le=100)
     max_events: int = Field(strict=True, ge=1, le=1_000_000_000)
     allow_known_geometry_repair: bool = Field(strict=True, default=False)
+    allow_partial_source_geometry: bool = Field(strict=True, default=False)
 
     @model_validator(mode='after')
     def supported_simulation(self):

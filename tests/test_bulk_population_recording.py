@@ -24,7 +24,7 @@ def test_independent_recording_requires_all_verified_solver_receipts(monkeypatch
     def solve(_metadata, _stimulus, _table, *, device_window_factory, **_kwargs):
         recorder = device_window_factory([cell])
         recorder['sink'](0, 41, [{'id': 10, 'neural_uv': [1.] * 41}])
-        yield [10], {'table_clamped_cell_ids': []}
+        yield [10], {'accelerated_cell_major': False, 'table_clamped_cell_ids': []}
 
     monkeypatch.setattr('service.application.population.bulk_recording.solve_population', solve)
     result = run_bulk_recording(None, [0.] * 41, None, **options())
@@ -42,7 +42,7 @@ def test_replacement_receipt_is_returned_only_after_complete_recording(monkeypat
         on_replacement(10, 7, transformation)
         recorder = device_window_factory([cell])
         recorder['sink'](0, 41, [{'id': 10, 'neural_uv': [1.] * 41}])
-        yield [10], {'table_clamped_cell_ids': []}
+        yield [10], {'accelerated_cell_major': False, 'table_clamped_cell_ids': []}
 
     monkeypatch.setattr('service.application.population.bulk_recording.solve_population', solve)
     result = run_bulk_recording(None, [0.] * 41, None, **options(),
@@ -55,7 +55,7 @@ def test_replacement_receipt_is_returned_only_after_complete_recording(monkeypat
 
 def test_independent_recording_rejects_partial_receipt_and_clamp(monkeypatch):
     def solve(*_args, **_kwargs):
-        yield [10], {'table_clamped_cell_ids': [10]}
+        yield [10], {'accelerated_cell_major': False, 'table_clamped_cell_ids': [10]}
 
     monkeypatch.setattr('service.application.population.bulk_recording.solve_population', solve)
     with pytest.raises(ValueError, match='clamped'):
@@ -75,7 +75,7 @@ def test_progress_reports_only_validated_batches(monkeypatch):
     def solve(_metadata, _stimulus, _table, *, device_window_factory, **_kwargs):
         recorder = device_window_factory([cell])
         recorder['sink'](0, 41, [{'id': 10, 'neural_uv': [1.] * 41}])
-        yield [10], {'table_clamped_cell_ids': []}
+        yield [10], {'accelerated_cell_major': False, 'table_clamped_cell_ids': []}
 
     monkeypatch.setattr('service.application.population.bulk_recording.solve_population', solve)
     run_bulk_recording(None, [0.] * 41, None, **options(),
@@ -83,7 +83,7 @@ def test_progress_reports_only_validated_batches(monkeypatch):
     assert updates == [('independent_cells', 0, 1), ('independent_cells', 1, 1)]
 
     def clamped(*_args, **_kwargs):
-        yield [10], {'table_clamped_cell_ids': [10]}
+        yield [10], {'accelerated_cell_major': False, 'table_clamped_cell_ids': [10]}
 
     monkeypatch.setattr('service.application.population.bulk_recording.solve_population', clamped)
     updates.clear()
@@ -101,7 +101,7 @@ def test_fixed_input_recording_is_explicit_and_does_not_claim_feedback(monkeypat
         assert event_factory((10,)) == {10: ['fixed']}
         recorder = device_window_factory([cell])
         recorder['sink'](0, 41, [{'id': 10, 'neural_uv': [1.] * 41}])
-        yield [10], {'table_clamped_cell_ids': []}
+        yield [10], {'accelerated_cell_major': False, 'table_clamped_cell_ids': []}
 
     monkeypatch.setattr('service.application.population.bulk_recording.solve_population', solve)
     result = run_fixed_input_recording(None, [0.] * 41, None, **options(),
@@ -142,7 +142,7 @@ def test_fixed_input_can_stream_selected_voltages(monkeypatch):
         assert recorder['selected_indices'] == {10: [0]}
         recorder['sink'](0, 41, [{'id': 10, 'neural_uv': [1.] * 41,
                                   'selected_voltage_mv': [[-65.] * 41]}])
-        yield [10], {'table_clamped_cell_ids': []}
+        yield [10], {'accelerated_cell_major': False, 'table_clamped_cell_ids': []}
 
     monkeypatch.setattr('service.application.population.bulk_recording.solve_population', solve)
     run_fixed_input_recording(None, [0.] * 41, None, **options(), event_factory=lambda _: {10: []},

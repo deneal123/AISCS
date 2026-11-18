@@ -7,6 +7,10 @@ import pytest
 from service.infrastructure.stimulation.experimental_gpu import batch_solver, population_replay
 
 
+def _solved(**extra):
+    return {'accelerated_cell_major': True, **extra}
+
+
 def _run(**kwargs):
     return population_replay.solve_population(
         None, None, None, audited_sources=None, params=None,
@@ -30,7 +34,7 @@ def test_closed_consumer_releases_blocked_preparation(monkeypatch):
 
     monkeypatch.setattr(population_replay, 'iter_cell_batches', batches)
     monkeypatch.setattr(batch_solver, 'build_cell_major', lambda *_: None)
-    monkeypatch.setattr(batch_solver, 'solve_prepared_batch', lambda *a, **kw: {})
+    monkeypatch.setattr(batch_solver, 'solve_prepared_batch', lambda *a, **kw: _solved())
     replay = _run()
     assert next(replay)[0] == [0]
     # Allow both bounded queues to fill while the consumer is paused.
@@ -84,7 +88,7 @@ def test_recording_batches_are_split_before_gpu_budget_is_exceeded(monkeypatch):
              for body in (1, 2)]
     monkeypatch.setattr(population_replay, 'iter_cell_batches', lambda *a, **k: iter([cells]))
     monkeypatch.setattr(batch_solver, 'build_cell_major', lambda *a: ('packed',))
-    monkeypatch.setattr(batch_solver, 'solve_prepared_batch', lambda *a, **k: {})
+    monkeypatch.setattr(batch_solver, 'solve_prepared_batch', lambda *a, **k: _solved())
 
     def factory(group):
         return {'recording_coefficients': {cell['id']: [1.] for cell in group},
@@ -103,7 +107,7 @@ def test_recording_selection_ceiling_can_exceed_small_cell_size(monkeypatch):
                                     'segment_nodes': [1, 2, 3, 4]}}]
     monkeypatch.setattr(population_replay, 'iter_cell_batches', lambda *a, **k: iter([cells]))
     monkeypatch.setattr(batch_solver, 'build_cell_major', lambda *a: ('packed',))
-    monkeypatch.setattr(batch_solver, 'solve_prepared_batch', lambda *a, **k: {})
+    monkeypatch.setattr(batch_solver, 'solve_prepared_batch', lambda *a, **k: _solved())
 
     def factory(group):
         return {'recording_coefficients': {cell['id']: [1.] for cell in group},
@@ -151,7 +155,7 @@ def test_closed_windowed_consumer_releases_preparation(monkeypatch):
             finished.set()
 
     monkeypatch.setattr(population_replay, 'iter_cell_batches', batches)
-    monkeypatch.setattr(batch_solver, 'solve_prepared_batch', lambda *a, **kw: {})
+    monkeypatch.setattr(batch_solver, 'solve_prepared_batch', lambda *a, **kw: _solved())
     replay = _run(window_sink=lambda *a: None)
     assert next(replay)[0] == [0]
     assert produced.wait(2)
@@ -172,7 +176,7 @@ def test_population_device_recording_uses_cell_major_and_checks_identity(monkeyp
         assert options['recording_coefficients'] == {7: [1.]}
         assert options['cell_major_block_threads'] == 128
         options['device_window_sink'](0, 1, [{'id': 7, 'neural_uv': [2.]}])
-        return {'ok': True}
+        return {'accelerated_cell_major': True, 'ok': True}
 
     monkeypatch.setattr(batch_solver, 'solve_prepared_batch', solver)
     def factory(group):
@@ -181,8 +185,17 @@ def test_population_device_recording_uses_cell_major_and_checks_identity(monkeyp
                 'sink': lambda start, end, rows: received.append((start, end, rows))}
 
     assert list(_run(device_window_factory=factory, cell_major_block_threads=128)) == [
-        ([7], {'ok': True})]
+        ([7], {'accelerated_cell_major': True, 'ok': True})]
     assert received == [(0, 1, [{'id': 7, 'neural_uv': [2.]}])]
+
+
+def test_missing_solver_kernel_receipt_is_rejected(monkeypatch):
+    cells = [{'id': 7, 'geometry': {'marker': True}}]
+    monkeypatch.setattr(population_replay, 'iter_cell_batches', lambda *a, **k: iter([cells]))
+    monkeypatch.setattr(batch_solver, 'build_cell_major', lambda *a: ('packed',))
+    monkeypatch.setattr(batch_solver, 'solve_prepared_batch', lambda *a, **kw: {'ok': True})
+    with pytest.raises(ValueError, match='solver receipt'):
+        next(_run())
 
 
 def test_population_device_recording_rejects_incompatible_sinks():
@@ -218,12 +231,12 @@ def test_population_events_build_grid_and_preserve_identity(monkeypatch):
     def solve(group, stimulus, table, **options):
         assert group[0]['events'] == [{'child_node_id': 42}]
         assert group[0]['geometry']['grid'] == [(42, 0, 3), (42, 1, 3), (42, 2, 3)]
-        return {}
+        return {'accelerated_cell_major': True}
     monkeypatch.setattr(batch_solver, 'solve_prepared_batch', solve)
     result = population_replay.solve_population(None, None, None, audited_sources=None,
         params=SimpleNamespace(nseg=3), segment_budget=10, output_budget_bytes=10,
         reduce_trees=False, event_factory=lambda ids: {7: [{'child_node_id': 42}]})
-    assert list(result) == [([7], {})]
+    assert list(result) == [([7], {'accelerated_cell_major': True})]
 
 
 def test_population_rejects_incomplete_event_schedule(monkeypatch):

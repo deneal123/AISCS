@@ -16,6 +16,8 @@ from concurrent.futures import ThreadPoolExecutor
 
 import numpy as np
 
+from .allocator import release as release_allocator
+from .allocator import tune as tune_allocator
 from .fast_prepare import iter_prepared_chunks
 
 __all__ = ["iter_cell_batches", "solve_population"]
@@ -292,6 +294,14 @@ def solve_population(metadata, stimulus_midpoint, rate_table, *, audited_sources
     # starves), but a SEPARATE packer thread fed by the prepare thread hides it
     # completely behind the GPU solve.
 
+    # The prepare path builds and drops a whole batch of per-cell arrays per
+    # chunk. glibc keeps those pages in per-thread arenas, so the resident set of
+    # a full-population walk climbed 0.98 -> 3.70 GB while the live object graph
+    # stayed flat (283 919 -> 283 927 objects, measured). Capping the arena and
+    # trimming between batches held the same walk at 0.86-1.95 GB and dropped it
+    # to 0.45-0.66 GB at the end; without that the connected control branch
+    # OOM-killed the 8 GiB container at 5.5 GiB.
+    tune_allocator()
     stop = threading.Event()
 
     def put_until_stopped(target, item):
@@ -374,6 +384,7 @@ def solve_population(metadata, stimulus_midpoint, rate_table, *, audited_sources
                         batch = updated
                     if not put_until_stopped(prepared, (batch, None)):
                         return
+                    release_allocator()
             put_until_stopped(prepared, (None, None))
         except BaseException as exc:  # forwarded to the consumer, never swallowed
             put_until_stopped(prepared, (None, exc))
@@ -477,6 +488,11 @@ def solve_population(metadata, stimulus_midpoint, rate_table, *, audited_sources
                 cell_warps=cell_warps, block_cell_segments=block_cell_segments,
                 cell_major_block_threads=cell_major_block_threads,
                 cell_major_packed=extra, require_cell_major=require_cell_major, **device_options)
+            # The accelerated cell-major kernel is a per-batch decision (a batch
+            # with mixed initial states falls back to the generic kernel), so the
+            # receipt travels with the batch instead of a caller assuming it.
+            if not isinstance(result.get('accelerated_cell_major'), bool):
+                raise ValueError('GPU solver receipt is incomplete')
             yield list(ids), result
     finally:
         # A stopped consumer must not leave producers blocked on full queues.

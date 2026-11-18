@@ -106,9 +106,83 @@ def test_store_reuses_verified_geometry_and_rejects_corruption(tmp_path, monkeyp
         index.manifest['source_md5'] = 'd' * 32
         with pytest.raises(ValueError, match='identity'):
             store.metadata([{**cell, 'morphology_sha256': 'f' * 64}])
+        # The diagnostic read fans out over independent read-only connections,
+        # so an uncommitted UPDATE is invisible to it; corruption on disk is what
+        # has to be detected, and that requires the write to be durable.
         store.db.execute('UPDATE sources SET payload = ?', (b'{}',))
+        store.db.commit()
         with pytest.raises(ValueError, match='corrupted'):
             store.diagnostics((10,))
+
+
+def test_store_reuses_completed_database_across_runs(tmp_path, monkeypatch):
+    from service.infrastructure.stimulation.population.source_store import SourceDiagnosticsStore
+
+    cell, graph, index, _ = inputs()
+    monkeypatch.setattr('service.infrastructure.stimulation.population.source_geometry.outgoing',
+        lambda *_a: {'next_offset': None, 'items': [{'target_id': '20', 'synapse_count': 2}]})
+    database = tmp_path / 'sources.sqlite'
+    options = dict(max_distance_um=2., morphology_sha256={10: 'b' * 64})
+    with SourceDiagnosticsStore(database, graph, index, threshold_mv=-20., duration_ms=10,
+            simulation_sha256='e' * 64, **options) as store:
+        first = store.metadata([cell])
+    index.query = lambda *_a, **_k: pytest.fail('second run rescanned the source index')
+    with SourceDiagnosticsStore(database, graph, index, threshold_mv=-10., duration_ms=25,
+            simulation_sha256='f' * 64, **options) as store:
+        second = store.metadata([cell])
+    assert second['diagnostics'][10]['graph_pairs'] == first['diagnostics'][10]['graph_pairs']
+    assert second['diagnostics'][10]['candidates'] == first['diagnostics'][10]['candidates']
+    assert second['diagnostics'][10]['simulation_sha256'] == 'f' * 64
+    assert second['diagnostics'][10]['threshold_mv'] == -10.
+    assert second['diagnostics'][10]['duration_ms'] == 25
+
+
+def test_store_remembers_exclusion_counts_across_runs(tmp_path, monkeypatch):
+    from service.infrastructure.stimulation.population.source_store import SourceDiagnosticsStore
+
+    cell, graph, index, _ = inputs()
+    monkeypatch.setattr('service.infrastructure.stimulation.population.source_geometry.outgoing',
+        lambda *_a: {'next_offset': None, 'items': [{'target_id': '20', 'synapse_count': 2}]})
+    database = tmp_path / 'sources.sqlite'
+    options = dict(max_distance_um=2., morphology_sha256={10: 'b' * 64})
+    with SourceDiagnosticsStore(database, graph, index, threshold_mv=-20., duration_ms=10,
+            simulation_sha256='e' * 64, **options) as store:
+        # A store that predates the side table must not be mistaken for a
+        # geometry without exclusions: it reports nothing until it is filled.
+        assert store.cached_counts() is None
+        store.metadata([cell])
+        store.remember_counts({10: (2, 1)})
+    original = index.query
+    index.query = lambda *_a, **_k: pytest.fail('counts were rebuilt from the source index')
+    with SourceDiagnosticsStore(database, graph, index, threshold_mv=-20., duration_ms=10,
+            simulation_sha256='e' * 64, **options) as store:
+        assert store.cached_counts() == {10: (2, 1)}
+    index.query = original
+    fresh = tmp_path / 'fresh.sqlite'
+    with SourceDiagnosticsStore(fresh, graph, index, threshold_mv=-20., duration_ms=10,
+            simulation_sha256='e' * 64, **options) as store:
+        store.metadata([cell])
+        assert store.cached_counts() is None
+        assert store.fill_counts() == {10: (2, 1)}
+        assert store.cached_counts() == {10: (2, 1)}
+
+
+def test_store_separates_distance_tolerances_in_one_database(tmp_path, monkeypatch):
+    from service.infrastructure.stimulation.population.source_store import SourceDiagnosticsStore
+
+    cell, graph, index, _ = inputs()
+    monkeypatch.setattr('service.infrastructure.stimulation.population.source_geometry.outgoing',
+        lambda *_a: {'next_offset': None, 'items': [{'target_id': '20', 'synapse_count': 2}]})
+    scans = []
+    original = index.query
+    index.query = lambda *a, **k: scans.append(1) or original(*a, **k)
+    database = tmp_path / 'sources.sqlite'
+    for tolerance in (2., 3.):
+        with SourceDiagnosticsStore(database, graph, index, threshold_mv=-20., duration_ms=10,
+                simulation_sha256='e' * 64, max_distance_um=tolerance,
+                morphology_sha256={10: 'b' * 64}) as store:
+            assert store.metadata([cell])['diagnostics'][10]['max_distance_um'] == tolerance
+    assert len(scans) == 2
 
 
 def test_source_store_accepts_producer_and_consumer_threads(tmp_path, monkeypatch):
@@ -126,3 +200,14 @@ def test_source_store_accepts_producer_and_consumer_threads(tmp_path, monkeypatc
             receipts = list(pool.map(lambda _: store.metadata([cell]), range(6)))
         assert all(receipt == receipts[0] for receipt in receipts)
         assert store.diagnostics((10,)) == receipts[0]['diagnostics']
+
+
+def test_source_diagnostics_cache_path_is_optional(monkeypatch, tmp_path):
+    from service.settings import source_diagnostics_cache_path
+
+    monkeypatch.delenv('GENERATOR_SOURCE_DIAGNOSTICS_CACHE', raising=False)
+    assert source_diagnostics_cache_path() is None
+    monkeypatch.setenv('GENERATOR_SOURCE_DIAGNOSTICS_CACHE', '')
+    assert source_diagnostics_cache_path() is None
+    monkeypatch.setenv('GENERATOR_SOURCE_DIAGNOSTICS_CACHE', str(tmp_path / 'source.db'))
+    assert source_diagnostics_cache_path() == tmp_path / 'source.db'

@@ -54,6 +54,7 @@ def replay_bulk_feedback(metadata, stimulus, rate_table, *, audited_sources, par
             raise ValueError('Invalid bulk feedback event batch')
         return events
 
+    kernels = {'accelerated_cell_major': 0, 'generic': 0, 'batches': 0}
     received = set()
     for ids, result in solve_population(metadata, stimulus, rate_table,
             audited_sources=audited_sources, params=params, segment_budget=segment_budget,
@@ -67,6 +68,8 @@ def replay_bulk_feedback(metadata, stimulus, rate_table, *, audited_sources, par
                 or len(set(ids)) != len(ids) or received.intersection(ids)
                 or not set(ids).issubset(collector.recording.completed)):
             raise ValueError('Bulk feedback solver receipt does not match recorded cells')
+        kernels['batches'] += 1
+        kernels['accelerated_cell_major' if result['accelerated_cell_major'] else 'generic'] += 1
         received.update(ids)
         if batch_progress is not None:
             batch_progress(len(received), len(expected_ids))
@@ -74,6 +77,7 @@ def replay_bulk_feedback(metadata, stimulus, rate_table, *, audited_sources, par
     if received != collector.recording.completed:
         raise ValueError('Bulk feedback solver receipts are incomplete')
     return {'neural_uv': signal, 'cells': len(received),
+            'solver_kernels': kernels,
             'interpretation': 'experimental fixed-schedule replay; no network convergence'}
 
 
@@ -96,22 +100,23 @@ def replay_verified_feedback_to_archive(metadata, stimulus, rate_table, *, sched
     The caller supplies independently trusted schedule and morphology digests.
     This performs one replay, not recurrent convergence or biological validation.
     """
-    from .fixed_inputs import fixed_input_factory
+    from .endpoint_policy import relocate_endpoints
+    from .fixed_inputs import fixed_input_digest, fixed_input_factory
 
     if (not isinstance(metadata, dict) or not callable(metadata_factory)
             or 'events_by_target' in options or 'event_sink' in options):
         raise ValueError('Invalid verified feedback replay inputs')
     graph_sha256 = metadata.get('graph_sha256')
-    event_factory = fixed_input_factory(schedule, options.get('expected_ids'),
+    # Authenticate the schedule exactly as the caller produced it, then apply the
+    # deterministic endpoint relocation the GPU grid requires: a finite segment
+    # cannot carry a point at a zero-area SWC endpoint. What was moved is returned
+    # as endpoint_relocation; nothing is inferred from the solver.
+    if fixed_input_digest(schedule) != schedule_sha256:
+        raise ValueError('Fixed input schedule digest mismatch')
+    relocated = relocate_endpoints(schedule, options.pop('endpoint_grids', None))
+    event_factory = fixed_input_factory(relocated['schedule'], options.get('expected_ids'),
         morphology_sha256, graph_sha256=graph_sha256,
-        expected_schedule_sha256=schedule_sha256)
-    # A one-segment GPU replay cannot place an event at a zero-area endpoint.
-    # Check the whole authenticated schedule before spending time on batches;
-    # never silently relocate the event without an audited grid policy.
-    for body, events in schedule['events_by_target'].items():
-        if any(isinstance(event, dict) and event.get('position') in (0, 1)
-               and type(event.get('position')) in (int, float) for event in events):
-            raise ValueError(f'Unresolved feedback endpoint in target cell {body}')
+        expected_schedule_sha256=relocated['sha256'])
     frozen_hashes = morphology_sha256.copy()
 
     def checked_metadata(cells):
@@ -125,4 +130,5 @@ def replay_verified_feedback_to_archive(metadata, stimulus, rate_table, *, sched
         metadata_factory=checked_metadata, **options)
     result['fixed_input_schedule_sha256'] = schedule_sha256
     result['fixed_input_graph_sha256'] = graph_sha256
+    result['endpoint_relocation'] = relocated['audit']
     return result

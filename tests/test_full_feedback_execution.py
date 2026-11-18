@@ -50,10 +50,12 @@ def test_child_rejects_result_without_request_identity(tmp_path, monkeypatch):
     monkeypatch.setattr('service.infrastructure.execution.process._field_geometry_cache',
                         lambda *_a: {})
 
-    def fake_execute(*_args, output_directory, **_kwargs):
+    def fake_execute(*_args, solver_options, output_directory, **_kwargs):
         output_directory.mkdir()
         path = output_directory / 'manifest.json'
-        path.write_text(json.dumps({'configuration': {'request_sha256': '0' * 64}}))
+        path.write_text(json.dumps({'configuration': {'request_sha256': '0' * 64},
+            'batch_settings': solver_options,
+            'solver_kernels': {'accelerated_cell_major': 1, 'generic': 0, 'batches': 1}}))
         digest = hashlib.sha256(path.read_bytes()).hexdigest()
         return {'status': 'converged', 'manifest_sha256': digest}
 
@@ -64,6 +66,54 @@ def test_child_rejects_result_without_request_identity(tmp_path, monkeypatch):
     with pytest.raises(ValueError, match='identity mismatch'):
         run_full_feedback_child(request.model_dump(mode='json'), str(output))
     assert (output / 'error.json').exists()
+
+
+def _published_child(monkeypatch, manifest_update):
+    monkeypatch.setenv('GENERATOR_SYNAPSE_DIR', 'configured')
+    monkeypatch.setattr('service.infrastructure.connectome.neighbors.registered_graph',
+                        lambda: SimpleNamespace(provenance={'manifest_sha256': 'a' * 64}))
+    monkeypatch.setattr('service.infrastructure.connectome.synapse_repository.registered_index',
+                        lambda *_a: object())
+    monkeypatch.setattr('service.infrastructure.execution.process._field_geometry_cache',
+                        lambda *_a: {})
+    seen = {}
+
+    def fake_execute(_graph, _index, config, *, solver_options, output_directory, **_kwargs):
+        seen.update(solver_options)
+        output_directory.mkdir()
+        path = output_directory / 'manifest.json'
+        manifest = {'configuration': {'request_sha256': config.digest()},
+                    'batch_settings': solver_options,
+                    'solver_kernels': {'accelerated_cell_major': 1, 'generic': 0,
+                                       'batches': 1}}
+        manifest.update(manifest_update(solver_options))
+        path.write_text(json.dumps(manifest))
+        digest = hashlib.sha256(path.read_bytes()).hexdigest()
+        return {'status': 'converged', 'manifest_sha256': digest}
+
+    monkeypatch.setattr('service.application.population.full_feedback_experiment.'
+                        'execute_full_feedback_request', fake_execute)
+    return seen
+
+
+def test_child_requires_the_accelerated_cell_major_kernel(tmp_path, monkeypatch):
+    seen = _published_child(monkeypatch,
+        lambda settings: {'solver_kernels': {'accelerated_cell_major': 0, 'generic': 3,
+                                             'batches': 3}})
+    request = FullFeedbackExecutionRequest(execution_id=uuid4(), config=config())
+    with pytest.raises(ValueError, match='accelerated cell-major kernel'):
+        run_full_feedback_child(request.model_dump(mode='json'), str(tmp_path / 'output'))
+    # The connected experiment must not inherit the small independent defaults.
+    assert seen['require_cell_major'] is True
+    assert seen['max_cells'] > 20 and seen['segment_budget'] > 200000
+
+
+def test_child_rejects_a_manifest_with_other_batch_settings(tmp_path, monkeypatch):
+    _published_child(monkeypatch, lambda settings: {'batch_settings': {**settings,
+        'max_cells': settings['max_cells'] - 1}})
+    request = FullFeedbackExecutionRequest(execution_id=uuid4(), config=config())
+    with pytest.raises(ValueError, match='batch settings mismatch'):
+        run_full_feedback_child(request.model_dump(mode='json'), str(tmp_path / 'output'))
 
 
 def test_private_http_start_and_cancel(tmp_path, monkeypatch):

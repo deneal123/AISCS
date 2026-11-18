@@ -85,14 +85,23 @@ def iter_direct_feedback(graph, expected_ids, batches, *, duration_ms):
 
 def iter_verified_source_feedback(graph, expected_ids, source_batches, *, duration_ms,
                                   diagnostics_factory, morphology_sha256,
-                                  control_source_batches=None, paired_batches=False):
+                                  control_source_batches=None, paired_batches=False,
+                                  events_only=False):
     """Route source events and restore trusted per-synapse geometry batchwise.
 
     Source archives and original diagnostics must have been authenticated by
     the caller. A supplied control must use the same configuration and time
     grid with stimulation disabled. Batches remain provisional until the end.
+
+    With events_only a cell that emitted no crossing is passed through as
+    silence without restoring its per-synapse geometry, because the caller only
+    maps pairs that carry events. This is a cost decision, not a completeness
+    one: the caller must still enforce the unresolved-geometry policy for the
+    whole population on every pass (complete_metadata in the full-population
+    workflow does exactly that), otherwise a quiet cell could hide an
+    unresolvable source.
     """
-    if (type(paired_batches) is not bool
+    if (type(paired_batches) is not bool or type(events_only) is not bool
             or (paired_batches and control_source_batches is not None)
             or not callable(diagnostics_factory) or not isinstance(morphology_sha256, dict)
             or not isinstance(expected_ids, list)
@@ -119,11 +128,20 @@ def iter_verified_source_feedback(graph, expected_ids, source_batches, *, durati
             if (paired_batches or control_source_batches is not None) and (
                     not isinstance(control, dict) or set(control) != set(batch)):
                 raise ValueError('Control source batch identities do not match')
-            originals = diagnostics_factory(tuple(batch))
-            if not isinstance(originals, dict) or set(originals) != set(batch):
+            # A quiet cell contributes no schedule entry: the caller only ever
+            # maps pairs that carry events, so restoring its diagnostics is pure
+            # work that is immediately discarded. Reading it anyway costs about
+            # 4 ms per cell, which over the whole population is the single
+            # largest term of an iteration that has nothing to replay. Only the
+            # emitting cells are restored through the factory, and every one of
+            # them is still identity-checked below.
+            audible = ({body: source for body, source in batch.items() if source['edge_events']}
+                       if events_only else batch)
+            originals = diagnostics_factory(tuple(audible)) if audible else {}
+            if not isinstance(originals, dict) or set(originals) != set(audible):
                 raise ValueError('Incomplete source feedback diagnostics')
             merged = {}
-            for body, source in batch.items():
+            for body, source in audible.items():
                 original = originals[body]
                 if (not isinstance(original, dict) or original.get('body_id') != str(body)
                         or original.get('graph_sha256') != graph_hash

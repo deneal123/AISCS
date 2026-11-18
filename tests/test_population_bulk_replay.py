@@ -22,7 +22,7 @@ def test_bulk_feedback_stages_events_and_recording(monkeypatch):
         voltage[20] = -10.
         device['sink'](0, 41, [{'id': 10, 'neural_uv': [1.] * 41,
                                 'selected_voltage_mv': [voltage]}])
-        yield [10], {'table_clamped_cell_ids': []}
+        yield [10], {'accelerated_cell_major': False, 'table_clamped_cell_ids': []}
 
     monkeypatch.setattr('service.application.feedback.population_bulk_replay.solve_population',
                         solve)
@@ -37,7 +37,7 @@ def test_bulk_feedback_stages_events_and_recording(monkeypatch):
     assert result['cells'] == 1
     assert staged[0][10]['edge_events'][0]['target_id'] == 20
     def incorrect_receipt(metadata, stimulus, rate_table, **kwargs):
-        yield [10], {'table_clamped_cell_ids': []}
+        yield [10], {'accelerated_cell_major': False, 'table_clamped_cell_ids': []}
     monkeypatch.setattr('service.application.feedback.population_bulk_replay.solve_population',
                         incorrect_receipt)
     with pytest.raises(ValueError, match='receipt does not match'):
@@ -109,16 +109,37 @@ def test_verified_replay_checks_inputs_before_atomic_publication(monkeypatch, tm
     assert destination.read_text(encoding='utf8') == 'previous'
 
 
-@pytest.mark.parametrize('position', [0., 1.])
-def test_verified_replay_rejects_endpoint_before_gpu_launch(monkeypatch, tmp_path, position):
+@pytest.mark.parametrize('position,effective', [(0., .5), (1., .5)])
+def test_verified_replay_relocates_endpoint_before_gpu_launch(monkeypatch, tmp_path,
+                                                             position, effective):
     schedule, hashes = schedule_fixture()
     schedule['events_by_target'][20][0]['position'] = position
+    seen = {}
+
+    def replay(metadata, stimulus, rate_table, *, events_by_target, **kwargs):
+        seen['events'] = events_by_target((20,))
+        return {'table_clamped_cell_ids': []}
+
+    monkeypatch.setattr('service.application.feedback.population_bulk_replay.'
+                        'replay_bulk_feedback_to_archive', replay)
+    result = replay_verified_feedback_to_archive({'graph_sha256': 'a' * 64}, [], None,
+        schedule=schedule, schedule_sha256=fixed_input_digest(schedule),
+        morphology_sha256=hashes, event_path=tmp_path / 'events.jsonl',
+        metadata_factory=lambda cells: {}, expected_ids=[10, 20])
+    assert seen['events'][20][0]['position'] == effective
+    assert result['endpoint_relocation']['relocated'] == 1
+
+
+def test_verified_replay_rejects_tampered_endpoint_schedule(monkeypatch, tmp_path):
+    schedule, hashes = schedule_fixture()
+    digest = fixed_input_digest(schedule)
+    schedule['events_by_target'][20][0]['position'] = 1.
     monkeypatch.setattr('service.application.feedback.population_bulk_replay.'
                         'replay_bulk_feedback_to_archive',
                         lambda *args, **kwargs: pytest.fail('GPU must not start'))
-    with pytest.raises(ValueError, match='Unresolved feedback endpoint in target cell 20'):
+    with pytest.raises(ValueError, match='Fixed input schedule digest mismatch'):
         replay_verified_feedback_to_archive({'graph_sha256': 'a' * 64}, [], None,
-            schedule=schedule, schedule_sha256=fixed_input_digest(schedule),
+            schedule=schedule, schedule_sha256=digest,
             morphology_sha256=hashes, event_path=tmp_path / 'events.jsonl',
             metadata_factory=lambda cells: {}, expected_ids=[10, 20])
     assert list(tmp_path.iterdir()) == []

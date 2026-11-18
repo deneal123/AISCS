@@ -21,7 +21,8 @@ from service.infrastructure.stimulation.population.pair_mapping import (
 def schedule_verified_source_batch(batch, source_ids, graph, index, directories, parameters, *,
                                    duration_ms, max_events, max_source_distance_um,
                                    max_target_distance_um, target_provider=None, pair_cache=None,
-                                   include_control_crossings=False):
+                                   include_control_crossings=False,
+                                   allow_partial_source_geometry=False):
     """Map one provisional physical-output batch to an experimental replay schedule.
 
     The producer must exhaust and verify the complete source stream before any
@@ -38,11 +39,13 @@ def schedule_verified_source_batch(batch, source_ids, graph, index, directories,
     mappings = match_fragment_inputs_batch(pairs, batch['diagnostics'], index, graph,
         directories, max_source_distance_um=max_source_distance_um,
         max_target_distance_um=max_target_distance_um, duration_ms=duration_ms,
+        allow_partial_source=allow_partial_source_geometry,
         _target_provider=target_provider, _pair_cache=pair_cache, **control_options)
     return population_feedback_schedule(source_ids, {'graph_sha256':
         graph.provenance['manifest_sha256'], 'delivery_delay_ms': 2,
         'events': batch['events']}, mappings, parameters, duration_ms=duration_ms,
-        max_events=max_events, output_targets=sorted({target for _, target in pairs}))
+        max_events=max_events, allow_partial_geometry=allow_partial_source_geometry,
+        output_targets=sorted({target for _, target in pairs}))
 
 
 def combine_partial_feedback_schedules(source_ids, graph_sha256, schedules, *, max_events):
@@ -130,7 +133,8 @@ def build_feedback_schedule_from_archives(graph, source_ids, index, directories,
                                           morphology_sha256, duration_ms, max_events,
                                           max_source_distance_um, max_target_distance_um,
                                           target_provider=None, pair_cache=None,
-                                          check_cancelled=None, include_control_crossings=False):
+                                          check_cancelled=None, include_control_crossings=False,
+                                          allow_partial_source_geometry=False, events_only=False):
     """Build a provisional fixed schedule after consuming both authenticated archives.
 
     The caller must independently verify paired run configurations, source
@@ -140,23 +144,33 @@ def build_feedback_schedule_from_archives(graph, source_ids, index, directories,
     from .event_archive import iter_aligned_archive_batches
     from .fixed_inputs import fixed_input_digest
 
+    if type(allow_partial_source_geometry) is not bool:
+        raise ValueError('Invalid partial source geometry policy')
     graph_sha256 = graph.provenance['manifest_sha256']
     batches = iter_verified_source_feedback(graph, source_ids,
         iter_aligned_archive_batches(active_path, active_sha256, control_path, control_sha256,
                                      check_cancelled=check_cancelled),
         duration_ms=duration_ms, paired_batches=True,
         diagnostics_factory=diagnostics_factory, morphology_sha256=morphology_sha256,
+        events_only=events_only,
     )
     def checked_schedules():
-        with closing(batches):
+        try:
             for batch in batches:
-                # Silence is not evidence that unmapped synapses were quiet.
-                for diagnostic in batch['diagnostics'].values():
-                    for candidate in diagnostic['candidates']:
-                        if (candidate.get('included_in_graph') is True
-                                and candidate.get('status') == 'geometry_unresolved'):
-                            raise ValueError('Unresolved source geometry prevents complete '
-                                             'feedback')
+                # Silence is not evidence that unmapped synapses were quiet, so an
+                # unresolvable source stops the default path. Under the explicit
+                # opt-in the synapses stay unmapped (never replayed as silence) and
+                # the count is published with the result instead. With events_only
+                # only emitting cells carry diagnostics here, so this gate is a
+                # no-op by construction and the full-population caller must enforce
+                # the same policy for every cell on every pass.
+                if not allow_partial_source_geometry:
+                    for diagnostic in batch['diagnostics'].values():
+                        for candidate in diagnostic['candidates']:
+                            if (candidate.get('included_in_graph') is True
+                                    and candidate.get('status') == 'geometry_unresolved'):
+                                raise ValueError('Unresolved source geometry prevents complete '
+                                                 'feedback')
                 if batch['events']:
                     control_options = ({'include_control_crossings': True}
                                        if include_control_crossings else {})
@@ -164,7 +178,12 @@ def build_feedback_schedule_from_archives(graph, source_ids, index, directories,
                         directories, parameters, duration_ms=duration_ms, max_events=max_events,
                         max_source_distance_um=max_source_distance_um,
                         max_target_distance_um=max_target_distance_um,
+                        allow_partial_source_geometry=allow_partial_source_geometry,
                         target_provider=target_provider, pair_cache=pair_cache, **control_options)
+        finally:
+            close = getattr(batches, 'close', None)
+            if close is not None:
+                close()
 
     partial = checked_schedules()
     try:

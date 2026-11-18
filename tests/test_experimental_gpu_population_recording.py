@@ -104,7 +104,9 @@ def test_recording_pipeline_reads_verified_chunk_with_bounds(tmp_path, monkeypat
         assert all(cell['geometry']['endpoint_radii_um'].shape == (1, 2) for cell in group)
         options['device_window_sink'](0, 3,
             [{'id': item['id'], 'neural_uv': [float(item['id'])] * 3} for item in group])
-        return {}
+        # The consumer refuses a batch whose receipt does not say which kernel
+        # solved it, so a stand-in solver must report the accelerated path.
+        return {'accelerated_cell_major': True}
 
     monkeypatch.setattr(batch_solver, 'solve_prepared_batch', solve)
     results = list(population_replay.solve_population(metadata, [0., 0., 0.], None,

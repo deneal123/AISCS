@@ -3,7 +3,7 @@
 from collections import OrderedDict
 
 from service.infrastructure.connectome.synapse_morphology import prepare_cached_morphology
-from service.infrastructure.stimulation.geometry_cache.selected import iter_selected_cache
+from service.infrastructure.stimulation.geometry_cache.selected import SelectedCache
 
 
 def known_derived_target(directories):
@@ -33,8 +33,26 @@ def known_derived_target(directories):
     return prepare
 
 
+def _prepare_entry(entry, *, target_ids, derived_target):
+    """Validate one decoded entry and return its prepared target geometry."""
+    body = int(entry['skeleton']['body_id'])
+    if derived_target is not None and body == 842998:
+        skeleton, geometry = derived_target(entry)
+        receipt = skeleton.get('transformation') if isinstance(skeleton, dict) else None
+        if (not isinstance(receipt, dict)
+                or receipt.get('source_sha256') != entry['skeleton']['sha256']
+                or receipt.get('derived_sha256') != skeleton.get('sha256')
+                or skeleton.get('body_id') != str(body)):
+            raise ValueError('Invalid derived target provenance')
+    else:
+        skeleton, geometry = prepare_cached_morphology(entry)
+    if int(skeleton['body_id']) not in target_ids:
+        raise ValueError('Unexpected cached target identity')
+    return int(skeleton['body_id']), (skeleton, geometry)
+
+
 def prepare_cached_targets(graph, target_ids, *, geometry_cache, workers=1,
-                           derived_target=None):
+                           derived_target=None, snapshot=None):
     """Load a small target batch only after every selected chunk is verified.
 
     The returned callable is valid only for this snapshot and selected batch.
@@ -46,28 +64,17 @@ def prepare_cached_targets(graph, target_ids, *, geometry_cache, workers=1,
         raise ValueError('Invalid cached target batch')
     if derived_target is not None and not callable(derived_target):
         raise ValueError('Invalid derived target policy')
-    entries = iter_selected_cache(geometry_cache['directory'],
-        expected_manifest_sha256=geometry_cache['expected_manifest_sha256'], graph_ids=graph.ids,
-        graph_sha256=graph.provenance['manifest_sha256'],
-        source_index=geometry_cache['source_index'], source_audit=geometry_cache['source_audit'],
-        selected_ids=target_ids, workers=workers)
+    if snapshot is not None and not isinstance(snapshot, SelectedCache):
+        raise ValueError('Invalid authenticated geometry snapshot')
+    entries = (snapshot or _open_snapshot(graph, geometry_cache, workers=workers)).entries(
+        target_ids, workers=workers)
     targets = {}
     for entry in entries:
-        body = int(entry['skeleton']['body_id'])
-        if derived_target is not None and body == 842998:
-            skeleton, geometry = derived_target(entry)
-            receipt = skeleton.get('transformation') if isinstance(skeleton, dict) else None
-            if (not isinstance(receipt, dict)
-                    or receipt.get('source_sha256') != entry['skeleton']['sha256']
-                    or receipt.get('derived_sha256') != skeleton.get('sha256')
-                    or skeleton.get('body_id') != str(body)):
-                raise ValueError('Invalid derived target provenance')
-        else:
-            skeleton, geometry = prepare_cached_morphology(entry)
-        body = int(skeleton['body_id'])
-        if body not in target_ids or body in targets:
+        body, prepared = _prepare_entry(entry, target_ids=target_ids,
+                                        derived_target=derived_target)
+        if body in targets:
             raise ValueError('Unexpected cached target identity')
-        targets[body] = (skeleton, geometry)
+        targets[body] = prepared
     if set(targets) != set(target_ids):
         raise ValueError('Cached target geometry is incomplete')
 
@@ -79,35 +86,79 @@ def prepare_cached_targets(graph, target_ids, *, geometry_cache, workers=1,
     return get
 
 
+def _open_snapshot(graph, geometry_cache, *, workers):
+    return SelectedCache(geometry_cache['directory'],
+        expected_manifest_sha256=geometry_cache['expected_manifest_sha256'],
+        graph_ids=graph.ids, graph_sha256=graph.provenance['manifest_sha256'],
+        source_index=geometry_cache['source_index'], source_audit=geometry_cache['source_audit'],
+        workers=workers)
+
+
 def population_target_provider(graph, morphology_sha256, *, geometry_cache, workers=1,
-                               derived_target=None, cache_size=16):
+                               derived_target=None, cache_size=128, snapshot=None):
     """Resolve arbitrary registered targets with bounded, verified geometry caching.
 
+    The authenticated snapshot is opened once.  A miss decodes the whole chunk
+    that holds the requested target, so the neighbouring cells it will be asked
+    for later are prepared for free instead of re-reading the chunk per cell.
     This does not establish synaptic function or electrical equivalence of any
-    derived geometry. Every returned morphology must match the solver identity.
+    derived geometry.  Every returned morphology must match the solver identity.
     """
     if (not isinstance(morphology_sha256, dict) or not morphology_sha256
             or set(morphology_sha256) != {int(body) for body in graph.ids}
-            or type(cache_size) is not int or not 1 <= cache_size <= 128):
+            or type(cache_size) is not int or not 1 <= cache_size <= 4096):
         raise ValueError('Invalid population target identities')
+    if snapshot is not None and not isinstance(snapshot, SelectedCache):
+        raise ValueError('Invalid authenticated geometry snapshot')
     hashes = morphology_sha256.copy()
     graph_hash = graph.provenance['manifest_sha256']
     cache = OrderedDict()
+    failures = {}
+    state = {'snapshot': snapshot}
+
+    def authenticated():
+        if state['snapshot'] is None:
+            state['snapshot'] = _open_snapshot(graph, geometry_cache, workers=workers)
+        return state['snapshot']
+
+    def prepare(body):
+        snapshot_now = authenticated()
+        siblings = [value for value in snapshot_now.chunk_bodies(body) if value in hashes]
+        for candidate in siblings:
+            if candidate in cache:
+                cache.move_to_end(candidate)
+        missing = [value for value in siblings if value not in cache]
+        if missing:
+            for entry in snapshot_now.entries(missing, workers=workers):
+                held = int(entry['skeleton']['body_id'])
+                try:
+                    held, prepared = _prepare_entry(entry, target_ids=set(siblings),
+                                                    derived_target=derived_target)
+                except ValueError as exc:
+                    # A neighbour that cannot be prepared (the known zero-edge
+                    # cell without a repair policy) must not fail an unrelated
+                    # request, but it may never be served silently either.
+                    failures[held] = exc
+                    continue
+                failures.pop(held, None)
+                if held in cache:
+                    raise ValueError('Unexpected cached target identity')
+                if prepared[0].get('body_id') != str(held) or prepared[0].get('sha256') != hashes[held]:
+                    raise ValueError('Population target morphology digest mismatch')
+                cache[held] = prepared
+                while len(cache) > cache_size:
+                    cache.popitem(last=False)
+        if body not in cache:
+            if body in failures:
+                raise failures[body]
+            raise ValueError('Cached target geometry is incomplete')
+        cache.move_to_end(body)
+        return cache[body]
 
     def get(body):
         if (type(body) is not int or body not in hashes
                 or graph.provenance.get('manifest_sha256') != graph_hash):
             raise ValueError('Invalid population target identity')
-        if body not in cache:
-            prepared = prepare_cached_targets(graph, [body], geometry_cache=geometry_cache,
-                                               workers=workers, derived_target=derived_target)(body)
-            if prepared[0].get('body_id') != str(body) or prepared[0].get('sha256') != hashes[body]:
-                raise ValueError('Population target morphology digest mismatch')
-            cache[body] = prepared
-            if len(cache) > cache_size:
-                cache.popitem(last=False)
-        else:
-            cache.move_to_end(body)
-        return cache[body]
+        return prepare(body)
 
     return get

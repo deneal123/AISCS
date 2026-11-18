@@ -155,6 +155,39 @@ def test_merge_source_events_preserves_geometry_and_rejects_missing_or_extra():
         merge_archived_source_events(original, {**archived, 'edge_events': []})
 
 
+def test_compact_archive_restores_omitted_quiet_candidates():
+    original = {'body_id': '10', 'duration_ms': 5, 'morphology_sha256': 'verified',
+        'candidates': [{'included_in_graph': True, 'partner_id': '20',
+                        'source_position_8nm': [1, 2, 3], 'child_node_id': 7,
+                        'stimulated_ticks_ms': None, 'status': 'no_crossing'},
+                       {'included_in_graph': True, 'partner_id': '30',
+                        'source_position_8nm': [4, 5, 6], 'child_node_id': 8,
+                        'stimulated_ticks_ms': None, 'status': 'no_crossing',
+                        'stimulated_crossing_intervals': [[0, 1]]}]}
+    archived = {'candidates': [{'partner_id': '20', 'source_position_8nm': [1, 2, 3],
+                               'stimulated_ticks_ms': [1]}],
+                'edge_events': [{'source_id': 10, 'target_id': 20, 'tick': 1, 'count': 1}],
+                'omitted_empty_candidates': True}
+    merged = merge_archived_source_events(original, archived)
+    assert merged['candidates'][0]['stimulated_ticks_ms'] == [1]
+    assert merged['candidates'][1]['stimulated_ticks_ms'] == []
+    assert merged['candidates'][1]['status'] == 'timing_or_trace_ambiguous'
+    assert 'stimulated_crossing_intervals' not in merged['candidates'][1]
+    with pytest.raises(ValueError, match='candidate omission'):
+        merge_archived_source_events(original, {**archived, 'omitted_empty_candidates': 'yes'})
+    # Without the flag an absent row is still an unreadable archive.
+    with pytest.raises(ValueError, match='Missing archived'):
+        merge_archived_source_events(original, {key: value for key, value in archived.items()
+                                                if key != 'omitted_empty_candidates'})
+    # Unresolved geometry keeps its explicit placeholder, never a quiet crossing.
+    unresolved = {**original, 'candidates': [{'included_in_graph': True, 'partner_id': '30',
+        'source_position_8nm': [4, 5, 6], 'child_node_id': 8, 'status': 'geometry_unresolved',
+        'stimulated_ticks_ms': None}]}
+    with pytest.raises(ValueError, match='Missing archived'):
+        merge_archived_source_events(unresolved, {'candidates': [], 'edge_events': [],
+                                                  'omitted_empty_candidates': True})
+
+
 def test_archived_source_batch_routes_with_verified_geometry(tmp_path):
     path = tmp_path / 'events.jsonl'
     hashes = {10: 'b' * 64, 20: 'c' * 64}
@@ -197,6 +230,63 @@ def test_archived_source_batch_routes_with_verified_geometry(tmp_path):
     rows[10]['morphology_sha256'] = 'd' * 64
     with pytest.raises(ValueError, match='identity mismatch'):
         run()
+
+
+def test_events_only_restores_geometry_of_emitting_cells_only(tmp_path):
+    """A quiet cell costs no durable read, but its silence is still routed.
+
+    Under events_only the schedule builder skips the per-synapse geometry of
+    cells that emitted nothing, because those rows are dropped again by the
+    caller. Nothing else may change: the quiet cell still appears as an empty
+    event batch, and an emitting cell is still identity checked.
+    """
+    path = tmp_path / 'events.jsonl'
+    hashes = {10: 'b' * 64, 20: 'c' * 64}
+    rows = {10: {'body_id': '10', 'graph_sha256': 'a' * 64,
+        'morphology_sha256': hashes[10], 'duration_ms': 5,
+        'candidates': [{'included_in_graph': True, 'partner_id': '20',
+                        'source_position_8nm': [1, 2, 3], 'child_node_id': 7}]},
+        20: {'body_id': '20', 'graph_sha256': 'a' * 64,
+        'morphology_sha256': hashes[20], 'duration_ms': 5, 'candidates': []}}
+    with EventArchive(path) as archive:
+        archive.write_batch({10: {'edge_events': [{'source_id': 10, 'target_id': 20,
+            'tick': 1, 'count': 1}], 'candidates': [{'partner_id': '20',
+            'source_position_8nm': [1, 2, 3], 'stimulated_ticks_ms': [1]}]}})
+        archive.write_batch({20: {'edge_events': [], 'candidates': []}})
+        archive.commit()
+        digest = archive.sha256
+    asked = []
+
+    def factory(ids):
+        asked.append(tuple(ids))
+        return {body: rows[body] for body in ids}
+
+    def run(events_only):
+        asked.clear()
+        return list(iter_verified_source_feedback(graph(), [10, 20],
+            iter_archived_source_batches(path, digest), duration_ms=5,
+            diagnostics_factory=factory, morphology_sha256=hashes,
+            events_only=events_only))
+
+    full = run(False)
+    # The factory is called once per archived batch, so each cell is restored
+    # in its own call; only the total set of restored cells matters here.
+    assert asked == [(10,), (20,)]
+    assert set(full[0]['diagnostics']) == {10}
+    assert set(full[1]['diagnostics']) == {20}
+    assert full[1]['events'] == []
+    partial = run(True)
+    # A batch with nothing audible is not read at all, so the factory is never
+    # called for it.
+    assert asked == [(10,)]
+    assert set(partial[0]['diagnostics']) == {10}
+    assert partial[0]['diagnostics'][10]['candidates'][0]['child_node_id'] == 7
+    assert partial[0]['events'][0]['delivery_tick_ms'] == 3
+    assert partial[1]['events'] == [] and partial[1]['diagnostics'] == {}
+    with pytest.raises(ValueError, match='Invalid source feedback identities'):
+        list(iter_verified_source_feedback(graph(), [10, 20],
+            iter_archived_source_batches(path, digest), duration_ms=5,
+            diagnostics_factory=factory, morphology_sha256=hashes, events_only=1))
 
 
 def test_paired_archives_feed_target_geometry_and_schedule(tmp_path, monkeypatch):

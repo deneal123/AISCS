@@ -2,6 +2,9 @@
 
 The caller authenticates the graph, synapse index and packed morphology snapshot.
 Nearest cable is a geometric candidate, not evidence of a functional synapse.
+The cable mapping depends on the graph, the synapse index, the packed morphology
+and the distance tolerance only, so it can be cached between experiments that
+differ in stimulus, threshold or duration.
 """
 
 import math
@@ -14,9 +17,7 @@ from service.infrastructure.connectome.cable_spatial_index import CableSpatialIn
 from service.infrastructure.connectome.neighbors import outgoing
 
 
-def source_geometry_diagnostics(cell, graph, index, *, threshold_mv, duration_ms,
-                                simulation_sha256, max_distance_um):
-    """Map every registered outgoing graph synapse without using simulated traces."""
+def _identity(cell, graph, index, max_distance_um):
     try:
         body = cell['id']
         source_hash = cell['morphology_sha256']
@@ -28,14 +29,28 @@ def source_geometry_diagnostics(cell, graph, index, *, threshold_mv, duration_ms
         raise ValueError('Missing source geometry identity') from exc
     if (type(body) is not int or body <= 0
             or any(not isinstance(value, str) or not re.fullmatch('[a-f0-9]{64}', value)
-                   for value in (source_hash, graph_hash, ids_hash, simulation_sha256))
+                   for value in (source_hash, graph_hash, ids_hash))
             or not isinstance(source_md5, str) or not re.fullmatch('[a-f0-9]{32}', source_md5)
             or index.manifest.get('ids_sha256') != ids_hash
-            or type(duration_ms) is not int or duration_ms < 1
-            or type(threshold_mv) not in (int, float) or not math.isfinite(threshold_mv)
             or type(max_distance_um) not in (int, float)
             or not math.isfinite(max_distance_um) or max_distance_um < 0):
         raise ValueError('Invalid source geometry identity')
+    return body, source_hash, geometry, graph_hash, source_md5
+
+
+def source_cable_mapping(cell, graph, index, *, max_distance_um, pairs=None):
+    """Map every registered outgoing graph synapse onto its nearest cable.
+
+    Returns only facts that a replay cannot change: the geometric candidate of
+    every registered synapse and whether it lies within the distance tolerance.
+    Stimulus, threshold and duration are stamped by the caller.
+
+    The optional pairs argument is an authenticated grouped pair source that
+    serves the same page shape as the packed synapse index, which avoids
+    re-materialising thousands of record batches for every single body.
+    """
+    body, source_hash, geometry, graph_hash, source_md5 = _identity(
+        cell, graph, index, max_distance_um)
     ids = np.asarray(geometry.get('edge_node_ids'))
     starts = np.asarray(geometry.get('starts_um'), dtype=float)
     ends = np.asarray(geometry.get('ends_um'), dtype=float)
@@ -57,7 +72,7 @@ def source_geometry_diagnostics(cell, graph, index, *, threshold_mv, duration_ms
     expected = {int(row['target_id']): row['synapse_count'] for row in edges['items']}
     if len(expected) != len(edges['items']):
         raise ValueError('Ambiguous outgoing graph edges')
-    page = index.query(body, 'outgoing', limit=None)
+    page = (index if pairs is None else pairs).query(body, 'outgoing', limit=None)
     if (page.get('source_md5') != source_md5 or page.get('truncated')
             or page.get('returned') != page.get('total')
             or len(page.get('pairs', [])) != page.get('total')):
@@ -89,7 +104,21 @@ def source_geometry_diagnostics(cell, graph, index, *, threshold_mv, duration_ms
             'stimulated_ticks_ms': None, 'control_ticks_ms': None})
     return {'body_id': str(body), 'morphology_sha256': source_hash,
             'source_md5': source_md5, 'graph_sha256': graph_hash,
-            'simulation_sha256': simulation_sha256, 'duration_ms': duration_ms,
-            'threshold_mv': float(threshold_mv), 'source_pairs': len(candidates),
-            'graph_pairs': len(candidates), 'candidates': candidates,
+            'max_distance_um': float(max_distance_um),
+            'source_pairs': len(candidates), 'graph_pairs': len(candidates),
+            'candidates': candidates,
             'interpretation': 'unobserved nearest-cable candidates; no activity inferred'}
+
+
+def source_geometry_diagnostics(cell, graph, index, *, threshold_mv, duration_ms,
+                                simulation_sha256, max_distance_um, pairs=None):
+    """Map every registered outgoing graph synapse without using simulated traces."""
+    if (not isinstance(simulation_sha256, str)
+            or not re.fullmatch('[a-f0-9]{64}', simulation_sha256)
+            or type(duration_ms) is not int or duration_ms < 1
+            or type(threshold_mv) not in (int, float) or not math.isfinite(threshold_mv)):
+        raise ValueError('Invalid source geometry identity')
+    mapping = source_cable_mapping(cell, graph, index,
+                                   max_distance_um=max_distance_um, pairs=pairs)
+    return {**mapping, 'simulation_sha256': simulation_sha256,
+            'duration_ms': duration_ms, 'threshold_mv': float(threshold_mv)}

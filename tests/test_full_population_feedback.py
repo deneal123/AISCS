@@ -26,11 +26,11 @@ def test_geometry_runner_shares_scratch_and_removes_it_on_failure(tmp_path, monk
 
     calls = []
 
-    def fake_diagnostics(cell, graph, index, **options):
+    def fake_mapping(cell, graph, index, **options):
         calls.append(cell['id'])
         return {'body_id': str(cell['id']), 'morphology_sha256': cell['morphology_sha256'],
                 'candidates': [], 'graph_sha256': 'a' * 64, 'source_md5': 'd' * 32,
-                'simulation_sha256': 'e' * 64, 'threshold_mv': -20., 'duration_ms': 10}
+                'max_distance_um': 2.}
 
     def fake_run(*_args, metadata_factory, diagnostics_factory, **_kwargs):
         cells = [{'id': 10, 'morphology_sha256': 'b' * 64}]
@@ -40,7 +40,7 @@ def test_geometry_runner_shares_scratch_and_removes_it_on_failure(tmp_path, monk
         raise RuntimeError('solver failed')
 
     monkeypatch.setattr('service.infrastructure.stimulation.population.source_store.'
-                        'source_geometry_diagnostics', fake_diagnostics)
+                        'source_cable_mapping', fake_mapping)
     monkeypatch.setattr('service.application.feedback.full_population.run_full_population_feedback',
                         fake_run)
     with pytest.raises(RuntimeError, match='solver failed'):
@@ -57,18 +57,22 @@ def test_geometry_runner_shares_scratch_and_removes_it_on_failure(tmp_path, monk
 def test_unresolved_source_reports_identity_and_prevents_replay(tmp_path, monkeypatch):
     from service.application.feedback.full_population import run_full_population_from_geometry
 
-    def diagnostics(cell, graph, index, **options):
+    def mapping(cell, graph, index, **options):
         return {'body_id': str(cell['id']), 'morphology_sha256': cell['morphology_sha256'],
-                'candidates': [{'included_in_graph': True, 'status': 'geometry_unresolved'}],
+                'candidates': [{'included_in_graph': True, 'partner_id': '20',
+                                'source_position_8nm': [1, 2, 3], 'child_node_id': 4,
+                                'segment_fraction': .5, 'centerline_distance_um': 3.,
+                                'result_segment_index': 5,
+                                'status': 'geometry_unresolved'}],
                 'graph_sha256': 'a' * 64, 'source_md5': 'd' * 32,
-                'simulation_sha256': 'e' * 64, 'threshold_mv': -20., 'duration_ms': 10}
+                'max_distance_um': 2.}
 
     def run(*_args, metadata_factory, **_kwargs):
         metadata_factory([{'id': 10, 'morphology_sha256': 'b' * 64}])
         pytest.fail('unresolved geometry must stop the replay')
 
     monkeypatch.setattr('service.infrastructure.stimulation.population.source_store.'
-                        'source_geometry_diagnostics', diagnostics)
+                        'source_cable_mapping', mapping)
     monkeypatch.setattr('service.application.feedback.full_population.run_full_population_feedback',
                         run)
     with pytest.raises(ValueError, match='cell 10, 1 of 1 synapses exceed 2 um'):
@@ -93,7 +97,9 @@ def _arguments(tmp_path):
         baseline_schedule={'placeholder': True}, baseline_sha256='d' * 64,
         configuration_sha256='e' * 64, metadata_factory=lambda cells: {},
         diagnostics_factory=lambda ids: {}, index=None, directories=[], synapse_parameters={},
-        replay_options={'expected_ids': ids, 'time_ms': [0., .05, .1], 'duration_ms': .1},
+        replay_options={'expected_ids': ids, 'time_ms': [0., .05, .1], 'duration_ms': .1,
+                        'max_cells': 800, 'segment_budget': 3000000,
+                        'require_cell_major': True},
         max_iterations=2, max_events=10, max_source_distance_um=2., max_target_distance_um=2.,
         output_directory=tmp_path / 'published')
 
@@ -103,7 +109,9 @@ def test_paired_full_population_publishes_only_after_convergence(tmp_path, monke
     def initial(metadata, stimulus, rate_table, *, event_path, **kwargs):
         calls.append(np.asarray(stimulus).copy())
         event_path.write_text('active' if np.any(stimulus) else 'control', encoding='utf8')
-        return {'event_sha256': _digest(event_path), 'neural_uv': np.asarray(stimulus), 'cells': 2}
+        return {'event_sha256': _digest(event_path), 'neural_uv': np.asarray(stimulus), 'cells': 2,
+            'solver_kernels': {'accelerated_cell_major': 1, 'generic': 0,
+                                              'batches': 1}}
 
     def iterate(metadata, stimulus, rate_table, *, active_path, active_sha256, control_path,
                 control_sha256, output_event_path, **kwargs):
@@ -113,7 +121,9 @@ def test_paired_full_population_publishes_only_after_convergence(tmp_path, monke
         return {'status': 'converged', 'iterations': 2, 'feedback_schedule_sha256': 'f' * 64,
                 'replay': {'event_sha256': _digest(output_event_path),
                            'neural_uv': [0., 2., 0.] if np.any(stimulus) else [0., 0., 0.],
-                           'cells': 2}}
+                           'cells': 2,
+                           'solver_kernels': {'accelerated_cell_major': 1,
+                                              'generic': 0, 'batches': 1}}}
 
     monkeypatch.setattr('service.application.feedback.full_population.'
                         'replay_verified_feedback_to_archive', initial)
@@ -128,6 +138,10 @@ def test_paired_full_population_publishes_only_after_convergence(tmp_path, monke
     assert result['status'] == 'converged' and result['manifest_sha256'] == _digest(
         destination / 'manifest.json')
     assert manifest['cells'] == 2 and 'not biological validation' in manifest['interpretation']
+    # The manifest states the batching that actually reached the solver.
+    assert manifest['batch_settings'] == {'max_cells': 800, 'segment_budget': 3000000,
+                                          'require_cell_major': True}
+    assert manifest['solver_kernels']['accelerated_cell_major'] >= 1
     assert all(_digest(destination / name) == digest
                for name, digest in manifest['file_hashes'].items())
     with np.load(destination / 'signals.npz') as signals:
@@ -140,7 +154,9 @@ def test_paired_full_population_publishes_only_after_convergence(tmp_path, monke
 def test_nonconverged_or_failed_run_never_publishes(tmp_path, monkeypatch, outcome):
     def initial(metadata, stimulus, rate_table, *, event_path, **kwargs):
         event_path.write_text('staged', encoding='utf8')
-        return {'event_sha256': _digest(event_path), 'neural_uv': stimulus, 'cells': 2}
+        return {'event_sha256': _digest(event_path), 'neural_uv': stimulus, 'cells': 2,
+            'solver_kernels': {'accelerated_cell_major': 1, 'generic': 0,
+                                              'batches': 1}}
     def iterate(*args, **kwargs):
         if outcome == 'exception':
             raise RuntimeError('failed')
@@ -163,7 +179,9 @@ def test_active_network_failure_after_control_converges_does_not_publish(tmp_pat
 
     def initial(metadata, stimulus, rate_table, *, event_path, **kwargs):
         event_path.write_text('staged', encoding='utf8')
-        return {'event_sha256': _digest(event_path), 'neural_uv': stimulus, 'cells': 2}
+        return {'event_sha256': _digest(event_path), 'neural_uv': stimulus, 'cells': 2,
+            'solver_kernels': {'accelerated_cell_major': 1, 'generic': 0,
+                                              'batches': 1}}
 
     def iterate(metadata, stimulus, rate_table, *, output_event_path, **kwargs):
         stages.append('active' if np.any(stimulus) else 'control')
@@ -172,7 +190,9 @@ def test_active_network_failure_after_control_converges_does_not_publish(tmp_pat
         output_event_path.write_text('control converged', encoding='utf8')
         return {'status': 'converged', 'iterations': 1, 'feedback_schedule_sha256': 'f' * 64,
                 'replay': {'event_sha256': _digest(output_event_path),
-                           'neural_uv': [0., 0., 0.], 'cells': 2}}
+                           'neural_uv': [0., 0., 0.], 'cells': 2,
+                           'solver_kernels': {'accelerated_cell_major': 1, 'generic': 0,
+                                              'batches': 1}}}
 
     monkeypatch.setattr('service.application.feedback.full_population.'
                         'replay_verified_feedback_to_archive', initial)
@@ -182,6 +202,41 @@ def test_active_network_failure_after_control_converges_does_not_publish(tmp_pat
     assert result == {'status': 'iteration_limit', 'iterations': 2}
     assert stages == ['control', 'active']
     assert list(tmp_path.iterdir()) == []
+
+
+def test_partial_source_geometry_is_opt_in_and_published_as_an_exclusion(tmp_path, monkeypatch):
+    seen = {}
+
+    def initial(metadata, stimulus, rate_table, *, event_path, **kwargs):
+        event_path.write_text('staged', encoding='utf8')
+        return {'event_sha256': _digest(event_path), 'neural_uv': stimulus, 'cells': 2,
+                'solver_kernels': {'accelerated_cell_major': 1, 'generic': 0, 'batches': 1}}
+
+    def iterate(metadata, stimulus, rate_table, *, output_event_path, **kwargs):
+        seen['policy'] = kwargs['allow_partial_source_geometry']
+        output_event_path.write_text('converged', encoding='utf8')
+        return {'status': 'converged', 'iterations': 1, 'feedback_schedule_sha256': 'f' * 64,
+                'replay': {'event_sha256': _digest(output_event_path),
+                           'neural_uv': [0., 0., 0.], 'cells': 2,
+                           'solver_kernels': {'accelerated_cell_major': 1, 'generic': 0,
+                                              'batches': 1}}}
+
+    monkeypatch.setattr('service.application.feedback.full_population.'
+                        'replay_verified_feedback_to_archive', initial)
+    monkeypatch.setattr('service.application.feedback.full_population.iterate_archived_feedback',
+                        iterate)
+    args = _arguments(tmp_path)
+    with pytest.raises(ValueError, match='partial source geometry'):
+        run_full_population_feedback(**{**args, 'source_geometry_exclusions': {10: 1}})
+    exclusions = {13931: 2474}
+    result = run_full_population_feedback(**args, source_geometry_exclusions=exclusions,
+                                          allow_partial_source_geometry=True)
+    assert seen['policy'] is True
+    manifest = json.loads((args['output_directory'] / 'manifest.json').read_text(encoding='utf8'))
+    assert manifest['allow_partial_source_geometry'] is True
+    assert manifest['source_geometry_exclusions'] == {'cells': 1, 'synapses': 2474,
+        'affected': [{'body_id': 13931, 'synapses': 2474}]}
+    assert result['status'] == 'converged'
 
 
 def test_subset_and_existing_destination_are_rejected(tmp_path):
@@ -233,7 +288,7 @@ def test_empty_network_runs_real_archive_and_convergence_path(tmp_path, monkeypa
         assert device['selected_indices'] == {10: [], 20: []}
         device['sink'](0, 21, [{'id': body, 'neural_uv': np.zeros(21),
                                 'selected_voltage_mv': np.empty((0, 21))} for body in ids])
-        yield ids, {'table_clamped_cell_ids': []}
+        yield ids, {'accelerated_cell_major': True, 'table_clamped_cell_ids': []}
 
     monkeypatch.setattr(
         'service.application.feedback.population_bulk_replay.solve_population', solve,
@@ -310,7 +365,7 @@ def test_connected_pair_replays_feedback_until_schedule_converges(tmp_path, monk
             {'id': 10, 'neural_uv': np.zeros(101), 'selected_voltage_mv': [trace]},
             {'id': 20, 'neural_uv': np.full(101, len(events[20])),
              'selected_voltage_mv': np.empty((0, 101))}])
-        yield ids, {'table_clamped_cell_ids': []}
+        yield ids, {'accelerated_cell_major': True, 'table_clamped_cell_ids': []}
 
     monkeypatch.setattr(
         'service.application.feedback.population_bulk_replay.solve_population', solve,

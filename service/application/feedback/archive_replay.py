@@ -16,7 +16,8 @@ def replay_archived_feedback(metadata, stimulus, rate_table, *, graph, source_id
                              max_source_distance_um, max_target_distance_um, output_event_path,
                              metadata_factory, replay_options, target_provider=None,
                              pair_cache=None, baseline_schedule=None, baseline_sha256=None,
-                             include_control_crossings=False, _feedback_gate=None):
+                             include_control_crossings=False, _feedback_gate=None,
+                             allow_partial_source_geometry=False, events_only=False):
     """Build a candidate schedule and replay it once; this is not a converged network.
 
     The caller authenticates the graph, paired-run configurations and all
@@ -24,6 +25,7 @@ def replay_archived_feedback(metadata, stimulus, rate_table, *, graph, source_id
     complete replay succeeds.
     """
     if (not isinstance(metadata, dict) or not isinstance(replay_options, dict)
+            or type(allow_partial_source_geometry) is not bool
             or (_feedback_gate is not None and not callable(_feedback_gate))
             or replay_options.get('expected_ids') != source_ids
             or replay_options.get('duration_ms') != duration_ms
@@ -41,6 +43,8 @@ def replay_archived_feedback(metadata, stimulus, rate_table, *, graph, source_id
         max_target_distance_um=max_target_distance_um,
         target_provider=target_provider, pair_cache=pair_cache,
         check_cancelled=replay_options.get('check_cancelled'),
+        allow_partial_source_geometry=allow_partial_source_geometry,
+        events_only=events_only,
         **({'include_control_crossings': True} if include_control_crossings else {}))
     feedback_sha256 = built['schedule_sha256']
     if _feedback_gate is not None:

@@ -28,7 +28,7 @@ def execute_full_feedback_experiment(graph, index, simulation, *, geometry_cache
         output_directory, directories, synapse_parameters, threshold_mv, max_source_distance_um,
         max_target_distance_um, max_iterations, max_events, solver_options,
         target_provider=None, pair_cache=None, allow_known_geometry_repair=False,
-        request_sha256=None, progress=None):
+        allow_partial_source_geometry=False, request_sha256=None, progress=None):
     """Prepare a coupled run; no biological validation or runtime guarantee is implied.
 
     The caller supplies trusted paths, resource limits and synaptic assumptions.
@@ -39,6 +39,7 @@ def execute_full_feedback_experiment(graph, index, simulation, *, geometry_cache
     if (not math.isfinite(duration) or duration != int(duration) or duration < 1
             or config.nseg_per_edge != 1 or not isinstance(solver_options, dict)
             or type(allow_known_geometry_repair) is not bool
+            or type(allow_partial_source_geometry) is not bool
             or (request_sha256 is not None and (not isinstance(request_sha256, str)
                 or not re.fullmatch('[a-f0-9]{64}', request_sha256)))):
         raise ValueError('Full feedback requires integer milliseconds and one segment per edge')
@@ -73,7 +74,9 @@ def execute_full_feedback_experiment(graph, index, simulation, *, geometry_cache
         'max_iterations': max_iterations, 'max_events': max_events,
         'graph_sha256': graph_hash, 'source_index_sha256': source_hash,
         'geometry_cache_manifest_sha256': geometry_cache['expected_manifest_sha256'],
-        'geometry_repair': repair, 'request_sha256': request_sha256}
+        'geometry_repair': repair,
+        'allow_partial_source_geometry': allow_partial_source_geometry,
+        'request_sha256': request_sha256}
     try:
         raw = json.dumps(configuration, sort_keys=True, separators=(',', ':'),
                          allow_nan=False).encode('utf8')
@@ -114,7 +117,8 @@ def execute_full_feedback_experiment(graph, index, simulation, *, geometry_cache
         max_source_distance_um=max_source_distance_um,
         max_target_distance_um=max_target_distance_um,
         max_iterations=max_iterations, max_events=max_events, target_provider=target_provider,
-        pair_cache=pair_cache, configuration=configuration, export_markers=True, progress=progress)
+        pair_cache=pair_cache, configuration=configuration, export_markers=True,
+        allow_partial_source_geometry=allow_partial_source_geometry, progress=progress)
 
 
 def execute_full_feedback_request(graph, index, config, *, geometry_cache, output_directory,
@@ -132,4 +136,5 @@ def execute_full_feedback_request(graph, index, config, *, geometry_cache, outpu
         max_events=config.max_events, solver_options=solver_options,
         target_provider=target_provider,
         pair_cache=pair_cache, allow_known_geometry_repair=config.allow_known_geometry_repair,
+        allow_partial_source_geometry=config.allow_partial_source_geometry,
         request_sha256=config.digest(), progress=progress)

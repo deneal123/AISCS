@@ -11,18 +11,26 @@ import numpy as np
 from service.infrastructure.connectome.forced_network import threshold_crossing_ticks
 
 
-def merge_archived_source_events(original, archived, *, control=None):
-    """Attach archived crossing ticks to independently verified source diagnostics.
+_CLEARED_CROSSING_FIELDS = ('stimulated_crossing_intervals', 'control_crossing_intervals',
+                          'max_stimulated_mv', 'max_control_mv', 'max_abs_delta_mv')
 
-    This preserves the geometry and provenance required by pair mapping. The
-    caller must authenticate all inputs and ensure a control uses the same
-    geometry, time grid and parameters with the stimulus disabled.
+
+def _archived_tick_index(original, archived):
+    """Validate one archived candidate list and index its tick lists by synapse.
+
+    Two archives of the same cell are indexed for every coupled iteration (the
+    stimulus pass and its paired control), so the validation runs on the archive
+    rather than on the cell's full durable geometry.
     """
     if (not isinstance(original, dict) or not isinstance(original.get('candidates'), list)
             or type(original.get('duration_ms')) is not int or original['duration_ms'] < 1
             or not isinstance(archived, dict) or not isinstance(archived.get('candidates'), list)
             or not isinstance(archived.get('edge_events'), list)):
         raise ValueError('Invalid archived source diagnostics')
+    omitted = archived.get('omitted_empty_candidates')
+    if omitted not in (None, False, True):
+        raise ValueError('Invalid archived source candidate omission')
+    duration = original['duration_ms']
     by_key = {}
     for row in archived['candidates']:
         if (not isinstance(row, dict) or set(row) != {
@@ -33,7 +41,7 @@ def merge_archived_source_events(original, archived, *, control=None):
                 or not isinstance(row['partner_id'], str) or not row['partner_id'].isascii()
                 or not row['partner_id'].isdigit() or row['partner_id'].startswith('0')
                 or not isinstance(row['stimulated_ticks_ms'], list)
-                or any(type(tick) is not int or not 1 <= tick <= original.get('duration_ms', 0)
+                or any(type(tick) is not int or not 1 <= tick <= duration
                        for tick in row['stimulated_ticks_ms'])
                 or row['stimulated_ticks_ms'] != sorted(set(row['stimulated_ticks_ms']))):
             raise ValueError('Invalid archived source candidate')
@@ -41,50 +49,93 @@ def merge_archived_source_events(original, archived, *, control=None):
         if key in by_key and by_key[key][0] != row['stimulated_ticks_ms']:
             raise ValueError('Conflicting archived source candidate')
         by_key.setdefault(key, []).append(row['stimulated_ticks_ms'])
-    updated = copy.deepcopy(original)
+    return by_key, bool(omitted)
+
+
+def _merge_candidate_rows(original, by_key, omitted):
+    """Rebuild verified candidate rows with the archived crossing ticks attached.
+
+    Rows are rebuilt instead of deep-copied: a deep copy of the durable
+    diagnostics cost 6.2 ms of the 12.9 ms each cell already spent here, and the
+    only mutable members of a row are the ones this function replaces.
+    """
+    rows = []
     expected = Counter()
-    for row in updated['candidates']:
-        if row.get('included_in_graph') is not True:
+    for row in original['candidates']:
+        merged = dict(row)
+        point = merged.get('source_position_8nm')
+        if type(point) is list:
+            merged['source_position_8nm'] = list(point)
+        if merged.get('included_in_graph') is not True:
+            rows.append(merged)
             continue
-        key = (row.get('partner_id'), *row.get('source_position_8nm', []))
-        if key not in by_key or not by_key[key]:
+        key = (merged.get('partner_id'), *merged.get('source_position_8nm', ()))
+        unresolved = merged.get('status') == 'geometry_unresolved'
+        ticks = None
+        if key in by_key and by_key[key]:
+            ticks = by_key[key].pop()
+            if unresolved and ticks:
+                raise ValueError('Unresolved source geometry cannot have observed events')
+        elif not (omitted and not unresolved):
+            # The compact archive omits exactly the candidates whose tick list is
+            # empty, so an absent row is a recorded quiet synapse, not an unknown
+            # one. Anything else stays an error.
             raise ValueError('Missing archived source candidate')
-        ticks = by_key[key].pop()
-        if row.get('status') == 'geometry_unresolved' and ticks:
-            raise ValueError('Unresolved source geometry cannot have observed events')
-        unresolved = row.get('status') == 'geometry_unresolved'
-        row['stimulated_ticks_ms'] = None if unresolved else ticks.copy()
+        merged['stimulated_ticks_ms'] = (None if unresolved
+                                         else [] if ticks is None else list(ticks))
         # The archived replay has no paired control. Old control values and
         # classifications belong to another replay and must not be reused.
-        row['control_ticks_ms'] = None
-        row['status'] = 'geometry_unresolved' if unresolved else 'timing_or_trace_ambiguous'
-        row.pop('stimulated_crossing_intervals', None)
-        row.pop('control_crossing_intervals', None)
-        for field in ('max_stimulated_mv', 'max_control_mv', 'max_abs_delta_mv'):
-            row.pop(field, None)
-        for tick in ticks:
-            expected[(int(row['partner_id']), tick)] += 1
-    if any(rows for rows in by_key.values()):
-        raise ValueError('Unexpected archived source candidate')
+        merged['control_ticks_ms'] = None
+        merged['status'] = 'geometry_unresolved' if unresolved else 'timing_or_trace_ambiguous'
+        for field in _CLEARED_CROSSING_FIELDS:
+            merged.pop(field, None)
+        if ticks:
+            partner = int(merged['partner_id'])
+            for tick in ticks:
+                expected[(partner, tick)] += 1
+        rows.append(merged)
+    return rows, expected
+
+
+def _archived_edge_events(original, archived, expected):
     body = original.get('body_id')
     try:
-        expected_events = [{'source_id': int(body), 'target_id': target, 'tick': tick,
-                            'count': count}
-                           for (target, tick), count in sorted(expected.items())]
+        events = [{'source_id': int(body), 'target_id': target, 'tick': tick, 'count': count}
+                  for (target, tick), count in sorted(expected.items())]
     except (ValueError, TypeError) as exc:
         raise ValueError('Invalid archived source identity') from exc
-    if archived['edge_events'] != expected_events:
+    if archived['edge_events'] != events:
         raise ValueError('Archived edge events do not match candidates')
+    return events
+
+
+def merge_archived_source_events(original, archived, *, control=None):
+    """Attach archived crossing ticks to independently verified source diagnostics.
+
+    This preserves the geometry and provenance required by pair mapping. The
+    caller must authenticate all inputs and ensure a control uses the same
+    geometry, time grid and parameters with the stimulus disabled.
+    """
+    by_key, omitted = _archived_tick_index(original, archived)
+    rows, expected = _merge_candidate_rows(original, by_key, omitted)
+    if any(remaining for remaining in by_key.values()):
+        raise ValueError('Unexpected archived source candidate')
+    _archived_edge_events(original, archived, expected)
     if control is not None:
-        control_rows = merge_archived_source_events(original, control)['candidates']
-        for row, quiet in zip(updated['candidates'], control_rows, strict=True):
+        control_by_key, control_omitted = _archived_tick_index(original, control)
+        control_rows, control_expected = _merge_candidate_rows(
+            original, control_by_key, control_omitted)
+        if any(remaining for remaining in control_by_key.values()):
+            raise ValueError('Unexpected archived source candidate')
+        _archived_edge_events(original, control, control_expected)
+        for row, quiet in zip(rows, control_rows, strict=True):
             if row.get('included_in_graph') is not True or row['status'] == 'geometry_unresolved':
                 continue
             ticks, control_ticks = row['stimulated_ticks_ms'], quiet['stimulated_ticks_ms']
             row['control_ticks_ms'] = control_ticks
             row['status'] = ('control_crossing' if control_ticks else
                              'stimulus_only_crossing' if ticks else 'no_crossing')
-    return updated
+    return {**original, 'candidates': rows}
 
 
 def feedback_output_events(body, solution, provenance, original, *, threshold_mv, duration_ms,
@@ -208,6 +259,7 @@ def _feedback_output_events(body, solution, provenance, original, *, threshold_m
             raise ValueError('Feedback output discretization mismatch')
     events = Counter()
     positions, local_events, seen = {}, [], {}
+    omitted = False
     for candidate in original['candidates']:
         if candidate.get('included_in_graph') is not True:
             continue
@@ -272,8 +324,20 @@ def _feedback_output_events(body, solution, provenance, original, *, threshold_m
             if identity in seen and seen[identity] != index:
                 raise ValueError('Conflicting duplicate source coordinate')
             seen[identity] = index
-            local_events.append({'source_position_8nm': point.copy(), 'partner_id': partner,
-                                 'stimulated_ticks_ms': [int(tick) for tick in positions[index]]})
+            ticks = [int(tick) for tick in positions[index]]
+            # A quiet synapse is the overwhelming majority of the population: at
+            # 256 registered synapses per cell the full archive reached 11.2 GB of
+            # candidates whose tick list is empty, and serialising, re-reading and
+            # re-indexing it cost 300-600 s of every pass while carrying no
+            # observation at all. Omit those rows and mark the batch instead; the
+            # merge rebuilds them as an explicit empty tick list from the durable
+            # diagnostics, so a missing row still means "observed quiet", never
+            # "unknown". Duplicate coordinates keep being checked above.
+            if ticks:
+                local_events.append({'source_position_8nm': point.copy(),
+                                     'partner_id': partner, 'stimulated_ticks_ms': ticks})
+            else:
+                omitted = True
         for tick in positions[index]:
             events[(int(partner), int(tick))] += 1
     if indices_only:
@@ -285,5 +349,6 @@ def _feedback_output_events(body, solution, provenance, original, *, threshold_m
     edge_events = [{'source_id': body, 'target_id': target, 'tick': tick, 'count': count}
                    for (target, tick), count in sorted(events.items())]
     if include_candidates:
-        return {'edge_events': edge_events, 'candidates': local_events}
+        return {'edge_events': edge_events, 'candidates': local_events,
+                'omitted_empty_candidates': omitted}
     return edge_events

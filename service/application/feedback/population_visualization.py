@@ -52,6 +52,10 @@ def export_population_markers(path, archive_path, archive_sha256, graph, *, dura
                     candidates = source.get('candidates')
                     if not isinstance(candidates, list):
                         raise ValueError('Missing marker candidates')
+                    # The compact archive omits candidates with no crossings; the
+                    # marker file only carries crossings, so nothing is lost here.
+                    if source.get('omitted_empty_candidates') not in (None, False, True):
+                        raise ValueError('Invalid marker candidate omission')
                     for candidate in candidates:
                         ticks = candidate.get('stimulated_ticks_ms') if isinstance(
                             candidate, dict) else None

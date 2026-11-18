@@ -365,7 +365,7 @@ def run_full_feedback_child(payload: dict, directory: str) -> None:
     from service.domain.contracts.population.full_feedback import FullFeedbackExecutionRequest
     from service.infrastructure.connectome.neighbors import registered_graph
     from service.infrastructure.connectome.synapse_repository import registered_index
-    from service.infrastructure.execution.gpu_batch_settings import independent_batch_settings
+    from service.infrastructure.execution.gpu_batch_settings import full_feedback_batch_settings
     from service.settings import connectome_directory, morphology_directories
 
     target = Path(directory)
@@ -376,9 +376,14 @@ def run_full_feedback_child(payload: dict, directory: str) -> None:
             raise ValueError('Synapse source is not configured')
         graph = registered_graph()
         index = registered_index(Path(synapse_root), connectome_directory() / 'ids.npy')
+        # The connected experiment solves the whole population with device-side
+        # windowed recording, so it uses the full-feedback bounds (wide bounded
+        # batches, a 256 MiB output budget and a REQUIRED cell-major kernel)
+        # instead of the small independent-recording defaults.
+        batch_settings = full_feedback_batch_settings()
         result = execute_full_feedback_request(graph, index, request.config,
             geometry_cache=_field_geometry_cache('gpu-fused'), output_directory=target,
-            directories=morphology_directories(), solver_options=independent_batch_settings(),
+            directories=morphology_directories(), solver_options=batch_settings,
             progress=lambda value: _write_progress(target.parent, value))
         if result.get('status') != 'converged':
             raise ValueError(f"Full feedback did not converge: {result.get('status')}")
@@ -386,6 +391,14 @@ def run_full_feedback_child(payload: dict, directory: str) -> None:
         if (manifest.get('configuration', {}).get('request_sha256') != request.config.digest()
                 or _file_sha256(target / 'manifest.json') != result.get('manifest_sha256')):
             raise ValueError('Full feedback result identity mismatch')
+        # The published manifest must say which batching and kernel produced the
+        # number; otherwise a result cannot be reproduced or compared.
+        if manifest.get('batch_settings') != batch_settings:
+            raise ValueError('Full feedback manifest batch settings mismatch')
+        kernels = manifest.get('solver_kernels')
+        if (not isinstance(kernels, dict) or kernels.get('batches', 0) < 1
+                or kernels.get('accelerated_cell_major', 0) < 1):
+            raise ValueError('Full feedback used no accelerated cell-major kernel')
     except Exception as exc:
         target.mkdir(parents=True, exist_ok=True)
         write_json(target / 'error.json', {'type': type(exc).__name__, 'message': str(exc)[:1000]})
@@ -954,12 +967,14 @@ class Executions:
                 process = self.processes.get(execution_id)
                 if process and process.is_alive():
                     grouped = False
-                    if (_group_cancellation_supported(record.get('kind'))
-                            and process.pid is not None):
+                    # A substituted process object may not expose a pid; only a
+                    # real started child can be a process-group leader.
+                    pid = getattr(process, 'pid', None)
+                    if _group_cancellation_supported(record.get('kind')) and pid is not None:
                         try:
-                            grouped = os.getpgid(process.pid) == process.pid
+                            grouped = os.getpgid(pid) == pid
                             if grouped:
-                                os.killpg(process.pid, signal.SIGTERM)
+                                os.killpg(pid, signal.SIGTERM)
                         except ProcessLookupError:
                             pass
                     if not grouped and process.is_alive():
@@ -967,7 +982,7 @@ class Executions:
                     process.join(timeout=5)
                     if grouped:
                         try:
-                            os.killpg(process.pid, signal.SIGKILL)
+                            os.killpg(pid, signal.SIGKILL)
                         except ProcessLookupError:
                             pass
                     elif process.is_alive():

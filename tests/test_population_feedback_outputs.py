@@ -30,6 +30,8 @@ def test_uses_each_verified_outgoing_compartment_and_aggregates_by_edge():
                                      duration_ms=2, include_candidates=True)
     assert details['edge_events'] == events
     assert details['candidates'][0]['stimulated_ticks_ms'] == [1]
+    assert details['omitted_empty_candidates'] is False
+    assert len(details['candidates']) == 2
     original['candidates'][0]['centerline_distance_um'] = .1
     original['candidates'][1]['centerline_distance_um'] = 2.1
     partial = feedback_output_events(10, solution, proof, original, threshold_mv=-20.,
@@ -86,3 +88,28 @@ def test_uniform_refinement_also_remaps_verified_output_positions():
                                 'child_node_id': 7, 'segment_fraction': .9, 'partner_id': '20'}]}
     events = feedback_output_events(10, solution, proof, original, threshold_mv=-20., duration_ms=2)
     assert events == [{'source_id': 10, 'target_id': 20, 'tick': 1, 'count': 1}]
+
+def test_quiet_candidates_are_omitted_from_the_archive():
+    solution = {'time_ms': [0., .5, 1., 1.5, 2.], 'edge_node_ids': np.array([7, 8]),
+                'voltage_mv': [[-65, -65, -10, -65, -65], [-65, -65, -65, -65, -65]]}
+    proof = {'body_id': '10', 'morphology_sha256': 'a'}
+    original = {'body_id': '10', 'morphology_sha256': 'a', 'threshold_mv': -20., 'duration_ms': 2,
+                'candidates': [{'included_in_graph': True, 'result_segment_index': 0,
+                                'child_node_id': 7, 'partner_id': '20',
+                                'source_position_8nm': [1, 2, 3]},
+                               {'included_in_graph': True, 'result_segment_index': 1,
+                                'child_node_id': 8, 'partner_id': '20',
+                                'source_position_8nm': [4, 5, 6]}]}
+    details = feedback_output_events(10, solution, proof, original, threshold_mv=-20.,
+                                     duration_ms=2, include_candidates=True)
+    assert details['omitted_empty_candidates'] is True
+    assert details['candidates'] == [{'source_position_8nm': [1, 2, 3], 'partner_id': '20',
+                                      'stimulated_ticks_ms': [1]}]
+    assert details['edge_events'] == [{'source_id': 10, 'target_id': 20, 'tick': 1, 'count': 1}]
+    for candidate in original['candidates']:
+        candidate['centerline_distance_um'] = .1
+    quiet = feedback_output_events(10, solution, proof, original, threshold_mv=-20.,
+                                   duration_ms=2, include_candidates=True, max_source_distance_um=.1)
+    # The crossing synapse stays; only the quiet one is dropped.
+    assert quiet['candidates'] == details['candidates']
+    assert quiet['omitted_empty_candidates'] is True

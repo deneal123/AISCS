@@ -302,6 +302,7 @@ def _solve_cell_major(cells, geometries, stimulus, table, *, steps, dt_ms, cell_
         raise ValueError("Non-finite final GPU voltage")
     flags = d_flags.copy_to_host()
     return {'time_ms': np.arange(steps) * dt_ms, 'final_voltage_mv': values,
+            'accelerated_cell_major': True,
             'table_clamped_cell_ids': [cell["id"] for cell, flag
                                        in zip(cells, flags, strict=True) if flag == 1]}
 
@@ -654,6 +655,7 @@ def solve_prepared_batch(
         final_segments = _final_segment_voltages(final, packed, batch)
         return {'time_ms': np.arange(steps) * dt_ms,
                 'final_voltage_mv': final_segments,
+                'accelerated_cell_major': False,
                 'table_clamped_cell_ids': [ids[i] for i, flag in enumerate(flags.copy_to_host())
                                            if flag == 1]}
     if not record_traces:
@@ -662,6 +664,7 @@ def solve_prepared_batch(
         final_segments = _final_segment_voltages(final, packed, batch)
         return {'time_ms': np.arange(steps) * dt_ms,
                 'final_voltage_mv': final_segments,
+                'accelerated_cell_major': False,
                 'table_clamped_cell_ids': [ids[i] for i, flag in enumerate(flags.copy_to_host())
                                            if flag == 1]}
     raw_currents, raw_voltages = currents.copy_to_host(), voltage_trace.copy_to_host()
@@ -684,5 +687,6 @@ def solve_prepared_batch(
             }
         )
     return {"time_ms": np.arange(steps) * dt_ms, "cells": results,
+            "accelerated_cell_major": False,
             "table_clamped_cell_ids": [ids[i] for i, flag in enumerate(flags.copy_to_host())
                                        if flag == 1]}

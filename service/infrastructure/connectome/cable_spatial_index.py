@@ -40,54 +40,15 @@ class CableSpatialIndex:
         points = np.asarray(points_um, dtype=float)
         if points.ndim != 2 or points.shape[1:] != (3,) or not np.isfinite(points).all():
             raise ValueError('Invalid synapse coordinates')
-        identifiers, fractions, distances, local_radii = [], [], [], []
-        tie_points, tie_positions = [], []
-        tree_distances, nearest_indices = self.tree.query(points)
-        if (not np.isfinite(tree_distances).all()
-                or np.any(nearest_indices >= len(self.ids))):
-            raise ValueError('Synapse coordinates exceed supported geometry range')
-        for point, nearest in zip(points, nearest_indices, strict=True):
-            initial, _ = self._distances(point, np.array([int(nearest)]))
-            # Any closer segment must have its midpoint within this radius.
-            # Include the existing tie tolerance and a floating-point margin.
-            radius = np.sqrt(initial[0] * (1 + 1e-12) + 1e-18) + self.half_max
-            radius = np.nextafter(radius, np.inf)
-            candidates = np.asarray(sorted(self.tree.query_ball_point(point, radius)), dtype=int)
-            if not len(candidates):
-                raise ValueError('Empty cable spatial shortlist')
-            squared, positions = self._distances(point, candidates)
-            minimum = squared.min()
-            ties = np.flatnonzero(np.isclose(squared, minimum, rtol=1e-12, atol=1e-18))
-            if len(ties) > 1:
-                # Resolve ties together below using the established chunked search.
-                tie_positions.append(len(identifiers))
-                tie_points.append(point)
-                identifiers.append(None)
-                fractions.append(None)
-                distances.append(None)
-                local_radii.append(None)
-                continue
-            pick = int(ties[0])
-            index, fraction = candidates[pick], positions[pick]
-            identifiers.append(int(self.ids[index]))
-            fractions.append(float(fraction))
-            distances.append(float(np.sqrt(squared[pick])))
-            local_radii.append(float(self.radii[index, 0] * (1 - fraction)
-                                     + self.radii[index, 1] * fraction))
-        if tie_points:
-            from .synapse_morphology import _nearest_prepared_segments
+        from .cable_kernel import nearest_cable
 
-            original = _nearest_prepared_segments(
-                (self.ids, self.starts, self.radii, self.vectors, self.lengths2),
-                np.asarray(tie_points),
-            )
-            for row, position in enumerate(tie_positions):
-                identifiers[position] = original['child_node_ids'][row]
-                fractions[position] = original['segment_fractions'][row]
-                distances[position] = original['centerline_distances_um'][row]
-                local_radii[position] = original['interpolated_swc_radii_um'][row]
-        return {'child_node_ids': identifiers, 'segment_fractions': fractions,
-                'centerline_distances_um': distances, 'interpolated_swc_radii_um': local_radii,
-                'coordinate_frame': 'MaleCNS native EM, micrometres',
-                'interpretation': 'nearest centerline candidates; '
-                                  'not validated synaptic compartments'}
+        identifiers, fractions, distances, local_radii, _ties = nearest_cable(
+            points, self.ids, self.starts, self.radii, self.vectors,
+            self.lengths2, self.tree, self.half_max)
+        return {"child_node_ids": identifiers.tolist(),
+                "segment_fractions": fractions.tolist(),
+                "centerline_distances_um": distances.tolist(),
+                "interpolated_swc_radii_um": local_radii.tolist(),
+                "coordinate_frame": "MaleCNS native EM, micrometres",
+                "interpretation": "nearest centerline candidates; "
+                                  "not validated synaptic compartments"}
