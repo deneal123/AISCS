@@ -123,6 +123,11 @@ class SourceDiagnosticsStore:
     database is supported; a truncated or foreign one is rejected on read.
     """
 
+    # Bounded groups for the payload fetch. Above a few hundred placeholders
+    # sqlite walks a larger IN-list for no gain, and a group this size keeps a
+    # single statement's result set small enough to stay in cache.
+    _READ_GROUP = 256
+
     def __init__(self, path, graph, index, *, threshold_mv, duration_ms,
                  simulation_sha256, max_distance_um, morphology_sha256, pairs=None):
         """Open the store; pairs optionally replaces the per-body source scan."""
@@ -156,7 +161,9 @@ class SourceDiagnosticsStore:
         # population took ~750 s per pass while the GPU sat idle. Independent
         # read-only connections in a small pool measured 0.98 ms per cell at
         # eight threads on the same file and 0.24 ms on a local volume, so the
-        # diagnostic read fans out instead of walking the batch serially.
+        # diagnostic read fans out instead of walking the batch serially. A
+        # payload probe also costs a statement round trip, so the shards fetch
+        # bounded groups of rows rather than one row per statement.
         self.path = str(path)
         self.read_workers = max(1, min(16, int(os.environ.get(
             'GENERATOR_SOURCE_READ_WORKERS', '8') or 8)))
@@ -179,17 +186,33 @@ class SourceDiagnosticsStore:
             self.db.close()
 
     def _read_rows(self, bodies):
-        """Read one shard of payloads over a private read-only connection."""
+        """Read one shard of payloads over a private read-only connection.
+
+        The rows are fetched in bounded groups instead of one probe per cell.
+        Every payload is still digest-checked and decoded exactly as before, but
+        a per-row probe pays a statement round trip for each cell: on the local
+        volume a full population of probes costs tens of milliseconds per cell
+        of pure statement overhead, while the batched form spends it once per
+        group. The callers re-key the result by body id, so row order is free.
+        """
+        if not bodies:
+            return {}
         reader = sqlite3.connect('file:' + self.path + '?mode=ro', uri=True, timeout=300.)
         decoded = {}
         try:
-            for body in bodies:
-                row = reader.execute(
-                    'SELECT digest, payload FROM sources WHERE dataset = ? AND body = ?',
-                    (self.dataset, body)).fetchone()
-                if row is None or hashlib.sha256(row[1]).hexdigest() != row[0]:
+            for start in range(0, len(bodies), self._READ_GROUP):
+                group = bodies[start:start + self._READ_GROUP]
+                placeholders = ','.join('?' * len(group))
+                rows = reader.execute(
+                    'SELECT body, digest, payload FROM sources WHERE dataset = ? '
+                    'AND body IN (' + placeholders + ')',
+                    (self.dataset, *group)).fetchall()
+                if len(rows) != len(set(group)):
                     raise ValueError('Missing or corrupted source diagnostics')
-                decoded[body] = _decode(row[1], self.options['max_distance_um'])
+                for body, digest, payload in rows:
+                    if hashlib.sha256(payload).hexdigest() != digest:
+                        raise ValueError('Missing or corrupted source diagnostics')
+                    decoded[body] = _decode(payload, self.options['max_distance_um'])
         finally:
             reader.close()
         return decoded

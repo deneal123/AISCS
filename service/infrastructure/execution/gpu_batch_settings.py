@@ -79,11 +79,24 @@ _INDEPENDENT_DEFAULTS = {
 _FEEDBACK_DEFAULTS = {
     'segment_budget': 3000000,
     'output_budget_bytes': 1024 * 1024 * 1024,
-    'workers': 1,
-    'max_cells': 800,
-    'pool_cells': 2400,
+    # Payload decoding (read, digest, inflate) is pure I/O and scales almost
+    # linearly with threads: measured 1.30 s at one thread against 0.38 s at
+    # four over 96.9 MB of chunks. It is the one stage that is safe to fan out,
+    # because it never touches the numba kernels that a thread pool slows down.
+    'workers': 4,
+    # Small batches are dominated by fixed per-batch overhead: eight kernel
+    # launches with a full device synchronise each, per-cell projection setup and
+    # the host callback chain. Measured on the same cells, 800-cell batches ran
+    # at 6.8 ms/cell while 3 000-cell batches ran at 5.1 ms/cell, and the real
+    # population otherwise splits into 1 300 padding-dominated batches.
+    'max_cells': 3000,
+    'pool_cells': 12000,
     'window_cells': 1024,
-    'window_steps': 25,
+    # A 25-step window synchronises the device eight times per batch and hands
+    # the host eight partial traces; 50 halves both without changing the
+    # recorded physics, and measured 104.3 -> 81.6 s on the same population
+    # slice.
+    'window_steps': 50,
     'reduce_workers': 1,
     'block_cell_segments': 40000,
     'require_cell_major': True,

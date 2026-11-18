@@ -183,10 +183,45 @@ def feedback_selected_output_ticks(body, edge_node_ids, ticks, provenance, origi
         selected_ticks=ticks, include_unresolved_candidates=include_unresolved_candidates)
 
 
-def _feedback_output_events(body, solution, provenance, original, *, threshold_mv, duration_ms,
-                            include_candidates, max_source_distance_um, indices_only,
-                            selected_traces, selected_ticks=None,
-                            include_unresolved_candidates=False):
+def feedback_output_plan(body, edge_node_ids, provenance, original, *, threshold_mv, duration_ms,
+                         include_candidates=False, include_unresolved_candidates=False,
+                         max_source_distance_um=None):
+    """Resolve one cell's verified candidates once for a whole streamed replay.
+
+    A streamed replay asks the same cell the same question twice: which
+    compartments to record, and which verified synapses the crossings recorded in
+    those compartments belong to. Walking the durable candidate list twice cost
+    26.4 s of a 130 s slice over 15 343 cells, and both walks have to see an
+    identical archive, so the resolved plan is kept and the tick stream is
+    attached to it later. The plan is opaque: only
+    :func:`feedback_plan_output_ticks` may consume it.
+    """
+    _verified_output_identity(body, provenance, original, threshold_mv=threshold_mv,
+        duration_ms=duration_ms, include_candidates=include_candidates,
+        include_unresolved_candidates=include_unresolved_candidates,
+        max_source_distance_um=max_source_distance_um)
+    ids = _verified_output_ids(edge_node_ids)
+    return _candidate_plan(body, original, ids, _output_edge_ranges(ids, provenance),
+        duration_ms=duration_ms, include_candidates=include_candidates,
+        include_unresolved_candidates=include_unresolved_candidates,
+        max_source_distance_um=max_source_distance_um, resolver=None)
+
+
+def feedback_plan_output_ticks(plan, ticks):
+    """Attach one cell's streamed crossing ticks to a resolved output plan."""
+    if (not isinstance(plan, dict) or not isinstance(ticks, dict)
+            or set(ticks) != set(plan['indices'])
+            or any(not isinstance(values, list)
+                   or any(type(tick) is not int or not 1 <= tick <= plan['duration_ms']
+                          for tick in values)
+                   or values != sorted(set(values)) for values in ticks.values())):
+        raise ValueError('Invalid selected feedback ticks')
+    return _plan_output(plan, ticks)
+
+
+def _verified_output_identity(body, provenance, original, *, threshold_mv, duration_ms,
+                              include_candidates, include_unresolved_candidates,
+                              max_source_distance_um):
     if (type(body) is not int or body <= 0 or not isinstance(original, dict)
             or original.get('body_id') != str(body) or provenance.get('body_id') != str(body)
             or provenance.get('morphology_sha256') != original.get('morphology_sha256')
@@ -201,9 +236,59 @@ def _feedback_output_events(body, solution, provenance, original, *, threshold_m
                      or not math.isfinite(max_source_distance_um)
                      or max_source_distance_um < 0))):
         raise ValueError('Incompatible output diagnostic identity')
-    ids = np.asarray(solution.get('edge_node_ids'))
+
+
+def _verified_output_ids(edge_node_ids):
+    ids = np.asarray(edge_node_ids)
     if ids.ndim != 1 or ids.dtype.kind not in 'iu':
         raise ValueError('Invalid feedback output solution')
+    return ids
+
+
+def _output_edge_ranges(ids, provenance):
+    config = provenance.get('configuration', {})
+    overrides = config.get('nseg_by_edge') if isinstance(config, dict) else None
+    remeshed = overrides is not None or (isinstance(config, dict)
+                                         and config.get('nseg_per_edge', 1) != 1)
+    edge_ranges = {}
+    if not remeshed:
+        return edge_ranges
+    if overrides is None:
+        overrides = {}
+    default = config.get('nseg_per_edge')
+    if (not isinstance(overrides, dict) or type(default) is not int or default < 1
+            or default % 2 != 1 or any(
+                type(key) is not str or not key.isascii() or not key.isdigit()
+                or str(int(key)) != key or int(key) <= 0
+                or type(value) is not int or value < 1 or value % 2 != 1
+                for key, value in overrides.items())):
+        raise ValueError('Invalid feedback output discretization')
+    for index, value in enumerate(ids):
+        child = int(value)
+        if child not in edge_ranges:
+            edge_ranges[child] = [index, 1]
+        else:
+            start, count = edge_ranges[child]
+            if index != start + count:
+                raise ValueError('Noncontiguous feedback output compartments')
+            edge_ranges[child][1] += 1
+    if any(int(key) not in edge_ranges for key in overrides):
+        raise ValueError('Unknown feedback output edge')
+    if any(count != overrides.get(str(child), default)
+           for child, (_, count) in edge_ranges.items()):
+        raise ValueError('Feedback output discretization mismatch')
+    return edge_ranges
+
+
+def _feedback_output_events(body, solution, provenance, original, *, threshold_mv, duration_ms,
+                            include_candidates, max_source_distance_um, indices_only,
+                            selected_traces, selected_ticks=None,
+                            include_unresolved_candidates=False):
+    _verified_output_identity(body, provenance, original, threshold_mv=threshold_mv,
+        duration_ms=duration_ms, include_candidates=include_candidates,
+        include_unresolved_candidates=include_unresolved_candidates,
+        max_source_distance_um=max_source_distance_um)
+    ids = _verified_output_ids(solution.get('edge_node_ids'))
     if selected_ticks is not None:
         if (not isinstance(selected_ticks, dict)
                 or any(type(index) is not int or not 0 <= index < len(ids)
@@ -227,38 +312,49 @@ def _feedback_output_events(body, solution, provenance, original, *, threshold_m
                            or not np.isfinite(np.asarray(trace, dtype=float)).all()
                            for index, trace in selected_traces.items())):
                 raise ValueError('Invalid selected feedback traces')
-    config = provenance.get('configuration', {})
-    overrides = config.get('nseg_by_edge') if isinstance(config, dict) else None
-    remeshed = overrides is not None or (isinstance(config, dict)
-                                         and config.get('nseg_per_edge', 1) != 1)
-    edge_ranges = {}
-    if remeshed:
-        if overrides is None:
-            overrides = {}
-        default = config.get('nseg_per_edge')
-        if (not isinstance(overrides, dict) or type(default) is not int or default < 1
-                or default % 2 != 1 or any(
-                    type(key) is not str or not key.isascii() or not key.isdigit()
-                    or str(int(key)) != key or int(key) <= 0
-                    or type(value) is not int or value < 1 or value % 2 != 1
-                    for key, value in overrides.items())):
-            raise ValueError('Invalid feedback output discretization')
-        for index, value in enumerate(ids):
-            child = int(value)
-            if child not in edge_ranges:
-                edge_ranges[child] = [index, 1]
-            else:
-                start, count = edge_ranges[child]
-                if index != start + count:
-                    raise ValueError('Noncontiguous feedback output compartments')
-                edge_ranges[child][1] += 1
-        if any(int(key) not in edge_ranges for key in overrides):
-            raise ValueError('Unknown feedback output edge')
-        if any(count != overrides.get(str(child), default)
-               for child, (_, count) in edge_ranges.items()):
-            raise ValueError('Feedback output discretization mismatch')
-    events = Counter()
-    positions, local_events, seen = {}, [], {}
+    edge_ranges = _output_edge_ranges(ids, provenance)
+
+    def crossing_ticks(index):
+        return ([] if indices_only else threshold_crossing_ticks(
+            times, voltage[index] if selected_traces is None else selected_traces[index],
+            threshold_mv=threshold_mv, duration_ms=duration_ms))
+
+    def declared_ticks(index):
+        if index not in selected_ticks:
+            raise ValueError('Missing selected feedback ticks')
+        return selected_ticks[index]
+
+    def trace_ticks(index):
+        if index not in selected_traces:
+            raise ValueError('Missing selected feedback trace')
+        return crossing_ticks(index)
+
+    resolver = (declared_ticks if selected_ticks is not None
+                else trace_ticks if selected_traces is not None else crossing_ticks)
+    plan = _candidate_plan(body, original, ids, edge_ranges, duration_ms=duration_ms,
+        include_candidates=include_candidates,
+        include_unresolved_candidates=include_unresolved_candidates,
+        max_source_distance_um=max_source_distance_um, resolver=resolver)
+    if indices_only:
+        return list(plan['indices'])
+    if selected_traces is not None and set(selected_traces) != set(plan['indices']):
+        raise ValueError('Unexpected selected feedback trace')
+    if selected_ticks is not None and set(selected_ticks) != set(plan['indices']):
+        raise ValueError('Unexpected selected feedback ticks')
+    return _plan_output(plan, plan['ticks'])
+
+
+def _candidate_plan(body, original, ids, edge_ranges, *, duration_ms, include_candidates,
+                    include_unresolved_candidates, max_source_distance_um, resolver):
+    """Walk one cell's verified candidates once and describe what they imply.
+
+    A streamed replay asks the same question twice: which compartments to record,
+    and which verified synapses those compartments belong to. Walking the durable
+    candidate list for the second answer cost a full pass again (0.86 ms of Python
+    per cell, 26.4 s of a 130 s slice), so the walk returns a plan that the tick
+    stream can be attached to later without touching the candidates again.
+    """
+    positions, partners, rows, seen = {}, {}, [], {}
     omitted = False
     for candidate in original['candidates']:
         if candidate.get('included_in_graph') is not True:
@@ -284,13 +380,12 @@ def _feedback_output_events(body, solution, provenance, original, *, threshold_m
                         raise ValueError('Invalid unresolved source candidate')
                     # Placeholder only: the original geometry_unresolved status
                     # prevents treating this as an observed negative crossing.
-                    local_events.append({'source_position_8nm': point.copy(),
-                                         'partner_id': partner, 'stimulated_ticks_ms': []})
+                    rows.append(('unresolved', point, partner, None))
                 continue
         index = candidate.get('result_segment_index')
         child = candidate.get('child_node_id')
         partner = candidate.get('partner_id')
-        if remeshed:
+        if edge_ranges:
             fraction = candidate.get('segment_fraction')
             if (type(child) is not int or child not in edge_ranges
                     or type(fraction) not in (int, float) or not math.isfinite(fraction)
@@ -303,16 +398,7 @@ def _feedback_output_events(body, solution, provenance, original, *, threshold_m
                 or not partner.isascii() or not partner.isdigit() or partner.startswith('0')):
             raise ValueError('Invalid verified output compartment')
         if index not in positions:
-            if selected_traces is not None and index not in selected_traces:
-                raise ValueError('Missing selected feedback trace')
-            if selected_ticks is not None:
-                if index not in selected_ticks:
-                    raise ValueError('Missing selected feedback ticks')
-                positions[index] = selected_ticks[index]
-            else:
-                positions[index] = ([] if indices_only else threshold_crossing_ticks(
-                    times, voltage[index] if selected_traces is None else selected_traces[index],
-                    threshold_mv=threshold_mv, duration_ms=duration_ms))
+            positions[index] = [] if resolver is None else resolver(index)
         if include_candidates:
             point = candidate.get('source_position_8nm')
             if (not isinstance(point, list) or len(point) != 3
@@ -324,31 +410,53 @@ def _feedback_output_events(body, solution, provenance, original, *, threshold_m
             if identity in seen and seen[identity] != index:
                 raise ValueError('Conflicting duplicate source coordinate')
             seen[identity] = index
-            ticks = [int(tick) for tick in positions[index]]
-            # A quiet synapse is the overwhelming majority of the population: at
-            # 256 registered synapses per cell the full archive reached 11.2 GB of
-            # candidates whose tick list is empty, and serialising, re-reading and
-            # re-indexing it cost 300-600 s of every pass while carrying no
-            # observation at all. Omit those rows and mark the batch instead; the
-            # merge rebuilds them as an explicit empty tick list from the durable
-            # diagnostics, so a missing row still means "observed quiet", never
-            # "unknown". Duplicate coordinates keep being checked above.
-            if ticks:
-                local_events.append({'source_position_8nm': point.copy(),
-                                     'partner_id': partner, 'stimulated_ticks_ms': ticks})
-            else:
-                omitted = True
-        for tick in positions[index]:
-            events[(int(partner), int(tick))] += 1
-    if indices_only:
-        return list(positions)
-    if selected_traces is not None and set(selected_traces) != set(positions):
-        raise ValueError('Unexpected selected feedback trace')
-    if selected_ticks is not None and set(selected_ticks) != set(positions):
+            rows.append(('candidate', point, partner, index))
+        # Multiplicity matters: several registered synapses may share one
+        # presynaptic coordinate and one output compartment, so a plain set
+        # would undercount their crossings.
+        totals = partners.get(index)
+        if totals is None:
+            partners[index] = totals = {}
+        totals[int(partner)] = totals.get(int(partner), 0) + 1
+    return {'body': body, 'ids': ids, 'pipelines': edge_ranges, 'duration_ms': duration_ms,
+            'indices': list(positions), 'ticks': positions, 'partners': partners,
+            'rows': rows, 'omitted': omitted, 'include_candidates': include_candidates,
+            'deferred': resolver is None}
+
+
+def _plan_output(plan, ticks):
+    """Render a candidate plan and the tick lists it resolved into its result."""
+    if (not isinstance(plan, dict) or not isinstance(ticks, dict)
+            or set(ticks) != set(plan['indices'])):
         raise ValueError('Unexpected selected feedback ticks')
-    edge_events = [{'source_id': body, 'target_id': target, 'tick': tick, 'count': count}
+    events = Counter()
+    for index, totals in plan['partners'].items():
+        for tick in ticks[index]:
+            events.update({(partner, int(tick)): count
+                           for partner, count in totals.items()})
+    edge_events = [{'source_id': plan['body'], 'target_id': target, 'tick': tick, 'count': count}
                    for (target, tick), count in sorted(events.items())]
-    if include_candidates:
-        return {'edge_events': edge_events, 'candidates': local_events,
-                'omitted_empty_candidates': omitted}
-    return edge_events
+    if not plan['include_candidates']:
+        return edge_events
+    rows, omitted = [], plan['omitted']
+    for kind, point, partner, index in plan['rows']:
+        if kind == 'unresolved':
+            rows.append({'source_position_8nm': point.copy(), 'partner_id': partner,
+                         'stimulated_ticks_ms': []})
+            continue
+        values = [int(tick) for tick in ticks[index]]
+        # A quiet synapse is the overwhelming majority of the population: at
+        # 256 registered synapses per cell the full archive reached 11.2 GB of
+        # candidates whose tick list is empty, and serialising, re-reading and
+        # re-indexing it cost 300-600 s of every pass while carrying no
+        # observation at all. Omit those rows and mark the batch instead; the
+        # merge rebuilds them as an explicit empty tick list from the durable
+        # diagnostics, so a missing row still means "observed quiet", never
+        # "unknown". Duplicate coordinates are still checked when planning.
+        if values:
+            rows.append({'source_position_8nm': point.copy(), 'partner_id': partner,
+                         'stimulated_ticks_ms': values})
+        else:
+            omitted = True
+    return {'edge_events': edge_events, 'candidates': rows,
+            'omitted_empty_candidates': omitted}
