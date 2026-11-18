@@ -116,6 +116,14 @@ services:
       GENERATOR_CNS_OVERVIEW_DIR: /morphologies/overview
       GENERATOR_SYNAPSE_DIR: /synapses
       GENERATOR_NEUROPIL_DIR: /neuropil
+      # Grouped per-body source pairs: replaces the per-cell 6.3 GB synapse
+      # scan, 160x faster on measured cells. Absent means the slower path.
+      GENERATOR_SOURCE_PAIR_STORE: /source-pairs
+      # Replay-independent source geometry, computed once at 6 um and reused by
+      # every experiment; the paired control branch is cached beside it so a
+      # repeat experiment replays the network once instead of four times.
+      GENERATOR_SOURCE_DIAGNOSTICS_CACHE: /source-diagnostics/sources.sqlite
+      GENERATOR_FULL_REPLAY_CACHE: /source-diagnostics/replay-cache
     volumes:
       - generator_scratch:/work
       - ${GENERATOR_MORPHOLOGY_EXISTING_PATH:-../.data/male-cns/morphology}:/morphologies/existing:ro
@@ -123,6 +131,8 @@ services:
       - ${GENERATOR_MORPHOLOGY_INDEX_PATH:-../.data/male-cns/morphology-index}:/morphology-index:ro
       - ${GENERATOR_CNS_OVERVIEW_PATH:-../.data/male-cns/overview-v1}:/morphologies/overview:ro
       - ${GENERATOR_SYNAPSE_PATH:-../.data/male-cns/synapses}:/synapses:ro
+      - ${GENERATOR_SOURCE_PAIR_PATH:-../.data/male-cns/source-pairs-v2}:/source-pairs:ro
+      - ${GENERATOR_SOURCE_DIAGNOSTICS_PATH:-../.data/male-cns/source-diagnostics}:/source-diagnostics
       - ${GENERATOR_NEUROPIL_PATH:-../.data/male-cns/neuropil-lod-v1}:/neuropil:ro
     networks: [internal]
     healthcheck:

@@ -1,6 +1,6 @@
 {
-  "version": "0.1.6",
-  "date": "2026-11-14",
+  "version": "0.1.7",
+  "date": "2026-11-18",
   "application": "AISCS",
   "branch": "dev",
   "components": {
@@ -10,9 +10,9 @@
       "commit": "d8db4750db239ff57e7e50e3e3bd95ffcfa0a014"
     },
     "frontend": {
-      "version": "1.1.4",
+      "version": "1.1.5",
       "branch": "frontend",
-      "commit": "b9ba78548693e6c10ebc9389670f3bb96268aae2"
+      "commit": "a5c5b833ffbd2a57145bd0c899d75a7f620d2255"
     },
     "agents": {
       "version": "0.2.0",
@@ -20,9 +20,9 @@
       "commit": "560ab7f1fdd8ed66d9c0fd16afc164024cecdd7f"
     },
     "generator": {
-      "version": "0.1.6",
+      "version": "0.1.7",
       "branch": "generator",
-      "commit": "21966b81e4cc8034f018ef498b387a1a1605c917"
+      "commit": "957d08601c8ba9113be4e76e5ccab068c7f5dcc8"
     },
     "workspace": {
       "version": "0.1.6",
@@ -81,18 +81,19 @@
       "scope": "focused simulation unit tests; no live stack"
     },
     "frontend_focused_jest": {
-      "suites": 6,
-      "passed": 37,
-      "scope": "focused simulator unit tests"
+      "suites": 45,
+      "passed": 174,
+      "scope": "simulator unit tests; 45 of 62 suites ran, 17 suites could not load because the pnpm install lacks @chakra-ui/utils/context"
     },
     "generator_focused_pytest": {
-      "passed": 35,
-      "skipped": 1,
-      "scope": "focused feedback, geometry and replay tests; not full suite"
+      "passed": 1538,
+      "skipped": 45,
+      "scope": "full generator suite, tests/test_screen_stim_sources.py ignored"
     },
     "gpu_refined_synthetic": "one refined synthetic cell, artificial event; not full population",
-    "population_benchmark": "725.41 seconds, 166700 independent detailed cells, 10 ms model time, E1-REF; excludes network feedback",
+    "population_benchmark": "515.94 seconds, 166699 independent detailed cells, 10 ms model time, E1-REF; excludes network feedback",
+    "population_feedback_full": "4336.83 seconds cold and 44.3 s warm for 166700 coupled cells, two full passes and one feedback iteration; no threshold crossing at -300 nA and -20 mV, so the feedback effect is 0.0 uV",
     "production_live": "not checked; full stack not started",
-    "full_cns_gpu": "coupled full population not validated; target 300 seconds not confirmed"
+    "full_cns_gpu": "coupled full population measured end to end but not validated biologically; the 300-second target is not confirmed"
   }
 }
