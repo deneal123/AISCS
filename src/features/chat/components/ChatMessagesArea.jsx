@@ -1,5 +1,6 @@
 import React, { Suspense, lazy } from 'react';
-import { Box, Button, HStack, Icon, IconButton, Text, VStack, keyframes } from '@chakra-ui/react';
+import { Box, Button, HStack, Icon, IconButton, Text, VStack } from '@chakra-ui/react';
+import { keyframes } from '@emotion/react';
 import { FiArchive, FiArrowDown, FiChevronDown, FiChevronUp, FiRefreshCw } from '@shared/icons';
 import { colors, borderRadius, motion, spacing } from '@theme/tokens';
 import ChatMessageItem from './ChatMessageItem';

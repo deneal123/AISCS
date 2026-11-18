@@ -135,7 +135,11 @@ export function createConnectomeLayer(data) {
     while (low < high) { const mid = (low + high) >>> 1; if (data.node_ids[mid] < target) low = mid + 1; else high = mid; }
     return low < data.node_ids.length && data.node_ids[low] === target ? low : -1;
   };
+  // Named accessors: tests and callers must not depend on child ordering, because
+  // optional layers (nociception candidates, arbors) are added conditionally.
+  const layers = { points, candidates, pulses, routes, arbors: data.arbors ? group.children.find(child => child.isLineSegments && child.material === arborMaterial) : null };
   return { group,
+    layers,
     nativeBounds,
     candidateCount: candidateIndices.length,
     showNociceptionCandidates(visible) { candidates.visible = Boolean(visible); },

@@ -1,5 +1,6 @@
 import React from "react";
-import { Box, HStack, Icon, Text, VStack, keyframes } from "@chakra-ui/react";
+import { Box, HStack, Icon, Text, VStack } from "@chakra-ui/react";
+import { keyframes } from "@emotion/react";
 import { FiZap, FiFile, FiDownload, FiImage } from "@shared/icons";
 import { colors, borderRadius, shadows, motion } from "@theme/tokens";
 import { useInView } from "@hooks/useInView";

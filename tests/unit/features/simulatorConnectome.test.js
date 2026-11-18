@@ -11,7 +11,7 @@ const data = () => ({
 
 test('whole scene retains every neuron; activity and transmissions follow the saved event clock including rewind', () => {
   const layer = createConnectomeLayer(data());
-  const cloud = layer.group.children[0], pulses = layer.group.children[1];
+  const cloud = layer.layers.points, pulses = layer.layers.pulses;
   expect(layer.group.children.some(child => child.isLineSegments)).toBe(false);
   expect(cloud.geometry.attributes.position.count).toBe(3);
   expect([...cloud.geometry.attributes.isInput.array]).toEqual([1, 0, 0]);
@@ -31,7 +31,7 @@ test('a quiet saved realization never receives artificial spikes from the visibl
   const quiet = data(); quiet.spike_neurons = new Int32Array(); quiet.spike_times_ms = new Float32Array();
   const layer = createConnectomeLayer(quiet);
   expect(layer.update(50, true, true)).toMatchObject({ active: 0, inputActive: 0, delivered: 0 });
-  expect([...layer.group.children[0].geometry.attributes.firedAt.array]).toEqual([-1000, -1000, -1000]);
+  expect([...layer.layers.points.geometry.attributes.firedAt.array]).toEqual([-1000, -1000, -1000]);
   layer.dispose();
 });
 
@@ -41,7 +41,7 @@ test('source segment crossings follow playback without generating network edge p
   source.physical_source_indices = Uint32Array.of(0, 0);
   source.physical_source_times_ms = Uint32Array.of(2, 5);
   const layer = createConnectomeLayer(source);
-  const cloud = layer.group.children[0], pulses = layer.group.children[1];
+  const cloud = layer.layers.points, pulses = layer.layers.pulses;
   expect(layer.update(3, true, true)).toMatchObject({ active: 0, delivered: 0 });
   expect([...cloud.geometry.attributes.sourceAt.array]).toEqual([2, -1000, -1000]);
   expect([...pulses.geometry.attributes.firedAt.array]).toEqual([-1000, -1000]);
@@ -58,14 +58,14 @@ test('native view displays source landmarks and real arbors without drawing sche
   source.description.scene.embedding = 'male-cns-flybody-view-only-v2';
   const original = source.positions_mm.slice(), layer = createConnectomeLayer(source);
   layer.coordinateView(true);
-  expect([...layer.group.children[0].geometry.index.array]).toEqual([0, 1]);
-  expect(layer.group.children[1].visible).toBe(false);
-  expect(layer.group.children[2].visible).toBe(false);
+  expect([...layer.layers.points.geometry.index.array]).toEqual([0, 1]);
+  expect(layer.layers.pulses.visible).toBe(false);
+  expect(layer.layers.routes.visible).toBe(false);
   expect(layer.nativeBounds.isEmpty()).toBe(false);
   expect(source.positions_mm).toEqual(original);
   layer.coordinateView(false);
   expect(layer.group.matrix.elements).toEqual([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
-  expect(layer.group.children[1].visible).toBe(true);
+  expect(layer.layers.pulses.visible).toBe(true);
   layer.dispose();
   const legacy = createConnectomeLayer(data());
   expect(() => legacy.coordinateView(true)).toThrow('native_frame_identity');
@@ -78,10 +78,10 @@ test('hiding an unlocated node and incident edges preserves the complete event j
   source.regions = new Uint8Array([0, 0, 0]);
   source.description.scene.regions = ['brain'];
   const layer = createConnectomeLayer(source);
-  expect([...layer.group.children[0].geometry.index.array]).toEqual([0, 2]);
-  expect(layer.group.children[1].geometry.index.count).toBe(0);
+  expect([...layer.layers.points.geometry.index.array]).toEqual([0, 2]);
+  expect(layer.layers.pulses.geometry.index.count).toBe(0);
   expect(layer.update(6, true, true)).toMatchObject({ active: 3, inputActive: 1, delivered: 3 });
-  expect([...layer.group.children[0].geometry.attributes.firedAt.array]).toEqual([1, 3, 5]);
+  expect([...layer.layers.points.geometry.attributes.firedAt.array]).toEqual([1, 3, 5]);
   expect([...source.node_ids]).toEqual([1n, 2n, 3n]);
   layer.dispose();
 });
@@ -128,7 +128,7 @@ test('scene rejects incompatible solver timing and events off the saved time gri
   times[1] = 201; expect(() => parseConnectome(buffer, description)).toThrow('content');
   times[1] = 2.5; expect(() => parseConnectome(buffer, description)).toThrow('content');
   const layer = createConnectomeLayer(data());
-  expect(layer.group.children[1].material.uniforms.synapticDelay.value).toBe(2);
+  expect(layer.layers.pulses.material.uniforms.synapticDelay.value).toBe(2);
   layer.dispose();
 });
 

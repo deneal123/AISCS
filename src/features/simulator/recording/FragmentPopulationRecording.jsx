@@ -398,8 +398,14 @@ export default function FragmentPopulationRecording({ sceneRunId, sceneManifest,
           simulation: { ...simulation, pulse_count: simulation.pulse_count ?? null,
             pulse_interval_ms: simulation.pulse_interval_ms ?? null },
           excitatory: synapse, inhibitory: { ...synapse, reversal_mv: -80 }, threshold_mv: -20,
-          max_source_distance_um: 2, max_target_distance_um: 2, max_iterations: 16,
-          max_events: 1000000, allow_known_geometry_repair: true },
+          max_source_distance_um: 6, max_target_distance_um: 4, max_iterations: 16,
+          max_events: 1000000, allow_known_geometry_repair: true,
+          // Cell 13931 carries synapse coordinates of a foreign cell in the index
+          // (all 2 474 graph synapses lie 9-230 um away from its own cable). The
+          // opt-in publishes those synapses as an explicit exclusion receipt
+          // instead of silently treating them as silence, and every other cell
+          // still needs its geometry inside the 6 um tolerance.
+          allow_partial_source_geometry: true },
         { signature: operatorContactSignature.current });
       } catch {
         if (!preparation.signal.aborted) {

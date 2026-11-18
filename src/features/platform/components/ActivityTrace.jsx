@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Box, HStack, Icon, Text, VStack, keyframes } from "@chakra-ui/react";
+import { Box, HStack, Icon, Text, VStack } from "@chakra-ui/react";
+import { keyframes } from "@emotion/react";
 import {
   FiActivity, FiAlertCircle, FiCheck, FiCpu, FiGitBranch, FiSearch, FiTool,
 } from "@shared/icons";

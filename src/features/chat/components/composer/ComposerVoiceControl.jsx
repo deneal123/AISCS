@@ -1,5 +1,6 @@
 import React, { useId } from 'react';
-import { Box, Icon, Spinner, Text, VStack, keyframes } from '@chakra-ui/react';
+import { Box, Icon, Spinner, Text, VStack } from '@chakra-ui/react';
+import { keyframes } from '@emotion/react';
 import { FiMic, FiSquare } from '@shared/icons';
 import { colors, composerActionControl } from '@theme/tokens';
 import { CHAT_THEME } from '../../constants/theme';

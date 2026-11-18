@@ -1,5 +1,6 @@
 import React from "react";
-import { Box, keyframes } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
+import { keyframes } from "@emotion/react";
 import { Outlet, useLocation } from "react-router-dom";
 import Header from "./Header";
 import SkipLink from "./SkipLink";
