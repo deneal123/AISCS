@@ -1,6 +1,6 @@
 {
-  "version": "0.1.7",
-  "date": "2026-11-18",
+  "version": "0.1.8",
+  "date": "2026-11-19",
   "application": "AISCS",
   "branch": "dev",
   "components": {
@@ -20,9 +20,9 @@
       "commit": "560ab7f1fdd8ed66d9c0fd16afc164024cecdd7f"
     },
     "generator": {
-      "version": "0.1.7",
+      "version": "0.1.8",
       "branch": "generator",
-      "commit": "957d08601c8ba9113be4e76e5ccab068c7f5dcc8"
+      "commit": "cce3f9bd371b0b2c7ebfcc02512df4ee19397ca1"
     },
     "workspace": {
       "version": "0.1.6",
@@ -94,6 +94,6 @@
     "population_benchmark": "515.94 seconds, 166699 independent detailed cells, 10 ms model time, E1-REF; excludes network feedback",
     "population_feedback_full": "4336.83 seconds cold and 44.3 s warm for 166700 coupled cells, two full passes and one feedback iteration; no threshold crossing at -300 nA and -20 mV, so the feedback effect is 0.0 uV",
     "production_live": "not checked; full stack not started",
-    "full_cns_gpu": "coupled full population measured end to end but not validated biologically; the 300-second target is not confirmed"
+    "full_cns_gpu": "coupled full population measured end to end but not validated biologically; the 300-second and 600-second targets are not confirmed; the fastest measured single full pass is 1945.96 s with tree reduction disabled"
   }
 }
