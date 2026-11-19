@@ -11,16 +11,19 @@ from service.infrastructure.execution.gpu_batch_settings import (
 def test_batch_settings_allow_bounded_administrator_tuning():
     defaults = independent_batch_settings({})
     assert defaults['pool_cells'] == defaults['max_cells'] == 20
+    assert defaults['pool_segments'] >= defaults['segment_budget']
     assert defaults['require_cell_major'] is False
     assert defaults['reroot'] is False
     assert defaults['cell_major_block_threads'] == 512
     assert defaults['block_cell_segments'] == 40000
     assert defaults['cell_warps'] == 1
     tuned = independent_batch_settings({'GENERATOR_GPU_BATCH_CELLS': '3000',
-        'GENERATOR_GPU_POOL_CELLS': '12000', 'GENERATOR_GPU_SEGMENT_BUDGET': '12000000'})
+        'GENERATOR_GPU_POOL_CELLS': '12000', 'GENERATOR_GPU_SEGMENT_BUDGET': '12000000',
+        'GENERATOR_GPU_POOL_SEGMENTS': '12000000'})
     assert tuned['max_cells'] == 3000
     assert tuned['pool_cells'] == 12000
     assert tuned['segment_budget'] == 12000000
+    assert tuned['pool_segments'] == 12000000
     assert independent_batch_settings({'GENERATOR_GPU_REQUIRE_CELL_MAJOR': '1'})[
         'require_cell_major'] is True
     configured = independent_batch_settings({'GENERATOR_GPU_REROOT': '1',
@@ -38,7 +41,9 @@ def test_batch_settings_allow_bounded_administrator_tuning():
     {'GENERATOR_GPU_REQUIRE_CELL_MAJOR': 'true'},
     {'GENERATOR_GPU_REROOT': 'true'}, {'GENERATOR_GPU_CELL_MAJOR_BLOCK_THREADS': '100'},
     {'GENERATOR_GPU_BLOCK_CELL_SEGMENTS': '0'},
-    {'GENERATOR_GPU_CELL_WARPS': '3'},
+    {'GENERATOR_GPU_CELL_WARPS': '3'}, {'GENERATOR_GPU_POOL_SEGMENTS': '0'},
+    # A pool smaller than one batch's segment budget cannot fill a batch.
+    {'GENERATOR_GPU_POOL_SEGMENTS': '150000'},
 ])
 def test_invalid_batch_settings_fail_closed(env):
     with pytest.raises(ValueError):
@@ -62,13 +67,25 @@ def test_full_feedback_defaults_are_population_scale_and_required():
     # must stay single threaded.
     assert settings['reduce_workers'] == 1
     assert settings['cell_major_block_threads'] in (32, 64, 128, 256)
+    # One warp per block leaves an SM slot running a single warp through every
+    # Hines level; four warps per block measured 1.55x on the connected pass.
+    assert settings['cell_warps'] == 4
+    # A cell-count bound is not a memory bound: the pool drains in ascending
+    # width, so 12 000 of the widest cells OOM-killed a whole-population run at
+    # 156 399 of 166 700 cells. The segment bound is what actually bounds the
+    # resident geometry.
+    # 152.7 bytes per segment measured on the widest chunk, so the bound has to
+    # stay a memory bound and still hold more than one maximum batch.
+    assert settings['segment_budget'] < settings['pool_segments'] < 30000000
 
 
 def test_full_feedback_settings_stay_administrator_overridable():
     settings = full_feedback_batch_settings({'GENERATOR_GPU_BATCH_CELLS': '300',
         'GENERATOR_GPU_POOL_CELLS': '900', 'GENERATOR_GPU_SEGMENT_BUDGET': '1000000',
-        'GENERATOR_GPU_REQUIRE_CELL_MAJOR': '0'})
+        'GENERATOR_GPU_REQUIRE_CELL_MAJOR': '0',
+        'GENERATOR_GPU_POOL_SEGMENTS': '5000000'})
     assert settings['max_cells'] == 300 and settings['pool_cells'] == 900
+    assert settings['pool_segments'] == 5000000
     assert settings['segment_budget'] == 1000000
     assert settings['require_cell_major'] is False
 

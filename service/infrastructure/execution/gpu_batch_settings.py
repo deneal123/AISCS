@@ -22,6 +22,7 @@ _LIMITS = {
     'workers': ('GENERATOR_GPU_PREPARE_WORKERS', 1, 8),
     'max_cells': ('GENERATOR_GPU_BATCH_CELLS', 1, 3000),
     'pool_cells': ('GENERATOR_GPU_POOL_CELLS', 1, 12000),
+    'pool_segments': ('GENERATOR_GPU_POOL_SEGMENTS', 1, 400000000),
     'window_cells': ('GENERATOR_GPU_WINDOW_CELLS', 1, 4096),
     'window_steps': ('GENERATOR_GPU_WINDOW_STEPS', 1, 1000),
     'reduce_workers': ('GENERATOR_GPU_REDUCE_WORKERS', 1, 16),
@@ -44,6 +45,7 @@ _INDEPENDENT_DEFAULTS = {
     'workers': 1,
     'max_cells': 20,
     'pool_cells': 20,
+    'pool_segments': 200000,
     'window_cells': 20,
     'window_steps': 25,
     'reduce_workers': 1,
@@ -91,6 +93,22 @@ _FEEDBACK_DEFAULTS = {
     # population otherwise splits into 1 300 padding-dominated batches.
     'max_cells': 3000,
     'pool_cells': 12000,
+    # A cell-count bound is NOT a memory bound: the pool is drained in ascending
+    # mean width, so the last pools hold the widest morphologies, and 12 000 of
+    # them are gigabytes of geometry. Measured: a whole-population run was
+    # OOM-killed at 156 399 of 166 700 cells (container exit 137, OOMKilled true)
+    # after finishing the narrow cells. Bounding the pool by segments as well
+    # keeps the resident geometry proportional to the actual padded work.
+    #
+    # 152.7 bytes per segment measured on the widest chunk: 765 slim prepared
+    # cells holding 9 171 225 segments raised the resident set by 1 335.2 MB.
+    # That is the real per-segment cost of the arrays the kernels read (area,
+    # parents, conductances, segment_nodes, grid plus the recorded starts_um,
+    # ends_um, midpoints_um, endpoint_radii_um, edge_node_ids and segment_index),
+    # not the 32 bytes a first guess assumes. 10 000 000 segments is therefore
+    # ~1.5 GB: enough to plan more than three maximum batches and small enough to
+    # leave room for the decode window on a 7.7 GB container.
+    'pool_segments': 10000000,
     'window_cells': 1024,
     # A 25-step window synchronises the device eight times per batch and hands
     # the host eight partial traces; 50 halves both without changing the
@@ -102,7 +120,14 @@ _FEEDBACK_DEFAULTS = {
     'require_cell_major': True,
     'reroot': False,
     'cell_major_block_threads': 128,
-    'cell_warps': 1,
+    # One warp per block (32 threads) leaves the SM mostly idle: a block then
+    # occupies a slot to run a single warp, and warp_batched barriers every Hines
+    # level, so a narrow cell stalls its slot for the whole level chain. Measured
+    # on the same population slice, four warps per block ran the whole connected
+    # pass 1.55x faster than one (110.9 -> 172.0 cells/s over 25 583 cells,
+    # reproduced twice at 164.6 cells/s), and two warps already reached 160.3.
+    # Wider cells are unaffected: they go to the block-per-cell kernel below.
+    'cell_warps': 4,
 }
 
 # The cell-major kernels keep four (batch, node) fp64 working columns plus the
@@ -159,6 +184,11 @@ def _settings(env, defaults):
             value == '1')
     if result['pool_cells'] < result['max_cells']:
         raise ValueError('GPU pool must hold at least one maximum batch')
+    # A pool smaller than one batch's segment budget cannot fill a single batch,
+    # so every batch would degenerate into the padding-dominated size the pool
+    # exists to avoid.
+    if result['pool_segments'] < result['segment_budget']:
+        raise ValueError('GPU pool segments must hold at least one maximum batch')
     return result
 
 

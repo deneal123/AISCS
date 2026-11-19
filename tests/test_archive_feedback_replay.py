@@ -111,3 +111,62 @@ def test_iteration_failure_preserves_previous_output_and_removes_scratch(tmp_pat
             output_event_path=destination, max_iterations=3)
     assert destination.read_text() == 'previous'
     assert list(tmp_path.iterdir()) == [destination]
+
+
+def test_empty_feedback_schedule_returns_the_incoming_replay(tmp_path, monkeypatch):
+    from service.application.feedback import archive_replay
+
+    active, control, output = (tmp_path / name for name in ('a', 'c', 'o'))
+    active.write_text('active')
+    control.write_text('control')
+    monkeypatch.setattr(archive_replay, 'build_feedback_schedule_from_archives',
+                        lambda *args, **kwargs: {'schedule': {'event_count': 0},
+                                                 'schedule_sha256': 'd' * 64})
+    def replay(*args, **kwargs):
+        raise AssertionError('an empty feedback schedule must not replay the population')
+    monkeypatch.setattr(archive_replay, 'replay_verified_feedback_to_archive', replay)
+    receipt = {'event_sha256': 'e' * 64, 'cells': 1}
+    result = replay_archived_feedback({'graph_sha256': 'a' * 64}, [], None,
+        graph=SimpleNamespace(provenance={'manifest_sha256': 'a' * 64}), source_ids=[10],
+        index=None, directories=[], synapse_parameters={}, active_path=active,
+        active_sha256='b' * 64, control_path=control, control_sha256='c' * 64,
+        diagnostics_factory=lambda ids: {}, morphology_sha256={10: 'f' * 64}, duration_ms=10,
+        max_events=1, max_source_distance_um=2, max_target_distance_um=2,
+        output_event_path=output, metadata_factory=lambda cells: {},
+        replay_options={'expected_ids': [10], 'duration_ms': 10},
+        baseline_schedule={'cells': []}, baseline_sha256='1' * 64, active_replay=receipt)
+    assert result['empty_feedback'] is True
+    assert result['replay'] == receipt
+    assert result['feedback_schedule_sha256'] == 'd' * 64
+    assert active.read_text() == 'active' and control.read_text() == 'control'
+    assert not output.exists()
+
+
+def test_iteration_converges_on_an_empty_feedback_schedule(tmp_path, monkeypatch):
+    from service.application.feedback import archive_replay
+
+    active, control, destination = (tmp_path / name for name in ('a', 'c', 'o'))
+    active.write_text('active')
+    control.write_text('control')
+    receipt = {'event_sha256': 'e' * 64}
+    monkeypatch.setattr(archive_replay, 'build_feedback_schedule_from_archives',
+                        lambda *args, **kwargs: {'schedule': {'event_count': 0},
+                                                 'schedule_sha256': 'd' * 64})
+    monkeypatch.setattr(archive_replay, 'replay_verified_feedback_to_archive',
+                        lambda *args, **kwargs: pytest.fail('no population replay is needed'))
+    result = iterate_archived_feedback({'graph_sha256': 'a' * 64}, [], None,
+        active_path=active, active_sha256='b' * 64, control_path=control, control_sha256='c' * 64,
+        output_event_path=destination, max_iterations=3, initial_replay=receipt,
+        graph=SimpleNamespace(provenance={'manifest_sha256': 'a' * 64}), source_ids=[10],
+        index=None, directories=[], synapse_parameters={}, diagnostics_factory=lambda ids: {},
+        morphology_sha256={10: 'f' * 64}, duration_ms=10, max_events=1,
+        max_source_distance_um=2, max_target_distance_um=2,
+        metadata_factory=lambda cells: {},
+        replay_options={'expected_ids': [10], 'duration_ms': 10})
+    assert result['status'] == 'converged'
+    assert result['iterations'] == 1 and result['empty_feedback'] is True
+    assert result['replay'] == receipt
+    assert destination.read_text() == 'active'
+    assert active.read_text() == 'active'
+    assert sorted(path.name for path in tmp_path.iterdir()) == ['a', 'c', 'o']
+

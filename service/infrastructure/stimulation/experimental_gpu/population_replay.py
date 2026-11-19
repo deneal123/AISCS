@@ -27,6 +27,11 @@ def _segments(cell):
     return len(cell["geometry"]["area"])
 
 
+def _pool_segments(cells):
+    """Total segments of a drained pool, the memory the pool actually holds."""
+    return sum(_segments(cell) for cell in cells)
+
+
 def _event_grid(geometry, default_nseg):
     """Keep an explicitly prepared nonuniform grid when attaching events."""
     edges = geometry['edge_node_ids']
@@ -142,7 +147,8 @@ def _reduce_all(cells, reduce_geometry, reroot_centre, slim=False, pool=None, re
 
 def iter_cell_batches(metadata, *, audited_sources, params, segment_budget, workers=4,
                       limit=None, progress=None, window_cells=4096, max_padding=3.0,
-                      max_cells=3000, pool_cells=12000, refine=None, on_invalid=None,
+                      max_cells=3000, pool_cells=12000, pool_segments=40000000,
+                      refine=None, on_invalid=None,
                       store_bounds=False, replacement_factory=None, on_replacement=None,
                       cell_transform=None):
     """Yield prepared-cell lists whose padded segment cost stays within budget.
@@ -159,8 +165,11 @@ def iter_cell_batches(metadata, *, audited_sources, params, segment_budget, work
     records vertex counts, so no decoding is needed to plan this), otherwise
     body-id order mixes a 100-segment cell with a 40 000-segment one in every
     window and padding flushes tiny batches. The pool is drained as a WHOLE
-    whenever it reaches pool_cells, and the drained prefix is planned by
-    batching.plan_batches. Draining whole is the important part: any rule that
+    whenever it reaches pool_cells or its cells hold pool_segments segments, and
+    the drained prefix is planned by batching.plan_batches. The segment bound is
+    what keeps the pool within memory: cells arrive in ascending width, so the
+    final pools are the widest in the graph and a count bound alone let 12 000 of
+    them OOM-kill a whole-population run at 156 399 of 166 700 cells. Draining whole is the important part: any rule that
     flushes a single width bucket while it is still growing cuts that bucket in
     half and the remainder becomes a 1-3 cell batch (measured 274 of 342
     batches under 200 cells with a staleness rule, versus 12 of 82 when the
@@ -178,6 +187,8 @@ def iter_cell_batches(metadata, *, audited_sources, params, segment_budget, work
         raise ValueError("Invalid cell limit per batch")
     if type(pool_cells) is not int or pool_cells < 1:
         raise ValueError("Invalid pool limit")
+    if type(pool_segments) is not int or pool_segments < 1:
+        raise ValueError("Invalid pool segment limit")
     if cell_transform is not None and not callable(cell_transform):
         raise ValueError('Invalid population cell transform')
     limit_cells = max_cells if max_cells is not None else window_cells
@@ -189,6 +200,7 @@ def iter_cell_batches(metadata, *, audited_sources, params, segment_budget, work
     # 12 000-cell pools gives 82 batches, median 2 880 cells, only 12 under 200;
     # any staleness/band rule gives 126-779 batches with most under 200.
     pool = []
+    pooled_segments = 0
     for bodies, cells, chunk in iter_prepared_chunks(
             metadata, audited_sources=audited_sources, params=params, workers=workers,
             limit=limit, progress=progress, order=order, on_invalid=on_invalid,
@@ -218,10 +230,15 @@ def iter_cell_batches(metadata, *, audited_sources, params, segment_budget, work
             if _segments(cell) > segment_budget:
                 raise ValueError("A morphology exceeds the batch segment budget")
             pool.append(cell)
-        if len(pool) >= pool_cells:
+        # The pool is drained by EITHER bound. Cells arrive in ascending mean
+        # width, so the last pools hold the widest morphologies in the graph: a
+        # 12 000-cell pool of those is far more geometry than of the narrow ones
+        # and OOM-killed a whole-population run at 156 399 of 166 700 cells.
+        pooled_segments = _pool_segments(pool)
+        if len(pool) >= pool_cells or pooled_segments >= pool_segments:
             yield from _plan_bucket(pool, segment_budget=segment_budget,
                                     max_padding=max_padding, max_cells=limit_cells)
-            pool = []
+            pool, pooled_segments = [], 0
     if pool:
         yield from _plan_bucket(pool, segment_budget=segment_budget,
                                 max_padding=max_padding, max_cells=limit_cells)
@@ -232,7 +249,8 @@ def solve_population(metadata, stimulus_midpoint, rate_table, *, audited_sources
                      block_threads=32, reduce_trees=True, workers=4, limit=None,
                      progress=None, check_cancelled=None, timing_sink=None,
                      window_sink=None, window_cells=4096, max_padding=3.0,
-                     max_cells=3000, pool_cells=12000, cell_warps=1,
+                     max_cells=3000, pool_cells=12000, pool_segments=40000000,
+                     cell_warps=1,
                      block_cell_segments=40000, allow_table_clamp=False, prefetch=2,
                      reroot=False, reduce_workers=1, on_invalid=None,
                      device_window_factory=None, event_factory=None,
@@ -348,7 +366,8 @@ def solve_population(metadata, stimulus_midpoint, rate_table, *, audited_sources
                     segment_budget=segment_budget, workers=workers, limit=limit,
                     progress=progress, window_cells=window_cells,
                     max_padding=max_padding, max_cells=max_cells,
-                    pool_cells=pool_cells, refine=refine, on_invalid=on_invalid,
+                    pool_cells=pool_cells, pool_segments=pool_segments,
+                    refine=refine, on_invalid=on_invalid,
                     store_bounds=device_window_factory is not None,
                     replacement_factory=replacement_factory, on_replacement=on_replacement,
                     cell_transform=cell_transform):

@@ -70,6 +70,29 @@ def test_population_batches_forward_rejected_cell_callback(monkeypatch):
     assert rejected == [(20, 3)]
 
 
+def test_pool_is_drained_by_segments_not_only_by_cell_count(monkeypatch):
+    # Cells arrive in ascending width, so a cell-count bound alone leaves the
+    # widest morphologies pooled together: 12 000 of them OOM-killed a
+    # whole-population run at 156 399 of 166 700 cells.
+    from service.infrastructure.stimulation.experimental_gpu.population_replay import (
+        iter_cell_batches,
+    )
+
+    def prepare(_metadata, **_kwargs):
+        for body in (10, 20, 30, 40):
+            cell = {'id': body, 'geometry': {'area': np.ones(2)}}
+            yield [body], [cell], None
+
+    monkeypatch.setattr('service.infrastructure.stimulation.experimental_gpu.'
+                        'population_replay.iter_prepared_chunks', prepare)
+    unbounded = list(iter_cell_batches({'chunks': []}, audited_sources={}, params=None,
+        segment_budget=10, pool_cells=100, pool_segments=1000))
+    assert [[cell['id'] for cell in batch] for batch in unbounded] == [[10, 20, 30, 40]]
+    bounded = list(iter_cell_batches({'chunks': []}, audited_sources={}, params=None,
+        segment_budget=10, pool_cells=100, pool_segments=4))
+    assert [[cell['id'] for cell in batch] for batch in bounded] == [[10, 20], [30, 40]]
+
+
 def test_snapshot_inventory_rejects_duplicate_or_missing_cells_before_reading(tmp_path):
     def descriptor(position, body):
         return {'name': f'chunk-{position:06d}.bin', 'format': 'malecns-packed-geometry-chunk-v1',

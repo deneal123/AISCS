@@ -2,6 +2,7 @@
 
 import copy
 import os
+import shutil
 import tempfile
 from pathlib import Path
 
@@ -17,7 +18,8 @@ def replay_archived_feedback(metadata, stimulus, rate_table, *, graph, source_id
                              metadata_factory, replay_options, target_provider=None,
                              pair_cache=None, baseline_schedule=None, baseline_sha256=None,
                              include_control_crossings=False, _feedback_gate=None,
-                             allow_partial_source_geometry=False, events_only=False):
+                             allow_partial_source_geometry=False, events_only=False,
+                             active_replay=None):
     """Build a candidate schedule and replay it once; this is not a converged network.
 
     The caller authenticates the graph, paired-run configurations and all
@@ -49,6 +51,20 @@ def replay_archived_feedback(metadata, stimulus, rate_table, *, graph, source_id
     feedback_sha256 = built['schedule_sha256']
     if _feedback_gate is not None:
         _feedback_gate(feedback_sha256)
+    # A schedule with no feedback events cannot change the archive: the merged
+    # replay would be the baseline replay that produced the incoming archive, and
+    # that replay is deterministic, so its output is the input byte for byte.
+    # Replaying anyway cost a whole population pass per iteration for nothing,
+    # and the current stimulus crosses no threshold at all, so every iteration of
+    # a real run took this branch.
+    if built['schedule'].get('event_count') == 0 and active_replay is not None:
+        return {'replay': active_replay, 'empty_feedback': True,
+                'input_schedule_sha256': feedback_sha256,
+                'feedback_schedule_sha256': feedback_sha256,
+                'baseline_schedule_sha256': baseline_sha256,
+                'active_archive_sha256': active_sha256,
+                'control_archive_sha256': control_sha256,
+                'interpretation': 'empty feedback schedule; the archive is unchanged'}
     if (baseline_schedule is None) != (baseline_sha256 is None):
         raise ValueError('Baseline schedule and digest must be supplied together')
     if baseline_schedule is not None:
@@ -72,7 +88,7 @@ def replay_archived_feedback(metadata, stimulus, rate_table, *, graph, source_id
 
 def iterate_archived_feedback(metadata, stimulus, rate_table, *, active_path, active_sha256,
                               control_path, control_sha256, output_event_path, max_iterations,
-                              iteration_progress=None,
+                              iteration_progress=None, initial_replay=None,
                               **options):
     """Replay until feedback schedules agree; publish only the converged archive.
 
@@ -88,7 +104,12 @@ def iterate_archived_feedback(metadata, stimulus, rate_table, *, active_path, ac
         raise ValueError('Iteration output must not overwrite an input archive')
     if options.get('baseline_schedule') is not None:
         options['baseline_schedule'] = copy.deepcopy(options['baseline_schedule'])
-    previous, seen, history, last_result = None, set(), [], None
+    # The replay that produced the incoming archive: a feedback schedule with no
+    # events leaves that archive unchanged, and its receipt is the converged one.
+    if initial_replay is not None and not isinstance(initial_replay, dict):
+        raise ValueError('Invalid initial archive replay receipt')
+    previous, seen, history = None, set(), []
+    last_result = None if initial_replay is None else {'replay': initial_replay}
     class StopIterationReplay(Exception):
         pass
 
@@ -116,7 +137,9 @@ def iterate_archived_feedback(metadata, stimulus, rate_table, *, active_path, ac
                 result = replay_archived_feedback(metadata, stimulus, rate_table,
                     active_path=current_path, active_sha256=current_sha, control_path=control_path,
                     control_sha256=control_sha256, output_event_path=candidate,
-                    _feedback_gate=gate, **current_options)
+                    _feedback_gate=gate,
+                    active_replay=None if last_result is None else last_result['replay'],
+                    **current_options)
             except StopIterationReplay as stop:
                 signature = stop.args[0]
                 history.append(signature)
@@ -132,6 +155,23 @@ def iterate_archived_feedback(metadata, stimulus, rate_table, *, active_path, ac
                 return {'status': 'iteration_limit', 'iterations': max_iterations,
                         'history': history}
             signature = result['feedback_schedule_sha256']
+            if result.get('empty_feedback'):
+                # No feedback event exists, so the schedule is a fixed point by
+                # construction and the archive already holds the outcome. Copy
+                # rather than move: this path can be reached on the first
+                # iteration, where current_path is the caller's input archive.
+                if Path(current_path).resolve() == Path(active_path).resolve():
+                    shutil.copyfile(current_path, destination)
+                else:
+                    os.replace(current_path, destination)
+                # Iterations counts replays performed, and the caller's initial
+                # replay is the first of them, so an empty schedule converges on
+                # this iteration without any further pass.
+                return {'status': 'converged', 'iterations': number, 'history': [signature],
+                        'replay': result['replay'], 'feedback_schedule_sha256': signature,
+                        'empty_feedback': True,
+                        'interpretation': 'experimental schedule convergence; '
+                                          'not biological validation'}
             history.append(signature)
             previous = signature
             seen.add(signature)

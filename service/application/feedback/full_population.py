@@ -280,6 +280,9 @@ def run_full_population_feedback(metadata, stimulus, rate_table, *, graph, sourc
             if _digest(initial_control_path) != first['event_sha256']:
                 raise ValueError('Initial population archive digest mismatch')
             loop = iterate_archived_feedback(metadata, zeros, rate_table,
+                # The zero-stimulus replay that produced the incoming control archive:
+                # an empty feedback schedule hands its receipt back as the converged one.
+                initial_replay=first,
                 graph=graph, source_ids=source_ids, index=index, directories=directories,
                 synapse_parameters=synapse_parameters, active_path=initial_control_path,
                 active_sha256=first['event_sha256'], control_path=initial_control_path,
@@ -368,6 +371,9 @@ def run_full_population_feedback(metadata, stimulus, rate_table, *, graph, sourc
                           'done': len(ids), 'total': len(ids)})
         else:
             iteration = iterate_archived_feedback(metadata, signal, rate_table, graph=graph,
+                # The active replay that produced the incoming archive; with an empty
+                # feedback schedule it is also the converged coupled result.
+                initial_replay=active,
                 source_ids=source_ids, index=index, directories=directories,
                 synapse_parameters=synapse_parameters, active_path=active_path,
                 active_sha256=active['event_sha256'], control_path=control_path,
