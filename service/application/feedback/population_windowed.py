@@ -7,7 +7,23 @@ from service.infrastructure.stimulation.experimental_gpu.population_recording im
 )
 from service.infrastructure.stimulation.experimental_gpu.window_crossings import WindowedCrossings
 
+from service.infrastructure.stimulation.population.source_columns import CandidateColumns
+
 from .outputs import feedback_output_plan, feedback_plan_output_ticks
+
+
+def _output_plan(cell, provenance, diagnostic, *, threshold_mv, duration_ms,
+                 max_source_distance_um):
+    """Resolve one cell's outputs from whichever form the diagnostics came in."""
+    body = cell['id']
+    if isinstance(diagnostic, CandidateColumns):
+        return diagnostic.plan(body, cell['geometry']['edge_node_ids'], provenance,
+            threshold_mv=threshold_mv, duration_ms=duration_ms, include_candidates=True,
+            include_unresolved_candidates=True,
+            max_source_distance_um=max_source_distance_um)
+    return feedback_output_plan(body, cell['geometry']['edge_node_ids'], provenance, diagnostic,
+        threshold_mv=threshold_mv, duration_ms=duration_ms, include_candidates=True,
+        include_unresolved_candidates=True, max_source_distance_um=max_source_distance_um)
 
 
 class PopulationWindowedFeedback:
@@ -63,11 +79,9 @@ class PopulationWindowedFeedback:
         # the tick pass at the end of the batch reuses it instead of walking the
         # candidate list a second time (that duplicate walk cost 26 s of a 130 s
         # slice on 15 343 cells).
-        return {cell['id']: feedback_output_plan(
-            cell['id'], cell['geometry']['edge_node_ids'], provenance[cell['id']],
-            diagnostics[cell['id']], threshold_mv=self.threshold, duration_ms=self.duration,
-            include_candidates=True, include_unresolved_candidates=True,
-            max_source_distance_um=self.distance) for cell in cells}
+        return {cell['id']: _output_plan(cell, provenance[cell['id']], diagnostics[cell['id']],
+                threshold_mv=self.threshold, duration_ms=self.duration,
+                max_source_distance_um=self.distance) for cell in cells}
 
     def _select(self, cells):
         ids = [cell['id'] for cell in cells]

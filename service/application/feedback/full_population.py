@@ -112,24 +112,23 @@ def run_full_population_from_geometry(metadata, stimulus, rate_table, *, graph, 
             excluded = {}
 
             def complete_metadata(cells):
-                result = sources.metadata(cells)
+                # Column form: the batch keeps one structured array per cell
+                # instead of one dictionary per contact. The population holds
+                # 124 million contacts, so the dictionary form alone cost 0.68 ms
+                # per cell (113 s per pass) and the counts taken from it another
+                # 0.03 ms; both are vectorised over the same columns here.
+                result = sources.metadata(cells, columns=True)
                 counts = {}
-                for diagnostic in result['diagnostics'].values():
-                    candidates = diagnostic['candidates']
-                    registered = sum(1 for row in candidates
-                                     if row.get('included_in_graph') is True)
-                    unresolved = sum(1 for row in candidates
-                                     if row.get('included_in_graph') is True
-                                     and row.get('status') == 'geometry_unresolved')
-                    counts[int(diagnostic['body_id'])] = (registered, unresolved)
+                for body, diagnostic in result['diagnostics'].items():
+                    registered, unresolved = diagnostic.counts(max_source_distance_um)
+                    counts[body] = (registered, unresolved)
                     if not unresolved:
                         continue
                     if not allow_partial_source_geometry:
                         raise ValueError('Unresolved source geometry prevents complete feedback: '
-                            f"cell {diagnostic['body_id']}, {unresolved} of "
-                            f"{len(candidates)} synapses exceed "
+                            f'cell {body}, {unresolved} of {len(diagnostic)} synapses exceed '
                             f'{max_source_distance_um:g} um')
-                    excluded[int(diagnostic['body_id'])] = unresolved
+                    excluded[body] = unresolved
                 sources.remember_counts(counts)
                 return result
 

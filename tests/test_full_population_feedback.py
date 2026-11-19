@@ -32,11 +32,19 @@ def test_geometry_runner_shares_scratch_and_removes_it_on_failure(tmp_path, monk
                 'candidates': [], 'graph_sha256': 'a' * 64, 'source_md5': 'd' * 32,
                 'max_distance_um': 2.}
 
+    def rows(diagnostics):
+        # The batch and a re-read of it are compared in the durable dictionary
+        # form, which is what the event merge consumes; either may hand back
+        # columns, and the assertion is about identity, not representation.
+        return {body: ({**item.header, 'candidates': item.rows()}
+                       if hasattr(item, 'rows') else item)
+                for body, item in diagnostics.items()}
+
     def fake_run(*_args, metadata_factory, diagnostics_factory, **_kwargs):
         cells = [{'id': 10, 'morphology_sha256': 'b' * 64}]
         first = metadata_factory(cells)
         assert metadata_factory(cells) == first
-        assert diagnostics_factory((10,)) == first['diagnostics']
+        assert rows(diagnostics_factory((10,))) == rows(first['diagnostics'])
         raise RuntimeError('solver failed')
 
     monkeypatch.setattr('service.infrastructure.stimulation.population.source_store.'

@@ -23,15 +23,20 @@ from concurrent.futures import ThreadPoolExecutor
 
 import numpy as np
 
+from .source_columns import (FORMAT, _CANDIDATE, CandidateColumns, columns_from_mapping,
+                             columns_from_payload)
 from .source_geometry import source_cable_mapping
-
-FORMAT = 'malecns-source-candidates-v2'
-_CANDIDATE = np.dtype([('partner', '<i8'), ('position', '<i4', (3,)),
-                       ('child', '<i4'), ('fraction', '<f8'), ('distance', '<f8'),
-                       ('index', '<i4'), ('included', '<u1')])
 
 
 def _encode(mapping):
+    if isinstance(mapping, CandidateColumns):
+        header = {key: value for key, value in mapping.header.items()
+                  if key not in ('format', 'rows')}
+        header['format'] = FORMAT
+        header['rows'] = len(mapping.array)
+        head = json.dumps(header, sort_keys=True, separators=(',', ':'),
+                          allow_nan=False).encode('utf8')
+        return struct.pack('<I', len(head)) + head + mapping.array.tobytes()
     header = {key: value for key, value in mapping.items() if key != 'candidates'}
     rows = mapping['candidates']
     array = np.zeros(len(rows), dtype=_CANDIDATE)
@@ -77,6 +82,11 @@ def _counts(payload, max_distance_um):
     registered = array['included'] == 1
     return (int(np.count_nonzero(registered)),
             int(np.count_nonzero(registered & (array['distance'] > max_distance_um))))
+
+
+def _decode_columns(payload, max_distance_um):
+    """Decode one payload into columns instead of one dictionary per contact."""
+    return columns_from_payload(payload, max_distance_um)
 
 
 def _decode(payload, max_distance_um):
@@ -185,7 +195,7 @@ class SourceDiagnosticsStore:
             self.readers = []
             self.db.close()
 
-    def _read_rows(self, bodies):
+    def _read_rows(self, bodies, columns=False):
         """Read one shard of payloads over a private read-only connection.
 
         The rows are fetched in bounded groups instead of one probe per cell.
@@ -197,6 +207,8 @@ class SourceDiagnosticsStore:
         """
         if not bodies:
             return {}
+        decode = _decode_columns if columns else _decode
+        limit = self.options['max_distance_um']
         reader = sqlite3.connect('file:' + self.path + '?mode=ro', uri=True, timeout=300.)
         decoded = {}
         try:
@@ -212,12 +224,12 @@ class SourceDiagnosticsStore:
                 for body, digest, payload in rows:
                     if hashlib.sha256(payload).hexdigest() != digest:
                         raise ValueError('Missing or corrupted source diagnostics')
-                    decoded[body] = _decode(payload, self.options['max_distance_um'])
+                    decoded[body] = decode(payload, limit)
         finally:
             reader.close()
         return decoded
 
-    def _read_many(self, bodies):
+    def _read_many(self, bodies, columns=False):
         """Decode a batch of payloads, fanning the I/O out over threads.
 
         Order is irrelevant here because the caller re-keys the result by body
@@ -227,12 +239,13 @@ class SourceDiagnosticsStore:
             return {}
         workers = min(self.read_workers, len(bodies))
         if workers < 2:
-            return self._read_rows(bodies)
+            return self._read_rows(bodies, columns=columns)
         shards = [bodies[index::workers] for index in range(workers)]
         decoded = {}
         with ThreadPoolExecutor(max_workers=workers,
                                  thread_name_prefix='source-diagnostics') as pool:
-            for shard in pool.map(self._read_rows, shards):
+            for shard in pool.map(lambda shard: self._read_rows(shard, columns=columns),
+                                  shards):
                 decoded.update(shard)
         return decoded
 
@@ -327,11 +340,11 @@ class SourceDiagnosticsStore:
             reader.close()
         return rows
 
-    def diagnostics(self, bodies):
+    def diagnostics(self, bodies, columns=False):
         with self.lock:
-            return self._diagnostics(bodies)
+            return self._diagnostics(bodies, columns=columns)
 
-    def _diagnostics(self, bodies, fresh=None):
+    def _diagnostics(self, bodies, fresh=None, columns=False):
         self._check_dataset()
         if (not isinstance(bodies, tuple) or not bodies or len(set(bodies)) != len(bodies)
                 or any(type(body) is not int or body not in self.hashes for body in bodies)):
@@ -340,26 +353,36 @@ class SourceDiagnosticsStore:
         # from disk and decoding it again costs about as much as the mapping
         # itself did, which is pure waste on a whole-population build.
         replayed = [body for body in bodies if fresh is None or body not in fresh]
-        loaded = self._read_many(replayed)
+        loaded = self._read_many(replayed, columns=columns)
+        stamped = {'simulation_sha256': self.options['simulation_sha256'],
+                   'duration_ms': self.options['duration_ms'],
+                   'threshold_mv': float(self.options['threshold_mv'])}
         result = {}
         for body in bodies:
             data = fresh[body] if fresh is not None and body in fresh else loaded[body]
-            if (data.get('body_id') != str(body)
-                    or data.get('morphology_sha256') != self.hashes[body]
-                    or data.get('graph_sha256') != self.graph_hash
-                    or data.get('source_md5') != self.source_md5
-                    or data.get('max_distance_um') != self.options['max_distance_um']):
+            if columns and not isinstance(data, CandidateColumns):
+                # A cell mapped in this call arrives as dictionaries; the batch
+                # asked for columns, so it is packed here rather than handed
+                # back in a form the caller would have to convert itself.
+                data = columns_from_mapping(data, self.options['max_distance_um'])
+            header = data.header if isinstance(data, CandidateColumns) else data
+            if (header.get('body_id') != str(body)
+                    or header.get('morphology_sha256') != self.hashes[body]
+                    or header.get('graph_sha256') != self.graph_hash
+                    or header.get('source_md5') != self.source_md5
+                    or header.get('max_distance_um') != self.options['max_distance_um']):
                 raise ValueError('Source diagnostics identity mismatch')
-            result[body] = {**data, 'simulation_sha256': self.options['simulation_sha256'],
-                            'duration_ms': self.options['duration_ms'],
-                            'threshold_mv': float(self.options['threshold_mv'])}
+            if isinstance(data, CandidateColumns):
+                result[body] = CandidateColumns({**header, **stamped}, data.array)
+            else:
+                result[body] = {**header, **stamped}
         return result
 
-    def metadata(self, cells):
+    def metadata(self, cells, columns=False):
         with self.lock:
-            return self._metadata(cells)
+            return self._metadata(cells, columns=columns)
 
-    def _metadata(self, cells):
+    def _metadata(self, cells, columns=False):
         from service.infrastructure.stimulation.experimental_gpu.grid_contract import (
             grid_configuration,
         )
@@ -399,7 +422,7 @@ class SourceDiagnosticsStore:
                                           for body, mapping in fresh.items())]
             with self.db:
                 self.db.executemany('INSERT OR IGNORE INTO sources VALUES (?, ?, ?, ?)', rows)
-        diagnostics = self._diagnostics(tuple(ids), fresh)
+        diagnostics = self._diagnostics(tuple(ids), fresh, columns=columns)
         provenance = {}
         for body, cell in zip(ids, cells, strict=True):
             receipt = {'body_id': str(body), 'morphology_sha256': self.hashes[body]}
