@@ -22,7 +22,7 @@
     "generator": {
       "version": "0.1.9",
       "branch": "generator",
-      "commit": "bb96e1ca2ee32e9f01b6517d0991943d743378c1"
+      "commit": "bf67d67ed3c1cfd13d912a7f662597874d136166"
     },
     "workspace": {
       "version": "0.1.6",
