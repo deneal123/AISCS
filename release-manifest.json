@@ -1,6 +1,6 @@
 {
-  "version": "0.1.8",
-  "date": "2026-11-19",
+  "version": "0.1.9",
+  "date": "2026-11-20",
   "application": "AISCS",
   "branch": "dev",
   "components": {
@@ -20,9 +20,9 @@
       "commit": "560ab7f1fdd8ed66d9c0fd16afc164024cecdd7f"
     },
     "generator": {
-      "version": "0.1.8",
+      "version": "0.1.9",
       "branch": "generator",
-      "commit": "cce3f9bd371b0b2c7ebfcc02512df4ee19397ca1"
+      "commit": "bb96e1ca2ee32e9f01b6517d0991943d743378c1"
     },
     "workspace": {
       "version": "0.1.6",
@@ -92,8 +92,8 @@
     },
     "gpu_refined_synthetic": "one refined synthetic cell, artificial event; not full population",
     "population_benchmark": "515.94 seconds, 166699 independent detailed cells, 10 ms model time, E1-REF; excludes network feedback",
-    "population_feedback_full": "4336.83 seconds cold and 44.3 s warm for 166700 coupled cells, two full passes and one feedback iteration; no threshold crossing at -300 nA and -20 mV, so the feedback effect is 0.0 uV",
+    "population_feedback_full": "2379.93 seconds cold (was 4336.83) and 91.12 s warm for 166700 coupled cells: setup plus two cold passes of 1140.96 s and 1177.10 s, because an empty feedback schedule makes both iterations return the base receipt without a new replay; no threshold crossing at -300 nA and -20 mV, so the feedback effect is 0.0 uV",
     "production_live": "not checked; full stack not started",
-    "full_cns_gpu": "coupled full population measured end to end but not validated biologically; the 300-second and 600-second targets are not confirmed; the fastest measured single full pass is 1945.96 s with tree reduction disabled"
+    "full_cns_gpu": "coupled full population measured end to end but not validated biologically; the 300-second and 600-second targets are not confirmed; the fastest measured single full pass is 1140.96 s after overlapping the producer, the packer and the GPU consumer, which is 6.85 ms per cell and 3.97x short of the 600-second target"
   }
 }
