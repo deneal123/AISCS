@@ -1,4 +1,5 @@
 import hashlib
+import threading
 
 import numpy as np
 import pytest
@@ -115,3 +116,42 @@ def test_recording_pipeline_reads_verified_chunk_with_bounds(tmp_path, monkeypat
         device_window_factory=recording.factory))
     assert sorted(body for ids, _ in results for body in ids) == [1, 2]
     np.testing.assert_array_equal(recording.finish(), [3., 3., 3.])
+
+def test_population_recording_snapshots_cells_still_in_flight():
+    # Window delivery runs on its own thread, so a batch's last window can still
+    # be streaming when the solver hands its receipt back. The snapshot therefore
+    # counts a cell as accounted for as soon as it is in flight, and must not
+    # raise if the delivery thread retires the batch at the same moment.
+    target = accumulator()
+    batch = target.factory([cell(1)])
+    assert target.settled() == {1}
+    batch['sink'](0, 3, [{'id': 1, 'neural_uv': [1., 2., 3.]}])
+    assert target.settled() == {1}
+    with pytest.raises(ValueError, match='Incomplete'):
+        target.finish()
+    second = target.factory([cell(2)])
+    second['sink'](0, 3, [{'id': 2, 'neural_uv': [1., 2., 3.]}])
+    assert target.settled() == {1, 2}
+    target.finish()
+
+
+def test_population_recording_settled_survives_concurrent_delivery():
+    # A regression guard for the crash this snapshot replaced: iterating the raw
+    # in-flight table from the solver thread raced the delivery thread and raised
+    # RuntimeError('dictionary changed size during iteration').
+    target = accumulator()
+    first = target.factory([cell(1)])
+    observed = []
+
+    def deliver():
+        for end in (1, 2, 3):
+            first['sink'](end - 1, end, [{'id': 1, 'neural_uv': [1.]}])
+            observed.append(target.settled())
+
+    worker = threading.Thread(target=deliver)
+    worker.start()
+    for _ in range(200):
+        assert target.settled() == {1}
+    worker.join()
+    assert all(1 in snapshot for snapshot in observed)
+    assert target.settled() == {1}
