@@ -86,9 +86,9 @@
       "scope": "simulator unit tests; 45 of 62 suites ran, 17 suites could not load because the pnpm install lacks @chakra-ui/utils/context"
     },
     "generator_focused_pytest": {
-      "passed": 1538,
-      "skipped": 45,
-      "scope": "full generator suite, tests/test_screen_stim_sources.py ignored"
+      "passed": 571,
+      "skipped": 50,
+      "scope": "gpu, feedback, population and recording selection; tests/test_screen_stim_sources.py ignored, two environment-only failures deselected (missing LFPy, allocator tuning needs a GPU)"
     },
     "gpu_refined_synthetic": "one refined synthetic cell, artificial event; not full population",
     "population_benchmark": "515.94 seconds, 166699 independent detailed cells, 10 ms model time, E1-REF; excludes network feedback",
