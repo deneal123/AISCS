@@ -76,6 +76,19 @@ def full_replay_cache_directory() -> Path | None:
     return Path(value) if value else None
 
 
+def narrow_cell_cache_directory() -> Path | None:
+    """Durable cache of narrowed population cells; unset disables it.
+
+    Decoding a morphology chunk and reducing its tree are functions of the
+    geometry and the field configuration alone, yet a full experiment pays for
+    them four times: 530 s of decoding and 603 s of reduction in a single
+    166 700-cell pass. The cache stores the narrowed cells once so later passes
+    read them instead, reproducing the same batches over the same cells.
+    """
+    value = os.environ.get('GENERATOR_NARROW_CELL_CACHE', '')
+    return Path(value) if value else None
+
+
 def connectome_model_path() -> Path:
     bundled = Path(__file__).resolve().parents[2] / "validation/male-cns-v1/classifier.json"
     if not bundled.is_file():

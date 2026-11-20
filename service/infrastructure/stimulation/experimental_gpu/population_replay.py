@@ -21,7 +21,7 @@ from .allocator import tune as tune_allocator
 from .fast_prepare import iter_prepared_chunks
 from .window_pipeline import WindowPipeline
 
-__all__ = ["iter_cell_batches", "solve_population"]
+__all__ = ["iter_cached_batches", "iter_cell_batches", "solve_population"]
 
 
 def _segments(cell):
@@ -151,7 +151,7 @@ def iter_cell_batches(metadata, *, audited_sources, params, segment_budget, work
                       max_cells=3000, pool_cells=12000, pool_segments=40000000,
                       refine=None, on_invalid=None,
                       store_bounds=False, replacement_factory=None, on_replacement=None,
-                      cell_transform=None):
+                      cell_transform=None, cache_writer=None):
     """Yield prepared-cell lists whose padded segment cost stays within budget.
 
     The solver pads every batch to its widest member, so the bound applies to
@@ -202,6 +202,7 @@ def iter_cell_batches(metadata, *, audited_sources, params, segment_budget, work
     # any staleness/band rule gives 126-779 batches with most under 200.
     pool = []
     pooled_segments = 0
+    group = 0
     for bodies, cells, chunk in iter_prepared_chunks(
             metadata, audited_sources=audited_sources, params=params, workers=workers,
             limit=limit, progress=progress, order=order, on_invalid=on_invalid,
@@ -231,6 +232,12 @@ def iter_cell_batches(metadata, *, audited_sources, params, segment_budget, work
             if _segments(cell) > segment_budget:
                 raise ValueError("A morphology exceeds the batch segment budget")
             pool.append(cell)
+        if cache_writer is not None:
+            # Grouped by chunk: a cached pass replays these groups in this exact
+            # order, which is what reproduces the pool boundaries below.
+            for cell in cells:
+                cache_writer.add(group, cell)
+        group += 1
         # The pool is drained by EITHER bound. Cells arrive in ascending mean
         # width, so the last pools hold the widest morphologies in the graph: a
         # 12 000-cell pool of those is far more geometry than of the narrow ones
@@ -240,6 +247,43 @@ def iter_cell_batches(metadata, *, audited_sources, params, segment_budget, work
             yield from _plan_bucket(pool, segment_budget=segment_budget,
                                     max_padding=max_padding, max_cells=limit_cells)
             pool, pooled_segments = [], 0
+    if pool:
+        yield from _plan_bucket(pool, segment_budget=segment_budget,
+                                max_padding=max_padding, max_cells=limit_cells)
+
+
+def iter_cached_batches(store, *, segment_budget, max_padding=3.0, max_cells=3000,
+                        pool_cells=12000, pool_segments=40000000, timing_sink=None):
+    """Yield batches from a narrowed-cell cache, reproducing the same pools.
+
+    The cache stores cells grouped by the chunk they came from, in the visiting
+    order of the run that built it, so draining the groups in order reproduces
+    the pool boundaries of an uncached pass and therefore its batches. Cells are
+    already narrowed and carry no chunk views, so nothing here can hold a decoded
+    chunk resident.
+    """
+    limit_cells = max_cells
+    pool = []
+    pooled_segments = 0
+    started = time.perf_counter()
+    groups = list(range(store.groups))
+    for position, group in enumerate(groups):
+        if timing_sink is not None:
+            timing_sink('decode', time.perf_counter() - started)
+        reading = time.perf_counter()
+        cells = store.group(group)
+        if timing_sink is not None:
+            timing_sink('cache_read', time.perf_counter() - reading)
+        for cell in cells:
+            if _segments(cell) > segment_budget:
+                raise ValueError("A morphology exceeds the batch segment budget")
+            pool.append(cell)
+        pooled_segments = _pool_segments(pool)
+        if len(pool) >= pool_cells or pooled_segments >= pool_segments:
+            yield from _plan_bucket(pool, segment_budget=segment_budget,
+                                    max_padding=max_padding, max_cells=limit_cells)
+            pool, pooled_segments = [], 0
+        started = time.perf_counter()
     if pool:
         yield from _plan_bucket(pool, segment_budget=segment_budget,
                                 max_padding=max_padding, max_cells=limit_cells)
@@ -257,7 +301,8 @@ def solve_population(metadata, stimulus_midpoint, rate_table, *, audited_sources
                      device_window_factory=None, event_factory=None,
                      replacement_factory=None, on_replacement=None,
                      recording_max_selected=None, require_cell_major=False,
-                     cell_major_block_threads=512, cell_transform=None):
+                     cell_major_block_threads=512, cell_transform=None, narrow_cache=None,
+                     narrow_cache_writer=None):
     """Yield (ids, result) for each bounded batch of an authenticated population.
 
     window_sink(ids, start, end, rows) receives the same ordered sample windows
@@ -288,6 +333,10 @@ def solve_population(metadata, stimulus_midpoint, rate_table, *, audited_sources
             (type(recording_max_selected) is not int or recording_max_selected < 0
              or device_window_factory is None)):
         raise ValueError('Invalid population recording selection bound')
+    if narrow_cache is not None and cell_transform is not None:
+        # The cache stores cells after narrowing but before any caller transform,
+        # so a transformed pass cannot be replayed from it.
+        raise ValueError('A cell transform cannot be replayed from a narrowed-cell cache')
     if type(reroot) is not bool:
         raise ValueError("Invalid re-root flag")
     if type(reduce_workers) is not int or not 1 <= reduce_workers <= 16:
@@ -362,7 +411,18 @@ def solve_population(metadata, stimulus_midpoint, rate_table, *, audited_sources
                         if _sink is not None:
                             _sink('reduce', clock() - started)
                         _marker[0] = clock()
-            for cells in iter_cell_batches(
+            if narrow_cache is not None and narrow_cache_writer is not None:
+                raise ValueError('A narrowed-cell cache cannot be both read and written')
+            if narrow_cache is not None:
+                # Same pools, same batches, same arithmetic: the entry was built
+                # by an uncached pass over this exact inventory, and the cells it
+                # holds are already narrowed and detached from any chunk.
+                source = iter_cached_batches(
+                    narrow_cache, segment_budget=segment_budget, max_padding=max_padding,
+                    max_cells=max_cells, pool_cells=pool_cells,
+                    pool_segments=pool_segments, timing_sink=timing_sink)
+            else:
+                source = iter_cell_batches(
                     metadata, audited_sources=audited_sources, params=params,
                     segment_budget=segment_budget, workers=workers, limit=limit,
                     progress=progress, window_cells=window_cells,
@@ -371,7 +431,8 @@ def solve_population(metadata, stimulus_midpoint, rate_table, *, audited_sources
                     refine=refine, on_invalid=on_invalid,
                     store_bounds=device_window_factory is not None,
                     replacement_factory=replacement_factory, on_replacement=on_replacement,
-                    cell_transform=cell_transform):
+                    cell_transform=cell_transform, cache_writer=narrow_cache_writer)
+            for cells in source:
                 if recording_max_selected is not None:
                     from .batching import plan_cell_major_window_batches
 

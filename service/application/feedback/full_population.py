@@ -60,8 +60,8 @@ def run_full_population_from_geometry(metadata, stimulus, rate_table, *, graph, 
     configuration identities must already have been authenticated by the caller.
     """
     from service.infrastructure.stimulation.population.source_store import SourceDiagnosticsStore
-    from service.settings import (full_replay_cache_directory, source_diagnostics_cache_path,
-                                  source_pair_directory)
+    from service.settings import (full_replay_cache_directory, narrow_cell_cache_directory,
+                                  source_diagnostics_cache_path, source_pair_directory)
 
     parent = Path(output_directory).parent
     if (not parent.is_dir() or 'metadata_factory' in options
@@ -86,6 +86,12 @@ def run_full_population_from_geometry(metadata, stimulus, rate_table, *, graph, 
         elif options['replay_cache_directory'] is not None and cache_path is None:
             raise ValueError('The full-population replay cache requires a durable '
                              'source diagnostics cache')
+        # Narrowed cells are a function of the geometry and the field alone, not
+        # of the pass and not of where source diagnostics live: a run whose
+        # diagnostics are run-local still decodes and reduces the same 166 700
+        # trees four times, so the narrowed cache is independent of cache_path.
+        if 'narrow_cache_directory' not in options:
+            options['narrow_cache_directory'] = narrow_cell_cache_directory()
         pairs_path = options.pop('source_pair_directory', None) or source_pair_directory()
         pairs = None
         if pairs_path is not None:
@@ -169,6 +175,7 @@ def run_full_population_feedback(metadata, stimulus, rate_table, *, graph, sourc
                                  max_target_distance_um, output_directory, target_provider=None,
                                  pair_cache=None, configuration=None, export_markers=False,
                                  replay_cache_directory=None, progress=None,
+                                 narrow_cache_directory=None,
                                  source_geometry_exclusions=None,
                                  allow_partial_source_geometry=False):
     """Stage paired physical replays and publish only converged experimental results.
@@ -260,7 +267,8 @@ def run_full_population_feedback(metadata, stimulus, rate_table, *, graph, sourc
             receipt = replay_verified_feedback_to_archive(metadata, values, rate_table,
                 schedule=baseline_schedule, schedule_sha256=baseline_sha256,
                 morphology_sha256=morphology_sha256, event_path=path,
-                metadata_factory=metadata_factory, **options)
+                metadata_factory=metadata_factory,
+                narrow_cache_directory=narrow_cache_directory, **options)
             if cache is not None:
                 cache.save(key, path, receipt)
             return receipt
@@ -297,7 +305,7 @@ def run_full_population_feedback(metadata, stimulus, rate_table, *, graph, sourc
                 # See the coupled iteration below: complete_metadata owns the
                 # population-wide unresolved-geometry policy, so mapping only the
                 # emitting cells here cannot hide an unresolvable source.
-                events_only=True,
+                events_only=True, narrow_cache_directory=narrow_cache_directory,
                 iteration_progress=(None if progress is None else lambda number, done, total:
                     progress({'phase': 'full_control_feedback', 'iteration': number,
                               'done': done, 'total': total})))
@@ -388,7 +396,7 @@ def run_full_population_feedback(metadata, stimulus, rate_table, *, graph, sourc
                 # Only cells that actually emitted a crossing are mapped; a quiet
                 # cell contributes no schedule entry and its diagnostics would be
                 # read, re-verified and merged only to be dropped again.
-                events_only=True,
+                events_only=True, narrow_cache_directory=narrow_cache_directory,
                 iteration_progress=(None if progress is None else lambda number, done, total:
                     progress({'phase': 'full_feedback', 'iteration': number,
                               'done': done, 'total': total})))

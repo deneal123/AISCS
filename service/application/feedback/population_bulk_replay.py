@@ -12,7 +12,7 @@ def replay_bulk_feedback(metadata, stimulus, rate_table, *, audited_sources, par
                          events_by_target, metadata_factory, event_sink, time_ms, threshold_mv,
                          duration_ms, electrode_um, reference_um, conductivity_s_m, clearance_um,
                          segment_budget, output_budget_bytes, max_source_distance_um=None,
-                         batch_progress=None,
+                         batch_progress=None, narrow_cache=None,
                          **solver_options):
     """Replay a fixed schedule; event_sink must stage results until this function returns.
 
@@ -32,7 +32,7 @@ def replay_bulk_feedback(metadata, stimulus, rate_table, *, audited_sources, par
             or not callable(metadata_factory) or not callable(event_sink)
             or (batch_progress is not None and not callable(batch_progress))
             or any(key in solver_options for key in ('event_factory', 'device_window_factory',
-                                                     'window_sink'))):
+                                                     'window_sink', 'narrow_cache'))):
         raise ValueError('Invalid bulk feedback replay inputs')
     dt = solver_options.get('dt_ms', .05)
     time = np.asarray(time_ms, dtype=float)
@@ -56,10 +56,15 @@ def replay_bulk_feedback(metadata, stimulus, rate_table, *, audited_sources, par
 
     kernels = {'accelerated_cell_major': 0, 'generic': 0, 'batches': 0}
     received = set()
+    # One pass, one source: a cache hit replays already-narrowed cells, a miss
+    # narrows them here and publishes the entry only once the pass has finished.
+    source_store = None if narrow_cache is None else narrow_cache.store
+    source_writer = None if narrow_cache is None else narrow_cache.writer
     for ids, result in solve_population(metadata, stimulus, rate_table,
             audited_sources=audited_sources, params=params, segment_budget=segment_budget,
             output_budget_bytes=output_budget_bytes, device_window_factory=collector.factory,
-            event_factory=events_for_batch,
+            event_factory=events_for_batch, narrow_cache=source_store,
+            narrow_cache_writer=source_writer,
             **solver_options):
         if result.get('table_clamped_cell_ids') != []:
             raise ValueError('Bulk feedback replay encountered clamped HH table values')
@@ -80,9 +85,16 @@ def replay_bulk_feedback(metadata, stimulus, rate_table, *, audited_sources, par
     signal = collector.finish()
     if received != collector.recording.completed:
         raise ValueError('Bulk feedback solver receipts are incomplete')
-    return {'neural_uv': signal, 'cells': len(received),
-            'solver_kernels': kernels,
-            'interpretation': 'experimental fixed-schedule replay; no network convergence'}
+    if narrow_cache is not None:
+        # Published only now: an entry that covers a pass which failed verification
+        # would let a later run skip the computation that produced its own evidence.
+        narrow_cache.commit()
+    receipt = {'neural_uv': signal, 'cells': len(received),
+               'solver_kernels': kernels,
+               'interpretation': 'experimental fixed-schedule replay; no network convergence'}
+    if narrow_cache is not None:
+        receipt['narrow_cache'] = narrow_cache.receipt()
+    return receipt
 
 
 def replay_bulk_feedback_to_archive(*args, event_path, **kwargs):
@@ -98,7 +110,8 @@ def replay_bulk_feedback_to_archive(*args, event_path, **kwargs):
 
 def replay_verified_feedback_to_archive(metadata, stimulus, rate_table, *, schedule,
                                         schedule_sha256, morphology_sha256, event_path,
-                                        metadata_factory, **options):
+                                        metadata_factory, narrow_cache_directory=None,
+                                        **options):
     """Replay a verified fixed schedule and atomically archive selected outputs.
 
     The caller supplies independently trusted schedule and morphology digests.
@@ -129,9 +142,26 @@ def replay_verified_feedback_to_archive(metadata, stimulus, rate_table, *, sched
             raise ValueError('Verified feedback morphology digest mismatch')
         return metadata_factory(cells)
 
-    result = replay_bulk_feedback_to_archive(metadata, stimulus, rate_table,
-        event_path=event_path, events_by_target=event_factory,
-        metadata_factory=checked_metadata, **options)
+    narrowed = None
+    if narrow_cache_directory is not None:
+        from .narrow_geometry import open_narrowed_cells
+
+        # One entry serves every pass of the experiment: decoding a chunk and
+        # reducing its tree cannot depend on the schedule being replayed.
+        narrowed = open_narrowed_cells(metadata, options['params'],
+            directory=narrow_cache_directory, recording=True,
+            events=True, reroot=bool(options.get('reroot', False)))
+    try:
+        result = replay_bulk_feedback_to_archive(metadata, stimulus, rate_table,
+            event_path=event_path, events_by_target=event_factory,
+            metadata_factory=checked_metadata, narrow_cache=narrowed, **options)
+    except BaseException:
+        if narrowed is not None:
+            narrowed.abort()
+        raise
+    finally:
+        if narrowed is not None:
+            narrowed.close()
     result['fixed_input_schedule_sha256'] = schedule_sha256
     result['fixed_input_graph_sha256'] = graph_sha256
     result['endpoint_relocation'] = relocated['audit']
