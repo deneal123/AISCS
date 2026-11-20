@@ -8,7 +8,9 @@ from .batching import estimate_output_bytes
 from .events import refined_segment_events
 from .execution import execute_windows
 from .packing import pack_trees
+from .validation import require_valid_voltage_ranges
 from .packing_cache import PackedTreeCache
+from .window_pipeline import WindowPipeline
 
 
 def _final_segment_voltages(final, packed, batch):
@@ -48,11 +50,56 @@ def build_cell_major(cells, geometries):
             initial_voltage, initial_gates)
 
 
+def build_recording_projection(cells, *, recording_coefficients, selected_indices, node_slots):
+    """Build the per-cell nodal recording projection on a helper thread.
+
+    The projection is a pure function of the reduced geometry and the selected
+    compartment, and it measured 12.6 s of a 54.8 s slice - every byte of it on
+    the solve thread in front of the launch. Building the host arrays here and
+    uploading them in the solver leaves only the transfer in front of the GPU.
+
+    Returns the four host arrays the recorded launch takes, or None when the
+    selection is unusable. The caller keeps the identity checks: this only does
+    the arithmetic.
+    """
+    from .observation_projection import nodal_recording_projection
+
+    ids = [cell['id'] for cell in cells]
+    if (not isinstance(recording_coefficients, dict) or not isinstance(selected_indices, dict)
+            or list(recording_coefficients) != ids or list(selected_indices) != ids):
+        return None
+    batch = len(cells)
+    max_selected = max(1, *(len(selected_indices[body])
+                            if isinstance(selected_indices[body], list) else 0 for body in ids))
+    weights = np.zeros((batch, int(node_slots)), dtype=np.float64)
+    factors = np.zeros(batch, dtype=np.float64)
+    selected_nodes = np.zeros((max_selected, batch), dtype=np.int64)
+    selected_counts = np.zeros(batch, dtype=np.int64)
+    for index, cell in enumerate(cells):
+        body = cell['id']
+        chosen = selected_indices[body]
+        geometry = cell['geometry']
+        count = len(geometry['segment_nodes'])
+        if (not isinstance(chosen, list)
+                or any(type(value) is not int or not 0 <= value < count for value in chosen)
+                or len(chosen) != len(set(chosen))):
+            return None
+        row, factors[index] = nodal_recording_projection(
+            geometry['parents'], geometry['conductances'], geometry['segment_nodes'],
+            recording_coefficients[body], cell['field_current_na'])
+        weights[index, :len(row)] = row
+        selected_counts[index] = len(chosen)
+        selected_nodes[:len(chosen), index] = np.asarray(geometry['segment_nodes'])[chosen]
+    return {'weights': weights, 'factors': factors, 'selected_nodes': selected_nodes,
+            'selected_counts': selected_counts, 'max_selected': max_selected}
+
+
 def _solve_cell_major(cells, geometries, stimulus, table, *, steps, dt_ms, cell_warps,
                       allow_table_clamp, check_cancelled, timing_sink, output_budget_bytes,
                       block_cell_segments=40000, block_cell_threads=512, packed=None,
                       device_window_sink=None, recording_coefficients=None,
-                      selected_indices=None, window_steps=25, progress=None):
+                      selected_indices=None, window_steps=25, progress=None,
+                      window_pipeline=None, recording_projection=None):
     """Solve a batch on the cell-major warp kernel (one warp per cell).
 
     The production kernel keeps every column as (node, cell); a lane stride then
@@ -101,6 +148,7 @@ def _solve_cell_major(cells, geometries, stimulus, table, *, steps, dt_ms, cell_
     if state_bytes * batch > output_budget_bytes:
         raise ValueError("GPU output buffers exceed the supplied budget")
 
+    events_started = time.perf_counter()
     mapped_events = []
     for cell, geometry in zip(cells, geometries, strict=True):
         grid = geometry.get("grid")
@@ -124,6 +172,8 @@ def _solve_cell_major(cells, geometries, stimulus, table, *, steps, dt_ms, cell_
             ("tau2_ms", np.float64),
         )
     }
+    if timing_sink is not None:
+        timing_sink('event_mapping', time.perf_counter() - events_started)
     event_counts = np.zeros(batch, dtype=np.int64)
     for index, events in enumerate(mapped_events):
         event_counts[index] = len(events)
@@ -196,7 +246,6 @@ def _solve_cell_major(cells, geometries, stimulus, table, *, steps, dt_ms, cell_
                         allow_table_clamp=allow_table_clamp)
     else:
         from .fused_observation_kernel import block_cell_recorded, warp_batched_recorded
-        from .observation_projection import nodal_recording_projection
 
         recording_start = time.perf_counter()
         ids = [cell['id'] for cell in cells]
@@ -210,24 +259,30 @@ def _solve_cell_major(cells, geometries, stimulus, table, *, steps, dt_ms, cell_
                                + samples * (max_selected + 1) * 8)
         if state_bytes * batch + extra_bytes > output_budget_bytes:
             raise ValueError('GPU output buffers exceed the supplied budget')
-        weights = np.zeros(node_shape, dtype=np.float64)
-        factors = np.zeros(batch, dtype=np.float64)
-        selected_nodes = np.zeros((max_selected, batch), dtype=np.int64)
-        selected_counts = np.zeros(batch, dtype=np.int64)
-        for index, (cell, geometry) in enumerate(zip(cells, geometries, strict=True)):
-            body = cell['id']
-            chosen = selected_indices[body]
-            count = len(geometry['segment_nodes'])
-            if (not isinstance(chosen, list)
-                    or any(type(value) is not int or not 0 <= value < count for value in chosen)
-                    or len(chosen) != len(set(chosen))):
+        if recording_projection is None:
+            # No prefetched projection (or one this batch cannot use): build it
+            # here, on the solve thread.
+            recording_projection = build_recording_projection(
+                [dict(cell, geometry=geometry)
+                 for cell, geometry in zip(cells, geometries, strict=True)],
+                recording_coefficients=recording_coefficients,
+                selected_indices=selected_indices, node_slots=node_slots)
+            if recording_projection is None or recording_projection['max_selected'] > max_selected:
                 raise ValueError('Invalid GPU recording selection')
-            row, factors[index] = nodal_recording_projection(
-                geometry['parents'], geometry['conductances'], geometry['segment_nodes'],
-                recording_coefficients[body], cell['field_current_na'])
-            weights[index, :len(row)] = row
-            selected_counts[index] = len(chosen)
-            selected_nodes[:len(chosen), index] = np.asarray(geometry['segment_nodes'])[chosen]
+        if recording_projection['weights'].shape != node_shape:
+            # The packer sized the weights from the widest reduced tree, while
+            # the solver's columns are padded to node_slots; rebuilding here is
+            # cheaper than carrying a wrong stride into the kernel.
+            recording_projection = build_recording_projection(
+                [dict(cell, geometry=geometry)
+                 for cell, geometry in zip(cells, geometries, strict=True)],
+                recording_coefficients=recording_coefficients,
+                selected_indices=selected_indices, node_slots=node_slots)
+        weights = recording_projection['weights']
+        factors = recording_projection['factors']
+        selected_nodes = recording_projection['selected_nodes']
+        selected_counts = recording_projection['selected_counts']
+        upload_started = time.perf_counter()
         d_weights, d_factors, d_selected_nodes, d_selected_counts = (
             device(value) for value in (weights, factors, selected_nodes, selected_counts))
         # Sample zero follows the existing kernel convention: no current, while
@@ -237,6 +292,7 @@ def _solve_cell_major(cells, geometries, stimulus, table, *, steps, dt_ms, cell_
                                     dtype=np.float64))
         if timing_sink is not None:
             cuda.synchronize()
+            timing_sink('projection_upload', time.perf_counter() - upload_started)
             timing_sink('recording_projection_and_transfer', time.perf_counter() - recording_start)
 
         def launch_recorded(start, end):
@@ -245,19 +301,40 @@ def _solve_cell_major(cells, geometries, stimulus, table, *, steps, dt_ms, cell_
                 *kernel_arguments(start, end), d_weights, d_factors, d_selected_nodes,
                 d_selected_counts, d_signal, d_selected)
 
+        # The recording chain is positional and CPU-bound, so it runs one window
+        # behind the launch on its own thread: the copies stay here (they must
+        # follow the synchronise) and everything after them overlaps the next
+        # GPU window. Delivery order is preserved by a single worker. The
+        # pipeline is passed in by the population loop so it survives the batch
+        # boundary; a lone batch opens and closes its own.
+        owns_pipeline = window_pipeline is None
+        delivery = (WindowPipeline() if owns_pipeline else window_pipeline)
+
         def deliver(end, total):
             start = ((end - 1) // window_steps) * window_steps
             first = 0 if start == 0 else 1
             last = end - start + 1
+            copied = time.perf_counter()
             signals = d_signal[first:last].copy_to_host()
             selected = d_selected[first:last].copy_to_host()
-            rows = [{'id': body, 'neural_uv': signals[:, index],
-                     'selected_voltage_mv': selected[:, :selected_counts[index], index].T}
-                    for index, body in enumerate(ids)]
-            if any(not np.isfinite(row['neural_uv']).all()
-                   or not np.isfinite(row['selected_voltage_mv']).all() for row in rows):
-                raise ValueError('Non-finite reduced GPU result')
-            device_window_sink(start + first, end + 1, rows)
+            if timing_sink is not None:
+                timing_sink('recording_copies', time.perf_counter() - copied)
+
+            def build_rows(signals=signals, selected=selected):
+                # Runs on the delivery worker: slicing the host copies into
+                # per-cell rows measured 15% of the solve wall time, all of it
+                # between the copy and the next launch.
+                built = [{'id': body, 'neural_uv': signals[:, index],
+                          'selected_voltage_mv': selected[:,
+                                                          :selected_counts[index], index].T}
+                         for index, body in enumerate(ids)]
+                if any(not np.isfinite(row['neural_uv']).all()
+                       or not np.isfinite(row['selected_voltage_mv']).all()
+                       for row in built):
+                    raise ValueError('Non-finite reduced GPU result')
+                return built
+
+            delivery.submit(device_window_sink, start + first, end + 1, build_rows)
             if progress is not None:
                 progress(end, total)
 
@@ -279,13 +356,34 @@ def _solve_cell_major(cells, geometries, stimulus, table, *, steps, dt_ms, cell_
             deliver(end, total)
             profile_times['recording_callbacks'] += time.perf_counter() - started
 
-        execute_windows(total_steps=steps - 1, window_steps=window_steps,
-                        launch=profiled_launch if timing_sink is not None else launch_recorded,
-                        synchronize=(profiled_synchronize if timing_sink is not None
-                                     else cuda.synchronize),
-                        read_flags=d_flags.copy_to_host, cell_ids=ids,
-                        progress=profiled_deliver if timing_sink is not None else deliver,
-                        check_cancelled=check_cancelled, allow_table_clamp=allow_table_clamp)
+        def profiled_read_flags():
+            # Copies the range flags and re-validates them before the next
+            # launch. Charged separately because it sits between the GPU window
+            # and the delivery, and an unexplained gap there hides a sync.
+            started = time.perf_counter()
+            flags = d_flags.copy_to_host()
+            require_valid_voltage_ranges(flags, ids, allow_table_clamp=allow_table_clamp)
+            profile_times['window_flags'] = (profile_times.get('window_flags', 0.0)
+                                             + time.perf_counter() - started)
+            return flags
+
+        try:
+            execute_windows(total_steps=steps - 1, window_steps=window_steps,
+                            launch=profiled_launch if timing_sink is not None else launch_recorded,
+                            synchronize=(profiled_synchronize if timing_sink is not None
+                                         else cuda.synchronize),
+                            read_flags=(profiled_read_flags if timing_sink is not None
+                                        else d_flags.copy_to_host),
+                            cell_ids=ids,
+                            progress=profiled_deliver if timing_sink is not None else deliver,
+                            check_cancelled=check_cancelled,
+                            allow_table_clamp=allow_table_clamp,
+                            timing_sink=timing_sink)
+        finally:
+            # A failed window must still surface a delivery error from an earlier
+            # one instead of a swallowed background failure.
+            if owns_pipeline:
+                delivery.close()
         if timing_sink is not None:
             timing_sink('recorded_windows', time.perf_counter() - recording_start)
             for name, seconds in profile_times.items():
@@ -333,6 +431,8 @@ def solve_prepared_batch(
     cell_major_packed=None,
     cell_major_block_threads=512,
     require_cell_major=False,
+    window_pipeline=None,
+    recording_projection=None,
 ):
     """Solve independent cells under one common pulse at the selected fixed step.
 
@@ -382,6 +482,8 @@ def solve_prepared_batch(
                  or len(cell_major_packed) != 3))
         or (cell_major and (window_sink is not None
                             or (record_traces and device_window_sink is None)))
+        or (window_pipeline is not None and not isinstance(window_pipeline, WindowPipeline))
+        or (recording_projection is not None and not isinstance(recording_projection, dict))
     ):
         raise ValueError("Invalid GPU batch")
     ids = [cell.get("id") for cell in cells]
@@ -418,7 +520,8 @@ def solve_prepared_batch(
             packed=None if cell_major_packed is None else cell_major_packed[0],
             device_window_sink=device_window_sink,
             recording_coefficients=recording_coefficients, selected_indices=selected_indices,
-            window_steps=window_steps, progress=progress)
+            window_steps=window_steps, progress=progress,
+            window_pipeline=window_pipeline, recording_projection=recording_projection)
         if solved is not None:
             return solved
         if require_cell_major:

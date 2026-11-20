@@ -45,8 +45,9 @@ class PopulationWindowedFeedback:
         self.duration = duration_ms
         self.distance = max_source_distance_um
         # Batches are keyed by identity, not held in one slot: the selection is
-        # resolved one batch ahead of the solve, so a later batch may be staging
-        # while an earlier one is still streaming windows.
+        # resolved ahead of the solve, so a later batch may be staging while an
+        # earlier one is still streaming windows. An entry is dropped exactly
+        # when its last window arrives, so the map holds only work in flight.
         self.batches = {}
 
         self.recording = PopulationRecording(expected_ids, electrode_um=electrode_um,
@@ -57,11 +58,14 @@ class PopulationWindowedFeedback:
     def _resolve(self, cells):
         """Resolve one batch's durable candidates into per-cell output plans.
 
-        The whole resolution is deliberately kept on the caller's thread: the
-        durable read and the candidate walk are CPU-bound Python, and moving them
-        one batch ahead onto a helper thread measured WORSE (91.4 -> 111.6 s on a
-        15 343-cell slice) because the second thread only takes interpreter time
-        from the prepare stage and the device starves.
+        The batch resolution runs on whichever stage calls the factory, which is
+        the population packer: it builds one batch's selection while the GPU is
+        still solving the previous one. Resolving it on the solve thread instead
+        put 27% of that thread's wall time in front of every launch (metadata
+        5.98 s of a 92.44 s slice), and moving the durable read alone onto a
+        separate thread measured worse (91.4 -> 111.6 s on 15 343 cells) because
+        that second thread competed with the prepare stage instead of reusing an
+        existing idle window.
         """
         ids = [cell['id'] for cell in cells]
         metadata = self.metadata_factory(cells)
@@ -91,8 +95,6 @@ class PopulationWindowedFeedback:
         selector = WindowedCrossings(selection, time_ms=self.time, threshold_mv=self.threshold,
                                      duration_ms=self.duration)
         self.batches[key] = (cells, plans, selection, selector)
-        while len(self.batches) > 2:
-            self.batches.pop(next(iter(self.batches)))
         return selection
 
     def _accept(self, start, end, rows, selection):

@@ -1,10 +1,13 @@
 """Bounded window execution for the experimental GPU solver."""
 
+import time
+
 from .validation import require_valid_voltage_ranges
 
 
 def execute_windows(*, total_steps, window_steps, launch, synchronize, read_flags,
-                    cell_ids, progress=None, check_cancelled=None, allow_table_clamp=False):
+                    cell_ids, progress=None, check_cancelled=None, allow_table_clamp=False,
+                    timing_sink=None):
     """Run ordered windows and fail before publishing an invalid result.
 
     ``launch(start, end)`` owns device buffers; indices define the same
@@ -17,14 +20,21 @@ def execute_windows(*, total_steps, window_steps, launch, synchronize, read_flag
             or not callable(launch) or not callable(synchronize) or not callable(read_flags)
             or not isinstance(cell_ids, (list, tuple)) or not cell_ids
             or (progress is not None and not callable(progress))
-            or (check_cancelled is not None and not callable(check_cancelled))):
+            or (check_cancelled is not None and not callable(check_cancelled))
+            or (timing_sink is not None and not callable(timing_sink))):
         raise ValueError('Invalid GPU window execution settings')
     for start in range(0, total_steps, window_steps):
         if check_cancelled is not None:
             check_cancelled()
         end = min(start + window_steps, total_steps)
+        window_started = time.perf_counter()
         launch(start, end)
         synchronize()
         require_valid_voltage_ranges(read_flags(), cell_ids, allow_table_clamp=allow_table_clamp)
         if progress is not None:
             progress(end, total_steps)
+        if timing_sink is not None:
+            # The window as a whole: launch, wait, flag check and the progress
+            # callback that copies and delivers. Anything charged under this name
+            # and not under the finer spans is host time between windows.
+            timing_sink('window_total', time.perf_counter() - window_started)

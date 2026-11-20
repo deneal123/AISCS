@@ -1,5 +1,7 @@
 """Bounded accumulation of experimental population electrode recordings."""
 
+import threading
+
 import numpy as np
 
 from .window_recording import WindowedPointRecorder
@@ -31,13 +33,22 @@ class PopulationRecording:
         self.conductivity = conductivity_s_m
         self.clearance = clearance_um
         self.samples = samples
-        self.active = False
+        # A batch's selection is resolved ahead of its solve, so several batches
+        # can legitimately be in flight: one streaming windows, one packed, and
+        # up to the prepare window still being planned. They are therefore keyed
+        # by identity instead of sharing a single slot, and a repeat of a batch
+        # already in flight is still rejected rather than silently reopened.
+        self.inflight = {}
+        # Windows are delivered on their own thread, so the receipt that the
+        # solver hands back can be read while another batch is still streaming:
+        # both views of the batch table are therefore taken under one lock.
+        self._lock = threading.Lock()
         self.failed = False
         self.selection_factory = selection_factory
         self.selected_sink = selected_sink
 
     def factory(self, cells):
-        if self.failed or self.active or not isinstance(cells, list) or not cells:
+        if self.failed or not isinstance(cells, list) or not cells:
             raise ValueError('Invalid population recording batch state')
         ids = [cell.get('id') if isinstance(cell, dict) else None for cell in cells]
         if (any(type(body) is not int for body in ids) or len(set(ids)) != len(ids)
@@ -54,13 +65,18 @@ class PopulationRecording:
                               len(recorder.coefficients[body]) for index in selection[body])
                        or len(set(selection[body])) != len(selection[body]) for body in ids)):
             raise ValueError('Invalid population segment selection')
-        self.active = True
+        key = tuple(ids)
+        with self._lock:
+            if key in self.inflight:
+                raise ValueError('Invalid population recording batch identities')
+            self.inflight[key] = None
         position = 0
+        live = [True]
 
         def accept(start, end, rows):
             nonlocal position
             try:
-                if (not self.active or type(start) is not int or type(end) is not int
+                if (not live[0] or type(start) is not int or type(end) is not int
                         or start != position or not start < end <= self.samples
                         or not isinstance(rows, list)
                         or [row.get('id') if isinstance(row, dict) else None
@@ -85,8 +101,10 @@ class PopulationRecording:
                 self.signal[start:end] = combined
                 position = end
                 if position == self.samples:
-                    self.completed.update(ids)
-                    self.active = False
+                    live[0] = False
+                    with self._lock:
+                        self.completed.update(ids)
+                        self.inflight.pop(key, None)
             except Exception:
                 self.failed = True
                 raise
@@ -94,7 +112,14 @@ class PopulationRecording:
         return {'recording_coefficients': recorder.coefficients,
                 'selected_indices': selection, 'sink': accept}
 
+    def settled(self):
+        """Snapshot of the cells already recorded or still streaming right now."""
+        with self._lock:
+            return self.completed.union(body for key in self.inflight for body in key)
+
     def finish(self):
-        if self.failed or self.active or self.completed != self.expected:
+        with self._lock:
+            unsettled = bool(self.inflight) or self.completed != self.expected
+        if self.failed or unsettled:
             raise ValueError('Incomplete population recording')
         return self.signal.copy()

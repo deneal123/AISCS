@@ -19,6 +19,7 @@ import numpy as np
 from .allocator import release as release_allocator
 from .allocator import tune as tune_allocator
 from .fast_prepare import iter_prepared_chunks
+from .window_pipeline import WindowPipeline
 
 __all__ = ["iter_cell_batches", "solve_population"]
 
@@ -401,12 +402,12 @@ def solve_population(metadata, stimulus_midpoint, rate_table, *, audited_sources
                                 geometry = dict(geometry, grid=grid)
                             updated.append(dict(cell, geometry=geometry, events=selected))
                         batch = updated
-                    if not put_until_stopped(prepared, (batch, None)):
+                    if not put_until_stopped(prepared, (batch, None, None)):
                         return
                     release_allocator()
-            put_until_stopped(prepared, (None, None))
+            put_until_stopped(prepared, (None, None, None))
         except BaseException as exc:  # forwarded to the consumer, never swallowed
-            put_until_stopped(prepared, (None, exc))
+            put_until_stopped(prepared, (None, exc, None))
         finally:
             if pool is not None:
                 pool.shutdown(wait=True, cancel_futures=True)
@@ -425,19 +426,53 @@ def solve_population(metadata, stimulus_midpoint, rate_table, *, audited_sources
         try:
             while not stop.is_set():
                 try:
-                    cells, failure = prepared.get(timeout=0.1)
+                    cells, failure, _ = prepared.get(timeout=0.1)
                 except queue.Empty:
                     continue
                 if failure is not None or cells is None:
-                    put_until_stopped(waiting, (cells, failure))
+                    put_until_stopped(waiting, (cells, failure, None, None))
                     return
                 extra = None
                 if cell_major:
+                    packed_started = time.perf_counter()
                     extra = build_cell_major(cells, [cell["geometry"] for cell in cells])
-                if not put_until_stopped(waiting, (cells, extra)):
+                    if timing_sink is not None:
+                        timing_sink('pack_stage_cells', time.perf_counter() - packed_started)
+                recording = None
+                projection = None
+                if device_window_factory is not None:
+                    # The recording selection (durable metadata plus the output
+                    # plan) is a pure function of the batch and measured 27% of
+                    # the solve thread's wall time, all of it before the launch.
+                    # Building it here overlaps it with the previous batch's GPU
+                    # windows instead of stalling the device behind Python.
+                    resolve_started = time.perf_counter()
+                    recording = device_window_factory(cells)
+                    if timing_sink is not None:
+                        timing_sink('pack_stage_resolve', time.perf_counter() - resolve_started)
+                    if isinstance(recording, dict):
+                        project_started = time.perf_counter()
+                        # The nodal projection is another 23%: it reads only the
+                        # reduced geometry and the selected compartment, both
+                        # already resident here, so it belongs on this thread and
+                        # not in front of the launch. A batch this stage cannot
+                        # project falls back to the solver, which repeats the
+                        # same checks and raises the same error there.
+                        try:
+                            projection = build_recording_projection(
+                                cells,
+                                recording_coefficients=recording.get('recording_coefficients'),
+                                selected_indices=recording.get('selected_indices'),
+                                node_slots=max(1, *(len(cell['geometry']['parents'])
+                                                     for cell in cells)))
+                        except (KeyError, TypeError, ValueError):
+                            projection = None
+                        if timing_sink is not None:
+                            timing_sink('pack_stage_projection', time.perf_counter() - project_started)
+                if not put_until_stopped(waiting, (cells, extra, recording, projection)):
                     return
         except BaseException as exc:
-            put_until_stopped(waiting, (None, exc))
+            put_until_stopped(waiting, (None, exc, None, None))
 
     if cell_major:
         # One packed batch in flight is enough: the packer is faster than the GPU,
@@ -445,16 +480,25 @@ def solve_population(metadata, stimulus_midpoint, rate_table, *, audited_sources
         # and a 3 000-cell batch of those is ~750 MB.
         waiting = queue.Queue(maxsize=1)
         prepared = queue.Queue(maxsize=prefetch)
-        from .batch_solver import build_cell_major
+        from .batch_solver import build_cell_major, build_recording_projection
         threading.Thread(target=pack, name="population-pack", daemon=True).start()
     else:
         # No packing stage: the producer hands batches straight to the consumer.
         waiting = prepared = queue.Queue(maxsize=prefetch)
     threading.Thread(target=produce, name="population-prepare", daemon=True).start()
+    # One delivery pipeline for the whole pass: a batch boundary is not a reason
+    # to wait for the recording chain, and the sinks are positional anyway.
+    delivery = WindowPipeline() if cell_major and device_window_factory is not None else None
     try:
         while True:
             try:
-                cells, extra = waiting.get(timeout=0.1)
+                item = waiting.get(timeout=0.1)
+                # The packing stage carries four fields; the unpaced path hands
+                # the prepared triple straight through, so pad it here instead of
+                # keeping two consumer bodies.
+                cells, extra = item[0], item[1]
+                recording = item[2] if len(item) > 2 else None
+                projection = item[3] if len(item) > 3 else None
             except queue.Empty:
                 if check_cancelled is not None:
                     check_cancelled()
@@ -475,7 +519,8 @@ def solve_population(metadata, stimulus_midpoint, rate_table, *, audited_sources
 
             device_options = {}
             if device_window_factory is not None:
-                recording = device_window_factory(cells)
+                if recording is None:
+                    recording = device_window_factory(cells)
                 if (not isinstance(recording, dict) or set(recording) !=
                         {'recording_coefficients', 'selected_indices', 'sink'}
                         or not callable(recording['sink'])):
@@ -506,7 +551,8 @@ def solve_population(metadata, stimulus_midpoint, rate_table, *, audited_sources
                 record_traces=sink is not None or device_window_factory is not None,
                 cell_warps=cell_warps, block_cell_segments=block_cell_segments,
                 cell_major_block_threads=cell_major_block_threads,
-                cell_major_packed=extra, require_cell_major=require_cell_major, **device_options)
+                cell_major_packed=extra, require_cell_major=require_cell_major,
+                window_pipeline=delivery, recording_projection=projection, **device_options)
             # The accelerated cell-major kernel is a per-batch decision (a batch
             # with mixed initial states falls back to the generic kernel), so the
             # receipt travels with the batch instead of a caller assuming it.
@@ -517,3 +563,8 @@ def solve_population(metadata, stimulus_midpoint, rate_table, *, audited_sources
         # A stopped consumer must not leave producers blocked on full queues.
         # In-flight decoding and GPU work can only stop at their next boundary.
         stop.set()
+        if delivery is not None:
+            # Drains the queued windows and re-raises a delivery failure, so a
+            # caller that finishes a pass sees the last windows' errors instead
+            # of reading a half-written recording.
+            delivery.close()

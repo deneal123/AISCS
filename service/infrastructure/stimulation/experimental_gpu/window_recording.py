@@ -2,10 +2,7 @@
 
 import numpy as np
 
-from service.infrastructure.stimulation.point_field import (
-    bipolar_potential_mv,
-    validate_segment_clearance,
-)
+from . import recording_kernel
 
 
 class WindowedPointRecorder:
@@ -35,13 +32,17 @@ class WindowedPointRecorder:
             parts.append((body, starts, ends, radii, midpoints))
         starts, ends, radii, midpoints = (np.concatenate([row[i] for row in parts], axis=0)
                                           for i in range(1, 5))
-        validate_segment_clearance(starts, ends, [electrode_um, reference_um], clearance_um,
-                                   radii)
+        # One fused kernel evaluates the clearance predicate and the field
+        # coefficients of every segment; on 389 152 real segments the numpy pair
+        # cost 0.160 s against 0.0037 s here, and the coefficients were bitwise
+        # equal (see recording_kernel). A whole-population pass concatenates
+        # 270 million segments several times over, so this is no longer a rounding
+        # error on the packer thread.
+        coefficients = recording_kernel.coefficients(starts, ends, radii, midpoints,
+            electrode_um, reference_um, conductivity_s_m, clearance_um=clearance_um)
         if (not np.isfinite(midpoints).all()
                 or not np.allclose(midpoints, (starts + ends) / 2, rtol=1e-12, atol=1e-12)):
             raise ValueError('Invalid recording midpoints')
-        coefficients = 1000 * bipolar_potential_mv(midpoints, electrode_um, reference_um, 1.,
-                                                    conductivity_s_m, clearance_um=clearance_um)
         offset = 0
         for body, start, *_ in parts:
             end = offset + len(start)

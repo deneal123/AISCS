@@ -63,10 +63,14 @@ def replay_bulk_feedback(metadata, stimulus, rate_table, *, audited_sources, par
             **solver_options):
         if result.get('table_clamped_cell_ids') != []:
             raise ValueError('Bulk feedback replay encountered clamped HH table values')
+        # Window delivery is asynchronous: a batch's last window may still be in
+        # the recording pipeline when the solver hands back its receipt, so a cell
+        # is accounted for as soon as it is either finished or still in flight.
+        settled = collector.recording.settled()
         if (not isinstance(ids, (list, tuple)) or not ids
                 or any(type(body) is not int for body in ids)
                 or len(set(ids)) != len(ids) or received.intersection(ids)
-                or not set(ids).issubset(collector.recording.completed)):
+                or not set(ids).issubset(settled)):
             raise ValueError('Bulk feedback solver receipt does not match recorded cells')
         kernels['batches'] += 1
         kernels['accelerated_cell_major' if result['accelerated_cell_major'] else 'generic'] += 1
