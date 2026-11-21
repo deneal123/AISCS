@@ -142,3 +142,40 @@ def test_private_http_validates_graph_and_returns_population_size(tmp_path, monk
     assert response.status_code == 200
     assert response.json()['configuration_sha256'] == config().digest()
     assert response.json()['graph_cells'] == 2
+
+
+
+def test_pause_is_a_request_and_a_checkpoint_makes_it_pausable(tmp_path, monkeypatch):
+    monkeypatch.setattr('service.infrastructure.execution.process.mp.get_context',
+                        lambda _: SimpleNamespace(Process=FakeProcess))
+    monkeypatch.setenv('GENERATOR_FULL_PAUSE', str(tmp_path / 'pause'))
+    manager = Executions(tmp_path)
+    req = FullFeedbackExecutionRequest(execution_id=uuid4(), config=config())
+    manager.start_full_feedback(req)
+    execution, root = str(req.execution_id), tmp_path / str(req.execution_id)
+    assert manager.status(execution)['pause_directory'] == str(tmp_path / 'pause')
+    # The resumed process is rebuilt from this file, so it must carry the request.
+    assert json.loads((root / 'request.json').read_text())['execution_id'] == execution
+    with pytest.raises(ValueError, match='paused'):
+        manager.resume(execution)
+    manager.pause(execution)
+    # A request is a file, so it outlives the service and still reaches a solver
+    # that has not crossed a batch boundary yet.
+    assert (tmp_path / 'pause' / 'pause.requested').is_file()
+    manager.processes[execution].alive = False
+    (root / 'output').mkdir(parents=True, exist_ok=True)
+    (root / 'pause.json').write_text(json.dumps({'checkpoint': {}, 'paused_at': 1.0}))
+    assert manager.status(execution)['status'] == 'paused'
+    with pytest.raises(ValueError, match='checkpoint is missing'):
+        manager.resume(execution)
+
+
+def test_pause_requires_a_configured_directory(tmp_path, monkeypatch):
+    monkeypatch.setattr('service.infrastructure.execution.process.mp.get_context',
+                        lambda _: SimpleNamespace(Process=FakeProcess))
+    monkeypatch.delenv('GENERATOR_FULL_PAUSE', raising=False)
+    manager = Executions(tmp_path)
+    req = FullFeedbackExecutionRequest(execution_id=uuid4(), config=config())
+    manager.start_full_feedback(req)
+    with pytest.raises(ValueError, match='configured pause directory'):
+        manager.pause(str(req.execution_id))

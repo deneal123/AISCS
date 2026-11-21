@@ -13,6 +13,7 @@ import numpy as np
 from service.infrastructure.execution.gpu_batch_settings import reported_settings
 
 from .archive_replay import iterate_archived_feedback
+from .pause import PauseController, clear as clear_pause, load as load_pause
 from .population_bulk_replay import replay_verified_feedback_to_archive
 
 _log = logging.getLogger(__name__)
@@ -53,14 +54,16 @@ def run_full_population_from_geometry(metadata, stimulus, rate_table, *, graph, 
                                       morphology_sha256, configuration_sha256,
                                       output_directory, replay_options,
                                       max_source_distance_um,
-                                      allow_partial_source_geometry=False, **options):
+                                      allow_partial_source_geometry=False,
+                                      pause_directory=None, **options):
     """Build source diagnostics once and reuse them across physical replay passes.
 
     Scratch is removed on completion or failure. Graph, cache, source index and
     configuration identities must already have been authenticated by the caller.
     """
     from service.infrastructure.stimulation.population.source_store import SourceDiagnosticsStore
-    from service.settings import (full_replay_cache_directory, narrow_cell_cache_directory,
+    from service.settings import (full_control_policy, full_pause_directory,
+                                  full_replay_cache_directory, narrow_cell_cache_directory,
                                   source_diagnostics_cache_path, source_pair_directory)
 
     parent = Path(output_directory).parent
@@ -161,7 +164,10 @@ def run_full_population_from_geometry(metadata, stimulus, rate_table, *, graph, 
                 replay_options=replay_options, max_source_distance_um=max_source_distance_um,
                 metadata_factory=complete_metadata, diagnostics_factory=sources.diagnostics,
                 source_geometry_exclusions=excluded,
-                allow_partial_source_geometry=allow_partial_source_geometry, **options)
+                allow_partial_source_geometry=allow_partial_source_geometry,
+                control_policy=options.pop('control_policy', None) or full_control_policy(),
+                pause_directory=pause_directory or full_pause_directory(),
+                **options)
     finally:
         if scratch is not None:
             scratch.cleanup()
@@ -177,7 +183,8 @@ def run_full_population_feedback(metadata, stimulus, rate_table, *, graph, sourc
                                  replay_cache_directory=None, progress=None,
                                  narrow_cache_directory=None,
                                  source_geometry_exclusions=None,
-                                 allow_partial_source_geometry=False):
+                                 allow_partial_source_geometry=False,
+                                 control_policy='required', pause_directory=None):
     """Stage paired physical replays and publish only converged experimental results.
 
     Callers must authenticate the graph, geometry, diagnostics, baseline schedule,
@@ -211,6 +218,8 @@ def run_full_population_feedback(metadata, stimulus, rate_table, *, graph, sourc
     if any(key in replay_options for key in ('schedule', 'schedule_sha256', 'event_path',
                                               'morphology_sha256', 'metadata_factory')):
         raise ValueError('Conflicting full-population replay options')
+    if control_policy not in ('required', 'omitted'):
+        raise ValueError('Invalid control branch policy')
     if source_geometry_exclusions and not allow_partial_source_geometry:
         raise ValueError('Source geometry exclusions require the partial source geometry policy')
     if configuration is not None:
@@ -232,6 +241,21 @@ def run_full_population_feedback(metadata, stimulus, rate_table, *, graph, sourc
         initial_control_path = staged / '.initial-control.jsonl'
         control_path = staged / 'control.jsonl'
         final_path = staged / 'activity.jsonl'
+        # A pause is a file, so it survives the service restart that cancelled the
+        # pass. The checkpoint names the phase it interrupted and carries every
+        # archive the remaining phases read; without that, a resumed run would
+        # have to repeat the passes its own archives already record.
+        pause = None if pause_directory is None else PauseController(pause_directory)
+        resume = None if pause_directory is None else load_pause(pause_directory)
+        receipts = {} if resume is None else dict(resume['receipts'])
+        targets = {'initial_active': active_path, 'initial_control': initial_control_path,
+                   'control': control_path}
+        if resume is not None:
+            import shutil as _shutil
+
+            for label, entry in resume['archives'].items():
+                if label in targets:
+                    _shutil.copyfile(entry['path'], targets[label])
 
         cache = None
         if replay_cache_directory is not None:
@@ -248,6 +272,16 @@ def run_full_population_feedback(metadata, stimulus, rate_table, *, graph, sourc
                                     allow_partial_source_geometry})
 
         def initial(values, path, phase):
+            if phase in receipts:
+                # A finished phase is not repeated: the checkpoint carries the
+                # receipt and the archive it published, and the remaining phases
+                # read that archive exactly as they read a freshly replayed one.
+                receipt = receipts[phase]
+                if path.is_file() and _digest(path) != receipt['event_sha256']:
+                    raise ValueError('Carried population archive digest mismatch')
+                if progress is not None:
+                    progress({'phase': phase, 'done': len(ids), 'total': len(ids)})
+                return receipt
             key = None if cache is None else cache_key(phase, values)
             if cache is not None:
                 restored = cache.load(key, path)
@@ -264,18 +298,57 @@ def run_full_population_feedback(metadata, stimulus, rate_table, *, graph, sourc
                 progress({'phase': phase, 'done': 0, 'total': len(ids)})
                 options['batch_progress'] = lambda done, total: progress(
                     {'phase': phase, 'done': done, 'total': total})
+            # The interrupted pass is the one this run continues: the checkpoint
+            # names its phase, so a pause taken in the active pass resumes there
+            # rather than starting the population over.
+            continued = resume if resume is not None and resume['phase'] == phase else None
+            if continued is not None:
+                options['resume'] = continued
             receipt = replay_verified_feedback_to_archive(metadata, values, rate_table,
                 schedule=baseline_schedule, schedule_sha256=baseline_sha256,
                 morphology_sha256=morphology_sha256, event_path=path,
                 metadata_factory=metadata_factory,
-                narrow_cache_directory=narrow_cache_directory, **options)
+                narrow_cache_directory=narrow_cache_directory, pause=pause,
+                pause_context=(None if pause is None else {
+                    'phase': phase, 'iteration': None,
+                    'history': list(continued['history']) if continued else [],
+                    'previous': continued['previous'] if continued else None,
+                    'archives': {}, 'receipts': receipts}),
+                **options)
             if cache is not None:
                 cache.save(key, path, receipt)
+            receipts[phase] = receipt
             return receipt
 
         initial_active = initial(signal, active_path, 'full_active')
         active = initial_active
         zeros = np.zeros_like(signal)
+
+        control_state = {'omitted': False, 'passes': None}
+
+        def write_zero_control_archive(path):
+            """Write the control archive the omitted branch is defined to have.
+
+            A zero stimulus cannot depolarise a cell from rest, so the branch has
+            no threshold crossing by construction and every cell's event list is
+            empty. The archive is written with the same record shape the measured
+            branch produced, so every reader downstream sees the same structure;
+            what differs is declared, not hidden.
+            """
+            import json as _json
+
+            record = {'edge_events': [], 'candidates': [],
+                      'omitted_empty_candidates': True}
+            body = _json.dumps(record, ensure_ascii=False, allow_nan=False,
+                               separators=(',', ':'))
+            digest = hashlib.sha256()
+            with path.open('w', encoding='utf8', newline='\n') as stream:
+                for start in range(0, len(ids), 1000):
+                    line = '{' + ','.join(f'"{value}":{body}' for value in
+                                          ids[start:start + 1000]) + '}\n'
+                    stream.write(line)
+                    digest.update(line.encode('utf8'))
+            return digest.hexdigest()
 
         def control_branch():
             """Replay the paired control branch: the zero stimulus and its own loop.
@@ -283,6 +356,37 @@ def run_full_population_feedback(metadata, stimulus, rate_table, *, graph, sourc
             Nothing in it depends on the stimulus, so the branch is a function of
             the configuration alone and can be cached as one unit.
             """
+            if control_policy == 'omitted':
+                # The pass is skipped, not faked: the archive declares zero events
+                # per cell because a zero drive produces none, and the empty-schedule
+                # loop below is the same code the measured branch reached after its
+                # pass. control_passes records how many population passes ran.
+                digest = write_zero_control_archive(initial_control_path)
+                first = {'neural_uv': zeros.copy(), 'cells': len(ids),
+                         'solver_kernels': {'accelerated_cell_major': 0, 'generic': 0,
+                                            'batches': 0},
+                         'event_sha256': digest, 'endpoint_relocation': None,
+                         'control_policy': 'omitted'}
+                loop = iterate_archived_feedback(metadata, zeros, rate_table,
+                    initial_replay=first,
+                    graph=graph, source_ids=source_ids, index=index, directories=directories,
+                    synapse_parameters=synapse_parameters, active_path=initial_control_path,
+                    active_sha256=digest, control_path=initial_control_path,
+                    control_sha256=digest, diagnostics_factory=diagnostics_factory,
+                    morphology_sha256=morphology_sha256, duration_ms=replay_options['duration_ms'],
+                    max_events=max_events, max_source_distance_um=max_source_distance_um,
+                    max_target_distance_um=max_target_distance_um, output_event_path=control_path,
+                    metadata_factory=metadata_factory, replay_options=replay_options,
+                    target_provider=target_provider, pair_cache=pair_cache,
+                    baseline_schedule=baseline_schedule, baseline_sha256=baseline_sha256,
+                    max_iterations=max_iterations, include_control_crossings=True,
+                    allow_partial_source_geometry=allow_partial_source_geometry,
+                    events_only=True, narrow_cache_directory=narrow_cache_directory,
+                    pause=pause, pause_phase='full_control_feedback',
+                    pause_context=(None if pause is None else {'receipts': receipts}))
+                control_state['omitted'] = True
+                control_state['passes'] = 0
+                return first, loop
             first = initial(zeros, initial_control_path, 'full_control')
             if _digest(initial_control_path) != first['event_sha256']:
                 raise ValueError('Initial population archive digest mismatch')
@@ -306,9 +410,13 @@ def run_full_population_feedback(metadata, stimulus, rate_table, *, graph, sourc
                 # population-wide unresolved-geometry policy, so mapping only the
                 # emitting cells here cannot hide an unresolvable source.
                 events_only=True, narrow_cache_directory=narrow_cache_directory,
+                pause=pause, pause_phase='full_control_feedback',
+                pause_context=(None if pause is None else {'receipts': receipts}),
                 iteration_progress=(None if progress is None else lambda number, done, total:
                     progress({'phase': 'full_control_feedback', 'iteration': number,
                               'done': done, 'total': total})))
+            receipts['initial_control'] = first
+            receipts['control'] = loop.get('replay', first)
             return first, loop
 
         branch_key = None if cache is None else pass_key('full_control_branch', zeros,
@@ -316,7 +424,11 @@ def run_full_population_feedback(metadata, stimulus, rate_table, *, graph, sourc
             baseline_sha256=baseline_sha256,
             replay_options={**replay_options, 'max_source_distance_um': max_source_distance_um,
                             'max_target_distance_um': max_target_distance_um,
-                            'max_iterations': max_iterations})
+                            'max_iterations': max_iterations,
+                            # The policy decides whether the archive was measured or
+                            # declared, so it is part of the branch identity: a
+                            # restored entry must never stand for the other policy.
+                            'control_policy': control_policy})
         restored = None if cache is None else cache.load(branch_key, control_path)
         if restored is not None:
             extra = restored.get('extra') or {}
@@ -335,7 +447,11 @@ def run_full_population_feedback(metadata, stimulus, rate_table, *, graph, sourc
                           'done': len(ids), 'total': len(ids)})
         else:
             initial_control, control_iteration = control_branch()
-            if cache is not None and control_iteration['status'] == 'converged':
+            if (cache is not None and control_iteration['status'] == 'converged'
+                    and not control_state['omitted']):
+                # Only a measured branch is cacheable. A declared one costs nothing
+                # to rebuild, and caching it would let a later 'required' run read an
+                # archive no pass ever produced.
                 cache.save(branch_key, control_path, control_iteration['replay'],
                     extra={'initial_control': {
                                key: initial_control[key] for key in ('event_sha256', 'cells',
@@ -397,6 +513,8 @@ def run_full_population_feedback(metadata, stimulus, rate_table, *, graph, sourc
                 # cell contributes no schedule entry and its diagnostics would be
                 # read, re-verified and merged only to be dropped again.
                 events_only=True, narrow_cache_directory=narrow_cache_directory,
+                pause=pause, pause_phase='full_feedback',
+                pause_context=(None if pause is None else {'receipts': receipts}),
                 iteration_progress=(None if progress is None else lambda number, done, total:
                     progress({'phase': 'full_feedback', 'iteration': number,
                               'done': done, 'total': total})))
@@ -455,6 +573,8 @@ def run_full_population_feedback(metadata, stimulus, rate_table, *, graph, sourc
             'graph_cells': len(ids), 'source_cells': len(ids),
             'duration_ms': replay_options['duration_ms'], 'iterations': iteration['iterations'],
             'control_iterations': control_iteration['iterations'],
+            'control_policy': control_policy,
+            'control_omitted': control_state['omitted'],
             'candidate_cell_time_markers': (None if marker_receipt is None
                                             else marker_receipt['events']),
             'endpoint_relocation': relocation, 'solver_kernels': kernels,
@@ -474,6 +594,15 @@ def run_full_population_feedback(metadata, stimulus, rate_table, *, graph, sourc
                         control_iteration['feedback_schedule_sha256'],
                     'cells': len(ids), 'iterations': iteration['iterations'], 'file_hashes': files,
                     'control_iterations': control_iteration['iterations'],
+                    'control_policy': control_policy,
+                    'control_omitted': control_state['omitted'],
+                    # How many population passes the control branch actually ran.
+                    # The iteration count is a schedule count, not a pass count:
+                    # with no feedback event it converges on its first iteration
+                    # without running a pass at all.
+                    'control_passes': (0 if control_state['omitted'] else
+                                       1 + (0 if control_iteration.get('empty_feedback')
+                                            else control_iteration['iterations'])),
                     'endpoint_relocation': relocation, 'solver_kernels': kernels,
                     'batch_settings': batch_settings,
                     'allow_partial_source_geometry': allow_partial_source_geometry,

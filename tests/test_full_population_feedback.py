@@ -415,3 +415,85 @@ def test_connected_pair_replays_feedback_until_schedule_converges(tmp_path, monk
     marker = next(item for item in manifest['files']
                   if item['name'] == 'coupled-source-events.bin')
     assert marker['sha256'] == _digest(args['output_directory'] / marker['name'])
+
+def test_omitted_control_declares_a_zero_line_and_runs_no_pass(tmp_path, monkeypatch):
+    passes, seen = [], {}
+
+    def initial(metadata, stimulus, rate_table, *, event_path, **kwargs):
+        passes.append(np.asarray(stimulus).copy())
+        event_path.write_text('measured', encoding='utf8')
+        return {'event_sha256': _digest(event_path), 'neural_uv': stimulus, 'cells': 2,
+                'solver_kernels': {'accelerated_cell_major': 1, 'generic': 0, 'batches': 1}}
+
+    def iterate(metadata, stimulus, rate_table, *, active_path, control_path, output_event_path,
+                initial_replay, **kwargs):
+        # The declared branch must hand the loop a zero line and an archive whose
+        # records say what they are: empty event lists, not a measured trace.
+        if not np.any(stimulus):
+            seen['control_archive'] = json.loads(
+                control_path.read_text(encoding='utf8').splitlines()[0])
+            seen['control_first'] = dict(initial_replay)
+        output_event_path.write_text('converged', encoding='utf8')
+        return {'status': 'converged', 'iterations': 1, 'feedback_schedule_sha256': 'f' * 64,
+                'replay': {'event_sha256': _digest(output_event_path),
+                           'neural_uv': [0., 0., 0.] if not np.any(stimulus) else [0., 2., 0.],
+                           'cells': 2,
+                           'solver_kernels': {'accelerated_cell_major': 1, 'generic': 0,
+                                              'batches': 1}}}
+
+    monkeypatch.setattr('service.application.feedback.full_population.'
+                        'replay_verified_feedback_to_archive', initial)
+    monkeypatch.setattr('service.application.feedback.full_population.iterate_archived_feedback',
+                        iterate)
+    args = _arguments(tmp_path)
+    result = run_full_population_feedback(**args, control_policy='omitted')
+    assert result['status'] == 'converged'
+    # One population pass, not two: the control branch never reaches the solver.
+    assert len(passes) == 1 and np.any(passes[0])
+    assert set(seen['control_archive']) == {'10', '20'}
+    assert seen['control_archive']['10'] == {'edge_events': [], 'candidates': [],
+                                             'omitted_empty_candidates': True}
+    assert seen['control_first']['solver_kernels'] == {
+        'accelerated_cell_major': 0, 'generic': 0, 'batches': 0}
+    destination = args['output_directory']
+    manifest = json.loads((destination / 'manifest.json').read_text(encoding='utf8'))
+    assert manifest['control_policy'] == 'omitted' and manifest['control_omitted'] is True
+    assert manifest['control_passes'] == 0 and manifest['cells'] == 2
+    assert 'control.jsonl' in manifest['file_hashes']
+    with np.load(destination / 'signals.npz') as signals:
+        np.testing.assert_array_equal(signals['control_uv'], [0., 0., 0.])
+
+
+def test_required_control_still_runs_its_own_pass(tmp_path, monkeypatch):
+    passes = []
+
+    def initial(metadata, stimulus, rate_table, *, event_path, **kwargs):
+        passes.append(np.asarray(stimulus).copy())
+        event_path.write_text('measured', encoding='utf8')
+        return {'event_sha256': _digest(event_path), 'neural_uv': stimulus, 'cells': 2,
+                'solver_kernels': {'accelerated_cell_major': 1, 'generic': 0, 'batches': 1}}
+
+    def iterate(metadata, stimulus, rate_table, *, output_event_path, **kwargs):
+        output_event_path.write_text('converged', encoding='utf8')
+        return {'status': 'converged', 'iterations': 1, 'feedback_schedule_sha256': 'f' * 64,
+                'replay': {'event_sha256': _digest(output_event_path),
+                           'neural_uv': [0., 0., 0.], 'cells': 2,
+                           'solver_kernels': {'accelerated_cell_major': 1, 'generic': 0,
+                                              'batches': 1}}}
+
+    monkeypatch.setattr('service.application.feedback.full_population.'
+                        'replay_verified_feedback_to_archive', initial)
+    monkeypatch.setattr('service.application.feedback.full_population.iterate_archived_feedback',
+                        iterate)
+    args = _arguments(tmp_path)
+    result = run_full_population_feedback(**args, control_policy='required')
+    assert result['status'] == 'converged'
+    assert len(passes) == 2 and np.any(passes[0]) and not np.any(passes[1])
+    manifest = json.loads((args['output_directory'] / 'manifest.json').read_text(encoding='utf8'))
+    assert manifest['control_policy'] == 'required' and manifest['control_omitted'] is False
+    assert manifest['control_passes'] == 2
+
+
+def test_unknown_control_policy_is_rejected_before_any_work(tmp_path):
+    with pytest.raises(ValueError, match='control_policy'):
+        run_full_population_feedback(**_arguments(tmp_path), control_policy='maybe')

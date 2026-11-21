@@ -357,8 +357,16 @@ def run_bulk_recording_child(payload: dict, directory: str) -> None:
         raise
 
 
-def run_full_feedback_child(payload: dict, directory: str) -> None:
-    """Run experimental full detailed-cell feedback in an isolated process."""
+def run_full_feedback_child(payload: dict, directory: str,
+                            pause_directory: str | None = None) -> None:
+    """Run experimental full detailed-cell feedback in an isolated process.
+
+    A pause request stops the pass at a batch boundary and leaves a checkpoint
+    instead of a result. The checkpoint is the only durable record of the work the
+    stopped process did, so it is published next to the receipt and the parent
+    turns it into a resumable status rather than a failure.
+    """
+    from service.application.feedback.pause import ReplayPaused
     from service.application.population.full_feedback_experiment import (
         execute_full_feedback_request,
     )
@@ -381,10 +389,17 @@ def run_full_feedback_child(payload: dict, directory: str) -> None:
         # batches, a 256 MiB output budget and a REQUIRED cell-major kernel)
         # instead of the small independent-recording defaults.
         batch_settings = full_feedback_batch_settings()
-        result = execute_full_feedback_request(graph, index, request.config,
-            geometry_cache=_field_geometry_cache('gpu-fused'), output_directory=target,
-            directories=morphology_directories(), solver_options=batch_settings,
-            progress=lambda value: _write_progress(target.parent, value))
+        try:
+            result = execute_full_feedback_request(graph, index, request.config,
+                geometry_cache=_field_geometry_cache('gpu-fused'), output_directory=target,
+                directories=morphology_directories(), solver_options=batch_settings,
+                progress=lambda value: _write_progress(target.parent, value),
+                pause_directory=pause_directory)
+        except ReplayPaused as paused:
+            target.mkdir(parents=True, exist_ok=True)
+            write_json(target.parent / 'pause.json',
+                       {'checkpoint': paused.receipt, 'paused_at': time()})
+            return
         if result.get('status') != 'converged':
             raise ValueError(f"Full feedback did not converge: {result.get('status')}")
         manifest = json.loads((target / 'manifest.json').read_text(encoding='utf8'))
@@ -634,8 +649,15 @@ class Executions:
                         process.join(timeout=1)
                     output = path.parent / "output"
                     manifest = output / "manifest.json"
+                    pause = path.parent / "pause.json"
                     if manifest.exists() and process is not None and process.exitcode == 0:
                         record.update(status="completed", manifest=json.loads(manifest.read_text()))
+                    elif (pause.is_file() and process is not None and process.exitcode == 0
+                            and record.get('kind') == 'experimental-full-population-feedback'):
+                        # The child stopped where it was asked to, so the work is not
+                        # lost and the record must not read as a failure: the
+                        # checkpoint it published is what a resume continues from.
+                        record.update(status="paused", pause=json.loads(pause.read_text()))
                     elif process is None:
                         record.update(status="interrupted", error="Executor restarted")
                     else:
@@ -873,11 +895,25 @@ class Executions:
                 if self.status(active)['status'] == 'running':
                     raise RuntimeError('Executor busy')
             output = self.root / execution_id / 'output'
+            # A restart can only continue a pass if the checkpoint outlives the
+            # process, so the directory is a service setting and its location is
+            # recorded with the receipt instead of being guessed later.
+            from service.settings import full_pause_directory
+
+            pause = full_pause_directory()
+            payload = request.model_dump(mode='json')
             record = {'execution_id': execution_id, 'kind': 'experimental-full-population-feedback',
                       'status': 'running', 'configuration_sha256': request.config.digest(),
-                      'started_at': time(), 'acknowledged': False}
+                      'started_at': time(), 'acknowledged': False,
+                      'pause_directory': (None if pause is None else str(pause))}
+            if pause is not None:
+                # Resume rebuilds the process from this payload after a restart, so
+                # the request must be durable on its own, not only in the database.
+                self.receipt(execution_id).parent.mkdir(parents=True, exist_ok=True)
+                write_json(self.receipt(execution_id).parent / 'request.json', payload)
             process = mp.get_context('spawn').Process(target=run_full_feedback_child,
-                args=(request.model_dump(mode='json'), str(output)), daemon=True)
+                args=(payload, str(output), None if pause is None else str(pause)),
+                daemon=True)
             self.save(record)
             try:
                 process.start()
@@ -950,6 +986,73 @@ class Executions:
             process = mp.get_context('spawn').Process(
                 target=run_population_target_child,
                 args=(request.model_dump(mode='json'), str(output), str(self.root)), daemon=True)
+            self.save(record)
+            try:
+                process.start()
+            except Exception:
+                record.update(status='failed', error='Could not start solver')
+                self.save(record)
+                raise
+            self.processes[execution_id] = process
+            return record
+
+    def pause(self, execution_id: str) -> dict:
+        """Ask a running full calculation to stop at its next batch boundary.
+
+        Nothing is killed: the solver publishes a checkpoint and exits on its own,
+        which is the only way the work already done survives the stop. A request
+        file is used rather than a signal so the pause still lands when the service
+        itself is restarted before the solver reaches the boundary.
+        """
+        from service.application.feedback.pause import PauseController
+
+        with self.lock:
+            record = self.status(execution_id)
+            if record['status'] != 'running':
+                raise ValueError('Only a running execution can be paused')
+            if record.get('kind') != 'experimental-full-population-feedback':
+                raise ValueError('Pausing is supported for the full population feedback only')
+            directory = record.get('pause_directory')
+            if not directory:
+                raise ValueError('Pausing requires a configured pause directory')
+            PauseController(Path(directory)).request()
+            return record
+
+    def resume(self, execution_id: str) -> dict:
+        """Continue a paused full calculation from the checkpoint it published."""
+        from service.application.feedback.pause import load as load_pause
+
+        with self.lock:
+            record = self.status(execution_id)
+            if record['status'] != 'paused':
+                raise ValueError('Only a paused execution can be resumed')
+            directory = record.get('pause_directory')
+            state = None if not directory else load_pause(Path(directory))
+            if state is None:
+                raise ValueError('The pause checkpoint is missing')
+            if state['meta'].get('phase') is None:
+                raise ValueError('The pause checkpoint names no phase')
+            request_path = self.receipt(execution_id).parent / 'request.json'
+            if not request_path.is_file():
+                raise ValueError('The paused request is missing')
+            payload = json.loads(request_path.read_text(encoding='utf8'))
+            from service.domain.contracts.population.full_feedback import (
+                FullFeedbackExecutionRequest,
+            )
+
+            # The resumed process must solve the configuration the receipt already
+            # promises; a checkpoint from a different one would publish a result
+            # under an identity it never had.
+            stored = FullFeedbackExecutionRequest.model_validate(payload)
+            if stored.config.digest() != record.get('configuration_sha256'):
+                raise ValueError('The paused request does not match its receipt')
+            output = self.receipt(execution_id).parent / 'output'
+            process = mp.get_context('spawn').Process(target=run_full_feedback_child,
+                args=(payload, str(output), directory), daemon=True)
+            record.update(status='running', resumed_at=time(), pause=None,
+                          acknowledged=False)
+            (self.receipt(execution_id).parent / 'pause.json').unlink(missing_ok=True)
+            (self.receipt(execution_id).parent / 'progress.json').unlink(missing_ok=True)
             self.save(record)
             try:
                 process.start()

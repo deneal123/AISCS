@@ -28,7 +28,8 @@ def execute_full_feedback_experiment(graph, index, simulation, *, geometry_cache
         output_directory, directories, synapse_parameters, threshold_mv, max_source_distance_um,
         max_target_distance_um, max_iterations, max_events, solver_options,
         target_provider=None, pair_cache=None, allow_known_geometry_repair=False,
-        allow_partial_source_geometry=False, request_sha256=None, progress=None):
+        allow_partial_source_geometry=False, request_sha256=None, progress=None,
+        pause_directory=None):
     """Prepare a coupled run; no biological validation or runtime guarantee is implied.
 
     The caller supplies trusted paths, resource limits and synaptic assumptions.
@@ -118,12 +119,13 @@ def execute_full_feedback_experiment(graph, index, simulation, *, geometry_cache
         max_target_distance_um=max_target_distance_um,
         max_iterations=max_iterations, max_events=max_events, target_provider=target_provider,
         pair_cache=pair_cache, configuration=configuration, export_markers=True,
-        allow_partial_source_geometry=allow_partial_source_geometry, progress=progress)
+        allow_partial_source_geometry=allow_partial_source_geometry, progress=progress,
+        pause_directory=pause_directory)
 
 
 def execute_full_feedback_request(graph, index, config, *, geometry_cache, output_directory,
                                   directories, solver_options, target_provider=None,
-                                  pair_cache=None, progress=None):
+                                  pair_cache=None, progress=None, pause_directory=None):
     """Bind one validated operator request to the full-population workflow."""
     config = FullFeedbackConfig.model_validate(config)
     if graph.provenance.get('manifest_sha256') != config.graph_manifest_sha256:
@@ -137,4 +139,4 @@ def execute_full_feedback_request(graph, index, config, *, geometry_cache, outpu
         target_provider=target_provider,
         pair_cache=pair_cache, allow_known_geometry_repair=config.allow_known_geometry_repair,
         allow_partial_source_geometry=config.allow_partial_source_geometry,
-        request_sha256=config.digest(), progress=progress)
+        request_sha256=config.digest(), progress=progress, pause_directory=pause_directory)

@@ -323,7 +323,7 @@ def solve_population(metadata, stimulus_midpoint, rate_table, *, audited_sources
                      replacement_factory=None, on_replacement=None,
                      recording_max_selected=None, require_cell_major=False,
                      cell_major_block_threads=512, cell_transform=None, narrow_cache=None,
-                     narrow_cache_writer=None, wide_cache=None):
+                     narrow_cache_writer=None, wide_cache=None, resume=None):
     """Yield (ids, result) for each bounded batch of an authenticated population.
 
     window_sink(ids, start, end, rows) receives the same ordered sample windows
@@ -363,6 +363,8 @@ def solve_population(metadata, stimulus_midpoint, rate_table, *, audited_sources
         # The cache stores cells after narrowing but before any caller transform,
         # so a transformed pass cannot be replayed from it.
         raise ValueError('A cell transform cannot be replayed from a narrowed-cell cache')
+    if resume is not None and not isinstance(resume, dict):
+        raise ValueError("Invalid population resume state")
     if type(reroot) is not bool:
         raise ValueError("Invalid re-root flag")
     if type(reduce_workers) is not int or not 1 <= reduce_workers <= 16:
@@ -459,6 +461,7 @@ def solve_population(metadata, stimulus_midpoint, rate_table, *, audited_sources
                     replacement_factory=replacement_factory, on_replacement=on_replacement,
                     cell_transform=cell_transform, cache_writer=narrow_cache_writer,
                     wide_cache=wide_cache)
+            skipped = 0
             for cells in source:
                 if recording_max_selected is not None:
                     from .batching import plan_cell_major_window_batches
@@ -474,6 +477,15 @@ def solve_population(metadata, stimulus_midpoint, rate_table, *, audited_sources
                 else:
                     groups = [list(range(len(cells)))]
                 for group in groups:
+                    # A resumed pass skips the batches a paused one already
+                    # recorded. The skip happens before the event schedule is
+                    # applied, so the remaining batches are composed exactly as
+                    # they were in the pass this one continues: a batch is a
+                    # packing decision and must not shift because a prefix of the
+                    # pass is missing.
+                    if resume is not None and skipped < resume['batches']:
+                        skipped += 1
+                        continue
                     batch = [cells[index] for index in group]
                     if event_factory is not None:
                         ids = [cell['id'] for cell in batch]

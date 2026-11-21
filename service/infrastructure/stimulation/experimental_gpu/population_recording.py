@@ -16,18 +16,38 @@ class PopulationRecording:
     """
 
     def __init__(self, expected_ids, *, electrode_um, reference_um, conductivity_s_m,
-                 clearance_um, samples, selection_factory=None, selected_sink=None):
+                 clearance_um, samples, selection_factory=None, selected_sink=None,
+                 resume=None):
+        """Accumulate one pass, optionally continuing a paused one.
+
+        ``resume`` carries the cells a paused pass had already recorded and the
+        signal they produced, so a resumed pass adds to that record instead of
+        starting a new one. The cells are then simply no longer expected: the
+        pass covers the remainder and its signal is the whole population's.
+        """
         if (not isinstance(expected_ids, (list, tuple)) or not expected_ids
                 or any(type(body) is not int or body <= 0 for body in expected_ids)
                 or len(set(expected_ids)) != len(expected_ids)
                 or type(samples) is not int or samples < 2
                 or (selection_factory is None) != (selected_sink is None)
                 or (selection_factory is not None and not callable(selection_factory))
-                or (selected_sink is not None and not callable(selected_sink))):
+                or (selected_sink is not None and not callable(selected_sink))
+                or (resume is not None and not isinstance(resume, dict))):
             raise ValueError('Invalid population recording identities or samples')
         self.expected = set(expected_ids)
         self.completed = set()
         self.signal = np.zeros(samples, dtype=float)
+        self.resumed = 0
+        if resume is not None:
+            done = resume.get('done_ids')
+            signal = resume.get('signal')
+            if (not isinstance(done, set) or not done or not done.issubset(self.expected)
+                    or not isinstance(signal, np.ndarray) or signal.shape != (samples,)
+                    or not np.isfinite(signal).all()):
+                raise ValueError('Invalid population recording resume state')
+            self.completed = set(done)
+            self.signal = signal.astype(float, copy=True)
+            self.resumed = len(done)
         self.electrode = electrode_um
         self.reference = reference_um
         self.conductivity = conductivity_s_m

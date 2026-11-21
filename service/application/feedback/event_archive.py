@@ -3,9 +3,18 @@
 import hashlib
 import json
 import os
+import shutil
 import sqlite3
 import tempfile
 from pathlib import Path
+
+
+def _file_sha256(path):
+    digest = hashlib.sha256()
+    with Path(path).open('rb') as stream:
+        for block in iter(lambda: stream.read(1 << 20), b''):
+            digest.update(block)
+    return digest.hexdigest()
 
 
 class EventArchive:
@@ -15,8 +24,15 @@ class EventArchive:
     The caller must validate the entire replay before calling ``commit``.
     """
 
-    def __init__(self, destination):
+    def __init__(self, destination, resume_from=None):
+        """Stage batches beside the destination until the replay succeeds.
+
+        ``resume_from`` seeds the archive with the batches a paused pass had
+        already published: the resumed run continues the same record instead of
+        opening a second one, so its digest covers the whole pass.
+        """
         self.destination = Path(destination)
+        self._resume = None if resume_from is None else Path(resume_from)
         self._file = None
         self._path = None
         self._committed = False
@@ -28,6 +44,11 @@ class EventArchive:
             dir=self.destination.parent,
         )
         self._file = os.fdopen(fd, 'w', encoding='utf-8', newline='\n')
+        if self._resume is not None:
+            with self._resume.open('rb') as stream:
+                for block in iter(lambda: stream.read(1 << 20), b''):
+                    self._digest.update(block)
+                    self._file.write(block.decode('utf-8'))
         return self
 
     def write_batch(self, batch):
@@ -54,6 +75,25 @@ class EventArchive:
         os.replace(self._path, self.destination)
         self._path = None
         self._committed = True
+
+    def checkpoint(self, directory):
+        """Copy the batches written so far into a pause checkpoint directory.
+
+        The staged file is not the destination: it is a temporary whose name is
+        private to this archive, and a checkpoint must survive the process. The
+        copy is flushed first, so a checkpoint always covers a prefix of whole
+        batches and never a partial line.
+        """
+        if self._file is None or self._committed:
+            raise ValueError('Invalid event archive state')
+        self._file.flush()
+        os.fsync(self._file.fileno())
+        target = Path(directory) / 'events.jsonl'
+        shutil.copyfile(self._path, target)
+        digest = _file_sha256(target)
+        if digest != self._digest.hexdigest():
+            raise ValueError('Event archive changed while checkpointing')
+        return target, digest
 
     def __exit__(self, exc_type, exc, traceback):
         if self._file is not None:

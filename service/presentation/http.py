@@ -799,6 +799,26 @@ def build_app(manager: Executions, secret: str, readiness, catalog_factory=catal
         except RuntimeError as exc:
             raise HTTPException(503, str(exc)) from exc
 
+    @app.post("/v1/executions/{execution_id}/pause", dependencies=protected)
+    def pause(execution_id: UUID):
+        read(execution_id)
+        try:
+            return manager.pause(str(execution_id))
+        except ValueError as exc:
+            raise HTTPException(409, str(exc)) from exc
+        except RuntimeError as exc:
+            raise HTTPException(503, str(exc)) from exc
+
+    @app.post("/v1/executions/{execution_id}/resume", dependencies=protected)
+    def resume(execution_id: UUID):
+        read(execution_id)
+        try:
+            return manager.resume(str(execution_id))
+        except ValueError as exc:
+            raise HTTPException(409, str(exc)) from exc
+        except RuntimeError as exc:
+            raise HTTPException(503, str(exc)) from exc
+
     @app.get("/v1/executions/{execution_id}/manifest", dependencies=protected)
     def manifest(execution_id: UUID):
         record = read(execution_id)

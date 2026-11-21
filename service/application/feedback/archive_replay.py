@@ -19,7 +19,8 @@ def replay_archived_feedback(metadata, stimulus, rate_table, *, graph, source_id
                              pair_cache=None, baseline_schedule=None, baseline_sha256=None,
                              include_control_crossings=False, _feedback_gate=None,
                              allow_partial_source_geometry=False, events_only=False,
-                             active_replay=None, narrow_cache_directory=None):
+                             active_replay=None, narrow_cache_directory=None,
+                             pause=None, pause_context=None, resume=None):
     """Build a candidate schedule and replay it once; this is not a converged network.
 
     The caller authenticates the graph, paired-run configurations and all
@@ -79,7 +80,7 @@ def replay_archived_feedback(metadata, stimulus, rate_table, *, graph, source_id
         schedule=built['schedule'], schedule_sha256=built['schedule_sha256'],
         morphology_sha256=morphology_sha256, event_path=output_event_path,
         metadata_factory=metadata_factory, narrow_cache_directory=narrow_cache_directory,
-        **replay_options)
+        pause=pause, pause_context=pause_context, resume=resume, **replay_options)
     return {'replay': replay, 'input_schedule_sha256': built['schedule_sha256'],
             'feedback_schedule_sha256': feedback_sha256,
             'baseline_schedule_sha256': baseline_sha256,
@@ -90,6 +91,7 @@ def replay_archived_feedback(metadata, stimulus, rate_table, *, graph, source_id
 def iterate_archived_feedback(metadata, stimulus, rate_table, *, active_path, active_sha256,
                               control_path, control_sha256, output_event_path, max_iterations,
                               iteration_progress=None, initial_replay=None,
+                              pause=None, pause_context=None, resume=None, pause_phase=None,
                               **options):
     """Replay until feedback schedules agree; publish only the converged archive.
 
@@ -109,8 +111,35 @@ def iterate_archived_feedback(metadata, stimulus, rate_table, *, active_path, ac
     # events leaves that archive unchanged, and its receipt is the converged one.
     if initial_replay is not None and not isinstance(initial_replay, dict):
         raise ValueError('Invalid initial archive replay receipt')
+    if pause is not None and not callable(getattr(pause, 'check', None)):
+        raise ValueError('Invalid archive replay pause controller')
+    if (pause is not None) != (pause_context is not None):
+        raise ValueError('Archive replay pause requires its context')
+    if resume is not None:
+        # A checkpoint names the iteration it interrupted and the archives that
+        # iteration reads, so resuming rebuilds the same schedule rather than a
+        # schedule for a population that happens to start at the same cell.
+        required = {'iteration', 'done_ids', 'batches', 'signal', 'archive_path',
+                    'history', 'previous', 'receipts', 'archives'}
+        if (not isinstance(resume, dict) or not required <= set(resume)
+                or type(resume['iteration']) is not int or resume['iteration'] < 1
+                or not isinstance(resume['archives'], dict)
+                or 'input' not in resume['archives']
+                or not Path(resume['archives']['input']['path']).is_file()):
+            raise ValueError('Invalid archived feedback resume state')
     previous, seen, history = None, set(), []
     last_result = None if initial_replay is None else {'replay': initial_replay}
+    receipts = {} if initial_replay is None else {'initial': initial_replay}
+    start, pending = 1, None
+    if resume is not None:
+        start = resume['iteration']
+        history = [signature for signature in resume['history']]
+        previous = resume['previous']
+        seen = set(history)
+        receipts.update(resume['receipts'])
+        prior = receipts.get(f'iteration-{start - 1}') or receipts.get('initial')
+        last_result = None if prior is None else {'replay': prior}
+        pending = resume
     class StopIterationReplay(Exception):
         pass
 
@@ -125,9 +154,20 @@ def iterate_archived_feedback(metadata, stimulus, rate_table, *, active_path, ac
 
     with tempfile.TemporaryDirectory(dir=destination.parent) as scratch:
         current_path, current_sha = Path(active_path), active_sha256
-        for number in range(1, max_iterations + 2):
+        if pending is not None:
+            # A resumed iteration replays into the archive the checkpoint carried,
+            # so the pass continues one archive instead of starting a second one.
+            current_path = Path(pending['archives']['input']['path'])
+            current_sha = pending['archives']['input']['sha256']
+        for number in range(start, max_iterations + 2):
             candidate = Path(scratch) / f'iteration-{number}.jsonl'
             current_options = options.copy()
+            if pending is not None and number == start:
+                # Replay only what the paused iteration had left, into the archive
+                # it had already started: the resumed pass produces the same
+                # record as an uninterrupted one, batch boundaries included.
+                current_options['resume'] = pending
+                pending = None
             if iteration_progress is not None:
                 if number <= max_iterations:
                     iteration_progress(number, 0, len(options['replay_options']['expected_ids']))
@@ -140,6 +180,16 @@ def iterate_archived_feedback(metadata, stimulus, rate_table, *, active_path, ac
                     control_sha256=control_sha256, output_event_path=candidate,
                     _feedback_gate=gate,
                     active_replay=None if last_result is None else last_result['replay'],
+                    pause=pause,
+                    pause_context=(None if pause is None else {
+                        'phase': pause_phase,
+                        'iteration': number,
+                        'history': history, 'previous': previous,
+                        'archives': {'input': {'path': current_path,
+                                               'sha256': current_sha},
+                                     'output': {'path': candidate,
+                                                'sha256': None}},
+                        'receipts': receipts}),
                     **current_options)
             except StopIterationReplay as stop:
                 signature = stop.args[0]
@@ -177,5 +227,9 @@ def iterate_archived_feedback(metadata, stimulus, rate_table, *, active_path, ac
             previous = signature
             seen.add(signature)
             last_result = result
+            # Named by iteration so a checkpoint taken later can say which replay
+            # produced the archive it is continuing, and resume with that receipt
+            # instead of inferring it from the schedule alone.
+            receipts[f'iteration-{number}'] = result['replay']
             current_path, current_sha = candidate, result['replay']['event_sha256']
         raise RuntimeError('Feedback iteration ended unexpectedly')

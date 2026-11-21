@@ -31,7 +31,7 @@ class PopulationWindowedFeedback:
 
     def __init__(self, expected_ids, *, metadata_factory, event_sink, time_ms, threshold_mv,
                  duration_ms, electrode_um, reference_um, conductivity_s_m, clearance_um,
-                 max_source_distance_um=None):
+                 max_source_distance_um=None, resume=None):
         time = np.asarray(time_ms, dtype=float)
         if (not callable(metadata_factory) or not callable(event_sink) or time.ndim != 1
                 or len(time) < 2 or not np.isfinite(time).all() or np.any(np.diff(time) <= 0)
@@ -53,7 +53,7 @@ class PopulationWindowedFeedback:
         self.recording = PopulationRecording(expected_ids, electrode_um=electrode_um,
             reference_um=reference_um, conductivity_s_m=conductivity_s_m,
             clearance_um=clearance_um, samples=len(time), selection_factory=self._select,
-            selected_sink=self._accept)
+            selected_sink=self._accept, resume=resume)
 
     def _resolve(self, cells):
         """Resolve one batch's durable candidates into per-cell output plans.

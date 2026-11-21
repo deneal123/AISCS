@@ -89,6 +89,37 @@ def narrow_cell_cache_directory() -> Path | None:
     return Path(value) if value else None
 
 
+def full_control_policy() -> str:
+    """Whether the paired zero-stimulus pass runs, or is declared structurally empty.
+
+    The control branch drives the same population with a zero stimulus. A solver
+    whose only drive is that stimulus cannot depolarise any cell from rest, so the
+    branch has no threshold crossing by construction, and a measurement of it
+    (2.68e-09 uV against a 1.7175 uV threshold, 0 events in 166 700 cells) only
+    confirms the arithmetic. 'omitted' therefore skips a whole population pass
+    and publishes a control archive that declares zero events per cell, labelled
+    control_omitted in the manifest and the preview. 'required' runs the pass and
+    measures it, which is what a new stimulation model should do before its first
+    release.
+    """
+    value = os.environ.get('GENERATOR_FULL_CONTROL', 'omitted')
+    if value not in ('required', 'omitted'):
+        raise ValueError("GENERATOR_FULL_CONTROL must be 'required' or 'omitted'")
+    return value
+
+
+def full_pause_directory() -> Path | None:
+    """Durable checkpoint directory for the full experiment; unset disables pausing.
+
+    A pass takes about twenty minutes, so a host restart or a pause request costs
+    a whole population unless the pass can stop at a batch boundary and continue
+    from there. The checkpoint is a file, not a signal, so it survives the restart
+    that a cancellation performs; nothing in it is trusted without its digest.
+    """
+    value = os.environ.get('GENERATOR_FULL_PAUSE', '')
+    return Path(value) if value else None
+
+
 def connectome_model_path() -> Path:
     bundled = Path(__file__).resolve().parents[2] / "validation/male-cns-v1/classifier.json"
     if not bundled.is_file():
