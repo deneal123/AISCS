@@ -154,7 +154,8 @@ def _decode(path, compression, descriptor):
 
 def iter_prepared_chunks(metadata, *, audited_sources, params, workers=4,
                          limit=None, progress=None, on_invalid=None, order=None,
-                         store_bounds=False, replacement_factory=None, on_replacement=None):
+                         store_bounds=False, replacement_factory=None, on_replacement=None,
+                     wide_cache=None):
     """Yield (bodies, cells, chunk) for each authenticated cache chunk.
 
     Decoding (read, SHA-256, inflate) runs in a bounded thread pool because all
@@ -169,6 +170,12 @@ def iter_prepared_chunks(metadata, *, audited_sources, params, workers=4,
     may contain many cells, so it must not be used as a cell-count bound.
     Replacement callbacks are experimental; their receipts are provisional
     until the entire consumer calculation and its provenance checks succeed.
+
+    wide_cache, when supplied, substitutes the narrowed cells it already holds
+    for a chunk whose every cell is stored. The chunk is then never read,
+    inflated, prepared or reduced, which is what takes the widest cells off the
+    producer's critical path; a chunk the cache does not cover is prepared
+    exactly as before, so a partial cache stays correct.
     """
     if type(store_bounds) is not bool:
         raise FastPrepareError('Invalid recording bounds option')
@@ -223,6 +230,7 @@ def iter_prepared_chunks(metadata, *, audited_sources, params, workers=4,
     with ThreadPoolExecutor(max_workers=workers) as pool:
         window = []
         pending = list(plan)
+        visit = 0
         while pending or window:
             while pending and len(window) < workers:
                 item = pending.pop(0)
@@ -230,6 +238,22 @@ def iter_prepared_chunks(metadata, *, audited_sources, params, workers=4,
             if not window:
                 break
             (path, compression, rows_of, descriptor), future = window.pop(0)
+            position = visit
+            visit += 1
+            if wide_cache is not None:
+                name = descriptor["name"]
+                stored = wide_cache.load(position)
+                if stored is not None:
+                    bodies = [row[0] for row in rows_of]
+                    cells = [stored[body] for body in bodies if body in stored]
+                    if len(cells) == len(bodies):
+                        # The decoded chunk is still needed by the next futures,
+                        # so it is drained, not cancelled.
+                        future.result()
+                        if progress is not None:
+                            progress(name, len(cells), len(rows_of))
+                        yield [cell['id'] for cell in cells], cells, None
+                        continue
             rows = future.result()
             bodies = [row[0] for row in rows_of]
             sources = {row[0]: row[1] for row in rows_of}

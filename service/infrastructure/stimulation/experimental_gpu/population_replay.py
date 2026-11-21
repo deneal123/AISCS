@@ -95,6 +95,15 @@ _GEOMETRY_KEYS = ("parents", "conductances", "segment_nodes", "area", "grid")
 _CELL_KEYS = ("id", "field_current_na", "events", "initial_voltage_mv", "initial_gates")
 
 
+def _detach(value):
+    """Return an array that owns its buffer, copying only when it borrows one."""
+    if not isinstance(value, np.ndarray):
+        return value
+    if value.base is None and value.flags.owndata and value.flags.c_contiguous:
+        return value
+    return np.ascontiguousarray(value).copy()
+
+
 def _narrow(cell, reduce_geometry, reroot_centre, slim, recording=False, events=False):
     """Reduce (and optionally re-root) one cell; thread-safe."""
     geometry = reduce_geometry(cell["geometry"], verify=False)[0]
@@ -104,24 +113,21 @@ def _narrow(cell, reduce_geometry, reroot_centre, slim, recording=False, events=
         geometry = dict(geometry, parents=parents, conductances=conductances,
                         segment_nodes=segments)
     if slim:
-        # .copy() is not cosmetic: the prepared arrays are VIEWS into the decoded
-        # chunk, so keeping even one view keeps that whole chunk (~14 MB of
-        # vertices) resident. A pooled batch spans dozens of chunks and the pool
-        # is thousands of cells, which is what pushed a whole-population run out
-        # of memory on a host with ~6 GB free. Detaching costs ~55 KB of memcpy
-        # per cell (9 GB over the population, a few seconds spread over the
-        # reduce pool) and lets every finished chunk be freed.
+        # Detaching is not cosmetic: a prepared array that is a VIEW into the
+        # decoded chunk keeps that whole chunk (~14 MB of vertices) resident, and
+        # a pooled batch spans dozens of chunks, which is what pushed a
+        # whole-population run out of memory on a host with ~6 GB free. But the
+        # copy is only needed for the arrays that still borrow the chunk: the
+        # reduction allocates its own parents/conductances/segment_nodes, so
+        # copying those again was pure memcpy. Measured over 6 397 cells:
+        # 25.07 -> 6.93 s of CPU for a bit-identical result.
         geometry_keys = _GEOMETRY_KEYS + (('starts_um', 'ends_um', 'midpoints_um',
                           'endpoint_radii_um') if recording else ())
         if recording or events:
             geometry_keys += ('edge_node_ids', 'segment_index')
         cell_keys = _CELL_KEYS + (('morphology_sha256',) if recording else ())
-        geometry = {key: (np.ascontiguousarray(geometry[key]).copy()
-                          if isinstance(geometry[key], np.ndarray) else geometry[key])
-                    for key in geometry_keys}
-        cell = {key: (np.ascontiguousarray(cell[key]).copy()
-                      if isinstance(cell[key], np.ndarray) else cell[key])
-                for key in cell_keys}
+        geometry = {key: _detach(geometry[key]) for key in geometry_keys}
+        cell = {key: _detach(cell[key]) for key in cell_keys}
         return {**cell, "geometry": geometry}
     return dict(cell, geometry=geometry)
 
@@ -151,7 +157,7 @@ def iter_cell_batches(metadata, *, audited_sources, params, segment_budget, work
                       max_cells=3000, pool_cells=12000, pool_segments=40000000,
                       refine=None, on_invalid=None,
                       store_bounds=False, replacement_factory=None, on_replacement=None,
-                      cell_transform=None, cache_writer=None):
+                      cell_transform=None, cache_writer=None, wide_cache=None):
     """Yield prepared-cell lists whose padded segment cost stays within budget.
 
     The solver pads every batch to its widest member, so the bound applies to
@@ -207,7 +213,13 @@ def iter_cell_batches(metadata, *, audited_sources, params, segment_budget, work
             metadata, audited_sources=audited_sources, params=params, workers=workers,
             limit=limit, progress=progress, order=order, on_invalid=on_invalid,
             store_bounds=store_bounds, replacement_factory=replacement_factory,
-            on_replacement=on_replacement):
+            on_replacement=on_replacement,
+            wide_cache=(None if wide_cache is None or wide_cache.writing else wide_cache)):
+        # A chunk served from the selective cache arrives without a prepared
+        # chunk behind it, and its cells are already narrowed: reducing them a
+        # second time would fail the live-edge check and would also be the work
+        # the cache exists to avoid.
+        served = chunk is None
         del bodies, chunk
         if cell_transform is not None:
             transformed = []
@@ -226,7 +238,7 @@ def iter_cell_batches(metadata, *, audited_sources, params, segment_budget, work
         # prepared records. A pooled batch is thousands of cells and the full
         # record measured 0.7 MB each, which is what OOM-killed whole-population
         # runs on a host with ~6 GB free.
-        if refine is not None:
+        if refine is not None and not served:
             cells = refine(cells)
         for cell in cells:
             if _segments(cell) > segment_budget:
@@ -237,6 +249,15 @@ def iter_cell_batches(metadata, *, audited_sources, params, segment_budget, work
             # order, which is what reproduces the pool boundaries below.
             for cell in cells:
                 cache_writer.add(group, cell)
+        if wide_cache is not None and wide_cache.writing:
+            # The selective cache stores the widest cells while the pass narrows
+            # them anyway, so building it costs only the write. A later pass
+            # replays a whole chunk from it when every cell in that chunk is
+            # covered, which is what takes the tail off the producer's path.
+            for cell in cells:
+                if wide_cache.wants(cell):
+                    wide_cache.add(cell['id'], cell)
+            wide_cache.flush(group)
         group += 1
         # The pool is drained by EITHER bound. Cells arrive in ascending mean
         # width, so the last pools hold the widest morphologies in the graph: a
@@ -302,7 +323,7 @@ def solve_population(metadata, stimulus_midpoint, rate_table, *, audited_sources
                      replacement_factory=None, on_replacement=None,
                      recording_max_selected=None, require_cell_major=False,
                      cell_major_block_threads=512, cell_transform=None, narrow_cache=None,
-                     narrow_cache_writer=None):
+                     narrow_cache_writer=None, wide_cache=None):
     """Yield (ids, result) for each bounded batch of an authenticated population.
 
     window_sink(ids, start, end, rows) receives the same ordered sample windows
@@ -333,6 +354,11 @@ def solve_population(metadata, stimulus_midpoint, rate_table, *, audited_sources
             (type(recording_max_selected) is not int or recording_max_selected < 0
              or device_window_factory is None)):
         raise ValueError('Invalid population recording selection bound')
+    if wide_cache is not None and (narrow_cache is not None or cell_transform is not None):
+        # The selective cache skips whole chunks, so it cannot be combined with a
+        # full-cell cache or with a caller transform: either would silently drop
+        # the cells the other path is supposed to see.
+        raise ValueError('A selective wide-cell cache cannot be combined with a full cache')
     if narrow_cache is not None and cell_transform is not None:
         # The cache stores cells after narrowing but before any caller transform,
         # so a transformed pass cannot be replayed from it.
@@ -431,7 +457,8 @@ def solve_population(metadata, stimulus_midpoint, rate_table, *, audited_sources
                     refine=refine, on_invalid=on_invalid,
                     store_bounds=device_window_factory is not None,
                     replacement_factory=replacement_factory, on_replacement=on_replacement,
-                    cell_transform=cell_transform, cache_writer=narrow_cache_writer)
+                    cell_transform=cell_transform, cache_writer=narrow_cache_writer,
+                    wide_cache=wide_cache)
             for cells in source:
                 if recording_max_selected is not None:
                     from .batching import plan_cell_major_window_batches
