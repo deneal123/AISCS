@@ -1,4 +1,4 @@
-﻿[project]
+[project]
 name = "aspa-generator"
 version = "0.1.13"
 description = "Reproducible compartmental neural simulation and extracellular recording sidecar"
