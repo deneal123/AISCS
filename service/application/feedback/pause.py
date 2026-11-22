@@ -67,9 +67,16 @@ class PauseController:
         return (self.directory / REQUEST_NAME).is_file()
 
     def check(self):
-        """Return True when a pause has been requested, remembering the fact."""
-        if self.requested is None:
-            self.requested = bool(self._poll())
+        """Return True once a pause has been requested.
+
+        The request is polled until it appears, and only held once it has: a
+        controller that latched its first answer would ignore a request made a
+        second later, which is exactly the case a person pressing a button in
+        the interface creates.
+        """
+        if self.requested:
+            return True
+        self.requested = bool(self._poll())
         return self.requested
 
     def request(self):

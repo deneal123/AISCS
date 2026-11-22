@@ -45,6 +45,12 @@ class _Recording:
     def __init__(self, samples, resume=None):
         self.signal = np.zeros(samples) if resume is None else np.array(resume['signal'], float)
         self.completed = set() if resume is None else set(resume['done_ids'])
+        # The receipt reports the coefficient cache, so a stand-in has to carry
+        # the same counters the real recording does.
+        self.coefficients = None
+        self.coefficient_hits = 0
+        self.coefficient_misses = 0
+        self.coefficient_errors = 0
 
     def settled(self):
         return set(self.completed)
@@ -123,6 +129,19 @@ def test_the_request_file_survives_a_restart_and_is_cleared_by_a_checkpoint(tmp_
     assert PauseController(tmp_path / 'pause').check() is False
     clear(tmp_path / 'pause')
     assert load(tmp_path / 'pause') is None
+
+
+def test_a_request_made_after_a_pass_started_is_still_observed(tmp_path):
+    # A person pressing pause in the interface does so long after the pass began,
+    # so the controller has to keep asking. One that latched its first answer
+    # would run the whole twenty minutes and never see the request.
+    controller = PauseController(tmp_path / 'pause')
+    assert controller.check() is False
+    controller.request()
+    assert controller.check() is True
+    # Once seen, the answer stays true even after the file is gone.
+    controller.clear_request()
+    assert controller.check() is True
 
 
 def test_a_paused_pass_resumes_into_the_same_archive_and_signal(tmp_path, monkeypatch):
