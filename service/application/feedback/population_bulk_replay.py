@@ -93,7 +93,14 @@ def replay_bulk_feedback(metadata, stimulus, rate_table, *, audited_sources, par
         received.update(ids)
         if batch_progress is not None:
             batch_progress(len(received), len(expected_ids))
-        if pause is not None and pause.check():
+        # A batch is settled as soon as its windows are in flight, but the archive
+        # only learns about a cell when its last window lands. Checkpointing on a
+        # settled-but-streaming batch publishes done_ids the archive does not
+        # carry, and the resumed run then fails its population check -- measured:
+        # 23 186 done ids against 21 595 archived cells. Wait for the completed
+        # set, which is the same state the archive and the signal share.
+        if (pause is not None and pause.check()
+                and received.issubset(collector.recording.completed)):
             # The boundary is the only honest place to stop: the archive holds
             # whole batches, every window of them has landed, and the signal
             # carries exactly those cells. What is written here is a pass that

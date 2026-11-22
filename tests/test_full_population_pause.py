@@ -172,6 +172,52 @@ def test_a_paused_pass_resumes_into_the_same_archive_and_signal(tmp_path, monkey
     np.testing.assert_array_equal(result['neural_uv'], continuous['neural_uv'])
 
 
+def test_a_pause_is_not_taken_while_a_batch_is_still_streaming(tmp_path, monkeypatch):
+    # The solver marks a batch settled when its windows are in flight; the archive
+    # and the signal only learn about a cell when its last window lands. A
+    # checkpoint taken on the settled set published 23 186 done ids against 21 595
+    # archived cells, and the resumed run then failed "Incomplete active source
+    # population". Here the recording lags one batch behind, so no boundary is
+    # honest and the pass must finish instead of checkpointing.
+    class LaggingRecording(_Recording):
+        streaming = set()
+
+        def settled(self):
+            # Settled covers what is in flight, exactly as the real recording
+            # does; completed is what the archive and the signal have seen.
+            return set(self.completed) | self.streaming
+
+    class Lagging(_Collector):
+        def __init__(self, expected_ids, *, resume=None, samples=4, **kwargs):
+            super().__init__(expected_ids, resume=resume, samples=samples, **kwargs)
+            self.recording = LaggingRecording(samples, resume)
+
+        def factory(self, cells):
+            # The previous batch lands now; this one only starts streaming.
+            self.recording.completed.update(self.recording.streaming)
+            self.recording.streaming = {int(body) for body in cells}
+            self.recording.signal[0] += float(len(cells))
+            return object()
+
+        def finish(self):
+            self.recording.completed.update(self.recording.streaming)
+            self.recording.streaming = set()
+            return self.recording.signal.copy()
+
+    monkeypatch.setattr('service.application.feedback.population_bulk_replay.'
+                        'PopulationWindowedFeedback', Lagging)
+    monkeypatch.setattr('service.application.feedback.population_bulk_replay.'
+                        'solve_population', _stub_solver([[10, 20], [30, 40]]))
+    armed = {'yes': True}
+    controller = PauseController(tmp_path / 'pause', poll=lambda: armed['yes'])
+    result = replay_bulk_feedback_to_archive(**_arguments(),
+        event_path=tmp_path / 'streaming.jsonl', pause=controller,
+        pause_context={'phase': 'full_active', 'iteration': 1, 'history': [],
+                       'previous': None, 'archives': {}, 'receipts': {}})
+    assert result['cells'] == 4
+    assert load(tmp_path / 'pause') is None
+
+
 def test_a_resume_state_without_its_archive_is_rejected():
     with pytest.raises(ValueError, match='resume'):
         replay_bulk_feedback(**_arguments(), event_sink=lambda batch: None,
