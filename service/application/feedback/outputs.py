@@ -446,7 +446,19 @@ def _plan_output(plan, ticks):
     if not plan['include_candidates']:
         return edge_events
     rows, omitted = [], plan['omitted']
-    for kind, point, partner, index in plan['rows']:
+    # Only a compartment that crossed can produce a row, and the deferred column
+    # form can skip the others before converting anything: a wide cell carries
+    # 11 372 contact rows behind 1 499 compartments, and a silenced cell - 168 of
+    # 166 700 report anything at all - keeps none of them.
+    source = plan['rows']
+    if hasattr(source, 'select'):
+        # Withholding a quiet row is what the compact archive records, so the
+        # batch has to carry that fact: the merge rebuilds exactly the rows the
+        # archive left out and rejects any other absence.
+        source, quiet = source.select({index for index, values in ticks.items() if values})
+        if quiet:
+            omitted = True
+    for kind, point, partner, index in source:
         if kind == 'unresolved':
             rows.append({'source_position_8nm': point.copy(), 'partner_id': partner,
                          'stimulated_ticks_ms': []})

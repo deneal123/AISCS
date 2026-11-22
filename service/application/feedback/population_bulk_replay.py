@@ -15,7 +15,7 @@ def replay_bulk_feedback(metadata, stimulus, rate_table, *, audited_sources, par
                          segment_budget, output_budget_bytes, max_source_distance_um=None,
                          batch_progress=None, narrow_cache=None, pause=None,
                          archive=None, resume=None, pause_context=None,
-                         **solver_options):
+                         recording_cache=None, **solver_options):
     """Replay a fixed schedule; event_sink must stage results until this function returns.
 
     ``events_by_target`` may be a batch callback to avoid materialising the
@@ -50,7 +50,8 @@ def replay_bulk_feedback(metadata, stimulus, rate_table, *, audited_sources, par
         event_sink=event_sink, time_ms=time_ms, threshold_mv=threshold_mv,
         duration_ms=duration_ms, electrode_um=electrode_um, reference_um=reference_um,
         conductivity_s_m=conductivity_s_m, clearance_um=clearance_um,
-        max_source_distance_um=max_source_distance_um, resume=resume)
+        max_source_distance_um=max_source_distance_um, resume=resume,
+        coefficients=recording_cache)
 
     def events_for_batch(batch):
         events = (events_by_target(batch) if callable(events_by_target)
@@ -123,6 +124,13 @@ def replay_bulk_feedback(metadata, stimulus, rate_table, *, audited_sources, par
                'interpretation': 'experimental fixed-schedule replay; no network convergence'}
     if narrow_cache is not None:
         receipt['narrow_cache'] = narrow_cache.receipt()
+    if collector.recording.coefficients is not None or collector.recording.coefficient_hits:
+        # Reported, not inferred: a pass that only computed must not be described
+        # as one that replayed stored coefficients.
+        receipt['recording_coefficients'] = {
+            'hits': collector.recording.coefficient_hits,
+            'misses': collector.recording.coefficient_misses,
+            'errors': collector.recording.coefficient_errors}
     return receipt
 
 
@@ -148,6 +156,7 @@ def replay_bulk_feedback_to_archive(*args, event_path, resume_from=None, pause=N
 def replay_verified_feedback_to_archive(metadata, stimulus, rate_table, *, schedule,
                                         schedule_sha256, morphology_sha256, event_path,
                                         metadata_factory, narrow_cache_directory=None,
+                                        recording_cache_directory=None,
                                         resume=None, pause=None, pause_context=None,
                                         **options):
     """Replay a verified fixed schedule and atomically archive selected outputs.
@@ -180,6 +189,24 @@ def replay_verified_feedback_to_archive(metadata, stimulus, rate_table, *, sched
             raise ValueError('Verified feedback morphology digest mismatch')
         return metadata_factory(cells)
 
+    coefficients = None
+    if recording_cache_directory is not None:
+        from service.infrastructure.stimulation.experimental_gpu.recording_cache import (
+            RecordingCoefficientCache,
+        )
+
+        # The recording coefficients of a batch are a function of its reduced
+        # geometry and the electrode pair, so they outlive the pass that computed
+        # them. Building them measured 159.8 s of a 384 s tail shard, of which
+        # removing the whole construction saved 96 s.
+        # The coefficients belong to one reduced geometry: entries computed for a
+        # different preparation cannot describe these cells.
+        from service.infrastructure.stimulation.experimental_gpu.narrow_cache import (
+            geometry_identity,
+        )
+
+        coefficients = RecordingCoefficientCache(recording_cache_directory,
+                                                 geometry_identity(options['params']))
     narrowed = None
     if narrow_cache_directory is not None:
         from .narrow_geometry import open_narrowed_cells
@@ -193,6 +220,7 @@ def replay_verified_feedback_to_archive(metadata, stimulus, rate_table, *, sched
         result = replay_bulk_feedback_to_archive(metadata, stimulus, rate_table,
             event_path=event_path, events_by_target=event_factory,
             metadata_factory=checked_metadata, narrow_cache=narrowed,
+            recording_cache=coefficients,
             resume_from=None if resume is None else resume['archive_path'],
             resume=resume, pause=pause, pause_context=pause_context, **options)
     except BaseException:

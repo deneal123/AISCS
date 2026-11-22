@@ -274,7 +274,8 @@ def iter_cell_batches(metadata, *, audited_sources, params, segment_budget, work
 
 
 def iter_cached_batches(store, *, segment_budget, max_padding=3.0, max_cells=3000,
-                        pool_cells=12000, pool_segments=40000000, timing_sink=None):
+                        pool_cells=12000, pool_segments=40000000, timing_sink=None,
+                        shard=None):
     """Yield batches from a narrowed-cell cache, reproducing the same pools.
 
     The cache stores cells grouped by the chunk they came from, in the visiting
@@ -288,6 +289,17 @@ def iter_cached_batches(store, *, segment_budget, max_padding=3.0, max_cells=300
     pooled_segments = 0
     started = time.perf_counter()
     groups = list(range(store.groups))
+    if shard is not None:
+        # A shard is a range of groups, never a range of cells: groups are the
+        # chunks the entry was built from, so two shards can never solve the
+        # same cell and no cell is dropped.
+        groups = groups[int(shard[0]):shard[1]]
+    # The payload is read on its own thread: os.pread releases the GIL, so the
+    # group after the one being decoded is already in memory. Reading inline
+    # measured 94 MB/s inside a live pass against 396 MB/s standalone, because
+    # the read waited behind everything else the pass was doing.
+    if hasattr(store, 'start_read_ahead'):
+        store.start_read_ahead(groups)
     for position, group in enumerate(groups):
         if timing_sink is not None:
             timing_sink('decode', time.perf_counter() - started)
@@ -323,7 +335,7 @@ def solve_population(metadata, stimulus_midpoint, rate_table, *, audited_sources
                      replacement_factory=None, on_replacement=None,
                      recording_max_selected=None, require_cell_major=False,
                      cell_major_block_threads=512, cell_transform=None, narrow_cache=None,
-                     narrow_cache_writer=None, wide_cache=None, resume=None):
+                     narrow_cache_writer=None, wide_cache=None, resume=None, shard=None):
     """Yield (ids, result) for each bounded batch of an authenticated population.
 
     window_sink(ids, start, end, rows) receives the same ordered sample windows
@@ -448,7 +460,7 @@ def solve_population(metadata, stimulus_midpoint, rate_table, *, audited_sources
                 source = iter_cached_batches(
                     narrow_cache, segment_budget=segment_budget, max_padding=max_padding,
                     max_cells=max_cells, pool_cells=pool_cells,
-                    pool_segments=pool_segments, timing_sink=timing_sink)
+                    pool_segments=pool_segments, timing_sink=timing_sink, shard=shard)
             else:
                 source = iter_cell_batches(
                     metadata, audited_sources=audited_sources, params=params,
@@ -533,11 +545,16 @@ def solve_population(metadata, stimulus_midpoint, rate_table, *, audited_sources
                     put_until_stopped(waiting, (cells, failure, None, None))
                     return
                 extra = None
+                # Wall time alone cannot separate work from waiting: the stage is
+                # measured on its own thread, so a stage that is starved of the
+                # GIL and a stage that is arithmetic look identical. Charging the
+                # thread's own CPU time next to it makes the difference visible.
                 if cell_major:
-                    packed_started = time.perf_counter()
+                    packed_started, packed_cpu = time.perf_counter(), time.thread_time()
                     extra = build_cell_major(cells, [cell["geometry"] for cell in cells])
                     if timing_sink is not None:
                         timing_sink('pack_stage_cells', time.perf_counter() - packed_started)
+                        timing_sink('pack_cpu_cells', time.thread_time() - packed_cpu)
                 recording = None
                 projection = None
                 if device_window_factory is not None:
@@ -546,12 +563,13 @@ def solve_population(metadata, stimulus_midpoint, rate_table, *, audited_sources
                     # the solve thread's wall time, all of it before the launch.
                     # Building it here overlaps it with the previous batch's GPU
                     # windows instead of stalling the device behind Python.
-                    resolve_started = time.perf_counter()
+                    resolve_started, resolve_cpu = time.perf_counter(), time.thread_time()
                     recording = device_window_factory(cells)
                     if timing_sink is not None:
                         timing_sink('pack_stage_resolve', time.perf_counter() - resolve_started)
+                        timing_sink('pack_cpu_resolve', time.thread_time() - resolve_cpu)
                     if isinstance(recording, dict):
-                        project_started = time.perf_counter()
+                        project_started, project_cpu = time.perf_counter(), time.thread_time()
                         # The nodal projection is another 23%: it reads only the
                         # reduced geometry and the selected compartment, both
                         # already resident here, so it belongs on this thread and
@@ -569,6 +587,7 @@ def solve_population(metadata, stimulus_midpoint, rate_table, *, audited_sources
                             projection = None
                         if timing_sink is not None:
                             timing_sink('pack_stage_projection', time.perf_counter() - project_started)
+                            timing_sink('pack_cpu_projection', time.thread_time() - project_cpu)
                 if not put_until_stopped(waiting, (cells, extra, recording, projection)):
                     return
         except BaseException as exc:

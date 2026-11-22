@@ -34,6 +34,7 @@ import json
 import os
 import re
 import struct
+import threading
 from pathlib import Path
 
 import numpy as np
@@ -114,6 +115,19 @@ def inventory(metadata, order, limit=None):
     for position in positions:
         bodies.extend(int(item['body_id']) for item in chunks[position]['neurons'])
     return len(positions), bodies_digest(bodies)
+
+
+def geometry_identity(params):
+    """Durable identity of the reduced geometry a pass will narrow.
+
+    The same body under different stimulation parameters has a different reduced
+    tree, so parameters are part of the identity. The recording flags are not:
+    they only decide which optional fields the narrowed cell carries, and a cell
+    that lacks them is narrowed the same way.
+    """
+    payload = json.dumps({'format': FORMAT, 'params': params_identity(params)},
+                         sort_keys=True, separators=(',', ':'))
+    return hashlib.sha256(payload.encode('utf8')).hexdigest()
 
 
 def cache_key(*, geometry_sha256, source_index_sha256, params, recording, events, reroot):
@@ -205,7 +219,9 @@ class NarrowCellStore:
     """Read-only view of one committed entry; groups replay in build order."""
 
     __slots__ = ('_meta', '_header', '_file', '_groups', '_layout', '_spans',
-                 '_prefetch', '_prefetched', '_inflight')
+                 '_prefetch', '_prefetched', '_inflight', '_reader', '_order',
+                 '_ready', '_cursor', '_depth', '_budget', '_ready_bytes',
+                 '_signal', '_stopped', '_exhausted')
 
     def __init__(self, meta, header, handle):
         self._meta = meta
@@ -228,6 +244,16 @@ class NarrowCellStore:
         self._prefetch = None
         self._prefetched = {}
         self._inflight = {}
+        self._reader = None
+        self._order = []
+        self._ready = {}
+        self._cursor = 0
+        self._depth = 0
+        self._budget = 0
+        self._ready_bytes = 0
+        self._signal = threading.Condition()
+        self._stopped = False
+        self._exhausted = False
 
     @property
     def key(self):
@@ -251,6 +277,73 @@ class NarrowCellStore:
         if len(window) != end - start:
             raise NarrowCacheError('Narrowed-cell cache payload is truncated')
         return (start, window)
+
+    def start_read_ahead(self, numbers, depth=4, budget=None):
+        """Stream the payload on a reader thread while the consumer works.
+
+        os.pread releases the GIL, so a thread that walks the entry in visiting
+        order keeps the disk busy during the decode and planning of the group
+        before it. Reading in the consumer instead measured 94 MB/s inside a
+        live pass against 396 MB/s from the same volume with nothing else
+        running: the read was not slow, it was serialised with everything else.
+        The buffer holds at most a few groups, so a wide entry cannot push the
+        pass out of memory.
+        """
+        if self._reader is not None or depth < 1 or not numbers:
+            return
+        self._order = list(numbers)
+        self._depth = int(depth)
+        self._budget = 0 if budget is None else int(budget)
+        self._reader = threading.Thread(target=self._read_ahead,
+                                        name='narrow-read-ahead', daemon=True)
+        self._reader.start()
+
+    def _read_ahead(self):
+        while True:
+            with self._signal:
+                while not self._stopped and (len(self._ready) >= self._depth
+                        or (self._budget and self._ready_bytes >= self._budget)):
+                    self._signal.wait()
+                if self._stopped or self._cursor >= len(self._order):
+                    # The reader only walks the order it was given. A store reused
+                    # for a second pass, or asked for a group out of order, must
+                    # fall back to reading inline instead of waiting for a thread
+                    # that has already returned.
+                    self._exhausted = True
+                    self._signal.notify_all()
+                    return
+                number = self._order[self._cursor]
+                self._cursor += 1
+            try:
+                fetched = self._fetch(number)
+            except Exception:
+                with self._signal:
+                    self._stopped = True
+                    self._signal.notify_all()
+                raise
+            start, end = self._spans[number]
+            with self._signal:
+                self._ready[number] = fetched
+                self._ready_bytes += end - start
+                self._signal.notify_all()
+
+    def _buffered(self, number):
+        """Take one already-read group, waiting only if it is still in flight."""
+        with self._signal:
+            while (number not in self._ready and not self._stopped
+                   and not (self._exhausted and self._cursor >= len(self._order))):
+                self._signal.wait()
+            fetched = self._ready.pop(number, None)
+            if fetched is None and self._exhausted:
+                # Nothing will arrive: this group is read by the caller below.
+                return None
+            if fetched is not None:
+                start, end = self._spans[number]
+                self._ready_bytes -= end - start
+            # Wake the reader: it sleeps on this same condition while the buffer
+            # is full, so taking a group without notifying it deadlocks the pass.
+            self._signal.notify_all()
+            return fetched
 
     def preload(self, numbers):
         """Read groups ahead of the decode; measured slower than plain pread.
@@ -282,6 +375,8 @@ class NarrowCellStore:
         86 MB/s standalone.
         """
         fetched = self._prefetched.pop(number, None)
+        if fetched is None and self._reader is not None:
+            fetched = self._buffered(number)
         if fetched is None:
             future = self._inflight.pop(number, None)
             fetched = future.result() if future is not None else self._fetch(number)
@@ -297,6 +392,12 @@ class NarrowCellStore:
         return cells
 
     def close(self):
+        if self._reader is not None:
+            with self._signal:
+                self._stopped = True
+                self._signal.notify_all()
+            self._reader.join(timeout=5.)
+            self._reader = None
         if self._prefetch is not None:
             self._prefetch.shutdown(wait=True)
             self._prefetch = None

@@ -1,6 +1,6 @@
-[project]
+﻿[project]
 name = "aspa-generator"
-version = "0.1.12"
+version = "0.1.13"
 description = "Reproducible compartmental neural simulation and extracellular recording sidecar"
 requires-python = ">=3.12,<3.13"
 license = "MIT"

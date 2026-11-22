@@ -89,6 +89,19 @@ def narrow_cell_cache_directory() -> Path | None:
     return Path(value) if value else None
 
 
+def recording_coefficient_cache_directory() -> Path | None:
+    """Durable cache of per-batch recording coefficients; unset disables it.
+
+    The recording coefficients are one float per segment, a function of the
+    reduced geometry and the electrode pair alone. They are recomputed on every
+    pass: on the wide tail that construction measured 159.8 s of a 384 s shard,
+    and removing it entirely saved 96 s. The cache stores them per batch, keyed
+    by the batch geometry, so a hit is one read and no arithmetic.
+    """
+    value = os.environ.get('GENERATOR_RECORDING_COEFFICIENT_CACHE', '')
+    return Path(value) if value else None
+
+
 def full_control_policy() -> str:
     """Whether the paired zero-stimulus pass runs, or is declared structurally empty.
 

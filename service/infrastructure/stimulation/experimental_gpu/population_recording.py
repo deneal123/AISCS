@@ -1,10 +1,15 @@
 """Bounded accumulation of experimental population electrode recordings."""
 
 import threading
+import time
 
 import numpy as np
 
 from .window_recording import WindowedPointRecorder
+
+# A coefficient store that fails this many times is dropped for the rest of the
+# pass: a broken store must not cost one failed read per batch forever.
+_CACHE_ERROR_LIMIT = 4
 
 
 class PopulationRecording:
@@ -17,7 +22,7 @@ class PopulationRecording:
 
     def __init__(self, expected_ids, *, electrode_um, reference_um, conductivity_s_m,
                  clearance_um, samples, selection_factory=None, selected_sink=None,
-                 resume=None):
+                 resume=None, timing_sink=None, coefficients=None):
         """Accumulate one pass, optionally continuing a paused one.
 
         ``resume`` carries the cells a paused pass had already recorded and the
@@ -66,6 +71,68 @@ class PopulationRecording:
         self.failed = False
         self.selection_factory = selection_factory
         self.selected_sink = selected_sink
+        # Optional durable store of the per-batch recording coefficients. They are
+        # a function of the reduced geometry and the electrode pair, they are
+        # recomputed on every pass, and their construction measured 159.8 s of a
+        # 384 s tail shard while removing it entirely saved 96 s.
+        self.coefficients = coefficients
+        # What the store actually did, for the pass receipt: a hit and a miss are
+        # different amounts of work, and a run that only recomputed must not be
+        # reported as one that replayed.
+        self.coefficient_hits = 0
+        self.coefficient_misses = 0
+        self.coefficient_errors = 0
+        # The recorder is separable from the selection: one is geometry (the
+        # per-segment field coefficients this batch will be recorded with), the
+        # other is the durable plan. Both are charged to the packer, so they are
+        # timed apart before either is optimised.
+        self.timing_sink = timing_sink
+
+    def _cached_coefficients(self, geometries, morphologies):
+        """Coefficients for this batch, from the durable store when it has them.
+
+        A cache is an optimisation, so no cache failure may fail a pass: any
+        error there is counted and the batch falls back to computing its own
+        coefficients exactly as it did before the store existed. After a few
+        failures the store is dropped for the rest of the pass instead of paying
+        a broken read per batch.
+        """
+        if self.coefficients is None:
+            return None
+        if any(not isinstance(value, str) for value in morphologies.values()):
+            return None
+        if self.coefficient_errors >= _CACHE_ERROR_LIMIT:
+            self.coefficients = None
+            return None
+        try:
+            # The key names the cells and the preparation: the reduced geometry of
+            # a cell is a deterministic function of its morphology digest and the
+            # params, so those two cover it without hashing 88 bytes per segment.
+            key = self.coefficients.key_for(geometries, morphologies=morphologies,
+                                            electrode_um=self.electrode,
+                                            reference_um=self.reference,
+                                            conductivity_s_m=self.conductivity,
+                                            clearance_um=self.clearance)
+            cached = self.coefficients.get(key, list(geometries))
+            if cached is not None:
+                self.coefficient_hits += 1
+                return cached
+            self.coefficient_misses += 1
+            # A miss hands the coefficients back as a side effect: the pass
+            # computes them anyway, so it fills the cache it just missed.
+            cached = self.coefficients.compute(geometries, electrode_um=self.electrode,
+                                               reference_um=self.reference,
+                                               conductivity_s_m=self.conductivity,
+                                               clearance_um=self.clearance)
+            self.coefficients.put(key, list(geometries), cached)
+            return cached
+        except Exception:
+            # Counting must not itself raise: a broken store is a reason to fall
+            # back to computing the batch, never a reason to fail the pass.
+            self.coefficient_errors += 1
+            if self.coefficient_errors >= _CACHE_ERROR_LIMIT:
+                self.coefficients = None
+            return None
 
     def factory(self, cells):
         if self.failed or not isinstance(cells, list) or not cells:
@@ -74,11 +141,23 @@ class PopulationRecording:
         if (any(type(body) is not int for body in ids) or len(set(ids)) != len(ids)
                 or any(body not in self.expected or body in self.completed for body in ids)):
             raise ValueError('Invalid population recording batch identities')
-        recorder = WindowedPointRecorder({cell['id']: cell['geometry'] for cell in cells},
+        started = time.perf_counter()
+        geometries = {cell['id']: cell['geometry'] for cell in cells}
+        # The key is the cells' identity, and a prepared cell carries its
+        # morphology digest only when the pass records: a batch without one simply
+        # computes its coefficients, exactly as it did before the store existed.
+        morphologies = {cell['id']: cell.get('morphology_sha256') for cell in cells}
+        cached = self._cached_coefficients(geometries, morphologies)
+        recorder = WindowedPointRecorder(geometries,
             self.electrode, self.reference, self.conductivity, clearance_um=self.clearance,
-            samples=self.samples)
+            samples=self.samples, coefficients=cached)
+        if self.timing_sink is not None:
+            self.timing_sink('resolve_recorder', time.perf_counter() - started)
+        started = time.perf_counter()
         selection = ({body: [] for body in ids} if self.selection_factory is None
                      else self.selection_factory(cells))
+        if self.timing_sink is not None:
+            self.timing_sink('resolve_selection', time.perf_counter() - started)
         if (not isinstance(selection, dict) or list(selection) != ids
                 or any(not isinstance(selection[body], list)
                        or any(type(index) is not int or not 0 <= index <

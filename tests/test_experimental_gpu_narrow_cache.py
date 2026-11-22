@@ -207,3 +207,19 @@ def test_inventory_covers_the_chunks_a_limit_visits():
     metadata = _metadata(chunks=3, per_chunk=2)
     assert inventory(metadata, None) == (3, bodies_digest(range(6)))
     assert inventory(metadata, [2, 0]) == (2, bodies_digest([4, 5, 0, 1]))
+
+def test_a_second_walk_after_the_reader_finishes_is_read_inline(tmp_path):
+    """The reader walks one order; a later group must not wait for a thread that ended."""
+    groups = [[_cell(0, 2)], [_cell(1, 3)], [_cell(2, 4)]]
+    cache, _meta = _built(tmp_path, groups, chunks=3)
+    store = cache.open(_key(), chunks=3, bodies=bodies_digest([0, 1, 2]))
+    assert store is not None
+    try:
+        store.start_read_ahead([0, 1], depth=1)
+        assert [cell['id'] for cell in store.group(0)] == [0]
+        assert [cell['id'] for cell in store.group(1)] == [1]
+        # The reader has now returned; asking for the group it never queued must
+        # read it here rather than block forever on a condition nothing notifies.
+        assert [cell['id'] for cell in store.group(2)] == [2]
+    finally:
+        store.close()

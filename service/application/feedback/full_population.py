@@ -50,6 +50,31 @@ def _timeline(time, active, control, stimulus, *, max_bins=400):
             'units': {'time_ms': 'ms', 'neural_uv': 'µV', 'control_uv': 'µV'}}
 
 
+def derived_cache_directories(options):
+    """Resolve the durable caches this pass may read from the environment.
+
+    Narrowed cells are a function of the geometry and the field alone, not of the
+    pass and not of where source diagnostics live: a run whose diagnostics are
+    run-local still decodes and reduces the same 166 700 trees four times, so
+    the narrowed cache is independent of the cache path. Recording coefficients
+    are a function of the reduced geometry and the electrode pair, so they do
+    not depend on the schedule, on the widened control branch, or on where the
+    diagnostics live either, and one store serves every pass of the experiment.
+
+    Separate from the run so that a caller can see, and a test can check, that an
+    unset setting means "no cache" rather than "cache in the current directory".
+    """
+    from service.settings import (narrow_cell_cache_directory,
+                                  recording_coefficient_cache_directory)
+
+    derived = {}
+    if 'narrow_cache_directory' not in options:
+        derived['narrow_cache_directory'] = narrow_cell_cache_directory()
+    if 'recording_cache_directory' not in options:
+        derived['recording_cache_directory'] = recording_coefficient_cache_directory()
+    return derived
+
+
 def run_full_population_from_geometry(metadata, stimulus, rate_table, *, graph, index,
                                       morphology_sha256, configuration_sha256,
                                       output_directory, replay_options,
@@ -63,7 +88,7 @@ def run_full_population_from_geometry(metadata, stimulus, rate_table, *, graph, 
     """
     from service.infrastructure.stimulation.population.source_store import SourceDiagnosticsStore
     from service.settings import (full_control_policy, full_pause_directory,
-                                  full_replay_cache_directory, narrow_cell_cache_directory,
+                                  full_replay_cache_directory,
                                   source_diagnostics_cache_path, source_pair_directory)
 
     parent = Path(output_directory).parent
@@ -89,12 +114,7 @@ def run_full_population_from_geometry(metadata, stimulus, rate_table, *, graph, 
         elif options['replay_cache_directory'] is not None and cache_path is None:
             raise ValueError('The full-population replay cache requires a durable '
                              'source diagnostics cache')
-        # Narrowed cells are a function of the geometry and the field alone, not
-        # of the pass and not of where source diagnostics live: a run whose
-        # diagnostics are run-local still decodes and reduces the same 166 700
-        # trees four times, so the narrowed cache is independent of cache_path.
-        if 'narrow_cache_directory' not in options:
-            options['narrow_cache_directory'] = narrow_cell_cache_directory()
+        options.update(derived_cache_directories(options))
         pairs_path = options.pop('source_pair_directory', None) or source_pair_directory()
         pairs = None
         if pairs_path is not None:
@@ -181,7 +201,7 @@ def run_full_population_feedback(metadata, stimulus, rate_table, *, graph, sourc
                                  max_target_distance_um, output_directory, target_provider=None,
                                  pair_cache=None, configuration=None, export_markers=False,
                                  replay_cache_directory=None, progress=None,
-                                 narrow_cache_directory=None,
+                                 narrow_cache_directory=None, recording_cache_directory=None,
                                  source_geometry_exclusions=None,
                                  allow_partial_source_geometry=False,
                                  control_policy='required', pause_directory=None):
@@ -219,7 +239,9 @@ def run_full_population_feedback(metadata, stimulus, rate_table, *, graph, sourc
                                               'morphology_sha256', 'metadata_factory')):
         raise ValueError('Conflicting full-population replay options')
     if control_policy not in ('required', 'omitted'):
-        raise ValueError('Invalid control branch policy')
+        # Name the setting: the caller sets control_policy='required'|'omitted',
+        # and the suffix GENERATOR_FULL_CONTROL carries the same two words.
+        raise ValueError('Invalid control_policy: expected required or omitted')
     if source_geometry_exclusions and not allow_partial_source_geometry:
         raise ValueError('Source geometry exclusions require the partial source geometry policy')
     if configuration is not None:
@@ -308,7 +330,8 @@ def run_full_population_feedback(metadata, stimulus, rate_table, *, graph, sourc
                 schedule=baseline_schedule, schedule_sha256=baseline_sha256,
                 morphology_sha256=morphology_sha256, event_path=path,
                 metadata_factory=metadata_factory,
-                narrow_cache_directory=narrow_cache_directory, pause=pause,
+                narrow_cache_directory=narrow_cache_directory,
+                recording_cache_directory=recording_cache_directory, pause=pause,
                 pause_context=(None if pause is None else {
                     'phase': phase, 'iteration': None,
                     'history': list(continued['history']) if continued else [],
@@ -382,6 +405,7 @@ def run_full_population_feedback(metadata, stimulus, rate_table, *, graph, sourc
                     max_iterations=max_iterations, include_control_crossings=True,
                     allow_partial_source_geometry=allow_partial_source_geometry,
                     events_only=True, narrow_cache_directory=narrow_cache_directory,
+                    recording_cache_directory=recording_cache_directory,
                     pause=pause, pause_phase='full_control_feedback',
                     pause_context=(None if pause is None else {'receipts': receipts}))
                 control_state['omitted'] = True
@@ -410,6 +434,7 @@ def run_full_population_feedback(metadata, stimulus, rate_table, *, graph, sourc
                 # population-wide unresolved-geometry policy, so mapping only the
                 # emitting cells here cannot hide an unresolvable source.
                 events_only=True, narrow_cache_directory=narrow_cache_directory,
+                    recording_cache_directory=recording_cache_directory,
                 pause=pause, pause_phase='full_control_feedback',
                 pause_context=(None if pause is None else {'receipts': receipts}),
                 iteration_progress=(None if progress is None else lambda number, done, total:
@@ -513,6 +538,7 @@ def run_full_population_feedback(metadata, stimulus, rate_table, *, graph, sourc
                 # cell contributes no schedule entry and its diagnostics would be
                 # read, re-verified and merged only to be dropped again.
                 events_only=True, narrow_cache_directory=narrow_cache_directory,
+                    recording_cache_directory=recording_cache_directory,
                 pause=pause, pause_phase='full_feedback',
                 pause_context=(None if pause is None else {'receipts': receipts}),
                 iteration_progress=(None if progress is None else lambda number, done, total:

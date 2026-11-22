@@ -45,16 +45,72 @@ class ColumnRows:
         return int(np.count_nonzero(self._kinds))
 
     def __iter__(self):
+        """Yield the rows that survive, converting only those to Python values.
+
+        Converting the whole contact array cost 5.0 ms per cell on the full
+        population, because the renderer keeps only the rows of compartments
+        that crossed and a silenced cell crosses none: 4 158 irrelevant
+        conversions for every cell that reports nothing, which is 168 of
+        166 700. Selecting the survivors first makes a quiet cell cost the
+        search, not the walk.
+        """
         kinds = self._kinds
-        positions = self._points.tolist()
-        partners = self._partners.tolist()
-        indexes = self._indexes.tolist()
-        for order in np.flatnonzero(kinds).tolist():
-            partner = str(partners[order])
-            if kinds[order] == _UNRESOLVED:
-                yield ('unresolved', positions[order], partner, None)
+        orders = np.flatnonzero(kinds)
+        if not len(orders):
+            return
+        chosen = kinds[orders]
+        points = self._points[orders].tolist()
+        partners = self._partners[orders].tolist()
+        indexes = self._indexes[orders].tolist()
+        for offset, kind in enumerate(chosen.tolist()):
+            partner = str(partners[offset])
+            if kind == _UNRESOLVED:
+                yield ('unresolved', points[offset], partner, None)
             else:
-                yield ('candidate', positions[order], partner, indexes[order])
+                yield ('candidate', points[offset], partner, indexes[offset])
+
+    def unresolved(self):
+        """Return the placeholder rows without touching the candidate columns."""
+        orders = np.flatnonzero(self._kinds == _UNRESOLVED)
+        points = self._points[orders].tolist()
+        partners = self._partners[orders].tolist()
+        return [('unresolved', point, str(partner), None)
+                for point, partner in zip(points, partners)]
+
+    def select(self, live):
+        """Return the rows kept when only the crossing compartments matter.
+
+        A row exists per contact, not per compartment: a wide cell carries
+        11 372 candidate rows behind its 1 499 compartments. The renderer drops
+        every row whose compartment reported no crossing, which for a silenced
+        cell is all of them - and 168 of 166 700 cells report anything at all.
+        Walking 11 372 rows to discard them cost 1.58 s of the 3.27 s a 253-cell
+        quiet batch spent rendering. Placeholders survive regardless, because
+        the renderer emits them whether or not their compartment crossed.
+
+        The second return value is the archive's omission flag, and it is the
+        reason this cannot be a filter with no report: a candidate row withheld
+        because its compartment stayed quiet is exactly what the compact archive
+        records by leaving it out, so the batch must say that it omitted rows.
+        Dropping them silently made every one of those cells claim a complete
+        candidate list, and the merge then rejected the archive as incomplete.
+        """
+        kinds = self._kinds
+        candidate = kinds == _CANDIDATE
+        live = np.fromiter(sorted(live), dtype=np.int64, count=len(live))
+        crossing = (np.isin(self._indexes, live) if len(live)
+                    else np.zeros(len(kinds), dtype=bool))
+        kept = (kinds == _UNRESOLVED) | (candidate & crossing)
+        omitted = bool(np.any(candidate & ~crossing))
+        orders = np.flatnonzero(kept)
+        points = self._points[orders].tolist()
+        partners = self._partners[orders].tolist()
+        indexes = self._indexes[orders].tolist()
+        rows = ((('unresolved', points[offset], str(partners[offset]), None)
+                 if kind == _UNRESOLVED
+                 else ('candidate', points[offset], str(partners[offset]), indexes[offset]))
+                for offset, kind in enumerate(kinds[orders].tolist()))
+        return rows, omitted
 
 
 def column_output_plan(body, ids, provenance, columns, *, threshold_mv, duration_ms,

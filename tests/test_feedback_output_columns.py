@@ -123,3 +123,20 @@ def test_column_plan_matches_the_walk_for_a_remeshed_cell():
     assert actual['indices'] == expected['indices']
     assert actual['partners'] == expected['partners']
     assert list(actual['rows']) == expected['rows']
+
+def test_a_quiet_candidate_is_reported_as_omitted_not_silently_dropped():
+    """The compact archive records a quiet synapse by leaving its row out.
+
+    Dropping those rows during rendering without reporting it made every cell
+    claim a complete candidate list while 165 479 of the 166 700 were short,
+    and the merge that rebuilds them then rejected the archive as incomplete.
+    """
+    rows = [_row('20', 1, 5, point=(1, 2, 3)), _row('21', 2, 6, point=(4, 5, 6))]
+    provenance = {'body_id': '10', 'morphology_sha256': 'b' * 64}
+    plan = _plan(_columns(rows), np.array([4, 5, 6]), provenance)
+    crossed = feedback_plan_output_ticks(plan, {1: [3], 2: []})
+    assert crossed['omitted_empty_candidates'] is True
+    assert [row['source_position_8nm'] for row in crossed['candidates']] == [[1, 2, 3]]
+    silent = feedback_plan_output_ticks(plan, {1: [], 2: []})
+    assert silent['omitted_empty_candidates'] is True
+    assert silent['candidates'] == []

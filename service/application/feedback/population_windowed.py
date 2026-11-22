@@ -1,5 +1,7 @@
 """Experimental streaming adapter for selected physical-cell feedback events."""
 
+import time
+
 import numpy as np
 
 from service.infrastructure.stimulation.experimental_gpu.population_recording import (
@@ -31,7 +33,8 @@ class PopulationWindowedFeedback:
 
     def __init__(self, expected_ids, *, metadata_factory, event_sink, time_ms, threshold_mv,
                  duration_ms, electrode_um, reference_um, conductivity_s_m, clearance_um,
-                 max_source_distance_um=None, resume=None):
+                 max_source_distance_um=None, resume=None, timing_sink=None,
+                 coefficients=None):
         time = np.asarray(time_ms, dtype=float)
         if (not callable(metadata_factory) or not callable(event_sink) or time.ndim != 1
                 or len(time) < 2 or not np.isfinite(time).all() or np.any(np.diff(time) <= 0)
@@ -40,6 +43,11 @@ class PopulationWindowedFeedback:
             raise ValueError('Invalid population feedback time grid or callbacks')
         self.time = time.copy()
         self.metadata_factory = metadata_factory
+        # The resolve stage is charged to the packer thread and measured as one
+        # number, but it is two different costs: reading the durable payload and
+        # computing the plan from it. Splitting them here is what tells whether
+        # the remaining lever is storage or arithmetic.
+        self.timing_sink = timing_sink
         self.event_sink = event_sink
         self.threshold = threshold_mv
         self.duration = duration_ms
@@ -53,7 +61,8 @@ class PopulationWindowedFeedback:
         self.recording = PopulationRecording(expected_ids, electrode_um=electrode_um,
             reference_um=reference_um, conductivity_s_m=conductivity_s_m,
             clearance_um=clearance_um, samples=len(time), selection_factory=self._select,
-            selected_sink=self._accept, resume=resume)
+            selected_sink=self._accept, resume=resume, timing_sink=timing_sink,
+            coefficients=coefficients)
 
     def _resolve(self, cells):
         """Resolve one batch's durable candidates into per-cell output plans.
@@ -68,7 +77,10 @@ class PopulationWindowedFeedback:
         existing idle window.
         """
         ids = [cell['id'] for cell in cells]
+        started = time.perf_counter()
         metadata = self.metadata_factory(cells)
+        if self.timing_sink is not None:
+            self.timing_sink('resolve_metadata', time.perf_counter() - started)
         if (not isinstance(metadata, dict) or set(metadata) != {'provenance', 'diagnostics'}
                 or not isinstance(metadata['provenance'], dict)
                 or not isinstance(metadata['diagnostics'], dict)
@@ -83,9 +95,13 @@ class PopulationWindowedFeedback:
         # the tick pass at the end of the batch reuses it instead of walking the
         # candidate list a second time (that duplicate walk cost 26 s of a 130 s
         # slice on 15 343 cells).
-        return {cell['id']: _output_plan(cell, provenance[cell['id']], diagnostics[cell['id']],
-                threshold_mv=self.threshold, duration_ms=self.duration,
-                max_source_distance_um=self.distance) for cell in cells}
+        started = time.perf_counter()
+        plans = {cell['id']: _output_plan(cell, provenance[cell['id']], diagnostics[cell['id']],
+                 threshold_mv=self.threshold, duration_ms=self.duration,
+                 max_source_distance_um=self.distance) for cell in cells}
+        if self.timing_sink is not None:
+            self.timing_sink('resolve_plan', time.perf_counter() - started)
+        return plans
 
     def _select(self, cells):
         ids = [cell['id'] for cell in cells]
@@ -113,7 +129,16 @@ class PopulationWindowedFeedback:
             self.batches.pop(key, None)
 
     def factory(self, cells):
-        return self.recording.factory(cells)
+        # The recorder's coefficients are a function of the cell geometry alone,
+        # but the constructor is charged to the resolve stage: on the full
+        # population resolve measured 614 s while the durable read (92 s) and the
+        # plan (212 s) together account for only half of it. Splitting this out
+        # names the remainder instead of leaving it inside "resolve".
+        started = time.perf_counter()
+        recording = self.recording.factory(cells)
+        if self.timing_sink is not None:
+            self.timing_sink('resolve_factory', time.perf_counter() - started)
+        return recording
 
     def finish(self):
         return self.recording.finish()

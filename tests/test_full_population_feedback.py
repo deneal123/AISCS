@@ -497,3 +497,28 @@ def test_required_control_still_runs_its_own_pass(tmp_path, monkeypatch):
 def test_unknown_control_policy_is_rejected_before_any_work(tmp_path):
     with pytest.raises(ValueError, match='control_policy'):
         run_full_population_feedback(**_arguments(tmp_path), control_policy='maybe')
+
+def test_derived_cache_directories_follow_the_environment_and_the_caller(tmp_path,
+                                                                         monkeypatch):
+    """An unset cache setting must mean no cache, not a cache beside the run.
+
+    This is the defect an absent import hid: the run crashed only once the
+    setting was read, so the resolution lives in its own function that both the
+    run and this test call.
+    """
+    from service.application.feedback.full_population import derived_cache_directories
+
+    for name in ('GENERATOR_NARROW_CELL_CACHE', 'GENERATOR_RECORDING_COEFFICIENT_CACHE'):
+        monkeypatch.delenv(name, raising=False)
+    assert derived_cache_directories({}) == {'narrow_cache_directory': None,
+                                             'recording_cache_directory': None}
+    monkeypatch.setenv('GENERATOR_NARROW_CELL_CACHE', str(tmp_path / 'narrow'))
+    monkeypatch.setenv('GENERATOR_RECORDING_COEFFICIENT_CACHE', str(tmp_path / 'coef'))
+    derived = derived_cache_directories({})
+    assert derived['narrow_cache_directory'] == tmp_path / 'narrow'
+    assert derived['recording_cache_directory'] == tmp_path / 'coef'
+    # A caller that already decided keeps its decision: the experiment may run a
+    # pass against a cache the environment does not name.
+    explicit = derived_cache_directories({'narrow_cache_directory': None,
+                                          'recording_cache_directory': tmp_path})
+    assert explicit == {}

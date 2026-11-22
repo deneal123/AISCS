@@ -20,6 +20,7 @@ def replay_archived_feedback(metadata, stimulus, rate_table, *, graph, source_id
                              include_control_crossings=False, _feedback_gate=None,
                              allow_partial_source_geometry=False, events_only=False,
                              active_replay=None, narrow_cache_directory=None,
+                             recording_cache_directory=None,
                              pause=None, pause_context=None, resume=None):
     """Build a candidate schedule and replay it once; this is not a converged network.
 
@@ -80,6 +81,7 @@ def replay_archived_feedback(metadata, stimulus, rate_table, *, graph, source_id
         schedule=built['schedule'], schedule_sha256=built['schedule_sha256'],
         morphology_sha256=morphology_sha256, event_path=output_event_path,
         metadata_factory=metadata_factory, narrow_cache_directory=narrow_cache_directory,
+        recording_cache_directory=recording_cache_directory,
         pause=pause, pause_context=pause_context, resume=resume, **replay_options)
     return {'replay': replay, 'input_schedule_sha256': built['schedule_sha256'],
             'feedback_schedule_sha256': feedback_sha256,
