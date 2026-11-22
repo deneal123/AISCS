@@ -56,7 +56,9 @@ def derived_cache_directories(options):
     Narrowed cells are a function of the geometry and the field alone, not of the
     pass and not of where source diagnostics live: a run whose diagnostics are
     run-local still decodes and reduces the same 166 700 trees four times, so
-    the narrowed cache is independent of the cache path. Recording coefficients
+    the narrowed cache is independent of the cache path. The output selection
+    is a function of the verified sources and two replay settings, so it too is
+    independent of where the diagnostics live. Recording coefficients
     are a function of the reduced geometry and the electrode pair, so they do
     not depend on the schedule, on the widened control branch, or on where the
     diagnostics live either, and one store serves every pass of the experiment.
@@ -65,6 +67,7 @@ def derived_cache_directories(options):
     unset setting means "no cache" rather than "cache in the current directory".
     """
     from service.settings import (narrow_cell_cache_directory,
+                                  output_selection_cache_directory,
                                   recording_coefficient_cache_directory)
 
     derived = {}
@@ -72,6 +75,8 @@ def derived_cache_directories(options):
         derived['narrow_cache_directory'] = narrow_cell_cache_directory()
     if 'recording_cache_directory' not in options:
         derived['recording_cache_directory'] = recording_coefficient_cache_directory()
+    if 'output_selection_directory' not in options:
+        derived['output_selection_directory'] = output_selection_cache_directory()
     return derived
 
 
@@ -202,6 +207,7 @@ def run_full_population_feedback(metadata, stimulus, rate_table, *, graph, sourc
                                  pair_cache=None, configuration=None, export_markers=False,
                                  replay_cache_directory=None, progress=None,
                                  narrow_cache_directory=None, recording_cache_directory=None,
+                                 output_selection_directory=None,
                                  source_geometry_exclusions=None,
                                  allow_partial_source_geometry=False,
                                  control_policy='required', pause_directory=None):
@@ -331,7 +337,8 @@ def run_full_population_feedback(metadata, stimulus, rate_table, *, graph, sourc
                 morphology_sha256=morphology_sha256, event_path=path,
                 metadata_factory=metadata_factory,
                 narrow_cache_directory=narrow_cache_directory,
-                recording_cache_directory=recording_cache_directory, pause=pause,
+                recording_cache_directory=recording_cache_directory,
+                output_selection_directory=output_selection_directory, pause=pause,
                 pause_context=(None if pause is None else {
                     'phase': phase, 'iteration': None,
                     'history': list(continued['history']) if continued else [],
@@ -406,6 +413,7 @@ def run_full_population_feedback(metadata, stimulus, rate_table, *, graph, sourc
                     allow_partial_source_geometry=allow_partial_source_geometry,
                     events_only=True, narrow_cache_directory=narrow_cache_directory,
                     recording_cache_directory=recording_cache_directory,
+                    output_selection_directory=output_selection_directory,
                     pause=pause, pause_phase='full_control_feedback',
                     pause_context=(None if pause is None else {'receipts': receipts}))
                 control_state['omitted'] = True
@@ -435,6 +443,7 @@ def run_full_population_feedback(metadata, stimulus, rate_table, *, graph, sourc
                 # emitting cells here cannot hide an unresolvable source.
                 events_only=True, narrow_cache_directory=narrow_cache_directory,
                     recording_cache_directory=recording_cache_directory,
+                    output_selection_directory=output_selection_directory,
                 pause=pause, pause_phase='full_control_feedback',
                 pause_context=(None if pause is None else {'receipts': receipts}),
                 iteration_progress=(None if progress is None else lambda number, done, total:
@@ -539,6 +548,7 @@ def run_full_population_feedback(metadata, stimulus, rate_table, *, graph, sourc
                 # read, re-verified and merged only to be dropped again.
                 events_only=True, narrow_cache_directory=narrow_cache_directory,
                     recording_cache_directory=recording_cache_directory,
+                    output_selection_directory=output_selection_directory,
                 pause=pause, pause_phase='full_feedback',
                 pause_context=(None if pause is None else {'receipts': receipts}),
                 iteration_progress=(None if progress is None else lambda number, done, total:

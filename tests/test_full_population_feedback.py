@@ -508,17 +508,22 @@ def test_derived_cache_directories_follow_the_environment_and_the_caller(tmp_pat
     """
     from service.application.feedback.full_population import derived_cache_directories
 
-    for name in ('GENERATOR_NARROW_CELL_CACHE', 'GENERATOR_RECORDING_COEFFICIENT_CACHE'):
+    for name in ('GENERATOR_NARROW_CELL_CACHE', 'GENERATOR_RECORDING_COEFFICIENT_CACHE',
+                 'GENERATOR_OUTPUT_SELECTION_CACHE'):
         monkeypatch.delenv(name, raising=False)
     assert derived_cache_directories({}) == {'narrow_cache_directory': None,
-                                             'recording_cache_directory': None}
+                                             'recording_cache_directory': None,
+                                             'output_selection_directory': None}
     monkeypatch.setenv('GENERATOR_NARROW_CELL_CACHE', str(tmp_path / 'narrow'))
     monkeypatch.setenv('GENERATOR_RECORDING_COEFFICIENT_CACHE', str(tmp_path / 'coef'))
+    monkeypatch.setenv('GENERATOR_OUTPUT_SELECTION_CACHE', str(tmp_path / 'selection'))
     derived = derived_cache_directories({})
     assert derived['narrow_cache_directory'] == tmp_path / 'narrow'
     assert derived['recording_cache_directory'] == tmp_path / 'coef'
+    assert derived['output_selection_directory'] == tmp_path / 'selection'
     # A caller that already decided keeps its decision: the experiment may run a
     # pass against a cache the environment does not name.
     explicit = derived_cache_directories({'narrow_cache_directory': None,
-                                          'recording_cache_directory': tmp_path})
+                                          'recording_cache_directory': tmp_path,
+                                          'output_selection_directory': None})
     assert explicit == {}

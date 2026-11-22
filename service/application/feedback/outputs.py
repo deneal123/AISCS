@@ -426,8 +426,20 @@ def _candidate_plan(body, original, ids, edge_ranges, *, duration_ms, include_ca
 
 def _plan_output(plan, ticks):
     """Render a candidate plan and the tick lists it resolved into its result."""
-    if (not isinstance(plan, dict) or not isinstance(ticks, dict)
-            or set(ticks) != set(plan['indices'])):
+    if not isinstance(plan, dict) or not isinstance(ticks, dict):
+        raise ValueError('Unexpected selected feedback ticks')
+    deferred = plan.get('deferred_plan')
+    if deferred is not None:
+        # A plan resolved from the selection table carries no rows and no partner
+        # multiplicities: neither is read unless this cell actually has something
+        # to say. When it does, the deferred reader resolves the real plan from the
+        # durable payload exactly as an eager pass would have.
+        resolved = deferred(ticks)
+        if resolved is None:
+            return {'edge_events': [],
+                    'candidates': [], 'omitted_empty_candidates': plan['omitted']}
+        plan = resolved
+    if set(ticks) != set(plan['indices']):
         raise ValueError('Unexpected selected feedback ticks')
     events = Counter()
     # Iterate the compartments that actually crossed, not every recorded

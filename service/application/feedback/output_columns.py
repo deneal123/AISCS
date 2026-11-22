@@ -69,6 +69,16 @@ class ColumnRows:
             else:
                 yield ('candidate', points[offset], partner, indexes[offset])
 
+    def has_placeholders(self):
+        """Return whether any row survives regardless of a crossing.
+
+        An unresolved contact is a placeholder the archive records with an empty
+        tick list, so a cell that owns one needs its real plan even when every
+        compartment stayed quiet. Cells without one can be answered from the
+        selection table alone.
+        """
+        return bool(np.any(self._kinds == _UNRESOLVED))
+
     def unresolved(self):
         """Return the placeholder rows without touching the candidate columns."""
         orders = np.flatnonzero(self._kinds == _UNRESOLVED)

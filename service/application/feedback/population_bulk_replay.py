@@ -15,7 +15,7 @@ def replay_bulk_feedback(metadata, stimulus, rate_table, *, audited_sources, par
                          segment_budget, output_budget_bytes, max_source_distance_um=None,
                          batch_progress=None, narrow_cache=None, pause=None,
                          archive=None, resume=None, pause_context=None,
-                         recording_cache=None, **solver_options):
+                         recording_cache=None, output_selection=None, **solver_options):
     """Replay a fixed schedule; event_sink must stage results until this function returns.
 
     ``events_by_target`` may be a batch callback to avoid materialising the
@@ -51,7 +51,7 @@ def replay_bulk_feedback(metadata, stimulus, rate_table, *, audited_sources, par
         duration_ms=duration_ms, electrode_um=electrode_um, reference_um=reference_um,
         conductivity_s_m=conductivity_s_m, clearance_um=clearance_um,
         max_source_distance_um=max_source_distance_um, resume=resume,
-        coefficients=recording_cache)
+        coefficients=recording_cache, output_selection=output_selection)
 
     def events_for_batch(batch):
         events = (events_by_target(batch) if callable(events_by_target)
@@ -69,6 +69,12 @@ def replay_bulk_feedback(metadata, stimulus, rate_table, *, audited_sources, par
     resumed_batches = 0 if resume is None else int(resume['batches'])
     # One pass, one source: a cache hit replays already-narrowed cells, a miss
     # narrows them here and publishes the entry only once the pass has finished.
+    if output_selection is not None:
+        # A resumed pass skips the batches it already recorded, so it never sees
+        # the whole population and must not publish a table for it.
+        output_selection.expect(len(expected_ids))
+        if resume is not None:
+            output_selection.note_incomplete()
     source_store = None if narrow_cache is None else narrow_cache.store
     source_writer = None if narrow_cache is None else narrow_cache.writer
     for ids, result in solve_population(metadata, stimulus, rate_table,
@@ -131,6 +137,11 @@ def replay_bulk_feedback(metadata, stimulus, rate_table, *, audited_sources, par
                'interpretation': 'experimental fixed-schedule replay; no network convergence'}
     if narrow_cache is not None:
         receipt['narrow_cache'] = narrow_cache.receipt()
+    if output_selection is not None:
+        # Published only now: a table covering a pass that failed verification
+        # would let a later run skip the computation that produced its evidence.
+        output_selection.commit()
+        receipt['output_selection'] = output_selection.receipt()
     if collector.recording.coefficients is not None or collector.recording.coefficient_hits:
         # Reported, not inferred: a pass that only computed must not be described
         # as one that replayed stored coefficients.
@@ -164,6 +175,7 @@ def replay_verified_feedback_to_archive(metadata, stimulus, rate_table, *, sched
                                         schedule_sha256, morphology_sha256, event_path,
                                         metadata_factory, narrow_cache_directory=None,
                                         recording_cache_directory=None,
+                                        output_selection_directory=None,
                                         resume=None, pause=None, pause_context=None,
                                         **options):
     """Replay a verified fixed schedule and atomically archive selected outputs.
@@ -214,6 +226,18 @@ def replay_verified_feedback_to_archive(metadata, stimulus, rate_table, *, sched
 
         coefficients = RecordingCoefficientCache(recording_cache_directory,
                                                  geometry_identity(options['params']))
+    selection = None
+    if output_selection_directory is not None:
+        from .output_selection import open_output_selection
+
+        # Which compartments a cell must record follows from its verified sources,
+        # the threshold and the distance cut only, so one table serves every pass
+        # of the same preparation. Computing it inside the packer cost 355 s of a
+        # 1010 s pass; reading it measured 204 s of a 921 s pass.
+        selection = open_output_selection(metadata, options,
+            directory=output_selection_directory, threshold_mv=options['threshold_mv'],
+            duration_ms=options['duration_ms'],
+            max_source_distance_um=options.get('max_source_distance_um'))
     narrowed = None
     if narrow_cache_directory is not None:
         from .narrow_geometry import open_narrowed_cells
@@ -227,7 +251,7 @@ def replay_verified_feedback_to_archive(metadata, stimulus, rate_table, *, sched
         result = replay_bulk_feedback_to_archive(metadata, stimulus, rate_table,
             event_path=event_path, events_by_target=event_factory,
             metadata_factory=checked_metadata, narrow_cache=narrowed,
-            recording_cache=coefficients,
+            recording_cache=coefficients, output_selection=selection,
             resume_from=None if resume is None else resume['archive_path'],
             resume=resume, pause=pause, pause_context=pause_context, **options)
     except BaseException:

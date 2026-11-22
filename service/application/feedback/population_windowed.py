@@ -11,6 +11,11 @@ from service.infrastructure.stimulation.experimental_gpu.window_crossings import
 
 from service.infrastructure.stimulation.population.source_columns import CandidateColumns
 
+from service.infrastructure.stimulation.experimental_gpu.selection_cache import (
+    HAS_CANDIDATES,
+    HAS_PLACEHOLDERS,
+)
+
 from .outputs import feedback_output_plan, feedback_plan_output_ticks
 
 
@@ -34,7 +39,7 @@ class PopulationWindowedFeedback:
     def __init__(self, expected_ids, *, metadata_factory, event_sink, time_ms, threshold_mv,
                  duration_ms, electrode_um, reference_um, conductivity_s_m, clearance_um,
                  max_source_distance_um=None, resume=None, timing_sink=None,
-                 coefficients=None):
+                 coefficients=None, output_selection=None):
         time = np.asarray(time_ms, dtype=float)
         if (not callable(metadata_factory) or not callable(event_sink) or time.ndim != 1
                 or len(time) < 2 or not np.isfinite(time).all() or np.any(np.diff(time) <= 0)
@@ -57,6 +62,13 @@ class PopulationWindowedFeedback:
         # earlier one is still streaming windows. An entry is dropped exactly
         # when its last window arrives, so the map holds only work in flight.
         self.batches = {}
+
+        # The selection - which compartments of each cell must come back as traces -
+        # is a function of the verified sources, the threshold and the distance cut,
+        # so it is read rather than recomputed when a table exists for this
+        # preparation. Measured on the full population, recomputing it cost the
+        # packer 355 s of a 1010 s pass and reading it 204 s of a 921 s pass.
+        self.selection = output_selection
 
         self.recording = PopulationRecording(expected_ids, electrode_um=electrode_um,
             reference_um=reference_um, conductivity_s_m=conductivity_s_m,
@@ -106,12 +118,82 @@ class PopulationWindowedFeedback:
     def _select(self, cells):
         ids = [cell['id'] for cell in cells]
         key = tuple(ids)
-        plans = self._resolve(cells)
+        if self.selection is None:
+            plans = self._resolve(cells)
+        elif self.selection.loaded:
+            plans = self._resolve_from_table(cells)
+        else:
+            plans = self._resolve_and_record(cells)
         selection = {body: plan['indices'] for body, plan in plans.items()}
         selector = WindowedCrossings(selection, time_ms=self.time, threshold_mv=self.threshold,
                                      duration_ms=self.duration)
         self.batches[key] = (cells, plans, selection, selector)
         return selection
+
+    def _resolve_from_table(self, cells):
+        """Answer the solver from the stored selection, planning only what speaks.
+
+        The solver needs one thing from the packer: which compartments of each
+        cell to record. Everything else the plan carries - partner multiplicities
+        and the candidate rows of every contact - is read only when a compartment
+        actually crosses, and 166 697 of 166 700 cells cross nothing. Answering
+        from the table therefore costs a slice and a copy per cell, and the real
+        plan is built on the same thread only for the cell that has something to
+        say, which is where the deferred resolver in the renderer asks for it.
+        """
+        started = time.perf_counter()
+        plans = {}
+        for cell in cells:
+            body = cell['id']
+            entry = self.selection.entry_for(body)
+            if entry is None:
+                # A cell the table does not cover is planned as it always was and
+                # the table is not published: a partial answer would silently drop
+                # compartments from the recording.
+                plans.update(self._resolve([cell]))
+                self.selection.note_incomplete()
+                continue
+            indices, flags = entry
+            plans[body] = {
+                'body': body, 'indices': indices, 'ticks': {value: [] for value in indices},
+                'duration_ms': self.duration, 'include_candidates': True,
+                # A cell whose compartments stayed quiet still records that its
+                # candidate rows were withheld, and only a cell with no candidate
+                # at all has nothing to withhold.
+                'omitted': bool(flags & HAS_CANDIDATES),
+                'deferred': True,
+                'deferred_plan': self._plan_resolver(cell, flags)}
+        if self.timing_sink is not None:
+            self.timing_sink('resolve_plan', time.perf_counter() - started)
+        return plans
+
+    def _resolve_and_record(self, cells):
+        """Plan a batch the old way and remember the selection for the next pass."""
+        plans = self._resolve(cells)
+        for cell in cells:
+            plan = plans[cell['id']]
+            rows = plan.get('rows')
+            # The placeholder flag is the only fact the stored plan needs beyond
+            # the compartments: an unresolved contact survives without crossing.
+            self.selection.record(cell['id'], plan['indices'],
+                                  placeholders=bool(hasattr(rows, 'has_placeholders')
+                                                    and rows.has_placeholders()))
+        return plans
+
+    def _plan_resolver(self, cell, flags):
+        """Return the callable a stored plan uses to build itself when it speaks."""
+        body = cell['id']
+        placeholders = bool(flags & HAS_PLACEHOLDERS)
+
+        def resolve(ticks):
+            if not placeholders and not any(ticks.values()):
+                # Nothing crossed and nothing survives without crossing: the rows
+                # this cell would have contributed are exactly what a compact
+                # archive records by leaving them out.
+                return None
+            return self._resolve([cell])[body]
+
+        return resolve
 
     def _accept(self, start, end, rows, selection):
         key = tuple(row.get('id') if isinstance(row, dict) else None for row in rows)

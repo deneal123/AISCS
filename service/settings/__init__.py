@@ -102,6 +102,19 @@ def recording_coefficient_cache_directory() -> Path | None:
     return Path(value) if value else None
 
 
+def output_selection_cache_directory() -> Path | None:
+    """Durable table of the compartments a pass must record; unset disables it.
+
+    Which compartments of a cell have to come back as traces follows from its
+    verified sources, the crossing threshold and the source distance cut, none of
+    which changes between the passes of one experiment. The packer recomputes it
+    after reading 187 KB of durable payload per cell: 355 s of a 1010 s pass.
+    Read from a table instead, the same pass measured 921 s.
+    """
+    value = os.environ.get('GENERATOR_OUTPUT_SELECTION_CACHE', '')
+    return Path(value) if value else None
+
+
 def full_control_policy() -> str:
     """Whether the paired zero-stimulus pass runs, or is declared structurally empty.
 
