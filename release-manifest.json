@@ -1,5 +1,5 @@
 {
-    "version":  "0.1.14",
+    "version":  "0.1.15",
     "date":  "2026-11-21",
     "application":  "AISCS",
     "branch":  "dev",
@@ -20,9 +20,9 @@
                                       "commit":  "560ab7f1fdd8ed66d9c0fd16afc164024cecdd7f"
                                   },
                        "generator":  {
-                                         "version":  "0.1.14",
+                                         "version":  "0.1.15",
                                          "branch":  "generator",
-                                         "commit":  "f79a112"
+                                         "commit":  "da30362486ab76bf64ab247ad0435c03a05fab8f"
                                      },
                        "workspace":  {
                                          "version":  "0.1.6",
@@ -100,7 +100,9 @@
                          "full_control_omitted":  "a zero stimulus cannot depolarise a cell, so the control pass has no threshold crossings by construction; the measurement confirms it (control_max_uv 2.68e-09 uV against a 1.7175 uV peak, 168 archive rows for 166700 cells, 0 events, feedback_effect_uv 0.0). GENERATOR_FULL_CONTROL=omitted (the default) declares the zero line, writes the same empty-event control archive, keeps control_iterations and control_uv for the backend validator but marks them control_omitted with control_passes 0, and never caches the branch; 14 of 14 population feedback tests pass.",
                          "wide_tail_flat_cache":  "declared negative: the selective flat narrow-cell cache reproduces every event digest bit for bit (identical_build and identical_cached both true) but a cached pass over the widest 80 chunks costs 171.45 s against 123.24 s plain, because 5.45 GB of payload is read at 178-204 MB/s while preparing and reducing those cells is cheaper; 7 cache tests pass and the cache is not wired into the production path",
                          "store_volume_read":  "measured: the same bounded payload query answers at 975.6 MB/s from a container-local copy of source-geometry-v4-6um.sqlite against 14.2 MB/s through the Windows bind mount, a 69x difference, but a full pass with the database in a docker volume still cost 1147.65 s against 1027.96 s, because the 163 s of metadata reads overlap the producer rather than sitting on the critical path",
-                         "recording_coefficient_cache":  {
+                         "output_selection_table":  "declared partial: the compartments each cell must record are a function of its verified sources, the threshold and the distance cut, so they are stored once per preparation identity (malecns-output-selection-v1: 17736664 compartments, 73615936 bytes, 154.02 s to build) and read instead of planned; on the full population that moves the packer resolve from 355.03 s of a 1010.02 s pass to 204.35 s of a 921.52 s pass, against a 477.65 s ceiling when the packer does no durable work at all, and only 3 of 166700 cells ever report a candidate row, so the plan is built lazily for the cell that speaks; the table is published only for a complete non-resumed pass and refused on any other identity, threshold or damaged file; 9 new selection tests and 84 of 84 feedback tests pass. Not yet measured end to end: the production build (identity d05781bdfae88666d9f0e059cc523fcfc215b7e7bd77809ca0bcd5dc06f20979) was stopped on operator request before finishing, so 921.52 s comes from the probe, not from a coupled run.",
+
+    "recording_coefficient_cache":  {
                                                              "verdict":  "transparent but not faster",
                                                              "full_run_s":  1177.99,
                                                              "base_run_s":  1140.96,
