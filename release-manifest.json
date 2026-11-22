@@ -1,104 +1,110 @@
-{
-  "version": "0.1.12",
-  "date": "2026-11-21",
-  "application": "AISCS",
-  "branch": "dev",
-  "components": {
-    "backend": {
-      "version": "1.5.3",
-      "branch": "backend",
-      "commit": "d8db4750db239ff57e7e50e3e3bd95ffcfa0a014"
-    },
-    "frontend": {
-      "version": "1.1.5",
-      "branch": "frontend",
-      "commit": "a5c5b833ffbd2a57145bd0c899d75a7f620d2255"
-    },
-    "agents": {
-      "version": "0.2.0",
-      "branch": "agents",
-      "commit": "560ab7f1fdd8ed66d9c0fd16afc164024cecdd7f"
-    },
-    "generator": {
-      "version": "0.1.12",
-      "branch": "generator",
-      "commit": "09a7f2952a46e1f19f74f53bdebe7827eb6b69ea"
-    },
-    "workspace": {
-      "version": "0.1.6",
-      "branch": "workspace",
-      "commit": "d4074b270f45a8ef94dc72b0e024d31f7ebc0aa5"
-    },
-    "duckdb": {
-      "version": "0.1.0",
-      "branch": "duckdb",
-      "commit": "bd687985919275d09472649f43bc6a92fc1861d1"
-    },
-    "opendataloader": {
-      "version": "0.1.0",
-      "branch": "opendataloader",
-      "commit": "5c80435de1ce2e6b891bfa872942d750db57f167"
-    },
-    "local_llm": {
-      "version": "0.1.6",
-      "branch": "local_llm",
-      "commit": "594328d5c2d21b3a0658dd9843eba2dbd6577bb3"
-    },
-    "memos": {
-      "version": "2.0.23+aiscs.1",
-      "branch": "memos",
-      "commit": "c045e98f421400955008f9f8f06c30318a4144c0"
-    },
-    "research": {
-      "version": "1.6.2",
-      "branch": "research",
-      "commit": "7ae6363ca26057fb9e62a5e231dc30cf437f5200"
-    },
-    "publications": {
-      "version": "1.2.2",
-      "branch": "publications",
-      "commit": "4ef173be987e59046a1a8e0ab320ff3c0b96a762"
-    }
-  },
-  "scientific_preset": {
-    "id": "male-cns-hybrid-v1",
-    "dataset": "male-cns:v1.0-annotated-nonglial",
-    "neurons": 166700,
-    "edges": 25582938,
-    "graph_manifest_sha256": "742ee0b22040d6831cb96479d468cd57f1a60d96e2004e3beb421a8d3ac936a2",
-    "classifier": "male-cns-recognition-v1",
-    "classifier_sha256": "da7317343a01e251ceafe82a2d90f7dcd1793ddca0ebc85714767851cb5517dd",
-    "heldout_balanced_accuracy": 0.71875,
-    "heldout_records": 96,
-    "heldout_groups": 32,
-    "scope": "Synthetic engineering demonstration; not biological or clinical validation"
-  },
-  "production_verified": false,
-  "protected_scientific_materials_changed": false,
-  "verification": {
-    "backend_focused_pytest": {
-      "passed": 32,
-      "scope": "focused simulation unit tests; no live stack"
-    },
-    "frontend_focused_jest": {
-      "suites": 45,
-      "passed": 174,
-      "scope": "simulator unit tests; 45 of 62 suites ran, 17 suites could not load because the pnpm install lacks @chakra-ui/utils/context"
-    },
-    "generator_focused_pytest": {
-      "passed": 571,
-      "skipped": 50,
-      "scope": "gpu, feedback, population and recording selection; tests/test_screen_stim_sources.py ignored, two environment-only failures deselected (missing LFPy, allocator tuning needs a GPU)"
-    },
-    "gpu_refined_synthetic": "one refined synthetic cell, artificial event; not full population",
-    "population_benchmark": "515.94 seconds, 166699 independent detailed cells, 10 ms model time, E1-REF; excludes network feedback",
-    "population_feedback_full": "2379.93 seconds cold (was 4336.83) and 91.12 s warm for 166700 coupled cells: setup plus two cold passes of 1140.96 s and 1177.10 s, because an empty feedback schedule makes both iterations return the base receipt without a new replay; no threshold crossing at -300 nA and -20 mV, so the feedback effect is 0.0 uV",
-    "narrowed_cell_cache_full": "declared negative: building the entry cost a 1292.8 s pass and 38117519568 bytes, restoring from it cost a 1110 s pass against the 1140.96 s baseline (1.03x), because 38.1 GB of payload is read at about 35 MB/s in a live pass; it wins 1.31x on the widest 80 chunks only (131.05 s against 171.81 s) and stays switched off by default; 11 cache tests pass",
-    "production_live": "not checked; full stack not started",
-    "full_cns_gpu": "coupled full population measured end to end but not validated biologically; the 300-second and 600-second targets are not confirmed; the fastest measured single full pass is 1027.96 s at 6.167 ms per cell after removing the redundant copies in _narrow and widening the recording window to 100 steps at a 2048 MiB output budget, which is 1.71x short of the 600-second target",
-    "full_run_pause_resume": "measured on slices: a checkpoint on a batch boundary resumes into the same event archive SHA-256 and the same signal as an uninterrupted pass, because batches are skipped only in the producer before the feedback schedule is applied; the request is a pause.requested file that survives a service restart; 5 of 5 pause tests, 8 of 8 execution tests and 1 of 1 HTTP test pass against /src. Not yet confirmed on the full 166700-cell population: such a run was started and stopped on request before it finished.",
-    "full_control_omitted": "a zero stimulus cannot depolarise a cell, so the control pass has no threshold crossings by construction; the measurement confirms it (control_max_uv 2.68e-09 uV against a 1.7175 uV peak, 168 archive rows for 166700 cells, 0 events, feedback_effect_uv 0.0). GENERATOR_FULL_CONTROL=omitted (the default) declares the zero line, writes the same empty-event control archive, keeps control_iterations and control_uv for the backend validator but marks them control_omitted with control_passes 0, and never caches the branch; 14 of 14 population feedback tests pass.",
-    "wide_tail_flat_cache": "declared negative: the selective flat narrow-cell cache reproduces every event digest bit for bit (identical_build and identical_cached both true) but a cached pass over the widest 80 chunks costs 171.45 s against 123.24 s plain, because 5.45 GB of payload is read at 178-204 MB/s while preparing and reducing those cells is cheaper; 7 cache tests pass and the cache is not wired into the production path",
-    "store_volume_read": "measured: the same bounded payload query answers at 975.6 MB/s from a container-local copy of source-geometry-v4-6um.sqlite against 14.2 MB/s through the Windows bind mount, a 69x difference, but a full pass with the database in a docker volume still cost 1147.65 s against 1027.96 s, because the 163 s of metadata reads overlap the producer rather than sitting on the critical path"
-  }
+﻿{
+    "version":  "0.1.13",
+    "date":  "2026-11-21",
+    "application":  "AISCS",
+    "branch":  "dev",
+    "components":  {
+                       "backend":  {
+                                       "version":  "1.5.3",
+                                       "branch":  "backend",
+                                       "commit":  "d8db4750db239ff57e7e50e3e3bd95ffcfa0a014"
+                                   },
+                       "frontend":  {
+                                        "version":  "1.1.5",
+                                        "branch":  "frontend",
+                                        "commit":  "a5c5b833ffbd2a57145bd0c899d75a7f620d2255"
+                                    },
+                       "agents":  {
+                                      "version":  "0.2.0",
+                                      "branch":  "agents",
+                                      "commit":  "560ab7f1fdd8ed66d9c0fd16afc164024cecdd7f"
+                                  },
+                       "generator":  {
+                                         "version":  "0.1.13",
+                                         "branch":  "generator",
+                                         "commit":  "f4520cc013d35a42be2609d139169509e1eb5d60"
+                                     },
+                       "workspace":  {
+                                         "version":  "0.1.6",
+                                         "branch":  "workspace",
+                                         "commit":  "d4074b270f45a8ef94dc72b0e024d31f7ebc0aa5"
+                                     },
+                       "duckdb":  {
+                                      "version":  "0.1.0",
+                                      "branch":  "duckdb",
+                                      "commit":  "bd687985919275d09472649f43bc6a92fc1861d1"
+                                  },
+                       "opendataloader":  {
+                                              "version":  "0.1.0",
+                                              "branch":  "opendataloader",
+                                              "commit":  "5c80435de1ce2e6b891bfa872942d750db57f167"
+                                          },
+                       "local_llm":  {
+                                         "version":  "0.1.6",
+                                         "branch":  "local_llm",
+                                         "commit":  "594328d5c2d21b3a0658dd9843eba2dbd6577bb3"
+                                     },
+                       "memos":  {
+                                     "version":  "2.0.23+aiscs.1",
+                                     "branch":  "memos",
+                                     "commit":  "c045e98f421400955008f9f8f06c30318a4144c0"
+                                 },
+                       "research":  {
+                                        "version":  "1.6.2",
+                                        "branch":  "research",
+                                        "commit":  "7ae6363ca26057fb9e62a5e231dc30cf437f5200"
+                                    },
+                       "publications":  {
+                                            "version":  "1.2.2",
+                                            "branch":  "publications",
+                                            "commit":  "4ef173be987e59046a1a8e0ab320ff3c0b96a762"
+                                        }
+                   },
+    "scientific_preset":  {
+                              "id":  "male-cns-hybrid-v1",
+                              "dataset":  "male-cns:v1.0-annotated-nonglial",
+                              "neurons":  166700,
+                              "edges":  25582938,
+                              "graph_manifest_sha256":  "742ee0b22040d6831cb96479d468cd57f1a60d96e2004e3beb421a8d3ac936a2",
+                              "classifier":  "male-cns-recognition-v1",
+                              "classifier_sha256":  "da7317343a01e251ceafe82a2d90f7dcd1793ddca0ebc85714767851cb5517dd",
+                              "heldout_balanced_accuracy":  0.71875,
+                              "heldout_records":  96,
+                              "heldout_groups":  32,
+                              "scope":  "Synthetic engineering demonstration; not biological or clinical validation"
+                          },
+    "production_verified":  false,
+    "protected_scientific_materials_changed":  false,
+    "verification":  {
+                         "backend_focused_pytest":  {
+                                                        "passed":  32,
+                                                        "scope":  "focused simulation unit tests; no live stack"
+                                                    },
+                         "frontend_focused_jest":  {
+                                                       "suites":  45,
+                                                       "passed":  174,
+                                                       "scope":  "simulator unit tests; 45 of 62 suites ran, 17 suites could not load because the pnpm install lacks @chakra-ui/utils/context"
+                                                   },
+                         "generator_focused_pytest":  {
+                                                          "passed":  571,
+                                                          "skipped":  50,
+                                                          "scope":  "gpu, feedback, population and recording selection; tests/test_screen_stim_sources.py ignored, two environment-only failures deselected (missing LFPy, allocator tuning needs a GPU)"
+                                                      },
+                         "gpu_refined_synthetic":  "one refined synthetic cell, artificial event; not full population",
+                         "population_benchmark":  "515.94 seconds, 166699 independent detailed cells, 10 ms model time, E1-REF; excludes network feedback",
+                         "population_feedback_full":  "2379.93 seconds cold (was 4336.83) and 91.12 s warm for 166700 coupled cells: setup plus two cold passes of 1140.96 s and 1177.10 s, because an empty feedback schedule makes both iterations return the base receipt without a new replay; no threshold crossing at -300 nA and -20 mV, so the feedback effect is 0.0 uV",
+                         "narrowed_cell_cache_full":  "declared negative: building the entry cost a 1292.8 s pass and 38117519568 bytes, restoring from it cost a 1110 s pass against the 1140.96 s baseline (1.03x), because 38.1 GB of payload is read at about 35 MB/s in a live pass; it wins 1.31x on the widest 80 chunks only (131.05 s against 171.81 s) and stays switched off by default; 11 cache tests pass",
+                         "production_live":  "not checked; full stack not started",
+                         "full_cns_gpu":  "coupled full population measured end to end but not validated biologically; the 300-second and 600-second targets are not confirmed; the fastest measured single full pass is 1027.96 s at 6.167 ms per cell after removing the redundant copies in _narrow and widening the recording window to 100 steps at a 2048 MiB output budget, which is 1.71x short of the 600-second target",
+                         "full_run_pause_resume":  "measured on slices: a checkpoint on a batch boundary resumes into the same event archive SHA-256 and the same signal as an uninterrupted pass, because batches are skipped only in the producer before the feedback schedule is applied; the request is a pause.requested file that survives a service restart; 5 of 5 pause tests, 8 of 8 execution tests and 1 of 1 HTTP test pass against /src. Not yet confirmed on the full 166700-cell population: such a run was started and stopped on request before it finished.",
+                         "full_control_omitted":  "a zero stimulus cannot depolarise a cell, so the control pass has no threshold crossings by construction; the measurement confirms it (control_max_uv 2.68e-09 uV against a 1.7175 uV peak, 168 archive rows for 166700 cells, 0 events, feedback_effect_uv 0.0). GENERATOR_FULL_CONTROL=omitted (the default) declares the zero line, writes the same empty-event control archive, keeps control_iterations and control_uv for the backend validator but marks them control_omitted with control_passes 0, and never caches the branch; 14 of 14 population feedback tests pass.",
+                         "wide_tail_flat_cache":  "declared negative: the selective flat narrow-cell cache reproduces every event digest bit for bit (identical_build and identical_cached both true) but a cached pass over the widest 80 chunks costs 171.45 s against 123.24 s plain, because 5.45 GB of payload is read at 178-204 MB/s while preparing and reducing those cells is cheaper; 7 cache tests pass and the cache is not wired into the production path",
+                         "store_volume_read":  "measured: the same bounded payload query answers at 975.6 MB/s from a container-local copy of source-geometry-v4-6um.sqlite against 14.2 MB/s through the Windows bind mount, a 69x difference, but a full pass with the database in a docker volume still cost 1147.65 s against 1027.96 s, because the 163 s of metadata reads overlap the producer rather than sitting on the critical path",
+                         "recording_coefficient_cache":  {
+                                                             "verdict":  "transparent but not faster",
+                                                             "full_run_s":  1177.99,
+                                                             "base_run_s":  1140.96,
+                                                             "archives":  "byte-identical to prod-c"
+                                                         }
+                     }
 }
