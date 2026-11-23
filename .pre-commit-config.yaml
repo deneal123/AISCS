@@ -161,7 +161,7 @@ repos:
       # нет вовсе, поэтому флаг и не нужен.
       - id: platform-tests
         name: суперпроект · контракты развёртывания и env
-        entry: uv run --no-project --with pytest==8.3.3 --with PyYAML==6.0.3 python -m pytest -q -p no:cacheprovider scripts/tests/test_deployment_contract.py scripts/tests/test_env_file_drift.py
+        entry: uv run --no-project --with pytest==8.3.3 --with PyYAML==6.0.3 python -m pytest -q -p no:cacheprovider scripts/tests/test_deployment_contract.py scripts/tests/test_env_file_drift.py scripts/tests/test_mermaid_diagrams.py
         language: system
         pass_filenames: false
         always_run: true
