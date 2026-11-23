@@ -134,6 +134,9 @@ def replay_bulk_feedback(metadata, stimulus, rate_table, *, audited_sources, par
         narrow_cache.commit()
     receipt = {'neural_uv': signal, 'cells': len(received),
                'solver_kernels': kernels,
+               # Crossings the 1 ms graph tick could not carry. Reported, not
+               # hidden: these are events the model produced and the format dropped.
+               'coincident_crossings': collector.coincident_crossings,
                'interpretation': 'experimental fixed-schedule replay; no network convergence'}
     if narrow_cache is not None:
         receipt['narrow_cache'] = narrow_cache.receipt()

@@ -29,6 +29,12 @@ class WindowedCrossings:
         self.previous = {}
         self.ticks = {body: {index: [] for index in indices}
                       for body, indices in self.indices.items()}
+        # Crossings that share a tick with an earlier one. The network can only
+        # deliver one event per tick, so these are counted and reported rather
+        # than raising: a strong stimulus fires bursts, and aborting the whole
+        # replay on the second crossing inside a millisecond made every strong
+        # run fail instead of reporting what the trace did.
+        self.coincident = 0
         self.position = 0
         self.failed = False
 
@@ -72,7 +78,8 @@ class WindowedCrossings:
                         if math.floor(before) + 1 != tick:
                             raise ValueError('Threshold crossing spans a graph tick boundary')
                         if tick in self.ticks[body][index]:
-                            raise ValueError('Multiple cell events fall within one graph tick')
+                            self.coincident += 1
+                            continue
                         self.ticks[body][index].append(tick)
                     self.previous[body] = selected[:, -1].copy()
             self.position = end
@@ -85,3 +92,9 @@ class WindowedCrossings:
             raise ValueError('Incomplete window crossing stream')
         return {body: {index: ticks.copy() for index, ticks in values.items()}
                 for body, values in self.ticks.items()}
+
+    def report(self):
+        """Counts of what was observed, including what the tick grid collapsed."""
+        return {'tick_events': sum(len(ticks) for values in self.ticks.values()
+                                   for ticks in values.values()),
+                'coincident_crossings': self.coincident}

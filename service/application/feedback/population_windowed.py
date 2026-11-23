@@ -62,6 +62,10 @@ class PopulationWindowedFeedback:
         # earlier one is still streaming windows. An entry is dropped exactly
         # when its last window arrives, so the map holds only work in flight.
         self.batches = {}
+        # What the 1 ms tick grid collapsed: the network delivers one event per
+        # tick, so a burst inside one millisecond keeps its first crossing and the
+        # rest are counted here instead of aborting the pass.
+        self.coincident_crossings = 0
 
         # The selection - which compartments of each cell must come back as traces -
         # is a function of the verified sources, the threshold and the distance cut,
@@ -205,6 +209,7 @@ class PopulationWindowedFeedback:
         selector.accept(start, end, rows)
         if end == len(self.time):
             ticks = selector.finish()
+            self.coincident_crossings += selector.report()['coincident_crossings']
             results = {cell['id']: feedback_plan_output_ticks(plans[cell['id']], ticks[cell['id']])
                        for cell in cells}
             self.event_sink(results)
