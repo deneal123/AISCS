@@ -10,7 +10,6 @@ import hashlib
 import json
 import math
 from collections import Counter
-from contextlib import closing
 
 from service.infrastructure.stimulation.population.pair_mapping import (
     match_fragment_inputs_batch,

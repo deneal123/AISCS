@@ -1,4 +1,3 @@
-import json
 from types import SimpleNamespace
 from uuid import uuid4
 

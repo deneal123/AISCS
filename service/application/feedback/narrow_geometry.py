@@ -17,8 +17,6 @@ recomputes and republishes; a hit is verified record by record as it is read.
 
 from service.infrastructure.stimulation.experimental_gpu.narrow_cache import (
     NarrowCellCache,
-    NarrowCacheError,
-    bodies_digest,
     cache_key,
     geometry_digest,
     inventory,

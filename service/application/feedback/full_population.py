@@ -13,7 +13,7 @@ import numpy as np
 from service.infrastructure.execution.gpu_batch_settings import reported_settings
 
 from .archive_replay import iterate_archived_feedback
-from .pause import PauseController, clear as clear_pause, load as load_pause
+from .pause import PauseController, load as load_pause
 from .population_bulk_replay import replay_verified_feedback_to_archive
 
 _log = logging.getLogger(__name__)

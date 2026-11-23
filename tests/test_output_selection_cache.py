@@ -1,6 +1,5 @@
 """The output-selection table: one answer per preparation, reused by every pass."""
 
-import json
 
 import numpy as np
 

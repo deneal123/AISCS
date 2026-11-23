@@ -1,12 +1,10 @@
 """Tests for the selective flat narrow-cell cache."""
-import hashlib
-import json
 from pathlib import Path
 
 import numpy as np
 
 from service.infrastructure.stimulation.experimental_gpu.flat_narrow import (
-    CELL_KEYS, FORMAT, GEOMETRY_KEYS, FlatNarrowCache, chunk_name)
+    GEOMETRY_KEYS, FlatNarrowCache, chunk_name)
 
 
 def _cell(body, segments=4):

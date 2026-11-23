@@ -298,7 +298,6 @@ def reduce_geometry(geometry, *, verify=True):
     # version is used here and only the renumbering/reporting stays in numpy.
     alive, parents, conductances = reduction.reduce_structure(
         parents, conductances, segments_array)
-    reduced_arms = _degree(parents, conductances, alive)
     contracted = int(np.count_nonzero(~alive & ~virtual))
     deleted = int(np.count_nonzero(~alive & virtual))
     if not alive[0]:

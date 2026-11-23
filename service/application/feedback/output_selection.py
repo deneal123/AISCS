@@ -1,6 +1,5 @@
 """Read or build the output-selection table for one preparation identity."""
 
-import json
 import os
 
 from service.infrastructure.stimulation.experimental_gpu.selection_cache import (

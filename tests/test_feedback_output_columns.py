@@ -1,4 +1,3 @@
-import math
 
 import numpy as np
 import pytest
@@ -6,7 +5,7 @@ import pytest
 from service.application.feedback.output_columns import column_output_plan
 from service.application.feedback.outputs import feedback_output_plan, feedback_plan_output_ticks
 from service.infrastructure.stimulation.population.source_columns import (
-    CandidateColumns, columns_from_mapping, columns_from_payload,
+    columns_from_mapping, columns_from_payload,
 )
 from service.infrastructure.stimulation.population.source_store import _decode, _encode
 

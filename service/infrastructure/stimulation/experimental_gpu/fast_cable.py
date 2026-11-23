@@ -26,27 +26,20 @@ Public API
 Params                    immutable per-run physical parameters
 PreparedChunk             flat GPU-ready arrays for a chunk of cells
 prepare_chunk             prepare one already-decoded chunk
-prepare_batch             prepare several decoded chunks in one kernel call
-iter_decoded_chunks       bounded parallel reader (read + sha256 + inflate)
-iter_prepared_chunks      fused reader + compute pipeline
-prepare_cache             whole-cache iterator
-read_chunk_file           verified single-chunk read
-load_manifest             read and check a cache manifest
+
+The chunk *readers* (iter_decoded_chunks, iter_prepared_chunks, prepare_batch,
+prepare_cache, read_chunk_file, load_manifest, prepare_descriptor_chunk) live in
+fast_prepare and used to be re-exported here; the names stayed in __all__ after they
+moved, so this module advertised an API it no longer had.
 
 The chunk record dtype is geometry_cache.chunk._RECORD.
 """
 
 from __future__ import annotations
 
-import hashlib
-import json
 import math
 import os
-import queue
-import re
-import threading
-import zlib
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
 
 import numpy as np
@@ -66,14 +59,7 @@ __all__ = [
     "Params",
     "PreparedChunk",
     "PrepareError",
-    "iter_decoded_chunks",
-    "iter_prepared_chunks",
-    "load_manifest",
-    "prepare_batch",
-    "prepare_cache",
     "prepare_chunk",
-    "prepare_descriptor_chunk",
-    "read_chunk_file",
     "set_num_threads",
     "get_num_threads",
 ]
@@ -276,11 +262,11 @@ def _sum_range(values, lo, hi):
 
 
 @njit(cache=True, inline="always", fastmath=False)
-def _dot_junction(field, seg, conductance, lo, n):
-    """np.dot(field[indices], conductance) with indices in junction order."""
+def _dot_junction(field_values, seg, conductance, lo, n):
+    """np.dot(field_values[indices], conductance) with indices in junction order."""
     total = 0.0
     for offset in range(n):
-        total += field[seg[lo + offset]] * conductance[lo + offset]
+        total += field_values[seg[lo + offset]] * conductance[lo + offset]
     return total
 
 
@@ -357,7 +343,6 @@ def _prepare_kernel(
 
     for slot in prange(ncell):
         cell = order[slot]
-        chunk = chunk_of_cell[cell]
         start = cell_start[cell]
         n = cell_count[cell]
         err_out[cell] = 0

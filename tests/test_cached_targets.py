@@ -3,7 +3,6 @@ from types import SimpleNamespace
 import numpy as np
 import pytest
 
-from service.infrastructure.stimulation.geometry_cache import selected
 from service.infrastructure.stimulation.population import cached_targets
 from service.infrastructure.stimulation.population.cached_targets import (
     population_target_provider,

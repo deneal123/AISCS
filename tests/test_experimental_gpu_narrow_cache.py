@@ -167,7 +167,6 @@ def test_an_empty_entry_is_refused(tmp_path):
 
 
 def test_cached_batches_cover_every_cell_once_and_respect_the_pool(tmp_path):
-    metadata = _metadata(chunks=2, per_chunk=3)
     groups = [[_cell(chunk * 3 + offset, 10) for offset in range(3)] for chunk in range(2)]
     cache, _meta = _built(tmp_path, groups)
     store = cache.open(_key(), chunks=2, bodies=bodies_digest(range(6)))

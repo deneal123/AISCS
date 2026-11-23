@@ -1,7 +1,6 @@
 """Pause and resume tests for the full detailed-population experiment."""
 
 import hashlib
-import json
 from pathlib import Path
 
 import numpy as np
