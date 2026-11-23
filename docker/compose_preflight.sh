@@ -1,64 +1,97 @@
 #!/bin/bash
-# Shared read-only preflight. Raw Compose output may contain dotenv values,
-# credentials or paths: never echo it, even when interpolation fails.
+# Общие проверки конфигурации для build.sh и run.sh.
+#
+# Здесь нет выбора «прикладного» compose-файла: конфигураций ровно две,
+# docker-compose.dev.yaml и docker-compose.yaml, и режим задаёт одну из них.
 
+# Ключи, отсутствие которых надо назвать пользователю по имени. Всё остальное
+# сообщается обезличенно: подставлять в диагностику произвольную строку из
+# вывода Compose нельзя, там бывают значения секретов.
 compose_preflight_error() {
-    local diagnostic="${1:-}"
-    local key
-    # Only source-controlled deployment key names may cross this boundary.
-    # Unknown parser messages fail closed with a generic bounded code.
-    for key in GPTHUB_WORKSPACE_COORDINATION_SECRET MINIO__ACCESS_KEY MINIO__SECRET_KEY NEO4J_PASSWORD GENERATOR_TOKEN; do
-        if [[ "$diagnostic" == *"required variable $key is missing a value"* ]]; then
-            printf '[ERROR] Compose configuration validation failed; code=missing_required_variable variable=%s\n' "$key" >&2
+    local message="$1"
+    local known key
+
+    for key in MINIO__ACCESS_KEY MINIO__SECRET_KEY PG__PASSWORD REDIS__PASSWORD GENERATOR_TOKEN AUTH__SECRET; do
+        if printf '%s\n' "$message" | grep -q "$key"; then
+            echo "[ERROR] Не задана обязательная переменная: $key"
+            echo "[ERROR] code=missing_required_variable variable=$key"
             return 0
         fi
     done
-    printf '[ERROR] Compose configuration validation failed; code=invalid_configuration\n' >&2
+
+    echo "[ERROR] Конфигурация Compose невалидна (значения не печатаются)."
+    echo "[ERROR] code=invalid_configuration"
 }
 
+# Тихая проверка: вывод Compose не печатается, потому что в нём бывают секреты.
 compose_config_preflight() {
-    local diagnostic
-    # Capture both streams. Even stdout from a failed parser is untrusted.
-    if diagnostic=$("$@" config --quiet 2>&1); then
+    local message
+    if message=$("$@" config --quiet 2>&1); then
         return 0
     fi
-    compose_preflight_error "$diagnostic"
+    compose_preflight_error "$message"
     return 1
 }
 
-# Aspa keeps the upstream entrypoints; this chooses only the requested application profile.
+# Значение ключа из env-файла с дефолтом.
 environment_value() {
-    local value
-    value=$(awk -F= -v wanted="$1" '$1 == wanted { value=substr($0,index($0,"=")+1) } END { print value }' "$ENV_FILE")
-    printf '%s' "${value:-$2}"
-}
+    local key="$1"
+    local default="$2"
+    local value=""
 
-select_application_compose() {
-    local configured
-    configured=$(awk -F= '$1 == "SERVICE__APPLICATION_PROFILE" { value=substr($0,index($0,"=")+1) } END { print value }' "$ENV_FILE")
-    SERVICE_APPLICATION_PROFILE="${APPLICATION_PROFILE:-${configured:-gpthub}}"
-    if [ "$SERVICE_APPLICATION_PROFILE" = "simulation" ]; then
-        if [ "$MODE" = "dev" ]; then
-            COMPOSE_FILE="docker-compose.simulation.yaml"
-        else
-            COMPOSE_FILE="docker-compose.simulation.prod.yaml"
-        fi
+    if [ -f "$ENV_FILE" ]; then
+        value=$(awk -v key="$key" '
+            index($0, key "=") == 1 { value=substr($0, length(key)+2) }
+            END { print value }
+        ' "$ENV_FILE")
+        value=$(printf '%s' "$value" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' -e 's/^"//' -e 's/"$//')
+    fi
+
+    if [ -z "$value" ]; then
+        printf '%s' "$default"
+    else
+        printf '%s' "$value"
     fi
 }
 
-# Check prerequisites before changing a live production stack. Never print values.
-production_simulation_preflight() {
-    [ "$MODE" = "prod" ] && [ "${SERVICE_APPLICATION_PROFILE:-gpthub}" = "simulation" ] || return 0
-    local key value
-    for key in MINIO__ACCESS_KEY MINIO__SECRET_KEY; do
-        value=$(awk -F= -v wanted="$key" '$1 == wanted { print substr($0,index($0,"=")+1) }' "$ENV_FILE")
-        if [ -z "$value" ]; then
-            printf '[ERROR] Production S3 credential is not configured; variable=%s\n' "$key" >&2
-            return 1
-        fi
-    done
-    if [ ! -s ../infra/nginx/certs/aiscs/certificate.pem ] || [ ! -s ../infra/nginx/certs/aiscs/private.pem ]; then
-        printf '[ERROR] AISCS TLS certificate is not provisioned; code=aiscs_tls_missing\n' >&2
+# Прод не поднимается без TLS-сертификата и учётных данных объектного хранилища:
+# молчаливая работа с дефолтным minioadmin на проде — это открытое хранилище.
+production_preflight() {
+    [ "$MODE" = "prod" ] || return 0
+
+    local access_key secret_key
+    access_key=$(environment_value MINIO__ACCESS_KEY "")
+    secret_key=$(environment_value MINIO__SECRET_KEY "")
+    if [ -z "$access_key" ] || [ -z "$secret_key" ]; then
+        echo "[ERROR] Для прода нужны MINIO__ACCESS_KEY и MINIO__SECRET_KEY."
+        echo "[ERROR] code=missing_required_variable variable=MINIO__SECRET_KEY"
         return 1
+    fi
+
+    # Каталог монтируется в nginx как /etc/nginx/certs, а шаблон ждёт
+    # certificate.pem и private.pem прямо в нём.
+    if [ ! -f ../infra/nginx/certs/certificate.pem ] || [ ! -f ../infra/nginx/certs/private.pem ]; then
+        echo "[ERROR] Нет сертификата TLS для домена AISCS в ../infra/nginx/certs/."
+        echo "[ERROR] code=aiscs_tls_missing"
+        return 1
+    fi
+}
+
+# Ключи, объявленные в шаблоне, но отсутствующие в рабочем env-файле. Это
+# предупреждение, а не отказ: значение может приходить из compose-дефолта.
+# Значения не печатаются ни при каких условиях.
+check_env_drift() {
+    local example="./${ENV_EXAMPLE:-.env.example}"
+    [ -f "$example" ] && [ -f "$ENV_FILE" ] || return 0
+
+    local missing
+missing=$(comm -23 \
+        <(grep -E '^[A-Z_][A-Z0-9_]*=' "$example" | cut -d= -f1 | LC_ALL=C sort -u) \
+        <(grep -E '^[A-Z_][A-Z0-9_]*=' "$ENV_FILE" | cut -d= -f1 | LC_ALL=C sort -u))
+
+    if [ -n "$missing" ]; then
+        echo "[WARN] В $ENV_FILE нет ключей из шаблона (берутся дефолты кода или compose):"
+        printf '%s\n' "$missing" | sed -e 's/^/  - /'
+        echo "[WARN] code=env_drift"
     fi
 }

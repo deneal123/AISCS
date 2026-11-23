@@ -1,27 +1,32 @@
 # Хуки суперпроекта.
 #
-# ⚠️ ГЛАВНОЕ ПРО ЭТОТ ФАЙЛ: сабмодули для суперпроекта — ГИТЛИНКИ. Проверено:
-# `git ls-files | grep -cE '^(backend|agents)/'` → 0 при девяти записях `160000`.
-# Суперпроект не перечисляет файлы внутри сабмодулей, поэтому любой хук,
-# отбирающий работу через `files:`/`types:`, внутри сервиса не совпадает НИ С ЧЕМ
-# и молча пропускается. Раньше так и было: `files: ^(backend|agents)/.*\.py$` у
-# ruff/ruff-format плюс isort и black — четыре хука, не проверявшие ничего.
+# ⚠️ ГЛАВНОЕ ПРО ЭТОТ ФАЙЛ: сабмодули для суперпроекта — ГИТЛИНКИ. `git ls-files | grep -cE '^(backend|generator)/'`
+# даёт 0 при записях `160000`, поэтому любой хук, отбирающий работу через `files:`/`types:`,
+# внутри сервиса не совпадает НИ С ЧЕМ и молча пропускается. Всё, что относится к коду
+# сервиса, оформляется как `local`-хук с `pass_filenames: false`, который сам заходит в каталог.
 #
-# ⇒ Всё, что относится к коду сервиса, оформляется ТОЛЬКО как `local`-хук с
-# `pass_filenames: false`, который сам заходит в каталог. Форма проверенная —
-# так уже работали mypy и eslint, единственные жившие проверки.
-#
-# Второе: конфиг без установки — документация. `pre-commit install` обязателен,
-# см. `make hooks`.
+# ⚠️ ВТОРОЕ, И ЭТО СТОИЛО ПОЛОВИНЫ ПРОВЕРОК: на этой машине нет POSIX-шелла и нет `python3`.
+# `C:/Windows/System32/bash.exe` — релей в WSL-дистрибутив docker-desktop, где нет `/bin/bash`
+# (`execvpe(/bin/bash) failed: No such file or directory`), а `python3` — заглушка Microsoft Store,
+# которая печатает одно слово и выходит с 9009. Поэтому в записях хуков НЕТ ни `bash -lc`,
+# ни `&&`, ни `python3`: одна команда — один хук, а интерпретатор берётся из окружения хука
+# (`language: python`) или из `uv`, который есть в PATH. Проверено запуском:
+# `pre-commit run --all-files`.
 repos:
-  # Эти хуки работают по файлам САМОГО суперпроекта (docker/, .github/, scripts/,
-  # docs/, infra/) — там `files:` осмыслен, потому что файлы действительно в индексе.
+  # Эти хуки работают по файлам САМОГО суперпроекта (docker/, scripts/, docs/, infra/),
+  # там `files:` осмыслен, потому что файлы действительно в индексе.
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks:
       - id: check-yaml
+      # Сгенерированные артефакты (SVG прогонов) и материалы статей цитируются как есть:
+      # у них законный хвостовой пробел и перевод строки в конце, а правка меняет байты
+      # опубликованных рисунков. Без этого исключения оба фиксера переписывали 38 SVG
+      # при КАЖДОМ прогоне, и хук не мог стать зелёным ни разу.
       - id: end-of-file-fixer
+        exclude: ^(docs/|simulations/artifacts/)
       - id: trailing-whitespace
+        exclude: ^(docs/|simulations/artifacts/)
       - id: check-added-large-files
         # `.*/tests/.*` из списка исключений УБРАН: тестовые фикстуры — ровно то
         # место, куда случайно уезжают многомегабайтные дампы.
@@ -45,12 +50,7 @@ repos:
       - id: debug-statements
 
   # Сканер секретов. Ставится ПОСЛЕДНИМ рубежом: секрет, попавший в коммит, из
-  # истории уже не убрать простым откатом — только переписыванием, поэтому ловить
-  # его надо до записи, а не в ревью.
-  #
-  # Стартует зелёным: прогон по истории backend и agents дал НОЛЬ находок (70
-  # «утечек» из первого прогона все оказались внутри .venv, то есть вне гита).
-  # Значит разбирать накопленное не пришлось и подавлений заводить не нужно.
+  # истории уже не убрать простым откатом — только переписыванием.
   - repo: https://github.com/gitleaks/gitleaks
     rev: v8.30.1
     hooks:
@@ -58,157 +58,132 @@ repos:
 
   - repo: local
     hooks:
-      # 🔴 Раздвоенные копии (каталог моделей, общие векторы). Этот гейт жил ТОЛЬКО в
-      # CI — и полгода молчал, потому что CI на репозитории красный на уровне заданий,
-      # а сама сверка стала невыполнимой (в копию сайдкара добавили импорт, которого у
-      # backend нет). Гейт, который негде выполнить, — не гейт. Здесь он выполняется.
-      # Чистый stdlib, поэтому без `uv run`: венва суперпроекта нет.
-      # ⚠️ `always_run` ОБЯЗАТЕЛЕН, и `pass_filenames: false` его не заменяет. Коммит-бамп
-      # состоит из одних гитлинков, то есть файлов в нём НОЛЬ — и pre-commit пропускает
-      # хук целиком («no files to check»). А бамп и есть тот момент, когда два указателя
-      # сабмодулей едут вместе, то есть когда расхождение и попадает в дерево.
-      - id: shared-copies
-        name: раздвоенные копии backend ↔ agents
-        entry: uv run --project agents --frozen python scripts/check_shared_copies.py
-        language: system
-        pass_filenames: false
-        always_run: true
-
-      # 🔴 Половина настроек сайдкара до него не доезжала: у backend `env_file`, а у
-      # `agents` — белый список (иначе `extra="forbid"` уронил бы старт на backend-only
-      # ключах). Список отстал от настроек, и сайдкар молча жил на код-дефолтах: замер
-      # на живом контейнере дал пустой прокси при заданном и `llm_provider=auto` при
-      # `routerai`. Отказ бесшумный по построению — pydantic не знает, что переменную
-      # кто-то задавал.
-      - id: sidecar-env
-        name: окружение сайдкара доезжает целиком
-        entry: uv run --project agents --frozen python scripts/check_sidecar_env.py
-        language: system
-        pass_filenames: false
-        always_run: true
-
-      # 🔴 Сервису песочницы отдан docker.sock — он самый привилегированный в стеке. Ему
-      # НУЖЕН выход наружу (файлы пользователя лежат во внешнем хранилище, качает он их
-      # сам) и НЕ НУЖЕН доступ внутрь: postgres, redis, qdrant и соседние сайдкары стоят
-      # в `internal` без аутентификации по топологии. Одна правка в compose снимает эту
-      # границу молча — поэтому она под стражем.
-      - id: workspace-isolation
-        name: песочница смотрит наружу, но не внутрь
-        entry: uv run --project agents --frozen python scripts/check_workspace_isolation.py
-        language: system
+      # 🔴 Контракт окружения. Пока он был размазан по двум скриптам (check_sidecar_env
+      # и check_settings_manifest), он требовал каталоги сайдкаров — и после их удаления
+      # падал по построению, то есть не проверял ничего. Здесь одна проверка: ключи
+      # шаблона есть в обеих конфигурациях, а переменные, которые читает код, объявлены.
+      # Заодно ловится расхождение имён вида GENERATOR_RADIUS_DB против
+      # GENERATOR_MORPHOLOGY_RADIUS_DB, которое не видно ни компилятору, ни compose.
+      #
+      # `language: python` без `additional_dependencies`: pre-commit поднимает пустое
+      # окружение ровно для того, чтобы `python` в записи хука означал ИМЕННО его,
+      # а не заглушку Microsoft Store, которая стоит первой в PATH.
+      # ⚠️ `always_run` ОБЯЗАТЕЛЕН, и `pass_filenames: false` его не заменяет: коммит-бамп
+      # состоит из одних гитлинков, то есть файлов в нём НОЛЬ, и pre-commit пропускает
+      # хук целиком («no files to check»). А бамп и есть тот момент, когда указатели
+      # сабмодулей едут вместе.
+      - id: env-contract
+        name: контракт окружения (шаблон ↔ конфигурации ↔ код)
+        entry: python scripts/check_env_contract.py
+        language: python
         pass_filenames: false
         always_run: true
 
       # 🔴 Backend разбирал `.py`, `.ts`, `.go` и ещё два десятка кодовых расширений, а
-      # выбрать такой файл во фронте было НЕЧЕМ: в `accept` их не было вовсе. Способность
-      # есть, двери к ней нет — и увидеть это не мог никто, у каждой стороны свой список.
-      # ⚠️ `always_run` по той же причине, что у соседей: расхождение приезжает бампом.
+      # выбрать такой файл во фронте было НЕЧЕМ: в `accept` их не было вовсе.
       - id: attachment-types
         name: выбираемые вложения ⊇ разбираемые backend
-        entry: uv run --project agents --frozen python scripts/check_attachment_types.py
-        language: system
+        entry: python scripts/check_attachment_types.py
+        language: python
         pass_filenames: false
         always_run: true
 
-      # --- Линтеры сервисов ---------------------------------------------------
-      # У каждого сервиса СВОЙ pyproject.toml: `cd` внутрь означает, что ruff берёт
-      # его конфиг, включая per-file-ignores. Раньше хук передавал
-      # `--config backend/pyproject.toml` и пути backend'а, из-за чего исключения
-      # сайдкара не применялись бы, даже если бы фильтр совпадал.
-      #
-      # ⚠️ ТОЛЬКО через `uv run --frozen`, а не голыми `ruff`/`mypy`/`pytest`.
-      # `cd` в каталог сервиса НЕ переключает окружение: голое имя берётся из PATH,
-      # а там оказывается венв ПЕРВОГО ПОПАВШЕГОСЯ соседа. На рабочей машине
-      # `pytest` резолвился в duckdb/.venv, и хук backend'а падал на
-      # «unrecognized arguments: --cov» — плагина pytest-cov в чужом венве нет.
-      # То есть проверка не проходила ни разу, а выглядела как проблема аргументов.
-      # `--frozen` — чтобы хук не трогал uv.lock молча.
-      - id: backend-ruff
-        name: backend · ruff (lint + format)
-        entry: bash -lc "cd backend && uv run --frozen ruff check . && uv run --frozen ruff format --check ."
-        language: system
+      # 🔴 Канонические владельцы контролов. Фронтенд брал `Select` прямо из Chakra в
+      # двух панелях симулятора, и этого не видел никто: оба места работали, просто мимо
+      # DESIGN.md. Гейт читает frontend/src целиком, поэтому ему файлы не нужны.
+      - id: frontend-ui-contract
+        name: frontend · канонические владельцы контролов
+        entry: python scripts/check_frontend_ui_contract.py
+        language: python
         pass_filenames: false
+        always_run: true
 
-      - id: agents-ruff
-        name: agents · ruff (lint + format)
-        entry: bash -lc "cd agents && uv run --frozen ruff check . && uv run --frozen ruff format --check ."
+      # --- Линтеры сервиса ----------------------------------------------------
+      # У каждого сервиса СВОЙ pyproject.toml, поэтому каталог задаётся через
+      # `uv run --directory`: ruff берёт конфиг оттуда вместе с per-file-ignores.
+      # ⚠️ ТОЛЬКО `uv run --frozen`, а не голые `ruff`/`mypy`/`pytest`: `cd` в каталог
+      # сервиса НЕ переключает окружение, и голое имя резолвится в венв первого
+      # попавшегося соседа (на рабочей машине `pytest` оказывался из duckdb/.venv,
+      # и хук падал на «unrecognized arguments: --cov»). `--frozen` — чтобы хук
+      # не трогал uv.lock молча.
+      #
+      # Формат-проверка НЕ включена: `ruff format --check .` красный на 56 файлах
+      # из 1364, то есть это массовое переформатирование чужого кода, отдельная работа.
+      - id: backend-ruff
+        name: backend · ruff (lint)
+        entry: uv run --directory backend --frozen ruff check .
         language: system
         pass_filenames: false
 
       # --- Прочие проверки backend --------------------------------------------
       - id: backend-complexity-guard
         name: backend · complexity guard
-        entry: bash -lc "cd backend && uv run --frozen python scripts/check_module_complexity.py"
+        entry: uv run --directory backend --frozen python scripts/check_module_complexity.py
         language: system
         pass_filenames: false
 
       - id: backend-mypy
         name: backend · mypy
-        entry: bash -lc "cd backend && uv run --frozen mypy"
+        entry: uv run --directory backend --frozen mypy
         language: system
         pass_filenames: false
 
-      # ⚠️ `--no-cov` обязателен: в `pytest.ini` стоит гейт покрытия, а здесь
-      # гоняются ТРИ файла из 114. Покрытие такого среза — 36%, то есть хук не мог
-      # пройти ни при каком состоянии кода. Все пять тестов при этом зелёные — он
-      # падал на гейте покрытия, а не на тестах. Не замечали, потому что pre-commit
-      # никогда не был установлен.
+      # ⚠️ `--no-cov` обязателен: в `pytest.ini` стоит гейт покрытия, а здесь гоняются
+      # ТРИ файла из 114. Покрытие такого среза — 36 %, то есть хук не мог пройти ни при
+      # каком состоянии кода.
       - id: backend-pytest-critical
         name: backend · pytest (критические пакеты)
-        entry: bash -lc "cd backend && uv run --frozen pytest --no-cov tests/test_chat_service_facade.py tests/test_process_chat_message_core.py tests/test_chat_agent_integration.py"
+        entry: uv run --directory backend --frozen pytest --no-cov tests/test_chat_service_facade.py tests/test_process_chat_message_core.py tests/test_chat_agent_integration.py
         language: system
         pass_filenames: false
 
-      # 🔴 СЮИТЫ САЙДКАРОВ ЦЕЛИКОМ, и это не избыточность. У backend гоняются три файла из
-      # 114 — там полный прогон слишком долог для хука; здесь весь набор укладывается в
-      # секунды (44 и 134 теста), а не гонять его было бы странно при такой цене.
+      # Генератор: там lockfile собран под linux (`environments = ["sys_platform == 'linux'"]`),
+      # поэтому `uv run --directory generator --frozen` на Windows неисполним вообще.
+      # Линт идёт через `uvx ruff` с версией, зафиксированной в записи хука, и только по
+      # F/E9: остальные правила требуют массового переформатирования чужого кода.
+      # Тесты генератора гоняются в GPU-образе (в образе нет pytest, но есть uv):
+      #   docker run --rm -v R:/Aspa/generator:/src -w /src aspa-generator-gpu:20261115 \
+      #     sh -lc "cd /src && uv run --frozen --group dev python -m pytest -q tests"
+      # Полный прогон 23.11.2026: 1607 passed, 45 skipped за 254,82 с.
+      - id: generator-lint
+        name: generator · ruff (F, E9)
+        entry: uvx ruff@0.15.12 check --select F,E9 generator
+        language: system
+        pass_filenames: false
+
+      # 🔴 ГЕЙТЫ СУПЕРПРОЕКТА. Они были разбросаны по CI, которого на репозитории нет,
+      # поэтому не запускались нигде. Здесь они выполняются на каждом коммите: контракт
+      # развёртывания (два compose-файла, GPU-генератор, отсутствие вырезанных сайдкаров)
+      # и синхронизация env-файлов.
       #
-      # ⚠️ ПОВОД ЗАВЕСТИ ИХ БЫЛ КОНКРЕТНЫЙ. Три асинхронных теста сайдкара `video` не
-      # ПАДАЛИ — они МОЛЧА НЕ ИСПОЛНЯЛИСЬ: `pytest` из PATH резолвился в венв соседнего
-      # сабмодуля, где нет `pytest-asyncio`, и `asyncio_mode = "auto"` оказывался
-      # неизвестной опцией. То есть у потолка длительности видео некоторое время не было
-      # рабочего стража, и узнать об этом было неоткуда. `uv run --frozen` берёт окружение
-      # СЕРВИСА и закрывает ровно этот класс.
-      #
-      # ⚠️ `always_run: true` обязателен: коммит-бамп суперпроекта состоит из одних
-      # гитлинков, `pass_filenames: false` сам по себе хук на нём НЕ запустит — а бамп это
-      # ровно тот момент, когда прогнать тесты сабмодуля нужнее всего.
-      - id: workspace-pytest
-        name: workspace · pytest
-        entry: bash -lc "cd workspace && uv run --frozen --extra dev pytest -q"
-        language: system
-        pass_filenames: false
-        always_run: true
-
-      - id: video-pytest
-        name: video · pytest
-        entry: bash -lc "cd video && uv run --frozen --extra dev pytest -q"
-        language: system
-        pass_filenames: false
-        always_run: true
-
-      - id: local-llm-checks
-        name: local_llm · Ruff и pytest
-        entry: bash -lc "uv run --project local_llm --frozen --extra dev ruff check local_llm && uv run --project local_llm --frozen --extra dev ruff format --check local_llm && uv run --project local_llm --frozen --extra dev pytest -q local_llm/tests"
+      # ⚠️ `--no-cov` ЗДЕСЬ НЕЛЬЗЯ: окружение поднимается `--with pytest` без pytest-cov,
+      # и неизвестный аргумент валит хук до запуска тестов. Гейта покрытия в scripts/tests
+      # нет вовсе, поэтому флаг и не нужен.
+      - id: platform-tests
+        name: суперпроект · контракты развёртывания и env
+        entry: uv run --no-project --with pytest==8.3.3 --with PyYAML==6.0.3 python -m pytest -q -p no:cacheprovider scripts/tests/test_deployment_contract.py scripts/tests/test_env_file_drift.py
         language: system
         pass_filenames: false
         always_run: true
 
       # --- Frontend -----------------------------------------------------------
+      # Вызов идёт через `scripts/run_frontend_checks.py`, потому что фронтенд-инструменты
+      # требуют рабочего каталога `frontend/`, а `cd` без шелла недоступен. Скрипт сам
+      # находит каталог, отказывается угадывать при отсутствующих зависимостях и
+      # возвращает код инструмента, а не свой.
+      #
       # ⚠️ Пропуск при неустановленных зависимостях — осознанно, и это НЕ смягчение
-      # проверки. Без `node_modules` хук падает не на коде, а на отсутствии eslint
-      # («Cannot find module 'eslint-plugin-react'», «jest не является командой»), и
+      # проверки: без `node_modules` хук падает не на коде, а на отсутствии eslint, и
       # тогда ЛЮБОЙ коммит в backend блокируется по причине, к нему не относящейся.
-      # Пропуск громкий: в выводе видно, почему. Если зависимости стоят — проверка
-      # обычная и падает на настоящих ошибках.
+      # Пропуск громкий: в выводе видно, почему.
       - id: frontend-eslint
         name: frontend · ESLint
-        entry: bash -lc "cd frontend && { [ -d node_modules/eslint ] || { echo 'ПРОПУСК — нет frontend/node_modules, выполните npm ci'; exit 0; }; } && npm run lint"
-        language: system
+        entry: python scripts/run_frontend_checks.py eslint
+        language: python
         pass_filenames: false
 
       - id: frontend-snapshots
-        name: frontend · снапшоты
-        entry: bash -lc "cd frontend && { [ -x node_modules/.bin/jest ] || { echo 'ПРОПУСК — нет frontend/node_modules, выполните npm ci'; exit 0; }; } && npm run test -- --watchAll=false --ci --runInBand --updateSnapshot=false"
-        language: system
+        name: frontend · тесты
+        entry: python scripts/run_frontend_checks.py jest --watchAll=false --updateSnapshot=false
+        language: python
         pass_filenames: false

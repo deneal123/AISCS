@@ -1118,3 +1118,129 @@ if (pause is not None and pause.check()
 называет `output_selection` с полями `identity/loaded/cells/compartments/hits/
 misses/built/incomplete`, так что первый же полный прогон сам скажет, читалась
 таблица или строилась.
+
+## 18. Инфраструктура сведена к двум конфигурациям (23.11.2026)
+
+### 18.1 Что было не так
+
+К 23.11.2026 стек состоял из девяти compose-файлов: `docker-compose.dev.yaml`,
+`docker-compose.yaml`, и семь оверлеев (`docker-compose.simulation.yaml`,
+`.simulation.prod.yaml`, `.simulation.gpu.yaml`, три acceptance-файла,
+два `local-llm-*`). Основная конфигурация разработки не описывала генератор
+вообще — он появлялся только в оверлее, поэтому «просто запустить стек» было
+невозможно. Дополнительно:
+
+- `docker/run.sh` был **побайтовой копией** `docker/build.sh`: флаги
+  `--stop/--restart/--status/--logs`, которые вызывает `make`, ни на что не влияли,
+  а запуск стека вообще отсутствовал;
+- `docker/.env.example`, `.env.dev`, `.env.prod` содержали 313/321/319 ключей в
+  разном порядке, включая 166 ключей `AGENTS__*`, 25 `WORKSPACE_*`, 5 `LOCAL_LLM_*`
+  и прочие остатки вырезанных сайдкаров;
+- в именах переменных сборки стояло одинарное подчёркивание
+  (`DEV_HARNESS_IDE_ENABLED`), а compose подставлял `${DEV_HARNESS__...}` —
+  ручки IDE не доезжали до backend ни разу;
+- генератор получал `GENERATOR_RADIUS_DB`/`GENERATOR_SEGMENT_DB`, а код
+  (`service/application/population/contact_preflight.py:19-27`) читает
+  `GENERATOR_MORPHOLOGY_RADIUS_DB`/`GENERATOR_MORPHOLOGY_SEGMENT_DB`, то есть
+  проверка контактов падала бы с «Verified contact-screen indexes are unavailable»;
+- `frontend/docker/Dockerfile` объявлял `ARG REACT_APP_APPLICATION_PROFILE`, но
+  `build.args` не передавались, поэтому в бандл уходил дефолт `gpthub`;
+- `Makefile` ссылался на удалённые каталоги (`cd workspace`, профили
+  `memos`/`ldr`, `uv run --project local_llm`) и на имена контейнеров
+  `gpthub-$(MODE)-*`, которых больше нет.
+
+### 18.2 Что сделано
+
+Осталось РОВНО два файла:
+
+| Файл | Проект | Сервисы |
+| --- | --- | --- |
+| `docker/docker-compose.dev.yaml` | `aspa-dev` | mailpit, frontend, backend, postgres, redis, minio, generator, celery-worker-maintenance, celery-worker-simulation, celery-beat |
+| `docker/docker-compose.yaml` | `aspa-prod` | frontend, backend, postgres, redis, nginx, generator, celery-worker-maintenance, celery-worker-simulation, celery-beat |
+
+Семь оверлеев и `local_llm_bootstrap.sh` удалены. Генератор описан в обоих
+файлах одинаково и сразу в GPU-исполнении: `build.target: gpu-runtime`,
+`gpus: all`, `GENERATOR_FIELD_BACKEND=gpu`, обязательный кэш геометрии
+(`GENERATOR_GEOMETRY_CACHE_DIR=/geometry-cache`, манифест
+`bf6374d275de2c52b908fa1b7847d3f7a97be401adc70e9a6ad0ca658ab0a725`,
+`GENERATOR_GEOMETRY_SOURCE_INDEX=/morphology-index/verified-bounds-v2.sqlite`,
+`GENERATOR_GEOMETRY_SOURCE_AUDIT=/morphology-index/verified-bounds-v2.audit.json`),
+научные данные монтируются только для чтения.
+
+Env-файлы переписаны в один порядок: 125 ключей, 14 секций (Docker/сборка,
+хостовые порты, nginx только prod, API-сервис, аутентификация, CORS, хранилище,
+базы и очереди, почта, ручки IDE, генератор, биллинг, платежи, админ,
+уведомления). Все `AGENTS__*`, `WORKSPACE_*`, `LOCAL_LLM_*`, `MEMOS_*`, `LDR_*`,
+`VIDEO_*`, `WHISPER_*`, `NEO4J_PASSWORD` удалены. Заодно исправлены значения,
+которые уронили бы запуск: dev `APP_DOMAIN` был `your-domain.example.com` при
+`SERVICE__APP_DOMAIN=localhost` (прод-гард `_assert_prod_safety` не пропустил бы),
+а `NOTIFICATIONS__APP_URL` и `PAYMENTS__*_URL` указывали на `gpthub.ru` и
+`localhost:3000`.
+
+Новый гейт `scripts/check_env_contract.py` (заменил удалённые
+`check_sidecar_env.py` и `check_settings_manifest.py`, которые были красными по
+построению) проверяет три вещи: каждый ключ `.env.example` есть в `.env.dev` и
+`.env.prod` без повторов; каждый ключ, который читает код `backend/service` и
+`generator/service` и который не задан в compose, объявлен в образце; каждый
+`GENERATOR_*` из блока generator упоминается в коде генератора. Итог прогона:
+«ok ключей в шаблоне: 125; читает код: 59; обе конфигурации совпадают с шаблоном».
+
+### 18.3 Дефекты, найденные запуском, а не чтением
+
+1. **MinIO нельзя было поднять.** В dev-compose стоял
+   `image: ${MINIO_DEV_IMAGE:-minio/minio:RELEASE.2025-09-07T16-13-09Z}` без
+   `build`, поэтому compose пытался тянуть образ из реестра и получал
+   `pull access denied for aspa-minio-source`. Исторические теги MinIO в
+   публичных реестрах недоступны (Docker Hub — `pull access denied`, Quay — 401);
+   это уже было записано в докладе 12. Исправлено: образ собирается из
+   `docker/minio/Dockerfile` (закреплённый коммит
+   `07c3a429bfed433e49018cb0f78a52145d4bedeb`, SHA-256 архива
+   `8819e3e7817e46b7b3798f8f200ead208562e571563c2e040352378031abe9f2`) с
+   `pull_policy: build`.
+2. **`npm install` в образе фронтенда расходился с деревом.** В рабочем дереве
+   лежал `node_modules`, установленный pnpm (`node_modules/.pnpm`), а в гите
+   отслеживается `package-lock.json`; из-за этого 102 сьюта из 258 падали на
+   `Cannot find module '@chakra-ui/utils/context'`. Исправлено: `npm ci --no-audit
+   --no-fund` в Dockerfile и `npm ci` в дереве; после этого осталось 2 настоящих
+   падения — тесты управляли нативным `<select>`, который был заменён на
+   `AppSelect` (react-select: `role=combobox`, `onChange` отдаёт голое значение).
+   Тесты переписаны на клавиатурное переключение combobox.
+3. **`--no-cov` валит хук платформенных тестов.** `pytest-cov` не ставится в
+   окружение хука, и неизвестный аргумент роняет прогон до тестов. Убрано.
+4. **`bash -lc` в pre-commit неисполним на этой машине.** `bash` на PATH —
+   WSL-релей в дистрибутив docker-desktop без `/bin/bash`, поэтому любой хук с
+   `bash -lc` падал с `execvpe(/bin/bash) failed`. Переписано на прямые формы.
+
+### 18.4 Сборка и запуск проверены
+
+`bash docker/build.sh --dev` собрал `aspa-dev-backend`, `aspa-dev-frontend`,
+`aspa-dev-celery-beat`, `aspa-dev-celery-worker-maintenance`,
+`aspa-dev-celery-worker-simulation`, `aspa-generator-gpu:dev` и
+`aspa-minio-source:RELEASE.2025-09-07T16-13-09Z`.
+`bash docker/run.sh --dev` поднял 10 контейнеров, все здоровые:
+
+```
+backend                   running (healthy)   generator                 running (healthy)
+minio                     running (healthy)   postgres                  running (healthy)
+redis                     running (healthy)   mailpit                   running (healthy)
+frontend                  running             celery-beat               running
+celery-worker-maintenance  running            celery-worker-simulation  running
+```
+
+Проверки внутри поднятого стека: `GET http://localhost:8094/api/health` → 200;
+`GET http://localhost:8095/` → 200; backend видит генератор по
+`http://generator:8090/health` → `{'status': 'ok', 'version': '0.1.15'}`;
+`nvidia-smi` внутри контейнера генератора видит `NVIDIA GeForce RTX 3060 Laptop
+GPU` (6144 MiB, драйвер 621.14); `numba.cuda.is_available()` → `True`,
+compute capability `(8, 6)`; `/geometry-cache/manifest.json` смонтирован.
+
+### 18.5 Что осталось открытым
+
+- Полный связанный опыт 166 700 клеток по-прежнему не уложен в 600 с: лучший
+  измеренный проход — 1027,96 с (6,167 мс/клетку). Поднятый стек даёт площадку,
+  но не ускорение.
+- `ruff format --check` красный на 56 файлах из 1364 (массовое переформатирование
+  чужого кода — отдельная работа), поэтому формат-хук в pre-commit не включён.
+- Тесты генератора исполняются только внутри образа (`make test-generator`) —
+  `uv run --directory generator --frozen` на Windows невозможен из-за
+  `environments = ["sys_platform == 'linux'"]` в `generator/pyproject.toml`.

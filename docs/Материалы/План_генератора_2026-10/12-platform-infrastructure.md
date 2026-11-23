@@ -1,5 +1,19 @@
 # Инфраструктура платформы: перенос GPTHub и подключение research
 
+> **Обновление 23.11.2026: сведено к двум конфигурациям.** Ниже описано исходное
+> решение от 27.10.2026 — оно сохранено как история, но его центральное положение
+> («профиль `simulation` использует `extends` исходных определений») больше не
+> действует. Оверлеев `docker-compose.simulation*.yaml`, `*.gpu`, `*.acceptance*`
+> и `local-llm*` в проекте НЕТ: осталось ровно два файла, как в GPTHub —
+> `docker/docker-compose.dev.yaml` (проект `aspa-dev`) и `docker/docker-compose.yaml`
+> (проект `aspa-prod`). GPU-настройки генератора живут прямо в них
+> (`build.target: gpu-runtime`, `gpus: all`, `GENERATOR_FIELD_BACKEND=gpu`,
+> смонтированный кэш геометрии). Сайдкары workspace, duckdb, opendataloader, memos,
+> local_llm, agents, whisper, video, graphify, ldr и searxng удалены из проекта.
+> Подробности и адреса — [docker/README.md](../../../docker/README.md),
+> фактические числа — раздел 18 доклада
+> [25-full-population-feedback](../../Материалы/План_генератора_2026-10/25-full-population-feedback-2026-11-18.md).
+
 Решение от **27 октября 2026 года** уточняет документы 02 и 04. Пользователь
 потребовал перенос готовой инфраструктуры GPTHub, включая подготовку среды,
 отдельные воркеры и beat. Прежний упрощённый контур не является целевой архитектурой.
