@@ -129,6 +129,10 @@ services:
       timeout: 5s
       retries: 5
     networks:
+      # default is required next to internal: Docker cannot publish ports for a
+      # container attached only to an internal network, so ${POSTGRES_HOST_PORT}
+      # was bound in HostConfig but never appeared in NetworkSettings.Ports.
+      - default
       - internal
 
   redis:
@@ -176,6 +180,9 @@ services:
       timeout: 5s
       retries: 5
     networks:
+      # Same reason as postgres: ports are published only from a non-internal
+      # network, so the console stayed unreachable even though HostConfig had it.
+      - default
       - internal
 
   # Симулятор ЦНС на GPU. Кэш геометрии обязателен: без него batch-путь
