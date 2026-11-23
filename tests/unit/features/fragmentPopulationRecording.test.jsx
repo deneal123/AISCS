@@ -704,7 +704,10 @@ test('restores the failed source contacts for correction without reviving manual
     error: 'executor_synapse_geometries:1:2:100,2:1:100;omitted:0' }] });
   render(<FragmentPopulationRecording sceneRunId={sceneId} sceneManifest={graph} onAdjustContact={adjust} />);
   await waitFor(() => expect(adjust).toHaveBeenCalledWith({ kind: 'fragments', configuration, simulation }, null));
-  expect(screen.getByLabelText('Радиус поиска, мкм')).toHaveValue(15);
+  // Колбэк восстановления черновика и применение значений к полям — два разных шага:
+  // ожидание только по adjust() проверяло поле ДО того, как компонент его обновил, и
+  // тест падал под нагрузкой полного прогона (в одиночку успевал). Ждём само значение.
+  await waitFor(() => expect(screen.getByLabelText('Радиус поиска, мкм')).toHaveValue(15));
   expect(screen.queryByLabelText('ID клеток через запятую')).not.toBeInTheDocument();
   expect(screen.getByRole('alert')).toHaveTextContent('2 нейронов');
 });

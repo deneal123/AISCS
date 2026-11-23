@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Box, Button, Checkbox, FormControl, FormLabel, Input, Select, Text } from '@chakra-ui/react';
+import { Box, Button, Checkbox, FormControl, FormLabel, Input, Text } from '@chakra-ui/react';
+import AppSelect from '@shared/controls/AppSelect';
 import { simulationApi } from '../api';
 import SignalPlot from './SignalPlot';
 import VoltageProbePlot from './VoltageProbePlot';
@@ -109,9 +110,12 @@ export default function PopulationTargetReplay({ runId, nodeId, candidates, onSh
     {loading && <Text role="status">Поиск сохранённого расчёта…</Text>}
     {history.length > 1 && <FormControl mt={2}>
       <FormLabel fontSize="11px" mb={0}>Сохранённый расчёт</FormLabel>
-      <Select size="xs" value={run?.id || ''} isDisabled={Boolean(locked)} onChange={event => selectSaved(event.target.value)}>
-        {history.map(item => <option key={item.id} value={item.id}>{item.configuration?.timing_mode === 'lower_bound' ? 'Нижняя граница' : item.configuration?.timing_mode === 'upper_bound' ? 'Верхняя граница' : 'Тик графа'} · {item.created_at ? new Date(item.created_at).toLocaleString('ru-RU') : item.id.slice(0, 8)}</option>)}
-      </Select>
+      <AppSelect ariaLabel="Сохранённый расчёт" value={run?.id || ''} isDisabled={Boolean(locked)}
+        onChange={selectSaved}
+        options={history.map(item => ({
+          value: item.id,
+          label: `${item.configuration?.timing_mode === 'lower_bound' ? 'Нижняя граница' : item.configuration?.timing_mode === 'upper_bound' ? 'Верхняя граница' : 'Тик графа'} · ${item.created_at ? new Date(item.created_at).toLocaleString('ru-RU') : item.id.slice(0, 8)}`,
+        }))} />
     </FormControl>}
     <Text color="gray.400" mt={2}>Односторонний повтор: параметры синапсов задаются исследователем и не откалиброваны. События графа округлены вперёд до шага 1 мс.</Text>
     {['upper_bound', 'lower_bound'].map(mode => <Checkbox key={mode} mt={2} display="block" size="sm"

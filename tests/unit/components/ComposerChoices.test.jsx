@@ -208,7 +208,11 @@ it('bounds the mobile model sheet and keeps descriptions opt-in without a duplic
   expect(dialog).toHaveStyle({ width: '320px' });
   await act(async () => fireEvent.click(screen.getByRole('option', { name: /GigaChat-2-Max/ })));
   expect(change).toHaveBeenCalledWith('GigaChat-2-Max');
-  await waitFor(() => expect(screen.queryByRole('dialog', { name: 'Модель ответа' })).not.toBeInTheDocument());
+  // ⚠️ Таймаут явный, а не дефолтная секунда. Закрытие листа — это анимация Chakra,
+  // и на загруженной машине (полный прогон идёт 353 с и держит все ядра) секунды не
+  // хватало: в одиночку тест зелёный, в общем прогоне падал. Проверка не ослаблена —
+  // ожидание осталось ожиданием, просто с запасом по времени.
+  await waitFor(() => expect(screen.queryByRole('dialog', { name: 'Модель ответа' })).not.toBeInTheDocument(), { timeout: 5000 });
 });
 
 it('uses icon-only mobile choices with full accessible names and an independent context slot', () => {

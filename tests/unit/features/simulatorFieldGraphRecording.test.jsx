@@ -18,11 +18,18 @@ test('opens an explicitly selected earlier completed electrical calculation', as
   simulationApi.get.mockImplementation(async id => ({ id, state: 'completed',
     result: { preview: { time_ms: [0, 1], neural_uv: [0, 0], source_cells: 1, replay_cells: 1 } } }));
   render(<FieldGraphRecording />);
-  const select = await screen.findByLabelText('Завершённый электрический расчёт');
-  await waitFor(() => expect(select).toHaveValue('newer'));
-  fireEvent.change(select, { target: { value: 'older' } });
-  await waitFor(() => expect(select).toHaveValue('older'));
-  expect(simulationApi.get).toHaveBeenCalledWith('older', expect.anything());
+  // Выбор живёт в AppSelect (react-select), а не в нативном <select>: у него нет
+  // ни value-атрибута, ни change-события с текстом значения. Значение проверяем по
+  // подписи выбранного варианта, а переключение делаем клавиатурой — тем же путём,
+  // которым пользуется человек.
+  const select = await screen.findByRole('combobox', { name: 'Завершённый электрический расчёт' });
+  const chosen = () => select.closest('[class*="container"]')?.textContent || '';
+  await waitFor(() => expect(chosen()).toContain('Новый'));
+  fireEvent.focus(select);
+  fireEvent.keyDown(select, { key: 'ArrowDown' });
+  fireEvent.keyDown(select, { key: 'ArrowDown' });
+  fireEvent.keyDown(select, { key: 'Enter' });
+  await waitFor(() => expect(simulationApi.get).toHaveBeenCalledWith('older', expect.anything()));
 });
 
 test('explains unavailable contact screening without presenting a result', async () => {

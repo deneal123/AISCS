@@ -79,13 +79,22 @@ test('switches between saved runs without mixing their source or target', async 
   const lower = make('lower', 'lower_bound'), upper = make('upper', 'upper_bound');
   simulationApi.populationTargetRuns.mockResolvedValue({ items: [lower, upper] });
   simulationApi.get.mockImplementation(async id => id === 'lower' ? lower : upper);
+  // «Сохранённый расчёт» — это AppSelect (react-select), у него нет нативного value и
+  // change-события со значением: выбор делается через список вариантов. Хелпер ниже
+  // открывает список и щёлкает по варианту, то есть повторяет путь пользователя.
+  const chooseSaved = async (label) => {
+    const control = screen.getByRole('combobox', { name: 'Сохранённый расчёт' });
+    fireEvent.focus(control);
+    fireEvent.keyDown(control, { key: 'ArrowDown' });
+    fireEvent.click(await screen.findByRole('option', { name: label }));
+  };
   render(<PopulationTargetReplay runId="source" nodeId="20" candidates={[{ source_id: 10, events: 2 }]} />);
   fireEvent.click(screen.getByText('Рассчитать ответ нейрона'));
   expect(await screen.findByText('Время событий: нижняя граница интервала.')).toBeInTheDocument();
-  fireEvent.change(screen.getByLabelText('Сохранённый расчёт'), { target: { value: 'upper' } });
+  await chooseSaved(/^Верхняя граница/);
   expect(await screen.findByText('Время событий: верхняя граница интервала.')).toBeInTheDocument();
   simulationApi.get.mockResolvedValue(make('lower', 'lower_bound', 21));
-  fireEvent.change(screen.getByLabelText('Сохранённый расчёт'), { target: { value: 'lower' } });
+  await chooseSaved(/^Нижняя граница/);
   expect(await screen.findByRole('alert')).toHaveTextContent('Не удалось открыть выбранный расчёт.');
   expect(screen.getByText('Время событий: верхняя граница интервала.')).toBeInTheDocument();
 });

@@ -1,6 +1,7 @@
 import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { executorStartError } from '../executorStartError';
-import { Box, Button, ButtonGroup, Checkbox, FormControl, FormLabel, HStack, Input, Select, SimpleGrid, Text } from '@chakra-ui/react';
+import { Box, Button, ButtonGroup, Checkbox, FormControl, FormLabel, HStack, Input, SimpleGrid, Text } from '@chakra-ui/react';
+import AppSelect from '@shared/controls/AppSelect';
 import { simulationApi } from '../api';
 import SignalPlot from '../recording/SignalPlot';
 import StimulusPlot from '../recording/StimulusPlot';
@@ -145,13 +146,13 @@ export default function FieldGraphRecording({ sceneRunId, sceneManifest, sceneDe
   return <Box as="section" aria-label="Электрическая стимуляция: отдельный расчёт" data-run-id={state.selected?.id || ''} borderTop="1px solid" borderColor={SIMULATION_THEME.panelBorder} pt={4}>
     <Text fontSize="14px" fontWeight="600">Электрическая стимуляция · отдельный расчёт</Text>
     <Text fontSize="12px" color={SIMULATION_THEME.textSecondary} mt={1}>Запись выбранных клеток; односторонняя модель без обратной связи. Координаты заданы в исходной системе MaleCNS и не привязаны к текущей сцене.</Text>
-    {state.items.filter(item => item.state === 'completed').length > 1 && <Select size="sm" mt={2}
-      aria-label="Завершённый электрический расчёт" value={state.selected?.id || ''}
-      onChange={event => { selectedRunId.current = event.target.value; setRetry(value => value + 1); }}>
-      {state.items.filter(item => item.state === 'completed').map(item => <option key={item.id} value={item.id}>
-        {item.title || 'Электрический расчёт'} · {item.id.slice(0, 8)}
-      </option>)}
-    </Select>}
+    {state.items.filter(item => item.state === 'completed').length > 1 && <Box mt={2} maxW="360px">
+      <AppSelect ariaLabel="Завершённый электрический расчёт" value={state.selected?.id || ''}
+        onChange={value => { selectedRunId.current = value; setRetry(count => count + 1); }}
+        options={state.items.filter(item => item.state === 'completed').map(item => ({
+          value: item.id, label: `${item.title || 'Электрический расчёт'} · ${item.id.slice(0, 8)}`,
+        }))} />
+    </Box>}
     {state.unavailable && <Text fontSize="12px" color="orange.200" mt={2} role="status">Эта версия backend не поддерживает отдельный электрический расчёт.</Text>}
     {newest?.state === 'failed' && executorStartError(newest.error) && <Text fontSize="12px" color="orange.200" mt={1} role="alert">{executorStartError(newest.error)}</Text>}
     {incomingContacts && !state.loading && !incomingContacts.configuration && state.selected?.id !== incomingContacts.fieldRunId && <Text fontSize="12px" color="orange.200" mt={2} role="alert">Исходный электрический расчёт недоступен; выбранные на модели положения не применены.</Text>}

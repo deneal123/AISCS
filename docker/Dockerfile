@@ -3,7 +3,13 @@ FROM node:20-alpine AS base
 WORKDIR /app
 
 COPY package.json package-lock.json ./
-RUN npm install
+# ⚠️ `npm ci`, а не `npm install`: в репозитории лежит package-lock.json, и сборка образа
+# обязана ставить РОВНО тот граф зависимостей, на котором гоняются тесты. `npm install`
+# молча пересобирает lock при расхождении, то есть образ и рабочее дерево могли
+# разойтись — и расходились: node_modules, поставленный pnpm, ронял 102 сьюта из 258
+# на `Cannot find module '@chakra-ui/utils/context'`. `npm ci` падает громко, если
+# lock и package.json не совпадают.
+RUN npm ci --no-audit --no-fund
 
 COPY . .
 # CRLF->LF в shebang, иначе в контейнере: env: 'bash\r': No such file or directory.
@@ -17,7 +23,7 @@ CMD ["npm", "start"]
 FROM base AS builder
 
 # Application policy is compiled into the bundle; API/WS URLs stay same-origin.
-ARG REACT_APP_APPLICATION_PROFILE=gpthub
+ARG REACT_APP_APPLICATION_PROFILE=simulation
 ENV REACT_APP_APPLICATION_PROFILE=${REACT_APP_APPLICATION_PROFILE}
 
 # ⚠️ ЗДЕСЬ НАМЕРЕННО НЕТ REACT_APP_*_BASE_URL, И ДОБАВЛЯТЬ ИХ НЕЛЬЗЯ.
