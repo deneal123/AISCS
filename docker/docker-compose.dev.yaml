@@ -160,7 +160,12 @@ services:
       MINIO_ROOT_USER: ${MINIO__ACCESS_KEY:-minioadmin}
       MINIO_ROOT_PASSWORD: ${MINIO__SECRET_KEY:-minioadmin}
     volumes:
-      - ../infra/minio_data:/data
+      # Named volume, not ../infra/minio_data: every artifact row in Postgres
+      # points at an object that already lives in this volume (2.2 GB, 1567
+      # objects), while the host directory is empty. A bind mount therefore
+      # served an empty bucket and the UI answered "cannot verify this run's
+      # connectome and events" for every completed run.
+      - minio_data_volume:/data
     ports:
       - "${MINIO_PORT:-9090}:9000"
       - "${MINIO_CONSOLE_PORT:-9091}:9001"
