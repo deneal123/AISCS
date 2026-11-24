@@ -77,14 +77,22 @@ def replay_bulk_feedback(metadata, stimulus, rate_table, *, audited_sources, par
             output_selection.note_incomplete()
     source_store = None if narrow_cache is None else narrow_cache.store
     source_writer = None if narrow_cache is None else narrow_cache.writer
+    # The rate table is evaluated at membrane voltages the table does not cover
+    # only when the caller explicitly opted into the experimental boundary policy.
+    # The default stays fail-closed, and an opted-in pass reports exactly which
+    # cells were clamped instead of hiding them.
+    clamp_allowed = solver_options.get('allow_table_clamp') is True
+    clamped_cells = []
     for ids, result in solve_population(metadata, stimulus, rate_table,
             audited_sources=audited_sources, params=params, segment_budget=segment_budget,
             output_budget_bytes=output_budget_bytes, device_window_factory=collector.factory,
             event_factory=events_for_batch, narrow_cache=source_store,
             narrow_cache_writer=source_writer, resume=resume,
             **solver_options):
-        if result.get('table_clamped_cell_ids') != []:
+        clamped = result.get('table_clamped_cell_ids')
+        if (not isinstance(clamped, list) or (clamped and not clamp_allowed)):
             raise ValueError('Bulk feedback replay encountered clamped HH table values')
+        clamped_cells.extend(clamped)
         # Window delivery is asynchronous: a batch's last window may still be in
         # the recording pipeline when the solver hands back its receipt, so a cell
         # is accounted for as soon as it is either finished or still in flight.
@@ -137,6 +145,9 @@ def replay_bulk_feedback(metadata, stimulus, rate_table, *, audited_sources, par
                # Crossings the 1 ms graph tick could not carry. Reported, not
                # hidden: these are events the model produced and the format dropped.
                'coincident_crossings': collector.coincident_crossings,
+               # Cells whose membrane voltage left the rate-table domain: the HH
+               # rates there are the clamped table boundary, not an evaluation.
+               'table_clamped_cell_ids': sorted(clamped_cells),
                'interpretation': 'experimental fixed-schedule replay; no network convergence'}
     if narrow_cache is not None:
         receipt['narrow_cache'] = narrow_cache.receipt()

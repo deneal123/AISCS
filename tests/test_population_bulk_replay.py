@@ -72,6 +72,30 @@ def test_bulk_feedback_rejects_missing_solver_receipt(monkeypatch):
             clearance_um=1., segment_budget=10, output_budget_bytes=10000)
 
 
+def test_bulk_feedback_accepts_clamped_cells_only_when_the_caller_opted_in(monkeypatch):
+    source = collector()
+    cell = {'id': 10, 'geometry': source.geometries[10], 'morphology_sha256': 'a'}
+
+    def solve(metadata, stimulus, rate_table, *, event_factory, device_window_factory, **kwargs):
+        device = device_window_factory([cell])
+        device['sink'](0, 41, [{'id': 10, 'neural_uv': [1.] * 41,
+                                'selected_voltage_mv': [[-65.] * 41]}])
+        yield [10], {'accelerated_cell_major': False, 'table_clamped_cell_ids': [10]}
+
+    monkeypatch.setattr('service.application.feedback.population_bulk_replay.solve_population',
+                        solve)
+    options = dict(audited_sources={}, params=None, expected_ids=[10], events_by_target={10: []},
+        metadata_factory=lambda cells: {'provenance': source.provenance,
+                                        'diagnostics': source.diagnostics},
+        event_sink=lambda result: None, time_ms=np.arange(41) * .05, threshold_mv=-20.,
+        duration_ms=2, electrode_um=[10., 0., 0.], reference_um=[20., 0., 0.],
+        conductivity_s_m=.3, clearance_um=1., segment_budget=10, output_budget_bytes=10000)
+    with pytest.raises(ValueError, match='clamped HH'):
+        replay_bulk_feedback(None, [0.] * 41, None, **options)
+    result = replay_bulk_feedback(None, [0.] * 41, None,
+                                  **{**options, 'allow_table_clamp': True})
+    assert result['table_clamped_cell_ids'] == [10]
+
 def test_verified_replay_checks_inputs_before_atomic_publication(monkeypatch, tmp_path):
     schedule, hashes = schedule_fixture()
     digest = fixed_input_digest(schedule)

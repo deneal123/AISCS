@@ -116,6 +116,10 @@ def population_target_provider(graph, morphology_sha256, *, geometry_cache, work
     failures = {}
     state = {'snapshot': snapshot}
 
+    def _pool(values):
+        # A worker pool costs more to start than a single small chunk is worth.
+        return 1 if len(values) <= 2 else workers
+
     def authenticated():
         if state['snapshot'] is None:
             state['snapshot'] = _open_snapshot(graph, geometry_cache, workers=workers)
@@ -129,7 +133,9 @@ def population_target_provider(graph, morphology_sha256, *, geometry_cache, work
                 cache.move_to_end(candidate)
         missing = [value for value in siblings if value not in cache]
         if missing:
-            for entry in snapshot_now.entries(missing, workers=workers):
+            # One or two cells do not pay for a worker pool: the pool costs more
+            # to start than the chunk it would read.
+            for entry in snapshot_now.entries(missing, workers=_pool(missing)):
                 held = int(entry['skeleton']['body_id'])
                 try:
                     held, prepared = _prepare_entry(entry, target_ids=set(siblings),
@@ -155,10 +161,72 @@ def population_target_provider(graph, morphology_sha256, *, geometry_cache, work
         cache.move_to_end(body)
         return cache[body]
 
+    def prefetch(bodies):
+        """Load many targets through one ordered pass over their chunks.
+
+        A target list scattered across the population touches a few cells of
+        many chunks; asking for them one at a time re-decodes a whole chunk per
+        cell.  One pass per batch decodes each needed chunk once.  The cache is
+        left as it would be after the same requests, so behaviour is unchanged.
+        """
+        snapshot_now = authenticated()
+        wanted = []
+        for body in bodies:
+            if (type(body) is not int or body not in hashes
+                    or body in cache or body in failures):
+                continue
+            wanted.append(body)
+        if not wanted:
+            return 0
+        siblings = {}
+        for body in wanted:
+            for value in snapshot_now.chunk_bodies(body):
+                if value in hashes:
+                    siblings.setdefault(value, None)
+        # Only the first window is loaded; the caller walks the targets in
+        # chunk order, so every later chunk is decoded once on its own miss.
+        held, used = [], 0
+        for value in siblings:
+            if value in cache:
+                continue
+            if used >= cache_size:
+                break
+            held.append(value)
+            used += 1
+        loaded = 0
+        for entry in snapshot_now.entries(held, workers=_pool(held)):
+            body = int(entry['skeleton']['body_id'])
+            try:
+                body, prepared = _prepare_entry(entry, target_ids=set(siblings),
+                                                derived_target=derived_target)
+            except ValueError as exc:
+                failures[body] = exc
+                continue
+            failures.pop(body, None)
+            if prepared[0].get('body_id') != str(body) or prepared[0].get('sha256') != hashes[body]:
+                raise ValueError('Population target morphology digest mismatch')
+            cache[body] = prepared
+            loaded += 1
+            while len(cache) > cache_size:
+                cache.popitem(last=False)
+        return loaded
+
     def get(body):
         if (type(body) is not int or body not in hashes
                 or graph.provenance.get('manifest_sha256') != graph_hash):
             raise ValueError('Invalid population target identity')
         return prepare(body)
 
+    def order(bodies):
+        """Return the given targets in the order their chunks are packed.
+
+        Walking targets in this order turns a scattered request into one pass
+        over the geometry snapshot instead of one whole-chunk decode per cell.
+        """
+        snapshot_now = authenticated()
+        unique = {body for body in bodies if type(body) is int and body in hashes}
+        return sorted(unique, key=lambda body: (snapshot_now.chunk_index(body) or 0, body))
+
+    get.prefetch = prefetch
+    get.order = order
     return get

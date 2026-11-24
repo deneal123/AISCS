@@ -269,7 +269,59 @@ def test_audit_chunks_more_than_128_verified_pairs(tmp_path, monkeypatch):
                         target, _dirs, **_kw: (diagnostic['source_id'], target))
     requested = [(body, 500) for body in reversed(bodies)]
     calls.clear()
+    primed = []
+    original_prefetch = index.prefetch_exact_pairs
+    monkeypatch.setattr(index, 'prefetch_exact_pairs', lambda pairs, **kw: (
+        primed.append(len(pairs)) or original_prefetch(pairs, **kw)))
+    opens = []
+    original_exact = index.query_exact_pairs
+
+    def counted(pairs, **kwargs):
+        opens.append(len(pairs))
+        return original_exact(pairs, **kwargs)
+
+    monkeypatch.setattr(index, 'query_exact_pairs', counted)
     mapped = match_fragment_inputs_batch(
         requested, {body: {'source_id': body} for body in bodies}, index, object(), [])
     assert mapped == requested
-    assert calls == [128, 2]
+    assert primed == [130]
+    # One scan primed every row, so the per-source lookups never reopen the table.
+    assert sorted(opens) == [2, 128]
+
+def test_bulk_exact_query_answers_more_pairs_than_the_bounded_call(tmp_path):
+    source = tmp_path / 'bulk.arrow'
+    count = 300
+    pres = [10 + value // 40 for value in range(count)]
+    posts = [200 + value % 40 for value in range(count)]
+    table = pa.table({'body_pre': pres, 'body_post': posts,
+                      **{name: list(range(count)) for name in
+                         ('x_pre', 'y_pre', 'z_pre', 'x_post', 'y_post', 'z_post')}})
+    with pa.OSFile(str(source), 'wb') as sink:
+        with ipc.new_file(sink, table.schema) as writer:
+            writer.write_table(table, max_chunksize=16)
+    digest = hashlib.md5(source.read_bytes(), usedforsecurity=False).hexdigest()
+    ids = tmp_path / 'bulk-ids.npy'
+    np.save(ids, np.array(sorted({*pres, *posts}), dtype=np.int64))
+    build_batch_index(source, ids, tmp_path / 'bulk-index', digest)
+    index = SynapseBatchIndex(source, ids, tmp_path / 'bulk-index', digest)
+    pairs = sorted(set(zip(pres, posts, strict=True)))
+    assert len(pairs) > 128
+    with pytest.raises(ValueError, match='Invalid exact'):
+        index.query_exact_pairs(pairs)
+    assert index.prefetch_exact_pairs(pairs) == len(pairs)
+    # Every pair is answered from the primed rows, in bounded calls.
+    for start in range(0, len(pairs), 128):
+        chunk = pairs[start:start + 128]
+        answered = index.query_exact_pairs(chunk)
+        assert set(answered) == set(chunk)
+        for pair in chunk[:5]:
+            assert answered[pair] == index.query(
+                pair[1], 'incoming', limit=None, partner_ids=[pair[0]])['pairs']
+    with pytest.raises(PairQueryLimitExceeded):
+        index.prefetch_exact_pairs(pairs, max_rows=1)
+    with pytest.raises(ValueError, match='Invalid exact'):
+        index.prefetch_exact_pairs([])
+    with source.open('ab') as stream:
+        stream.write(b'changed')
+    with pytest.raises(ValueError, match='source changed'):
+        index.query_exact_pairs(pairs[:1])

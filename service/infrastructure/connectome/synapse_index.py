@@ -165,7 +165,32 @@ class SynapseBatchIndex:
                 or len(set(pairs)) != len(pairs)
                 or type(max_rows) is not int or max_rows < 1):
             raise ValueError('Invalid exact synapse pair query')
+        return self._exact_pairs(pairs, max_rows)
+
+    def prefetch_exact_pairs(self, pairs, *, max_rows=4_000_000):
+        """Read every requested pair in one pass and keep the rows in memory.
+
+        A whole schedule asks its questions batch by batch, but each batch would
+        otherwise reopen the multi-gigabyte pair table. Priming once turns the
+        later calls into lookups of exact rows; nothing is inferred.
+        """
+        if (not isinstance(pairs, list) or not pairs
+                or any(not isinstance(pair, tuple) or len(pair) != 2
+                       for pair in pairs)
+                or type(max_rows) is not int or max_rows < 1):
+            raise ValueError('Invalid exact synapse pair query')
+        rows = self._exact_pairs(sorted(set(pairs)), max_rows, fresh=True)
+        primed = getattr(self, '_primed', None)
+        if primed is None:
+            primed = self._primed = {}
+        primed.update(rows)
+        return len(rows)
+
+    def _exact_pairs(self, pairs, max_rows, *, fresh=False):
         self.assert_unchanged()
+        primed = None if fresh else getattr(self, '_primed', None)
+        if primed and all(pair in primed for pair in pairs):
+            return {pair: list(primed[pair]) for pair in pairs}
         mask = np.zeros(self.bits.shape[2], dtype=np.uint8)
         for source, target in pairs:
             positions = np.searchsorted(self.ids, [source, target])
@@ -200,7 +225,6 @@ class SynapseBatchIndex:
                             result[pair].append(row)
         self.assert_unchanged()
         return result
-
     def scan_incoming_many(self, requests):
         """Count incoming source pairs for several targets in one source pass.
 

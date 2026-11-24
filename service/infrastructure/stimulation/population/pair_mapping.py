@@ -23,7 +23,8 @@ from service.infrastructure.stimulation.population.diagnostics import fragment_e
 def match_fragment_inputs(diagnostics, index, graph, target_id, directories, *,
                           max_source_distance_um, max_target_distance_um, duration_ms,
                           allow_partial=False, allow_partial_source=False, _prefetched_page=None,
-                          _prepared_target=None, include_control_crossings=False):
+                          _prepared_target=None, include_control_crossings=False,
+                          _source_schedule=None):
     """Match all pairs on one edge without inventing individual synapse identities."""
     if (type(target_id) is not int or target_id <= 0 or type(allow_partial) is not bool
             or type(allow_partial_source) is not bool):
@@ -33,10 +34,12 @@ def match_fragment_inputs(diagnostics, index, graph, target_id, directories, *,
             or not 0 <= max_target_distance_um < float('inf')):
         raise ValueError('Invalid target tolerance')
     control_options = {'include_control_crossings': True} if include_control_crossings else {}
+    # Validating the whole candidate list of a source is independent of the
+    # target, so a batch may hand in the schedule it already checked once.
     schedule = fragment_edge_schedule(diagnostics, max_distance_um=max_source_distance_um,
                                       duration_ms=duration_ms,
                                       allow_partial_geometry=allow_partial_source,
-                                      **control_options)
+                                      **control_options) if _source_schedule is None else _source_schedule
     source_id = schedule['source_id']
     if schedule['graph_sha256'] != graph.provenance['manifest_sha256']:
         raise ValueError('Incompatible graph or source')
@@ -166,9 +169,40 @@ def match_fragment_inputs_batch(pairs, diagnostics, index, graph, directories, *
             or not isinstance(diagnostics, dict)
             or any(source not in diagnostics for source, _target in pairs)):
         raise ValueError('Invalid fragment pair batch')
+    # A batch asks for cells scattered across the population, so the target
+    # provider is told the whole set first: one ordered pass over the chunks
+    # replaces a whole-chunk decode per requested cell.
+    if _target_provider is not None and hasattr(_target_provider, 'prefetch'):
+        _target_provider.prefetch(sorted({target for _source, target in pairs}))
+    # Validating a source's candidate list depends only on that source and the
+    # batch options, so each source is checked once instead of once per pair.
+    schedules = {}
+
+    def schedule_of(source):
+        # A caller that supplies no bounds asks nothing about candidates, so the
+        # per-source schedule is only built when the batch actually needs it.
+        if 'max_source_distance_um' not in options or 'duration_ms' not in options:
+            return None
+        if source not in schedules:
+            schedules[source] = fragment_edge_schedule(
+                diagnostics[source], max_distance_um=options['max_source_distance_um'],
+                duration_ms=options['duration_ms'],
+                allow_partial_geometry=options.get('allow_partial_source', False),
+                **({'include_control_crossings': True}
+                   if options.get('include_control_crossings') else {}))
+        return schedules[source]
+
     matched = {}
     remaining = []
     observations = []
+    # One pass over the pair table answers the whole batch; without it every
+    # source would reopen a 6.8 GB file for a handful of rows.
+    if (isinstance(index, SynapseBatchIndex) and len(pairs) <= 50_000
+            and getattr(index, 'source_path', None) is not None):
+        try:
+            index.prefetch_exact_pairs(list(pairs))
+        except PairQueryLimitExceeded:
+            pass
     if _pair_cache is not None:
         _pair_cache.verify(index, index.manifest['source_md5'])
     for source, target in pairs:
@@ -180,25 +214,39 @@ def match_fragment_inputs_batch(pairs, diagnostics, index, graph, directories, *
                 'total': len(rows), 'returned': len(rows)}
         matched[(source, target)] = match_fragment_inputs(
             diagnostics[source], index, graph, target, directories, _prefetched_page=page,
-            **target_options(target), **options)
+            _source_schedule=schedule_of(source), **target_options(target), **options)
     if isinstance(index, SynapseBatchIndex) and remaining:
-        uncached = remaining
+        # Visiting pairs grouped by target keeps one prepared target (and the
+        # geometry chunk behind it) in hand for every pair that shares it; the
+        # provider, when it can, orders targets so that chunks are shared too.
+        if _target_provider is not None and hasattr(_target_provider, 'order'):
+            rank = {target: position for position, target
+                    in enumerate(_target_provider.order([target for _s, target in remaining]))}
+            uncached = sorted(remaining, key=lambda pair: (rank.get(pair[1], 0), pair[0]))
+        else:
+            uncached = sorted(remaining, key=lambda pair: (pair[1], pair[0]))
         remaining = []
+        indexed = {}
         for start in range(0, len(uncached), 128):
             chunk = uncached[start:start + 128]
             try:
-                indexed = index.query_exact_pairs(chunk)
+                # The rows were already read once for this batch, so this is a
+                # lookup unless the row cap forced a bounded re-read.
+                indexed.update(index.query_exact_pairs(chunk))
             except PairQueryLimitExceeded:
                 remaining.extend(chunk)
-                continue
-            for source, target in chunk:
+        if indexed:
+            for source, target in uncached:
+                if (source, target) not in indexed:
+                    continue
                 rows = indexed[(source, target)]
                 page = {'pairs': rows, 'truncated': False,
                         'source_md5': index.manifest['source_md5'],
                         'total': len(rows), 'returned': len(rows)}
                 matched[(source, target)] = match_fragment_inputs(
                     diagnostics[source], index, graph, target, directories,
-                    _prefetched_page=page, **target_options(target), **options)
+                    _prefetched_page=page, _source_schedule=schedule_of(source),
+                    **target_options(target), **options)
                 if _pair_cache is not None:
                     observations.append((source, target, rows))
     by_target = defaultdict(list)
@@ -229,7 +277,8 @@ def match_fragment_inputs_batch(pairs, diagnostics, index, graph, directories, *
                           'total': len(rows), 'returned': len(rows)}
                 matched[(source, target)] = match_fragment_inputs(
                     diagnostics[source], index, graph, target, directories,
-                    _prefetched_page=single, **target_options(target), **options)
+                    _prefetched_page=single, _source_schedule=schedule_of(source),
+                    **target_options(target), **options)
                 if _pair_cache is not None:
                     observations.append((source, target, rows))
     if _pair_cache is not None:
