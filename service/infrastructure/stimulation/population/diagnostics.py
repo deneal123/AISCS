@@ -306,7 +306,7 @@ def registered_outgoing_fragment_diagnostics(
         }
         for diagnostic, pair in zip(result["candidates"], page["pairs"], strict=True)
     ]
-    return {
+    receipt = {
         **result,
         "body_id": str(body_id),
         "morphology_sha256": source["sha256"],
@@ -317,6 +317,11 @@ def registered_outgoing_fragment_diagnostics(
         "graph_pairs": sum(row["included_in_graph"] for row in candidates),
         "candidates": candidates,
     }
+    if not candidates:
+        # Registered and solvable, but the table lists no outgoing synapse, so
+        # there is nothing to map and nothing that could drive a partner.
+        receipt["no_outgoing_synapses"] = True
+    return receipt
 
 
 def fragment_edge_schedule(diagnostics, *, max_distance_um, duration_ms,

@@ -66,6 +66,36 @@ def test_a_source_without_outgoing_synapses_is_named_and_solvable(monkeypatch):
                        "geometry_complete": True}
 
 
+def test_diagnostics_of_a_source_without_outgoing_synapses_are_empty_not_invalid(monkeypatch):
+    graph = SimpleNamespace(posts=[0], provenance={
+        "array_sha256": {"ids.npy": "ids"}, "manifest_sha256": "b" * 64})
+    index = SimpleNamespace(
+        manifest={"ids_sha256": "ids"},
+        query=lambda *_a, **_kw: {"total": 0, "returned": 0, "truncated": False, "pairs": [],
+                                  "source_md5": "e" * 32},
+    )
+    module = "service.infrastructure.stimulation.population.diagnostics."
+    digest = hashlib.sha256(SWC.encode("utf8")).hexdigest()
+    monkeypatch.setattr(
+        module + "read_skeleton", lambda *_a, **_kw: {"swc": SWC, "sha256": digest}
+    )
+    monkeypatch.setattr(module + "outgoing", lambda *_a: {"next_offset": None, "items": []})
+    provenance = {"body_id": "7", "morphology_sha256": digest, "components": 2,
+                  "configuration": {"current_na": -5.0, "duration_ms": 2, "nseg_per_edge": 1}}
+    control_provenance = {"body_id": "7", "morphology_sha256": digest, "components": 2,
+                          "configuration": {"current_na": 0.0, "duration_ms": 2,
+                                            "nseg_per_edge": 1}}
+    time = np.array([0.0, 1.0, 2.0])
+    solution = {"time_ms": time, "edge_node_ids": np.array([1]), "voltage_mv": np.zeros((1, 3))}
+    receipt = registered_outgoing_fragment_diagnostics(
+        index, graph, 7, [], solution, dict(solution), provenance, control_provenance,
+        threshold_mv=-20.0, duration_ms=2,
+    )
+    assert receipt["candidates"] == []
+    assert receipt["source_pairs"] == 0 and receipt["graph_pairs"] == 0
+    assert receipt["no_outgoing_synapses"] is True
+
+
 def test_fragment_edge_schedule_keeps_synapses_local_and_rejects_unknowns():
     row = {
         "included_in_graph": True,

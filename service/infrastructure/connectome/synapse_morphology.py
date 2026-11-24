@@ -103,6 +103,10 @@ def _nearest_prepared_segments(prepared, points_um, *, point_batch_size=16):
     if type(point_batch_size) is not int or not 1 <= point_batch_size <= 128:
         raise ValueError("Invalid point batch size")
     points = np.asarray(points_um, dtype=float)
+    if points.size == 0:
+        # An empty candidate list arrives as shape (0,), not (0, 3); a source
+        # without outgoing synapses is a legitimate, nameable state.
+        points = points.reshape(0, 3)
     if points.ndim != 2 or points.shape[1:] != (3,) or not np.isfinite(points).all():
         raise ValueError("Invalid synapse coordinates")
     child_ids, starts, radii, vector, length2 = prepared
