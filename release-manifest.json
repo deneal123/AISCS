@@ -1,5 +1,5 @@
 {
-    "version":  "0.1.17",
+    "version":  "0.1.18",
     "date":  "2026-11-24",
     "application":  "AISCS",
     "branch":  "dev",
@@ -10,14 +10,14 @@
                                        "commit":  "d6596211005b5eddb58b53a4bbc7c2b073065ff2"
                                    },
                        "frontend":  {
-                                        "version":  "1.1.7",
+                                        "version":  "1.1.8",
                                         "branch":  "frontend",
-                                        "commit":  "3b8128d191b3a5399205c8ae95bf0f9d30d2f712"
+                                        "commit":  "421744e60ddaf24476827f8f0e878a7546c67f63"
                                     },
                        "generator":  {
-                                         "version":  "0.1.17",
+                                         "version":  "0.1.18",
                                          "branch":  "generator",
-                                         "commit":  "964f877f72684f39b2b3823ade227adccf799fd7"
+                                         "commit":  "201a0045645b06c018cafb45d5c40a6d24fe38a1"
                                      },
                        "research":  {
                                         "version":  "1.6.2",
@@ -92,6 +92,22 @@
                                                          "chain":  {"with_edges":  {"downstream":  127, "ascending":  41, "first_tick":  5}, "without_afferent_edges":  {"downstream":  0, "ascending":  0}},
                                                          "artifacts":  "docs/Материалы/План_генератора_2026-10/nociception-2026-11-24/",
                                                          "limits":  "No selectivity: the nearest foreign cable is 0.03 um away while the nearest afferent is 2.37 um, so 314 intrinsic and 24 motor cells cross too. The ascending answer is a LIF graph property, not HH with field. A threshold crossing is not a spike. 2.4 uA is the point where the model stops being silent, not a nociceptive stimulus for a fly."
+                                                     ,
+                                                     "nociception_screened_point":  {
+                                                         "graph_sha256":  "742ee0b22040d6831cb96479d468cd57f1a60d96e2004e3beb421a8d3ac936a2",
+                                                         "point":  {"source_um":  [480, 390, 1040], "return_um":  [480, 390, 540], "electrode_um":  [423.8, 411.7, 960.9], "reference_um":  [444.8, 417.2, 466.9]},
+                                                         "current_na":  -9600,
+                                                         "duration_ms":  100,
+                                                         "threshold_mv":  -20,
+                                                         "cable_screen":  {"clearance_um":  1.0, "previous_point":  "STIM+ inside cable 512510 at 0.823 um; REF inside cables 10106 (-0.977), 10759 (0.672), 11332 (0.833), 12447 (0.522)", "this_point":  "all four points free at 1.0 um"},
+                                                         "slice":  {"chunks":  279, "chunks_total":  2605, "cells":  17838, "afferents":  1145},
+                                                         "crossed":  {"total":  1220, "afferents":  403, "non_afferents":  817, "events":  164561},
+                                                         "reading":  {"ptp_uv":  2670.323, "min_uv":  -1706.409, "max_uv":  963.914, "rms_uv":  125.111, "samples":  2001},
+                                                         "chain":  {"with_edges":  {"downstream":  203, "ascending":  62, "first_tick":  5}, "without_afferent_edges":  {"downstream":  0, "ascending":  0}},
+                                                         "field_sweep":  {"afferent_median_mv":  25.96, "afferent_p90_mv":  56.76, "afferent_above_45mv":  419, "other_median_mv":  3.93, "other_p90_mv":  11.15, "other_above_45mv":  152, "other_share":  0.0147},
+                                                         "artifacts":  "docs/Материалы/План_генератора_2026-10/nociception-screened-2026-11-24/",
+                                                         "limits":  "Selectivity costs current: 9.6 uA is 32x the -300 nA demo value and 152 non-afferent cells still reach 45 mV. A cable-free point is a geometry check, not electric isolation: a point-source field is not shielded by membranes. No afferent in MaleCNS carries a nociceptive receptorType, so these are abdominal afferents by position. A threshold crossing is not a spike."
+                                                     }
                                                      }
 }
 }
