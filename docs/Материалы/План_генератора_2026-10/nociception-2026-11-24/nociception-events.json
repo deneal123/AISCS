@@ -1,0 +1,9579 @@
+{
+ "rows": [
+  {
+   "id": 72797,
+   "ticks": [
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "events": 221,
+   "superclass": "sensory_ascending",
+   "subclass": "abdomen",
+   "type": "SAxx01",
+   "afferent": true,
+   "ascending": true
+  },
+  {
+   "id": 800608,
+   "ticks": [
+    4,
+    5
+   ],
+   "events": 10,
+   "superclass": "vnc_motor",
+   "subclass": "ad",
+   "type": "MNad19",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 800611,
+   "ticks": [
+    3
+   ],
+   "events": 153,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx23",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 800615,
+   "ticks": [
+    4,
+    5
+   ],
+   "events": 14,
+   "superclass": "vnc_efferent",
+   "subclass": "",
+   "type": "EN00B013",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 800641,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 528,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "INXXX062",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 800649,
+   "ticks": [
+    3,
+    4,
+    5,
+    6
+   ],
+   "events": 483,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "INXXX062",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 800664,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 214,
+   "superclass": "vnc_motor",
+   "subclass": "ad",
+   "type": "MNad64",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 801632,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 371,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "INXXX045",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 801658,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 264,
+   "superclass": "vnc_intrinsic",
+   "subclass": "CR",
+   "type": "IN01A027",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 801677,
+   "ticks": [
+    3
+   ],
+   "events": 35,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "IN07B022",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 801686,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 160,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN16B049",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 801687,
+   "ticks": [
+    3,
+    4,
+    5,
+    6
+   ],
+   "events": 620,
+   "superclass": "vnc_intrinsic",
+   "subclass": "II",
+   "type": "IN12A005",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 801688,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 364,
+   "superclass": "vnc_intrinsic",
+   "subclass": "",
+   "type": "IN07B061",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 801700,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 301,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "INXXX058",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 802413,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 5,
+   "superclass": "vnc_motor",
+   "subclass": "ad",
+   "type": "MNad53",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 802452,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 18,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN00A027",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 802462,
+   "ticks": [
+    3
+   ],
+   "events": 4,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN01A045",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 802482,
+   "ticks": [
+    4
+   ],
+   "events": 220,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 803581,
+   "ticks": [
+    3
+   ],
+   "events": 149,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx02",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 803608,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 268,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "IN01A044",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 803615,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 309,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "INXXX306",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 803635,
+   "ticks": [
+    4,
+    5
+   ],
+   "events": 217,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "INXXX339",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 803646,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 373,
+   "superclass": "vnc_intrinsic",
+   "subclass": "CI",
+   "type": "IN14A020",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 803763,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 165,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX188",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 803768,
+   "ticks": [
+    3
+   ],
+   "events": 178,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 803910,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 362,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "INXXX241",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 803935,
+   "ticks": [
+    3
+   ],
+   "events": 3,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "INXXX269",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 803941,
+   "ticks": [
+    3
+   ],
+   "events": 61,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN06B073",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 803952,
+   "ticks": [
+    3,
+    4,
+    5,
+    6
+   ],
+   "events": 445,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "IN05B028",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 803987,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 190,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX217",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 803996,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 112,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX287",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 804004,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 361,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX334",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 804005,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 306,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX260",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 804050,
+   "ticks": [
+    4
+   ],
+   "events": 134,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX417",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 804060,
+   "ticks": [
+    3
+   ],
+   "events": 9,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX301",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 804074,
+   "ticks": [
+    3
+   ],
+   "events": 24,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX370",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 804087,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 214,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 804116,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 343,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX370",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 804118,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 293,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "IN05B033",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 804119,
+   "ticks": [
+    4
+   ],
+   "events": 12,
+   "superclass": "vnc_motor",
+   "subclass": "ad",
+   "type": "MNad53",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 804124,
+   "ticks": [
+    3
+   ],
+   "events": 21,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX301",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 804137,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 228,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX333",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 804156,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 199,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX474",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 804168,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 215,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX353",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 804176,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 308,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx09",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 804178,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 345,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX364",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 804202,
+   "ticks": [
+    4
+   ],
+   "events": 214,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx11",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 804320,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 193,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "IN01A059",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 804344,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 226,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX346",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 804345,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 128,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX282",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 804355,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 256,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN02A030",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 804525,
+   "ticks": [
+    4
+   ],
+   "events": 182,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX334",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 804538,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 168,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX373",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 804547,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 109,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX217",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 804574,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 246,
+   "superclass": "vnc_intrinsic",
+   "subclass": "IR",
+   "type": "INXXX400",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 804624,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 299,
+   "superclass": "vnc_intrinsic",
+   "subclass": "",
+   "type": "INXXX302",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 804633,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 216,
+   "superclass": "vnc_intrinsic",
+   "subclass": "IR",
+   "type": "INXXX431",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 804668,
+   "ticks": [
+    3
+   ],
+   "events": 189,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 804671,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 221,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX394",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 804674,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 314,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX283",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 804728,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 206,
+   "superclass": "vnc_intrinsic",
+   "subclass": "II",
+   "type": "IN16B037",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 804736,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 299,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX258",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 804756,
+   "ticks": [
+    4
+   ],
+   "events": 257,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX331",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 804765,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 236,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx09",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 804777,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 337,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx14",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 804792,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 235,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "INXXX341",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 804800,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 171,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX282",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 804825,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 300,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX399",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 804827,
+   "ticks": [
+    3
+   ],
+   "events": 31,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX388",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 804902,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 241,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN19B068",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 804907,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 219,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN06B073",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 804923,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 185,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx14",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 805022,
+   "ticks": [
+    3,
+    4,
+    5,
+    6
+   ],
+   "events": 271,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "IN08B062",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 805046,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 99,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX346",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 805067,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 11,
+   "superclass": "vnc_motor",
+   "subclass": "ad",
+   "type": "MNad08",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 805103,
+   "ticks": [
+    3,
+    4,
+    5,
+    6
+   ],
+   "events": 396,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN00A033",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 805156,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 187,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN19B078",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 805257,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 195,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX365",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 805267,
+   "ticks": [
+    3
+   ],
+   "events": 9,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX350",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 805268,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 178,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX386",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 805271,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 215,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX350",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 805279,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 110,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX332",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 805280,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 643,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX293",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 805281,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 269,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN02A030",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 805295,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 187,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "IN01A061",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 805314,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 151,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNch01",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 805324,
+   "ticks": [
+    5,
+    6
+   ],
+   "events": 164,
+   "superclass": "vnc_intrinsic",
+   "subclass": "IR",
+   "type": "INXXX400",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 805342,
+   "ticks": [
+    3
+   ],
+   "events": 55,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX217",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 805382,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 141,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX315",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 805394,
+   "ticks": [
+    3
+   ],
+   "events": 11,
+   "superclass": "vnc_intrinsic",
+   "subclass": "",
+   "type": "INXXX446",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 805441,
+   "ticks": [
+    4,
+    5
+   ],
+   "events": 255,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "IN01A061",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 805466,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 331,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX369",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 805493,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 169,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNch01",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 805508,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 208,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx11",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 805514,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 386,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX399",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 805533,
+   "ticks": [
+    5,
+    6
+   ],
+   "events": 181,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "IN01A059",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 805534,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 140,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNch01",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 805557,
+   "ticks": [
+    4,
+    5
+   ],
+   "events": 264,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN01A051",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 805574,
+   "ticks": [
+    4
+   ],
+   "events": 102,
+   "superclass": "vnc_intrinsic",
+   "subclass": "",
+   "type": "IN07B061",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 805576,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 128,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN19B068",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 805577,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 13,
+   "superclass": "vnc_motor",
+   "subclass": "ad",
+   "type": "MNad02",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 805587,
+   "ticks": [
+    4
+   ],
+   "events": 136,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNch01",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 805591,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 188,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX406",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 805600,
+   "ticks": [
+    4,
+    5
+   ],
+   "events": 228,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN14A020",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 805623,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 179,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNch01",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 805668,
+   "ticks": [
+    4
+   ],
+   "events": 136,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx07",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 805775,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 247,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN14A020",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 805778,
+   "ticks": [
+    3
+   ],
+   "events": 23,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX217",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 805843,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 349,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN00A033",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 805881,
+   "ticks": [
+    3
+   ],
+   "events": 4,
+   "superclass": "vnc_motor",
+   "subclass": "ad",
+   "type": "MNad05",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 805882,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 121,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN06A066",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 805920,
+   "ticks": [
+    4,
+    5
+   ],
+   "events": 153,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX315",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 805937,
+   "ticks": [
+    3
+   ],
+   "events": 135,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx04",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 805949,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 160,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX474",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 805956,
+   "ticks": [
+    4
+   ],
+   "events": 140,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNch01",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 806008,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 10,
+   "superclass": "vnc_motor",
+   "subclass": "ad",
+   "type": "MNad02",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 806035,
+   "ticks": [
+    3
+   ],
+   "events": 109,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx04",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 806044,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 228,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN19B078",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 806070,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 255,
+   "superclass": "vnc_intrinsic",
+   "subclass": "CR",
+   "type": "IN01A065",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 806087,
+   "ticks": [
+    4
+   ],
+   "events": 17,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN00A024",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 806110,
+   "ticks": [
+    3
+   ],
+   "events": 16,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX399",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 806113,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 274,
+   "superclass": "vnc_intrinsic",
+   "subclass": "IR",
+   "type": "INXXX427",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 806126,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 109,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "IN06B033",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 806130,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 206,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN02A044",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 806134,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 322,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX197",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 806238,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 188,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX332",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 806243,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 135,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN06A064",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 806258,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 118,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN06A098",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 806263,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 100,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN06A106",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 806272,
+   "ticks": [
+    3
+   ],
+   "events": 80,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX418",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 806280,
+   "ticks": [
+    4
+   ],
+   "events": 181,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 806283,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 120,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN06A064",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 806290,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 281,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN02A030",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 806298,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 379,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX253",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 806355,
+   "ticks": [
+    4
+   ],
+   "events": 4,
+   "superclass": "vnc_motor",
+   "subclass": "ad",
+   "type": "MNad08",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 806391,
+   "ticks": [
+    3
+   ],
+   "events": 12,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN01A065",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 806456,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 239,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 806480,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 273,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX364",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 806494,
+   "ticks": [
+    3
+   ],
+   "events": 94,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN02A030",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 806496,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 246,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX393",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 806512,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 234,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX415",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 806559,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 131,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX332",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 806591,
+   "ticks": [
+    4,
+    5
+   ],
+   "events": 13,
+   "superclass": "vnc_efferent",
+   "subclass": "",
+   "type": "EN00B012",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 806611,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 83,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN06B073",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 806646,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 136,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX363",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 806778,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 189,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx15",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 806817,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 2,
+   "superclass": "vnc_motor",
+   "subclass": "ad",
+   "type": "MNad11",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 806883,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 100,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx17",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 806928,
+   "ticks": [
+    3
+   ],
+   "events": 119,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx23",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 806949,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 133,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN06A064",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 806958,
+   "ticks": [
+    4
+   ],
+   "events": 84,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN06A109",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 807132,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 460,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX316",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 807169,
+   "ticks": [
+    3
+   ],
+   "events": 107,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx23",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 807192,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 162,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNch01",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 807199,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 171,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX407",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 807248,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 251,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 807283,
+   "ticks": [
+    4
+   ],
+   "events": 197,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx14",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 807288,
+   "ticks": [
+    4,
+    5
+   ],
+   "events": 3,
+   "superclass": "vnc_endocrine",
+   "subclass": "ad",
+   "type": "LK",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 807291,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 17,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN06A098",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 807292,
+   "ticks": [
+    3
+   ],
+   "events": 108,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX290",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 807346,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 434,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX290",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 807382,
+   "ticks": [
+    5
+   ],
+   "events": 136,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx01",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 807420,
+   "ticks": [
+    3
+   ],
+   "events": 165,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 807424,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 260,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX396",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 807435,
+   "ticks": [
+    4,
+    5,
+    6
+   ],
+   "events": 511,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX290",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 807454,
+   "ticks": [
+    3,
+    4,
+    5,
+    6
+   ],
+   "events": 340,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "AN05B108",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 807506,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 176,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX397",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 807527,
+   "ticks": [
+    3
+   ],
+   "events": 182,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx14",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 807546,
+   "ticks": [
+    4
+   ],
+   "events": 141,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx01",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 807573,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 247,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "INXXX396",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 807630,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 173,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX407",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 807657,
+   "ticks": [
+    3
+   ],
+   "events": 186,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 807713,
+   "ticks": [
+    4
+   ],
+   "events": 3,
+   "superclass": "vnc_motor",
+   "subclass": "ad",
+   "type": "MNad02",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 807730,
+   "ticks": [
+    3
+   ],
+   "events": 188,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx14",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 807747,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 185,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN06A063",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 807780,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 119,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX374",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 807787,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 115,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN06B073",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 807863,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 201,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 807967,
+   "ticks": [
+    3
+   ],
+   "events": 148,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNch01",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 807997,
+   "ticks": [
+    3
+   ],
+   "events": 183,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 808155,
+   "ticks": [
+    3
+   ],
+   "events": 183,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 808164,
+   "ticks": [
+    4
+   ],
+   "events": 229,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 808176,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 168,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX411",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 808183,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 348,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN09A005",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 808207,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 179,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX411",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 808208,
+   "ticks": [
+    4
+   ],
+   "events": 2,
+   "superclass": "vnc_motor",
+   "subclass": "ad",
+   "type": "MNad02",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 808255,
+   "ticks": [
+    3
+   ],
+   "events": 1,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX452",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 808280,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 140,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX411",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 808329,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 221,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 808350,
+   "ticks": [
+    3
+   ],
+   "events": 170,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx14",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 808353,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 25,
+   "superclass": "vnc_efferent",
+   "subclass": "",
+   "type": "EN00B013",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 808399,
+   "ticks": [
+    3
+   ],
+   "events": 107,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 808404,
+   "ticks": [
+    4
+   ],
+   "events": 115,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 808454,
+   "ticks": [
+    4,
+    5
+   ],
+   "events": 4,
+   "superclass": "vnc_efferent",
+   "subclass": "",
+   "type": "",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 808456,
+   "ticks": [
+    4
+   ],
+   "events": 3,
+   "superclass": "vnc_efferent",
+   "subclass": "",
+   "type": "",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 808457,
+   "ticks": [
+    4
+   ],
+   "events": 10,
+   "superclass": "vnc_efferent",
+   "subclass": "",
+   "type": "",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 808473,
+   "ticks": [
+    4
+   ],
+   "events": 102,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 808489,
+   "ticks": [
+    4,
+    5,
+    6,
+    7
+   ],
+   "events": 537,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "IN05B028",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 808500,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 99,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN06A106",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 808571,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 93,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN19A099",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 808715,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 412,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX293",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 808733,
+   "ticks": [
+    4
+   ],
+   "events": 107,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 808765,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 97,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN06A106",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 808769,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 79,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN06A106",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 808775,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 148,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX397",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 808834,
+   "ticks": [
+    4,
+    5
+   ],
+   "events": 174,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "INXXX280",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 808856,
+   "ticks": [
+    4,
+    5
+   ],
+   "events": 16,
+   "superclass": "vnc_efferent",
+   "subclass": "",
+   "type": "EN00B004",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 808874,
+   "ticks": [
+    3
+   ],
+   "events": 171,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx04",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 808879,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 107,
+   "superclass": "vnc_intrinsic",
+   "subclass": "",
+   "type": "IN07B061",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 808890,
+   "ticks": [
+    3
+   ],
+   "events": 18,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN19A099",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 808944,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 199,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx20",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 809022,
+   "ticks": [
+    4,
+    5
+   ],
+   "events": 166,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX396",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 809050,
+   "ticks": [
+    3
+   ],
+   "events": 37,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX407",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 809061,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 174,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX411",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 809163,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 144,
+   "superclass": "vnc_intrinsic",
+   "subclass": "IR",
+   "type": "INXXX360",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 809179,
+   "ticks": [
+    4
+   ],
+   "events": 153,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 809225,
+   "ticks": [
+    3
+   ],
+   "events": 119,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX326",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 809260,
+   "ticks": [
+    3
+   ],
+   "events": 6,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx19",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 809292,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 155,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN06A063",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 809327,
+   "ticks": [
+    3
+   ],
+   "events": 177,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 809355,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 183,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "INXXX280",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 809445,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 130,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX424",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 809480,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 152,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx20",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 809529,
+   "ticks": [
+    3
+   ],
+   "events": 128,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN02A054",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 809536,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 174,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN02A044",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 809580,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 306,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX275",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 809690,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 378,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN14A029",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 809707,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 156,
+   "superclass": "vnc_intrinsic",
+   "subclass": "",
+   "type": "INXXX446",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 809845,
+   "ticks": [
+    4
+   ],
+   "events": 134,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX417",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 809862,
+   "ticks": [
+    4
+   ],
+   "events": 1,
+   "superclass": "vnc_motor",
+   "subclass": "ad",
+   "type": "MNad09",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 809874,
+   "ticks": [
+    3
+   ],
+   "events": 132,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx14",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 809937,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 140,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX438",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 809974,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 12,
+   "superclass": "vnc_efferent",
+   "subclass": "",
+   "type": "EN00B010",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 810004,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 63,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNpp02",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 810021,
+   "ticks": [
+    4
+   ],
+   "events": 199,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx01",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 810069,
+   "ticks": [
+    4
+   ],
+   "events": 2,
+   "superclass": "vnc_motor",
+   "subclass": "ad",
+   "type": "MNad09",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 810086,
+   "ticks": [
+    3
+   ],
+   "events": 5,
+   "superclass": "vnc_motor",
+   "subclass": "ad",
+   "type": "MNad03",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 810095,
+   "ticks": [
+    4
+   ],
+   "events": 175,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx14",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 810270,
+   "ticks": [
+    3
+   ],
+   "events": 130,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx14",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 810301,
+   "ticks": [
+    3
+   ],
+   "events": 104,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 810307,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 209,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX364",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 810321,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 137,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx20",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 810349,
+   "ticks": [
+    3
+   ],
+   "events": 100,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 810364,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 241,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN02A059",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 810372,
+   "ticks": [
+    4
+   ],
+   "events": 5,
+   "superclass": "vnc_motor",
+   "subclass": "ad",
+   "type": "MNad09",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 810390,
+   "ticks": [
+    3
+   ],
+   "events": 18,
+   "superclass": "vnc_intrinsic",
+   "subclass": "",
+   "type": "INXXX446",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 810453,
+   "ticks": [
+    4,
+    5
+   ],
+   "events": 9,
+   "superclass": "vnc_efferent",
+   "subclass": "",
+   "type": "EN00B016",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 810476,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 153,
+   "superclass": "vnc_intrinsic",
+   "subclass": "IR",
+   "type": "INXXX431",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 810596,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 154,
+   "superclass": "vnc_intrinsic",
+   "subclass": "IR",
+   "type": "IN02A054",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 810722,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 141,
+   "superclass": "ascending_neuron",
+   "subclass": "BA",
+   "type": "ANXXX150",
+   "afferent": false,
+   "ascending": true
+  },
+  {
+   "id": 810768,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 221,
+   "superclass": "vnc_intrinsic",
+   "subclass": "",
+   "type": "INXXX446",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 810776,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 163,
+   "superclass": "vnc_intrinsic",
+   "subclass": "",
+   "type": "INXXX446",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 810859,
+   "ticks": [
+    4
+   ],
+   "events": 7,
+   "superclass": "vnc_efferent",
+   "subclass": "",
+   "type": "",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 810935,
+   "ticks": [
+    4
+   ],
+   "events": 80,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN06A117",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 811015,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 204,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 811139,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 422,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN14A029",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 811168,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 164,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX438",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 811199,
+   "ticks": [
+    3
+   ],
+   "events": 27,
+   "superclass": "vnc_intrinsic",
+   "subclass": "",
+   "type": "INXXX446",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 811295,
+   "ticks": [
+    3
+   ],
+   "events": 22,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN14A029",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 811397,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 231,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx21",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 811414,
+   "ticks": [
+    4,
+    5
+   ],
+   "events": 12,
+   "superclass": "vnc_efferent",
+   "subclass": "",
+   "type": "EN00B016",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 811420,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 153,
+   "superclass": "vnc_intrinsic",
+   "subclass": "",
+   "type": "INXXX448",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 811502,
+   "ticks": [
+    3
+   ],
+   "events": 103,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 811554,
+   "ticks": [
+    4,
+    5
+   ],
+   "events": 2,
+   "superclass": "vnc_motor",
+   "subclass": "ad",
+   "type": "MNad07",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 811622,
+   "ticks": [
+    3
+   ],
+   "events": 131,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx04",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 811698,
+   "ticks": [
+    3
+   ],
+   "events": 149,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 811704,
+   "ticks": [
+    3
+   ],
+   "events": 138,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx14",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 811869,
+   "ticks": [
+    4
+   ],
+   "events": 131,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX443",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 811952,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 12,
+   "superclass": "vnc_motor",
+   "subclass": "ad",
+   "type": "MNad07",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 812018,
+   "ticks": [
+    3
+   ],
+   "events": 144,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 812026,
+   "ticks": [
+    4
+   ],
+   "events": 128,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx14",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 812045,
+   "ticks": [
+    4
+   ],
+   "events": 84,
+   "superclass": "vnc_intrinsic",
+   "subclass": "",
+   "type": "INXXX448",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 812086,
+   "ticks": [
+    3
+   ],
+   "events": 70,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 812156,
+   "ticks": [
+    3
+   ],
+   "events": 127,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 812161,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 151,
+   "superclass": "vnc_intrinsic",
+   "subclass": "",
+   "type": "INXXX446",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 812172,
+   "ticks": [
+    3
+   ],
+   "events": 141,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 812193,
+   "ticks": [
+    4
+   ],
+   "events": 4,
+   "superclass": "vnc_motor",
+   "subclass": "ad",
+   "type": "MNad55",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 812203,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 173,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX456",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 812208,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 269,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN14A029",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 812284,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 198,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx20",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 812338,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 163,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx20",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 812357,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 224,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN02A059",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 812564,
+   "ticks": [
+    4
+   ],
+   "events": 139,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx14",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 812587,
+   "ticks": [
+    3
+   ],
+   "events": 15,
+   "superclass": "vnc_intrinsic",
+   "subclass": "",
+   "type": "INXXX446",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 812624,
+   "ticks": [
+    4
+   ],
+   "events": 167,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx21",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 812632,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 453,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "INXXX237",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 812718,
+   "ticks": [
+    4
+   ],
+   "events": 5,
+   "superclass": "vnc_motor",
+   "subclass": "ad",
+   "type": "MNad07",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 812767,
+   "ticks": [
+    3
+   ],
+   "events": 2,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN14A029",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 812821,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 141,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX452",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 812830,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 133,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX424",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 813030,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 232,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx21",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 813057,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 189,
+   "superclass": "vnc_intrinsic",
+   "subclass": "",
+   "type": "",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 813076,
+   "ticks": [
+    3,
+    4,
+    5,
+    6
+   ],
+   "events": 297,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "IN09A005",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 813084,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 105,
+   "superclass": "vnc_intrinsic",
+   "subclass": "",
+   "type": "INXXX448",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 813134,
+   "ticks": [
+    3
+   ],
+   "events": 138,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx14",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 813136,
+   "ticks": [
+    4
+   ],
+   "events": 128,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx14",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 813189,
+   "ticks": [
+    3
+   ],
+   "events": 126,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx14",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 813193,
+   "ticks": [
+    4
+   ],
+   "events": 112,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 813204,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 197,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX364",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 813270,
+   "ticks": [
+    3
+   ],
+   "events": 107,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 813303,
+   "ticks": [
+    3
+   ],
+   "events": 129,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 813332,
+   "ticks": [
+    4
+   ],
+   "events": 80,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX450",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 813366,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 153,
+   "superclass": "vnc_intrinsic",
+   "subclass": "",
+   "type": "INXXX446",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 813367,
+   "ticks": [
+    4
+   ],
+   "events": 139,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx14",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 813368,
+   "ticks": [
+    3
+   ],
+   "events": 97,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx04",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 813371,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 109,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx21",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 813465,
+   "ticks": [
+    3
+   ],
+   "events": 5,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN02A059",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 813546,
+   "ticks": [
+    4
+   ],
+   "events": 4,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN02A059",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 813635,
+   "ticks": [
+    4
+   ],
+   "events": 147,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx20",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 813659,
+   "ticks": [
+    3
+   ],
+   "events": 154,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 813665,
+   "ticks": [
+    3
+   ],
+   "events": 124,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx04",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 813695,
+   "ticks": [
+    4
+   ],
+   "events": 12,
+   "superclass": "vnc_endocrine",
+   "subclass": "ad",
+   "type": "LK",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 813725,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 5,
+   "superclass": "vnc_endocrine",
+   "subclass": "ad",
+   "type": "LK",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 813730,
+   "ticks": [
+    4,
+    5
+   ],
+   "events": 96,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNpp01",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 813772,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 211,
+   "superclass": "vnc_intrinsic",
+   "subclass": "",
+   "type": "INXXX454",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 813792,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 145,
+   "superclass": "vnc_intrinsic",
+   "subclass": "",
+   "type": "INXXX454",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 813799,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 195,
+   "superclass": "vnc_intrinsic",
+   "subclass": "",
+   "type": "INXXX454",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 813862,
+   "ticks": [
+    3
+   ],
+   "events": 123,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 813875,
+   "ticks": [
+    3
+   ],
+   "events": 126,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx14",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 813906,
+   "ticks": [
+    3
+   ],
+   "events": 131,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx14",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 813923,
+   "ticks": [
+    3
+   ],
+   "events": 150,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx04",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 814112,
+   "ticks": [
+    4
+   ],
+   "events": 122,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 814115,
+   "ticks": [
+    4,
+    5,
+    6
+   ],
+   "events": 257,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "IN09A005",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 814250,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 122,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 814262,
+   "ticks": [
+    3
+   ],
+   "events": 123,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx14",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 814263,
+   "ticks": [
+    3
+   ],
+   "events": 9,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX295",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 814305,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 256,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN00A024",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 814430,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 17,
+   "superclass": "vnc_motor",
+   "subclass": "ad",
+   "type": "MNad03",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 814468,
+   "ticks": [
+    3,
+    4,
+    5,
+    6
+   ],
+   "events": 361,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "INXXX245",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 814470,
+   "ticks": [
+    4,
+    5
+   ],
+   "events": 14,
+   "superclass": "vnc_efferent",
+   "subclass": "",
+   "type": "",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 814510,
+   "ticks": [
+    3
+   ],
+   "events": 100,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx14",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 814516,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 95,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN02A059",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 814564,
+   "ticks": [
+    3
+   ],
+   "events": 130,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 814579,
+   "ticks": [
+    3
+   ],
+   "events": 110,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 814679,
+   "ticks": [
+    4,
+    5
+   ],
+   "events": 97,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNpp01",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 814753,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 245,
+   "superclass": "vnc_intrinsic",
+   "subclass": "",
+   "type": "",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 814771,
+   "ticks": [
+    5
+   ],
+   "events": 84,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNpp02",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 814834,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 109,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX436",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 814842,
+   "ticks": [
+    3
+   ],
+   "events": 18,
+   "superclass": "vnc_intrinsic",
+   "subclass": "",
+   "type": "INXXX446",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 814907,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 154,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 814918,
+   "ticks": [
+    3
+   ],
+   "events": 115,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx14",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 815117,
+   "ticks": [
+    3
+   ],
+   "events": 101,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx14",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 815164,
+   "ticks": [
+    3
+   ],
+   "events": 103,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx14",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 815179,
+   "ticks": [
+    3
+   ],
+   "events": 138,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx04",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 815182,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 294,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX295",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 815225,
+   "ticks": [
+    3
+   ],
+   "events": 119,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx04",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 815283,
+   "ticks": [
+    4
+   ],
+   "events": 101,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 815303,
+   "ticks": [
+    3
+   ],
+   "events": 104,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx14",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 815318,
+   "ticks": [
+    3
+   ],
+   "events": 96,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 815358,
+   "ticks": [
+    3
+   ],
+   "events": 25,
+   "superclass": "vnc_intrinsic",
+   "subclass": "",
+   "type": "INXXX454",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 815405,
+   "ticks": [
+    3
+   ],
+   "events": 113,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 815429,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 260,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX293",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 815445,
+   "ticks": [
+    4
+   ],
+   "events": 12,
+   "superclass": "vnc_efferent",
+   "subclass": "",
+   "type": "",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 815448,
+   "ticks": [
+    4
+   ],
+   "events": 63,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNpp02",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 815494,
+   "ticks": [
+    3
+   ],
+   "events": 112,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 815506,
+   "ticks": [
+    3
+   ],
+   "events": 100,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 815507,
+   "ticks": [
+    4
+   ],
+   "events": 83,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 815521,
+   "ticks": [
+    3
+   ],
+   "events": 109,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx04",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 815568,
+   "ticks": [
+    3
+   ],
+   "events": 104,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 815653,
+   "ticks": [
+    3
+   ],
+   "events": 107,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 815670,
+   "ticks": [
+    4,
+    5
+   ],
+   "events": 81,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNpp02",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 815706,
+   "ticks": [
+    3
+   ],
+   "events": 143,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx04",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 815720,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 109,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 815773,
+   "ticks": [
+    3
+   ],
+   "events": 110,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx04",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 815778,
+   "ticks": [
+    3
+   ],
+   "events": 107,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 815788,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 387,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX285",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 815817,
+   "ticks": [
+    3
+   ],
+   "events": 107,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx04",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 815907,
+   "ticks": [
+    3
+   ],
+   "events": 121,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx04",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 815943,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 80,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNpp02",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 815977,
+   "ticks": [
+    3
+   ],
+   "events": 112,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 816011,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 138,
+   "superclass": "vnc_intrinsic",
+   "subclass": "",
+   "type": "INXXX446",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 816028,
+   "ticks": [
+    4
+   ],
+   "events": 111,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx14",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 816035,
+   "ticks": [
+    3
+   ],
+   "events": 115,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 816048,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 166,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 816057,
+   "ticks": [
+    3
+   ],
+   "events": 117,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx04",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 816079,
+   "ticks": [
+    3
+   ],
+   "events": 129,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 816130,
+   "ticks": [
+    3
+   ],
+   "events": 95,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx14",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 816221,
+   "ticks": [
+    3
+   ],
+   "events": 115,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx04",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 816260,
+   "ticks": [
+    3
+   ],
+   "events": 76,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx21",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 816335,
+   "ticks": [
+    3
+   ],
+   "events": 122,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx04",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 816413,
+   "ticks": [
+    3
+   ],
+   "events": 103,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 816427,
+   "ticks": [
+    4,
+    5
+   ],
+   "events": 78,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNpp01",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 816499,
+   "ticks": [
+    3
+   ],
+   "events": 104,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 816523,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 143,
+   "superclass": "vnc_intrinsic",
+   "subclass": "",
+   "type": "INXXX446",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 816577,
+   "ticks": [
+    4
+   ],
+   "events": 93,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 816587,
+   "ticks": [
+    3
+   ],
+   "events": 92,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx04",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 816631,
+   "ticks": [
+    4
+   ],
+   "events": 100,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 816696,
+   "ticks": [
+    3
+   ],
+   "events": 120,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 816801,
+   "ticks": [
+    3
+   ],
+   "events": 114,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 816808,
+   "ticks": [
+    3
+   ],
+   "events": 116,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 816823,
+   "ticks": [
+    3
+   ],
+   "events": 110,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx04",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 816847,
+   "ticks": [
+    3
+   ],
+   "events": 112,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 816859,
+   "ticks": [
+    4
+   ],
+   "events": 98,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 816902,
+   "ticks": [
+    4
+   ],
+   "events": 139,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 816908,
+   "ticks": [
+    3,
+    4,
+    5,
+    6
+   ],
+   "events": 344,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX244",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 816910,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 91,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 816933,
+   "ticks": [
+    4
+   ],
+   "events": 89,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 816936,
+   "ticks": [
+    3
+   ],
+   "events": 98,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx04",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 816941,
+   "ticks": [
+    3
+   ],
+   "events": 111,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 816976,
+   "ticks": [
+    4,
+    5
+   ],
+   "events": 7,
+   "superclass": "vnc_efferent",
+   "subclass": "",
+   "type": "",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 816994,
+   "ticks": [
+    3
+   ],
+   "events": 108,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 817064,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 134,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 817157,
+   "ticks": [
+    3
+   ],
+   "events": 97,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 817215,
+   "ticks": [
+    3
+   ],
+   "events": 129,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 817226,
+   "ticks": [
+    3
+   ],
+   "events": 90,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 817252,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 131,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 817336,
+   "ticks": [
+    3
+   ],
+   "events": 86,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 817337,
+   "ticks": [
+    4
+   ],
+   "events": 100,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 817345,
+   "ticks": [
+    3
+   ],
+   "events": 89,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 817349,
+   "ticks": [
+    3
+   ],
+   "events": 92,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx04",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 817354,
+   "ticks": [
+    4
+   ],
+   "events": 109,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 817361,
+   "ticks": [
+    3
+   ],
+   "events": 112,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 817391,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 316,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN14A029",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 817439,
+   "ticks": [
+    3
+   ],
+   "events": 91,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 817444,
+   "ticks": [
+    3
+   ],
+   "events": 110,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx04",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 817501,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 119,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 817535,
+   "ticks": [
+    3
+   ],
+   "events": 96,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx04",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 817540,
+   "ticks": [
+    3
+   ],
+   "events": 102,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx04",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 817603,
+   "ticks": [
+    3
+   ],
+   "events": 108,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 817611,
+   "ticks": [
+    4
+   ],
+   "events": 119,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 817613,
+   "ticks": [
+    4
+   ],
+   "events": 90,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 817626,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 125,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 817628,
+   "ticks": [
+    4
+   ],
+   "events": 112,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx05",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 817661,
+   "ticks": [
+    3
+   ],
+   "events": 101,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 817692,
+   "ticks": [
+    3
+   ],
+   "events": 87,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 817699,
+   "ticks": [
+    3
+   ],
+   "events": 99,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx04",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 817720,
+   "ticks": [
+    3
+   ],
+   "events": 89,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx04",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 817721,
+   "ticks": [
+    3
+   ],
+   "events": 93,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 817760,
+   "ticks": [
+    3
+   ],
+   "events": 112,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx04",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 817767,
+   "ticks": [
+    3
+   ],
+   "events": 94,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 817801,
+   "ticks": [
+    3
+   ],
+   "events": 101,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 817816,
+   "ticks": [
+    3
+   ],
+   "events": 89,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 817838,
+   "ticks": [
+    4
+   ],
+   "events": 20,
+   "superclass": "vnc_efferent",
+   "subclass": "",
+   "type": "EN00B013",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 817842,
+   "ticks": [
+    3
+   ],
+   "events": 90,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 817856,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 86,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx05",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 817877,
+   "ticks": [
+    3
+   ],
+   "events": 89,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx04",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 817878,
+   "ticks": [
+    3
+   ],
+   "events": 109,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 817897,
+   "ticks": [
+    3
+   ],
+   "events": 105,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 817909,
+   "ticks": [
+    3
+   ],
+   "events": 91,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx04",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 817972,
+   "ticks": [
+    3
+   ],
+   "events": 87,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 818009,
+   "ticks": [
+    3
+   ],
+   "events": 94,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx04",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 818025,
+   "ticks": [
+    3
+   ],
+   "events": 101,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 818049,
+   "ticks": [
+    4
+   ],
+   "events": 86,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 818144,
+   "ticks": [
+    4
+   ],
+   "events": 52,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx21",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 818238,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 51,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNpp01",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 818419,
+   "ticks": [
+    4
+   ],
+   "events": 90,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx05",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 818527,
+   "ticks": [
+    4
+   ],
+   "events": 4,
+   "superclass": "vnc_efferent",
+   "subclass": "",
+   "type": "EN00B026",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 818535,
+   "ticks": [
+    3
+   ],
+   "events": 81,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 818635,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 88,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 818692,
+   "ticks": [
+    3
+   ],
+   "events": 95,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx04",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 818723,
+   "ticks": [
+    3
+   ],
+   "events": 88,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx04",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 818737,
+   "ticks": [
+    5
+   ],
+   "events": 5,
+   "superclass": "vnc_efferent",
+   "subclass": "",
+   "type": "",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 818743,
+   "ticks": [
+    4
+   ],
+   "events": 85,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 818864,
+   "ticks": [
+    3
+   ],
+   "events": 83,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx04",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 818881,
+   "ticks": [
+    4
+   ],
+   "events": 86,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 818882,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 87,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx16",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 818968,
+   "ticks": [
+    3
+   ],
+   "events": 70,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx20",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 819067,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 48,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNpp01",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 819104,
+   "ticks": [
+    3
+   ],
+   "events": 95,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 819110,
+   "ticks": [
+    4
+   ],
+   "events": 89,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 819209,
+   "ticks": [
+    4
+   ],
+   "events": 89,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 819247,
+   "ticks": [
+    4
+   ],
+   "events": 83,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 819256,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 103,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 819281,
+   "ticks": [
+    4
+   ],
+   "events": 74,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx05",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 819342,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 4,
+   "superclass": "vnc_efferent",
+   "subclass": "",
+   "type": "EN00B023",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 819390,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 98,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 819514,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 76,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx20",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 819554,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 77,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx05",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 819608,
+   "ticks": [
+    4
+   ],
+   "events": 1,
+   "superclass": "vnc_efferent",
+   "subclass": "",
+   "type": "ENXXX226",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 819614,
+   "ticks": [
+    3
+   ],
+   "events": 85,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 819623,
+   "ticks": [
+    3
+   ],
+   "events": 75,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 819855,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 76,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx05",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 819862,
+   "ticks": [
+    3
+   ],
+   "events": 65,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx04",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 819980,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 73,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 819990,
+   "ticks": [
+    4
+   ],
+   "events": 91,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx05",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 820188,
+   "ticks": [
+    4
+   ],
+   "events": 68,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx05",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 820319,
+   "ticks": [
+    4
+   ],
+   "events": 102,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 820375,
+   "ticks": [
+    4
+   ],
+   "events": 72,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx05",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 820520,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 609,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX293",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 820570,
+   "ticks": [
+    4
+   ],
+   "events": 92,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 820758,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 53,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNpp01",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 820883,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 2,
+   "superclass": "vnc_efferent",
+   "subclass": "",
+   "type": "ENXXX226",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 820945,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 77,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx16",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 821096,
+   "ticks": [
+    4
+   ],
+   "events": 59,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 821131,
+   "ticks": [
+    4
+   ],
+   "events": 58,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 821265,
+   "ticks": [
+    4
+   ],
+   "events": 57,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 821267,
+   "ticks": [
+    4
+   ],
+   "events": 65,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 821284,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 50,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 821703,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 60,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 822364,
+   "ticks": [
+    3
+   ],
+   "events": 20,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx19",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 822384,
+   "ticks": [
+    3
+   ],
+   "events": 48,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx16",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 823060,
+   "ticks": [
+    5
+   ],
+   "events": 86,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx01",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 823637,
+   "ticks": [
+    4
+   ],
+   "events": 128,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 824447,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 83,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 825066,
+   "ticks": [
+    4
+   ],
+   "events": 38,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 826805,
+   "ticks": [
+    5
+   ],
+   "events": 82,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 828582,
+   "ticks": [
+    4
+   ],
+   "events": 23,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 829527,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 8,
+   "superclass": "vnc_endocrine",
+   "subclass": "ad",
+   "type": "LK",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 829562,
+   "ticks": [
+    4
+   ],
+   "events": 26,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx05",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 851549,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 78,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN06A106",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 855832,
+   "ticks": [
+    4
+   ],
+   "events": 11,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 879926,
+   "ticks": [
+    4,
+    5
+   ],
+   "events": 99,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNpp02",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 902687,
+   "ticks": [
+    4
+   ],
+   "events": 202,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx11",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 902689,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 216,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX334",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 902691,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 232,
+   "superclass": "vnc_intrinsic",
+   "subclass": "IR",
+   "type": "INXXX360",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 902699,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 171,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX052",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 902728,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 454,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX209",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 902735,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 104,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX333",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 902772,
+   "ticks": [
+    3,
+    4,
+    5,
+    6
+   ],
+   "events": 173,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "IN23B035",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 902775,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 273,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX260",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 902844,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 682,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX197",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 903018,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 334,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX262",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 903021,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 249,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX197",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 903101,
+   "ticks": [
+    3
+   ],
+   "events": 73,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 903107,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 262,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX364",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 903140,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 487,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "INXXX114",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 903422,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 304,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN01A043",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 903484,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 38,
+   "superclass": "vnc_efferent",
+   "subclass": "ad",
+   "type": "EN00B003",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 903491,
+   "ticks": [
+    3
+   ],
+   "events": 15,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "INXXX269",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 903563,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 158,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX418",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 903623,
+   "ticks": [
+    3,
+    4,
+    5,
+    6
+   ],
+   "events": 486,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BA",
+   "type": "AN05B036",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 903634,
+   "ticks": [
+    3
+   ],
+   "events": 37,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX267",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 903679,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 49,
+   "superclass": "vnc_motor",
+   "subclass": "ad",
+   "type": "MNad67",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 903780,
+   "ticks": [
+    3
+   ],
+   "events": 53,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX258",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 903859,
+   "ticks": [
+    3
+   ],
+   "events": 3,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX230",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 903861,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 393,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX258",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 903938,
+   "ticks": [
+    3
+   ],
+   "events": 41,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "INXXX231",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 904011,
+   "ticks": [
+    3
+   ],
+   "events": 139,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 904047,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 346,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX149",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 904108,
+   "ticks": [
+    3
+   ],
+   "events": 17,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX230",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 904110,
+   "ticks": [
+    3
+   ],
+   "events": 105,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx04",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 904120,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 131,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx21",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 904191,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 221,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX442",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 904192,
+   "ticks": [
+    3
+   ],
+   "events": 18,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX258",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 904243,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 323,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX246",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 904274,
+   "ticks": [
+    4,
+    5
+   ],
+   "events": 99,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNpp01",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 904306,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 175,
+   "superclass": "vnc_intrinsic",
+   "subclass": "",
+   "type": "INXXX446",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 904393,
+   "ticks": [
+    3
+   ],
+   "events": 122,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 904655,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 261,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "INXXX122",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 904666,
+   "ticks": [
+    3
+   ],
+   "events": 97,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx04",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 904853,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 235,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "IN12A024",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 904898,
+   "ticks": [
+    3,
+    4,
+    5,
+    6
+   ],
+   "events": 720,
+   "superclass": "vnc_intrinsic",
+   "subclass": "II",
+   "type": "INXXX045",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 904909,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 203,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 905136,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 197,
+   "superclass": "vnc_intrinsic",
+   "subclass": "",
+   "type": "",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 905148,
+   "ticks": [
+    3
+   ],
+   "events": 5,
+   "superclass": "vnc_intrinsic",
+   "subclass": "",
+   "type": "INXXX446",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 905149,
+   "ticks": [
+    3
+   ],
+   "events": 23,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN01A051",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 905171,
+   "ticks": [
+    4,
+    5
+   ],
+   "events": 362,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "IN12A026",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 905231,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 472,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "INXXX281",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 905253,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 22,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX421",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 905298,
+   "ticks": [
+    4,
+    5
+   ],
+   "events": 95,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNpp02",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 905425,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 314,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "INXXX425",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 905443,
+   "ticks": [
+    3
+   ],
+   "events": 122,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 905533,
+   "ticks": [
+    3
+   ],
+   "events": 166,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx14",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 905557,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 425,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "INXXX122",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 905604,
+   "ticks": [
+    3
+   ],
+   "events": 20,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX299",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 905613,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 312,
+   "superclass": "vnc_intrinsic",
+   "subclass": "",
+   "type": "INXXX322",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 905891,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 169,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx23",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 905905,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 415,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX230",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 905907,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 167,
+   "superclass": "vnc_intrinsic",
+   "subclass": "IR",
+   "type": "INXXX427",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 905917,
+   "ticks": [
+    4
+   ],
+   "events": 54,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNpp02",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 905924,
+   "ticks": [
+    3
+   ],
+   "events": 38,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX279",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 905993,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 218,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX353",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 906072,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 272,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX442",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 906089,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 107,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx17",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 906092,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 347,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX230",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 906111,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 4,
+   "superclass": "vnc_motor",
+   "subclass": "ad",
+   "type": "MNad20",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 906189,
+   "ticks": [
+    3
+   ],
+   "events": 25,
+   "superclass": "vnc_intrinsic",
+   "subclass": "",
+   "type": "IN07B061",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 906236,
+   "ticks": [
+    3
+   ],
+   "events": 87,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN01A043",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 906307,
+   "ticks": [
+    3
+   ],
+   "events": 76,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX287",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 906312,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 151,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx17",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 906334,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 207,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx08",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 906551,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 144,
+   "superclass": "vnc_intrinsic",
+   "subclass": "IR",
+   "type": "INXXX225",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 906634,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 144,
+   "superclass": "vnc_intrinsic",
+   "subclass": "",
+   "type": "INXXX448",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 906662,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 321,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx08",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 906663,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 545,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX364",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 906669,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 244,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX320",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 906712,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 229,
+   "superclass": "vnc_intrinsic",
+   "subclass": "",
+   "type": "",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 907233,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 355,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN01A051",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 907237,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 56,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX317",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 907251,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 426,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "IN01A048",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 907323,
+   "ticks": [
+    3
+   ],
+   "events": 124,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx04",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 907324,
+   "ticks": [
+    3
+   ],
+   "events": 213,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 907399,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 183,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX349",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 907500,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 371,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX416",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 907525,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 218,
+   "superclass": "vnc_intrinsic",
+   "subclass": "",
+   "type": "INXXX446",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 907528,
+   "ticks": [
+    3
+   ],
+   "events": 154,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx23",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 907578,
+   "ticks": [
+    3
+   ],
+   "events": 132,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx23",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 907580,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 226,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN16B049",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 907690,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 124,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX353",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 907722,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 159,
+   "superclass": "vnc_intrinsic",
+   "subclass": "",
+   "type": "INXXX322",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 907723,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 165,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX394",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 907835,
+   "ticks": [
+    4,
+    5
+   ],
+   "events": 26,
+   "superclass": "vnc_efferent",
+   "subclass": "",
+   "type": "EN00B010",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 907987,
+   "ticks": [
+    3,
+    4,
+    5,
+    6
+   ],
+   "events": 302,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX244",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 908045,
+   "ticks": [
+    4,
+    5,
+    6
+   ],
+   "events": 270,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX273",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 908084,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 505,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "IN01A045",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 908135,
+   "ticks": [
+    3
+   ],
+   "events": 111,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx04",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 908136,
+   "ticks": [
+    3
+   ],
+   "events": 159,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx04",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 908138,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 174,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNch01",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 908178,
+   "ticks": [
+    3
+   ],
+   "events": 24,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN19B068",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 908274,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 100,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX326",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 908285,
+   "ticks": [
+    4
+   ],
+   "events": 7,
+   "superclass": "vnc_motor",
+   "subclass": "ad",
+   "type": "MNad50",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 908286,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 235,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN14A020",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 908337,
+   "ticks": [
+    3
+   ],
+   "events": 109,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx04",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 908393,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 343,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX283",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 908728,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 270,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX357",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 908866,
+   "ticks": [
+    3
+   ],
+   "events": 202,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx04",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 908946,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 220,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 908962,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 242,
+   "superclass": "vnc_intrinsic",
+   "subclass": "CI",
+   "type": "IN14A020",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 909068,
+   "ticks": [
+    4,
+    5
+   ],
+   "events": 212,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "IN01A061",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 909139,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 516,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN00A017",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 909195,
+   "ticks": [
+    3
+   ],
+   "events": 30,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN00A033",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 909199,
+   "ticks": [
+    4
+   ],
+   "events": 123,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx19",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 909217,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 205,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN19B078",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 909257,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 155,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX292",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 909363,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 293,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX416",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 909421,
+   "ticks": [
+    3
+   ],
+   "events": 117,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx04",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 909422,
+   "ticks": [
+    3
+   ],
+   "events": 136,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx04",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 909441,
+   "ticks": [
+    3
+   ],
+   "events": 40,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "IN08B062",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 909515,
+   "ticks": [
+    3
+   ],
+   "events": 118,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx19",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 909633,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 162,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX403",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 909643,
+   "ticks": [
+    4
+   ],
+   "events": 19,
+   "superclass": "vnc_efferent",
+   "subclass": "",
+   "type": "",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 909650,
+   "ticks": [
+    3
+   ],
+   "events": 131,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 909670,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 132,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX377",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 909823,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 160,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN00A024",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 909871,
+   "ticks": [
+    4
+   ],
+   "events": 140,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx14",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 910127,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 178,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 910220,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 226,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx20",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 910506,
+   "ticks": [
+    3
+   ],
+   "events": 165,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 910607,
+   "ticks": [
+    3
+   ],
+   "events": 4,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX396",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 910835,
+   "ticks": [
+    3
+   ],
+   "events": 107,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx04",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 910881,
+   "ticks": [
+    3
+   ],
+   "events": 125,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx04",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 910926,
+   "ticks": [
+    3
+   ],
+   "events": 195,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx04",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 911624,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 124,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX436",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 911713,
+   "ticks": [
+    4,
+    5
+   ],
+   "events": 6,
+   "superclass": "vnc_efferent",
+   "subclass": "",
+   "type": "",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 911768,
+   "ticks": [
+    4
+   ],
+   "events": 156,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 911856,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 150,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx01",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 911962,
+   "ticks": [
+    3
+   ],
+   "events": 102,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 912285,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 183,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "IN23B076",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 912325,
+   "ticks": [
+    4
+   ],
+   "events": 121,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx01",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 912811,
+   "ticks": [
+    3
+   ],
+   "events": 122,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx14",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 912876,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 59,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNpp02",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 912988,
+   "ticks": [
+    3
+   ],
+   "events": 110,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 913132,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 62,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNpp02",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 913323,
+   "ticks": [
+    3
+   ],
+   "events": 102,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 913455,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 268,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX421",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 913946,
+   "ticks": [
+    3
+   ],
+   "events": 18,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "IN08B062",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 914054,
+   "ticks": [
+    3
+   ],
+   "events": 11,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX230",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 914267,
+   "ticks": [
+    3
+   ],
+   "events": 89,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx04",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 914347,
+   "ticks": [
+    3
+   ],
+   "events": 97,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 914495,
+   "ticks": [
+    3
+   ],
+   "events": 102,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 914569,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 129,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 914586,
+   "ticks": [
+    3
+   ],
+   "events": 92,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx04",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 914592,
+   "ticks": [
+    3
+   ],
+   "events": 85,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX353",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 915024,
+   "ticks": [
+    5,
+    6
+   ],
+   "events": 83,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx21",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 927842,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 286,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX260",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 928267,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 229,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "INXXX307",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 929742,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 178,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "IN01A059",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 933415,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 23,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "INXXX269",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 934485,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 266,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX262",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 936485,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 153,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx20",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 936682,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 187,
+   "superclass": "vnc_intrinsic",
+   "subclass": "",
+   "type": "INXXX431",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 936737,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 106,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "IN06A106",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 936772,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 160,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX456",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 936773,
+   "ticks": [
+    3
+   ],
+   "events": 56,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX217",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 936775,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 314,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX283",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 936838,
+   "ticks": [
+    4
+   ],
+   "events": 29,
+   "superclass": "vnc_efferent",
+   "subclass": "",
+   "type": "",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 939644,
+   "ticks": [
+    3,
+    4,
+    5
+   ],
+   "events": 225,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX416",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 939699,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 48,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNpp01",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 943313,
+   "ticks": [
+    4
+   ],
+   "events": 83,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "SNxx03",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 944625,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 196,
+   "superclass": "vnc_intrinsic",
+   "subclass": "",
+   "type": "",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 946056,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 179,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "INXXX341",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 1050003044,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 6,
+   "superclass": "vnc_endocrine",
+   "subclass": "ad",
+   "type": "LK",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 1050043684,
+   "ticks": [
+    4
+   ],
+   "events": 3,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 1053964972,
+   "ticks": [
+    3,
+    4,
+    5,
+    6
+   ],
+   "events": 426,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BI",
+   "type": "IN10B010",
+   "afferent": false,
+   "ascending": false
+  },
+  {
+   "id": 1062383461,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 62,
+   "superclass": "vnc_sensory",
+   "subclass": "abdomen",
+   "type": "",
+   "afferent": true,
+   "ascending": false
+  },
+  {
+   "id": 1063973986,
+   "ticks": [
+    3,
+    4
+   ],
+   "events": 232,
+   "superclass": "vnc_intrinsic",
+   "subclass": "BR",
+   "type": "INXXX442",
+   "afferent": false,
+   "ascending": false
+  }
+ ],
+ "afferent_ticks": {
+  "1062383461": [
+   3,
+   4
+  ],
+  "855832": [
+   4
+  ],
+  "821703": [
+   3,
+   4
+  ],
+  "828582": [
+   4
+  ],
+  "821284": [
+   3,
+   4
+  ],
+  "825066": [
+   4
+  ],
+  "821267": [
+   4
+  ],
+  "824447": [
+   3,
+   4
+  ],
+  "821131": [
+   4
+  ],
+  "818049": [
+   4
+  ],
+  "821096": [
+   4
+  ],
+  "821265": [
+   4
+  ],
+  "826805": [
+   5
+  ],
+  "818144": [
+   4
+  ],
+  "823060": [
+   5
+  ],
+  "823637": [
+   4
+  ],
+  "879926": [
+   4,
+   5
+  ],
+  "822364": [
+   3
+  ],
+  "819980": [
+   3,
+   4
+  ],
+  "819862": [
+   3
+  ],
+  "829562": [
+   4
+  ],
+  "820375": [
+   4
+  ],
+  "817842": [
+   3
+  ],
+  "817877": [
+   3
+  ],
+  "817439": [
+   3
+  ],
+  "818864": [
+   3
+  ],
+  "817603": [
+   3
+  ],
+  "819990": [
+   4
+  ],
+  "817611": [
+   4
+  ],
+  "817972": [
+   3
+  ],
+  "817897": [
+   3
+  ],
+  "817692": [
+   3
+  ],
+  "819256": [
+   3,
+   4
+  ],
+  "820188": [
+   4
+  ],
+  "819247": [
+   4
+  ],
+  "819390": [
+   3,
+   4
+  ],
+  "818025": [
+   3
+  ],
+  "819554": [
+   3,
+   4
+  ],
+  "816130": [
+   3
+  ],
+  "817661": [
+   3
+  ],
+  "817856": [
+   3,
+   4
+  ],
+  "817699": [
+   3
+  ],
+  "818009": [
+   3
+  ],
+  "819855": [
+   3,
+   4
+  ],
+  "819281": [
+   4
+  ],
+  "817878": [
+   3
+  ],
+  "817501": [
+   3,
+   4
+  ],
+  "817909": [
+   3
+  ],
+  "819209": [
+   4
+  ],
+  "817628": [
+   4
+  ],
+  "819614": [
+   3
+  ],
+  "817626": [
+   3,
+   4
+  ],
+  "820319": [
+   4
+  ],
+  "819623": [
+   3
+  ],
+  "817444": [
+   3
+  ],
+  "818238": [
+   3,
+   4
+  ],
+  "817613": [
+   4
+  ],
+  "818881": [
+   4
+  ],
+  "822384": [
+   3
+  ],
+  "819514": [
+   3,
+   4
+  ],
+  "818968": [
+   3
+  ],
+  "818882": [
+   3,
+   4
+  ],
+  "820945": [
+   3,
+   4
+  ],
+  "817336": [
+   3
+  ],
+  "816823": [
+   3
+  ],
+  "818723": [
+   3
+  ],
+  "816413": [
+   3
+  ],
+  "816994": [
+   3
+  ],
+  "815778": [
+   3
+  ],
+  "817540": [
+   3
+  ],
+  "816335": [
+   3
+  ],
+  "817226": [
+   3
+  ],
+  "817361": [
+   3
+  ],
+  "816808": [
+   3
+  ],
+  "817157": [
+   3
+  ],
+  "818635": [
+   3,
+   4
+  ],
+  "815977": [
+   3
+  ],
+  "818743": [
+   4
+  ],
+  "817345": [
+   3
+  ],
+  "818419": [
+   4
+  ],
+  "817354": [
+   4
+  ],
+  "817349": [
+   3
+  ],
+  "816847": [
+   3
+  ],
+  "816631": [
+   4
+  ],
+  "816587": [
+   3
+  ],
+  "818692": [
+   3
+  ],
+  "816801": [
+   3
+  ],
+  "815907": [
+   3
+  ],
+  "817337": [
+   4
+  ],
+  "816859": [
+   4
+  ],
+  "817252": [
+   3,
+   4
+  ],
+  "817064": [
+   3,
+   4
+  ],
+  "816577": [
+   4
+  ],
+  "815773": [
+   3
+  ],
+  "820570": [
+   4
+  ],
+  "816696": [
+   3
+  ],
+  "817215": [
+   3
+  ],
+  "817535": [
+   3
+  ],
+  "820758": [
+   3,
+   4
+  ],
+  "815943": [
+   3,
+   4,
+   5
+  ],
+  "816427": [
+   4,
+   5
+  ],
+  "1050043684": [
+   4
+  ],
+  "817721": [
+   3
+  ],
+  "914586": [
+   3
+  ],
+  "815507": [
+   4
+  ],
+  "816499": [
+   3
+  ],
+  "815506": [
+   3
+  ],
+  "819104": [
+   3
+  ],
+  "814918": [
+   3
+  ],
+  "817720": [
+   3
+  ],
+  "816941": [
+   3
+  ],
+  "815817": [
+   3
+  ],
+  "818535": [
+   3
+  ],
+  "815494": [
+   3
+  ],
+  "817801": [
+   3
+  ],
+  "815568": [
+   3
+  ],
+  "816933": [
+   4
+  ],
+  "815225": [
+   3
+  ],
+  "817767": [
+   3
+  ],
+  "817816": [
+   3
+  ],
+  "816910": [
+   3,
+   4
+  ],
+  "816035": [
+   3
+  ],
+  "816936": [
+   3
+  ],
+  "815521": [
+   3
+  ],
+  "816079": [
+   3
+  ],
+  "819110": [
+   4
+  ],
+  "815117": [
+   3
+  ],
+  "816048": [
+   3,
+   4
+  ],
+  "817760": [
+   3
+  ],
+  "814907": [
+   3,
+   4
+  ],
+  "816057": [
+   3
+  ],
+  "815164": [
+   3
+  ],
+  "815179": [
+   3
+  ],
+  "814510": [
+   3
+  ],
+  "816028": [
+   4
+  ],
+  "813923": [
+   3
+  ],
+  "819067": [
+   3,
+   4
+  ],
+  "816902": [
+   4
+  ],
+  "814564": [
+   3
+  ],
+  "814679": [
+   4,
+   5
+  ],
+  "814771": [
+   5
+  ],
+  "915024": [
+   5,
+   6
+  ],
+  "815448": [
+   4
+  ],
+  "815405": [
+   3
+  ],
+  "912988": [
+   3
+  ],
+  "815720": [
+   3,
+   4
+  ],
+  "813875": [
+   3
+  ],
+  "813862": [
+   3
+  ],
+  "813303": [
+   3
+  ],
+  "814579": [
+   3
+  ],
+  "815318": [
+   3
+  ],
+  "815283": [
+   4
+  ],
+  "816221": [
+   3
+  ],
+  "815653": [
+   3
+  ],
+  "815706": [
+   3
+  ],
+  "813193": [
+   4
+  ],
+  "815303": [
+   3
+  ],
+  "814250": [
+   3,
+   4
+  ],
+  "814262": [
+   3
+  ],
+  "813906": [
+   3
+  ],
+  "912811": [
+   3
+  ],
+  "813189": [
+   3
+  ],
+  "943313": [
+   4
+  ],
+  "816260": [
+   3
+  ],
+  "813134": [
+   3
+  ],
+  "813136": [
+   4
+  ],
+  "912876": [
+   3,
+   4
+  ],
+  "815670": [
+   4,
+   5
+  ],
+  "812086": [
+   3
+  ],
+  "813368": [
+   3
+  ],
+  "812018": [
+   3
+  ],
+  "813665": [
+   3
+  ],
+  "814112": [
+   4
+  ],
+  "912325": [
+   4
+  ],
+  "812564": [
+   4
+  ],
+  "813367": [
+   4
+  ],
+  "812026": [
+   4
+  ],
+  "813659": [
+   3
+  ],
+  "813371": [
+   3,
+   4
+  ],
+  "812624": [
+   4
+  ],
+  "813030": [
+   3,
+   4
+  ],
+  "812338": [
+   3,
+   4
+  ],
+  "812284": [
+   3,
+   4
+  ],
+  "813635": [
+   4
+  ],
+  "910835": [
+   3
+  ],
+  "909421": [
+   3
+  ],
+  "813270": [
+   3
+  ],
+  "913132": [
+   3,
+   4
+  ],
+  "913323": [
+   3
+  ],
+  "812156": [
+   3
+  ],
+  "909422": [
+   3
+  ],
+  "811622": [
+   3
+  ],
+  "811698": [
+   3
+  ],
+  "811704": [
+   3
+  ],
+  "813730": [
+   4,
+   5
+  ],
+  "809480": [
+   3,
+   4
+  ],
+  "72797": [
+   3,
+   4,
+   5,
+   6,
+   7
+  ],
+  "914347": [
+   3
+  ],
+  "914267": [
+   3
+  ],
+  "811502": [
+   3
+  ],
+  "914495": [
+   3
+  ],
+  "911962": [
+   3
+  ],
+  "909650": [
+   3
+  ],
+  "812172": [
+   3
+  ],
+  "914569": [
+   3,
+   4
+  ],
+  "909871": [
+   4
+  ],
+  "810004": [
+   3,
+   4
+  ],
+  "911856": [
+   3,
+   4
+  ],
+  "911768": [
+   4
+  ],
+  "811015": [
+   3,
+   4
+  ],
+  "910926": [
+   3
+  ],
+  "810021": [
+   4
+  ],
+  "908866": [
+   3
+  ],
+  "909515": [
+   3
+  ],
+  "910881": [
+   3
+  ],
+  "810095": [
+   4
+  ],
+  "936485": [
+   3,
+   4
+  ],
+  "810301": [
+   3
+  ],
+  "809874": [
+   3
+  ],
+  "908135": [
+   3
+  ],
+  "908136": [
+   3
+  ],
+  "910127": [
+   3,
+   4
+  ],
+  "910506": [
+   3
+  ],
+  "810270": [
+   3
+  ],
+  "909199": [
+   4
+  ],
+  "939699": [
+   3,
+   4
+  ],
+  "908138": [
+   3,
+   4
+  ],
+  "910220": [
+   3,
+   4
+  ],
+  "808733": [
+   4
+  ],
+  "810349": [
+   3
+  ],
+  "908337": [
+   3
+  ],
+  "808473": [
+   4
+  ],
+  "809327": [
+   3
+  ],
+  "808155": [
+   3
+  ],
+  "808329": [
+   3,
+   4
+  ],
+  "808350": [
+   3
+  ],
+  "808164": [
+   4
+  ],
+  "809260": [
+   3
+  ],
+  "908946": [
+   3,
+   4
+  ],
+  "810321": [
+   3,
+   4
+  ],
+  "808944": [
+   3,
+   4
+  ],
+  "811397": [
+   3,
+   4
+  ],
+  "808399": [
+   3
+  ],
+  "807169": [
+   3
+  ],
+  "808404": [
+   4
+  ],
+  "808874": [
+   3
+  ],
+  "807546": [
+   4
+  ],
+  "807997": [
+   3
+  ],
+  "807863": [
+   3,
+   4
+  ],
+  "807730": [
+   3
+  ],
+  "807527": [
+   3
+  ],
+  "809179": [
+   4
+  ],
+  "807967": [
+   3
+  ],
+  "807192": [
+   3,
+   4
+  ],
+  "806928": [
+   3
+  ],
+  "806883": [
+   3,
+   4
+  ],
+  "907578": [
+   3
+  ],
+  "906089": [
+   3,
+   4
+  ],
+  "807248": [
+   3,
+   4
+  ],
+  "807657": [
+   3
+  ],
+  "806778": [
+   3,
+   4
+  ],
+  "807283": [
+   4
+  ],
+  "907323": [
+   3
+  ],
+  "907324": [
+   3
+  ],
+  "906312": [
+   3,
+   4
+  ],
+  "907528": [
+   3
+  ],
+  "807382": [
+   5
+  ],
+  "806280": [
+   4
+  ],
+  "807420": [
+   3
+  ],
+  "806456": [
+   3,
+   4
+  ],
+  "906334": [
+   3,
+   4
+  ],
+  "904393": [
+   3
+  ],
+  "805937": [
+   3
+  ],
+  "805508": [
+   3,
+   4
+  ],
+  "805956": [
+   4
+  ],
+  "905917": [
+   4
+  ],
+  "805623": [
+   3,
+   4
+  ],
+  "805534": [
+   3,
+   4
+  ],
+  "805493": [
+   3,
+   4
+  ],
+  "805587": [
+   4
+  ],
+  "905298": [
+   4,
+   5
+  ],
+  "904274": [
+   4,
+   5
+  ],
+  "905891": [
+   3,
+   4
+  ],
+  "806035": [
+   3
+  ],
+  "906662": [
+   3,
+   4
+  ],
+  "904110": [
+   3
+  ],
+  "805668": [
+   4
+  ],
+  "904909": [
+   3,
+   4
+  ],
+  "805314": [
+   3,
+   4
+  ],
+  "804765": [
+   3,
+   4
+  ],
+  "904120": [
+   3,
+   4
+  ],
+  "804777": [
+   3,
+   4
+  ],
+  "903101": [
+   3
+  ],
+  "905443": [
+   3
+  ],
+  "904011": [
+   3
+  ],
+  "905533": [
+   3
+  ],
+  "804923": [
+   3,
+   4
+  ],
+  "804202": [
+   4
+  ],
+  "804176": [
+   3,
+   4
+  ],
+  "904666": [
+   3
+  ],
+  "803768": [
+   3
+  ],
+  "804668": [
+   3
+  ],
+  "803581": [
+   3
+  ],
+  "902687": [
+   4
+  ],
+  "804087": [
+   3,
+   4
+  ],
+  "800611": [
+   3
+  ],
+  "802482": [
+   4
+  ]
+ }
+}

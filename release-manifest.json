@@ -1,6 +1,6 @@
 {
-    "version":  "0.1.16",
-    "date":  "2026-11-23",
+    "version":  "0.1.17",
+    "date":  "2026-11-24",
     "application":  "AISCS",
     "branch":  "dev",
     "components":  {
@@ -10,14 +10,14 @@
                                        "commit":  "d6596211005b5eddb58b53a4bbc7c2b073065ff2"
                                    },
                        "frontend":  {
-                                        "version":  "1.1.6",
+                                        "version":  "1.1.7",
                                         "branch":  "frontend",
-                                        "commit":  "bdd151e75f1bd7283bb43310427ac5c14ba2d835"
+                                        "commit":  "3b8128d191b3a5399205c8ae95bf0f9d30d2f712"
                                     },
                        "generator":  {
-                                         "version":  "0.1.16",
+                                         "version":  "0.1.17",
                                          "branch":  "generator",
-                                         "commit":  "892b9e650929c3e61205f78f5169d134a44af463"
+                                         "commit":  "964f877f72684f39b2b3823ade227adccf799fd7"
                                      },
                        "research":  {
                                         "version":  "1.6.2",
@@ -79,5 +79,19 @@
                                                              "base_run_s":  1140.96,
                                                              "archives":  "byte-identical to prod-c"
                                                          }
-                     }
+                                          ,
+                     "nociception_operating_point":  {
+                                                         "graph_sha256":  "742ee0b22040d6831cb96479d468cd57f1a60d96e2004e3beb421a8d3ac936a2",
+                                                         "point":  {"source_um":  [436.6, 385.0, 1009.5], "return_um":  [436.6, 385.0, 509.5], "electrode_um":  [423.8, 411.7, 960.9], "reference_um":  [404.8, 417.2, 466.9]},
+                                                         "current_na":  -2400,
+                                                         "duration_ms":  100,
+                                                         "threshold_mv":  -20,
+                                                         "slice":  {"chunks":  279, "chunks_total":  2605, "cells":  17816, "afferents":  1145, "rejected":  23},
+                                                         "crossed":  {"total":  676, "afferents":  307, "events":  101705},
+                                                         "reading":  {"ptp_uv":  1348.677, "min_uv":  -781.643, "max_uv":  567.034, "rms_uv":  52.027, "samples":  2001},
+                                                         "chain":  {"with_edges":  {"downstream":  127, "ascending":  41, "first_tick":  5}, "without_afferent_edges":  {"downstream":  0, "ascending":  0}},
+                                                         "artifacts":  "docs/Материалы/План_генератора_2026-10/nociception-2026-11-24/",
+                                                         "limits":  "No selectivity: the nearest foreign cable is 0.03 um away while the nearest afferent is 2.37 um, so 314 intrinsic and 24 motor cells cross too. The ascending answer is a LIF graph property, not HH with field. A threshold crossing is not a spike. 2.4 uA is the point where the model stops being silent, not a nociceptive stimulus for a fly."
+                                                     }
+}
 }
