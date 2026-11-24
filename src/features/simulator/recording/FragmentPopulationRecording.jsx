@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { executorStartError } from '../executorStartError';
-import { Box, FormControl, FormLabel, Input, Text } from '@chakra-ui/react';
+import { Box, Button, FormControl, FormLabel, Input, Text } from '@chakra-ui/react';
 import { simulationApi } from '../api';
 import { fieldDemoPreset } from '../field/fieldDemoPreset';
+import { NOCICEPTION_MEASURED, nociceptionPreset } from '../field/nociceptionPreset';
 import { contactSelectionBasis as contactBasis } from '../field/contactSelectionBasis';
 import { candidateEligibility } from '../field/fieldCandidateEligibility';
 import { SIMULATION_THEME } from '../theme';
@@ -109,6 +110,21 @@ export default function FragmentPopulationRecording({ sceneRunId, sceneManifest,
     source_um: [429.056, 387.68, 228.352], return_um: [929.056, 327.68, 228.352],
     electrode_um: [419.328, 379.488, 359.92], reference_um: [919.328, 319.488, 359.92],
   });
+  // One documented nociceptive operating point, so nobody has to retype six
+  // coordinates and a current from a report. It only moves the operator's
+  // contacts; the run itself still goes through the same checks.
+  const nociception = nociceptionPreset(sceneManifest);
+  const applyNociception = () => {
+    if (!nociception) return;
+    const simulation = { ...(baseConfiguration?.simulation || preset?.simulation), ...nociception.simulation };
+    const configuration = { ...(baseConfiguration || { graph_manifest_sha256: sceneManifest, source_ids: [], seed: 1,
+      threshold_mv: -20, max_distance_um: 2 }), simulation };
+    draftEdited.current = true;
+    setBaseConfiguration(configuration);
+    setCoordinates(Object.fromEntries(contacts.map(([key]) => [key, [...simulation[key]]])));
+    setSelectionBasis('preset'); setSubmitError(''); requestId.current = null;
+    onAdjustContact?.({ kind: 'fragments', configuration, simulation }, null);
+  };
   const [state, setState] = useState({ items: [], selected: null, loading: true, error: false });
   useEffect(() => {
     const source = state.selected;
@@ -645,6 +661,17 @@ export default function FragmentPopulationRecording({ sceneRunId, sceneManifest,
         {calculationMode === 'fast' && <Text fontSize="11px" color={SIMULATION_THEME.textSecondary}>Упрощённая сеть; запись E1–REF не рассчитывается.</Text>}
         {calculationMode === 'full' && <Text fontSize="11px" color={SIMULATION_THEME.textSecondary}>Экспериментальная модель: параметры синапсов не откалиброваны. При неполной геометрии расчёт остановится.</Text>}
       </FormControl>
+      {calculationMode === 'full' && <Box mb={3} maxW="420px">
+        <Button size="xs" variant="outline" onClick={applyNociception}
+          isDisabled={!nociception || running || sending || feedbackRunning || proxyRunning || direct.running || full.running}>
+          Подставить ноцицептивную точку
+        </Button>
+        <Text fontSize="11px" color={SIMULATION_THEME.textSecondary} mt={1}>
+          Брюшная цепочка, −2,4 мкА, 100 мс. Измерено: {NOCICEPTION_MEASURED.crossedAfferents} афферентов,
+          {' '}{NOCICEPTION_MEASURED.crossedAscending} восходящих клеток, чтение E1−REF {(NOCICEPTION_MEASURED.readingPtpUv / 1000).toFixed(2)} мВ.
+          Это не калибровка боли: точка выбрана по замеру поля, а не по физиологии.
+        </Text>
+      </Box>}
       <FormControl maxW="200px" isInvalid={!validCurrent}>
         <FormLabel fontSize="12px">Ток STIM, нА</FormLabel>
         <Input size="sm" type="number" isDisabled={!preset || running || sending || feedbackRunning || full.running} value={stimulusCurrent} onChange={event => {

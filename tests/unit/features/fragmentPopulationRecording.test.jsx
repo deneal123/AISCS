@@ -9,6 +9,7 @@ jest.mock('../../../src/features/simulator/api', () => ({ simulationApi: {
   fragmentPopulationRuns: jest.fn(), createFragmentPopulation: jest.fn(), get: jest.fn(),
   feedbackRuns: jest.fn(), feedbackSource: jest.fn(), createFeedback: jest.fn(),
   cancel: jest.fn(), artifacts: jest.fn(), download: jest.fn(), spatialCandidates: jest.fn(), contactScreen: jest.fn(), contactPositions: jest.fn(),
+  createFullFeedback: jest.fn(),
 } }));
 jest.mock('../../../src/features/simulator/recording/SignalPlot', () => ({ preview }) => <div>Сигнал: {preview.signal_uv.length}</div>);
 jest.mock('../../../src/features/simulator/recording/useWholeNetworkProxy', () => jest.fn());
@@ -1333,4 +1334,22 @@ test('does not silently exclude a failed cell from a new spatial selection', asy
   fireEvent.click(screen.getByRole('button', { name: 'Рассчитать' }));
   await waitFor(() => expect(simulationApi.createFragmentPopulation).toHaveBeenCalledWith(
     expect.objectContaining({ configuration: expect.objectContaining({ source_ids: [174827, 176609] }) })));
+});
+
+test('fills the documented nociceptive operating point without launching it', async () => {
+  const adjust = jest.fn(), form = React.createRef();
+  render(<FragmentPopulationRecording sceneRunId="scene" sceneManifest={graph} formRef={form}
+    onAdjustContact={adjust} />);
+  await waitFor(() => expect(screen.getByRole('button', { name: 'Рассчитать' })).toBeEnabled());
+  const mode = await screen.findByRole('combobox', { name: 'Режим расчёта' });
+  fireEvent.keyDown(mode, { key: 'ArrowDown' });
+  fireEvent.click(await screen.findByRole('option', { name: 'Полная ЦНС · экспериментальный', exact: true }));
+  const fill = await screen.findByRole('button', { name: 'Подставить ноцицептивную точку' });
+  await act(async () => { fireEvent.click(fill); });
+  expect(adjust).toHaveBeenCalledWith(expect.objectContaining({ kind: 'fragments',
+    simulation: expect.objectContaining({ current_na: -2400, duration_ms: 100,
+      source_um: [436.6, 385, 1009.5], return_um: [436.6, 385, 509.5],
+      electrode_um: [423.8, 411.7, 960.9], reference_um: [404.8, 417.2, 466.9] }) }), null);
+  expect(screen.getByText(/Это не калибровка боли/)).toBeInTheDocument();
+  expect(simulationApi.createFullFeedback).not.toHaveBeenCalled();
 });
