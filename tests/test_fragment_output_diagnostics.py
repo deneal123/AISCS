@@ -46,6 +46,26 @@ def test_geometry_preflight_checks_all_graph_pairs_before_solving(monkeypatch):
     assert receipt == {"body_id": 1, "graph_pairs": 2, "morphology_sha256": "d" * 64}
 
 
+def test_a_source_without_outgoing_synapses_is_named_and_solvable(monkeypatch):
+    graph = SimpleNamespace(posts=[0], provenance={"array_sha256": {"ids.npy": "ids"}})
+    index = SimpleNamespace(
+        manifest={"ids_sha256": "ids"},
+        query=lambda *_a, **_kw: {"total": 0, "returned": 0, "truncated": False, "pairs": []},
+    )
+    module = "service.infrastructure.stimulation.population.diagnostics."
+    monkeypatch.setattr(
+        module + "read_skeleton", lambda *_a, **_kw: {"swc": SWC, "sha256": "d" * 64}
+    )
+    monkeypatch.setattr(module + "outgoing", lambda *_a: {"next_offset": None, "items": []})
+    with pytest.raises(ValueError, match=r"Source 7 has no registered outgoing synapses"):
+        preflight_outgoing_fragment_geometry(index, graph, 7, [], max_distance_um=2)
+    receipt = preflight_outgoing_fragment_geometry(index, graph, 7, [], max_distance_um=2,
+                                                   allow_partial_geometry=True)
+    assert receipt == {"body_id": 7, "graph_pairs": 0, "morphology_sha256": "d" * 64,
+                       "no_outgoing_synapses": True, "unresolved_graph_pairs": 0,
+                       "geometry_complete": True}
+
+
 def test_fragment_edge_schedule_keeps_synapses_local_and_rejects_unknowns():
     row = {
         "included_in_graph": True,

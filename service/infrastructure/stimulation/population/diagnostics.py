@@ -225,8 +225,6 @@ def _registered_source_coordinates(index, graph, body_id, directories, expected_
     counts = Counter(row["body_post"] for row in page["pairs"] if row["body_post"] in expected)
     if any(counts[partner] != amount for partner, amount in expected.items()):
         raise ValueError("Synapse counts do not match the registered graph")
-    if not page["pairs"]:
-        raise ValueError("No outgoing synapse coordinates available")
     points = [[row[f"{axis}_pre"] * 0.008 for axis in "xyz"] for row in page["pairs"]]
     return source, page, expected, points
 
@@ -241,10 +239,20 @@ def preflight_outgoing_fragment_geometry(index, graph, body_id, directories, *, 
     source, page, expected, points = _registered_source_coordinates(
         index, graph, body_id, directories
     )
+    if not points and not allow_partial_geometry:
+        raise ValueError(
+            f"Source {body_id} has no registered outgoing synapses; "
+            f"omit it or allow partial geometry"
+        )
     graph_points = [point for point, pair in zip(points, page["pairs"], strict=True)
                     if pair["body_post"] in expected]
     if not graph_points:
         receipt = {"body_id": body_id, "graph_pairs": 0, "morphology_sha256": source["sha256"]}
+        if not points:
+            # The cell is registered and reconstructed but the synapse table holds
+            # no outgoing coordinates for it, so there is no edge to check. Its own
+            # trace is still solvable; it simply cannot drive a downstream partner.
+            receipt["no_outgoing_synapses"] = True
         if allow_partial_geometry:
             receipt.update({"unresolved_graph_pairs": 0, "geometry_complete": True})
         return receipt
