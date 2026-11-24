@@ -1347,9 +1347,9 @@ test('fills the documented nociceptive operating point without launching it', as
   const fill = await screen.findByRole('button', { name: 'Подставить ноцицептивную точку' });
   await act(async () => { fireEvent.click(fill); });
   expect(adjust).toHaveBeenCalledWith(expect.objectContaining({ kind: 'fragments',
-    simulation: expect.objectContaining({ current_na: -2400, duration_ms: 100,
-      source_um: [436.6, 385, 1009.5], return_um: [436.6, 385, 509.5],
-      electrode_um: [423.8, 411.7, 960.9], reference_um: [404.8, 417.2, 466.9] }) }), null);
+    simulation: expect.objectContaining({ current_na: -9600, duration_ms: 100,
+      source_um: [480, 390, 1040], return_um: [480, 390, 540],
+      electrode_um: [423.8, 411.7, 960.9], reference_um: [444.8, 417.2, 466.9] }) }), null);
   expect(screen.getByText(/Это не калибровка боли/)).toBeInTheDocument();
   expect(simulationApi.createFullFeedback).not.toHaveBeenCalled();
 });
