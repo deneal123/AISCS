@@ -390,6 +390,73 @@
             "runs": 12
           },
           "probe": "R:/Aspa/.work/connectome-routing-20261028/probe-h158.py"
+        },
+        "boundary": {
+          "note": "two boundaries, not one; absolute observability ends at 300, the AN01A021 block stops separating at 500",
+          "absolute_observability_limit_mass": 300,
+          "block_separation_limit_mass": 500,
+          "curve": {
+            "0": {
+              "nociceptive": 12,
+              "control": 0
+            },
+            "100": {
+              "nociceptive": 13,
+              "control": 0
+            },
+            "200": {
+              "nociceptive": 13,
+              "control": 3
+            },
+            "300": {
+              "nociceptive": [
+                14,
+                18
+              ],
+              "control": [
+                2,
+                10
+              ]
+            },
+            "400": {
+              "nociceptive": 14,
+              "control": 1
+            },
+            "500": {
+              "nociceptive": [
+                10,
+                13
+              ],
+              "control": [
+                0,
+                5
+              ]
+            },
+            "600": {
+              "nociceptive": [
+                9,
+                14
+              ],
+              "control": [
+                0,
+                6
+              ]
+            }
+          },
+          "block_separates": {
+            "0": true,
+            "100": true,
+            "200": true,
+            "300": "5 of 6",
+            "400": true,
+            "500": "0 of 6",
+            "600": "0 of 12"
+          },
+          "cleanest_regime": [
+            100,
+            200
+          ],
+          "probe": "R:/Aspa/.work/connectome-routing-20261028/probe-h159.py"
         }
       }
     }
