@@ -572,6 +572,74 @@
         ]
       },
       "limit": "the slice holds 60 of 307 abdominal motors, so absolute motor counts are not comparable with the full population; thresholds and curve shape are"
+    },
+    "nociception_full_population_curve": {
+      "date": "2026-11-25",
+      "claim": "the current -> spikes -> recording curve reproduces on the full 166 700-cell population, not only on a 6 255-cell slice",
+      "probe": "probe-h180d.py",
+      "container": "h180k",
+      "population": 166700,
+      "abdominal_motors_in_model": 307,
+      "window_ms": 10,
+      "dt_ms": 0.05,
+      "thresholds": {
+        "set_mv": 7,
+        "cell_mv": -20,
+        "max_source_distance_um": 6
+      },
+      "points": [
+        {
+          "current_na": -3600,
+          "wall_s": 1165.87,
+          "ms_per_cell": 6.994,
+          "spikes": 80127,
+          "cells_with_events": 526,
+          "motors": 41,
+          "motor_share": 0.134,
+          "ascending": 37,
+          "descending": 4,
+          "brain": 0,
+          "ptp_uv": 2409.742,
+          "post_stim_ptp_uv": 69.328,
+          "activity_ticks": 7,
+          "max_per_tick": 43616
+        },
+        {
+          "current_na": -9600,
+          "wall_s": 1401.55,
+          "ms_per_cell": 8.408,
+          "spikes": 450457,
+          "cells_with_events": 2445,
+          "motors": 95,
+          "motor_share": 0.309,
+          "ascending": 197,
+          "descending": 179,
+          "brain": 0,
+          "ptp_uv": 9128.865,
+          "post_stim_ptp_uv": 176.916,
+          "activity_ticks": 8,
+          "max_per_tick": 195060
+        }
+      ],
+      "slice_comparison": {
+        "slice_motors": 60,
+        "slice_share_3600": 0.117,
+        "slice_share_9600": 0.35,
+        "full_share_3600": 0.134,
+        "full_share_9600": 0.309
+      },
+      "findings": [
+        "the motor threshold is a property of the population, not of the slice",
+        "the ascending layer grows with current much faster than the motor layer (37 to 197 against 41 to 95)",
+        "descending neurons only answer en masse at -9600 (4 to 179)",
+        "brain cells stay at zero at both currents, so the giant fibre silence is not a slice artefact",
+        "98 % of the trace span is the stimulus itself; the network is 1.9 % of it",
+        "activity occupies 7-8 of 201 ticks: one short volley, not a sustained discharge"
+      ],
+      "limit": "window is 10 ms instead of 100 ms because the long window exhausts the 8 GiB docker VM; the first motor appeared at 9 ms on the slice, so recruitment shares remain comparable",
+      "commits": [
+        "5e8bd7d9"
+      ]
     }
   }
 }
