@@ -358,7 +358,39 @@
           "0_600": 0.474,
           "400_600": 0.429
         },
-        "probe": "R:/Aspa/.work/connectome-routing-20261028/probe-h157.py"
+        "probe": "R:/Aspa/.work/connectome-routing-20261028/probe-h157.py",
+        "seed_robustness": {
+          "seeds": [
+            2,
+            3,
+            7,
+            11
+          ],
+          "control_draws": 3,
+          "masses": [
+            0,
+            600
+          ],
+          "runs": 24,
+          "added_by_md_range": [
+            9,
+            14
+          ],
+          "added_by_md_median": 12,
+          "added_by_ctrl_range": [
+            0,
+            6
+          ],
+          "added_by_ctrl_median": 3,
+          "ratio_of_medians": 4,
+          "ctrl_never_caught_md": true,
+          "mass_zero_invariant": {
+            "added_by_md": 12,
+            "added_by_ctrl": 0,
+            "runs": 12
+          },
+          "probe": "R:/Aspa/.work/connectome-routing-20261028/probe-h158.py"
+        }
       }
     }
   }
