@@ -1,0 +1,2572 @@
+{
+  "version": "male-cns-motor-display-v1",
+  "dataset_id": "male-cns:v1.0-annotated-nonglial",
+  "annotations_sha256": "d27d8ed9294b57d28a7c376b0a958fc9074b93ae4ea2ce77441c1c18c1570bee",
+  "source": "https://male-cns.janelia.org/download/",
+  "license": "CC BY 4.0",
+  "selection": "vnc_motor; exitNerve ProLN/MesoLN/MetaLN; matching somaNeuromere",
+  "laterality": "somaSide; not an independently validated peripheral muscle map",
+  "neurons": 319,
+  "counts": {
+    "hind_right": 60,
+    "hind_left": 62,
+    "middle_right": 58,
+    "middle_left": 58,
+    "front_left": 41,
+    "front_right": 40
+  },
+  "cells": [
+    {
+      "id": "800158",
+      "region": "hind_right",
+      "type": "Ti extensor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "800175",
+      "region": "hind_left",
+      "type": "Pleural remotor/abductor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "800230",
+      "region": "middle_right",
+      "type": "MNml82",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "800290",
+      "region": "hind_right",
+      "type": "Pleural remotor/abductor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "800316",
+      "region": "hind_right",
+      "type": "Sternal anterior rotator MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "800358",
+      "region": "hind_right",
+      "type": "MNhl64",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "800504",
+      "region": "hind_left",
+      "type": "Sternotrochanter MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "800541",
+      "region": "middle_left",
+      "type": "Pleural remotor/abductor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "800553",
+      "region": "hind_right",
+      "type": "Pleural remotor/abductor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "800578",
+      "region": "hind_left",
+      "type": "Fe reductor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "800589",
+      "region": "middle_left",
+      "type": "Tr flexor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "800621",
+      "region": "hind_left",
+      "type": "Ti extensor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "800636",
+      "region": "front_left",
+      "type": "Ti extensor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "L",
+      "neuromere": "T1"
+    },
+    {
+      "id": "800776",
+      "region": "middle_right",
+      "type": "Pleural remotor/abductor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "800851",
+      "region": "hind_left",
+      "type": "Sternotrochanter MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "800911",
+      "region": "middle_left",
+      "type": "Ti extensor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "800962",
+      "region": "middle_right",
+      "type": "Sternal posterior rotator MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "801057",
+      "region": "middle_right",
+      "type": "Tr flexor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "801058",
+      "region": "middle_right",
+      "type": "Tr flexor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "801090",
+      "region": "hind_right",
+      "type": "Sternotrochanter MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "801148",
+      "region": "hind_right",
+      "type": "Sternotrochanter MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "801234",
+      "region": "middle_left",
+      "type": "Ti extensor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "801335",
+      "region": "hind_right",
+      "type": "MNhl59",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "801375",
+      "region": "hind_right",
+      "type": "Sternotrochanter MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "801477",
+      "region": "middle_right",
+      "type": "MNml81",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "801492",
+      "region": "hind_left",
+      "type": "Sternal posterior rotator MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "801548",
+      "region": "hind_left",
+      "type": "Sternal anterior rotator MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "801637",
+      "region": "hind_right",
+      "type": "Acc. ti flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "801693",
+      "region": "hind_right",
+      "type": "Fe reductor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "801715",
+      "region": "hind_left",
+      "type": "Sternal posterior rotator MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "801721",
+      "region": "hind_right",
+      "type": "Tr flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "801761",
+      "region": "middle_right",
+      "type": "Sternal posterior rotator MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "801768",
+      "region": "middle_left",
+      "type": "Sternal posterior rotator MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "801813",
+      "region": "middle_right",
+      "type": "Sternal anterior rotator MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "801932",
+      "region": "hind_right",
+      "type": null,
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "801946",
+      "region": "middle_right",
+      "type": "Sternal anterior rotator MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "802215",
+      "region": "hind_left",
+      "type": "Sternal anterior rotator MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "802232",
+      "region": "middle_left",
+      "type": "Tr flexor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "802295",
+      "region": "middle_left",
+      "type": "Ti flexor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "802407",
+      "region": "middle_left",
+      "type": "Sternotrochanter MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "802521",
+      "region": "middle_right",
+      "type": "Sternal posterior rotator MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "802731",
+      "region": "hind_left",
+      "type": "MNhl59",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "802864",
+      "region": "middle_right",
+      "type": "Sternotrochanter MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "802964",
+      "region": "hind_left",
+      "type": "Sternal posterior rotator MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "803072",
+      "region": "hind_right",
+      "type": "Ti flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "803086",
+      "region": "middle_left",
+      "type": "MNml29",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "803147",
+      "region": "hind_left",
+      "type": "Ti flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "803226",
+      "region": "middle_left",
+      "type": "Sternal posterior rotator MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "803480",
+      "region": "middle_left",
+      "type": "MNml82",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "803499",
+      "region": "middle_right",
+      "type": "Pleural remotor/abductor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "803523",
+      "region": "middle_right",
+      "type": "ltm1-tibia MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "803704",
+      "region": "middle_left",
+      "type": "Sternal posterior rotator MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "803829",
+      "region": "middle_left",
+      "type": "Tr flexor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "803830",
+      "region": "front_right",
+      "type": "Fe reductor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "R",
+      "neuromere": "T1"
+    },
+    {
+      "id": "804025",
+      "region": "middle_left",
+      "type": "Fe reductor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "804078",
+      "region": "hind_left",
+      "type": "MNhl29",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "804257",
+      "region": "front_right",
+      "type": "Ti extensor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "R",
+      "neuromere": "T1"
+    },
+    {
+      "id": "804405",
+      "region": "middle_right",
+      "type": "Ti flexor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "804741",
+      "region": "hind_right",
+      "type": "ltm1-tibia MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "804847",
+      "region": "hind_left",
+      "type": "MNhl88",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "804919",
+      "region": "hind_left",
+      "type": "Ti flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "804941",
+      "region": "front_left",
+      "type": "Fe reductor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "L",
+      "neuromere": "T1"
+    },
+    {
+      "id": "805010",
+      "region": "middle_right",
+      "type": "Ti flexor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "805309",
+      "region": "front_left",
+      "type": "ltm2-femur MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "L",
+      "neuromere": "T1"
+    },
+    {
+      "id": "805477",
+      "region": "middle_left",
+      "type": "Tr extensor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "805568",
+      "region": "middle_right",
+      "type": "Acc. ti flexor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "805598",
+      "region": "front_left",
+      "type": "Fe reductor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "L",
+      "neuromere": "T1"
+    },
+    {
+      "id": "806204",
+      "region": "middle_right",
+      "type": "Tergotr. MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "806599",
+      "region": "front_left",
+      "type": "Acc. ti flexor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "L",
+      "neuromere": "T1"
+    },
+    {
+      "id": "806898",
+      "region": "front_right",
+      "type": "Fe reductor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "R",
+      "neuromere": "T1"
+    },
+    {
+      "id": "807165",
+      "region": "front_left",
+      "type": "Ti flexor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "L",
+      "neuromere": "T1"
+    },
+    {
+      "id": "807395",
+      "region": "middle_right",
+      "type": "MNml29",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "807640",
+      "region": "hind_right",
+      "type": "Tr flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "807854",
+      "region": "hind_right",
+      "type": "Sternal adductor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "807906",
+      "region": "front_left",
+      "type": "Tr extensor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "L",
+      "neuromere": "T1"
+    },
+    {
+      "id": "807972",
+      "region": "middle_left",
+      "type": "ltm2-femur MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "808453",
+      "region": "hind_right",
+      "type": "Tr extensor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "808685",
+      "region": "hind_right",
+      "type": "Ti flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "809055",
+      "region": "hind_right",
+      "type": "MNhl88",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "809604",
+      "region": "hind_left",
+      "type": "Acc. tr flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "809670",
+      "region": "middle_left",
+      "type": "Acc. ti flexor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "809912",
+      "region": "front_left",
+      "type": "Ti flexor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "L",
+      "neuromere": "T1"
+    },
+    {
+      "id": "809935",
+      "region": "hind_right",
+      "type": "Ti extensor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "810098",
+      "region": "front_right",
+      "type": "Ti flexor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "R",
+      "neuromere": "T1"
+    },
+    {
+      "id": "810541",
+      "region": "front_left",
+      "type": "Ta levator MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "L",
+      "neuromere": "T1"
+    },
+    {
+      "id": "810720",
+      "region": "middle_right",
+      "type": "Acc. tr flexor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "811137",
+      "region": "hind_left",
+      "type": "MNhl87",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "811652",
+      "region": "front_right",
+      "type": "Fe reductor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "R",
+      "neuromere": "T1"
+    },
+    {
+      "id": "812111",
+      "region": "front_left",
+      "type": "Fe reductor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "L",
+      "neuromere": "T1"
+    },
+    {
+      "id": "812531",
+      "region": "middle_right",
+      "type": "Acc. ti flexor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "812872",
+      "region": "middle_right",
+      "type": "ltm MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "812899",
+      "region": "hind_right",
+      "type": "MNhl87",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "812953",
+      "region": "hind_left",
+      "type": "Ti extensor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "813566",
+      "region": "front_right",
+      "type": "Fe reductor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "R",
+      "neuromere": "T1"
+    },
+    {
+      "id": "813603",
+      "region": "middle_left",
+      "type": "ltm MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "813629",
+      "region": "hind_right",
+      "type": "Acc. ti flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "813755",
+      "region": "middle_left",
+      "type": "Tergotr. MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "814163",
+      "region": "front_left",
+      "type": "Fe reductor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "L",
+      "neuromere": "T1"
+    },
+    {
+      "id": "814942",
+      "region": "middle_right",
+      "type": "Tr extensor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "814983",
+      "region": "middle_right",
+      "type": "MNml78",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "815097",
+      "region": "hind_right",
+      "type": "ltm MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "815246",
+      "region": "front_left",
+      "type": "Acc. ti flexor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "L",
+      "neuromere": "T1"
+    },
+    {
+      "id": "815344",
+      "region": "front_left",
+      "type": "Ti extensor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "L",
+      "neuromere": "T1"
+    },
+    {
+      "id": "815498",
+      "region": "hind_left",
+      "type": "ltm2-femur MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "815678",
+      "region": "front_right",
+      "type": "Ti extensor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "R",
+      "neuromere": "T1"
+    },
+    {
+      "id": "815958",
+      "region": "hind_right",
+      "type": "Acc. tr flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "816018",
+      "region": "middle_left",
+      "type": "Sternal adductor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "816022",
+      "region": "hind_right",
+      "type": "MNhl29",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "816215",
+      "region": "front_left",
+      "type": "Acc. ti flexor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "L",
+      "neuromere": "T1"
+    },
+    {
+      "id": "816222",
+      "region": "middle_right",
+      "type": "Ti flexor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "816404",
+      "region": "front_left",
+      "type": "Acc. ti flexor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "L",
+      "neuromere": "T1"
+    },
+    {
+      "id": "817210",
+      "region": "front_right",
+      "type": "Ta levator MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "R",
+      "neuromere": "T1"
+    },
+    {
+      "id": "817283",
+      "region": "front_left",
+      "type": "Acc. ti flexor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "L",
+      "neuromere": "T1"
+    },
+    {
+      "id": "817374",
+      "region": "hind_left",
+      "type": "Acc. ti flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "817509",
+      "region": "front_right",
+      "type": "Acc. ti flexor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "R",
+      "neuromere": "T1"
+    },
+    {
+      "id": "817655",
+      "region": "front_left",
+      "type": "Ta depressor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "L",
+      "neuromere": "T1"
+    },
+    {
+      "id": "817681",
+      "region": "middle_right",
+      "type": "Tr flexor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "817990",
+      "region": "middle_right",
+      "type": "MNml78",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "818057",
+      "region": "front_left",
+      "type": "Ti flexor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "L",
+      "neuromere": "T1"
+    },
+    {
+      "id": "818295",
+      "region": "middle_left",
+      "type": "Ti flexor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "818399",
+      "region": "hind_left",
+      "type": "Sternal posterior rotator MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "818553",
+      "region": "front_left",
+      "type": "ltm1-tibia MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "L",
+      "neuromere": "T1"
+    },
+    {
+      "id": "818842",
+      "region": "front_right",
+      "type": "Tr extensor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "R",
+      "neuromere": "T1"
+    },
+    {
+      "id": "818996",
+      "region": "middle_right",
+      "type": "Sternal posterior rotator MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "819112",
+      "region": "hind_left",
+      "type": "Ti flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "819203",
+      "region": "middle_right",
+      "type": "Tr flexor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "819278",
+      "region": "front_left",
+      "type": "Ta depressor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "L",
+      "neuromere": "T1"
+    },
+    {
+      "id": "819384",
+      "region": "front_left",
+      "type": "Ti flexor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "L",
+      "neuromere": "T1"
+    },
+    {
+      "id": "819674",
+      "region": "middle_left",
+      "type": "Acc. ti flexor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "819869",
+      "region": "front_left",
+      "type": "Acc. ti flexor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "L",
+      "neuromere": "T1"
+    },
+    {
+      "id": "820110",
+      "region": "front_right",
+      "type": "Ta levator MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "R",
+      "neuromere": "T1"
+    },
+    {
+      "id": "820350",
+      "region": "hind_left",
+      "type": "Fe reductor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "820574",
+      "region": "middle_right",
+      "type": "MNml83",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "820632",
+      "region": "middle_left",
+      "type": "MNml80",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "820764",
+      "region": "middle_left",
+      "type": "Fe reductor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "820896",
+      "region": "front_right",
+      "type": "Ta levator MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "R",
+      "neuromere": "T1"
+    },
+    {
+      "id": "821154",
+      "region": "hind_left",
+      "type": "Acc. tr flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "821291",
+      "region": "front_left",
+      "type": "Acc. tr flexor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "L",
+      "neuromere": "T1"
+    },
+    {
+      "id": "821375",
+      "region": "middle_left",
+      "type": "Acc. tr flexor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "821449",
+      "region": "hind_right",
+      "type": "ltm2-femur MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "821494",
+      "region": "middle_left",
+      "type": "MNml79",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "821635",
+      "region": "front_right",
+      "type": "Ti flexor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "R",
+      "neuromere": "T1"
+    },
+    {
+      "id": "821769",
+      "region": "middle_right",
+      "type": "Fe reductor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "822013",
+      "region": "middle_right",
+      "type": "Ti flexor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "822047",
+      "region": "front_left",
+      "type": "ltm1-tibia MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "L",
+      "neuromere": "T1"
+    },
+    {
+      "id": "822092",
+      "region": "front_left",
+      "type": "ltm MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "L",
+      "neuromere": "T1"
+    },
+    {
+      "id": "822185",
+      "region": "middle_left",
+      "type": "MNml77",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "822252",
+      "region": "hind_left",
+      "type": "MNhl64",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "822274",
+      "region": "front_left",
+      "type": "ltm MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "L",
+      "neuromere": "T1"
+    },
+    {
+      "id": "822742",
+      "region": "middle_left",
+      "type": "MNml80",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "822945",
+      "region": "hind_left",
+      "type": "Ti flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "823132",
+      "region": "middle_right",
+      "type": "Fe reductor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "823405",
+      "region": "hind_left",
+      "type": "ltm MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "823665",
+      "region": "hind_right",
+      "type": "Ti flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "823739",
+      "region": "middle_left",
+      "type": "Ti flexor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "824041",
+      "region": "middle_left",
+      "type": "Ti flexor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "824104",
+      "region": "hind_left",
+      "type": "ltm MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "824315",
+      "region": "middle_right",
+      "type": "Tr flexor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "824689",
+      "region": "middle_left",
+      "type": "ltm MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "824997",
+      "region": "middle_right",
+      "type": "ltm MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "825485",
+      "region": "middle_left",
+      "type": "Acc. ti flexor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "825516",
+      "region": "front_left",
+      "type": "Acc. ti flexor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "L",
+      "neuromere": "T1"
+    },
+    {
+      "id": "825681",
+      "region": "middle_left",
+      "type": "ltm MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "825721",
+      "region": "front_right",
+      "type": "Ta depressor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "R",
+      "neuromere": "T1"
+    },
+    {
+      "id": "826996",
+      "region": "middle_left",
+      "type": "ltm2-femur MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "827188",
+      "region": "front_right",
+      "type": "Ti flexor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "R",
+      "neuromere": "T1"
+    },
+    {
+      "id": "827968",
+      "region": "hind_right",
+      "type": "Ti flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "828238",
+      "region": "hind_right",
+      "type": null,
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "828939",
+      "region": "front_left",
+      "type": "Tr flexor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "L",
+      "neuromere": "T1"
+    },
+    {
+      "id": "828978",
+      "region": "hind_left",
+      "type": "Sternotrochanter MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "829873",
+      "region": "hind_left",
+      "type": "Acc. ti flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "830039",
+      "region": "front_right",
+      "type": "ltm2-femur MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "R",
+      "neuromere": "T1"
+    },
+    {
+      "id": "830480",
+      "region": "middle_left",
+      "type": "Acc. ti flexor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "830514",
+      "region": "middle_right",
+      "type": "Ti extensor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "832490",
+      "region": "middle_left",
+      "type": "Sternal anterior rotator MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "833140",
+      "region": "front_right",
+      "type": "Acc. ti flexor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "R",
+      "neuromere": "T1"
+    },
+    {
+      "id": "837745",
+      "region": "front_right",
+      "type": "Acc. ti flexor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "R",
+      "neuromere": "T1"
+    },
+    {
+      "id": "840530",
+      "region": "middle_right",
+      "type": "Tr extensor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "840740",
+      "region": "hind_right",
+      "type": "Ti flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "840981",
+      "region": "hind_left",
+      "type": "Tr extensor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "843389",
+      "region": "hind_left",
+      "type": "Acc. ti flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "852673",
+      "region": "middle_right",
+      "type": "ltm2-femur MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "852881",
+      "region": "hind_right",
+      "type": null,
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "856359",
+      "region": "middle_right",
+      "type": "Sternotrochanter MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "857751",
+      "region": "hind_left",
+      "type": "ltm2-femur MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "858248",
+      "region": "hind_left",
+      "type": "ltm1-tibia MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "860084",
+      "region": "front_right",
+      "type": "ltm MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "R",
+      "neuromere": "T1"
+    },
+    {
+      "id": "867630",
+      "region": "front_left",
+      "type": "Acc. ti flexor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "L",
+      "neuromere": "T1"
+    },
+    {
+      "id": "867926",
+      "region": "middle_right",
+      "type": "Acc. tr flexor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "869369",
+      "region": "hind_right",
+      "type": "MNhl65",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "876504",
+      "region": "hind_left",
+      "type": null,
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "890541",
+      "region": "hind_left",
+      "type": "ltm MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "895449",
+      "region": "middle_left",
+      "type": "MNml78",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "896719",
+      "region": "hind_left",
+      "type": "Acc. tr flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "902310",
+      "region": "hind_left",
+      "type": "Pleural remotor/abductor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "902492",
+      "region": "middle_left",
+      "type": "Pleural remotor/abductor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "902719",
+      "region": "middle_right",
+      "type": "Pleural remotor/abductor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "902962",
+      "region": "hind_right",
+      "type": "Fe reductor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "903158",
+      "region": "middle_left",
+      "type": "Tr flexor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "903159",
+      "region": "middle_left",
+      "type": "Tr flexor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "903298",
+      "region": "front_left",
+      "type": "Acc. ti flexor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "L",
+      "neuromere": "T1"
+    },
+    {
+      "id": "903363",
+      "region": "middle_right",
+      "type": "Ti flexor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "903508",
+      "region": "middle_left",
+      "type": "MNml81",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "903579",
+      "region": "middle_left",
+      "type": "Tr flexor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "903642",
+      "region": "hind_right",
+      "type": "Sternal posterior rotator MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "903643",
+      "region": "hind_right",
+      "type": "Sternal posterior rotator MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "903689",
+      "region": "middle_left",
+      "type": "Sternal anterior rotator MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "903844",
+      "region": "middle_right",
+      "type": "MNml80",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "904184",
+      "region": "hind_left",
+      "type": "Sternal adductor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "904657",
+      "region": "middle_left",
+      "type": "Sternotrochanter MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "905145",
+      "region": "middle_right",
+      "type": "Fe reductor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "905235",
+      "region": "middle_right",
+      "type": "Acc. ti flexor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "905236",
+      "region": "middle_right",
+      "type": "MNml80",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "905421",
+      "region": "middle_left",
+      "type": "Pleural remotor/abductor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "905487",
+      "region": "middle_right",
+      "type": "ltm MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "905559",
+      "region": "middle_right",
+      "type": "MNml79",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "905586",
+      "region": "hind_right",
+      "type": "Acc. tr flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "905661",
+      "region": "hind_right",
+      "type": "Tr extensor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "905928",
+      "region": "hind_right",
+      "type": "Tr flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "906235",
+      "region": "hind_right",
+      "type": "Sternal anterior rotator MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "907256",
+      "region": "hind_right",
+      "type": "Sternal posterior rotator MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "907387",
+      "region": "middle_right",
+      "type": "MNml77",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "907422",
+      "region": "middle_left",
+      "type": "MNml78",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "907443",
+      "region": "middle_left",
+      "type": "ltm1-tibia MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "907848",
+      "region": "middle_right",
+      "type": "Acc. ti flexor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "908094",
+      "region": "middle_left",
+      "type": "Acc. ti flexor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "908673",
+      "region": "middle_right",
+      "type": "ltm2-femur MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "908762",
+      "region": "hind_left",
+      "type": "Ti flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "909078",
+      "region": "middle_left",
+      "type": "Tr extensor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "909255",
+      "region": "middle_right",
+      "type": "Acc. ti flexor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "909371",
+      "region": "middle_right",
+      "type": "Sternal adductor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "909618",
+      "region": "front_left",
+      "type": "Acc. tr flexor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "L",
+      "neuromere": "T1"
+    },
+    {
+      "id": "909713",
+      "region": "front_right",
+      "type": "Acc. ti flexor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "R",
+      "neuromere": "T1"
+    },
+    {
+      "id": "909831",
+      "region": "front_left",
+      "type": "Ti flexor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "L",
+      "neuromere": "T1"
+    },
+    {
+      "id": "910095",
+      "region": "middle_right",
+      "type": "Tr flexor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "910178",
+      "region": "hind_right",
+      "type": "Ti flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "910296",
+      "region": "hind_right",
+      "type": "Acc. ti flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "910334",
+      "region": "front_left",
+      "type": "ltm MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "L",
+      "neuromere": "T1"
+    },
+    {
+      "id": "911134",
+      "region": "front_left",
+      "type": "Acc. tr flexor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "L",
+      "neuromere": "T1"
+    },
+    {
+      "id": "911453",
+      "region": "front_left",
+      "type": "ltm MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "L",
+      "neuromere": "T1"
+    },
+    {
+      "id": "912694",
+      "region": "hind_left",
+      "type": "ltm1-tibia MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "914655",
+      "region": "front_right",
+      "type": "Tr flexor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "R",
+      "neuromere": "T1"
+    },
+    {
+      "id": "914837",
+      "region": "hind_right",
+      "type": "ltm1-tibia MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "914852",
+      "region": "hind_right",
+      "type": "Acc. tr flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "924142",
+      "region": "middle_right",
+      "type": "Tr flexor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "924189",
+      "region": "front_right",
+      "type": "ltm MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "R",
+      "neuromere": "T1"
+    },
+    {
+      "id": "927808",
+      "region": "middle_left",
+      "type": "Ti flexor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "927828",
+      "region": "middle_left",
+      "type": "Acc. tr flexor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "928579",
+      "region": "middle_right",
+      "type": "Ti extensor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "929376",
+      "region": "hind_left",
+      "type": "Ti flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "934519",
+      "region": "hind_left",
+      "type": "Acc. ti flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "936696",
+      "region": "hind_left",
+      "type": "MNhl65",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "939950",
+      "region": "hind_right",
+      "type": "MNhl60",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "1050003192",
+      "region": "hind_left",
+      "type": "Acc. ti flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "1050005026",
+      "region": "front_right",
+      "type": "Acc. ti flexor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "R",
+      "neuromere": "T1"
+    },
+    {
+      "id": "1050013311",
+      "region": "hind_right",
+      "type": "Ti flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "1050013851",
+      "region": "front_right",
+      "type": "ltm MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "R",
+      "neuromere": "T1"
+    },
+    {
+      "id": "1050015101",
+      "region": "front_right",
+      "type": "ltm MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "R",
+      "neuromere": "T1"
+    },
+    {
+      "id": "1050031705",
+      "region": "front_right",
+      "type": "Ti flexor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "R",
+      "neuromere": "T1"
+    },
+    {
+      "id": "1050032839",
+      "region": "hind_right",
+      "type": "Acc. ti flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "1050038433",
+      "region": "hind_left",
+      "type": "Acc. tr flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "1050046221",
+      "region": "middle_left",
+      "type": "MNml80",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "1050080384",
+      "region": "hind_left",
+      "type": "ltm MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "1050088257",
+      "region": "hind_left",
+      "type": "Ti flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "1050091102",
+      "region": "hind_right",
+      "type": "ltm MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "1050091581",
+      "region": "front_right",
+      "type": "Acc. ti flexor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "R",
+      "neuromere": "T1"
+    },
+    {
+      "id": "1050098047",
+      "region": "hind_right",
+      "type": "Tr flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "1050100010",
+      "region": "hind_left",
+      "type": "Ti flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "1050102118",
+      "region": "hind_right",
+      "type": "Acc. tr flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "1050111955",
+      "region": "front_left",
+      "type": "Ta levator MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "L",
+      "neuromere": "T1"
+    },
+    {
+      "id": "1050115387",
+      "region": "front_left",
+      "type": "Acc. ti flexor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "L",
+      "neuromere": "T1"
+    },
+    {
+      "id": "1050119039",
+      "region": "middle_left",
+      "type": "MNml78",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "1050123559",
+      "region": "hind_left",
+      "type": "Acc. ti flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "1050126678",
+      "region": "front_right",
+      "type": "Acc. ti flexor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "R",
+      "neuromere": "T1"
+    },
+    {
+      "id": "1050139141",
+      "region": "hind_left",
+      "type": "Acc. tr flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "1050151215",
+      "region": "middle_left",
+      "type": "MNml78",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "1050156705",
+      "region": "front_right",
+      "type": "Acc. ti flexor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "R",
+      "neuromere": "T1"
+    },
+    {
+      "id": "1050160514",
+      "region": "hind_right",
+      "type": "Acc. ti flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "1050160593",
+      "region": "middle_right",
+      "type": "MNml76",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "1050166426",
+      "region": "hind_left",
+      "type": "Ti flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "1050174251",
+      "region": "hind_right",
+      "type": "ltm2-femur MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "1050189039",
+      "region": "front_right",
+      "type": "Ti flexor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "R",
+      "neuromere": "T1"
+    },
+    {
+      "id": "1050194310",
+      "region": "hind_left",
+      "type": "Tr flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "1050202259",
+      "region": "hind_left",
+      "type": "MNhl65",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "1050202461",
+      "region": "hind_right",
+      "type": "Acc. ti flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "1050203465",
+      "region": "hind_right",
+      "type": "ltm MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "1050233038",
+      "region": "hind_left",
+      "type": "Acc. ti flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "1050239701",
+      "region": "hind_left",
+      "type": "Acc. tr flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "1050248133",
+      "region": "front_right",
+      "type": "Ta depressor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "R",
+      "neuromere": "T1"
+    },
+    {
+      "id": "1050251718",
+      "region": "front_right",
+      "type": "ltm2-femur MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "R",
+      "neuromere": "T1"
+    },
+    {
+      "id": "1050263576",
+      "region": "hind_left",
+      "type": "Acc. ti flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "1050268065",
+      "region": "front_right",
+      "type": "Acc. ti flexor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "R",
+      "neuromere": "T1"
+    },
+    {
+      "id": "1050272154",
+      "region": "hind_left",
+      "type": null,
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "1050274189",
+      "region": "hind_left",
+      "type": "MNhl60",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "1050303231",
+      "region": "hind_right",
+      "type": "Ti flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "1050306082",
+      "region": "front_right",
+      "type": "Acc. tr flexor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "R",
+      "neuromere": "T1"
+    },
+    {
+      "id": "1050340850",
+      "region": "front_right",
+      "type": null,
+      "exit_nerve": "ProLN",
+      "soma_side": "R",
+      "neuromere": "T1"
+    },
+    {
+      "id": "1050349786",
+      "region": "front_right",
+      "type": "Acc. tr flexor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "R",
+      "neuromere": "T1"
+    },
+    {
+      "id": "1050380236",
+      "region": "front_right",
+      "type": "Ta depressor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "R",
+      "neuromere": "T1"
+    },
+    {
+      "id": "1050403926",
+      "region": "front_left",
+      "type": "Ta depressor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "L",
+      "neuromere": "T1"
+    },
+    {
+      "id": "1050460102",
+      "region": "hind_right",
+      "type": "Acc. ti flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "1050493413",
+      "region": "hind_right",
+      "type": "Sternal posterior rotator MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "1050607195",
+      "region": "middle_left",
+      "type": "Fe reductor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "1050615112",
+      "region": "front_left",
+      "type": "ltm2-femur MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "L",
+      "neuromere": "T1"
+    },
+    {
+      "id": "1050660827",
+      "region": "front_left",
+      "type": "Ta depressor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "L",
+      "neuromere": "T1"
+    },
+    {
+      "id": "1050669248",
+      "region": "middle_left",
+      "type": "Tr flexor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "1050673969",
+      "region": "middle_right",
+      "type": "MNml80",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "1050730563",
+      "region": "hind_left",
+      "type": "Acc. tr flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "1050815462",
+      "region": "front_right",
+      "type": "Ta depressor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "R",
+      "neuromere": "T1"
+    },
+    {
+      "id": "1050938258",
+      "region": "hind_right",
+      "type": "Tr flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    },
+    {
+      "id": "1051054875",
+      "region": "middle_left",
+      "type": "Sternal posterior rotator MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "1051062549",
+      "region": "front_left",
+      "type": "Ta depressor MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "L",
+      "neuromere": "T1"
+    },
+    {
+      "id": "1051236875",
+      "region": "hind_left",
+      "type": "Acc. tr flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "1051356801",
+      "region": "middle_left",
+      "type": "Acc. ti flexor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "L",
+      "neuromere": "T2"
+    },
+    {
+      "id": "1051680335",
+      "region": "hind_left",
+      "type": null,
+      "exit_nerve": "MetaLN",
+      "soma_side": "L",
+      "neuromere": "T3"
+    },
+    {
+      "id": "1052407897",
+      "region": "front_right",
+      "type": null,
+      "exit_nerve": "ProLN",
+      "soma_side": "R",
+      "neuromere": "T1"
+    },
+    {
+      "id": "1052521030",
+      "region": "middle_right",
+      "type": "Acc. ti flexor MN",
+      "exit_nerve": "MesoLN",
+      "soma_side": "R",
+      "neuromere": "T2"
+    },
+    {
+      "id": "1057471940",
+      "region": "front_right",
+      "type": "ltm1-tibia MN",
+      "exit_nerve": "ProLN",
+      "soma_side": "R",
+      "neuromere": "T1"
+    },
+    {
+      "id": "1059707690",
+      "region": "hind_right",
+      "type": "Acc. ti flexor MN",
+      "exit_nerve": "MetaLN",
+      "soma_side": "R",
+      "neuromere": "T3"
+    }
+  ]
+}

@@ -1,0 +1,599 @@
+<mujoco model="flybody-muscled">
+  <compiler angle="radian" autolimits="true"/>
+  <option timestep="0.0001" gravity="0.0 0.0 -981.0" viscosity="0.000185" density="0.00128" cone="elliptic" noslip_iterations="3"/>
+  <size njmax="800" nconmax="300" nkey="0"/>
+  <visual><global offwidth="1280" offheight="960"/></visual>
+  <worldbody>
+    <geom name="floor" type="plane" size="2 2 0.01" pos="0 0 -0.1325" contype="1" conaffinity="1" friction="0.8 0.005 0.0001" solref="0.0002 1"/>
+    <body name="thorax" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+      <inertial pos="1.7780994506222392e-06 3.782228279908378e-07 9.602626598982644e-05" quat="0.3925764131659816 0.5881188313816638 -0.5881188313816638 -0.3925764131659816" mass="0.00034" diaginertia="3.7198926610525504e-07 3.5362563378335154e-07 2.773905458767146e-07"/>
+      <joint name="free" type="free"/>
+      <geom name="thorax_collision" type="ellipsoid" size="0.0437 0.0437 0.0551" pos="0.00168 0.0 -0.00262" quat="0.0 -0.4789221814677536 0.0 -0.8778573597676153" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="1" conaffinity="1"/>
+      <geom name="thorax_collision2" type="ellipsoid" size="0.0499 0.028 0.0114" pos="-0.00445 0.0 0.0219" quat="0.0 -0.19899990050007463 0.0 -0.9799995100003674" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="1" conaffinity="1"/>
+      <site name="thorax" pos="0.0 0.0 0.0" size="0.01 0.005 0.005"/>
+      <site name="hover_up_dir" pos="0.0262 0.0 0.0262" size="0.01 0.005 0.005"/>
+      <body name="head" pos="0.0567 3.81e-07 -0.00305" quat="0.7017383004118204 -0.08696756714505467 0.08696756714505467 -0.7017383004118204">
+        <inertial pos="3.015045345434207e-08 0.016750802730431013 0.0012510108570763132" quat="0.46514478431968503 0.5325789421486689 0.46514478431968503 0.5325789421486689" mass="0.00012532980000741348" diaginertia="8.222291394825791e-08 7.10007625372737e-08 3.8270350399163056e-08"/>
+        <joint name="head_abduct" type="hinge" axis="0.0 0.0 1.0" pos="0.0 0.0 0.0" range="-0.2 0.2" limited="true" stiffness="0.03" springref="0.0" damping="0.001" armature="1e-06"/>
+        <joint name="head_twist" type="hinge" axis="0.0 1.0 0.0" pos="0.0 0.0 0.0" range="-3.0 3.0" limited="true" stiffness="0.03" springref="0.0" damping="0.001" armature="1e-06"/>
+        <joint name="head" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.5 0.3" limited="true" stiffness="0.03" springref="0.0" damping="0.001" armature="1e-06"/>
+        <geom name="head_collision" type="ellipsoid" size="0.0455 0.0262 0.0324" pos="0.0 0.0149 0.000875" quat="0.9887710779360422 0.14943813247359922 0.0 0.0" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="1" conaffinity="1"/>
+        <site name="head" pos="0.0 0.015 0.0" size="0.01 0.005 0.005"/>
+        <body name="rostrum" pos="0.0 0.0368 -0.0235" quat="2.2008529958357934e-07 -1.2104691477096864e-07 0.19207444327294196 -0.9813803585976878">
+          <inertial pos="-1.8312880034364234e-08 0.019582994990444295 -0.0006177423686023471" quat="0.8077992938852495 0.5894576327425863 0.0 0.0" mass="1.4341893549966639e-05" diaginertia="2.435999250896849e-09 1.9574272419368786e-09 1.7073156345492504e-09"/>
+          <joint name="rostrum" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-1.24 0.183" limited="true" stiffness="0.03" springref="0.0" damping="0.001" armature="1e-06"/>
+          <geom name="rostrum_collision_right" type="capsule" size="0.0035 0.012719501759109906 0.0" pos="0.008765 0.02845 -0.0118" quat="0.9817609928688794 -0.15815802294560363 -0.1055054153067508 0.0" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="1" conaffinity="1"/>
+          <geom name="rostrum_collision_left" type="capsule" size="0.0035 0.012719501759109906 0.0" pos="-0.008765 0.02845 -0.0118" quat="0.9817609928688794 -0.15815802294560363 0.1055054153067508 0.0" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="1" conaffinity="1"/>
+          <geom name="rostrum_collision" type="ellipsoid" size="0.0131 0.0219 0.0131" pos="0.0 0.0175 0.00263" quat="0.9987502603949663 0.04997916927067833 0.0 0.0" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="1" conaffinity="1"/>
+          <body name="haustellum" pos="0.0 0.0377 0.0" quat="2.3297053109159835e-07 -1.5598026974373108e-07 -0.3469561128274018 0.937881365510383">
+            <inertial pos="4.589701827727935e-08 0.0123668847993065 -0.0012227778887281965" quat="0.6329552498567949 0.7741883825521574 0.0 0.0" mass="3.1839273230959297e-06" diaginertia="1.8262451808208857e-10 1.8055525858403616e-10 1.0058176397432935e-10"/>
+            <joint name="haustellum_abduct" type="hinge" axis="0.0 0.0 1.0" pos="0.0 0.0 0.0" range="-0.0873 0.0873" limited="true" stiffness="0.03" springref="0.0" damping="0.001" armature="1e-06"/>
+            <joint name="haustellum" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-1.59 0.7" limited="true" stiffness="0.03" springref="0.0" damping="0.001" armature="1e-06"/>
+            <geom name="haustellum_collision" type="capsule" size="0.00788 0.00788 0.0" pos="0.0 0.0123 -0.000948" quat="0.6330743906116021 0.7740909610321959 0.0 0.0" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="1" conaffinity="1"/>
+            <body name="labrum_left" pos="-0.00263 0.0182 0.0" quat="0.7408797501576396 -0.014197695617055982 -0.5909040922309919 0.3189482325240041">
+              <inertial pos="-0.00027752757985870236 0.008731487042680106 -0.004082494901341258" quat="-0.175024112129807 -0.7161160087738806 0.08765705198417134 0.6699706436765622" mass="2.085851235857341e-06" diaginertia="1.1723423562277445e-10 8.872373771509779e-11 5.272354807418536e-11"/>
+              <joint name="labrum_left" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.00524 1.05" limited="true" stiffness="0.03" springref="0.0" damping="0.001" armature="1e-06"/>
+              <geom name="labrum_left_lower_collision" type="ellipsoid" size="0.0035 0.00875 0.0131" pos="-0.000603 0.0106 -0.00438" quat="-0.1739340254217802 -0.7147288975665106 0.08756678521234451 0.6717452016289442" condim="1" friction="0.6 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0005" gap="0.0005" contype="1" conaffinity="1"/>
+            </body>
+            <body name="labrum_right" pos="0.00263 0.0182 0.0" quat="0.6987804400846876 0.002739139350260435 0.6417983441121166 -0.3159007425847801">
+              <inertial pos="0.000674208342706567 0.008919207887205037 -0.003993540907901017" quat="-0.17623524257562764 -0.6700673910929548 -0.07188401513462085 -0.7174841594323311" mass="2.085849648932058e-06" diaginertia="1.172339787144653e-10 8.8723621933639e-11 5.272343049762072e-11"/>
+              <joint name="labrum_right" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.00524 1.05" limited="true" stiffness="0.03" springref="0.0" damping="0.001" armature="1e-06"/>
+              <geom name="labrum_right_lower_collision" type="ellipsoid" size="0.0035 0.00875 0.0131" pos="0.00116 0.0106 -0.00414" quat="-0.17508303005398207 -0.6683169375774859 -0.07243435071947602 -0.7193411349075035" condim="1" friction="0.6 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0005" gap="0.0005" contype="1" conaffinity="1"/>
+            </body>
+          </body>
+        </body>
+        <body name="antenna_left" pos="-0.00795 0.0378 0.0129" quat="0.7844695484514196 -0.5896013166704936 -0.012791350598953083 0.19187025898429624">
+          <inertial pos="-0.0033309993978213673 0.011952313651317423 0.0024279187219690967" quat="-0.19117997422046396 0.6181510417734876 -0.3826151842473164 -0.6595036980903202" mass="1.4407548075496394e-06" diaginertia="1.32373327817071e-10 9.346677533120279e-11 5.085244770607182e-11"/>
+          <joint name="antenna_abduct_left" type="hinge" axis="0.0 0.0 1.0" pos="0.0 0.0 0.0" range="-0.4 0.8" limited="true" stiffness="0.03" springref="0.0" damping="0.0003" armature="1e-06"/>
+          <joint name="antenna_twist_left" type="hinge" axis="0.0 1.0 0.0" pos="0.0 0.0 0.0" range="-0.1 0.09" limited="true" stiffness="0.03" springref="0.0" damping="0.0003" armature="1e-06"/>
+          <joint name="antenna_left" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.2 0.5" limited="true" stiffness="0.03" springref="0.0" damping="0.0003" armature="1e-06"/>
+          <geom name="antenna_left_collision" type="capsule" size="0.00481 0.00875 0.0" pos="0.0 0.0114 0.00263" quat="0.634163318084318 -0.773199124415107 0.0 0.0" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="1" conaffinity="1"/>
+        </body>
+        <body name="antenna_right" pos="0.00861 0.038 0.0129" quat="0.5896013166704936 0.7844695484514196 -0.19187025898429624 -0.012791350598953083">
+          <inertial pos="0.0028304901657965325 -0.011952130518765772 -0.0024278242706829573" quat="-0.659513185778146 0.38260096331811566 0.6181543181415626 0.19116511087473953" mass="1.4407642058121425e-06" diaginertia="1.3237863989849122e-10 9.347109502747935e-11 5.0853365487159654e-11"/>
+          <joint name="antenna_abduct_right" type="hinge" axis="0.0 0.0 1.0" pos="0.0 0.0 0.0" range="-0.4 0.8" limited="true" stiffness="0.03" springref="0.0" damping="0.0003" armature="1e-06"/>
+          <joint name="antenna_twist_right" type="hinge" axis="0.0 1.0 0.0" pos="0.0 0.0 0.0" range="-0.1 0.09" limited="true" stiffness="0.03" springref="0.0" damping="0.0003" armature="1e-06"/>
+          <joint name="antenna_right" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.2 0.5" limited="true" stiffness="0.03" springref="0.0" damping="0.0003" armature="1e-06"/>
+          <geom name="antenna_right_collision" type="capsule" size="0.00481 0.00875 0.0" pos="-0.000616 -0.0114 -0.00231" quat="0.7817703496019761 0.6228170432251037 -0.025792423298888725 -0.016395183802394384" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="1" conaffinity="1"/>
+        </body>
+      </body>
+      <body name="wing_left" pos="-0.00694 0.0432 0.0091" quat="0.0 -0.4030737692502769 0.0 -0.9151674909776758">
+        <inertial pos="0.0263 -0.148 -0.0289" quat="-0.684844215659391 -0.6338558142015386 0.2649397330653119 -0.24294473635800293" mass="8e-06" diaginertia="4.275202666666666e-08 3.465666666666667e-08 8.096693333333333e-09"/>
+        <joint name="wing_yaw_left" type="hinge" axis="0.0 0.0 1.0" pos="0.0 0.0 0.0" range="-1.5 1.5" limited="true" stiffness="0.03" springref="0.0" damping="0.0005" armature="1e-06"/>
+        <joint name="wing_roll_left" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-1.0 1.5" limited="true" stiffness="0.03" springref="0.0" damping="0.0005" armature="1e-06"/>
+        <joint name="wing_pitch_left" type="hinge" axis="0.0 1.0 0.0" pos="0.0 0.0 0.0" range="-1.27 2.92" limited="true" stiffness="0.03" springref="0.0" damping="0.0005" armature="1e-06"/>
+        <geom name="wing_left_brown_collision" type="ellipsoid" size="0.00219 0.0175 0.114" pos="0.00186 -0.11 -0.00166" quat="-0.6727840709642702 -0.6467924129478199 0.2599165801645026 -0.2479204303107563" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="0" conaffinity="0"/>
+        <geom name="wing_left_membrane_collision" type="ellipsoid" size="0.00306 0.0551 0.114" pos="0.0263 -0.148 -0.0289" quat="-0.684844215659391 -0.6338558142015386 0.2649397330653119 -0.24294473635800293" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="0" conaffinity="0"/>
+        <geom name="wing_left_fluid" type="ellipsoid" size="0.0005 0.0551 0.114" pos="0.0263 -0.148 -0.0289" quat="-0.684844215659391 -0.6338558142015386 0.2649397330653119 -0.24294473635800293" condim="3" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="0" conaffinity="0"/>
+        <geom name="wing_left_inertial" type="box" size="0.0005 0.0551 0.114" pos="0.0263 -0.148 -0.0289" quat="-0.684844215659391 -0.6338558142015386 0.2649397330653119 -0.24294473635800293" condim="3" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="0" conaffinity="0"/>
+      </body>
+      <body name="wing_right" pos="-0.00694 -0.0432 0.0091" quat="0.0 0.9151674909776758 0.0 -0.4030737692502769">
+        <inertial pos="-0.0263 0.148 0.0289" quat="0.24294473635800293 0.2649397330653119 0.6338558142015386 -0.684844215659391" mass="8e-06" diaginertia="4.275202666666666e-08 3.465666666666667e-08 8.096693333333333e-09"/>
+        <joint name="wing_yaw_right" type="hinge" axis="0.0 0.0 1.0" pos="0.0 0.0 0.0" range="-1.5 1.5" limited="true" stiffness="0.03" springref="0.0" damping="0.0005" armature="1e-06"/>
+        <joint name="wing_roll_right" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-1.0 1.5" limited="true" stiffness="0.03" springref="0.0" damping="0.0005" armature="1e-06"/>
+        <joint name="wing_pitch_right" type="hinge" axis="0.0 1.0 0.0" pos="0.0 0.0 0.0" range="-1.27 2.92" limited="true" stiffness="0.03" springref="0.0" damping="0.0005" armature="1e-06"/>
+        <geom name="wing_right_brown_collision" type="ellipsoid" size="0.00219 0.0175 0.114" pos="-0.00186 0.11 0.00166" quat="0.2479204303107563 0.2599165801645026 0.6467924129478199 -0.6727840709642702" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="0" conaffinity="0"/>
+        <geom name="wing_right_membrane_collision" type="ellipsoid" size="0.00306 0.0551 0.114" pos="-0.0263 0.148 0.0289" quat="0.24294473635800293 0.2649397330653119 0.6338558142015386 -0.684844215659391" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="0" conaffinity="0"/>
+        <geom name="wing_right_fluid" type="ellipsoid" size="0.0005 0.0551 0.114" pos="-0.0263 0.148 0.0289" quat="0.24294473635800293 0.2649397330653119 0.6338558142015386 -0.684844215659391" condim="3" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="0" conaffinity="0"/>
+        <geom name="wing_right_inertial" type="box" size="0.0005 0.0551 0.114" pos="-0.0263 0.148 0.0289" quat="0.24294473635800293 0.2649397330653119 0.6338558142015386 -0.684844215659391" condim="3" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="0" conaffinity="0"/>
+      </body>
+      <body name="abdomen" pos="-0.0447 -0.000555 0.00428" quat="-0.7039046625697452 -0.08588836720843908 -0.08528844846193077 -0.6999052042596897">
+        <inertial pos="-0.00017169720254684608 0.006435420644590411 -0.00955137806180833" quat="0.5898562267488509 0.38623057759863993 0.5749586890060099 0.41511212777985973" mass="1.5766671302797982e-05" diaginertia="6.894046934565459e-09 4.389101341752475e-09 2.9903795857645464e-09"/>
+        <joint name="abdomen_abduct" type="hinge" axis="0.0 0.0 1.0" pos="0.0 0.0 0.0" range="-0.1 0.1" limited="true" stiffness="0.8" springref="0.0" damping="0.01" armature="1e-06"/>
+        <joint name="abdomen" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.15 0.1" limited="true" stiffness="0.8" springref="0.0" damping="0.01" armature="1e-06"/>
+        <geom name="abdomen_collision" type="cylinder" size="0.0281 0.0102 0.0" pos="-0.000187 0.00646 -0.0146" quat="0.010400725944001776 -0.020501430947311196 0.8240575171016792 0.5660395081062505" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="0" conaffinity="0"/>
+        <body name="abdomen_2" pos="0.0 0.0119 0.0" quat="0.9813793047807188 -0.19207423702130277 -0.0002691040091600544 0.0014405567776597707">
+          <inertial pos="-0.00016312232302540135 0.016574795946813225 -0.013897985782781471" quat="0.4836500953872876 0.5157318622328712 0.49923357575228305 0.5008683143814099" mass="5.5575856243548255e-05" diaginertia="3.9945541425465035e-08 2.431521534718154e-08 2.312710816969135e-08"/>
+          <joint name="abdomen_abduct_2" type="hinge" axis="0.0 0.0 1.0" pos="0.0 0.0 0.0" range="-0.1 0.1" limited="true" stiffness="0.8" springref="0.0" damping="0.01" armature="1e-06"/>
+          <joint name="abdomen_2" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.15 0.1" limited="true" stiffness="0.8" springref="0.0" damping="0.01" armature="1e-06"/>
+          <geom name="abdomen_2_collision" type="cylinder" size="0.0367 0.0142 0.0" pos="-0.000182 0.0166 -0.0177" quat="-0.011098805277914289 0.010298891384010557 0.6949251953288675 0.7189226121459796" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="0" conaffinity="0"/>
+          <body name="abdomen_3" pos="0.0 0.0212 0.0" quat="0.9958610422155264 -0.09088731800942906 6.689066638977782e-05 0.0005249267541798708">
+            <inertial pos="-1.6213739350683577e-05 0.019897308369319345 -0.014478980166001746" quat="0.6703975895106605 -0.2056840305156064 -0.3325929892213549 0.6305894505063939" mass="8.829516289398615e-05" diaginertia="7.242458624943387e-08 4.7753167313305934e-08 4.67768451372821e-08"/>
+            <joint name="abdomen_abduct_3" type="hinge" axis="0.0 0.0 1.0" pos="0.0 0.0 0.0" range="-0.1 0.1" limited="true" stiffness="0.8" springref="0.0" damping="0.01" armature="1e-06"/>
+            <joint name="abdomen_3" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.15 0.1" limited="true" stiffness="0.8" springref="0.0" damping="0.01" armature="1e-06"/>
+            <geom name="abdomen_3_collision" type="cylinder" size="0.0389 0.0194 0.0" pos="3.29e-05 0.0198 -0.0174" quat="0.7098218570680088 -0.5908517148270327 0.23894003357641422 0.29992472833859524" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="0" conaffinity="0"/>
+            <body name="abdomen_4" pos="0.0 0.0313 0.0" quat="0.9994481960728993 -0.03321489500462488 0.00014706595077348969 -0.00022910273964033427">
+              <inertial pos="-5.271318561306893e-05 0.014915501207503548 -0.014138597247565285" quat="0.4637407546881089 0.527879052420142 0.43691762594422406 0.5615970144120976" mass="8.211459945011209e-05" diaginertia="7.011931510337788e-08 4.3751124092347415e-08 4.3355417632497896e-08"/>
+              <joint name="abdomen_abduct_4" type="hinge" axis="0.0 0.0 1.0" pos="0.0 0.0 0.0" range="-0.1 0.1" limited="true" stiffness="0.8" springref="0.0" damping="0.01" armature="1e-06"/>
+              <joint name="abdomen_4" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.15 0.1" limited="true" stiffness="0.8" springref="0.0" damping="0.01" armature="1e-06"/>
+              <geom name="abdomen_4_collision" type="cylinder" size="0.0396 0.0176 0.0" pos="9.67e-05 0.015 -0.0192" quat="0.018604026253938977 -0.023505086933740104 0.6371378883741466 0.770166678254463" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="0" conaffinity="0"/>
+              <body name="abdomen_5" pos="0.0 0.0262 0.0" quat="0.9993221588645165 -0.03681186731352773 -4.72152211195247e-05 -0.00032710545140009694">
+                <inertial pos="0.00034545220287643164 0.010472960151525885 -0.014066722585366004" quat="0.4594754572237944 0.5380145246952616 0.4223524759489004 0.566604854802492" mass="6.441391053123382e-05" diaginertia="4.70708736217017e-08 2.9803567171299706e-08 2.8252130296263583e-08"/>
+                <joint name="abdomen_abduct_5" type="hinge" axis="0.0 0.0 1.0" pos="0.0 0.0 0.0" range="-0.1 0.1" limited="true" stiffness="0.8" springref="0.0" damping="0.01" armature="1e-06"/>
+                <joint name="abdomen_5" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.15 0.1" limited="true" stiffness="0.8" springref="0.0" damping="0.01" armature="1e-06"/>
+                <geom name="abdomen_5_collision" type="cylinder" size="0.0371 0.016 0.0" pos="0.000282 0.0105 -0.0187" quat="0.026194135789421643 -0.02059538920847656 0.6238603333053093 0.7808251928068055" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="0" conaffinity="0"/>
+                <body name="abdomen_6" pos="0.0 0.0213 0.0" quat="0.9978071487326582 -0.06618720766142482 0.0001559698549121189 -0.0003509321735522676">
+                  <inertial pos="-0.00012014821947461784 0.009393600204718005 -0.013264819795644981" quat="0.4164682793792483 0.571291163845245 0.42091439845492923 0.5683411366042066" mass="4.275280829944473e-05" diaginertia="2.3801576971435142e-08 1.5901380242178753e-08 1.3570355727557875e-08"/>
+                  <joint name="abdomen_abduct_6" type="hinge" axis="0.0 0.0 1.0" pos="0.0 0.0 0.0" range="-0.1 0.1" limited="true" stiffness="0.8" springref="0.0" damping="0.01" armature="1e-06"/>
+                  <joint name="abdomen_6" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.15 0.1" limited="true" stiffness="0.8" springref="0.0" damping="0.01" armature="1e-06"/>
+                  <geom name="abdomen_6_collision" type="cylinder" size="0.0334 0.0141 0.0" pos="-0.000157 0.00942 -0.017" quat="-0.002919835666783681 0.0020098868802175345 0.5919666831287463 0.8059546395300162" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="0" conaffinity="0"/>
+                  <body name="abdomen_7" pos="0.0 0.0182 0.0" quat="0.9947866237582768 -0.10197812625461732 -1.7896161372133824e-06 -0.00018695989813346508">
+                    <inertial pos="-9.339386266572952e-05 0.013495556792193162 -0.010995019562974273" quat="0.6781208148913751 0.1611004015303879 -0.13732440674759616 0.7038045384545535" mass="3.128590470167569e-05" diaginertia="9.197919530246339e-09 7.322248447955275e-09 7.094057482762107e-09"/>
+                    <joint name="abdomen_abduct_7" type="hinge" axis="0.0 0.0 1.0" pos="0.0 0.0 0.0" range="-0.1 0.1" limited="true" stiffness="0.8" springref="0.0" damping="0.01" armature="1e-06"/>
+                    <joint name="abdomen_7" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.15 0.1" limited="true" stiffness="0.8" springref="0.0" damping="0.01" armature="1e-06"/>
+                    <geom name="abdomen_7_collision" type="sphere" size="0.0262 0.0 0.0" pos="-3.83e-05 0.0134 -0.0108" quat="1.0 0.0 0.0 0.0" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="0" conaffinity="0"/>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="haltere_left" pos="-0.0386 0.0247 -0.00866" quat="0.2908119055260152 -0.2038681399563818 0.8254660960978989 0.43871624235711576">
+        <inertial pos="0.0005008916709853817 0.017188980526422024 0.0011226791074353815" quat="-0.6708575479420297 0.7006188819667789 -0.16098690822831926 -0.18211685254230217" mass="8.217017166493275e-07" diaginertia="5.491809457685891e-11 5.1373355841203157e-11 9.278277677786676e-12"/>
+        <joint name="haltere_left" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.2 0.2" limited="true" stiffness="0.03" springref="0.0" damping="0.0004001189287968311" armature="1e-06"/>
+      </body>
+      <body name="haltere_right" pos="-0.0386 -0.0247 -0.00866" quat="-0.4380173020251517 -0.8290327474402985 0.20600813748214897 -0.28001106065534814">
+        <inertial pos="-0.0004471553108492121 0.017512739622798035 0.0011318886146997262" quat="0.16107369335637747 -0.14451961807650032 0.7075273747461365 0.672736470904022" mass="8.217079275865213e-07" diaginertia="5.4918901179555916e-11 5.136940598833624e-11 9.283055373972515e-12"/>
+        <joint name="haltere_right" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.2 0.2" limited="true" stiffness="0.03" springref="0.0" damping="0.00040012268854051143" armature="1e-06"/>
+      </body>
+      <body name="coxa_T1_left" pos="0.0317 0.0209 -0.0272" quat="-0.5320962090319543 0.7871423242634361 -0.31105624249800334 -0.02290414132863111">
+        <inertial pos="4.913156319010306e-06 0.02569612575084912 -0.0004036410145743449" quat="-0.4176100281150052 -0.3833586865565002 -0.5313798745905073 0.6295025105109878" mass="5.75633823823148e-06" diaginertia="6.269295815226035e-10 6.135827277916897e-10 1.3124508037017303e-10"/>
+        <joint name="coxa_abduct_T1_left" type="hinge" axis="0.0 0.0 1.0" pos="0.0 0.0 0.0" range="-1.0 0.7" limited="true" stiffness="0.8" springref="0.0" damping="0.01" armature="1e-06"/>
+        <joint name="coxa_twist_T1_left" type="hinge" axis="0.0 1.0 0.0" pos="0.0 0.0 0.0" range="-0.8 0.8" limited="true" stiffness="0.8" springref="0.0" damping="0.01" armature="1e-06"/>
+        <joint name="coxa_T1_left" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.2 1.7" limited="true" stiffness="0.8" springref="0.0" damping="0.01" armature="1e-06"/>
+        <geom name="coxa_T1_left_collision" type="ellipsoid" size="0.00679 0.00752 0.0208" pos="-2.04e-05 0.0261 -0.000454" quat="-0.4168953723906474 -0.38290390317893996 -0.5318665182537756 0.6298419295110501" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="0" conaffinity="0"/>
+        <body name="femur_T1_left" pos="0.0 0.0437 0.0" quat="0.0 0.0 0.2519334983335015 0.9677445491540851">
+          <inertial pos="0.002149211997053039 0.03334619539485561 0.0027763592461816297" quat="0.6666659215974969 -0.6760134666084486 0.22602174514245876 0.2178910568778533" mass="7.869657677272841e-06" diaginertia="2.866662554692562e-09 2.8528995753086552e-09 1.191795084997464e-10"/>
+          <joint name="femur_twist_T1_left" type="hinge" axis="0.0 1.0 0.0" pos="0.0 0.0 0.0" range="-1.0 1.0" limited="true" stiffness="0.8" springref="0.0" damping="0.01" armature="1e-06"/>
+          <joint name="femur_T1_left" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.15 2.0" limited="true" stiffness="0.8" springref="0.0" damping="0.01" armature="1e-06"/>
+          <geom name="femur_T1_left_collision" type="capsule" size="0.005 0.03188748265385651 0.0" pos="0.001315 0.034414999999999994 0.00219" quat="0.7309852894523768 0.681809969980702 0.028207648592877867 -0.0" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="1" conaffinity="1"/>
+          <body name="tibia_T1_left" pos="0.0 0.0697 0.0" quat="0.18592518016944362 0.16193483434112832 0.676727671907061 -0.6937208335354509">
+            <inertial pos="-0.000534023824584535 -0.028791318201946248 -0.0005850515278153223" quat="-0.29799657117458006 0.3031253189407381 0.6605057081297595 0.6189065309990471" mass="1.976834281017673e-06" diaginertia="4.2875119658621916e-10 4.288555389638119e-10 1.156563974504658e-11"/>
+            <joint name="tibia_T1_left" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-1.35 1.3" limited="true" stiffness="0.4" springref="0.0" damping="0.004" armature="1e-06"/>
+            <geom name="tibia_T1_left_collision" type="capsule" size="0.00362 0.02551500783852515 0.0" pos="0.0 -0.0255 0.000875" quat="0.6948764126531175 -0.7191291755577258 0.0 0.0" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="1" conaffinity="1"/>
+            <body name="tarsus_T1_left" pos="0.0 -0.051 0.00175" quat="0.03900356533064744 0.9980912358970806 0.006740616162270865 0.047404333248017655">
+              <inertial pos="-0.00048336102521800983 0.013096271495604923 0.0011180015706538787" quat="-0.32110659991923923 -0.33942100344706083 -0.6250299071365147 0.6253171588020078" mass="2.6682765568196103e-07" diaginertia="1.1285621277113854e-11 1.1285098605051723e-11 4.943984304106743e-13"/>
+              <joint name="tarsus_T1_left" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.7 1.2" limited="true" stiffness="0.4" springref="0.0" damping="0.01" armature="1e-06"/>
+              <geom name="tarsus_T1_left_collision" type="capsule" size="0.00204 0.011782453320510122 0.0" pos="-8.25e-05 0.01175 0.00087" quat="0.680500326203859 0.7327297169617181 0.005144698012709936 -0.0" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="1" conaffinity="1"/>
+              <site name="tarsus_T1_left" pos="0.0 0.0 0.0" size="0.01 0.005 0.005"/>
+              <body name="tarsus2_T1_left" pos="-0.000165 0.0235 0.00174" quat="1.0 0.0 0.0 0.0">
+                <inertial pos="-6.699350735698065e-05 0.007986314579354618 -0.00020915207212106324" quat="0.37303674592930014 0.2310227568623816 0.4680461048120978 -0.7670755606642714" mass="1.044938608675405e-07" diaginertia="1.5196356803605954e-12 1.5957272512915302e-12 4.76311658536945e-13"/>
+                <joint name="tarsus2_T1_left" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.36 0.36" limited="true" stiffness="0.4" springref="0.0" damping="0.002" armature="1e-06"/>
+                <geom name="tarsus2_T1_left_collision" type="capsule" size="0.00159 0.006805914798908373 0.0" pos="5.65e-05 0.0068 0.000278" quat="0.6925146845303637 0.721378878228305 -0.0059938097970440056 0.0" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="1" conaffinity="1"/>
+                <body name="tarsus3_T1_left" pos="0.000113 0.0136 0.000556" quat="1.0 0.0 0.0 0.0">
+                  <inertial pos="-0.00023222787431173564 0.005555871017363025 -0.0006766492306893857" quat="-0.37303674592930014 -0.2310227568623816 -0.4680461048120978 0.7670755606642714" mass="6.371920677861686e-08" diaginertia="4.4337656304534756e-13 4.519645651334022e-13 1.4004109569297476e-13"/>
+                  <joint name="tarsus3_T1_left" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.36 0.36" limited="true" stiffness="0.4" springref="0.0" damping="0.002" armature="1e-06"/>
+                  <geom name="tarsus3_T1_left_collision" type="capsule" size="0.00149 0.004547887559076192 0.0" pos="-0.0001275 0.004545 0.0001" quat="0.6992895571528858 0.7145574151878921 0.020045340030023378 -0.0" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="1" conaffinity="1"/>
+                  <body name="tarsus4_T1_left" pos="-0.000255 0.00909 0.0002" quat="1.0 0.0 0.0 0.0">
+                    <inertial pos="-0.00020806679605457103 0.004792103938571435 -0.000714550601344871" quat="0.37303674592930014 0.2310227568623816 0.4680461048120978 -0.7670755606642714" mass="4.977392171146566e-08" diaginertia="2.378714723864668e-13 2.3524629680686884e-13 7.085806660099068e-14"/>
+                    <joint name="tarsus4_T1_left" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.36 0.36" limited="true" stiffness="0.4" springref="0.0" damping="0.002" armature="1e-06"/>
+                    <geom name="tarsus4_T1_left_collision" type="capsule" size="0.00148 0.004548207598604092 0.0" pos="-3.56e-05 0.00453 -0.000405" quat="0.7379180399331831 0.674869497058709 0.0053036101755607155 -0.0" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="1" conaffinity="1"/>
+                    <body name="claw_T1_left" pos="-7.12e-05 0.00906 -0.00081" quat="1.0 0.0 0.0 0.0">
+                      <inertial pos="-0.0005457257575861036 0.004973090489174603 1.0951603508779773e-06" quat="-0.37303674592930014 -0.2310227568623816 -0.4680461048120978 0.7670755606642714" mass="9.329473679243119e-08" diaginertia="8.331997703693443e-13 8.018919849943435e-13 3.0482645019623047e-13"/>
+                      <joint name="tarsus5_T1_left" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.36 0.36" limited="true" stiffness="0.4" springref="0.0" damping="0.002" armature="1e-06"/>
+                      <geom name="tarsal_claw_T1_left_collision" type="capsule" size="0.00199 0.004548207598604092 0.0" pos="-3.56e-05 0.00453 -0.000405" quat="0.7379180399331831 0.674869497058709 0.0053036101755607155 -0.0" condim="1" friction="0.6 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0005" gap="0.0005" contype="1" conaffinity="1"/>
+                      <site name="claw_T1_left" pos="-3.56e-05 0.00453 -0.000405" size="0.00219 0.004548207598604092 0.005"/>
+                    </body>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="coxa_T1_right" pos="0.0317 -0.0209 -0.0272" quat="0.3189266553029507 0.010997470872515541 -0.54287515307054 -0.7768213516313252">
+        <inertial pos="0.0007126376972259561 -0.02595269971043855 0.0014655467444806862" quat="-0.5074594343765731 0.6280093072386751 0.4468687025563676 0.3852240843449388" mass="5.756350581064001e-06" diaginertia="6.26931764653829e-10 6.135847763511935e-10 1.3124552209277567e-10"/>
+        <joint name="coxa_abduct_T1_right" type="hinge" axis="0.0 0.0 1.0" pos="0.0 0.0 0.0" range="-1.0 0.7" limited="true" stiffness="0.8" springref="0.0" damping="0.01" armature="1e-06"/>
+        <joint name="coxa_twist_T1_right" type="hinge" axis="0.0 1.0 0.0" pos="0.0 0.0 0.0" range="-0.8 0.8" limited="true" stiffness="0.8" springref="0.0" damping="0.01" armature="1e-06"/>
+        <joint name="coxa_T1_right" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.2 1.7" limited="true" stiffness="0.8" springref="0.0" damping="0.01" armature="1e-06"/>
+        <geom name="coxa_T1_right_collision" type="ellipsoid" size="0.00679 0.00752 0.0208" pos="0.00061 -0.026 0.00153" quat="-0.5078776162399525 0.6278487066903351 0.4468923119276748 0.38490724852831054" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="0" conaffinity="0"/>
+        <body name="femur_T1_right" pos="0.0 -0.0436 0.0" quat="0.0 0.0 0.26108538888553173 0.9653157098641307">
+          <inertial pos="-0.0021911877437771066 -0.03323518012013118 -0.0026461588341802136" quat="0.23172278754513057 -0.23911202046595825 -0.6715192023965953 -0.6619606878158585" mass="7.874609198668766e-06" diaginertia="2.8692178809060455e-09 2.855295483031811e-09 1.193322228008244e-10"/>
+          <joint name="femur_twist_T1_right" type="hinge" axis="0.0 1.0 0.0" pos="0.0 0.0 0.0" range="-1.0 1.0" limited="true" stiffness="0.8" springref="0.0" damping="0.01" armature="1e-06"/>
+          <joint name="femur_T1_right" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.15 2.0" limited="true" stiffness="0.8" springref="0.0" damping="0.01" armature="1e-06"/>
+          <geom name="femur_T1_right_collision" type="capsule" size="0.005 0.03193732221085544 0.0" pos="-0.001315 -0.034464999999999996 -0.00219" quat="0.6824324837315984 -0.7303258412842092 -0.030167378083516095 0.0" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="1" conaffinity="1"/>
+          <body name="tibia_T1_right" pos="0.0 -0.0698 0.0" quat="0.16294452683131358 0.14794963172413747 0.6877658555824768 -0.6917644942777238">
+            <inertial pos="-7.308889676372905e-05 0.0285581996124344 0.0002653942764277717" quat="-0.66610472927362 -0.6111641161570392 -0.29974116671906736 0.3048575827090337" mass="1.975459412857717e-06" diaginertia="4.2811375466052395e-10 4.2829010768415464e-10 1.1553398140256616e-11"/>
+            <joint name="tibia_T1_right" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-1.35 1.3" limited="true" stiffness="0.4" springref="0.0" damping="0.004" armature="1e-06"/>
+            <geom name="tibia_T1_right_collision" type="capsule" size="0.00362 0.02576486221581633 0.0" pos="0.0 0.02575 -0.000875" quat="0.7190135538181128 0.694996049935428 0.0 -0.0" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="1" conaffinity="1"/>
+            <body name="tarsus_T1_right" pos="0.0 0.0515 -0.00175" quat="-0.07447362983266557 -0.994647807832245 0.013295292305697344 0.07037508107677393">
+              <inertial pos="-0.000275706298543503 -0.012473685268196751 -0.0006912899181795856" quat="-0.6745485699681906 0.644255721138726 0.23511934602246662 0.27319898546637617" mass="2.66829433333727e-07" diaginertia="1.1286025533224981e-11 1.1285103316525401e-11 4.944026918028718e-13"/>
+              <joint name="tarsus_T1_right" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.7 1.2" limited="true" stiffness="0.4" springref="0.0" damping="0.01" armature="1e-06"/>
+              <geom name="tarsus_T1_right_collision" type="capsule" size="0.00204 0.011388737034895485 0.0" pos="-0.0004825 -0.01135 -0.000805" quat="0.7316706462931768 -0.6810432119097061 0.028951836982064598 0.0" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="1" conaffinity="1"/>
+              <site name="tarsus_T1_right" pos="0.0 0.0 0.0" size="0.01 0.005 0.005"/>
+              <body name="tarsus2_T1_right" pos="-0.000965 -0.0227 -0.00161" quat="1.0 0.0 0.0 0.0">
+                <inertial pos="0.0003499390214423727 -0.008065573000415112 -0.000316418096896004" quat="0.5289666761490709 -0.7779509906313368 -0.2989811647799096 -0.15998992095245998" mass="1.0449250157087453e-07" diaginertia="1.5644991665492641e-12 1.563263866011391e-12 4.638470994554297e-13"/>
+                <joint name="tarsus2_T1_right" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.36 0.36" limited="true" stiffness="0.4" springref="0.0" damping="0.002" armature="1e-06"/>
+                <geom name="tarsus2_T1_right_collision" type="capsule" size="0.00159 0.006852058978876349 0.0" pos="7.15e-05 -0.0068 -0.00084" quat="0.7491965325439549 -0.6623111491070626 -0.006964006935463967 0.0" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="1" conaffinity="1"/>
+                <body name="tarsus3_T1_right" pos="0.000143 -0.0136 -0.00168" quat="1.0 0.0 0.0 0.0">
+                  <inertial pos="0.00035547163608883395 -0.005482586606750328 0.00047159405260360776" quat="-0.5289666761490709 0.7779509906313368 0.2989811647799096 0.15998992095245998" mass="6.371960214038196e-08" diaginertia="4.563260212369962e-13 4.4031412745266274e-13 1.3874734562320684e-13"/>
+                  <joint name="tarsus3_T1_right" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.36 0.36" limited="true" stiffness="0.4" springref="0.0" damping="0.002" armature="1e-06"/>
+                  <geom name="tarsus3_T1_right_collision" type="capsule" size="0.00149 0.004511318238608311 0.0" pos="0.0002185 -0.004495 -0.000315" quat="0.73137691384918 -0.6811691780813938 -0.03311133824489089 0.0" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="1" conaffinity="1"/>
+                  <body name="tarsus4_T1_right" pos="0.000437 -0.00899 -0.00063" quat="1.0 0.0 0.0 0.0">
+                    <inertial pos="0.0005037124523256352 -0.004884564054852984 -7.213063645901407e-05" quat="0.5289666761490709 -0.7779509906313368 -0.2989811647799096 -0.15998992095245998" mass="4.977324090979308e-08" diaginertia="2.4258237813686787e-13 2.29697110152595e-13 7.168649602664404e-14"/>
+                    <joint name="tarsus4_T1_right" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.36 0.36" limited="true" stiffness="0.4" springref="0.0" damping="0.002" armature="1e-06"/>
+                    <geom name="tarsus4_T1_right_collision" type="capsule" size="0.00148 0.004511742484894278 0.0" pos="0.0003825 -0.004495 6.7e-05" quat="0.7018368263607362 -0.7097726235463893 -0.06039778164771833 0.0" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="1" conaffinity="1"/>
+                    <body name="claw_T1_right" pos="0.000765 -0.00899 0.000134" quat="1.0 0.0 0.0 0.0">
+                      <inertial pos="0.0005620532725179872 -0.0050303013169581 -0.00048006470200837037" quat="-0.5289666761490709 0.7779509906313368 0.2989811647799096 0.15998992095245998" mass="9.329408408931855e-08" diaginertia="8.571044441163993e-13 7.791862162853326e-13 3.0363442307293117e-13"/>
+                      <joint name="tarsus5_T1_right" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.36 0.36" limited="true" stiffness="0.4" springref="0.0" damping="0.002" armature="1e-06"/>
+                      <geom name="tarsal_claw_T1_right_collision" type="capsule" size="0.00199 0.004511742484894278 0.0" pos="0.0003825 -0.004495 6.7e-05" quat="0.7018368263607362 -0.7097726235463893 -0.06039778164771833 0.0" condim="1" friction="0.6 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0005" gap="0.0005" contype="1" conaffinity="1"/>
+                      <site name="claw_T1_right" pos="0.0003825 -0.004495 6.7e-05" size="0.00219 0.004511742484894278 0.005"/>
+                    </body>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="coxa_T2_left" pos="-0.0144 0.0241 -0.0425" quat="-0.37107072539891206 0.9171748118350469 -0.12602401994680032 -0.07221376381078558">
+        <inertial pos="0.00045196754907449524 0.01807990057418226 -0.002748519543389373" quat="-0.6388970868151549 -0.46465887695243546 -0.4611544809758542 0.4040286935408217" mass="2.3600879519715473e-06" diaginertia="1.274184621166227e-10 1.1361432757110888e-10 5.192033567952895e-11"/>
+        <joint name="coxa_abduct_T2_left" type="hinge" axis="0.0 0.0 1.0" pos="0.0 0.0 0.0" range="-0.5 0.3" limited="true" stiffness="0.8" springref="0.0" damping="0.01" armature="1e-06"/>
+        <joint name="coxa_twist_T2_left" type="hinge" axis="0.0 1.0 0.0" pos="0.0 0.0 0.0" range="-0.75 0.8" limited="true" stiffness="0.8" springref="0.0" damping="0.01" armature="1e-06"/>
+        <joint name="coxa_T2_left" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.2 0.9" limited="true" stiffness="0.8" springref="0.0" damping="0.01" armature="1e-06"/>
+        <geom name="coxa_T2_left_collision" type="ellipsoid" size="0.00788 0.007 0.0149" pos="0.000349 0.0143 -0.00216" quat="0.7071067811865476 -0.7071067811865476 0.0 0.0" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="0" conaffinity="0"/>
+        <body name="femur_T2_left" pos="0.0 0.0281 0.0" quat="0.0 0.0 0.1279713376301968 0.9917778666340252">
+          <inertial pos="-0.0013424324809435638 0.04054462107241488 0.0022867271289612676" quat="0.6682124754147738 -0.6907000131004774 -0.20186555002612544 -0.18888059539220023" mass="8.002335118992439e-06" diaginertia="4.168948177406494e-09 4.154346944357384e-09 1.0685293531861558e-10"/>
+          <joint name="femur_twist_T2_left" type="hinge" axis="0.0 1.0 0.0" pos="0.0 0.0 0.0" range="-1.0 1.0" limited="true" stiffness="0.8" springref="0.0" damping="0.01" armature="1e-06"/>
+          <joint name="femur_T2_left" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.15 2.0" limited="true" stiffness="0.8" springref="0.0" damping="0.01" armature="1e-06"/>
+          <geom name="femur_T2_left_collision" type="capsule" size="0.00469 0.03819783141750328 0.0" pos="0.0 0.040764999999999996 0.00219" quat="0.7270945941501046 0.6865372904349004 0.0 -0.0" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="1" conaffinity="1"/>
+          <body name="tibia_T2_left" pos="0.0 0.083 0.0" quat="0.10703722545717956 0.08342901498251193 0.656228223363643 -0.7422581428899742">
+            <inertial pos="3.4140323695197594e-05 -0.033643331844794386 -0.0008630275485009276" quat="-0.11311678255198737 0.10697535967544183 0.7151905789951165 0.6813686972880588" mass="2.6215025220686976e-06" diaginertia="1.0963033724122559e-09 1.094957044744755e-09 1.4509020464598798e-11"/>
+            <joint name="tibia_T2_left" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-1.35 1.3" limited="true" stiffness="0.4" springref="0.0" damping="0.004" armature="1e-06"/>
+            <geom name="tibia_T2_left_collision" type="capsule" size="0.00352 0.03341145948623017 0.0" pos="0.0 -0.0334 0.000875" quat="0.6977862783412901 -0.7163060168382027 0.0 0.0" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="1" conaffinity="1"/>
+            <body name="tarsus_T2_left" pos="0.0 -0.0668 0.00175" quat="-0.14805156349472384 0.9783407371475671 -0.021607525483013753 -0.14304982148476697">
+              <inertial pos="-6.45459118378093e-05 0.016665656668175113 2.335132206195134e-05" quat="-0.014606352741319592 0.019570729851921636 0.6940171656571077 0.7195441715182853" mass="4.870578912884016e-07" diaginertia="5.0683199833551213e-11 5.06910289104112e-11 9.374587659445738e-13"/>
+              <joint name="tarsus_T2_left" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-1.0 1.8" limited="true" stiffness="0.4" springref="0.0" damping="0.01" armature="1e-06"/>
+              <geom name="tarsus_T2_left_collision" type="capsule" size="0.00208 0.017115135414305083 0.0" pos="0.0002355 0.0171 0.00068" quat="0.6929174137069697 0.7209485943192142 -0.009928853448080406 0.0" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="1" conaffinity="1"/>
+              <site name="tarsus_T2_left" pos="0.0 0.0 0.0" size="0.01 0.005 0.005"/>
+              <body name="tarsus2_T2_left" pos="0.000471 0.0342 0.00136" quat="1.0 0.0 0.0 0.0">
+                <inertial pos="-0.00015541315604043413 0.010042613101928388 -3.071631994372437e-05" quat="0.07880198481812173 0.047995863343714126 -0.694435540282478 -0.7136146892288588" mass="1.3623205024956287e-07" diaginertia="3.262592857940462e-12 3.376881609176933e-12 2.684904718898181e-13"/>
+                <joint name="tarsus2_T2_left" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.36 0.36" limited="true" stiffness="0.4" springref="0.0" damping="0.002" armature="1e-06"/>
+                <geom name="tarsus2_T2_left_collision" type="capsule" size="0.00162 0.00890058698401403 0.0" pos="1.21e-05 0.0089 0.0001015" quat="0.703063388938706 0.7111265263001183 -0.0009668124683406102 0.0" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="1" conaffinity="1"/>
+                <body name="tarsus3_T2_left" pos="2.42e-05 0.0178 0.000203" quat="1.0 0.0 0.0 0.0">
+                  <inertial pos="-0.00013197078212917254 0.005832968625255633 -0.0005454306701073441" quat="-0.0774116203563887 0.05020753671693427 -0.34205134576078733 0.935140375106246" mass="6.806711157246109e-08" diaginertia="5.839247260699577e-13 3.0540814511183776e-13 3.82611362045269e-13"/>
+                  <joint name="tarsus3_T2_left" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.36 0.36" limited="true" stiffness="0.4" springref="0.0" damping="0.002" armature="1e-06"/>
+                  <geom name="tarsus3_T2_left_collision" type="capsule" size="0.00149 0.004957174881169718 0.0" pos="-1.555e-05 0.004955 0.000146" quat="0.6966160135609588 0.717440631955442 0.002251503900485797 -0.0" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="1" conaffinity="1"/>
+                  <body name="tarsus4_T2_left" pos="-3.11e-05 0.00991 0.000292" quat="1.0 0.0 0.0 0.0">
+                    <inertial pos="2.6413354504636888e-06 0.0052133134907196566 -0.00042650874990408927" quat="0.0774116203563887 -0.05020753671693427 0.34205134576078733 -0.935140375106246" mass="5.5093039510916104e-08" diaginertia="3.0839256052807203e-13 1.869148654313271e-13 1.9185737616177553e-13"/>
+                    <joint name="tarsus4_T2_left" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.36 0.36" limited="true" stiffness="0.4" springref="0.0" damping="0.002" armature="1e-06"/>
+                    <geom name="tarsus4_T2_left_collision" type="capsule" size="0.00146 0.004956659964129071 0.0" pos="1.8e-05 0.004955 -0.000127" quat="0.7161082643293006 0.6979846163569242 -0.0025355647011956885 0.0" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="1" conaffinity="1"/>
+                    <body name="claw_T2_left" pos="3.6e-05 0.00991 -0.000254" quat="1.0 0.0 0.0 0.0">
+                      <inertial pos="1.6106657165868704e-05 0.005104235055251705 0.0005907121911349067" quat="-0.0774116203563887 0.05020753671693427 -0.34205134576078733 0.935140375106246" mass="9.946221763442429e-08" diaginertia="9.618399140935009e-13 4.635298839891464e-13 7.902368997804918e-13"/>
+                      <joint name="tarsus5_T2_left" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.36 0.36" limited="true" stiffness="0.4" springref="0.0" damping="0.002" armature="1e-06"/>
+                      <geom name="tarsal_claw_T2_left_collision" type="capsule" size="0.002 0.004956659964129071 0.0" pos="1.8e-05 0.004955 -0.000127" quat="0.7161082643293006 0.6979846163569242 -0.0025355647011956885 0.0" condim="1" friction="0.6 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0005" gap="0.0005" contype="1" conaffinity="1"/>
+                      <site name="claw_T2_left" pos="1.8e-05 0.004955 -0.000127" size="0.0022 0.004956659964129071 0.005"/>
+                    </body>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="coxa_T2_right" pos="-0.0144 -0.0241 -0.0425" quat="0.12601040825952303 -0.07090585671111257 -0.37403089435763187 -0.9160756663946278">
+        <inertial pos="-0.0003735739566258188 -0.018065410840220557 0.0025603721835498125" quat="-0.40483174384002457 -0.45961461016889804 0.4625923668494667 -0.6409945174737047" mass="2.3600885600285718e-06" diaginertia="1.2741850807033807e-10 1.1361453308122931e-10 5.192029906417684e-11"/>
+        <joint name="coxa_abduct_T2_right" type="hinge" axis="0.0 0.0 1.0" pos="0.0 0.0 0.0" range="-0.5 0.3" limited="true" stiffness="0.8" springref="0.0" damping="0.01" armature="1e-06"/>
+        <joint name="coxa_twist_T2_right" type="hinge" axis="0.0 1.0 0.0" pos="0.0 0.0 0.0" range="-0.75 0.8" limited="true" stiffness="0.8" springref="0.0" damping="0.01" armature="1e-06"/>
+        <joint name="coxa_T2_right" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.2 0.9" limited="true" stiffness="0.8" springref="0.0" damping="0.01" armature="1e-06"/>
+        <geom name="coxa_T2_right_collision" type="ellipsoid" size="0.00788 0.007 0.0149" pos="-0.000335 -0.0143 0.00206" quat="0.7071067811865476 0.7071067811865476 0.0 0.0" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="0" conaffinity="0"/>
+        <body name="femur_T2_right" pos="0.0 -0.0282 0.0" quat="0.0 0.0 0.13399752106879015 0.9909816670087389">
+          <inertial pos="0.0013711340517150936 -0.04052451498395007 -0.0019678696225715817" quat="-0.18677436185186996 0.202597198944144 -0.6934226648556255 -0.665758755555898" mass="8.005858932088554e-06" diaginertia="4.173789513987396e-09 4.1592000372798e-09 1.0687447033967439e-10"/>
+          <joint name="femur_twist_T2_right" type="hinge" axis="0.0 1.0 0.0" pos="0.0 0.0 0.0" range="-1.0 1.0" limited="true" stiffness="0.8" springref="0.0" damping="0.01" armature="1e-06"/>
+          <joint name="femur_T2_right" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.15 2.0" limited="true" stiffness="0.8" springref="0.0" damping="0.01" armature="1e-06"/>
+          <geom name="femur_T2_right_collision" type="capsule" size="0.00469 0.03864709982650704 0.0" pos="0.0 -0.041214999999999995 -0.00219" quat="0.6867799478196519 -0.7268653955670447 0.0 0.0" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="1" conaffinity="1"/>
+          <body name="tibia_T2_right" pos="0.0 -0.084 0.0" quat="0.09023849312257146 0.1030439555612512 0.6592812302414034 -0.7393153704831519">
+            <inertial pos="-0.0003182499266008963 0.033081302463846496 -0.0002582005811594956" quat="-0.7150353291915864 -0.6873557862404761 -0.09278058539891218 0.08751150840118932" mass="2.6223204948426782e-06" diaginertia="1.0968481179332232e-09 1.0954992565631146e-09 1.4518563230672532e-11"/>
+            <joint name="tibia_T2_right" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-1.35 1.3" limited="true" stiffness="0.4" springref="0.0" damping="0.004" armature="1e-06"/>
+            <geom name="tibia_T2_right_collision" type="capsule" size="0.00353 0.03326151116530937 0.0" pos="0.0 0.03325 -0.000875" quat="0.716347221006766 0.6977439780864351 0.0 -0.0" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="1" conaffinity="1"/>
+            <body name="tarsus_T2_right" pos="0.0 0.0665 -0.00175" quat="0.15000833769512006 -0.9820545841107194 0.017200956055707102 0.11300628106365712">
+              <inertial pos="6.03651856206245e-05 -0.016471401313045718 0.0005475437857779958" quat="-0.7212791374168708 0.6922980581163701 -0.017345318773661935 -0.013377016562724955" mass="4.870767956553145e-07" diaginertia="5.068501753721485e-11 5.069282193584981e-11 9.37532964528977e-13"/>
+              <joint name="tarsus_T2_right" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-1.0 1.8" limited="true" stiffness="0.4" springref="0.0" damping="0.01" armature="1e-06"/>
+              <geom name="tarsus_T2_right_collision" type="capsule" size="0.00208 0.016958814736000864 0.0" pos="-0.0001835 -0.01695 -0.000515" quat="0.7177630835830915 -0.6962466096008172 0.007537537041991147 0.0" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="1" conaffinity="1"/>
+              <site name="tarsus_T2_right" pos="0.0 0.0 0.0" size="0.01 0.005 0.005"/>
+              <body name="tarsus2_T2_right" pos="-0.000367 -0.0339 -0.00103" quat="1.0 0.0 0.0 0.0">
+                <inertial pos="0.00016292736726329117 -0.010142457677496067 0.00046650864509859" quat="0.7151761684438466 -0.692829238857239 -0.050266161114044416 0.07735636315996314" mass="1.3623640592905672e-07" diaginertia="3.2629411213506804e-12 3.3772514951821536e-12 2.685125374672107e-13"/>
+                <joint name="tarsus2_T2_right" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.36 0.36" limited="true" stiffness="0.4" springref="0.0" damping="0.002" armature="1e-06"/>
+                <geom name="tarsus2_T2_right_collision" type="capsule" size="0.00162 0.008854322459115662 0.0" pos="8.6e-06 -0.00885 -0.0002765" quat="0.7180625619787742 -0.6959782321873808 -0.0006763178301481892 0.0" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="1" conaffinity="1"/>
+                <body name="tarsus3_T2_right" pos="1.72e-05 -0.0177 -0.000553" quat="1.0 0.0 0.0 0.0">
+                  <inertial pos="5.544193657272892e-05 -0.0063309890263609225 -8.631213878862454e-05" quat="-0.34413839727472206 0.9343757646935769 0.07883170263153516 -0.04791927101586973" mass="6.806889578679022e-08" diaginertia="5.839148707306342e-13 3.053845919384256e-13 3.8263430296339814e-13"/>
+                  <joint name="tarsus3_T2_right" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.36 0.36" limited="true" stiffness="0.4" springref="0.0" damping="0.002" armature="1e-06"/>
+                  <geom name="tarsus3_T2_right_collision" type="capsule" size="0.00149 0.004942236828855938 0.0" pos="2.535e-05 -0.00494 -0.0001465" quat="0.7175104348940129 -0.6965385846399345 -0.003574342736968085 0.0" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="1" conaffinity="1"/>
+                  <body name="tarsus4_T2_right" pos="5.07e-05 -0.00988 -0.000293" quat="1.0 0.0 0.0 0.0">
+                    <inertial pos="3.032227353472021e-05 -0.005710247861302531 0.000747992535648459" quat="0.34413839727472206 -0.9343757646935769 -0.07883170263153516 0.04791927101586973" mass="5.509385574313913e-08" diaginertia="3.08392703015322e-13 1.8688765652417582e-13 1.918884494419946e-13"/>
+                    <joint name="tarsus4_T2_right" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.36 0.36" limited="true" stiffness="0.4" springref="0.0" damping="0.002" armature="1e-06"/>
+                    <geom name="tarsus4_T2_right_collision" type="capsule" size="0.00146 0.004941842661396657 0.0" pos="-4.83e-05 -0.00494 0.000126" quat="0.6980341816691199 -0.7160302152490595 0.007000862226018133 0.0" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="1" conaffinity="1"/>
+                    <body name="claw_T2_right" pos="-9.66e-05 -0.00988 0.000252" quat="1.0 0.0 0.0 0.0">
+                      <inertial pos="3.160835185946238e-05 -0.005596142173362184 -0.001319288431890872" quat="-0.34413839727472206 0.9343757646935769 0.07883170263153516 -0.04791927101586973" mass="9.946183417593952e-08" diaginertia="9.617940544381863e-13 4.63442358266854e-13 7.902415489195573e-13"/>
+                      <joint name="tarsus5_T2_right" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.36 0.36" limited="true" stiffness="0.4" springref="0.0" damping="0.002" armature="1e-06"/>
+                      <geom name="tarsal_claw_T2_right_collision" type="capsule" size="0.002 0.004941842661396657 0.0" pos="-4.83e-05 -0.00494 0.000126" quat="0.6980341816691199 -0.7160302152490595 0.007000862226018133 0.0" condim="1" friction="0.6 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0005" gap="0.0005" contype="1" conaffinity="1"/>
+                      <site name="claw_T2_right" pos="-4.83e-05 -0.00494 0.000126" size="0.0022 0.004941842661396657 0.005"/>
+                    </body>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="coxa_T3_left" pos="-0.0377 0.0192 -0.0402" quat="0.6812094223433081 -0.5291626790302643 -0.08822712342243724 0.49815314585457765">
+        <inertial pos="-0.0034683716028244133 0.013337375882650875 -0.006870516342252178" quat="0.3837388043265627 0.05909507907534975 0.5102365876685364 -0.7674053207317941" mass="2.9934598418239074e-06" diaginertia="1.4648657075494327e-10 1.2956391665989913e-10 7.147420306089539e-11"/>
+        <joint name="coxa_abduct_T3_left" type="hinge" axis="0.0 0.0 1.0" pos="0.0 0.0 0.0" range="-0.9 0.25" limited="true" stiffness="0.8" springref="0.0" damping="0.01" armature="1e-06"/>
+        <joint name="coxa_twist_T3_left" type="hinge" axis="0.0 1.0 0.0" pos="0.0 0.0 0.0" range="-0.15 0.8" limited="true" stiffness="0.8" springref="0.0" damping="0.01" armature="1e-06"/>
+        <joint name="coxa_T3_left" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.3 1.3" limited="true" stiffness="0.8" springref="0.0" damping="0.01" armature="1e-06"/>
+        <geom name="coxa_T3_left_collision" type="ellipsoid" size="0.007 0.00875 0.0166" pos="-0.00348 0.0116 -0.00687" quat="0.6031115859660605 -0.7861454503637207 -0.13502498193270013 0.0" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="0" conaffinity="0"/>
+        <body name="femur_T3_left" pos="-0.00398 0.0232 -0.00668" quat="0.0 0.0 -0.6680801744316864 -0.7440892960736147">
+          <inertial pos="-0.0024758560313572833 0.0331883669960093 0.001156056199108687" quat="0.6704985627632669 -0.7045240442764972 -0.178074065480701 -0.14955659655079986" mass="1.0745600922781446e-05" diaginertia="5.347579085374734e-09 5.3252051542375046e-09 1.9263311780211163e-10"/>
+          <joint name="femur_twist_T3_left" type="hinge" axis="0.0 1.0 0.0" pos="0.0 0.0 0.0" range="-1.0 1.0" limited="true" stiffness="0.8" springref="0.0" damping="0.01" armature="1e-06"/>
+          <joint name="femur_T3_left" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.7 1.5" limited="true" stiffness="0.8" springref="0.0" damping="0.01" armature="1e-06"/>
+          <geom name="femur_T3_left_collision" type="capsule" size="0.00544 0.03704977722100062 0.0" pos="-0.00263 0.039615 0.002190076" quat="0.727704478434998 0.6858908018523412 0.0 -0.0" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="1" conaffinity="1"/>
+          <body name="tibia_T3_left" pos="0.0 0.0779 1.6e-07" quat="-0.11704384112929214 -0.10403896989270411 -0.7112664191703136 0.6852566766971377">
+            <inertial pos="0.00016219233384346873 -0.03676118597854014 -0.001829985874251927" quat="0.12774845712284952 -0.11137329635637319 -0.7128072873324651 -0.68057482445884" mass="3.6399979728077663e-06" diaginertia="1.5684264678525038e-09 1.5623544384086888e-09 2.962881924600595e-11"/>
+            <joint name="tibia_T3_left" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-1.35 1.3" limited="true" stiffness="0.4" springref="0.0" damping="0.004" armature="1e-06"/>
+            <geom name="tibia_T3_left_collision" type="capsule" size="0.00365 0.034415884777236214 0.0" pos="0.0 -0.03725 -0.0016250000000000001" quat="0.6715410702730685 -0.7409673345947861 0.0 0.0" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="1" conaffinity="1"/>
+            <body name="tarsus_T3_left" pos="0.0 -0.0715 0.00175" quat="-0.22995378393367732 0.9628064953397011 -0.03299336899917979 -0.1379722703602064">
+              <inertial pos="3.1336630370529944e-05 0.015347018147847585 0.0004606925555196012" quat="-0.10414114771586827 0.10023421140465377 -0.6851233644129963 -0.7139423644468285" mass="6.340699867543237e-07" diaginertia="6.752070698494445e-11 6.725267989280729e-11 1.5590201692955925e-12"/>
+              <joint name="tarsus_T3_left" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.8 1.2" limited="true" stiffness="0.4" springref="0.0" damping="0.01" armature="1e-06"/>
+              <geom name="tarsus_T3_left_collision" type="capsule" size="0.00234 0.016858256879048912 0.0" pos="0.000135 0.01685 0.00051" quat="0.6963288597935019 0.717699836400118 -0.005750117383621124 0.0" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="1" conaffinity="1"/>
+              <site name="tarsus_T3_left" pos="0.0 0.0 0.0" size="0.01 0.005 0.005"/>
+              <body name="tarsus2_T3_left" pos="0.00027 0.0337 0.00102" quat="1.0 0.0 0.0 0.0">
+                <inertial pos="-0.00018022267868149366 0.010134172038187672 0.0013869612216623611" quat="0.10363790865993538 -0.09780032165444169 0.6817810742399998 0.7175436208210882" mass="1.740929482782643e-07" diaginertia="5.6806984952458434e-12 5.684907782497411e-12 2.183361559866968e-13"/>
+                <joint name="tarsus2_T3_left" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.36 0.36" limited="true" stiffness="0.4" springref="0.0" damping="0.002" armature="1e-06"/>
+                <geom name="tarsus2_T3_left_collision" type="capsule" size="0.00168 0.009881709772225654 0.0" pos="-3.985e-05 0.00985 0.00079" quat="0.6782530209070451 0.7348224287079208 0.0029728602826406747 -0.0" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="1" conaffinity="1"/>
+                <body name="tarsus3_T3_left" pos="-7.97e-05 0.0197 0.00158" quat="1.0 0.0 0.0 0.0">
+                  <inertial pos="-8.124432411416721e-05 0.005739064311210795 -0.00017257704518242045" quat="-0.49012892086150983 -0.13803630832426195 0.2510660390535489 -0.8232165344265766" mass="7.253954523129135e-08" diaginertia="4.1513814375857183e-13 6.672126472493929e-13 5.3092138660406e-13"/>
+                  <joint name="tarsus3_T3_left" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.36 0.36" limited="true" stiffness="0.4" springref="0.0" damping="0.002" armature="1e-06"/>
+                  <geom name="tarsus3_T3_left_collision" type="capsule" size="0.00145 0.005550161548099298 0.0" pos="4e-05 0.00555 -1.39e-05" quat="0.7079916777780993 0.7062024346245293 -0.005089747276573184 0.0" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="1" conaffinity="1"/>
+                  <body name="tarsus4_T3_left" pos="8e-05 0.0111 -2.78e-05" quat="1.0 0.0 0.0 0.0">
+                    <inertial pos="-0.00014281872215180479 0.005092533362411056 -0.000667027487470967" quat="0.49012892086150983 0.13803630832426195 -0.2510660390535489 0.8232165344265766" mass="5.9429529912893043e-08" diaginertia="2.4961452963046753e-13 3.581694708994369e-13 2.578137599680466e-13"/>
+                    <joint name="tarsus4_T3_left" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.36 0.36" limited="true" stiffness="0.4" springref="0.0" damping="0.002" armature="1e-06"/>
+                    <geom name="tarsus4_T3_left_collision" type="capsule" size="0.00145 0.005577313062757012 0.0" pos="0.000111 0.00555 -0.00054" quat="0.7405473704203647 0.6718698002976934 -0.013437396005953868 0.0" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="1" conaffinity="1"/>
+                    <body name="claw_T3_left" pos="0.000222 0.0111 -0.00108" quat="1.0 0.0 0.0 0.0">
+                      <inertial pos="-0.00041667836004531666 0.005487018819702955 2.280281403845008e-05" quat="-0.49012892086150983 -0.13803630832426195 0.2510660390535489 -0.8232165344265766" mass="9.698211322043057e-08" diaginertia="6.859532272667314e-13 1.0836860024568101e-12 9.101944874251888e-13"/>
+                      <joint name="tarsus5_T3_left" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.36 0.36" limited="true" stiffness="0.4" springref="0.0" damping="0.002" armature="1e-06"/>
+                      <geom name="tarsal_claw_T3_left_collision" type="capsule" size="0.0019 0.005577313062757012 0.0" pos="0.000111 0.00555 -0.00054" quat="0.7405473704203647 0.6718698002976934 -0.013437396005953868 0.0" condim="1" friction="0.6 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0005" gap="0.0005" contype="1" conaffinity="1"/>
+                      <site name="claw_T3_left" pos="0.000111 0.00555 -0.00054" size="0.00209 0.005577313062757012 0.005"/>
+                    </body>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="coxa_T3_right" pos="-0.0377 -0.0192 -0.0402" quat="-0.08538279027153081 -0.5048982328702935 -0.6728643776667474 -0.5338923888173004">
+        <inertial pos="0.003363911177044425 -0.013465434132225139 0.006789754565438635" quat="0.06668674734697703 -0.37517963179024305 0.7685756955197833 0.5138915468017553" mass="2.9934747817669465e-06" diaginertia="1.464872969530844e-10 1.2956459936166644e-10 7.147469129080111e-11"/>
+        <joint name="coxa_abduct_T3_right" type="hinge" axis="0.0 0.0 1.0" pos="0.0 0.0 0.0" range="-0.9 0.25" limited="true" stiffness="0.8" springref="0.0" damping="0.01" armature="1e-06"/>
+        <joint name="coxa_twist_T3_right" type="hinge" axis="0.0 1.0 0.0" pos="0.0 0.0 0.0" range="-0.15 0.8" limited="true" stiffness="0.8" springref="0.0" damping="0.01" armature="1e-06"/>
+        <joint name="coxa_T3_right" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.3 1.3" limited="true" stiffness="0.8" springref="0.0" damping="0.01" armature="1e-06"/>
+        <geom name="coxa_T3_right_collision" type="ellipsoid" size="0.007 0.00875 0.0166" pos="0.00338 -0.0117 0.00678" quat="0.7969649781435363 0.5959738105063332 0.09829568049122912 0.0" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="0" conaffinity="0"/>
+        <body name="femur_T3_right" pos="0.00383 -0.0232 0.0066" quat="0.0 0.0 0.660695489552803 0.750654028221112">
+          <inertial pos="0.0026777489897026746 -0.033304426104989 -0.0012428481989620183" quat="0.1575376571996544 -0.18354603463564878 0.7006870767507037 0.6712155840027317" mass="1.0749297453409094e-05" diaginertia="5.353350459931007e-09 5.3310366808338555e-09 1.9265467480237427e-10"/>
+          <joint name="femur_twist_T3_right" type="hinge" axis="0.0 1.0 0.0" pos="0.0 0.0 0.0" range="-1.0 1.0" limited="true" stiffness="0.8" springref="0.0" damping="0.01" armature="1e-06"/>
+          <joint name="femur_T3_right" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.7 1.5" limited="true" stiffness="0.8" springref="0.0" damping="0.01" armature="1e-06"/>
+          <geom name="femur_T3_right_collision" type="capsule" size="0.00544 0.03665049432870916 0.0" pos="0.00263 -0.039215 -0.0021899065000000003" quat="0.6856543666409414 -0.7279272556418049 0.0 0.0" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="1" conaffinity="1"/>
+          <body name="tibia_T3_right" pos="0.0 -0.077 1.96e-07" quat="-0.12107133202803705 -0.11106543681910837 -0.7084173807921507 0.6864044113325076">
+            <inertial pos="-0.00016883903306948514 0.03745904277746828 0.0028195830139429168" quat="-0.11026019729718994 -0.12893913000418453 0.6752561052733249 -0.7178067859367523" mass="3.6384679457242374e-06" diaginertia="1.5669652804719027e-09 1.5609248457282217e-09 2.9596643836104645e-11"/>
+            <joint name="tibia_T3_right" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-1.35 1.3" limited="true" stiffness="0.4" springref="0.0" damping="0.004" armature="1e-06"/>
+            <geom name="tibia_T3_right_collision" type="capsule" size="0.00365 0.03471445124152187 0.0" pos="0.0 0.03755 0.0016250000000000001" quat="0.740682711639137 0.6718549848582617 0.0 -0.0" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="1" conaffinity="1"/>
+            <body name="tarsus_T3_right" pos="0.0 0.0721 -0.00175" quat="0.22295210499944954 -0.9647927413653309 0.03129327751785996 0.13597079049293784">
+              <inertial pos="-0.0005934976674243607 -0.015368830009057463 -0.00043228030347487734" quat="-0.1013924366436577 -0.10604386088379815 -0.7134859264687475 0.6851365601771336" mass="6.340846028645918e-07" diaginertia="6.752230687965173e-11 6.725427398354362e-11 1.5590793857957215e-12"/>
+              <joint name="tarsus_T3_right" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.8 1.2" limited="true" stiffness="0.4" springref="0.0" damping="0.01" armature="1e-06"/>
+              <geom name="tarsus_T3_right_collision" type="capsule" size="0.00234 0.016914943836737972 0.0" pos="-0.000365 -0.0169 -0.00061" quat="0.719743977401907 -0.6940777289450263 0.014990436157688436 0.0" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="1" conaffinity="1"/>
+              <site name="tarsus_T3_right" pos="0.0 0.0 0.0" size="0.01 0.005 0.005"/>
+              <body name="tarsus2_T3_right" pos="-0.00073 -0.0338 -0.00122" quat="1.0 0.0 0.0 0.0">
+                <inertial pos="3.834666417935895e-05 -0.010156647586803735 -0.0003679064517891212" quat="0.09883228040862585 0.10557695213580637 0.7172153320198063 -0.6816801706391833" mass="1.7409459936071374e-07" diaginertia="5.680768333851638e-12 5.68497696255771e-12 2.183427947998535e-13"/>
+                <joint name="tarsus2_T3_right" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.36 0.36" limited="true" stiffness="0.4" springref="0.0" damping="0.002" armature="1e-06"/>
+                <geom name="tarsus2_T3_right_collision" type="capsule" size="0.00168 0.009881663890762527 0.0" pos="9.25e-05 -0.00985 -0.000785" quat="0.7346564036319538 -0.6784094492788447 -0.00637085015820235 0.0" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="1" conaffinity="1"/>
+                <body name="tarsus3_T3_right" pos="0.000185 -0.0197 -0.00157" quat="1.0 0.0 0.0 0.0">
+                  <inertial pos="-0.00019227028847253191 -0.005761924535233359 0.0001913395726361733" quat="-0.25207197682554267 0.823235067172308 -0.4901399549385552 -0.13603884463600718" mass="7.254044143494279e-08" diaginertia="4.150252015980105e-13 6.669802927963585e-13 5.312614894235617e-13"/>
+                  <joint name="tarsus3_T3_right" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.36 0.36" limited="true" stiffness="0.4" springref="0.0" damping="0.002" armature="1e-06"/>
+                  <geom name="tarsus3_T3_right_collision" type="capsule" size="0.00145 0.005500017552017448 0.0" pos="9.9e-06 -0.0055 9.75e-06" quat="0.7064797514382548 -0.7077321088810306 -0.001273917795985855 0.0" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="1" conaffinity="1"/>
+                  <body name="tarsus4_T3_right" pos="1.98e-05 -0.011 1.95e-05" quat="1.0 0.0 0.0 0.0">
+                    <inertial pos="-0.0002495761847915671 -0.005115279230946845 0.0006826331405502956" quat="0.25207197682554267 -0.823235067172308 0.4901399549385552 0.13603884463600718" mass="5.942930865849612e-08" diaginertia="2.4950409933660695e-13 3.5802204613350406e-13 2.5805713633843226e-13"/>
+                    <joint name="tarsus4_T3_right" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.36 0.36" limited="true" stiffness="0.4" springref="0.0" damping="0.002" armature="1e-06"/>
+                    <geom name="tarsus4_T3_right_collision" type="capsule" size="0.00145 0.0055354392102162945 0.0" pos="2.15e-05 -0.0055 0.000625" quat="0.6659921784953805 -0.7459530247525957 -0.002915998187669238 0.0" condim="1" friction="0.5 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0" gap="0.0" contype="1" conaffinity="1"/>
+                    <body name="claw_T3_right" pos="4.3e-05 -0.011 0.00125" quat="1.0 0.0 0.0 0.0">
+                      <inertial pos="-0.00025570109159880373 -0.0055101608994031215 -1.1715735760614576e-05" quat="-0.25207197682554267 0.823235067172308 -0.4901399549385552 -0.13603884463600718" mass="9.698213932278134e-08" diaginertia="6.856950989996005e-13 1.0832919389660765e-12 9.11004747941339e-13"/>
+                      <joint name="tarsus5_T3_right" type="hinge" axis="1.0 0.0 0.0" pos="0.0 0.0 0.0" range="-0.36 0.36" limited="true" stiffness="0.4" springref="0.0" damping="0.002" armature="1e-06"/>
+                      <geom name="tarsal_claw_T3_right_collision" type="capsule" size="0.0019 0.0055354392102162945 0.0" pos="2.15e-05 -0.0055 0.000625" quat="0.6659921784953805 -0.7459530247525957 -0.002915998187669238 0.0" condim="1" friction="0.6 0.005 0.0001" solref="0.0002 1.0" solimp="0.95 0.99 0.01 0.5 2.0" margin="0.0005" gap="0.0005" contype="1" conaffinity="1"/>
+                      <site name="claw_T3_right" pos="2.15e-05 -0.0055 0.000625" size="0.00209 0.0055354392102162945 0.005"/>
+                    </body>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+  <tendon>
+    <fixed name="abduct_abdomen">
+      <joint joint="abdomen_abduct" coef="1.0"/>
+      <joint joint="abdomen_abduct_2" coef="1.0"/>
+      <joint joint="abdomen_abduct_3" coef="1.0"/>
+      <joint joint="abdomen_abduct_4" coef="1.0"/>
+      <joint joint="abdomen_abduct_5" coef="1.0"/>
+      <joint joint="abdomen_abduct_6" coef="1.0"/>
+      <joint joint="abdomen_abduct_7" coef="1.0"/>
+    </fixed>
+    <fixed name="abdomen">
+      <joint joint="abdomen" coef="1.0"/>
+      <joint joint="abdomen_2" coef="1.0"/>
+      <joint joint="abdomen_3" coef="1.0"/>
+      <joint joint="abdomen_4" coef="1.0"/>
+      <joint joint="abdomen_5" coef="1.0"/>
+      <joint joint="abdomen_6" coef="1.0"/>
+      <joint joint="abdomen_7" coef="1.0"/>
+    </fixed>
+    <fixed name="tarsus2_T1_left">
+      <joint joint="tarsus2_T1_left" coef="1.0"/>
+      <joint joint="tarsus3_T1_left" coef="0.5"/>
+      <joint joint="tarsus4_T1_left" coef="0.5"/>
+      <joint joint="tarsus5_T1_left" coef="0.5"/>
+    </fixed>
+    <fixed name="tarsus2_T1_right">
+      <joint joint="tarsus2_T1_right" coef="1.0"/>
+      <joint joint="tarsus3_T1_right" coef="0.5"/>
+      <joint joint="tarsus4_T1_right" coef="0.5"/>
+      <joint joint="tarsus5_T1_right" coef="0.5"/>
+    </fixed>
+    <fixed name="tarsus2_T2_left">
+      <joint joint="tarsus2_T2_left" coef="1.0"/>
+      <joint joint="tarsus3_T2_left" coef="0.5"/>
+      <joint joint="tarsus4_T2_left" coef="0.5"/>
+      <joint joint="tarsus5_T2_left" coef="0.5"/>
+    </fixed>
+    <fixed name="tarsus2_T2_right">
+      <joint joint="tarsus2_T2_right" coef="1.0"/>
+      <joint joint="tarsus3_T2_right" coef="0.5"/>
+      <joint joint="tarsus4_T2_right" coef="0.5"/>
+      <joint joint="tarsus5_T2_right" coef="0.5"/>
+    </fixed>
+    <fixed name="tarsus2_T3_left">
+      <joint joint="tarsus2_T3_left" coef="1.0"/>
+      <joint joint="tarsus3_T3_left" coef="0.5"/>
+      <joint joint="tarsus4_T3_left" coef="0.5"/>
+      <joint joint="tarsus5_T3_left" coef="0.5"/>
+    </fixed>
+    <fixed name="tarsus2_T3_right">
+      <joint joint="tarsus2_T3_right" coef="1.0"/>
+      <joint joint="tarsus3_T3_right" coef="0.5"/>
+      <joint joint="tarsus4_T3_right" coef="0.5"/>
+      <joint joint="tarsus5_T3_right" coef="0.5"/>
+    </fixed>
+  </tendon>
+  <actuator>
+    <general name="head_abduct" joint="head_abduct" gainprm="0.1 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" biasprm="0.0 -0.1 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" ctrlrange="-0.2 0.2" gear="1.0 0.0 0.0 0.0 0.0 0.0"/>
+    <general name="head_twist" joint="head_twist" gainprm="0.1 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" biasprm="0.0 -0.1 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" ctrlrange="-3.0 3.0" gear="1.0 0.0 0.0 0.0 0.0 0.0"/>
+    <general name="head" joint="head" gainprm="0.1 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" biasprm="0.0 -0.1 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" ctrlrange="-0.5 0.3" gear="1.0 0.0 0.0 0.0 0.0 0.0"/>
+    <general name="rostrum" joint="rostrum" gainprm="0.1 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" biasprm="0.0 -0.1 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" ctrlrange="-1.24 0.183" gear="1.0 0.0 0.0 0.0 0.0 0.0"/>
+    <general name="haustellum_abduct" joint="haustellum_abduct" gainprm="0.1 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" biasprm="0.0 -0.1 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" ctrlrange="-0.0873 0.0873" gear="1.0 0.0 0.0 0.0 0.0 0.0"/>
+    <general name="haustellum" joint="haustellum" gainprm="0.1 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" biasprm="0.0 -0.1 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" ctrlrange="-1.59 0.7" gear="1.0 0.0 0.0 0.0 0.0 0.0"/>
+    <general name="labrum_left" joint="labrum_left" gainprm="0.01 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" biasprm="0.0 -0.01 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" ctrlrange="-0.00524 1.05" gear="1.0 0.0 0.0 0.0 0.0 0.0"/>
+    <general name="labrum_right" joint="labrum_right" gainprm="0.01 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" biasprm="0.0 -0.01 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" ctrlrange="-0.00524 1.05" gear="1.0 0.0 0.0 0.0 0.0 0.0"/>
+    <general name="antenna_abduct_left" joint="antenna_abduct_left" gainprm="0.01 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" biasprm="0.0 -0.01 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" ctrlrange="-0.4 0.8" gear="1.0 0.0 0.0 0.0 0.0 0.0"/>
+    <general name="antenna_twist_left" joint="antenna_twist_left" gainprm="0.01 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" biasprm="0.0 -0.01 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" ctrlrange="-0.1 0.09" gear="1.0 0.0 0.0 0.0 0.0 0.0"/>
+    <general name="antenna_left" joint="antenna_left" gainprm="0.01 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" biasprm="0.0 -0.01 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" ctrlrange="-0.2 0.5" gear="1.0 0.0 0.0 0.0 0.0 0.0"/>
+    <general name="antenna_abduct_right" joint="antenna_abduct_right" gainprm="0.01 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" biasprm="0.0 -0.01 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" ctrlrange="-0.4 0.8" gear="1.0 0.0 0.0 0.0 0.0 0.0"/>
+    <general name="antenna_twist_right" joint="antenna_twist_right" gainprm="0.01 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" biasprm="0.0 -0.01 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" ctrlrange="-0.1 0.09" gear="1.0 0.0 0.0 0.0 0.0 0.0"/>
+    <general name="antenna_right" joint="antenna_right" gainprm="0.01 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" biasprm="0.0 -0.01 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" ctrlrange="-0.2 0.5" gear="1.0 0.0 0.0 0.0 0.0 0.0"/>
+    <general name="wing_yaw_left" joint="wing_yaw_left" gainprm="3.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" biasprm="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" ctrlrange="-1.0 1.0" gear="1.0 0.0 0.0 0.0 0.0 0.0"/>
+    <general name="wing_roll_left" joint="wing_roll_left" gainprm="2.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" biasprm="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" ctrlrange="-1.0 1.0" gear="1.0 0.0 0.0 0.0 0.0 0.0"/>
+    <general name="wing_pitch_left" joint="wing_pitch_left" gainprm="1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" biasprm="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" ctrlrange="-1.0 1.0" gear="1.0 0.0 0.0 0.0 0.0 0.0"/>
+    <general name="wing_yaw_right" joint="wing_yaw_right" gainprm="3.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" biasprm="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" ctrlrange="-1.0 1.0" gear="1.0 0.0 0.0 0.0 0.0 0.0"/>
+    <general name="wing_roll_right" joint="wing_roll_right" gainprm="2.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" biasprm="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" ctrlrange="-1.0 1.0" gear="1.0 0.0 0.0 0.0 0.0 0.0"/>
+    <general name="wing_pitch_right" joint="wing_pitch_right" gainprm="1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" biasprm="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" ctrlrange="-1.0 1.0" gear="1.0 0.0 0.0 0.0 0.0 0.0"/>
+    <general name="abdomen_abduct" tendon="abduct_abdomen" gainprm="0.1 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" biasprm="0.0 -0.1 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" ctrlrange="-0.7 0.7" gear="1.0 0.0 0.0 0.0 0.0 0.0"/>
+    <general name="tarsus2_T1_left" tendon="tarsus2_T1_left" gainprm="0.4 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" biasprm="0.0 -0.4 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" ctrlrange="-0.9 0.9" gear="1.0 0.0 0.0 0.0 0.0 0.0"/>
+    <general name="tarsus2_T1_right" tendon="tarsus2_T1_right" gainprm="0.4 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" biasprm="0.0 -0.4 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" ctrlrange="-0.9 0.9" gear="1.0 0.0 0.0 0.0 0.0 0.0"/>
+    <general name="tarsus2_T2_left" tendon="tarsus2_T2_left" gainprm="0.4 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" biasprm="0.0 -0.4 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" ctrlrange="-0.9 0.9" gear="1.0 0.0 0.0 0.0 0.0 0.0"/>
+    <general name="tarsus2_T2_right" tendon="tarsus2_T2_right" gainprm="0.4 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" biasprm="0.0 -0.4 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" ctrlrange="-0.9 0.9" gear="1.0 0.0 0.0 0.0 0.0 0.0"/>
+    <general name="tarsus2_T3_left" tendon="tarsus2_T3_left" gainprm="0.4 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" biasprm="0.0 -0.4 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" ctrlrange="-0.9 0.9" gear="1.0 0.0 0.0 0.0 0.0 0.0"/>
+    <general name="tarsus2_T3_right" tendon="tarsus2_T3_right" gainprm="0.4 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" biasprm="0.0 -0.4 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" ctrlrange="-0.9 0.9" gear="1.0 0.0 0.0 0.0 0.0 0.0"/>
+    <general name="coxa_abduct_T1_left_extensor" joint="coxa_abduct_T1_left" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="5.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.010925"/>
+    <general name="coxa_abduct_T1_left_flexor" joint="coxa_abduct_T1_left" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="5.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.010925"/>
+    <general name="coxa_twist_T1_left_extensor" joint="coxa_twist_T1_left" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="2.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.010925"/>
+    <general name="coxa_twist_T1_left_flexor" joint="coxa_twist_T1_left" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="2.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.010925"/>
+    <general name="coxa_T1_left_extensor" joint="coxa_T1_left" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="5.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.010925"/>
+    <general name="coxa_T1_left_flexor" joint="coxa_T1_left" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="5.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.010925"/>
+    <general name="femur_twist_T1_left_extensor" joint="femur_twist_T1_left" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="2.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.017425"/>
+    <general name="femur_twist_T1_left_flexor" joint="femur_twist_T1_left" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="2.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.017425"/>
+    <general name="femur_T1_left_extensor" joint="femur_T1_left" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="5.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.017425"/>
+    <general name="femur_T1_left_flexor" joint="femur_T1_left" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="5.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.017425"/>
+    <general name="tibia_T1_left_extensor" joint="tibia_T1_left" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="3.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.01275750391926258"/>
+    <general name="tibia_T1_left_flexor" joint="tibia_T1_left" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="3.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.01275750391926258"/>
+    <general name="tarsus_T1_left_extensor" joint="tarsus_T1_left" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="0.7 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.005891226660255063"/>
+    <general name="tarsus_T1_left_flexor" joint="tarsus_T1_left" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="0.7 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.005891226660255063"/>
+    <general name="coxa_abduct_T2_left_extensor" joint="coxa_abduct_T2_left" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="5.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.007025"/>
+    <general name="coxa_abduct_T2_left_flexor" joint="coxa_abduct_T2_left" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="5.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.007025"/>
+    <general name="coxa_twist_T2_left_extensor" joint="coxa_twist_T2_left" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="2.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.007025"/>
+    <general name="coxa_twist_T2_left_flexor" joint="coxa_twist_T2_left" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="2.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.007025"/>
+    <general name="coxa_T2_left_extensor" joint="coxa_T2_left" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="5.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.007025"/>
+    <general name="coxa_T2_left_flexor" joint="coxa_T2_left" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="5.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.007025"/>
+    <general name="femur_twist_T2_left_extensor" joint="femur_twist_T2_left" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="2.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.02075"/>
+    <general name="femur_twist_T2_left_flexor" joint="femur_twist_T2_left" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="2.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.02075"/>
+    <general name="femur_T2_left_extensor" joint="femur_T2_left" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="5.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.02075"/>
+    <general name="femur_T2_left_flexor" joint="femur_T2_left" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="5.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.02075"/>
+    <general name="tibia_T2_left_extensor" joint="tibia_T2_left" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="3.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.016705729743115086"/>
+    <general name="tibia_T2_left_flexor" joint="tibia_T2_left" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="3.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.016705729743115086"/>
+    <general name="tarsus_T2_left_extensor" joint="tarsus_T2_left" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="0.7 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.00855756770715254"/>
+    <general name="tarsus_T2_left_flexor" joint="tarsus_T2_left" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="0.7 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.00855756770715254"/>
+    <general name="coxa_abduct_T3_left_extensor" joint="coxa_abduct_T3_left" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="5.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.0061171010290823205"/>
+    <general name="coxa_abduct_T3_left_flexor" joint="coxa_abduct_T3_left" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="5.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.0061171010290823205"/>
+    <general name="coxa_twist_T3_left_extensor" joint="coxa_twist_T3_left" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="2.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.0061171010290823205"/>
+    <general name="coxa_twist_T3_left_flexor" joint="coxa_twist_T3_left" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="2.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.0061171010290823205"/>
+    <general name="coxa_T3_left_extensor" joint="coxa_T3_left" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="5.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.0061171010290823205"/>
+    <general name="coxa_T3_left_flexor" joint="coxa_T3_left" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="5.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.0061171010290823205"/>
+    <general name="femur_twist_T3_left_extensor" joint="femur_twist_T3_left" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="2.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.019475000000041078"/>
+    <general name="femur_twist_T3_left_flexor" joint="femur_twist_T3_left" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="2.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.019475000000041078"/>
+    <general name="femur_T3_left_extensor" joint="femur_T3_left" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="5.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.019475000000041078"/>
+    <general name="femur_T3_left_flexor" joint="femur_T3_left" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="5.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.019475000000041078"/>
+    <general name="tibia_T3_left_extensor" joint="tibia_T3_left" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="3.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.01788035321938579"/>
+    <general name="tibia_T3_left_flexor" joint="tibia_T3_left" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="3.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.01788035321938579"/>
+    <general name="tarsus_T3_left_extensor" joint="tarsus_T3_left" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="0.7 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.008429128439524458"/>
+    <general name="tarsus_T3_left_flexor" joint="tarsus_T3_left" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="0.7 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.008429128439524458"/>
+    <general name="coxa_abduct_T1_right_extensor" joint="coxa_abduct_T1_right" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="5.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.010900000000000002"/>
+    <general name="coxa_abduct_T1_right_flexor" joint="coxa_abduct_T1_right" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="5.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.010900000000000002"/>
+    <general name="coxa_twist_T1_right_extensor" joint="coxa_twist_T1_right" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="2.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.010900000000000002"/>
+    <general name="coxa_twist_T1_right_flexor" joint="coxa_twist_T1_right" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="2.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.010900000000000002"/>
+    <general name="coxa_T1_right_extensor" joint="coxa_T1_right" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="5.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.010900000000000002"/>
+    <general name="coxa_T1_right_flexor" joint="coxa_T1_right" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="5.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.010900000000000002"/>
+    <general name="femur_twist_T1_right_extensor" joint="femur_twist_T1_right" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="2.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.017450000000000004"/>
+    <general name="femur_twist_T1_right_flexor" joint="femur_twist_T1_right" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="2.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.017450000000000004"/>
+    <general name="femur_T1_right_extensor" joint="femur_T1_right" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="5.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.017450000000000004"/>
+    <general name="femur_T1_right_flexor" joint="femur_T1_right" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="5.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.017450000000000004"/>
+    <general name="tibia_T1_right_extensor" joint="tibia_T1_right" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="3.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.012882431107908161"/>
+    <general name="tibia_T1_right_flexor" joint="tibia_T1_right" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="3.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.012882431107908161"/>
+    <general name="tarsus_T1_right_extensor" joint="tarsus_T1_right" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="0.7 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.005694368517447744"/>
+    <general name="tarsus_T1_right_flexor" joint="tarsus_T1_right" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="0.7 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.005694368517447744"/>
+    <general name="coxa_abduct_T2_right_extensor" joint="coxa_abduct_T2_right" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="5.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.007049999999999999"/>
+    <general name="coxa_abduct_T2_right_flexor" joint="coxa_abduct_T2_right" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="5.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.007049999999999999"/>
+    <general name="coxa_twist_T2_right_extensor" joint="coxa_twist_T2_right" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="2.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.007049999999999999"/>
+    <general name="coxa_twist_T2_right_flexor" joint="coxa_twist_T2_right" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="2.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.007049999999999999"/>
+    <general name="coxa_T2_right_extensor" joint="coxa_T2_right" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="5.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.007049999999999999"/>
+    <general name="coxa_T2_right_flexor" joint="coxa_T2_right" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="5.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.007049999999999999"/>
+    <general name="femur_twist_T2_right_extensor" joint="femur_twist_T2_right" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="2.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.020999999999999994"/>
+    <general name="femur_twist_T2_right_flexor" joint="femur_twist_T2_right" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="2.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.020999999999999994"/>
+    <general name="femur_T2_right_extensor" joint="femur_T2_right" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="5.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.020999999999999994"/>
+    <general name="femur_T2_right_flexor" joint="femur_T2_right" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="5.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.020999999999999994"/>
+    <general name="tibia_T2_right_extensor" joint="tibia_T2_right" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="3.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.01663075558265468"/>
+    <general name="tibia_T2_right_flexor" joint="tibia_T2_right" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="3.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.01663075558265468"/>
+    <general name="tarsus_T2_right_extensor" joint="tarsus_T2_right" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="0.7 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.008479407368000427"/>
+    <general name="tarsus_T2_right_flexor" joint="tarsus_T2_right" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="0.7 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.008479407368000427"/>
+    <general name="coxa_abduct_T3_right_extensor" joint="coxa_abduct_T3_right" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="5.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.006105678197383154"/>
+    <general name="coxa_abduct_T3_right_flexor" joint="coxa_abduct_T3_right" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="5.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.006105678197383154"/>
+    <general name="coxa_twist_T3_right_extensor" joint="coxa_twist_T3_right" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="2.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.006105678197383154"/>
+    <general name="coxa_twist_T3_right_flexor" joint="coxa_twist_T3_right" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="2.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.006105678197383154"/>
+    <general name="coxa_T3_right_extensor" joint="coxa_T3_right" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="5.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.006105678197383154"/>
+    <general name="coxa_T3_right_flexor" joint="coxa_T3_right" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="5.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.006105678197383154"/>
+    <general name="femur_twist_T3_right_extensor" joint="femur_twist_T3_right" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="2.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.019250000000062363"/>
+    <general name="femur_twist_T3_right_flexor" joint="femur_twist_T3_right" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="2.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.019250000000062363"/>
+    <general name="femur_T3_right_extensor" joint="femur_T3_right" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="5.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.019250000000062363"/>
+    <general name="femur_T3_right_flexor" joint="femur_T3_right" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="5.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.019250000000062363"/>
+    <general name="tibia_T3_right_extensor" joint="tibia_T3_right" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="3.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.018030308684268283"/>
+    <general name="tibia_T3_right_flexor" joint="tibia_T3_right" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="3.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.018030308684268283"/>
+    <general name="tarsus_T3_right_extensor" joint="tarsus_T3_right" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="0.7 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.00845747191836899"/>
+    <general name="tarsus_T3_right_flexor" joint="tarsus_T3_right" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="0.7 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.00845747191836899"/>
+    <general name="abdomen_pitch_abdomen_extensor" joint="abdomen" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="2.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.0029749999999999993"/>
+    <general name="abdomen_pitch_abdomen_flexor" joint="abdomen" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="2.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.0029749999999999993"/>
+    <general name="abdomen_yaw_abdomen_extensor" joint="abdomen_abduct" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="1.2 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.0029749999999999993"/>
+    <general name="abdomen_yaw_abdomen_flexor" joint="abdomen_abduct" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="1.2 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.0029749999999999993"/>
+    <general name="abdomen_pitch_abdomen_2_extensor" joint="abdomen_2" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="2.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.005299999999999999"/>
+    <general name="abdomen_pitch_abdomen_2_flexor" joint="abdomen_2" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="2.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.005299999999999999"/>
+    <general name="abdomen_yaw_abdomen_2_extensor" joint="abdomen_abduct_2" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="1.2 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.005299999999999999"/>
+    <general name="abdomen_yaw_abdomen_2_flexor" joint="abdomen_abduct_2" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="1.2 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.005299999999999999"/>
+    <general name="abdomen_pitch_abdomen_3_extensor" joint="abdomen_3" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="2.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.007824999999999999"/>
+    <general name="abdomen_pitch_abdomen_3_flexor" joint="abdomen_3" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="2.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.007824999999999999"/>
+    <general name="abdomen_yaw_abdomen_3_extensor" joint="abdomen_abduct_3" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="1.2 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.007824999999999999"/>
+    <general name="abdomen_yaw_abdomen_3_flexor" joint="abdomen_abduct_3" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="1.2 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.007824999999999999"/>
+    <general name="abdomen_pitch_abdomen_4_extensor" joint="abdomen_4" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="2.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.006550000000000001"/>
+    <general name="abdomen_pitch_abdomen_4_flexor" joint="abdomen_4" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="2.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.006550000000000001"/>
+    <general name="abdomen_yaw_abdomen_4_extensor" joint="abdomen_abduct_4" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="1.2 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.006550000000000001"/>
+    <general name="abdomen_yaw_abdomen_4_flexor" joint="abdomen_abduct_4" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="1.2 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.006550000000000001"/>
+    <general name="abdomen_pitch_abdomen_5_extensor" joint="abdomen_5" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="2.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.005324999999999997"/>
+    <general name="abdomen_pitch_abdomen_5_flexor" joint="abdomen_5" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="2.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.005324999999999997"/>
+    <general name="abdomen_yaw_abdomen_5_extensor" joint="abdomen_abduct_5" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="1.2 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.005324999999999997"/>
+    <general name="abdomen_yaw_abdomen_5_flexor" joint="abdomen_abduct_5" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="1.2 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.005324999999999997"/>
+    <general name="abdomen_pitch_abdomen_6_extensor" joint="abdomen_6" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="2.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.004549999999999995"/>
+    <general name="abdomen_pitch_abdomen_6_flexor" joint="abdomen_6" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="2.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.004549999999999995"/>
+    <general name="abdomen_yaw_abdomen_6_extensor" joint="abdomen_abduct_6" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="1.2 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.004549999999999995"/>
+    <general name="abdomen_yaw_abdomen_6_flexor" joint="abdomen_abduct_6" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="1.2 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.004549999999999995"/>
+    <general name="abdomen_pitch_abdomen_7_extensor" joint="abdomen_7" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="2.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.075"/>
+    <general name="abdomen_pitch_abdomen_7_flexor" joint="abdomen_7" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="2.0 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.075"/>
+    <general name="abdomen_yaw_abdomen_7_extensor" joint="abdomen_abduct_7" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="1.2 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="0.075"/>
+    <general name="abdomen_yaw_abdomen_7_flexor" joint="abdomen_abduct_7" dyntype="filter" dynprm="0.005 0 0 0 0 0 0 0 0 0" gaintype="fixed" gainprm="1.2 0 0 0 0 0 0 0 0 0" biastype="none" ctrlrange="0 1" gear="-0.075"/>
+  </actuator>
+</mujoco>

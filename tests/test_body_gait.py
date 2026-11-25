@@ -1,0 +1,95 @@
+"""The twin has to walk: a gait that does not move the body is not a gait."""
+
+import numpy as np
+import pytest
+
+try:
+    import mujoco
+except ImportError:  # the shim has no importorskip
+    pytest.skip("mujoco is not installed", allow_module_level=True)
+
+from service.infrastructure.body.kinematics import LEGS
+from service.infrastructure.body.loop import BehaviourLoop
+from service.infrastructure.body.twin import TwinBody
+
+
+def _gripping(body):
+    """Give the claws a real friction cone: MuJoCo default condim=1 has no friction."""
+    model = body.model
+    for geom in range(model.ngeom):
+        name = mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_BODY, int(model.geom_bodyid[geom])) or ""
+        if name.startswith("claw"):
+            model.geom_condim[geom] = 3
+            model.geom_friction[geom] = [4.0, 0.005, 0.0001]
+    return body
+
+
+def _walk(seconds=2.0, stroke_cm=0.22, period_s=0.18):
+    body = _gripping(TwinBody())
+    loop = BehaviourLoop(body, compliance=1.0, stroke_cm=stroke_cm, lift_cm=0.02,
+                         kp=60.0, kd=4.0, period_s=period_s, height_gain=0.0)
+    loop.settle(steps=300)
+    start_x = float(body.data.qpos[0])
+    heights = []
+    for step in range(int(seconds * 1000)):
+        loop.advance(0.001)
+        if step % 250 == 0:
+            heights.append(float(body.data.qpos[2]))
+    return (float(body.data.qpos[0]) - start_x) * 10.0, heights
+
+
+def test_the_gait_carries_the_body_forward_at_a_measured_speed():
+    """10 mm/s is what .work/twin/speed3.py measured; a still body would be 0."""
+    distance_mm, _ = _walk()
+    assert distance_mm > 10.0, "the gait moved the body only %.3f mm" % distance_mm
+    assert distance_mm < 80.0, "the body was flung %.3f mm rather than walked" % distance_mm
+
+
+def test_a_faster_period_walks_further_in_the_same_time():
+    """Speed has to follow the step rate, which a slipping foot would not do."""
+    slow, _ = _walk(seconds=1.5, period_s=0.30)
+    fast, _ = _walk(seconds=1.5, period_s=0.12)
+    assert fast > slow, "fast %.3f mm was not faster than slow %.3f mm" % (fast, slow)
+
+
+def test_the_body_stays_near_its_standing_height():
+    """Walking is not flying and not sinking: the height has to stay bounded."""
+    _, heights = _walk()
+    span = max(heights) - min(heights)
+    assert span < 0.08, "height wandered by %.4f cm" % span
+
+
+def test_a_stance_foot_is_anchored_where_it_landed():
+    """While a claw is planted its anchor must not move; a new step may move it."""
+    from service.infrastructure.body.footgait import SWING_FRACTION, _phase_of
+    body = _gripping(TwinBody())
+    loop = BehaviourLoop(body, compliance=1.0, stroke_cm=0.22, lift_cm=0.02,
+                         kp=60.0, kd=4.0, period_s=0.18, height_gain=0.0)
+    loop.settle(steps=300)
+    gait = loop.gait
+    previous = {}
+    held = 0
+    for _ in range(600):
+        loop.advance(0.001)
+        current = {leg: point.copy() for leg, point in gait.anchors.items()}
+        for leg, point in current.items():
+            local = _phase_of(leg, gait.phase, gait.period_s)
+            if local < SWING_FRACTION:
+                continue
+            if leg in previous and np.allclose(point, previous[leg], atol=1e-9):
+                held += 1
+            elif leg in previous:
+                raise AssertionError("the anchor of %s moved while it was planted" % leg)
+        previous = current
+    assert held > 100, "a planted claw was tracked for only %d samples" % held
+
+def test_the_reference_frame_travels_with_the_body():
+    """A world-fixed reference exhausts the reach after one step."""
+    body = _gripping(TwinBody())
+    loop = BehaviourLoop(body, compliance=1.0, stroke_cm=0.22, lift_cm=0.02,
+                         kp=60.0, kd=4.0, period_s=0.18, height_gain=0.0)
+    loop.settle(steps=300)
+    for _ in range(400):
+        loop.advance(0.001)
+    assert loop.gait.travel_cm() * 10.0 > 1.0, "the reference did not follow the body"
+    assert set(loop.gait.rest) == set(LEGS)

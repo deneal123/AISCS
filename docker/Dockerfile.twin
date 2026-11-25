@@ -1,0 +1,10 @@
+FROM aspa-generator-gpu:dev
+
+# The twin runs the same package as the generator, so it reuses its environment
+# instead of carrying a second copy of numpy and the service modules.  The venv
+# is owned by the runtime user, so MuJoCo goes into a separate library directory
+# that is put on the path for the twin only; the generator image is untouched.
+USER root
+RUN mkdir -p /opt/twin-libs && uv pip install --target /opt/twin-libs --no-cache mujoco==3.3.7
+ENV PYTHONPATH=/opt/twin-libs
+USER generator
