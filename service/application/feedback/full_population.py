@@ -33,8 +33,13 @@ def _exclusion_receipt(exclusions):
                          for body in sorted(exclusions)]}
 
 
-def _timeline(time, active, control, stimulus, *, max_bins=400):
-    """Keep measured samples and bin extrema; no interpolation or artifact model."""
+def _timeline(time, active, control, stimulus, *, spikes=None, max_bins=400):
+    """Keep measured samples and bin extrema; no interpolation or artifact model.
+
+    When a spike count is supplied it is sampled at the same indices, so the
+    preview carries both channels of the same recording: the electrode potential
+    and what the population actually fired at that graph millisecond.
+    """
     edges = np.linspace(0, len(time), min(max_bins, len(time)) + 1, dtype=int)
     selected = set()
     for start, end in zip(edges[:-1], edges[1:], strict=True):
@@ -43,11 +48,16 @@ def _timeline(time, active, control, stimulus, *, max_bins=400):
             selected.update((int(start + np.argmin(signal[start:end])),
                              int(start + np.argmax(signal[start:end]))))
     indices = np.array(sorted(selected), dtype=int)
-    return {'samples': len(time), 'shown_samples': len(indices),
+    timeline = {'samples': len(time), 'shown_samples': len(indices),
             'time_ms': time[indices].tolist(), 'neural_uv': active[indices].tolist(),
             'control_uv': control[indices].tolist(),
             'stimulus_fraction': stimulus[indices].tolist(),
             'units': {'time_ms': 'ms', 'neural_uv': 'µV', 'control_uv': 'µV'}}
+    if spikes is not None:
+        counts = np.asarray(spikes, dtype=np.int64)
+        timeline['spikes'] = counts[indices].tolist()
+        timeline['units']['spikes'] = 'crossings per sample'
+    return timeline
 
 
 def derived_cache_directories(options):
@@ -584,6 +594,32 @@ def run_full_population_feedback(metadata, stimulus, rate_table, *, graph, sourc
         batch_settings = reported_settings(replay_options)
         time = np.asarray(replay_options['time_ms'], dtype=float)
         arrays = [np.asarray(item['neural_uv'], dtype=float) for item in (active, control, final)]
+
+        def spike_counts(item, *, declared_zero=False):
+            """The pass's spike count per graph millisecond.
+
+            The electrode trace is the population's summed field, not the
+            population's firing: on a pass that fires hundreds of spikes the
+            membrane potential it publishes can be exactly zero over every cell
+            by the end of the window. A declared-zero control has no crossings by
+            construction, so its zeros are stated rather than fabricated.
+            """
+            value = item.get('activity')
+            if value is None:
+                if declared_zero:
+                    return np.zeros(time.shape, dtype=np.int64)
+                raise ValueError('Population activity receipt is missing')
+            counts = np.asarray(value, dtype=np.int64)
+            if counts.shape != time.shape or (counts < 0).any():
+                raise ValueError('Population activity receipt is invalid')
+            if int(counts.sum()) != item.get('spikes', int(counts.sum())):
+                raise ValueError('Population activity receipt does not match its total')
+            return counts
+
+        activities = [spike_counts(item, declared_zero=declared)
+                      for item, declared in ((active, False),
+                                             (control, control_state['omitted']),
+                                             (final, False))]
         if (time.shape != signal.shape or not np.isfinite(time).all()
                 or any(array.shape != time.shape or not np.isfinite(array).all()
                        for array in arrays)
@@ -591,8 +627,13 @@ def run_full_population_feedback(metadata, stimulus, rate_table, *, graph, sourc
                 or not final_path.is_file() or _digest(final_path) != final['event_sha256']):
             raise ValueError('Incomplete converged population feedback result')
         trace_path = staged / 'signals.npz'
+        # Two channels, published together: the electrode potential each pass
+        # produced, and the spike count it produced. Reading only the first is
+        # how a firing population was reported as silence before.
         np.savez_compressed(trace_path, time_ms=time, initial_active_uv=arrays[0],
-                            control_uv=arrays[1], converged_active_uv=arrays[2])
+                            control_uv=arrays[1], converged_active_uv=arrays[2],
+                            initial_active_spikes=activities[0], control_spikes=activities[1],
+                            converged_active_spikes=activities[2])
         files = {path.name: _digest(path) for path in (active_path, control_path, final_path,
                                                        trace_path)}
         marker_receipt = None
@@ -614,8 +655,18 @@ def run_full_population_feedback(metadata, stimulus, rate_table, *, graph, sourc
             'candidate_cell_time_markers': (None if marker_receipt is None
                                             else marker_receipt['events']),
             'endpoint_relocation': relocation, 'solver_kernels': kernels,
+            # The second recording channel: whole-cell spike counts per graph
+            # millisecond, published beside the electrode potential.
+            'spikes': {'initial_active': int(activities[0].sum()),
+                       'control': int(activities[1].sum()),
+                       'converged_active': int(activities[2].sum()),
+                       'channel': 'signals.npz',
+                       'note': 'whole-cell threshold crossings per graph ms; the '
+                               'electrode trace is a field sum and can read as zero '
+                               'while the population fires'},
             'source_geometry_exclusions': _exclusion_receipt(source_geometry_exclusions),
-            'timeline': _timeline(time, arrays[2], arrays[1], signal),
+            'timeline': _timeline(time, arrays[2], arrays[1], signal,
+                                  spikes=activities[2]),
             'interpretation': 'segment threshold markers are not whole-cell spikes; '
                               'numerical convergence is not biological validation'}
         preview_path = staged / 'preview.json'

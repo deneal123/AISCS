@@ -117,7 +117,11 @@ def test_paired_full_population_publishes_only_after_convergence(tmp_path, monke
     def initial(metadata, stimulus, rate_table, *, event_path, **kwargs):
         calls.append(np.asarray(stimulus).copy())
         event_path.write_text('active' if np.any(stimulus) else 'control', encoding='utf8')
-        return {'event_sha256': _digest(event_path), 'neural_uv': np.asarray(stimulus), 'cells': 2,
+        trace = np.asarray(stimulus)
+        return {'event_sha256': _digest(event_path), 'neural_uv': trace, 'cells': 2,
+            # A pass reports both channels: the electrode trace and what the
+            # population fired, which the trace cannot carry.
+            'activity': np.zeros(trace.shape, dtype=np.int64), 'spikes': 0,
             'solver_kernels': {'accelerated_cell_major': 1, 'generic': 0,
                                               'batches': 1}}
 
@@ -129,6 +133,9 @@ def test_paired_full_population_publishes_only_after_convergence(tmp_path, monke
         return {'status': 'converged', 'iterations': 2, 'feedback_schedule_sha256': 'f' * 64,
                 'replay': {'event_sha256': _digest(output_event_path),
                            'neural_uv': [0., 2., 0.] if np.any(stimulus) else [0., 0., 0.],
+                           'activity': np.asarray([0, 5, 1] if np.any(stimulus) else [0, 0, 0],
+                                                  dtype=np.int64),
+                           'spikes': 6 if np.any(stimulus) else 0,
                            'cells': 2,
                            'solver_kernels': {'accelerated_cell_major': 1,
                                               'generic': 0, 'batches': 1}}}
@@ -155,6 +162,12 @@ def test_paired_full_population_publishes_only_after_convergence(tmp_path, monke
     with np.load(destination / 'signals.npz') as signals:
         np.testing.assert_array_equal(signals['control_uv'], [0., 0., 0.])
         np.testing.assert_array_equal(signals['converged_active_uv'], [0., 2., 0.])
+        # The second recording channel: the same passes, counted as spikes.
+        np.testing.assert_array_equal(signals['converged_active_spikes'], [0, 5, 1])
+        np.testing.assert_array_equal(signals['control_spikes'], [0, 0, 0])
+        np.testing.assert_array_equal(signals['initial_active_spikes'], [0, 0, 0])
+    preview = json.loads((destination / 'preview.json').read_text(encoding='utf8'))
+    assert preview['spikes']['converged_active'] == 6 and preview['spikes']['control'] == 0
     assert sorted(path.name for path in tmp_path.iterdir()) == ['published']
 
 
@@ -217,15 +230,19 @@ def test_partial_source_geometry_is_opt_in_and_published_as_an_exclusion(tmp_pat
 
     def initial(metadata, stimulus, rate_table, *, event_path, **kwargs):
         event_path.write_text('staged', encoding='utf8')
+        counts = np.zeros(len(stimulus), dtype=np.int64)
         return {'event_sha256': _digest(event_path), 'neural_uv': stimulus, 'cells': 2,
+                'activity': counts, 'spikes': 0,
                 'solver_kernels': {'accelerated_cell_major': 1, 'generic': 0, 'batches': 1}}
 
     def iterate(metadata, stimulus, rate_table, *, output_event_path, **kwargs):
         seen['policy'] = kwargs['allow_partial_source_geometry']
         output_event_path.write_text('converged', encoding='utf8')
+        counts = np.zeros(3, dtype=np.int64)
         return {'status': 'converged', 'iterations': 1, 'feedback_schedule_sha256': 'f' * 64,
                 'replay': {'event_sha256': _digest(output_event_path),
                            'neural_uv': [0., 0., 0.], 'cells': 2,
+                           'activity': counts, 'spikes': 0,
                            'solver_kernels': {'accelerated_cell_major': 1, 'generic': 0,
                                               'batches': 1}}}
 
@@ -422,7 +439,9 @@ def test_omitted_control_declares_a_zero_line_and_runs_no_pass(tmp_path, monkeyp
     def initial(metadata, stimulus, rate_table, *, event_path, **kwargs):
         passes.append(np.asarray(stimulus).copy())
         event_path.write_text('measured', encoding='utf8')
+        counts = np.asarray([0, 5, 1], dtype=np.int64)
         return {'event_sha256': _digest(event_path), 'neural_uv': stimulus, 'cells': 2,
+                'activity': counts, 'spikes': int(counts.sum()),
                 'solver_kernels': {'accelerated_cell_major': 1, 'generic': 0, 'batches': 1}}
 
     def iterate(metadata, stimulus, rate_table, *, active_path, control_path, output_event_path,
@@ -434,9 +453,11 @@ def test_omitted_control_declares_a_zero_line_and_runs_no_pass(tmp_path, monkeyp
                 control_path.read_text(encoding='utf8').splitlines()[0])
             seen['control_first'] = dict(initial_replay)
         output_event_path.write_text('converged', encoding='utf8')
+        counts = np.asarray([0, 0, 0] if not np.any(stimulus) else [0, 5, 1], dtype=np.int64)
         return {'status': 'converged', 'iterations': 1, 'feedback_schedule_sha256': 'f' * 64,
                 'replay': {'event_sha256': _digest(output_event_path),
                            'neural_uv': [0., 0., 0.] if not np.any(stimulus) else [0., 2., 0.],
+                           'activity': counts, 'spikes': int(counts.sum()),
                            'cells': 2,
                            'solver_kernels': {'accelerated_cell_major': 1, 'generic': 0,
                                               'batches': 1}}}
@@ -470,14 +491,18 @@ def test_required_control_still_runs_its_own_pass(tmp_path, monkeypatch):
     def initial(metadata, stimulus, rate_table, *, event_path, **kwargs):
         passes.append(np.asarray(stimulus).copy())
         event_path.write_text('measured', encoding='utf8')
+        counts = np.zeros(len(stimulus), dtype=np.int64)
         return {'event_sha256': _digest(event_path), 'neural_uv': stimulus, 'cells': 2,
+                'activity': counts, 'spikes': 0,
                 'solver_kernels': {'accelerated_cell_major': 1, 'generic': 0, 'batches': 1}}
 
     def iterate(metadata, stimulus, rate_table, *, output_event_path, **kwargs):
         output_event_path.write_text('converged', encoding='utf8')
+        counts = np.zeros(3, dtype=np.int64)
         return {'status': 'converged', 'iterations': 1, 'feedback_schedule_sha256': 'f' * 64,
                 'replay': {'event_sha256': _digest(output_event_path),
                            'neural_uv': [0., 0., 0.], 'cells': 2,
+                           'activity': counts, 'spikes': 0,
                            'solver_kernels': {'accelerated_cell_major': 1, 'generic': 0,
                                               'batches': 1}}}
 

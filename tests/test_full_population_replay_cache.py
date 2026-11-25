@@ -18,13 +18,15 @@ def _identity(**overrides):
     return values
 
 
-def _receipt(tmp_path, trace=(0., 1., 0.)):
+def _receipt(tmp_path, trace=(0., 1., 0.), activity=(0, 3, 2)):
     archive = tmp_path / 'events.jsonl'
     archive.write_text('{"1": {"edge_events": []}}\n', encoding='utf8')
     # A real receipt always carries the digest of the archive it published;
     # the cache re-verifies it, so a fabricated digest is legitimately a miss.
     digest = hashlib.sha256(archive.read_bytes()).hexdigest()
+    counts = np.asarray(activity, dtype=np.int64)
     return {'event_sha256': digest, 'neural_uv': np.asarray(trace, dtype=float),
+            'activity': counts, 'spikes': int(counts.sum()),
             'cells': 2, 'solver_kernels': {'accelerated_cell_major': 1, 'generic': 0,
                                            'batches': 1},
             'endpoint_relocation': None}
@@ -81,3 +83,34 @@ def test_saving_again_replaces_the_previous_entry(tmp_path):
     restored = cache.load(key, tmp_path / 'target.jsonl')
     assert np.array_equal(restored['neural_uv'], np.asarray([0., 2., 0.]))
     assert [path.name for path in cache.directory.iterdir()] == [key[:2]]
+
+
+def test_restored_entry_carries_the_spike_count_beside_the_trace(tmp_path):
+    cache, key = ReplayPassCache(tmp_path / 'cache'), pass_key('full_active', np.zeros(4),
+                                                               **_identity())
+    cache.save(key, tmp_path / 'events.jsonl', _receipt(tmp_path, activity=(0, 7, 4)))
+    restored = cache.load(key, tmp_path / 'target.jsonl')
+    assert np.array_equal(restored['activity'], np.asarray([0, 7, 4]))
+    assert restored['spikes'] == 11
+
+
+def test_a_receipt_without_the_spike_count_is_refused(tmp_path):
+    cache, key = ReplayPassCache(tmp_path / 'cache'), pass_key('full_active', np.zeros(4),
+                                                               **_identity())
+    receipt = _receipt(tmp_path)
+    del receipt['activity']
+    with pytest.raises(ValueError, match='activity'):
+        cache.save(key, tmp_path / 'events.jsonl', receipt)
+    assert not cache.directory.exists()
+
+
+def test_a_tampered_spike_count_is_a_miss(tmp_path):
+    cache, key = ReplayPassCache(tmp_path / 'cache'), pass_key('full_active', np.zeros(4),
+                                                               **_identity())
+    cache.save(key, tmp_path / 'events.jsonl', _receipt(tmp_path))
+    entry = cache.directory / key[:2] / key
+    # Same shape, different counts: the totals recorded in the entry no longer
+    # describe the file, so the entry must not be restored.
+    with (entry / 'activity.npy').open('wb') as stream:
+        np.save(stream, np.asarray([0, 1, 0], dtype=np.int64))
+    assert cache.load(key, tmp_path / 'target.jsonl') is None

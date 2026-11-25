@@ -22,9 +22,13 @@ from pathlib import Path
 
 import numpy as np
 
-FORMAT = 'malecns-full-population-replay-cache-v1'
+# v2 stores the spike count per graph millisecond beside the electrode trace:
+# a pass whose membrane potential returns to rest still fired, and an entry that
+# could only restore the trace would publish silence as a measurement.
+FORMAT = 'malecns-full-population-replay-cache-v2'
 _EVENT = 'events.jsonl'
 _TRACE = 'signals.npy'
+_ACTIVITY = 'activity.npy'
 _META = 'meta.json'
 # 'full_control_branch' caches the whole paired-control branch (its initial pass
 # plus its converged feedback iteration), which is a function of the experiment
@@ -92,7 +96,8 @@ class ReplayPassCache:
         if (not isinstance(meta, dict) or meta.get('format') != FORMAT
                 or meta.get('key') != key
                 or not isinstance(meta.get('event_sha256'), str)
-                or not (entry / _EVENT).is_file() or not (entry / _TRACE).is_file()):
+                or not (entry / _EVENT).is_file() or not (entry / _TRACE).is_file()
+                or not (entry / _ACTIVITY).is_file()):
             return None
         # A corrupted or half-written entry must look like a miss, never like a
         # measurement: the archive digest is verified before anything is copied.
@@ -101,6 +106,13 @@ class ReplayPassCache:
         trace = np.asarray(np.load(entry / _TRACE), dtype=float).copy()
         if trace.ndim != 1 or not np.isfinite(trace).all():
             return None
+        # The spike count is restored with the same strictness as the trace: a
+        # cache that cannot prove the counts it stored must look like a miss.
+        activity = np.asarray(np.load(entry / _ACTIVITY), dtype=np.int64).copy()
+        if (activity.ndim != 1 or activity.shape != trace.shape
+                or (activity < 0).any()
+                or int(activity.sum()) != meta.get('spikes', int(activity.sum()))):
+            return None
         if (type(meta.get('cells')) is not int or meta['cells'] < 1
                 or not isinstance(meta.get('solver_kernels'), dict)
                 or not isinstance(meta.get('endpoint_relocation'), (dict, type(None)))
@@ -108,23 +120,37 @@ class ReplayPassCache:
             return None
         shutil.copyfile(entry / _EVENT, event_path)
         return {'event_sha256': meta['event_sha256'], 'neural_uv': trace,
+                'activity': activity, 'spikes': int(activity.sum()),
                 'cells': meta['cells'], 'solver_kernels': meta['solver_kernels'],
                 'endpoint_relocation': meta.get('endpoint_relocation'),
                 'extra': meta.get('extra'), 'replay_cache_key': key}
 
 
     def save(self, key, event_path, result, *, extra=None):
-        """Publish one completed pass atomically after its archive is final."""
+        """Publish one completed pass atomically after its archive is final.
+
+        The pass is stored with its spike count, not only with its electrode
+        trace. A receipt that cannot name what the population fired is not a
+        completed measurement of this format, so it is refused rather than
+        stored as zeros.
+        """
         entry = self._entry(key)
-        meta = {'format': FORMAT, 'key': key,
-                'event_sha256': result['event_sha256'],
-                'cells': int(result['cells']),
-                'solver_kernels': result['solver_kernels'],
-                'endpoint_relocation': result.get('endpoint_relocation'),
-                'extra': extra}
         trace = np.asarray(result['neural_uv'], dtype=float)
         if trace.ndim != 1 or not np.isfinite(trace).all():
             raise ValueError('Invalid cached replay trace')
+        if 'activity' not in result:
+            raise ValueError('Cached replay activity is missing')
+        activity = np.asarray(result['activity'], dtype=np.int64)
+        if (activity.ndim != 1 or activity.shape != trace.shape or (activity < 0).any()
+                or int(activity.sum()) != result.get('spikes', int(activity.sum()))):
+            raise ValueError('Invalid cached replay activity')
+        meta = {'format': FORMAT, 'key': key,
+                'event_sha256': result['event_sha256'],
+                'cells': int(result['cells']),
+                'spikes': int(activity.sum()),
+                'solver_kernels': result['solver_kernels'],
+                'endpoint_relocation': result.get('endpoint_relocation'),
+                'extra': extra}
         self.directory.mkdir(parents=True, exist_ok=True)
         scratch = Path(tempfile.mkdtemp(prefix=f'.{key[:8]}-', dir=self.directory))
         try:
@@ -132,6 +158,8 @@ class ReplayPassCache:
             # np.save would append ".npy" to a Path, so write through a handle.
             with (scratch / _TRACE).open('wb') as stream:
                 np.save(stream, trace)
+            with (scratch / _ACTIVITY).open('wb') as stream:
+                np.save(stream, activity)
             (scratch / _META).write_text(_canonical(meta) + '\n', encoding='utf8')
             entry.parent.mkdir(parents=True, exist_ok=True)
             if entry.exists():
