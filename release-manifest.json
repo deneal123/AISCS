@@ -1,5 +1,5 @@
 {
-  "version": "0.1.19",
+  "version": "0.1.20",
   "date": "2026-11-24",
   "application": "AISCS",
   "branch": "dev",
@@ -10,14 +10,14 @@
       "commit": "d6596211005b5eddb58b53a4bbc7c2b073065ff2"
     },
     "frontend": {
-      "version": "1.1.8",
+      "version": "1.1.9",
       "branch": "frontend",
-      "commit": "421744e60ddaf24476827f8f0e878a7546c67f63"
+      "commit": "eeb19ba"
     },
     "generator": {
-      "version": "0.1.19",
+      "version": "0.1.20",
       "branch": "generator",
-      "commit": "33b67e2a75487a2e63ad637ae4a2c2a7620d9ad3"
+      "commit": "cd8318264d518e2744a4c4670b799c4adec71a58"
     },
     "research": {
       "version": "1.6.2",
@@ -459,6 +459,119 @@
           "probe": "R:/Aspa/.work/connectome-routing-20261028/probe-h159.py"
         }
       }
+    },
+    "nociception_second_wave": {
+      "date": "2026-11-25",
+      "hypotheses_checked": 168,
+      "claim": "the nociceptive path is a two-channel measurement: the electrode sees a field sum while the spike counter sees the population, and the motor threshold reproduces on a real pass",
+      "measurements": {
+        "spike_channel_format": "malecns-full-population-replay-cache-v2",
+        "spike_channel_arrays": [
+          "initial_active_spikes",
+          "control_spikes",
+          "converged_active_spikes"
+        ],
+        "spike_channel_tests": "8/8 replay cache, 15/15 full population feedback, 5/5 windowed, 7/7 crossings, 7/7 pause, 5/5 frontend",
+        "real_pass_slice_chunks": 98,
+        "real_pass_slice_cells": 6255,
+        "real_pass_slice_motors": 60,
+        "real_pass_curve": [
+          {
+            "current_na": 0,
+            "spikes": 0,
+            "motors": 0,
+            "ptp_uv": 0
+          },
+          {
+            "current_na": -600,
+            "spikes": 0,
+            "motors": 0,
+            "ptp_uv": 10.213
+          },
+          {
+            "current_na": -1200,
+            "spikes": 0,
+            "motors": 0,
+            "ptp_uv": 20.115
+          },
+          {
+            "current_na": -2400,
+            "spikes": 1410,
+            "motors": 0,
+            "ptp_uv": 77.757
+          },
+          {
+            "current_na": -3600,
+            "spikes": 11297,
+            "motors": 7,
+            "ptp_uv": 209.256
+          },
+          {
+            "current_na": -4800,
+            "spikes": 21931,
+            "motors": 10,
+            "ptp_uv": 347.625
+          },
+          {
+            "current_na": -7200,
+            "spikes": 38462,
+            "motors": 15,
+            "ptp_uv": 800.328
+          },
+          {
+            "current_na": -9600,
+            "spikes": 50795,
+            "motors": 21,
+            "ptp_uv": 1157.039
+          }
+        ],
+        "motor_threshold_real_pass_na": [
+          2400,
+          3600
+        ],
+        "behavioural_threshold_na": [
+          3000,
+          3600
+        ],
+        "saturation_threshold_afferents": 800,
+        "saturation_motors": 21,
+        "ascending_at_saturation": [
+          95,
+          116
+        ],
+        "an05b004_share_of_md_input": 0.462,
+        "an05b004_published_share": 0.57,
+        "an05b004_ablation_delta_ascending": [
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        "gfc_cells": 34,
+        "gfc_to_giant_fiber_direct": 0,
+        "gnathal_to_abdominal_motors_synapses": 0,
+        "gnathal_to_descending_synapses": 649482,
+        "relays_to_abdominal_motors_synapses": 25683,
+        "command_latency_ms": [
+          9,
+          12
+        ],
+        "measured_behaviour_ms": 480,
+        "unexplained_behaviour_ms": 471
+      },
+      "code": {
+        "spike_counter": "window_crossings.py counts, population_windowed.py activity, replay_cache.py v2, full_population.py signals.npz + preview",
+        "frontend_spike_channel": "frontend/src/features/simulator/recording/spikeChannel.js",
+        "abdominal_motor_layer": "frontend/src/features/simulator/connectome/abdominalMotorCandidates.js with the \"Брюшные моторы\" toggle",
+        "commits": [
+          "96740cb",
+          "38eb8df",
+          "cd83182",
+          "eeb19ba"
+        ]
+      },
+      "limit": "the slice holds 60 of 307 abdominal motors, so absolute motor counts are not comparable with the full population; thresholds and curve shape are"
     }
   }
 }
