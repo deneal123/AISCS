@@ -1,6 +1,6 @@
 {
-  "version": "0.1.20",
-  "date": "2026-11-24",
+  "version": "0.1.21",
+  "date": "2026-11-26",
   "application": "AISCS",
   "branch": "dev",
   "components": {
@@ -15,9 +15,9 @@
       "commit": "eeb19ba"
     },
     "generator": {
-      "version": "0.1.20",
+      "version": "0.1.21",
       "branch": "generator",
-      "commit": "cd8318264d518e2744a4c4670b799c4adec71a58"
+      "commit": "c4c4db492a8c83efd67ed23f4ba468f5370dd463"
     },
     "research": {
       "version": "1.6.2",
@@ -46,6 +46,62 @@
   "production_verified": false,
   "protected_scientific_materials_changed": false,
   "verification": {
+    "twin_body": {
+      "scope": "MuJoCo digital twin of the MaleCNS fly: meshless FlyBody body, 112 muscles, foot-space gait, closed loop connectome to muscles to body, noxious episode corpus",
+      "body": {
+        "bodies": 68,
+        "joints": 103,
+        "geometries": 75,
+        "actuators": 139,
+        "muscles": 112,
+        "leg_muscles": 84,
+        "abdomen_muscles": 28,
+        "mass_g": 0.0009846212,
+        "units": "cm g s dyne"
+      },
+      "mapping": {
+        "neurons_mapped": 630,
+        "muscles_reached": 55,
+        "muscles_without_a_neuron": 9,
+        "neurons_unmapped": 203
+      },
+      "gait": {
+        "speed_mm_s": 10.84,
+        "stroke_cm": 0.22,
+        "period_s": 0.18,
+        "real_fly_mm_s": "10 to 30"
+      },
+      "stimulus_field": {
+        "recruitment": "analytic_bipolar_field",
+        "threshold_mv": 7.0,
+        "soma_cap_um": 120.0,
+        "calibration_point_um": [470, 390, 950],
+        "measured_curve": [0, 6, 22, 92, 368, 881],
+        "model_curve": [0, 6, 22, 92, 368, 881],
+        "measured_from": "hypothesis H95, 1200 to 3600 nA"
+      },
+      "corpus": {
+        "episodes": 162,
+        "sites": 6,
+        "currents_na": 9,
+        "seeds": 3,
+        "wall_s": 576.8,
+        "format": "malecns-noxious-episode-v1",
+        "corpus_format": "malecns-noxious-corpus-v2",
+        "path": ".work/connectome-routing-20261028/pain-corpus/"
+      },
+      "escape_threshold_by_site": {
+        "abdomen_behavioural_z950": {"afferent": 881, "current_na": -3600, "latency_ms": 11},
+        "abdomen_posterior_z1000": {"afferent": 523, "current_na": -2400, "latency_ms": 11},
+        "abdomen_anterior_z850": {"escape": "never", "max_afferent": 157},
+        "abdomen_front_z700": {"escape": "never", "max_afferent": 1},
+        "thorax_z860": {"escape": "never", "max_afferent": 164},
+        "brain": {"escape": "never", "max_afferent": 0}
+      },
+      "mass_matched_pairs": {"pairs": 30, "same_outcome": 28, "different": 2},
+      "tests": {"test_body_muscles": "7/7", "test_body_bridge": "7/7", "test_body_gait": "5/5", "test_body_episode": "7/7", "test_body_recruitment": "7/7"},
+      "limit": "the corpus uses a 120 ms window and 3 seeds; the gait displaces the body 0.31 to 1.56 mm in every episode including the zero dose, so displacement is not a label; no wings, no flight, no muscle antagonist pairs, 9 muscles have no motor neuron"
+    },
     "backend_focused_pytest": {
       "passed": 32,
       "scope": "focused simulation unit tests; no live stack"
