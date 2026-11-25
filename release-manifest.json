@@ -316,7 +316,50 @@
         "conclusion": "the network is visible in the electrode record, but only differentially; the peak to peak of the whole trace is set by the stimulation artifact"
       },
       "probes": "R:/Aspa/.work/connectome-routing-20261028/probe-h140.py, probe-h144.py, probe-h151.py, probe-h152.py, probe-noci-network-contribution.py",
-      "receipt": "R:/Aspa/.work/connectome-routing-20261028/net-out/network-contribution-receipt.json"
+      "receipt": "R:/Aspa/.work/connectome-routing-20261028/net-out/network-contribution-receipt.json",
+      "differential": {
+        "note": "the address is not observable in absolute activity above roughly 300 mechanosensory afferents, but it is observable as a differential at every mass",
+        "n_unknown_afferents": [
+          0,
+          200,
+          400,
+          600
+        ],
+        "added_by_26_nociceptors": [
+          12,
+          13,
+          14,
+          16
+        ],
+        "added_by_26_controls": [
+          0,
+          3,
+          1,
+          6
+        ],
+        "ratio_range": [
+          2.7,
+          14
+        ],
+        "stable_core_nine_cells": [
+          11604,
+          14026,
+          18325,
+          19197,
+          29334,
+          32085,
+          512555,
+          513169,
+          515447
+        ],
+        "stability_jaccard_on_md_addition": {
+          "0_200": 0.786,
+          "0_400": 0.529,
+          "0_600": 0.474,
+          "400_600": 0.429
+        },
+        "probe": "R:/Aspa/.work/connectome-routing-20261028/probe-h157.py"
+      }
     }
   }
 }
