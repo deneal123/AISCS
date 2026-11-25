@@ -4,12 +4,12 @@
 export const DIFFERENTIAL_VERSION = 'malecns-nociceptive-address-differential-v1';
 
 // Mass of unknown_sensory afferents already driven, before the probe is added.
-export const PROBE_MASSES = [0, 200, 400, 600];
+export const PROBE_MASSES = [0, 100, 200, 300, 400, 500, 600];
 
 // Measured additions, four seeds by three control draws (probe-h157.py, probe-h158.py,
 // seed 11 draw 0 for 0/200/400/600 and two further probes for the rest).
-export const NOCICEPTIVE_ADDITIONS = Object.freeze({ 0: 12, 200: 13, 400: 14, 600: 12 });
-export const CONTROL_ADDITIONS = Object.freeze({ 0: 0, 200: 3, 400: 1, 600: 3 });
+export const NOCICEPTIVE_ADDITIONS = Object.freeze({ 0: 12, 100: 13, 200: 13, 300: 15, 400: 14, 500: 12, 600: 12 });
+export const CONTROL_ADDITIONS = Object.freeze({ 0: 0, 100: 0, 200: 3, 300: 5, 400: 1, 500: 4, 600: 3 });
 export const ADDITION_RANGE = Object.freeze({ nociceptive: [9, 14], control: [0, 6] });
 
 // The nine cells common to every measured nociceptive addition. The map also has
@@ -36,14 +36,17 @@ export function differentialReadout(mass) {
     absoluteObservable: key === 0, core: STABLE_CORE };
 }
 
-// The address is not observable as absolute activity above this mass: the cells that only
-// the nociceptors recruited start firing from mechanosensory input alone (H151).
-export const ABSOLUTE_LIMIT_MASS = 300;
+// Where the measured curve changes shape, from probe-h159.py: at 0 and 100 the control adds
+// nothing at all; from 300 the control starts adding 2 to 10 cells; from 500 the block that
+// only nociceptors recruited is already firing from the base, so nothing separates it.
+export const OVERLAP_STARTS_MASS = 300;
+export const ABSOLUTE_LIMIT_MASS = 500;
 
 export function addressObservability(mass) {
   const value = Number(mass);
   if (!Number.isFinite(value)) return 'unknown';
   if (value <= 0) return 'absolute';
-  if (value < ABSOLUTE_LIMIT_MASS) return 'absolute-with-overlap';
+  if (value < OVERLAP_STARTS_MASS) return 'absolute-with-overlap';
+  if (value < ABSOLUTE_LIMIT_MASS) return 'differential-narrowing';
   return 'differential-only';
 }
