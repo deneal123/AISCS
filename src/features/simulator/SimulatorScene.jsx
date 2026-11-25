@@ -45,7 +45,7 @@ export default function SimulatorScene({ opacity, neurons, placement, onPlacemen
   sceneLabel, fullConnectome = false, onMotorReadout, onFieldEventsVerified, nativeView = false, fieldRun = null,
   fieldSourceConfiguration = null,
   fieldContactDraft = null, fieldContactNormals = null, fieldSnapRequest = 0, onFieldContactsSnap,
-  fieldContactPick = null, onFieldContactPick, onFieldContactSelect, onShowTarget, targetProbe = null, sceneControls, bodyVisible = true, regionsVisible = true, showNociceptionCandidates = false }) {
+  fieldContactPick = null, onFieldContactPick, onFieldContactSelect, onShowTarget, targetProbe = null, sceneControls, bodyVisible = true, regionsVisible = true, showNociceptionCandidates = false, showAbdominalMotors = false }) {
   const canvasLabel = sceneLabel || (fullConnectome || preview?.connectome
     ? 'Трёхмерная сцена мухи и полного коннектома'
     : 'Трёхмерная сцена мухи и локальной модели');
@@ -105,7 +105,7 @@ export default function SimulatorScene({ opacity, neurons, placement, onPlacemen
     onFieldContactSelect, bodyVisible, modelGeometry, sceneContext, onAnchor, invalidPlacement, modelVisualization, localWindow, focusLocal,
     connectomeData: sceneConnectome, contrastData: contrast.data, fieldContactsValid, showFieldContacts, motorReadout: motor.data, peripheralReadout: null, showPeripheral: false,
     kinematics: kinematics.data, showJoints, showNeuropil, neuropilRegion,
-    nativeView: nativeView && Boolean(sceneConnectome), pickingStimulus, onStimulusRegion, fullConnectome, showNociceptionCandidates };
+    nativeView: nativeView && Boolean(sceneConnectome), pickingStimulus, onStimulusRegion, fullConnectome, showNociceptionCandidates, showAbdominalMotors };
   const [error, setError] = useState('');
   const [loaded, setLoaded] = useState(false);
   const [graphicsAttempt, setGraphicsAttempt] = useState(0);
@@ -731,6 +731,7 @@ export default function SimulatorScene({ opacity, neurons, placement, onPlacemen
       let inputActive = 0;
       if (connectomeLayer) {
         connectomeLayer.showNociceptionCandidates(view.showNociceptionCandidates);
+    connectomeLayer.showAbdominalMotors(view.showAbdominalMotors);
         renderer.domElement.dataset.nociceptionCandidates = String(view.showNociceptionCandidates ? connectomeLayer.candidateCount : 0);
         renderer.domElement.dataset.selectedNeuronIndex = String(connectomeLayer.selectNode(selectedNodeRef.current));
         renderer.domElement.dataset.selectedNeuronId = selectedNodeRef.current || '';

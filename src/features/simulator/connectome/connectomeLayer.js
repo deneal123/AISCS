@@ -4,6 +4,7 @@ import { inspectConnectomeNode } from './connectomeInspection';
 import { NATIVE_VIEW_MATRIX } from './connectomeMorphology';
 import { createPeripheralLayer } from '../scene/peripheralLayer';
 import { nociceptionAscendingIndices, nociceptionCandidateIndices } from './nociceptionCandidates';
+import { abdominalMotorIndices } from './abdominalMotorCandidates';
 
 // The event journal alone drives the activity. Input controls never animate it.
 export function createConnectomeLayer(data) {
@@ -71,6 +72,23 @@ export function createConnectomeLayer(data) {
   });
   const candidates = new THREE.Points(candidateGeometry, candidateMaterial);
   candidates.visible = false; candidates.frustumCulled = false; candidates.renderOrder = 7; group.add(candidates);
+  // Abdominal motor neurons: an inventory of measured cells, not a muscle map.
+  // They are drawn as separate rings so the nociception toggle cannot hide them.
+  const motorIndices = abdominalMotorIndices(data);
+  const motorGeometry = new THREE.BufferGeometry();
+  motorGeometry.setAttribute('position', geometry.getAttribute('position'));
+  motorGeometry.setAttribute('firedAt', geometry.getAttribute('firedAt'));
+  motorGeometry.setIndex(motorIndices);
+  const motorMaterial = new THREE.ShaderMaterial({ transparent: true, depthTest: false, depthWrite: false, uniforms,
+    vertexShader: `attribute float firedAt; uniform float clock; varying float eventGlow;
+      void main(){float age=clock-firedAt; eventGlow=age>=0.0 && age<6.0 ? exp(-age/2.5) : 0.0;
+      gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); gl_PointSize=7.0+4.0*eventGlow;}`,
+    fragmentShader: `varying float eventGlow; void main(){float d=length(gl_PointCoord-vec2(.5));
+      if(d>.5||d<.30)discard;
+      gl_FragColor=vec4(mix(vec3(.72,.55,1.0),vec3(1.0),eventGlow),.85);}`,
+  });
+  const motors = new THREE.Points(motorGeometry, motorMaterial);
+  motors.visible = false; motors.frustumCulled = false; motors.renderOrder = 8; group.add(motors);
   const nativeIndices = routing.visibleNodes.filter(index => data.coordinate_kind?.[index] > 0);
   const nativeMatrix = new THREE.Matrix4().set(...NATIVE_VIEW_MATRIX), nativeBounds = new THREE.Box3();
   for (const index of nativeIndices) nativeBounds.expandByPoint(new THREE.Vector3().fromArray(routing.positions, index * 3).applyMatrix4(nativeMatrix));
@@ -137,12 +155,14 @@ export function createConnectomeLayer(data) {
   };
   // Named accessors: tests and callers must not depend on child ordering, because
   // optional layers (nociception candidates, arbors) are added conditionally.
-  const layers = { points, candidates, pulses, routes, arbors: data.arbors ? group.children.find(child => child.isLineSegments && child.material === arborMaterial) : null };
+  const layers = { points, candidates, motors, pulses, routes, arbors: data.arbors ? group.children.find(child => child.isLineSegments && child.material === arborMaterial) : null };
   return { group,
     layers,
     nativeBounds,
     candidateCount: candidateIndices.length,
     showNociceptionCandidates(visible) { candidates.visible = Boolean(visible); },
+    abdominalMotorCount: motorIndices.length,
+    showAbdominalMotors(visible) { motors.visible = Boolean(visible); },
     setOverview(chunks) {
       if (overviewChunks === chunks) return;
       if (chunks.length < overviewChunks.length || chunks.some((chunk, i) => i < overviewChunks.length && chunk !== overviewChunks[i])) {
