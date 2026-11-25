@@ -16,6 +16,7 @@ import SceneVisibilityControls from './components/SceneVisibilityControls';
 import { fieldDemoPreset } from './field/fieldDemoPreset';
 import RecognitionSummary from './RecognitionSummary';
 import SimulatorScene from './SimulatorScene';
+import { differentialReadout, addressObservability, PROBE_MASSES } from './scene/nociceptiveDifferential';
 import SimulationComparison from './SimulationComparison';
 import { createCameraLink } from './scene/sceneCamera';
 import useSimulationHistory from './useSimulationHistory';
@@ -493,6 +494,15 @@ export default function SimulatorPage() {
           <Text fontSize="13px" color="orange.200" fontWeight="600" mb={2}>Сопоставление нейронов не подтверждено</Text>
           <Text fontSize="13px" color={CHAT_THEME.textSecondary} mb={3}>Оранжевые кольца — предварительные соответствия 26 сенсорных нейронов, голубые — до 160 аннотированных восходящих клеток, получающих от них связи. Яркость меняется при событиях сохранённого расчёта. Соответствия и функция не подтверждены; это не полная цепь и не измерение боли.</Text>
           <Text as="a" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12636578/" target="_blank" rel="noopener noreferrer" fontSize="12px" color="blue.300">Исследование ноцицептивных путей ↗</Text>
+          <Box as="section" aria-label="Дифференциальное считывание адреса" mt={4} pt={3} borderTop="1px solid" borderColor={CHAT_THEME.panelBorder}>
+            <Text fontSize="12px" fontWeight="600" mb={2}>Адрес виден только как разница</Text>
+            <Text fontSize="12px" color={CHAT_THEME.textSecondary} mb={2}>Выше примерно 300 уже работающих механосенсорных афферентов те же клетки зажигаются и без ноцицепторов. Считать надо не абсолютную активность, а прибавку: сколько восходящих клеток добавляет масса ноцицепторов и сколько добавляет равный по размеру контроль.</Text>
+            <Box as="table" fontSize="11px" w="100%">
+              <Box as="thead" color={CHAT_THEME.textSecondary}><Box as="tr"><Box as="th" textAlign="left" fontWeight="500">масса</Box><Box as="th" textAlign="right" fontWeight="500">ноцицепторы</Box><Box as="th" textAlign="right" fontWeight="500">контроль</Box></Box></Box>
+              <Box as="tbody">{PROBE_MASSES.map(mass => { const row = differentialReadout(mass); return <Box as="tr" key={mass} data-mass={mass}><Box as="td">{mass}</Box><Box as="td" textAlign="right" data-nociceptive={row.nociceptive}>{row.nociceptive}</Box><Box as="td" textAlign="right" data-control={row.control}>{row.control}</Box></Box>; })}</Box>
+            </Box>
+            <Text fontSize="11px" color={CHAT_THEME.textSecondary} mt={2}>Девять клеток ядра не меняются при изменении массы в 30 раз. Это измеримая величина, а не мера боли.</Text>
+          </Box>
         </Box>}
         {recordingDetails && tab === 'scene' && <Box as="section" aria-label="Сведения о записи" position="absolute" zIndex={3} right={3} top="58px" bottom={3} w={{ base: 'min(90vw, 400px)', lg: '420px' }} bg="rgba(10,14,28,.98)" border="1px solid" borderColor={CHAT_THEME.panelBorder} borderRadius="8px" overflowY="auto" p={4}>
           <HStack mb={4}><Text flex={1} fontWeight="600">Сведения о записи</Text><CloseButton aria-label="Закрыть сведения о записи" onClick={() => setRecordingDetails(false)} /></HStack>
