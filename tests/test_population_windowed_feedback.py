@@ -33,6 +33,28 @@ def test_streamed_feedback_preserves_crossing_across_window_boundary():
     assert np.any(actual['sampled_voltage_relative_mv'] != quiet['sampled_voltage_relative_mv'])
 
 
+def test_spikes_survive_a_window_whose_potential_returns_to_zero():
+    # The electrode trace is a membrane potential: it decays back to rest, so a
+    # pass that spiked can still end with a zero drive. The crossing counter is
+    # the evidence that does not decay, and it must be reported per millisecond.
+    source = collector()
+    cell = {'id': 10, 'geometry': source.geometries[10], 'morphology_sha256': 'a'}
+    staged = []
+    target = PopulationWindowedFeedback([10], metadata_factory=lambda cells: {
+        'provenance': source.provenance, 'diagnostics': source.diagnostics},
+        event_sink=staged.append, time_ms=[0., .5, 1., 1.5, 2.], threshold_mv=-20.,
+        duration_ms=2, electrode_um=[10., 0., 0.], reference_um=[20., 0., 0.],
+        conductivity_s_m=.3, clearance_um=1.)
+    device = target.factory([cell])
+    device['sink'](0, 5, [{'id': 10, 'neural_uv': [0., 0., 0., 0., 0.],
+                            'selected_voltage_mv': [[-65., -10., -65., -10., -65.]]}])
+    # Crossings at 0.5 ms and 1.5 ms land on graph ticks 1 and 2: the counter is
+    # indexed by tick, so tick 2 is the third sample of a 0.5 ms time base.
+    np.testing.assert_array_equal(target.activity, [0, 1, 1, 0, 0])
+    assert int(target.activity.sum()) == 2
+    assert target.finish().tolist() == [0., 0., 0., 0., 0.]
+
+
 def test_streamed_feedback_rejects_wrong_morphology():
     source = collector()
     target = PopulationWindowedFeedback([10], metadata_factory=lambda cells: {

@@ -26,7 +26,9 @@ def test_two_crossings_in_one_tick_keep_the_first_and_count_the_rest():
     stream = WindowedCrossings({1: [0]}, time_ms=times, threshold_mv=-20., duration_ms=1)
     stream.accept(0, len(times), [{'id': 1, 'selected_voltage_mv': [values]}])
     assert stream.finish() == {1: {0: [1]}}
-    assert stream.report() == {'tick_events': 1, 'coincident_crossings': 1}
+    assert stream.report() == {'tick_events': 1, 'coincident_crossings': 1,
+                               'activity_total': 1}
+    assert stream.activity().tolist() == [0, 1, 0, 0]
 
 
 def test_crossing_that_straddles_a_tick_is_still_rejected():
@@ -103,7 +105,11 @@ def test_crossings_inside_one_tick_are_counted_not_rejected():
     stream.accept(0, len(time), [{'id': 4, 'selected_voltage_mv': [values]}])
     ticks = stream.finish()[4][0]
     assert ticks == [1]
-    assert stream.report() == {'tick_events': 1, 'coincident_crossings': 1}
+    assert stream.report() == {'tick_events': 1, 'coincident_crossings': 1,
+                               'activity_total': 1}
+    # The counter, not the voltage, is the durable evidence: one spike in graph
+    # millisecond 1 and nothing later, even though the trace returned to rest.
+    assert stream.activity().tolist() == [0, 1] + [0] * 19
 
 
 def test_crossings_in_separate_ticks_are_all_kept():
@@ -114,5 +120,7 @@ def test_crossings_in_separate_ticks_are_all_kept():
     stream = WindowedCrossings({4: [0]}, time_ms=time, threshold_mv=-20., duration_ms=2)
     stream.accept(0, len(time), [{'id': 4, 'selected_voltage_mv': [values]}])
     assert stream.finish()[4][0] == [1, 2]
-    assert stream.report() == {'tick_events': 2, 'coincident_crossings': 0}
+    assert stream.report() == {'tick_events': 2, 'coincident_crossings': 0,
+                               'activity_total': 2}
+    assert stream.activity().tolist() == [0, 1, 1] + [0] * 38
 

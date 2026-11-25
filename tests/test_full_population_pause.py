@@ -50,6 +50,10 @@ class _Recording:
         self.coefficient_hits = 0
         self.coefficient_misses = 0
         self.coefficient_errors = 0
+        self.activity = (np.zeros(samples, dtype=np.int64) if resume is None
+                         else np.array(resume['activity'], np.int64)
+                         if resume.get('activity') is not None
+                         else np.zeros(samples, dtype=np.int64))
 
     def settled(self):
         return set(self.completed)
@@ -60,6 +64,9 @@ class _Collector:
 
     def __init__(self, expected_ids, *, resume=None, samples=4, **kwargs):
         self.recording = _Recording(samples, resume)
+        # The receipt also reports the crossings the one-millisecond tick grid
+        # could not carry, so the stand-in has to answer for them too.
+        self.coincident_crossings = 0
 
     def factory(self, cells):
         self.recording.completed.update(int(body) for body in cells)
@@ -68,6 +75,10 @@ class _Collector:
 
     def finish(self):
         return self.recording.signal.copy()
+
+    @property
+    def activity(self):
+        return self.recording.activity
 
 
 def _stub_solver(batches):

@@ -32,7 +32,7 @@ wheels = [
 
 [[package]]
 name = "aspa-generator"
-version = "0.1.18"
+version = "0.1.19"
 source = { editable = "." }
 dependencies = [
     { name = "fastapi", marker = "sys_platform == 'linux'" },

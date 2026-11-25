@@ -122,11 +122,13 @@ def replay_bulk_feedback(metadata, stimulus, rate_table, *, audited_sources, par
             signal = collector.recording.signal.copy()
             batches = resumed_batches + kernels['batches']
 
+            activity = collector.activity
+
             def capture(state):
                 return capture_state(state, archive=archive, signal=signal,
                     done_ids=received, cells=len(received), batches=batches,
                     receipts=pause_context.get('receipts'),
-                    archives=pause_context.get('archives'))
+                    archives=pause_context.get('archives'), activity=activity)
 
             meta = pause.save(phase=pause_context['phase'], capture=capture,
                 iteration=pause_context.get('iteration'),
@@ -140,7 +142,14 @@ def replay_bulk_feedback(metadata, stimulus, rate_table, *, audited_sources, par
         # Published only now: an entry that covers a pass which failed verification
         # would let a later run skip the computation that produced its own evidence.
         narrow_cache.commit()
-    receipt = {'neural_uv': signal, 'cells': len(received),
+    activity = collector.activity
+    receipt = {'neural_uv': signal,
+               # The spike count per graph millisecond, which the electrode trace
+               # cannot carry: the membrane potential is back at rest by the end of
+               # the window, so a pass with hundreds of spikes published a final
+               # drive of exactly zero over all cells.
+               'activity': activity, 'spikes': int(activity.sum()),
+               'cells': len(received),
                'solver_kernels': kernels,
                # Crossings the 1 ms graph tick could not carry. Reported, not
                # hidden: these are events the model produced and the format dropped.

@@ -37,6 +37,17 @@ class WindowedCrossings:
         self.coincident = 0
         self.position = 0
         self.failed = False
+        # One counter per graph millisecond. The voltage trace is a membrane
+        # potential that decays back to rest before the window closes, so a
+        # population that spiked still reads as zero at the end of the record.
+        # Counting the crossings the tick grid actually carried keeps that
+        # evidence: measured on the full population, the final synaptic drive was
+        # exactly zero for all 166 700 cells while the same pass produced 509
+        # spikes. Zero in the potential is not silence.
+        # One counter per sample of the recorded time base, indexed by the graph
+        # tick the crossing was collapsed onto, so the counter and the electrode
+        # trace describe the same window.
+        self.counts = np.zeros(len(time), dtype=np.int64)
 
     def accept(self, start, end, rows):
         try:
@@ -81,6 +92,7 @@ class WindowedCrossings:
                             self.coincident += 1
                             continue
                         self.ticks[body][index].append(tick)
+                        self.counts[tick] += 1
                     self.previous[body] = selected[:, -1].copy()
             self.position = end
         except Exception:
@@ -93,8 +105,13 @@ class WindowedCrossings:
         return {body: {index: ticks.copy() for index, ticks in values.items()}
                 for body, values in self.ticks.items()}
 
+    def activity(self):
+        """Crossings per graph millisecond, as the tick grid delivered them."""
+        return self.counts.copy()
+
     def report(self):
         """Counts of what was observed, including what the tick grid collapsed."""
         return {'tick_events': sum(len(ticks) for values in self.ticks.values()
                                    for ticks in values.values()),
-                'coincident_crossings': self.coincident}
+                'coincident_crossings': self.coincident,
+                'activity_total': int(self.counts.sum())}

@@ -113,6 +113,7 @@ class PauseController:
                     'cells': int(receipt['cells']), 'batches': int(receipt['batches']),
                     'archive_sha256': receipt['archive_sha256'],
                     'signal_sha256': receipt['signal_sha256'],
+                    'activity_sha256': receipt.get('activity_sha256'),
                     'receipts': receipt['receipts'],
                     'archives': receipt['archives']}
             (state / 'meta.json').write_text(
@@ -131,7 +132,7 @@ class PauseController:
 
 
 def capture_state(directory, *, archive, signal, done_ids, cells, batches,
-                  receipts=None, archives=None):
+                  receipts=None, archives=None, activity=None):
     """Write one checkpoint's payload and return the identities it claims.
 
     The archive copy is taken by the archive itself, from the staged file it is
@@ -147,6 +148,15 @@ def capture_state(directory, *, archive, signal, done_ids, cells, batches,
     np.save(Path(directory) / 'signal.npy', np.asarray(signal, dtype=float))
     signal_sha256 = hashlib.sha256(
         (Path(directory) / 'signal.npy').read_bytes()).hexdigest()
+    # The spike count per millisecond is part of what a pass measured: the
+    # electrode trace alone is zero by the end of the window even when the
+    # population fired, so a checkpoint without it would silently lose the
+    # evidence the resumed pass is supposed to continue.
+    activity_sha256 = None
+    if activity is not None:
+        np.save(Path(directory) / 'activity.npy', np.asarray(activity, dtype=np.int64))
+        activity_sha256 = hashlib.sha256(
+            (Path(directory) / 'activity.npy').read_bytes()).hexdigest()
     kept = {}
     for label, receipt in (receipts or {}).items():
         name = f'receipt-{label}.npy'
@@ -171,6 +181,7 @@ def capture_state(directory, *, archive, signal, done_ids, cells, batches,
                             (Path(directory) / target_name).read_bytes()).hexdigest()}
     return {'done_ids': set(done_ids), 'cells': int(cells), 'batches': int(batches),
             'archive_sha256': digest, 'signal_sha256': signal_sha256,
+            'activity_sha256': activity_sha256,
             'receipts': kept, 'archives': copies}
 
 
@@ -210,6 +221,13 @@ def load(directory):
             raise ValueError('Pause checkpoint receipt file is missing')
         receipts[label] = {key: value for key, value in receipt.items()
                            if key != 'signal'} | {'neural_uv': np.load(waypoint)}
+    activity = None
+    if meta.get('activity_sha256') is not None:
+        waypoint = state / 'activity.npy'
+        if (not waypoint.is_file() or hashlib.sha256(waypoint.read_bytes()).hexdigest()
+                != meta['activity_sha256']):
+            raise ValueError('Pause checkpoint activity changed or is incomplete')
+        activity = np.load(waypoint)
     archives = {}
     for name, entry in (meta.get('archives') or {}).items():
         copied = state / entry['file']
@@ -219,7 +237,8 @@ def load(directory):
         archives[name] = {'path': copied, 'sha256': entry['sha256']}
     return {'directory': state, 'meta': meta, 'archive_path': archive,
             'archive_sha256': meta['archive_sha256'], 'done_ids': set(meta['done_ids']),
-            'signal': np.load(signal_path), 'receipts': receipts, 'archives': archives,
+            'signal': np.load(signal_path), 'activity': activity,
+            'receipts': receipts, 'archives': archives,
             'batches': int(meta['batches']), 'phase': meta.get('phase'),
             'iteration': meta.get('iteration'), 'history': list(meta.get('history') or []),
             'previous': meta.get('previous')}

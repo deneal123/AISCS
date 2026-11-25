@@ -66,6 +66,18 @@ class PopulationWindowedFeedback:
         # tick, so a burst inside one millisecond keeps its first crossing and the
         # rest are counted here instead of aborting the pass.
         self.coincident_crossings = 0
+        # The population's spike count per graph millisecond. The electrode trace
+        # cannot carry it: the membrane potential returns to rest before the window
+        # closes, so a pass with 509 spikes published a final drive of exactly zero
+        # across all 166 700 cells. This is the evidence that survives the window.
+        self.activity = np.zeros(len(self.time), dtype=np.int64)
+        if resume is not None and resume.get('activity') is not None:
+            # A resumed pass continues the spike record, not just the electrode
+            # trace: the part already recorded is the part it skips.
+            carried = np.asarray(resume['activity'])
+            if carried.shape != self.activity.shape or carried.dtype.kind not in 'iu':
+                raise ValueError('Invalid population activity resume state')
+            self.activity = carried.astype(np.int64, copy=True)
 
         # The selection - which compartments of each cell must come back as traces -
         # is a function of the verified sources, the threshold and the distance cut,
@@ -209,7 +221,11 @@ class PopulationWindowedFeedback:
         selector.accept(start, end, rows)
         if end == len(self.time):
             ticks = selector.finish()
-            self.coincident_crossings += selector.report()['coincident_crossings']
+            report = selector.report()
+            self.coincident_crossings += report['coincident_crossings']
+            # The selector counts on the same time base the recording uses, so the
+            # two arrays are added element by element and describe one window.
+            self.activity += selector.activity()
             results = {cell['id']: feedback_plan_output_ticks(plans[cell['id']], ticks[cell['id']])
                        for cell in cells}
             self.event_sink(results)
