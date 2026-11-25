@@ -1,0 +1,2793 @@
+{
+ "version": "male-cns-abdominal-motor-inventory-v1",
+ "dataset_id": "male-cns:v1.0-annotated-nonglial",
+ "source": "https://male-cns.janelia.org/download/",
+ "license": "CC BY 4.0",
+ "selection": "vnc_motor with an abdominal exit nerve or neuromere",
+ "laterality": "somaSide; not a validated peripheral muscle map",
+ "not_a_muscle_model": "motor spikes are not contraction; the graph has no muscle nodes",
+ "neurons": 307,
+ "counts_by_subclass": {
+  "ad": 214,
+  "wm": 67,
+  "hm": 16,
+  "hl": 8,
+  "xm": 2
+ },
+ "counts_by_nerve": {
+  "AbN2": 44,
+  "ADMN": 28,
+  "PDMNp": 6,
+  "MesoAN": 19,
+  "AbN4": 72,
+  "AbN1": 30,
+  "AbNT": 64,
+  "PDMNa": 16,
+  "AbN3": 28
+ },
+ "cells": [
+  {
+   "id": "164190",
+   "type": "MNad21",
+   "subclass": "ad",
+   "exit_nerve": "AbN2",
+   "neuromere": "A1",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "800056",
+   "type": "DVMn 1a-c",
+   "subclass": "wm",
+   "exit_nerve": "ADMN",
+   "neuromere": "T2",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "800146",
+   "type": "TTMn",
+   "subclass": "wm",
+   "exit_nerve": "PDMNp",
+   "neuromere": "T2",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "800184",
+   "type": "MNwm36",
+   "subclass": "wm",
+   "exit_nerve": "MesoAN",
+   "neuromere": "T2",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "800190",
+   "type": "MNwm35",
+   "subclass": "wm",
+   "exit_nerve": "MesoAN",
+   "neuromere": "T2",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "800241",
+   "type": "hg1 MN",
+   "subclass": "wm",
+   "exit_nerve": "ADMN",
+   "neuromere": "T2",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "800248",
+   "type": "MNad07",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A4",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "800381",
+   "type": "i2 MN",
+   "subclass": "wm",
+   "exit_nerve": "ADMN",
+   "neuromere": "T2",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "800412",
+   "type": "DVMn 1a-c",
+   "subclass": "wm",
+   "exit_nerve": "ADMN",
+   "neuromere": "T2",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "800474",
+   "type": "MNhm42",
+   "subclass": "hm",
+   "exit_nerve": "AbN1",
+   "neuromere": "T3",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "800478",
+   "type": "MNad68",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A9",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "800479",
+   "type": "MNad49",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A9",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "800573",
+   "type": "i2 MN",
+   "subclass": "wm",
+   "exit_nerve": "ADMN",
+   "neuromere": "T2",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "800577",
+   "type": "MNad61",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A8",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "800606",
+   "type": "MNwm35",
+   "subclass": "wm",
+   "exit_nerve": "MesoAN",
+   "neuromere": "T2",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "800608",
+   "type": "MNad19",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A4",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "800637",
+   "type": "i1 MN",
+   "subclass": "wm",
+   "exit_nerve": "ADMN",
+   "neuromere": "T2",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "800659",
+   "type": "MNad22",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A7",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "800664",
+   "type": "MNad64",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A9",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "800696",
+   "type": "MNwm36",
+   "subclass": "wm",
+   "exit_nerve": "MesoAN",
+   "neuromere": "T2",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "800718",
+   "type": "DLMn c-f",
+   "subclass": "wm",
+   "exit_nerve": "PDMNa",
+   "neuromere": "T1",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "800743",
+   "type": "ps1 MN",
+   "subclass": "wm",
+   "exit_nerve": "MesoAN",
+   "neuromere": "T2",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "800762",
+   "type": "MNad41",
+   "subclass": "ad",
+   "exit_nerve": "AbN2",
+   "neuromere": "A1",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "800847",
+   "type": "hg4 MN",
+   "subclass": "wm",
+   "exit_nerve": "MesoAN",
+   "neuromere": "T2",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "800875",
+   "type": "MNad33",
+   "subclass": "ad",
+   "exit_nerve": "AbN2",
+   "neuromere": "A1",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "800890",
+   "type": "DLMn c-f",
+   "subclass": "wm",
+   "exit_nerve": "PDMNa",
+   "neuromere": "T1",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "800899",
+   "type": "tp2 MN",
+   "subclass": "wm",
+   "exit_nerve": "ADMN",
+   "neuromere": "T2",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "800906",
+   "type": "hg4 MN",
+   "subclass": "wm",
+   "exit_nerve": "MesoAN",
+   "neuromere": "T2",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "800917",
+   "type": "hg1 MN",
+   "subclass": "wm",
+   "exit_nerve": "ADMN",
+   "neuromere": "T2",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "800928",
+   "type": "ps1 MN",
+   "subclass": "wm",
+   "exit_nerve": "MesoAN",
+   "neuromere": "T2",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "801020",
+   "type": "MNad20",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A9",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "801021",
+   "type": "hg3 MN",
+   "subclass": "wm",
+   "exit_nerve": "ADMN",
+   "neuromere": "T2",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "801137",
+   "type": "b2 MN",
+   "subclass": "wm",
+   "exit_nerve": "ADMN",
+   "neuromere": "T2",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "801158",
+   "type": "MNad64",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A9",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "801185",
+   "type": "tpn MN",
+   "subclass": "wm",
+   "exit_nerve": "ADMN",
+   "neuromere": "T2",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "801220",
+   "type": "i1 MN",
+   "subclass": "wm",
+   "exit_nerve": "ADMN",
+   "neuromere": "T2",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "801267",
+   "type": "MNhl02",
+   "subclass": "hl",
+   "exit_nerve": "AbN1",
+   "neuromere": "T3",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "801292",
+   "type": "b3 MN",
+   "subclass": "wm",
+   "exit_nerve": "ADMN",
+   "neuromere": "T2",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "801295",
+   "type": "DLMn a, b",
+   "subclass": "wm",
+   "exit_nerve": "PDMNa",
+   "neuromere": "T2",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "801304",
+   "type": "MNad42",
+   "subclass": "ad",
+   "exit_nerve": "AbN2",
+   "neuromere": "A1",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "801310",
+   "type": "b1 MN",
+   "subclass": "wm",
+   "exit_nerve": "ADMN",
+   "neuromere": "T2",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "801350",
+   "type": "b2 MN",
+   "subclass": "wm",
+   "exit_nerve": "ADMN",
+   "neuromere": "T2",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "801362",
+   "type": "MNad41",
+   "subclass": "ad",
+   "exit_nerve": "AbN2",
+   "neuromere": "A1",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "801391",
+   "type": "STTMm",
+   "subclass": "wm",
+   "exit_nerve": "PDMNp",
+   "neuromere": "T2",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "801394",
+   "type": "MNad67",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A8",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "801434",
+   "type": "MNad19",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A4",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "801491",
+   "type": "MNad19",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A5",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "801553",
+   "type": "MNad05",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A2",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "801736",
+   "type": "MNhl62",
+   "subclass": "hl",
+   "exit_nerve": "AbN1",
+   "neuromere": "T3",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "801815",
+   "type": "tpn MN",
+   "subclass": "wm",
+   "exit_nerve": "ADMN",
+   "neuromere": "T2",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "801816",
+   "type": "DVMn 1a-c",
+   "subclass": "wm",
+   "exit_nerve": "ADMN",
+   "neuromere": "T2",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "801895",
+   "type": "DLMn c-f",
+   "subclass": "wm",
+   "exit_nerve": "PDMNa",
+   "neuromere": "T1",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "801899",
+   "type": "MNad42",
+   "subclass": "ad",
+   "exit_nerve": "AbN2",
+   "neuromere": "A1",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "801933",
+   "type": "MNhm42",
+   "subclass": "hm",
+   "exit_nerve": "AbN1",
+   "neuromere": "T3",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "801949",
+   "type": "tp2 MN",
+   "subclass": "wm",
+   "exit_nerve": "ADMN",
+   "neuromere": "T2",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "801970",
+   "type": "DLMn a, b",
+   "subclass": "wm",
+   "exit_nerve": "PDMNa",
+   "neuromere": "T2",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "801998",
+   "type": "DLMn c-f",
+   "subclass": "wm",
+   "exit_nerve": "PDMNa",
+   "neuromere": "T1",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "802003",
+   "type": "MNad01",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A3",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "802028",
+   "type": "tp1 MN",
+   "subclass": "wm",
+   "exit_nerve": "ADMN",
+   "neuromere": "T2",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "802055",
+   "type": "hi2 MN",
+   "subclass": "hm",
+   "exit_nerve": "AbN1",
+   "neuromere": "T3",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "802114",
+   "type": "MNad66",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A8",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "802116",
+   "type": "MNad65",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A9",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "802120",
+   "type": "b3 MN",
+   "subclass": "wm",
+   "exit_nerve": "ADMN",
+   "neuromere": "T2",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "802130",
+   "type": "MNad02",
+   "subclass": "ad",
+   "exit_nerve": "AbN3",
+   "neuromere": "A2",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "802137",
+   "type": "MNad19",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A5",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "802164",
+   "type": "MNad14",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A5",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "802201",
+   "type": "MNad68",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A9",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "802240",
+   "type": "MNad62",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A8",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "802251",
+   "type": "MNad34",
+   "subclass": "ad",
+   "exit_nerve": "AbN2",
+   "neuromere": "A1",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "802252",
+   "type": "MNad34",
+   "subclass": "ad",
+   "exit_nerve": "AbN2",
+   "neuromere": "A1",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "802315",
+   "type": "tp1 MN",
+   "subclass": "wm",
+   "exit_nerve": "ADMN",
+   "neuromere": "T2",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "802327",
+   "type": "iii3 MN",
+   "subclass": "wm",
+   "exit_nerve": "MesoAN",
+   "neuromere": "T2",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "802405",
+   "type": "MNad06",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A3",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "802413",
+   "type": "MNad53",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A9",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "802500",
+   "type": "MNad40",
+   "subclass": "ad",
+   "exit_nerve": "AbN2",
+   "neuromere": "A1",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "802544",
+   "type": "DLMn c-f",
+   "subclass": "wm",
+   "exit_nerve": "PDMNa",
+   "neuromere": "T1",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "802579",
+   "type": "MNad65",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A9",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "802587",
+   "type": "MNad20",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A8",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "802659",
+   "type": "MNhm03",
+   "subclass": "hm",
+   "exit_nerve": "AbN1",
+   "neuromere": "T3",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "802690",
+   "type": "MNad30",
+   "subclass": "ad",
+   "exit_nerve": "AbN2",
+   "neuromere": "A1",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "802806",
+   "type": "MNhm03",
+   "subclass": "hm",
+   "exit_nerve": "AbN1",
+   "neuromere": "T3",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "802835",
+   "type": "iii1 MN",
+   "subclass": "wm",
+   "exit_nerve": "MesoAN",
+   "neuromere": "T2",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "802837",
+   "type": "ps2 MN",
+   "subclass": "wm",
+   "exit_nerve": "MesoAN",
+   "neuromere": "T2",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "802907",
+   "type": "MNad23",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A7",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "802937",
+   "type": "MNad63",
+   "subclass": "ad",
+   "exit_nerve": "AbN2",
+   "neuromere": "A1",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "802954",
+   "type": "MNad53",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A9",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "802980",
+   "type": "MNad63",
+   "subclass": "ad",
+   "exit_nerve": "AbN2",
+   "neuromere": "A1",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "803010",
+   "type": "MNad17",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A8",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "803013",
+   "type": "DLMn c-f",
+   "subclass": "wm",
+   "exit_nerve": "PDMNa",
+   "neuromere": "T1",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "803047",
+   "type": "MNad15",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A8",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "803048",
+   "type": "DLMn c-f",
+   "subclass": "wm",
+   "exit_nerve": "PDMNa",
+   "neuromere": "T1",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "803070",
+   "type": "MNad16",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A4",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "803100",
+   "type": "iii1 MN",
+   "subclass": "wm",
+   "exit_nerve": "MesoAN",
+   "neuromere": "T2",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "803107",
+   "type": "MNad08",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A5",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "803129",
+   "type": "DVMn 1a-c",
+   "subclass": "wm",
+   "exit_nerve": "ADMN",
+   "neuromere": "T2",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "803215",
+   "type": "hDVM MN",
+   "subclass": "hm",
+   "exit_nerve": "AbN1",
+   "neuromere": "T3",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "803241",
+   "type": "MNad16",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A4",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "803310",
+   "type": "MNhm43",
+   "subclass": "hm",
+   "exit_nerve": "AbN1",
+   "neuromere": "T3",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "803342",
+   "type": "MNad11",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A4",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "803451",
+   "type": "MNad35",
+   "subclass": "ad",
+   "exit_nerve": "AbN2",
+   "neuromere": "A1",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "803524",
+   "type": "MNad15",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A6",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "803562",
+   "type": "MNad06",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A4",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "803589",
+   "type": "ps2 MN",
+   "subclass": "wm",
+   "exit_nerve": "MesoAN",
+   "neuromere": "T2",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "803599",
+   "type": "DVMn 2a, b",
+   "subclass": "wm",
+   "exit_nerve": "MesoAN",
+   "neuromere": "T2",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "803684",
+   "type": "MNad36",
+   "subclass": "ad",
+   "exit_nerve": "AbN2",
+   "neuromere": "A1",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "803690",
+   "type": "MNad22",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A7",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "803709",
+   "type": "MNad15",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A8",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "803717",
+   "type": "MNad35",
+   "subclass": "ad",
+   "exit_nerve": "AbN2",
+   "neuromere": "A1",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "803732",
+   "type": "MNad03",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A4",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "803804",
+   "type": "MNad14",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A4",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "803813",
+   "type": "MNad36",
+   "subclass": "ad",
+   "exit_nerve": "AbN2",
+   "neuromere": "A1",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "803891",
+   "type": "hg2 MN",
+   "subclass": "wm",
+   "exit_nerve": "ADMN",
+   "neuromere": "T2",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "803904",
+   "type": "MNad10",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A3",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "803912",
+   "type": "MNad10",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A3",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "803946",
+   "type": "MNad10",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A2",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "803982",
+   "type": "DVMn 2a, b",
+   "subclass": "wm",
+   "exit_nerve": "MesoAN",
+   "neuromere": "T2",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "803992",
+   "type": "MNad14",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A3",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "804023",
+   "type": "MNad61",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A8",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "804107",
+   "type": "iii3 MN",
+   "subclass": "wm",
+   "exit_nerve": "MesoAN",
+   "neuromere": "T2",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "804119",
+   "type": "MNad53",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A9",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "804131",
+   "type": "hg2 MN",
+   "subclass": "wm",
+   "exit_nerve": "ADMN",
+   "neuromere": "T2",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "804173",
+   "type": "MNad10",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A2",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "804180",
+   "type": "MNad14",
+   "subclass": "ad",
+   "exit_nerve": "AbN3",
+   "neuromere": "A2",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "804195",
+   "type": "MNad14",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A4",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "804301",
+   "type": "b1 MN",
+   "subclass": "wm",
+   "exit_nerve": "ADMN",
+   "neuromere": "T2",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "804326",
+   "type": "MNad14",
+   "subclass": "ad",
+   "exit_nerve": "AbN3",
+   "neuromere": "A2",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "804371",
+   "type": "MNad22",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A6",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "804398",
+   "type": "MNad14",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A3",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "804445",
+   "type": "MNad14",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A5",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "804514",
+   "type": "Tergotr. MN",
+   "subclass": "hl",
+   "exit_nerve": "AbN1",
+   "neuromere": "T3",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "804625",
+   "type": "MNad22",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A6",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "804642",
+   "type": "TTMn",
+   "subclass": "wm",
+   "exit_nerve": "PDMNp",
+   "neuromere": "T2",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "804775",
+   "type": "MNad20",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A8",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "804860",
+   "type": "MNad26",
+   "subclass": "ad",
+   "exit_nerve": "AbN1",
+   "neuromere": "T3",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "804966",
+   "type": "MNad10",
+   "subclass": "ad",
+   "exit_nerve": "AbN3",
+   "neuromere": "A1",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "804992",
+   "type": "MNad18,MNad27",
+   "subclass": "ad",
+   "exit_nerve": "AbN3",
+   "neuromere": "A2",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "805067",
+   "type": "MNad08",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A5",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "805107",
+   "type": "MNad10",
+   "subclass": "ad",
+   "exit_nerve": "AbN3",
+   "neuromere": "A1",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "805137",
+   "type": "hi1 MN",
+   "subclass": "hm",
+   "exit_nerve": "AbN1",
+   "neuromere": "T3",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "805165",
+   "type": "DVMn 3a, b",
+   "subclass": "wm",
+   "exit_nerve": "PDMNa",
+   "neuromere": "T1",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "805255",
+   "type": "MNad32",
+   "subclass": "ad",
+   "exit_nerve": "AbN2",
+   "neuromere": "A1",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "805326",
+   "type": "MNad32",
+   "subclass": "ad",
+   "exit_nerve": "AbN2",
+   "neuromere": "A1",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "805511",
+   "type": "MNad33",
+   "subclass": "ad",
+   "exit_nerve": "AbN2",
+   "neuromere": "A1",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "805577",
+   "type": "MNad02",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A5",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "805630",
+   "type": "MNad17",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A10",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "805634",
+   "type": "MNad05",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A3",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "805647",
+   "type": "MNad23",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A7",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "805690",
+   "type": "MNad26",
+   "subclass": "ad",
+   "exit_nerve": "AbN1",
+   "neuromere": "T3",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "805757",
+   "type": "MNad11",
+   "subclass": "ad",
+   "exit_nerve": "AbN3",
+   "neuromere": "A2",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "805776",
+   "type": "MNad06",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A2",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "805790",
+   "type": "MNad46",
+   "subclass": "ad",
+   "exit_nerve": "AbN2",
+   "neuromere": "A1",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "805797",
+   "type": "MNad06",
+   "subclass": "ad",
+   "exit_nerve": "AbN3",
+   "neuromere": "A1",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "805842",
+   "type": "MNad44",
+   "subclass": "ad",
+   "exit_nerve": "AbN3",
+   "neuromere": "A2",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "805879",
+   "type": "MNad17",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A10",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "805881",
+   "type": "MNad05",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A3",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "805974",
+   "type": "MNad05",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A2",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "805980",
+   "type": "MNad07",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A5",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "806008",
+   "type": "MNad02",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A5",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "806014",
+   "type": "MNad46",
+   "subclass": "ad",
+   "exit_nerve": "AbN2",
+   "neuromere": "A1",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "806037",
+   "type": "MNad06",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A2",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "806047",
+   "type": "MNad17",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A10",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "806061",
+   "type": "MNad11",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A3",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "806094",
+   "type": "MNad08",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A3",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "806124",
+   "type": "MNad08",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A2",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "806144",
+   "type": "MNad11",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A3",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "806161",
+   "type": "MNad24",
+   "subclass": "ad",
+   "exit_nerve": "AbN2",
+   "neuromere": "A1",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "806253",
+   "type": "MNad11",
+   "subclass": "ad",
+   "exit_nerve": "AbN3",
+   "neuromere": "A2",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "806281",
+   "type": "MNad06",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A3",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "806302",
+   "type": "MNad08",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A2",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "806355",
+   "type": "MNad08",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A3",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "806427",
+   "type": "MNad11",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A4",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "806561",
+   "type": "MNad24",
+   "subclass": "ad",
+   "exit_nerve": "AbN2",
+   "neuromere": "A1",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "806601",
+   "type": "MNad69",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A10",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "806620",
+   "type": "MNad06",
+   "subclass": "ad",
+   "exit_nerve": "AbN3",
+   "neuromere": "A1",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "806643",
+   "type": "MNad05",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A4",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "806671",
+   "type": "MNad02",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A6",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "806679",
+   "type": "MNad12",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A9",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "806689",
+   "type": "MNad09",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A7",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "806754",
+   "type": "MNad31",
+   "subclass": "ad",
+   "exit_nerve": "AbN2",
+   "neuromere": "A1",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "806779",
+   "type": "MNad09",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A7",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "806817",
+   "type": "MNad11",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A5",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "806837",
+   "type": "MNad47",
+   "subclass": "ad",
+   "exit_nerve": "AbN2",
+   "neuromere": "A1",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "806902",
+   "type": "MNad44",
+   "subclass": "ad",
+   "exit_nerve": "AbN3",
+   "neuromere": "A2",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "806943",
+   "type": "MNad47",
+   "subclass": "ad",
+   "exit_nerve": "AbN2",
+   "neuromere": "A1",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "807010",
+   "type": "MNad02",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A3",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "807075",
+   "type": "MNad02",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A3",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "807144",
+   "type": "MNad02",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A6",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "807160",
+   "type": "MNhl01",
+   "subclass": "hl",
+   "exit_nerve": "AbN1",
+   "neuromere": "T3",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "807176",
+   "type": "MNad28",
+   "subclass": "ad",
+   "exit_nerve": "AbN1",
+   "neuromere": "T3",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "807312",
+   "type": "MNad56",
+   "subclass": "ad",
+   "exit_nerve": "AbN3",
+   "neuromere": "A1",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "807368",
+   "type": "MNad28",
+   "subclass": "ad",
+   "exit_nerve": "AbN1",
+   "neuromere": "T3",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "807396",
+   "type": "MNad56",
+   "subclass": "ad",
+   "exit_nerve": "AbN3",
+   "neuromere": "A1",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "807401",
+   "type": "MNad01",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A2",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "807464",
+   "type": "MNad02",
+   "subclass": "ad",
+   "exit_nerve": "AbN2",
+   "neuromere": "A1",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "807569",
+   "type": "MNad31",
+   "subclass": "ad",
+   "exit_nerve": "AbN2",
+   "neuromere": "A1",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "807594",
+   "type": "MNad01",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A2",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "807638",
+   "type": "MNad02",
+   "subclass": "ad",
+   "exit_nerve": "AbN2",
+   "neuromere": "A1",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "807649",
+   "type": "MNad11",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A5",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "807681",
+   "type": "MNad16",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A3",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "807694",
+   "type": "MNad16",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A3",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "807713",
+   "type": "MNad02",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A4",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "807784",
+   "type": "hi2 MN",
+   "subclass": "hm",
+   "exit_nerve": "AbN1",
+   "neuromere": "T3",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "807799",
+   "type": "DVMn 2a, b",
+   "subclass": "wm",
+   "exit_nerve": "MesoAN",
+   "neuromere": "T2",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "807813",
+   "type": "MNad45",
+   "subclass": "ad",
+   "exit_nerve": "AbN2",
+   "neuromere": "A1",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "807837",
+   "type": "MNad43",
+   "subclass": "ad",
+   "exit_nerve": "AbN3",
+   "neuromere": "A1",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "807838",
+   "type": "MNad02",
+   "subclass": "ad",
+   "exit_nerve": "AbN3",
+   "neuromere": "A2",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "807870",
+   "type": "MNad16",
+   "subclass": "ad",
+   "exit_nerve": "AbN3",
+   "neuromere": "A1",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "807899",
+   "type": "MNad05",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A4",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "807924",
+   "type": "DVMn 2a, b",
+   "subclass": "wm",
+   "exit_nerve": "MesoAN",
+   "neuromere": "T2",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "807945",
+   "type": "MNad17",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A10",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "807987",
+   "type": null,
+   "subclass": "wm",
+   "exit_nerve": "MesoAN",
+   "neuromere": "T2",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "808101",
+   "type": "MNad01",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A3",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "808134",
+   "type": "MNad01",
+   "subclass": "ad",
+   "exit_nerve": "AbN3",
+   "neuromere": "A1",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "808208",
+   "type": "MNad02",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A4",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "808250",
+   "type": "MNad53",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A9",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "808464",
+   "type": "MNad57",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A8",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "808532",
+   "type": "MNad01",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A4",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "808572",
+   "type": "MNad57",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A8",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "808621",
+   "type": "MNad01",
+   "subclass": "ad",
+   "exit_nerve": "AbN3",
+   "neuromere": "A1",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "808720",
+   "type": "MNad16",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A2",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "808813",
+   "type": "hi2 MN",
+   "subclass": "hm",
+   "exit_nerve": "AbN1",
+   "neuromere": "T3",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "808820",
+   "type": "MNad01",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A4",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "808888",
+   "type": "MNad16",
+   "subclass": "ad",
+   "exit_nerve": "AbN3",
+   "neuromere": "A1",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "808926",
+   "type": "MNad04,MNad48",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A10",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "809085",
+   "type": "hDVM MN",
+   "subclass": "hm",
+   "exit_nerve": "AbN1",
+   "neuromere": "T3",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "809238",
+   "type": "MNad16",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A2",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "809304",
+   "type": "MNad45",
+   "subclass": "ad",
+   "exit_nerve": "AbN2",
+   "neuromere": "A1",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "809397",
+   "type": "MNad04,MNad48",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A9",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "809401",
+   "type": "MNad25",
+   "subclass": "ad",
+   "exit_nerve": "AbN3",
+   "neuromere": "A2",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "809484",
+   "type": "MNad30",
+   "subclass": "ad",
+   "exit_nerve": "AbN2",
+   "neuromere": "A1",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "809492",
+   "type": "MNad04,MNad48",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A10",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "809862",
+   "type": "MNad09",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A6",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "809985",
+   "type": "hi2 MN",
+   "subclass": "hm",
+   "exit_nerve": "AbN1",
+   "neuromere": "T3",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "810069",
+   "type": "MNad09",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A6",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "810086",
+   "type": "MNad03",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A4",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "810241",
+   "type": "MNad09",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A5",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "810372",
+   "type": "MNad09",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A5",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "810460",
+   "type": "hiii2 MN",
+   "subclass": "hm",
+   "exit_nerve": "AbN1",
+   "neuromere": "T3",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "811554",
+   "type": "MNad07",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A4",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "811952",
+   "type": "MNad07",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A3",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "811999",
+   "type": "MNad09",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A4",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "812186",
+   "type": "MNad09",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A4",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "812193",
+   "type": "MNad55",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A9",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "812354",
+   "type": "MNad43",
+   "subclass": "ad",
+   "exit_nerve": "AbN3",
+   "neuromere": "A1",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "812385",
+   "type": "MNad07",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A3",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "812503",
+   "type": "MNad49",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A9",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "812718",
+   "type": "MNad07",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A5",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "813291",
+   "type": "MNad25",
+   "subclass": "ad",
+   "exit_nerve": "AbN3",
+   "neuromere": "A2",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "813633",
+   "type": "MNad21",
+   "subclass": "ad",
+   "exit_nerve": "AbN3",
+   "neuromere": "A2",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "814106",
+   "type": "MNad04,MNad48",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A10",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "814206",
+   "type": "MNad06",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A4",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "814430",
+   "type": "MNad03",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A5",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "814989",
+   "type": "MNad03",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A3",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "815075",
+   "type": "MNad17",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A8",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "815205",
+   "type": "MNad03",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A3",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "815209",
+   "type": "MNad29",
+   "subclass": "ad",
+   "exit_nerve": "AbN1",
+   "neuromere": "T3",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "815281",
+   "type": "MNad03",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A5",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "815682",
+   "type": "MNad29",
+   "subclass": "ad",
+   "exit_nerve": "AbN1",
+   "neuromere": "T3",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "816501",
+   "type": "MNhl02",
+   "subclass": "hl",
+   "exit_nerve": "AbN1",
+   "neuromere": "T3",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "816810",
+   "type": "MNad18,MNad27",
+   "subclass": "ad",
+   "exit_nerve": "AbN2",
+   "neuromere": "A1",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "817026",
+   "type": "MNxm01",
+   "subclass": "xm",
+   "exit_nerve": "PDMNa",
+   "neuromere": "T1",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "817133",
+   "type": "MNad18,MNad27",
+   "subclass": "ad",
+   "exit_nerve": "AbN2",
+   "neuromere": "A1",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "817458",
+   "type": "MNad54",
+   "subclass": "ad",
+   "exit_nerve": "AbN2",
+   "neuromere": "A1",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "817835",
+   "type": "MNad18,MNad27",
+   "subclass": "ad",
+   "exit_nerve": "AbN2",
+   "neuromere": "A1",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "817927",
+   "type": "MNad18,MNad27",
+   "subclass": "ad",
+   "exit_nerve": "AbN3",
+   "neuromere": "A2",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "817999",
+   "type": "MNad54",
+   "subclass": "ad",
+   "exit_nerve": "AbN2",
+   "neuromere": "A1",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "818077",
+   "type": "MNad18,MNad27",
+   "subclass": "ad",
+   "exit_nerve": "AbN3",
+   "neuromere": "A2",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "818098",
+   "type": "MNxm01",
+   "subclass": "xm",
+   "exit_nerve": "PDMNa",
+   "neuromere": "T1",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "818387",
+   "type": "MNad54",
+   "subclass": "ad",
+   "exit_nerve": "AbN2",
+   "neuromere": "A1",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "818428",
+   "type": "MNad54",
+   "subclass": "ad",
+   "exit_nerve": "AbN2",
+   "neuromere": "A1",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "818563",
+   "type": "MNad25",
+   "subclass": "ad",
+   "exit_nerve": "AbN2",
+   "neuromere": "A1",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "819492",
+   "type": "MNad12",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A9",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "819549",
+   "type": "MNad12",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A8",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "819796",
+   "type": "MNad25",
+   "subclass": "ad",
+   "exit_nerve": "AbN2",
+   "neuromere": "A1",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "820803",
+   "type": "MNad18,MNad27",
+   "subclass": "ad",
+   "exit_nerve": "AbN3",
+   "neuromere": "A2",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "820983",
+   "type": "MNad12",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A8",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "824223",
+   "type": "STTMm",
+   "subclass": "wm",
+   "exit_nerve": "PDMNp",
+   "neuromere": "T2",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "825991",
+   "type": "MNad21",
+   "subclass": "ad",
+   "exit_nerve": "AbN3",
+   "neuromere": "A2",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "830847",
+   "type": "STTMm",
+   "subclass": "wm",
+   "exit_nerve": "PDMNp",
+   "neuromere": "T2",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "833211",
+   "type": "MNad18,MNad27",
+   "subclass": "ad",
+   "exit_nerve": "AbN2",
+   "neuromere": "A1",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "903090",
+   "type": "MNhl62",
+   "subclass": "hl",
+   "exit_nerve": "AbN1",
+   "neuromere": "T3",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "903679",
+   "type": "MNad67",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A8",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "903852",
+   "type": "hg3 MN",
+   "subclass": "wm",
+   "exit_nerve": "ADMN",
+   "neuromere": "T2",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "904990",
+   "type": "MNad62",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A8",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "905584",
+   "type": "MNad66",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A8",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "905709",
+   "type": "MNad55",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A9",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "905792",
+   "type": "MNhl01",
+   "subclass": "hl",
+   "exit_nerve": "AbN1",
+   "neuromere": "T3",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "905849",
+   "type": "Tergotr. MN",
+   "subclass": "hl",
+   "exit_nerve": "AbN1",
+   "neuromere": "T3",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "906003",
+   "type": "MNhm43",
+   "subclass": "hm",
+   "exit_nerve": "AbN1",
+   "neuromere": "T3",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "906111",
+   "type": "MNad20",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A9",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "906520",
+   "type": "MNad40",
+   "subclass": "ad",
+   "exit_nerve": "AbN2",
+   "neuromere": "A1",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "906612",
+   "type": "DVMn 3a, b",
+   "subclass": "wm",
+   "exit_nerve": "PDMNa",
+   "neuromere": "T1",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "908158",
+   "type": "MNad17",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A9",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "908181",
+   "type": "hi1 MN",
+   "subclass": "hm",
+   "exit_nerve": "AbN1",
+   "neuromere": "T3",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "908285",
+   "type": "MNad50",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": null,
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "911334",
+   "type": "MNad17",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A9",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "911338",
+   "type": "MNad69",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A10",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "913939",
+   "type": "MNad21",
+   "subclass": "ad",
+   "exit_nerve": "AbN2",
+   "neuromere": "A1",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "924167",
+   "type": "STTMm",
+   "subclass": "wm",
+   "exit_nerve": "PDMNp",
+   "neuromere": "T2",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "932321",
+   "type": "DVMn 3a, b",
+   "subclass": "wm",
+   "exit_nerve": "PDMNa",
+   "neuromere": "T1",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "932322",
+   "type": "DVMn 1a-c",
+   "subclass": "wm",
+   "exit_nerve": "ADMN",
+   "neuromere": "T2",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "932796",
+   "type": "DVMn 1a-c",
+   "subclass": "wm",
+   "exit_nerve": "ADMN",
+   "neuromere": "T2",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "934019",
+   "type": "hiii2 MN",
+   "subclass": "hm",
+   "exit_nerve": "AbN1",
+   "neuromere": "T3",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "935161",
+   "type": "MNad04,MNad48",
+   "subclass": "ad",
+   "exit_nerve": "AbNT",
+   "neuromere": "A10",
+   "soma_side": "L",
+   "class": null
+  },
+  {
+   "id": "1050014552",
+   "type": "DLMn c-f",
+   "subclass": "wm",
+   "exit_nerve": "PDMNa",
+   "neuromere": "T1",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "1050045395",
+   "type": "DVMn 3a, b",
+   "subclass": "wm",
+   "exit_nerve": "PDMNa",
+   "neuromere": "T1",
+   "soma_side": "R",
+   "class": null
+  },
+  {
+   "id": "1050074465",
+   "type": "MNad15",
+   "subclass": "ad",
+   "exit_nerve": "AbN4",
+   "neuromere": "A6",
+   "soma_side": "R",
+   "class": null
+  }
+ ]
+}
