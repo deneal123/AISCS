@@ -1,5 +1,5 @@
 {
-  "version": "0.1.21",
+  "version": "0.1.22",
   "date": "2026-11-26",
   "application": "AISCS",
   "branch": "dev",
@@ -15,9 +15,9 @@
       "commit": "eeb19ba"
     },
     "generator": {
-      "version": "0.1.21",
+      "version": "0.1.22",
       "branch": "generator",
-      "commit": "f5c156f13beb41cd428b9f48ca975fda38ed4da4"
+      "commit": "f8f1eda"
     },
     "research": {
       "version": "1.6.2",
@@ -833,6 +833,16 @@
         "test_body_recruitment": "9/9"
       },
       "report": "docs/Материалы/План_генератора_2026-10/37-twin-validation-2026-11-26.md"
+    },
+    "twin_hypothesis_series": {
+      "report": "docs/Материалы/План_генератора_2026-10/38-twin-hypotheses-2026-11-26.md",
+      "repeat_summation": "refuted: 1/2/3/5 pulses at -1200 nA give 22/44/66/110 spikes and no escape at any count",
+      "escape_threshold": "between 3400 and 3500 nA (833-862 of 1145 afferents), inside the measured 3000-3600 nA behavioural interval",
+      "latency": "12.0 ms at -3500 nA, 9.0 ms at -9600 nA",
+      "modality_at_body": "not readable: 600 cells with 17 nociceptors vs 600 without give 10.0 ms both and curl -0.1855 vs -0.1873",
+      "escape_cost": "displacement 1.30x, curl 12.5x",
+      "defect_fixed": "motor_spikes counted every raster spike; at -3600 nA the receipt said 1250 motor spikes while 11 reached a muscle",
+      "tests": "body gait 5/5, bridge 8/8, muscles 7/7, episode 7/7, recruitment 9/9"
     }
   }
 }
