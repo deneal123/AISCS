@@ -158,7 +158,9 @@ def run_episode(graph, *, source_cells, current_na, site_um, seed=1,
     record.record_body(start=start, end=end, curl_start=curl0, curl_end=curl1,
                        escape_latency_ms=control.escape_latency_ms,
                        peak_height_cm=max(heights) if heights else float(body.data.qpos[2]),
-                       min_height_cm=min(heights) if heights else float(body.data.qpos[2]))
+                       min_height_cm=min(heights) if heights else float(body.data.qpos[2]),
+                       motor_spikes=getattr(control, "motor_spikes", 0),
+                       mapped_first_tick_ms=getattr(control, "mapped_first_tick_ms", None))
     if electrode is not None:
         record.record_electrode(**electrode)
     if owner:

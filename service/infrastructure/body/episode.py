@@ -84,7 +84,8 @@ class Episode:
         return self.network
 
     def record_body(self, *, start, end, curl_start, curl_end, escape_latency_ms,
-                    peak_height_cm, min_height_cm):
+                    peak_height_cm, min_height_cm, motor_spikes=0,
+                    mapped_first_tick_ms=None):
         dx = (float(end[0]) - float(start[0])) * 10.0
         dy = (float(end[1]) - float(start[1])) * 10.0
         dz = (float(end[2]) - float(start[2])) * 10.0
@@ -97,6 +98,14 @@ class Episode:
                                   else round(float(escape_latency_ms), 3)),
             "min_height_cm": round(float(min_height_cm), 5),
             "peak_height_cm": round(float(peak_height_cm), 5),
+            # Spikes that reached a muscle, not every spike in the raster. The two
+            # differ by two orders of magnitude: at -3600 nA the old counter said 1250
+            # while 11 reached a muscle (report 38, section 6). The tick is when the
+            # first of them landed, so a reader can tell whether the body heard the
+            # network before or after the escape programme fired.
+            "motor_spikes": int(motor_spikes),
+            "mapped_first_tick_ms": (None if mapped_first_tick_ms is None
+                                     else round(float(mapped_first_tick_ms), 3)),
         }
         return self.body
 
