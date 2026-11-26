@@ -1,5 +1,5 @@
 {
-  "version": "0.1.22",
+  "version": "0.1.23",
   "date": "2026-11-26",
   "application": "AISCS",
   "branch": "dev",
@@ -15,9 +15,9 @@
       "commit": "eeb19ba"
     },
     "generator": {
-      "version": "0.1.22",
+      "version": "0.1.23",
       "branch": "generator",
-      "commit": "f8f1eda"
+      "commit": "ae0bfc9"
     },
     "research": {
       "version": "1.6.2",
@@ -843,6 +843,35 @@
       "escape_cost": "displacement 1.30x, curl 12.5x",
       "defect_fixed": "motor_spikes counted every raster spike; at -3600 nA the receipt said 1250 motor spikes while 11 reached a muscle",
       "tests": "body gait 5/5, bridge 8/8, muscles 7/7, episode 7/7, recruitment 9/9"
+    },
+    "twin_dataset": {
+      "report": "docs/Материалы/План_генератора_2026-10/39-twin-dataset-2026-11-26.md",
+      "schema": "generator/service/infrastructure/body/dataset.py, format malecns-twin-noxious-dataset-v1, 12 tests",
+      "corpus": "126 episodes, 6 sites x 7 currents x 3 seeds, 120 ms, .work/connectome-routing-20261028/twin-dataset/",
+      "escape_thresholds_na": {
+        "abdomen_posterior": -2400,
+        "abdomen_behavioural": -3600,
+        "abdomen_anterior": -9600,
+        "thorax": -9600
+      },
+      "no_escape_sites": [
+        "abdomen_front",
+        "brain"
+      ],
+      "held_out_site_accuracy": 0.7143,
+      "held_out_site": "abdomen_behavioural",
+      "auc": {
+        "current": 0.8188,
+        "recruited": 0.9969,
+        "spikes": 0.9997
+      },
+      "degeneracy": "spikes and recruited cells coincide in all 126 episodes",
+      "not_claimed": [
+        "pain",
+        "per-cell nociceptor",
+        "threshold transfer between sites",
+        "modality from body"
+      ]
     }
   }
 }
