@@ -84,12 +84,20 @@ def test_a_stance_foot_is_anchored_where_it_landed():
     assert held > 100, "a planted claw was tracked for only %d samples" % held
 
 def test_the_reference_frame_travels_with_the_body():
-    """A world-fixed reference exhausts the reach after one step."""
+    """A world-fixed reference exhausts the reach after one step.
+
+    The frame is moved in steps rather than continuously, so what keeps growing is the
+    origin of the frame, not the offset from it: rebase() deliberately resets that
+    offset so the foot targets stay within one window of where the feet are.
+    """
     body = _gripping(TwinBody())
     loop = BehaviourLoop(body, compliance=1.0, stroke_cm=0.22, lift_cm=0.02,
                          kp=60.0, kd=4.0, period_s=0.18, height_gain=0.0)
     loop.settle(steps=300)
-    for _ in range(400):
+    origin0 = float(loop.gait.origin_x)
+    for _ in range(4000):
         loop.advance(0.001)
-    assert loop.gait.travel_cm() * 10.0 > 1.0, "the reference did not follow the body"
+    moved_mm = (float(loop.gait.origin_x) - origin0) * 10.0
+    assert moved_mm > 1.0, "the reference moved only %.3f mm" % moved_mm
+    assert abs(loop.gait.travel_cm()) < 0.25, "the offset from the reference ran away"
     assert set(loop.gait.rest) == set(LEGS)

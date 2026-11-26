@@ -106,8 +106,44 @@ class FootGait:
         """How far the body has gone since the reference was captured."""
         return float(self.body.data.qpos[0]) - self.origin_x
 
+    def rebase(self, window_cm=0.20):
+        """Move the reference forward when the body has outwalked it.
+
+        The reference frame travels with the body but is only re-captured when the
+        caller asks, so a long walk eventually aims every foot target behind the
+        animal and the legs run out of reach. Rebasing keeps the foot targets inside
+        one stroke of where the feet actually are; the anchors are dropped because
+        they were expressed against the old reference and are re-taken on the next
+        stance sample. The window is a whole number of strokes on purpose: a partial
+        stroke would make one step shorter than the others and show up as a limp.
+        """
+        travel = self.travel_cm()
+        if abs(travel) < float(window_cm):
+            return 0.0
+        # Continuity, not re-capture. A foot target is rest[0] + travel, so moving
+        # the origin forward by the travel and adding the same travel to the reference
+        # leaves every target exactly where it was; re-reading the feet instead would
+        # aim the next swing from wherever a mid-stance leg happens to be, and the
+        # gait would limp once per rebase.
+        self.origin_x = float(self.body.data.qpos[0])
+        for leg in LEGS:
+            self.rest[leg][0] += travel
+        # Anchors are world points, not offsets from the reference, so they survive the
+        # move untouched: the stance branch aims at anchors[leg][0] directly and never
+        # consults rest. Dropping them here would re-plant a standing foot mid-step,
+        # which is what the gait test caught.
+        return travel
+
     def advance(self, dt_s, *, stride_scale=1.0):
-        self.phase = (self.phase + dt_s / self.period_s) % 1.0
+        """Advance the step cycle; a stride scale shortens the cycle, not just the step.
+
+        Scaling only the stroke length leaves the animal stepping at the same rate and
+        the escape does not speed it up: measured in .work/twin/ep3.log, an episode
+        that triggered the escape covered 0.558 mm in 120 ms against 0.541 mm without
+        one, a difference of three per cent. A fly that escapes takes faster steps, so
+        the scale multiplies the phase rate as well as the stroke.
+        """
+        self.phase = (self.phase + dt_s * float(stride_scale) / self.period_s) % 1.0
         return self.phase
 
     def foot_target(self, leg, phase=None, *, stride_scale=1.0):

@@ -24,7 +24,17 @@ from .footgait import Escape, FootGait, blend
 # stiff enough to swallow most of a muscle's excursion.  At 0.4 the body still
 # stands within 0.05 mm of its pose while a single muscle moves its joint 1.8
 # times further; the trade is measured in .work/twin/dbg5.py.
-COMPLIANCE = 0.4
+COMPLIANCE = 1.0
+# The walking configuration, measured rather than chosen: at these values the twin
+# covers 32.1 mm in 3 s (10.7 mm/s, the low end of a real fly's 10-30 mm/s) while the
+# root height stays inside 0.05 cm, and it does so on every seed tried. Every
+# neighbouring point fails: height_gain 6.0 climbs 9.6 cm in 3 s, kp 200 with
+# compliance 0.4 covers 1.7 mm in the same time, kp 40 walks backwards
+# (.work/twin/walkgrid.py, .work/twin/confirm1.py).
+WALK_KP = 60.0
+WALK_KD = 4.0
+WALK_HEIGHT_GAIN = 0.0
+WALK_COMPLIANCE = 1.0
 # IK costs six solves of forty iterations, so it is asked every few milliseconds
 # and the posture loop interpolates the joint targets in between.
 IK_PERIOD_MS = 5
@@ -33,10 +43,15 @@ IK_PERIOD_MS = 5
 class BehaviourLoop:
     """A walking fly whose muscles also listen to the connectome."""
 
-    def __init__(self, body, *, kp=200.0, kd=6.0, height_gain=6.0,
-                 compliance=COMPLIANCE, period_s=0.18, stroke_cm=0.22,
+    def __init__(self, body, *, kp=WALK_KP, kd=WALK_KD, height_gain=WALK_HEIGHT_GAIN,
+                 compliance=WALK_COMPLIANCE, period_s=0.18, stroke_cm=0.22,
                  lift_cm=0.02, sway_cm=0.004, escape_threshold=1):
         self.body = body
+        # The claws need a tangential contact model before anything can push: with
+        # the source model's condim 1 the twin walks backwards at 0.56 mm/s, with
+        # condim 3 and friction 4.0 it walks forwards at 10.7 mm/s (.work/twin/confirm1.py).
+        if hasattr(body, "set_claw_grip"):
+            body.set_claw_grip()
         self.apply_compliance(compliance)
         self.posture = Posture(body, kp=kp, kd=kd, height_gain=height_gain)
         self.gait = FootGait(body, period_s=period_s, stroke_cm=stroke_cm,
@@ -63,10 +78,24 @@ class BehaviourLoop:
                 if any(name.endswith(suffix) for suffix in bounds) or name.startswith("abdomen")]
 
     def apply_compliance(self, scale):
-        """Scale the passive joint springs, which decides how far a muscle can move."""
-        for name in self._joints():
+        """Scale the passive joint springs, which decides how far a muscle can move.
+
+        The scale is applied to the stiffness the model shipped with, not to whatever
+        the previous call left behind: two loops built on one body used to compound
+        the factor (1.0 then 0.4 then 0.16), which silently made every later
+        measurement depend on how many loops had been built before it. Measured in
+        .work/twin/stand2.py: compliance 0.4 and 1.0 produced identical trajectories.
+        """
+        # The baseline lives on the body, not on the loop: several loops are built
+        # over one body during a sweep, and a per-loop baseline would still read the
+        # previous loop's scaled value.
+        if not hasattr(self.body, "_stiffness0"):
+            self.body._stiffness0 = {
+                name: float(self.body.model.jnt_stiffness[self.body.joint_index[name]])
+                for name in self._joints()}
+        for name, base in self.body._stiffness0.items():
             index = self.body.joint_index[name]
-            self.body.model.jnt_stiffness[index] *= float(scale)
+            self.body.model.jnt_stiffness[index] = base * float(scale)
         return float(scale)
 
     def trigger_escape(self, *, side=0.0, delay_s=None, stride_scale=2.0):
@@ -120,6 +149,11 @@ class BehaviourLoop:
         """One control period: gait, escape, posture, then connectome recruitment."""
         self.time_ms += dt_s * 1000.0
         self.escape.advance(dt_s)
+        # A walk longer than one stroke would otherwise run the legs out of reach: the
+        # foot targets are expressed in a frame that travels with the body, and that
+        # frame has to be moved forward periodically. Measured without it in
+        # .work/twin/valbody.py: 0.006 cm to 4.87 cm, the fly climbing its own legs.
+        self.gait.rebase()
         self.gait.advance(dt_s, stride_scale=self.escape.stride_scale())
         if self.time_ms >= self.next_ik_ms:
             self.posture.set_targets(blend(self.gait.joint_targets(),

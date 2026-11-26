@@ -32,6 +32,9 @@ ABDOMINAL_INVENTORY_PATH = os.path.join(ASSET_DIR, "abdominal-motors.json")
 # -0.1345 cm sat 0.3-1.2 mm below them, so six claws touched nothing and the rostrum
 # and thorax carried the whole weight.
 FLOOR_Z = -0.1235
+# Claw contact model: condim 3 carries tangential friction, condim 1 does not.
+CLAW_CONDIM = 3
+CLAW_FRICTION = (4.0, 0.005, 0.0001)
 
 
 class TwinBody:
@@ -129,6 +132,29 @@ class TwinBody:
             raise ValueError("The twin model has no floor plane")
         self.model.geom_pos[index][2] = float(self.floor_z)
         return float(self.floor_z)
+
+    def set_claw_grip(self, *, condim=CLAW_CONDIM, friction=CLAW_FRICTION):
+        """Give the claws a contact model that can transmit a horizontal push.
+
+        The source model gives the claws condim 1: a contact that resists being
+        pressed into the floor and nothing else. A foot with no tangential friction
+        cannot hold a stance, so every step slides and the body never travels: measured
+        in .work/twin/fric1.py, condim 1 walked -0.044 mm in 2 s while condim 3 with
+        friction 4.0 walked +0.081 mm, and in .work/twin/confirm1.py the same
+        difference is 0.56 mm/s against 10.69 mm/s. The values are a measured choice,
+        not a material constant of fly cuticle.
+        """
+        mujoco = self.mujoco
+        count = 0
+        for geom in range(self.model.ngeom):
+            name = mujoco.mj_id2name(self.model, mujoco.mjtObj.mjOBJ_BODY,
+                                     int(self.model.geom_bodyid[geom])) or ""
+            if not name.startswith("claw"):
+                continue
+            self.model.geom_condim[geom] = int(condim)
+            self.model.geom_friction[geom] = list(friction)
+            count += 1
+        return count
 
     def reset(self, *, height_cm=None):
         """Put the body in its standing pose with the root on the floor."""
@@ -235,7 +261,10 @@ class TwinBody:
             "actuators": int(self.model.nu),
             "muscles": len(self.muscles.order),
             "muscles_with_neurons": sum(1 for name in self.muscles.order if self.mapping.get(name)),
-            "neurons_mapped": sum(len(ids) for ids in self.mapping.values()),
+            # Unique neurons, not the sum over muscles: one motor neuron usually drives
+            # the flexor of a joint and the extensor of its neighbour, so summing counts
+            # it several times (630 against 423 real cells, measured in .work/twin/val1.py).
+            "neurons_mapped": len({int(n) for ids in self.mapping.values() for n in ids}),
             "neurons_unmapped": len(self.unmapped),
             "timestep_s": float(self.model.opt.timestep),
             "mass_gram": float(self.model.body_mass.sum()),

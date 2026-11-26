@@ -71,7 +71,7 @@ def _curl(body, joints):
 def run_episode(graph, *, source_cells, current_na, site_um, seed=1,
                 duration_ms=DEFAULT_DURATION_MS, onset_ms=DEFAULT_ONSET_MS,
                 body=None, loop=None, reason="", electrode=None,
-                allow_silent=False):
+                allow_silent=False, escape_threshold=None):
     """Run one stimulus through the connectome and the body and return the record.
 
     The source_cells argument names the cells the stimulus drives. Which cells a
@@ -113,7 +113,12 @@ def run_episode(graph, *, source_cells, current_na, site_um, seed=1,
     owner = body is None
     if body is None:
         body = TwinBody()
-    control = loop if loop is not None else BehaviourLoop(body)
+    if loop is not None:
+        control = loop
+    elif escape_threshold is None:
+        control = BehaviourLoop(body)
+    else:
+        control = BehaviourLoop(body, escape_threshold=int(escape_threshold))
     # A reused body carries the previous episode in it -- a displaced root, a curled
     # abdomen, an escape already triggered.  Measured in the first corpus run: seed 3
     # at -2400 nA moved 13.9 mm while seed 1 at the same current moved 1.5 mm, which
@@ -135,9 +140,14 @@ def run_episode(graph, *, source_cells, current_na, site_um, seed=1,
     end = body.state()["position_cm"]
     curl1 = _curl(body, joints)
 
+    # The raster is stored as body ids. run_forced_network reports positions in the
+    # graph, so a record that stored them unchanged would name cells that do not exist
+    # in any other view of the connectome; the record module says so and this is the one
+    # place the conversion happens.
+    neuron_ids = np.asarray([int(ids[int(p)]) for p in np.asarray(spikes).tolist()], dtype=np.int64)
     record = Episode(seed=seed, site_um=site_um, current_na=current_na,
                      source_cells=cells, duration_ms=duration_ms, reason=reason)
-    record.record_network(spikes=spikes, spike_neurons=spikes, spike_times_ms=times,
+    record.record_network(spikes=spikes, spike_neurons=neuron_ids, spike_times_ms=times,
                           activity=activity, cell_ids=ids)
     record.record_body(start=start, end=end, curl_start=curl0, curl_end=curl1,
                        escape_latency_ms=control.escape_latency_ms,

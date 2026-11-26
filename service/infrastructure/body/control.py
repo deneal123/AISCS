@@ -67,8 +67,13 @@ class Posture:
     def commands(self):
         """Recruitment for every muscle for the current state."""
         out = {name: 0.0 for name in self.body.muscles.order}
-        # Positive height error means the body has sunk, so every leg extends.
-        extension = max(0.0, min(HEIGHT_LIMIT, self.height_gain * self.height_error()))
+        # The height loop must work in BOTH directions.  An earlier version only
+        # extended the legs when the body had sunk (max(0, ...)), so a body that rose
+        # was never brought back: measured in .work/twin/valbody.py, a walking fly
+        # climbed from 0.006 cm to 4.87 cm in three seconds.  A negative drive flexes
+        # the legs and is what keeps the animal on the ground.
+        extension = max(-HEIGHT_LIMIT, min(HEIGHT_LIMIT,
+                                          self.height_gain * self.height_error()))
         for joint in self.joints:
             pair = self.body.muscles.by_joint(joint)
             if len(pair) != 2:
