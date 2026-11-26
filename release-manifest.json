@@ -17,7 +17,7 @@
     "generator": {
       "version": "0.1.21",
       "branch": "generator",
-      "commit": "c4c4db492a8c83efd67ed23f4ba468f5370dd463"
+      "commit": "f5c156f13beb41cd428b9f48ca975fda38ed4da4"
     },
     "research": {
       "version": "1.6.2",
@@ -73,11 +73,29 @@
       },
       "stimulus_field": {
         "recruitment": "analytic_bipolar_field",
-        "threshold_mv": 7.0,
-        "soma_cap_um": 120.0,
-        "calibration_point_um": [470, 390, 950],
-        "measured_curve": [0, 6, 22, 92, 368, 881],
-        "model_curve": [0, 6, 22, 92, 368, 881],
+        "threshold_mv": 7,
+        "soma_cap_um": 120,
+        "calibration_point_um": [
+          470,
+          390,
+          950
+        ],
+        "measured_curve": [
+          0,
+          6,
+          22,
+          92,
+          368,
+          881
+        ],
+        "model_curve": [
+          0,
+          6,
+          22,
+          92,
+          368,
+          881
+        ],
         "measured_from": "hypothesis H95, 1200 to 3600 nA"
       },
       "corpus": {
@@ -91,15 +109,45 @@
         "path": ".work/connectome-routing-20261028/pain-corpus/"
       },
       "escape_threshold_by_site": {
-        "abdomen_behavioural_z950": {"afferent": 881, "current_na": -3600, "latency_ms": 11},
-        "abdomen_posterior_z1000": {"afferent": 523, "current_na": -2400, "latency_ms": 11},
-        "abdomen_anterior_z850": {"escape": "never", "max_afferent": 157},
-        "abdomen_front_z700": {"escape": "never", "max_afferent": 1},
-        "thorax_z860": {"escape": "never", "max_afferent": 164},
-        "brain": {"escape": "never", "max_afferent": 0}
+        "abdomen_behavioural_z950": {
+          "afferent": 881,
+          "current_na": -3600,
+          "latency_ms": 11
+        },
+        "abdomen_posterior_z1000": {
+          "afferent": 523,
+          "current_na": -2400,
+          "latency_ms": 11
+        },
+        "abdomen_anterior_z850": {
+          "escape": "never",
+          "max_afferent": 157
+        },
+        "abdomen_front_z700": {
+          "escape": "never",
+          "max_afferent": 1
+        },
+        "thorax_z860": {
+          "escape": "never",
+          "max_afferent": 164
+        },
+        "brain": {
+          "escape": "never",
+          "max_afferent": 0
+        }
       },
-      "mass_matched_pairs": {"pairs": 30, "same_outcome": 28, "different": 2},
-      "tests": {"test_body_muscles": "7/7", "test_body_bridge": "7/7", "test_body_gait": "5/5", "test_body_episode": "7/7", "test_body_recruitment": "7/7"},
+      "mass_matched_pairs": {
+        "pairs": 30,
+        "same_outcome": 28,
+        "different": 2
+      },
+      "tests": {
+        "test_body_muscles": "7/7",
+        "test_body_bridge": "7/7",
+        "test_body_gait": "5/5",
+        "test_body_episode": "7/7",
+        "test_body_recruitment": "7/7"
+      },
       "limit": "the corpus uses a 120 ms window and 3 seeds; the gait displaces the body 0.31 to 1.56 mm in every episode including the zero dose, so displacement is not a label; no wings, no flight, no muscle antagonist pairs, 9 muscles have no motor neuron"
     },
     "backend_focused_pytest": {
@@ -696,6 +744,95 @@
       "commits": [
         "5e8bd7d9"
       ]
+    },
+    "twin_calibration_and_validation": {
+      "summary": "Stimulus field reproduces three measured datasets exactly; the twin stands, walks and reacts under its shipped controller.",
+      "stimulus_field": {
+        "dose_curve_points": 9,
+        "dose_curve_max_error_cells": 0,
+        "dose_curve_total_cells": 885,
+        "site_map_points": 18,
+        "site_map_max_error_cells": 0,
+        "site_by_dose_points": 28,
+        "site_by_dose_max_error_cells": 0,
+        "thresholds_mv": {
+          "dose_curve": 7,
+          "site_map": 30
+        },
+        "note": "The two measured datasets were taken at different thresholds; reading both at 7 mV left a 637-cell disagreement. The 120 um soma cap introduced to hide that is removed."
+      },
+      "standing": {
+        "seconds": 2,
+        "z_start_cm": 0.0077,
+        "z_end_cm": 0.009,
+        "z_span_cm": 0.0013,
+        "drift_mm": 0.008
+      },
+      "walking": {
+        "seconds": 3,
+        "seeds": 5,
+        "mm_per_s": 10.794,
+        "spread_mm_per_s": 0,
+        "z_span_cm": 0.0483,
+        "note": "Real Drosophila walk 10-30 mm/s, so the twin sits at the low end of the range."
+      },
+      "muscles": {
+        "pairs_checked": 42,
+        "pairs_opposed": 42,
+        "missing_actuators": 0,
+        "muscles": 112,
+        "muscles_with_neurons": 55,
+        "neurons_mapped": 423,
+        "neurons_unmapped": 203
+      },
+      "episode": {
+        "site_um": [
+          470,
+          390,
+          950
+        ],
+        "return_um": [
+          470,
+          390,
+          500
+        ],
+        "window_ms": 120,
+        "points": [
+          {
+            "current_na": -1200,
+            "afferents": 22,
+            "spikes": 22,
+            "escape_latency_ms": null,
+            "curl_rad": -0.0162,
+            "moved_mm": 0.5412
+          },
+          {
+            "current_na": -3600,
+            "afferents": 885,
+            "spikes": 1250,
+            "escape_latency_ms": 12,
+            "curl_rad": -0.1834,
+            "moved_mm": 0.7029
+          },
+          {
+            "current_na": -9600,
+            "afferents": 1144,
+            "spikes": 1652,
+            "escape_latency_ms": 9,
+            "curl_rad": -0.16167,
+            "moved_mm": 1.062
+          }
+        ],
+        "escape_versus_walk_curl_ratio": 12.5
+      },
+      "tests": {
+        "test_body_gait": "5/5",
+        "test_body_bridge": "7/7",
+        "test_body_muscles": "7/7",
+        "test_body_episode": "7/7",
+        "test_body_recruitment": "9/9"
+      },
+      "report": "docs/Материалы/План_генератора_2026-10/37-twin-validation-2026-11-26.md"
     }
   }
 }
