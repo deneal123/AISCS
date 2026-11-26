@@ -71,6 +71,7 @@ class BehaviourLoop:
         self.escape_threshold = int(escape_threshold)
         self.escape_latency_ms = None
         self.motor_spikes = 0
+        self.mapped_first_tick_ms = None
 
     def _joints(self):
         bounds = ("T1_left", "T1_right", "T2_left", "T2_right", "T3_left", "T3_right")
@@ -141,6 +142,7 @@ class BehaviourLoop:
         self.next_ik_ms = 0.0
         self.escape_latency_ms = None
         self.motor_spikes = 0
+        self.mapped_first_tick_ms = None
         self.posture.capture_pose()
         self.gait.capture()
         return self.body.state()
@@ -165,8 +167,18 @@ class BehaviourLoop:
             for name, value in self.drive.commands().items():
                 if value:
                     commands[name] = min(1.0, commands[name] + value)
-            self.motor_spikes += sum(int(v) for v in spikes.values())
-            mapped = sum(1 for neuron in spikes if int(neuron) in self._mapped)
+            # "motor_spikes" used to add up EVERY spike in the raster, including the
+            # sensory and interneuronal ones no muscle listens to, and the receipt then
+            # read as if 1250 motor neurons had fired. Measured in .work/twin/hyp3.py:
+            # of 1250 spikes at -3600 nA only 11 land on a mapped neuron, and at -4800
+            # 18 of 1612. The count below is the one the body can actually feel.
+            mapped = 0
+            for neuron, count in spikes.items():
+                if int(neuron) in self._mapped:
+                    mapped += int(count)
+            self.motor_spikes += mapped
+            self.mapped_first_tick_ms = (self.time_ms if self.mapped_first_tick_ms is None
+                                         and mapped else self.mapped_first_tick_ms)
             if (mapped >= self.escape_threshold and self.escape_latency_ms is None
                     and not self.escape.active):
                 self.trigger_escape()

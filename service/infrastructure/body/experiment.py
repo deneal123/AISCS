@@ -71,7 +71,7 @@ def _curl(body, joints):
 def run_episode(graph, *, source_cells, current_na, site_um, seed=1,
                 duration_ms=DEFAULT_DURATION_MS, onset_ms=DEFAULT_ONSET_MS,
                 body=None, loop=None, reason="", electrode=None,
-                allow_silent=False, escape_threshold=None):
+                allow_silent=False, escape_threshold=None, onsets_ms=None):
     """Run one stimulus through the connectome and the body and return the record.
 
     The source_cells argument names the cells the stimulus drives. Which cells a
@@ -101,10 +101,16 @@ def run_episode(graph, *, source_cells, current_na, site_um, seed=1,
     else:
         from ..connectome.forced_network import run_forced_network
 
+        # A stimulus may be a train, not a single pulse. The connectome takes a list
+        # of times per cell, so repetition is expressed here rather than by running
+        # the network several times: the later pulses then land on a network that the
+        # earlier ones have already changed, which is the whole point of asking
+        # whether a sub-threshold dose sums.
+        times_ms = [int(v) for v in onsets_ms] if onsets_ms else [int(onset_ms)]
         result = run_forced_network(graph, seed=int(seed),
                                     duration_ms=int(duration_ms),
                                     forced_cell_ids=cells,
-                                    events={cell: [int(onset_ms)] for cell in cells})
+                                    events={cell: list(times_ms) for cell in cells})
         raster = _raster(result, ids)
         activity = _activity(raster, duration_ms)
         spikes = result["spike_neurons"]

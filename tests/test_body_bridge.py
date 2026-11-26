@@ -121,3 +121,24 @@ def test_a_spike_outside_the_motor_map_does_not_start_the_escape():
     unmapped = max(loop._mapped) + 1000
     loop.advance(0.001, {int(unmapped): 5})
     assert loop.escape_latency_ms is None
+
+def test_only_spikes_that_reach_a_muscle_are_counted_as_motor_spikes():
+    """The receipt used to add every spike, so a sensory burst looked like a motor one."""
+    try:
+        from service.infrastructure.body.twin import TwinBody
+        import mujoco  # noqa: F401
+    except ImportError:  # pragma: no cover - the twin needs the physics engine
+        pytest.skip("mujoco is not installed")
+    from service.infrastructure.body.loop import BehaviourLoop
+    body = TwinBody()
+    loop = BehaviourLoop(body, compliance=1.0)
+    loop.settle(steps=50)
+    unmapped = max(loop._mapped) + 1000
+    # 400 spikes that no muscle listens to: the connectome would report 400 motor
+    # spikes and zero recruitment, which is the defect this test pins.
+    loop.advance(0.001, {int(unmapped): 400})
+    assert loop.motor_spikes == 0
+    mapped = next(iter(loop._mapped))
+    loop.advance(0.001, {int(mapped): 3})
+    assert loop.motor_spikes == 3
+    assert loop.mapped_first_tick_ms is not None
