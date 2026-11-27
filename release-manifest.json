@@ -1,5 +1,5 @@
 {
-  "version": "0.1.24",
+  "version": "0.1.25",
   "date": "2026-11-27",
   "application": "AISCS",
   "branch": "dev",
@@ -15,9 +15,9 @@
       "commit": "eeb19ba"
     },
     "generator": {
-      "version": "0.1.24",
+      "version": "0.1.25",
       "branch": "generator",
-      "commit": "55b6a21"
+      "commit": "d5f6d24"
     },
     "research": {
       "version": "1.6.2",
@@ -77,6 +77,56 @@
         "tests": 5,
         "limitation": "the turn is prescribed, not produced by the connectome; a slip limit on the claws instead of a hard clamp is what would make it physical",
         "report": "docs/Материалы/План_генератора_2026-10/31-final-report-2026-11-24.md section 10"
+      },
+      "behaviours": {
+        "programmes": [
+          "walk",
+          "back",
+          "turn_in_place",
+          "groom",
+          "freeze"
+        ],
+        "measured_600_ms": {
+          "walk": {
+            "forward_mm": 6.06,
+            "turn_deg": 0.0,
+            "height_cm": 0.0002,
+            "ik_error_cm": 0.037
+          },
+          "back": {
+            "forward_mm": -5.12,
+            "height_cm": -0.0151,
+            "ik_error_cm": 0.034
+          },
+          "turn_in_place": {
+            "distance_mm": 0.06,
+            "turn_deg": -59.9
+          },
+          "groom": {
+            "distance_mm": 0.01,
+            "front_claw_lift_cm": 0.0371
+          },
+          "freeze": {
+            "distance_mm": 0.04
+          }
+        },
+        "groom_lift_cm": 0.05,
+        "corrections_from_measurement": [
+          "reversing the phase instead of the stroke walks backwards but turns the animal -16.5 degrees in 600 ms, so the swing leg leads with the wrong pair",
+          "a pivot with a stride describes a 16.15 mm circle at -59.6 degrees; a pivot needs a zero stride",
+          "lifting a front leg in joint space does not lift the claw (nine femur and tibia poses moved it -0.0051 to 0.0000 cm); the lift is solved in foot space instead",
+          "a frightened animal must drop its programme: scaling a standing programme by the escape stride left it stationary (0.49 mm per escape) until the escape took the programme over (5.5 mm)"
+        ],
+        "dataset_columns": [
+          "behaviour"
+        ],
+        "tests": {
+          "test_body_behaviours": "10/10",
+          "test_body_behaviour_episode": "5/5",
+          "body_regression_nine_files": "74/74"
+        },
+        "limitation": "all five programmes are prescribed; the connectome decides only whether to escape and which way, not which programme to run",
+        "report": "docs/Материалы/План_генератора_2026-10/31-final-report-2026-11-24.md section 11"
       },
       "gait": {
         "speed_mm_s": 10.84,
