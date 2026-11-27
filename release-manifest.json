@@ -1,6 +1,6 @@
 {
-  "version": "0.1.23",
-  "date": "2026-11-26",
+  "version": "0.1.24",
+  "date": "2026-11-27",
   "application": "AISCS",
   "branch": "dev",
   "components": {
@@ -15,9 +15,9 @@
       "commit": "eeb19ba"
     },
     "generator": {
-      "version": "0.1.23",
+      "version": "0.1.24",
       "branch": "generator",
-      "commit": "ae0bfc9"
+      "commit": "55b6a21"
     },
     "research": {
       "version": "1.6.2",
@@ -64,6 +64,19 @@
         "muscles_reached": 55,
         "muscles_without_a_neuron": 9,
         "neurons_unmapped": 203
+      },
+      "turning": {
+        "mechanism": "prescribed rigid rotation of the body and the foot frame",
+        "why_prescribed": "every stance claw is clamped to a fixed world point, so a body moment is absorbed as slip instead of turning the animal; measured with the moment applied on every substep, 0.002 to 0.04 dyne cm left both sides at 3-4 degrees (what an unsteered escape does) and 0.08 tore the feet loose",
+        "turn_rate_rad_s": 1.75,
+        "walk_1500_ms": {"turn_deg": -0.5, "distance_cm": 1.762, "ik_error_cm": 0.04},
+        "escape_350_ms": {"no_steering_deg": 3.7, "away_from_right_deg": -22.4, "away_from_left_deg": 24.8, "height_cm": 0.0091},
+        "dataset_columns": ["heading_start_rad", "turn_deg"],
+        "detection_features": ["turn_deg", "abs_turn_deg"],
+        "not_in_default_features": "the detection numbers in report 31 were measured before the turn existed",
+        "tests": 5,
+        "limitation": "the turn is prescribed, not produced by the connectome; a slip limit on the claws instead of a hard clamp is what would make it physical",
+        "report": "docs/Материалы/План_генератора_2026-10/31-final-report-2026-11-24.md section 10"
       },
       "gait": {
         "speed_mm_s": 10.84,
