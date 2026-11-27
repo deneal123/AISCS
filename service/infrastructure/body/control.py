@@ -38,9 +38,16 @@ class Posture:
         self.kd = float(kd)
         self.tone = float(tone)
         self.height_gain = float(height_gain)
+        # The wings are not posture.  Their actuators carry thirty times the gear of a
+        # leg (see twin.WING_GEAR_SCALE), so a tone of 0.06 that merely holds a leg
+        # still would slam a wing through its whole range, and a posture loop fighting
+        # the flight programme is a body that twitches instead of flying.  Measured
+        # after the gear change: the gait test flung the body 160 mm in 3 s.
         self.joints = []
         for name in body.muscles.order:
             joint = body.muscles.muscles[name].joint
+            if joint.startswith(("wing_", "haltere_")):
+                continue
             if joint not in self.joints:
                 self.joints.append(joint)
         self.leg_joints = [j for j in self.joints if "abdomen" not in j]
@@ -94,4 +101,3 @@ class Posture:
     def step(self, dt_s=0.001):
         self.body.set_commands(self.commands())
         return self.body.step(dt_s)
-

@@ -1,0 +1,230 @@
+{
+ "version": 1,
+ "dataset_id": "malecns-v1",
+ "source": "MaleCNS neurons.feather, subset superclass=vnc_motor and subclass in {wm,hm}",
+ "license": "CC-BY-4.0 (FlyWire/MaleCNS release)",
+ "selection": "Every cell whose subclass is wm (wing muscle motor neuron) or hm (haltere muscle motor neuron). 26 cells: 24 wm, 2 hm.",
+ "laterality": "soma_side is the side of the cell body, not the side of the muscle. A muscle is driven by the mean recruitment of every neuron mapped to it, so laterality is not used.",
+ "not_a_muscle_model": "The connectome names a motor neuron, not the muscle it innervates. DLM is the wing elevator and DVM the depressor in Drosophila; the mapping to the pitch joint below follows that. Wing yaw and roll have no named muscle in the connectome at all, so their actuators are driven by the flight programme and are not mapped to any cell - labelled a modelling choice, not a measurement.",
+ "neurons": 26,
+ "counts_by_subclass": {
+  "wm": 24,
+  "hm": 2
+ },
+ "counts_by_nerve": {
+  "PDMNa": 14,
+  "ADMN": 6,
+  "MesoAN": 4,
+  "AbN1": 2
+ },
+ "cells": [
+  {
+   "id": "800056",
+   "type": "DVMn 1a-c",
+   "subclass": "wm",
+   "exit_nerve": "ADMN",
+   "neuromere": "T2",
+   "soma_side": "R"
+  },
+  {
+   "id": "800412",
+   "type": "DVMn 1a-c",
+   "subclass": "wm",
+   "exit_nerve": "ADMN",
+   "neuromere": "T2",
+   "soma_side": "L"
+  },
+  {
+   "id": "800718",
+   "type": "DLMn c-f",
+   "subclass": "wm",
+   "exit_nerve": "PDMNa",
+   "neuromere": "T1",
+   "soma_side": "L"
+  },
+  {
+   "id": "800890",
+   "type": "DLMn c-f",
+   "subclass": "wm",
+   "exit_nerve": "PDMNa",
+   "neuromere": "T1",
+   "soma_side": "L"
+  },
+  {
+   "id": "801295",
+   "type": "DLMn a, b",
+   "subclass": "wm",
+   "exit_nerve": "PDMNa",
+   "neuromere": "T2",
+   "soma_side": "R"
+  },
+  {
+   "id": "801816",
+   "type": "DVMn 1a-c",
+   "subclass": "wm",
+   "exit_nerve": "ADMN",
+   "neuromere": "T2",
+   "soma_side": "R"
+  },
+  {
+   "id": "801895",
+   "type": "DLMn c-f",
+   "subclass": "wm",
+   "exit_nerve": "PDMNa",
+   "neuromere": "T1",
+   "soma_side": "L"
+  },
+  {
+   "id": "801970",
+   "type": "DLMn a, b",
+   "subclass": "wm",
+   "exit_nerve": "PDMNa",
+   "neuromere": "T2",
+   "soma_side": "L"
+  },
+  {
+   "id": "801998",
+   "type": "DLMn c-f",
+   "subclass": "wm",
+   "exit_nerve": "PDMNa",
+   "neuromere": "T1",
+   "soma_side": "R"
+  },
+  {
+   "id": "802544",
+   "type": "DLMn c-f",
+   "subclass": "wm",
+   "exit_nerve": "PDMNa",
+   "neuromere": "T1",
+   "soma_side": "R"
+  },
+  {
+   "id": "803013",
+   "type": "DLMn c-f",
+   "subclass": "wm",
+   "exit_nerve": "PDMNa",
+   "neuromere": "T1",
+   "soma_side": "L"
+  },
+  {
+   "id": "803048",
+   "type": "DLMn c-f",
+   "subclass": "wm",
+   "exit_nerve": "PDMNa",
+   "neuromere": "T1",
+   "soma_side": "R"
+  },
+  {
+   "id": "803129",
+   "type": "DVMn 1a-c",
+   "subclass": "wm",
+   "exit_nerve": "ADMN",
+   "neuromere": "T2",
+   "soma_side": "R"
+  },
+  {
+   "id": "803215",
+   "type": "hDVM MN",
+   "subclass": "hm",
+   "exit_nerve": "AbN1",
+   "neuromere": "T3",
+   "soma_side": "L"
+  },
+  {
+   "id": "803599",
+   "type": "DVMn 2a, b",
+   "subclass": "wm",
+   "exit_nerve": "MesoAN",
+   "neuromere": "T2",
+   "soma_side": "R"
+  },
+  {
+   "id": "803982",
+   "type": "DVMn 2a, b",
+   "subclass": "wm",
+   "exit_nerve": "MesoAN",
+   "neuromere": "T2",
+   "soma_side": "L"
+  },
+  {
+   "id": "805165",
+   "type": "DVMn 3a, b",
+   "subclass": "wm",
+   "exit_nerve": "PDMNa",
+   "neuromere": "T1",
+   "soma_side": "L"
+  },
+  {
+   "id": "807799",
+   "type": "DVMn 2a, b",
+   "subclass": "wm",
+   "exit_nerve": "MesoAN",
+   "neuromere": "T2",
+   "soma_side": "L"
+  },
+  {
+   "id": "807924",
+   "type": "DVMn 2a, b",
+   "subclass": "wm",
+   "exit_nerve": "MesoAN",
+   "neuromere": "T2",
+   "soma_side": "R"
+  },
+  {
+   "id": "809085",
+   "type": "hDVM MN",
+   "subclass": "hm",
+   "exit_nerve": "AbN1",
+   "neuromere": "T3",
+   "soma_side": "R"
+  },
+  {
+   "id": "906612",
+   "type": "DVMn 3a, b",
+   "subclass": "wm",
+   "exit_nerve": "PDMNa",
+   "neuromere": "T1",
+   "soma_side": "L"
+  },
+  {
+   "id": "932321",
+   "type": "DVMn 3a, b",
+   "subclass": "wm",
+   "exit_nerve": "PDMNa",
+   "neuromere": "T1",
+   "soma_side": "R"
+  },
+  {
+   "id": "932322",
+   "type": "DVMn 1a-c",
+   "subclass": "wm",
+   "exit_nerve": "ADMN",
+   "neuromere": "T2",
+   "soma_side": "L"
+  },
+  {
+   "id": "932796",
+   "type": "DVMn 1a-c",
+   "subclass": "wm",
+   "exit_nerve": "ADMN",
+   "neuromere": "T2",
+   "soma_side": "L"
+  },
+  {
+   "id": "1050014552",
+   "type": "DLMn c-f",
+   "subclass": "wm",
+   "exit_nerve": "PDMNa",
+   "neuromere": "T1",
+   "soma_side": "R"
+  },
+  {
+   "id": "1050045395",
+   "type": "DVMn 3a, b",
+   "subclass": "wm",
+   "exit_nerve": "PDMNa",
+   "neuromere": "T1",
+   "soma_side": "R"
+  }
+ ]
+}

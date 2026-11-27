@@ -69,9 +69,46 @@ def label(record):
         "escape_latency_ms": signature["latency_ms"],
         "escaped": signature["escaped"],
         "displacement_mm": body.get("displacement_mm"),
+        # Signed heading change, degrees. Displacement says how far; this says which way,
+        # and an escape to the left and one to the right are otherwise identical rows.
+        "turn_deg": body.get("turn_deg"),
+        # The ECAP-compatible column. Kept next to the body row because the two are read
+        # together: a corpus that pairs a compound action with a behaviour is the one
+        # thing neither the ECAP literature nor the connectome literature has.
+        "compound_action": compound_action_labels(record),
         "label_scope": "the applied input and the measured body response, not a feeling",
     }
 
+
+def compound_action_labels(record):
+    """What the electrode saw in this episode, in the terms an ECAP corpus uses.
+
+    A real compound action potential corpus is a set of channels with an amplitude, a
+    latency and a recruitment count behind them. The twin can produce all three, and it
+    can produce the last one exactly -- which no real recording can, because the number
+    of fibres under a contact is what an ECAP is used to estimate and never reports.
+    That exact count is the label this channel exists for.
+
+    An episode without a channel returns zeros and says so, rather than a silent
+    zero amplitude that would read as a measured flat line.
+    """
+    block = record.get("compound_action") or {}
+    if not block:
+        return {"present": False, "ptp_uv": 0.0, "peak_at_ms": None,
+                "recruited_fibres": 0, "skipped_spikes": 0, "classes": {},
+                "calibrated": False}
+    return {
+        "present": True,
+        "ptp_uv": float(block.get("ptp_uv") or 0.0),
+        "peak_at_ms": block.get("peak_at_ms"),
+        # The label a real ECAP cannot carry: the exact number of recruited fibres, by
+        # class. It is a count of volleys the twin put on the electrode, not an estimate
+        # inverted from an amplitude.
+        "recruited_fibres": int(block.get("recruited_fibres") or 0),
+        "skipped_spikes": int(block.get("skipped_spikes") or 0),
+        "classes": dict(block.get("classes") or {}),
+        "calibrated": bool(block.get("calibrated", False)),
+    }
 
 def site_key(record):
     site = record.get("site_um") or [0.0, 0.0, 0.0]
@@ -126,6 +163,35 @@ def baseline_escape(records):
             "auc_by_recruited": roc_auc(recruited, outcome),
             "auc_by_spikes": roc_auc(spikes, outcome)}
 
+
+def compound_action_summary(records):
+    """The recruitment curve and the class mix of every channel in the corpus.
+
+    This is the column an ECAP corpus is built to learn: amplitude against recruited
+    fibres. Because the twin knows the count exactly, the curve here is a true
+    input-output function of the preparation, not a fit to an unknown dose. It is
+    written without a calibration claim, and the caller is told how many episodes had
+    no channel at all rather than having them counted as a zero.
+    """
+    rows = [compound_action_labels(record) for record in records]
+    present = [row for row in rows if row["present"]]
+    absent = len(rows) - len(present)
+    classes = Counter()
+    for row in present:
+        for name, count in row["classes"].items():
+            classes[name] += int(count)
+    curve = sorted((row["recruited_fibres"], row["ptp_uv"]) for row in present)
+    return {
+        "episodes": len(rows),
+        "channels": len(present),
+        "absent": absent,
+        "classes": dict(classes),
+        "recruited_range": ([curve[0][0], curve[-1][0]] if curve else None),
+        "ptp_range_uv": ([round(curve[0][1], 6), round(curve[-1][1], 6)] if curve else None),
+        "calibrated": False,
+        "note": ("the fibre count is exact; the microvolt scale is a declared model, "
+                 "not a measurement"),
+    }
 
 def summarize(records):
     counts = Counter()

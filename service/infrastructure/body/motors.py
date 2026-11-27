@@ -83,12 +83,45 @@ def muscles_of_abdominal_neuron(neuromere, soma_side):
     return pair
 
 
-def build_map(leg_path, abdominal_path):
-    """Read both motor inventories and return muscle name -> neuron ids."""
+# Wing motor neuron type -> (joint group, direction, which side of the body).
+# DLM, the dorsal longitudinal muscle, is the wing elevator, and DVM, the dorsal
+# ventral muscle, is the depressor; that is the one part of this map the Drosophila
+# literature settles.  Everything else about flight - yaw, roll, the stroke
+# amplitude - has no named muscle in the connectome, so the flight programme drives
+# those actuators directly and no cell is mapped onto them.
+WING_TYPES = {
+    "DLMn a, b": ("wing_pitch", "extensor"),
+    "DLMn c-f": ("wing_pitch", "extensor"),
+    "DVMn 1a-c": ("wing_pitch", "flexor"),
+    "DVMn 2a, b": ("wing_pitch", "flexor"),
+    "DVMn 3a, b": ("wing_pitch", "flexor"),
+    "hDVM MN": ("haltere", "flexor"),
+}
+
+
+def muscle_of_wing_neuron(neuron_type, side):
+    """Muscle name for a wing or haltere motor neuron, or None if it is unknown."""
+    entry = WING_TYPES.get(neuron_type)
+    if entry is None:
+        return None
+    joint, direction = entry
+    if joint == "haltere":
+        suffix = "left" if side == "L" else "right"
+        return "haltere_haltere_%s_%s" % (suffix, direction)
+    suffix = "left" if side == "L" else "right"
+    return "%s_%s_%s" % (joint, suffix, direction)
+
+
+def build_map(leg_path, abdominal_path, wing_path=None):
+    """Read the motor inventories and return muscle name -> neuron ids."""
     with open(leg_path, encoding="utf-8") as handle:
         leg_inventory = json.load(handle)
     with open(abdominal_path, encoding="utf-8") as handle:
         abdominal_inventory = json.load(handle)
+    wing_inventory = None
+    if wing_path:
+        with open(wing_path, encoding="utf-8") as handle:
+            wing_inventory = json.load(handle)
 
     mapping = {}
     unmapped = []
@@ -105,6 +138,12 @@ def build_map(leg_path, abdominal_path):
             continue
         for muscle, _ in pairs:
             mapping.setdefault(muscle, []).append(int(cell["id"]))
+    for cell in (wing_inventory or {}).get("cells", []):
+        muscle = muscle_of_wing_neuron(cell.get("type"), cell.get("soma_side"))
+        if muscle is None:
+            unmapped.append(("wing", int(cell["id"]), cell.get("type")))
+            continue
+        mapping.setdefault(muscle, []).append(int(cell["id"]))
     return mapping, unmapped
 
 

@@ -18,6 +18,7 @@ from __future__ import annotations
 
 from .bridge import SpikeDrive
 from .control import Posture
+from .flight import FlightProgram
 from .footgait import Escape, FootGait, blend
 
 # The passive springs the model inherits are stiff enough to carry the body and
@@ -38,6 +39,14 @@ WALK_COMPLIANCE = 1.0
 # IK costs six solves of forty iterations, so it is asked every few milliseconds
 # and the posture loop interpolates the joint targets in between.
 IK_PERIOD_MS = 5
+# Wing motor neurons are DLM and DVM, the power muscles of the thorax.  A burst on
+# them above this count starts the beat; the count is the same threshold the escape
+# programme uses, because it is the same kind of evidence -- a few mapped cells firing
+# together -- and because at the measured spike gain three wing neurons reach it.
+FLIGHT_SPIKE_THRESHOLD = 3
+# The beat is advanced at the physics grid so that a 200 Hz stroke is not aliased by
+# the 1 ms control period: five samples per cycle would make a sawtooth of a sinusoid.
+BEAT_SUBSTEP_S = 0.0002
 
 
 class BehaviourLoop:
@@ -72,6 +81,55 @@ class BehaviourLoop:
         self.escape_latency_ms = None
         self.motor_spikes = 0
         self.mapped_first_tick_ms = None
+        # Flight.  The programme is built here but stays still until a wing motor
+        # neuron burst or the caller asks for it; a fly on the ground does not beat.
+        self.flight = FlightProgram().still()
+        self.wing_neurons = self._wing_neurons()
+        self.wing_spikes = 0
+        self.flight_latency_ms = None
+        self.flight_ticks = 0
+        self.beat_phase = 0.0
+
+    def _wing_neurons(self):
+        """The mapped cells that drive a wing or haltere muscle, as a set of ids."""
+        out = set()
+        for name, ids in self.body.mapping.items():
+            if name.startswith(("wing_", "haltere_")):
+                out.update(int(n) for n in ids)
+        return out
+
+    def start_flight(self, recruitment=1.0):
+        """Begin beating at a given recruitment, in [0, 1]."""
+        self.flight.commanded_by(recruitment)
+        self.flight_ticks += 1
+        return self.flight.force()
+
+    def stop_flight(self):
+        self.flight.still()
+        return self.body.set_beat({})
+
+    def _advance_beat(self, dt_s):
+        """Drive the wings through one control period, at the physics grid.
+
+        Returning the mean force of the beat rather than the instantaneous one is a
+        deliberate simplification and it is stated rather than hidden: the animal's
+        thorax damps the stroke and the body responds to the average over a wingbeat,
+        which at 200 Hz is five control periods.  A per-substep force would add a
+        200 Hz vibration to a 1 cm/s walk and change nothing about where the animal
+        goes.
+        """
+        if not self.flight.amplitude_rad:
+            self.body.set_beat({})
+            self.body.apply_aerodynamic_force(0.0, 0.0)
+            return 0.0
+        steps = max(1, int(round(dt_s / BEAT_SUBSTEP_S)))
+        step_s = dt_s / steps
+        for _ in range(steps):
+            self.flight.advance(step_s)
+            self.body.set_beat(self.flight.angles())
+        force = self.flight.force()
+        self.body.apply_aerodynamic_force(force["lift"], 0.0)
+        return force["lift"]
 
     def _joints(self):
         bounds = ("T1_left", "T1_right", "T2_left", "T2_right", "T3_left", "T3_right")
@@ -143,6 +201,13 @@ class BehaviourLoop:
         self.escape_latency_ms = None
         self.motor_spikes = 0
         self.mapped_first_tick_ms = None
+        self.flight = FlightProgram().still()
+        self.wing_spikes = 0
+        self.flight_latency_ms = None
+        self.flight_ticks = 0
+        self.beat_phase = 0.0
+        self.body.set_beat({})
+        self.body.apply_aerodynamic_force(0.0, 0.0)
         self.posture.capture_pose()
         self.gait.capture()
         return self.body.state()
@@ -156,10 +221,16 @@ class BehaviourLoop:
         # frame has to be moved forward periodically. Measured without it in
         # .work/twin/valbody.py: 0.006 cm to 4.87 cm, the fly climbing its own legs.
         self.gait.rebase()
-        self.gait.advance(dt_s, stride_scale=self.escape.stride_scale())
+        # A fly that is hurt does not only flee faster, it flees away from the side
+        # that hurt: the escape carries the steering, the gait only executes it, and
+        # the steering is applied in the same control period as the stride so that
+        # the claws pivot the body on every step of the escape rather than one late.
+        turn = self.escape.turn()
+        self.gait.advance(dt_s, stride_scale=self.escape.stride_scale(), turn=turn)
         if self.time_ms >= self.next_ik_ms:
-            self.posture.set_targets(blend(self.gait.joint_targets(),
-                                          self.escape.joint_targets(self.joints)))
+            self.posture.set_targets(blend(
+                self.gait.joint_targets(stride_scale=self.escape.stride_scale(), turn=turn),
+                self.escape.joint_targets(self.joints)))
             self.next_ik_ms = self.time_ms + IK_PERIOD_MS
         commands = self.posture.commands()
         if spikes:
@@ -179,6 +250,17 @@ class BehaviourLoop:
             self.motor_spikes += mapped
             self.mapped_first_tick_ms = (self.time_ms if self.mapped_first_tick_ms is None
                                          and mapped else self.mapped_first_tick_ms)
+            wing = 0
+            for neuron, count in spikes.items():
+                if int(neuron) in self.wing_neurons:
+                    wing += int(count)
+            self.wing_spikes += wing
+            if (wing >= FLIGHT_SPIKE_THRESHOLD and self.flight_latency_ms is None):
+                # A burst on the power muscles IS the take-off command; the programme
+                # then runs at the recruitment the burst bought, which is what makes a
+                # weak burst a weak beat rather than a binary switch.
+                self.start_flight(min(1.0, wing / float(2 * FLIGHT_SPIKE_THRESHOLD)))
+                self.flight_latency_ms = self.time_ms
             if (mapped >= self.escape_threshold and self.escape_latency_ms is None
                     and not self.escape.active):
                 self.trigger_escape()
@@ -186,6 +268,7 @@ class BehaviourLoop:
         else:
             self.drive.advance(dt_s)
         self.body.set_commands(commands)
+        self._advance_beat(dt_s)
         return self.body.step(dt_s)
 
     def run(self, duration_s, *, spikes_at=None, dt_s=0.001, on_step=None):

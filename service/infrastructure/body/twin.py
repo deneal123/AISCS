@@ -25,6 +25,7 @@ MUSCLES_PATH = os.path.join(ASSET_DIR, "flybody-muscles.json")
 # wants a body that moves must not have to find the frontend assets first.
 LEG_INVENTORY_PATH = os.path.join(ASSET_DIR, "motor.json")
 ABDOMINAL_INVENTORY_PATH = os.path.join(ASSET_DIR, "abdominal-motors.json")
+WING_INVENTORY_PATH = os.path.join(ASSET_DIR, "wing-motors.json")
 # Fallback floor height, used only when the model cannot report where its own claws
 # are.  A plane at the wrong height is not a cosmetic detail: the animal falls until
 # something else carries it, and .work/twin/clawtest.py caught the twin doing exactly
@@ -35,6 +36,19 @@ FLOOR_Z = -0.1235
 # Claw contact model: condim 3 carries tangential friction, condim 1 does not.
 CLAW_CONDIM = 3
 CLAW_FRICTION = (4.0, 0.005, 0.0001)
+# The source model drives every joint through the same servo, and for a leg that is
+# right: a leg moves slowly and holds a pose.  A wing is not a leg.  Measured in
+# .work/twin/wgear.py at 200 Hz, the shipped gear reaches 27 degrees of stroke on the
+# yaw hinge, and a Drosophila stroke is 140 degrees peak to peak; at 30 times the gear
+# the same command reaches 83 degrees on yaw and 189 on pitch.  The factor is applied
+# to the wing and haltere actuators only, and only because the flight programme drives
+# them as a resonator rather than as a posture.
+WING_GEAR_SCALE = 30.0
+WING_ACTUATOR_PREFIXES = ("wing_", "haltere_")
+# How much stroke one unit of actuator command produces on the yaw hinge at 200 Hz,
+# radian peak to peak, measured in the same probe.  The flight programme needs the
+# inverse to ask for a stroke in radians.
+WING_STROKE_PER_UNIT_RAD = 1.441
 
 
 class TwinBody:
@@ -48,7 +62,8 @@ class TwinBody:
 
     def __init__(self, *, model_path=MODEL_PATH, muscles_path=MUSCLES_PATH,
                  leg_inventory=LEG_INVENTORY_PATH,
-                 abdominal_inventory=ABDOMINAL_INVENTORY_PATH, floor_z=None):
+                 abdominal_inventory=ABDOMINAL_INVENTORY_PATH,
+                 wing_inventory=WING_INVENTORY_PATH, floor_z=None):
         try:
             import mujoco
         except ImportError as error:  # pragma: no cover - environment guard
@@ -57,12 +72,25 @@ class TwinBody:
         self.model = mujoco.MjModel.from_xml_path(model_path)
         self.data = mujoco.MjData(self.model)
         self.muscles = MuscleSet.load(muscles_path)
-        self.mapping, self.unmapped = build_map(leg_inventory, abdominal_inventory)
+        self.mapping, self.unmapped = build_map(leg_inventory, abdominal_inventory,
+                                                     wing_inventory)
         self.actuator_index = {}
         for index in range(self.model.nu):
             name = mujoco.mj_id2name(self.model, mujoco.mjtObj.mjOBJ_ACTUATOR, index)
             if name:
                 self.actuator_index[name] = index
+        self.wing_actuators = {}
+        for name, index in self.actuator_index.items():
+            if name.startswith(WING_ACTUATOR_PREFIXES):
+                self.model.actuator_gear[index][0] *= WING_GEAR_SCALE
+                self.wing_actuators[name] = index
+        # Aerodynamic force and the wingbeat both bypass the muscle loop, so they are
+        # held here and applied inside step() rather than through set_commands().
+        self.beat = {}
+        self.external_force = None
+        self.steering_torque = 0.0
+        self._was_applying = False
+        self.thorax_body = int(mujoco.mj_name2id(self.model, mujoco.mjtObj.mjOBJ_BODY, "thorax"))
         self.joint_index = {}
         self.dof_index = {}
         self.qpos_index = {}
@@ -159,6 +187,9 @@ class TwinBody:
     def reset(self, *, height_cm=None):
         """Put the body in its standing pose with the root on the floor."""
         self.mujoco.mj_resetData(self.model, self.data)
+        self.beat = {}
+        self.external_force = None
+        self.steering_torque = 0.0
         for name in self.muscles.order:
             self.muscles.muscles[name].activation = 0.
         self.commands = {name: 0. for name in self.muscles.order}
@@ -201,6 +232,66 @@ class TwinBody:
             speeds[muscle.joint] = -muscle.arm_cm * math.cos(angle) * rate
         return lengths, speeds
 
+    # -- flight ------------------------------------------------------------
+
+    def set_beat(self, values):
+        """Set wing and haltere actuator commands directly, bypassing the muscle loop.
+
+        The beat is a resonator, not a posture: at 200 Hz a muscle that took 5 ms to
+        activate would lag the stroke by a whole period, so the thorax is driven as
+        the oscillator it is and the connectome only sets the gain (see flight.py).
+        """
+        self.beat = {name: float(value) for name, value in values.items()}
+
+    def apply_aerodynamic_force(self, lift_dyne, forward_dyne=0.0):
+        """Push the thorax with the force the wings make, dyne, in the body frame.
+
+        MuJoCo has no air, so the force is added here.  Only the mean is applied: the
+        fore and aft halves of a stroke carry equal and opposite drag and cancel, so a
+        symmetric beat loads the body with lift and nothing else.
+        """
+        if self.thorax_body < 0:
+            return None
+        self.external_force = (float(lift_dyne), float(forward_dyne))
+        return self.external_force
+
+    def apply_steering_torque(self, dyne_cm):
+        """Yaw the whole body with the moment the legs would make, dyne times cm.
+
+        Kept for experiments that want the physical moment; the gait does not use it.
+        A turning fly swings the planted claws one way and the body the other, and those
+        claws are clamped in this model, so the moment is absorbed as slip and never
+        turns the animal: measured in .work/twin/tw1.log, 0.002 to 0.04 dyne cm leaves
+        the heading at 3-4 degrees whichever way the animal is told to turn, and 0.08
+        upwards tears the feet loose.  A positive moment turns the animal to its left.
+        """
+        self.steering_torque = float(dyne_cm)
+        return self.steering_torque
+
+    def rotate_heading(self, delta_rad):
+        """Turn the whole animal about the vertical axis through its own thorax.
+
+        The heading is prescribed, not produced: see the note on TURN_RATE_RAD_S in
+        footgait.  Rotating the free joint is the only way to turn a body whose claws are
+        clamped to fixed points, because a moment applied to it is absorbed by those
+        clamps.  Angular velocity is cleared with it so the rotation does not carry on
+        after the steering stops.  Returns the rotation actually applied.
+        """
+        delta = float(delta_rad)
+        if not delta:
+            return 0.0
+        half = 0.5 * delta
+        c, s = math.cos(half), math.sin(half)
+        w, x, y, z = [float(v) for v in self.data.qpos[3:7]]
+        # q_yaw * q, rotating the body in the world frame rather than about its own axis.
+        self.data.qpos[3] = c * w - s * z
+        self.data.qpos[4] = c * x - s * y
+        self.data.qpos[5] = c * y + s * x
+        self.data.qpos[6] = c * z + s * w
+        self.data.qvel[3:6] = 0.0
+        self.mujoco.mj_forward(self.model, self.data)
+        return delta
+
     # -- control -----------------------------------------------------------
 
     def command_from_spikes(self, spikes, *, gain=0.05):
@@ -230,11 +321,34 @@ class TwinBody:
             muscle = self.muscles.muscles[name]
             length = lengths.get(muscle.joint, muscle.rest_length_cm)
             speed = speeds.get(muscle.joint, 0.)
-            # The actuator is linear in its control, so the Hill factors are folded
-            # into the control.  Force and moment arm already live in the model, in
-            # the actuator's gain and gear, so they are not applied twice.
+            # The actuator is linear in its control, so the Hill factors, the series
+            # element and the moment arm are folded into the control.  Force and the
+            # nominal arm already live in the model, in the actuator's gain and gear,
+            # so they are not applied twice; the arm profile is a scale around that
+            # nominal arm and is the only new factor.
             factor = max(0., muscle.relative_force(length, speed))
-            self.data.ctrl[index] = min(1., max(0., muscle.activation * factor))
+            qpos = self.qpos_index.get(muscle.joint)
+            angle = float(self.data.qpos[qpos]) if qpos is not None else 0.
+            self.data.ctrl[index] = min(
+                1., max(0., muscle.series * factor * muscle.arm_scale(angle)))
+        for name, value in self.beat.items():
+            index = self.actuator_index.get(name)
+            if index is not None:
+                self.data.ctrl[index] = min(1., max(0., float(value)))
+        applying = self.external_force is not None or bool(self.steering_torque)
+        lift, forward = self.external_force or (0.0, 0.0)
+        if applying or self._was_applying:
+            # Applied every substep: MuJoCo clears xfrc_applied at the end of mj_step,
+            # so a force set once would act for 0.1 ms and vanish.  The zero case is
+            # written too: a torque left in the slot from the previous control period is
+            # otherwise latched, and a latching calibration measured a steady 10 degrees
+            # turn from a moment that was never actually applied (see .work/twin/tc1.log).
+            for _ in range(substeps):
+                self.data.xfrc_applied[self.thorax_body][:3] = (forward, 0.0, lift)
+                self.data.xfrc_applied[self.thorax_body][5] = self.steering_torque
+                self.mujoco.mj_step(self.model, self.data)
+            self._was_applying = applying
+            return self.state()
         for _ in range(substeps):
             self.mujoco.mj_step(self.model, self.data)
         return self.state()
@@ -269,4 +383,3 @@ class TwinBody:
             "timestep_s": float(self.model.opt.timestep),
             "mass_gram": float(self.model.body_mass.sum()),
         }
-

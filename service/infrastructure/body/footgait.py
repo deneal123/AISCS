@@ -62,7 +62,29 @@ STANCE_PRESS_CM = 0.0
 ESCAPE_DURATION_S = 0.35
 ESCAPE_ONSET_S = 0.012
 ESCAPE_CURL_RAD = 0.10
-ESCAPE_STRIDE_SCALE = 2.0
+# The escape is faster, but not arbitrarily faster.  Above 1.8 the phase runs so far
+# ahead of the tripods that a leg is still in the air when its tripod is asked to carry
+# again and the animal spins: measured in .work/twin/escape_boundary.py, the 350 ms
+# heading change stays between 0.2 and 4.0 degrees up to a stride of 1.8 and becomes
+# -129 degrees at 2.0, while the displacement at 1.6 is already 1.54 times a walk
+# (0.512 against 0.332 cm).
+ESCAPE_STRIDE_SCALE = 1.6
+
+# How fast the animal turns at full steering, radian per second: a 350 ms escape is
+# about 35 degrees, the order of a measured fly turn.
+#
+# The turn is prescribed, and that is a limitation of this model, not a shortcut.  A
+# turning fly twists its body against the claws that are on the floor; here every stance
+# claw is clamped to a fixed world point, so the twist is absorbed as slip instead of
+# turning anything.  Measured in .work/twin/tw1.log with the moment applied on every
+# substep: 0.002 to 0.04 dyne cm leaves the heading at 3-4 degrees whichever way the
+# animal is told to turn, which is exactly what an escape with no steering does, and
+# 0.08 and above tears the feet loose and throws the animal into the air (height
+# 0.77 cm).  There is no value at which the claws turn the body.  So the heading is
+# prescribed, and the body and the whole foot set are rotated together rigidly, which
+# leaves the step geometry untouched.  A slip limit on the claws instead of a hard clamp
+# is the change that would make the turn physical; that is not done here.
+TURN_RATE_RAD_S = 1.75
 
 def _phase_of(leg, phase, period_s):
     shift = 0.0 if leg in TRIPOD_A else 0.5
@@ -88,7 +110,11 @@ class FootGait:
         self.base_height = None
         # The frame the foot targets are expressed in.  It travels with the body, so
         # the legs never run out of reach; see the module docstring.
-        self.origin_x = 0.0
+        self.origin = np.zeros(2)
+        # Heading of the frame, radian.  It follows the body every control period, so a
+        # turned animal steps along the way it is actually facing rather than along world
+        # x, and the stance clamp pulls it fore and aft instead of sideways.
+        self.heading = 0.0
         # Where each stance claw touched down, in world coordinates.
         self.anchors = {}
         self.targets = {}
@@ -96,15 +122,105 @@ class FootGait:
 
     def capture(self):
         """Record where the claws stand now; that pose is the gait reference."""
-        self.rest = {leg: self.kinematics.foot(leg).copy() for leg in LEGS}
+        self.origin = np.array([float(self.body.data.qpos[0]),
+                                float(self.body.data.qpos[1])])
+        self.heading = self.body_yaw()
+        # Reference feet as offsets from the frame origin, never as world points: every
+        # target this module plans is a point of the frame, and mixing the two puts the
+        # swing a body's width off.
+        self.rest = {}
+        for leg in LEGS:
+            foot = self.kinematics.foot(leg)
+            fore, side = self.frame_of(foot[0], foot[1])
+            self.rest[leg] = np.array([fore, side, float(foot[2])])
         self.base_height = float(self.body.data.qpos[2])
-        self.origin_x = float(self.body.data.qpos[0])
         self.anchors = {}
         return dict(self.rest)
 
+    def body_yaw(self):
+        """Heading of the body about the vertical axis, radian, from its quaternion."""
+        w, x, y, z = [float(value) for value in self.body.data.qpos[3:7]]
+        return math.atan2(2.0 * (w * z + x * y), 1.0 - 2.0 * (y * y + z * z))
+
+    def axes(self):
+        """The frame's forward and left axes in world coordinates."""
+        cos, sin = math.cos(self.heading), math.sin(self.heading)
+        return cos, sin
+
+    def frame_of(self, x, y):
+        """A world point as (fore, side) offsets from the frame origin."""
+        cos, sin, = self.axes()
+        dx = float(x) - float(self.origin[0])
+        dy = float(y) - float(self.origin[1])
+        return dx * cos + dy * sin, -dx * sin + dy * cos
+
+    def world_of(self, fore, side):
+        """A (fore, side) offset from the frame origin, in world coordinates."""
+        cos, sin = self.axes()
+        x = float(self.origin[0]) + fore * cos - side * sin
+        y = float(self.origin[1]) + fore * sin + side * cos
+        return x, y
+
+    def follow_body(self):
+        """Take the frame's heading from the body.
+
+        Not called by advance(): see the note there on why reading the heading back turns
+        the steering into a feedback loop.  It is here for callers that want to resync the
+        frame after something else has turned the animal.
+        """
+        self.heading = self.body_yaw()
+        return self.heading
+
     def travel_cm(self):
-        """How far the body has gone since the reference was captured."""
-        return float(self.body.data.qpos[0]) - self.origin_x
+        """How far the body has gone forward since the reference was captured.
+
+        Measured along the frame's own axis: once the animal has turned, a world-x
+        difference would count sideways motion as progress.
+        """
+        cos, sin = self.axes()
+        dx = float(self.body.data.qpos[0]) - float(self.origin[0])
+        dy = float(self.body.data.qpos[1]) - float(self.origin[1])
+        return dx * cos + dy * sin
+
+    def steer(self, angle_rad):
+        """Turn the animal, and every foot target with it, about its own body.
+
+        The body, the reference feet and the stance anchors all go round by the same
+        angle about the same centre, so the step pattern is carried round rigidly and the
+        legs see exactly the geometry they saw before the turn.  Turning only part of the
+        set is what broke the walk in every earlier attempt: the anchors stayed in the
+        old heading while the reference feet moved, and each tripod was pulled two ways
+        at once (measured in .work/twin/tn4.log through tn12.log, and in .work/twin/fd4.log
+        where a reference that moved twice as fast as the body spun the animal 111
+        degrees in 400 ms).
+        """
+        angle = float(angle_rad)
+        if not angle:
+            return 0.0
+        centre_x = float(self.body.data.qpos[0])
+        centre_y = float(self.body.data.qpos[1])
+        cos, sin = math.cos(angle), math.sin(angle)
+        # The reference feet are frame offsets, so they are invariant under a rotation of
+        # the frame: the whole set goes round with the animal by construction.  Only the
+        # frame origin has to be carried round the body, or the reference stops describing
+        # the feet that are actually under it.
+        self._rotate_about(self.origin, centre_x, centre_y, cos, sin)
+        # The anchors are world points, and a claw nailed to the floor would lever the
+        # animal into the air when the body turns over it (measured in .work/twin/fz1.log,
+        # height 0.53 cm on a right escape).  Dropping them makes the next stance sample
+        # re-take the claw where the leg now stands, which is what a real foot does.
+        self.anchors.clear()
+        self.heading = math.atan2(math.sin(self.heading + angle),
+                                  math.cos(self.heading + angle))
+        self.body.rotate_heading(angle)
+        return angle
+
+    @staticmethod
+    def _rotate_about(point, centre_x, centre_y, cos, sin):
+        """Turn a world point round a vertical axis through (centre_x, centre_y)."""
+        dx, dy = float(point[0]) - centre_x, float(point[1]) - centre_y
+        point[0] = centre_x + dx * cos - dy * sin
+        point[1] = centre_y + dx * sin + dy * cos
 
     def rebase(self, window_cm=0.20):
         """Move the reference forward when the body has outwalked it.
@@ -120,21 +236,22 @@ class FootGait:
         travel = self.travel_cm()
         if abs(travel) < float(window_cm):
             return 0.0
-        # Continuity, not re-capture. A foot target is rest[0] + travel, so moving
-        # the origin forward by the travel and adding the same travel to the reference
-        # leaves every target exactly where it was; re-reading the feet instead would
-        # aim the next swing from wherever a mid-stance leg happens to be, and the
-        # gait would limp once per rebase.
-        self.origin_x = float(self.body.data.qpos[0])
-        for leg in LEGS:
-            self.rest[leg][0] += travel
+        # Continuity, not re-capture, and only the origin moves.  A target is
+        # origin + rest[0] + travel and travel is measured FROM the origin, so advancing
+        # the origin by the travel lowers travel by the same amount and leaves every
+        # target exactly where it was.  Adding the travel to the reference as well moves
+        # each target twice as fast as the body and tears the tripod apart: measured in
+        # .work/twin/fd4.log, a plain walk spun 111 degrees in 400 ms that way.
+        cos, sin = self.axes()
+        self.origin[0] += travel * cos
+        self.origin[1] += travel * sin
         # Anchors are world points, not offsets from the reference, so they survive the
         # move untouched: the stance branch aims at anchors[leg][0] directly and never
         # consults rest. Dropping them here would re-plant a standing foot mid-step,
         # which is what the gait test caught.
         return travel
 
-    def advance(self, dt_s, *, stride_scale=1.0):
+    def advance(self, dt_s, *, stride_scale=1.0, turn=0.0):
         """Advance the step cycle; a stride scale shortens the cycle, not just the step.
 
         Scaling only the stroke length leaves the animal stepping at the same rate and
@@ -143,10 +260,18 @@ class FootGait:
         one, a difference of three per cent. A fly that escapes takes faster steps, so
         the scale multiplies the phase rate as well as the stroke.
         """
+        # The frame heading is NOT read back from the body every period.  Doing that makes
+        # the steering a feedback loop -- a little yaw rotates the frame, the rotated frame
+        # pushes a little more yaw -- and a plain walk drifts: measured in .work/twin/fz4.log,
+        # 9.1 degrees in 400 ms and 28.5 in 1500.  The heading changes only when the gait is
+        # steered, so with no steering the frame is the world frame and the walk is exactly
+        # the walk that was measured before the turn existed.
         self.phase = (self.phase + dt_s * float(stride_scale) / self.period_s) % 1.0
+        if turn:
+            self.steer(dt_s * TURN_RATE_RAD_S * float(turn))
         return self.phase
 
-    def foot_target(self, leg, phase=None, *, stride_scale=1.0):
+    def foot_target(self, leg, phase=None, *, stride_scale=1.0, turn=0.0):
         """Where this leg foot must be at this phase, in world coordinates."""
         if phase is None:
             phase = self.phase
@@ -164,22 +289,31 @@ class FootGait:
             fore = rest[0] + travel + stroke * (-0.5 + progress)
             up = self.lift_cm * math.sin(math.pi * progress)
             side = rest[1] + self.sway_cm * math.sin(2.0 * math.pi * progress)
-            return np.array([fore, side, rest[2] + up])
-        # On the ground: the claw stays where it landed.  Its goal is that point,
-        # clamped so the leg is never pulled past what it can hold.
+            x, y = self.world_of(fore, side)
+            return np.array([x, y, rest[2] + up])
+        # On the ground: the claw stays where it landed.  Its goal is that point, clamped
+        # along the frame's forward axis so the leg is never pulled past what it can hold.
+        # The clamp runs along that axis and not along world x, or a turned animal is held
+        # back sideways instead of fore and aft.
         if leg not in self.anchors:
             self.anchors[leg] = self.kinematics.foot(leg).copy()
         anchor = self.anchors[leg]
         here = self.kinematics.foot(leg)
-        fore = here[0] + max(-self.clamp_cm, min(self.clamp_cm, anchor[0] - here[0]))
-        return np.array([fore, rest[1], anchor[2] - self.press_cm])
+        here_fore, here_side = self.frame_of(here[0], here[1])
+        anchor_fore, _ = self.frame_of(anchor[0], anchor[1])
+        fore = here_fore + max(-self.clamp_cm, min(self.clamp_cm, anchor_fore - here_fore))
+        # The across-frame coordinate is the nominal stance width, not the foot's own
+        # lateral position: a stance that follows the foot sideways holds nothing and the
+        # animal slides away from where it is standing.
+        x, y = self.world_of(fore, rest[1])
+        return np.array([x, y, anchor[2] - self.press_cm])
 
-    def joint_targets(self, *, phase=None, stride_scale=1.0):
+    def joint_targets(self, *, phase=None, stride_scale=1.0, turn=0.0):
         """Joint angles that place every foot on its trajectory."""
         out = {}
         self.errors = {}
         for leg in LEGS:
-            target = self.foot_target(leg, phase, stride_scale=stride_scale)
+            target = self.foot_target(leg, phase, stride_scale=stride_scale, turn=turn)
             angles, error = self.kinematics.solve(leg, target)
             self.errors[leg] = error
             for name, value in zip(self.kinematics.joints[leg], angles):
@@ -187,10 +321,10 @@ class FootGait:
         self.targets = out
         return out
 
-    def step(self, posture, dt_s=0.001, *, stride_scale=1.0):
+    def step(self, posture, dt_s=0.001, *, stride_scale=1.0, turn=0.0):
         """Advance the phase and hand the posture controller its new targets."""
-        self.advance(dt_s, stride_scale=stride_scale)
-        posture.set_targets(self.joint_targets(stride_scale=stride_scale))
+        self.advance(dt_s, stride_scale=stride_scale, turn=turn)
+        posture.set_targets(self.joint_targets(stride_scale=stride_scale, turn=turn))
         return posture.step(dt_s)
 
 
@@ -250,6 +384,19 @@ class Escape:
     def stride_scale(self):
         """How much faster than a walk the escape is."""
         return 1.0 + (ESCAPE_STRIDE_SCALE - 1.0) * self.envelope()
+
+    def turn(self):
+        """Signed steering for the gait; the animal turns away from the stimulus side.
+
+        The sign is the one the abdomen already uses: a negative side is a stimulus on
+        the right and the animal turns left, away from it.  Before this existed, an
+        escape with a side of +1 and one with -1 both drifted the same 2.2 degrees as no
+        escape at all (measured in .work/twin/turning.py).
+        """
+        amount = self.envelope()
+        if amount <= 0.0 or self.side == 0.0:
+            return 0.0
+        return -amount if self.side > 0.0 else amount
 
 
 def blend(gait_targets, escaped_targets):

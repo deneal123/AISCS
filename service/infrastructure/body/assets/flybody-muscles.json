@@ -19,9 +19,27 @@
   "femur_twist": 2.0,
   "femur": 5.0,
   "tibia": 3.0,
-  "tarsus": 0.7,
+  "tarsus": 3.0,
+  "tarsus2": 0.25,
+  "tarsus3": 0.2,
+  "tarsus4": 0.18,
+  "tarsus5": 0.05,
   "abdomen_pitch": 2.0,
-  "abdomen_yaw": 1.2
+  "abdomen_yaw": 1.2,
+  "head_abduct": 1.0,
+  "head_twist": 0.8,
+  "head_pitch": 1.0,
+  "rostrum": 0.8,
+  "haustellum_abduct": 0.6,
+  "haustellum": 0.6,
+  "labrum": 0.4,
+  "antenna_abduct": 0.4,
+  "antenna_twist": 0.3,
+  "antenna": 0.4,
+  "wing_pitch": 8.0,
+  "wing_yaw": 4.0,
+  "wing_roll": 4.0,
+  "haltere": 0.1
  },
  "calibrated_flips": 0,
  "unverified_muscles": [],
@@ -40,6 +58,12 @@
   "abdomen_abduct_5",
   "abdomen_abduct_6",
   "abdomen_abduct_7",
+  "antenna_abduct_left",
+  "antenna_abduct_right",
+  "antenna_left",
+  "antenna_right",
+  "antenna_twist_left",
+  "antenna_twist_right",
   "coxa_T1_left",
   "coxa_T1_right",
   "coxa_T2_left",
@@ -70,6 +94,40 @@
   "femur_twist_T2_right",
   "femur_twist_T3_left",
   "femur_twist_T3_right",
+  "haltere_left",
+  "haltere_right",
+  "haustellum",
+  "haustellum_abduct",
+  "head",
+  "head_abduct",
+  "head_twist",
+  "labrum_left",
+  "labrum_right",
+  "rostrum",
+  "tarsus2_T1_left",
+  "tarsus2_T1_right",
+  "tarsus2_T2_left",
+  "tarsus2_T2_right",
+  "tarsus2_T3_left",
+  "tarsus2_T3_right",
+  "tarsus3_T1_left",
+  "tarsus3_T1_right",
+  "tarsus3_T2_left",
+  "tarsus3_T2_right",
+  "tarsus3_T3_left",
+  "tarsus3_T3_right",
+  "tarsus4_T1_left",
+  "tarsus4_T1_right",
+  "tarsus4_T2_left",
+  "tarsus4_T2_right",
+  "tarsus4_T3_left",
+  "tarsus4_T3_right",
+  "tarsus5_T1_left",
+  "tarsus5_T1_right",
+  "tarsus5_T2_left",
+  "tarsus5_T2_right",
+  "tarsus5_T3_left",
+  "tarsus5_T3_right",
   "tarsus_T1_left",
   "tarsus_T1_right",
   "tarsus_T2_left",
@@ -81,7 +139,13 @@
   "tibia_T2_left",
   "tibia_T2_right",
   "tibia_T3_left",
-  "tibia_T3_right"
+  "tibia_T3_right",
+  "wing_pitch_left",
+  "wing_pitch_right",
+  "wing_roll_left",
+  "wing_roll_right",
+  "wing_yaw_left",
+  "wing_yaw_right"
  ],
  "muscles": [
   {
@@ -108,7 +172,7 @@
    "segment_length": 0.0437,
    "torque_dyne_cm": 0.05462500000000001,
    "direction_verified": true,
-   "joint_travel_rad": 0.06401202543731738
+   "joint_travel_rad": 0.06544263046321913
   },
   {
    "name": "coxa_abduct_T1_left_flexor",
@@ -134,7 +198,7 @@
    "segment_length": 0.0437,
    "torque_dyne_cm": -0.05462500000000001,
    "direction_verified": true,
-   "joint_travel_rad": -0.06802811262330488
+   "joint_travel_rad": -0.06890792089966867
   },
   {
    "name": "coxa_twist_T1_left_extensor",
@@ -160,7 +224,7 @@
    "segment_length": 0.0437,
    "torque_dyne_cm": 0.02185,
    "direction_verified": true,
-   "joint_travel_rad": 0.01627364602253555
+   "joint_travel_rad": 0.016399621136159566
   },
   {
    "name": "coxa_twist_T1_left_flexor",
@@ -186,7 +250,7 @@
    "segment_length": 0.0437,
    "torque_dyne_cm": -0.02185,
    "direction_verified": true,
-   "joint_travel_rad": -0.023216465703311803
+   "joint_travel_rad": -0.0328586895390743
   },
   {
    "name": "coxa_T1_left_extensor",
@@ -212,7 +276,7 @@
    "segment_length": 0.0437,
    "torque_dyne_cm": 0.05462500000000001,
    "direction_verified": true,
-   "joint_travel_rad": 0.06877460914371514
+   "joint_travel_rad": 0.07329483847167774
   },
   {
    "name": "coxa_T1_left_flexor",
@@ -238,7 +302,7 @@
    "segment_length": 0.0437,
    "torque_dyne_cm": -0.05462500000000001,
    "direction_verified": true,
-   "joint_travel_rad": -0.05290237998475879
+   "joint_travel_rad": -0.0553371030652723
   },
   {
    "name": "femur_twist_T1_left_extensor",
@@ -264,7 +328,7 @@
    "segment_length": 0.0697,
    "torque_dyne_cm": 0.03485,
    "direction_verified": true,
-   "joint_travel_rad": 0.035343344010683425
+   "joint_travel_rad": 0.04373143073037771
   },
   {
    "name": "femur_twist_T1_left_flexor",
@@ -290,7 +354,7 @@
    "segment_length": 0.0697,
    "torque_dyne_cm": -0.03485,
    "direction_verified": true,
-   "joint_travel_rad": -0.03636727422765774
+   "joint_travel_rad": -0.03749816217833578
   },
   {
    "name": "femur_T1_left_extensor",
@@ -316,7 +380,7 @@
    "segment_length": 0.0697,
    "torque_dyne_cm": 0.087125,
    "direction_verified": true,
-   "joint_travel_rad": 0.0737363256354748
+   "joint_travel_rad": 0.0762194245561393
   },
   {
    "name": "femur_T1_left_flexor",
@@ -342,7 +406,7 @@
    "segment_length": 0.0697,
    "torque_dyne_cm": -0.087125,
    "direction_verified": true,
-   "joint_travel_rad": -0.10837168404928404
+   "joint_travel_rad": -0.11077491496940943
   },
   {
    "name": "tibia_T1_left_extensor",
@@ -368,7 +432,7 @@
    "segment_length": 0.05103001567705032,
    "torque_dyne_cm": 0.03827251175778774,
    "direction_verified": true,
-   "joint_travel_rad": 0.09443120432018293
+   "joint_travel_rad": 0.09780796974974053
   },
   {
    "name": "tibia_T1_left_flexor",
@@ -394,7 +458,7 @@
    "segment_length": 0.05103001567705032,
    "torque_dyne_cm": -0.03827251175778774,
    "direction_verified": true,
-   "joint_travel_rad": -0.074838670121906
+   "joint_travel_rad": -0.08774434480706161
   },
   {
    "name": "tarsus_T1_left_extensor",
@@ -406,7 +470,7 @@
    "part": "T1_left",
    "body_origin": "tibia_T1_left",
    "body_insertion": "tarsus_T1_left",
-   "peak_force_dyne": 0.7,
+   "peak_force_dyne": 3.0,
    "axis": [
     1.0,
     0.0,
@@ -418,9 +482,9 @@
    ],
    "arm_cm": 0.005891226660255063,
    "segment_length": 0.02356490664102025,
-   "torque_dyne_cm": 0.004123858662178544,
+   "torque_dyne_cm": 0.01767367998076519,
    "direction_verified": true,
-   "joint_travel_rad": 0.0041880863527968895
+   "joint_travel_rad": 0.09783990346389086
   },
   {
    "name": "tarsus_T1_left_flexor",
@@ -432,7 +496,7 @@
    "part": "T1_left",
    "body_origin": "tibia_T1_left",
    "body_insertion": "tarsus_T1_left",
-   "peak_force_dyne": 0.7,
+   "peak_force_dyne": 3.0,
    "axis": [
     1.0,
     0.0,
@@ -444,9 +508,217 @@
    ],
    "arm_cm": 0.005891226660255063,
    "segment_length": 0.02356490664102025,
-   "torque_dyne_cm": -0.004123858662178544,
+   "torque_dyne_cm": -0.01767367998076519,
    "direction_verified": true,
-   "joint_travel_rad": -0.014292225319781342
+   "joint_travel_rad": -0.1012293875619494
+  },
+  {
+   "name": "tarsus2_T1_left_extensor",
+   "joint": "tarsus2_T1_left",
+   "sign": 1,
+   "side_sign": 1.0,
+   "intended_torque_sign": 1.0,
+   "role": "tarsus",
+   "part": "T1_left",
+   "body_origin": "tarsus_T1_left",
+   "body_insertion": "tarsus2_T1_left",
+   "peak_force_dyne": 0.25,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.36,
+    0.36
+   ],
+   "arm_cm": 0.0034029573994541866,
+   "segment_length": 0.013611829597816746,
+   "torque_dyne_cm": 0.0008507393498635466,
+   "direction_verified": true,
+   "joint_travel_rad": -0.01014782350983186
+  },
+  {
+   "name": "tarsus2_T1_left_flexor",
+   "joint": "tarsus2_T1_left",
+   "sign": -1,
+   "side_sign": 1.0,
+   "intended_torque_sign": -1.0,
+   "role": "tarsus",
+   "part": "T1_left",
+   "body_origin": "tarsus_T1_left",
+   "body_insertion": "tarsus2_T1_left",
+   "peak_force_dyne": 0.25,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.36,
+    0.36
+   ],
+   "arm_cm": 0.0034029573994541866,
+   "segment_length": 0.013611829597816746,
+   "torque_dyne_cm": -0.0008507393498635466,
+   "direction_verified": true,
+   "joint_travel_rad": -0.06569593326745504
+  },
+  {
+   "name": "tarsus3_T1_left_extensor",
+   "joint": "tarsus3_T1_left",
+   "sign": 1,
+   "side_sign": 1.0,
+   "intended_torque_sign": 1.0,
+   "role": "tarsus",
+   "part": "T1_left",
+   "body_origin": "tarsus2_T1_left",
+   "body_insertion": "tarsus3_T1_left",
+   "peak_force_dyne": 0.2,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.36,
+    0.36
+   ],
+   "arm_cm": 0.0022739437795380978,
+   "segment_length": 0.009095775118152391,
+   "torque_dyne_cm": 0.00045478875590761956,
+   "direction_verified": true,
+   "joint_travel_rad": -0.023322630323125256
+  },
+  {
+   "name": "tarsus3_T1_left_flexor",
+   "joint": "tarsus3_T1_left",
+   "sign": -1,
+   "side_sign": 1.0,
+   "intended_torque_sign": -1.0,
+   "role": "tarsus",
+   "part": "T1_left",
+   "body_origin": "tarsus2_T1_left",
+   "body_insertion": "tarsus3_T1_left",
+   "peak_force_dyne": 0.2,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.36,
+    0.36
+   ],
+   "arm_cm": 0.0022739437795380978,
+   "segment_length": 0.009095775118152391,
+   "torque_dyne_cm": -0.00045478875590761956,
+   "direction_verified": true,
+   "joint_travel_rad": -0.058191926000656174
+  },
+  {
+   "name": "tarsus4_T1_left_extensor",
+   "joint": "tarsus4_T1_left",
+   "sign": 1,
+   "side_sign": 1.0,
+   "intended_torque_sign": 1.0,
+   "role": "tarsus",
+   "part": "T1_left",
+   "body_origin": "tarsus3_T1_left",
+   "body_insertion": "tarsus4_T1_left",
+   "peak_force_dyne": 0.18,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.36,
+    0.36
+   ],
+   "arm_cm": 0.0022741037993020455,
+   "segment_length": 0.009096415197208182,
+   "torque_dyne_cm": 0.0004093386838743682,
+   "direction_verified": true,
+   "joint_travel_rad": -0.02204829455420658
+  },
+  {
+   "name": "tarsus4_T1_left_flexor",
+   "joint": "tarsus4_T1_left",
+   "sign": -1,
+   "side_sign": 1.0,
+   "intended_torque_sign": -1.0,
+   "role": "tarsus",
+   "part": "T1_left",
+   "body_origin": "tarsus3_T1_left",
+   "body_insertion": "tarsus4_T1_left",
+   "peak_force_dyne": 0.18,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.36,
+    0.36
+   ],
+   "arm_cm": 0.0022741037993020455,
+   "segment_length": 0.009096415197208182,
+   "torque_dyne_cm": -0.0004093386838743682,
+   "direction_verified": true,
+   "joint_travel_rad": -0.05560303091868173
+  },
+  {
+   "name": "tarsus5_T1_left_extensor",
+   "joint": "tarsus5_T1_left",
+   "sign": 1,
+   "side_sign": 1.0,
+   "intended_torque_sign": 1.0,
+   "role": "tarsus",
+   "part": "T1_left",
+   "body_origin": "tarsus4_T1_left",
+   "body_insertion": "claw_T1_left",
+   "peak_force_dyne": 0.05,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.36,
+    0.36
+   ],
+   "arm_cm": 0.07500000000000001,
+   "segment_length": 0.30000000000000004,
+   "torque_dyne_cm": 0.0037500000000000007,
+   "direction_verified": true,
+   "joint_travel_rad": 0.13483379289128247
+  },
+  {
+   "name": "tarsus5_T1_left_flexor",
+   "joint": "tarsus5_T1_left",
+   "sign": -1,
+   "side_sign": 1.0,
+   "intended_torque_sign": -1.0,
+   "role": "tarsus",
+   "part": "T1_left",
+   "body_origin": "tarsus4_T1_left",
+   "body_insertion": "claw_T1_left",
+   "peak_force_dyne": 0.05,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.36,
+    0.36
+   ],
+   "arm_cm": 0.07500000000000001,
+   "segment_length": 0.30000000000000004,
+   "torque_dyne_cm": -0.0037500000000000007,
+   "direction_verified": true,
+   "joint_travel_rad": -0.18397313853005584
   },
   {
    "name": "coxa_abduct_T2_left_extensor",
@@ -472,7 +744,7 @@
    "segment_length": 0.0281,
    "torque_dyne_cm": 0.035125,
    "direction_verified": true,
-   "joint_travel_rad": 0.03988429501258793
+   "joint_travel_rad": 0.04090514785655881
   },
   {
    "name": "coxa_abduct_T2_left_flexor",
@@ -498,7 +770,7 @@
    "segment_length": 0.0281,
    "torque_dyne_cm": -0.035125,
    "direction_verified": true,
-   "joint_travel_rad": -0.04428650824521159
+   "joint_travel_rad": -0.04538095979085676
   },
   {
    "name": "coxa_twist_T2_left_extensor",
@@ -524,7 +796,7 @@
    "segment_length": 0.0281,
    "torque_dyne_cm": 0.01405,
    "direction_verified": true,
-   "joint_travel_rad": 0.01267638809530985
+   "joint_travel_rad": 0.016471763248062498
   },
   {
    "name": "coxa_twist_T2_left_flexor",
@@ -550,7 +822,7 @@
    "segment_length": 0.0281,
    "torque_dyne_cm": -0.01405,
    "direction_verified": true,
-   "joint_travel_rad": -0.014246905588342728
+   "joint_travel_rad": -0.0157413062150122
   },
   {
    "name": "coxa_T2_left_extensor",
@@ -576,7 +848,7 @@
    "segment_length": 0.0281,
    "torque_dyne_cm": 0.035125,
    "direction_verified": true,
-   "joint_travel_rad": 0.04342189777029548
+   "joint_travel_rad": 0.05099901993427015
   },
   {
    "name": "coxa_T2_left_flexor",
@@ -602,7 +874,7 @@
    "segment_length": 0.0281,
    "torque_dyne_cm": -0.035125,
    "direction_verified": true,
-   "joint_travel_rad": -0.024865744133328812
+   "joint_travel_rad": -0.027729672924188344
   },
   {
    "name": "femur_twist_T2_left_extensor",
@@ -628,7 +900,7 @@
    "segment_length": 0.083,
    "torque_dyne_cm": 0.0415,
    "direction_verified": true,
-   "joint_travel_rad": 0.04591663813135317
+   "joint_travel_rad": 0.048280490759827675
   },
   {
    "name": "femur_twist_T2_left_flexor",
@@ -654,7 +926,7 @@
    "segment_length": 0.083,
    "torque_dyne_cm": -0.0415,
    "direction_verified": true,
-   "joint_travel_rad": -0.045356585547921414
+   "joint_travel_rad": -0.05087353489579245
   },
   {
    "name": "femur_T2_left_extensor",
@@ -680,7 +952,7 @@
    "segment_length": 0.083,
    "torque_dyne_cm": 0.10375000000000001,
    "direction_verified": true,
-   "joint_travel_rad": 0.08328430879285938
+   "joint_travel_rad": 0.09653247149542052
   },
   {
    "name": "femur_T2_left_flexor",
@@ -706,7 +978,7 @@
    "segment_length": 0.083,
    "torque_dyne_cm": -0.10375000000000001,
    "direction_verified": true,
-   "joint_travel_rad": -0.12886508469583602
+   "joint_travel_rad": -0.12885843692974727
   },
   {
    "name": "tibia_T2_left_extensor",
@@ -732,7 +1004,7 @@
    "segment_length": 0.06682291897246034,
    "torque_dyne_cm": 0.05011718922934526,
    "direction_verified": true,
-   "joint_travel_rad": 0.12498575412222251
+   "joint_travel_rad": 0.12555287228685355
   },
   {
    "name": "tibia_T2_left_flexor",
@@ -758,7 +1030,7 @@
    "segment_length": 0.06682291897246034,
    "torque_dyne_cm": -0.05011718922934526,
    "direction_verified": true,
-   "joint_travel_rad": -0.08509672141706116
+   "joint_travel_rad": -0.11583394803920037
   },
   {
    "name": "tarsus_T2_left_extensor",
@@ -770,7 +1042,7 @@
    "part": "T2_left",
    "body_origin": "tibia_T2_left",
    "body_insertion": "tarsus_T2_left",
-   "peak_force_dyne": 0.7,
+   "peak_force_dyne": 3.0,
    "axis": [
     1.0,
     0.0,
@@ -782,9 +1054,9 @@
    ],
    "arm_cm": 0.00855756770715254,
    "segment_length": 0.03423027082861016,
-   "torque_dyne_cm": 0.005990297395006778,
+   "torque_dyne_cm": 0.02567270312145762,
    "direction_verified": true,
-   "joint_travel_rad": 0.019308472477850256
+   "joint_travel_rad": 0.16272495162474485
   },
   {
    "name": "tarsus_T2_left_flexor",
@@ -796,7 +1068,7 @@
    "part": "T2_left",
    "body_origin": "tibia_T2_left",
    "body_insertion": "tarsus_T2_left",
-   "peak_force_dyne": 0.7,
+   "peak_force_dyne": 3.0,
    "axis": [
     1.0,
     0.0,
@@ -808,9 +1080,217 @@
    ],
    "arm_cm": 0.00855756770715254,
    "segment_length": 0.03423027082861016,
-   "torque_dyne_cm": -0.005990297395006778,
+   "torque_dyne_cm": -0.02567270312145762,
    "direction_verified": true,
-   "joint_travel_rad": -0.008203001987126297
+   "joint_travel_rad": -0.1266909944327035
+  },
+  {
+   "name": "tarsus2_T2_left_extensor",
+   "joint": "tarsus2_T2_left",
+   "sign": 1,
+   "side_sign": 1.0,
+   "intended_torque_sign": 1.0,
+   "role": "tarsus",
+   "part": "T2_left",
+   "body_origin": "tarsus_T2_left",
+   "body_insertion": "tarsus2_T2_left",
+   "peak_force_dyne": 0.25,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.36,
+    0.36
+   ],
+   "arm_cm": 0.004450293492007015,
+   "segment_length": 0.01780117396802806,
+   "torque_dyne_cm": 0.0011125733730017538,
+   "direction_verified": true,
+   "joint_travel_rad": 0.11171878482533595
+  },
+  {
+   "name": "tarsus2_T2_left_flexor",
+   "joint": "tarsus2_T2_left",
+   "sign": -1,
+   "side_sign": 1.0,
+   "intended_torque_sign": -1.0,
+   "role": "tarsus",
+   "part": "T2_left",
+   "body_origin": "tarsus_T2_left",
+   "body_insertion": "tarsus2_T2_left",
+   "peak_force_dyne": 0.25,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.36,
+    0.36
+   ],
+   "arm_cm": 0.004450293492007015,
+   "segment_length": 0.01780117396802806,
+   "torque_dyne_cm": -0.0011125733730017538,
+   "direction_verified": true,
+   "joint_travel_rad": 0.03183550362340846
+  },
+  {
+   "name": "tarsus3_T2_left_extensor",
+   "joint": "tarsus3_T2_left",
+   "sign": 1,
+   "side_sign": 1.0,
+   "intended_torque_sign": 1.0,
+   "role": "tarsus",
+   "part": "T2_left",
+   "body_origin": "tarsus2_T2_left",
+   "body_insertion": "tarsus3_T2_left",
+   "peak_force_dyne": 0.2,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.36,
+    0.36
+   ],
+   "arm_cm": 0.0024785874405848585,
+   "segment_length": 0.009914349762339434,
+   "torque_dyne_cm": 0.0004957174881169718,
+   "direction_verified": true,
+   "joint_travel_rad": 0.06352487575600219
+  },
+  {
+   "name": "tarsus3_T2_left_flexor",
+   "joint": "tarsus3_T2_left",
+   "sign": -1,
+   "side_sign": 1.0,
+   "intended_torque_sign": -1.0,
+   "role": "tarsus",
+   "part": "T2_left",
+   "body_origin": "tarsus2_T2_left",
+   "body_insertion": "tarsus3_T2_left",
+   "peak_force_dyne": 0.2,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.36,
+    0.36
+   ],
+   "arm_cm": 0.0024785874405848585,
+   "segment_length": 0.009914349762339434,
+   "torque_dyne_cm": -0.0004957174881169718,
+   "direction_verified": true,
+   "joint_travel_rad": 0.023073003361545583
+  },
+  {
+   "name": "tarsus4_T2_left_extensor",
+   "joint": "tarsus4_T2_left",
+   "sign": 1,
+   "side_sign": 1.0,
+   "intended_torque_sign": 1.0,
+   "role": "tarsus",
+   "part": "T2_left",
+   "body_origin": "tarsus3_T2_left",
+   "body_insertion": "tarsus4_T2_left",
+   "peak_force_dyne": 0.18,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.36,
+    0.36
+   ],
+   "arm_cm": 0.0024783299820645365,
+   "segment_length": 0.009913319928258146,
+   "torque_dyne_cm": 0.0004460993967716166,
+   "direction_verified": true,
+   "joint_travel_rad": 0.044377764369716535
+  },
+  {
+   "name": "tarsus4_T2_left_flexor",
+   "joint": "tarsus4_T2_left",
+   "sign": -1,
+   "side_sign": 1.0,
+   "intended_torque_sign": -1.0,
+   "role": "tarsus",
+   "part": "T2_left",
+   "body_origin": "tarsus3_T2_left",
+   "body_insertion": "tarsus4_T2_left",
+   "peak_force_dyne": 0.18,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.36,
+    0.36
+   ],
+   "arm_cm": 0.0024783299820645365,
+   "segment_length": 0.009913319928258146,
+   "torque_dyne_cm": -0.0004460993967716166,
+   "direction_verified": true,
+   "joint_travel_rad": 0.0065589722622248
+  },
+  {
+   "name": "tarsus5_T2_left_extensor",
+   "joint": "tarsus5_T2_left",
+   "sign": 1,
+   "side_sign": 1.0,
+   "intended_torque_sign": 1.0,
+   "role": "tarsus",
+   "part": "T2_left",
+   "body_origin": "tarsus4_T2_left",
+   "body_insertion": "claw_T2_left",
+   "peak_force_dyne": 0.05,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.36,
+    0.36
+   ],
+   "arm_cm": 0.075,
+   "segment_length": 0.3,
+   "torque_dyne_cm": 0.00375,
+   "direction_verified": true,
+   "joint_travel_rad": 0.16980326638637194
+  },
+  {
+   "name": "tarsus5_T2_left_flexor",
+   "joint": "tarsus5_T2_left",
+   "sign": -1,
+   "side_sign": 1.0,
+   "intended_torque_sign": -1.0,
+   "role": "tarsus",
+   "part": "T2_left",
+   "body_origin": "tarsus4_T2_left",
+   "body_insertion": "claw_T2_left",
+   "peak_force_dyne": 0.05,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.36,
+    0.36
+   ],
+   "arm_cm": 0.075,
+   "segment_length": 0.3,
+   "torque_dyne_cm": -0.00375,
+   "direction_verified": true,
+   "joint_travel_rad": -0.15115981430707698
   },
   {
    "name": "coxa_abduct_T3_left_extensor",
@@ -836,7 +1316,7 @@
    "segment_length": 0.024468404116329282,
    "torque_dyne_cm": 0.030585505145411602,
    "direction_verified": true,
-   "joint_travel_rad": 0.04129306194899023
+   "joint_travel_rad": 0.045061848974148284
   },
   {
    "name": "coxa_abduct_T3_left_flexor",
@@ -862,7 +1342,7 @@
    "segment_length": 0.024468404116329282,
    "torque_dyne_cm": -0.030585505145411602,
    "direction_verified": true,
-   "joint_travel_rad": -0.02494639335161318
+   "joint_travel_rad": -0.03080121331438568
   },
   {
    "name": "coxa_twist_T3_left_extensor",
@@ -888,7 +1368,7 @@
    "segment_length": 0.024468404116329282,
    "torque_dyne_cm": 0.012234202058164641,
    "direction_verified": true,
-   "joint_travel_rad": 0.002108875935334668
+   "joint_travel_rad": 0.0024603452829384588
   },
   {
    "name": "coxa_twist_T3_left_flexor",
@@ -914,7 +1394,7 @@
    "segment_length": 0.024468404116329282,
    "torque_dyne_cm": -0.012234202058164641,
    "direction_verified": true,
-   "joint_travel_rad": -0.025103173491696787
+   "joint_travel_rad": -0.0264501945231514
   },
   {
    "name": "coxa_T3_left_extensor",
@@ -940,7 +1420,7 @@
    "segment_length": 0.024468404116329282,
    "torque_dyne_cm": 0.030585505145411602,
    "direction_verified": true,
-   "joint_travel_rad": 0.05658384921631938
+   "joint_travel_rad": 0.06519296061508041
   },
   {
    "name": "coxa_T3_left_flexor",
@@ -966,7 +1446,7 @@
    "segment_length": 0.024468404116329282,
    "torque_dyne_cm": -0.030585505145411602,
    "direction_verified": true,
-   "joint_travel_rad": -0.00931002765556872
+   "joint_travel_rad": -0.010266259893181426
   },
   {
    "name": "femur_twist_T3_left_extensor",
@@ -992,7 +1472,7 @@
    "segment_length": 0.07790000000016431,
    "torque_dyne_cm": 0.038950000000082155,
    "direction_verified": true,
-   "joint_travel_rad": 0.04934837502130092
+   "joint_travel_rad": 0.053637938936548064
   },
   {
    "name": "femur_twist_T3_left_flexor",
@@ -1018,7 +1498,7 @@
    "segment_length": 0.07790000000016431,
    "torque_dyne_cm": -0.038950000000082155,
    "direction_verified": true,
-   "joint_travel_rad": -0.03701638547331857
+   "joint_travel_rad": -0.04333665570101709
   },
   {
    "name": "femur_T3_left_extensor",
@@ -1044,7 +1524,7 @@
    "segment_length": 0.07790000000016431,
    "torque_dyne_cm": 0.09737500000020538,
    "direction_verified": true,
-   "joint_travel_rad": 0.07259587016757849
+   "joint_travel_rad": 0.08766287738673298
   },
   {
    "name": "femur_T3_left_flexor",
@@ -1070,7 +1550,7 @@
    "segment_length": 0.07790000000016431,
    "torque_dyne_cm": -0.09737500000020538,
    "direction_verified": true,
-   "joint_travel_rad": -0.13159498947607506
+   "joint_travel_rad": -0.14573977325589127
   },
   {
    "name": "tibia_T3_left_extensor",
@@ -1096,7 +1576,7 @@
    "segment_length": 0.07152141287754316,
    "torque_dyne_cm": 0.05364105965815737,
    "direction_verified": true,
-   "joint_travel_rad": 0.14270872808252585
+   "joint_travel_rad": 0.15513023027751405
   },
   {
    "name": "tibia_T3_left_flexor",
@@ -1122,7 +1602,7 @@
    "segment_length": 0.07152141287754316,
    "torque_dyne_cm": -0.05364105965815737,
    "direction_verified": true,
-   "joint_travel_rad": -0.09699838400222319
+   "joint_travel_rad": -0.12230077830103525
   },
   {
    "name": "tarsus_T3_left_extensor",
@@ -1134,7 +1614,7 @@
    "part": "T3_left",
    "body_origin": "tibia_T3_left",
    "body_insertion": "tarsus_T3_left",
-   "peak_force_dyne": 0.7,
+   "peak_force_dyne": 3.0,
    "axis": [
     1.0,
     0.0,
@@ -1146,9 +1626,9 @@
    ],
    "arm_cm": 0.008429128439524458,
    "segment_length": 0.03371651375809783,
-   "torque_dyne_cm": 0.00590038990766712,
+   "torque_dyne_cm": 0.02528738531857337,
    "direction_verified": true,
-   "joint_travel_rad": 0.03365206684011067
+   "joint_travel_rad": 0.21572690639431266
   },
   {
    "name": "tarsus_T3_left_flexor",
@@ -1160,7 +1640,7 @@
    "part": "T3_left",
    "body_origin": "tibia_T3_left",
    "body_insertion": "tarsus_T3_left",
-   "peak_force_dyne": 0.7,
+   "peak_force_dyne": 3.0,
    "axis": [
     1.0,
     0.0,
@@ -1172,9 +1652,217 @@
    ],
    "arm_cm": 0.008429128439524458,
    "segment_length": 0.03371651375809783,
-   "torque_dyne_cm": -0.00590038990766712,
+   "torque_dyne_cm": -0.02528738531857337,
    "direction_verified": true,
-   "joint_travel_rad": 0.0054768196609894645
+   "joint_travel_rad": -0.08804018589717821
+  },
+  {
+   "name": "tarsus2_T3_left_extensor",
+   "joint": "tarsus2_T3_left",
+   "sign": 1,
+   "side_sign": 1.0,
+   "intended_torque_sign": 1.0,
+   "role": "tarsus",
+   "part": "T3_left",
+   "body_origin": "tarsus_T3_left",
+   "body_insertion": "tarsus2_T3_left",
+   "peak_force_dyne": 0.25,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.36,
+    0.36
+   ],
+   "arm_cm": 0.004940854886112827,
+   "segment_length": 0.019763419544451308,
+   "torque_dyne_cm": 0.0012352137215282067,
+   "direction_verified": true,
+   "joint_travel_rad": 0.3467512396320185
+  },
+  {
+   "name": "tarsus2_T3_left_flexor",
+   "joint": "tarsus2_T3_left",
+   "sign": -1,
+   "side_sign": 1.0,
+   "intended_torque_sign": -1.0,
+   "role": "tarsus",
+   "part": "T3_left",
+   "body_origin": "tarsus_T3_left",
+   "body_insertion": "tarsus2_T3_left",
+   "peak_force_dyne": 0.25,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.36,
+    0.36
+   ],
+   "arm_cm": 0.004940854886112827,
+   "segment_length": 0.019763419544451308,
+   "torque_dyne_cm": -0.0012352137215282067,
+   "direction_verified": true,
+   "joint_travel_rad": 0.24405114759624286
+  },
+  {
+   "name": "tarsus3_T3_left_extensor",
+   "joint": "tarsus3_T3_left",
+   "sign": 1,
+   "side_sign": 1.0,
+   "intended_torque_sign": 1.0,
+   "role": "tarsus",
+   "part": "T3_left",
+   "body_origin": "tarsus2_T3_left",
+   "body_insertion": "tarsus3_T3_left",
+   "peak_force_dyne": 0.2,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.36,
+    0.36
+   ],
+   "arm_cm": 0.002775080774049647,
+   "segment_length": 0.011100323096198588,
+   "torque_dyne_cm": 0.0005550161548099294,
+   "direction_verified": true,
+   "joint_travel_rad": 0.2012571109764747
+  },
+  {
+   "name": "tarsus3_T3_left_flexor",
+   "joint": "tarsus3_T3_left",
+   "sign": -1,
+   "side_sign": 1.0,
+   "intended_torque_sign": -1.0,
+   "role": "tarsus",
+   "part": "T3_left",
+   "body_origin": "tarsus2_T3_left",
+   "body_insertion": "tarsus3_T3_left",
+   "peak_force_dyne": 0.2,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.36,
+    0.36
+   ],
+   "arm_cm": 0.002775080774049647,
+   "segment_length": 0.011100323096198588,
+   "torque_dyne_cm": -0.0005550161548099294,
+   "direction_verified": true,
+   "joint_travel_rad": 0.15233918880652794
+  },
+  {
+   "name": "tarsus4_T3_left_extensor",
+   "joint": "tarsus4_T3_left",
+   "sign": 1,
+   "side_sign": 1.0,
+   "intended_torque_sign": 1.0,
+   "role": "tarsus",
+   "part": "T3_left",
+   "body_origin": "tarsus3_T3_left",
+   "body_insertion": "tarsus4_T3_left",
+   "peak_force_dyne": 0.18,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.36,
+    0.36
+   ],
+   "arm_cm": 0.0027886565313785037,
+   "segment_length": 0.011154626125514015,
+   "torque_dyne_cm": 0.0005019581756481306,
+   "direction_verified": true,
+   "joint_travel_rad": 0.13283105489344302
+  },
+  {
+   "name": "tarsus4_T3_left_flexor",
+   "joint": "tarsus4_T3_left",
+   "sign": -1,
+   "side_sign": 1.0,
+   "intended_torque_sign": -1.0,
+   "role": "tarsus",
+   "part": "T3_left",
+   "body_origin": "tarsus3_T3_left",
+   "body_insertion": "tarsus4_T3_left",
+   "peak_force_dyne": 0.18,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.36,
+    0.36
+   ],
+   "arm_cm": 0.0027886565313785037,
+   "segment_length": 0.011154626125514015,
+   "torque_dyne_cm": -0.0005019581756481306,
+   "direction_verified": true,
+   "joint_travel_rad": 0.08855768203159436
+  },
+  {
+   "name": "tarsus5_T3_left_extensor",
+   "joint": "tarsus5_T3_left",
+   "sign": 1,
+   "side_sign": 1.0,
+   "intended_torque_sign": 1.0,
+   "role": "tarsus",
+   "part": "T3_left",
+   "body_origin": "tarsus4_T3_left",
+   "body_insertion": "claw_T3_left",
+   "peak_force_dyne": 0.05,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.36,
+    0.36
+   ],
+   "arm_cm": 0.07499999999999998,
+   "segment_length": 0.29999999999999993,
+   "torque_dyne_cm": 0.0037499999999999994,
+   "direction_verified": true,
+   "joint_travel_rad": 0.19729872152453232
+  },
+  {
+   "name": "tarsus5_T3_left_flexor",
+   "joint": "tarsus5_T3_left",
+   "sign": -1,
+   "side_sign": 1.0,
+   "intended_torque_sign": -1.0,
+   "role": "tarsus",
+   "part": "T3_left",
+   "body_origin": "tarsus4_T3_left",
+   "body_insertion": "claw_T3_left",
+   "peak_force_dyne": 0.05,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.36,
+    0.36
+   ],
+   "arm_cm": 0.07499999999999998,
+   "segment_length": 0.29999999999999993,
+   "torque_dyne_cm": -0.0037499999999999994,
+   "direction_verified": true,
+   "joint_travel_rad": -0.11535993365179689
   },
   {
    "name": "coxa_abduct_T1_right_extensor",
@@ -1200,7 +1888,7 @@
    "segment_length": 0.04360000000000001,
    "torque_dyne_cm": 0.05450000000000001,
    "direction_verified": true,
-   "joint_travel_rad": 0.06428161836779558
+   "joint_travel_rad": 0.06679620479823131
   },
   {
    "name": "coxa_abduct_T1_right_flexor",
@@ -1226,7 +1914,7 @@
    "segment_length": 0.04360000000000001,
    "torque_dyne_cm": -0.05450000000000001,
    "direction_verified": true,
-   "joint_travel_rad": -0.06706606481810387
+   "joint_travel_rad": -0.06667247611046027
   },
   {
    "name": "coxa_twist_T1_right_extensor",
@@ -1252,7 +1940,7 @@
    "segment_length": 0.04360000000000001,
    "torque_dyne_cm": 0.021800000000000003,
    "direction_verified": true,
-   "joint_travel_rad": 0.016479110635778303
+   "joint_travel_rad": 0.014718078098283736
   },
   {
    "name": "coxa_twist_T1_right_flexor",
@@ -1278,7 +1966,7 @@
    "segment_length": 0.04360000000000001,
    "torque_dyne_cm": -0.021800000000000003,
    "direction_verified": true,
-   "joint_travel_rad": -0.023187153008804934
+   "joint_travel_rad": -0.03367123393386252
   },
   {
    "name": "coxa_T1_right_extensor",
@@ -1304,7 +1992,7 @@
    "segment_length": 0.04360000000000001,
    "torque_dyne_cm": 0.05450000000000001,
    "direction_verified": true,
-   "joint_travel_rad": 0.06821999737502747
+   "joint_travel_rad": 0.07233211086868173
   },
   {
    "name": "coxa_T1_right_flexor",
@@ -1330,7 +2018,7 @@
    "segment_length": 0.04360000000000001,
    "torque_dyne_cm": -0.05450000000000001,
    "direction_verified": true,
-   "joint_travel_rad": -0.052228011547273995
+   "joint_travel_rad": -0.05586504222858201
   },
   {
    "name": "femur_twist_T1_right_extensor",
@@ -1356,7 +2044,7 @@
    "segment_length": 0.06980000000000001,
    "torque_dyne_cm": 0.03490000000000001,
    "direction_verified": true,
-   "joint_travel_rad": 0.03591532655989822
+   "joint_travel_rad": 0.04506573460316601
   },
   {
    "name": "femur_twist_T1_right_flexor",
@@ -1382,7 +2070,7 @@
    "segment_length": 0.06980000000000001,
    "torque_dyne_cm": -0.03490000000000001,
    "direction_verified": true,
-   "joint_travel_rad": -0.035536385832009396
+   "joint_travel_rad": -0.03502386694010211
   },
   {
    "name": "femur_T1_right_extensor",
@@ -1408,7 +2096,7 @@
    "segment_length": 0.06980000000000001,
    "torque_dyne_cm": 0.08725000000000002,
    "direction_verified": true,
-   "joint_travel_rad": 0.07365030606120344
+   "joint_travel_rad": 0.07735020455870784
   },
   {
    "name": "femur_T1_right_flexor",
@@ -1434,7 +2122,7 @@
    "segment_length": 0.06980000000000001,
    "torque_dyne_cm": -0.08725000000000002,
    "direction_verified": true,
-   "joint_travel_rad": -0.10852710296058816
+   "joint_travel_rad": -0.10997352049847767
   },
   {
    "name": "tibia_T1_right_extensor",
@@ -1460,7 +2148,7 @@
    "segment_length": 0.051529724431632645,
    "torque_dyne_cm": 0.038647293323724484,
    "direction_verified": true,
-   "joint_travel_rad": 0.09561259090974046
+   "joint_travel_rad": 0.09822420124169187
   },
   {
    "name": "tibia_T1_right_flexor",
@@ -1486,7 +2174,7 @@
    "segment_length": 0.051529724431632645,
    "torque_dyne_cm": -0.038647293323724484,
    "direction_verified": true,
-   "joint_travel_rad": -0.07545448195895724
+   "joint_travel_rad": -0.09148494297675705
   },
   {
    "name": "tarsus_T1_right_extensor",
@@ -1498,7 +2186,7 @@
    "part": "T1_right",
    "body_origin": "tibia_T1_right",
    "body_insertion": "tarsus_T1_right",
-   "peak_force_dyne": 0.7,
+   "peak_force_dyne": 3.0,
    "axis": [
     1.0,
     0.0,
@@ -1510,9 +2198,9 @@
    ],
    "arm_cm": 0.005694368517447744,
    "segment_length": 0.022777474069790977,
-   "torque_dyne_cm": 0.003986057962213421,
+   "torque_dyne_cm": 0.017083105552343235,
    "direction_verified": true,
-   "joint_travel_rad": 0.0035646995966981086
+   "joint_travel_rad": 0.09426576358363256
   },
   {
    "name": "tarsus_T1_right_flexor",
@@ -1524,7 +2212,7 @@
    "part": "T1_right",
    "body_origin": "tibia_T1_right",
    "body_insertion": "tarsus_T1_right",
-   "peak_force_dyne": 0.7,
+   "peak_force_dyne": 3.0,
    "axis": [
     1.0,
     0.0,
@@ -1536,9 +2224,217 @@
    ],
    "arm_cm": 0.005694368517447744,
    "segment_length": 0.022777474069790977,
-   "torque_dyne_cm": -0.003986057962213421,
+   "torque_dyne_cm": -0.017083105552343235,
    "direction_verified": true,
-   "joint_travel_rad": -0.014252814106093477
+   "joint_travel_rad": -0.09898921507726523
+  },
+  {
+   "name": "tarsus2_T1_right_extensor",
+   "joint": "tarsus2_T1_right",
+   "sign": 1,
+   "side_sign": 1.0,
+   "intended_torque_sign": 1.0,
+   "role": "tarsus",
+   "part": "T1_right",
+   "body_origin": "tarsus_T1_right",
+   "body_insertion": "tarsus2_T1_right",
+   "peak_force_dyne": 0.25,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.36,
+    0.36
+   ],
+   "arm_cm": 0.003426029489438176,
+   "segment_length": 0.013704117957752704,
+   "torque_dyne_cm": 0.000856507372359544,
+   "direction_verified": true,
+   "joint_travel_rad": -0.0034047723702114977
+  },
+  {
+   "name": "tarsus2_T1_right_flexor",
+   "joint": "tarsus2_T1_right",
+   "sign": -1,
+   "side_sign": 1.0,
+   "intended_torque_sign": -1.0,
+   "role": "tarsus",
+   "part": "T1_right",
+   "body_origin": "tarsus_T1_right",
+   "body_insertion": "tarsus2_T1_right",
+   "peak_force_dyne": 0.25,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.36,
+    0.36
+   ],
+   "arm_cm": 0.003426029489438176,
+   "segment_length": 0.013704117957752704,
+   "torque_dyne_cm": -0.000856507372359544,
+   "direction_verified": true,
+   "joint_travel_rad": -0.058896375931593116
+  },
+  {
+   "name": "tarsus3_T1_right_extensor",
+   "joint": "tarsus3_T1_right",
+   "sign": 1,
+   "side_sign": 1.0,
+   "intended_torque_sign": 1.0,
+   "role": "tarsus",
+   "part": "T1_right",
+   "body_origin": "tarsus2_T1_right",
+   "body_insertion": "tarsus3_T1_right",
+   "peak_force_dyne": 0.2,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.36,
+    0.36
+   ],
+   "arm_cm": 0.002255659119304156,
+   "segment_length": 0.009022636477216624,
+   "torque_dyne_cm": 0.00045113182386083124,
+   "direction_verified": true,
+   "joint_travel_rad": -0.019307333354343863
+  },
+  {
+   "name": "tarsus3_T1_right_flexor",
+   "joint": "tarsus3_T1_right",
+   "sign": -1,
+   "side_sign": 1.0,
+   "intended_torque_sign": -1.0,
+   "role": "tarsus",
+   "part": "T1_right",
+   "body_origin": "tarsus2_T1_right",
+   "body_insertion": "tarsus3_T1_right",
+   "peak_force_dyne": 0.2,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.36,
+    0.36
+   ],
+   "arm_cm": 0.002255659119304156,
+   "segment_length": 0.009022636477216624,
+   "torque_dyne_cm": -0.00045113182386083124,
+   "direction_verified": true,
+   "joint_travel_rad": -0.05390731111497887
+  },
+  {
+   "name": "tarsus4_T1_right_extensor",
+   "joint": "tarsus4_T1_right",
+   "sign": 1,
+   "side_sign": 1.0,
+   "intended_torque_sign": 1.0,
+   "role": "tarsus",
+   "part": "T1_right",
+   "body_origin": "tarsus3_T1_right",
+   "body_insertion": "tarsus4_T1_right",
+   "peak_force_dyne": 0.18,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.36,
+    0.36
+   ],
+   "arm_cm": 0.00225587124244714,
+   "segment_length": 0.00902348496978856,
+   "torque_dyne_cm": 0.0004060568236404852,
+   "direction_verified": true,
+   "joint_travel_rad": -0.017107578315773312
+  },
+  {
+   "name": "tarsus4_T1_right_flexor",
+   "joint": "tarsus4_T1_right",
+   "sign": -1,
+   "side_sign": 1.0,
+   "intended_torque_sign": -1.0,
+   "role": "tarsus",
+   "part": "T1_right",
+   "body_origin": "tarsus3_T1_right",
+   "body_insertion": "tarsus4_T1_right",
+   "peak_force_dyne": 0.18,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.36,
+    0.36
+   ],
+   "arm_cm": 0.00225587124244714,
+   "segment_length": 0.00902348496978856,
+   "torque_dyne_cm": -0.0004060568236404852,
+   "direction_verified": true,
+   "joint_travel_rad": -0.0504519294687527
+  },
+  {
+   "name": "tarsus5_T1_right_extensor",
+   "joint": "tarsus5_T1_right",
+   "sign": 1,
+   "side_sign": 1.0,
+   "intended_torque_sign": 1.0,
+   "role": "tarsus",
+   "part": "T1_right",
+   "body_origin": "tarsus4_T1_right",
+   "body_insertion": "claw_T1_right",
+   "peak_force_dyne": 0.05,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.36,
+    0.36
+   ],
+   "arm_cm": 0.075,
+   "segment_length": 0.3,
+   "torque_dyne_cm": 0.00375,
+   "direction_verified": true,
+   "joint_travel_rad": 0.13773269014345688
+  },
+  {
+   "name": "tarsus5_T1_right_flexor",
+   "joint": "tarsus5_T1_right",
+   "sign": -1,
+   "side_sign": 1.0,
+   "intended_torque_sign": -1.0,
+   "role": "tarsus",
+   "part": "T1_right",
+   "body_origin": "tarsus4_T1_right",
+   "body_insertion": "claw_T1_right",
+   "peak_force_dyne": 0.05,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.36,
+    0.36
+   ],
+   "arm_cm": 0.075,
+   "segment_length": 0.3,
+   "torque_dyne_cm": -0.00375,
+   "direction_verified": true,
+   "joint_travel_rad": -0.18105043518327368
   },
   {
    "name": "coxa_abduct_T2_right_extensor",
@@ -1564,7 +2460,7 @@
    "segment_length": 0.028199999999999996,
    "torque_dyne_cm": 0.03525,
    "direction_verified": true,
-   "joint_travel_rad": 0.03998727270170155
+   "joint_travel_rad": 0.04127046080220145
   },
   {
    "name": "coxa_abduct_T2_right_flexor",
@@ -1590,7 +2486,7 @@
    "segment_length": 0.028199999999999996,
    "torque_dyne_cm": -0.03525,
    "direction_verified": true,
-   "joint_travel_rad": -0.0444910227400579
+   "joint_travel_rad": -0.04526160950815141
   },
   {
    "name": "coxa_twist_T2_right_extensor",
@@ -1616,7 +2512,7 @@
    "segment_length": 0.028199999999999996,
    "torque_dyne_cm": 0.014099999999999998,
    "direction_verified": true,
-   "joint_travel_rad": 0.012754601339670445
+   "joint_travel_rad": 0.017040962713807655
   },
   {
    "name": "coxa_twist_T2_right_flexor",
@@ -1642,7 +2538,7 @@
    "segment_length": 0.028199999999999996,
    "torque_dyne_cm": -0.014099999999999998,
    "direction_verified": true,
-   "joint_travel_rad": -0.01395883225764534
+   "joint_travel_rad": -0.014946203448803992
   },
   {
    "name": "coxa_T2_right_extensor",
@@ -1668,7 +2564,7 @@
    "segment_length": 0.028199999999999996,
    "torque_dyne_cm": 0.03525,
    "direction_verified": true,
-   "joint_travel_rad": 0.04357861271458432
+   "joint_travel_rad": 0.051385578500962176
   },
   {
    "name": "coxa_T2_right_flexor",
@@ -1694,7 +2590,7 @@
    "segment_length": 0.028199999999999996,
    "torque_dyne_cm": -0.03525,
    "direction_verified": true,
-   "joint_travel_rad": -0.02430315503153196
+   "joint_travel_rad": -0.027678792765734466
   },
   {
    "name": "femur_twist_T2_right_extensor",
@@ -1720,7 +2616,7 @@
    "segment_length": 0.08399999999999998,
    "torque_dyne_cm": 0.04199999999999999,
    "direction_verified": true,
-   "joint_travel_rad": 0.045974450226325465
+   "joint_travel_rad": 0.04802095390412429
   },
   {
    "name": "femur_twist_T2_right_flexor",
@@ -1746,7 +2642,7 @@
    "segment_length": 0.08399999999999998,
    "torque_dyne_cm": -0.04199999999999999,
    "direction_verified": true,
-   "joint_travel_rad": -0.045852899328504906
+   "joint_travel_rad": -0.051773083336197796
   },
   {
    "name": "femur_T2_right_extensor",
@@ -1772,7 +2668,7 @@
    "segment_length": 0.08399999999999998,
    "torque_dyne_cm": 0.10499999999999997,
    "direction_verified": true,
-   "joint_travel_rad": 0.08446157707162692
+   "joint_travel_rad": 0.09837052284035167
   },
   {
    "name": "femur_T2_right_flexor",
@@ -1798,7 +2694,7 @@
    "segment_length": 0.08399999999999998,
    "torque_dyne_cm": -0.10499999999999997,
    "direction_verified": true,
-   "joint_travel_rad": -0.1304279388753349
+   "joint_travel_rad": -0.13042014447033595
   },
   {
    "name": "tibia_T2_right_extensor",
@@ -1824,7 +2720,7 @@
    "segment_length": 0.06652302233061871,
    "torque_dyne_cm": 0.049892266747964036,
    "direction_verified": true,
-   "joint_travel_rad": 0.12443554220161633
+   "joint_travel_rad": 0.1254310312460498
   },
   {
    "name": "tibia_T2_right_flexor",
@@ -1850,7 +2746,7 @@
    "segment_length": 0.06652302233061871,
    "torque_dyne_cm": -0.049892266747964036,
    "direction_verified": true,
-   "joint_travel_rad": -0.08392556295769733
+   "joint_travel_rad": -0.11605192885791488
   },
   {
    "name": "tarsus_T2_right_extensor",
@@ -1862,7 +2758,7 @@
    "part": "T2_right",
    "body_origin": "tibia_T2_right",
    "body_insertion": "tarsus_T2_right",
-   "peak_force_dyne": 0.7,
+   "peak_force_dyne": 3.0,
    "axis": [
     1.0,
     0.0,
@@ -1874,9 +2770,9 @@
    ],
    "arm_cm": 0.008479407368000427,
    "segment_length": 0.033917629472001706,
-   "torque_dyne_cm": 0.005935585157600298,
+   "torque_dyne_cm": 0.02543822210400128,
    "direction_verified": true,
-   "joint_travel_rad": 0.019470890026113408
+   "joint_travel_rad": 0.1615249962806342
   },
   {
    "name": "tarsus_T2_right_flexor",
@@ -1888,7 +2784,7 @@
    "part": "T2_right",
    "body_origin": "tibia_T2_right",
    "body_insertion": "tarsus_T2_right",
-   "peak_force_dyne": 0.7,
+   "peak_force_dyne": 3.0,
    "axis": [
     1.0,
     0.0,
@@ -1900,9 +2796,217 @@
    ],
    "arm_cm": 0.008479407368000427,
    "segment_length": 0.033917629472001706,
-   "torque_dyne_cm": -0.005935585157600298,
+   "torque_dyne_cm": -0.02543822210400128,
    "direction_verified": true,
-   "joint_travel_rad": -0.007896174636734355
+   "joint_travel_rad": -0.12603791393899377
+  },
+  {
+   "name": "tarsus2_T2_right_extensor",
+   "joint": "tarsus2_T2_right",
+   "sign": 1,
+   "side_sign": 1.0,
+   "intended_torque_sign": 1.0,
+   "role": "tarsus",
+   "part": "T2_right",
+   "body_origin": "tarsus_T2_right",
+   "body_insertion": "tarsus2_T2_right",
+   "peak_force_dyne": 0.25,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.36,
+    0.36
+   ],
+   "arm_cm": 0.004427161229557826,
+   "segment_length": 0.017708644918231303,
+   "torque_dyne_cm": 0.0011067903073894564,
+   "direction_verified": true,
+   "joint_travel_rad": 0.11202508863105226
+  },
+  {
+   "name": "tarsus2_T2_right_flexor",
+   "joint": "tarsus2_T2_right",
+   "sign": -1,
+   "side_sign": 1.0,
+   "intended_torque_sign": -1.0,
+   "role": "tarsus",
+   "part": "T2_right",
+   "body_origin": "tarsus_T2_right",
+   "body_insertion": "tarsus2_T2_right",
+   "peak_force_dyne": 0.25,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.36,
+    0.36
+   ],
+   "arm_cm": 0.004427161229557826,
+   "segment_length": 0.017708644918231303,
+   "torque_dyne_cm": -0.0011067903073894564,
+   "direction_verified": true,
+   "joint_travel_rad": 0.032591863348645916
+  },
+  {
+   "name": "tarsus3_T2_right_extensor",
+   "joint": "tarsus3_T2_right",
+   "sign": 1,
+   "side_sign": 1.0,
+   "intended_torque_sign": 1.0,
+   "role": "tarsus",
+   "part": "T2_right",
+   "body_origin": "tarsus2_T2_right",
+   "body_insertion": "tarsus3_T2_right",
+   "peak_force_dyne": 0.2,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.36,
+    0.36
+   ],
+   "arm_cm": 0.0024711184144279707,
+   "segment_length": 0.009884473657711883,
+   "torque_dyne_cm": 0.0004942236828855941,
+   "direction_verified": true,
+   "joint_travel_rad": 0.06269747651568654
+  },
+  {
+   "name": "tarsus3_T2_right_flexor",
+   "joint": "tarsus3_T2_right",
+   "sign": -1,
+   "side_sign": 1.0,
+   "intended_torque_sign": -1.0,
+   "role": "tarsus",
+   "part": "T2_right",
+   "body_origin": "tarsus2_T2_right",
+   "body_insertion": "tarsus3_T2_right",
+   "peak_force_dyne": 0.2,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.36,
+    0.36
+   ],
+   "arm_cm": 0.0024711184144279707,
+   "segment_length": 0.009884473657711883,
+   "torque_dyne_cm": -0.0004942236828855941,
+   "direction_verified": true,
+   "joint_travel_rad": 0.022331657207039127
+  },
+  {
+   "name": "tarsus4_T2_right_extensor",
+   "joint": "tarsus4_T2_right",
+   "sign": 1,
+   "side_sign": 1.0,
+   "intended_torque_sign": 1.0,
+   "role": "tarsus",
+   "part": "T2_right",
+   "body_origin": "tarsus3_T2_right",
+   "body_insertion": "tarsus4_T2_right",
+   "peak_force_dyne": 0.18,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.36,
+    0.36
+   ],
+   "arm_cm": 0.0024709213306983255,
+   "segment_length": 0.009883685322793302,
+   "torque_dyne_cm": 0.0004447658395256986,
+   "direction_verified": true,
+   "joint_travel_rad": 0.04369286072616853
+  },
+  {
+   "name": "tarsus4_T2_right_flexor",
+   "joint": "tarsus4_T2_right",
+   "sign": -1,
+   "side_sign": 1.0,
+   "intended_torque_sign": -1.0,
+   "role": "tarsus",
+   "part": "T2_right",
+   "body_origin": "tarsus3_T2_right",
+   "body_insertion": "tarsus4_T2_right",
+   "peak_force_dyne": 0.18,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.36,
+    0.36
+   ],
+   "arm_cm": 0.0024709213306983255,
+   "segment_length": 0.009883685322793302,
+   "torque_dyne_cm": -0.0004447658395256986,
+   "direction_verified": true,
+   "joint_travel_rad": 0.0059603466745632595
+  },
+  {
+   "name": "tarsus5_T2_right_extensor",
+   "joint": "tarsus5_T2_right",
+   "sign": 1,
+   "side_sign": 1.0,
+   "intended_torque_sign": 1.0,
+   "role": "tarsus",
+   "part": "T2_right",
+   "body_origin": "tarsus4_T2_right",
+   "body_insertion": "claw_T2_right",
+   "peak_force_dyne": 0.05,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.36,
+    0.36
+   ],
+   "arm_cm": 0.075,
+   "segment_length": 0.3,
+   "torque_dyne_cm": 0.00375,
+   "direction_verified": true,
+   "joint_travel_rad": 0.1694418289309496
+  },
+  {
+   "name": "tarsus5_T2_right_flexor",
+   "joint": "tarsus5_T2_right",
+   "sign": -1,
+   "side_sign": 1.0,
+   "intended_torque_sign": -1.0,
+   "role": "tarsus",
+   "part": "T2_right",
+   "body_origin": "tarsus4_T2_right",
+   "body_insertion": "claw_T2_right",
+   "peak_force_dyne": 0.05,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.36,
+    0.36
+   ],
+   "arm_cm": 0.075,
+   "segment_length": 0.3,
+   "torque_dyne_cm": -0.00375,
+   "direction_verified": true,
+   "joint_travel_rad": -0.15168401004163948
   },
   {
    "name": "coxa_abduct_T3_right_extensor",
@@ -1928,7 +3032,7 @@
    "segment_length": 0.024422712789532616,
    "torque_dyne_cm": 0.03052839098691577,
    "direction_verified": true,
-   "joint_travel_rad": 0.04133486512630672
+   "joint_travel_rad": 0.044424689428741546
   },
   {
    "name": "coxa_abduct_T3_right_flexor",
@@ -1954,7 +3058,7 @@
    "segment_length": 0.024422712789532616,
    "torque_dyne_cm": -0.03052839098691577,
    "direction_verified": true,
-   "joint_travel_rad": -0.02479003528156398
+   "joint_travel_rad": -0.030967474465808015
   },
   {
    "name": "coxa_twist_T3_right_extensor",
@@ -1980,7 +3084,7 @@
    "segment_length": 0.024422712789532616,
    "torque_dyne_cm": 0.012211356394766308,
    "direction_verified": true,
-   "joint_travel_rad": 0.0012382697821510592
+   "joint_travel_rad": 0.001884220274091635
   },
   {
    "name": "coxa_twist_T3_right_flexor",
@@ -2006,7 +3110,7 @@
    "segment_length": 0.024422712789532616,
    "torque_dyne_cm": -0.012211356394766308,
    "direction_verified": true,
-   "joint_travel_rad": -0.02578390685783244
+   "joint_travel_rad": -0.02685189580749706
   },
   {
    "name": "coxa_T3_right_extensor",
@@ -2032,7 +3136,7 @@
    "segment_length": 0.024422712789532616,
    "torque_dyne_cm": 0.03052839098691577,
    "direction_verified": true,
-   "joint_travel_rad": 0.05653533136040949
+   "joint_travel_rad": 0.0649635083822507
   },
   {
    "name": "coxa_T3_right_flexor",
@@ -2058,7 +3162,7 @@
    "segment_length": 0.024422712789532616,
    "torque_dyne_cm": -0.03052839098691577,
    "direction_verified": true,
-   "joint_travel_rad": -0.009315842540844886
+   "joint_travel_rad": -0.010056074710528913
   },
   {
    "name": "femur_twist_T3_right_extensor",
@@ -2084,7 +3188,7 @@
    "segment_length": 0.07700000000024945,
    "torque_dyne_cm": 0.038500000000124726,
    "direction_verified": true,
-   "joint_travel_rad": 0.048958968524561275
+   "joint_travel_rad": 0.05265742609827154
   },
   {
    "name": "femur_twist_T3_right_flexor",
@@ -2110,7 +3214,7 @@
    "segment_length": 0.07700000000024945,
    "torque_dyne_cm": -0.038500000000124726,
    "direction_verified": true,
-   "joint_travel_rad": -0.036046534829029496
+   "joint_travel_rad": -0.04264550819288766
   },
   {
    "name": "femur_T3_right_extensor",
@@ -2136,7 +3240,7 @@
    "segment_length": 0.07700000000024945,
    "torque_dyne_cm": 0.09625000000031181,
    "direction_verified": true,
-   "joint_travel_rad": 0.07153712020379946
+   "joint_travel_rad": 0.08576572145909747
   },
   {
    "name": "femur_T3_right_flexor",
@@ -2162,7 +3266,7 @@
    "segment_length": 0.07700000000024945,
    "torque_dyne_cm": -0.09625000000031181,
    "direction_verified": true,
-   "joint_travel_rad": -0.13058207638613478
+   "joint_travel_rad": -0.14411561131630352
   },
   {
    "name": "tibia_T3_right_extensor",
@@ -2188,7 +3292,7 @@
    "segment_length": 0.07212123473707313,
    "torque_dyne_cm": 0.05409092605280485,
    "direction_verified": true,
-   "joint_travel_rad": 0.14407307968325242
+   "joint_travel_rad": 0.15598495299634862
   },
   {
    "name": "tibia_T3_right_flexor",
@@ -2214,7 +3318,7 @@
    "segment_length": 0.07212123473707313,
    "torque_dyne_cm": -0.05409092605280485,
    "direction_verified": true,
-   "joint_travel_rad": -0.09763560137878378
+   "joint_travel_rad": -0.12143264805947931
   },
   {
    "name": "tarsus_T3_right_extensor",
@@ -2226,7 +3330,7 @@
    "part": "T3_right",
    "body_origin": "tibia_T3_right",
    "body_insertion": "tarsus_T3_right",
-   "peak_force_dyne": 0.7,
+   "peak_force_dyne": 3.0,
    "axis": [
     1.0,
     0.0,
@@ -2238,9 +3342,9 @@
    ],
    "arm_cm": 0.00845747191836899,
    "segment_length": 0.03382988767347596,
-   "torque_dyne_cm": 0.005920230342858292,
+   "torque_dyne_cm": 0.02537241575510697,
    "direction_verified": true,
-   "joint_travel_rad": 0.03380824890340116
+   "joint_travel_rad": 0.21642352689566094
   },
   {
    "name": "tarsus_T3_right_flexor",
@@ -2252,7 +3356,7 @@
    "part": "T3_right",
    "body_origin": "tibia_T3_right",
    "body_insertion": "tarsus_T3_right",
-   "peak_force_dyne": 0.7,
+   "peak_force_dyne": 3.0,
    "axis": [
     1.0,
     0.0,
@@ -2264,9 +3368,1361 @@
    ],
    "arm_cm": 0.00845747191836899,
    "segment_length": 0.03382988767347596,
-   "torque_dyne_cm": -0.005920230342858292,
+   "torque_dyne_cm": -0.02537241575510697,
    "direction_verified": true,
-   "joint_travel_rad": 0.005514507619333305
+   "joint_travel_rad": -0.08811959032329196
+  },
+  {
+   "name": "tarsus2_T3_right_extensor",
+   "joint": "tarsus2_T3_right",
+   "sign": 1,
+   "side_sign": 1.0,
+   "intended_torque_sign": 1.0,
+   "role": "tarsus",
+   "part": "T3_right",
+   "body_origin": "tarsus_T3_right",
+   "body_insertion": "tarsus2_T3_right",
+   "peak_force_dyne": 0.25,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.36,
+    0.36
+   ],
+   "arm_cm": 0.004940831945381266,
+   "segment_length": 0.019763327781525064,
+   "torque_dyne_cm": 0.0012352079863453165,
+   "direction_verified": true,
+   "joint_travel_rad": 0.3471671169462273
+  },
+  {
+   "name": "tarsus2_T3_right_flexor",
+   "joint": "tarsus2_T3_right",
+   "sign": -1,
+   "side_sign": 1.0,
+   "intended_torque_sign": -1.0,
+   "role": "tarsus",
+   "part": "T3_right",
+   "body_origin": "tarsus_T3_right",
+   "body_insertion": "tarsus2_T3_right",
+   "peak_force_dyne": 0.25,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.36,
+    0.36
+   ],
+   "arm_cm": 0.004940831945381266,
+   "segment_length": 0.019763327781525064,
+   "torque_dyne_cm": -0.0012352079863453165,
+   "direction_verified": true,
+   "joint_travel_rad": 0.24279527029212628
+  },
+  {
+   "name": "tarsus3_T3_right_extensor",
+   "joint": "tarsus3_T3_right",
+   "sign": 1,
+   "side_sign": 1.0,
+   "intended_torque_sign": 1.0,
+   "role": "tarsus",
+   "part": "T3_right",
+   "body_origin": "tarsus2_T3_right",
+   "body_insertion": "tarsus3_T3_right",
+   "peak_force_dyne": 0.2,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.36,
+    0.36
+   ],
+   "arm_cm": 0.0027500087760087256,
+   "segment_length": 0.011000035104034902,
+   "torque_dyne_cm": 0.0005500017552017452,
+   "direction_verified": true,
+   "joint_travel_rad": 0.1990862963762603
+  },
+  {
+   "name": "tarsus3_T3_right_flexor",
+   "joint": "tarsus3_T3_right",
+   "sign": -1,
+   "side_sign": 1.0,
+   "intended_torque_sign": -1.0,
+   "role": "tarsus",
+   "part": "T3_right",
+   "body_origin": "tarsus2_T3_right",
+   "body_insertion": "tarsus3_T3_right",
+   "peak_force_dyne": 0.2,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.36,
+    0.36
+   ],
+   "arm_cm": 0.0027500087760087256,
+   "segment_length": 0.011000035104034902,
+   "torque_dyne_cm": -0.0005500017552017452,
+   "direction_verified": true,
+   "joint_travel_rad": 0.1495654542123047
+  },
+  {
+   "name": "tarsus4_T3_right_extensor",
+   "joint": "tarsus4_T3_right",
+   "sign": 1,
+   "side_sign": 1.0,
+   "intended_torque_sign": 1.0,
+   "role": "tarsus",
+   "part": "T3_right",
+   "body_origin": "tarsus3_T3_right",
+   "body_insertion": "tarsus4_T3_right",
+   "peak_force_dyne": 0.18,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.36,
+    0.36
+   ],
+   "arm_cm": 0.0027677196051081486,
+   "segment_length": 0.011070878420432594,
+   "torque_dyne_cm": 0.0004981895289194667,
+   "direction_verified": true,
+   "joint_travel_rad": 0.13024646292546127
+  },
+  {
+   "name": "tarsus4_T3_right_flexor",
+   "joint": "tarsus4_T3_right",
+   "sign": -1,
+   "side_sign": 1.0,
+   "intended_torque_sign": -1.0,
+   "role": "tarsus",
+   "part": "T3_right",
+   "body_origin": "tarsus3_T3_right",
+   "body_insertion": "tarsus4_T3_right",
+   "peak_force_dyne": 0.18,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.36,
+    0.36
+   ],
+   "arm_cm": 0.0027677196051081486,
+   "segment_length": 0.011070878420432594,
+   "torque_dyne_cm": -0.0004981895289194667,
+   "direction_verified": true,
+   "joint_travel_rad": 0.08527957482188073
+  },
+  {
+   "name": "tarsus5_T3_right_extensor",
+   "joint": "tarsus5_T3_right",
+   "sign": 1,
+   "side_sign": 1.0,
+   "intended_torque_sign": 1.0,
+   "role": "tarsus",
+   "part": "T3_right",
+   "body_origin": "tarsus4_T3_right",
+   "body_insertion": "claw_T3_right",
+   "peak_force_dyne": 0.05,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.36,
+    0.36
+   ],
+   "arm_cm": 0.075,
+   "segment_length": 0.3,
+   "torque_dyne_cm": 0.00375,
+   "direction_verified": true,
+   "joint_travel_rad": 0.1983183613823353
+  },
+  {
+   "name": "tarsus5_T3_right_flexor",
+   "joint": "tarsus5_T3_right",
+   "sign": -1,
+   "side_sign": 1.0,
+   "intended_torque_sign": -1.0,
+   "role": "tarsus",
+   "part": "T3_right",
+   "body_origin": "tarsus4_T3_right",
+   "body_insertion": "claw_T3_right",
+   "peak_force_dyne": 0.05,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.36,
+    0.36
+   ],
+   "arm_cm": 0.075,
+   "segment_length": 0.3,
+   "torque_dyne_cm": -0.00375,
+   "direction_verified": true,
+   "joint_travel_rad": -0.1175595698476289
+  },
+  {
+   "name": "head_abduct_head_abduct_extensor",
+   "joint": "head_abduct",
+   "sign": 1,
+   "side_sign": 1.0,
+   "intended_torque_sign": 1.0,
+   "role": "head",
+   "part": "head_abduct",
+   "body_origin": "thorax",
+   "body_insertion": "head",
+   "peak_force_dyne": 1.0,
+   "axis": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "range": [
+    -0.2,
+    0.2
+   ],
+   "arm_cm": 0.010915842844233326,
+   "segment_length": 0.0436633713769333,
+   "torque_dyne_cm": 0.010915842844233326,
+   "direction_verified": true,
+   "joint_travel_rad": 0.25592679922100153
+  },
+  {
+   "name": "head_abduct_head_abduct_flexor",
+   "joint": "head_abduct",
+   "sign": -1,
+   "side_sign": 1.0,
+   "intended_torque_sign": -1.0,
+   "role": "head",
+   "part": "head_abduct",
+   "body_origin": "thorax",
+   "body_insertion": "head",
+   "peak_force_dyne": 1.0,
+   "axis": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "range": [
+    -0.2,
+    0.2
+   ],
+   "arm_cm": 0.010915842844233326,
+   "segment_length": 0.0436633713769333,
+   "torque_dyne_cm": -0.010915842844233326,
+   "direction_verified": true,
+   "joint_travel_rad": -0.25394299455693214
+  },
+  {
+   "name": "head_twist_head_twist_extensor",
+   "joint": "head_twist",
+   "sign": 1,
+   "side_sign": 1.0,
+   "intended_torque_sign": 1.0,
+   "role": "head",
+   "part": "head_twist",
+   "body_origin": "thorax",
+   "body_insertion": "head",
+   "peak_force_dyne": 0.8,
+   "axis": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "range": [
+    -3.0,
+    3.0
+   ],
+   "arm_cm": 0.010915842844233326,
+   "segment_length": 0.0436633713769333,
+   "torque_dyne_cm": 0.00873267427538666,
+   "direction_verified": true,
+   "joint_travel_rad": 0.26934684433570977
+  },
+  {
+   "name": "head_twist_head_twist_flexor",
+   "joint": "head_twist",
+   "sign": -1,
+   "side_sign": 1.0,
+   "intended_torque_sign": -1.0,
+   "role": "head",
+   "part": "head_twist",
+   "body_origin": "thorax",
+   "body_insertion": "head",
+   "peak_force_dyne": 0.8,
+   "axis": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "range": [
+    -3.0,
+    3.0
+   ],
+   "arm_cm": 0.010915842844233326,
+   "segment_length": 0.0436633713769333,
+   "torque_dyne_cm": -0.00873267427538666,
+   "direction_verified": true,
+   "joint_travel_rad": -0.26933895533031493
+  },
+  {
+   "name": "head_pitch_head_extensor",
+   "joint": "head",
+   "sign": 1,
+   "side_sign": 1.0,
+   "intended_torque_sign": 1.0,
+   "role": "head",
+   "part": "head",
+   "body_origin": "thorax",
+   "body_insertion": "head",
+   "peak_force_dyne": 1.0,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.5,
+    0.3
+   ],
+   "arm_cm": 0.010915842844233326,
+   "segment_length": 0.0436633713769333,
+   "torque_dyne_cm": 0.010915842844233326,
+   "direction_verified": true,
+   "joint_travel_rad": 0.2606001185159881
+  },
+  {
+   "name": "head_pitch_head_flexor",
+   "joint": "head",
+   "sign": -1,
+   "side_sign": 1.0,
+   "intended_torque_sign": -1.0,
+   "role": "head",
+   "part": "head",
+   "body_origin": "thorax",
+   "body_insertion": "head",
+   "peak_force_dyne": 1.0,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.5,
+    0.3
+   ],
+   "arm_cm": 0.010915842844233326,
+   "segment_length": 0.0436633713769333,
+   "torque_dyne_cm": -0.010915842844233326,
+   "direction_verified": true,
+   "joint_travel_rad": -0.33980018980708304
+  },
+  {
+   "name": "rostrum_rostrum_extensor",
+   "joint": "rostrum",
+   "sign": 1,
+   "side_sign": 1.0,
+   "intended_torque_sign": 1.0,
+   "role": "rostrum",
+   "part": "rostrum",
+   "body_origin": "head",
+   "body_insertion": "rostrum",
+   "peak_force_dyne": 0.8,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -1.24,
+    0.183
+   ],
+   "arm_cm": 0.009424999999999996,
+   "segment_length": 0.037699999999999984,
+   "torque_dyne_cm": 0.007539999999999997,
+   "direction_verified": true,
+   "joint_travel_rad": 0.18938721647667897
+  },
+  {
+   "name": "rostrum_rostrum_flexor",
+   "joint": "rostrum",
+   "sign": -1,
+   "side_sign": 1.0,
+   "intended_torque_sign": -1.0,
+   "role": "rostrum",
+   "part": "rostrum",
+   "body_origin": "head",
+   "body_insertion": "rostrum",
+   "peak_force_dyne": 0.8,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -1.24,
+    0.183
+   ],
+   "arm_cm": 0.009424999999999996,
+   "segment_length": 0.037699999999999984,
+   "torque_dyne_cm": -0.007539999999999997,
+   "direction_verified": true,
+   "joint_travel_rad": -0.24934837225422427
+  },
+  {
+   "name": "haustellum_abduct_haustellum_abduct_extensor",
+   "joint": "haustellum_abduct",
+   "sign": 1,
+   "side_sign": 1.0,
+   "intended_torque_sign": 1.0,
+   "role": "haustellum",
+   "part": "haustellum_abduct",
+   "body_origin": "rostrum",
+   "body_insertion": "haustellum",
+   "peak_force_dyne": 0.6,
+   "axis": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "range": [
+    -0.0873,
+    0.0873
+   ],
+   "arm_cm": 0.004597260733306299,
+   "segment_length": 0.018389042933225196,
+   "torque_dyne_cm": 0.0027583564399837794,
+   "direction_verified": true,
+   "joint_travel_rad": 0.031880808219774966
+  },
+  {
+   "name": "haustellum_abduct_haustellum_abduct_flexor",
+   "joint": "haustellum_abduct",
+   "sign": -1,
+   "side_sign": 1.0,
+   "intended_torque_sign": -1.0,
+   "role": "haustellum",
+   "part": "haustellum_abduct",
+   "body_origin": "rostrum",
+   "body_insertion": "haustellum",
+   "peak_force_dyne": 0.6,
+   "axis": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "range": [
+    -0.0873,
+    0.0873
+   ],
+   "arm_cm": 0.004597260733306299,
+   "segment_length": 0.018389042933225196,
+   "torque_dyne_cm": -0.0027583564399837794,
+   "direction_verified": true,
+   "joint_travel_rad": -0.03266958337238018
+  },
+  {
+   "name": "haustellum_haustellum_extensor",
+   "joint": "haustellum",
+   "sign": 1,
+   "side_sign": 1.0,
+   "intended_torque_sign": 1.0,
+   "role": "haustellum",
+   "part": "haustellum",
+   "body_origin": "rostrum",
+   "body_insertion": "haustellum",
+   "peak_force_dyne": 0.6,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -1.59,
+    0.7
+   ],
+   "arm_cm": 0.004597260733306299,
+   "segment_length": 0.018389042933225196,
+   "torque_dyne_cm": 0.0027583564399837794,
+   "direction_verified": true,
+   "joint_travel_rad": 0.08303041121179423
+  },
+  {
+   "name": "haustellum_haustellum_flexor",
+   "joint": "haustellum",
+   "sign": -1,
+   "side_sign": 1.0,
+   "intended_torque_sign": -1.0,
+   "role": "haustellum",
+   "part": "haustellum",
+   "body_origin": "rostrum",
+   "body_insertion": "haustellum",
+   "peak_force_dyne": 0.6,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -1.59,
+    0.7
+   ],
+   "arm_cm": 0.004597260733306299,
+   "segment_length": 0.018389042933225196,
+   "torque_dyne_cm": -0.0027583564399837794,
+   "direction_verified": true,
+   "joint_travel_rad": -0.090291847715546
+  },
+  {
+   "name": "labrum_labrum_left_extensor",
+   "joint": "labrum_left",
+   "sign": 1,
+   "side_sign": 1.0,
+   "intended_torque_sign": 1.0,
+   "role": "labrum",
+   "part": "labrum_left",
+   "body_origin": "haustellum",
+   "body_insertion": "labrum_left",
+   "peak_force_dyne": 0.4,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.00524,
+    1.05
+   ],
+   "arm_cm": 0.075,
+   "segment_length": 0.3,
+   "torque_dyne_cm": 0.03,
+   "direction_verified": true,
+   "joint_travel_rad": 0.3309609528157142
+  },
+  {
+   "name": "labrum_labrum_left_flexor",
+   "joint": "labrum_left",
+   "sign": -1,
+   "side_sign": 1.0,
+   "intended_torque_sign": -1.0,
+   "role": "labrum",
+   "part": "labrum_left",
+   "body_origin": "haustellum",
+   "body_insertion": "labrum_left",
+   "peak_force_dyne": 0.4,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.00524,
+    1.05
+   ],
+   "arm_cm": 0.075,
+   "segment_length": 0.3,
+   "torque_dyne_cm": -0.03,
+   "direction_verified": true,
+   "joint_travel_rad": -0.24271081848511514
+  },
+  {
+   "name": "labrum_labrum_right_extensor",
+   "joint": "labrum_right",
+   "sign": 1,
+   "side_sign": 1.0,
+   "intended_torque_sign": 1.0,
+   "role": "labrum",
+   "part": "labrum_right",
+   "body_origin": "haustellum",
+   "body_insertion": "labrum_right",
+   "peak_force_dyne": 0.4,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.00524,
+    1.05
+   ],
+   "arm_cm": 0.075,
+   "segment_length": 0.3,
+   "torque_dyne_cm": 0.03,
+   "direction_verified": true,
+   "joint_travel_rad": 0.340002608654598
+  },
+  {
+   "name": "labrum_labrum_right_flexor",
+   "joint": "labrum_right",
+   "sign": -1,
+   "side_sign": 1.0,
+   "intended_torque_sign": -1.0,
+   "role": "labrum",
+   "part": "labrum_right",
+   "body_origin": "haustellum",
+   "body_insertion": "labrum_right",
+   "peak_force_dyne": 0.4,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.00524,
+    1.05
+   ],
+   "arm_cm": 0.075,
+   "segment_length": 0.3,
+   "torque_dyne_cm": -0.03,
+   "direction_verified": true,
+   "joint_travel_rad": -0.24229658088947548
+  },
+  {
+   "name": "antenna_abduct_antenna_abduct_left_extensor",
+   "joint": "antenna_abduct_left",
+   "sign": 1,
+   "side_sign": 1.0,
+   "intended_torque_sign": 1.0,
+   "role": "antenna",
+   "part": "antenna_abduct_left",
+   "body_origin": "head",
+   "body_insertion": "antenna_left",
+   "peak_force_dyne": 0.4,
+   "axis": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "range": [
+    -0.4,
+    0.8
+   ],
+   "arm_cm": 0.075,
+   "segment_length": 0.3,
+   "torque_dyne_cm": 0.03,
+   "direction_verified": true,
+   "joint_travel_rad": 0.8834302496679597
+  },
+  {
+   "name": "antenna_abduct_antenna_abduct_left_flexor",
+   "joint": "antenna_abduct_left",
+   "sign": -1,
+   "side_sign": 1.0,
+   "intended_torque_sign": -1.0,
+   "role": "antenna",
+   "part": "antenna_abduct_left",
+   "body_origin": "head",
+   "body_insertion": "antenna_left",
+   "peak_force_dyne": 0.4,
+   "axis": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "range": [
+    -0.4,
+    0.8
+   ],
+   "arm_cm": 0.075,
+   "segment_length": 0.3,
+   "torque_dyne_cm": -0.03,
+   "direction_verified": true,
+   "joint_travel_rad": -0.6330526335650237
+  },
+  {
+   "name": "antenna_twist_antenna_twist_left_extensor",
+   "joint": "antenna_twist_left",
+   "sign": 1,
+   "side_sign": 1.0,
+   "intended_torque_sign": 1.0,
+   "role": "antenna",
+   "part": "antenna_twist_left",
+   "body_origin": "head",
+   "body_insertion": "antenna_left",
+   "peak_force_dyne": 0.3,
+   "axis": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "range": [
+    -0.1,
+    0.09
+   ],
+   "arm_cm": 0.075,
+   "segment_length": 0.3,
+   "torque_dyne_cm": 0.0225,
+   "direction_verified": true,
+   "joint_travel_rad": 0.3401153323912262
+  },
+  {
+   "name": "antenna_twist_antenna_twist_left_flexor",
+   "joint": "antenna_twist_left",
+   "sign": -1,
+   "side_sign": 1.0,
+   "intended_torque_sign": -1.0,
+   "role": "antenna",
+   "part": "antenna_twist_left",
+   "body_origin": "head",
+   "body_insertion": "antenna_left",
+   "peak_force_dyne": 0.3,
+   "axis": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "range": [
+    -0.1,
+    0.09
+   ],
+   "arm_cm": 0.075,
+   "segment_length": 0.3,
+   "torque_dyne_cm": -0.0225,
+   "direction_verified": true,
+   "joint_travel_rad": -0.3465440306621401
+  },
+  {
+   "name": "antenna_antenna_left_extensor",
+   "joint": "antenna_left",
+   "sign": 1,
+   "side_sign": 1.0,
+   "intended_torque_sign": 1.0,
+   "role": "antenna",
+   "part": "antenna_left",
+   "body_origin": "head",
+   "body_insertion": "antenna_left",
+   "peak_force_dyne": 0.4,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.2,
+    0.5
+   ],
+   "arm_cm": 0.075,
+   "segment_length": 0.3,
+   "torque_dyne_cm": 0.03,
+   "direction_verified": true,
+   "joint_travel_rad": 0.6965721971896045
+  },
+  {
+   "name": "antenna_antenna_left_flexor",
+   "joint": "antenna_left",
+   "sign": -1,
+   "side_sign": 1.0,
+   "intended_torque_sign": -1.0,
+   "role": "antenna",
+   "part": "antenna_left",
+   "body_origin": "head",
+   "body_insertion": "antenna_left",
+   "peak_force_dyne": 0.4,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.2,
+    0.5
+   ],
+   "arm_cm": 0.075,
+   "segment_length": 0.3,
+   "torque_dyne_cm": -0.03,
+   "direction_verified": true,
+   "joint_travel_rad": -0.5049533615187025
+  },
+  {
+   "name": "antenna_abduct_antenna_abduct_right_extensor",
+   "joint": "antenna_abduct_right",
+   "sign": 1,
+   "side_sign": 1.0,
+   "intended_torque_sign": 1.0,
+   "role": "antenna",
+   "part": "antenna_abduct_right",
+   "body_origin": "head",
+   "body_insertion": "antenna_right",
+   "peak_force_dyne": 0.4,
+   "axis": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "range": [
+    -0.4,
+    0.8
+   ],
+   "arm_cm": 0.075,
+   "segment_length": 0.3,
+   "torque_dyne_cm": 0.03,
+   "direction_verified": true,
+   "joint_travel_rad": 0.8834271698266606
+  },
+  {
+   "name": "antenna_abduct_antenna_abduct_right_flexor",
+   "joint": "antenna_abduct_right",
+   "sign": -1,
+   "side_sign": 1.0,
+   "intended_torque_sign": -1.0,
+   "role": "antenna",
+   "part": "antenna_abduct_right",
+   "body_origin": "head",
+   "body_insertion": "antenna_right",
+   "peak_force_dyne": 0.4,
+   "axis": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "range": [
+    -0.4,
+    0.8
+   ],
+   "arm_cm": 0.075,
+   "segment_length": 0.3,
+   "torque_dyne_cm": -0.03,
+   "direction_verified": true,
+   "joint_travel_rad": -0.6330661501769449
+  },
+  {
+   "name": "antenna_twist_antenna_twist_right_extensor",
+   "joint": "antenna_twist_right",
+   "sign": 1,
+   "side_sign": 1.0,
+   "intended_torque_sign": 1.0,
+   "role": "antenna",
+   "part": "antenna_twist_right",
+   "body_origin": "head",
+   "body_insertion": "antenna_right",
+   "peak_force_dyne": 0.3,
+   "axis": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "range": [
+    -0.1,
+    0.09
+   ],
+   "arm_cm": 0.075,
+   "segment_length": 0.3,
+   "torque_dyne_cm": 0.0225,
+   "direction_verified": true,
+   "joint_travel_rad": 0.3401177068937387
+  },
+  {
+   "name": "antenna_twist_antenna_twist_right_flexor",
+   "joint": "antenna_twist_right",
+   "sign": -1,
+   "side_sign": 1.0,
+   "intended_torque_sign": -1.0,
+   "role": "antenna",
+   "part": "antenna_twist_right",
+   "body_origin": "head",
+   "body_insertion": "antenna_right",
+   "peak_force_dyne": 0.3,
+   "axis": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "range": [
+    -0.1,
+    0.09
+   ],
+   "arm_cm": 0.075,
+   "segment_length": 0.3,
+   "torque_dyne_cm": -0.0225,
+   "direction_verified": true,
+   "joint_travel_rad": -0.3465450540772155
+  },
+  {
+   "name": "antenna_antenna_right_extensor",
+   "joint": "antenna_right",
+   "sign": 1,
+   "side_sign": 1.0,
+   "intended_torque_sign": 1.0,
+   "role": "antenna",
+   "part": "antenna_right",
+   "body_origin": "head",
+   "body_insertion": "antenna_right",
+   "peak_force_dyne": 0.4,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.2,
+    0.5
+   ],
+   "arm_cm": 0.075,
+   "segment_length": 0.3,
+   "torque_dyne_cm": 0.03,
+   "direction_verified": true,
+   "joint_travel_rad": 0.6965738345792596
+  },
+  {
+   "name": "antenna_antenna_right_flexor",
+   "joint": "antenna_right",
+   "sign": -1,
+   "side_sign": 1.0,
+   "intended_torque_sign": -1.0,
+   "role": "antenna",
+   "part": "antenna_right",
+   "body_origin": "head",
+   "body_insertion": "antenna_right",
+   "peak_force_dyne": 0.4,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.2,
+    0.5
+   ],
+   "arm_cm": 0.075,
+   "segment_length": 0.3,
+   "torque_dyne_cm": -0.03,
+   "direction_verified": true,
+   "joint_travel_rad": -0.5049558495855817
+  },
+  {
+   "name": "wing_yaw_wing_yaw_left_extensor",
+   "joint": "wing_yaw_left",
+   "sign": 1,
+   "side_sign": 1.0,
+   "intended_torque_sign": 1.0,
+   "role": "wing",
+   "part": "wing_yaw_left",
+   "body_origin": "thorax",
+   "body_insertion": "wing_left",
+   "peak_force_dyne": 4.0,
+   "axis": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "range": [
+    -1.5,
+    1.5
+   ],
+   "arm_cm": 0.075,
+   "segment_length": 0.3,
+   "torque_dyne_cm": 0.3,
+   "direction_verified": true,
+   "joint_travel_rad": 4.412454450764754
+  },
+  {
+   "name": "wing_yaw_wing_yaw_left_flexor",
+   "joint": "wing_yaw_left",
+   "sign": -1,
+   "side_sign": 1.0,
+   "intended_torque_sign": -1.0,
+   "role": "wing",
+   "part": "wing_yaw_left",
+   "body_origin": "thorax",
+   "body_insertion": "wing_left",
+   "peak_force_dyne": 4.0,
+   "axis": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "range": [
+    -1.5,
+    1.5
+   ],
+   "arm_cm": 0.075,
+   "segment_length": 0.3,
+   "torque_dyne_cm": -0.3,
+   "direction_verified": true,
+   "joint_travel_rad": -4.406270603683332
+  },
+  {
+   "name": "wing_roll_wing_roll_left_extensor",
+   "joint": "wing_roll_left",
+   "sign": 1,
+   "side_sign": 1.0,
+   "intended_torque_sign": 1.0,
+   "role": "wing",
+   "part": "wing_roll_left",
+   "body_origin": "thorax",
+   "body_insertion": "wing_left",
+   "peak_force_dyne": 4.0,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -1.0,
+    1.5
+   ],
+   "arm_cm": 0.075,
+   "segment_length": 0.3,
+   "torque_dyne_cm": 0.3,
+   "direction_verified": true,
+   "joint_travel_rad": 4.397655387682644
+  },
+  {
+   "name": "wing_roll_wing_roll_left_flexor",
+   "joint": "wing_roll_left",
+   "sign": -1,
+   "side_sign": 1.0,
+   "intended_torque_sign": -1.0,
+   "role": "wing",
+   "part": "wing_roll_left",
+   "body_origin": "thorax",
+   "body_insertion": "wing_left",
+   "peak_force_dyne": 4.0,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -1.0,
+    1.5
+   ],
+   "arm_cm": 0.075,
+   "segment_length": 0.3,
+   "torque_dyne_cm": -0.3,
+   "direction_verified": true,
+   "joint_travel_rad": -4.052114595794796
+  },
+  {
+   "name": "wing_pitch_wing_pitch_left_extensor",
+   "joint": "wing_pitch_left",
+   "sign": 1,
+   "side_sign": 1.0,
+   "intended_torque_sign": 1.0,
+   "role": "wing",
+   "part": "wing_pitch_left",
+   "body_origin": "thorax",
+   "body_insertion": "wing_left",
+   "peak_force_dyne": 8.0,
+   "axis": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "range": [
+    -1.27,
+    2.92
+   ],
+   "arm_cm": 0.075,
+   "segment_length": 0.3,
+   "torque_dyne_cm": 0.6,
+   "direction_verified": true,
+   "joint_travel_rad": 9.323174644094559
+  },
+  {
+   "name": "wing_pitch_wing_pitch_left_flexor",
+   "joint": "wing_pitch_left",
+   "sign": -1,
+   "side_sign": 1.0,
+   "intended_torque_sign": -1.0,
+   "role": "wing",
+   "part": "wing_pitch_left",
+   "body_origin": "thorax",
+   "body_insertion": "wing_left",
+   "peak_force_dyne": 8.0,
+   "axis": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "range": [
+    -1.27,
+    2.92
+   ],
+   "arm_cm": 0.075,
+   "segment_length": 0.3,
+   "torque_dyne_cm": -0.6,
+   "direction_verified": true,
+   "joint_travel_rad": -8.225549292382512
+  },
+  {
+   "name": "wing_yaw_wing_yaw_right_extensor",
+   "joint": "wing_yaw_right",
+   "sign": 1,
+   "side_sign": 1.0,
+   "intended_torque_sign": 1.0,
+   "role": "wing",
+   "part": "wing_yaw_right",
+   "body_origin": "thorax",
+   "body_insertion": "wing_right",
+   "peak_force_dyne": 4.0,
+   "axis": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "range": [
+    -1.5,
+    1.5
+   ],
+   "arm_cm": 0.075,
+   "segment_length": 0.3,
+   "torque_dyne_cm": 0.3,
+   "direction_verified": true,
+   "joint_travel_rad": 4.410333901137261
+  },
+  {
+   "name": "wing_yaw_wing_yaw_right_flexor",
+   "joint": "wing_yaw_right",
+   "sign": -1,
+   "side_sign": 1.0,
+   "intended_torque_sign": -1.0,
+   "role": "wing",
+   "part": "wing_yaw_right",
+   "body_origin": "thorax",
+   "body_insertion": "wing_right",
+   "peak_force_dyne": 4.0,
+   "axis": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "range": [
+    -1.5,
+    1.5
+   ],
+   "arm_cm": 0.075,
+   "segment_length": 0.3,
+   "torque_dyne_cm": -0.3,
+   "direction_verified": true,
+   "joint_travel_rad": -4.408162688810755
+  },
+  {
+   "name": "wing_roll_wing_roll_right_extensor",
+   "joint": "wing_roll_right",
+   "sign": 1,
+   "side_sign": 1.0,
+   "intended_torque_sign": 1.0,
+   "role": "wing",
+   "part": "wing_roll_right",
+   "body_origin": "thorax",
+   "body_insertion": "wing_right",
+   "peak_force_dyne": 4.0,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -1.0,
+    1.5
+   ],
+   "arm_cm": 0.075,
+   "segment_length": 0.3,
+   "torque_dyne_cm": 0.3,
+   "direction_verified": true,
+   "joint_travel_rad": 4.39770921423293
+  },
+  {
+   "name": "wing_roll_wing_roll_right_flexor",
+   "joint": "wing_roll_right",
+   "sign": -1,
+   "side_sign": 1.0,
+   "intended_torque_sign": -1.0,
+   "role": "wing",
+   "part": "wing_roll_right",
+   "body_origin": "thorax",
+   "body_insertion": "wing_right",
+   "peak_force_dyne": 4.0,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -1.0,
+    1.5
+   ],
+   "arm_cm": 0.075,
+   "segment_length": 0.3,
+   "torque_dyne_cm": -0.3,
+   "direction_verified": true,
+   "joint_travel_rad": -4.052230227423636
+  },
+  {
+   "name": "wing_pitch_wing_pitch_right_extensor",
+   "joint": "wing_pitch_right",
+   "sign": 1,
+   "side_sign": 1.0,
+   "intended_torque_sign": 1.0,
+   "role": "wing",
+   "part": "wing_pitch_right",
+   "body_origin": "thorax",
+   "body_insertion": "wing_right",
+   "peak_force_dyne": 8.0,
+   "axis": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "range": [
+    -1.27,
+    2.92
+   ],
+   "arm_cm": 0.075,
+   "segment_length": 0.3,
+   "torque_dyne_cm": 0.6,
+   "direction_verified": true,
+   "joint_travel_rad": 9.322796919160984
+  },
+  {
+   "name": "wing_pitch_wing_pitch_right_flexor",
+   "joint": "wing_pitch_right",
+   "sign": -1,
+   "side_sign": 1.0,
+   "intended_torque_sign": -1.0,
+   "role": "wing",
+   "part": "wing_pitch_right",
+   "body_origin": "thorax",
+   "body_insertion": "wing_right",
+   "peak_force_dyne": 8.0,
+   "axis": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "range": [
+    -1.27,
+    2.92
+   ],
+   "arm_cm": 0.075,
+   "segment_length": 0.3,
+   "torque_dyne_cm": -0.6,
+   "direction_verified": true,
+   "joint_travel_rad": -8.225930161929343
+  },
+  {
+   "name": "haltere_haltere_left_extensor",
+   "joint": "haltere_left",
+   "sign": 1,
+   "side_sign": 1.0,
+   "intended_torque_sign": 1.0,
+   "role": "haltere",
+   "part": "haltere_left",
+   "body_origin": "thorax",
+   "body_insertion": "haltere_left",
+   "peak_force_dyne": 0.1,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.2,
+    0.2
+   ],
+   "arm_cm": 0.075,
+   "segment_length": 0.3,
+   "torque_dyne_cm": 0.0075,
+   "direction_verified": true,
+   "joint_travel_rad": 0.221130778082753
+  },
+  {
+   "name": "haltere_haltere_left_flexor",
+   "joint": "haltere_left",
+   "sign": -1,
+   "side_sign": 1.0,
+   "intended_torque_sign": -1.0,
+   "role": "haltere",
+   "part": "haltere_left",
+   "body_origin": "thorax",
+   "body_insertion": "haltere_left",
+   "peak_force_dyne": 0.1,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.2,
+    0.2
+   ],
+   "arm_cm": 0.075,
+   "segment_length": 0.3,
+   "torque_dyne_cm": -0.0075,
+   "direction_verified": true,
+   "joint_travel_rad": -0.22088509962778624
+  },
+  {
+   "name": "haltere_haltere_right_extensor",
+   "joint": "haltere_right",
+   "sign": 1,
+   "side_sign": 1.0,
+   "intended_torque_sign": 1.0,
+   "role": "haltere",
+   "part": "haltere_right",
+   "body_origin": "thorax",
+   "body_insertion": "haltere_right",
+   "peak_force_dyne": 0.1,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.2,
+    0.2
+   ],
+   "arm_cm": 0.075,
+   "segment_length": 0.3,
+   "torque_dyne_cm": 0.0075,
+   "direction_verified": true,
+   "joint_travel_rad": 0.2211446536939493
+  },
+  {
+   "name": "haltere_haltere_right_flexor",
+   "joint": "haltere_right",
+   "sign": -1,
+   "side_sign": 1.0,
+   "intended_torque_sign": -1.0,
+   "role": "haltere",
+   "part": "haltere_right",
+   "body_origin": "thorax",
+   "body_insertion": "haltere_right",
+   "peak_force_dyne": 0.1,
+   "axis": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "range": [
+    -0.2,
+    0.2
+   ],
+   "arm_cm": 0.075,
+   "segment_length": 0.3,
+   "torque_dyne_cm": -0.0075,
+   "direction_verified": true,
+   "joint_travel_rad": -0.22087344409958184
   },
   {
    "name": "abdomen_pitch_abdomen_extensor",
@@ -2292,7 +4748,7 @@
    "segment_length": 0.011899999999999997,
    "torque_dyne_cm": 0.005949999999999999,
    "direction_verified": true,
-   "joint_travel_rad": -0.02241406110052212
+   "joint_travel_rad": -0.02099572442282293
   },
   {
    "name": "abdomen_pitch_abdomen_flexor",
@@ -2318,7 +4774,7 @@
    "segment_length": 0.011899999999999997,
    "torque_dyne_cm": -0.005949999999999999,
    "direction_verified": true,
-   "joint_travel_rad": -0.037049549776295494
+   "joint_travel_rad": -0.03560548460676485
   },
   {
    "name": "abdomen_yaw_abdomen_extensor",
@@ -2344,7 +4800,7 @@
    "segment_length": 0.011899999999999997,
    "torque_dyne_cm": 0.003569999999999999,
    "direction_verified": true,
-   "joint_travel_rad": 0.0045317138726645384
+   "joint_travel_rad": 0.004508356125060752
   },
   {
    "name": "abdomen_yaw_abdomen_flexor",
@@ -2370,7 +4826,7 @@
    "segment_length": 0.011899999999999997,
    "torque_dyne_cm": -0.003569999999999999,
    "direction_verified": true,
-   "joint_travel_rad": -0.00443951634007956
+   "joint_travel_rad": -0.004445921861381026
   },
   {
    "name": "abdomen_pitch_abdomen_2_extensor",
@@ -2396,7 +4852,7 @@
    "segment_length": 0.021199999999999997,
    "torque_dyne_cm": 0.010599999999999998,
    "direction_verified": true,
-   "joint_travel_rad": -0.011315185378836128
+   "joint_travel_rad": -0.009871560612631104
   },
   {
    "name": "abdomen_pitch_abdomen_2_flexor",
@@ -2422,7 +4878,7 @@
    "segment_length": 0.021199999999999997,
    "torque_dyne_cm": -0.010599999999999998,
    "direction_verified": true,
-   "joint_travel_rad": -0.03736868729088068
+   "joint_travel_rad": -0.035890183829469596
   },
   {
    "name": "abdomen_yaw_abdomen_2_extensor",
@@ -2448,7 +4904,7 @@
    "segment_length": 0.021199999999999997,
    "torque_dyne_cm": 0.0063599999999999985,
    "direction_verified": true,
-   "joint_travel_rad": 0.007945690799388233
+   "joint_travel_rad": 0.007914361354849405
   },
   {
    "name": "abdomen_yaw_abdomen_2_flexor",
@@ -2474,7 +4930,7 @@
    "segment_length": 0.021199999999999997,
    "torque_dyne_cm": -0.0063599999999999985,
    "direction_verified": true,
-   "joint_travel_rad": -0.007863584888596528
+   "joint_travel_rad": -0.007864935771896038
   },
   {
    "name": "abdomen_pitch_abdomen_3_extensor",
@@ -2500,7 +4956,7 @@
    "segment_length": 0.031299999999999994,
    "torque_dyne_cm": 0.015649999999999997,
    "direction_verified": true,
-   "joint_travel_rad": 0.003639102556279504
+   "joint_travel_rad": 0.004801760227393998
   },
   {
    "name": "abdomen_pitch_abdomen_3_flexor",
@@ -2526,7 +4982,7 @@
    "segment_length": 0.031299999999999994,
    "torque_dyne_cm": -0.015649999999999997,
    "direction_verified": true,
-   "joint_travel_rad": -0.03493557341834857
+   "joint_travel_rad": -0.03374079438908658
   },
   {
    "name": "abdomen_yaw_abdomen_3_extensor",
@@ -2552,7 +5008,7 @@
    "segment_length": 0.031299999999999994,
    "torque_dyne_cm": 0.009389999999999997,
    "direction_verified": true,
-   "joint_travel_rad": 0.011670359110044241
+   "joint_travel_rad": 0.011644238094343347
   },
   {
    "name": "abdomen_yaw_abdomen_3_flexor",
@@ -2578,7 +5034,7 @@
    "segment_length": 0.031299999999999994,
    "torque_dyne_cm": -0.009389999999999997,
    "direction_verified": true,
-   "joint_travel_rad": -0.01161051135180848
+   "joint_travel_rad": -0.01160714428131108
   },
   {
    "name": "abdomen_pitch_abdomen_4_extensor",
@@ -2604,7 +5060,7 @@
    "segment_length": 0.026200000000000005,
    "torque_dyne_cm": 0.013100000000000002,
    "direction_verified": true,
-   "joint_travel_rad": 0.00957962631729854
+   "joint_travel_rad": 0.010256537827301605
   },
   {
    "name": "abdomen_pitch_abdomen_4_flexor",
@@ -2630,7 +5086,7 @@
    "segment_length": 0.026200000000000005,
    "torque_dyne_cm": -0.013100000000000002,
    "direction_verified": true,
-   "joint_travel_rad": -0.02288622328058863
+   "joint_travel_rad": -0.02219743721106781
   },
   {
    "name": "abdomen_yaw_abdomen_4_extensor",
@@ -2656,7 +5112,7 @@
    "segment_length": 0.026200000000000005,
    "torque_dyne_cm": 0.00786,
    "direction_verified": true,
-   "joint_travel_rad": 0.009792955335520905
+   "joint_travel_rad": 0.009782311094763834
   },
   {
    "name": "abdomen_yaw_abdomen_4_flexor",
@@ -2682,7 +5138,7 @@
    "segment_length": 0.026200000000000005,
    "torque_dyne_cm": -0.00786,
    "direction_verified": true,
-   "joint_travel_rad": -0.009756461380584194
+   "joint_travel_rad": -0.009755308506669912
   },
   {
    "name": "abdomen_pitch_abdomen_5_extensor",
@@ -2708,7 +5164,7 @@
    "segment_length": 0.02129999999999999,
    "torque_dyne_cm": 0.010649999999999995,
    "direction_verified": true,
-   "joint_travel_rad": 0.011119158403601762
+   "joint_travel_rad": 0.011463105495248486
   },
   {
    "name": "abdomen_pitch_abdomen_5_flexor",
@@ -2734,7 +5190,7 @@
    "segment_length": 0.02129999999999999,
    "torque_dyne_cm": -0.010649999999999995,
    "direction_verified": true,
-   "joint_travel_rad": -0.015377993773759532
+   "joint_travel_rad": -0.015031039741721208
   },
   {
    "name": "abdomen_yaw_abdomen_5_extensor",
@@ -2760,7 +5216,7 @@
    "segment_length": 0.02129999999999999,
    "torque_dyne_cm": 0.006389999999999996,
    "direction_verified": true,
-   "joint_travel_rad": 0.007981609231043244
+   "joint_travel_rad": 0.007978466942840746
   },
   {
    "name": "abdomen_yaw_abdomen_5_flexor",
@@ -2786,7 +5242,7 @@
    "segment_length": 0.02129999999999999,
    "torque_dyne_cm": -0.006389999999999996,
    "direction_verified": true,
-   "joint_travel_rad": -0.00794919289053077
+   "joint_travel_rad": -0.007948444037728956
   },
   {
    "name": "abdomen_pitch_abdomen_6_extensor",
@@ -2812,7 +5268,7 @@
    "segment_length": 0.01819999999999998,
    "torque_dyne_cm": 0.00909999999999999,
    "direction_verified": true,
-   "joint_travel_rad": 0.010919876626851718
+   "joint_travel_rad": 0.011070896783623689
   },
   {
    "name": "abdomen_pitch_abdomen_6_flexor",
@@ -2838,7 +5294,7 @@
    "segment_length": 0.01819999999999998,
    "torque_dyne_cm": -0.00909999999999999,
    "direction_verified": true,
-   "joint_travel_rad": -0.01177433305539085
+   "joint_travel_rad": -0.011622933510270057
   },
   {
    "name": "abdomen_yaw_abdomen_6_extensor",
@@ -2864,7 +5320,7 @@
    "segment_length": 0.01819999999999998,
    "torque_dyne_cm": 0.0054599999999999935,
    "direction_verified": true,
-   "joint_travel_rad": 0.006810723461881244
+   "joint_travel_rad": 0.006808847867745368
   },
   {
    "name": "abdomen_yaw_abdomen_6_flexor",
@@ -2890,7 +5346,7 @@
    "segment_length": 0.01819999999999998,
    "torque_dyne_cm": -0.0054599999999999935,
    "direction_verified": true,
-   "joint_travel_rad": -0.006818028574213951
+   "joint_travel_rad": -0.006818762846101115
   },
   {
    "name": "abdomen_pitch_abdomen_7_extensor",
@@ -2916,7 +5372,7 @@
    "segment_length": 0.3,
    "torque_dyne_cm": 0.15,
    "direction_verified": true,
-   "joint_travel_rad": 0.1822035181354371
+   "joint_travel_rad": 0.18228146307450158
   },
   {
    "name": "abdomen_pitch_abdomen_7_flexor",
@@ -2942,7 +5398,7 @@
    "segment_length": 0.3,
    "torque_dyne_cm": -0.15,
    "direction_verified": true,
-   "joint_travel_rad": -0.1850867747560836
+   "joint_travel_rad": -0.18499364754691502
   },
   {
    "name": "abdomen_yaw_abdomen_7_extensor",
@@ -2968,7 +5424,7 @@
    "segment_length": 0.3,
    "torque_dyne_cm": 0.09,
    "direction_verified": true,
-   "joint_travel_rad": 0.1116953648581654
+   "joint_travel_rad": 0.11169049788938444
   },
   {
    "name": "abdomen_yaw_abdomen_7_flexor",
@@ -2994,7 +5450,7 @@
    "segment_length": 0.3,
    "torque_dyne_cm": -0.09,
    "direction_verified": true,
-   "joint_travel_rad": -0.11170606615476775
+   "joint_travel_rad": -0.1117014136365596
   }
  ]
 }

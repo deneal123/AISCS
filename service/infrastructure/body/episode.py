@@ -31,6 +31,7 @@ import numpy as np
 LABEL_NOXIOUS_INPUT = "noxious_input_arrived"
 LABEL_NO_ESCAPE = "no_escape"
 LABEL_ESCAPE = "escape"
+LABEL_FLIGHT = "flight"
 # The format name says noxious, not pain: the record holds what was applied and what
 # answered, and naming it after the feeling would claim the conclusion.
 FORMAT = "malecns-noxious-episode-v1"
@@ -50,6 +51,8 @@ class Episode:
         self.network = {}
         self.body = {}
         self.electrode = {}
+        self.compound = {}
+        self.loop = {}
 
     def record_network(self, *, spikes, spike_neurons, spike_times_ms, activity,
                        cell_ids):
@@ -85,7 +88,8 @@ class Episode:
 
     def record_body(self, *, start, end, curl_start, curl_end, escape_latency_ms,
                     peak_height_cm, min_height_cm, motor_spikes=0,
-                    mapped_first_tick_ms=None):
+                    mapped_first_tick_ms=None, flight=None,
+                    heading_start_rad=None, turn_deg=None):
         dx = (float(end[0]) - float(start[0])) * 10.0
         dy = (float(end[1]) - float(start[1])) * 10.0
         dz = (float(end[2]) - float(start[2])) * 10.0
@@ -106,8 +110,41 @@ class Episode:
             "motor_spikes": int(motor_spikes),
             "mapped_first_tick_ms": (None if mapped_first_tick_ms is None
                                      else round(float(mapped_first_tick_ms), 3)),
+            # Which way the animal ended up facing. The displacement above has no sign
+            # for it: an escape to the left and one to the right cover the same distance.
+            # None rather than zero when the body was not asked, so a reader can tell a
+            # straight run from a run that was never measured.
+            "heading_start_rad": (None if heading_start_rad is None
+                                  else round(float(heading_start_rad), 6)),
+            "turn_deg": None if turn_deg is None else round(float(turn_deg), 3),
         }
+        # Flight is recorded apart from walking because it is a different claim: a
+        # displacement can be walked or flown, and only the beat and the lift say which.
+        if flight is not None:
+            self.body["flight"] = {
+                "latency_ms": (None if flight.get("latency_ms") is None
+                               else round(float(flight["latency_ms"]), 3)),
+                "wing_spikes": int(flight.get("wing_spikes", 0)),
+                "lift_to_weight": round(float(flight.get("lift_to_weight", 0.0)), 4),
+                "airborne_cm": round(float(flight.get("airborne_cm", 0.0)), 5),
+                "beating": bool(flight.get("beating", False)),
+            }
         return self.body
+
+    def record_loop(self, proprioception, *, body_events):
+        """What the body said to the network, and what the network made of it.
+
+        An episode that ran open loop leaves this empty; a closed one names the cells
+        that carried the pose back, the rate they fired at, and how many events the
+        body injected. Without this block a closed episode and an open one differ only
+        in their spike counts, which is not an explanation.
+        """
+        self.loop = {
+            "closed": True,
+            "body_events": int(body_events),
+            "proprioception": dict(proprioception),
+        }
+        return self.loop
 
     def record_electrode(self, *, ptp_uv, tail_abs_max_uv, samples, source):
         """The field recording is joined in by whoever owns a field solve."""
@@ -119,6 +156,21 @@ class Episode:
         }
         return self.electrode
 
+    def record_compound_action(self, receipt):
+        """The propagating-electrode channel, when the caller built one.
+
+        This is separate from record_electrode on purpose. That block is a field
+        solve, which the twin does not own; this block is a forward model of a passing
+        volley, which the twin can compute from its own raster. Keeping them apart stops
+        a model output from being read as a measurement.
+        """
+        if not isinstance(receipt, dict) or not receipt.get("format"):
+            raise ValueError("Invalid compound action receipt")
+        if receipt["format"] != "malecns-compound-action-potential-v1":
+            raise ValueError("Unexpected compound action receipt format")
+        self.compound = dict(receipt)
+        return self.compound
+
     def labels(self):
         """What may be claimed from this episode, and nothing more."""
         labels = []
@@ -128,6 +180,8 @@ class Episode:
             labels.append(LABEL_NO_ESCAPE)
         else:
             labels.append(LABEL_ESCAPE)
+        if self.body.get("flight", {}).get("beating"):
+            labels.append(LABEL_FLIGHT)
         return labels
 
     def record(self):
@@ -143,6 +197,8 @@ class Episode:
             "network": self.network,
             "body": self.body,
             "electrode": self.electrode,
+            "compound_action": self.compound,
+            "loop": self.loop,
             "labels": self.labels(),
             # Stated once per record so a reader cannot mistake the label for a
             # statement about a cell.
