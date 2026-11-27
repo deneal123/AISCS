@@ -89,7 +89,15 @@ def walk():
 def back():
     # Stroke negative, phase forward: reversing the phase as well yaws the animal by
     # 16.5 degrees in 600 ms (measured), which is a turn the caller did not ask for.
-    return Behaviour(BACK, stroke_scale=-1.0)
+    #
+    # The rate is 0.65, not 1.0, because at the retuned 90 ms period a full-rate
+    # reversal yaws the body 13.7 degrees in 600 ms: the same claws that hold a
+    # forward stance at 19.5 mm/s cannot drag it backwards that fast without the
+    # front pair losing grip.  Measured in .work/twin/bs1.log, rate 1.0 -> 13.74
+    # degrees and the body rides 0.0315 cm up, 0.8 -> -1.02, 0.65 -> 1.75 with the
+    # body at 0.0022 cm, 0.5 -> 1.35 but the body sinks to -0.0015 cm.  Slower than
+    # a real fly backs up, and straight.
+    return Behaviour(BACK, stride_rate=0.65, stroke_scale=-1.0)
 
 
 def turn_in_place(*, direction=-1.0):

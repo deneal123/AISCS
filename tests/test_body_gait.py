@@ -186,3 +186,35 @@ def test_the_episode_records_which_way_the_animal_turned():
     turned = _turn_deg(start, _heading(body))
     assert turned < -5.0, "the recorded turn was %.1f deg" % turned
     assert -180.0 < turned <= 180.0
+
+def test_the_default_gait_walks_at_a_speed_a_real_fly_walks_at():
+    """Mendes et al. 2013 measured freely walking flies at 7.2 to 44.7 mm/s.
+
+    The twin used to walk at 10.8 mm/s, which is the bottom edge of that range, and
+    it did so with a 180 ms step period, three times slower than the 60 ms a fly
+    uses above 30 mm/s.  The gait is now tuned against that paper, and this test is
+    the one that would have caught the loop keeping its own copy of the constants:
+    the loop used to pass 0.18 s explicitly and went on walking slowly after the
+    module was retuned.
+    """
+    body = _gripping(TwinBody())
+    loop = BehaviourLoop(body, compliance=1.0, kp=60.0, kd=4.0, height_gain=0.0)
+    loop.settle(steps=300)
+    start_x = float(body.data.qpos[0])
+    for _ in range(2000):
+        loop.advance(0.001)
+    speed = (float(body.data.qpos[0]) - start_x) * 10.0 / 2.0
+    assert speed > 15.0, "the default gait walks at %.2f mm/s, below the real range" % speed
+    assert speed < 45.0, "the default gait runs at %.2f mm/s, past the real range" % speed
+    assert loop.gait.period_s < 0.12, "the step period is still %.3f s" % loop.gait.period_s
+
+
+def test_the_loop_takes_its_gait_from_the_module():
+    """Two files holding the same constants is how the walk stayed slow."""
+    import service.infrastructure.body.footgait as footgait
+
+    body = _gripping(TwinBody())
+    loop = BehaviourLoop(body, compliance=1.0, kp=60.0, kd=4.0, height_gain=0.0)
+    assert loop.gait.period_s == footgait.GAIT_PERIOD_S
+    assert loop.gait.stroke_cm == footgait.STROKE_CM
+    assert loop.gait.lift_cm == footgait.LIFT_CM

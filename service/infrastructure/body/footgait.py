@@ -37,13 +37,37 @@ from .kinematics import LEGS, LegKinematics
 # Tripod gait: these three legs swing together, the other three carry the body.
 TRIPOD_A = ("T1_left", "T2_right", "T3_left")
 TRIPOD_B = ("T1_right", "T2_left", "T3_right")
-GAIT_PERIOD_S = 0.18
+# Step period, s, and stroke, cm.  These two set the walking speed, and the speed is
+# the one thing about the gait that can be checked against a real animal: Mendes et
+# al. 2013 (eLife 2:e00231) measured freely walking wild-type flies at 7.2 to
+# 44.7 mm/s, most often 28 mm/s, with a step period near 60 ms above 30 mm/s.  The
+# twin used to walk at 10.8 mm/s with a 180 ms period, which is at the bottom edge
+# of the real range and three times slower than a fly steps.
+#
+# Measured sweep through the real control loop (.work/twin/gc5.log, gc6.log, 2 s
+# each, standing gait only, no stimulus):
+#   period 0.18, stroke 0.22 -> 12.0 mm/s, IK 0.040, height span 0.042
+#   period 0.12, stroke 0.22 -> 12.9 mm/s, IK 0.038, height span 0.024
+#   period 0.09, stroke 0.22 -> 19.1 mm/s, IK 0.036, height span 0.018
+#   period 0.09, stroke 0.26 -> 19.5 mm/s, IK 0.064, height span 0.028
+#   period 0.09, stroke 0.32 -> blows up, IK 7.99: the claw is pulled past its clamp
+#   period 0.075, stroke 0.26 -> 16.0 mm/s: faster steps walk FURTHER but slip more
+# A duty factor of 0.5 (swing 0.5) did not help at any period: 15.5 mm/s at 0.09
+# against 19.5 at 0.4, because a longer swing leaves the tripod short of support.
+#
+# So 0.09 s and 0.26 cm is the fastest gait that still stands, and it lands at
+# 19.5 mm/s: inside the real range, still below the most-represented 28 mm/s.  The
+# ceiling is the stance clamp, not the stride - stroke 0.32 tears the claws loose
+# rather than pushing the body - so getting to 28 mm/s needs a slipping contact
+# model, not another constant.
+GAIT_PERIOD_S = 0.09
 SWING_FRACTION = 0.4
-# Stroke: how far the foot travels fore and aft, cm.  A fly step is about 0.4 mm.
-STROKE_CM = 0.22
+STROKE_CM = 0.26
 # Lift: how high the claw rises during swing, cm.  It has to clear the tarsus and
-# the tibia as well as the floor, which is why it is not a hair.
-LIFT_CM = 0.02
+# the tibia as well as the floor, which is why it is not a hair.  0.01 cm walks
+# slightly faster and steadier than 0.02 at every period measured above (13.2 mm/s
+# against 11.4 at period 0.12), because a lower swing keeps the body from rocking.
+LIFT_CM = 0.01
 # Sideways sway of the swing foot, cm: a fly does not swing its feet in a straight
 # line, and without the sway the claw drags the tarsus chain.
 SWAY_CM = 0.004

@@ -56,8 +56,8 @@ class BehaviourLoop:
     """A walking fly whose muscles also listen to the connectome."""
 
     def __init__(self, body, *, kp=WALK_KP, kd=WALK_KD, height_gain=WALK_HEIGHT_GAIN,
-                 compliance=WALK_COMPLIANCE, period_s=0.18, stroke_cm=0.22,
-                 lift_cm=0.02, sway_cm=0.004, escape_threshold=1):
+                 compliance=WALK_COMPLIANCE, period_s=None, stroke_cm=None,
+                 lift_cm=None, sway_cm=None, escape_threshold=1):
         self.body = body
         # The claws need a tangential contact model before anything can push: with
         # the source model's condim 1 the twin walks backwards at 0.56 mm/s, with
@@ -66,9 +66,21 @@ class BehaviourLoop:
             body.set_claw_grip()
         self.apply_compliance(compliance)
         self.posture = Posture(body, kp=kp, kd=kd, height_gain=height_gain)
-        self.gait = FootGait(body, period_s=period_s, stroke_cm=stroke_cm,
-                             lift_cm=lift_cm, sway_cm=sway_cm,
-                             press_cm=0.0)
+        # The gait constants live in footgait.py, where the sweep that chose them is
+        # written down.  Repeating the numbers here is how the loop kept walking at
+        # the old 180 ms period after the module was retuned to 90 ms: the values
+        # below read as "the module default", and the module is the only place that
+        # can be retuned without two files disagreeing.
+        gait_options = {}
+        if period_s is not None:
+            gait_options["period_s"] = period_s
+        if stroke_cm is not None:
+            gait_options["stroke_cm"] = stroke_cm
+        if lift_cm is not None:
+            gait_options["lift_cm"] = lift_cm
+        if sway_cm is not None:
+            gait_options["sway_cm"] = sway_cm
+        self.gait = FootGait(body, press_cm=0.0, **gait_options)
         self.escape = Escape()
         # The locomotion programme the animal is running.  A walk until one of the
         # others is selected; the escape rides on top of whatever this is.
