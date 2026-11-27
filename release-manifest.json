@@ -1,5 +1,5 @@
 {
-  "version": "0.1.25",
+  "version": "0.1.26",
   "date": "2026-11-27",
   "application": "AISCS",
   "branch": "dev",
@@ -15,9 +15,9 @@
       "commit": "eeb19ba"
     },
     "generator": {
-      "version": "0.1.25",
+      "version": "0.1.26",
       "branch": "generator",
-      "commit": "d5f6d24"
+      "commit": "dd6c255"
     },
     "research": {
       "version": "1.6.2",
@@ -129,10 +129,39 @@
         "report": "docs/Материалы/План_генератора_2026-10/31-final-report-2026-11-24.md section 11"
       },
       "gait": {
-        "speed_mm_s": 10.84,
-        "stroke_cm": 0.22,
-        "period_s": 0.18,
-        "real_fly_mm_s": "10 to 30"
+        "speed_mm_s": 19.21,
+        "stroke_cm": 0.26,
+        "period_s": 0.09,
+        "lift_cm": 0.01,
+        "real_fly_mm_s": "7.2 to 44.7, most common 28",
+        "reference": "Mendes et al. 2013, eLife 2:e00231",
+        "ceiling": "the 0.08 cm stance clamp, not the stride: 0.32 cm at 0.09 s reaches 35.6 mm/s but the claw tears out (ik error 7.99 cm)",
+        "walk_1500_ms": {
+          "forward_mm": 28.81,
+          "turn_deg": -3.34,
+          "ik_error_cm": 0.0645
+        },
+        "measured_behaviours_600_ms": {
+          "back": {"forward_mm": -6.88, "turn_deg": 1.75},
+          "turn_in_place": {"turn_deg": -60.34, "distance_mm": 0.057},
+          "turn_in_place_reversed": {"turn_deg": 60.06, "distance_mm": 0.055},
+          "groom": {"turn_deg": -0.67},
+          "freeze": {"turn_deg": -0.68}
+        },
+        "escape_350_ms": {
+          "no_steering": {"distance_mm": 5.97, "turn_deg": -1.74},
+          "away_from_right_stimulus": {"distance_mm": 7.35, "turn_deg": -24.2},
+          "away_from_left_stimulus": {"distance_mm": 6.77, "turn_deg": 22.71}
+        },
+        "defect_found": "BehaviourLoop.__init__ kept a second copy of the constants (0.18/0.22/0.02) and passed them to FootGait explicitly, so retuning the module left the walk at 180 ms",
+        "measurement_defect_found": "the gait_final probe wrote body_yaw() (radians) into a field named turn_deg, so a 60.2 degree pivot read as 1.05 degrees; the episode converts with math.degrees, so section 10 stands",
+        "back_stride_rate": 0.65,
+        "back_why_slow": "at a 90 ms period a full-rate reversal yaws 13.7 degrees in 600 ms and lifts the body to 0.0315 cm",
+        "tests": {
+          "test_body_gait": "11/11",
+          "body_regression_eleven_files": "93/93"
+        },
+        "report": "docs/Материалы/План_генератора_2026-10/31-final-report-2026-11-24.md section 12"
       },
       "stimulus_field": {
         "recruitment": "analytic_bipolar_field",
