@@ -115,7 +115,8 @@ def run_episode(graph, *, source_cells, current_na, site_um, seed=1,
                 duration_ms=DEFAULT_DURATION_MS, onset_ms=DEFAULT_ONSET_MS,
                 body=None, loop=None, reason="", electrode=None,
                 allow_silent=False, escape_threshold=None, onsets_ms=None,
-                flight_recruitment=None, electrode_um=None, fibre_classes=True):
+                flight_recruitment=None, electrode_um=None, fibre_classes=True,
+                behaviour=None):
     """Run one stimulus through the connectome and the body and return the record.
 
     The source_cells argument names the cells the stimulus drives. Which cells a
@@ -184,6 +185,14 @@ def run_episode(graph, *, source_cells, current_na, site_um, seed=1,
     reset = getattr(control, "reset", None)
     if reset is not None:
         reset()
+    # Which locomotion programme the legs run.  A corpus of walks and bolts cannot say
+    # anything about grooming or backing, and those are behaviours the body was measured
+    # to perform (.work/twin/bm2.log), so an episode is allowed to ask for one.
+    if behaviour is not None:
+        select = getattr(control, "select", None)
+        if select is None:
+            raise ValueError("This control has no behaviours to select")
+        select(behaviour)
     control.settle()
 
     joints = [name for name in body.qpos_index
@@ -222,6 +231,7 @@ def run_episode(graph, *, source_cells, current_na, site_um, seed=1,
     record.record_body(start=start, end=end, curl_start=curl0, curl_end=curl1,
                        heading_start_rad=heading0,
                        turn_deg=_turn_deg(heading0, heading1),
+                       behaviour=getattr(getattr(control, "behaviour", None), "name", None),
                        escape_latency_ms=control.escape_latency_ms,
                        peak_height_cm=max(heights) if heights else float(body.data.qpos[2]),
                        min_height_cm=min(heights) if heights else float(body.data.qpos[2]),
@@ -350,6 +360,7 @@ def run_closed_episode(graph, *, source_cells, current_na, site_um, seed=1,
     record.record_body(start=start, end=end, curl_start=curl0, curl_end=curl1,
                        heading_start_rad=heading0,
                        turn_deg=_turn_deg(heading0, heading1),
+                       behaviour=getattr(getattr(control, "behaviour", None), "name", None),
                        escape_latency_ms=control.escape_latency_ms,
                        peak_height_cm=max(heights) if heights else float(body.data.qpos[2]),
                        min_height_cm=min(heights) if heights else float(body.data.qpos[2]),

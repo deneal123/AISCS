@@ -72,6 +72,10 @@ def label(record):
         # Signed heading change, degrees. Displacement says how far; this says which way,
         # and an escape to the left and one to the right are otherwise identical rows.
         "turn_deg": body.get("turn_deg"),
+        # Which programme the legs were running. A reader who groups by it can ask what a
+        # walk, a back-up, a pivot and a groom each look like in the recording; the
+        # displacement alone cannot separate them.
+        "behaviour": body.get("behaviour"),
         # The ECAP-compatible column. Kept next to the body row because the two are read
         # together: a corpus that pairs a compound action with a behaviour is the one
         # thing neither the ECAP literature nor the connectome literature has.

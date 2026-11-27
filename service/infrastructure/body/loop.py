@@ -16,6 +16,9 @@ with measured joint signs, and the asset README says so.
 
 from __future__ import annotations
 
+import math
+
+from . import behaviours
 from .bridge import SpikeDrive
 from .control import Posture
 from .flight import FlightProgram
@@ -67,6 +70,9 @@ class BehaviourLoop:
                              lift_cm=lift_cm, sway_cm=sway_cm,
                              press_cm=0.0)
         self.escape = Escape()
+        # The locomotion programme the animal is running.  A walk until one of the
+        # others is selected; the escape rides on top of whatever this is.
+        self.behaviour = behaviours.walk()
         self.posture.capture_pose()
         self.gait.capture()
         self.joints = self._joints()
@@ -157,6 +163,23 @@ class BehaviourLoop:
             self.body.model.jnt_stiffness[index] = base * float(scale)
         return float(scale)
 
+    def select(self, behaviour):
+        """Choose the locomotion programme: a name from behaviours.BEHAVIOURS or a Behaviour.
+
+        The gait has two knobs and they are separate on purpose: the phase rate decides
+        how often a step is taken, the stroke decides how long it is and which way it
+        goes.  Walking backwards needs a negative stroke with the phase still running
+        forward; reversing both made the animal yaw 16.5 degrees in 600 ms (measured in
+        .work/twin/bk2.log), which is a turn nobody asked for.
+        """
+        if isinstance(behaviour, str):
+            behaviour = behaviours.named(behaviour)
+        if not isinstance(behaviour, behaviours.Behaviour):
+            raise TypeError("Expected a behaviour name or a Behaviour, got %r"
+                            % (type(behaviour).__name__,))
+        self.behaviour = behaviour
+        return behaviour
+
     def trigger_escape(self, *, side=0.0, delay_s=None, stride_scale=2.0):
         """Start the escape response; deciding that a stimulus was noxious is the caller's job."""
         self.escape.trigger(side=side, delay_s=12.0 * 1e-3 if delay_s is None else delay_s)
@@ -195,6 +218,7 @@ class BehaviourLoop:
         """
         self.body.reset()
         self.escape = Escape()
+        self.behaviour = behaviours.walk()
         self.drive.reset()
         self.time_ms = 0.0
         self.next_ik_ms = 0.0
@@ -225,12 +249,28 @@ class BehaviourLoop:
         # that hurt: the escape carries the steering, the gait only executes it, and
         # the steering is applied in the same control period as the stride so that
         # the claws pivot the body on every step of the escape rather than one late.
-        turn = self.escape.turn()
-        self.gait.advance(dt_s, stride_scale=self.escape.stride_scale(), turn=turn)
+        turn = self.behaviour.turn + self.escape.turn()
+        if self.escape.active and not self.behaviour.moves():
+            # A hurt animal drops what it was doing and runs.  Freezing or grooming is a
+            # still programme, and a still programme multiplied by the escape's stride
+            # scale is still still: measured in .work/twin/bm1.log, a grooming animal
+            # that was stung moved 0.49 mm during the whole escape.
+            rate = self.escape.stride_scale()
+            stroke = self.escape.stride_scale()
+        else:
+            rate = self.behaviour.stride_rate * self.escape.stride_scale()
+            stroke = self.behaviour.stroke_scale * self.escape.stride_scale()
+        self.gait.advance(dt_s, stride_scale=rate, turn=turn)
         if self.time_ms >= self.next_ik_ms:
-            self.posture.set_targets(blend(
-                self.gait.joint_targets(stride_scale=self.escape.stride_scale(), turn=turn),
-                self.escape.joint_targets(self.joints)))
+            targets = self.gait.joint_targets(stride_scale=stroke, turn=turn)
+            if self.behaviour.front_lift_cm and not self.escape.active:
+                # Grooming is held by the front pair; a hurt animal drops it and
+                # flees, which is why the escape cancels the lift rather than
+                # blending with it.
+                sweep = behaviours.GROOM_SWEEP_RAD * math.sin(2.0 * math.pi * self.gait.phase)
+                targets.update(behaviours.front_lift_targets(
+                    self.gait, self.behaviour.front_lift_cm, sweep=sweep))
+            self.posture.set_targets(blend(targets, self.escape.joint_targets(self.joints)))
             self.next_ik_ms = self.time_ms + IK_PERIOD_MS
         commands = self.posture.commands()
         if spikes:

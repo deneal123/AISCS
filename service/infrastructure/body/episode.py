@@ -89,7 +89,7 @@ class Episode:
     def record_body(self, *, start, end, curl_start, curl_end, escape_latency_ms,
                     peak_height_cm, min_height_cm, motor_spikes=0,
                     mapped_first_tick_ms=None, flight=None,
-                    heading_start_rad=None, turn_deg=None):
+                    heading_start_rad=None, turn_deg=None, behaviour=None):
         dx = (float(end[0]) - float(start[0])) * 10.0
         dy = (float(end[1]) - float(start[1])) * 10.0
         dz = (float(end[2]) - float(start[2])) * 10.0
@@ -117,6 +117,10 @@ class Episode:
             "heading_start_rad": (None if heading_start_rad is None
                                   else round(float(heading_start_rad), 6)),
             "turn_deg": None if turn_deg is None else round(float(turn_deg), 3),
+            # Which programme the legs were running.  A displacement alone cannot say
+            # whether the animal walked, backed, pivoted or groomed, and a corpus that
+            # labels behaviour needs the programme, not an inference from the path.
+            "behaviour": None if behaviour is None else str(behaviour),
         }
         # Flight is recorded apart from walking because it is a different claim: a
         # displacement can be walked or flown, and only the beat and the lift say which.
